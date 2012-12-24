@@ -3,7 +3,6 @@ package com.topface.topface.ui.fragments;
 import android.app.Activity;
 import android.content.*;
 import android.content.res.Resources;
-import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,7 +16,6 @@ import android.view.animation.AlphaAnimation;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.*;
-import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.NovicePower;
 import com.topface.topface.data.Search;
 import com.topface.topface.data.SearchUser;
@@ -43,7 +41,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     public static final int SEARCH_LIMIT = 30;
     private int mCurrentPhotoPrevPos;
-    private TextView mResourcesPower;
+    private TextView mResourcesLikes;
     private TextView mResourcesMoney;
     private TextView mDatingLovePrice;
     private Button mDelightBtn;
@@ -161,7 +159,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         // Resources
         mDatingResources = view.findViewById(R.id.loDatingResources);
         mDatingResources.setOnClickListener(this);
-        mResourcesPower = (TextView) view.findViewById(R.id.tvResourcesPower);
+        mResourcesLikes = (TextView) view.findViewById(R.id.tvResourcesPower);
         mResourcesMoney = (TextView) view.findViewById(R.id.tvResourcesMoney);
         updateResources();
 
@@ -779,16 +777,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private View.OnClickListener mOnNewbieEnergyClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            mResourcesPower.setBackgroundResource(R.anim.battery);
-            mResourcesPower.setText("");
-            final AnimationDrawable mailAnimation = (AnimationDrawable) mResourcesPower
-                    .getBackground();
-            mResourcesPower.post(new Runnable() {
-                public void run() {
-                    if (mailAnimation != null)
-                        mailAnimation.start();
-                }
-            });
+            mResourcesLikes.setText(getResources().getString(R.string.default_resource_value));
             NovicePowerRequest novicePowerRequest = new NovicePowerRequest(getActivity());
             registerRequest(novicePowerRequest);
             novicePowerRequest.callback(new ApiHandler() {
@@ -799,7 +788,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     updateUI(new Runnable() {
                         @Override
                         public void run() {
-                            mResourcesPower.setText("+" + CacheProfile.power + "%");
+                            mResourcesLikes.setText("+" + CacheProfile.power);
                         }
                     });
                 }
@@ -815,9 +804,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         updateUI(new Runnable() {
             @Override
             public void run() {
-                mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
-                mResourcesPower.setText(CacheProfile.power + "%");
-                mResourcesMoney.setText("" + CacheProfile.money);
+                mResourcesLikes.setText(Integer.toString(CacheProfile.power));
+                mResourcesMoney.setText(Integer.toString(CacheProfile.money));
             }
         });
     }

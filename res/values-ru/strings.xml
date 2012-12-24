@@ -394,4 +394,6 @@
     <string name="settings_want_answer">Я хочу что бы мне ответили</string>
     <string name="settings_feedback_email">Email для связи</string>
     <string name="settings_invalid_email">Некорректный Email</string>
+
+    <string name="buying_sympathies">Покупка симпатий</string>
 </resources>

@@ -34,14 +34,15 @@
                         android:textStyle="bold"
                         />
 
-                <com.topface.topface.ui.views.ServicesTextView xmlns:stv="http://schemas.android.com/apk/res/com.topface.topface"
-                                                               android:id="@+id/fbCurCoins"
-                                                               stv:maxChars="5"
-                                                               stv:charPadding="7"
-                                                               android:layout_width="wrap_content"
-                                                               android:layout_height="wrap_content"
-                                                               stv:fontSize="24"
-                                                               stv:image="@drawable/ic_coins"
+                <com.topface.topface.ui.views.ServicesTextView
+                        xmlns:stv="http://schemas.android.com/apk/res/com.topface.topface"
+                        android:id="@+id/fbCurCoins"
+                        stv:maxChars="5"
+                        stv:charPadding="7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        stv:fontSize="24"
+                        stv:image="@drawable/ic_coins"
                         />
             </LinearLayout>
 
@@ -55,21 +56,21 @@
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/default_energy_balance_constant"
+                        android:text=""
                         android:textColor="#FFFFFF"
                         android:textStyle="bold"
                         android:layout_marginBottom="10dp"
                         />
 
-                <com.topface.topface.ui.views.ServicesTextView xmlns:stv="http://schemas.android.com/apk/res/com.topface.topface"
-                                                               android:id="@+id/fbCurPower"
-                                                               stv:maxChars="3"
-                                                               stv:charPadding="7"
-                                                               android:layout_width="wrap_content"
-                                                               android:layout_height="wrap_content"
-                                                               stv:fontSize="24"
-                                                               stv:textWithoutBackground="%"
-                                                               stv:image="@drawable/ic_power"
+                <com.topface.topface.ui.views.ServicesTextView
+                        xmlns:stv="http://schemas.android.com/apk/res/com.topface.topface"
+                        android:id="@+id/fbCurPower"
+                        stv:maxChars="5"
+                        stv:charPadding="7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        stv:fontSize="24"
+                        stv:image="@drawable/ic_sympathy"
                         />
             </LinearLayout>
         </RelativeLayout>
@@ -109,13 +110,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="2dp"
-                        android:text="@string/buying_power"
+                        android:text="@string/buying_sympathies"
                         android:layout_alignParentLeft="true"
                         android:textStyle="bold"/>
                 <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_bolt_small"
+                        android:src="@drawable/ic_sympathy_small"
                         android:layout_alignParentRight="true"
                         />
             </RelativeLayout>
@@ -127,7 +128,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="50dp"
                     android:background="@drawable/btn_vip_super_sale_selector"
-                    android:layout_marginBottom = "10dp"
+                    android:layout_marginBottom="10dp"
                     android:padding="5dp"
                     >
                 <TextView
@@ -157,11 +158,11 @@
                         />
             </RelativeLayout>
 
-             !-- Money -->
+            !-- Money -->
             <RelativeLayout
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                >
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    >
 
                 <TextView
                         style="@style/TitleWhiteText"
@@ -247,19 +248,19 @@
                         />
             </RelativeLayout>
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:text="@string/default_economy_25"
-                android:textColor="#B8B8B8"
-                android:textSize="10sp"
-                />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:text="@string/default_economy_25"
+                    android:textColor="#B8B8B8"
+                    android:textSize="10sp"
+                    />
             <RelativeLayout
                     android:id="@+id/fb100Pack"
                     android:layout_width="fill_parent"
                     android:layout_height="50dp"
                     android:background="@drawable/btn_vip_super_sale_selector"
-                    android:layout_marginTop = "10dp"
+                    android:layout_marginTop="10dp"
                     android:padding="5dp"
                     >
                 <TextView
@@ -302,7 +303,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="50dp"
                     android:background="@drawable/btn_vip_super_sale_selector"
-                    android:layout_marginTop = "10dp"
+                    android:layout_marginTop="10dp"
                     android:padding="5dp"
                     >
                 <TextView
@@ -341,22 +342,34 @@
                     />
             <!-- Power -->
 
-            <TextView
-                    android:id="@+id/vip_status"
-                    style="@style/TitleWhiteText"
-                    android:layout_width="wrap_content"
+            <RelativeLayout
                     android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_marginBottom="2dp"
                     android:layout_marginTop="10dp"
-                    android:text="@string/vip_not_activated"
-                    android:layout_alignParentLeft="true"
-                    android:textStyle="bold"/>
+                    >
+                <TextView
+                        android:id="@+id/vip_status"
+                        style="@style/TitleWhiteText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/vip_not_activated"
+                        android:layout_alignParentLeft="true"
+                        android:textStyle="bold"/>
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_rocket_small"
+                        android:layout_alignParentRight="true"
+                        />
+            </RelativeLayout>
+
             <RelativeLayout
                     android:id="@+id/fbVipButton"
                     android:layout_width="fill_parent"
                     android:layout_height="50dp"
                     android:background="@drawable/btn_vip_sale_selector"
-                    android:layout_marginTop = "10dp"
+                    android:layout_marginTop="10dp"
                     android:padding="5dp"
                     >
                 <TextView
@@ -369,6 +382,7 @@
                         android:layout_centerVertical="true"
                         />
             </RelativeLayout>
+
             <TextView
                     android:id="@+id/vipPrice"
                     android:layout_width="wrap_content"

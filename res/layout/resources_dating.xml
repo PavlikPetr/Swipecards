@@ -19,13 +19,14 @@
                 android:id="@+id/tvResourcesPower"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingBottom="3dp"
                 android:layout_marginTop="6dp"
                 android:gravity="center"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:text="@string/default_resource_value"
-                android:background="@drawable/resources_battery"/>
+                android:background="@drawable/ic_sympathy_widget"/>
 
         <TextView
                 android:id="@+id/tvResourcesMoney"

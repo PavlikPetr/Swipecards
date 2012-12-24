@@ -3,8 +3,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:background="@drawable/im_list_bkgrd"
-                android:id="@+id/ac_dating_container"
-        >
+                android:id="@+id/ac_dating_container">
 
     <!-- Dating Album -->
     <com.topface.topface.ui.views.ImageSwitcher
