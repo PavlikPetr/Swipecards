@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.billing.BuyingActivity;
+import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.CacheProfile;
 
@@ -42,7 +44,8 @@ public class ServicesFragment extends BaseFragment{
     }
 
     private void buyAction() {
-        Intent intent = new Intent(getActivity(), BuyingActivity.class);
+        Intent intent = new Intent(getActivity(), ContainerActivity.class);
+        intent.putExtra(Static.INTENT_REQUEST_KEY,ContainerActivity.INTENT_BUYING_FRAGMENT);
         startActivity(intent);
     }
 }

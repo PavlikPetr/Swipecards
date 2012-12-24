@@ -167,7 +167,9 @@ public class AuthorizationManager {
                 JSONObject jsonResult = new JSONObject(response);
                 String user_id = jsonResult.getString("id");
                 String user_name = jsonResult.getString("name");
+                String user_email = jsonResult.getString("email");
                 Settings.getInstance().setSocialAccountName(user_name);
+                Settings.getInstance().setSocialAccountEmail(user_email);
 
                 final AuthToken authToken = new AuthToken(mParentActivity.getApplicationContext());
                 authToken.saveToken(AuthToken.SN_FACEBOOK, user_id, Data.facebook.getAccessToken(),

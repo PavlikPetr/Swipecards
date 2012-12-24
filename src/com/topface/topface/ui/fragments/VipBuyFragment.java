@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditContainerActivity;
@@ -33,8 +36,15 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener, Bil
     EditSwitcher mInvisSwitcher;
     EditSwitcher mBgSwitcher;
 
+    BroadcastReceiver mBroadcastReceiver;
+
     ProgressBar mInvisLoadBar;
     private BillingDriver mBillindDriver;
+
+    public static final String BROADCAST_PURCHASE_ACTION = "com.topface.topface.PURCHASE_NOTIFICATION";
+    private LayoutInflater mInflater;
+    private View mRoot;
+    private ViewGroup mContainer;
 
     // В этот метод потом можно будет передать аргументы,
     // чтобы потом установить их с помощью setArguments();
@@ -56,17 +66,27 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener, Bil
                 }
             }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mBroadcastReceiver = new BroadcastReceiver() {
             @Override
-            public void onError() {
-                //TODO: Обрабатывать ошибку
-                Debug.error("Subscription error");
+            public void onReceive(Context context, Intent intent) {
+                switchLayouts();
             }
+        };
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
+    }
 
-            @Override
-            public void onCancel() {
-                Debug.error("Subscription cancel");
-            }
-        }, this);
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     @Override
@@ -77,15 +97,31 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener, Bil
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root;
+        mContainer = container;
         if (CacheProfile.premium) {
-            root = inflater.inflate(R.layout.fragment_edit_premium, null);
-            initEditVipViews(root);
+            mRoot = inflater.inflate(R.layout.fragment_edit_premium, null);
+            initEditVipViews(mRoot);
         } else {
-            root = inflater.inflate(R.layout.fragment_buy_premium, null);
-            initBuyVipViews(root);
+            mRoot = inflater.inflate(R.layout.fragment_buy_premium, null);
+            initBuyVipViews(mRoot);
         }
-        return root;
+        return mRoot;
+    }
+
+    private void switchLayouts() {
+        if (mRoot != null && mContainer != null) {
+            if (CacheProfile.premium) {
+                mRoot = getActivity().getLayoutInflater().inflate(R.layout.fragment_edit_premium, null);
+                initEditVipViews(mRoot);
+                mContainer.removeAllViews();
+                mContainer.addView(mRoot);
+            } else {
+                mRoot = getActivity().getLayoutInflater().inflate(R.layout.fragment_buy_premium, null);
+                initBuyVipViews(mRoot);
+                mContainer.removeAllViews();
+                mContainer.addView(mRoot);
+            }
+        }
     }
 
     private void initBuyVipViews(View root) {

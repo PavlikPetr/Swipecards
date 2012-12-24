@@ -95,7 +95,9 @@ public class ServicesTextView extends View {
 
         if(imageId != 0) {
             mImageBitmap = BitmapFactory.decodeResource(getResources(), imageId);
-            mImageBitmap = Bitmap.createScaledBitmap(mImageBitmap, (int)(mImageBitmap.getWidth()/realScaleCoeff), (int)(mImageBitmap.getHeight()/realScaleCoeff), false);
+//            double imageRes = (double)mImageBitmap.getWidth()/(double)mImageBitmap.getHeight();
+//            int newWidth = (int) (imageRes * (int)(outHeight/realScaleCoeff));
+//            mImageBitmap = Bitmap.createScaledBitmap(mImageBitmap, newWidth,  (int)(outHeight/realScaleCoeff), false);
         }
 
     }
