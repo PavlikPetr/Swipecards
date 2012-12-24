@@ -244,7 +244,10 @@
     <string name="vip_privileges">VIP-Privilegien</string>
     <string name="vip_text_visitors">Erfahren Sie, wer für Sie sich interessierte - sehen Sie Ihre Gäste durch!</string>
     <string name="vip_invis">Unsichtbares Regime</string>
+    <string name="vip_messages_bg">Nachrichten Hintergrund</string>
     <string name="vip_black_list">Schwarze Liste</string>
+    <string name="vip_profile_bg">Hitergrund Foto</string>
+    <string name="profile_vip_status">Super Skills</string>
     <string name="profile_services">Services</string>
     <string name="default_balance_constant">Auf Ihrem Konto</string>
     <string name="default_energy_balance_constant">Kraft</string>
@@ -258,10 +261,16 @@
     <string name="buying_profile_energy">Kraft</string>
     <string name="buying_buy_resources">Coins kaufen, Kraft ergänzen</string>
     <string name="vip_buy_vip">VIP kaufen</string>
+    <string name="vip_state_off">Ihr VIP-Status ist nicht aktiviert</string>
+    <string name="vip_info_delight">Senden Sie Entzücken kostenlos - zeigen Sie Ihre Gefühle!</string>
     <string name="vip_info_guest">Erfahren Sie, wer für Sie sich interessierte - sehen Sie Ihre Gäste durch!</string>
+    <string name="vip_info_message">Bekommen Sie ein Privileg - Ihre Nachrichten werden sich vom gemeinsamen Hintergrund abheben!</string>
+    <string name="vip_info_gift">Wählen Sie einzigartige VIP-Geschenke und man wird Sie unbedingt merken!</string>
+    <string name="vip_info_blackList">Befreien Sie sich von langweiligen Leuten mit Hilfe der \"schwarzen Liste\"</string>
     <string name="vip_info_title">VIP-Privilegien</string>
     <string name="black_list_retrieve">Wiederherstellen</string>
     <string name="buying_vip_status">VIP Status kaufen</string>
+    <string name="buying_vip_info">Für den Zugang zu den Gästen müssen Sie VIP Status haben</string>
     <string name="buy_play_market_not_available">Play Market ist nicht erreichbar</string>
     <string name="buy_subscription_not_available">Abonnements sind nicht erreichbar</string>
 </resources>

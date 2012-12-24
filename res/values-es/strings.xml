@@ -277,4 +277,11 @@
     <string name="buying_vip_info">Para acceder a la información de visitantes hay que tener estado VIP</string>
     <string name="buy_play_market_not_available">Play Market sin acceso</string>
     <string name="buy_subscription_not_available">Suscripciones sin acceso</string>
+    <string name="profile_gifts_empty">A este usuario nadie aún le hizo regalos</string>
+    <string name="profile_mygifts_empty">Nadie te hizo regalos aún</string>
+    <string name="profile_mood">Describe tu humor</string>
+    <string name="general_reconnect">Intentamos recuperar la conexión con Internet.\nEspere, por favor.</string>
+    <string name="dating_people_unnoticed">¡Diez personas quedaron sin tu atención!</string>
+    <string name="dating_continue">Continua evaluando</string>
+    <string name="dating_better_look">¡Fijate bien!\n¡Posiblemente estás dejando escapar tu destino!</string>
 </resources>

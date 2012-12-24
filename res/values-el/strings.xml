@@ -277,4 +277,11 @@
     <string name="buying_vip_info">Για να αποκτήσετε πρόσβαση τους επισκέπτες πρέπει να έχετε τη κατάσταση VIP</string>
     <string name="buy_play_market_not_available">Play Market δεν είναι διαθέσιμη</string>
     <string name="buy_subscription_not_available">Τα συνδρομές δεν είναι διαθέσιμες</string>
+    <string name="profile_gifts_empty">Αυτός ο χρήστης δεν έχει λάβει τα δώρα από κανέναν</string>
+    <string name="profile_mygifts_empty">Δεν έχετε λάβει τα δώρα από κανέναν</string>
+    <string name="profile_mood">Περιγράψτε τη διάθεσή σας</string>
+    <string name="general_reconnect">Προσπαθούμε να δημιουργήσουμε μια σύνδεση στο Internet.\nΠαρακαλώ, να περιμένετε.</string>
+    <string name="dating_people_unnoticed">Δέκα ανθρώπους έμειναν χωρίς την προσοχή σας!</string>
+    <string name="dating_continue">Συνεχίστε να αξιολογήσετε</string>
+    <string name="dating_better_look">Ρίξτε μια προσεκτική ματιά!   Ίσως χάσετε το πεπρωμένο σας!</string>
 </resources>

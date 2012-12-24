@@ -5,7 +5,6 @@ import android.text.ClipboardManager;
 import android.text.Html;
 import android.text.format.DateFormat;
 import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -251,9 +250,6 @@ public class ChatListAdapter extends BaseAdapter {
             return convertView;
         }
 
-        //Это нужно, что бы обработать сперва html, а потом autoLink, иначе html не получитя распарсить
-        holder.message.setAutoLinkMask(0);
-
         // setting textual information
         switch (history.type) {
             case FeedDialog.DEFAULT:
@@ -348,7 +344,6 @@ public class ChatListAdapter extends BaseAdapter {
         }
 
         holder.message.setMovementMethod(LinkMovementMethod.getInstance());
-        holder.message.setAutoLinkMask(Linkify.ALL);
 
         holder.date.setText(dateFormat.format(history.created));
         // Utils.formatTime(holder.date, msg.created);

@@ -281,4 +281,11 @@
     <string name="buying_vip_info">Chcete-li získat přístup k seznamu hostů, musíte mít VIP status</string>
     <string name="buy_play_market_not_available">Play Market není dostupný</string>
     <string name="buy_subscription_not_available">Předplatné není k dispozici</string>
+    <string name="profile_gifts_empty">Tento uživatel prozatím nedostal žádné dárky</string>
+    <string name="profile_mygifts_empty">Prozatím jste nedostali žádné dárky</string>
+    <string name="profile_mood">Popište Vaši náladu</string>
+    <string name="general_reconnect">Snažíme se obnovit připojení k Internetu.\nVydržte  prosím.</string>
+    <string name="dating_people_unnoticed">Deset lidí uniklo Vaší pozornosti</string>
+    <string name="dating_continue">Pokračovat v hodnocení</string>
+    <string name="dating_better_look">Rozkoukejte se!\n Nepropásněte svou šanci!</string>
 </resources>

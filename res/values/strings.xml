@@ -277,5 +277,12 @@
     <string name="buying_vip_info">To get access to guests VIP status is necessary</string>
     <string name="buy_play_market_not_available">Play Market not available</string>
     <string name="buy_subscription_not_available">Subscriptions are not available</string>
+    <string name="profile_gifts_empty">No one has sent gifts to this user yet</string>
+    <string name="profile_mygifts_empty">No one has sent you gifts yet</string>
+    <string name="profile_mood">Describe your mood</string>
+    <string name="general_reconnect">Trying to restore internet connection.\nPlease, wait</string>
+    <string name="dating_people_unnoticed">You left 10 people unnoticed!</string>
+    <string name="dating_continue">Continue rating</string>
+    <string name="dating_better_look">Get a better look!\nYou might be missing your fate!</string>
     <string name="default_coins_100_price">10 USD</string>
 </resources>

@@ -16,11 +16,11 @@
         <item quantity="other">%d минут назад</item>
     </plurals>
 
-    <string name="time_month">
+    <plurals name="time_month">
         <item quantity="one">%d месяц</item>
         <item quantity="few">%d месяца</item>
         <item quantity="other">%d месяцев</item>
-    </string>
+    </plurals>
 
     <string name="time_yesterday">Вчера</string>
     <string name="time_today">Сегодня</string>
