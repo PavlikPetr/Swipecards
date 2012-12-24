@@ -5,7 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
+import android.widget.Button;
+import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
@@ -16,14 +17,10 @@ public class LeadersPhotoAdapter extends BaseAdapter {
     private LeadersActivity.PhotoSelector mPhotoSelector;
     // class ViewHolder
 
-    protected static final int T_ADD_BTN = 0;
-    protected static final int T_PHOTO = 1;
-    protected static final int T_COUNT = T_PHOTO + 1;
-
     static class ViewHolder {
         ImageViewRemote imageView;
-        ImageView addPhoto;
-        ImageView checkbox;
+        TextView textRating;
+        Button checkbox;
     }
 
     private Photos mAlbumsList;
@@ -33,7 +30,6 @@ public class LeadersPhotoAdapter extends BaseAdapter {
     public LeadersPhotoAdapter(Context context, Photos albumList, LeadersActivity.PhotoSelector selector) {
         mAlbumsList = albumList;
         mInflater = LayoutInflater.from(context);
-        mAlbumsList.addFirst(null);
         mPhotoSelector = selector;
     }
 
@@ -41,7 +37,6 @@ public class LeadersPhotoAdapter extends BaseAdapter {
     public int getCount() {
         return mAlbumsList.size();
     }
-
 
     @Override
     public Photo getItem(int position) {
@@ -54,48 +49,30 @@ public class LeadersPhotoAdapter extends BaseAdapter {
     }
 
     @Override
-    public int getItemViewType(int position) {
-        if (position == 0) {
-            return T_ADD_BTN;
-        } else {
-            return T_PHOTO;
-        }
-    }
-
-    @Override
-    public int getViewTypeCount() {
-        return T_COUNT;
-    }
-
-    @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
+
+        Photo item = getItem(position);
 
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.leaders_album_item, parent, false);
             holder.imageView = (ImageViewRemote) convertView.findViewById(R.id.leaderAlbumPhoto);
-            holder.addPhoto = (ImageView) convertView.findViewById(R.id.ivAddPhoto);
-            holder.checkbox = (ImageView) convertView.findViewById(R.id.checkbox);
+            holder.textRating = (TextView) convertView.findViewById(R.id.tvRating);
+            holder.checkbox = (Button) convertView.findViewById(R.id.checkbox);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        if (getItemViewType(position) == T_ADD_BTN) {
-            holder.imageView.setVisibility(View.GONE);
-            holder.checkbox.setVisibility(View.GONE);
-            holder.addPhoto.setVisibility(View.VISIBLE);
-        } else {
-            holder.imageView.setVisibility(View.VISIBLE);
-            holder.addPhoto.setVisibility(View.GONE);
-            holder.checkbox.setVisibility(
-                    mPhotoSelector.getItemId() == position ?
-                            View.VISIBLE :
-                            View.GONE
-            );
-            holder.imageView.setPhoto(getItem(position));
-        }
+        holder.imageView.setVisibility(View.VISIBLE);
+        holder.checkbox.setVisibility(
+                mPhotoSelector.getItemId() == position ?
+                        View.VISIBLE :
+                        View.GONE
+        );
+        holder.textRating.setText(item.getRate() + "%");
+        holder.imageView.setPhoto(item);
 
         return convertView;
     }

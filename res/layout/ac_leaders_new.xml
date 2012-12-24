@@ -9,27 +9,54 @@
             android:id="@+id/loNavigationBar"
             layout="@layout/bar_navigation_header"/>
 
-    <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+    <RelativeLayout
             android:layout_below="@id/loNavigationBar"
-            android:orientation="vertical">
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+        <RelativeLayout
+                android:id="@+id/loFooter"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                >
+
+            <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/leader_btn_bg_plate"
+                    android:scaleType="fitXY"
+                    />
+
+            <Button
+                    android:id="@+id/btnLeadersBuy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/btn_vip_super_sale_selector"
+                    />
+        </RelativeLayout>
 
         <TextView
                 android:id="@+id/fragmentTitle"
-                style="@style/BackgroundTitleText"
+                style="@style/TitleWhiteText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:layout_marginLeft="10dp"
-                android:text="Выберите эффектную фотографию"/>
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentTop="true"
+                android:text="@string/leaders_select_cool_picture"/>
 
         <GridView
                 android:id="@+id/fragmentGrid"
+                android:layout_below="@id/fragmentTitle"
+                android:layout_above="@id/loFooter"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="10"
+                android:layout_height="fill_parent"
                 android:layout_margin="0px"
                 android:background="@android:color/transparent"
                 android:fadeScrollbars="true"
@@ -39,37 +66,11 @@
                 android:padding="0px"
                 android:numColumns="auto_fit"
                 android:stretchMode="columnWidth"
-                android:columnWidth="105dp"
-                android:verticalSpacing="0px"/>
-
-        <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="2">
-
-            <ImageView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/leader_btn_bg_plate"
-                    />
-            <Button
-                    android:id="@+id/btnBecomeLeader"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:background="@drawable/btn_vip_super_sale_selector"
-                    />
-        </RelativeLayout>
-    </LinearLayout>
+                android:columnWidth="95dp"
+                android:verticalSpacing="0px"
+                android:gravity="center"/>
+    </RelativeLayout>
 
 	<ImageView style="@style/HeaderShadow"/>
-	
-    <ProgressBar
-            android:id="@+id/loader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="visible"
-            style="@android:style/Widget.ProgressBar.Small"/>
 
 </RelativeLayout>
