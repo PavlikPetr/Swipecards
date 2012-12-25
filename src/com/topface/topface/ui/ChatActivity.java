@@ -605,9 +605,9 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                     @Override
                     public void success(final ApiResponse response) {
                         SendGiftAnswer answer = SendGiftAnswer.parse(response);
-                        CacheProfile.power = answer.power;
+                        CacheProfile.likes = answer.likes;
                         CacheProfile.money = answer.money;
-                        Debug.log(ChatActivity.this, "power:" + answer.power + " money:"
+                        Debug.log(ChatActivity.this, "likes:" + answer.likes + " money:"
                                 + answer.money);
                         runOnUiThread(new Runnable() {
                             @Override

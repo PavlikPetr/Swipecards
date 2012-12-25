@@ -66,14 +66,14 @@ public class BuyingActivity extends Activity implements View.OnClickListener, Bi
         // Drawable battery =
         // getResources().getDrawable(Utils.getBatteryResource(CacheProfile.power));
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
-                Utils.getBatteryResource(CacheProfile.power));
+                Utils.getBatteryResource(CacheProfile.likes));
         Bitmap scaledBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
                 bitmap.getHeight(), matrix, true);
         BitmapDrawable battery = new BitmapDrawable(getResources(), scaledBitmap);
 
         mResourcesPower = (TextView) findViewById(R.id.tvResourcesPower);
         mResourcesPower.setCompoundDrawablesWithIntrinsicBounds(null, null, battery, null);
-        mResourcesPower.setText("" + CacheProfile.power + "%");
+        mResourcesPower.setText("" + CacheProfile.likes + "%");
 
         int coins = getIntent().getIntExtra(INTENT_USER_COINS, 0);
 
@@ -95,8 +95,8 @@ public class BuyingActivity extends Activity implements View.OnClickListener, Bi
         mBillingDriver = BillingTypeManager.getInstance().createMainBillingDriver(this, new BillingListener() {
             @Override
             public void onPurchased() {
-                mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
-                mResourcesPower.setText("" + CacheProfile.power + "%");
+                mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.likes));
+                mResourcesPower.setText("" + CacheProfile.likes + "%");
                 mResourcesMoney.setText("" + CacheProfile.money);
             }
 

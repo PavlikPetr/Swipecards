@@ -555,7 +555,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         @Override
                         public void success(ApiResponse response) throws NullPointerException {
                             SendGiftAnswer answer = SendGiftAnswer.parse(response);
-                            CacheProfile.power = answer.power;
+                            CacheProfile.likes = answer.likes;
                             CacheProfile.money = answer.money;
 
                             ArrayList<Gift> gifts = new ArrayList<Gift>();

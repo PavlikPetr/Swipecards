@@ -48,6 +48,7 @@ public class BuyingFragment extends BaseFragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_buy, null);
 
+        initViews(root);
         mBillindDriver = BillingTypeManager.getInstance().createMainBillingDriver(getActivity(), new BillingListener() {
             @Override
             public void onPurchased() {
@@ -64,9 +65,6 @@ public class BuyingFragment extends BaseFragment implements View.OnClickListener
                 //Возможно стоит добавить реакцию на отмену покупки пользователем
             }
         }, this);
-
-        initViews(root);
-
         return root;
     }
 
@@ -103,7 +101,7 @@ public class BuyingFragment extends BaseFragment implements View.OnClickListener
     private void updateBalanceCounters() {
         if (mCurCoins != null && mCurPower != null && mResourcesInfo != null) {
             mCurCoins.setText(Integer.toString(CacheProfile.money));
-            mCurPower.setText(Integer.toString(CacheProfile.power));
+            mCurPower.setText(Integer.toString(CacheProfile.likes));
             if (CacheProfile.money > 0) {
                 mResourcesInfo.setText(getResources().getString(R.string.buying_default_message));
             } else {

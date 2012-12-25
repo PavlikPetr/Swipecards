@@ -30,7 +30,7 @@ public class ServicesFragment extends BaseFragment {
         mCurCoins.setText(Integer.toString(CacheProfile.money));
 
         ServicesTextView mCurPower = (ServicesTextView) root.findViewById(R.id.fpsCurPower);
-        mCurPower.setText(Integer.toString(CacheProfile.power));
+        mCurPower.setText(Integer.toString(CacheProfile.likes));
 
         Button mBuyBtn = (Button) root.findViewById(R.id.fpsBuyBtn);
         mBuyBtn.setOnClickListener(new View.OnClickListener() {

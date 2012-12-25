@@ -30,7 +30,7 @@ public class CacheProfile {
     public static String city_name; // название города пользователя
     public static String city_full; // полное название города пользвоателя
     public static int money;        // количество монет у пользователя
-    public static int power;        // количество энергии пользователя
+    public static int likes;        // количество симпатий пользователя
     public static int average_rate; // средняя оценка текущего пользователя
     // Dating
     public static int dating_sex; // пол пользователей для поиска
@@ -96,7 +96,7 @@ public class CacheProfile {
 
     public static void updateNotifications(Profile profile) {
         money = profile.money;
-        power = profile.power;
+        likes = profile.likes;
         unread_rates = profile.unread_rates;
         unread_likes = profile.unread_likes;
         unread_messages = profile.unread_messages;
@@ -113,7 +113,7 @@ public class CacheProfile {
         profile.sex = sex;
 
         profile.money = money;
-        profile.power = power;
+        profile.likes = likes;
 
         profile.unread_rates = unread_rates;
         profile.unread_likes = unread_likes;
@@ -154,7 +154,7 @@ public class CacheProfile {
         sex = profile.sex;
 
         money = profile.money;
-        power = profile.power;
+        likes = profile.likes;
 
         unread_rates = profile.unread_rates;
         unread_likes = profile.unread_likes;

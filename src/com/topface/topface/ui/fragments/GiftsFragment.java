@@ -180,7 +180,7 @@ public class GiftsFragment extends BaseFragment {
                         @Override
                         public void success(ApiResponse response) {
                             SendGiftAnswer answer = SendGiftAnswer.parse(response);
-                            CacheProfile.power = answer.power;
+                            CacheProfile.likes = answer.likes;
                             CacheProfile.money = answer.money;
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override

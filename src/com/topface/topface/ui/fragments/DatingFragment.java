@@ -16,7 +16,7 @@ import android.view.animation.AlphaAnimation;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.*;
-import com.topface.topface.data.NovicePower;
+import com.topface.topface.data.NoviceLikes;
 import com.topface.topface.data.Search;
 import com.topface.topface.data.SearchUser;
 import com.topface.topface.data.SkipRate;
@@ -159,7 +159,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         // Resources
         mDatingResources = view.findViewById(R.id.loDatingResources);
         mDatingResources.setOnClickListener(this);
-        mResourcesLikes = (TextView) view.findViewById(R.id.tvResourcesPower);
+        mResourcesLikes = (TextView) view.findViewById(R.id.tvResourcesLikes);
         mResourcesMoney = (TextView) view.findViewById(R.id.tvResourcesMoney);
         updateResources();
 
@@ -517,7 +517,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 public void success(ApiResponse response) {
                     SkipRate skipRate = SkipRate.parse(response);
                     if (skipRate.completed) {
-                        CacheProfile.power = skipRate.power;
+                        CacheProfile.likes = skipRate.likes;
                         CacheProfile.money = skipRate.money;
                         updateResources();
                     } else {
@@ -554,7 +554,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     mOnNewbieEnergyClickListener);
             mNoviceLayout.startAnimation(mAlphaAnimation);
             mNovice.completeShowBatteryBonus();
-        } else if (mNovice.showEnergy && hasOneSympathyOrDelight && CacheProfile.power <= 10) {
+        } else if (mNovice.showEnergy && hasOneSympathyOrDelight && CacheProfile.likes <= 10) {
             mNoviceLayout.setLayoutRes(R.layout.novice_energy, new OnClickListener() {
 
                 @Override
@@ -778,17 +778,17 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         @Override
         public void onClick(View v) {
             mResourcesLikes.setText(getResources().getString(R.string.default_resource_value));
-            NovicePowerRequest novicePowerRequest = new NovicePowerRequest(getActivity());
-            registerRequest(novicePowerRequest);
-            novicePowerRequest.callback(new ApiHandler() {
+            NoviceLikesRequest noviceLikesRequest = new NoviceLikesRequest(getActivity());
+            registerRequest(noviceLikesRequest);
+            noviceLikesRequest.callback(new ApiHandler() {
                 @Override
                 public void success(ApiResponse response) {
-                    NovicePower novicePower = NovicePower.parse(response);
-                    CacheProfile.power = (int) (novicePower.power * 0.01);
+                    NoviceLikes noviceLikes = NoviceLikes.parse(response);
+                    CacheProfile.likes = noviceLikes.likes;
                     updateUI(new Runnable() {
                         @Override
                         public void run() {
-                            mResourcesLikes.setText("+" + CacheProfile.power);
+                            mResourcesLikes.setText("+" + CacheProfile.likes);
                         }
                     });
                 }
@@ -804,7 +804,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         updateUI(new Runnable() {
             @Override
             public void run() {
-                mResourcesLikes.setText(Integer.toString(CacheProfile.power));
+                mResourcesLikes.setText(Integer.toString(CacheProfile.likes));
                 mResourcesMoney.setText(Integer.toString(CacheProfile.money));
             }
         });

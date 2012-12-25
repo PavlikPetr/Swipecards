@@ -71,7 +71,7 @@ public class RateController {
             @Override
             public void success(ApiResponse response) {
                 Rate rate = Rate.parse(response);
-                CacheProfile.power = rate.power;
+                CacheProfile.likes = rate.likes;
                 CacheProfile.money = rate.money;
                 CacheProfile.average_rate = rate.average;
             }
@@ -121,7 +121,7 @@ public class RateController {
             @Override
             public void success(ApiResponse response) {
                 Rate rate = Rate.parse(response);
-                CacheProfile.power = rate.power;
+                CacheProfile.likes = rate.likes;
                 CacheProfile.money = rate.money;
                 CacheProfile.average_rate = rate.average;
             }
