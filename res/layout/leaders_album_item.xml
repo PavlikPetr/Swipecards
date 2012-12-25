@@ -1,41 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:topface="http://schemas.android.com/apk/res/com.topface.topface"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content">
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp">
 
     <com.topface.topface.ui.views.ImageViewRemote
-            android:id="@+id/leaderAlbumPhoto"   
-            xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"         
+            android:id="@+id/leaderAlbumPhoto"
+            xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
+            ivr:clipMask="@drawable/frame_top_mask"
             ivr:postProcessor="mask"
-            ivr:clipMask="@drawable/user_mask_album"
-            android:scaleType="centerInside"
-            android:background="@drawable/user_frame_album_center"
-            android:layout_width="97dp"
-            android:layout_height="107dp"            
-            android:layout_marginLeft="3dp"
-            android:layout_marginRight="3dp"
-            android:layout_centerInParent="true"/>
-    
-    <ImageView
-            android:id="@+id/ivAddPhoto"
-            android:layout_width="97dp"
-            android:layout_height="107dp"    
-            android:layout_marginLeft="3dp"
-            android:layout_marginRight="3dp"        
-            android:background="@drawable/profile_add_photo_selector"
-            android:layout_centerInParent="true"
-            android:visibility="gone"/>
-    
-    <ImageView
-            android:id="@+id/checkbox"
-            android:layout_height="25dp"
-            android:layout_width="25dp"
-            android:src="@drawable/ic_leaders_checkbox"
-            android:layout_alignBottom="@id/leaderAlbumPhoto"
-            android:layout_alignLeft="@id/leaderAlbumPhoto"
-            android:layout_marginBottom="10dp"            
-            android:visibility="gone"/>
+            android:background="@drawable/frame_top"
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp"
+            android:paddingTop="0.5dp"
+            android:paddingBottom="0.5dp"
+            android:scaleType="centerCrop"
+            android:layout_width="95dp"
+            android:layout_height="97dp"/>
 
+    <TextView
+            android:id="@+id/tvRating"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="#FFFFFF"
+            android:drawableRight="@drawable/tops_heart"
+            android:layout_marginTop="3dp"
+            android:layout_marginLeft="5dp"
+            android:textSize="12sp"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:layout_alignParentTop="true"
+            style="@style/ShadowItemFontBottom"
+            />
+
+    <Button
+            android:id="@+id/checkbox"
+            style="@style/EditPhotoButtonsText"
+            android:text="@string/edit_selected"
+            android:layout_width="wrap_content"
+            android:layout_height="28dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/leaders_selected_photo_bg"
+            android:drawableLeft="@drawable/edit_form_select_check"
+            android:visibility="gone"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_alignBottom="@id/leaderAlbumPhoto"
+            android:layout_marginBottom="4dp"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            />
 </RelativeLayout>

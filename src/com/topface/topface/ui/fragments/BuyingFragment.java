@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,26 +13,23 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.topface.billing.BillingDriver;
+import com.topface.billing.BillingListener;
+import com.topface.billing.BillingSupportListener;
+import com.topface.billing.BillingTypeManager;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.billing.BillingService;
-import com.topface.topface.billing.Consts;
-import com.topface.topface.billing.PurchaseObserver;
-import com.topface.topface.billing.ResponseHandler;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 
-public class BuyingFragment extends BaseFragment implements View.OnClickListener {
+public class BuyingFragment extends BaseFragment implements View.OnClickListener, BillingSupportListener {
 
-    private BillingService mBillingService;
     private RelativeLayout mBuy6;
     private RelativeLayout mBuy40;
     private RelativeLayout mBuy100;
     private RelativeLayout mBuy300;
-    private RelativeLayout mVipBtn;
     private RelativeLayout mRecharge;
 
     private BroadcastReceiver mReceiver;
@@ -42,6 +38,7 @@ public class BuyingFragment extends BaseFragment implements View.OnClickListener
     private ServicesTextView mCurCoins;
     private ServicesTextView mCurPower;
     private TextView mResourcesInfo;
+    private BillingDriver mBillindDriver;
 
     public static BuyingFragment newInstance() {
         return new BuyingFragment();
@@ -51,17 +48,25 @@ public class BuyingFragment extends BaseFragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_buy, null);
 
-        mBillingService = new BillingService();
-        mBillingService.setContext(getActivity());
+        mBillindDriver = BillingTypeManager.getInstance().createMainBillingDriver(getActivity(), new BillingListener() {
+            @Override
+            public void onPurchased() {
+                updateBalanceCounters();
+            }
 
-        if (!mBillingService.checkBillingSupported(Consts.ITEM_TYPE_INAPP)) {
-            Toast.makeText(getActivity().getApplicationContext(), "Play Market not available", Toast.LENGTH_SHORT)
-                    .show();
-        }
+            @Override
+            public void onError() {
+                //TODO: Сделать обработку ошибок
+            }
+
+            @Override
+            public void onCancel() {
+                //Возможно стоит добавить реакцию на отмену покупки пользователем
+            }
+        }, this);
 
         initViews(root);
 
-        ResponseHandler.register(new TopfacePurchaseObserver(new Handler()));
         return root;
     }
 
@@ -89,14 +94,14 @@ public class BuyingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void initBalanceCounters(View root) {
-        mCurCoins = (ServicesTextView)root.findViewById(R.id.fbCurCoins);
-        mCurPower = (ServicesTextView)root.findViewById(R.id.fbCurPower);
+        mCurCoins = (ServicesTextView) root.findViewById(R.id.fbCurCoins);
+        mCurPower = (ServicesTextView) root.findViewById(R.id.fbCurPower);
         mResourcesInfo = (TextView) root.findViewById(R.id.tvResourcesInfo);
         updateBalanceCounters();
     }
 
     private void updateBalanceCounters() {
-        if(mCurCoins != null && mCurPower != null && mResourcesInfo != null) {
+        if (mCurCoins != null && mCurPower != null && mResourcesInfo != null) {
             mCurCoins.setText(Integer.toString(CacheProfile.money));
             mCurPower.setText(Integer.toString(CacheProfile.power));
             if (CacheProfile.money > 0) {
@@ -128,7 +133,7 @@ public class BuyingFragment extends BaseFragment implements View.OnClickListener
         TextView vipBtnText = (TextView) root.findViewById(R.id.fbVipBtnText);
         TextView vipPrice = (TextView) root.findViewById(R.id.vipPrice);
 
-        mVipBtn = (RelativeLayout) root.findViewById(R.id.fbVipButton);
+        RelativeLayout vipBtn = (RelativeLayout) root.findViewById(R.id.fbVipButton);
 
         if (CacheProfile.premium) {
             status.setText(getString(R.string.vip_state_on));
@@ -140,7 +145,7 @@ public class BuyingFragment extends BaseFragment implements View.OnClickListener
             vipPrice.setVisibility(View.VISIBLE);
         }
 
-        mVipBtn.setOnClickListener(new View.OnClickListener() {
+        vipBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 goToVipSettings();
@@ -153,7 +158,7 @@ public class BuyingFragment extends BaseFragment implements View.OnClickListener
 //        if(getActivity() != null) {
 //            ((ContainerActivity)getActivity()).startFragment(ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
 //        }
-        Intent intent = new Intent(getActivity(),ContainerActivity.class);
+        Intent intent = new Intent(getActivity(), ContainerActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
         startActivity(intent);
     }
@@ -166,19 +171,19 @@ public class BuyingFragment extends BaseFragment implements View.OnClickListener
     private void requestPurchase(View view) {
         switch (view.getId()) {
             case R.id.fb6Pack:
-                mBillingService.requestPurchase("topface.coins.6", Consts.ITEM_TYPE_INAPP, null);
+                mBillindDriver.buyItem("topface.coins.6");
                 break;
             case R.id.fb40Pack:
-                mBillingService.requestPurchase("topface.coins.40", Consts.ITEM_TYPE_INAPP, null);
+                mBillindDriver.buyItem("topface.coins.40");
                 break;
             case R.id.fb100Pack:
-                mBillingService.requestPurchase("topface.coins.100", Consts.ITEM_TYPE_INAPP, null);
+                mBillindDriver.buyItem("topface.coins.100");
                 break;
             case R.id.fb300Pack:
-                mBillingService.requestPurchase("topface.coins.300", Consts.ITEM_TYPE_INAPP, null);
+                mBillindDriver.buyItem("topface.coins.300");
                 break;
             case R.id.fbRecharge:
-                mBillingService.requestPurchase("topface.energy.10000", Consts.ITEM_TYPE_INAPP, null);
+                mBillindDriver.buyItem("topface.energy.10000");
                 break;
         }
     }
@@ -192,90 +197,57 @@ public class BuyingFragment extends BaseFragment implements View.OnClickListener
     private void requestTestPurchase(View view) {
         switch (view.getId()) {
             case R.id.btnBuyingMoney6:
-                mBillingService.requestPurchase("android.test.purchased", Consts.ITEM_TYPE_INAPP, null);
+                mBillindDriver.buyItem("android.test.purchased");
                 break;
             case R.id.btnBuyingMoney40:
-                mBillingService.requestPurchase("android.test.canceled", Consts.ITEM_TYPE_INAPP, null);
+                mBillindDriver.buyItem("android.test.canceled");
                 break;
             case R.id.btnBuyingMoney100:
-                mBillingService.requestPurchase("android.test.refunded", Consts.ITEM_TYPE_INAPP, null);
+                mBillindDriver.buyItem("android.test.refunded");
                 break;
             case R.id.btnBuyingMoney300:
-                mBillingService.requestPurchase("android.test.item_unavailable", Consts.ITEM_TYPE_INAPP, null);
+                mBillindDriver.buyItem("android.test.item_unavailable");
                 break;
             case R.id.btnBuyingPower:
-                mBillingService.requestPurchase("android.test.purchased", Consts.ITEM_TYPE_INAPP, null);
+                mBillindDriver.buyItem("android.test.purchased");
                 break;
         }
     }
-
 
 
     @Override
     public void onDestroy() {
-        mBillingService.unbind();
+        mBillindDriver.onDestroy();
         super.onDestroy();
     }
 
-    private class TopfacePurchaseObserver extends PurchaseObserver {
-        public TopfacePurchaseObserver(Handler handler) {
-            super(getActivity(), handler);
-        }
-
-        @Override
-        public void onBillingSupported(boolean supported, String type) {
-            Debug.log("Buying: supported: " + supported);
-
-            if (type == null || type.equals(Consts.ITEM_TYPE_INAPP)) {
-                if (supported) {
-                    mBuy6.setEnabled(true);
-                    mBuy40.setEnabled(true);
-                    mBuy100.setEnabled(true);
-                    mBuy300.setEnabled(true);
-                    mRecharge.setEnabled(true);
-                } else {
-                    mBuy6.setEnabled(false);
-                    mBuy40.setEnabled(false);
-                    mBuy100.setEnabled(false);
-                    mBuy300.setEnabled(false);
-                    mRecharge.setEnabled(false);
-                    Toast.makeText(getActivity().getApplicationContext(), getString(R.string.buy_play_market_not_available), Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-
-        @Override
-        public void onPurchaseStateChange(Consts.PurchaseState purchaseState, String itemId,
-                                          int quantity, long purchaseTime, String developerPayload,
-                                          String signedData, String signature) {
-
-            if (purchaseState == Consts.PurchaseState.PURCHASED) {
-                Debug.log("Вот мы и купили, нужно понять что делать с интерфейсом");
-            }
-        }
-
-        @Override
-        public void onRequestPurchaseResponse(BillingService.RequestPurchase request,
-                                              Consts.ResponseCode responseCode) {
-            Debug.log("Buying " + request.mProductId + ": " + responseCode);
-            if (responseCode == Consts.ResponseCode.RESULT_OK) {
-                Debug.log("Buying: purchase was successfully sent to server");
-            } else if (responseCode == Consts.ResponseCode.RESULT_USER_CANCELED) {
-                Debug.log("Buying: user canceled purchase");
-            } else {
-                Debug.log("Buying: purchase failed");
-            }
-        }
-
-        @Override
-        public void onRestoreTransactionsResponse(BillingService.RestoreTransactions request,
-                                                  Consts.ResponseCode responseCode) {
-            if (responseCode == Consts.ResponseCode.RESULT_OK) {
-                //Нам восстанавливать транзакции при переустановки приложения не нужно, нам об это и так сервер скажет
-                Debug.log("Buying: completed RestoreTransactions request");
-            } else {
-                Debug.log("Buying: RestoreTransactions error: " + responseCode);
-            }
-        }
+    @Override
+    public void onInAppBillingSupported() {
+        mBuy6.setEnabled(true);
+        mBuy40.setEnabled(true);
+        mBuy100.setEnabled(true);
+        mBuy300.setEnabled(true);
+        mRecharge.setEnabled(true);
     }
+
+    @Override
+    public void onSubscritionSupported() {
+        //TODO: добавить поддержку подписок
+    }
+
+    @Override
+    public void onInAppBillingUnsupported() {
+        mBuy6.setEnabled(false);
+        mBuy40.setEnabled(false);
+        mBuy100.setEnabled(false);
+        mBuy300.setEnabled(false);
+        mRecharge.setEnabled(false);
+        Toast.makeText(getActivity().getApplicationContext(), getString(R.string.buy_play_market_not_available), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onSubscritionUnsupported() {
+        //TODO: добавить поддержку подписок
+    }
+
 }

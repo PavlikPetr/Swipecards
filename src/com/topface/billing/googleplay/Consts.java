@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.topface.topface.billing;
+package com.topface.billing.googleplay;
 
 /**
  * This class holds global constants that are used throughout the application
@@ -60,9 +60,11 @@ public class Consts {
         }
     }
 
-    /** This is the action we use to bind to the MarketBillingService. */
+    /**
+     * This is the action we use to bind to the MarketBillingService.
+     */
     public static final String MARKET_BILLING_SERVICE_ACTION =
-        "com.android.vending.billing.MarketBillingService.BIND";
+            "com.android.vending.billing.MarketBillingService.BIND";
 
     // Intent actions that we send from the BillingReceiver to the
     // BillingService.  Defined by this application.
@@ -77,9 +79,9 @@ public class Consts {
     // These are defined by Market and cannot be changed.
     public static final String ACTION_NOTIFY = "com.android.vending.billing.IN_APP_NOTIFY";
     public static final String ACTION_RESPONSE_CODE =
-        "com.android.vending.billing.RESPONSE_CODE";
+            "com.android.vending.billing.RESPONSE_CODE";
     public static final String ACTION_PURCHASE_STATE_CHANGED =
-        "com.android.vending.billing.PURCHASE_STATE_CHANGED";
+            "com.android.vending.billing.PURCHASE_STATE_CHANGED";
 
     // These are the names of the extras that are passed in an intent from
     // Market to this application and cannot be changed.
@@ -107,6 +109,6 @@ public class Consts {
     // These are the types supported in the IAB v2
     public static final String ITEM_TYPE_INAPP = "inapp";
     public static final String ITEM_TYPE_SUBSCRIPTION = "subs";
-    
+
     public static final boolean DEBUG = true;
 }

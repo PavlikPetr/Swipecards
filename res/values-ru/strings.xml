@@ -24,7 +24,8 @@
     <string name="general_server_error">Ошибка. Попробуйте позже</string>
     <string name="general_data_error">Ошибка. Попробуйте ещё раз</string>
     <string name="general_internet_off">Нет подключения к интернету</string>
-    <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru</string>
+    <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru
+    </string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Текст скопирован</string>
     <string name="general_spinner_title">Выберите действие</string>
@@ -309,7 +310,8 @@
     <string name="dating_prev_button_ext">Предыдущий</string>
     <string name="dating_skip_button_ext">Следующий</string>
     <string name="dating_search_empty_title">К сожалению, ничего не найдено</string>
-    <string name="dating_search_empty_text">Вы можете попытаться повторить поиск, либо изменить настройки фильтра.</string>
+    <string name="dating_search_empty_text">Вы можете попытаться повторить поиск, либо изменить настройки фильтра.
+    </string>
     <string name="general_close">Закрыть</string>
     <string name="vip_not_activated">Ваш VIP-статус не активирован</string>
     <string name="vip_one_month_title">1 месяц</string>
@@ -352,7 +354,9 @@
     <string name="vip_why">Почему вам так важно быть VIP</string>
     <string name="vip_info_delight">Отправляйте восхищения бесплатно - вражайте свои чувства по максимуму!</string>
     <string name="vip_info_guest">Узнайте, кто вами интересовался - смотрите своих гостей!</string>
-    <string name="vip_info_invisible">Оставайтесь незамеченными, посещая чужие страницы, благодаря режиму \"невидимка\"</string>
+    <string name="vip_info_invisible">Оставайтесь незамеченными, посещая чужие страницы, благодаря режиму
+        \"невидимка\"
+    </string>
     <string name="vip_info_message">Получите преимущество - ваши сообщения будут выделяться на общем фоне!</string>
     <string name="vip_info_gift">Выбирайте эксклюзивные VIP-подарки, и вас обязательно запомнят!</string>
     <string name="vip_info_blackList">Избавляйтесь от надоевших персон с помощью \"черного списка\"</string>
@@ -387,13 +391,16 @@
     <string name="edit_my_city">Мой город</string>
     <string name="edit_my_photos">Мои фотографии</string>
     <string name="general_search_empty_title">К сожалению, ничего не найдено</string>
-    <string name="general_search_empty_text">Вы можете попытаться повторить поиск, либо изменить настройки фильтра</string>
+    <string name="general_search_empty_text">Вы можете попытаться повторить поиск, либо изменить настройки фильтра
+    </string>
     <string name="profile_get_status">Опишите Ваше настроение</string>
     <string name="map_title">Карта</string>
 
     <string name="settings_want_answer">Я хочу что бы мне ответили</string>
     <string name="settings_feedback_email">Email для связи</string>
     <string name="settings_invalid_email">Некорректный Email</string>
+
+    <string name="leaders_select_cool_picture">Выберите эффектную фотографию:</string>
 
     <string name="buying_sympathies">Покупка симпатий</string>
 </resources>

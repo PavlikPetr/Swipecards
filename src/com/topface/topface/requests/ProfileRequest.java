@@ -55,14 +55,14 @@ public class ProfileRequest extends AbstractApiRequest {
                 fields = new JSONArray();
                 break;
         }
-        if(fields != null) {
+        if (fields != null) {
             return new JSONObject()
                     .put("fields", fields)
                             //При запросе профиля считаем текущего пользователя "гостем"
                     .put("visitor", true);
         }
         return new JSONObject()
-                        //При запросе профиля считаем текущего пользователя "гостем"
+                //При запросе профиля считаем текущего пользователя "гостем"
                 .put("visitor", true);
     }
 

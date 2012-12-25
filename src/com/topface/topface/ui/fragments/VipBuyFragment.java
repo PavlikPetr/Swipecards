@@ -2,39 +2,31 @@ package com.topface.topface.ui.fragments;
 
 
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
-import com.topface.topface.GCMUtils;
+import com.topface.billing.BillingDriver;
+import com.topface.billing.BillingListener;
+import com.topface.billing.BillingSupportListener;
+import com.topface.billing.BillingTypeManager;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.billing.BillingService;
-import com.topface.topface.billing.Consts;
-import com.topface.topface.billing.PurchaseObserver;
-import com.topface.topface.billing.ResponseHandler;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.profile.BlackListActivity;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 
 import static android.view.View.OnClickListener;
 
-public class VipBuyFragment extends BaseFragment implements OnClickListener {
+public class VipBuyFragment extends BaseFragment implements OnClickListener, BillingSupportListener {
 
     EditSwitcher mInvisSwitcher;
     EditSwitcher mBgSwitcher;
@@ -42,7 +34,7 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener {
     BroadcastReceiver mBroadcastReceiver;
 
     ProgressBar mInvisLoadBar;
-    private BillingService mBillingService;
+    private BillingDriver mBillindDriver;
 
     public static final String BROADCAST_PURCHASE_ACTION = "com.topface.topface.PURCHASE_NOTIFICATION";
     private LayoutInflater mInflater;
@@ -58,48 +50,28 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ResponseHandler.register(new VipPurchaseObserver(new Handler()));
 
-        mBillingService = new BillingService();
-        mBillingService.setContext(getActivity());
 
-        if (!mBillingService.checkBillingSupported(Consts.ITEM_TYPE_INAPP)) {
-            Toast.makeText(getActivity(), R.string.buy_play_market_not_available, Toast.LENGTH_SHORT)
-                    .show();
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mBroadcastReceiver = new BroadcastReceiver() {
+        mBillindDriver = BillingTypeManager.getInstance().createMainBillingDriver(getActivity(), new BillingListener() {
             @Override
-            public void onReceive(Context context, Intent intent) {
+            public void onPurchased() {
                 switchLayouts();
             }
-        };
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
-    }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
-    }
+            @Override
+            public void onError() {
+                //TODO: сделать обработку ошибок
+            }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
+            @Override
+            public void onCancel() {
+            }
+        }, this);
     }
 
     @Override
     public void onDestroy() {
-        mBillingService.unbind();
+        mBillindDriver.onDestroy();
         super.onDestroy();
     }
 
@@ -288,45 +260,37 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener {
         //Подписки на премиумы
         switch (v.getId()) {
             case R.id.fbpBuyingMonth:
-                mBillingService.requestPurchase("topface.premium.month.1", Consts.ITEM_TYPE_SUBSCRIPTION, null);
+                mBillindDriver.buySubscriotion("topface.premium.month.1");
                 EasyTracker.getTracker().trackEvent("Subscription", "ButtonClick", "Month", 0L);
                 break;
 
             case R.id.fbpBuyingYear:
-                mBillingService.requestPurchase("topface.premium.year.1", Consts.ITEM_TYPE_SUBSCRIPTION, null);
+                mBillindDriver.buySubscriotion("topface.premium.year.1");
                 EasyTracker.getTracker().trackEvent("Subscription", "ButtonClick", "Year", 0L);
                 break;
 
         }
     }
 
-    private class VipPurchaseObserver extends PurchaseObserver {
-        public VipPurchaseObserver(Handler handler) {
-            super(getActivity(), handler);
-        }
+    @Override
+    public void onSubscritionSupported() {
+    }
 
-        @Override
-        public void onBillingSupported(boolean supported, String type) {
-
-        }
-
-        @Override
-        public void onPurchaseStateChange(Consts.PurchaseState purchaseState, String itemId, int quantity, long purchaseTime, String developerPayload, String signedData, String signature) {
-            if (purchaseState == Consts.PurchaseState.PURCHASED) {
-                try {
-                    EasyTracker.getTracker().trackEvent("Subscription", "Complete", itemId, 0L);
-                } catch (Exception e) {
-                    Debug.error(e);
-                }
-            }
-        }
-
-        @Override
-        public void onRequestPurchaseResponse(BillingService.RequestPurchase request, Consts.ResponseCode responseCode) {
-        }
-
-        @Override
-        public void onRestoreTransactionsResponse(BillingService.RestoreTransactions request, Consts.ResponseCode responseCode) {
+    @Override
+    public void onSubscritionUnsupported() {
+        //Если подписка не поддерживается, сообщаем об этом пользователю
+        if (!CacheProfile.premium) {
+            Toast.makeText(getActivity(), R.string.buy_play_market_not_available, Toast.LENGTH_SHORT)
+                    .show();
         }
     }
+
+    @Override
+    public void onInAppBillingSupported() {
+    }
+
+    @Override
+    public void onInAppBillingUnsupported() {
+    }
+
 }

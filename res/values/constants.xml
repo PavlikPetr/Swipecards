@@ -2,6 +2,12 @@
 <!--suppress AndroidLintMissingTranslation -->
 <resources>
 
+    <string name="build_type_key">com.topface.topface.build</string>
+    <string name="build_default">@string/build_google_play_v2</string>
+    <string name="build_google_play_v2">google-play-v2</string>
+    <string name="build_google_play_v3">google-play-v3</string>
+    <string name="build_amazon">amazon</string>
+
     <!-- Filter pref name -->
     <string name="s_dating_select_city">dating_select_city</string>
     <string name="s_dating_city">dating_city</string>

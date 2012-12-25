@@ -209,7 +209,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
                         @Override
                         public void run() {
-                        Toast.makeText(getActivity(), getString(R.string.general_data_error),Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -218,7 +218,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             updateUI(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(getActivity().getApplicationContext(),R.string.settings_invalid_email,Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity().getApplicationContext(), R.string.settings_invalid_email, Toast.LENGTH_LONG).show();
                     mEditEmail.requestFocus();
                 }
             });
@@ -233,8 +233,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
                 mReport.email = email;
                 Settings.getInstance().setSocialAccountEmail(mReport.email);
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         } else {
@@ -276,7 +275,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         public String getExtra() {
             StringBuilder strBuilder = new StringBuilder();
 
-            if(emailWanted && email != null) {
+            if (emailWanted && email != null) {
                 strBuilder.append("<p>Email for answer: ").append(email).append("</p>");
             }
             strBuilder.append("<p>Topface version: ").append(topface_version).append("/").append(topface_versionCode).append("</p>");

@@ -34,15 +34,14 @@
                         android:textStyle="bold"
                         />
 
-                <com.topface.topface.ui.views.ServicesTextView
-                        xmlns:stv="http://schemas.android.com/apk/res/com.topface.topface"
-                        android:id="@+id/fbCurCoins"
-                        stv:maxChars="5"
-                        stv:charPadding="7"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        stv:fontSize="24"
-                        stv:image="@drawable/ic_coins"
+                <com.topface.topface.ui.views.ServicesTextView xmlns:stv="http://schemas.android.com/apk/res/com.topface.topface"
+                                                               android:id="@+id/fbCurCoins"
+                                                               stv:maxChars="5"
+                                                               stv:charPadding="7"
+                                                               android:layout_width="wrap_content"
+                                                               android:layout_height="wrap_content"
+                                                               stv:fontSize="24"
+                                                               stv:image="@drawable/ic_coins"
                         />
             </LinearLayout>
 
@@ -56,21 +55,21 @@
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=""
+                        android:text="@string/default_energy_balance_constant"
                         android:textColor="#FFFFFF"
                         android:textStyle="bold"
                         android:layout_marginBottom="10dp"
                         />
 
-                <com.topface.topface.ui.views.ServicesTextView
-                        xmlns:stv="http://schemas.android.com/apk/res/com.topface.topface"
-                        android:id="@+id/fbCurPower"
-                        stv:maxChars="5"
-                        stv:charPadding="7"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        stv:fontSize="24"
-                        stv:image="@drawable/ic_sympathy"
+                <com.topface.topface.ui.views.ServicesTextView xmlns:stv="http://schemas.android.com/apk/res/com.topface.topface"
+                                                               android:id="@+id/fbCurPower"
+                                                               stv:maxChars="3"
+                                                               stv:charPadding="7"
+                                                               android:layout_width="wrap_content"
+                                                               android:layout_height="wrap_content"
+                                                               stv:fontSize="24"
+                                                               stv:textWithoutBackground="%"
+                                                               stv:image="@drawable/ic_power"
                         />
             </LinearLayout>
         </RelativeLayout>
@@ -347,29 +346,15 @@
                     android:layout_width="fill_parent"
                     android:layout_marginBottom="2dp"
                     android:layout_marginTop="10dp"
-                    >
-                <TextView
-                        android:id="@+id/vip_status"
-                        style="@style/TitleWhiteText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/vip_not_activated"
-                        android:layout_alignParentLeft="true"
-                        android:textStyle="bold"/>
-                <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_rocket_small"
-                        android:layout_alignParentRight="true"
-                        />
-            </RelativeLayout>
-
+                    android:text="@string/vip_not_activated"
+                    android:layout_alignParentLeft="true"
+                    android:textStyle="bold"/>
             <RelativeLayout
                     android:id="@+id/fbVipButton"
                     android:layout_width="fill_parent"
                     android:layout_height="50dp"
                     android:background="@drawable/btn_vip_sale_selector"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop = "10dp"
                     android:padding="5dp"
                     >
                 <TextView

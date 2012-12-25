@@ -4,16 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.Photo;
+import com.topface.topface.data.Photos;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.LeaderRequest;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.adapters.LeadersPhotoAdapter;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
@@ -28,7 +27,7 @@ public class LeadersActivity extends BaseFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_leaders);
+        setContentView(R.layout.ac_leaders_new);
         ((TextView) findViewById(R.id.tvNavigationTitle)).setText(R.string.leaders_go_date);
         findViewById(R.id.btnNavigationHome).setVisibility(View.INVISIBLE);
         View backButton = findViewById(R.id.btnNavigationBack);
@@ -40,6 +39,8 @@ public class LeadersActivity extends BaseFragmentActivity {
             }
         });
 
+//        mProgressBar = (ProgressBar) findViewById(R.id.loader);
+        mGridView = (GridView) findViewById(R.id.fragmentGrid);
         mBuyButton = (Button) findViewById(R.id.btnLeadersBuy);
         mLoadingLocker = (LockerView) findViewById(R.id.llvLeaderSending);
 
@@ -99,27 +100,23 @@ public class LeadersActivity extends BaseFragmentActivity {
             }
         });
 
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i == 0) {
-                    mAddPhotoHelper.addPhoto();
-                } else {
-                    mSelectedPhoto.select(i, adapterView);
-                }
+                mSelectedPhoto.select(i, adapterView);
             }
         });
     }
 
     private void updateProfileInfo(Profile profile) {
         LeadersPhotoAdapter leadersAdapter = new LeadersPhotoAdapter(getApplicationContext(), profile.photos, mSelectedPhoto);
-        mListView.setAdapter(leadersAdapter);
+        mGridView.setAdapter(leadersAdapter);
+        mSelectedPhoto.selectInitPhoto(profile.photo,profile.photos);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mAddPhotoHelper.checkActivityResult(requestCode, resultCode, data);
     }
 
     private void getProfile() {
@@ -131,11 +128,11 @@ public class LeadersActivity extends BaseFragmentActivity {
         private int mPhotoId;
 
         public void select(int item, AdapterView<?> adapterView) {
-            if (item > 0) {
+            if (item >= 0) {
                 //При повторном клике на выбранный элемент, отключаем
                 if (item == mItem) {
-                    mItem = 0;
-                    mPhotoId = 0;
+                    mItem = -1;
+                    mPhotoId = -1;
                 } else {
                     Photo photo = (Photo) adapterView.getItemAtPosition(item);
                     mItem = item;
@@ -143,6 +140,16 @@ public class LeadersActivity extends BaseFragmentActivity {
                 }
                 ((LeadersPhotoAdapter) adapterView.getAdapter()).notifyDataSetChanged();
             }
+        }
+
+        public void selectInitPhoto(Photo avatar, Photos photos) {
+            for (int i=0; i < photos.size(); i++) {
+                if (avatar.getId() == photos.get(i).getId()) {
+                    mItem = i;
+                    break;
+                }
+            }
+            mPhotoId = avatar.getId();
         }
 
         public boolean isSelected() {
