@@ -89,6 +89,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
     private Handler mHideActionControlsUpdater;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -603,6 +604,19 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         private String mCityVal;
         private ImageView mBackgroundView;
         private int mBackgroundVal;
+        private BroadcastReceiver mBroadcastReceiver;
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            mBroadcastReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    refreshViews();
+                }
+            };
+            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
+        }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -692,6 +706,12 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         public boolean isTrackable() {
             return false;
         }
+
+        @Override
+        public void onDestroy() {
+            super.onDestroy();
+            LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
+        }
     }
 
     public static class HeaderStatusFragment extends BaseFragment {
@@ -699,6 +719,19 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
         private TextView mStatusView;
         private String mStatusVal;
+        private BroadcastReceiver mBroadcastReceiver;
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            mBroadcastReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    refreshViews();
+                }
+            };
+            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
+        }
 
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             super.onCreateView(inflater, container, savedInstanceState);
@@ -764,6 +797,12 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         @Override
         public void clearContent() {
             mStatusView.setText(Static.EMPTY);
+        }
+
+        @Override
+        public void onDestroy() {
+            super.onDestroy();
+            LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
         }
     }
 

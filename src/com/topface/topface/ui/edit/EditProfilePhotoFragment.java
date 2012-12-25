@@ -6,19 +6,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.topface.topface.App;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.MainRequest;
-import com.topface.topface.requests.PhotoDeleteRequest;
+import com.topface.topface.requests.*;
 import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.ui.profile.ProfilePhotoGridAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -165,7 +164,9 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                         CacheProfile.photo = mPhotoLinks.getByPhotoId(mLastSelectedAsMainId);
                         getActivity().setResult(Activity.RESULT_OK);
                         mSelectedAsMainId = mLastSelectedAsMainId;
+                        LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
                         finishOperations(handler);
+
                     }
 
                     @Override

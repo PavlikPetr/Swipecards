@@ -47,6 +47,7 @@ public class BuyingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_buy, null);
+        initViews(root);
 
         mBillindDriver = BillingTypeManager.getInstance().createMainBillingDriver(getActivity(), new BillingListener() {
             @Override
@@ -65,7 +66,6 @@ public class BuyingFragment extends BaseFragment implements View.OnClickListener
             }
         }, this);
 
-        initViews(root);
 
         return root;
     }

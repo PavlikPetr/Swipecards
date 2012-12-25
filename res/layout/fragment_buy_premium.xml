@@ -5,145 +5,208 @@
             android:background="@drawable/bg_main"
         >
     <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/fbpContainer"
-            android:padding="5dp"
-            >
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/vip_not_activated"
-                style="@style/TitleWhiteText"
-                android:layout_margin="5dp"
-                />
-        <RelativeLayout
-                android:id="@+id/fbpBuyingMonth"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        >
+        <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="fill_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/btn_vip_sale_selector"
+                android:layout_height="wrap_content"
+                android:id="@+id/fbpContainer"
                 android:padding="5dp"
-                android:layout_margin="5dp"
                 >
             <TextView
-                    android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:paddingLeft="5dp"
-                    android:text="@string/vip_one_month_title"
-                    style="@style/ButtonGrayText"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
+                    android:layout_height="wrap_content"
+                    android:text="@string/vip_not_activated"
+                    style="@style/TitleWhiteText"
+                    android:layout_margin="5dp"
                     />
-            <ImageView
+            <RelativeLayout
+                    android:id="@+id/fbpBuyingMonth"
+                    android:layout_width="fill_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/btn_vip_sale_selector"
+                    android:padding="5dp"
+                    android:layout_margin="5dp"
+                    >
+                <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:paddingLeft="5dp"
+                        android:text="@string/vip_one_month_title"
+                        style="@style/ButtonGrayText"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        />
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:src="@drawable/dot_vip_btn"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="75dp"
+                        />
+                <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:paddingRight="5dp"
+                        style="@style/ButtonGrayText"
+                        android:text="@string/vip_one_month_value"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        />
+            </RelativeLayout>
+            <RelativeLayout
+                    android:id="@+id/fbpBuyingYear"
+                    android:layout_width="fill_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/btn_vip_super_sale_selector"
+                    android:padding="5dp"
+                    android:layout_margin="5dp"
+                    >
+                <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="@string/vip_one_year_title"
+                        android:paddingLeft="5dp"
+                        style="@style/ButtonWhiteText"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        />
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
                     android:src="@drawable/dot_vip_btn"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="75dp"
                     />
+                <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:paddingRight="5dp"
+                        android:text="@string/vip_one_year_value"
+                        style="@style/ButtonWhiteText"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        />
+            </RelativeLayout>
+
             <TextView
-                    android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:paddingRight="5dp"
-                    style="@style/ButtonGrayText"
-                    android:text="@string/vip_one_month_value"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
+                    android:layout_height="wrap_content"
+                    android:text="@string/vip_privileges"
+                    style="@style/TitleWhiteText"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="10dp"
                     />
-        </RelativeLayout>
-        <RelativeLayout
-                android:id="@+id/fbpBuyingYear"
-                android:layout_width="fill_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/btn_vip_super_sale_selector"
-                android:padding="5dp"
-                android:layout_margin="5dp"
-                >
-            <TextView
+
+            <ImageView
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="@string/vip_one_year_title"
-                    android:paddingLeft="5dp"
-                    style="@style/ButtonWhiteText"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
+                    android:src="@drawable/vip_separator"
+                    />
+            <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_vip_invisible"
+                    android:text="@string/vip_info_guest"
+                    style="@style/VipItemTitleWhiteText"
                     />
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:src="@drawable/dot_vip_btn"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="75dp"
-                />
-            <TextView
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:paddingRight="5dp"
-                    android:text="@string/vip_one_year_value"
-                    style="@style/ButtonWhiteText"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
+                    android:src="@drawable/vip_separator"
                     />
-        </RelativeLayout>
+            <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_vip_unlock"
+                    android:text="@string/vip_info_delight"
+                    style="@style/VipItemTitleWhiteText"
+                    />
+            <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/vip_separator"
+                    />
+            <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_vip_blacklist"
+                    android:text="@string/vip_info_blackList"
+                    style="@style/VipItemTitleWhiteText"
+                    />
+            <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/vip_separator"
+                    />
+            <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_vip_dialog"
+                    android:text="@string/vip_info_message"
+                    style="@style/VipItemTitleWhiteText"
+                    />
+        </LinearLayout>
+        <LinearLayout
+                android:id="@+id/editPremiumContainer"
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                >
+            <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    >
+                <TextView
+                        android:id="@+id/fepVipRest"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/TitleWhiteText"
+                        android:text="@string/vip_rest"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        />
+                <ImageButton
+                        android:id="@+id/fepVipEdit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_vip_edit"
+                        android:layout_alignParentRight="true"
+                        android:background="@android:color/transparent"
+                        />
+            </RelativeLayout>
 
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/vip_privileges"
-                style="@style/TitleWhiteText"
-                android:layout_marginLeft="5dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="10dp"
-                />
+            <include
+                    android:id="@+id/fepInvis"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="20dp"
+                    layout="@layout/vip_item_edit_form_switch"/>
 
-        <ImageView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/vip_separator"
-                />
-        <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_vip_invisible"
-                android:text="@string/vip_info_guest"
-                style="@style/VipItemTitleWhiteText"
-                />
-        <ImageView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/vip_separator"
-                />
-        <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_vip_unlock"
-                android:text="@string/vip_info_delight"
-                style="@style/VipItemTitleWhiteText"
-                />
-        <ImageView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/vip_separator"
-                />
-        <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_vip_blacklist"
-                android:text="@string/vip_info_blackList"
-                style="@style/VipItemTitleWhiteText"
-                />
-        <ImageView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/vip_separator"
-                />
-        <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_vip_dialog"
-                android:text="@string/vip_info_message"
-                style="@style/VipItemTitleWhiteText"
-                />
+            <include
+                    android:id="@+id/fepBlackList"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    layout="@layout/vip_item_edit_form_select"/>
+            <include
+                    android:id="@+id/fepProfileBG"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    layout="@layout/vip_item_edit_form_select"/>
+
+
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>
