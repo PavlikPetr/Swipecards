@@ -2,8 +2,6 @@ package com.topface.topface.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -17,18 +15,15 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.LeaderRequest;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.adapters.LeadersPhotoAdapter;
-import com.topface.topface.ui.blocks.HorizontalListView;
-import com.topface.topface.ui.profile.AddPhotoHelper;
+import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
 public class LeadersActivity extends BaseFragmentActivity {
-    private HorizontalListView mListView;
-    private ProgressBar mProgressBar;
-    private ViewGroup mLeadersContent;
+    private GridView mGridView;
+    private LockerView mLoadingLocker;
     private PhotoSelector mSelectedPhoto = new PhotoSelector();
     private Button mBuyButton;
-    private AddPhotoHelper mAddPhotoHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +40,8 @@ public class LeadersActivity extends BaseFragmentActivity {
             }
         });
 
-        mProgressBar = (ProgressBar) findViewById(R.id.loader);
-        mLeadersContent = (ViewGroup) findViewById(R.id.leadersContent);
-        mListView = (HorizontalListView) findViewById(R.id.photoAlbum);
         mBuyButton = (Button) findViewById(R.id.btnLeadersBuy);
-        mAddPhotoHelper = new AddPhotoHelper(this);
-        mAddPhotoHelper.setOnResultHandler(mHandler);
+        mLoadingLocker = (LockerView) findViewById(R.id.llvLeaderSending);
 
         setListeners();
         getProfile();
@@ -75,6 +66,7 @@ public class LeadersActivity extends BaseFragmentActivity {
                 if (CacheProfile.money < CacheProfile.getOptions().price_leader) {
                     startActivity(new Intent(getApplicationContext(), BuyingActivity.class));
                 } else if (mSelectedPhoto.isSelected()) {
+                    mLoadingLocker.setVisibility(View.VISIBLE);
                     new LeaderRequest(mSelectedPhoto.getPhotoId(), LeadersActivity.this)
                             .callback(new ApiHandler() {
                                 @Override
@@ -82,6 +74,7 @@ public class LeadersActivity extends BaseFragmentActivity {
                                     post(new Runnable() {
                                         @Override
                                         public void run() {
+                                            mLoadingLocker.setVisibility(View.GONE);
                                             Toast.makeText(LeadersActivity.this, R.string.leaders_leader_now, Toast.LENGTH_SHORT).show();
                                             finish();
                                         }
@@ -93,6 +86,7 @@ public class LeadersActivity extends BaseFragmentActivity {
                                     post(new Runnable() {
                                         @Override
                                         public void run() {
+                                            mLoadingLocker.setVisibility(View.GONE);
                                             Toast.makeText(LeadersActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT).show();
                                         }
                                     });
@@ -129,32 +123,7 @@ public class LeadersActivity extends BaseFragmentActivity {
     }
 
     private void getProfile() {
-        ProfileRequest profileRequest = new ProfileRequest(getApplicationContext());
-        profileRequest.part = ProfileRequest.P_ALL;
-        profileRequest.callback(new ApiHandler() {
-            @Override
-            public void success(final ApiResponse response) {
-                post(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateProfileInfo(Profile.parse(response));
-                        mProgressBar.setVisibility(View.GONE);
-                        mLeadersContent.setVisibility(View.VISIBLE);
-                    }
-                });
-            }
-
-            @Override
-            public void fail(int codeError, ApiResponse response) {
-                post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Utils.showErrorMessage(LeadersActivity.this);
-                        mProgressBar.setVisibility(View.GONE);
-                    }
-                });
-            }
-        }).exec();
+        updateProfileInfo(CacheProfile.getProfile());
     }
 
     public static class PhotoSelector {
@@ -188,18 +157,4 @@ public class LeadersActivity extends BaseFragmentActivity {
             return mItem;
         }
     }
-
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            getProfile();
-            if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
-                Toast.makeText(LeadersActivity.this, R.string.photo_add_or, Toast.LENGTH_SHORT).show();
-            } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
-                Toast.makeText(LeadersActivity.this, R.string.photo_add_error, Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
-
 }
