@@ -1,0 +1,59 @@
+{
+    "topface.premium.month.1": {
+        "itemType": "SUBSCRIPTION",
+        "price": 10,
+        "title": "Topface 1 month subscription",
+        "description": "Subscription for VIP status!",
+        "smallIconUrl": "http://some/image.jpg",
+        "subscriptionParent": "topface.premium"
+    },
+
+    "topface.premium.year.1": {
+        "itemType": "SUBSCRIPTION",
+        "price": 100,
+        "title": "Topface 1 year subscription",
+        "description": "Subscription for VIP status!",
+        "smallIconUrl": "http://some/image.jpg",
+        "subscriptionParent": "topface.premium"
+    },
+
+    "topface.coins.6": {
+        "itemType": "CONSUMABLE",
+        "price": 1,
+        "title": "6 coins",
+        "description": "Buy 6 coins!",
+        "smallIconUrl": "http://some/image.jpg"
+    },
+
+    "topface.coins.40": {
+        "itemType": "CONSUMABLE",
+        "price": 5,
+        "title": "40 coins",
+        "description": "Buy 40 coins!",
+        "smallIconUrl": "http://some/image.jpg"
+    },
+
+    "topface.coins.100": {
+        "itemType": "CONSUMABLE",
+        "price": 10,
+        "title": "100 coins",
+        "description": "Buy 100 coins!",
+        "smallIconUrl": "http://some/image.jpg"
+    },
+
+    "topface.coins.300": {
+        "itemType": "CONSUMABLE",
+        "price": 25,
+        "title": "300 coins",
+        "description": "Buy 300 coins!",
+        "smallIconUrl": "http://some/image.jpg"
+    },
+
+    "topface.energy.10000": {
+        "itemType": "CONSUMABLE",
+        "price": 3,
+        "title": "10000 energy",
+        "description": "Buy 10000 coins!",
+        "smallIconUrl": "http://some/image.jpg"
+    }
+}

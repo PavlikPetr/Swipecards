@@ -6,7 +6,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import com.topface.billing.GooglePlayV2Queue;
 import com.topface.billing.googleplay.BillingService.RequestPurchase;
 import com.topface.billing.googleplay.BillingService.RestoreTransactions;
 import com.topface.billing.googleplay.Consts.PurchaseState;

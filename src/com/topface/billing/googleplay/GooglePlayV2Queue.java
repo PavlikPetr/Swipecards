@@ -1,7 +1,7 @@
-package com.topface.billing;
+package com.topface.billing.googleplay;
 
 import android.content.Context;
-import com.topface.billing.googleplay.ResponseHandler;
+import com.topface.billing.PurchaseQueue;
 import com.topface.topface.R;
 import com.topface.topface.utils.Debug;
 import org.json.JSONException;

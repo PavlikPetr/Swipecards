@@ -13,10 +13,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.topface.billing.BillingDriver;
-import com.topface.billing.BillingDriverManager;
-import com.topface.billing.BillingListener;
-import com.topface.billing.BillingSupportListener;
+import com.topface.billing.BillingFragment;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ProfileRequest;
@@ -24,7 +21,7 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.CacheProfile;
 
-public class BuyingFragment extends BaseFragment implements View.OnClickListener, BillingSupportListener {
+public class BuyingFragment extends BillingFragment implements View.OnClickListener {
 
     private RelativeLayout mBuy6;
     private RelativeLayout mBuy40;
@@ -38,7 +35,6 @@ public class BuyingFragment extends BaseFragment implements View.OnClickListener
     private ServicesTextView mCurCoins;
     private ServicesTextView mCurPower;
     private TextView mResourcesInfo;
-    private BillingDriver mBillindDriver;
 
     public static BuyingFragment newInstance() {
         return new BuyingFragment();
@@ -48,24 +44,6 @@ public class BuyingFragment extends BaseFragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_buy, null);
         initViews(root);
-
-        mBillindDriver = BillingDriverManager.getInstance().createMainBillingDriver(getActivity(), new BillingListener() {
-            @Override
-            public void onPurchased() {
-                updateBalanceCounters();
-            }
-
-            @Override
-            public void onError() {
-                //TODO: Сделать обработку ошибок
-            }
-
-            @Override
-            public void onCancel() {
-                //Возможно стоит добавить реакцию на отмену покупки пользователем
-            }
-        }, this);
-
 
         return root;
     }
@@ -171,19 +149,19 @@ public class BuyingFragment extends BaseFragment implements View.OnClickListener
     private void requestPurchase(View view) {
         switch (view.getId()) {
             case R.id.fb6Pack:
-                mBillindDriver.buyItem("topface.coins.6");
+                buyItem("topface.coins.6");
                 break;
             case R.id.fb40Pack:
-                mBillindDriver.buyItem("topface.coins.40");
+                buyItem("topface.coins.40");
                 break;
             case R.id.fb100Pack:
-                mBillindDriver.buyItem("topface.coins.100");
+                buyItem("topface.coins.100");
                 break;
             case R.id.fb300Pack:
-                mBillindDriver.buyItem("topface.coins.300");
+                buyItem("topface.coins.300");
                 break;
             case R.id.fbRecharge:
-                mBillindDriver.buyItem("topface.energy.10000");
+                buyItem("topface.energy.10000");
                 break;
         }
     }
@@ -197,28 +175,21 @@ public class BuyingFragment extends BaseFragment implements View.OnClickListener
     private void requestTestPurchase(View view) {
         switch (view.getId()) {
             case R.id.btnBuyingMoney6:
-                mBillindDriver.buyItem("android.test.purchased");
+                buyItem("android.test.purchased");
                 break;
             case R.id.btnBuyingMoney40:
-                mBillindDriver.buyItem("android.test.canceled");
+                buyItem("android.test.canceled");
                 break;
             case R.id.btnBuyingMoney100:
-                mBillindDriver.buyItem("android.test.refunded");
+                buyItem("android.test.refunded");
                 break;
             case R.id.btnBuyingMoney300:
-                mBillindDriver.buyItem("android.test.item_unavailable");
+                buyItem("android.test.item_unavailable");
                 break;
             case R.id.btnBuyingPower:
-                mBillindDriver.buyItem("android.test.purchased");
+                buyItem("android.test.purchased");
                 break;
         }
-    }
-
-
-    @Override
-    public void onDestroy() {
-        mBillindDriver.onDestroy();
-        super.onDestroy();
     }
 
     @Override
@@ -250,4 +221,18 @@ public class BuyingFragment extends BaseFragment implements View.OnClickListener
         //TODO: добавить поддержку подписок
     }
 
+    @Override
+    public void onPurchased() {
+        updateBalanceCounters();
+    }
+
+    @Override
+    public void onError() {
+        //TODO: Сделать обработку ошибок
+    }
+
+    @Override
+    public void onCancel() {
+        //Возможно стоит добавить реакцию на отмену покупки пользователем
+    }
 }
