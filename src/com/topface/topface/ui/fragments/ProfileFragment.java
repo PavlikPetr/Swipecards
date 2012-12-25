@@ -173,6 +173,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         setProfile(mUserProfile);
 
         startWaitingActionControlsHide();
+        mNavBarController.refreshNotificators();
     }
 
     @Override

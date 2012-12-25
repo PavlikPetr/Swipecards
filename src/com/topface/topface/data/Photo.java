@@ -84,6 +84,8 @@ public class Photo extends AbstractData implements Parcelable {
     protected int mId;
     private Pattern mPattern;
 
+    public int mLiked;
+
     public Photo(int id, HashMap<String, String> links) {
         this.mId = id;
         this.links = links;
@@ -111,6 +113,8 @@ public class Photo extends AbstractData implements Parcelable {
                     links.put(key, linksJson.optString(key));
                 }
             }
+
+            mLiked = photoItem.optInt("liked");
         }
     }
 
@@ -287,6 +291,10 @@ public class Photo extends AbstractData implements Parcelable {
 
     public int getId() {
         return mId;
+    }
+
+    public int getRate() {
+        return mLiked;
     }
 
     @Override
