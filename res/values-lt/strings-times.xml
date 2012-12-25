@@ -11,6 +11,11 @@
         <item quantity="other">%d minučių atgal</item>
         <item quantity="one">%d minučių atgal</item>
     </plurals>
+    <plurals name="time_month">
+        <item quantity="few">%d mėnesiai</item>
+        <item quantity="other">%d mėnesių</item>
+        <item quantity="one">%d mėnuo</item>
+    </plurals>
     <string name="time_yesterday">Vakar</string>
     <string name="time_today">Šiandien</string>
     <string name="time_monday">Pir</string>

@@ -10,6 +10,10 @@
         <item quantity="other">%d perccel ezelőtt</item>
         <item quantity="one">%d perccel ezelőtt</item>
     </plurals>
+    <plurals name="time_month">
+        <item quantity="other">%d hónap</item>
+        <item quantity="one">%d hónap</item>
+    </plurals>
     <string name="time_yesterday">Tegnap</string>
     <string name="time_today">Ma</string>
     <string name="time_monday">H</string>

@@ -288,4 +288,9 @@
     <string name="dating_people_unnoticed">Deset lidí uniklo Vaší pozornosti</string>
     <string name="dating_continue">Pokračovat v hodnocení</string>
     <string name="dating_better_look">Rozkoukejte se!\n Nepropásněte svou šanci!</string>
+    <string name="edit_my_city">Moje město</string>
+    <string name="edit_my_photos">Mojí fotky</string>
+    <string name="general_search_empty_title">Bohužel, nic nebylo nalezeno</string>
+    <string name="profile_get_status">Popište Vaši náladu</string>
+    <string name="map_title">Mapa</string>
 </resources>

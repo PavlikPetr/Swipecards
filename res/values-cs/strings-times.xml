@@ -11,6 +11,11 @@
         <item quantity="other">před %d minutami</item>
         <item quantity="one">před %d minutami</item>
     </plurals>
+    <plurals name="time_month">
+        <item quantity="few">%d měsíce</item>
+        <item quantity="other">%d měsíců</item>
+        <item quantity="one">%d měsíc</item>
+    </plurals>
     <string name="time_yesterday">Včera</string>
     <string name="time_today">Dnes</string>
     <string name="time_monday">Pondělí</string>

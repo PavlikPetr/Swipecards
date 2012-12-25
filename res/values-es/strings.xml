@@ -284,4 +284,9 @@
     <string name="dating_people_unnoticed">¡Diez personas quedaron sin tu atención!</string>
     <string name="dating_continue">Continua evaluando</string>
     <string name="dating_better_look">¡Fijate bien!\n¡Posiblemente estás dejando escapar tu destino!</string>
+    <string name="edit_my_city">Mi ciudad</string>
+    <string name="edit_my_photos">Mis fotografías</string>
+    <string name="general_search_empty_title">Lamentablemente, no se ha encontrado nada</string>
+    <string name="profile_get_status">Decribe tu humor</string>
+    <string name="map_title">Mapa</string>
 </resources>

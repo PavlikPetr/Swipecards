@@ -119,7 +119,7 @@
     <string name="edit_selected">Επιλεγμένη</string>
     <string name="edit_name">\'Ονομα</string>
     <string name="edit_age">Ηλικία</string>
-    <string name="edit_status">Κατάσταση</string>
+    <string name="edit_status">Η κατάσταση</string>
     <string name="edit_set_as_main">Να κάνουμε κύρια</string>
     <string name="edit_delete">Κατάργηστε</string>
     <string name="edit_restore">Αποκαταστήστε</string>
@@ -284,4 +284,9 @@
     <string name="dating_people_unnoticed">Δέκα ανθρώπους έμειναν χωρίς την προσοχή σας!</string>
     <string name="dating_continue">Συνεχίστε να αξιολογήσετε</string>
     <string name="dating_better_look">Ρίξτε μια προσεκτική ματιά!   Ίσως χάσετε το πεπρωμένο σας!</string>
+    <string name="edit_my_city">Η πόλη μου</string>
+    <string name="edit_my_photos">Οι φωτογραφίες μου</string>
+    <string name="general_search_empty_title">Μας συγχωρείτε,τίποτα δεν βρέθηκε.</string>
+    <string name="profile_get_status">Περιγράψτε τη διάθεσή σας</string>
+    <string name="map_title">Ο χάρτης</string>
 </resources>

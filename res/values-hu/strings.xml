@@ -284,4 +284,9 @@
     <string name="dating_people_unnoticed">10 ember maradt a figyelmed nélkül!</string>
     <string name="dating_continue">Értékelés folytatása</string>
     <string name="dating_better_look">Óvatosabban!\nTalán elszalasztod a sorsodat!</string>
+    <string name="edit_my_city">Városom</string>
+    <string name="edit_my_photos">Fényképeim</string>
+    <string name="general_search_empty_title">Sajnos, nincs találat</string>
+    <string name="profile_get_status">Jellemezed a kedved</string>
+    <string name="map_title">Térkép</string>
 </resources>
