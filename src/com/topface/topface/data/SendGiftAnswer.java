@@ -13,7 +13,6 @@ public class SendGiftAnswer extends AbstractData {
         try {
             sendGift.power = response.jsonResult.optInt("power");
             sendGift.money = response.jsonResult.optInt("money");
-            sendGift.power = (int) (sendGift.power * 0.01);
         } catch (Exception e) {
             Debug.error("SendGift.class: Wrong response parsing", e);
         }
