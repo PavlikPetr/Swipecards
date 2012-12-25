@@ -17,8 +17,8 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.MainRequest;
 import com.topface.topface.requests.PhotoDeleteRequest;
+import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.ui.profile.ProfilePhotoGridAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -155,10 +155,10 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
             }
 
             if (mSelectedAsMainId != mLastSelectedAsMainId) {
-                MainRequest setAsMainRequest = new MainRequest(getActivity());
-                registerRequest(setAsMainRequest);
-                setAsMainRequest.photoid = mLastSelectedAsMainId;
-                setAsMainRequest.callback(new ApiHandler() {
+                PhotoMainRequest setAsPhotoMainRequest = new PhotoMainRequest(getActivity());
+                registerRequest(setAsPhotoMainRequest);
+                setAsPhotoMainRequest.photoid = mLastSelectedAsMainId;
+                setAsPhotoMainRequest.callback(new ApiHandler() {
 
                     @Override
                     public void success(ApiResponse response) {
