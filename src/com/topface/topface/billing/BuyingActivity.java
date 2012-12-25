@@ -14,9 +14,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.topface.billing.BillingDriver;
+import com.topface.billing.BillingDriverManager;
 import com.topface.billing.BillingListener;
 import com.topface.billing.BillingSupportListener;
-import com.topface.billing.BillingTypeManager;
 import com.topface.topface.R;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -92,7 +92,7 @@ public class BuyingActivity extends Activity implements View.OnClickListener, Bi
 
         setButtonLiseners();
 
-        mBillingDriver = BillingTypeManager.getInstance().createMainBillingDriver(this, new BillingListener() {
+        mBillingDriver = BillingDriverManager.getInstance().createMainBillingDriver(this, new BillingListener() {
             @Override
             public void onPurchased() {
                 mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));

@@ -428,7 +428,8 @@ public class ChatListAdapter extends BaseAdapter {
      * @return последнее "реальное" сообщение в чате, т.е. такое у которого есть id
      */
     private History getLastRealMessage() {
-        for (int i = mDataList.size() - 1; i >= 0; i--) {
+        int cnt = getCount();
+        for (int i = cnt - 1; i >= 0; i--) {
             History lastItem = mDataList.get(i);
             if (lastItem != null) {
                 if (lastItem.id > 0) {

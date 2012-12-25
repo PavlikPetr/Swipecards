@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="time_now">Práve teraz</string>
+    <plurals name="time_hour">
+        <item quantity="few">pred %d hodinami</item>
+        <item quantity="other">pred %d hodinami</item>
+        <item quantity="one">pred %d hodinou</item>
+    </plurals>
+    <plurals name="time_minute">
+        <item quantity="zero">pred %d minútou</item>
+        <item quantity="other">pred %d minptami</item>
+        <item quantity="one">pred %d minútami</item>
+    </plurals>
+    <plurals name="time_month">
+        <item quantity="few">pred %d mesiacmi</item>
+        <item quantity="other">%d mesiacov</item>
+        <item quantity="one">pred %d mesiacom</item>
+    </plurals>
+    <string name="time_yesterday">Včera</string>
+    <string name="time_today">Dnes</string>
+    <string name="time_monday">Pondelok</string>
+    <string name="time_tuesday">Utorok</string>
+    <string name="time_wednesday">Streda</string>
+    <string name="time_thursday">Štvrtok</string>
+    <string name="time_friday">Pia</string>
+    <string name="time_saturday">Sobota</string>
+    <string name="time_sunday">Nedeľa</string>
+    <string name="time_january">Január</string>
+    <string name="time_february">Február</string>
+    <string name="time_march">Marec</string>
+    <string name="time_april">Apríl</string>
+    <string name="time_may">Máj</string>
+    <string name="time_june">Jún</string>
+    <string name="time_july">Júl</string>
+    <string name="time_august">August</string>
+    <string name="time_september">September</string>
+    <string name="time_october">Október</string>
+    <string name="time_november">November</string>
+    <string name="time_december">December</string>
+</resources>

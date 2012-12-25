@@ -1,6 +1,7 @@
 package com.topface.billing;
 
 import android.content.Context;
+import com.topface.billing.googleplay.ResponseHandler;
 import com.topface.topface.R;
 import com.topface.topface.utils.Debug;
 import org.json.JSONException;
@@ -29,6 +30,18 @@ public class GooglePlayV2Queue extends PurchaseQueue {
         return mContext.getString(R.string.build_google_play_v2);
     }
 
+    /**
+     * Отправляет запросы из очереди на проверку на сервер, если в ней что-то есть
+     */
+    @Override
+    public void sendQueueItems() {
+        final QueueItem item = getQueueItemObject();
+        if (item != null) {
+            ResponseHandler.verifyPurchase(mContext, item.data, item.signature, item.id);
+        }
+
+    }
+
     public synchronized String addPurchaseToQueue(String data, String signature) {
         String id = "";
         try {
@@ -45,11 +58,14 @@ public class GooglePlayV2Queue extends PurchaseQueue {
 
     public synchronized QueueItem getQueueItemObject() {
         JSONObject object = super.getQueueItem();
-        QueueItem item = new QueueItem();
-        item.id = object.optString(ITEM_ID_KEY);
-        item.data = object.optString(DATA_KEY);
-        item.signature = object.optString(SIGNATURE_KEY);
-        return item;
+        QueueItem item = null;
+        if (object != null) {
+            item = new QueueItem();
+            item.id = object.optString(ITEM_ID_KEY);
+            item.data = object.optString(DATA_KEY);
+            item.signature = object.optString(SIGNATURE_KEY);
+        }
+        return (item != null && item.id != null) ? item : null;
     }
 
 

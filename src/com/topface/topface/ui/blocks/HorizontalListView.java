@@ -128,8 +128,12 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
         if (mAdapter != null) {
             mAdapter.unregisterDataSetObserver(mDataObserver);
         }
+
         mAdapter = adapter;
-        mAdapter.registerDataSetObserver(mDataObserver);
+
+        if (adapter != null) {
+            mAdapter.registerDataSetObserver(mDataObserver);
+        }
         reset();
     }
 

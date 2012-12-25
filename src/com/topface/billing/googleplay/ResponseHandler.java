@@ -11,6 +11,7 @@ import com.topface.billing.googleplay.BillingService.RequestPurchase;
 import com.topface.billing.googleplay.BillingService.RestoreTransactions;
 import com.topface.billing.googleplay.Consts.PurchaseState;
 import com.topface.billing.googleplay.Consts.ResponseCode;
+import com.topface.topface.App;
 import com.topface.topface.data.Verify;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
@@ -116,7 +117,9 @@ public class ResponseHandler {
 
         //Отправляем проверку на сервер
         if (purchaseState == PurchaseState.PURCHASED) {
-            verifyPurchase(context, signedData, signature);
+            //Перед отправкой добаляем в очередь
+            String queueId = GooglePlayV2Queue.getInstance(context).addPurchaseToQueue(signedData, signature);
+            verifyPurchase(context, signedData, signature, queueId);
         }
 
         if (sPurchaseObserver != null) {
@@ -165,15 +168,14 @@ public class ResponseHandler {
 
     /**
      * Проверка платежа на сервере
+     * Этот метод может вызываться как при покупке, так и при разборе очереди,
      *
      * @param context   текущий контекст
      * @param data      данные платежа
      * @param signature подпись данных платежа
+     * @param queueId   id покуки в очереди запросов
      */
-    public static void verifyPurchase(final Context context, final String data, final String signature) {//Сохраняем в очередь запросов на покупку текущий запрос
-        //Сохраняем очередь запрос в очередь
-        final String queueItemId = GooglePlayV2Queue.getInstance(context).addPurchaseToQueue(data, signature);
-
+    public static void verifyPurchase(final Context context, final String data, final String signature, final String queueId) {
         // Отправлем заказ на сервер
         final VerifyRequest verifyRequest = new VerifyRequest(context);
         verifyRequest.data = data;
@@ -183,7 +185,7 @@ public class ResponseHandler {
             @Override
             public void success(ApiResponse response) {
                 //Удаляем запрос из очереди запросов
-                GooglePlayV2Queue.getInstance(context).deleteQueueItem(queueItemId);
+                GooglePlayV2Queue.getInstance(context).deleteQueueItem(queueId);
                 Verify verify = Verify.parse(response);
                 CacheProfile.power = verify.power;
                 CacheProfile.money = verify.money;
@@ -198,12 +200,19 @@ public class ResponseHandler {
             public void fail(int codeError, final ApiResponse response) {
                 //Если сервер определил как не верный или поддельный, или мы не знаем такой продукт, удаляем его из очереди
                 if (codeError == ApiResponse.INVALID_PRODUCT || codeError == ApiResponse.INVALID_TRANSACTION) {
-                    GooglePlayV2Queue.getInstance(context).deleteQueueItem(queueItemId);
+                    GooglePlayV2Queue.getInstance(context).deleteQueueItem(queueId);
                 }
                 //В случае ошибки не забываем оповестить об этом
                 if (sPurchaseObserver != null) {
                     sPurchaseObserver.postVerify(response);
                 }
+            }
+
+            @Override
+            public void always(ApiResponse response) {
+                super.always(response);
+                //После завершения запроса, проверяем, есть ли элементы в очереди, если есть отправляем их на сервер
+                GooglePlayV2Queue.getInstance(App.getContext()).sendQueueItems();
             }
         }).exec();
     }

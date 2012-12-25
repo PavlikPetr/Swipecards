@@ -14,9 +14,9 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.billing.BillingDriver;
+import com.topface.billing.BillingDriverManager;
 import com.topface.billing.BillingListener;
 import com.topface.billing.BillingSupportListener;
-import com.topface.billing.BillingTypeManager;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiHandler;
@@ -61,7 +61,7 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener, Bil
         };
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
 
-        mBillindDriver = BillingTypeManager.getInstance().createMainBillingDriver(getActivity(), new BillingListener() {
+        mBillindDriver = BillingDriverManager.getInstance().createMainBillingDriver(getActivity(), new BillingListener() {
             @Override
             public void onPurchased() {
                 switchLayouts();
@@ -99,7 +99,7 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener, Bil
     }
 
     private void switchLayouts() {
-        if(mBuyVipViewsContainer != null && mEditPremiumContainer != null) {
+        if (mBuyVipViewsContainer != null && mEditPremiumContainer != null) {
             if (CacheProfile.premium) {
                 mEditPremiumContainer.setVisibility(View.VISIBLE);
                 mBuyVipViewsContainer.setVisibility(View.GONE);
@@ -111,13 +111,13 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener, Bil
     }
 
     private void initBuyVipViews(View root) {
-        mBuyVipViewsContainer = (LinearLayout)root.findViewById(R.id.fbpContainer);
+        mBuyVipViewsContainer = (LinearLayout) root.findViewById(R.id.fbpContainer);
         root.findViewById(R.id.fbpBuyingMonth).setOnClickListener(this);
         root.findViewById(R.id.fbpBuyingYear).setOnClickListener(this);
     }
 
     private void initEditVipViews(View root) {
-        mEditPremiumContainer = (LinearLayout)root.findViewById(R.id.editPremiumContainer);
+        mEditPremiumContainer = (LinearLayout) root.findViewById(R.id.editPremiumContainer);
         ImageButton editVip = (ImageButton) root.findViewById(R.id.fepVipEdit);
         editVip.setOnClickListener(new OnClickListener() {
             @Override

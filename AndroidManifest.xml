@@ -36,7 +36,7 @@
 
         <meta-data
                 android:name="@string/build_type_key"
-                android:value="google-play"/>
+                android:value="@string/build_google_play_v2"/>
 
         <uses-library
                 android:required="false"

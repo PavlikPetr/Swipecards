@@ -3,6 +3,7 @@ package com.topface.billing;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import com.topface.topface.App;
 import com.topface.topface.utils.Debug;
 import org.json.JSONArray;
@@ -66,9 +67,11 @@ abstract public class PurchaseQueue {
 
     protected synchronized JSONObject getQueueItem() {
         JSONArray queue = getQueue();
-        JSONObject item;
+        JSONObject item = null;
         try {
-            item = queue.getJSONObject(0);
+            if (queue != null && queue.length() > 0) {
+                item = queue.getJSONObject(0);
+            }
         } catch (JSONException e) {
             Debug.error(e);
             item = null;
@@ -78,25 +81,27 @@ abstract public class PurchaseQueue {
     }
 
     public synchronized boolean deleteQueueItem(String itemId) {
-        JSONArray queue = getQueue();
         boolean result = false;
-        for (int i = 0; i < queue.length(); i++) {
-            try {
-                JSONObject item = queue.getJSONObject(i);
-                if (itemId.equals(item.optString(ITEM_ID_KEY, ""))) {
-                    queue = removeItemFromJSONArray(i, queue);
-                    getPreferences()
-                            .edit()
-                            .putString(getQueueKey(), queue.toString())
-                            .commit();
-                    result = true;
-                    break;
+        if (!TextUtils.isEmpty(itemId)) {
+            JSONArray queue = getQueue();
+            for (int i = 0; i < queue.length(); i++) {
+                try {
+                    JSONObject item = queue.getJSONObject(i);
+                    if (itemId.equals(item.optString(ITEM_ID_KEY, ""))) {
+                        queue = removeItemFromJSONArray(i, queue);
+                        getPreferences()
+                                .edit()
+                                .putString(getQueueKey(), queue.toString())
+                                .commit();
+                        result = true;
+                        break;
+                    }
+                } catch (JSONException e) {
+                    Debug.error(e);
                 }
-            } catch (JSONException e) {
-                Debug.error(e);
             }
-        }
 
+        }
         return result;
     }
 
@@ -131,5 +136,7 @@ abstract public class PurchaseQueue {
         }
         return result;
     }
+
+    abstract public void sendQueueItems();
 
 }

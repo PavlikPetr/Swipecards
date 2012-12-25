@@ -402,4 +402,5 @@
 
     <string name="leaders_select_cool_picture">Выберите эффектную фотографию:</string>
     <string name="chat_write_message">Написать сообщение</string>
+    <string name="default_coins_100_price">10 USD</string>
 </resources>
