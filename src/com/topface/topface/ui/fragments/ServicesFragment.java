@@ -1,21 +1,42 @@
 package com.topface.topface.ui.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.CacheProfile;
 
 public class ServicesFragment extends BaseFragment {
 
+    private ServicesTextView mCurCoins;
+    private ServicesTextView mCurPower;
+    private BroadcastReceiver mBroadcastReceiver;
+
     public static ServicesFragment newInstance() {
         return new ServicesFragment();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                updateViews();
+            }
+        };
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
     }
 
     @Override
@@ -26,11 +47,9 @@ public class ServicesFragment extends BaseFragment {
     }
 
     private void initViews(View root) {
-        ServicesTextView mCurCoins = (ServicesTextView) root.findViewById(R.id.fpsCurCoins);
-        mCurCoins.setText(Integer.toString(CacheProfile.money));
-
-        ServicesTextView mCurPower = (ServicesTextView) root.findViewById(R.id.fpsCurPower);
-        mCurPower.setText(Integer.toString(CacheProfile.likes));
+        mCurCoins = (ServicesTextView) root.findViewById(R.id.fpsCurCoins);
+        mCurPower = (ServicesTextView) root.findViewById(R.id.fpsCurPower);
+        updateViews();
 
         Button mBuyBtn = (Button) root.findViewById(R.id.fpsBuyBtn);
         mBuyBtn.setOnClickListener(new View.OnClickListener() {
@@ -41,9 +60,22 @@ public class ServicesFragment extends BaseFragment {
         });
     }
 
+    public void updateViews() {
+        if(mCurPower != null && mCurCoins != null) {
+            mCurCoins.setText(Integer.toString(CacheProfile.money));
+            mCurPower.setText(Integer.toString(CacheProfile.likes));
+        }
+    }
+
     private void buyAction() {
         Intent intent = new Intent(getActivity(), ContainerActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
         startActivity(intent);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
     }
 }

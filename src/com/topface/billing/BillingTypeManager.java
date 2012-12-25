@@ -55,9 +55,7 @@ public class BillingTypeManager {
             );
             //Получаем тип сборки
             type = info.metaData.getString(
-                    context.getString(R.string.build_type_key),
-                    context.getString(R.string.build_default)
-            );
+                    context.getString(R.string.build_type_key));
         } catch (PackageManager.NameNotFoundException e) {
             Debug.error("BuildType error", e);
             type = context.getString(R.string.build_default);

@@ -2,9 +2,12 @@ package com.topface.topface.ui.fragments;
 
 
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
@@ -29,7 +33,6 @@ import static android.view.View.OnClickListener;
 public class VipBuyFragment extends BaseFragment implements OnClickListener, BillingSupportListener {
 
     EditSwitcher mInvisSwitcher;
-    EditSwitcher mBgSwitcher;
 
     BroadcastReceiver mBroadcastReceiver;
 
@@ -37,9 +40,9 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener, Bil
     private BillingDriver mBillindDriver;
 
     public static final String BROADCAST_PURCHASE_ACTION = "com.topface.topface.PURCHASE_NOTIFICATION";
-    private LayoutInflater mInflater;
-    private View mRoot;
-    private ViewGroup mContainer;
+
+    private LinearLayout mBuyVipViewsContainer;
+    private LinearLayout mEditPremiumContainer;
 
     // В этот метод потом можно будет передать аргументы,
     // чтобы потом установить их с помощью setArguments();
@@ -50,7 +53,13 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener, Bil
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                switchLayouts();
+            }
+        };
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
 
         mBillindDriver = BillingTypeManager.getInstance().createMainBillingDriver(getActivity(), new BillingListener() {
             @Override
@@ -71,45 +80,44 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener, Bil
 
     @Override
     public void onDestroy() {
-        mBillindDriver.onDestroy();
         super.onDestroy();
+        mBillindDriver.onDestroy();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mContainer = container;
-        if (CacheProfile.premium) {
-            mRoot = inflater.inflate(R.layout.fragment_edit_premium, null);
-            initEditVipViews(mRoot);
-        } else {
-            mRoot = inflater.inflate(R.layout.fragment_buy_premium, null);
-            initBuyVipViews(mRoot);
-        }
-        return mRoot;
+        View view = inflater.inflate(R.layout.fragment_buy_premium, null);
+        initViews(view);
+        return view;
+    }
+
+    private void initViews(View root) {
+        initBuyVipViews(root);
+        initEditVipViews(root);
+        switchLayouts();
     }
 
     private void switchLayouts() {
-        if (mRoot != null && mContainer != null) {
+        if(mBuyVipViewsContainer != null && mEditPremiumContainer != null) {
             if (CacheProfile.premium) {
-                mRoot = getActivity().getLayoutInflater().inflate(R.layout.fragment_edit_premium, null);
-                initEditVipViews(mRoot);
-                mContainer.removeAllViews();
-                mContainer.addView(mRoot);
+                mEditPremiumContainer.setVisibility(View.VISIBLE);
+                mBuyVipViewsContainer.setVisibility(View.GONE);
             } else {
-                mRoot = getActivity().getLayoutInflater().inflate(R.layout.fragment_buy_premium, null);
-                initBuyVipViews(mRoot);
-                mContainer.removeAllViews();
-                mContainer.addView(mRoot);
+                mEditPremiumContainer.setVisibility(View.GONE);
+                mBuyVipViewsContainer.setVisibility(View.VISIBLE);
             }
         }
     }
 
     private void initBuyVipViews(View root) {
+        mBuyVipViewsContainer = (LinearLayout)root.findViewById(R.id.fbpContainer);
         root.findViewById(R.id.fbpBuyingMonth).setOnClickListener(this);
         root.findViewById(R.id.fbpBuyingYear).setOnClickListener(this);
     }
 
     private void initEditVipViews(View root) {
+        mEditPremiumContainer = (LinearLayout)root.findViewById(R.id.editPremiumContainer);
         ImageButton editVip = (ImageButton) root.findViewById(R.id.fepVipEdit);
         editVip.setOnClickListener(new OnClickListener() {
             @Override

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import com.topface.topface.R;
+import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
@@ -31,9 +32,25 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     private FragmentMenuListener mFragmentMenuListener;
     private Button mDefaultMenuItem;
     BroadcastReceiver mBroadcastReceiver;
+    private ImageViewRemote mMenuAvatar;
+    private BroadcastReceiver mProfileUpdateReceiver;
 
     public interface FragmentMenuListener {
         public void onMenuClick(int buttonId);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mProfileUpdateReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if(mMenuAvatar != null) {
+                    mMenuAvatar.setPhoto(CacheProfile.photo);
+                }
+            }
+        };
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileUpdateReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
     }
 
     @Override
@@ -47,9 +64,9 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         // Buttons
         final Button btnProfile = (Button) mRootLayout.findViewById(R.id.btnFragmentProfile);
         btnProfile.setOnClickListener(this);
-        ImageViewRemote menuAvatar = (ImageViewRemote) mRootLayout.findViewById(R.id.ivMenuAvatar);
-        menuAvatar.setPhoto(CacheProfile.photo);
-        menuAvatar.setOnClickListener(new OnClickListener() {
+        mMenuAvatar = (ImageViewRemote) mRootLayout.findViewById(R.id.ivMenuAvatar);
+        mMenuAvatar.setPhoto(CacheProfile.photo);
+        mMenuAvatar.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -109,6 +126,12 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
     public void setOnMenuListener(FragmentMenuListener onFragmentMenuListener) {
         mFragmentMenuListener = onFragmentMenuListener;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileUpdateReceiver);
     }
 
     @Override
