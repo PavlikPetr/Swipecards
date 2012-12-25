@@ -27,10 +27,10 @@
             android:paddingRight="4dp"
             android:singleLine="false"
             android:textSize="18sp"
-            android:maxLines="3"
+            android:maxLines="5"
             android:imeOptions="actionSend"
-            android:inputType="textCapSentences"
             android:textColor="#000000"
+            android:hint="@string/chat_write_message"
             android:background="@drawable/chat_editbox_selector"/>
 
     <Button

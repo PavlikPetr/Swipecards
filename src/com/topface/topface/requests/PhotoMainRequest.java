@@ -5,12 +5,12 @@ import com.google.analytics.tracking.android.EasyTracker;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MainRequest extends AbstractApiRequest {
+public class PhotoMainRequest extends AbstractApiRequest {
     // Data
-    public static final String service = "main";
+    public static final String service = "photoMain";
     public int photoid; // идентификатор фотографии для установки в качестве главной
 
-    public MainRequest(Context context) {
+    public PhotoMainRequest(Context context) {
         super(context);
     }
 

@@ -78,14 +78,9 @@ public class Profile extends AbstractDataWithPhotos {
 
     protected static Profile parse(Profile profile, JSONObject resp) {
         try {
-            profile.unread_rates = resp.optInt("unread_rates");
-            profile.unread_likes = resp.optInt("unread_likes");
-            profile.unread_messages = resp.optInt("unread_messages");
-            profile.unread_mutual = resp.optInt("unread_symphaties");
-            profile.unread_visitors = resp.optInt("unread_visitors");
             profile.average_rate = resp.optInt("average_rate");
             profile.money = resp.optInt("money");
-            Novice.giveNovicePower = !resp.optBoolean("novice_power",true);
+            Novice.giveNovicePower = !resp.optBoolean("novice_power", true);
 
             int power = resp.optInt("power");
             // if(power > 10000) power = 10000;
@@ -97,7 +92,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.status = resp.optString("status");
             profile.first_name = resp.optString("first_name");
 
-            if(!resp.isNull("in_blacklist")) {
+            if (!resp.isNull("in_blacklist")) {
                 profile.inBlackList = resp.getBoolean("in_blacklist");
             }
 

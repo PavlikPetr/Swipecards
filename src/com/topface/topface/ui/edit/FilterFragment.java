@@ -529,11 +529,10 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
                 if (city_id == 0) {
                     mFilter.geo = false;
-                    mFilter.city_id = city_id;
-                } else {
-                    mFilter.city_id = city_id;
-                    mFilter.city_name = city_name;
                 }
+
+                mFilter.city_id = city_id;
+                mFilter.city_name = city_name;
 
                 setText(buildCityString(), mCityFrame);
             } else if (requestCode == EditContainerActivity.INTENT_EDIT_AGE) {
