@@ -351,7 +351,9 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                             } else {
                                 mAdapter.setDataList(dataList.items);
                             }
-                            mAdapter.notifyDataSetChanged();
+                            if(dataList.items.size() > 0) {
+                                mAdapter.notifyDataSetChanged();
+                            }
                         }
                         if (pullToRefresh && mListView != null) {
                             mListView.onRefreshComplete();

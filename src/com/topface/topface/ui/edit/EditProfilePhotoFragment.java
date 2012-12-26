@@ -56,7 +56,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         super.onCreate(savedInstanceState);
         mSelectedAsMainId = CacheProfile.photo == null ? -1 : CacheProfile.photo.getId();
         mLastSelectedAsMainId = mSelectedAsMainId;
-
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
         mPhotoLinks = new Photos();
         mPhotoLinks.add(null);
         if (CacheProfile.photos != null) {

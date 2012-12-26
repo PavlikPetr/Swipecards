@@ -1,13 +1,16 @@
 package com.topface.topface.ui.edit;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,6 +21,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.CitySearchActivity;
@@ -46,6 +50,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
     private boolean hasStartedFromAuthActivity;
 
     public static String FROM_AUTH_ACTIVITY = "com.topface.topface.FROM_AUTH";
+    private BroadcastReceiver mBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +104,27 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
             editProfileMsg = (TextView) findViewById(R.id.EditProfileMessage);
             editProfileMsg.setVisibility(View.VISIBLE);
         }
+
+        mBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                updateViews();
+            }
+        };
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
+    }
+
+    private void updateViews() {
+//        initEditItems();
+        mAdapter.notifyDataSetChanged();
+        mEditName.setText(CacheProfile.first_name + ", ");
+        mEditAge.setText(Integer.toString(CacheProfile.age));
+        mEditSex.setImageResource(CacheProfile.sex == Static.BOY ?
+                R.drawable.ico_boy :
+                R.drawable.ico_girl);
+        mEditCity.setText(CacheProfile.city_name);
+        mProfilePhoto.setPhoto(CacheProfile.photo);
     }
 
     private void initEditItems() {
@@ -143,6 +169,12 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
             prevFormItem = formItem;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
     }
 
     @Override
