@@ -13,10 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
-import com.topface.billing.BillingDriver;
-import com.topface.billing.BillingDriverManager;
-import com.topface.billing.BillingListener;
-import com.topface.billing.BillingSupportListener;
+import com.topface.billing.BillingFragment;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiHandler;
@@ -30,14 +27,11 @@ import com.topface.topface.utils.CacheProfile;
 
 import static android.view.View.OnClickListener;
 
-public class VipBuyFragment extends BaseFragment implements OnClickListener, BillingSupportListener {
+public class VipBuyFragment extends BillingFragment implements OnClickListener {
 
     EditSwitcher mInvisSwitcher;
 
-    BroadcastReceiver mBroadcastReceiver;
-
     ProgressBar mInvisLoadBar;
-    private BillingDriver mBillindDriver;
 
     public static final String BROADCAST_PURCHASE_ACTION = "com.topface.topface.PURCHASE_NOTIFICATION";
 
@@ -53,35 +47,13 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener, Bil
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                switchLayouts();
-            }
-        };
+
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
-
-        mBillindDriver = BillingDriverManager.getInstance().createMainBillingDriver(getActivity(), new BillingListener() {
-            @Override
-            public void onPurchased() {
-                switchLayouts();
-            }
-
-            @Override
-            public void onError() {
-                //TODO: сделать обработку ошибок
-            }
-
-            @Override
-            public void onCancel() {
-            }
-        }, this);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mBillindDriver.onDestroy();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
     }
 
@@ -268,12 +240,12 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener, Bil
         //Подписки на премиумы
         switch (v.getId()) {
             case R.id.fbpBuyingMonth:
-                mBillindDriver.buySubscriotion("topface.premium.month.1");
+                buySubscriotion("topface.premium.month.1");
                 EasyTracker.getTracker().trackEvent("Subscription", "ButtonClick", "Month", 0L);
                 break;
 
             case R.id.fbpBuyingYear:
-                mBillindDriver.buySubscriotion("topface.premium.year.1");
+                buySubscriotion("topface.premium.year.1");
                 EasyTracker.getTracker().trackEvent("Subscription", "ButtonClick", "Year", 0L);
                 break;
 
@@ -301,4 +273,23 @@ public class VipBuyFragment extends BaseFragment implements OnClickListener, Bil
     public void onInAppBillingUnsupported() {
     }
 
+    @Override
+    public void onPurchased() {
+        switchLayouts();
+    }
+
+    @Override
+    public void onError() {
+        //TODO: сделать обработку ошибок
+    }
+
+    @Override
+    public void onCancel() {}
+
+    BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switchLayouts();
+        }
+    };
 }

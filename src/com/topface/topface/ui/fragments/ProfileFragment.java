@@ -573,7 +573,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                                 @Override
                                 public void run() {
                                     if (response.code == ApiResponse.PAYMENT) {
-                                        Intent intent = new Intent(getActivity().getApplicationContext(),ContainerActivity.class);
+                                        Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
                                         intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
                                         intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
                                         intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);

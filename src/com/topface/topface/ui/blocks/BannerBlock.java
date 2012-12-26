@@ -157,7 +157,7 @@ public class BannerBlock {
                     Intent intent = null;
                     if (banner.action.equals(Banner.ACTION_PAGE)) {
                         EasyTracker.getTracker().trackEvent("Purchase", "Banner", "", 0L);
-                        intent = new Intent(mActivity.getApplicationContext(),ContainerActivity.class);
+                        intent = new Intent(mActivity.getApplicationContext(), ContainerActivity.class);
                         intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
 //                    } else if (banner.action.equals(Banner.INVITE_PAGE)) {
 //                        EasyTracker.getTracker().trackEvent("Banner", "Invite", "", 0L);

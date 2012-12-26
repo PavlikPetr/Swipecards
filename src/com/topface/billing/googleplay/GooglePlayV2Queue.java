@@ -1,7 +1,7 @@
-package com.topface.billing;
+package com.topface.billing.googleplay;
 
 import android.content.Context;
-import com.topface.billing.googleplay.ResponseHandler;
+import com.topface.billing.BillingQueue;
 import com.topface.topface.R;
 import com.topface.topface.utils.Debug;
 import org.json.JSONException;
@@ -10,7 +10,7 @@ import org.json.JSONObject;
 /**
  * Очередь запросов на покупку в Google Play
  */
-public class GooglePlayV2Queue extends PurchaseQueue {
+public class GooglePlayV2Queue extends BillingQueue {
     public static final String SIGNATURE_KEY = "signature";
     public static final String DATA_KEY = "data";
     private static Context mContext;

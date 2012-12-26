@@ -15,7 +15,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
-import com.topface.billing.GooglePlayV2Queue;
+import com.topface.billing.googleplay.GooglePlayV2Queue;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
