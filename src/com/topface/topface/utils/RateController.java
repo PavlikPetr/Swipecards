@@ -47,7 +47,7 @@ public class RateController {
 
     public void onRate(final int userId, final int rate) {
         if (rate == 10 && CacheProfile.money <= 0) {
-            Intent intent = new Intent(mContext,ContainerActivity.class);
+            Intent intent = new Intent(mContext, ContainerActivity.class);
             intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
             mContext.startActivity(intent);
             mOnRateControllerListener.failRate();
@@ -103,7 +103,7 @@ public class RateController {
 
     public void onRate(final int userId, final int rate, final int mutualId) {
         if (rate == 10 && CacheProfile.money <= 0) {
-            Intent intent = new Intent(mContext,ContainerActivity.class);
+            Intent intent = new Intent(mContext, ContainerActivity.class);
             intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
             mContext.startActivity(intent);
             mOnRateControllerListener.failRate();

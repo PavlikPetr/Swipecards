@@ -213,7 +213,7 @@ public class BuyingFragment extends BillingFragment implements View.OnClickListe
                 buyItem("android.test.item_unavailable");
                 break;
             case R.id.btnBuyingLikes:
-                mBillindDriver.buyItem("android.test.purchased");
+                buyItem("android.test.purchased");
                 break;
         }
     }

@@ -83,7 +83,7 @@ public class Profile extends AbstractDataWithPhotos {
             if (profile instanceof User) {
                 //TODO nothing
             } else if (profile instanceof Profile) {
-                Novice.giveNoviceLikes = !resp.optBoolean("novice_likes",true);
+                Novice.giveNoviceLikes = !resp.optBoolean("novice_likes", true);
             }
 
             profile.likes = resp.optInt("likes");

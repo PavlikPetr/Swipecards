@@ -71,7 +71,7 @@
                 android:gravity="center"/>
     </RelativeLayout>
 
-	<ImageView style="@style/HeaderShadow"/>
+    <ImageView style="@style/HeaderShadow"/>
 
     <com.topface.topface.ui.views.LockerView
             android:id="@+id/llvLeaderSending"
