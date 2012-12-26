@@ -80,7 +80,11 @@ public class Profile extends AbstractDataWithPhotos {
         try {
             profile.average_rate = resp.optInt("average_rate");
             profile.money = resp.optInt("money");
-            Novice.giveNoviceLikes = !resp.optBoolean("novice_likes",true);
+            if (profile instanceof User) {
+                //TODO nothing
+            } else if (profile instanceof Profile) {
+                Novice.giveNoviceLikes = !resp.optBoolean("novice_likes",true);
+            }
 
             profile.likes = resp.optInt("likes");
 
