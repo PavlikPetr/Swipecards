@@ -50,16 +50,9 @@
                     android:layout_width="wrap_content"
                     android:orientation="vertical"
                     android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
                     >
 
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/default_energy_balance_constant"
-                        android:textColor="#FFFFFF"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="10dp"
-                        />
 
                 <com.topface.topface.ui.views.ServicesTextView
                         xmlns:stv="http://schemas.android.com/apk/res/com.topface.topface"
@@ -121,41 +114,11 @@
             </RelativeLayout>
 
             <!-- 10 000 power btn -->
-
-            <RelativeLayout
-                    android:id="@+id/fbRecharge"
-                    android:layout_width="fill_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/btn_vip_super_sale_selector"
-                    android:layout_marginBottom="10dp"
-                    android:padding="5dp"
-                    >
-                <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:text="@string/buying_recharge"
-                        android:paddingLeft="5dp"
-                        style="@style/ButtonWhiteTextMini"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        />
-                <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:src="@drawable/dot_vip_btn"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="75dp"
-                        />
-                <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:paddingRight="5dp"
-                        android:text="@string/buying_energy"
-                        style="@style/ButtonWhiteTextMini"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        />
-            </RelativeLayout>
+            <ListView
+                android:id="@+id/likes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+            />
 
             !-- Money -->
             <RelativeLayout
