@@ -1,11 +1,10 @@
-package com.topface.billing;
+package com.topface.billing.googleplay;
 
 import android.app.Activity;
 import android.os.Handler;
-import com.topface.billing.googleplay.BillingService;
-import com.topface.billing.googleplay.Consts;
-import com.topface.billing.googleplay.PurchaseObserver;
-import com.topface.billing.googleplay.ResponseHandler;
+import com.topface.billing.BillingDriver;
+import com.topface.billing.BillingListener;
+import com.topface.billing.BillingSupportListener;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 
@@ -28,18 +27,30 @@ public class GooglePlayV2BillingDriver extends BillingDriver {
     }
 
     @Override
-    protected void checkBillingSupport(BillingSupportListener listener) {
-        //Проверяем, какие методы покупки доступны и вызываем соотвесвующие коллбэки
-        if (mBillingService.checkBillingSupported(Consts.ITEM_TYPE_INAPP)) {
-            listener.onInAppBillingSupported();
-        } else {
-            listener.onInAppBillingUnsupported();
-        }
+    public void onStart() {
+        checkBillingSupport(getBillingSupportListener());
+    }
 
-        if (mBillingService.checkBillingSupported(Consts.ITEM_TYPE_SUBSCRIPTION)) {
-            listener.onSubscritionSupported();
-        } else {
-            listener.onSubscritionUnsupported();
+    @Override
+    public void onResume() {}
+
+    @Override
+    public void onStop() {}
+
+    protected void checkBillingSupport(BillingSupportListener listener) {
+        if (listener != null) {
+            //Проверяем, какие методы покупки доступны и вызываем соотвесвующие коллбэки
+            if (mBillingService.checkBillingSupported(Consts.ITEM_TYPE_INAPP)) {
+                listener.onInAppBillingSupported();
+            } else {
+                listener.onInAppBillingUnsupported();
+            }
+
+            if (mBillingService.checkBillingSupported(Consts.ITEM_TYPE_SUBSCRIPTION)) {
+                listener.onSubscritionSupported();
+            } else {
+                listener.onSubscritionUnsupported();
+            }
         }
     }
 
@@ -100,15 +111,16 @@ public class GooglePlayV2BillingDriver extends BillingDriver {
         @Override
         public void onRequestPurchaseResponse(BillingService.RequestPurchase request,
                                               Consts.ResponseCode responseCode) {
-            if (mBillingListener != null) {
+            BillingListener listener = getBillingListener();
+            if (listener != null) {
                 //Если пользователь сам отменил, то вызываем коллбэк onCancel();
                 if (responseCode == Consts.ResponseCode.RESULT_USER_CANCELED) {
                     Debug.log("Billing: onCancel");
-                    mBillingListener.onCancel();
+                    listener.onCancel();
                 } else if (responseCode != Consts.ResponseCode.RESULT_OK) {
                     //Если это другая ошибка, то возвращаем соответсвующий коллбэк
                     Debug.log("Billing: onError " + responseCode);
-                    mBillingListener.onError();
+                    listener.onError();
                 }
             }
         }
@@ -128,13 +140,14 @@ public class GooglePlayV2BillingDriver extends BillingDriver {
         @Override
         public void onVerifyResponse(ApiResponse response) {
             Debug.log(String.format("VerifyResponse: #%d:\n%s", response.code, response.jsonResult));
-            if (mBillingListener != null) {
+            BillingListener listener = getBillingListener();
+            if (listener != null) {
                 if (response.code == ApiResponse.RESULT_OK) {
                     Debug.log("Billing: onPurchased");
-                    mBillingListener.onPurchased();
+                    listener.onPurchased();
                 } else {
                     Debug.log("Billing: onError");
-                    mBillingListener.onError();
+                    listener.onError();
                 }
             }
         }

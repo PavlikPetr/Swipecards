@@ -1,50 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="fill_parent"
-             android:layout_height="wrap_content"
-             >
-
-    <LinearLayout
-                  android:orientation="vertical"
-                  android:layout_width="fill_parent"
-                  android:layout_height="fill_parent"
-                  >
-        <RelativeLayout
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:background="@drawable/bg_services_counters">
-            <LinearLayout
+        >
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            >
+
+        <RelativeLayout
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:orientation="vertical"
-                android:layout_alignParentLeft="true"
-                >
+                android:padding="10dp"
+                android:background="@drawable/bg_services_counters">
+
+            <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_alignParentLeft="true"
+                    >
+
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/default_balance_constant"
-                    android:layout_marginBottom="10dp"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold"
-                    />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/default_balance_constant"
+                        android:layout_marginBottom="10dp"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        />
+
                 <com.topface.topface.ui.views.ServicesTextView xmlns:stv="http://schemas.android.com/apk/res/com.topface.topface"
-                    android:id="@+id/fpsCurCoins"
-                    stv:maxChars = "5"
-                    stv:charPadding = "7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    stv:fontSize="24"
-                    stv:image="@drawable/ic_coins"
-                    />
+                                                               android:id="@+id/fpsCurCoins"
+                                                               stv:maxChars="5"
+                                                               stv:charPadding="7"
+                                                               android:layout_width="wrap_content"
+                                                               android:layout_height="wrap_content"
+                                                               stv:fontSize="24"
+                                                               stv:image="@drawable/ic_coins"
+                        />
             </LinearLayout>
+
             <LinearLayout
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:orientation="vertical"
                     android:layout_alignParentRight="true"
                     >
+
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -53,28 +59,29 @@
                         android:textStyle="bold"
                         android:layout_marginBottom="10dp"
                         />
+
                 <com.topface.topface.ui.views.ServicesTextView xmlns:stv="http://schemas.android.com/apk/res/com.topface.topface"
-                       android:id="@+id/fpsCurLikes"
-                       stv:maxChars = "5"
-                       stv:charPadding = "7"
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       stv:fontSize="24"
-                       stv:image="@drawable/ic_sympathy"
+                                                               android:id="@+id/fpsCurLikes"
+                                                               stv:maxChars="5"
+                                                               stv:charPadding="7"
+                                                               android:layout_width="wrap_content"
+                                                               android:layout_height="wrap_content"
+                                                               stv:fontSize="24"
+                                                               stv:image="@drawable/ic_sympathy"
                         />
             </LinearLayout>
         </RelativeLayout>
 
         <Button
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:background="@drawable/btn_vip_super_sale_selector"
-            android:text="@string/default_energy_coins_buy_btn_text"
-            style="@style/VipItemTitleWhiteText"
-            android:textStyle="bold"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:id="@+id/fpsBuyBtn"
-            />
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:background="@drawable/btn_vip_super_sale_selector"
+                android:text="@string/default_energy_coins_buy_btn_text"
+                style="@style/VipItemTitleWhiteText"
+                android:textStyle="bold"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:id="@+id/fpsBuyBtn"
+                />
     </LinearLayout>
 </ScrollView>

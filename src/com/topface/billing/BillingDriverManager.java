@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.text.TextUtils;
+import com.topface.billing.amazon.AmazonBillingDriver;
+import com.topface.billing.googleplay.GooglePlayV2BillingDriver;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.utils.Debug;
@@ -38,9 +41,16 @@ public class BillingDriverManager {
     }
 
     public BillingDriver createMainBillingDriver(Activity activity, BillingListener listener, BillingSupportListener supportListener) {
-        //TODO: тестовый режим, пока только Google Play
-        BillingDriver driver = new GooglePlayV2BillingDriver(activity, listener);
+        BillingDriver driver;
+
+        if (TextUtils.equals(Utils.getBuildType(), activity.getString(R.string.build_amazon))) {
+            driver = new AmazonBillingDriver(activity, listener);
+        } else {
+            driver = new GooglePlayV2BillingDriver(activity, listener);
+        }
+
         driver.setBillingSupportListener(supportListener);
+
         return driver;
     }
 

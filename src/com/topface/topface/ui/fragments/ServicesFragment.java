@@ -61,7 +61,7 @@ public class ServicesFragment extends BaseFragment {
     }
 
     public void updateViews() {
-        if(mCurLikes != null && mCurCoins != null) {
+        if (mCurLikes != null && mCurCoins != null) {
             mCurCoins.setText(Integer.toString(CacheProfile.money));
             mCurLikes.setText(Integer.toString(CacheProfile.likes));
         }

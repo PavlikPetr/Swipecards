@@ -2,8 +2,12 @@ package com.topface.billing;
 
 import android.app.Activity;
 
+/**
+ * Универсальный драйвер покупки через внешнее API.
+ * На его основе пишутся остальные драйверы и работа с ними идет прозрачно через интерфейс BillingDriver
+ */
 abstract public class BillingDriver {
-    BillingListener mBillingListener;
+    private BillingListener mBillingListener;
     private final Activity mActivity;
     protected BillingSupportListener mBillingSupportListener;
 
@@ -12,9 +16,12 @@ abstract public class BillingDriver {
         setBillingListener(listener);
     }
 
-    /**
-     * Этот метод нужно вызвать в активити покупки для отработки всех событий
-     */
+    public abstract void onStart();
+
+    public abstract void onResume();
+
+    public abstract void onStop();
+
     public abstract void onDestroy();
 
     public abstract void buyItem(String itemId);
@@ -37,8 +44,10 @@ abstract public class BillingDriver {
 
     public void setBillingSupportListener(BillingSupportListener listener) {
         mBillingSupportListener = listener;
-        checkBillingSupport(mBillingSupportListener);
     }
 
-    protected abstract void checkBillingSupport(BillingSupportListener billingSupportListener);
+    public BillingSupportListener getBillingSupportListener() {
+        return mBillingSupportListener;
+    }
+
 }

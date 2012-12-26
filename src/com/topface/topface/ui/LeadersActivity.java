@@ -65,7 +65,7 @@ public class LeadersActivity extends BaseFragmentActivity {
             @Override
             public void onClick(View view) {
                 if (CacheProfile.money < CacheProfile.getOptions().price_leader) {
-                    Intent intent = new Intent(getApplicationContext(),ContainerActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), ContainerActivity.class);
                     intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
                     startActivity(intent);
                 } else if (mSelectedPhoto.isSelected()) {
@@ -113,7 +113,7 @@ public class LeadersActivity extends BaseFragmentActivity {
     private void updateProfileInfo(Profile profile) {
         LeadersPhotoAdapter leadersAdapter = new LeadersPhotoAdapter(getApplicationContext(), profile.photos, mSelectedPhoto);
         mGridView.setAdapter(leadersAdapter);
-        mSelectedPhoto.selectInitPhoto(profile.photo,profile.photos);
+        mSelectedPhoto.selectInitPhoto(profile.photo, profile.photos);
     }
 
     @Override
@@ -145,7 +145,7 @@ public class LeadersActivity extends BaseFragmentActivity {
         }
 
         public void selectInitPhoto(Photo avatar, Photos photos) {
-            for (int i=0; i < photos.size(); i++) {
+            for (int i = 0; i < photos.size(); i++) {
                 if (avatar.getId() == photos.get(i).getId()) {
                     mItem = i;
                     break;

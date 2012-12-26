@@ -163,6 +163,7 @@ public class ServicesTextView extends View {
                 textWithoutBackround = "+";
             }
         }
+        invalidate();
     }
 
     public void setTextSize(int textSize) {

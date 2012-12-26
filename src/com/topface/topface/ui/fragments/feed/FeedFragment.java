@@ -430,7 +430,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                             if (updateErrorMessage != null) {
                                 if (codeError == ApiResponse.PREMIUM_ACCESS_ONLY) {
                                     updateErrorMessage.showOnlyMessage(false);
-                                    updateErrorMessage.addBlueButton(getString(R.string.buying_vip_status),new View.OnClickListener() {
+                                    updateErrorMessage.addBlueButton(getString(R.string.buying_vip_status), new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
                                             Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
