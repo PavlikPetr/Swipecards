@@ -206,15 +206,9 @@
         <item quantity="other">%d fotografií</item>
         <item quantity="one">%d fotografií</item>
     </plurals>
-    <string name="novice_sympathy">Posielajte sympatie iba ľuďom, ktorý sa Vám\nnaozaj páčia\n - a môžete začať príjemnú
-        známosť
-    </string>
-    <string name="novice_energy">Čím vyššie je nabitie baterky, \ n tým viac je Vás vidieť. \ NNezabudnite nabiť \
-        nbaterku tým, že kúpite energiu.
-    </string>
-    <string name="novice_battery_bonus">Energia Vám poskytuje popularitu \na nové sympatie. Môžete \nnabit baterku -
-        kúpte\n 100% energie. Prvé nabitie \nmáte od nás ako darček!
-    </string>
+    <string name="novice_sympathy">Posielajte sympatie iba ľuďom, ktorý sa Vám\nnaozaj páčia\n - a môžete začať príjemnú známosť</string>
+    <string name="novice_energy">Čím vyššie je nabitie baterky, \ n tým viac je Vás vidieť. \ NNezabudnite nabiť \ nbaterku tým, že kúpite energiu.</string>
+    <string name="novice_battery_bonus">Energia Vám poskytuje popularitu \na nové sympatie. Môžete \nnabit baterku - kúpte\n 100% energie. Prvé nabitie \nmáte od nás ako darček!</string>
     <string name="novice_fill_profile">Pridajte svoje najlepšie fotky,\naby ste získali čo najviac sympatií.</string>
     <string name="general_edit_profile_message">Prosím, vyplňte všetky povinné polia dotazníka</string>
     <string name="general_premium_access_error">Pre túto funkciu je potrebné Premium</string>
@@ -226,9 +220,7 @@
     <string name="filter_city_fail">Nenájdené žiadne mesto, ktoré by začínalo na "%s"</string>
     <string name="age_filter_man">Máte záujem o mužov</string>
     <string name="age_filter_girl">Máte záujem o dievčatá</string>
-    <string name="dashbrd_popup_rating">Páči sa naša aplikácia? Pomôžte zdvihnúť náš rating! Čím vyšší je rating, tým
-        viac zaujímavých ľudí stretnete v Topface
-    </string>
+    <string name="dashbrd_popup_rating">Páči sa naša aplikácia? Pomôžte zdvihnúť náš rating! Čím vyšší je rating, tým viac zaujímavých ľudí stretnete v Topface</string>
     <string name="dashbrd_popup_title">Rating</string>
     <string name="dashbrd_popup_cancel">Viac sa nepýtať</string>
     <string name="dashbrd_popup_rate">Vystaviť rating</string>
@@ -281,8 +273,7 @@
     <string name="vip_why">Prečo je tak dôležité, aby ste boli VIP</string>
     <string name="vip_info_delight">Posielajte obdivy zadarmo - Vyjadrujte maximálne svoje pocity!</string>
     <string name="vip_info_guest">Zistite, kto sa o Vás zaujíma - prezrite si svojich návštevníkov!</string>
-    <string name="vip_info_invisible">Zostaňte neodhalený pri návšteve cudzích stránok vďaka režimu \"neviditeľný\"
-    </string>
+    <string name="vip_info_invisible">Zostaňte neodhalený pri návšteve cudzích stránok vďaka režimu \"neviditeľný\"</string>
     <string name="vip_info_message">Získajte výhodu - Vaše správy budú vyčnievať z davu!</string>
     <string name="vip_info_gift">Zvoľte exkluzívne VIP-darčeky a určite si Vás zapamätajú!</string>
     <string name="vip_info_blackList">Zbavte sa otravných osôb pomocou "\čiernej listiny\"</string>

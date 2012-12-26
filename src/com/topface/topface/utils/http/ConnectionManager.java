@@ -110,7 +110,7 @@ public class ConnectionManager {
                             //Если после переавторизации у нас все же не верный ssid, то пробуем все повторить
                             || apiResponse.code == ApiResponse.SESSION_NOT_FOUND) {
                         //Если пришел пустой ответ или пришел какой то мусор, то пробуем переотправить запрос
-                        if (apiRequest.isNeedResend()) {
+                        if (apiRequest.isNeedResend() && apiRequest.handler != null) {
                             needResend = true;
                             Debug.error("Response error. Try resend");
                             apiRequest.handler.postDelayed(new Runnable() {
