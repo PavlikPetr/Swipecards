@@ -35,6 +35,8 @@ public class ApiResponse {
     public static final int INVERIFIED_RECEIPT = 18;
     public static final int ITUNES_CONNECTION = 19;
     public static final int INVERIFIED_TOKEN = 20;
+    public static final int INVALID_FORMAT = 21;
+    public static final int UNVERIFIED_SIGNATURE = 22;
     public static final int BAN = 28;
     public static final int PREMIUM_ACCESS_ONLY = 32;
     // local

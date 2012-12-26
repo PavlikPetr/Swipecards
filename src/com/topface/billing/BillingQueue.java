@@ -18,9 +18,9 @@ import java.util.UUID;
  * Класс хранения очередей запросов на покупку,
  * помогающий уменьшить колличество неудавшихся платежей и негодующих пользователей
  */
-abstract public class PurchaseQueue {
+abstract public class BillingQueue {
     public static final String ITEM_ID_KEY = "id";
-    private static PurchaseQueue mInstance;
+    private static BillingQueue mInstance;
     private Context mContext;
     private SharedPreferences mPreferences;
 

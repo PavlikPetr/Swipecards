@@ -198,7 +198,14 @@ public class ResponseHandler {
             @Override
             public void fail(int codeError, final ApiResponse response) {
                 //Если сервер определил как не верный или поддельный, или мы не знаем такой продукт, удаляем его из очереди
-                if (codeError == ApiResponse.INVALID_PRODUCT || codeError == ApiResponse.INVALID_TRANSACTION) {
+                if (
+                        codeError == ApiResponse.INVALID_PRODUCT ||
+                                codeError == ApiResponse.INVALID_TRANSACTION ||
+                                codeError == ApiResponse.INVALID_FORMAT ||
+                                codeError == ApiResponse.UNVERIFIED_SIGNATURE
+
+                        ) {
+
                     GooglePlayV2Queue.getInstance(context).deleteQueueItem(queueId);
                 }
                 //В случае ошибки не забываем оповестить об этом

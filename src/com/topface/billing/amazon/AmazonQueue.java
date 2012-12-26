@@ -1,4 +1,4 @@
-package com.topface.billing.googleplay;
+package com.topface.billing.amazon;
 
 import android.content.Context;
 import com.topface.billing.BillingQueue;
@@ -8,18 +8,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Очередь запросов на покупку в Google Play
+ * Очередь запросов на покупку через Amazon
  */
-public class GooglePlayV2Queue extends BillingQueue {
-    public static final String SIGNATURE_KEY = "signature";
-    public static final String DATA_KEY = "data";
-    private static Context mContext;
-    private static GooglePlayV2Queue mInstance;
+public class AmazonQueue extends BillingQueue {
 
-    public static GooglePlayV2Queue getInstance(Context context) {
+    public static final String USER_ID_KEY = "user_id";
+    public static final String PURCHASE_TOKEN_KEY = "purchase_token";
+    private static AmazonQueue mInstance;
+    private static Context mContext;
+
+    public static AmazonQueue getInstance(Context context) {
         mContext = context;
         if (mInstance == null) {
-            mInstance = new GooglePlayV2Queue();
+            mInstance = new AmazonQueue();
         }
 
         return mInstance;
@@ -27,27 +28,24 @@ public class GooglePlayV2Queue extends BillingQueue {
 
     @Override
     protected String getQueueName() {
-        return mContext.getString(R.string.build_google_play_v2);
+        return mContext.getString(R.string.build_amazon);
     }
 
-    /**
-     * Отправляет запросы из очереди на проверку на сервер, если в ней что-то есть
-     */
     @Override
     public void sendQueueItems() {
         final QueueItem item = getQueueItemObject();
         if (item != null) {
-            ResponseHandler.verifyPurchase(mContext, item.data, item.signature, item.id);
+            AmazonPurchaseObserver.validateRequest(null, item.userId, item.purchaseToken, mContext);
         }
 
     }
 
-    public synchronized String addPurchaseToQueue(String data, String signature) {
+    public synchronized String addPurchaseToQueue(String userId, String purchaseToken) {
         String id = "";
         try {
             JSONObject dataJson = new JSONObject();
-            dataJson.put(DATA_KEY, data);
-            dataJson.put(SIGNATURE_KEY, signature);
+            dataJson.put(USER_ID_KEY, userId);
+            dataJson.put(PURCHASE_TOKEN_KEY, purchaseToken);
             id = super.addPurchaseToQueue(dataJson);
         } catch (JSONException e) {
             Debug.error(e);
@@ -62,8 +60,8 @@ public class GooglePlayV2Queue extends BillingQueue {
         if (object != null) {
             item = new QueueItem();
             item.id = object.optString(ITEM_ID_KEY);
-            item.data = object.optString(DATA_KEY);
-            item.signature = object.optString(SIGNATURE_KEY);
+            item.userId = object.optString(USER_ID_KEY);
+            item.purchaseToken = object.optString(PURCHASE_TOKEN_KEY);
         }
         return (item != null && item.id != null) ? item : null;
     }
@@ -71,7 +69,7 @@ public class GooglePlayV2Queue extends BillingQueue {
 
     public static class QueueItem {
         public String id;
-        public String signature;
-        public String data;
+        public String userId;
+        public String purchaseToken;
     }
 }

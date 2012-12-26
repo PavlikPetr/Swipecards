@@ -6,6 +6,10 @@ import com.amazon.inapp.purchasing.PurchaseResponse;
 import com.amazon.inapp.purchasing.PurchasingManager;
 import com.topface.billing.BillingListener;
 import com.topface.billing.BillingSupportListener;
+import com.topface.topface.App;
+import com.topface.topface.requests.AmazonValidateRequest;
+import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 
 /**
@@ -13,9 +17,11 @@ import com.topface.topface.utils.Debug;
  */
 public class AmazonPurchaseObserver extends BasePurchasingObserver {
     private final AmazonBillingDriver mDriver;
+    private final Context mContext;
 
     public AmazonPurchaseObserver(Context context, AmazonBillingDriver amazonBillingDriver) {
         super(context);
+        mContext = context;
         mDriver = amazonBillingDriver;
     }
 
@@ -53,17 +59,15 @@ public class AmazonPurchaseObserver extends BasePurchasingObserver {
         }
     }
 
-    private void handleCallbacks(PurchaseResponse purchaseResponse, BillingListener listener) {
+    private void handleCallbacks(PurchaseResponse purchaseResponse, final BillingListener listener) {
         switch (purchaseResponse.getPurchaseRequestStatus()) {
             case SUCCESSFUL:
-                //TODO: Тут будет AmazonVerifyRequest, будем отправлять UserId и PurchaseToken
+                //Добавляем запрос в очередь
+                String userId = purchaseResponse.getUserId();
+                String purchaseToken = purchaseResponse.getReceipt().getPurchaseToken();
 
-                //TODO: Не забыть, что нужно добавить очередь запросов
+                validateRequest(listener, userId, purchaseToken, mContext);
 
-                //TODO: а вызов коллбэка не забыть сделать асинхронным
-                if (listener != null) {
-                    listener.onPurchased();
-                }
                 break;
             case ALREADY_ENTITLED:
                 //При попытке купить уже купленые товары просто отправлям коллбэк, не трогая сервер
@@ -77,6 +81,47 @@ public class AmazonPurchaseObserver extends BasePurchasingObserver {
                     listener.onError();
                 }
         }
+    }
+
+    public static void validateRequest(final BillingListener listener, String userId, String purchaseToken, final Context context) {
+        //Добавляем запрос в очередь
+        final String queueId = AmazonQueue.getInstance(context)
+                .addPurchaseToQueue(userId, purchaseToken);
+
+        new AmazonValidateRequest(userId, purchaseToken, context)
+                .callback(new ApiHandler() {
+                    @Override
+                    public void success(ApiResponse response) {
+                        AmazonQueue.getInstance(context).deleteQueueItem(queueId);
+                        if (listener != null) {
+                            listener.onPurchased();
+                        }
+                    }
+
+                    @Override
+                    public void fail(int codeError, ApiResponse response) {
+                        //Если это ошибка оплаты от сервера, то удалям из очереди
+                        if (
+                                response.code == ApiResponse.INVALID_TRANSACTION ||
+                                        response.code == ApiResponse.INVALID_PRODUCT
+                                ) {
+
+                            AmazonQueue.getInstance(context).deleteQueueItem(queueId);
+                        }
+
+                        if (listener != null) {
+                            listener.onError();
+                        }
+                    }
+
+                    @Override
+                    public void always(ApiResponse response) {
+                        super.always(response);
+                        //После завершения запроса, проверяем, есть ли элементы в очереди, если есть отправляем их на сервер
+                        AmazonQueue.getInstance(App.getContext()).sendQueueItems();
+                    }
+                })
+                .exec();
     }
 
 }
