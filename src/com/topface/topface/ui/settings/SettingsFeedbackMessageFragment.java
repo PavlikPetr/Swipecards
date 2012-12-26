@@ -78,7 +78,8 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
 
         Bundle extras = getActivity().getIntent().getExtras();
-        switch (extras.getInt(INTENT_FEEDBACK_TYPE, UNKNOWN)) {
+        int feedbackType = extras.getInt(INTENT_FEEDBACK_TYPE, UNKNOWN);
+        switch (feedbackType) {
             case ERROR_MESSAGE:
                 mReport.subject = getResources().getString(R.string.settings_error_message);
                 break;
@@ -125,31 +126,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             }
         });
 
-        final TextView emailTitle = (TextView) root.findViewById(R.id.tvEmailTitle);
-        mEditEmail = (EditText) root.findViewById(R.id.edEmail);
-        mEditEmail.setInputType(InputType.TYPE_CLASS_TEXT);
-        mEditEmail.setText(Settings.getInstance().getSocialAccountEmail());
-
-        ViewGroup emailSwitchLayout = (ViewGroup) root.findViewById(R.id.loEmailSwitcher);
-        setBackground(R.drawable.edit_big_btn_selector, emailSwitchLayout);
-        setText(R.string.settings_want_answer, emailSwitchLayout);
-        final EditSwitcher switchBeautifull = new EditSwitcher(emailSwitchLayout);
-        switchBeautifull.setChecked(false);
-        emailSwitchLayout.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switchBeautifull.doSwitch();
-                if (switchBeautifull.isChecked()) {
-                    mReport.emailWanted = true;
-                    mEditEmail.setVisibility(View.VISIBLE);
-                    emailTitle.setVisibility(View.VISIBLE);
-                } else {
-                    mReport.emailWanted = false;
-                    mEditEmail.setVisibility(View.GONE);
-                    emailTitle.setVisibility(View.GONE);
-                }
-            }
-        });
+        initEmailViews(root,feedbackType);
 
         try {
             PackageInfo pInfo;
@@ -164,6 +141,52 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
         return root;
+    }
+
+    private void initEmailViews(View root, int feedbackType) {
+        final TextView emailTitle = (TextView) root.findViewById(R.id.tvEmailTitle);
+        mEditEmail = (EditText) root.findViewById(R.id.edEmail);
+        ViewGroup emailSwitchLayout = (ViewGroup) root.findViewById(R.id.loEmailSwitcher);
+        mEditEmail.setInputType(InputType.TYPE_CLASS_TEXT);
+        mEditEmail.setText(Settings.getInstance().getSocialAccountEmail());
+        setBackground(R.drawable.edit_big_btn_selector, emailSwitchLayout);
+        setText(R.string.settings_want_answer, emailSwitchLayout);
+        final EditSwitcher switchEmail = new EditSwitcher(emailSwitchLayout);
+        switch (feedbackType) {
+            case DEVELOPERS_MESSAGE:
+                switchEmail.setChecked(true);
+                mReport.emailWanted = true;
+                mEditEmail.setVisibility(View.VISIBLE);
+                emailTitle.setVisibility(View.VISIBLE);
+                break;
+            case PAYMENT_MESSAGE:
+                mReport.emailWanted = true;
+                mEditEmail.setVisibility(View.VISIBLE);
+                emailTitle.setVisibility(View.VISIBLE);
+                emailSwitchLayout.setVisibility(View.GONE);
+                break;
+            case ERROR_MESSAGE:
+            case COOPERATION_MESSAGE:
+            case UNKNOWN:
+                switchEmail.setChecked(false);
+                break;
+        }
+
+        emailSwitchLayout.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchEmail.doSwitch();
+                if (switchEmail.isChecked()) {
+                    mReport.emailWanted = true;
+                    mEditEmail.setVisibility(View.VISIBLE);
+                    emailTitle.setVisibility(View.VISIBLE);
+                } else {
+                    mReport.emailWanted = false;
+                    mEditEmail.setVisibility(View.GONE);
+                    emailTitle.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override
@@ -183,6 +206,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             feedbackRequest.subject = mReport.getSubject();
             feedbackRequest.text = mReport.getBody();
             feedbackRequest.extra = mReport.getExtra();
+            feedbackRequest.email = mReport.getEmail();
             feedbackRequest.callback(new ApiHandler() {
 
                 @Override
@@ -292,6 +316,10 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             strBuilder.append(android_RELEASE).append("/").append(android_SDK).append("</p>");
 
             return strBuilder.toString();
+        }
+
+        public String getEmail() {
+            return email;
         }
     }
 
