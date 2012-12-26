@@ -1,9 +1,11 @@
 package com.topface.billing.amazon;
 
 import android.content.Context;
+import android.os.Looper;
 import com.amazon.inapp.purchasing.BasePurchasingObserver;
 import com.amazon.inapp.purchasing.PurchaseResponse;
 import com.amazon.inapp.purchasing.PurchasingManager;
+import com.amazon.inapp.purchasing.Receipt;
 import com.topface.billing.BillingListener;
 import com.topface.billing.BillingSupportListener;
 import com.topface.topface.App;
@@ -43,15 +45,15 @@ public class AmazonPurchaseObserver extends BasePurchasingObserver {
     public void onPurchaseResponse(PurchaseResponse purchaseResponse) {
         super.onPurchaseResponse(purchaseResponse);
 
-        if (purchaseResponse != null) {
+        if (purchaseResponse != null && mDriver != null) {
             BillingListener listener = mDriver.getBillingListener();
             Debug.log(
                     String.format(
                             "Amazon In-APP Purchase request #%s for user #%s \n status: %s \n receipt: %s",
                             purchaseResponse.getRequestId(),
                             purchaseResponse.getUserId(),
-                            purchaseResponse.getPurchaseRequestStatus().toString(),
-                            purchaseResponse.getReceipt().toString()
+                            purchaseResponse.getPurchaseRequestStatus(),
+                            purchaseResponse.getReceipt()
                     )
             );
 
@@ -64,17 +66,23 @@ public class AmazonPurchaseObserver extends BasePurchasingObserver {
             case SUCCESSFUL:
                 //Добавляем запрос в очередь
                 String userId = purchaseResponse.getUserId();
-                String purchaseToken = purchaseResponse.getReceipt().getPurchaseToken();
-
-                validateRequest(listener, userId, purchaseToken, mContext);
+                Receipt receipt = purchaseResponse.getReceipt();
+                if (receipt != null && receipt.getPurchaseToken() != null) {
+                    String purchaseToken = receipt.getPurchaseToken();
+                    validateRequest(listener, userId, purchaseToken, mContext);
+                } else if (listener != null) {
+                    listener.onError();
+                }
 
                 break;
+
             case ALREADY_ENTITLED:
                 //При попытке купить уже купленые товары просто отправлям коллбэк, не трогая сервер
                 if (listener != null) {
                     listener.onPurchased();
                 }
                 break;
+
             default:
                 //Все остальные статусы будут считаться ошибкой
                 if (listener != null) {
@@ -118,7 +126,9 @@ public class AmazonPurchaseObserver extends BasePurchasingObserver {
                     public void always(ApiResponse response) {
                         super.always(response);
                         //После завершения запроса, проверяем, есть ли элементы в очереди, если есть отправляем их на сервер
+                        Looper.prepare();
                         AmazonQueue.getInstance(App.getContext()).sendQueueItems();
+                        Looper.loop();
                     }
                 })
                 .exec();
