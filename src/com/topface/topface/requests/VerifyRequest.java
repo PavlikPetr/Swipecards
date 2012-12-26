@@ -9,7 +9,6 @@ public class VerifyRequest extends AbstractApiRequest {
     public static final String service = "verify";
     public String data; // строка данных заказа от Google Play
     public String signature; // подпись данных заказа
-    public boolean sandbox = false; //Тестовый режим, при котором все запросы проверки транзакции возвращают True
 
     public VerifyRequest(Context context) {
         super(context);
@@ -20,8 +19,7 @@ public class VerifyRequest extends AbstractApiRequest {
     protected JSONObject getRequestData() throws JSONException {
         return new JSONObject()
                 .put("data", data)
-                .put("signature", signature)
-                .put("sandbox", sandbox);
+                .put("signature", signature);
     }
 
     @Override

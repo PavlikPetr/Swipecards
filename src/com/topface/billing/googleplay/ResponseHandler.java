@@ -5,6 +5,7 @@ package com.topface.billing.googleplay;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Looper;
 import android.util.Log;
 import com.topface.billing.googleplay.BillingService.RequestPurchase;
 import com.topface.billing.googleplay.BillingService.RestoreTransactions;
@@ -178,7 +179,6 @@ public class ResponseHandler {
         // Отправлем заказ на сервер
         final VerifyRequest verifyRequest = new VerifyRequest(context);
         verifyRequest.data = data;
-        verifyRequest.sandbox = true;
         verifyRequest.signature = signature;
         verifyRequest.callback(new ApiHandler() {
             @Override
@@ -217,8 +217,10 @@ public class ResponseHandler {
             @Override
             public void always(ApiResponse response) {
                 super.always(response);
+                Looper.prepare();
                 //После завершения запроса, проверяем, есть ли элементы в очереди, если есть отправляем их на сервер
                 GooglePlayV2Queue.getInstance(App.getContext()).sendQueueItems();
+                Looper.loop();
             }
         }).exec();
     }
