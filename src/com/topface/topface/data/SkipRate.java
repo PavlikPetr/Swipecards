@@ -6,7 +6,7 @@ import com.topface.topface.utils.Debug;
 public class SkipRate extends Confirmation {
     // Data
     public int money; // мгновенное количество оставшихся монет текущего пользователя
-    public int power; // мгновенное значение энергии текущего пользователя
+    public int likes; // мгновенное значение симпатий текущего пользователя
     public boolean completed; // результат выполнения операции
 
     public SkipRate(ApiResponse response) {
@@ -18,8 +18,7 @@ public class SkipRate extends Confirmation {
 
         try {
             skip.money = response.jsonResult.optInt("money");
-            skip.power = response.jsonResult.optInt("power");
-            skip.power = (int) (skip.power * 0.01);
+            skip.likes = response.jsonResult.optInt("likes");
             skip.completed = response.jsonResult.optBoolean("completed");
         } catch (Exception e) {
             Debug.error("SkipRate.class: Wrong response parsing", e);

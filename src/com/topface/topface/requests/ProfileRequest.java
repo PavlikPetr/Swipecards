@@ -73,7 +73,7 @@ public class ProfileRequest extends AbstractApiRequest {
 
     private JSONArray getNotification() {
         JSONArray array = new JSONArray();
-        array.put("money").put("power").put("average_rate").put("unread_rates").put("unread_likes").put("unread_messages").put("unread_symphaties");
+        array.put("money").put("likes").put("average_rate").put("unread_rates").put("unread_likes").put("unread_messages").put("unread_symphaties");
 
         return array;
     }

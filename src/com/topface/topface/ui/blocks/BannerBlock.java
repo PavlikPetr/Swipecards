@@ -17,7 +17,7 @@ import com.google.ads.AdView;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.topface.topface.R;
-import com.topface.topface.billing.BuyingActivity;
+import com.topface.topface.Static;
 import com.topface.topface.data.Banner;
 import com.topface.topface.data.Options;
 import com.topface.topface.imageloader.DefaultImageLoader;
@@ -25,6 +25,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.BaseApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.fragments.TopsFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
@@ -156,7 +157,8 @@ public class BannerBlock {
                     Intent intent = null;
                     if (banner.action.equals(Banner.ACTION_PAGE)) {
                         EasyTracker.getTracker().trackEvent("Purchase", "Banner", "", 0L);
-                        intent = new Intent(mActivity, BuyingActivity.class); // "parameter":"PURCHASE"
+                        intent = new Intent(mActivity.getApplicationContext(),ContainerActivity.class);
+                        intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
 //                    } else if (banner.action.equals(Banner.INVITE_PAGE)) {
 //                        EasyTracker.getTracker().trackEvent("Banner", "Invite", "", 0L);
 //                        intent = new Intent(mActivity, InviteActivity.class);

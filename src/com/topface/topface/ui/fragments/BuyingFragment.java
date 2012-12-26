@@ -23,6 +23,11 @@ import com.topface.topface.utils.CacheProfile;
 
 public class BuyingFragment extends BillingFragment implements View.OnClickListener {
 
+    public static final String ARG_ITEM_TYPE = "type_of_buying_item";
+    public static final int TYPE_GIFT = 1;
+    public static final int TYPE_DELIGHT = 2;
+    public static final String ARG_ITEM_PRICE = "quantity_of_coins";
+
     private RelativeLayout mBuy6;
     private RelativeLayout mBuy40;
     private RelativeLayout mBuy100;
@@ -33,8 +38,17 @@ public class BuyingFragment extends BillingFragment implements View.OnClickListe
 
     public static final String BROADCAST_PURCHASE_ACTION = "com.topface.topface.PURCHASE_NOTIFICATION";
     private ServicesTextView mCurCoins;
-    private ServicesTextView mCurPower;
+    private ServicesTextView mCurLikes;
     private TextView mResourcesInfo;
+
+    public static BuyingFragment newInstance(int type, int coins) {
+        BuyingFragment fragment = new BuyingFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_ITEM_TYPE, type);
+        args.putInt(ARG_ITEM_PRICE, coins);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     public static BuyingFragment newInstance() {
         return new BuyingFragment();
@@ -44,7 +58,6 @@ public class BuyingFragment extends BillingFragment implements View.OnClickListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_buy, null);
         initViews(root);
-
         return root;
     }
 
@@ -73,21 +86,34 @@ public class BuyingFragment extends BillingFragment implements View.OnClickListe
 
     private void initBalanceCounters(View root) {
         mCurCoins = (ServicesTextView) root.findViewById(R.id.fbCurCoins);
-        mCurPower = (ServicesTextView) root.findViewById(R.id.fbCurPower);
+        mCurLikes = (ServicesTextView) root.findViewById(R.id.fbCurLikes);
         mResourcesInfo = (TextView) root.findViewById(R.id.tvResourcesInfo);
         updateBalanceCounters();
     }
 
     private void updateBalanceCounters() {
-        if (mCurCoins != null && mCurPower != null && mResourcesInfo != null) {
+        if (mCurCoins != null && mCurLikes != null && mResourcesInfo != null) {
             mCurCoins.setText(Integer.toString(CacheProfile.money));
-            mCurPower.setText(Integer.toString(CacheProfile.power));
-            if (CacheProfile.money > 0) {
-                mResourcesInfo.setText(getResources().getString(R.string.buying_default_message));
+            mCurLikes.setText(Integer.toString(CacheProfile.likes));
+
+            Bundle args = getArguments();
+            if (args != null) {
+                int type = args.getInt(ARG_ITEM_TYPE);
+                int coins = args.getInt(ARG_ITEM_PRICE);
+                switch (type) {
+                    case TYPE_GIFT:
+                        mResourcesInfo.setText(String.format(
+                                getResources().getString(R.string.buying_you_have_no_coins_for_gift),
+                                coins - CacheProfile.money));
+                        break;
+                    default:
+                        mResourcesInfo.setText(getResources().getString(R.string.buying_default_message));
+                        break;
+                }
             } else {
-                mResourcesInfo.setText(String.format(
-                        getResources().getString(R.string.buying_you_have_no_coins_for_gift), CacheProfile.money));
+                mResourcesInfo.setText(getResources().getString(R.string.buying_default_message));
             }
+
         }
     }
 
@@ -186,8 +212,8 @@ public class BuyingFragment extends BillingFragment implements View.OnClickListe
             case R.id.btnBuyingMoney300:
                 buyItem("android.test.item_unavailable");
                 break;
-            case R.id.btnBuyingPower:
-                buyItem("android.test.purchased");
+            case R.id.btnBuyingLikes:
+                mBillindDriver.buyItem("android.test.purchased");
                 break;
         }
     }

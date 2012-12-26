@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import com.topface.topface.Static;
 
 public class Novice {
-    public static boolean giveNovicePower = false;
+    public static boolean giveNoviceLikes = false;
 
     public boolean showSympathy;
     public boolean showBatteryBonus;
@@ -19,7 +19,7 @@ public class Novice {
 
         showSympathy = mPreferences.getBoolean(Static.PREFERENCES_NOVICE_DATING_SYMPATHY, true);
         showEnergy = getShowEnergy(); //preferences.getBoolean(Static.PREFERENCES_NOVICE_DATING_ENERGY, true);
-        showBatteryBonus = Novice.giveNovicePower;
+        showBatteryBonus = Novice.giveNoviceLikes;
         showFillProfile = getShowProfile();//preferences.getBoolean(Static.PREFERENCES_NOVICE_MENU_FILL_PROFILE, true);        
     }
 
@@ -88,6 +88,6 @@ public class Novice {
 
     public void completeShowBatteryBonus() {
         showBatteryBonus = false;
-        Novice.giveNovicePower = false;
+        Novice.giveNoviceLikes = false;
     }
 }

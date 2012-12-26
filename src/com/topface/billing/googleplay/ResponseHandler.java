@@ -186,7 +186,7 @@ public class ResponseHandler {
                 //Удаляем запрос из очереди запросов
                 GooglePlayV2Queue.getInstance(context).deleteQueueItem(queueId);
                 Verify verify = Verify.parse(response);
-                CacheProfile.power = verify.power;
+                CacheProfile.likes = verify.likes;
                 CacheProfile.money = verify.money;
                 CacheProfile.premium = verify.premium;
                 //Оповещаем интерфейс о том, что элемент удачно куплен

@@ -101,7 +101,7 @@
                 <!-- 10 000 power btn -->
 
                 <LinearLayout
-                        android:id="@+id/btnBuyingPower"
+                        android:id="@+id/btnBuyingLikes"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/buying_purchase_selector"

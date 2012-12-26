@@ -5,11 +5,11 @@ import com.topface.topface.utils.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class NovicePowerRequest extends ApiRequest {
+public class NoviceLikesRequest extends ApiRequest {
     // Data
-    public static final String service = "novicePower";
+    public static final String service = "noviceLikes";
 
-    public NovicePowerRequest(Context context) {
+    public NoviceLikesRequest(Context context) {
         super(context);
     }
 

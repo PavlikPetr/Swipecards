@@ -61,15 +61,15 @@
                         android:layout_marginBottom="10dp"
                         />
 
-                <com.topface.topface.ui.views.ServicesTextView xmlns:stv="http://schemas.android.com/apk/res/com.topface.topface"
-                                                               android:id="@+id/fbCurPower"
-                                                               stv:maxChars="3"
-                                                               stv:charPadding="7"
-                                                               android:layout_width="wrap_content"
-                                                               android:layout_height="wrap_content"
-                                                               stv:fontSize="24"
-                                                               stv:textWithoutBackground="%"
-                                                               stv:image="@drawable/ic_power"
+                <com.topface.topface.ui.views.ServicesTextView
+                        xmlns:stv="http://schemas.android.com/apk/res/com.topface.topface"
+                        android:id="@+id/fbCurLikes"
+                        stv:maxChars="5"
+                        stv:charPadding="7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        stv:fontSize="24"
+                        stv:image="@drawable/ic_sympathy"
                         />
             </LinearLayout>
         </RelativeLayout>
@@ -109,14 +109,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="2dp"
-                        android:text="@string/buying_power"
+                        android:text="@string/buying_sympathies"
                         android:layout_alignParentLeft="true"
                         android:textStyle="bold"/>
-
                 <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_bolt_small"
+                        android:src="@drawable/ic_sympathy_small"
                         android:layout_alignParentRight="true"
                         />
             </RelativeLayout>
@@ -131,7 +130,6 @@
                     android:layout_marginBottom="10dp"
                     android:padding="5dp"
                     >
-
                 <TextView
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
@@ -141,7 +139,6 @@
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
                         />
-
                 <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="fill_parent"
@@ -149,7 +146,6 @@
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="75dp"
                         />
-
                 <TextView
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
@@ -162,7 +158,6 @@
             </RelativeLayout>
 
             !-- Money -->
-
             <RelativeLayout
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
@@ -176,7 +171,6 @@
                         android:text="@string/buying_money"
                         android:layout_alignParentLeft="true"
                         android:textStyle="bold"/>
-
                 <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -184,7 +178,6 @@
                         android:layout_alignParentRight="true"
                         />
             </RelativeLayout>
-
             <RelativeLayout
                     android:id="@+id/fb6Pack"
                     android:layout_width="fill_parent"
@@ -193,7 +186,6 @@
                     android:padding="5dp"
                     android:layout_marginTop="10dp"
                     >
-
                 <TextView
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
@@ -203,7 +195,6 @@
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
                         />
-
                 <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="fill_parent"
@@ -211,7 +202,6 @@
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="75dp"
                         />
-
                 <TextView
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
@@ -222,7 +212,6 @@
                         android:layout_centerVertical="true"
                         />
             </RelativeLayout>
-
             <RelativeLayout
                     android:id="@+id/fb40Pack"
                     android:layout_width="fill_parent"
@@ -231,7 +220,6 @@
                     android:padding="5dp"
                     android:layout_marginTop="10dp"
                     >
-
                 <TextView
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
@@ -241,7 +229,6 @@
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
                         />
-
                 <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="fill_parent"
@@ -249,7 +236,6 @@
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="75dp"
                         />
-
                 <TextView
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
@@ -260,7 +246,6 @@
                         android:layout_centerVertical="true"
                         />
             </RelativeLayout>
-
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -269,7 +254,6 @@
                     android:textColor="#B8B8B8"
                     android:textSize="10sp"
                     />
-
             <RelativeLayout
                     android:id="@+id/fb100Pack"
                     android:layout_width="fill_parent"
@@ -278,7 +262,6 @@
                     android:layout_marginTop="10dp"
                     android:padding="5dp"
                     >
-
                 <TextView
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
@@ -288,7 +271,6 @@
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
                         />
-
                 <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="fill_parent"
@@ -296,7 +278,6 @@
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="75dp"
                         />
-
                 <TextView
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
@@ -307,7 +288,6 @@
                         android:layout_centerVertical="true"
                         />
             </RelativeLayout>
-
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -325,7 +305,6 @@
                     android:layout_marginTop="10dp"
                     android:padding="5dp"
                     >
-
                 <TextView
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
@@ -335,7 +314,6 @@
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
                         />
-
                 <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="fill_parent"
@@ -343,7 +321,6 @@
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="75dp"
                         />
-
                 <TextView
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
@@ -354,7 +331,6 @@
                         android:layout_centerVertical="true"
                         />
             </RelativeLayout>
-
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -365,16 +341,27 @@
                     />
             <!-- Power -->
 
-            <TextView
-                    android:id="@+id/vip_status"
-                    style="@style/TitleWhiteText"
-                    android:layout_width="wrap_content"
+            <RelativeLayout
                     android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_marginBottom="2dp"
                     android:layout_marginTop="10dp"
-                    android:text="@string/vip_not_activated"
-                    android:layout_alignParentLeft="true"
-                    android:textStyle="bold"/>
+                    >
+                <TextView
+                        android:id="@+id/vip_status"
+                        style="@style/TitleWhiteText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/vip_not_activated"
+                        android:layout_alignParentLeft="true"
+                        android:textStyle="bold"/>
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_rocket_small"
+                        android:layout_alignParentRight="true"
+                        />
+            </RelativeLayout>
 
             <RelativeLayout
                     android:id="@+id/fbVipButton"
@@ -384,7 +371,6 @@
                     android:layout_marginTop="10dp"
                     android:padding="5dp"
                     >
-
                 <TextView
                         android:id="@+id/fbVipBtnText"
                         android:layout_height="wrap_content"

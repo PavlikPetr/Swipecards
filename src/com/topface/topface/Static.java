@@ -3,7 +3,7 @@ package com.topface.topface;
 public class Static {
     // Constants
 
-    public static final int API_VERSION = 3;
+    public static final int API_VERSION = 4;
     public static final int GIRL = 0;
     public static final int BOY = 1;
     public static final int PHOTO_WIDTH = 640;
