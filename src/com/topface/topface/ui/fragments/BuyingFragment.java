@@ -14,9 +14,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.topface.billing.BillingDriver;
+import com.topface.billing.BillingDriverManager;
 import com.topface.billing.BillingListener;
 import com.topface.billing.BillingSupportListener;
-import com.topface.billing.BillingTypeManager;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ProfileRequest;
@@ -63,7 +63,7 @@ public class BuyingFragment extends BaseFragment implements View.OnClickListener
         View root = inflater.inflate(R.layout.fragment_buy, null);
         initViews(root);
 
-        mBillindDriver = BillingTypeManager.getInstance().createMainBillingDriver(getActivity(), new BillingListener() {
+        mBillindDriver = BillingDriverManager.getInstance().createMainBillingDriver(getActivity(), new BillingListener() {
             @Override
             public void onPurchased() {
                 updateBalanceCounters();

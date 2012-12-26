@@ -7,12 +7,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import com.topface.billing.GooglePlayV2Queue;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
@@ -27,6 +30,7 @@ import com.topface.topface.ui.fragments.MenuFragment.FragmentMenuListener;
 import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Novice;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthorizationManager;
 
 import java.util.Calendar;
@@ -36,6 +40,7 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
     public static final String RATING_POPUP = "RATING_POPUP";
     public static final int RATE_POPUP_TIMEOUT = 86400000; // 1000 * 60 * 60 * 24 * 1 (1 сутки)
     public static final int UPDATE_INTERVAL = 1 * 60 * 1000;
+    public static final int BILLING_QUEUE_CHECK_DELAY = 3000;
     private FragmentManager mFragmentManager;
     private MenuFragment mFragmentMenu;
     private FragmentSwitchController mFragmentSwitcher;
@@ -113,6 +118,8 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
             }
         }
 
+        sendQueueItems();
+
         //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
         if (mDelayedFragment != null) {
             onExtraFragment(mDelayedFragment);
@@ -120,6 +127,20 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
             mChatInvoke = true;
         }
 
+    }
+
+    /**
+     * Пробуем разобрать очередь запросов
+     */
+    private void sendQueueItems() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (TextUtils.equals(getString(R.string.build_google_play_v2), Utils.getBuildType())) {
+                    GooglePlayV2Queue.getInstance(App.getContext()).sendQueueItems();
+                }
+            }
+        }, BILLING_QUEUE_CHECK_DELAY);
     }
 
     @Override

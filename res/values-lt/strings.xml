@@ -19,7 +19,7 @@
     <string name="general_server_error">Klaida. Bandykite vėliau</string>
     <string name="general_data_error">Klaida. Bandykite dar kartą</string>
     <string name="general_internet_off">Negalima prisijungti prie interneto</string>
-    <string name="general_purchasing_error">Prašome, parašyti pranešimą apie pirkimo klaidą adresu support@topface.ru</string>
+    <string name="general_purchasing_error">Prašome parašyti pranešimą apie pirkimo klaidą adresu support@topface.ru</string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Tekstas nukopijuotas</string>
     <string name="general_spinner_title">Pasirinkite veiksmą</string>
@@ -278,4 +278,16 @@
     <string name="buying_vip_info">Norint turėti priėjimą prie svečių būtinas VIP statusas</string>
     <string name="buy_play_market_not_available">Play Market neprieinamas</string>
     <string name="buy_subscription_not_available">Prenumeratos neprieinamos</string>
+    <string name="profile_gifts_empty">Šiam vartotojui dar niekas nedovanojo dovanų</string>
+    <string name="profile_mygifts_empty">Jums dar niekas nedovanojo dovanų</string>
+    <string name="profile_mood">Aprašykite savo nuotaiką</string>
+    <string name="general_reconnect">Bandome atstatyti interneto ryšį.\nPrašome palaukti.</string>
+    <string name="dating_people_unnoticed">Be jūsų dėmesio liko dešimt žmonių!</string>
+    <string name="dating_continue">Tęsti įvertinimą</string>
+    <string name="dating_better_look">Įsižiūrėkite!\nGalbūt jūs praleidžiate savo likimą!</string>
+    <string name="edit_my_city">Mano miestas</string>
+    <string name="edit_my_photos">Mano fotografijos</string>
+    <string name="general_search_empty_title">Gaila, bet nieko nerasta</string>
+    <string name="profile_get_status">Aprašykite savo nuotaiką</string>
+    <string name="map_title">Žemėlapis</string>
 </resources>

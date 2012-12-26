@@ -19,7 +19,8 @@
     <string name="general_server_error">Λάθος. Προσπαθήστε αργότερα</string>
     <string name="general_data_error">Σφάλμα. Προσπαθήστε ξανά</string>
     <string name="general_internet_off">Δεν υπάρχει σύνδεση με το Διαδίκτυο</string>
-    <string name="general_purchasing_error">Παρακαλώ, γράψετε ένα μήνυμα σφάλματος για την αγορά support@topface.ru</string>
+    <string name="general_purchasing_error">Παρακαλώ, γράψετε ένα μήνυμα σφάλματος για την αγορά support@topface.ru
+    </string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">αντιγραφεί</string>
     <string name="general_spinner_title">Επιλέξτε μια δράση</string>
@@ -119,7 +120,7 @@
     <string name="edit_selected">Επιλεγμένη</string>
     <string name="edit_name">\'Ονομα</string>
     <string name="edit_age">Ηλικία</string>
-    <string name="edit_status">Κατάσταση</string>
+    <string name="edit_status">Η κατάσταση</string>
     <string name="edit_set_as_main">Να κάνουμε κύρια</string>
     <string name="edit_delete">Κατάργηστε</string>
     <string name="edit_restore">Αποκαταστήστε</string>
@@ -152,7 +153,8 @@
     <plurals name="invite_bonus_text">
         <item quantity="zero">Προσκαλέστε τους φίλους σας και να παρέτε για καθεμία από τις 20</item>
         <item quantity="other">Θα πάμε για να στείλετε προσκλήσεις %2$d στους φίλους και να παρέτε γι \'αυτό %1$d</item>
-        <item quantity="one">Θα πάμε για να στείλετε μια πρόσκληση για %2$d στους φίλους και να παρέτε γι \'αυτό %1$d</item>
+        <item quantity="one">Θα πάμε για να στείλετε μια πρόσκληση για %2$d στους φίλους και να παρέτε γι \'αυτό %1$d
+        </item>
     </plurals>
     <string name="settings_header_title">Ρυθμίσεις</string>
     <string name="settings_wifi">Μόνο σε Wi-Fi</string>
@@ -202,10 +204,18 @@
         <item quantity="other">%d φωτογραφίες</item>
         <item quantity="one">%d φωτογραφία</item>
     </plurals>
-    <string name="novice_sympathy">Στείλτε συμπάθεια για εκείνους που \nσας αρέσει πραγματικά\ nγια να ξεκινήσετε μια ευχάριστη γνωριμία</string>
-    <string name="novice_energy">Όσο υψηλότερη είναι η φόρτιση της μπαταρίας, \nτόσο περισσότερο σας να εκτιμήσουν. \nΜην ξεχάσετε να φορτίσετε \nμπαταρία, με την αγορά της ενέργειας.</string>
-    <string name="novice_battery_bonus">Ενέργεια σας δίνει τις δημοφιλείς \nκαι νέα συμπάθειας. Μπορείτε να \n φορτίσετε την μπαταρία, αν έχετε αγοράσει \n100% της ενέργειας. Η πρώτη φόρτιση \n να σας δίνουμε δωρεάν!</string>
-    <string name="novice_fill_profile">Προσθέστε τις καλύτερες φωτογραφίες σας \nγια να πάρετε περισσότερες συμπάθειας.</string>
+    <string name="novice_sympathy">Στείλτε συμπάθεια για εκείνους που \nσας αρέσει πραγματικά\ nγια να ξεκινήσετε μια
+        ευχάριστη γνωριμία
+    </string>
+    <string name="novice_energy">Όσο υψηλότερη είναι η φόρτιση της μπαταρίας, \nτόσο περισσότερο σας να εκτιμήσουν.
+        \nΜην ξεχάσετε να φορτίσετε \nμπαταρία, με την αγορά της ενέργειας.
+    </string>
+    <string name="novice_battery_bonus">Ενέργεια σας δίνει τις δημοφιλείς \nκαι νέα συμπάθειας. Μπορείτε να \n φορτίσετε
+        την μπαταρία, αν έχετε αγοράσει \n100% της ενέργειας. Η πρώτη φόρτιση \n να σας δίνουμε δωρεάν!
+    </string>
+    <string name="novice_fill_profile">Προσθέστε τις καλύτερες φωτογραφίες σας \nγια να πάρετε περισσότερες
+        συμπάθειας.
+    </string>
     <string name="general_edit_profile_message">Παρακαλούμε συμπληρώστε τα απαιτούμενα πεδία του ερωτηματολόγιο</string>
     <string name="general_premium_access_error">Για αυτή η λειτουργία χρειάζεται Premium</string>
     <string name="general_search_null_response_error">Τίποτα δεν βρέθηκε. Προσπαθήστε να αλλάξετε τα φίλτρα</string>
@@ -216,7 +226,9 @@
     <string name="filter_city_fail">Βρέθηκε καμία πόλη που αρχίζει με «%s»</string>
     <string name="age_filter_man">‘Εχετε ενδιαφέρον για άντρες</string>
     <string name="age_filter_girl">‘Εχετε ενδιαφέρον για κοπέλες</string>
-    <string name="dashbrd_popup_rating">Άρεσε εφαρμογή μας? Ανασηκώστε το βαθμολογίας μας!  Όσο υψηλότερη είναι η βαθμολογίας, τόσο πιο πολλοί ενδιαφέροντες ανθρώπους μπορείς να συναντήσεις στη Topface</string>
+    <string name="dashbrd_popup_rating">Άρεσε εφαρμογή μας? Ανασηκώστε το βαθμολογίας μας! Όσο υψηλότερη είναι η
+        βαθμολογίας, τόσο πιο πολλοί ενδιαφέροντες ανθρώπους μπορείς να συναντήσεις στη Topface
+    </string>
     <string name="dashbrd_popup_title">Βαθμολογίας</string>
     <string name="dashbrd_popup_cancel">Μην ρωτήσετε</string>
     <string name="dashbrd_popup_rate">Ρυθμίστε το βαθμολογίας</string>
@@ -234,7 +246,9 @@
     <string name="dating_prev_button_ext">Προηγούμενος</string>
     <string name="dating_skip_button_ext">Επόμενος</string>
     <string name="dating_search_empty_title">Δυστυχώς, τίποτα δεν βρέθηκε</string>
-    <string name="dating_search_empty_text">Μπορείτε να δοκιμάσετε την αναζήτηση ξανά, ή να αλλάξετε τις ρυθμίσεις του φίλτρου.</string>
+    <string name="dating_search_empty_text">Μπορείτε να δοκιμάσετε την αναζήτηση ξανά, ή να αλλάξετε τις ρυθμίσεις του
+        φίλτρου.
+    </string>
     <string name="general_close">Κλείστε</string>
     <string name="vip_not_activated">Η κατάστασή σας-VIP δεν είναι ενεργοποιημένη</string>
     <string name="vip_one_month_title">1 μήνας</string>
@@ -266,7 +280,9 @@
     <string name="vip_state_off">Η κατάστασή σας-VIP δεν είναι ενεργοποιημένη</string>
     <string name="vip_info_delight">Στείλτε θαυμασμό για δωρεάν - εκφράστε τα συναισθήματά σας στο μέγιστο!</string>
     <string name="vip_info_guest">Μάθετε ποιος είναι ενδιαφέρεται για σας - δείτε τους καλεσμένους σας!</string>
-    <string name="vip_info_invisible">Μείνετε απαρατήρητα, όταν επισκέπτεστε τις σελίδες κάποιου άλλου, χάρη στην \ "αόρατος \"</string>
+    <string name="vip_info_invisible">Μείνετε απαρατήρητα, όταν επισκέπτεστε τις σελίδες κάποιου άλλου, χάρη στην \
+        "αόρατος \"
+    </string>
     <string name="vip_info_message">Αποκτήστε το πλεονέκτημα - τα μηνύματα σας θα ξεχωρίσουν από το πλήθος!</string>
     <string name="vip_info_gift">Επιλέξτε αποκλειστικά VIP-δώρα, και θα σας μείνει αξέχαστο!</string>
     <string name="vip_info_blackList">Απαλλαγείτε από τα ενοχλητικά άτομα με \ "μαύρη λίστα \"</string>
@@ -277,11 +293,24 @@
     <string name="buying_vip_info">Για να αποκτήσετε πρόσβαση τους επισκέπτες πρέπει να έχετε τη κατάσταση VIP</string>
     <string name="buy_play_market_not_available">Play Market δεν είναι διαθέσιμη</string>
     <string name="buy_subscription_not_available">Τα συνδρομές δεν είναι διαθέσιμες</string>
+    <string name="default_six_coins">6 κέρματα το καθένα από την 0,16 $</string>
+    <string name="default_six_coins_price">1 USD</string>
+    <string name="default_coins_40">40 κέρματα το καθένα από την 0,12 $</string>
+    <string name="default_coins_40_price">5 USD</string>
+    <string name="default_coins_100">100 κέρματα το καθένα από την 0,1 $</string>
+    <string name="default_coins_300">300 κέρματα το καθένα από την 0,08 $</string>
     <string name="profile_gifts_empty">Αυτός ο χρήστης δεν έχει λάβει τα δώρα από κανέναν</string>
     <string name="profile_mygifts_empty">Δεν έχετε λάβει τα δώρα από κανέναν</string>
     <string name="profile_mood">Περιγράψτε τη διάθεσή σας</string>
-    <string name="general_reconnect">Προσπαθούμε να δημιουργήσουμε μια σύνδεση στο Internet.\nΠαρακαλώ, να περιμένετε.</string>
+    <string name="general_reconnect">Προσπαθούμε να δημιουργήσουμε μια σύνδεση στο Internet.\nΠαρακαλώ, να περιμένετε.
+    </string>
     <string name="dating_people_unnoticed">Δέκα ανθρώπους έμειναν χωρίς την προσοχή σας!</string>
     <string name="dating_continue">Συνεχίστε να αξιολογήσετε</string>
-    <string name="dating_better_look">Ρίξτε μια προσεκτική ματιά!   Ίσως χάσετε το πεπρωμένο σας!</string>
+    <string name="dating_better_look">Ρίξτε μια προσεκτική ματιά! Ίσως χάσετε το πεπρωμένο σας!</string>
+    <string name="edit_my_city">Η πόλη μου</string>
+    <string name="edit_my_photos">Οι φωτογραφίες μου</string>
+    <string name="general_search_empty_title">Μας συγχωρείτε,τίποτα δεν βρέθηκε.</string>
+    <string name="profile_get_status">Περιγράψτε τη διάθεσή σας</string>
+    <string name="map_title">Ο χάρτης</string>
+    <string name="chat_write_message">Στείλτε ένα μήνυμα</string>
 </resources>

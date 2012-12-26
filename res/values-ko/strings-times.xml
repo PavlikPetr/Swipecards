@@ -8,6 +8,9 @@
         <item quantity="zero">%d 분 전에</item>
         <item quantity="other">%d 분 전에</item>
     </plurals>
+    <plurals name="time_month">
+        <item quantity="other">%d 달</item>
+    </plurals>
     <string name="time_yesterday">어제</string>
     <string name="time_today">오늘</string>
     <string name="time_monday">월요일</string>

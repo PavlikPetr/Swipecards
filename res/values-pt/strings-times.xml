@@ -10,6 +10,10 @@
         <item quantity="other">%d minutos atrás</item>
         <item quantity="one">%d minutos atrás</item>
     </plurals>
+    <plurals name="time_month">
+        <item quantity="other">%d meses</item>
+        <item quantity="one">%d mês</item>
+    </plurals>
     <string name="time_yesterday">Ontem</string>
     <string name="time_today">Hoje</string>
     <string name="time_monday">PHD</string>

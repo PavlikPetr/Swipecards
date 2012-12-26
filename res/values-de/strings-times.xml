@@ -11,6 +11,9 @@
         <item quantity="other">vor %d Minuten</item>
         <item quantity="one">vor %d Minuten</item>
     </plurals>
+    <plurals name="time_month">
+        <item quantity="one">%d Monat</item>
+    </plurals>
     <string name="time_yesterday">Gestern</string>
     <string name="time_today">Heute</string>
     <string name="time_monday">Mon</string>

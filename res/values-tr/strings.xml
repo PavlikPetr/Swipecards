@@ -284,4 +284,9 @@
     <string name="dating_people_unnoticed">On kişi dikkatinizden kaçırdınız!</string>
     <string name="dating_continue">Not vermeye devam etmek</string>
     <string name="dating_better_look">Dikkatle bakın!\n Belki kaderinizi kaçırıyorsunuz!</string>
+    <string name="edit_my_city">Şehrim</string>
+    <string name="edit_my_photos">Fotoğraflarım</string>
+    <string name="general_search_empty_title">Maalesef bir şey bulunamadı</string>
+    <string name="profile_get_status">Moralinizi anlatın</string>
+    <string name="map_title">Harita</string>
 </resources>

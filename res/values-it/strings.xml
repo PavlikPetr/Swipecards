@@ -284,4 +284,9 @@
     <string name="dating_people_unnoticed">Hai lasciato sfuggire alla tua vista dieci persone!</string>
     <string name="dating_continue">Continua a valutare</string>
     <string name="dating_better_look">Guarda meglio!\nPuò darsi che ti stai lasciando sfuggire il tuo destino!</string>
+    <string name="edit_my_city">Mia città</string>
+    <string name="edit_my_photos">Mie foto</string>
+    <string name="general_search_empty_title">Purtroppo, la ricerca non ha prodotto risultati</string>
+    <string name="profile_get_status">Descrivi il tuo umore</string>
+    <string name="map_title">Mappa</string>
 </resources>

@@ -280,4 +280,9 @@
     <string name="dating_people_unnoticed">아직 10명의 사람들에게 관심을 끌지 못했습니다.</string>
     <string name="dating_continue">계속 평가하기</string>
     <string name="dating_better_look">주의 깊게 보세요!\n 당신의 운명의 상대를 놓쳤을 수도 있습니다!</string>
+    <string name="edit_my_city">내 도시</string>
+    <string name="edit_my_photos">내 사진</string>
+    <string name="general_search_empty_title">유감스럽게도 아무것도 찾지 못했습니다.</string>
+    <string name="profile_get_status">당신의 기분을 설명해 주세요.</string>
+    <string name="map_title">지도</string>
 </resources>

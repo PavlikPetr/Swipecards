@@ -10,6 +10,10 @@
         <item quantity="other">%d minutes ago</item>
         <item quantity="one">%d minute ago</item>
     </plurals>
+    <plurals name="time_month">
+        <item quantity="other">%d months</item>
+        <item quantity="one">%d month</item>
+    </plurals>
     <string name="time_yesterday">Yesterday</string>
     <string name="time_today">Today</string>
     <string name="time_monday">Mon</string>

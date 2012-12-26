@@ -90,7 +90,7 @@
     <string name="buying_money">Purchase coins</string>
     <string name="buying_power">Buy energy</string>
     <string name="buying_recharge">Get 100% charge</string>
-    <string name="buying_energy">2.99 USD</string>
+    <string name="buying_energy">3 USD</string>
     <string name="buying_pack_6coins">6 coins package</string>
     <string name="buying_6coins">1 USD</string>
     <string name="buying_pack_40coins">40 coins package</string>
@@ -273,7 +273,7 @@
     <string name="vip_state_off">Your VIP status not activated</string>
     <string name="vip_info_delight">Send admiration\'s for free - maximum express of feelings!</string>
     <string name="vip_info_guest">Find out who was interested in you - look through your guests!</string>
-    <string name="vip_info_invisible">Stay unnoticed looking through other people\'s profiles by \"invisible\" mode
+    <string name="vip_info_invisible">Stay unnoticed looking through other people\'s profiles by "invisible" mode
     </string>
     <string name="vip_info_message">Receive odds - your messages will be notable against general background!</string>
     <string name="vip_info_gift">Choose exclusive VIP gifts, and you will be remembered by all means!</string>

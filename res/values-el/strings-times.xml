@@ -10,6 +10,10 @@
         <item quantity="other">Πριν από%d λεπτά</item>
         <item quantity="one">Πριν από%d λεπτά</item>
     </plurals>
+    <plurals name="time_month">
+        <item quantity="other">%d μήνες</item>
+        <item quantity="one">%d μήνας</item>
+    </plurals>
     <string name="time_yesterday">Χτες</string>
     <string name="time_today">σήμερα</string>
     <string name="time_monday">Δευτ</string>

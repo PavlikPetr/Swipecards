@@ -10,6 +10,10 @@
         <item quantity="other">%d minuti fa</item>
         <item quantity="one">%d minuti fa</item>
     </plurals>
+    <plurals name="time_month">
+        <item quantity="other">%d mesi</item>
+        <item quantity="one">%d mese</item>
+    </plurals>
     <string name="time_yesterday">Ieri</string>
     <string name="time_today">Oggi</string>
     <string name="time_monday">Lun</string>

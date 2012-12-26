@@ -11,6 +11,11 @@
         <item quantity="other">%d хвилин тому</item>
         <item quantity="one">%d хвилини тому</item>
     </plurals>
+    <plurals name="time_month">
+        <item quantity="few">%d місяця</item>
+        <item quantity="other">%d місяців</item>
+        <item quantity="one">%d місяць</item>
+    </plurals>
     <string name="time_yesterday">Вчора</string>
     <string name="time_today">Сьогодні</string>
     <string name="time_monday">Пон</string>

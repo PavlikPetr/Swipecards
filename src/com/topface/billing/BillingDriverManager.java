@@ -7,21 +7,22 @@ import android.content.pm.PackageManager;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Utils;
 
 /**
  * Класс возвращающий платежный драйвер согласно окружению и настройкам сборки
  */
-public class BillingTypeManager {
-    private static BillingTypeManager mInstance;
+public class BillingDriverManager {
+    private static BillingDriverManager mInstance;
     private final String mBuildType;
 
-    protected BillingTypeManager() {
-        mBuildType = getBuildType();
+    protected BillingDriverManager() {
+        mBuildType = Utils.getBuildType();
     }
 
-    public static BillingTypeManager getInstance() {
+    public static BillingDriverManager getInstance() {
         if (mInstance == null) {
-            mInstance = new BillingTypeManager();
+            mInstance = new BillingDriverManager();
         }
 
         return mInstance;

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.*;
@@ -537,4 +538,26 @@ public class Utils {
     }
 
 
+    public static String getBuildType() {
+        String type;
+        Context context = App.getContext();
+
+        try {
+            //Получаем мета данные из информации приложения
+            ApplicationInfo info = context.getPackageManager().getApplicationInfo(
+                    context.getPackageName(),
+                    PackageManager.GET_META_DATA
+            );
+            //Получаем тип сборки
+            type = info.metaData.getString(
+                    context.getString(R.string.build_type_key),
+                    context.getString(R.string.build_default)
+            );
+        } catch (PackageManager.NameNotFoundException e) {
+            Debug.error("BuildType error", e);
+            type = context.getString(R.string.build_default);
+        }
+
+        return type;
+    }
 }
