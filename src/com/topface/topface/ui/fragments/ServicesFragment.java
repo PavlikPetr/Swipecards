@@ -20,7 +20,7 @@ import com.topface.topface.utils.CacheProfile;
 public class ServicesFragment extends BaseFragment {
 
     private ServicesTextView mCurCoins;
-    private ServicesTextView mCurPower;
+    private ServicesTextView mCurLikes;
     private BroadcastReceiver mBroadcastReceiver;
 
     public static ServicesFragment newInstance() {
@@ -48,7 +48,7 @@ public class ServicesFragment extends BaseFragment {
 
     private void initViews(View root) {
         mCurCoins = (ServicesTextView) root.findViewById(R.id.fpsCurCoins);
-        mCurPower = (ServicesTextView) root.findViewById(R.id.fpsCurPower);
+        mCurLikes = (ServicesTextView) root.findViewById(R.id.fpsCurLikes);
         updateViews();
 
         Button mBuyBtn = (Button) root.findViewById(R.id.fpsBuyBtn);
@@ -61,9 +61,9 @@ public class ServicesFragment extends BaseFragment {
     }
 
     public void updateViews() {
-        if(mCurPower != null && mCurCoins != null) {
+        if(mCurLikes != null && mCurCoins != null) {
             mCurCoins.setText(Integer.toString(CacheProfile.money));
-            mCurPower.setText(Integer.toString(CacheProfile.power));
+            mCurLikes.setText(Integer.toString(CacheProfile.likes));
         }
     }
 

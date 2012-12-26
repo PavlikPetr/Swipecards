@@ -3,7 +3,6 @@ package com.topface.topface.ui.fragments;
 import android.app.Activity;
 import android.content.*;
 import android.content.res.Resources;
-import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,7 +16,7 @@ import android.view.animation.AlphaAnimation;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.*;
-import com.topface.topface.data.NovicePower;
+import com.topface.topface.data.NoviceLikes;
 import com.topface.topface.data.Search;
 import com.topface.topface.data.SearchUser;
 import com.topface.topface.data.SkipRate;
@@ -42,7 +41,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     public static final int SEARCH_LIMIT = 30;
     private int mCurrentPhotoPrevPos;
-    private TextView mResourcesPower;
+    private TextView mResourcesLikes;
     private TextView mResourcesMoney;
     private TextView mDatingLovePrice;
     private Button mDelightBtn;
@@ -160,7 +159,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         // Resources
         mDatingResources = view.findViewById(R.id.loDatingResources);
         mDatingResources.setOnClickListener(this);
-        mResourcesPower = (TextView) view.findViewById(R.id.tvResourcesPower);
+        mResourcesLikes = (TextView) view.findViewById(R.id.tvResourcesLikes);
         mResourcesMoney = (TextView) view.findViewById(R.id.tvResourcesMoney);
         updateResources();
 
@@ -359,14 +358,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             break;
             case R.id.btnDatingSkip: {
-                skipUser();
                 SearchUser currentSearch = getCurrentUser();
+                skipUser(currentSearch);
                 if (currentSearch != null) {
                     currentSearch.skipped = true;
 
                     EasyTracker.getTracker().trackEvent("Dating", "Rate", "Skip", 0L);
                 }
-
+                showNextUser();
             }
             break;
             case R.id.btnDatingPrev: {
@@ -505,10 +504,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
-    private void skipUser() {
-
-        SearchUser currentSearch = getCurrentUser();
-
+    private void skipUser(SearchUser currentSearch) {
         if (currentSearch != null && !currentSearch.skipped) {
             SkipRateRequest skipRateRequest = new SkipRateRequest(getActivity());
             registerRequest(skipRateRequest);
@@ -518,12 +514,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 public void success(ApiResponse response) {
                     SkipRate skipRate = SkipRate.parse(response);
                     if (skipRate.completed) {
-                        CacheProfile.power = skipRate.power;
+                        CacheProfile.likes = skipRate.likes;
                         CacheProfile.money = skipRate.money;
                         updateResources();
-                    } else {
-                        Toast.makeText(getActivity(), App.getContext().getString(R.string.general_server_error),
-                                Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -533,7 +526,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 }
             }).exec();
         }
-        showNextUser();
     }
 
     private void showNovice() {
@@ -555,7 +547,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     mOnNewbieEnergyClickListener);
             mNoviceLayout.startAnimation(mAlphaAnimation);
             mNovice.completeShowBatteryBonus();
-        } else if (mNovice.showEnergy && hasOneSympathyOrDelight && CacheProfile.power <= 10) {
+        } else if (mNovice.showEnergy && hasOneSympathyOrDelight && CacheProfile.likes <= 10) {
             mNoviceLayout.setLayoutRes(R.layout.novice_energy, new OnClickListener() {
 
                 @Override
@@ -778,27 +770,18 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private View.OnClickListener mOnNewbieEnergyClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            mResourcesPower.setBackgroundResource(R.anim.battery);
-            mResourcesPower.setText("");
-            final AnimationDrawable mailAnimation = (AnimationDrawable) mResourcesPower
-                    .getBackground();
-            mResourcesPower.post(new Runnable() {
-                public void run() {
-                    if (mailAnimation != null)
-                        mailAnimation.start();
-                }
-            });
-            NovicePowerRequest novicePowerRequest = new NovicePowerRequest(getActivity());
-            registerRequest(novicePowerRequest);
-            novicePowerRequest.callback(new ApiHandler() {
+            mResourcesLikes.setText(getResources().getString(R.string.default_resource_value));
+            NoviceLikesRequest noviceLikesRequest = new NoviceLikesRequest(getActivity());
+            registerRequest(noviceLikesRequest);
+            noviceLikesRequest.callback(new ApiHandler() {
                 @Override
                 public void success(ApiResponse response) {
-                    NovicePower novicePower = NovicePower.parse(response);
-                    CacheProfile.power = (int) (novicePower.power * 0.01);
+                    NoviceLikes noviceLikes = NoviceLikes.parse(response);
+                    CacheProfile.likes = noviceLikes.likes;
                     updateUI(new Runnable() {
                         @Override
                         public void run() {
-                            mResourcesPower.setText("+" + CacheProfile.power + "%");
+                            mResourcesLikes.setText("+" + CacheProfile.likes);
                         }
                     });
                 }
@@ -814,9 +797,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         updateUI(new Runnable() {
             @Override
             public void run() {
-                mResourcesPower.setBackgroundResource(Utils.getBatteryResource(CacheProfile.power));
-                mResourcesPower.setText(CacheProfile.power + "%");
-                mResourcesMoney.setText("" + CacheProfile.money);
+                mResourcesLikes.setText(Integer.toString(CacheProfile.likes));
+                mResourcesMoney.setText(Integer.toString(CacheProfile.money));
             }
         });
     }

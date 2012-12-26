@@ -41,7 +41,7 @@ public class Profile extends AbstractDataWithPhotos {
 
     // Resources
     public int money; // количество монет у пользователя
-    public int power; // количество энергии пользователя
+    public int likes; // количество энергии пользователя
 
     public int average_rate; // средняя оценка текущего пользователя
 
@@ -80,11 +80,13 @@ public class Profile extends AbstractDataWithPhotos {
         try {
             profile.average_rate = resp.optInt("average_rate");
             profile.money = resp.optInt("money");
-            Novice.giveNovicePower = !resp.optBoolean("novice_power", true);
+            if (profile instanceof User) {
+                //TODO nothing
+            } else if (profile instanceof Profile) {
+                Novice.giveNoviceLikes = !resp.optBoolean("novice_likes",true);
+            }
 
-            int power = resp.optInt("power");
-            // if(power > 10000) power = 10000;
-            profile.power = (int) (power * 0.01);
+            profile.likes = resp.optInt("likes");
 
             profile.uid = resp.optInt("id");
             profile.age = resp.optInt("age");

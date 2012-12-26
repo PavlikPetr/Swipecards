@@ -15,6 +15,7 @@ import com.topface.topface.ui.fragments.VipBuyFragment;
 public class ContainerActivity extends BaseFragmentActivity {
 
     public static final int INTENT_BUY_VIP_FRAGMENT = 1;
+
     public static final int INTENT_BUYING_FRAGMENT = 2;
 
     @Override
@@ -38,7 +39,6 @@ public class ContainerActivity extends BaseFragmentActivity {
 
         Intent intent = getIntent();
         startFragment(intent.getIntExtra(Static.INTENT_REQUEST_KEY, 0));
-
     }
 
     public void startFragment(int id) {
@@ -51,7 +51,13 @@ public class ContainerActivity extends BaseFragmentActivity {
                 break;
             case INTENT_BUYING_FRAGMENT:
                 ((TextView) findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.buying_header_title));
-                fragment = BuyingFragment.newInstance();
+                Bundle extras =  getIntent().getExtras();
+                if (extras.containsKey(BuyingFragment.ARG_ITEM_TYPE) && extras.containsKey(BuyingFragment.ARG_ITEM_PRICE)) {
+                    fragment = BuyingFragment.newInstance(extras.getInt(BuyingFragment.ARG_ITEM_TYPE),
+                            extras.getInt(BuyingFragment.ARG_ITEM_PRICE));
+                } else {
+                    fragment = BuyingFragment.newInstance();
+                }
             default:
                 break;
         }

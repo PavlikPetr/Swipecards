@@ -54,22 +54,26 @@ public class NoviceLayout extends RelativeLayout {
         Typeface tf = Typeface.createFromAsset(mContext.getAssets(), "neucha.otf");
         bubble.setTypeface(tf);
 
-        ViewTreeObserver vto = mMask.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+        if (mMask != null) {
+            ViewTreeObserver vto = mMask.getViewTreeObserver();
+            vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
 
-            @SuppressWarnings("deprecation")
-            @Override
-            public void onGlobalLayout() {
-                int[] point = new int[2];
-                mMask.getLocationOnScreen(point);
-                mBackground.setImageBitmap(getMaskedBackgroundBitmap(mMask, point));
-                ViewTreeObserver obs = mMask.getViewTreeObserver();
-                invalidate();
-                obs.removeGlobalOnLayoutListener(this);
-            }
-        });
+                @SuppressWarnings("deprecation")
+                @Override
+                public void onGlobalLayout() {
+                    int[] point = new int[2];
+                    mMask.getLocationOnScreen(point);
+                    mBackground.setImageBitmap(getMaskedBackgroundBitmap(mMask, point));
+                    ViewTreeObserver obs = mMask.getViewTreeObserver();
+                    invalidate();
+                    obs.removeGlobalOnLayoutListener(this);
+                }
+            });
 
-        mMask.setVisibility(View.INVISIBLE);
+            mMask.setVisibility(View.INVISIBLE);
+        } else {
+            mBackground.setBackgroundColor(Color.argb(178, 0, 0, 0));
+        }
         mMaskListener = maskListener;
         mBackgroundListener = null;
     }
@@ -109,6 +113,7 @@ public class NoviceLayout extends RelativeLayout {
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             if (mBackgroundListener != null) mBackgroundListener.onClick(this);
+
 
             if (isPointInsideView(event.getX(), event.getY(), mMask) && mMaskListener != null) {
                 mMaskListener.onClick(mMask);

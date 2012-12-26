@@ -11,12 +11,13 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import com.topface.topface.R;
-import com.topface.topface.billing.BuyingActivity;
+import com.topface.topface.Static;
 import com.topface.topface.data.Rate;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.RateRequest;
+import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 
 public class RateController {
@@ -46,7 +47,9 @@ public class RateController {
 
     public void onRate(final int userId, final int rate) {
         if (rate == 10 && CacheProfile.money <= 0) {
-            mContext.startActivity(new Intent(mContext, BuyingActivity.class));
+            Intent intent = new Intent(mContext,ContainerActivity.class);
+            intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
+            mContext.startActivity(intent);
             mOnRateControllerListener.failRate();
             return;
         }
@@ -71,7 +74,7 @@ public class RateController {
             @Override
             public void success(ApiResponse response) {
                 Rate rate = Rate.parse(response);
-                CacheProfile.power = rate.power;
+                CacheProfile.likes = rate.likes;
                 CacheProfile.money = rate.money;
                 CacheProfile.average_rate = rate.average;
             }
@@ -100,7 +103,9 @@ public class RateController {
 
     public void onRate(final int userId, final int rate, final int mutualId) {
         if (rate == 10 && CacheProfile.money <= 0) {
-            mContext.startActivity(new Intent(mContext, BuyingActivity.class));
+            Intent intent = new Intent(mContext,ContainerActivity.class);
+            intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
+            mContext.startActivity(intent);
             mOnRateControllerListener.failRate();
             return;
         }
@@ -121,7 +126,7 @@ public class RateController {
             @Override
             public void success(ApiResponse response) {
                 Rate rate = Rate.parse(response);
-                CacheProfile.power = rate.power;
+                CacheProfile.likes = rate.likes;
                 CacheProfile.money = rate.money;
                 CacheProfile.average_rate = rate.average;
             }

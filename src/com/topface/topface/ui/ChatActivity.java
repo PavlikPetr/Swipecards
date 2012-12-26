@@ -23,11 +23,11 @@ import com.topface.topface.Data;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
 import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.fragments.BuyingFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
@@ -607,9 +607,9 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                     @Override
                     public void success(final ApiResponse response) {
                         SendGiftAnswer answer = SendGiftAnswer.parse(response);
-                        CacheProfile.power = answer.power;
+                        CacheProfile.likes = answer.likes;
                         CacheProfile.money = answer.money;
-                        Debug.log(ChatActivity.this, "power:" + answer.power + " money:"
+                        Debug.log(ChatActivity.this, "likes:" + answer.likes + " money:"
                                 + answer.money);
                         runOnUiThread(new Runnable() {
                             @Override
@@ -629,10 +629,10 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                             @Override
                             public void run() {
                                 if (response.code == ApiResponse.PAYMENT) {
-                                    Intent intent = new Intent(getApplicationContext(),
-                                            BuyingActivity.class);
-                                    intent.putExtra(BuyingActivity.INTENT_USER_COINS, price
-                                            - CacheProfile.money);
+                                    Intent intent = new Intent(getApplicationContext(),ContainerActivity.class);
+                                    intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
+                                    intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
+                                    intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
                                     startActivity(intent);
                                 }
                                 mLoadingLocker.setVisibility(View.GONE);

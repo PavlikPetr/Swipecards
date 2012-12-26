@@ -437,7 +437,11 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                                             startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                                         }
                                     });
-                                    updateErrorMessage.setErrorMsg(getString(R.string.general_premium_access_error));
+                                    if (FeedFragment.this instanceof VisitorsFragment) {
+                                        updateErrorMessage.setErrorMsg(getString(R.string.buying_vip_info));
+                                    } else {
+                                        updateErrorMessage.setErrorMsg(getString(R.string.general_premium_access_error));
+                                    }
                                 } else {
                                     updateErrorMessage.showOnlyMessage(false);
                                     updateErrorMessage.setErrorMsg(getString(R.string.general_data_error));
