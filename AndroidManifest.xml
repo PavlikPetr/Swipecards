@@ -36,7 +36,7 @@
 
         <meta-data
                 android:name="@string/build_type_key"
-                android:value="@string/build_amazon"/>
+                android:value="@string/build_default"/>
 
         <uses-library
                 android:required="false"
@@ -125,10 +125,11 @@
         </receiver>
 
         <!-- Amazon In-App Purchasing -->
-        <receiver android:name = "com.amazon.inapp.purchasing.ResponseReceiver" >
+        <receiver android:name="com.amazon.inapp.purchasing.ResponseReceiver">
             <intent-filter>
-                <action android:name = "com.amazon.inapp.purchasing.NOTIFY"
-                        android:permission = "com.amazon.inapp.purchasing.Permission.NOTIFY" />
+                <action
+                        android:name="com.amazon.inapp.purchasing.NOTIFY"
+                        android:permission="com.amazon.inapp.purchasing.Permission.NOTIFY"/>
             </intent-filter>
         </receiver>
 
