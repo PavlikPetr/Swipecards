@@ -14,12 +14,13 @@ import android.widget.GridView;
 import android.widget.TextView;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
-import com.topface.topface.billing.BuyingActivity;
+import com.topface.topface.Static;
 import com.topface.topface.data.*;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FeedGiftsRequest;
 import com.topface.topface.requests.SendGiftRequest;
+import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.GiftsAdapter;
@@ -201,10 +202,11 @@ public class GiftsFragment extends BaseFragment {
                                 @Override
                                 public void run() {
                                     if (response.code == ApiResponse.PAYMENT) {
-                                        Intent intent = new Intent(getActivity()
-                                                .getApplicationContext(), BuyingActivity.class);
-                                        intent.putExtra(BuyingActivity.INTENT_USER_COINS, price
-                                                - CacheProfile.money);
+                                        Intent intent = new Intent(getActivity().getApplicationContext(),
+                                                ContainerActivity.class);
+                                        intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
+                                        intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
+                                        intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
                                         startActivity(intent);
                                     }
                                 }

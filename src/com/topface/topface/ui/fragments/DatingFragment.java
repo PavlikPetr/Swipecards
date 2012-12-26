@@ -358,14 +358,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             break;
             case R.id.btnDatingSkip: {
-                skipUser();
                 SearchUser currentSearch = getCurrentUser();
+                skipUser(currentSearch);
                 if (currentSearch != null) {
                     currentSearch.skipped = true;
 
                     EasyTracker.getTracker().trackEvent("Dating", "Rate", "Skip", 0L);
                 }
-
+                showNextUser();
             }
             break;
             case R.id.btnDatingPrev: {
@@ -504,10 +504,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
-    private void skipUser() {
-
-        SearchUser currentSearch = getCurrentUser();
-
+    private void skipUser(SearchUser currentSearch) {
         if (currentSearch != null && !currentSearch.skipped) {
             SkipRateRequest skipRateRequest = new SkipRateRequest(getActivity());
             registerRequest(skipRateRequest);
@@ -520,9 +517,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         CacheProfile.likes = skipRate.likes;
                         CacheProfile.money = skipRate.money;
                         updateResources();
-                    } else {
-                        Toast.makeText(getActivity(), App.getContext().getString(R.string.general_server_error),
-                                Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -532,7 +526,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 }
             }).exec();
         }
-        showNextUser();
     }
 
     private void showNovice() {

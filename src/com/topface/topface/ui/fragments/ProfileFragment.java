@@ -20,10 +20,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.billing.BuyingActivity;
 import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
 import com.topface.topface.ui.ChatActivity;
+import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditProfileActivity;
@@ -573,10 +573,10 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                                 @Override
                                 public void run() {
                                     if (response.code == ApiResponse.PAYMENT) {
-                                        Intent intent = new Intent(getActivity()
-                                                .getApplicationContext(), BuyingActivity.class);
-                                        intent.putExtra(BuyingActivity.INTENT_USER_COINS, price
-                                                - CacheProfile.money);
+                                        Intent intent = new Intent(getActivity().getApplicationContext(),ContainerActivity.class);
+                                        intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
+                                        intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
+                                        intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
                                         startActivity(intent);
                                     }
                                 }
