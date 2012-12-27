@@ -398,4 +398,20 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
     public void onVipRecieved() {
         mFragmentSwitcher.showFragment(BaseFragment.F_VIP_PROFILE);
     }
+
+// fullscreen mode
+//    public void fullScreenMode(boolean value) {
+//        if(value)
+//        {
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+//        }
+//        else
+//        {
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+//            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        }
+//
+//        this.getWindow().getDecorView().requestLayout();
+//    }
 }
