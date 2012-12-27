@@ -1,33 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:layout_marginBottom="10dp"
-        >
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              >
+    <RelativeLayout
+            android:id="@+id/itContainer"
+            android:layout_height="50dp"
+            android:layout_width="fill_parent"
+            android:padding="5dp"
+            >
+        <TextView
+                android:id="@+id/itText"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:paddingLeft="10dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                />
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:src="@drawable/dot_vip_btn"
+                android:layout_marginRight="75dp"
+                android:layout_alignParentRight="true"
+                android:scaleType="fitXY"
+                />
+
+        <TextView
+                android:id="@+id/itValue"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:paddingRight="10dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                />
+
+    </RelativeLayout>
+
     <TextView
+            android:id="@+id/itEconomy"
+            android:layout_below="@id/itContainer"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:text="@string/buying_recharge"
-            android:paddingLeft="5dp"
-            style="@style/ButtonWhiteTextMini"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            />
-    <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:src="@drawable/dot_vip_btn"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="75dp"
-            />
-    <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:paddingRight="5dp"
-            android:text="@string/buying_energy"
-            style="@style/ButtonWhiteTextMini"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
+            android:paddingLeft="10dp"
+            android:textColor="#FFFFFF"
+            android:textSize="10sp"
             />
 </RelativeLayout>

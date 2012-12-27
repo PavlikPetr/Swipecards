@@ -50,16 +50,9 @@
                     android:layout_width="wrap_content"
                     android:orientation="vertical"
                     android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
                     >
 
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/default_energy_balance_constant"
-                        android:textColor="#FFFFFF"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="10dp"
-                        />
 
                 <com.topface.topface.ui.views.ServicesTextView
                         xmlns:stv="http://schemas.android.com/apk/res/com.topface.topface"
@@ -122,44 +115,12 @@
             </RelativeLayout>
 
             <!-- 10 000 power btn -->
-
-            <RelativeLayout
-                    android:id="@+id/fbRecharge"
-                    android:layout_width="fill_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/btn_vip_super_sale_selector"
-                    android:layout_marginBottom="10dp"
-                    android:padding="5dp"
-                    >
-
-                <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:text="@string/buying_recharge"
-                        android:paddingLeft="5dp"
-                        style="@style/ButtonWhiteTextMini"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        />
-
-                <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:src="@drawable/dot_vip_btn"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="75dp"
-                        />
-
-                <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:paddingRight="5dp"
-                        android:text="@string/buying_energy"
-                        style="@style/ButtonWhiteTextMini"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        />
-            </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/fbLikes"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+            />
 
             !-- Money -->
 
@@ -185,187 +146,16 @@
                         />
             </RelativeLayout>
 
-            <RelativeLayout
-                    android:id="@+id/fb6Pack"
+            <LinearLayout
+                    android:id="@+id/fbCoins"
                     android:layout_width="fill_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/btn_vip_sale_selector"
-                    android:padding="5dp"
-                    android:layout_marginTop="10dp"
-                    >
-
-                <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:paddingLeft="5dp"
-                        android:text="@string/default_six_coins"
-                        style="@style/ButtonGrayTextMini"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        />
-
-                <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:src="@drawable/dot_vip_btn"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="75dp"
-                        />
-
-                <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:paddingRight="5dp"
-                        style="@style/ButtonGrayTextMini"
-                        android:text="@string/default_six_coins_price"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        />
-            </RelativeLayout>
-
-            <RelativeLayout
-                    android:id="@+id/fb40Pack"
-                    android:layout_width="fill_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/btn_vip_sale_selector"
-                    android:padding="5dp"
-                    android:layout_marginTop="10dp"
-                    >
-
-                <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:paddingLeft="5dp"
-                        android:text="@string/default_coins_40"
-                        style="@style/ButtonGrayTextMini"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        />
-
-                <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:src="@drawable/dot_vip_btn"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="75dp"
-                        />
-
-                <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:paddingRight="5dp"
-                        style="@style/ButtonGrayTextMini"
-                        android:text="@string/default_coins_40_price"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        />
-            </RelativeLayout>
-
-            <TextView
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:text="@string/default_economy_25"
-                    android:textColor="#B8B8B8"
-                    android:textSize="10sp"
-                    />
-
-            <RelativeLayout
-                    android:id="@+id/fb100Pack"
-                    android:layout_width="fill_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/btn_vip_super_sale_selector"
-                    android:layout_marginTop="10dp"
-                    android:padding="5dp"
-                    >
-
-                <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:text="@string/default_coins_100"
-                        android:paddingLeft="5dp"
-                        style="@style/ButtonWhiteTextMini"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        />
-
-                <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:src="@drawable/dot_vip_btn"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="75dp"
-                        />
-
-                <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:paddingRight="5dp"
-                        android:text="@string/default_coins_100_price"
-                        style="@style/ButtonWhiteTextMini"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        />
-            </RelativeLayout>
-
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:text="@string/default_economy_38"
-                    android:textColor="#FFFFFF"
-                    android:textSize="10sp"
-                    />
-
-            <RelativeLayout
-                    android:id="@+id/fb300Pack"
-                    android:layout_width="fill_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/btn_vip_super_sale_selector"
-                    android:layout_marginTop="10dp"
-                    android:padding="5dp"
-                    >
-
-                <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:text="@string/default_coins_300"
-                        android:paddingLeft="5dp"
-                        style="@style/ButtonWhiteTextMini"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        />
-
-                <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:src="@drawable/dot_vip_btn"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="75dp"
-                        />
-
-                <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:paddingRight="5dp"
-                        android:text="@string/buying_300coins"
-                        style="@style/ButtonWhiteTextMini"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        />
-            </RelativeLayout>
-
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:text="@string/default_economy_50"
-                    android:textColor="#FFFFFF"
-                    android:textSize="10sp"
+                    android:orientation="vertical"
                     />
             <!-- Power -->
 
             <RelativeLayout
+                    android:id="@+id/fbVipTitle"
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
                     android:layout_marginBottom="2dp"

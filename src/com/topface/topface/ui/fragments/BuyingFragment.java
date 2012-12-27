@@ -10,16 +10,17 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import com.topface.billing.BillingFragment;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.Options;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.CacheProfile;
+
+import java.util.LinkedList;
 
 public class BuyingFragment extends BillingFragment implements View.OnClickListener {
 
@@ -28,11 +29,7 @@ public class BuyingFragment extends BillingFragment implements View.OnClickListe
     public static final int TYPE_DELIGHT = 2;
     public static final String ARG_ITEM_PRICE = "quantity_of_coins";
 
-    private RelativeLayout mBuy6;
-    private RelativeLayout mBuy40;
-    private RelativeLayout mBuy100;
-    private RelativeLayout mBuy300;
-    private RelativeLayout mRecharge;
+    private LinkedList<RelativeLayout> purchaseButtons = new LinkedList<RelativeLayout>();
 
     private BroadcastReceiver mReceiver;
 
@@ -118,20 +115,33 @@ public class BuyingFragment extends BillingFragment implements View.OnClickListe
     }
 
     private void initButtons(View root) {
-        mBuy6 = (RelativeLayout) root.findViewById(R.id.fb6Pack);
-        mBuy6.setOnClickListener(this);
+        LinearLayout likesButtons = (LinearLayout) root.findViewById(R.id.fbLikes);
+        for(Options.BuyButton curButton: CacheProfile.getOptions().likes) {
+            RelativeLayout newButton = Options.setButton(likesButtons, curButton, getActivity(), new Options.BuyButtonClickListener() {
+                @Override
+                public void onClick(String id) {
+                    buyItem(id);
+                }
+            });
+            if(newButton != null) {
+                purchaseButtons.add(newButton);
+            }
+        }
 
-        mBuy40 = (RelativeLayout) root.findViewById(R.id.fb40Pack);
-        mBuy40.setOnClickListener(this);
 
-        mBuy100 = (RelativeLayout) root.findViewById(R.id.fb100Pack);
-        mBuy100.setOnClickListener(this);
+        LinearLayout coinsButtons = (LinearLayout) root.findViewById(R.id.fbCoins);
+        for(Options.BuyButton curButton: CacheProfile.getOptions().coins) {
+            RelativeLayout newButton = Options.setButton(coinsButtons, curButton, getActivity(), new Options.BuyButtonClickListener() {
+                @Override
+                public void onClick(String id) {
+                    buyItem(id);
+                }
+            });
+            if(newButton != null) {
+                purchaseButtons.add(newButton);
+            }
+        }
 
-        mBuy300 = (RelativeLayout) root.findViewById(R.id.fb300Pack);
-        mBuy300.setOnClickListener(this);
-
-        mRecharge = (RelativeLayout) root.findViewById(R.id.fbRecharge);
-        mRecharge.setOnClickListener(this);
 
         TextView status = (TextView) root.findViewById(R.id.vip_status);
         TextView vipBtnText = (TextView) root.findViewById(R.id.fbVipBtnText);
@@ -156,6 +166,16 @@ public class BuyingFragment extends BillingFragment implements View.OnClickListe
             }
         });
 
+        if (CacheProfile.getOptions().premium.isEmpty()) {
+            status.setVisibility(View.GONE);
+            vipBtnText.setVisibility(View.GONE);
+            vipPrice.setVisibility(View.GONE);
+        } else {
+            status.setVisibility(View.VISIBLE);
+            vipBtnText.setVisibility(View.VISIBLE);
+            vipPrice.setVisibility(View.VISIBLE);
+        }
+
     }
 
     private void goToVipSettings() {
@@ -173,23 +193,23 @@ public class BuyingFragment extends BillingFragment implements View.OnClickListe
     }
 
     private void requestPurchase(View view) {
-        switch (view.getId()) {
-            case R.id.fb6Pack:
-                buyItem("topface.coins.6");
-                break;
-            case R.id.fb40Pack:
-                buyItem("topface.coins.40");
-                break;
-            case R.id.fb100Pack:
-                buyItem("topface.coins.100");
-                break;
-            case R.id.fb300Pack:
-                buyItem("topface.coins.300");
-                break;
-            case R.id.fbRecharge:
-                buyItem("topface.energy.10000");
-                break;
-        }
+//        switch (view.getId()) {
+//            case R.id.fb6Pack:
+//                buyItem("topface.coins.6");
+//                break;
+//            case R.id.fb40Pack:
+//                buyItem("topface.coins.40");
+//                break;
+//            case R.id.fb100Pack:
+//                buyItem("topface.coins.100");
+//                break;
+//            case R.id.fb300Pack:
+//                buyItem("topface.coins.300");
+//                break;
+//            case R.id.fbRecharge:
+//                buyItem("topface.energy.10000");
+//                break;
+//        }
     }
 
     /**
@@ -220,11 +240,9 @@ public class BuyingFragment extends BillingFragment implements View.OnClickListe
 
     @Override
     public void onInAppBillingSupported() {
-        mBuy6.setEnabled(true);
-        mBuy40.setEnabled(true);
-        mBuy100.setEnabled(true);
-        mBuy300.setEnabled(true);
-        mRecharge.setEnabled(true);
+        for (RelativeLayout btn: purchaseButtons)  {
+            btn.setEnabled(true);
+        }
     }
 
     @Override
@@ -234,11 +252,9 @@ public class BuyingFragment extends BillingFragment implements View.OnClickListe
 
     @Override
     public void onInAppBillingUnsupported() {
-        mBuy6.setEnabled(false);
-        mBuy40.setEnabled(false);
-        mBuy100.setEnabled(false);
-        mBuy300.setEnabled(false);
-        mRecharge.setEnabled(false);
+        for (RelativeLayout btn: purchaseButtons)  {
+            btn.setEnabled(false);
+        }
         Toast.makeText(getActivity().getApplicationContext(), getString(R.string.buy_play_market_not_available), Toast.LENGTH_SHORT).show();
     }
 
@@ -250,6 +266,7 @@ public class BuyingFragment extends BillingFragment implements View.OnClickListe
     @Override
     public void onPurchased() {
         updateBalanceCounters();
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
     }
 
     @Override
