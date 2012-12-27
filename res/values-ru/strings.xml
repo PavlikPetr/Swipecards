@@ -405,4 +405,11 @@
     <string name="default_coins_100_price">10 USD</string>
 
     <string name="buying_sympathies">Покупка симпатий</string>
+
+    <string name="novice_sympathies_bonus">Вы получаете %1$d симпатий в\nподарок! Это означает, что вы\nточно понравитесь %2$d людям,\nкоторые выразят вам свою симпатию</string>
+    <string name="novice_energy_to_sympathies_title">Мы заменили энергию на симпатии</string>
+    <string name="novice_energy_to_sympathies_message_boys">Пополнив запас симпатий, вы получите\nуказанное количество симпатий\nот парней, которым точно нравитесь</string>
+    <string name="novice_energy_to_sympathies_message_girls">Пополнив запас симпатий, вы получите\nуказанное количество симпатий\nот девушек, которым точно нравитесь</string>
+    <string name="novice_buy_sympathies"></string>
+
 </resources>
