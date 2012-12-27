@@ -69,7 +69,9 @@
                 android:name=".ui.GeoMapActivity"
                 android:screenOrientation="portrait"
                 android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".ui.profile.PhotoSwitcherActivity"/>
+        <activity android:name=".ui.profile.PhotoSwitcherActivity"
+                android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+                />
         <activity
                 android:name=".ui.edit.EditProfileActivity"
                 android:screenOrientation="portrait"/>
