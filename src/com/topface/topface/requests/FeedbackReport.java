@@ -11,6 +11,7 @@ public class FeedbackReport extends AbstractApiRequest {
     public String subject;
     public String text;
     public String extra;
+    public String email;
 
     public FeedbackReport(Context context) {
         super(context);
@@ -21,7 +22,8 @@ public class FeedbackReport extends AbstractApiRequest {
         return new JSONObject()
                 .put("subject", subject)
                 .put("message", text)
-                .put("extra", extra);
+                .put("extra", extra)
+                .put("email",email);
     }
 
     @Override

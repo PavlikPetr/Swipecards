@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/loParent"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
     <ImageView
         android:id="@+id/ivBackground"
@@ -38,7 +38,7 @@
         android:background="@drawable/tip_energy_bubble"
         android:gravity="center"
         android:lines="5"
-        android:text="@string/novice_battery_bonus"
+        android:text="@string/novice_sympathies_bonus"
         android:textColor="#000000"
         android:textSize="18sp"
         android:paddingTop="10dp"

@@ -27,4 +27,34 @@
             android:focusable="true"
             android:focusableInTouchMode="true"/>
 
+    <include
+            android:id="@+id/loEmailSwitcher"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/item_edit_form_switch"
+            android:layout_marginTop="10dp"/>
+
+    <TextView
+            android:paddingTop="8dp"
+            android:id="@+id/tvEmailTitle"
+            style="@style/BackgroundFormTitleText"
+            android:text="@string/settings_feedback_email"
+            android:visibility="gone"/>
+
+    <EditText
+            android:id="@+id/edEmail"
+            style="@style/ItemTitleText"
+            android:layout_width="fill_parent"
+            android:layout_height="34dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            android:gravity="top|left|center_horizontal"
+            android:background="@drawable/edit_editbox_selector"
+            android:inputType="textMultiLine"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:textSize="14sp"
+            android:visibility="gone"/>
+
 </LinearLayout>

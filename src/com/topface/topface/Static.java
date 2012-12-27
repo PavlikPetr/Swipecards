@@ -17,7 +17,7 @@ public class Static {
     public static final String AMPERSAND = "&";
     public static final String CLIENT_TYPE = "android";
     public static final String API_BETA_URL = "http://api.alpha.topface.com/?v=" + API_VERSION; //Beta API URL
-    public static final String API_URL = "https://api.topface.com/?v=" + API_VERSION;
+    public static final String API_URL = "http://api.topface.com/?v=" + API_VERSION;
 //    public static final String API_URL = API_BETA_URL;
     /**
      * Ревизия серверной части, используется толькро при тестировании на бете
@@ -39,6 +39,9 @@ public class Static {
 
     public static final String PREFERENCES_NOVICE_DATING_ENERGY = "novice_dating_energy";
     public static final String PREFERENCES_NOVICE_DATING_ENERGY_DATE = "novice_dating_energy_date_tag";
+    public static final String PREFERENCES_NOVICE_DATING_ENERGY_TO_SYMPATHIES = "novice_dating_energy_to_sympathies";
+    public static final String PREFERENCES_NOVICE_DATING_BUY_SYMPATHY = "novice_dating_buy_sympathy";
+    public static final String PREFERENCES_NOVICE_DATING_BUY_SYMPATHY_DATE = "novice_dating_buy_symathy_date_tag";
     public static final String PREFERENCES_NOVICE_DATING_SYMPATHY = "novice_dating_sympathy";
     public static final String PREFERENCES_NOVICE_MENU_FILL_PROFILE = "novice_menu_fill_profile";
     public static final String PREFERENCES_NOVICE_MENU_FILL_PROFILE_DATE = "novice_menu_fill_profile_date_tag";
