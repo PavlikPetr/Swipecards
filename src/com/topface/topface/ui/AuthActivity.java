@@ -87,7 +87,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
             public void handleMessage(Message msg) {
                 switch (msg.what) {
                     case AuthorizationManager.AUTHORIZATION_FAILED:
-                        authorizationFailed();
+                        authorizationFailed(ApiResponse.NETWORK_CONNECT_ERROR);
                         break;
                     case AuthorizationManager.DIALOG_COMPLETED:
                         hideButtons();
@@ -116,7 +116,6 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         mProgressBar = (ProgressBar) findViewById(R.id.prsAuthLoading);
 
         checkOnline();
-
     }
 
     private void checkOnline() {
@@ -276,11 +275,11 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(final int codeError, ApiResponse response) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        authorizationFailed();
+                        authorizationFailed(codeError);
                         mIsAuthorized = false;
                     }
                 });
@@ -328,7 +327,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                             }
 
                             @Override
-                            public void fail(int codeError, ApiResponse response) {
+                            public void fail(final int codeError, ApiResponse response) {
                                 final ApiResponse finalResponse = response;
                                 runOnUiThread(new Runnable() {
                                     @Override
@@ -336,7 +335,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                                         if (finalResponse.code == ApiResponse.BAN)
                                             showButtons();
                                         else {
-                                            authorizationFailed();
+                                            authorizationFailed(codeError);
                                             Toast.makeText(AuthActivity.this, getString(R.string.general_data_error),
                                                     Toast.LENGTH_SHORT).show();
                                         }
@@ -351,7 +350,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(final int codeError, ApiResponse response) {
                 final ApiResponse finalResponse = response;
                 mProfileRequest = null;
                 runOnUiThread(new Runnable() {
@@ -360,7 +359,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                         if (finalResponse.code == ApiResponse.BAN)
                             showButtons();
                         else {
-                            authorizationFailed();
+                            authorizationFailed(codeError);
                             Toast.makeText(AuthActivity.this, getString(R.string.general_data_error),
                                     Toast.LENGTH_SHORT).show();
                         }
@@ -385,8 +384,16 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         }
     }
 
-    private void authorizationFailed() {
+    private void authorizationFailed(int codeError) {
         hideButtons();
+        switch(codeError) {
+            case ApiResponse.NETWORK_CONNECT_ERROR:
+                mRetryView.setErrorMsg(getString(R.string.general_reconnect_social));
+                break;
+            default:
+                mRetryView.setErrorMsg(getString(R.string.general_data_error));
+                break;
+        }
         mRetryView.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
     }

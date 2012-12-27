@@ -35,8 +35,13 @@ public class RetryView extends LinearLayout {
         addView(initButtonContainer());
     }
 
-    public void setErrorMsg(String errorMsg) {
-        mErrorMsg.setText(errorMsg);
+    public void setErrorMsg(final String errorMsg) {
+        mErrorMsg.post(new Runnable() {
+            @Override
+            public void run() {
+                mErrorMsg.setText(errorMsg);
+            }
+        });
     }
 
     public void addButton(String title, OnClickListener listener) {
