@@ -49,7 +49,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
-        View root = inflater.inflate(R.layout.item_edit_form_input, null);
+        View root = inflater.inflate(R.layout.item_feedback_input, null);
 
         // Navigation bar
         getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
