@@ -260,6 +260,10 @@ public class CacheProfile {
         return options;
     }
 
+    public static void clearProfile() {
+
+    }
+
     public static boolean isOptionsLoaded() {
         return options != null;
     }

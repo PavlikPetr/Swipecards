@@ -97,7 +97,13 @@ public class SettingsAccountFragment extends TrackedFragment {
 
                     @Override
                     public void fail(int codeError, ApiResponse response) {
-                        lockerView.setVisibility(View.GONE);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                lockerView.setVisibility(View.GONE);
+                            }
+                        });
+
                     }
                 }).exec();
 

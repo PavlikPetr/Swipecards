@@ -320,8 +320,9 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                                             intent.putExtra(EditProfileActivity.FROM_AUTH_ACTIVITY, true);
                                             openActivity(intent);
                                         } else {
-                                            Intent intent = new Intent(AuthActivity.this, NavigationActivity.class);
-                                            openActivity(intent);
+//                                            Intent intent = new Intent(AuthActivity.this, NavigationActivity.class);
+//                                            openActivity(intent);
+                                            finish();
                                         }
                                     }
                                 });
