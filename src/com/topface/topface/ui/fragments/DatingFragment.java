@@ -210,7 +210,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mImageSwitcher.setUpdateHandler(mUnlockHandler);
 
         // Newbie
-        mNovice = new Novice(preferences);
+        mNovice = Novice.getInstance(preferences);
         mNoviceLayout = (NoviceLayout) view.findViewById(R.id.loNovice);
 
         mPreloadManager = new PreloadManager(getActivity().getApplicationContext());
@@ -532,7 +532,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mNovice.isDatingCompleted())
             return;
 
-        if (mNovice.showSympathy) {
+        //TODO check flag
+        if (mNovice.isShowEnergyToSympathies()) {
+            mNoviceLayout.setLayoutRes(R.layout.novice_energy_to_sympathies, null,
+                    getResources().getString(CacheProfile.sex == Static.BOY ?
+                            R.string.novice_energy_to_sympathies_message_girls :
+                            R.string.novice_energy_to_sympathies_message_boys));
+            mNoviceLayout.startAnimation(mAlphaAnimation);
+        } else if (mNovice.isShowSympathy()) {
             mNoviceLayout.setLayoutRes(R.layout.novice_sympathy, new OnClickListener() {
 
                 @Override
@@ -542,12 +549,36 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             });
             mNoviceLayout.startAnimation(mAlphaAnimation);
             mNovice.completeShowSympathy();
-        } else if (mNovice.showBatteryBonus) {
-            mNoviceLayout.setLayoutRes(R.layout.novice_battery_bonus, null,
-                    mOnNewbieEnergyClickListener);
-            mNoviceLayout.startAnimation(mAlphaAnimation);
-            mNovice.completeShowBatteryBonus();
-        } else if (mNovice.showEnergy && hasOneSympathyOrDelight && CacheProfile.likes <= 10) {
+        } else if (mNovice.isShowSympathiesBonus()) {
+            mResourcesLikes.setText(getResources().getString(R.string.default_resource_value));
+            NoviceLikesRequest noviceLikesRequest = new NoviceLikesRequest(getActivity());
+            registerRequest(noviceLikesRequest);
+            noviceLikesRequest.callback(new ApiHandler() {
+                @Override
+                public void success(ApiResponse response) {
+                    NoviceLikes noviceLikes = NoviceLikes.parse(response);
+                    CacheProfile.likes = noviceLikes.likes;
+                    Novice.giveNoviceLikesQuantity = noviceLikes.increment;
+                    final String text = String.format(
+                            getResources().getString(R.string.novice_sympathies_bonus),
+                            Novice.giveNoviceLikesQuantity, Novice.giveNoviceLikesQuantity);
+                    updateUI(new Runnable() {
+                        @Override
+                        public void run() {
+                            mResourcesLikes.setText(Integer.toString(CacheProfile.likes));
+                            mNoviceLayout.setLayoutRes(R.layout.novice_sympathies_bonus, null,
+                                    null, text);
+                            mNoviceLayout.startAnimation(mAlphaAnimation);
+                            mNovice.completeShowBatteryBonus();
+                        }
+                    });
+                }
+
+                @Override
+                public void fail(int codeError, ApiResponse response) {
+                }
+            }).exec();
+        } else if (mNovice.isShowBuySympathies() && hasOneSympathyOrDelight && CacheProfile.likes <= Novice.MIN_LIKES_QUANTITY) {
             mNoviceLayout.setLayoutRes(R.layout.novice_energy, new OnClickListener() {
 
                 @Override
@@ -556,7 +587,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 }
             });
             mNoviceLayout.startAnimation(mAlphaAnimation);
-            mNovice.completeShowEnergy();
+            mNovice.completeShowBuySympathies();
         }
     }
 
@@ -764,32 +795,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         @Override
         public void onPageScrollStateChanged(int arg0) {
-        }
-    };
-
-    private View.OnClickListener mOnNewbieEnergyClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            mResourcesLikes.setText(getResources().getString(R.string.default_resource_value));
-            NoviceLikesRequest noviceLikesRequest = new NoviceLikesRequest(getActivity());
-            registerRequest(noviceLikesRequest);
-            noviceLikesRequest.callback(new ApiHandler() {
-                @Override
-                public void success(ApiResponse response) {
-                    NoviceLikes noviceLikes = NoviceLikes.parse(response);
-                    CacheProfile.likes = noviceLikes.likes;
-                    updateUI(new Runnable() {
-                        @Override
-                        public void run() {
-                            mResourcesLikes.setText("+" + CacheProfile.likes);
-                        }
-                    });
-                }
-
-                @Override
-                public void fail(int codeError, ApiResponse response) {
-                }
-            }).exec();
         }
     };
 

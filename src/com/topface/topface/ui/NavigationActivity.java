@@ -80,7 +80,7 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
 
         mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         setStopTime();
-        mNovice = new Novice(mPreferences);
+        mNovice = Novice.getInstance(mPreferences);
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
 
         if (App.isOnline()) {
@@ -262,7 +262,7 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
         public void afterOpening() {
             if (mNovice.isMenuCompleted()) return;
 
-            if (mNovice.showFillProfile) {
+            if (mNovice.isShowFillProfile()) {
                 mNoviceLayout.setLayoutRes(R.layout.novice_fill_profile, mFragmentMenu.getProfileButtonOnClickListener());
                 AlphaAnimation alphaAnimation = new AlphaAnimation(0.0F, 1.0F);
                 alphaAnimation.setDuration(400L);
