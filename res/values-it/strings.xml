@@ -264,6 +264,9 @@
     <string name="buying_buy_resources">Compra le monete, ricarica l’energia</string>
     <string name="vip_buy_vip">Acquisto VIP</string>
     <string name="vip_state_off">Il tuo stato VIP non è attivo</string>
+    <string name="vip_state_on">Il tuo stato VIP è attivo</string>
+    <string name="vip_abilities">Le tue possibilità VIP</string>
+    <string name="vip_why">Perché è così importante essere VIP</string>
     <string name="vip_info_delight">Invia i segni di ammirazione gratis, esprimi i sentimenti al massimo!</string>
     <string name="vip_info_guest">Scopri chi si era interessato di te, guarda i tuoi ospiti!</string>
     <string name="vip_info_invisible">Rimani invisibile visitando le pagine degli altri grazie allo stato di \”invisibilità\”</string>
@@ -277,6 +280,16 @@
     <string name="buying_vip_info">Bisogna avere lo stato VIP per vedere gli ospiti</string>
     <string name="buy_play_market_not_available">Play Market non è disponibile</string>
     <string name="buy_subscription_not_available">Abbonamenti non sono disponibili</string>
+    <string name="default_six_coins">6 monete a 0,16 $ ciascuna</string>
+    <string name="default_six_coins_price">1 USD</string>
+    <string name="default_coins_40">40 monete a 0,12 $ ciascuna</string>
+    <string name="default_coins_40_price">5 USD</string>
+    <string name="default_economy_25">Risparmio del 25%</string>
+    <string name="default_coins_100">100 monete a 0,1 $ ciascuna</string>
+    <string name="default_economy_vip">Vip a partire da 10 USD al mese</string>
+    <string name="default_economy_38">Risparmio del 38%</string>
+    <string name="default_coins_300">300 monete a 0,08 $ ciascuna</string>
+    <string name="default_economy_50">Risparmio del 50%</string>
     <string name="profile_gifts_empty">Questo utente non ha ancora ricevuto regali da nessuno</string>
     <string name="profile_mygifts_empty">Non hai ancora ricevuto regali da nessuno</string>
     <string name="profile_mood">Descrivi il tuo umore</string>
@@ -287,6 +300,14 @@
     <string name="edit_my_city">Mia città</string>
     <string name="edit_my_photos">Mie foto</string>
     <string name="general_search_empty_title">Purtroppo, la ricerca non ha prodotto risultati</string>
+    <string name="general_search_empty_text">Puoi rifare la ricerca oppure cambiare le impostazioni dei parametri di ricerca</string>
     <string name="profile_get_status">Descrivi il tuo umore</string>
     <string name="map_title">Mappa</string>
+    <string name="settings_want_answer">Vorrei ricevere le risposte</string>
+    <string name="settings_feedback_email">E-mail</string>
+    <string name="settings_invalid_email">E-mail erronea</string>
+    <string name="leaders_select_cool_picture">Scegli una foto d’effetto:</string>
+    <string name="chat_write_message">Scrivi un messaggio</string>
+    <string name="default_coins_100_price">10 USD</string>
+    <string name="buying_sympathies">Acquisto simpatie</string>
 </resources>

@@ -406,12 +406,24 @@
 
     <string name="buying_sympathies">Покупка симпатий</string>
 
-    <string name="novice_sympathies_bonus">Вы получаете %1$d симпатий в\nподарок! Это означает, что вы\nточно понравитесь %2$d людям,\nкоторые выразят вам свою симпатию</string>
+    <string name="novice_sympathies_bonus">Вы получаете %1$d симпатий в\nподарок! Это означает, что вы\nточно
+        понравитесь %2$d людям,\nкоторые выразят вам свою симпатию
+    </string>
     <string name="novice_energy_to_sympathies_title">Мы заменили энергию на симпатии</string>
-    <string name="novice_energy_to_sympathies_message_boys">Пополнив запас симпатий, вы получите\nуказанное количество симпатий\nот парней, которым точно нравитесь</string>
-    <string name="novice_energy_to_sympathies_message_girls">Пополнив запас симпатий, вы получите\nуказанное количество симпатий\nот девушек, которым точно нравитесь</string>
-    <string name="novice_buy_sympathies">Если вы хотите гарантированно\nполучать симпатии,\nприобретайте их прямо сейчас!</string>
+    <string name="novice_energy_to_sympathies_message_boys">Пополнив запас симпатий, вы получите\nуказанное количество
+        симпатий\nот парней, которым точно нравитесь
+    </string>
+    <string name="novice_energy_to_sympathies_message_girls">Пополнив запас симпатий, вы получите\nуказанное количество
+        симпатий\nот девушек, которым точно нравитесь
+    </string>
+    <string name="novice_buy_sympathies">Если вы хотите гарантированно\nполучать симпатии,\nприобретайте их прямо
+        сейчас!
+    </string>
 
     <string name="general_reconnect_social">Невозможно подключиться к соцсети. Повторите попытку позже.</string>
+
+    <string name="general_buying">Купить симпатии и монеты</string>
+    <string name="general_block">Блокировать</string>
+
 
 </resources>

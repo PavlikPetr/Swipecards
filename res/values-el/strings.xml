@@ -83,7 +83,7 @@
     <string name="filter_all">\'Ολοι</string>
     <string name="filter_cities_all">Σε όλες οι πόλεις</string>
     <string name="filter_select_city">Επιλέξτε πόλη</string>
-    <string name="buying_header_title">Ψώνια</string>
+    <string name="buying_header_title">Αγορές</string>
     <string name="buying_you_have">Έχετε</string>
     <string name="buying_you_have_no_coins_for_gift">Σας λείπουν %d {{coins}} κέρματα για να αγοράσετε ένα δώρο</string>
     <string name="buying_default_message">Μπορείτε να στείλετε τα δώρα και το θαυμασμό για τα κέρματα</string>
@@ -230,7 +230,7 @@
     <string name="general_ready">Έγινε</string>
     <string name="profile_deleted_user">Ο χρήστης έχει διαγραφεί</string>
     <string name="filter_main_parameters">Έχω ένα ενδιαφέρον</string>
-    <string name="buying_store_ok">Αγορά ολοκληρώθηκε με επιτυχία</string>
+    <string name="buying_store_ok">Η αγορά ολοκληρώθηκε με επιτυχία</string>
     <string name="dating_prev_button_ext">Προηγούμενος</string>
     <string name="dating_skip_button_ext">Επόμενος</string>
     <string name="dating_search_empty_title">Δυστυχώς, τίποτα δεν βρέθηκε</string>
@@ -308,4 +308,6 @@
     <string name="settings_invalid_email">Εσφαλμένος e-mail</string>
     <string name="leaders_select_cool_picture">Επιλέξτε μια εντυπωσιακή φωτογραφία:</string>
     <string name="chat_write_message">Στείλτε ένα μήνυμα</string>
+    <string name="default_coins_100_price">10 USD</string>
+    <string name="buying_sympathies">Η αγορά τις συμπάθειες</string>
 </resources>

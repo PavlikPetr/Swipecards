@@ -290,4 +290,5 @@
     <string name="general_search_empty_title">Infelizmente, nada foi encontrado</string>
     <string name="profile_get_status">Descreva o seu humor</string>
     <string name="map_title">Mapa</string>
+    <string name="chat_write_message">Escrever mensagem</string>
 </resources>
