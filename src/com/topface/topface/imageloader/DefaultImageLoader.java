@@ -9,6 +9,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.postprocessors.ImagePostProcessor;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -36,7 +37,6 @@ public class DefaultImageLoader {
         builder.discCacheSize(DISC_CACHE_SIZE);
         builder.memoryCache(new WeakMemoryCache());
         builder.memoryCacheSize(MEMORY_CACHE_SIZE);
-        builder.threadPriority(Thread.MIN_PRIORITY + 2);
         builder.defaultDisplayImageOptions(getDisplayImageConfig().build());
         return builder;
     }
@@ -45,6 +45,7 @@ public class DefaultImageLoader {
         DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder();
         builder.cacheInMemory();
         builder.cacheOnDisc();
+        builder.imageScaleType(ImageScaleType.EXACT);
         builder.resetViewBeforeLoading();
         //builder.showStubImage(R.drawable.loader);
         builder.showImageForEmptyUri(R.drawable.im_photo_error);
