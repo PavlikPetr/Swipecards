@@ -177,10 +177,12 @@ public class Options extends AbstractData {
             );
             value.setTypeface(Typeface.DEFAULT_BOLD);
             value.setTextColor(Color.parseColor(color));
+            TextView economy = (TextView) view.findViewById(R.id.itEconomy);
 
             if(!TextUtils.isEmpty(curBtn.hint)) {
-                TextView economy = (TextView) view.findViewById(R.id.itEconomy);
                 economy.setText(curBtn.hint);
+            } else {
+                economy.setVisibility(View.GONE);
             }
 
             container.setOnClickListener(new View.OnClickListener() {
