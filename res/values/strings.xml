@@ -284,4 +284,6 @@
     <string name="dating_people_unnoticed">You left 10 people unnoticed!</string>
     <string name="dating_continue">Continue rating</string>
     <string name="dating_better_look">Get a better look!\nYou might be missing your fate!</string>
+    <string name="default_currency">USD</string>
+    <string name="general_reconnect_social"></string>
 </resources>

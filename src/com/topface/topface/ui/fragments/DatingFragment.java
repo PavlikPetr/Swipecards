@@ -539,6 +539,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                             R.string.novice_energy_to_sympathies_message_girls :
                             R.string.novice_energy_to_sympathies_message_boys));
             mNoviceLayout.startAnimation(mAlphaAnimation);
+            mNovice.completeShowEnergyToSympathies();
         } else if (mNovice.isShowSympathy()) {
             mNoviceLayout.setLayoutRes(R.layout.novice_sympathy, new OnClickListener() {
 

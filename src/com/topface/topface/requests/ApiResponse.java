@@ -38,6 +38,7 @@ public class ApiResponse {
     public static final int INVALID_FORMAT = 21;
     public static final int UNVERIFIED_SIGNATURE = 22;
     public static final int BAN = 28;
+    public static final int NETWORK_CONNECT_ERROR = 29;
     public static final int PREMIUM_ACCESS_ONLY = 32;
     // local
     public static final int NULL_RESPONSE = 100;

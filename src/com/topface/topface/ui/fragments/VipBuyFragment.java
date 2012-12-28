@@ -16,6 +16,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.billing.BillingFragment;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
@@ -84,8 +85,16 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
 
     private void initBuyVipViews(View root) {
         mBuyVipViewsContainer = (LinearLayout) root.findViewById(R.id.fbpContainer);
-        root.findViewById(R.id.fbpBuyingMonth).setOnClickListener(this);
-        root.findViewById(R.id.fbpBuyingYear).setOnClickListener(this);
+        LinearLayout btnContainer = (LinearLayout) root.findViewById(R.id.fbpBtnContainer);
+        for (Options.BuyButton curBtn: CacheProfile.getOptions().premium) {
+            Options.setButton(btnContainer, curBtn, getActivity(), new Options.BuyButtonClickListener() {
+                @Override
+                public void onClick(String id) {
+                    buySubscriotion(id);
+                    EasyTracker.getTracker().trackEvent("Subscription", "ButtonClick", id, 0L);
+                }
+            });
+        }
     }
 
     private void initEditVipViews(View root) {
@@ -238,18 +247,18 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     @Override
     public void onClick(View v) {
         //Подписки на премиумы
-        switch (v.getId()) {
-            case R.id.fbpBuyingMonth:
-                buySubscriotion("topface.premium.month.1");
-                EasyTracker.getTracker().trackEvent("Subscription", "ButtonClick", "Month", 0L);
-                break;
-
-            case R.id.fbpBuyingYear:
-                buySubscriotion("topface.premium.year.1");
-                EasyTracker.getTracker().trackEvent("Subscription", "ButtonClick", "Year", 0L);
-                break;
-
-        }
+//        switch (v.getId()) {
+//            case R.id.fbpBuyingMonth:
+//                buySubscriotion("topface.premium.month.1");
+//                EasyTracker.getTracker().trackEvent("Subscription", "ButtonClick", "Month", 0L);
+//                break;
+//
+//            case R.id.fbpBuyingYear:
+//                buySubscriotion("topface.premium.year.1");
+//                EasyTracker.getTracker().trackEvent("Subscription", "ButtonClick", "Year", 0L);
+//                break;
+//
+//        }
     }
 
     @Override

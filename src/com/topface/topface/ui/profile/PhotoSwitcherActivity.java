@@ -50,6 +50,7 @@ public class PhotoSwitcherActivity extends Activity {
 
         //Header
         mHeaderBar = (ViewGroup) findViewById(R.id.loHeaderBar);
+        mHeaderBar.setVisibility(View.INVISIBLE);
 
         // Title Header
         mCounter = ((TextView) findViewById(R.id.tvHeaderTitle));
