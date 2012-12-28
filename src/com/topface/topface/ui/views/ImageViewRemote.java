@@ -153,6 +153,9 @@ public class ImageViewRemote extends ImageView {
             if (context instanceof Activity) {
                 getImageLoader((Activity) context)
                         .displayImage(remoteSrc, this, null, getListener(handler, remoteSrc), getPostProcessor());
+            } else {
+                getImageLoader()
+                        .displayImage(remoteSrc, this, null, getListener(handler, remoteSrc), getPostProcessor());
             }
 
         } else {
@@ -188,6 +191,11 @@ public class ImageViewRemote extends ImageView {
 
     public DefaultImageLoader getImageLoader(Activity activity) {
         return DefaultImageLoader.getInstance(activity);
+    }
+
+    public DefaultImageLoader getImageLoader() {
+        //noinspection deprecation
+        return DefaultImageLoader.getInstance();
     }
 
     public ImagePostProcessor getPostProcessor() {
