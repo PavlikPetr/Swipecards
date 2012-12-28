@@ -81,19 +81,19 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         int feedbackType = extras.getInt(INTENT_FEEDBACK_TYPE, UNKNOWN);
         switch (feedbackType) {
             case ERROR_MESSAGE:
-                mReport.subject = getResources().getString(R.string.settings_error_message);
+                mReport.subject = getResources().getString(R.string.settings_error_message_internal);
                 break;
             case DEVELOPERS_MESSAGE:
-                mReport.subject = getResources().getString(R.string.settings_ask_developer);
+                mReport.subject = getResources().getString(R.string.settings_ask_developer_internal);
                 break;
             case PAYMENT_MESSAGE:
-                mReport.subject = getResources().getString(R.string.settings_payment_problems);
+                mReport.subject = getResources().getString(R.string.settings_payment_problems_internal);
                 break;
             case COOPERATION_MESSAGE:
-                mReport.subject = getResources().getString(R.string.settings_cooperation);
+                mReport.subject = getResources().getString(R.string.settings_cooperation_internal);
                 break;
             case UNKNOWN:
-                mReport.subject = getResources().getString(R.string.settings_feedback);
+                mReport.subject = getResources().getString(R.string.settings_feedback_internal);
                 break;
         }
 

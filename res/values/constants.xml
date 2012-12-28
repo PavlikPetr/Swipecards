@@ -27,4 +27,10 @@
 
     <string name="default_chat_update_period">30000</string>
     <string name="default_market_link">market://details?id=com.topface.topface</string>
+
+    <string name="settings_error_message_internal">Сообщение об ошибке</string>
+    <string name="settings_ask_developer_internal">Вопрос разработчикам</string>
+    <string name="settings_payment_problems_internal">Проблемы с оплатой</string>
+    <string name="settings_cooperation_internal">Сотрудничество</string>
+    <string name="settings_feedback_internal">Оставить отзыв</string>
 </resources>
