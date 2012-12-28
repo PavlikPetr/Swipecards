@@ -1,6 +1,6 @@
 package com.topface.topface.utils;
 
-import android.content.Context;
+import android.app.Activity;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.SearchUser;
@@ -13,18 +13,18 @@ public class PreloadManager {
 
     int width, height;
     boolean canLoad = true;
-    Context mContext;
+    Activity mActivity;
 
-    public PreloadManager(int width, int height, Context mContext) {
+    public PreloadManager(int width, int height, Activity activity) {
         this.width = width;
         this.height = height;
-        this.mContext = mContext;
+        this.mActivity = activity;
 
         checkConnectionType(ConnectionChangeReceiver.getConnectionType());
     }
 
-    public PreloadManager(Context mContext) {
-        this(0, 0, mContext);
+    public PreloadManager(Activity activity) {
+        this(0, 0, activity);
     }
 
     public void preloadPhoto(LinkedList<SearchUser> userList, int position) {
@@ -59,7 +59,7 @@ public class PreloadManager {
     }
 
     private DefaultImageLoader getImageLoader() {
-        return DefaultImageLoader.getInstance();
+        return DefaultImageLoader.getInstance(mActivity);
     }
 
     public void checkConnectionType(int type) {

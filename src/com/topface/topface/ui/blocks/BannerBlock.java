@@ -135,7 +135,7 @@ public class BannerBlock {
             mPLus1Asker.setRemoveBannersOnPause(true);
             mPLus1Asker.setDisabledWebViewCorePausing(true);
         } else if (mBannerView instanceof ImageView) {
-            DefaultImageLoader.getInstance().displayImage(banner.url, (ImageView) mBannerView, new SimpleImageLoadingListener() {
+            DefaultImageLoader.getInstance(mActivity).displayImage(banner.url, (ImageView) mBannerView, new SimpleImageLoadingListener() {
                 @Override
                 public void onLoadingComplete(Bitmap loadedImage) {
                     super.onLoadingComplete(loadedImage);

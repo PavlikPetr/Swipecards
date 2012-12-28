@@ -3,16 +3,17 @@ package com.topface.topface.data;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Novice;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -96,8 +97,10 @@ public class Options extends AbstractData {
             JSONObject purchases = response.jsonResult.optJSONObject("purchases");
             if(purchases != null) {
                 JSONArray coinsJSON = purchases.optJSONArray("coins");
-                for (int i=0; i < coinsJSON.length(); i++) {
-                    options.coins.add(createBuyButtonFromJSON(coinsJSON.optJSONObject(i)));
+                if (coinsJSON != null) {
+                    for (int i=0; i < coinsJSON.length(); i++) {
+                        options.coins.add(createBuyButtonFromJSON(coinsJSON.optJSONObject(i)));
+                    }
                 }
 
                 JSONArray likesJSON = purchases.optJSONArray("likes");
@@ -106,19 +109,23 @@ public class Options extends AbstractData {
                 }
 
                 JSONArray premiumJSON = purchases.optJSONArray("premium");
-                for (int i=0; i < premiumJSON.length(); i++) {
-                    options.premium.add(createBuyButtonFromJSON(premiumJSON.optJSONObject(i)));
+                if (premiumJSON != null) {
+                    for (int i=0; i < premiumJSON.length(); i++) {
+                        options.premium.add(createBuyButtonFromJSON(premiumJSON.optJSONObject(i)));
+                    }
                 }
 
                 JSONArray othersJSON = purchases.optJSONArray("others");
-                for (int i=0; i < othersJSON.length(); i++) {
-                    options.others.add(createBuyButtonFromJSON(othersJSON.optJSONObject(i)));
+                if (othersJSON != null) {
+                    for (int i=0; i < othersJSON.length(); i++) {
+                        options.others.add(createBuyButtonFromJSON(othersJSON.optJSONObject(i)));
+                    }
                 }
             }
 
 
         } catch (Exception e) {
-            Debug.log("Message.class", "Wrong response parsing: " + e);
+            Debug.error("Options parsing error", e);
         }
 
         CacheProfile.setOptions(options, response.jsonResult);
@@ -126,12 +133,14 @@ public class Options extends AbstractData {
     }
 
     public static BuyButton createBuyButtonFromJSON(JSONObject purchaseItem) {
-        BuyButton buyCoinBtn = new BuyButton(purchaseItem.optString("id"),
-                purchaseItem.optString("amount"),
+        return new BuyButton(
+                purchaseItem.optString("id"),
+                purchaseItem.optString("title"),
                 purchaseItem.optInt("price"),
-                purchaseItem.optString("additional"),
-                purchaseItem.optInt("showType"));
-        return buyCoinBtn;
+                purchaseItem.optString("hint"),
+                purchaseItem.optInt("showType"),
+                purchaseItem.optString("type")
+        );
     }
 
     public static String generateKey(int type, boolean isMail) {
@@ -139,33 +148,39 @@ public class Options extends AbstractData {
     }
 
     public static RelativeLayout setButton(LinearLayout root, final BuyButton curBtn, Context context, final BuyButtonClickListener l) {
-        if(context != null && !curBtn.text.equals("")) {
+        if (context != null && !curBtn.title.equals("")) {
             LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.item_buying_btn,root,false);
             RelativeLayout container = (RelativeLayout) view.findViewById(R.id.itContainer);
-            container.setBackgroundResource(curBtn.type == 0 ? R.drawable.btn_vip_sale_selector : R.drawable.btn_vip_super_sale_selector);
+            container.setBackgroundResource(
+                    curBtn.showType == 0 ?
+                            R.drawable.btn_vip_sale_selector :
+                            R.drawable.btn_vip_super_sale_selector
+            );
 
             container.requestLayout();
 
-            String color = curBtn.type == 0 ? "#B8B8B8" : "#FFFFFF";
+            String color = curBtn.showType == 0 ? "#B8B8B8" : "#FFFFFF";
 
             TextView title = (TextView) view.findViewById(R.id.itText);
-            title.setText(curBtn.text);
+            title.setText(curBtn.title);
             title.setTypeface(Typeface.DEFAULT_BOLD);
             title.setTextColor(Color.parseColor(color));
 
             TextView value = (TextView) view.findViewById(R.id.itValue);
 
-
-            double price = (double)curBtn.value/100.0;
-
-            value.setText(Double.toString(price) + " " + context.getString(R.string.default_currency));
+            value.setText(
+                    String.format(
+                            App.getContext().getString(R.string.general_default_currency),
+                            curBtn.price/100f
+                    )
+            );
             value.setTypeface(Typeface.DEFAULT_BOLD);
             value.setTextColor(Color.parseColor(color));
 
-            if(curBtn.economy != null) {
+            if(!TextUtils.isEmpty(curBtn.hint)) {
                 TextView economy = (TextView) view.findViewById(R.id.itEconomy);
-                economy.setText(curBtn.economy);
+                economy.setText(curBtn.hint);
             }
 
             container.setOnClickListener(new View.OnClickListener() {
@@ -199,18 +214,20 @@ public class Options extends AbstractData {
 
     public static class BuyButton {
         public String id;
-        public String text;
-        public int value;
-        public String economy;
-        public int type;
+        public String title;
+        public int price;
+        private int showType;
+        public String hint;
+        public String type;
         public static final String COINS_NAME = "coins";
         public static final String LIKES_NAME = "likes";
 
-        public BuyButton(String id, String text, int value, String economy, int type) {
+        public BuyButton(String id, String title, int price, String hint, int showType, String type) {
             this.id = id;
-            this.text = text;
-            this.value = value;
-            this.economy = economy;
+            this.title = title;
+            this.price = price;
+            this.hint = hint;
+            this.showType = showType;
             this.type = type;
         }
     }

@@ -1,5 +1,6 @@
 package com.topface.topface.ui.views;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -120,7 +121,10 @@ public class ImageViewRemote extends ImageView {
     public boolean setRemoteSrc(String remoteSrc, Handler handler, boolean isRepeat) {
         boolean isCorrectSrc = true;
         //Отменяем текущую загрузку, если ImageViewRemote уже используется для другого изображения
-        getImageLoader().getImageLoader().cancelDisplayTask(this);
+        //Используем метод getInstance без указания контекста. т.к. отмена загрузки должна происходить всегда,
+        //Даже если ImageViewRemote уже вне контекста активити
+        //noinspection deprecation
+        DefaultImageLoader.getInstance().getImageLoader().cancelDisplayTask(this);
         //Если это не повторный запрос изображения, то сбрасываем счетчик повторов
         if (!isRepeat) {
             mRepeatCounter = 0;
@@ -143,7 +147,13 @@ public class ImageViewRemote extends ImageView {
             if (getDrawable() != null) {
                 super.setImageBitmap(null);
             }
-            getImageLoader().displayImage(remoteSrc, this, null, getListener(handler, remoteSrc), getPostProcessor());
+
+            //Начинаем загрузку только если ImageViewRemote внутри контекста активити
+            Context context = getContext();
+            if (context instanceof Activity) {
+                getImageLoader((Activity) context)
+                        .displayImage(remoteSrc, this, null, getListener(handler, remoteSrc), getPostProcessor());
+            }
 
         } else {
             isCorrectSrc = false;
@@ -176,8 +186,8 @@ public class ImageViewRemote extends ImageView {
         return setRemoteSrc(remoteSrc, null);
     }
 
-    public DefaultImageLoader getImageLoader() {
-        return DefaultImageLoader.getInstance();
+    public DefaultImageLoader getImageLoader(Activity activity) {
+        return DefaultImageLoader.getInstance(activity);
     }
 
     public ImagePostProcessor getPostProcessor() {
