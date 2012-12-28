@@ -424,7 +424,7 @@
 
     <string name="general_buying">Купить симпатии и монеты</string>
     <string name="general_block">Блокировать</string>
-    <string name="general_default_currency">%%.2f USD</string>
+    <string name="general_default_currency">%.2f USD</string>
 
 
 </resources>
