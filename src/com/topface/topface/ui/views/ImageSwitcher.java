@@ -1,5 +1,6 @@
 package com.topface.topface.ui.views;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
@@ -31,7 +32,7 @@ public class ImageSwitcher extends ViewPager {
         setAdapter(mImageSwitcherAdapter);
         setOnTouchListener(mOnTouchListener);
         setPageMargin(40);
-        mPreloadManager = new PreloadManager(getWidth(), getHeight(), getContext());
+        mPreloadManager = new PreloadManager(getWidth(), getHeight(), (Activity) getContext());
     }
 
     public void setData(Photos photoLinks) {

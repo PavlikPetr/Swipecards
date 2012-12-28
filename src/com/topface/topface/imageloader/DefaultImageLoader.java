@@ -1,5 +1,6 @@
 package com.topface.topface.imageloader;
 
+import android.app.Activity;
 import android.content.Context;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -56,9 +57,23 @@ public class DefaultImageLoader {
         return mImageLoader;
     }
 
+    /**
+     * Загрузчик изображений нужно использовать только с контекстом активити
+     *
+     * @return инстанс загрузчика изображений
+     */
+    @Deprecated
     public static DefaultImageLoader getInstance() {
         if (mInstance == null) {
             mInstance = new DefaultImageLoader(App.getContext());
+        }
+
+        return mInstance;
+    }
+
+    public static DefaultImageLoader getInstance(Activity activity) {
+        if (mInstance == null) {
+            mInstance = new DefaultImageLoader(activity);
         }
 
         return mInstance;
