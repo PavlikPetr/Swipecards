@@ -127,9 +127,9 @@ public class Options extends AbstractData {
 
     public static BuyButton createBuyButtonFromJSON(JSONObject purchaseItem) {
         BuyButton buyCoinBtn = new BuyButton(purchaseItem.optString("id"),
-                purchaseItem.optString("amount"),
+                purchaseItem.optString("title"),
                 purchaseItem.optInt("price"),
-                purchaseItem.optString("additional"),
+                purchaseItem.optString("hint"),
                 purchaseItem.optInt("showType"));
         return buyCoinBtn;
     }
@@ -162,10 +162,12 @@ public class Options extends AbstractData {
             value.setText(Double.toString(price) + " " + context.getString(R.string.default_currency));
             value.setTypeface(Typeface.DEFAULT_BOLD);
             value.setTextColor(Color.parseColor(color));
+            TextView economy = (TextView) view.findViewById(R.id.itEconomy);
+            if(curBtn.economy != null && !curBtn.economy.equals("")) {
 
-            if(curBtn.economy != null) {
-                TextView economy = (TextView) view.findViewById(R.id.itEconomy);
                 economy.setText(curBtn.economy);
+            } else {
+                economy.setVisibility(View.GONE);
             }
 
             container.setOnClickListener(new View.OnClickListener() {
