@@ -92,6 +92,7 @@ public class SettingsAccountFragment extends TrackedFragment {
                         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(Static.LOGOUT_INTENT));
                         //Чистим список тех, кого нужно оценить
                         Data.searchList = new LinkedList<SearchUser>();
+                        Data.searchPosition = -1;
 
                     }
 
