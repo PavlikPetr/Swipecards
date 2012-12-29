@@ -64,12 +64,12 @@ public class AmazonPurchaseObserver extends BasePurchasingObserver {
     private void handleCallbacks(PurchaseResponse purchaseResponse, final BillingListener listener) {
         switch (purchaseResponse.getPurchaseRequestStatus()) {
             case SUCCESSFUL:
-                //Добавляем запрос в очередь
                 String userId = purchaseResponse.getUserId();
+                String sku = purchaseResponse.getReceipt().getSku();
                 Receipt receipt = purchaseResponse.getReceipt();
                 if (receipt != null && receipt.getPurchaseToken() != null) {
                     String purchaseToken = receipt.getPurchaseToken();
-                    validateRequest(listener, userId, purchaseToken, mContext);
+                    validateRequest(listener, sku, userId, purchaseToken, purchaseResponse.getRequestId(), mContext);
                 } else if (listener != null) {
                     listener.onError();
                 }
@@ -91,12 +91,14 @@ public class AmazonPurchaseObserver extends BasePurchasingObserver {
         }
     }
 
-    public static void validateRequest(final BillingListener listener, String userId, String purchaseToken, final Context context) {
+    public static void validateRequest(final BillingListener listener,
+                                       String sku, String userId, String purchaseToken, String requestId,
+                                       final Context context) {
         //Добавляем запрос в очередь
         final String queueId = AmazonQueue.getInstance(context)
-                .addPurchaseToQueue(userId, purchaseToken);
+                .addPurchaseToQueue(sku, userId, purchaseToken, requestId);
 
-        new AmazonValidateRequest(userId, purchaseToken, context)
+        new AmazonValidateRequest(sku, userId, purchaseToken, requestId, context)
                 .callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
