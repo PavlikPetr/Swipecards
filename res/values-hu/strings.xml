@@ -318,4 +318,5 @@
     <string name="general_reconnect_social">A kapcsolódás a közösségi oldalhoz nem lehetséges. Próbáld meg később.</string>
     <string name="general_buying">Vegyél szimpátiát és érméket</string>
     <string name="general_block">Letiltás</string>
+    <string name="general_default_currency">%.2f USD</string>
 </resources>

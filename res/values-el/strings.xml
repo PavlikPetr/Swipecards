@@ -284,12 +284,12 @@
     <string name="default_six_coins_price">1 USD</string>
     <string name="default_coins_40">40 κέρματα το καθένα από την 0,12 $</string>
     <string name="default_coins_40_price">5 USD</string>
-    <string name="default_economy_25">Με έκπτωση 25%</string>
+    <string name="default_economy_25">Eξοικονομήσει 25%</string>
     <string name="default_coins_100">100 κέρματα το καθένα από την 0,1 $</string>
     <string name="default_economy_vip">Vip από 10 USD ανά μήνα</string>
-    <string name="default_economy_38">Με έκπτωση 38%</string>
+    <string name="default_economy_38">Eξοικονομήσει 38%</string>
     <string name="default_coins_300">300 κέρματα το καθένα από την 0,08 $</string>
-    <string name="default_economy_50">Με έκπτωση 50%</string>
+    <string name="default_economy_50">Eξοικονομήσει 50%</string>
     <string name="profile_gifts_empty">Αυτός ο χρήστης δεν έχει λάβει τα δώρα από κανέναν</string>
     <string name="profile_mygifts_empty">Δεν έχετε λάβει τα δώρα από κανέναν</string>
     <string name="profile_mood">Περιγράψτε τη διάθεσή σας</string>
@@ -310,4 +310,13 @@
     <string name="chat_write_message">Στείλτε ένα μήνυμα</string>
     <string name="default_coins_100_price">10 USD</string>
     <string name="buying_sympathies">Η αγορά τις συμπάθειες</string>
+    <string name="novice_sympathies_bonus">Παίρνετε %1$d συμπάθειες για\nδωρεάν!  Αυτό σημαίνει ότι, εσέις\n θα αρέσετε ακριβώς για %2$d τους ανθρώπους,\nοποίοι θα εκφράζουν την συμπάθεια για σας</string>
+    <string name="novice_energy_to_sympathies_title">Έχουμε ήδη αντικαταστήσει την ενέργεια για συμπάθειες</string>
+    <string name="novice_energy_to_sympathies_message_boys">Ξαναγεμίστε του απόθεμα τις συμπάθειες, και θα λάβετε \nσυγκεκριμένο ποσό τις συμπάθειες\nαπό τους άνδρες, για ποιόν αρέσετε</string>
+    <string name="novice_energy_to_sympathies_message_girls">Ξαναγεμίστε του απόθεμα τις συμπάθειες, και θα λάβετε \nσυγκεκριμένο ποσό τις συμπάθειες\nαπό τις κοπέλες, για την οποία αρέσετε</string>
+    <string name="novice_buy_sympathies">Αν θέλετε να είστε εγγυημένος για\nνα λαμβάνετε συμπάθειες,\nνα τις αγοράσετε τώρα!</string>
+    <string name="general_reconnect_social">Δεν είναι δυνατή η σύνδεση με κοινωνικά δίκτυα. Παρακαλώ δοκιμάστε ξανά αργότερα.</string>
+    <string name="general_buying">Αγοράστε τη συμπάθεια και τα κέρματα</string>
+    <string name="general_block">Αποκλεισμός</string>
+    <string name="general_default_currency">%.2f USD</string>
 </resources>

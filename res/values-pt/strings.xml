@@ -265,6 +265,9 @@
     <string name="buying_buy_resources">Comprar moeda, completando a reserva de energias</string>
     <string name="vip_buy_vip">Compra de VIP</string>
     <string name="vip_state_off">O seu status-VIP não está ativado</string>
+    <string name="vip_state_on">Seu staus-VIP está ativado</string>
+    <string name="vip_abilities">O vosso VIP de disponibilidade</string>
+    <string name="vip_why">Por que é importante para você ser VIP?</string>
     <string name="vip_info_delight">Envie adimirações gratuitamente - manifeste os seus sentimentos ao máximo!</string>
     <string name="vip_info_guest">Descubra, quem está interessado em você - veja os seus visitantes!</string>
     <string name="vip_info_invisible">Passe despercebido, visitando páginas alheias através do regime \"invisível\"</string>
@@ -301,11 +304,15 @@
     <string name="general_search_empty_text">Você pode tentar procurar novamente, ou alterar definições de filtro</string>
     <string name="profile_get_status">Descreva o seu humor</string>
     <string name="map_title">Mapa</string>
+    <string name="settings_want_answer">Eu queria que me respondessem</string>
+    <string name="settings_feedback_email">E-mail para a ligação</string>
+    <string name="settings_invalid_email">E-mail incorrecto</string>
     <string name="leaders_select_cool_picture">Selecione uma fotografia efectiva:</string>
     <string name="chat_write_message">Escrever mensagem</string>
     <string name="default_coins_100_price">10 USD</string>
     <string name="buying_sympathies">Compra de simpatias</string>
-    <string name="novice_energy_to_sympathies_title">Nós substituimos a energia pelas simpatias</string>
+    <string name="novice_sympathies_bonus">Você recebe %1$d de simpatias em \nprresente! Isto significa que %2$d de pessoas certamente gostam de você, \nque lhe revelam as suas simpatias</string>
+    <string name="novice_energy_to_sympathies_title">Nós substituímos a energia pelas simpatias</string>
     <string name="novice_energy_to_sympathies_message_boys">Completando a reserva de simpatias, você receberá\n a quantidade de simpatias assinaladas\n de rapazes que certamente gostam de você</string>
     <string name="novice_energy_to_sympathies_message_girls">Completando a reserva de simpatias, você receberá\n a quantidade de simpatias assinaladas\n de meninas que certamente gostam de você</string>
     <string name="novice_buy_sympathies">Se você quiser garantidamente\nreceber simpatias, \nadquira as mesmo agora!</string>
