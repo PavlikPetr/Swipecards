@@ -1,6 +1,7 @@
 package com.topface.topface.utils;
 
 import android.app.Activity;
+import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.SearchUser;
@@ -37,25 +38,43 @@ public class PreloadManager {
         preloadNextPhoto(currentUser.photos.get(position));
     }
 
-    public void preloadPhoto(Photos photos, int position) {
-        if (position < photos.size()) {
-            preloadNextPhoto(photos.get(position));
-        }
+    public boolean preloadPhoto(Photos photos, int position) {
+        return preloadPhoto(photos, position, null);
     }
 
-    private void preloadNextPhoto(Photo photo) {
+    public boolean preloadPhoto(Photos photos, int position, ImageLoadingListener listener) {
+        boolean result = false;
+        if (position < photos.size()) {
+            result = preloadNextPhoto(photos.get(position), listener);
+        }
+        return result;
+    }
+
+    private boolean preloadNextPhoto(Photo photo) {
+        return preloadNextPhoto(photo, null);
+    }
+
+    private boolean preloadNextPhoto(Photo photo, ImageLoadingListener listener) {
+        boolean result = false;
         if (photo != null && canLoad) {
             int size = Math.max(height, width);
             if (size > 0) {
-                preloadImage(photo.getSuitableLink(width, height));
+                preloadImage(photo.getSuitableLink(width, height), listener);
             } else {
-                preloadImage(photo.getSuitableLink(Photo.SIZE_960));
+                preloadImage(photo.getSuitableLink(Photo.SIZE_960), listener);
             }
+            result = true;
         }
+
+        return result;
     }
 
     private void preloadImage(String url) {
-        getImageLoader().preloadImage(url);
+        preloadImage(url, null);
+    }
+
+    private void preloadImage(String url, ImageLoadingListener listener) {
+        getImageLoader().preloadImage(url, listener);
     }
 
     private DefaultImageLoader getImageLoader() {

@@ -1,5 +1,6 @@
 package com.topface.topface.data;
 
+import android.text.TextUtils;
 import org.json.JSONObject;
 
 public class FeedUser extends AbstractData {
@@ -51,7 +52,7 @@ public class FeedUser extends AbstractData {
 
     public String getNameAndAge() {
         String result;
-        if (first_name != null && first_name.length() > 0 && age > 0) {
+        if (!TextUtils.isEmpty(first_name) && age > 0) {
             result = String.format("%s, %d", first_name, age);
         } else {
             result = first_name;

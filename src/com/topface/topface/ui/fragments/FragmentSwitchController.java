@@ -84,20 +84,24 @@ public class FragmentSwitchController extends ViewGroup {
     }
 
     public void showFragmentWithAnimation(int fragmentId) {
-        if (fragmentId != mCurrentFragmentId) {
-            mCurrentFragmentId = fragmentId;
-            snapToScreen(EXPAND_FULL);
-        } else {
-            closeMenu();
+        if (mScroller.isFinished()) {
+            if (fragmentId != mCurrentFragmentId) {
+                mCurrentFragmentId = fragmentId;
+                snapToScreen(EXPAND_FULL);
+            } else {
+                closeMenu();
+            }
         }
     }
 
     public void showFragment(int fragmentId) {
-        if (fragmentId != mCurrentFragmentId) {
-            mCurrentFragmentId = fragmentId;
-            switchFragment();
-        } else {
-            closeMenu();
+        if (mScroller.isFinished()) {
+            if (fragmentId != mCurrentFragmentId) {
+                mCurrentFragmentId = fragmentId;
+                switchFragment();
+            } else {
+                closeMenu();
+            }
         }
     }
 
@@ -136,7 +140,7 @@ public class FragmentSwitchController extends ViewGroup {
         if (mExtraFrame != null) mExtraFrame.setVisibility(View.GONE);
         if (mCurrentExtraFragment != null) {
             if (mCurrentExtraFragment instanceof BaseFragment) {
-                ((BaseFragment)mCurrentExtraFragment).clearContent();
+                ((BaseFragment) mCurrentExtraFragment).clearContent();
             }
             mCurrentExtraFragment = null;
         }
@@ -212,7 +216,7 @@ public class FragmentSwitchController extends ViewGroup {
         mOpenDX = mWidth - mClosedDX;
         mFullOpenDX = mWidth - mOpenDX;
 
-        mExtraFrame = (FrameLayout)this.findViewById(R.id.fragment_extra_container);
+        mExtraFrame = (FrameLayout) this.findViewById(R.id.fragment_extra_container);
     }
 
     private void snapToScreen(int typeAnimation) {

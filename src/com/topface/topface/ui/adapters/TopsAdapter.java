@@ -53,7 +53,7 @@ public class TopsAdapter extends BaseAdapter {
         }
         Top topUser = mTopsList.get(position);
         holder.rating.setText(topUser.liked + "%");
-        holder.name.setText(String.format("%s, %d", topUser.name, topUser.age));
+        holder.name.setText(topUser.getNameAndAge());
         holder.photo.setPhoto(topUser.photo);
         holder.online.setVisibility(topUser.online ? View.VISIBLE : View.GONE);
         return convertView;
