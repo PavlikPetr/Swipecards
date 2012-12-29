@@ -39,6 +39,7 @@ public class AmazonQueue extends BillingQueue {
         if (item != null) {
             AmazonPurchaseObserver.validateRequest(
                     null,
+                    item.id,
                     item.sku,
                     item.userId,
                     item.purchaseToken,
