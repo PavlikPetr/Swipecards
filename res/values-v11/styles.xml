@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
-        >
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Page indicators -->
-    <style name="Theme.TopfaceIndicators" parent="android:Theme.Holo.NoActionBar">
-        <item name="vpiIconPageIndicatorStyle">@style/Widget.TopfaceIconPageIndicator</item>
-        <item name="vpiTabPageIndicatorStyle">@style/Widget.TopfaceTabPageIndicator</item>
-        <item name="vpiCirclePageIndicatorStyle">@style/TopfaceCirclePageIndicator</item>
-        <item name="android:textAppearanceLarge">@style/TopfaceTextAppearance.Large</item>
-        <item name="android:textAppearanceMedium">@style/TopfaceTextAppearance.Medium</item>
-        <item name="android:textAppearanceSmall">@style/TopfaceTextAppearance.Small</item>
+    <!-- Основная тема приложения -->
+    <style name="Theme.Topface" parent="android:Theme.Holo.NoActionBar">
+        <!-- Не используем картинку для курсора из стандратной темы, она будет таким же цветом как и текст -->
         <item name="android:textCursorDrawable">@null</item>
     </style>
 

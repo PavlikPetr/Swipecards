@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
-        >
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Базовая тема приложения -->
+    <style name="Theme.Topface" parent="android:Theme.NoTitleBar">
+        <!-- Тема индикаторов для ViewPager -->
+        <item name="vpiIconPageIndicatorStyle">@style/Widget.TopfaceIconPageIndicator</item>
+        <item name="vpiTabPageIndicatorStyle">@style/Widget.TopfaceTabPageIndicator</item>
+        <item name="vpiCirclePageIndicatorStyle">@style/TopfaceCirclePageIndicator</item>
+        <item name="android:textAppearanceLarge">@style/TopfaceTextAppearance.Large</item>
+        <item name="android:textAppearanceMedium">@style/TopfaceTextAppearance.Medium</item>
+        <item name="android:textAppearanceSmall">@style/TopfaceTextAppearance.Small</item>
+
+        <!-- Цвет ссылок (для TextView свойства autoLink)  -->
+        <item name="android:textColorLink">#2371B9</item>
+    </style>
 
     <style name="ShadowItemFont">
         <item name="android:shadowColor">#222222</item>
@@ -381,16 +394,6 @@
         <item name="android:paddingRight">0.5dp</item>
         <item name="android:paddingBottom">2dp</item>
         <item name="android:background">@drawable/avatar_frame_center</item>
-    </style>
-
-    <!-- Page indicators -->
-    <style name="Theme.TopfaceIndicators" parent="android:Theme.NoTitleBar">
-        <item name="vpiIconPageIndicatorStyle">@style/Widget.TopfaceIconPageIndicator</item>
-        <item name="vpiTabPageIndicatorStyle">@style/Widget.TopfaceTabPageIndicator</item>
-        <item name="vpiCirclePageIndicatorStyle">@style/TopfaceCirclePageIndicator</item>
-        <item name="android:textAppearanceLarge">@style/TopfaceTextAppearance.Large</item>
-        <item name="android:textAppearanceMedium">@style/TopfaceTextAppearance.Medium</item>
-        <item name="android:textAppearanceSmall">@style/TopfaceTextAppearance.Small</item>
     </style>
 
     <style name="TopfaceCirclePageIndicator">
