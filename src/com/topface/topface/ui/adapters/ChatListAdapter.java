@@ -1,6 +1,7 @@
 package com.topface.topface.ui.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.text.ClipboardManager;
 import android.text.Html;
 import android.text.format.DateFormat;
@@ -9,16 +10,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.facebook.topface.DialogError;
+import com.facebook.topface.Facebook;
+import com.facebook.topface.FacebookError;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.History;
+import com.topface.topface.data.VirusLikeFriends;
+import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.VirusLikesRequest;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.MemoryCacheTemplate;
 import com.topface.topface.utils.OsmManager;
+import com.topface.topface.utils.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -28,6 +37,7 @@ import java.util.LinkedList;
 
 @SuppressWarnings("deprecation")
 public class ChatListAdapter extends BaseAdapter {
+
     // class ViewHolder
     static class ViewHolder {
         ImageViewRemote avatar;
@@ -37,6 +47,7 @@ public class ChatListAdapter extends BaseAdapter {
         TextView address;
         ImageView mapBackground;
         ProgressBar prgsAddress;
+        Button likeRequest;
         // View mInfoGroup;
     }
 
@@ -62,6 +73,8 @@ public class ChatListAdapter extends BaseAdapter {
     private static final int T_USER_MAP_EXT = 10;
     private static final int T_FRIEND_MAP_PHOTO = 11;
     private static final int T_FRIEND_MAP_EXT = 12;
+    private static final int T_USER_LIKE_REQUEST = 13;
+    private static final int T_FRIEND_LIKE_REQUEST = 14;
     private static final int T_COUNT = 13;
 
 
@@ -216,6 +229,20 @@ public class ChatListAdapter extends BaseAdapter {
                             .findViewById(R.id.prgsFriendMapAddress);
                     holder.avatar.setVisibility(View.INVISIBLE);
                     break;
+                case T_USER_LIKE_REQUEST:
+                    convertView = mInflater.inflate(R.layout.chat_like_request, null, false);
+                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                    holder.message = (TextView) convertView.findViewById(R.id.chat_message);
+                    holder.date = (TextView) convertView.findViewById(R.id.chat_date);
+                case T_FRIEND_LIKE_REQUEST:
+                    //TODO: Заменить на нормальный фон
+                    convertView = mInflater.inflate(R.layout.chat_like_request_ext, null, false);
+                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                    holder.date = (TextView) convertView.findViewById(R.id.chat_date);
+                    Button likeRequestBtn = (Button) convertView.findViewById(R.id.btn_chat_like_request);
+                    likeRequestBtn.setTag(position);
+                    likeRequestBtn.setOnClickListener(mLikeRequestListener);
+
             }
 
             if (convertView != null) {
@@ -254,22 +281,6 @@ public class ChatListAdapter extends BaseAdapter {
         switch (history.type) {
             case FeedDialog.DEFAULT:
                 holder.message.setText(Html.fromHtml(history.text));
-                break;
-            case FeedDialog.PHOTO:
-//			if (history.code > 100500) {
-//				holder.message.setText(history.text);
-//				//holder.message.setText(mContext.getString(R.string.chat_money_in) + ".");
-//				break;
-//			}
-                holder.message.setText("TARGET IT");
-//			switch (history.target) {
-//			case FeedDialog.FRIEND_MESSAGE:
-//				holder.message.setText(mContext.getString(R.string.chat_rate_in) + " " + history.code + ".");
-//				break;
-//			case FeedDialog.USER_MESSAGE:
-//				holder.message.setText(mContext.getString(R.string.chat_rate_out) + " " + history.code + ".");
-//				break;
-//			}
                 break;
             case FeedDialog.MESSAGE:
                 holder.message.setText(Html.fromHtml(history.text));
@@ -324,19 +335,11 @@ public class ChatListAdapter extends BaseAdapter {
                         break;
                 }
                 break;
-            case FeedDialog.RATE:
-                holder.message.setText("RATE IT");
-//			switch (history.target) {
-//			case FeedDialog.FRIEND_MESSAGE:
-//				holder.message.setText(mContext.getString(R.string.chat_rate_in) + " " + history.code + ".");
-//				break;
-//			case FeedDialog.USER_MESSAGE:
-//				holder.message.setText(mContext.getString(R.string.chat_rate_out) + " " + history.code + ".");
-//				break;
-//			}
-                break;
             case FeedDialog.PROMOTION:
                 holder.message.setText(Html.fromHtml(history.text));
+                break;
+            case FeedDialog.LIKE_REQUEST:
+                //В шаблонах уже есть вся нужная инфа
                 break;
             default:
                 holder.message.setText(Html.fromHtml(history.text));
@@ -563,6 +566,13 @@ public class ChatListAdapter extends BaseAdapter {
                         else
                             item_type = T_FRIEND_MAP_PHOTO;
                         break;
+                    case FeedDialog.LIKE_REQUEST:
+                        if (history.target == prev_target) {
+                            item_type = T_USER_LIKE_REQUEST;
+                        } else {
+                            item_type = T_FRIEND_LIKE_REQUEST;
+                        }
+                        break;
                     default:
                         if (history.target == prev_target)
                             item_type = T_FRIEND_EXT;
@@ -590,6 +600,13 @@ public class ChatListAdapter extends BaseAdapter {
                             item_type = T_USER_MAP_EXT;
                         } else {
                             item_type = T_USER_MAP_PHOTO;
+                        }
+                        break;
+                    case FeedDialog.LIKE_REQUEST:
+                        if (history.target == prev_target) {
+                            item_type = T_USER_LIKE_REQUEST;
+                        } else {
+                            item_type = T_FRIEND_LIKE_REQUEST;
                         }
                         break;
                     default:
@@ -687,4 +704,56 @@ public class ChatListAdapter extends BaseAdapter {
     public void addAll(LinkedList<History> dataList) {
         prepare(dataList, false);
     }
+
+    private View.OnClickListener mLikeRequestListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final int position = (Integer) v.getTag();
+            final History item = getItem(position);
+            new VirusLikesRequest(item.id, mContext).callback(new ApiHandler() {
+                @Override
+                public void success(ApiResponse response) {
+                    //После заврешения запроса удаляем элемент
+                    removeItem(position);
+
+                    //И предлагаем отправить пользователю запрос своим друзьям не из приложения
+                    new VirusLikeFriends(response).sendFacebookRequest(mContext, new Facebook.DialogListener() {
+                        @Override
+                        public void onComplete(Bundle values) {
+                            post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getContext(), "Вы получили 5 симпатий!", Toast.LENGTH_SHORT);
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onFacebookError(FacebookError e) {
+                            post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getContext(), "Не удалось отправить 5 симпатий вашим друзьям", Toast.LENGTH_SHORT);
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onError(DialogError e) {
+                            Toast.makeText(getContext(), "Не удалось отправить 5 симпатий вашим друзьям", Toast.LENGTH_SHORT);
+                        }
+
+                        @Override
+                        public void onCancel() {
+                        }
+                    });
+                }
+
+                @Override
+                public void fail(int codeError, ApiResponse response) {
+                    Utils.showErrorMessage(getContext());
+                }
+            }).exec();
+        }
+    };
 }

@@ -202,9 +202,14 @@
         <item quantity="other">%d photos</item>
         <item quantity="one">%d photo</item>
     </plurals>
-    <string name="novice_sympathy">Send messages only to those\nwho really attracts you.\nThat might be a good start!</string>
-    <string name="novice_energy">The higher your battery charge is,\nthe more likes you will get.\nDon\'t forget to charge your\nbattery, by purchasing energy</string>
-    <string name="novice_battery_bonus">Energy gives you popularity\nand new likes. You may\ncharge your battery, by purchasing\n100% energy. First charge\n is on the house!</string>
+    <string name="novice_sympathy">Send messages only to those\nwho really attracts you.\nThat might be a good start!
+    </string>
+    <string name="novice_energy">The higher your battery charge is,\nthe more likes you will get.\nDon\'t forget to
+        charge your\nbattery, by purchasing energy
+    </string>
+    <string name="novice_battery_bonus">Energy gives you popularity\nand new likes. You may\ncharge your battery, by
+        purchasing\n100% energy. First charge\n is on the house!
+    </string>
     <string name="novice_fill_profile">Add your best photos,\nto get more likes</string>
     <string name="general_edit_profile_message">Please, fill in all the obligatory fields in you profile</string>
     <string name="general_premium_access_error">To do this you have to be VIP</string>
@@ -216,7 +221,9 @@
     <string name="filter_city_fail">Couldn\'t find cities beginning with «%s»</string>
     <string name="age_filter_man">You are interested in guys</string>
     <string name="age_filter_girl">You are interested in girls</string>
-    <string name="dashbrd_popup_rating">Did you like our application? Raise our rating! The higher rating the more people you will meet in Topface</string>
+    <string name="dashbrd_popup_rating">Did you like our application? Raise our rating! The higher rating the more
+        people you will meet in Topface
+    </string>
     <string name="dashbrd_popup_title">Rate me</string>
     <string name="dashbrd_popup_cancel">Don\'t ask me again</string>
     <string name="dashbrd_popup_rate">Yes, I would rate</string>
@@ -269,7 +276,8 @@
     <string name="vip_why">Why you need to be VIP</string>
     <string name="vip_info_delight">Send admiration\'s for free - maximum express of feelings!</string>
     <string name="vip_info_guest">Find out who was interested in you - look through your guests!</string>
-    <string name="vip_info_invisible">Stay unnoticed looking through other people\'s profiles by "invisible" mode</string>
+    <string name="vip_info_invisible">Stay unnoticed looking through other people\'s profiles by "invisible" mode
+    </string>
     <string name="vip_info_message">Receive odds - your messages will be notable against general background!</string>
     <string name="vip_info_gift">Choose exclusive VIP gifts, and you will be remembered by all means!</string>
     <string name="vip_info_blackList">Get rid of annoying individuals with the help of \"black list\"</string>
@@ -310,13 +318,25 @@
     <string name="chat_write_message">Write a message</string>
     <string name="default_coins_100_price">10 USD</string>
     <string name="buying_sympathies">Perchase of likes</string>
-    <string name="novice_sympathies_bonus">You are getting %1$d likes as a gift! It means, that you will impress %2$d people and they\'ll tell you they like you.</string>
+    <string name="novice_sympathies_bonus">You are getting %1$d likes as a gift! It means, that you will impress %2$d
+        people and they\'ll tell you they like you.
+    </string>
     <string name="novice_energy_to_sympathies_title">We changed energy for likes.</string>
-    <string name="novice_energy_to_sympathies_message_boys">Having refilled your supply of likes, you\'ll get\nthe specified number of likes from\nguys, who are really attracted to you.</string>
-    <string name="novice_energy_to_sympathies_message_girls">Having refilled your supply of likes, you\'ll get\nthe specified number of likes from\ngirls, who are really attracted to you.</string>
+    <string name="novice_energy_to_sympathies_message_boys">Having refilled your supply of likes, you\'ll get\nthe
+        specified number of likes from\nguys, who are really attracted to you.
+    </string>
+    <string name="novice_energy_to_sympathies_message_girls">Having refilled your supply of likes, you\'ll get\nthe
+        specified number of likes from\ngirls, who are really attracted to you.
+    </string>
     <string name="novice_buy_sympathies">If you want to be sure, that\nyou\'ll get likes,\nbuy them right now!</string>
     <string name="general_reconnect_social">Cannot connect the social network. Please, try again later</string>
     <string name="general_buying">Buy likes and coins</string>
     <string name="general_block">Block</string>
     <string name="general_default_currency">%.2f USD</string>
+    <string name="chat_likes_virus_message">Вам подарили 5 лайков.
+        Вы можете их получить и бесплатно подарить своим друзьям в ответ
+    </string>
+    <string name="chat_likes_request_title">invite friends</string>
+    <string name="chat_likes_request_message">5 likes for you!</string>
+    <string name="chat_virus_btn">Получить лайки</string>
 </resources>
