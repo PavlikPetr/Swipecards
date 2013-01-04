@@ -264,6 +264,8 @@
     <string name="buying_buy_resources">Coins kaufen, Kraft ergänzen</string>
     <string name="vip_buy_vip">VIP kaufen</string>
     <string name="vip_state_off">Ihr VIP-Status ist nicht aktiviert</string>
+    <string name="vip_state_on">Ihr VIP-Status ist aktiviert</string>
+    <string name="vip_abilities">Ihre VIP Möglichkeiten</string>
     <string name="vip_info_delight">Senden Sie Entzücken kostenlos - zeigen Sie Ihre Gefühle!</string>
     <string name="vip_info_guest">Erfahren Sie, wer für Sie sich interessierte - sehen Sie Ihre Gäste durch!</string>
     <string name="vip_info_message">Bekommen Sie ein Privileg - Ihre Nachrichten werden sich vom gemeinsamen Hintergrund abheben!</string>
@@ -276,6 +278,8 @@
     <string name="buying_vip_info">Für den Zugang zu den Gästen müssen Sie VIP Status haben</string>
     <string name="buy_play_market_not_available">Play Market ist nicht erreichbar</string>
     <string name="buy_subscription_not_available">Abonnements sind nicht erreichbar</string>
+    <string name="default_six_coins_price">1 USD</string>
+    <string name="default_coins_40_price">5 USD</string>
     <string name="profile_gifts_empty">Diesem Nutzer hat noch niemand Geschenke geschenk</string>
     <string name="profile_mygifts_empty">Sie haben noch keine Geschenke bekommen</string>
     <string name="profile_mood">Beschreiben Sie Ihre Laune</string>
@@ -288,4 +292,11 @@
     <string name="general_search_empty_title">Leider, nichts gefunden</string>
     <string name="profile_get_status">Beschreiben Sie Ihre Laune</string>
     <string name="map_title">Karte</string>
+    <string name="leaders_select_cool_picture">Wählen Sie ein effektvolles Foto:</string>
+    <string name="chat_write_message">Nachricht schreiben</string>
+    <string name="default_coins_100_price">10 USD</string>
+    <string name="buying_sympathies">Sympathie kaufen</string>
+    <string name="general_buying">Sympathie und Coins kaufen</string>
+    <string name="general_block">Blokieren</string>
+    <string name="general_default_currency">%.2f USD</string>
 </resources>

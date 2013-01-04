@@ -314,4 +314,13 @@
     <string name="chat_write_message">Napsat zprávu</string>
     <string name="default_coins_100_price">10 USD</string>
     <string name="buying_sympathies">Nákup sympatií</string>
+    <string name="novice_sympathies_bonus">Zjískáváte %1$d sympatií jako\ndárek! Znamená to, že se\nurčitě budete líbit %2$d lidem,\nkteří vyjádří Vám svou sympatii</string>
+    <string name="novice_energy_to_sympathies_title">Vyměnili jsme energii za sympatie</string>
+    <string name="novice_energy_to_sympathies_message_boys">Když doplnite zásobu sympatií, získáte\n uvedené množství sympatií\nod chlapů, kteřím se uřčitě líbite</string>
+    <string name="novice_energy_to_sympathies_message_girls">Když doplnite zásobu sympatií, získáte\n uvedené množství sympatií\nod dívek, kteřím se uřčitě líbite</string>
+    <string name="novice_buy_sympathies">Pokud chcete zaručeně\ndostávat sympatie,\nkupte je hned teď!</string>
+    <string name="general_reconnect_social">Nelze se připojit k sociálním sítím. Prosím, zkuste to znovu později.</string>
+    <string name="general_buying">Koupit sympatie a mince</string>
+    <string name="general_block">Blokovat</string>
+    <string name="general_default_currency">%.2f USD</string>
 </resources>
