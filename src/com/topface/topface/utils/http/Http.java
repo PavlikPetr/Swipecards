@@ -1,8 +1,5 @@
 package com.topface.topface.utils.http;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import com.topface.topface.Static;
 import com.topface.topface.utils.Base64;
 import com.topface.topface.utils.Debug;
@@ -42,12 +39,6 @@ public class Http {
             return totalBytesSkipped;
         }
     } // FlushedInputStream
-
-    public static boolean isOnline(Context context) {
-        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.isConnected();
-    }
 
     public static String httpGetRequest(String request) {
         return httpRequest(HTTP_GET_REQUEST, request, null, null, null);

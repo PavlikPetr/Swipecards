@@ -14,7 +14,7 @@ import com.topface.topface.utils.social.AuthToken;
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 
-@ReportsCrashes(formUri = "https://api.zubhium.com/api2/acra/?secret_key=26d677a706e68e841ab85b286c5556",formKey="")
+@ReportsCrashes(formUri = "https://api.zubhium.com/api2/acra/?secret_key=26d677a706e68e841ab85b286c5556", formKey = "")
 public class App extends Application {
     // Constants
     public static final String TAG = "Topface";
