@@ -113,7 +113,9 @@ public class LeadersActivity extends BaseFragmentActivity {
     private void updateProfileInfo(Profile profile) {
         LeadersPhotoAdapter leadersAdapter = new LeadersPhotoAdapter(getApplicationContext(), profile.photos, mSelectedPhoto);
         mGridView.setAdapter(leadersAdapter);
-        mSelectedPhoto.selectInitPhoto(profile.photo, profile.photos);
+        if (mSelectedPhoto != null) {
+            mSelectedPhoto.selectInitPhoto(profile.photo, profile.photos);
+        }
     }
 
     @Override

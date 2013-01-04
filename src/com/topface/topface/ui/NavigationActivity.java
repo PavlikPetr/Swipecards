@@ -335,9 +335,15 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-        unbindDrawables(findViewById(R.id.NavigationLayout));
-        System.gc();
+        //В некоторых редких случаях выпадает NullPointerException при destroyDrawingCache,
+        //поэтому на всякий случай оборачиваем в try
+        try {
+            super.onDestroy();
+            unbindDrawables(findViewById(R.id.NavigationLayout));
+            System.gc();
+        } catch (Exception e) {
+            Debug.error(e);
+        }
     }
 
     private void unbindDrawables(View view) {
