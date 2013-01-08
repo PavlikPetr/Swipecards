@@ -3,6 +3,15 @@
 
     <!-- Основная тема приложения -->
     <style name="Theme.Topface" parent="android:Theme.Holo.NoActionBar">
+        <item name="vpiIconPageIndicatorStyle">@style/Widget.TopfaceIconPageIndicator</item>
+        <item name="vpiTabPageIndicatorStyle">@style/Widget.TopfaceTabPageIndicator</item>
+        <item name="vpiCirclePageIndicatorStyle">@style/TopfaceCirclePageIndicator</item>
+        <item name="android:textAppearanceLarge">@style/TopfaceTextAppearance.Large</item>
+        <item name="android:textAppearanceMedium">@style/TopfaceTextAppearance.Medium</item>
+        <item name="android:textAppearanceSmall">@style/TopfaceTextAppearance.Small</item>
+
+        <!-- Цвет ссылок (для TextView свойства autoLink)  -->
+        <item name="android:textColorLink">#2371B9</item>
         <!-- Не используем картинку для курсора из стандратной темы, она будет таким же цветом как и текст -->
         <item name="android:textCursorDrawable">@null</item>
     </style>
