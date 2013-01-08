@@ -316,31 +316,26 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             break;
             case R.id.btnDatingLove: {
-                TestRequest req = new TestRequest(getActivity().getApplicationContext());
-                req.required =  "2";
-                req.error = ApiResponse.DETECT_FLOOD;
-                req.exec();
+                SearchUser currentSearch = getCurrentUser();
+                if (currentSearch != null) {
+                    if (Data.searchPosition > mUserSearchList.size() - 1) {
+                        updateData(true);
+                        return;
+                    } else {
+                        lockControls();
+                        if (CacheProfile.money > 0) {
+                            CacheProfile.money = CacheProfile.money - CacheProfile.getOptions().price_highrate;
+                        }
+                        mRateController.onRate(currentSearch.id, 10,
+                                currentSearch.mutual ? RateRequest.DEFAULT_MUTUAL
+                                        : RateRequest.DEFAULT_NO_MUTUAL);
 
-//                SearchUser currentSearch = getCurrentUser();
-//                if (currentSearch != null) {
-//                    if (Data.searchPosition > mUserSearchList.size() - 1) {
-//                        updateData(true);
-//                        return;
-//                    } else {
-//                        lockControls();
-//                        if (CacheProfile.money > 0) {
-//                            CacheProfile.money = CacheProfile.money - CacheProfile.getOptions().price_highrate;
-//                        }
-//                        mRateController.onRate(currentSearch.id, 10,
-//                                currentSearch.mutual ? RateRequest.DEFAULT_MUTUAL
-//                                        : RateRequest.DEFAULT_NO_MUTUAL);
-//
-//                        EasyTracker.getTracker().trackEvent("Dating", "Rate",
-//                                "AdmirationSend" + (currentSearch.mutual ? "mutual" : ""),
-//                                (long) CacheProfile.getOptions().price_highrate);
-//                    }
-//                    // currentSearch.rated = true;
-//                }
+                        EasyTracker.getTracker().trackEvent("Dating", "Rate",
+                                "AdmirationSend" + (currentSearch.mutual ? "mutual" : ""),
+                                (long) CacheProfile.getOptions().price_highrate);
+                    }
+                    // currentSearch.rated = true;
+                }
             }
             break;
             case R.id.btnDatingSympathy: {

@@ -428,23 +428,29 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                                 getListAdapter().showRetryItem();
                             }
                             if (updateErrorMessage != null) {
-                                if (codeError == ApiResponse.PREMIUM_ACCESS_ONLY) {
-                                    updateErrorMessage.showOnlyMessage(false);
-                                    updateErrorMessage.addBlueButton(getString(R.string.buying_vip_status), new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
-                                            startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                                switch (codeError) {
+                                    case ApiResponse.PREMIUM_ACCESS_ONLY:
+                                        updateErrorMessage.showOnlyMessage(false);
+                                        updateErrorMessage.addBlueButton(getString(R.string.buying_vip_status), new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
+                                                startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                                            }
+                                        });
+                                        if (FeedFragment.this instanceof VisitorsFragment) {
+                                            updateErrorMessage.setErrorMsg(getString(R.string.buying_vip_info));
+                                        } else {
+                                            updateErrorMessage.setErrorMsg(getString(R.string.general_premium_access_error));
                                         }
-                                    });
-                                    if (FeedFragment.this instanceof VisitorsFragment) {
-                                        updateErrorMessage.setErrorMsg(getString(R.string.buying_vip_info));
-                                    } else {
-                                        updateErrorMessage.setErrorMsg(getString(R.string.general_premium_access_error));
-                                    }
-                                } else {
-                                    updateErrorMessage.showOnlyMessage(false);
-                                    updateErrorMessage.setErrorMsg(getString(R.string.general_data_error));
+                                        break;
+                                    case ApiResponse.MAINTENANCE:
+                                        updateErrorMessage.showOnlyMessage(false);
+                                        updateErrorMessage.setErrorMsg(getString(R.string.general_maintenance));
+                                    default:
+                                        updateErrorMessage.showOnlyMessage(false);
+                                        updateErrorMessage.setErrorMsg(getString(R.string.general_data_error));
+                                        break;
                                 }
                             }
                             Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();

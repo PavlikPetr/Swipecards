@@ -113,7 +113,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
         mLockScreen = (RelativeLayout) root.findViewById(R.id.lockScreen);
         mRetryBtn = new RetryView(getActivity().getApplicationContext());
-        mRetryBtn.setErrorMsg(getString(R.string.general_profile_error));
         mRetryBtn.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -230,12 +229,20 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(final int codeError, ApiResponse response) {
                 updateUI(new Runnable() {
                     @Override
                     public void run() {
                         mLoaderView.setVisibility(View.GONE);
                         mLockScreen.setVisibility(View.VISIBLE);
+                        switch (codeError) {
+                            case ApiResponse.MAINTENANCE:
+                                mRetryBtn.setErrorMsg(getString(R.string.general_maintenance));
+                                break;
+                            default:
+                                mRetryBtn.setErrorMsg(getString(R.string.general_profile_error));
+                                break;
+                        }
                         mRetryBtn.showOnlyMessage(false);
                     }
                 });

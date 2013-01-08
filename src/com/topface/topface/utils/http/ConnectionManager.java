@@ -123,9 +123,6 @@ public class ConnectionManager {
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent.putExtra(BanActivity.INTENT_TYPE, BanActivity.TYPE_FLOOD);
                         apiRequest.context.startActivity(intent);
-                    } else if (apiResponse.code == ApiResponse.MAINTENANCE) {
-                        //TODO
-
                     } else if (apiResponse.code == ApiResponse.NULL_RESPONSE
                             || apiResponse.code == ApiResponse.WRONG_RESPONSE
                             //Если после переавторизации у нас все же не верный ssid, то пробуем все повторить

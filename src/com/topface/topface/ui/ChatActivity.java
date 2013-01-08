@@ -59,6 +59,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
     private LinkedList<History> mHistoryList;
     private EditText mEditBox;
     private LockerView mLoadingLocker;
+    private RetryView mRetryView;
 
     private SwapControl mSwapControl;
     private static ProgressDialog mProgressDialog;
@@ -201,9 +202,8 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         mEditBox.setOnEditorActionListener(mEditorActionListener);
 
         lockScreen = (RelativeLayout) findViewById(R.id.llvLockScreen);
-        RetryView retryBtn = new RetryView(getApplicationContext());
-        retryBtn.setErrorMsg(getString(R.string.general_data_error));
-        retryBtn.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new OnClickListener() {
+        mRetryView = new RetryView(getApplicationContext());
+        mRetryView.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new OnClickListener() {
             @Override
             public void onClick(View v) {
                 update(false, "retry");
@@ -211,7 +211,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             }
         });
 
-        lockScreen.addView(retryBtn);
+        lockScreen.addView(mRetryView);
 
         //Send Button
         Button sendButton = (Button) findViewById(R.id.btnSend);
@@ -367,13 +367,21 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(final int codeError, ApiResponse response) {
                 post(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(ChatActivity.this, getString(R.string.general_data_error),
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(ChatActivity.this, getString(R.string.general_data_error),
+//                                Toast.LENGTH_SHORT).show();
                         mLoadingLocker.setVisibility(View.GONE);
+                        switch (codeError) {
+                            case ApiResponse.MAINTENANCE:
+                                mRetryView.setErrorMsg(getString(R.string.general_maintenance));
+                                break;
+                            default:
+                                mRetryView.setErrorMsg(getString(R.string.general_data_error));
+                                break;
+                        }
                         lockScreen.setVisibility(View.VISIBLE);
                         wasFailed = true;
                     }
