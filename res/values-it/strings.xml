@@ -310,4 +310,13 @@
     <string name="chat_write_message">Scrivi un messaggio</string>
     <string name="default_coins_100_price">10 USD</string>
     <string name="buying_sympathies">Acquisto simpatie</string>
+    <string name="novice_sympathies_bonus">Riceverai %1$d simpatie in\nregalo! Significa che\ndi sicuro piacerai a %2$d persone\nche ti dimostreranno la loro simpatia</string>
+    <string name="novice_energy_to_sympathies_title">Abbiamo sostituito l’energia con le simpatie</string>
+    <string name="novice_energy_to_sympathies_message_boys">Aggiungendo le simpatie sul tuo conto riceverai\nla quantità indicata di simpatie\ndai ragazzi ai quali piaci di sicuro</string>
+    <string name="novice_energy_to_sympathies_message_girls">Aggiungendo le simpatie sul tuo conto riceverai\nla quantità indicata di simpatie\ndalle ragazze alle quale piaci di sicuro</string>
+    <string name="novice_buy_sympathies">Se vuoi ricevere\nle simpatie sicure,\nacquistale ora!</string>
+    <string name="general_reconnect_social">Impossibile collegarsi alla rete sociale. Riprova più tardi.</string>
+    <string name="general_buying">Compra simpatie e monete</string>
+    <string name="general_block">Blocca</string>
+    <string name="general_default_currency">%.2f USD</string>
 </resources>

@@ -15,10 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.google.analytics.tracking.android.EasyTracker;
-import com.topface.topface.Data;
-import com.topface.topface.GCMUtils;
-import com.topface.topface.R;
-import com.topface.topface.ReAuthReceiver;
+import com.topface.topface.*;
 import com.topface.topface.data.Auth;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
@@ -29,7 +26,6 @@ import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.ConnectionManager;
-import com.topface.topface.utils.http.Http;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -119,7 +115,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
     }
 
     private void checkOnline() {
-        if (!Http.isOnline(this)) {
+        if (!App.isOnline()) {
             Toast.makeText(this, getString(R.string.general_internet_off), Toast.LENGTH_SHORT)
                     .show();
 
@@ -186,7 +182,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
-        if (!Http.isOnline(this)) {
+        if (!App.isOnline()) {
             Toast.makeText(this, getString(R.string.general_internet_off), Toast.LENGTH_SHORT)
                     .show();
         } else {
@@ -386,7 +382,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 
     private void authorizationFailed(int codeError) {
         hideButtons();
-        switch(codeError) {
+        switch (codeError) {
             case ApiResponse.NETWORK_CONNECT_ERROR:
                 mRetryView.setErrorMsg(getString(R.string.general_reconnect_social));
                 break;
