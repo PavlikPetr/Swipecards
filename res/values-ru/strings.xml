@@ -425,12 +425,10 @@
     <string name="general_buying">Купить симпатии и монеты</string>
     <string name="general_block">Блокировать</string>
     <string name="general_default_currency">%.2f USD</string>
-    <string name="chat_likes_virus_message">
-        Вам подарили 5 лайков.\nВы можете их получить и бесплатно подарить своим друзьям в ответ
-    </string>
-    <string name="chat_likes_request_title">invite friends</string>
-    <string name="chat_likes_request_message">5 likes for you!</string>
+    <string name="chat_likes_request_title">Подарить симпатии вашим друзьям</string>
     <string name="chat_virus_btn">Получить лайки</string>
+    <string name="virus_request_error">Не удалось отправить 5 симпатий вашим друзьям</string>
+    <string name="virus_request_complete">Теперь у вас %d симпатий!</string>
 
 
 </resources>

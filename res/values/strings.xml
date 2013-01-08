@@ -333,10 +333,7 @@
     <string name="general_buying">Buy likes and coins</string>
     <string name="general_block">Block</string>
     <string name="general_default_currency">%.2f USD</string>
-    <string name="chat_likes_virus_message">Вам подарили 5 лайков.
-        Вы можете их получить и бесплатно подарить своим друзьям в ответ
-    </string>
     <string name="chat_likes_request_title">invite friends</string>
-    <string name="chat_likes_request_message">5 likes for you!</string>
     <string name="chat_virus_btn">Получить лайки</string>
+    <string name="virus_request_complete">Теперь у вас %d симпатий!</string>
 </resources>

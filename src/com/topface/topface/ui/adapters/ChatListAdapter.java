@@ -18,7 +18,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.History;
-import com.topface.topface.data.VirusLikeFriends;
+import com.topface.topface.data.VirusLike;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.VirusLikesRequest;
@@ -73,9 +73,12 @@ public class ChatListAdapter extends BaseAdapter {
     private static final int T_USER_MAP_EXT = 10;
     private static final int T_FRIEND_MAP_PHOTO = 11;
     private static final int T_FRIEND_MAP_EXT = 12;
-    private static final int T_USER_LIKE_REQUEST = 13;
-    private static final int T_FRIEND_LIKE_REQUEST = 14;
-    private static final int T_COUNT = 13;
+    private static final int T_USER_REQUEST = 13;
+    private static final int T_USER_REQUEST_EXT = 14;
+    private static final int T_FRIEND_REQUEST = 15;
+    private static final int T_FRIEND_REQUEST_EXT = 16;
+
+    private static final int T_COUNT = 17;
 
 
     ChatActivity.OnListViewItemLongClickListener mLongClickListener;
@@ -229,19 +232,42 @@ public class ChatListAdapter extends BaseAdapter {
                             .findViewById(R.id.prgsFriendMapAddress);
                     holder.avatar.setVisibility(View.INVISIBLE);
                     break;
-                case T_USER_LIKE_REQUEST:
-                    convertView = mInflater.inflate(R.layout.chat_like_request, null, false);
-                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                case T_FRIEND_REQUEST:
+                case T_FRIEND_REQUEST_EXT:
+                    if (type == T_FRIEND_REQUEST) {
+                        convertView = mInflater.inflate(R.layout.chat_friend_request, null, false);
+                        holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                        holder.avatar.setOnClickListener(mOnClickListener);
+                        holder.avatar.setPhoto(history.user.photo);
+                        holder.avatar.setVisibility(View.VISIBLE);
+                    } else {
+                        convertView = mInflater.inflate(R.layout.chat_friend_request_ext, null, false);
+                        holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                        holder.avatar.setVisibility(View.INVISIBLE);
+                    }
                     holder.message = (TextView) convertView.findViewById(R.id.chat_message);
-                    holder.date = (TextView) convertView.findViewById(R.id.chat_date);
-                case T_FRIEND_LIKE_REQUEST:
-                    //TODO: Заменить на нормальный фон
-                    convertView = mInflater.inflate(R.layout.chat_like_request_ext, null, false);
-                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
                     holder.date = (TextView) convertView.findViewById(R.id.chat_date);
                     Button likeRequestBtn = (Button) convertView.findViewById(R.id.btn_chat_like_request);
                     likeRequestBtn.setTag(position);
                     likeRequestBtn.setOnClickListener(mLikeRequestListener);
+                    break;
+                case T_USER_REQUEST:
+                case T_USER_REQUEST_EXT:
+                    if (type == T_USER_REQUEST) {
+                        convertView = mInflater.inflate(R.layout.chat_user, null, false);
+                        holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                        holder.avatar.setOnClickListener(mOnClickListener);
+                        holder.avatar.setPhoto(CacheProfile.photo);
+                        holder.avatar.setVisibility(View.VISIBLE);
+                    } else {
+                        convertView = mInflater.inflate(R.layout.chat_user_ext, null, false);
+                        holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                        holder.avatar.setVisibility(View.INVISIBLE);
+                    }
+                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                    holder.message = (TextView) convertView.findViewById(R.id.chat_message);
+                    holder.date = (TextView) convertView.findViewById(R.id.chat_date);
+                    break;
 
             }
 
@@ -339,7 +365,7 @@ public class ChatListAdapter extends BaseAdapter {
                 holder.message.setText(Html.fromHtml(history.text));
                 break;
             case FeedDialog.LIKE_REQUEST:
-                //В шаблонах уже есть вся нужная инфа
+                holder.message.setText(history.text);
                 break;
             default:
                 holder.message.setText(Html.fromHtml(history.text));
@@ -568,9 +594,9 @@ public class ChatListAdapter extends BaseAdapter {
                         break;
                     case FeedDialog.LIKE_REQUEST:
                         if (history.target == prev_target) {
-                            item_type = T_USER_LIKE_REQUEST;
+                            item_type = T_FRIEND_REQUEST_EXT;
                         } else {
-                            item_type = T_FRIEND_LIKE_REQUEST;
+                            item_type = T_FRIEND_REQUEST;
                         }
                         break;
                     default:
@@ -604,9 +630,9 @@ public class ChatListAdapter extends BaseAdapter {
                         break;
                     case FeedDialog.LIKE_REQUEST:
                         if (history.target == prev_target) {
-                            item_type = T_USER_LIKE_REQUEST;
+                            item_type = T_USER_REQUEST_EXT;
                         } else {
-                            item_type = T_FRIEND_LIKE_REQUEST;
+                            item_type = T_USER_REQUEST;
                         }
                         break;
                     default:
@@ -717,13 +743,19 @@ public class ChatListAdapter extends BaseAdapter {
                     removeItem(position);
 
                     //И предлагаем отправить пользователю запрос своим друзьям не из приложения
-                    new VirusLikeFriends(response).sendFacebookRequest(mContext, new Facebook.DialogListener() {
+                    new VirusLike(response).sendFacebookRequest(mContext, new Facebook.DialogListener() {
                         @Override
                         public void onComplete(Bundle values) {
                             post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(getContext(), "Вы получили 5 симпатий!", Toast.LENGTH_SHORT);
+                                    Toast.makeText(
+                                            getContext(),
+                                            String.format(
+                                                    mContext.getString(R.string.virus_request_complete),
+                                                    CacheProfile.likes
+                                            ),
+                                            Toast.LENGTH_SHORT);
                                 }
                             });
                         }
@@ -733,14 +765,14 @@ public class ChatListAdapter extends BaseAdapter {
                             post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(getContext(), "Не удалось отправить 5 симпатий вашим друзьям", Toast.LENGTH_SHORT);
+                                    Toast.makeText(getContext(), mContext.getString(R.string.virus_request_error), Toast.LENGTH_SHORT);
                                 }
                             });
                         }
 
                         @Override
                         public void onError(DialogError e) {
-                            Toast.makeText(getContext(), "Не удалось отправить 5 симпатий вашим друзьям", Toast.LENGTH_SHORT);
+                            Toast.makeText(getContext(), mContext.getString(R.string.virus_request_error), Toast.LENGTH_SHORT);
                         }
 
                         @Override
