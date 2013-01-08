@@ -101,9 +101,15 @@ public class ConnectionManager {
                     if (apiResponse.code == ApiResponse.BAN) {
                         Intent intent = new Intent(apiRequest.context, BanActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra(BanActivity.BANNING_INTENT, apiResponse.jsonResult.get("message").toString());
+                        intent.putExtra(BanActivity.BANNING_TEXT_INTENT, apiResponse.jsonResult.get("message").toString());
                         apiRequest.context.startActivity(intent);
                         //В запрос отправлять ничего не будем, в finally его просто отменем
+
+                    } else if (apiResponse.code == ApiResponse.DETECT_FLOOD) {
+                        //TODO
+
+                    } else if (apiResponse.code == ApiResponse.MAINTENANCE) {
+                        //TODO
 
                     } else if (apiResponse.code == ApiResponse.NULL_RESPONSE
                             || apiResponse.code == ApiResponse.WRONG_RESPONSE

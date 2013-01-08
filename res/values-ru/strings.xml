@@ -426,5 +426,6 @@
     <string name="general_block">Блокировать</string>
     <string name="general_default_currency">%.2f USD</string>
 
-
+    <string name="ban_flood_detected">Вы слишком часто совершаете запросы к серверу. Для дальнейшего использования приложения подождите 3 минуты.</string>
+    <string name="general_maintenance">На сервере проводятся технические работы и ваш запрос не может быть выполнен. Попробуйте повторить позже.</string>
 </resources>
