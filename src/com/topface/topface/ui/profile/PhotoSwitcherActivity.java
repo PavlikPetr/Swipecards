@@ -33,7 +33,7 @@ public class PhotoSwitcherActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_photos);
-        mPreloadManager = new PreloadManager(getApplicationContext());
+        mPreloadManager = new PreloadManager(this);
         // Extras
         Intent intent = getIntent();
         int position = intent.getIntExtra(INTENT_ALBUM_POS, 0);
@@ -50,6 +50,7 @@ public class PhotoSwitcherActivity extends Activity {
 
         //Header
         mHeaderBar = (ViewGroup) findViewById(R.id.loHeaderBar);
+        mHeaderBar.setVisibility(View.INVISIBLE);
 
         // Title Header
         mCounter = ((TextView) findViewById(R.id.tvHeaderTitle));

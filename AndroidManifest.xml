@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.topface.topface"
           android:installLocation="auto"
-          android:versionCode="47"
-          android:versionName="2.1.2">
+          android:versionCode="49"
+          android:versionName="2.2.1">
 
     <uses-sdk
             android:minSdkVersion="7"
@@ -25,15 +25,15 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="com.android.vending.BILLING"/>
     <uses-permission android:name="android.permission.GET_TASKS"/>
-    <!-- uses-permission android:name="android.permission.READ_CONTACTS" / -->
 
     <application
             android:name=".App"
             android:hardwareAccelerated="true"
             android:icon="@drawable/ic_launcher"
             android:label="@string/app_name"
-            android:theme="@style/Theme.TopfaceIndicators">
+            android:theme="@style/Theme.Topface">
 
+        <!-- Тип сборки. При релизе приложения не забываем его указать! -->
         <meta-data
                 android:name="@string/build_type_key"
                 android:value="@string/build_default"/>
@@ -71,7 +71,10 @@
                 android:name=".ui.GeoMapActivity"
                 android:screenOrientation="portrait"
                 android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".ui.profile.PhotoSwitcherActivity"/>
+        <activity
+                android:name=".ui.profile.PhotoSwitcherActivity"
+                android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+                />
         <activity
                 android:name=".ui.edit.EditProfileActivity"
                 android:screenOrientation="portrait"/>

@@ -1,5 +1,6 @@
 package com.topface.topface.data;
 
+import android.text.TextUtils;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 import org.json.JSONArray;
@@ -58,4 +59,13 @@ public class Top extends AbstractDataWithPhotos {
         return userList;
     }
 
+    public String getNameAndAge() {
+        String result;
+        if (!TextUtils.isEmpty(name) && age > 0) {
+            result = String.format("%s, %d", name, age);
+        } else {
+            result = name;
+        }
+        return result;
+    }
 }

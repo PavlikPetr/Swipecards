@@ -142,4 +142,11 @@ public class Novice {
         showSympathiesBonus = false;
         Novice.giveNoviceLikes = false;
     }
+
+    public void completeShowEnergyToSympathies() {
+        showEnergyToSympathies = false;
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putBoolean(Static.PREFERENCES_NOVICE_DATING_ENERGY_TO_SYMPATHIES, false);
+        editor.commit();
+    }
 }

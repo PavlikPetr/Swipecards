@@ -11,6 +11,11 @@
         <item quantity="other">%d minute in urma</item>
         <item quantity="one">%d minute in urma</item>
     </plurals>
+    <plurals name="time_month">
+        <item quantity="few">%d lunii</item>
+        <item quantity="other">%d lunilor</item>
+        <item quantity="one">%d luna</item>
+    </plurals>
     <string name="time_yesterday">Ieri</string>
     <string name="time_today">Azi</string>
     <string name="time_monday">Luni</string>

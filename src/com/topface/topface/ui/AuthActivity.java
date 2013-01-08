@@ -15,10 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.google.analytics.tracking.android.EasyTracker;
-import com.topface.topface.Data;
-import com.topface.topface.GCMUtils;
-import com.topface.topface.R;
-import com.topface.topface.ReAuthReceiver;
+import com.topface.topface.*;
 import com.topface.topface.data.Auth;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
@@ -29,7 +26,6 @@ import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.ConnectionManager;
-import com.topface.topface.utils.http.Http;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -87,7 +83,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
             public void handleMessage(Message msg) {
                 switch (msg.what) {
                     case AuthorizationManager.AUTHORIZATION_FAILED:
-                        authorizationFailed();
+                        authorizationFailed(ApiResponse.NETWORK_CONNECT_ERROR);
                         break;
                     case AuthorizationManager.DIALOG_COMPLETED:
                         hideButtons();
@@ -116,11 +112,10 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         mProgressBar = (ProgressBar) findViewById(R.id.prsAuthLoading);
 
         checkOnline();
-
     }
 
     private void checkOnline() {
-        if (!Http.isOnline(this)) {
+        if (!App.isOnline()) {
             Toast.makeText(this, getString(R.string.general_internet_off), Toast.LENGTH_SHORT)
                     .show();
 
@@ -187,7 +182,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
-        if (!Http.isOnline(this)) {
+        if (!App.isOnline()) {
             Toast.makeText(this, getString(R.string.general_internet_off), Toast.LENGTH_SHORT)
                     .show();
         } else {
@@ -276,11 +271,11 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(final int codeError, ApiResponse response) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        authorizationFailed();
+                        authorizationFailed(codeError);
                         mIsAuthorized = false;
                     }
                 });
@@ -329,7 +324,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                             }
 
                             @Override
-                            public void fail(int codeError, ApiResponse response) {
+                            public void fail(final int codeError, ApiResponse response) {
                                 final ApiResponse finalResponse = response;
                                 runOnUiThread(new Runnable() {
                                     @Override
@@ -337,7 +332,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                                         if (finalResponse.code == ApiResponse.BAN)
                                             showButtons();
                                         else {
-                                            authorizationFailed();
+                                            authorizationFailed(codeError);
                                             Toast.makeText(AuthActivity.this, getString(R.string.general_data_error),
                                                     Toast.LENGTH_SHORT).show();
                                         }
@@ -352,7 +347,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(final int codeError, ApiResponse response) {
                 final ApiResponse finalResponse = response;
                 mProfileRequest = null;
                 runOnUiThread(new Runnable() {
@@ -361,7 +356,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                         if (finalResponse.code == ApiResponse.BAN)
                             showButtons();
                         else {
-                            authorizationFailed();
+                            authorizationFailed(codeError);
                             Toast.makeText(AuthActivity.this, getString(R.string.general_data_error),
                                     Toast.LENGTH_SHORT).show();
                         }
@@ -386,8 +381,16 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         }
     }
 
-    private void authorizationFailed() {
+    private void authorizationFailed(int codeError) {
         hideButtons();
+        switch (codeError) {
+            case ApiResponse.NETWORK_CONNECT_ERROR:
+                mRetryView.setErrorMsg(getString(R.string.general_reconnect_social));
+                break;
+            default:
+                mRetryView.setErrorMsg(getString(R.string.general_data_error));
+                break;
+        }
         mRetryView.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
     }

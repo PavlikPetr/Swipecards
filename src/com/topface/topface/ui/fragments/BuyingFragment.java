@@ -10,7 +10,10 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 import com.topface.billing.BillingFragment;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -116,7 +119,7 @@ public class BuyingFragment extends BillingFragment implements View.OnClickListe
 
     private void initButtons(View root) {
         LinearLayout likesButtons = (LinearLayout) root.findViewById(R.id.fbLikes);
-        for(Options.BuyButton curButton: CacheProfile.getOptions().likes) {
+        for (Options.BuyButton curButton: CacheProfile.getOptions().likes) {
             RelativeLayout newButton = Options.setButton(likesButtons, curButton, getActivity(), new Options.BuyButtonClickListener() {
                 @Override
                 public void onClick(String id) {
@@ -130,7 +133,7 @@ public class BuyingFragment extends BillingFragment implements View.OnClickListe
 
 
         LinearLayout coinsButtons = (LinearLayout) root.findViewById(R.id.fbCoins);
-        for(Options.BuyButton curButton: CacheProfile.getOptions().coins) {
+        for (Options.BuyButton curButton: CacheProfile.getOptions().coins) {
             RelativeLayout newButton = Options.setButton(coinsButtons, curButton, getActivity(), new Options.BuyButtonClickListener() {
                 @Override
                 public void onClick(String id) {

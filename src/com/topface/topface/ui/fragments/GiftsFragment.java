@@ -202,12 +202,15 @@ public class GiftsFragment extends BaseFragment {
                                 @Override
                                 public void run() {
                                     if (response.code == ApiResponse.PAYMENT) {
-                                        Intent intent = new Intent(getActivity().getApplicationContext(),
-                                                ContainerActivity.class);
-                                        intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
-                                        intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
-                                        intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
-                                        startActivity(intent);
+                                        FragmentActivity activity = getActivity();
+                                        if (activity != null) {
+                                            Intent intent = new Intent(activity.getApplicationContext(),
+                                                    ContainerActivity.class);
+                                            intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
+                                            intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
+                                            intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
+                                            startActivity(intent);
+                                        }
                                     }
                                 }
                             });

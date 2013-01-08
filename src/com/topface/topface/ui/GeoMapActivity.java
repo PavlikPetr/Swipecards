@@ -67,15 +67,15 @@ public class GeoMapActivity extends TrackedMapActivity implements LocationListen
 
     @Override
     protected void onCreate(Bundle icicle) {
-        //При каких то проблемах с картой на устройстве не удается найти класс
+        //При каких то проблемах с картой на устройстве не удается найти класс MapView
         try {
             super.onCreate(icicle);
+            setContentView(R.layout.ac_map);
         } catch (NoClassDefFoundError e) {
             Debug.error("MapActivity error!", e);
             finish();
         }
 
-        setContentView(R.layout.ac_map);
 
         mGeoLocationManager = new GeoLocationManager(getApplicationContext());
 

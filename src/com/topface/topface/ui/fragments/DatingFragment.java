@@ -213,7 +213,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mNovice = Novice.getInstance(preferences);
         mNoviceLayout = (NoviceLayout) view.findViewById(R.id.loNovice);
 
-        mPreloadManager = new PreloadManager(getActivity().getApplicationContext());
+        mPreloadManager = new PreloadManager(getActivity());
         emptySearchDialog = new RetryView(getActivity());
         emptySearchDialog.setErrorMsg(App.getContext().getString(R.string.general_search_null_response_error));
         emptySearchDialog.addButton(RetryView.REFRESH_TEMPLATE + App.getContext().getString(R.string.general_dialog_retry), new OnClickListener() {
@@ -539,6 +539,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                             R.string.novice_energy_to_sympathies_message_girls :
                             R.string.novice_energy_to_sympathies_message_boys));
             mNoviceLayout.startAnimation(mAlphaAnimation);
+            mNovice.completeShowEnergyToSympathies();
         } else if (mNovice.isShowSympathy()) {
             mNoviceLayout.setLayoutRes(R.layout.novice_sympathy, new OnClickListener() {
 

@@ -39,7 +39,7 @@ public class ConnectionManager {
     public static final String BAN_RESPONSE = "ban_response";
 
     private ConnectionManager() {
-        mWorker = Executors.newFixedThreadPool(2);
+        mWorker = Executors.newFixedThreadPool(3);
         mDelayedRequestsThreads = new LinkedList<Thread>();
     }
 
@@ -53,7 +53,7 @@ public class ConnectionManager {
 
     public RequestConnection sendRequest(final ApiRequest apiRequest) {
         final RequestConnection connection = new RequestConnection();
-        mWorker.execute(new Runnable() {
+        mWorker.submit(new Runnable() {
             @Override
             public void run() {
                 String rawResponse;

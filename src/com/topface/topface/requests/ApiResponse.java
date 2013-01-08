@@ -37,8 +37,12 @@ public class ApiResponse {
     public static final int INVERIFIED_TOKEN = 20;
     public static final int INVALID_FORMAT = 21;
     public static final int UNVERIFIED_SIGNATURE = 22;
+    public static final int INCORRECT_VALUE = 23;
     public static final int BAN = 28;
+    public static final int NETWORK_CONNECT_ERROR = 29;
     public static final int PREMIUM_ACCESS_ONLY = 32;
+    public static final int INVALID_PURCHASE_TOKEN = 34;
+
     // local
     public static final int NULL_RESPONSE = 100;
     public static final int WRONG_RESPONSE = 101;
