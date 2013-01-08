@@ -2,6 +2,8 @@ package com.topface.topface.utils.http;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import com.topface.topface.App;
 import com.topface.topface.Data;
 import com.topface.topface.ReAuthReceiver;
@@ -53,6 +55,16 @@ public class ConnectionManager {
 
     public RequestConnection sendRequest(final ApiRequest apiRequest) {
         final RequestConnection connection = new RequestConnection();
+
+        // Не посылать запросы пока не истечет время бана за флуд
+        if (isBlockedForFlood())  {
+            Intent intent = new Intent(apiRequest.context, BanActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(BanActivity.INTENT_TYPE, BanActivity.TYPE_FLOOD);
+            apiRequest.context.startActivity(intent);
+            return null;
+        }
+
         mWorker.submit(new Runnable() {
             @Override
             public void run() {
@@ -101,13 +113,16 @@ public class ConnectionManager {
                     if (apiResponse.code == ApiResponse.BAN) {
                         Intent intent = new Intent(apiRequest.context, BanActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra(BanActivity.INTENT_TYPE, BanActivity.TYPE_BAN);
                         intent.putExtra(BanActivity.BANNING_TEXT_INTENT, apiResponse.jsonResult.get("message").toString());
                         apiRequest.context.startActivity(intent);
-                        //В запрос отправлять ничего не будем, в finally его просто отменем
-
+                        //В запрос отправлять ничего не будем, в finally его просто отменим
                     } else if (apiResponse.code == ApiResponse.DETECT_FLOOD) {
                         //TODO
-
+                        Intent intent = new Intent(apiRequest.context, BanActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra(BanActivity.INTENT_TYPE, BanActivity.TYPE_FLOOD);
+                        apiRequest.context.startActivity(intent);
                     } else if (apiResponse.code == ApiResponse.MAINTENANCE) {
                         //TODO
 
@@ -291,5 +306,12 @@ public class ConnectionManager {
         }
 
         mDelayedRequestsThreads.clear();
+    }
+
+    private boolean isBlockedForFlood() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+        long endTime = preferences.getLong(BanActivity.FLOOD_ENDS_TIME,0L);
+        long now = System.currentTimeMillis();
+        return endTime > now;
     }
 }
