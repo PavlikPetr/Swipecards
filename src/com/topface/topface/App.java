@@ -91,21 +91,25 @@ public class App extends Application {
             @Override
             public void success(ApiResponse response) {
                 CacheProfile.setProfile(Profile.parse(response),response);
-                OptionsRequest request = new OptionsRequest(getApplicationContext());
-                request.callback(new ApiHandler() {
-                    @Override
-                    public void success(ApiResponse response) {
-                        Options.parse(response);
-                    }
 
-                    @Override
-                    public void fail(int codeError, ApiResponse response) {}
-                });
             }
 
             @Override
             public void fail(int codeError, ApiResponse response) {}
 
+        }).exec();
+
+        OptionsRequest request = new OptionsRequest(getApplicationContext());
+        request.callback(new ApiHandler() {
+            @Override
+            public void success(ApiResponse response) {
+                Options.parse(response);
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+                Debug.log("options::fail");
+            }
         }).exec();
     }
 
