@@ -47,6 +47,8 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
     public static AuthActivity mThis;
     private ProfileRequest mProfileRequest;
 
+    public static String FROM_AUTH_ACTIVITY = "com.topface.topface.FROM_AUTH";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -312,7 +314,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
                                     public void run() {
                                         if (!isProfileNormal() && isFirstTime) {
                                             Intent intent = new Intent(AuthActivity.this, EditProfileActivity.class);
-                                            intent.putExtra(EditProfileActivity.FROM_AUTH_ACTIVITY, true);
+                                            intent.putExtra(FROM_AUTH_ACTIVITY, true);
                                             openActivity(intent);
                                         } else {
                                             Intent intent = new Intent(AuthActivity.this, NavigationActivity.class);

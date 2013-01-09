@@ -44,16 +44,12 @@
 
         <!-- main Activity -->
         <activity android:name=".ui.AuthActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
         <!-- Алиас для главной активити из первой версии. На всякий случай, а то раньше уже были проблемы с FB -->
-        <activity-alias
-                android:name=".ui.MainActivity"
-                android:targetActivity=".ui.AuthActivity"/>
+        <!--<activity-alias-->
+                <!--android:name=".ui.MainActivity"-->
+                <!--android:targetActivity=".ui.AuthActivity"/>-->
 
         <!-- activity -->
         <activity
@@ -61,7 +57,13 @@
                 android:screenOrientation="portrait"/>
         <activity
                 android:name=".ui.NavigationActivity"
-                android:screenOrientation="portrait"/>
+                android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
         <activity
                 android:name=".ui.CitySearchActivity"
                 android:screenOrientation="portrait"/>
