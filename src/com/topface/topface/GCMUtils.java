@@ -79,7 +79,7 @@ public class GCMUtils {
                 }
 
             } catch (Exception ex) {
-                Debug.error(ex);
+                Debug.error("GCM not supported", ex);
             }
         }
     }
@@ -121,8 +121,8 @@ public class GCMUtils {
                 if (intent != null) {
                     intent.putExtra("C2DM", true);
                     final TopfaceNotificationManager notificationManager = TopfaceNotificationManager.getInstance(context);
-                    if(!Data.isSSID()) {
-                        if(type == GCM_TYPE_UPDATE || type == GCM_TYPE_NOTIFICATION) {
+                    if (!Data.isSSID()) {
+                        if (type == GCM_TYPE_UPDATE || type == GCM_TYPE_NOTIFICATION) {
                             notificationManager.showNotification(
                                     title,
                                     data,
