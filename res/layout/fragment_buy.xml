@@ -90,11 +90,19 @@
                 android:layout_marginTop="12dp"
                 android:padding="10dp"
                 android:orientation="vertical">
-
+            <TextView
+                    android:id="@+id/fbBuyingDisabled"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/TitleWhiteText"
+                    android:text="@string/general_buying_disabled"
+                    android:visibility="gone"
+                    />
             <RelativeLayout
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
                     android:layout_marginBottom="10dp"
+                    android:id="@+id/likes_title"
                     >
 
                 <TextView
@@ -122,9 +130,11 @@
                 android:orientation="vertical"
             />
 
-            !-- Money -->
+            <!-- Money -->
 
             <RelativeLayout
+
+                    android:id="@+id/coins_title"
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
                     >
@@ -207,6 +217,7 @@
                     android:text="@string/default_economy_vip"
                     android:textColor="#FFFFFF"
                     android:textSize="10sp"
+                    android:visibility="gone"
                     />
         </LinearLayout>
     </LinearLayout>

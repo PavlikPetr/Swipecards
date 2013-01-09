@@ -22,6 +22,7 @@ import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.ui.AuthActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.ui.views.LockerView;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.social.AuthToken;
@@ -88,6 +89,7 @@ public class SettingsAccountFragment extends TrackedFragment {
                         Settings.getInstance().resetSettings();
                         startActivity(new Intent(getActivity().getApplicationContext(), AuthActivity.class));
                         getActivity().setResult(RESULT_LOGOUT);
+                        CacheProfile.clearProfile();
                         getActivity().finish();
                         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(Static.LOGOUT_INTENT));
                         //Чистим список тех, кого нужно оценить

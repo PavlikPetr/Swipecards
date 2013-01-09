@@ -23,6 +23,7 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
+import com.topface.topface.ui.AuthActivity;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.ui.NavigationActivity;
@@ -49,7 +50,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
     private boolean hasStartedFromAuthActivity;
 
-    public static String FROM_AUTH_ACTIVITY = "com.topface.topface.FROM_AUTH";
+
     private BroadcastReceiver mBroadcastReceiver;
 
     @Override
@@ -65,7 +66,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         btnBackToProfile.setVisibility(View.VISIBLE);
         btnBackToProfile.setOnClickListener(this);
 
-        hasStartedFromAuthActivity = getIntent().getBooleanExtra(FROM_AUTH_ACTIVITY, false);
+        hasStartedFromAuthActivity = getIntent().getBooleanExtra(AuthActivity.FROM_AUTH_ACTIVITY, false);
 
         // ListView
         mEditItems = new LinkedList<EditProfileItem>();
