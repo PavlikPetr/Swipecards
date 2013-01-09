@@ -49,6 +49,12 @@ public class FilterRequest extends AbstractApiRequest {
     public int character;
 
     /**
+     * код отношения к алкоголю (расширенный параметр)
+     */
+    public int alcohol;
+
+
+    /**
      * размер груди (расширенный параметр)
      */
     public int breast;
@@ -73,6 +79,7 @@ public class FilterRequest extends AbstractApiRequest {
                 .put("xstatus", xstatus)
                 .put("marriage", marriage)
                 .put("character", character)
+                .put("alcohol", alcohol)
                 .put("breast", breast)
                 .put("finances", finances);
 

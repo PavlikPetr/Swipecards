@@ -404,8 +404,9 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
             filterRequest.agebegin = mFilter.age_start;
             filterRequest.ageend = mFilter.age_end;
             filterRequest.xstatus = mFilter.xstatus_id;
-            filterRequest.character = mFilter.character_id;
             filterRequest.marriage = mFilter.marriage_id;
+            filterRequest.character = mFilter.character_id;
+            filterRequest.alcohol = mFilter.alcohol_id;
             //Финансовое положение и бюст - по сути одно поле, отправляем их оба, что бы не париться с опрееделением пола
             filterRequest.finances = filterRequest.breast = mFilter.showoff_id;
             prepareRequestSend();
