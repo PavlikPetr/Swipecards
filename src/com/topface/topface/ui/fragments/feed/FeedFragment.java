@@ -444,9 +444,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                                             updateErrorMessage.setErrorMsg(getString(R.string.general_premium_access_error));
                                         }
                                         break;
-                                    case ApiResponse.MAINTENANCE:
-                                        updateErrorMessage.showOnlyMessage(false);
-                                        updateErrorMessage.setErrorMsg(getString(R.string.general_maintenance));
                                     default:
                                         updateErrorMessage.showOnlyMessage(false);
                                         updateErrorMessage.setErrorMsg(getString(R.string.general_data_error));

@@ -236,9 +236,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         mLoaderView.setVisibility(View.GONE);
                         mLockScreen.setVisibility(View.VISIBLE);
                         switch (codeError) {
-                            case ApiResponse.MAINTENANCE:
-                                mRetryBtn.setErrorMsg(getString(R.string.general_maintenance));
-                                break;
                             default:
                                 mRetryBtn.setErrorMsg(getString(R.string.general_profile_error));
                                 break;

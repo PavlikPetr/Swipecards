@@ -375,9 +375,6 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
 //                                Toast.LENGTH_SHORT).show();
                         mLoadingLocker.setVisibility(View.GONE);
                         switch (codeError) {
-                            case ApiResponse.MAINTENANCE:
-                                mRetryView.setErrorMsg(getString(R.string.general_maintenance));
-                                break;
                             default:
                                 mRetryView.setErrorMsg(getString(R.string.general_data_error));
                                 break;
