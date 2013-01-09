@@ -427,5 +427,6 @@
     <string name="general_default_currency">%.2f USD</string>
     <string name="general_buying_disabled">В данный момент покупка невозможна</string>
 
-
+    <string name="ban_flood_detected">Вы слишком часто совершаете запросы к серверу. Для дальнейшего использования приложения подождите.</string>
+    <string name="general_maintenance">На сервере проводятся технические работы и ваш запрос не может быть выполнен. Попробуйте повторить позже.</string>
 </resources>

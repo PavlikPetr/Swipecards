@@ -319,4 +319,6 @@
     <string name="general_buying">Buy likes and coins</string>
     <string name="general_block">Block</string>
     <string name="general_default_currency">%.2f USD</string>
+
+    <string name="ban_flood_detected"></string>
 </resources>

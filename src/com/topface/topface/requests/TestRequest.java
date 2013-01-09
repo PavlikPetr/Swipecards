@@ -14,7 +14,7 @@ public class TestRequest extends AbstractApiRequest {
     public static final String SERVICE_NAME = "test";
     public String required;
     private String nonrequired;
-    private int error;
+    public int error;
 
     public TestRequest(Context context) {
         super(context);

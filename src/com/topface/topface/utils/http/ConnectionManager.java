@@ -1,15 +1,18 @@
 package com.topface.topface.utils.http;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import com.topface.topface.App;
-import com.topface.topface.Data;
-import com.topface.topface.ReAuthReceiver;
-import com.topface.topface.Static;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import com.topface.topface.*;
 import com.topface.topface.data.Auth;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AuthRequest;
+import com.topface.topface.ui.AuthActivity;
 import com.topface.topface.ui.BanActivity;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.Http.FlushedInputStream;
@@ -53,6 +56,16 @@ public class ConnectionManager {
 
     public RequestConnection sendRequest(final ApiRequest apiRequest) {
         final RequestConnection connection = new RequestConnection();
+
+        // Не посылать запросы пока не истечет время бана за флуд
+        if (isBlockedForFlood())  {
+            Intent intent = new Intent(apiRequest.context, BanActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(BanActivity.INTENT_TYPE, BanActivity.TYPE_FLOOD);
+            apiRequest.context.startActivity(intent);
+            return null;
+        }
+
         mWorker.submit(new Runnable() {
             @Override
             public void run() {
@@ -101,9 +114,36 @@ public class ConnectionManager {
                     if (apiResponse.code == ApiResponse.BAN) {
                         Intent intent = new Intent(apiRequest.context, BanActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra(BanActivity.BANNING_INTENT, apiResponse.jsonResult.get("message").toString());
+                        intent.putExtra(BanActivity.INTENT_TYPE, BanActivity.TYPE_BAN);
+                        intent.putExtra(BanActivity.BANNING_TEXT_INTENT, apiResponse.jsonResult.get("message").toString());
                         apiRequest.context.startActivity(intent);
-                        //В запрос отправлять ничего не будем, в finally его просто отменем
+                        //В запрос отправлять ничего не будем, в finally его просто отменим
+                    } else if (apiResponse.code == ApiResponse.DETECT_FLOOD) {
+                        Intent intent = new Intent(apiRequest.context, BanActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra(BanActivity.INTENT_TYPE, BanActivity.TYPE_FLOOD);
+                        apiRequest.context.startActivity(intent);
+                    } else if (apiResponse.code == ApiResponse.MAINTENANCE) {
+                        if (apiRequest.context instanceof Activity) {
+                            Activity activity = (Activity) apiRequest.context;
+                            if (!(activity instanceof AuthActivity)) {
+                                needResend = true;
+                                activity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        RetryDialog retryDialog = new RetryDialog(apiRequest.context);
+                                        retryDialog.setMessage(apiRequest.context.getString(R.string.general_maintenance));
+                                        retryDialog.setButton(Dialog.BUTTON_POSITIVE, apiRequest.context.getString(R.string.general_dialog_retry), new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                apiRequest.exec();
+                                            }
+                                        });
+                                        retryDialog.show();
+                                    }
+                                });
+                            }
+                        }
 
                     } else if (apiResponse.code == ApiResponse.NULL_RESPONSE
                             || apiResponse.code == ApiResponse.WRONG_RESPONSE
@@ -285,5 +325,12 @@ public class ConnectionManager {
         }
 
         mDelayedRequestsThreads.clear();
+    }
+
+    private boolean isBlockedForFlood() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+        long endTime = preferences.getLong(BanActivity.FLOOD_ENDS_TIME,0L);
+        long now = System.currentTimeMillis();
+        return endTime > now;
     }
 }

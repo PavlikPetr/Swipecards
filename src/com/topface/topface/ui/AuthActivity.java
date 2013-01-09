@@ -188,10 +188,13 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
             Toast.makeText(this, getString(R.string.general_internet_off), Toast.LENGTH_SHORT)
                     .show();
         } else {
-            if (view.getId() == R.id.btnAuthVK) {
-                mAuthorizationManager.vkontakteAuth();
-            } else if (view.getId() == R.id.btnAuthFB) {
-                mAuthorizationManager.facebookAuth();
+            switch (view.getId()) {
+                case R.id.btnAuthVK:
+                    mAuthorizationManager.vkontakteAuth();
+                    break;
+                case R.id.btnAuthFB:
+                    mAuthorizationManager.facebookAuth();
+                    break;
             }
         }
     }
@@ -387,6 +390,9 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         switch (codeError) {
             case ApiResponse.NETWORK_CONNECT_ERROR:
                 mRetryView.setErrorMsg(getString(R.string.general_reconnect_social));
+                break;
+            case ApiResponse.MAINTENANCE:
+                mRetryView.setErrorMsg(getString(R.string.general_maintenance));
                 break;
             default:
                 mRetryView.setErrorMsg(getString(R.string.general_data_error));
