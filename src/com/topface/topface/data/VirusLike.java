@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
+import android.widget.Toast;
+import com.facebook.topface.DialogError;
 import com.facebook.topface.Facebook;
+import com.facebook.topface.FacebookError;
 import com.topface.topface.App;
 import com.topface.topface.Data;
 import com.topface.topface.R;
@@ -79,13 +82,54 @@ public class VirusLike extends AbstractData {
      * @param context  контекст
      * @param listener листенер диалога приглашений
      */
-    public void sendFacebookRequest(Context context, Facebook.DialogListener listener) {
+    public void sendFacebookRequest(Context context, VirusLikeDialogListener listener) {
         if (mSocialIdArray.size() > 0) {
             Bundle params = new Bundle();
-            params.putString("title", context.getString(R.string.chat_likes_request_title));
+            params.putString("title", context.getString(R.string.virus_chat_likes_request_title));
             params.putString("to", TextUtils.join(",", mSocialIdArray));
             params.putString("message", getFacebookRequestText());
             Data.facebook.dialog(context, "apprequests", params, listener);
+        } else {
+            //Если пустой список пользователей, которых мы приглашаем, то просто считаем запрос завершенным
+            listener.onComplete(null);
+        }
+    }
+
+    public static class VirusLikeDialogListener implements Facebook.DialogListener {
+        private final Context mContext;
+
+        public VirusLikeDialogListener(Context context) {
+            mContext = context;
+        }
+
+        @Override
+        public void onComplete(Bundle values) {
+            Toast.makeText(
+                    mContext,
+                    String.format(
+                            mContext.getString(R.string.virus_request_complete),
+                            CacheProfile.likes
+                    ),
+                    Toast.LENGTH_SHORT
+            ).show();
+        }
+
+        @Override
+        public void onFacebookError(FacebookError e) {
+            onError(null);
+        }
+
+        @Override
+        public void onError(DialogError e) {
+            Toast.makeText(
+                    mContext,
+                    R.string.virus_request_error,
+                    Toast.LENGTH_SHORT
+            ).show();
+        }
+
+        @Override
+        public void onCancel() {
         }
     }
 }

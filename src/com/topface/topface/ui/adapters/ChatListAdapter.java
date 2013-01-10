@@ -1,7 +1,6 @@
 package com.topface.topface.ui.adapters;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.text.ClipboardManager;
 import android.text.Html;
 import android.text.format.DateFormat;
@@ -10,9 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import com.facebook.topface.DialogError;
-import com.facebook.topface.Facebook;
-import com.facebook.topface.FacebookError;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -743,42 +739,10 @@ public class ChatListAdapter extends BaseAdapter {
                     removeItem(position);
 
                     //И предлагаем отправить пользователю запрос своим друзьям не из приложения
-                    new VirusLike(response).sendFacebookRequest(mContext, new Facebook.DialogListener() {
-                        @Override
-                        public void onComplete(Bundle values) {
-                            post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(
-                                            getContext(),
-                                            String.format(
-                                                    mContext.getString(R.string.virus_request_complete),
-                                                    CacheProfile.likes
-                                            ),
-                                            Toast.LENGTH_SHORT);
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void onFacebookError(FacebookError e) {
-                            post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(getContext(), mContext.getString(R.string.virus_request_error), Toast.LENGTH_SHORT);
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void onError(DialogError e) {
-                            Toast.makeText(getContext(), mContext.getString(R.string.virus_request_error), Toast.LENGTH_SHORT);
-                        }
-
-                        @Override
-                        public void onCancel() {
-                        }
-                    });
+                    new VirusLike(response).sendFacebookRequest(
+                            mContext,
+                            new VirusLike.VirusLikeDialogListener(mContext)
+                    );
                 }
 
                 @Override

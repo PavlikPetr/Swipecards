@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +23,9 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Banner;
 import com.topface.topface.data.Options;
+import com.topface.topface.data.VirusLike;
 import com.topface.topface.imageloader.DefaultImageLoader;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BannerRequest;
-import com.topface.topface.requests.BaseApiHandler;
+import com.topface.topface.requests.*;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.fragments.TopsFragment;
@@ -33,6 +35,7 @@ import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Device;
+import com.topface.topface.utils.Utils;
 import ru.wapstart.plus1.sdk.Plus1BannerAsker;
 import ru.wapstart.plus1.sdk.Plus1BannerRequest;
 import ru.wapstart.plus1.sdk.Plus1BannerView;
@@ -49,6 +52,7 @@ public class BannerBlock {
 
     public static final String ADFONIC_SLOT_ID = "9f83e583-a247-4b78-94a0-bf2beb8775fc";
     public static final int PLUS1_ID = 7227;
+    public static final String VIRUS_LIKES_BANNER_PARAM = "viruslikes";
 
     private Activity mActivity;
     private Fragment mFragment;
@@ -164,12 +168,47 @@ public class BannerBlock {
 //                        intent = new Intent(mActivity, InviteActivity.class);
                     } else if (banner.action.equals(Banner.ACTION_URL)) {
                         intent = new Intent(Intent.ACTION_VIEW, Uri.parse(banner.parameter));
+                    } else if (banner.action.equals(Banner.ACTION_METHOD)) {
+                        invokeBannerMethod(banner.parameter);
                     }
                     sendStat(getBannerName(banner.url), "click");
-                    mActivity.startActivity(intent);
+                    if (intent != null) {
+                        mActivity.startActivity(intent);
+                    }
                 }
             });
         }
+    }
+
+    private void invokeBannerMethod(String param) {
+        if (TextUtils.equals(param, VIRUS_LIKES_BANNER_PARAM)) {
+            sendVirusLikeRequest();
+        }
+    }
+
+    private void sendVirusLikeRequest() {
+        new VirusLikesRequest(mActivity).callback(new ApiHandler() {
+            @Override
+            public void success(final ApiResponse response) {
+                final Handler handler = this;
+                //И предлагаем отправить пользователю запрос своим друзьям не из приложения
+                new VirusLike(response).sendFacebookRequest(
+                        mActivity,
+                        new VirusLike.VirusLikeDialogListener(mActivity) {
+                            @Override
+                            public void onComplete(Bundle values) {
+                                super.onComplete(values);
+                                loadBanner();
+                            }
+                        }
+                );
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+                Utils.showErrorMessage(getContext());
+            }
+        }).exec();
     }
 
     /**

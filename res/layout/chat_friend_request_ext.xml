@@ -11,13 +11,14 @@
             android:id="@+id/left_icon"
             style="@style/ChatFriendAvatarInvisible"/>
 
-    <LinearLayout android:id="@+id/user_info"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_toRightOf="@id/left_icon"
-                  android:layout_marginRight="4dp"
-                  android:background="@drawable/bg_message_friend_ext"
-                  android:orientation="vertical">
+    <LinearLayout
+            android:id="@+id/user_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/left_icon"
+            android:layout_marginRight="4dp"
+            android:background="@drawable/bg_message_friend_ext"
+            android:orientation="vertical">
 
         <!-- message -->
         <TextView
@@ -26,7 +27,7 @@
 
         <Button
                 android:id="@+id/btn_chat_like_request"
-                android:text="@string/chat_virus_btn"
+                android:text="@string/virus_chat_btn"
                 style="@style/LikeRequestButton"/>
 
         <!-- date -->
