@@ -15,6 +15,7 @@ import com.topface.topface.Static;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.History;
 import com.topface.topface.ui.ChatActivity;
+import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.MemoryCacheTemplate;
@@ -65,7 +66,7 @@ public class ChatListAdapter extends BaseAdapter {
     private static final int T_COUNT = 13;
 
 
-    ChatActivity.OnListViewItemLongClickListener mLongClickListener;
+    ChatFragment.OnListViewItemLongClickListener mLongClickListener;
 
 
     public ChatListAdapter(Context context, LinkedList<History> dataList) {
@@ -78,7 +79,7 @@ public class ChatListAdapter extends BaseAdapter {
         prepare(dataList, true);
     }
 
-    public void setOnItemLongClickListener(ChatActivity.OnListViewItemLongClickListener l) {
+    public void setOnItemLongClickListener(ChatFragment.OnListViewItemLongClickListener l) {
         mLongClickListener = l;
     }
 

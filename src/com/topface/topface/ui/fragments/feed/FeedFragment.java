@@ -18,9 +18,11 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.*;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
@@ -28,6 +30,7 @@ import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.blocks.FilterBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.LockerView;
@@ -346,15 +349,27 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     protected void onFeedItemClick(FeedItem item) {
         //Open mailchat activity
-        Intent intent = new Intent(getActivity(), ChatActivity.class);
-        intent.putExtra(ChatActivity.INTENT_USER_ID, item.user.id);
-        intent.putExtra(ChatActivity.INTENT_USER_NAME, item.user.first_name);
-        intent.putExtra(ChatActivity.INTENT_USER_SEX, item.user.sex);
-        intent.putExtra(ChatActivity.INTENT_USER_AGE, item.user.age);
-        intent.putExtra(ChatActivity.INTENT_USER_CITY, item.user.city.name);
-        intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
-        intent.putExtra(ChatActivity.INTENT_ITEM_ID, item.id);
-        getActivity().startActivityForResult(intent, ChatActivity.INTENT_CHAT_REQUEST);
+
+        Intent intent = new Intent(getActivity(), ContainerActivity.class);
+        intent.putExtra(ChatFragment.INTENT_USER_ID, item.user.id);
+        intent.putExtra(ChatFragment.INTENT_USER_NAME, item.user.first_name);
+        intent.putExtra(ChatFragment.INTENT_USER_SEX, item.user.sex);
+        intent.putExtra(ChatFragment.INTENT_USER_AGE, item.user.age);
+        intent.putExtra(ChatFragment.INTENT_USER_CITY, item.user.city.name);
+        intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
+        intent.putExtra(ChatFragment.INTENT_ITEM_ID, item.id);
+        intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_CHAT_FRAGMENT);
+        getActivity().startActivityForResult(intent, ChatFragment.INTENT_CHAT_REQUEST);
+
+//        Intent intent = new Intent(getActivity(), ChatActivity.class);
+//        intent.putExtra(ChatActivity.INTENT_USER_ID, item.user.id);
+//        intent.putExtra(ChatActivity.INTENT_USER_NAME, item.user.first_name);
+//        intent.putExtra(ChatActivity.INTENT_USER_SEX, item.user.sex);
+//        intent.putExtra(ChatActivity.INTENT_USER_AGE, item.user.age);
+//        intent.putExtra(ChatActivity.INTENT_USER_CITY, item.user.city.name);
+//        intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
+//        intent.putExtra(ChatActivity.INTENT_ITEM_ID, item.id);
+//        getActivity().startActivityForResult(intent, ChatActivity.INTENT_CHAT_REQUEST);
     }
 
     public void onAvatarClick(T item, View view) {

@@ -10,13 +10,14 @@ import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.fragments.BuyingFragment;
+import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.VipBuyFragment;
 
 public class ContainerActivity extends BaseFragmentActivity {
 
     public static final int INTENT_BUY_VIP_FRAGMENT = 1;
-
     public static final int INTENT_BUYING_FRAGMENT = 2;
+    public static final int INTENT_CHAT_FRAGMENT = 3;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -58,6 +59,17 @@ public class ContainerActivity extends BaseFragmentActivity {
                 } else {
                     fragment = BuyingFragment.newInstance();
                 }
+            case INTENT_CHAT_FRAGMENT:
+                Intent intent = getIntent();
+
+                fragment = ChatFragment.newInstance(intent.getIntExtra(ChatFragment.INTENT_ITEM_ID, -1),
+                        intent.getIntExtra(ChatFragment.INTENT_USER_ID, -1),
+                        false,
+                        intent.getIntExtra(ChatFragment.INTENT_USER_SEX, Static.BOY),
+                        intent.getStringExtra(ChatFragment.INTENT_USER_NAME),
+                        intent.getIntExtra(ChatFragment.INTENT_USER_AGE, 0),
+                        intent.getStringExtra(ChatFragment.INTENT_USER_CITY),
+                        intent.getStringExtra(BaseFragmentActivity.INTENT_PREV_ENTITY));
             default:
                 break;
         }

@@ -390,18 +390,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingChat: {
                 Intent intent = new Intent(getActivity(), ChatActivity.class);
-                intent.putExtra(ChatActivity.INTENT_USER_ID,
-                        mUserSearchList.get(Data.searchPosition).id);
-                intent.putExtra(ChatActivity.INTENT_USER_NAME,
-                        mUserSearchList.get(Data.searchPosition).first_name);
-                intent.putExtra(ChatActivity.INTENT_USER_SEX,
-                        mUserSearchList.get(Data.searchPosition).sex);
-                intent.putExtra(ChatActivity.INTENT_USER_AGE,
-                        mUserSearchList.get(Data.searchPosition).age);
-                intent.putExtra(ChatActivity.INTENT_USER_CITY,
-                        mUserSearchList.get(Data.searchPosition).city.name);
-                intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, DatingFragment.this.getClass()
-                        .getSimpleName());
+                intent.putExtra(ChatActivity.INTENT_USER_ID, mUserSearchList.get(Data.searchPosition).id);
+                intent.putExtra(ChatActivity.INTENT_USER_NAME, mUserSearchList.get(Data.searchPosition).first_name);
+                intent.putExtra(ChatActivity.INTENT_USER_SEX, mUserSearchList.get(Data.searchPosition).sex);
+                intent.putExtra(ChatActivity.INTENT_USER_AGE, mUserSearchList.get(Data.searchPosition).age);
+                intent.putExtra(ChatActivity.INTENT_USER_CITY, mUserSearchList.get(Data.searchPosition).city.name);
+                intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, DatingFragment.this.getClass().getSimpleName());
                 getActivity().startActivityForResult(intent, ChatActivity.INTENT_CHAT_REQUEST);
 
                 EasyTracker.getTracker().trackEvent("Dating", "Additional", "Chat", 1L);
