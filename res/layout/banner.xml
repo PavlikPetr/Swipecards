@@ -22,7 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 ads:adUnitId="a1506c2c0d9899a"
-                ads:adSize="BANNER"
+                ads:adSize="SMART_BANNER"
                 ads:testDevices="0009fefc45872f"
                 ads:loadAdOnCreate="false"
                 android:visibility="gone"/>
