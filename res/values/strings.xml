@@ -334,8 +334,4 @@
     <string name="general_block">Block</string>
     <string name="general_default_currency">%.2f USD</string>
 
-    <string name="virus_chat_likes_request_title">Подарить симпатии вашим друзьям</string>
-    <string name="virus_chat_btn">Получить лайки</string>
-    <string name="virus_request_error">Не удалось отправить симпатий вашим друзьям</string>
-    <string name="virus_request_complete">Теперь у вас %d симпатий!</string>
 </resources>

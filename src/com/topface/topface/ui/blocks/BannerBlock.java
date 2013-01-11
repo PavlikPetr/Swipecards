@@ -110,13 +110,9 @@ public class BannerBlock {
             @Override
             public void success(ApiResponse response) {
                 final Banner banner = Banner.parse(response);
-                if (mBannerView != null)
-                    post(new Runnable() {
-                        @Override
-                        public void run() {
-                            showBanner(banner);
-                        }
-                    });
+                if (mBannerView != null) {
+                    showBanner(banner);
+                }
             }
         }).exec();
     }
@@ -139,6 +135,13 @@ public class BannerBlock {
             mPLus1Asker.setRemoveBannersOnPause(true);
             mPLus1Asker.setDisabledWebViewCorePausing(true);
         } else if (mBannerView instanceof ImageView) {
+            //Это нужно, что бы сбросить размеры баннера, для правильного расчета размера в ImageLoader
+            ViewGroup.LayoutParams params = mBannerView.getLayoutParams();
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            mBannerView.setLayoutParams(params);
+            //Убираем старый баннер
+            ((ImageView) mBannerView).setImageDrawable(null);
+
             DefaultImageLoader.getInstance(mActivity).displayImage(banner.url, (ImageView) mBannerView, new SimpleImageLoadingListener() {
                 @Override
                 public void onLoadingComplete(Bitmap loadedImage) {
