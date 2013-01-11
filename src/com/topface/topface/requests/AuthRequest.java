@@ -1,6 +1,7 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import com.topface.topface.R;
@@ -8,6 +9,8 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.UUID;
 
 public class AuthRequest extends AbstractApiRequest {
     // Data
@@ -22,7 +25,7 @@ public class AuthRequest extends AbstractApiRequest {
     private String clientversion; // версия клиента
     private String clientdevice; // тип устройства клиента
     private String clientid; // уникальный идентификатор клиентского устройства
-    public Boolean sandbox; // параметр использования тестовых аккаунтов для уведомлений APNS и C2DM
+    private static String mDeviceId;
 
     public AuthRequest(Context context) {
         super(context);
@@ -32,7 +35,7 @@ public class AuthRequest extends AbstractApiRequest {
         locale = getClientLocale(context);
         clientversion = getClientVersion(context);
         clientdevice = getClientDeviceName();
-        clientid = getClientId();
+        clientid = getClientId(context);
     }
 
     private String getClientLocale(Context context) {
@@ -59,11 +62,34 @@ public class AuthRequest extends AbstractApiRequest {
     }
 
     private String getClientDeviceName() {
-        return Build.MANUFACTURER + " " + Build.MODEL + " " + Build.PRODUCT;
+        return Build.MANUFACTURER + " " + Build.MODEL + " " + Build.PRODUCT +
+                " (Android " + Build.VERSION.RELEASE + ", build " + Build.ID + ")";
     }
 
-    private String getClientId() {
-        return "Android " + Build.VERSION.RELEASE + " (" + Build.ID + ")";
+    private static String uniqueID = null;
+    private static final String PREF_UNIQUE_ID = "PREF_UNIQUE_ID";
+
+    /**
+     * Возвращает уникальный id устройства (на самом деле id установки, т.к. он генерится при первом запросе)
+     *
+     * @param context контекст
+     * @return id устройства в виде строки UUID
+     */
+    public synchronized static String getClientId(Context context) {
+        if (uniqueID == null) {
+            SharedPreferences sharedPrefs = context.getSharedPreferences(
+                    PREF_UNIQUE_ID, Context.MODE_PRIVATE);
+            uniqueID = sharedPrefs.getString(PREF_UNIQUE_ID, null);
+
+            if (uniqueID == null) {
+                uniqueID = UUID.randomUUID().toString();
+                SharedPreferences.Editor editor = sharedPrefs.edit();
+                editor.putString(PREF_UNIQUE_ID, uniqueID);
+                editor.commit();
+            }
+        }
+
+        return uniqueID;
     }
 
     @Override
@@ -76,8 +102,7 @@ public class AuthRequest extends AbstractApiRequest {
                 .put("clienttype", clienttype)
                 .put("clientversion", clientversion)
                 .put("clientdevice", clientdevice)
-                .put("clientid", clientid)
-                .put("sandbox", sandbox);
+                .put("clientid", clientid);
     }
 
     @Override

@@ -429,4 +429,11 @@
 
     <string name="ban_flood_detected">Вы слишком часто совершаете запросы к серверу. Для дальнейшего использования приложения подождите.</string>
     <string name="general_maintenance">На сервере проводятся технические работы и ваш запрос не может быть выполнен. Попробуйте повторить позже.</string>
+    
+    <string name="virus_chat_likes_request_title">Подарить симпатии вашим друзьям</string>
+    <string name="virus_chat_btn">Получить симпатии</string>
+    <string name="virus_request_error">Не удалось отправить симпатий вашим друзьям</string>
+    <string name="virus_request_complete">Теперь у вас %d симпатий!</string>
+
+
 </resources>
