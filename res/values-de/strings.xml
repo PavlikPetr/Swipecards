@@ -88,17 +88,6 @@
     <string name="buying_you_have_no_coins_for_gift">Sie brauchen %d {{coins}}, um ein Geschenk zu kaufen</string>
     <string name="buying_default_message">Sie können Geschenke und Entzüсken für Coins senden</string>
     <string name="buying_money">Coins kaufen</string>
-    <string name="buying_power">Kraft kaufen</string>
-    <string name="buying_recharge">Laden auf 100%</string>
-    <string name="buying_energy">3 USD</string>
-    <string name="buying_pack_6coins">Paket mit 6 Coins</string>
-    <string name="buying_6coins">1 USD</string>
-    <string name="buying_pack_40coins">Paket mit 40 Coins</string>
-    <string name="buying_40coins">5 USD</string>
-    <string name="buying_pack_100coins">Paket mit 100 Coins</string>
-    <string name="buying_100coins">10 USD</string>
-    <string name="buying_pack_300coins">Paket mit 300 Coins</string>
-    <string name="buying_300coins">25 USD</string>
     <string name="profile_header_title">Mein Profil</string>
     <string name="profile_btn_chat">Plaudern</string>
     <string name="profile_add_title">Foto hinzufügen</string>
@@ -203,8 +192,6 @@
         <item quantity="one">%d Foto</item>
     </plurals>
     <string name="novice_sympathy">Senden Sie Sympathien den Menschen, die Ihnen\nwirklich gefallen,\num eine angenehme Bekanntschaft anzufangen</string>
-    <string name="novice_energy">Je höher die Ladung der Batterie, \ndesto öfter schätzt man Sie ein. \nVergessen Sie nicht die Batterie\nzu laden, kaufend die Kraft.</string>
-    <string name="novice_battery_bonus">Die Kraft gibt Ihnen die Popularität\nund neue Sympathien. Kaufen Sie\n100% der Kraft und\nladen Sie Ihre Batterie. Die erste Ladung\n schenken wir Ihnen kostenlos!</string>
     <string name="novice_fill_profile">Fügen Sie Ihre besten Fotos hinzu, \num mehr Sympathien zu erhalten.</string>
     <string name="general_edit_profile_message">Bitte, füllen Sie notwendige Felder des Fragebogens</string>
     <string name="general_premium_access_error">Für diese Funktion brauchen Sie Premium</string>
@@ -237,10 +224,6 @@
     <string name="dating_search_empty_text">Sie können Ihre Suche wiederholen, oder die Filter Einstellungen ändern</string>
     <string name="general_close">Schließen</string>
     <string name="vip_not_activated">Ihr VIP-Status ist nicht aktiviert</string>
-    <string name="vip_one_month_title">1 Monat</string>
-    <string name="vip_one_month_value">10 USD</string>
-    <string name="vip_one_year_title">1 Jahr</string>
-    <string name="vip_one_year_value">100 USD</string>
     <string name="vip_privileges">VIP-Privilegien</string>
     <string name="vip_text_visitors">Erfahren Sie, wer für Sie sich interessierte - sehen Sie Ihre Gäste durch!</string>
     <string name="vip_text_adm_unlock">Senden Sie Entzücken kostenlos - zeigen Sie Ihre Gefühle</string>
@@ -252,7 +235,6 @@
     <string name="profile_vip_status">Super Skills</string>
     <string name="profile_services">Services</string>
     <string name="default_balance_constant">Auf Ihrem Konto</string>
-    <string name="default_energy_balance_constant">Kraft</string>
     <string name="default_energy_coins_buy_btn_text">Coins kaufen, Kraft ergänzen</string>
     <string name="black_list_title">Schwarze Liste</string>
     <string name="black_list_empty">Ihre schwarze Liste ist leer</string>
@@ -260,14 +242,14 @@
     <string name="black_list_delete">Von der schwarzen Liste entfernen</string>
     <string name="vip_invisible_mode">Unsichtbares Regime</string>
     <string name="buying_profile_coins">Auf Ihrem Konto</string>
-    <string name="buying_profile_energy">Kraft</string>
-    <string name="buying_buy_resources">Coins kaufen, Kraft ergänzen</string>
     <string name="vip_buy_vip">VIP kaufen</string>
     <string name="vip_state_off">Ihr VIP-Status ist nicht aktiviert</string>
     <string name="vip_state_on">Ihr VIP-Status ist aktiviert</string>
     <string name="vip_abilities">Ihre VIP Möglichkeiten</string>
+    <string name="vip_why">Warum ist es wichtig für Sie, VIP zu sein</string>
     <string name="vip_info_delight">Senden Sie Entzücken kostenlos - zeigen Sie Ihre Gefühle!</string>
     <string name="vip_info_guest">Erfahren Sie, wer für Sie sich interessierte - sehen Sie Ihre Gäste durch!</string>
+    <string name="vip_info_invisible">Bleiben Sie unscihtbar und besuchen Sie andere Seiten mit dem \"unsichtbaren\" Regime</string>
     <string name="vip_info_message">Bekommen Sie ein Privileg - Ihre Nachrichten werden sich vom gemeinsamen Hintergrund abheben!</string>
     <string name="vip_info_gift">Wählen Sie einzigartige VIP-Geschenke und man wird Sie unbedingt merken!</string>
     <string name="vip_info_blackList">Befreien Sie sich von langweiligen Leuten mit Hilfe der \"schwarzen Liste\"</string>
@@ -278,8 +260,7 @@
     <string name="buying_vip_info">Für den Zugang zu den Gästen müssen Sie VIP Status haben</string>
     <string name="buy_play_market_not_available">Play Market ist nicht erreichbar</string>
     <string name="buy_subscription_not_available">Abonnements sind nicht erreichbar</string>
-    <string name="default_six_coins_price">1 USD</string>
-    <string name="default_coins_40_price">5 USD</string>
+    <string name="default_economy_vip">VIP ab 10 USD pro Monat</string>
     <string name="profile_gifts_empty">Diesem Nutzer hat noch niemand Geschenke geschenk</string>
     <string name="profile_mygifts_empty">Sie haben noch keine Geschenke bekommen</string>
     <string name="profile_mood">Beschreiben Sie Ihre Laune</string>
@@ -290,13 +271,15 @@
     <string name="edit_my_city">Meine Stadt</string>
     <string name="edit_my_photos">Meine Fotos</string>
     <string name="general_search_empty_title">Leider, nichts gefunden</string>
+    <string name="general_search_empty_text">Sie können Ihre Suche wiederholen, oder die Filter Einstellungen ändern</string>
     <string name="profile_get_status">Beschreiben Sie Ihre Laune</string>
     <string name="map_title">Karte</string>
+    <string name="settings_want_answer">Ich will die Antwort bekommen</string>
+    <string name="settings_feedback_email">E-Mail für die Verbindung</string>
+    <string name="settings_invalid_email">E-Mail ist unkorrekt</string>
     <string name="leaders_select_cool_picture">Wählen Sie ein effektvolles Foto:</string>
     <string name="chat_write_message">Nachricht schreiben</string>
-    <string name="default_coins_100_price">10 USD</string>
     <string name="buying_sympathies">Sympathie kaufen</string>
     <string name="general_buying">Sympathie und Coins kaufen</string>
     <string name="general_block">Blokieren</string>
-    <string name="general_default_currency">%.2f USD</string>
 </resources>

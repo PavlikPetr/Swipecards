@@ -15,6 +15,7 @@ import com.topface.topface.R;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -106,8 +107,9 @@ public class VirusLike extends AbstractData {
         public void onComplete(Bundle values) {
             Toast.makeText(
                     mContext,
-                    String.format(
-                            mContext.getString(R.string.virus_request_complete),
+                    Utils.getQuantityString(
+                            R.plurals.virus_request_complete,
+                            CacheProfile.likes,
                             CacheProfile.likes
                     ),
                     Toast.LENGTH_SHORT
