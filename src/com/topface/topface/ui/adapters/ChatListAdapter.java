@@ -732,24 +732,26 @@ public class ChatListAdapter extends BaseAdapter {
         public void onClick(View v) {
             final int position = (Integer) v.getTag();
             final History item = getItem(position);
-            new VirusLikesRequest(item.id, mContext).callback(new ApiHandler() {
-                @Override
-                public void success(ApiResponse response) {
-                    //После заврешения запроса удаляем элемент
-                    removeItem(position);
+            if (item != null) {
+                new VirusLikesRequest(item.id, mContext).callback(new ApiHandler() {
+                    @Override
+                    public void success(ApiResponse response) {
+                        //После заврешения запроса удаляем элемент
+                        removeItem(position);
 
-                    //И предлагаем отправить пользователю запрос своим друзьям не из приложения
-                    new VirusLike(response).sendFacebookRequest(
-                            mContext,
-                            new VirusLike.VirusLikeDialogListener(mContext)
-                    );
-                }
+                        //И предлагаем отправить пользователю запрос своим друзьям не из приложения
+                        new VirusLike(response).sendFacebookRequest(
+                                mContext,
+                                new VirusLike.VirusLikeDialogListener(mContext)
+                        );
+                    }
 
-                @Override
-                public void fail(int codeError, ApiResponse response) {
-                    Utils.showErrorMessage(getContext());
-                }
-            }).exec();
+                    @Override
+                    public void fail(int codeError, ApiResponse response) {
+                        Utils.showErrorMessage(getContext());
+                    }
+                }).exec();
+            }
         }
     };
 }
