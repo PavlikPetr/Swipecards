@@ -25,7 +25,7 @@ import com.topface.topface.utils.CacheProfile;
 
 import java.util.LinkedList;
 
-public class BuyingFragment extends BillingFragment implements View.OnClickListener {
+public class BuyingFragment extends BillingFragment {
 
     public static final String ARG_ITEM_TYPE = "type_of_buying_item";
     public static final int TYPE_GIFT = 1;
@@ -119,6 +119,24 @@ public class BuyingFragment extends BillingFragment implements View.OnClickListe
 
     private void initButtons(View root) {
         LinearLayout likesButtons = (LinearLayout) root.findViewById(R.id.fbLikes);
+
+
+        if (CacheProfile.getOptions().coins.isEmpty()) {
+            root.findViewById(R.id.coins_title).setVisibility(View.GONE);
+        } else {
+            root.findViewById(R.id.coins_title).setVisibility(View.VISIBLE);
+        }
+
+        if (CacheProfile.getOptions().likes.isEmpty()) {
+            root.findViewById(R.id.likes_title).setVisibility(View.GONE);
+        } else {
+            root.findViewById(R.id.likes_title).setVisibility(View.VISIBLE);
+        }
+
+        if(CacheProfile.getOptions().likes.isEmpty() && CacheProfile.getOptions().coins.isEmpty()) {
+            root.findViewById(R.id.fbBuyingDisabled).setVisibility(View.VISIBLE);
+        }
+
         for (Options.BuyButton curButton: CacheProfile.getOptions().likes) {
             RelativeLayout newButton = Options.setButton(likesButtons, curButton, getActivity(), new Options.BuyButtonClickListener() {
                 @Override
@@ -155,11 +173,9 @@ public class BuyingFragment extends BillingFragment implements View.OnClickListe
         if (CacheProfile.premium) {
             status.setText(getString(R.string.vip_state_on));
             vipBtnText.setText(R.string.vip_abilities);
-            vipPrice.setVisibility(View.GONE);
         } else {
             status.setText(R.string.vip_state_off);
             vipBtnText.setText(R.string.vip_why);
-            vipPrice.setVisibility(View.VISIBLE);
         }
 
         vipBtn.setOnClickListener(new View.OnClickListener() {
@@ -169,14 +185,15 @@ public class BuyingFragment extends BillingFragment implements View.OnClickListe
             }
         });
 
+        RelativeLayout vipTitle = (RelativeLayout) root.findViewById(R.id.fbVipTitle);
+
+
         if (CacheProfile.getOptions().premium.isEmpty()) {
-            status.setVisibility(View.GONE);
-            vipBtnText.setVisibility(View.GONE);
-            vipPrice.setVisibility(View.GONE);
+            vipTitle.setVisibility(View.GONE);
+            vipBtn.setVisibility(View.GONE);
         } else {
-            status.setVisibility(View.VISIBLE);
-            vipBtnText.setVisibility(View.VISIBLE);
-            vipPrice.setVisibility(View.VISIBLE);
+            vipTitle.setVisibility(View.VISIBLE);
+            vipBtn.setVisibility(View.VISIBLE);
         }
 
     }
@@ -185,57 +202,6 @@ public class BuyingFragment extends BillingFragment implements View.OnClickListe
         Intent intent = new Intent(getActivity(), ContainerActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
         startActivity(intent);
-    }
-
-    @Override
-    public void onClick(View view) {
-        requestPurchase(view);
-    }
-
-    private void requestPurchase(View view) {
-//        switch (view.getId()) {
-//            case R.id.fb6Pack:
-//                buyItem("topface.coins.6");
-//                break;
-//            case R.id.fb40Pack:
-//                buyItem("topface.coins.40");
-//                break;
-//            case R.id.fb100Pack:
-//                buyItem("topface.coins.100");
-//                break;
-//            case R.id.fb300Pack:
-//                buyItem("topface.coins.300");
-//                break;
-//            case R.id.fbRecharge:
-//                buyItem("topface.energy.10000");
-//                break;
-//        }
-    }
-
-    /**
-     * Тестовые товары для отладки покупок
-     * NOTE: Применяется только для тестирования!
-     *
-     * @param view кнопка покупки
-     */
-    private void requestTestPurchase(View view) {
-        switch (view.getId()) {
-            case R.id.btnBuyingMoney6:
-                buyItem("android.test.purchased");
-                break;
-            case R.id.btnBuyingMoney40:
-                buyItem("android.test.canceled");
-                break;
-            case R.id.btnBuyingMoney100:
-                buyItem("android.test.refunded");
-                break;
-            case R.id.btnBuyingMoney300:
-                buyItem("android.test.item_unavailable");
-                break;
-            case R.id.btnBuyingLikes:
-                buyItem("android.test.purchased");
-                break;
-        }
     }
 
     @Override

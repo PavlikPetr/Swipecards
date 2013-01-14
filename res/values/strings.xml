@@ -88,17 +88,6 @@
     <string name="buying_you_have_no_coins_for_gift">You need %d {{coins}} to buy this gift</string>
     <string name="buying_default_message">You can send gifts and admirations for coins</string>
     <string name="buying_money">Purchase coins</string>
-    <string name="buying_power">Buy energy</string>
-    <string name="buying_recharge">Get 100% charge</string>
-    <string name="buying_energy">3 USD</string>
-    <string name="buying_pack_6coins">6 coins package</string>
-    <string name="buying_6coins">1 USD</string>
-    <string name="buying_pack_40coins">40 coins package</string>
-    <string name="buying_40coins">5 USD</string>
-    <string name="buying_pack_100coins">100 coins package</string>
-    <string name="buying_100coins">10 USD</string>
-    <string name="buying_pack_300coins">Package of 300 coins</string>
-    <string name="buying_300coins">25 USD</string>
     <string name="profile_header_title">My profile</string>
     <string name="profile_btn_chat">Chat</string>
     <string name="profile_add_title">Add photo</string>
@@ -177,7 +166,7 @@
     <string name="settings_version">Version</string>
     <string name="settings_copyright">Copyright 2010-</string>
     <string name="settings_rights_reserved">Topface \nAll rights reserved</string>
-    <string name="settings_extra">More information you can find on</string>
+    <string name="settings_extra">You can find more information on</string>
     <string name="settings_logout">Log out</string>
     <string name="settings_logout_msg">Do you really want to exit?</string>
     <string name="settings_error_message">Error message</string>
@@ -203,8 +192,6 @@
         <item quantity="one">%d photo</item>
     </plurals>
     <string name="novice_sympathy">Send messages only to those\nwho really attracts you.\nThat might be a good start!</string>
-    <string name="novice_energy">The higher your battery charge is,\nthe more likes you will get.\nDon\'t forget to charge your\nbattery, by purchasing energy</string>
-    <string name="novice_battery_bonus">Energy gives you popularity\nand new likes. You may\ncharge your battery, by purchasing\n100% energy. First charge\n is on the house!</string>
     <string name="novice_fill_profile">Add your best photos,\nto get more likes</string>
     <string name="general_edit_profile_message">Please, fill in all the obligatory fields in you profile</string>
     <string name="general_premium_access_error">To do this you have to be VIP</string>
@@ -237,10 +224,6 @@
     <string name="dating_search_empty_text">You can try to run the search again or change the filter settings.</string>
     <string name="general_close">Close</string>
     <string name="vip_not_activated">Your VIP-status is not activated</string>
-    <string name="vip_one_month_title">1 month</string>
-    <string name="vip_one_month_value">10 USD</string>
-    <string name="vip_one_year_title">1 year</string>
-    <string name="vip_one_year_value">100 USD</string>
     <string name="vip_privileges">VIP-privileges</string>
     <string name="vip_text_visitors">Find out who was interested in you - look through your guests!</string>
     <string name="vip_text_adm_unlock">Send admiration\'s for free - maximum express of feelings!</string>
@@ -252,7 +235,6 @@
     <string name="profile_vip_status">Super Skills</string>
     <string name="profile_services">Service</string>
     <string name="default_balance_constant">Your accaunt</string>
-    <string name="default_energy_balance_constant">Battery charge</string>
     <string name="default_energy_coins_buy_btn_text">Buy coins, charge battery</string>
     <string name="black_list_title">Black list</string>
     <string name="black_list_empty">Your black list is empty</string>
@@ -260,8 +242,6 @@
     <string name="black_list_delete">Delete from black list</string>
     <string name="vip_invisible_mode">Invisible mode</string>
     <string name="buying_profile_coins">Your account</string>
-    <string name="buying_profile_energy">Battery charge</string>
-    <string name="buying_buy_resources">Buy coins, charge your battery</string>
     <string name="vip_buy_vip">Purchase of the VIP</string>
     <string name="vip_state_off">Your VIP status not activated</string>
     <string name="vip_state_on">Your VIP-status was activated</string>
@@ -280,16 +260,7 @@
     <string name="buying_vip_info">To get access to guests VIP status is necessary</string>
     <string name="buy_play_market_not_available">Play Market not available</string>
     <string name="buy_subscription_not_available">Subscriptions are not available</string>
-    <string name="default_six_coins">6 coins for 0.16$ per coin</string>
-    <string name="default_six_coins_price">1 USD</string>
-    <string name="default_coins_40">40 coins for 0.12$ per coin</string>
-    <string name="default_coins_40_price">5 USD</string>
-    <string name="default_economy_25">Saving 25%</string>
-    <string name="default_coins_100">100 coins for 0.1$ per coin</string>
     <string name="default_economy_vip">VIP from 10 USD a month</string>
-    <string name="default_economy_38">Saving 38%</string>
-    <string name="default_coins_300">300 coins for 0.08$ per coin</string>
-    <string name="default_economy_50">Saving 50%</string>
     <string name="profile_gifts_empty">No one has sent gifts to this user yet</string>
     <string name="profile_mygifts_empty">No one has sent you gifts yet</string>
     <string name="profile_mood">Describe your mood</string>
@@ -308,7 +279,6 @@
     <string name="settings_invalid_email">Invalid e-mail</string>
     <string name="leaders_select_cool_picture">Choose your best photo:</string>
     <string name="chat_write_message">Write a message</string>
-    <string name="default_coins_100_price">10 USD</string>
     <string name="buying_sympathies">Perchase of likes</string>
     <string name="novice_sympathies_bonus">You are getting %1$d likes as a gift! It means, that you will impress %2$d people and they\'ll tell you they like you.</string>
     <string name="novice_energy_to_sympathies_title">We changed energy for likes.</string>
@@ -318,7 +288,9 @@
     <string name="general_reconnect_social">Cannot connect the social network. Please, try again later</string>
     <string name="general_buying">Buy likes and coins</string>
     <string name="general_block">Block</string>
-    <string name="general_default_currency">%.2f USD</string>
-
-    <string name="ban_flood_detected"></string>
+    <string name="general_buying_disabled">The purchase is impossible at the moment</string>
+    <string name="ban_flood_detected">You too often make requests to the server. Please wait.</string>
+    <string name="virus_chat_likes_request_title">Give likes to your friends as a gift</string>
+    <string name="virus_chat_btn">Receive likes</string>
+    <string name="virus_request_error">Unable to send likes to your friends</string>
 </resources>

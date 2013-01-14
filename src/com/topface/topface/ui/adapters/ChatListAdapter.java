@@ -14,17 +14,26 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.History;
-import com.topface.topface.ui.fragments.ChatFragment;
+import com.topface.topface.data.VirusLike;
+import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.VirusLikesRequest;
+import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.MemoryCacheTemplate;
 import com.topface.topface.utils.OsmManager;
+import com.topface.topface.utils.Utils;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 @SuppressWarnings("deprecation")
 public class ChatListAdapter extends BaseAdapter {
+
     // class ViewHolder
     static class ViewHolder {
         ImageViewRemote avatar;
@@ -34,6 +43,7 @@ public class ChatListAdapter extends BaseAdapter {
         TextView address;
         ImageView mapBackground;
         ProgressBar prgsAddress;
+        Button likeRequest;
         // View mInfoGroup;
     }
 
@@ -59,12 +69,18 @@ public class ChatListAdapter extends BaseAdapter {
     private static final int T_USER_MAP_EXT = 10;
     private static final int T_FRIEND_MAP_PHOTO = 11;
     private static final int T_FRIEND_MAP_EXT = 12;
-    private static final int T_COUNT = 13;
+    private static final int T_USER_REQUEST = 13;
+    private static final int T_USER_REQUEST_EXT = 14;
+    private static final int T_FRIEND_REQUEST = 15;
+    private static final int T_FRIEND_REQUEST_EXT = 16;
+
+    private static final int T_COUNT = 17;
 
 
-    ChatFragment.OnListViewItemLongClickListener mLongClickListener;
+    ChatActivity.OnListViewItemLongClickListener mLongClickListener;
 
-    public ChatListAdapter(Context context, ArrayList<History> dataList) {
+
+    public ChatListAdapter(Context context, LinkedList<History> dataList) {
         mContext = context;
         mItemLayoutList = new LinkedList<Integer>();
         mItemTimeList = new HashMap<Integer, String>();
@@ -74,7 +90,7 @@ public class ChatListAdapter extends BaseAdapter {
         prepare(dataList, true);
     }
 
-    public void setOnItemLongClickListener(ChatFragment.OnListViewItemLongClickListener l) {
+    public void setOnItemLongClickListener(ChatActivity.OnListViewItemLongClickListener l) {
         mLongClickListener = l;
     }
 
@@ -116,24 +132,153 @@ public class ChatListAdapter extends BaseAdapter {
         if (convertView == null) {
             holder = new ViewHolder();
 
-            convertView = inflateConvertView(convertView, holder, type, history);
+            switch (type) {
+                case T_FRIEND_PHOTO:
+                    convertView = mInflater.inflate(R.layout.chat_friend, null, false);
+                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                    holder.message = (TextView) convertView.findViewById(R.id.chat_message);
+                    holder.date = (TextView) convertView.findViewById(R.id.chat_date);
+                    holder.avatar.setOnClickListener(mOnClickListener);
+                    holder.avatar.setPhoto(history.user.photo);
+                    break;
+                case T_FRIEND_EXT:
+                    convertView = mInflater.inflate(R.layout.chat_friend_ext, null, false);
+                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                    holder.message = (TextView) convertView.findViewById(R.id.chat_message);
+                    holder.date = (TextView) convertView.findViewById(R.id.chat_date);
+                    break;
+                case T_USER_PHOTO:
+                    convertView = mInflater.inflate(R.layout.chat_user, null, false);
+                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                    holder.message = (TextView) convertView.findViewById(R.id.chat_message);
+                    holder.date = (TextView) convertView.findViewById(R.id.chat_date);
+                    holder.avatar.setPhoto(CacheProfile.photo);
+                    break;
+                case T_USER_EXT:
+                    convertView = mInflater.inflate(R.layout.chat_user_ext, null, false);
+                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                    holder.message = (TextView) convertView.findViewById(R.id.chat_message);
+                    holder.date = (TextView) convertView.findViewById(R.id.chat_date);
+                    break;
+                case T_DATE:
+                    convertView = mInflater.inflate(R.layout.chat_date_divider, null, false);
+                    holder.date = (TextView) convertView.findViewById(R.id.tvChatDateDivider);
+                    break;
+                case T_USER_GIFT_PHOTO:
+                    convertView = mInflater.inflate(R.layout.chat_user_gift, null, false);
+                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                    holder.gift = (ImageViewRemote) convertView.findViewById(R.id.ivChatGift);
+                    holder.avatar.setPhoto(CacheProfile.photo);
+                    holder.avatar.setVisibility(View.VISIBLE);
+                    break;
+                case T_USER_GIFT_EXT:
+                    convertView = mInflater.inflate(R.layout.chat_user_gift, null, false);
+                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                    holder.gift = (ImageViewRemote) convertView.findViewById(R.id.ivChatGift);
+                    holder.avatar.setVisibility(View.INVISIBLE);
+                    break;
+                case T_FRIEND_GIFT_PHOTO:
+                    convertView = mInflater.inflate(R.layout.chat_friend_gift, null, false);
+                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                    holder.gift = (ImageViewRemote) convertView.findViewById(R.id.ivChatGift);
+                    holder.avatar.setOnClickListener(mOnClickListener);
+                    holder.avatar.setPhoto(history.user.photo);
+                    holder.avatar.setVisibility(View.VISIBLE);
+                    break;
+                case T_FRIEND_GIFT_EXT:
+                    convertView = mInflater.inflate(R.layout.chat_friend_gift, null, false);
+                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                    holder.gift = (ImageViewRemote) convertView.findViewById(R.id.ivChatGift);
+                    holder.avatar.setVisibility(View.INVISIBLE);
+                    break;
+                case T_USER_MAP_PHOTO:
+                    convertView = mInflater.inflate(R.layout.chat_user_map, null, false);
+                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                    holder.address = (TextView) convertView.findViewById(R.id.tvChatMapAddress);
+                    holder.mapBackground = (ImageView) convertView.findViewById(R.id.ivUserMapBg);
+                    holder.prgsAddress = (ProgressBar) convertView.findViewById(R.id.prgsUserMapAddress);
+                    holder.avatar.setPhoto(CacheProfile.photo);
+                    holder.avatar.setVisibility(View.VISIBLE);
+                    break;
+                case T_USER_MAP_EXT:
+                    convertView = mInflater.inflate(R.layout.chat_user_map, null, false);
+                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                    holder.address = (TextView) convertView.findViewById(R.id.tvChatMapAddress);
+                    holder.mapBackground = (ImageView) convertView.findViewById(R.id.ivUserMapBg);
+                    holder.prgsAddress = (ProgressBar) convertView.findViewById(R.id.prgsUserMapAddress);
+                    holder.avatar.setVisibility(View.INVISIBLE);
+                    break;
+                case T_FRIEND_MAP_PHOTO:
+                    convertView = mInflater.inflate(R.layout.chat_friend_map, null, false);
+                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                    holder.address = (TextView) convertView.findViewById(R.id.tvChatMapAddress);
+                    holder.mapBackground = (ImageView) convertView.findViewById(R.id.ivFriendMapBg);
+                    holder.prgsAddress = (ProgressBar) convertView
+                            .findViewById(R.id.prgsFriendMapAddress);
+                    holder.avatar.setOnClickListener(mOnClickListener);
+                    holder.avatar.setPhoto(history.user.photo);
+                    holder.avatar.setVisibility(View.VISIBLE);
+                    break;
+                case T_FRIEND_MAP_EXT:
+                    convertView = mInflater.inflate(R.layout.chat_friend_map, null, false);
+                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                    holder.address = (TextView) convertView.findViewById(R.id.tvChatMapAddress);
+                    holder.mapBackground = (ImageView) convertView.findViewById(R.id.ivFriendMapBg);
+                    holder.prgsAddress = (ProgressBar) convertView
+                            .findViewById(R.id.prgsFriendMapAddress);
+                    holder.avatar.setVisibility(View.INVISIBLE);
+                    break;
+                case T_FRIEND_REQUEST:
+                case T_FRIEND_REQUEST_EXT:
+                    if (type == T_FRIEND_REQUEST) {
+                        convertView = mInflater.inflate(R.layout.chat_friend_request, null, false);
+                        holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                        holder.avatar.setOnClickListener(mOnClickListener);
+                        holder.avatar.setPhoto(history.user.photo);
+                        holder.avatar.setVisibility(View.VISIBLE);
+                    } else {
+                        convertView = mInflater.inflate(R.layout.chat_friend_request_ext, null, false);
+                        holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                        holder.avatar.setVisibility(View.INVISIBLE);
+                    }
+                    holder.message = (TextView) convertView.findViewById(R.id.chat_message);
+                    holder.date = (TextView) convertView.findViewById(R.id.chat_date);
+                    Button likeRequestBtn = (Button) convertView.findViewById(R.id.btn_chat_like_request);
+                    likeRequestBtn.setTag(position);
+                    likeRequestBtn.setOnClickListener(mLikeRequestListener);
+                    break;
+                case T_USER_REQUEST:
+                case T_USER_REQUEST_EXT:
+                    if (type == T_USER_REQUEST) {
+                        convertView = mInflater.inflate(R.layout.chat_user, null, false);
+                        holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                        holder.avatar.setOnClickListener(mOnClickListener);
+                        holder.avatar.setPhoto(CacheProfile.photo);
+                        holder.avatar.setVisibility(View.VISIBLE);
+                    } else {
+                        convertView = mInflater.inflate(R.layout.chat_user_ext, null, false);
+                        holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                        holder.avatar.setVisibility(View.INVISIBLE);
+                    }
+                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                    holder.message = (TextView) convertView.findViewById(R.id.chat_message);
+                    holder.date = (TextView) convertView.findViewById(R.id.chat_date);
+                    break;
+
+            }
 
             if (convertView != null) {
                 convertView.setTag(holder);
             }
 
-        } else {
+        } else
             holder = (ViewHolder) convertView.getTag();
-        }
 
-        // set date for divider
+        // setting visual information
         if (type == T_DATE) {
             holder.date.setText(mItemTimeList.get(position));
             return convertView;
-        }
-
-        // setting visual information
-        if (type == T_USER_GIFT_PHOTO || type == T_USER_GIFT_EXT
+        } else if (type == T_USER_GIFT_PHOTO || type == T_USER_GIFT_EXT
                 || type == T_FRIEND_GIFT_PHOTO || type == T_FRIEND_GIFT_EXT) {
             holder.gift.setRemoteSrc(history.link);
             return convertView;
@@ -158,9 +303,6 @@ public class ChatListAdapter extends BaseAdapter {
         switch (history.type) {
             case FeedDialog.DEFAULT:
                 holder.message.setText(Html.fromHtml(history.text));
-                break;
-            case FeedDialog.PHOTO:
-                holder.message.setText("TARGET IT");
                 break;
             case FeedDialog.MESSAGE:
                 holder.message.setText(Html.fromHtml(history.text));
@@ -215,11 +357,11 @@ public class ChatListAdapter extends BaseAdapter {
                         break;
                 }
                 break;
-            case FeedDialog.RATE:
-                holder.message.setText("RATE IT");
-                break;
             case FeedDialog.PROMOTION:
                 holder.message.setText(Html.fromHtml(history.text));
+                break;
+            case FeedDialog.LIKE_REQUEST:
+                holder.message.setText(history.text);
                 break;
             default:
                 holder.message.setText(Html.fromHtml(history.text));
@@ -229,13 +371,7 @@ public class ChatListAdapter extends BaseAdapter {
         holder.message.setMovementMethod(LinkMovementMethod.getInstance());
 
         holder.date.setText(dateFormat.format(history.created));
-
-        setOnLongClickListener(position, convertView, holder);
-
-        return convertView;
-    }
-
-    private void setOnLongClickListener(final int position, View convertView, final ViewHolder holder) {
+        // Utils.formatTime(holder.date, msg.created);
         if (holder.message != null && convertView != null) {
             convertView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
@@ -251,107 +387,6 @@ public class ChatListAdapter extends BaseAdapter {
                     return false;
                 }
             });
-        }
-    }
-
-    private View inflateConvertView(View convertView, ViewHolder holder, int type, History history) {
-        switch (type) {
-            case T_DATE:
-                convertView = mInflater.inflate(R.layout.chat_date_divider, null, false);
-                holder.date = (TextView) convertView.findViewById(R.id.tvChatDateDivider);
-                break;
-            //TODO refactor
-            case T_FRIEND_PHOTO:
-                convertView = mInflater.inflate(R.layout.chat_friend, null, false);
-                holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                holder.message = (TextView) convertView.findViewById(R.id.chat_message);
-                holder.date = (TextView) convertView.findViewById(R.id.chat_date);
-                holder.avatar.setOnClickListener(mOnClickListener);
-                holder.avatar.setPhoto(history.user.photo);
-                break;
-            case T_FRIEND_EXT:
-                convertView = mInflater.inflate(R.layout.chat_friend_ext, null, false);
-                holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                holder.message = (TextView) convertView.findViewById(R.id.chat_message);
-                holder.date = (TextView) convertView.findViewById(R.id.chat_date);
-                break;
-            case T_USER_PHOTO:
-                convertView = mInflater.inflate(R.layout.chat_user, null, false);
-                holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                holder.message = (TextView) convertView.findViewById(R.id.chat_message);
-                holder.date = (TextView) convertView.findViewById(R.id.chat_date);
-                holder.avatar.setPhoto(CacheProfile.photo);
-                break;
-            case T_USER_EXT:
-                convertView = mInflater.inflate(R.layout.chat_user_ext, null, false);
-                holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                holder.message = (TextView) convertView.findViewById(R.id.chat_message);
-                holder.date = (TextView) convertView.findViewById(R.id.chat_date);
-                break;
-            case T_USER_GIFT_PHOTO:
-                convertView = mInflater.inflate(R.layout.chat_user_gift, null, false);
-                holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                holder.gift = (ImageViewRemote) convertView.findViewById(R.id.ivChatGift);
-                holder.avatar.setPhoto(CacheProfile.photo);
-                holder.avatar.setVisibility(View.VISIBLE);
-                break;
-            case T_USER_GIFT_EXT:
-                convertView = mInflater.inflate(R.layout.chat_user_gift, null, false);
-                holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                holder.gift = (ImageViewRemote) convertView.findViewById(R.id.ivChatGift);
-                holder.avatar.setVisibility(View.INVISIBLE);
-                break;
-            case T_FRIEND_GIFT_PHOTO:
-                convertView = mInflater.inflate(R.layout.chat_friend_gift, null, false);
-                holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                holder.gift = (ImageViewRemote) convertView.findViewById(R.id.ivChatGift);
-                holder.avatar.setOnClickListener(mOnClickListener);
-                holder.avatar.setPhoto(history.user.photo);
-                holder.avatar.setVisibility(View.VISIBLE);
-                break;
-            case T_FRIEND_GIFT_EXT:
-                convertView = mInflater.inflate(R.layout.chat_friend_gift, null, false);
-                holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                holder.gift = (ImageViewRemote) convertView.findViewById(R.id.ivChatGift);
-                holder.avatar.setVisibility(View.INVISIBLE);
-                break;
-            case T_USER_MAP_PHOTO:
-                convertView = mInflater.inflate(R.layout.chat_user_map, null, false);
-                holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                holder.address = (TextView) convertView.findViewById(R.id.tvChatMapAddress);
-                holder.mapBackground = (ImageView) convertView.findViewById(R.id.ivUserMapBg);
-                holder.prgsAddress = (ProgressBar) convertView.findViewById(R.id.prgsUserMapAddress);
-                holder.avatar.setPhoto(CacheProfile.photo);
-                holder.avatar.setVisibility(View.VISIBLE);
-                break;
-            case T_USER_MAP_EXT:
-                convertView = mInflater.inflate(R.layout.chat_user_map, null, false);
-                holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                holder.address = (TextView) convertView.findViewById(R.id.tvChatMapAddress);
-                holder.mapBackground = (ImageView) convertView.findViewById(R.id.ivUserMapBg);
-                holder.prgsAddress = (ProgressBar) convertView.findViewById(R.id.prgsUserMapAddress);
-                holder.avatar.setVisibility(View.INVISIBLE);
-                break;
-            case T_FRIEND_MAP_PHOTO:
-                convertView = mInflater.inflate(R.layout.chat_friend_map, null, false);
-                holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                holder.address = (TextView) convertView.findViewById(R.id.tvChatMapAddress);
-                holder.mapBackground = (ImageView) convertView.findViewById(R.id.ivFriendMapBg);
-                holder.prgsAddress = (ProgressBar) convertView
-                        .findViewById(R.id.prgsFriendMapAddress);
-                holder.avatar.setOnClickListener(mOnClickListener);
-                holder.avatar.setPhoto(history.user.photo);
-                holder.avatar.setVisibility(View.VISIBLE);
-                break;
-            case T_FRIEND_MAP_EXT:
-                convertView = mInflater.inflate(R.layout.chat_friend_map, null, false);
-                holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                holder.address = (TextView) convertView.findViewById(R.id.tvChatMapAddress);
-                holder.mapBackground = (ImageView) convertView.findViewById(R.id.ivFriendMapBg);
-                holder.prgsAddress = (ProgressBar) convertView
-                        .findViewById(R.id.prgsFriendMapAddress);
-                holder.avatar.setVisibility(View.INVISIBLE);
-                break;
         }
         return convertView;
     }
@@ -430,11 +465,11 @@ public class ChatListAdapter extends BaseAdapter {
         return null;
     }
 
-    public void setDataList(ArrayList<History> dataList) {
+    public void setDataList(LinkedList<History> dataList) {
         prepare(dataList, true);
     }
 
-    private void prepare(ArrayList<History> dataList, boolean doNeedClear) {
+    private void prepare(LinkedList<History> dataList, boolean doNeedClear) {
         // because of stackFromBottom of PullToRefreshListView does not work
         Collections.reverse(dataList);
 
@@ -553,6 +588,13 @@ public class ChatListAdapter extends BaseAdapter {
                         else
                             item_type = T_FRIEND_MAP_PHOTO;
                         break;
+                    case FeedDialog.LIKE_REQUEST:
+                        if (history.target == prev_target) {
+                            item_type = T_FRIEND_REQUEST_EXT;
+                        } else {
+                            item_type = T_FRIEND_REQUEST;
+                        }
+                        break;
                     default:
                         if (history.target == prev_target)
                             item_type = T_FRIEND_EXT;
@@ -580,6 +622,13 @@ public class ChatListAdapter extends BaseAdapter {
                             item_type = T_USER_MAP_EXT;
                         } else {
                             item_type = T_USER_MAP_PHOTO;
+                        }
+                        break;
+                    case FeedDialog.LIKE_REQUEST:
+                        if (history.target == prev_target) {
+                            item_type = T_USER_REQUEST_EXT;
+                        } else {
+                            item_type = T_USER_REQUEST;
                         }
                         break;
                     default:
@@ -666,15 +715,43 @@ public class ChatListAdapter extends BaseAdapter {
     }
 
     @SuppressWarnings("unchecked")
-    public ArrayList<History> getDataCopy() {
+    public LinkedList<History> getDataCopy() {
         //noinspection unchecked
-        ArrayList<History> dataClone = (ArrayList<History>) mDataList.clone();
+        LinkedList<History> dataClone = (LinkedList<History>) mDataList.clone();
         Collections.reverse(dataClone);
         return dataClone;
 
     }
 
-    public void addAll(ArrayList<History> dataList) {
+    public void addAll(LinkedList<History> dataList) {
         prepare(dataList, false);
     }
+
+    private View.OnClickListener mLikeRequestListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final int position = (Integer) v.getTag();
+            final History item = getItem(position);
+            if (item != null) {
+                new VirusLikesRequest(item.id, mContext).callback(new ApiHandler() {
+                    @Override
+                    public void success(ApiResponse response) {
+                        //После заврешения запроса удаляем элемент
+                        removeItem(position);
+
+                        //И предлагаем отправить пользователю запрос своим друзьям не из приложения
+                        new VirusLike(response).sendFacebookRequest(
+                                mContext,
+                                new VirusLike.VirusLikeDialogListener(mContext)
+                        );
+                    }
+
+                    @Override
+                    public void fail(int codeError, ApiResponse response) {
+                        Utils.showErrorMessage(getContext());
+                    }
+                }).exec();
+            }
+        }
+    };
 }

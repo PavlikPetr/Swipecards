@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.topface.topface"
           android:installLocation="auto"
-          android:versionCode="49"
-          android:versionName="2.2.1">
+          android:versionCode="50"
+          android:versionName="2.2.2">
 
     <uses-sdk
             android:minSdkVersion="7"
@@ -42,26 +42,21 @@
                 android:required="false"
                 android:name="com.google.android.maps"/>
 
-        <!-- main Activity -->
-        <activity android:name=".ui.AuthActivity">
+        <!-- activity -->
+        <activity
+                android:name=".ui.NavigationActivity"
+                android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <!-- Алиас для главной активити из первой версии. На всякий случай, а то раньше уже были проблемы с FB -->
-        <activity-alias
-                android:name=".ui.MainActivity"
-                android:targetActivity=".ui.AuthActivity"/>
-
-        <!-- activity -->
+        <activity android:name=".ui.AuthActivity"/>
         <activity
                 android:name=".utils.social.WebAuthActivity"
                 android:screenOrientation="portrait"/>
-        <activity
-                android:name=".ui.NavigationActivity"
-                android:screenOrientation="portrait"/>
+
         <activity
                 android:name=".ui.CitySearchActivity"
                 android:screenOrientation="portrait"/>
@@ -94,6 +89,11 @@
         <activity android:name="ru.wapstart.plus1.sdk.MraidBrowser"/>
         <activity android:name=".ui.profile.BlackListActivity"/>
         <activity android:name=".ui.ContainerActivity"/>
+
+        <!-- Алиас для главной активити из первой версии. На xвсякий случай, а то раньше уже были проблемы с FB -->
+        <activity-alias
+                android:name=".ui.MainActivity"
+                android:targetActivity=".ui.NavigationActivity"/>
 
         <!-- services -->
         <service android:name="com.topface.billing.googleplay.BillingService"/>

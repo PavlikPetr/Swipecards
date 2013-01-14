@@ -88,15 +88,6 @@
     <string name="buying_you_have_no_coins_for_gift">Nie starcza Tobie %d {{coins}} dla zakupu prezentu</string>
     <string name="buying_default_message">Możesz wysyłać prezenty i podziwy za monety</string>
     <string name="buying_money">Zakup monet</string>
-    <string name="buying_power">Zakup energii</string>
-    <string name="buying_recharge">Doładuj na 100%</string>
-    <string name="buying_energy">3 USD</string>
-    <string name="buying_pack_6coins">Pakiet z 6 monet</string>
-    <string name="buying_6coins">1 USD</string>
-    <string name="buying_pack_40coins">Pakiet z 40 monet</string>
-    <string name="buying_40coins">5 USD</string>
-    <string name="buying_pack_100coins">Pakiet ze 100 monet</string>
-    <string name="buying_100coins">10 USD</string>
     <string name="profile_header_title">Mój profil</string>
     <string name="profile_btn_chat">Pogadać</string>
     <string name="profile_add_title">Dodaj zdjęcie</string>
@@ -205,8 +196,6 @@
         <item quantity="one">%d zdjęcie</item>
     </plurals>
     <string name="novice_sympathy">Wysyłaj sympatie tym, kto Ci\nrzeczywiście się podoba,\naby zacząć miłą znajomość</string>
-    <string name="novice_energy">Im więcej energii,\ntym częściej Cię pokazują.\nNie zapominaj doładować\nenergię kupując ją.</string>
-    <string name="novice_battery_bonus">Energia daje Ci popularność\ni nowe sympatie. Możesz\ndoładować energię kupując\n 100% energii. Pierwsze doładowanie\n dostaniesz od nas za darmo!</string>
     <string name="novice_fill_profile">Dodaj swoje najlepsze zdjęcia,\naby zdobywać więcej sympatii.</string>
     <string name="general_edit_profile_message">Prosimy o uzupełnienie wszystkich pól ankiety</string>
     <string name="general_premium_access_error">Dla tej opcji potrzebny jest Premium</string>

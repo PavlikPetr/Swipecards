@@ -7,7 +7,13 @@ import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import com.topface.topface.data.Options;
+import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
+import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.OptionsRequest;
+import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
@@ -50,11 +56,17 @@ public class App extends Application {
 
         Debug.log("App", "+onCreate");
         Data.init(getApplicationContext());
+
         CacheProfile.loadProfile();
+
         //Начинаем слушать подключение к интернету
         if (mConnectionIntent == null) {
             mConnectionReceiver = new ConnectionChangeReceiver(mContext);
             mConnectionIntent = registerReceiver(mConnectionReceiver, new IntentFilter(CONNECTIVITY_CHANGE_ACTION));
+        }
+
+        if (CacheProfile.isLoaded()) {
+            sendProfileRequest();
         }
         //Если приходим с нотификации незалогинеными, нужно вернуться в AuthActivity
         if (Data.isSSID() && (new AuthToken(getApplicationContext())).isEmpty()) {
@@ -70,6 +82,35 @@ public class App extends Application {
         if (mConnectionIntent != null && mConnectionReceiver != null) {
             unregisterReceiver(mConnectionReceiver);
         }
+    }
+
+    public void sendProfileRequest() {
+        ProfileRequest profileRequest = new ProfileRequest(getBaseContext());
+        profileRequest.part = ProfileRequest.P_ALL;
+        profileRequest.callback(new ApiHandler() {
+            @Override
+            public void success(ApiResponse response) {
+                CacheProfile.setProfile(Profile.parse(response),response);
+
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {}
+
+        }).exec();
+
+        OptionsRequest request = new OptionsRequest(getApplicationContext());
+        request.callback(new ApiHandler() {
+            @Override
+            public void success(ApiResponse response) {
+                Options.parse(response);
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+                Debug.log("options::fail");
+            }
+        }).exec();
     }
 
     public static Context getContext() {

@@ -23,6 +23,15 @@
                     style="@style/TitleWhiteText"
                     android:layout_margin="5dp"
                     />
+            <TextView
+                    android:id="@+id/fbpBuyingDisabled"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/TitleWhiteText"
+                    android:text="@string/general_buying_disabled"
+                    android:visibility="gone"
+                    android:layout_margin="5dp"
+                    />
             <LinearLayout
                 android:id="@+id/fbpBtnContainer"
                 android:orientation="vertical"

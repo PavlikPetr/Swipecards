@@ -86,6 +86,11 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     private void initBuyVipViews(View root) {
         mBuyVipViewsContainer = (LinearLayout) root.findViewById(R.id.fbpContainer);
         LinearLayout btnContainer = (LinearLayout) root.findViewById(R.id.fbpBtnContainer);
+        if(CacheProfile.getOptions().premium.isEmpty()) {
+            root.findViewById(R.id.fbpBuyingDisabled).setVisibility(View.VISIBLE);
+        } else {
+            root.findViewById(R.id.fbpBuyingDisabled).setVisibility(View.GONE);
+        }
         for (Options.BuyButton curBtn: CacheProfile.getOptions().premium) {
             Options.setButton(btnContainer, curBtn, getActivity(), new Options.BuyButtonClickListener() {
                 @Override
