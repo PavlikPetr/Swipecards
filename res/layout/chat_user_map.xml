@@ -12,7 +12,7 @@
         android:padding="13dp" >
 
         <ImageView
-            android:id="@+id/ivUserMapBg"
+            android:id="@+id/ivMapBg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -30,7 +30,7 @@
                 android:textSize="10sp" />
 
             <ProgressBar
-                android:id="@+id/prgsUserMapAddress"
+                android:id="@+id/prgsMapAddress"
                 android:layout_width="10dp"
                 android:layout_height="10dp"
                 android:layout_centerInParent="true"

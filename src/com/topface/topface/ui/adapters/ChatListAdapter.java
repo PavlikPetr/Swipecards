@@ -18,7 +18,7 @@ import com.topface.topface.data.VirusLike;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.VirusLikesRequest;
-import com.topface.topface.ui.ChatActivity;
+import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.MemoryCacheTemplate;
@@ -26,10 +26,7 @@ import com.topface.topface.utils.OsmManager;
 import com.topface.topface.utils.Utils;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.*;
 
 @SuppressWarnings("deprecation")
 public class ChatListAdapter extends BaseAdapter {
@@ -44,6 +41,7 @@ public class ChatListAdapter extends BaseAdapter {
         ImageView mapBackground;
         ProgressBar prgsAddress;
         Button likeRequest;
+        View userInfo;
         // View mInfoGroup;
     }
 
@@ -77,10 +75,10 @@ public class ChatListAdapter extends BaseAdapter {
     private static final int T_COUNT = 17;
 
 
-    ChatActivity.OnListViewItemLongClickListener mLongClickListener;
+    ChatFragment.OnListViewItemLongClickListener mLongClickListener;
 
 
-    public ChatListAdapter(Context context, LinkedList<History> dataList) {
+    public ChatListAdapter(Context context, ArrayList<History> dataList) {
         mContext = context;
         mItemLayoutList = new LinkedList<Integer>();
         mItemTimeList = new HashMap<Integer, String>();
@@ -90,7 +88,7 @@ public class ChatListAdapter extends BaseAdapter {
         prepare(dataList, true);
     }
 
-    public void setOnItemLongClickListener(ChatActivity.OnListViewItemLongClickListener l) {
+    public void setOnItemLongClickListener(ChatFragment.OnListViewItemLongClickListener l) {
         mLongClickListener = l;
     }
 
@@ -127,251 +125,137 @@ public class ChatListAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder holder;
         final int type = getItemViewType(position);
-        final History history = getItem(position);
+        final History item = getItem(position);
 
         if (convertView == null) {
             holder = new ViewHolder();
-
-            switch (type) {
-                case T_FRIEND_PHOTO:
-                    convertView = mInflater.inflate(R.layout.chat_friend, null, false);
-                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                    holder.message = (TextView) convertView.findViewById(R.id.chat_message);
-                    holder.date = (TextView) convertView.findViewById(R.id.chat_date);
-                    holder.avatar.setOnClickListener(mOnClickListener);
-                    holder.avatar.setPhoto(history.user.photo);
-                    break;
-                case T_FRIEND_EXT:
-                    convertView = mInflater.inflate(R.layout.chat_friend_ext, null, false);
-                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                    holder.message = (TextView) convertView.findViewById(R.id.chat_message);
-                    holder.date = (TextView) convertView.findViewById(R.id.chat_date);
-                    break;
-                case T_USER_PHOTO:
-                    convertView = mInflater.inflate(R.layout.chat_user, null, false);
-                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                    holder.message = (TextView) convertView.findViewById(R.id.chat_message);
-                    holder.date = (TextView) convertView.findViewById(R.id.chat_date);
-                    holder.avatar.setPhoto(CacheProfile.photo);
-                    break;
-                case T_USER_EXT:
-                    convertView = mInflater.inflate(R.layout.chat_user_ext, null, false);
-                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                    holder.message = (TextView) convertView.findViewById(R.id.chat_message);
-                    holder.date = (TextView) convertView.findViewById(R.id.chat_date);
-                    break;
-                case T_DATE:
-                    convertView = mInflater.inflate(R.layout.chat_date_divider, null, false);
-                    holder.date = (TextView) convertView.findViewById(R.id.tvChatDateDivider);
-                    break;
-                case T_USER_GIFT_PHOTO:
-                    convertView = mInflater.inflate(R.layout.chat_user_gift, null, false);
-                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                    holder.gift = (ImageViewRemote) convertView.findViewById(R.id.ivChatGift);
-                    holder.avatar.setPhoto(CacheProfile.photo);
-                    holder.avatar.setVisibility(View.VISIBLE);
-                    break;
-                case T_USER_GIFT_EXT:
-                    convertView = mInflater.inflate(R.layout.chat_user_gift, null, false);
-                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                    holder.gift = (ImageViewRemote) convertView.findViewById(R.id.ivChatGift);
-                    holder.avatar.setVisibility(View.INVISIBLE);
-                    break;
-                case T_FRIEND_GIFT_PHOTO:
-                    convertView = mInflater.inflate(R.layout.chat_friend_gift, null, false);
-                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                    holder.gift = (ImageViewRemote) convertView.findViewById(R.id.ivChatGift);
-                    holder.avatar.setOnClickListener(mOnClickListener);
-                    holder.avatar.setPhoto(history.user.photo);
-                    holder.avatar.setVisibility(View.VISIBLE);
-                    break;
-                case T_FRIEND_GIFT_EXT:
-                    convertView = mInflater.inflate(R.layout.chat_friend_gift, null, false);
-                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                    holder.gift = (ImageViewRemote) convertView.findViewById(R.id.ivChatGift);
-                    holder.avatar.setVisibility(View.INVISIBLE);
-                    break;
-                case T_USER_MAP_PHOTO:
-                    convertView = mInflater.inflate(R.layout.chat_user_map, null, false);
-                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                    holder.address = (TextView) convertView.findViewById(R.id.tvChatMapAddress);
-                    holder.mapBackground = (ImageView) convertView.findViewById(R.id.ivUserMapBg);
-                    holder.prgsAddress = (ProgressBar) convertView.findViewById(R.id.prgsUserMapAddress);
-                    holder.avatar.setPhoto(CacheProfile.photo);
-                    holder.avatar.setVisibility(View.VISIBLE);
-                    break;
-                case T_USER_MAP_EXT:
-                    convertView = mInflater.inflate(R.layout.chat_user_map, null, false);
-                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                    holder.address = (TextView) convertView.findViewById(R.id.tvChatMapAddress);
-                    holder.mapBackground = (ImageView) convertView.findViewById(R.id.ivUserMapBg);
-                    holder.prgsAddress = (ProgressBar) convertView.findViewById(R.id.prgsUserMapAddress);
-                    holder.avatar.setVisibility(View.INVISIBLE);
-                    break;
-                case T_FRIEND_MAP_PHOTO:
-                    convertView = mInflater.inflate(R.layout.chat_friend_map, null, false);
-                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                    holder.address = (TextView) convertView.findViewById(R.id.tvChatMapAddress);
-                    holder.mapBackground = (ImageView) convertView.findViewById(R.id.ivFriendMapBg);
-                    holder.prgsAddress = (ProgressBar) convertView
-                            .findViewById(R.id.prgsFriendMapAddress);
-                    holder.avatar.setOnClickListener(mOnClickListener);
-                    holder.avatar.setPhoto(history.user.photo);
-                    holder.avatar.setVisibility(View.VISIBLE);
-                    break;
-                case T_FRIEND_MAP_EXT:
-                    convertView = mInflater.inflate(R.layout.chat_friend_map, null, false);
-                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                    holder.address = (TextView) convertView.findViewById(R.id.tvChatMapAddress);
-                    holder.mapBackground = (ImageView) convertView.findViewById(R.id.ivFriendMapBg);
-                    holder.prgsAddress = (ProgressBar) convertView
-                            .findViewById(R.id.prgsFriendMapAddress);
-                    holder.avatar.setVisibility(View.INVISIBLE);
-                    break;
-                case T_FRIEND_REQUEST:
-                case T_FRIEND_REQUEST_EXT:
-                    if (type == T_FRIEND_REQUEST) {
-                        convertView = mInflater.inflate(R.layout.chat_friend_request, null, false);
-                        holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                        holder.avatar.setOnClickListener(mOnClickListener);
-                        holder.avatar.setPhoto(history.user.photo);
-                        holder.avatar.setVisibility(View.VISIBLE);
-                    } else {
-                        convertView = mInflater.inflate(R.layout.chat_friend_request_ext, null, false);
-                        holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                        holder.avatar.setVisibility(View.INVISIBLE);
-                    }
-                    holder.message = (TextView) convertView.findViewById(R.id.chat_message);
-                    holder.date = (TextView) convertView.findViewById(R.id.chat_date);
-                    Button likeRequestBtn = (Button) convertView.findViewById(R.id.btn_chat_like_request);
-                    likeRequestBtn.setTag(position);
-                    likeRequestBtn.setOnClickListener(mLikeRequestListener);
-                    break;
-                case T_USER_REQUEST:
-                case T_USER_REQUEST_EXT:
-                    if (type == T_USER_REQUEST) {
-                        convertView = mInflater.inflate(R.layout.chat_user, null, false);
-                        holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                        holder.avatar.setOnClickListener(mOnClickListener);
-                        holder.avatar.setPhoto(CacheProfile.photo);
-                        holder.avatar.setVisibility(View.VISIBLE);
-                    } else {
-                        convertView = mInflater.inflate(R.layout.chat_user_ext, null, false);
-                        holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                        holder.avatar.setVisibility(View.INVISIBLE);
-                    }
-                    holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
-                    holder.message = (TextView) convertView.findViewById(R.id.chat_message);
-                    holder.date = (TextView) convertView.findViewById(R.id.chat_date);
-                    break;
-
-            }
-
+            convertView = inflateConvertView(position, convertView, holder, type, item);
             if (convertView != null) {
                 convertView.setTag(holder);
             }
-
         } else
             holder = (ViewHolder) convertView.getTag();
 
-        // setting visual information
+        // setting date for divider
         if (type == T_DATE) {
             holder.date.setText(mItemTimeList.get(position));
             return convertView;
-        } else if (type == T_USER_GIFT_PHOTO || type == T_USER_GIFT_EXT
-                || type == T_FRIEND_GIFT_PHOTO || type == T_FRIEND_GIFT_EXT) {
-            holder.gift.setRemoteSrc(history.link);
-            return convertView;
-        } else if (type == T_USER_MAP_PHOTO || type == T_USER_MAP_EXT
-                || type == T_FRIEND_MAP_PHOTO || type == T_FRIEND_MAP_EXT) {
-            holder.address.setText(Static.EMPTY);
-
-            if (history.type == FeedDialog.MAP) {
-                holder.mapBackground.setBackgroundResource(R.drawable.chat_item_place);
-            } else {
-                holder.mapBackground.setBackgroundResource(R.drawable.chat_item_map);
-            }
-
-            holder.mapBackground.setTag(history);
-            holder.mapBackground.setOnClickListener(mOnClickListener);
-
-            mapAddressDetection(history, holder.address, holder.prgsAddress);
-            return convertView;
         }
+
+        // setting only visual information
+        if (setImageInfo(holder, type, item)) return convertView;
 
         // setting textual information
-        switch (history.type) {
-            case FeedDialog.DEFAULT:
-                holder.message.setText(Html.fromHtml(history.text));
+        setMessageText(holder, item);
+
+        setLongClickListener(position, convertView, holder);
+        return convertView;
+    }
+
+    private View inflateConvertView(int position, View convertView, ViewHolder holder, int type, History item) {
+        switch (type) {
+            case T_DATE:
+                convertView = mInflater.inflate(R.layout.chat_date_divider, null, false);
+                holder.date = (TextView) convertView.findViewById(R.id.tvChatDateDivider);
                 break;
-            case FeedDialog.MESSAGE:
-                holder.message.setText(Html.fromHtml(history.text));
-                break;
-            case FeedDialog.MESSAGE_WISH:
-                switch (history.target) {
-                    case FeedDialog.FRIEND_MESSAGE:
-                        holder.message.setText(mContext.getString(R.string.chat_wish_in));
-                        break;
-                    case FeedDialog.USER_MESSAGE:
-                        holder.message.setText(mContext.getString(R.string.chat_wish_out));
-                        break;
+            case T_FRIEND_PHOTO:
+            case T_FRIEND_EXT:
+            case T_USER_PHOTO:
+            case T_USER_EXT:
+                convertView = mInflater.inflate(item.target == FeedDialog.USER_MESSAGE ?
+                        R.layout.chat_user : R.layout.chat_friend, null, false);
+                holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                holder.message = (TextView) convertView.findViewById(R.id.chat_message);
+                holder.date = (TextView) convertView.findViewById(R.id.chat_date);
+                holder.userInfo = convertView.findViewById(R.id.user_info);
+                if (type == T_FRIEND_PHOTO || type == T_USER_PHOTO) {
+
+                    holder.avatar.setOnClickListener(item.target != FeedDialog.USER_MESSAGE ?
+                                null : mOnClickListener);
+                    holder.avatar.setPhoto(item.target == FeedDialog.USER_MESSAGE ?
+                            CacheProfile.photo : item.user.photo);
+                    holder.userInfo.setBackgroundResource(item.target == FeedDialog.USER_MESSAGE ?
+                            R.drawable.bg_message_user : R.drawable.bg_message_friend);
+                } else {
+                    holder.avatar.setVisibility(View.INVISIBLE);
+                    holder.userInfo.setBackgroundResource(item.target == FeedDialog.USER_MESSAGE ?
+                            R.drawable.bg_message_user_ext : R.drawable.bg_message_friend_ext);
                 }
                 break;
-            case FeedDialog.MESSAGE_SEXUALITY:
-                switch (history.target) {
-                    case FeedDialog.FRIEND_MESSAGE:
-                        holder.message.setText(mContext.getString(R.string.chat_sexuality_in));
-                        break;
-                    case FeedDialog.USER_MESSAGE:
-                        holder.message.setText(mContext.getString(R.string.chat_sexuality_out));
-                        break;
+            case T_FRIEND_GIFT_PHOTO:
+            case T_FRIEND_GIFT_EXT:
+            case T_USER_GIFT_PHOTO:
+            case T_USER_GIFT_EXT:
+                convertView = mInflater.inflate(item.target == FeedDialog.USER_MESSAGE ?
+                        R.layout.chat_user_gift : R.layout.chat_friend_gift, null, false);
+                holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                holder.gift = (ImageViewRemote) convertView.findViewById(R.id.ivChatGift);
+                if(type == T_FRIEND_GIFT_PHOTO  || type == T_USER_GIFT_PHOTO) {
+                    holder.avatar.setOnClickListener(item.target != FeedDialog.USER_MESSAGE ?
+                            null : mOnClickListener);
+                    holder.avatar.setPhoto(item.target == FeedDialog.USER_MESSAGE ?
+                            CacheProfile.photo : item.user.photo);
+                    holder.avatar.setVisibility(View.VISIBLE);
+                } else {
+                    holder.avatar.setVisibility(View.INVISIBLE);
                 }
                 break;
-            case FeedDialog.LIKE:
-                switch (history.target) {
-                    case FeedDialog.FRIEND_MESSAGE:
-                        holder.message.setText(mContext.getString(R.string.chat_like_in));
-                        break;
-                    case FeedDialog.USER_MESSAGE:
-                        holder.message.setText(mContext.getString(R.string.chat_like_out));
-                        break;
+            case T_FRIEND_MAP_PHOTO:
+            case T_FRIEND_MAP_EXT:
+            case T_USER_MAP_PHOTO:
+            case T_USER_MAP_EXT:
+                convertView = mInflater.inflate(item.target == FeedDialog.USER_MESSAGE ?
+                        R.layout.chat_user_map : R.layout.chat_friend_map, null, false);
+                holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                holder.address = (TextView) convertView.findViewById(R.id.tvChatMapAddress);
+                holder.mapBackground = (ImageView) convertView.findViewById(R.id.ivMapBg);
+                holder.prgsAddress = (ProgressBar) convertView.findViewById(R.id.prgsMapAddress);
+                if (type == T_FRIEND_MAP_PHOTO  || type == T_USER_MAP_PHOTO) {
+                    holder.avatar.setOnClickListener(item.target != FeedDialog.USER_MESSAGE ?
+                            null : mOnClickListener);
+                    holder.avatar.setPhoto(item.target == FeedDialog.USER_MESSAGE ?
+                            CacheProfile.photo : item.user.photo);
+                    holder.avatar.setVisibility(View.VISIBLE);
+                } else {
+                    holder.avatar.setVisibility(View.INVISIBLE);
                 }
                 break;
-            case FeedDialog.SYMPHATHY:
-                switch (history.target) {
-                    case FeedDialog.FRIEND_MESSAGE:
-                        holder.message.setText(mContext.getString(R.string.chat_mutual_in));
-                        break;
-                    case FeedDialog.USER_MESSAGE:
-                        holder.message.setText(mContext.getString(R.string.chat_mutual_out));
-                        break;
+            case T_FRIEND_REQUEST:
+            case T_FRIEND_REQUEST_EXT:
+                convertView = mInflater.inflate(R.layout.chat_friend_request, null, false);
+                holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                if (type == T_FRIEND_REQUEST) {
+                    holder.avatar.setOnClickListener(mOnClickListener);
+                    holder.avatar.setPhoto(item.user.photo);
+                    holder.avatar.setVisibility(View.VISIBLE);
+                } else {
+                    holder.avatar.setVisibility(View.INVISIBLE);
                 }
+                holder.message = (TextView) convertView.findViewById(R.id.chat_message);
+                holder.date = (TextView) convertView.findViewById(R.id.chat_date);
+                Button likeRequestBtn = (Button) convertView.findViewById(R.id.btn_chat_like_request);
+                likeRequestBtn.setTag(position);
+                likeRequestBtn.setOnClickListener(mLikeRequestListener);
                 break;
-            case FeedDialog.MESSAGE_WINK:
-                switch (history.target) {
-                    case FeedDialog.FRIEND_MESSAGE:
-                        holder.message.setText(mContext.getString(R.string.chat_wink_in));
-                        break;
-                    case FeedDialog.USER_MESSAGE:
-                        holder.message.setText(mContext.getString(R.string.chat_wink_out));
-                        break;
+            case T_USER_REQUEST:
+            case T_USER_REQUEST_EXT:
+                convertView = mInflater.inflate(R.layout.chat_user, null, false);
+                holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
+                if (type == T_USER_REQUEST) {
+                    holder.avatar.setOnClickListener(mOnClickListener);
+                    holder.avatar.setPhoto(CacheProfile.photo);
+                    holder.avatar.setVisibility(View.VISIBLE);
+                } else {
+                    holder.avatar.setVisibility(View.INVISIBLE);
                 }
-                break;
-            case FeedDialog.PROMOTION:
-                holder.message.setText(Html.fromHtml(history.text));
-                break;
-            case FeedDialog.LIKE_REQUEST:
-                holder.message.setText(history.text);
-                break;
-            default:
-                holder.message.setText(Html.fromHtml(history.text));
+                holder.message = (TextView) convertView.findViewById(R.id.chat_message);
+                holder.date = (TextView) convertView.findViewById(R.id.chat_date);
                 break;
         }
+        return convertView;
+    }
 
-        holder.message.setMovementMethod(LinkMovementMethod.getInstance());
-
-        holder.date.setText(dateFormat.format(history.created));
-        // Utils.formatTime(holder.date, msg.created);
+    private void setLongClickListener(final int position, View convertView, final ViewHolder holder) {
         if (holder.message != null && convertView != null) {
             convertView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
@@ -388,7 +272,104 @@ public class ChatListAdapter extends BaseAdapter {
                 }
             });
         }
-        return convertView;
+    }
+
+    private boolean setImageInfo(ViewHolder holder, int type, History item) {
+        View convertView;
+        if (type == T_USER_GIFT_PHOTO || type == T_USER_GIFT_EXT
+                || type == T_FRIEND_GIFT_PHOTO || type == T_FRIEND_GIFT_EXT) {
+            holder.gift.setRemoteSrc(item.link);
+            return true;
+        } else if (type == T_USER_MAP_PHOTO || type == T_USER_MAP_EXT
+                || type == T_FRIEND_MAP_PHOTO || type == T_FRIEND_MAP_EXT) {
+            holder.address.setText(Static.EMPTY);
+
+            if (item.type == FeedDialog.MAP) {
+                holder.mapBackground.setBackgroundResource(R.drawable.chat_item_place);
+            } else {
+                holder.mapBackground.setBackgroundResource(R.drawable.chat_item_map);
+            }
+
+            holder.mapBackground.setTag(item);
+            holder.mapBackground.setOnClickListener(mOnClickListener);
+
+            mapAddressDetection(item, holder.address, holder.prgsAddress);
+            return true;
+        }
+        return false;
+    }
+
+    private void setMessageText(ViewHolder holder, History item) {
+        switch (item.type) {
+            case FeedDialog.DEFAULT:
+                holder.message.setText(Html.fromHtml(item.text));
+                break;
+            case FeedDialog.MESSAGE:
+                holder.message.setText(Html.fromHtml(item.text));
+                break;
+            case FeedDialog.MESSAGE_WISH:
+                switch (item.target) {
+                    case FeedDialog.FRIEND_MESSAGE:
+                        holder.message.setText(mContext.getString(R.string.chat_wish_in));
+                        break;
+                    case FeedDialog.USER_MESSAGE:
+                        holder.message.setText(mContext.getString(R.string.chat_wish_out));
+                        break;
+                }
+                break;
+            case FeedDialog.MESSAGE_SEXUALITY:
+                switch (item.target) {
+                    case FeedDialog.FRIEND_MESSAGE:
+                        holder.message.setText(mContext.getString(R.string.chat_sexuality_in));
+                        break;
+                    case FeedDialog.USER_MESSAGE:
+                        holder.message.setText(mContext.getString(R.string.chat_sexuality_out));
+                        break;
+                }
+                break;
+            case FeedDialog.LIKE:
+                switch (item.target) {
+                    case FeedDialog.FRIEND_MESSAGE:
+                        holder.message.setText(mContext.getString(R.string.chat_like_in));
+                        break;
+                    case FeedDialog.USER_MESSAGE:
+                        holder.message.setText(mContext.getString(R.string.chat_like_out));
+                        break;
+                }
+                break;
+            case FeedDialog.SYMPHATHY:
+                switch (item.target) {
+                    case FeedDialog.FRIEND_MESSAGE:
+                        holder.message.setText(mContext.getString(R.string.chat_mutual_in));
+                        break;
+                    case FeedDialog.USER_MESSAGE:
+                        holder.message.setText(mContext.getString(R.string.chat_mutual_out));
+                        break;
+                }
+                break;
+            case FeedDialog.MESSAGE_WINK:
+                switch (item.target) {
+                    case FeedDialog.FRIEND_MESSAGE:
+                        holder.message.setText(mContext.getString(R.string.chat_wink_in));
+                        break;
+                    case FeedDialog.USER_MESSAGE:
+                        holder.message.setText(mContext.getString(R.string.chat_wink_out));
+                        break;
+                }
+                break;
+            case FeedDialog.PROMOTION:
+                holder.message.setText(Html.fromHtml(item.text));
+                break;
+            case FeedDialog.LIKE_REQUEST:
+                holder.message.setText(item.text);
+                break;
+            default:
+                holder.message.setText(Html.fromHtml(item.text));
+                break;
+        }
+
+        holder.message.setMovementMethod(LinkMovementMethod.getInstance());
+        holder.date.setText(dateFormat.format(item.created));
     }
 
     public void copyText(String text) {
@@ -465,11 +446,11 @@ public class ChatListAdapter extends BaseAdapter {
         return null;
     }
 
-    public void setDataList(LinkedList<History> dataList) {
+    public void setDataList(ArrayList<History> dataList) {
         prepare(dataList, true);
     }
 
-    private void prepare(LinkedList<History> dataList, boolean doNeedClear) {
+    private void prepare(ArrayList<History> dataList, boolean doNeedClear) {
         // because of stackFromBottom of PullToRefreshListView does not work
         Collections.reverse(dataList);
 
@@ -715,15 +696,15 @@ public class ChatListAdapter extends BaseAdapter {
     }
 
     @SuppressWarnings("unchecked")
-    public LinkedList<History> getDataCopy() {
+    public ArrayList<History> getDataCopy() {
         //noinspection unchecked
-        LinkedList<History> dataClone = (LinkedList<History>) mDataList.clone();
+        ArrayList<History> dataClone = (ArrayList<History>) mDataList.clone();
         Collections.reverse(dataClone);
         return dataClone;
 
     }
 
-    public void addAll(LinkedList<History> dataList) {
+    public void addAll(ArrayList<History> dataList) {
         prepare(dataList, false);
     }
 

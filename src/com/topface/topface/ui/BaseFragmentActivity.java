@@ -6,9 +6,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.http.IRequestClient;
-import com.topface.topface.utils.social.AuthToken;
 
 import java.util.LinkedList;
 
