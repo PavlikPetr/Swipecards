@@ -166,7 +166,7 @@
     <string name="settings_version">Version</string>
     <string name="settings_copyright">Copyright 2010-</string>
     <string name="settings_rights_reserved">Topface \nAll rights reserved</string>
-    <string name="settings_extra">More information you can find on</string>
+    <string name="settings_extra">You can find more information on</string>
     <string name="settings_logout">Log out</string>
     <string name="settings_logout_msg">Do you really want to exit?</string>
     <string name="settings_error_message">Error message</string>

@@ -288,4 +288,10 @@
     <string name="general_reconnect_social">Det är omöjligt att ansluta sig till social media. Vänligen försök senare.</string>
     <string name="general_buying">Köp sympatier och mynt</string>
     <string name="general_block">Blockera</string>
+    <string name="general_buying_disabled">För närvarande är inköpet omöjligt</string>
+    <string name="ban_flood_detected">Du skickar för många förfrågningar till servern. För att kunna använda applikationen vidare, vänta lite.</string>
+    <string name="general_maintenance">Vi kan inte ta emot din förfrågan eftersom servern är under teknisk undersökning. Vänligen försök senare</string>
+    <string name="virus_chat_likes_request_title">Skänk sympatier till vänner</string>
+    <string name="virus_chat_btn">Erhålla sympatier</string>
+    <string name="virus_request_error">Det gick inte att skicka fler sympatier till vänner</string>
 </resources>
