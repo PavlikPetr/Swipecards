@@ -10,6 +10,10 @@
         <item quantity="other">%d minuter före</item>
         <item quantity="one">%d minuter före</item>
     </plurals>
+    <plurals name="time_month">
+        <item quantity="other">%d månader</item>
+        <item quantity="one">%d månad</item>
+    </plurals>
     <string name="time_yesterday">Igår</string>
     <string name="time_today">Idag</string>
     <string name="time_monday">Mo</string>

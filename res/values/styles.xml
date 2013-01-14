@@ -460,4 +460,21 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="LikeRequestButton" parent="ShadowButtonFont">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:background">@drawable/btn_like_request_selector</item>
+        <item name="android:drawableRight">@drawable/ic_like</item>
+        <item name="android:drawablePadding">10dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:paddingLeft">25dp</item>
+        <item name="android:paddingRight">25dp</item>
+        <item name="android:paddingBottom">2dp</item>
+        <item name="android:layout_marginTop">3dp</item>
+        <item name="android:layout_marginBottom">3dp</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
 </resources>

@@ -25,7 +25,7 @@ import com.topface.topface.utils.CacheProfile;
 
 import java.util.LinkedList;
 
-public class BuyingFragment extends BillingFragment implements View.OnClickListener {
+public class BuyingFragment extends BillingFragment {
 
     public static final String ARG_ITEM_TYPE = "type_of_buying_item";
     public static final int TYPE_GIFT = 1;
@@ -199,63 +199,9 @@ public class BuyingFragment extends BillingFragment implements View.OnClickListe
     }
 
     private void goToVipSettings() {
-//        if(getActivity() != null) {
-//            ((ContainerActivity)getActivity()).startFragment(ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
-//        }
         Intent intent = new Intent(getActivity(), ContainerActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
         startActivity(intent);
-    }
-
-    @Override
-    public void onClick(View view) {
-        requestPurchase(view);
-    }
-
-    private void requestPurchase(View view) {
-//        switch (view.getId()) {
-//            case R.id.fb6Pack:
-//                buyItem("topface.coins.6");
-//                break;
-//            case R.id.fb40Pack:
-//                buyItem("topface.coins.40");
-//                break;
-//            case R.id.fb100Pack:
-//                buyItem("topface.coins.100");
-//                break;
-//            case R.id.fb300Pack:
-//                buyItem("topface.coins.300");
-//                break;
-//            case R.id.fbRecharge:
-//                buyItem("topface.energy.10000");
-//                break;
-//        }
-    }
-
-    /**
-     * Тестовые товары для отладки покупок
-     * NOTE: Применяется только для тестирования!
-     *
-     * @param view кнопка покупки
-     */
-    private void requestTestPurchase(View view) {
-        switch (view.getId()) {
-            case R.id.btnBuyingMoney6:
-                buyItem("android.test.purchased");
-                break;
-            case R.id.btnBuyingMoney40:
-                buyItem("android.test.canceled");
-                break;
-            case R.id.btnBuyingMoney100:
-                buyItem("android.test.refunded");
-                break;
-            case R.id.btnBuyingMoney300:
-                buyItem("android.test.item_unavailable");
-                break;
-            case R.id.btnBuyingLikes:
-                buyItem("android.test.purchased");
-                break;
-        }
     }
 
     @Override

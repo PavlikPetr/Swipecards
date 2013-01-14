@@ -23,9 +23,9 @@ public class TestRequest extends AbstractApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         JSONObject data = new JSONObject();
-        if (!TextUtils.isEmpty(required)) {
-            data.put("required", required);
-        }
+
+        data.put("required", required != null ? required : "value");
+
         if (!TextUtils.isEmpty(nonrequired)) {
             data.put("nonrequired", nonrequired);
         }

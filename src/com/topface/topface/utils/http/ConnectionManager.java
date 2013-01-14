@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import com.topface.topface.*;
 import com.topface.topface.data.Auth;
@@ -165,10 +166,14 @@ public class ConnectionManager {
                             // (если отменен, может возникнуть ситуация, когда handler уже не сможет
                             // обработать ответ из-за убитого контекста)
                         } else if (!apiRequest.isCanceled()) {
-                            apiRequest.handler.response(apiResponse);
+                            Message msg = new Message();
+                            msg.obj = apiResponse;
+                            apiRequest.handler.sendMessage(msg);
                         }
                     } else if (!apiRequest.isCanceled()) {
-                        apiRequest.handler.response(apiResponse);
+                        Message msg = new Message();
+                        msg.obj = apiResponse;
+                        apiRequest.handler.sendMessage(msg);
                     }
 
                 } catch (Exception e) {

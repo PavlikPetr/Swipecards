@@ -33,11 +33,5 @@
                 android:layout_height="wrap_content"/>
     </LinearLayout>
 
-    <ImageView
-            android:id="@+id/chat_gift"
-            android:layout_toRightOf="@id/left_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"/>
 
 </RelativeLayout>    

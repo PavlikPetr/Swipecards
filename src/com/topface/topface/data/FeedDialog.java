@@ -37,6 +37,7 @@ public class FeedDialog extends FeedLike {
     public static final int PROMOTION = 10; // Рекламное сообщение
     public static final int MAP = 12; // Текущее местоположение
     public static final int ADDRESS = 13; // Произвольное место на карте
+    public static final int LIKE_REQUEST = 15; // Вирус "Получи 5 лайков"
 
 
     public static final int USER_MESSAGE = 0;

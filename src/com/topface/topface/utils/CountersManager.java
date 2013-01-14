@@ -3,7 +3,6 @@ package com.topface.topface.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
-import com.topface.topface.requests.LeaderRequest;
 import com.topface.topface.requests.LeadersRequest;
 
 public class CountersManager {
@@ -121,7 +120,6 @@ public class CountersManager {
         commitCounters();
     }
 
-    @SuppressWarnings("UnusedDeclaration")
     public int getCounter(int type) {
         switch (type) {
             case LIKES:
@@ -137,9 +135,7 @@ public class CountersManager {
     }
 
     public void setMethod(String method) {
-        if(method == null) {
-            lastRequestMethod = method;
-        } if(!method.equals(LeadersRequest.SERVICE_NAME)) {
+        if (method == null || !method.equals(LeadersRequest.SERVICE_NAME)) {
             lastRequestMethod = method;
         } else {
             lastRequestMethod = DeniedMethod;

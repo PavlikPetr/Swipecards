@@ -196,6 +196,8 @@
                     android:background="@drawable/btn_vip_sale_selector"
                     android:layout_marginTop="10dp"
                     android:padding="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     >
 
                 <TextView

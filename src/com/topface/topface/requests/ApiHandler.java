@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 import com.topface.topface.App;
@@ -15,6 +16,12 @@ import org.json.JSONObject;
 abstract public class ApiHandler extends Handler {
 
     private Context mContext;
+
+    @Override
+    public void handleMessage(Message msg) {
+        super.handleMessage(msg);
+        response((ApiResponse) msg.obj);
+    }
 
     public void response(ApiResponse response) {
         try {
