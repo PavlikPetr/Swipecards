@@ -108,7 +108,7 @@ public class VirusLike extends AbstractData {
             Toast.makeText(
                     mContext,
                     Utils.getQuantityString(
-                            R.plurals.virus_request_complete,
+                            R.plurals.virus_request_likes_cnt,
                             CacheProfile.likes,
                             CacheProfile.likes
                     ),

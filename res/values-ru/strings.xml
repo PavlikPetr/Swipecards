@@ -397,7 +397,7 @@
     <string name="virus_chat_btn">Получить симпатии</string>
     <string name="virus_request_error">Не удалось отправить симпатий вашим друзьям</string>
 
-    <plurals name="virus_request_complete">
+    <plurals name="virus_request_likes_cnt">
         <item quantity="one">Теперь у вас %d симпатия!</item>
         <item quantity="few">Теперь у вас %d симпатии!</item>
         <item quantity="many">Теперь у вас %d симпатия!</item>
