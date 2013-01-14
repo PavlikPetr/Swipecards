@@ -53,19 +53,34 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_navigation);
+
         Debug.log(this, "onCreate");
         mFragmentManager = getSupportFragmentManager();
+        if(CacheProfile.isLoaded()) {
+            onInit();
+        }
+        mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        setStopTime();
+        mNovice = Novice.getInstance(mPreferences);
+        mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
+
+        if (App.isOnline()) {
+            ratingPopup();
+        }
+    }
+
+    @Override
+    public void onInit() {
+        mFragmentSwitcher = (FragmentSwitchController) findViewById(R.id.fragment_switcher);
+        mFragmentSwitcher.setFragmentSwitchListener(mFragmentSwitchListener);
+        mFragmentSwitcher.setFragmentManager(mFragmentManager);
 
         mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
         mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
         mFragmentMenu.setOnMenuListener(mOnFragmentMenuListener);
 
-        mFragmentSwitcher = (FragmentSwitchController) findViewById(R.id.fragment_switcher);
-        mFragmentSwitcher.setFragmentSwitchListener(mFragmentSwitchListener);
-        mFragmentSwitcher.setFragmentManager(mFragmentManager);
 
         Intent intent = getIntent();
         int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
@@ -75,16 +90,8 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
             mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
             mFragmentMenu.selectDefaultMenu();
         }
-        AuthorizationManager.getInstance(this).extendAccessToken();
+        AuthorizationManager.getInstance(NavigationActivity.this).extendAccessToken();
 
-        mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        setStopTime();
-        mNovice = Novice.getInstance(mPreferences);
-        mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
-
-        if (App.isOnline()) {
-            ratingPopup();
-        }
     }
 
     @Override
@@ -360,6 +367,14 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
             ((ViewGroup) view).removeAllViews();
         }
     }
+
+    @Override
+    public void close(Fragment fragment) {
+        super.close(fragment);
+        mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
+        mFragmentMenu.selectDefaultMenu();
+    }
+
 
 
     @Override

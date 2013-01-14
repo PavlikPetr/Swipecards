@@ -20,6 +20,7 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.ui.AuthActivity;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
@@ -87,7 +88,7 @@ public class SettingsAccountFragment extends TrackedFragment {
                             }
                         });
                         Settings.getInstance().resetSettings();
-                        startActivity(new Intent(getActivity().getApplicationContext(), AuthActivity.class));
+                        startActivity(new Intent(getActivity().getApplicationContext(), NavigationActivity.class));
                         getActivity().setResult(RESULT_LOGOUT);
                         CacheProfile.clearProfile();
                         getActivity().finish();

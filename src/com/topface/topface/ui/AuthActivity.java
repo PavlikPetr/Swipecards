@@ -79,7 +79,7 @@ public class AuthActivity extends BaseFragmentActivity implements View.OnClickLi
         filterReauthBan.addAction(ConnectionChangeReceiver.REAUTH);
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, filterReauthBan);
 
-        mAuthorizationManager = AuthorizationManager.getInstance(this);
+//        mAuthorizationManager = AuthorizationManager.getInstance(this);
         mAuthorizationManager.setOnAuthorizationHandler(new Handler() {
             @Override
             public void handleMessage(Message msg) {
