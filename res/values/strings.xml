@@ -288,4 +288,9 @@
     <string name="general_reconnect_social">Cannot connect the social network. Please, try again later</string>
     <string name="general_buying">Buy likes and coins</string>
     <string name="general_block">Block</string>
+    <string name="general_buying_disabled">The purchase is impossible at the moment</string>
+    <string name="ban_flood_detected">You too often make requests to the server. Please wait.</string>
+    <string name="virus_chat_likes_request_title">Give likes to your friends as a gift</string>
+    <string name="virus_chat_btn">Receive likes</string>
+    <string name="virus_request_error">Unable to send likes to your friends</string>
 </resources>

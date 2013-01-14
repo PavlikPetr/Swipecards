@@ -288,4 +288,10 @@
     <string name="general_reconnect_social">Sosyal ağa bağlanamıyor. Daha sonra tekrar deneyin.</string>
     <string name="general_buying">Sempati ve paraları satın almak</string>
     <string name="general_block">Engellemek</string>
+    <string name="general_buying_disabled">Şu anda alışveriş mümkün değildir</string>
+    <string name="ban_flood_detected">Server\'i çok sık kullanıyorsunuz. Uygulamayı kullanmaya devam etmek için bekleyin.</string>
+    <string name="general_maintenance">Serverde teknik çalışmalar yapılmaktadır ve isteğiniz şu anda uygulanamaz. Daha sonra tekrar deneyebilirsiniz.</string>
+    <string name="virus_chat_likes_request_title">Arkadaşlarınıza sempatileri hediye etmek</string>
+    <string name="virus_chat_btn">Sempati kazanmak</string>
+    <string name="virus_request_error">Sempatiler arkadaşlarınıza gönderilemedi</string>
 </resources>
