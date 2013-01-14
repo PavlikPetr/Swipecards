@@ -189,7 +189,7 @@ public class GiftsFragment extends BaseFragment {
                                     if (mGifts.size() > 1) {
                                         mGifts.add(1, sendedGift);
                                     } else {
-                                        mGifts.addLast(sendedGift);
+                                        mGifts.add((mGifts.size()-1), sendedGift);
                                     }
                                     mGridAdapter.notifyDataSetChanged();
                                 }

@@ -22,10 +22,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
-import com.topface.topface.ui.ChatActivity;
-import com.topface.topface.ui.ContainerActivity;
-import com.topface.topface.ui.GiftsActivity;
-import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.*;
 import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.profile.*;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -373,15 +370,25 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
     public void openChat() {
         if (mUserProfile != null) {
-            Intent intent = new Intent(getActivity(), ChatActivity.class);
-            intent.putExtra(ChatActivity.INTENT_USER_ID, mUserProfile.uid);
-            intent.putExtra(ChatActivity.INTENT_USER_NAME, mUserProfile.first_name);
-            intent.putExtra(ChatActivity.INTENT_USER_SEX, mUserProfile.sex);
-            intent.putExtra(ChatActivity.INTENT_USER_AGE, mUserProfile.age);
-            intent.putExtra(ChatActivity.INTENT_USER_CITY, mUserProfile.city_name);
-            intent.putExtra(ChatActivity.INTENT_PROFILE_INVOKE, true);
-            intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, ProfileFragment.this.getClass().getSimpleName());
-            getActivity().startActivityForResult(intent, ChatActivity.INTENT_CHAT_REQUEST);
+//            Intent intent = new Intent(getActivity(), ChatActivity.class);
+//            intent.putExtra(ChatActivity.INTENT_USER_ID, mUserProfile.uid);
+//            intent.putExtra(ChatActivity.INTENT_USER_NAME, mUserProfile.first_name);
+//            intent.putExtra(ChatActivity.INTENT_USER_SEX, mUserProfile.sex);
+//            intent.putExtra(ChatActivity.INTENT_USER_AGE, mUserProfile.age);
+//            intent.putExtra(ChatActivity.INTENT_USER_CITY, mUserProfile.city_name);
+//            intent.putExtra(ChatActivity.INTENT_PROFILE_INVOKE, true);
+//            intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, ProfileFragment.this.getClass().getSimpleName());
+//            getActivity().startActivityForResult(intent, ChatActivity.INTENT_CHAT_REQUEST);
+
+            Intent intent = new Intent(getActivity(), ContainerActivity.class);
+            intent.putExtra(ChatFragment.INTENT_USER_ID, mUserProfile.uid);
+            intent.putExtra(ChatFragment.INTENT_USER_NAME, mUserProfile.first_name);
+            intent.putExtra(ChatFragment.INTENT_USER_SEX, mUserProfile.sex);
+            intent.putExtra(ChatFragment.INTENT_USER_AGE, mUserProfile.age);
+            intent.putExtra(ChatFragment.INTENT_USER_CITY, mUserProfile.city_name);
+            intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
+            intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_CHAT_FRAGMENT);
+            getActivity().startActivityForResult(intent, ChatFragment.INTENT_CHAT_REQUEST);
         }
     }
 

@@ -62,7 +62,9 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
-        intent.putExtra(Static.INTENT_REQUEST_KEY, requestCode);
+        if (requestCode != -1) {
+            intent.putExtra(Static.INTENT_REQUEST_KEY, requestCode);
+        }
         super.startActivityForResult(intent, requestCode);
     }
 }

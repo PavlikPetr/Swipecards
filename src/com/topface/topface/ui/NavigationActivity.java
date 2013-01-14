@@ -374,9 +374,9 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK && requestCode == ChatActivity.INTENT_CHAT_REQUEST) {
+        if (resultCode == Activity.RESULT_OK && requestCode == ChatFragment.INTENT_CHAT_REQUEST) {
             if (data != null) {
-                int user_id = data.getExtras().getInt(ChatActivity.INTENT_USER_ID);
+                int user_id = data.getExtras().getInt(ChatFragment.INTENT_USER_ID);
                 mDelayedFragment = ProfileFragment.newInstance(user_id, ProfileFragment.TYPE_USER_PROFILE);
                 return;
             }

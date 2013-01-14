@@ -6,18 +6,18 @@ import android.widget.AbsListView.OnScrollListener;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.ui.views.ImageViewRemote;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class GiftGalleryManager<T extends FeedGift> implements OnScrollListener {
-    private LinkedList<T> mDataList;
+    private ArrayList<T> mDataList;
     private Handler mHandler;
 
 
-    public GiftGalleryManager(LinkedList<T> dataList, Handler handler) {
+    public GiftGalleryManager(ArrayList<T> dataList, Handler handler) {
         mHandler = handler;
         mDataList = dataList;
         if (mDataList == null) {
-            mDataList = new LinkedList<T>();
+            mDataList = new ArrayList<T>();
         }
     }
 
@@ -41,7 +41,7 @@ public class GiftGalleryManager<T extends FeedGift> implements OnScrollListener 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= totalItemCount - 1) {
-            if (mHandler != null && !mDataList.isEmpty() && mDataList.getLast().isLoader()) {
+            if (mHandler != null && !mDataList.isEmpty() && mDataList.get(mDataList.size()-1).isLoader()) {
                 mHandler.sendEmptyMessage(0);
             }
         }

@@ -65,7 +65,7 @@ public class LeadersActivity extends BaseFragmentActivity {
             @Override
             public void onClick(View view) {
                 if (CacheProfile.money < CacheProfile.getOptions().price_leader) {
-                    Intent intent = new Intent(getApplicationContext(), ContainerActivity.class);
+                    Intent intent = new Intent(LeadersActivity.this, ContainerActivity.class);
                     intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
                     startActivity(intent);
                 } else if (mSelectedPhoto.isSelected()) {
@@ -133,10 +133,10 @@ public class LeadersActivity extends BaseFragmentActivity {
 
         public void select(int item, AdapterView<?> adapterView) {
             if (item >= 0) {
-                //При повторном клике на выбранный элемент, отключаем
+                //При повторном клике на выбранный элемент, ничего не делаем
                 if (item == mItem) {
-                    mItem = -1;
-                    mPhotoId = -1;
+//                    mItem = -1;
+//                    mPhotoId = -1;
                 } else {
                     Photo photo = (Photo) adapterView.getItemAtPosition(item);
                     mItem = item;
@@ -157,7 +157,7 @@ public class LeadersActivity extends BaseFragmentActivity {
         }
 
         public boolean isSelected() {
-            return mItem > 0;
+            return mItem >= 0;
         }
 
         public int getPhotoId() {

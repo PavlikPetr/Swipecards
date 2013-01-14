@@ -34,7 +34,7 @@ import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.ui.views.SwapControl;
 import com.topface.topface.utils.*;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.TimerTask;
 
 public class ChatFragment extends BaseFragment implements View.OnClickListener,
@@ -45,11 +45,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     public static final String WAS_FAILED = "was_failed";
     // Data
     private int mUserId;
+
     private boolean mProfileInvoke;
     private boolean mIsAddPanelOpened;
     private PullToRefreshListView mListView;
     private ChatListAdapter mAdapter;
-    private LinkedList<History> mHistoryList;
+    private ArrayList<History> mHistoryData;
     private EditText mEditBox;
     private LockerView mLoadingLocker;
     private RetryView mRetryView;
@@ -91,11 +92,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
     // Managers
     private GeoLocationManager mGeoManager = null;
-    private RelativeLayout lockScreen;
+    private RelativeLayout mLockScreen;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
+//        super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.ac_chat_new, null);
 
         Debug.log(this, "+onCreate");
@@ -109,71 +110,16 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         String userCity = getArguments().getString(INTENT_USER_CITY);
         String prevEntity = getArguments().getString(BaseFragmentActivity.INTENT_PREV_ENTITY, null);
 
-
-        // Data
-        mHistoryList = new LinkedList<History>();
-
-        // Swap Control
-        mSwapControl = ((SwapControl) root.findViewById(R.id.swapFormView));
-
         // Locker
         mLoadingLocker = (LockerView) root.findViewById(R.id.llvChatLoading);
 
+        // Navigation bar
+        initNavigationbar(userSex, userName, userAge, userCity);
+
         editButtonsNames = new String[]{getString(R.string.general_copy_title), getString(R.string.general_delete_title)};
 
-        // Navigation bar
-        TextView headerTitle = ((TextView) getActivity().findViewById(R.id.tvNavigationTitle));
-        headerTitle.setText(userName + ", "
-                + userAge);
-        TextView headerSubtitle = ((TextView) getActivity().findViewById(R.id.tvNavigationSubtitle));
-        headerSubtitle.setVisibility(View.VISIBLE);
-        headerSubtitle.setText(userCity);
-
-    //        getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
-    //        btnBack = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
-    //        btnBack.setVisibility(View.VISIBLE);
-    //
-    //        if (prevEntity != null && Utils.isThereNavigationActivity(getActivity())) {
-    //            btnBack.setOnClickListener(new View.OnClickListener() {
-    //                @Override
-    //                public void onClick(View v) {
-    //                    //TODO close fragment
-    //                    getActivity().finish();
-    //                }
-    //            });
-    //            if (prevEntity.equals(ChatFragment.class.getSimpleName())) {
-    //                btnBack.setText(R.string.general_chat);
-    //            } else if (prevEntity.equals(DatingFragment.class.getSimpleName())) {
-    //                btnBack.setText(R.string.general_dating);
-    //            } else if (prevEntity.equals(DialogsFragment.class.getSimpleName())) {
-    //                btnBack.setText(R.string.general_dialogs);
-    //            } else if (prevEntity.equals(LikesFragment.class.getSimpleName())) {
-    //                btnBack.setText(R.string.general_likes);
-    //            } else if (prevEntity.equals(MutualFragment.class.getSimpleName())) {
-    //                btnBack.setText(R.string.general_mutual);
-    //            } else if (prevEntity.equals(VisitorsFragment.class.getSimpleName())) {
-    //                btnBack.setText(R.string.general_dating);
-    //            } else if (prevEntity.equals(ProfileFragment.class.getSimpleName())) {
-    //                btnBack.setText(R.string.general_profile);
-    //            }
-    //
-    //        }
-
-        final ImageButton btnProfile = (ImageButton) getActivity().findViewById(R.id.btnNavigationProfileBar);
-        switch (userSex) {
-            case Static.BOY:
-                btnProfile.setImageResource(R.drawable.navigation_male_profile_selector);
-                break;
-            case Static.GIRL:
-                btnProfile.setImageResource(R.drawable.navigation_female_profile_selector);
-                break;
-        }
-        btnProfile.setVisibility(View.VISIBLE);
-        btnProfile.setOnClickListener(this);
-
-        // View btnProfile = root.findViewById(R.id.btnHeaderProfile);
-        // btnProfile.setVisibility(View.VISIBLE);
-        // btnProfile.setOnClickListener(this);
+        // Swap Control
+        mSwapControl = ((SwapControl) root.findViewById(R.id.swapFormView));
 
         // Add Button
         root.findViewById(R.id.btnChatAdd).setOnClickListener(this);
@@ -184,11 +130,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         // Place Button
         root.findViewById(R.id.btnChatPlace).setOnClickListener(this);
 
+        // Map Button
         /**
          * Показываем кнопки отправки произвольного местоположения когда карты доступны
          */
         if (Utils.isGoogleMapsAvailable()) {
-            // Map Button
             View chatMap = root.findViewById(R.id.btnChatMap);
             chatMap.setOnClickListener(this);
             chatMap.setVisibility(View.VISIBLE);
@@ -198,27 +144,42 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         mEditBox = (EditText) root.findViewById(R.id.edChatBox);
         mEditBox.setOnEditorActionListener(mEditorActionListener);
 
-        lockScreen = (RelativeLayout) root.findViewById(R.id.llvLockScreen);
-        mRetryView = new RetryView(getActivity().getApplicationContext());
-        mRetryView.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                update(false, "retry");
-                lockScreen.setVisibility(View.GONE);
-            }
-        });
-
-        lockScreen.addView(mRetryView);
+        //LockScreen
+        initLockScreen(root);
 
         //Send Button
         Button sendButton = (Button) root.findViewById(R.id.btnSend);
         sendButton.setOnClickListener(this);
 
-        // ListView
-        mListView = (PullToRefreshListView) root.findViewById(R.id.lvChatList);
+        //init data
+        restoreData(savedInstanceState);
 
-        // Adapter
-        mAdapter = new ChatListAdapter(getActivity().getApplicationContext(), mHistoryList);
+        // History ListView & ListAdapter
+        initChatHistory(root);
+
+        GCMUtils.cancelNotification(getActivity().getApplicationContext(), GCMUtils.GCM_TYPE_MESSAGE);
+
+        return root;
+    }
+
+    private void restoreData(Bundle savedInstanceState) {
+        if (mHistoryData == null) {
+            if (savedInstanceState != null) {
+                boolean was_failed = savedInstanceState.getBoolean(WAS_FAILED);
+                mHistoryData = savedInstanceState.getParcelableArrayList(ADAPTER_DATA);
+                if (was_failed) mLockScreen.setVisibility(View.VISIBLE);
+                else mLockScreen.setVisibility(View.GONE);
+                mLoadingLocker.setVisibility(View.GONE);
+            }
+            if (mHistoryData == null) {
+                mHistoryData = new ArrayList<History>();
+            }
+        }
+    }
+
+    private void initChatHistory(View root) {
+        mListView = (PullToRefreshListView) root.findViewById(R.id.lvChatList);
+        mAdapter = new ChatListAdapter(getActivity().getApplicationContext(), mHistoryData);
         mAdapter.setOnAvatarListener(this);
         mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
@@ -252,32 +213,82 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         });
 
         mListView.setAdapter(mAdapter);
-        // Сперва пробуем восстановить данные, если это просто поворот
-        // устройства
-//        Object data = getLastCustomNonConfigurationInstance();
-//        if (data != null) {
-//            // noinspection unchecked
-//            try {
-//                Bundle params = (Bundle) data;
-//                LinkedList<History> history = (LinkedList<History>) params.getSerializable(ADAPTER_DATA);
-//                if (history != null) {
-//                    mAdapter.setDataList(history);
-//                }
-//                wasFailed = params.getBoolean(WAS_FAILED, false);
-//                if (wasFailed) {
-//                    lockScreen.setVisibility(View.VISIBLE);
-//                } else {
-//                    lockScreen.setVisibility(View.GONE);
-//                }
-//                mLoadingLocker.setVisibility(View.GONE);
-//            } catch (Exception e) {
-//                Debug.error(e);
-//            }
-//        }
+    }
 
-        GCMUtils.cancelNotification(getActivity().getApplicationContext(), GCMUtils.GCM_TYPE_MESSAGE);
+    private void initLockScreen(View root) {
+        mLockScreen = (RelativeLayout) root.findViewById(R.id.llvLockScreen);
+        mRetryView = new RetryView(getActivity().getApplicationContext());
+        mRetryView.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                update(false, "retry");
+                mLockScreen.setVisibility(View.GONE);
+            }
+        });
 
-        return root;
+        mLockScreen.addView(mRetryView);
+    }
+
+    private void initNavigationbar(int userSex, String userName, int userAge, String userCity) {
+        TextView headerTitle = ((TextView) getActivity().findViewById(R.id.tvNavigationTitle));
+        headerTitle.setText(userName + ", "
+                + userAge);
+        TextView headerSubtitle = ((TextView) getActivity().findViewById(R.id.tvNavigationSubtitle));
+        headerSubtitle.setVisibility(View.VISIBLE);
+        headerSubtitle.setText(userCity);
+
+        //        getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
+        //        btnBack = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
+        //        btnBack.setVisibility(View.VISIBLE);
+        //
+        //        if (prevEntity != null && Utils.isThereNavigationActivity(getActivity())) {
+        //            btnBack.setOnClickListener(new View.OnClickListener() {
+        //                @Override
+        //                public void onClick(View v) {
+        //                    //TODO close fragment
+        //                    getActivity().finish();
+        //                }
+        //            });
+        //            if (prevEntity.equals(ChatFragment.class.getSimpleName())) {
+        //                btnBack.setText(R.string.general_chat);
+        //            } else if (prevEntity.equals(DatingFragment.class.getSimpleName())) {
+        //                btnBack.setText(R.string.general_dating);
+        //            } else if (prevEntity.equals(DialogsFragment.class.getSimpleName())) {
+        //                btnBack.setText(R.string.general_dialogs);
+        //            } else if (prevEntity.equals(LikesFragment.class.getSimpleName())) {
+        //                btnBack.setText(R.string.general_likes);
+        //            } else if (prevEntity.equals(MutualFragment.class.getSimpleName())) {
+        //                btnBack.setText(R.string.general_mutual);
+        //            } else if (prevEntity.equals(VisitorsFragment.class.getSimpleName())) {
+        //                btnBack.setText(R.string.general_dating);
+        //            } else if (prevEntity.equals(ProfileFragment.class.getSimpleName())) {
+        //                btnBack.setText(R.string.general_profile);
+        //            }
+        //
+        //        }
+
+        final ImageButton btnProfile = (ImageButton) getActivity().findViewById(R.id.btnNavigationProfileBar);
+        switch (userSex) {
+            case Static.BOY:
+                btnProfile.setImageResource(R.drawable.navigation_male_profile_selector);
+                break;
+            case Static.GIRL:
+                btnProfile.setImageResource(R.drawable.navigation_female_profile_selector);
+                break;
+        }
+        btnProfile.setVisibility(View.VISIBLE);
+        btnProfile.setOnClickListener(this);
+
+        // View btnProfile = root.findViewById(R.id.btnHeaderProfile);
+        // btnProfile.setVisibility(View.VISIBLE);
+        // btnProfile.setOnClickListener(this);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(WAS_FAILED, wasFailed);
+        outState.putParcelableArrayList(ADAPTER_DATA,mAdapter.getDataCopy());
     }
 
     private void deleteItem(final int position) {
@@ -303,7 +314,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 Debug.log(response.toString());
             }
         }).exec();
-
     }
 
     @Override
@@ -324,10 +334,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         historyRequest.debug = type;
         historyRequest.limit = LIMIT;
         if (pullToRefresh && mAdapter != null) {
-            LinkedList<History> data = mAdapter.getDataCopy();
+            ArrayList<History> data = mAdapter.getDataCopy();
             if (!data.isEmpty()) {
-                if (data.getFirst() != null) {
-                    historyRequest.from = data.getFirst().id;
+                if (data.get(0) != null) {
+                    historyRequest.from = data.get(0).id;
                 }
             }
         }
@@ -378,7 +388,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                                 mRetryView.setErrorMsg(getString(R.string.general_data_error));
                                 break;
                         }
-                        lockScreen.setVisibility(View.VISIBLE);
+                        mLockScreen.setVisibility(View.VISIBLE);
                         wasFailed = true;
                     }
                 });
@@ -393,7 +403,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             mAdapter.release();
         }
         mAdapter = null;
-        mHistoryList = null;
     }
 
     @Override
@@ -449,8 +458,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             }
             break;
             case R.id.btnNavigationBackWithText: {
-                //TODO close fragment
                 getActivity().finish();
+                //TODO костыль для навигации
+                getActivity().setResult(Activity.RESULT_CANCELED);
             }
             break;
             case R.id.chat_message: {
@@ -458,8 +468,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             }
             break;
             default: {
-                //TODO close fragment
+                //TODO костыль для навигации
+                if (mProfileInvoke) {
+                    getActivity().setResult(Activity.RESULT_CANCELED);
+                } else {
+                    Intent intent = getActivity().getIntent();
+                    intent.putExtra(ChatActivity.INTENT_USER_ID, mUserId);
+                    getActivity().setResult(Activity.RESULT_OK, intent);
+                }
                 getActivity().finish();
+                //TODO костыль для навигации
+                getActivity().setResult(Activity.RESULT_OK);
             }
             break;
         }
@@ -495,6 +514,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     startActivity(intent);
                     //TODO close fragment
                     getActivity().finish();
+                    //TODO костыль для навигации
+                    getActivity().setResult(Activity.RESULT_CANCELED);
                 }
             });
             btnBack.setText(R.string.general_dialogs);
@@ -505,6 +526,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     public void onClick(View v) {
                         //TODO close fragment
                         getActivity().finish();
+                        //TODO костыль для навигации
+                        getActivity().setResult(Activity.RESULT_CANCELED);
                     }
                 });
             }
@@ -930,5 +953,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
         return fragment;
     }
+
+
 
 }

@@ -182,9 +182,6 @@ public class BuyingFragment extends BillingFragment implements View.OnClickListe
     }
 
     private void goToVipSettings() {
-//        if(getActivity() != null) {
-//            ((ContainerActivity)getActivity()).startFragment(ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
-//        }
         Intent intent = new Intent(getActivity(), ContainerActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
         startActivity(intent);
