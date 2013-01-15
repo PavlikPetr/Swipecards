@@ -21,7 +21,6 @@ import com.topface.topface.data.SearchUser;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.LogoutRequest;
-import com.topface.topface.ui.AuthActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.ui.views.LockerView;

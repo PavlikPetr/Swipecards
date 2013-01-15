@@ -20,7 +20,6 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
-import com.topface.topface.ui.AuthActivity;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.ui.NavigationActivity;

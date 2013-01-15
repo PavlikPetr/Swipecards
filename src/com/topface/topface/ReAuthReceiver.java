@@ -3,7 +3,7 @@ package com.topface.topface;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import com.topface.topface.ui.AuthActivity;
+import com.topface.topface.ui.NavigationActivity;
 
 public class ReAuthReceiver extends BroadcastReceiver {
 
@@ -14,7 +14,7 @@ public class ReAuthReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         final String action = intent.getAction();
         if (action.equals(REAUTH_INTENT)) {
-            Intent authIntent = new Intent(context, AuthActivity.class);
+            Intent authIntent = new Intent(context, NavigationActivity.class);
             authIntent.putExtra(REAUTH_FROM_RECEIVER, true);
             authIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             authIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
