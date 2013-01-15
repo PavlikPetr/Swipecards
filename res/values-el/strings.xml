@@ -288,4 +288,10 @@
     <string name="general_reconnect_social">Δεν είναι δυνατή η σύνδεση με κοινωνικά δίκτυα. Παρακαλώ δοκιμάστε ξανά αργότερα.</string>
     <string name="general_buying">Αγοράστε τη συμπάθεια και τα κέρματα</string>
     <string name="general_block">Αποκλεισμός</string>
+    <string name="general_buying_disabled">Αγορά αυτή τη στιγμή δεν μπορεί να γίνει</string>
+    <string name="ban_flood_detected">Εσείς πολύ συχνά κάνετε αιτήματα στο διακομιστή. Για την περαιτέρω χρήση της εφαρμογής, να περιμένετε.</string>
+    <string name="general_maintenance">Στο διακομιστή διεξάγονται τεχνικές εργασίες, και το αίτημά σας δεν μπορεί να εκτελεστεί. Παρακαλώ δοκιμάστε ξανά αργότερα.</string>
+    <string name="virus_chat_likes_request_title">Να δώσω συμπάθειες προς τους φίλους σας</string>
+    <string name="virus_chat_btn">Αποκτήσω συμπάθειες</string>
+    <string name="virus_request_error">Απέτυχε η αποστολή τις συμπάθειες στους φίλους σας</string>
 </resources>

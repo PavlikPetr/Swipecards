@@ -221,7 +221,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         mListView = (PullToRefreshListView) findViewById(R.id.lvChatList);
 
         // Adapter
-        mAdapter = new ChatListAdapter(this, mHistoryList);
+        mAdapter = new ChatListAdapter(this, mHistoryList, mLoadingLocker);
         mAdapter.setOnAvatarListener(this);
         mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
