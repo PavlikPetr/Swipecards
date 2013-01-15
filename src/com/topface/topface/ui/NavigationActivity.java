@@ -34,7 +34,7 @@ import com.topface.topface.utils.social.AuthorizationManager;
 
 import java.util.Calendar;
 
-public class NavigationActivity extends TrackedFragmentActivity implements View.OnClickListener {
+public class NavigationActivity extends BaseFragmentActivity implements View.OnClickListener {
 
     public static final String RATING_POPUP = "RATING_POPUP";
     public static final String FROM_AUTH = "com.topface.topface.AUTH";

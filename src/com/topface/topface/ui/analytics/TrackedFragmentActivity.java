@@ -17,13 +17,7 @@ import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.social.AuthToken;
 
 public class TrackedFragmentActivity extends FragmentActivity {
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if(new AuthToken(getApplicationContext()).isEmpty() || !CacheProfile.isLoaded()) {
-            startAuth();
-        }
-    }
+
 
     @Override
     public void onStart() {
@@ -48,15 +42,5 @@ public class TrackedFragmentActivity extends FragmentActivity {
         return this.getClass().getSimpleName().replace("Activity", "");
     }
 
-    public void startAuth() {
-        AuthFragment af = AuthFragment.newInstance();
-        getSupportFragmentManager().beginTransaction().add(R.id.content, af).commit();
-    }
 
-    public void close(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-        onInit();
-    }
-
-    public void onInit() {}
 }

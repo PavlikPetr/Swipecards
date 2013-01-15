@@ -26,6 +26,7 @@ import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.*;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.views.IllustratedTextView;
 import com.topface.topface.ui.views.RetryView;
@@ -141,8 +142,7 @@ public class AuthFragment extends BaseFragment{
         mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == getActivity().RESULT_CANCELED) {
-            hideButtons();
-//            showButtons();
+            showButtons();
         }
     }
 
@@ -237,7 +237,7 @@ public class AuthFragment extends BaseFragment{
             @Override
             public void success(final ApiResponse response) {
                 Options.parse(response);
-                ((TrackedFragmentActivity) getActivity()).close(AuthFragment.this);
+                ((BaseFragmentActivity) getActivity()).close(AuthFragment.this);
             }
 
             @Override
@@ -306,10 +306,9 @@ public class AuthFragment extends BaseFragment{
 
     private void btnVKClick() {
         if(checkOnline()) {
-            Intent intent = new Intent(getActivity(), WebAuthActivity.class);
-            startActivityForResult(intent, WebAuthActivity.INTENT_WEB_AUTH);
+            mAuthorizationManager.vkontakteAuth();
         }
-//        mAuthorizationManager.vkontakteAuth();
+//
     }
 
 
