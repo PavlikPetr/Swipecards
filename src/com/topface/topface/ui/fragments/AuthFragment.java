@@ -27,6 +27,7 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.*;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
+import com.topface.topface.ui.views.IllustratedTextView;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -69,7 +70,7 @@ public class AuthFragment extends BaseFragment{
             public void handleMessage(Message msg) {
                 switch (msg.what) {
                     case AuthorizationManager.AUTHORIZATION_FAILED:
-                        authorizationFailed(ApiResponse.NETWORK_CONNECT_ERROR);
+                        authorizationFailed(ApiResponse.NETWORK_CONNECT_ERROR,null);
                         break;
                     case AuthorizationManager.DIALOG_COMPLETED:
                         hideButtons();
@@ -111,9 +112,7 @@ public class AuthFragment extends BaseFragment{
         mRetryView.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                auth(new AuthToken(getActivity().getApplicationContext()));
-                mRetryView.setVisibility(View.GONE);
-                mProgressBar.setVisibility(View.VISIBLE);
+
             }
         });
         mRetryView.setVisibility(View.GONE);
@@ -125,7 +124,12 @@ public class AuthFragment extends BaseFragment{
             @Override
             public void onReceive(Context context, Intent intent) {
                 int mConnectionType = intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE, -1);
-//                reAuthAfterInternetConnected(mConnectionType);
+                if(mConnectionType != ConnectionChangeReceiver.CONNECTION_OFFLINE) {
+                    IllustratedTextView btn = mRetryView.getBtn1();
+                    if (btn != null) {
+                        btn.performClick();
+                    }
+                }
             }
         };
     }
@@ -142,25 +146,16 @@ public class AuthFragment extends BaseFragment{
         }
     }
 
-    public void reAuthAfterInternetConnected(int type) {
-        if(type != ConnectionChangeReceiver.CONNECTION_OFFLINE) {
-            if(!(new AuthToken(getActivity()).isEmpty())) {
-                mAuthorizationManager.reAuthorize();
-                hideButtons();
-                mRetryView.setVisibility(View.GONE);
-                mProgressBar.setVisibility(View.VISIBLE);
-            }
-        }
-    }
-
     private void initOtherViews(View root) {
         mProgressBar = (ProgressBar) root.findViewById(R.id.prsAuthLoading);
     }
 
-    private void checkOnline() {
+    private boolean checkOnline() {
         if (!App.isOnline()) {
             showNoInternetToast();
+            return false;
         }
+        return true;
     }
 
     private void showNoInternetToast() {
@@ -169,66 +164,18 @@ public class AuthFragment extends BaseFragment{
     }
 
     private void auth(AuthToken token) {
-        AuthRequest authRequest = generateAuthRequest(token);
+        final AuthRequest authRequest = generateAuthRequest(token);
         authRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
                 saveAuthInfo(response);
-
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ProfileRequest profileRequest = new ProfileRequest(getActivity());
-                        profileRequest.part = ProfileRequest.P_ALL;
-                        registerRequest(profileRequest);
-                        profileRequest.callback(new ApiHandler() {
-                            @Override
-                            public void success(ApiResponse response) {
-                                CacheProfile.setProfile(Profile.parse(response), response);
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        OptionsRequest request = new OptionsRequest(getActivity());
-
-                                        registerRequest(request);
-                                        request.callback(new ApiHandler() {
-                                            @Override
-                                            public void success(final ApiResponse response) {
-                                                getActivity().runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        Options.parse(response);
-                                                        ((TrackedFragmentActivity) getActivity()).close(AuthFragment.this);
-                                                    }
-                                                });
-
-                                            }
-
-                                            @Override
-                                            public void fail(int codeError, ApiResponse response) {
-                                                Debug.log("fail");
-                                            }
-                                        }).exec();
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void fail(int codeError, ApiResponse response) {
-                            }
-                        }).exec();
-                    }
-                });
+                getProfileAndOptions();
             }
 
             @Override
             public void fail(final int codeError, ApiResponse response) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        authorizationFailed(codeError);
-                    }
-                });
+
+                authorizationFailed(codeError, authRequest);
             }
 
             @Override
@@ -258,7 +205,56 @@ public class AuthFragment extends BaseFragment{
 
     }
 
-    private void authorizationFailed(int codeError) {
+    private void getProfileAndOptions() {
+        final ProfileRequest profileRequest = new ProfileRequest(getActivity());
+        profileRequest.part = ProfileRequest.P_ALL;
+        registerRequest(profileRequest);
+        profileRequest.callback(new ApiHandler() {
+            @Override
+            public void success(ApiResponse response) {
+                CacheProfile.setProfile(Profile.parse(response), response);
+                getOptions();
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+                if (response.code == ApiResponse.BAN)
+                    showButtons();
+                else {
+                    profileRequest.handler = this;
+                    authorizationFailed(codeError, profileRequest);
+                    Toast.makeText(getActivity(), getString(R.string.general_data_error),
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        }).exec();
+    }
+
+    private void getOptions() {
+        final OptionsRequest request = new OptionsRequest(getActivity());
+        registerRequest(request);
+        request.callback(new ApiHandler() {
+            @Override
+            public void success(final ApiResponse response) {
+                Options.parse(response);
+                ((TrackedFragmentActivity) getActivity()).close(AuthFragment.this);
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+                if (response.code == ApiResponse.BAN)
+                    showButtons();
+                else {
+                    request.callback(this);
+                    authorizationFailed(codeError, request);
+                    Toast.makeText(getActivity(), getString(R.string.general_data_error),
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        }).exec();
+    }
+
+    private void authorizationFailed(int codeError, final ApiRequest request) {
         hideButtons();
         switch (codeError) {
             case ApiResponse.NETWORK_CONNECT_ERROR:
@@ -271,47 +267,57 @@ public class AuthFragment extends BaseFragment{
                 mRetryView.setErrorMsg(getString(R.string.general_data_error));
                 break;
         }
-        mRetryView.setVisibility(View.VISIBLE);
-        mProgressBar.setVisibility(View.GONE);
+
+        if(request != null) {
+            mRetryView.setVisibility(View.VISIBLE);
+            mProgressBar.setVisibility(View.GONE);
+            mRetryView.setListenerToBtn(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mRetryView.setVisibility(View.GONE);
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    request.canceled = false;
+                    registerRequest(request);
+                    request.exec();
+                }
+            });
+
+        } else {
+            showButtons();
+        }
     }
 
     private void showButtons() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                //Эта проверка нужна, для безопасной работы в
-                if (mFBButton != null && mVKButton != null && mProgressBar != null) {
-                    mFBButton.setVisibility(View.VISIBLE);
-                    mVKButton.setVisibility(View.VISIBLE);
-                    mProgressBar.setVisibility(View.GONE);
-                    mRetryView.setVisibility(View.GONE);
-                }
-            }
-        });
+        //Эта проверка нужна, для безопасной работы в
+        if (mFBButton != null && mVKButton != null && mProgressBar != null) {
+            mFBButton.setVisibility(View.VISIBLE);
+            mVKButton.setVisibility(View.VISIBLE);
+            mProgressBar.setVisibility(View.GONE);
+            mRetryView.setVisibility(View.GONE);
+        }
     }
 
     private void hideButtons() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mFBButton.setVisibility(View.GONE);
-                mVKButton.setVisibility(View.GONE);
-                mProgressBar.setVisibility(View.VISIBLE);
-                mRetryView.setVisibility(View.GONE);
-            }
-        });
+        mFBButton.setVisibility(View.GONE);
+        mVKButton.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
+        mRetryView.setVisibility(View.GONE);
     }
 
     private void btnVKClick() {
-        Intent intent = new Intent(getActivity(), WebAuthActivity.class);
-        startActivityForResult(intent, WebAuthActivity.INTENT_WEB_AUTH);
+        if(checkOnline()) {
+            Intent intent = new Intent(getActivity(), WebAuthActivity.class);
+            startActivityForResult(intent, WebAuthActivity.INTENT_WEB_AUTH);
+        }
 //        mAuthorizationManager.vkontakteAuth();
     }
 
 
 
     private void btnFBClick() {
-        mAuthorizationManager.facebookAuth();
+        if(checkOnline()) {
+            mAuthorizationManager.facebookAuth();
+        }
     }
 
     @Override

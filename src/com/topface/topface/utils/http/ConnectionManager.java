@@ -166,6 +166,7 @@ public class ConnectionManager {
                             // (если отменен, может возникнуть ситуация, когда handler уже не сможет
                             // обработать ответ из-за убитого контекста)
                         } else if (!apiRequest.isCanceled()) {
+                            needResend = true;
                             Message msg = new Message();
                             msg.obj = apiResponse;
                             apiRequest.handler.sendMessage(msg);

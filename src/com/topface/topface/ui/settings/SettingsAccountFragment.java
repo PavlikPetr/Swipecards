@@ -1,6 +1,8 @@
 package com.topface.topface.ui.settings;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -80,18 +82,16 @@ public class SettingsAccountFragment extends TrackedFragment {
                         GCMRegistrar.unregister(getActivity().getApplicationContext());
                         Data.removeSSID(getActivity().getApplicationContext());
                         token.removeToken();
-                        getActivity().runOnUiThread(new Runnable() {
-                            @SuppressWarnings({"rawtypes", "unchecked"})
-                            @Override
-                            public void run() {
-                                new FacebookLogoutTask().execute();
-                            }
-                        });
+                        new FacebookLogoutTask().execute();
                         Settings.getInstance().resetSettings();
                         startActivity(new Intent(getActivity().getApplicationContext(), NavigationActivity.class));
                         getActivity().setResult(RESULT_LOGOUT);
                         CacheProfile.clearProfile();
                         getActivity().finish();
+                        SharedPreferences preferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                        if(preferences != null) {
+                            preferences.edit().clear().commit();
+                        }
                         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(Static.LOGOUT_INTENT));
                         //Чистим список тех, кого нужно оценить
                         Data.searchList = new LinkedList<SearchUser>();
@@ -101,13 +101,7 @@ public class SettingsAccountFragment extends TrackedFragment {
 
                     @Override
                     public void fail(int codeError, ApiResponse response) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                lockerView.setVisibility(View.GONE);
-                            }
-                        });
-
+                        lockerView.setVisibility(View.GONE);
                     }
                 }).exec();
 
