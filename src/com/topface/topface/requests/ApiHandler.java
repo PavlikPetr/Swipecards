@@ -37,9 +37,9 @@ abstract public class ApiHandler extends Handler {
             } else if (response.code != ApiResponse.RESULT_OK) {
                 fail(response.code, response);
             } else {
-                sendProfileUpdateIntent(response);
                 setCounters(response);
                 success(response);
+                sendProfileUpdateIntent(response);
             }
         } catch (Exception e) {
             Debug.error("ApiHandler exception", e);

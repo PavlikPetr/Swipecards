@@ -65,7 +65,7 @@ public class LeadersActivity extends BaseFragmentActivity {
             @Override
             public void onClick(View view) {
                 if (CacheProfile.money < CacheProfile.getOptions().price_leader) {
-                    Intent intent = new Intent(getApplicationContext(), ContainerActivity.class);
+                    Intent intent = new Intent(LeadersActivity.this, ContainerActivity.class);
                     intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
                     startActivity(intent);
                 } else if (mSelectedPhoto.isSelected()) {

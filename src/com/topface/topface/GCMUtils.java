@@ -16,7 +16,6 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.RegistrationTokenRequest;
-import com.topface.topface.ui.AuthActivity;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -279,7 +278,7 @@ public class GCMUtils {
                 break;
 
             default:
-                i = new Intent(context, AuthActivity.class);
+                i = new Intent(context, NavigationActivity.class);
 
         }
         return i;

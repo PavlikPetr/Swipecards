@@ -13,7 +13,6 @@ import com.topface.topface.data.Auth;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AuthRequest;
-import com.topface.topface.ui.AuthActivity;
 import com.topface.topface.ui.BanActivity;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.Http.FlushedInputStream;
@@ -127,23 +126,21 @@ public class ConnectionManager {
                     } else if (apiResponse.code == ApiResponse.MAINTENANCE) {
                         if (apiRequest.context instanceof Activity) {
                             Activity activity = (Activity) apiRequest.context;
-                            if (!(activity instanceof AuthActivity)) {
-                                needResend = true;
-                                activity.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        RetryDialog retryDialog = new RetryDialog(apiRequest.context);
-                                        retryDialog.setMessage(apiRequest.context.getString(R.string.general_maintenance));
-                                        retryDialog.setButton(Dialog.BUTTON_POSITIVE, apiRequest.context.getString(R.string.general_dialog_retry), new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                apiRequest.exec();
-                                            }
-                                        });
-                                        retryDialog.show();
-                                    }
-                                });
-                            }
+                            needResend = true;
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    RetryDialog retryDialog = new RetryDialog(apiRequest.context);
+                                    retryDialog.setMessage(apiRequest.context.getString(R.string.general_maintenance));
+                                    retryDialog.setButton(Dialog.BUTTON_POSITIVE, apiRequest.context.getString(R.string.general_dialog_retry), new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            apiRequest.exec();
+                                        }
+                                    });
+                                    retryDialog.show();
+                                }
+                            });
                         }
 
                     } else if (apiResponse.code == ApiResponse.NULL_RESPONSE
@@ -166,6 +163,7 @@ public class ConnectionManager {
                             // (если отменен, может возникнуть ситуация, когда handler уже не сможет
                             // обработать ответ из-за убитого контекста)
                         } else if (!apiRequest.isCanceled()) {
+                            needResend = true;
                             Message msg = new Message();
                             msg.obj = apiResponse;
                             apiRequest.handler.sendMessage(msg);

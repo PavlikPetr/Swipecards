@@ -1,6 +1,8 @@
 package com.topface.topface.ui.settings;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,7 +21,7 @@ import com.topface.topface.data.SearchUser;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.LogoutRequest;
-import com.topface.topface.ui.AuthActivity;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
@@ -79,18 +81,16 @@ public class SettingsAccountFragment extends TrackedFragment {
                         GCMRegistrar.unregister(getActivity().getApplicationContext());
                         Data.removeSSID(getActivity().getApplicationContext());
                         token.removeToken();
-                        getActivity().runOnUiThread(new Runnable() {
-                            @SuppressWarnings({"rawtypes", "unchecked"})
-                            @Override
-                            public void run() {
-                                new FacebookLogoutTask().execute();
-                            }
-                        });
+                        new FacebookLogoutTask().execute();
                         Settings.getInstance().resetSettings();
-                        startActivity(new Intent(getActivity().getApplicationContext(), AuthActivity.class));
+                        startActivity(new Intent(getActivity().getApplicationContext(), NavigationActivity.class));
                         getActivity().setResult(RESULT_LOGOUT);
                         CacheProfile.clearProfile();
                         getActivity().finish();
+                        SharedPreferences preferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                        if(preferences != null) {
+                            preferences.edit().clear().commit();
+                        }
                         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(Static.LOGOUT_INTENT));
                         //Чистим список тех, кого нужно оценить
                         Data.searchList = new LinkedList<SearchUser>();
@@ -100,13 +100,7 @@ public class SettingsAccountFragment extends TrackedFragment {
 
                     @Override
                     public void fail(int codeError, ApiResponse response) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                lockerView.setVisibility(View.GONE);
-                            }
-                        });
-
+                        lockerView.setVisibility(View.GONE);
                     }
                 }).exec();
 

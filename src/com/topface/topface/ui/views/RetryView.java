@@ -58,6 +58,13 @@ public class RetryView extends LinearLayout {
         }
     }
 
+    public void setListenerToBtn(OnClickListener l) {
+        if(mBtn1 != null) {
+            mBtn1.setOnClickListener(null);
+            mBtn1.setOnClickListener(l);
+        }
+    }
+
     public void addBlueButton(String title, OnClickListener listener) {
         if (mBtnBlue == null) {
             mBtnBlue = generateBlueButton();
@@ -65,6 +72,14 @@ public class RetryView extends LinearLayout {
             mBtnBlue.setOnClickListener(listener);
             mButtonContainer.addView(mBtnBlue);
         }
+    }
+
+    public IllustratedTextView getBtn1() {
+        return mBtn1;
+    }
+
+    public IllustratedTextView getBtn2() {
+        return mBtn2;
     }
 
     private IllustratedTextView generateButton() {
