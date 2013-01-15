@@ -192,23 +192,24 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
             @Override
             public void onLongClick(final int position, final View v) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity().getApplicationContext());
-                builder.setTitle(R.string.general_spinner_title).setItems(editButtonsNames, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case DELETE_BUTTON:
-                                deleteItem(position);
-                                EasyTracker.getTracker().trackEvent("Chat", "DeleteItem", "", 1L);
-                                break;
-                            case COPY_BUTTON:
-                                mAdapter.copyText(((TextView) v).getText().toString());
-                                EasyTracker.getTracker().trackEvent("Chat", "CopyItemText", "", 1L);
-                                break;
-                        }
-                    }
-                });
-                builder.create().show();
+
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.general_spinner_title)
+                        .setItems(editButtonsNames, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which) {
+                                    case DELETE_BUTTON:
+                                        deleteItem(position);
+                                        EasyTracker.getTracker().trackEvent("Chat", "DeleteItem", "", 1L);
+                                        break;
+                                    case COPY_BUTTON:
+                                        mAdapter.copyText(((TextView) v).getText().toString());
+                                        EasyTracker.getTracker().trackEvent("Chat", "CopyItemText", "", 1L);
+                                        break;
+                                }
+                            }
+                        }).create().show();
             }
         });
 
