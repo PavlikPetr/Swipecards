@@ -246,9 +246,6 @@ public class ChatListAdapter extends BaseAdapter {
                     }
                     holder.message = (TextView) convertView.findViewById(R.id.chat_message);
                     holder.date = (TextView) convertView.findViewById(R.id.chat_date);
-                    Button likeRequestBtn = (Button) convertView.findViewById(R.id.btn_chat_like_request);
-                    likeRequestBtn.setTag(position);
-                    likeRequestBtn.setOnClickListener(mLikeRequestListener);
                     break;
                 case T_USER_REQUEST:
                 case T_USER_REQUEST_EXT:
@@ -300,6 +297,10 @@ public class ChatListAdapter extends BaseAdapter {
 
             mapAddressDetection(history, holder.address, holder.prgsAddress);
             return convertView;
+        } else if (type == T_FRIEND_REQUEST || type == T_FRIEND_REQUEST_EXT) {
+            Button likeRequestBtn = (Button) convertView.findViewById(R.id.btn_chat_like_request);
+            likeRequestBtn.setTag(position);
+            likeRequestBtn.setOnClickListener(mLikeRequestListener);
         }
 
         // setting textual information

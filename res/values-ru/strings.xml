@@ -404,5 +404,8 @@
         <item quantity="other">Теперь у вас %d симпатий!</item>
     </plurals>
 
+    <string name="profile_ask_sent">Просьба отправлена</string>
+    <string name="virus_error">За сутки ваш друг может подарить симпатии только 1 раз! Попробуйте завтра!</string>
+
 
 </resources>

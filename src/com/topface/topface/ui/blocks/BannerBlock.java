@@ -14,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 import com.adfonic.android.AdfonicView;
 import com.adfonic.android.api.Request;
 import com.google.ads.AdRequest;
@@ -215,7 +216,11 @@ public class BannerBlock {
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                Utils.showErrorMessage(getContext());
+                if (response.isError(ApiResponse.CODE_VIRUS_LIKES_ALREADY_RECEIVED)) {
+                    Toast.makeText(getContext(), R.string.virus_error, Toast.LENGTH_LONG).show();
+                } else {
+                    Utils.showErrorMessage(getContext());
+                }
             }
 
             @Override

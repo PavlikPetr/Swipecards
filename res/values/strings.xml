@@ -293,4 +293,6 @@
     <string name="virus_chat_likes_request_title">Give likes to your friends as a gift</string>
     <string name="virus_chat_btn">Receive likes</string>
     <string name="virus_request_error">Unable to send likes to your friends</string>
+    <string name="virus_error">During the day, your friend can send a sympathy only 1 time! Try it tomorrow!</string>
+    <string name="profile_ask_sent">Request is sent</string>
 </resources>
