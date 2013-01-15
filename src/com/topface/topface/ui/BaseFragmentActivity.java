@@ -100,6 +100,9 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        //Вот такая херня сделана для того, чтобы result фэйсбуковского приложение обрабатывал
+        //AuthFragment. Потому что фб приложение обязательно должно стартовать из активити
+        //и ответ возвращать тоже в активити.
         Fragment authFragment = getSupportFragmentManager().findFragmentByTag(AUTH_TAG);
         if(authFragment != null) {
             authFragment.onActivityResult(requestCode, resultCode, data);
