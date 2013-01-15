@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Topface</string>
-    <string name="app_locale">pt_PT</string>
+    <string name="app_locale">ru_RU</string>
     <string name="general_error">ERRO</string>
     <string name="general_warning">AVISO</string>
     <string name="general_ok">OK</string>
@@ -289,4 +289,14 @@
     <string name="general_reconnect_social">Não é possível conectar-se com a rede social. Tente repetir mais tarde.</string>
     <string name="general_buying">Comprar simpatias e moedas</string>
     <string name="general_block">Bolquear</string>
+    <string name="general_buying_disabled">Neste preciso momento é impossível a compra</string>
+    <string name="ban_flood_detected">Você faz pedidos com muita frequência ao servidor. Aguardará para posterior utilização de aplicação.</string>
+    <string name="general_maintenance">No servidor está a decorrer o trabalho técnico e o seu pedido não pode ser executado. Tente repetir mais tarde.</string>
+    <string name="virus_chat_likes_request_title">Dar presente de simpatias para seus amigos</string>
+    <string name="virus_chat_btn">Receber simpatias</string>
+    <string name="virus_request_error">Não foi possível enviar simpatias para seus amigos</string>
+    <plurals name="virus_request_likes_cnt">
+        <item quantity="other">Agora vocês têm %d de simpatia!</item>
+        <item quantity="one">Agora vocês têm %d de simpatia!</item>
+    </plurals>
 </resources>

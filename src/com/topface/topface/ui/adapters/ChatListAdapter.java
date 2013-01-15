@@ -20,6 +20,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.VirusLikesRequest;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.MemoryCacheTemplate;
 import com.topface.topface.utils.OsmManager;
@@ -48,6 +49,7 @@ public class ChatListAdapter extends BaseAdapter {
     }
 
     private Context mContext;
+    private LockerView mLockerView;
     private LayoutInflater mInflater;
     private FeedList<History> mDataList; // data
     private LinkedList<Integer> mItemLayoutList; // types
@@ -80,8 +82,9 @@ public class ChatListAdapter extends BaseAdapter {
     ChatActivity.OnListViewItemLongClickListener mLongClickListener;
 
 
-    public ChatListAdapter(Context context, LinkedList<History> dataList) {
+    public ChatListAdapter(Context context, LinkedList<History> dataList, LockerView lockerView) {
         mContext = context;
+        mLockerView = lockerView;
         mItemLayoutList = new LinkedList<Integer>();
         mItemTimeList = new HashMap<Integer, String>();
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -733,6 +736,7 @@ public class ChatListAdapter extends BaseAdapter {
             final int position = (Integer) v.getTag();
             final History item = getItem(position);
             if (item != null) {
+                lockView();
                 new VirusLikesRequest(item.id, mContext).callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
@@ -750,8 +754,26 @@ public class ChatListAdapter extends BaseAdapter {
                     public void fail(int codeError, ApiResponse response) {
                         Utils.showErrorMessage(getContext());
                     }
+
+                    @Override
+                    public void always(ApiResponse response) {
+                        super.always(response);
+                        unlockView();
+                    }
                 }).exec();
             }
         }
     };
+
+    private void lockView() {
+        if (mLockerView != null) {
+            mLockerView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void unlockView() {
+        if (mLockerView != null) {
+            mLockerView.setVisibility(View.GONE);
+        }
+    }
 }

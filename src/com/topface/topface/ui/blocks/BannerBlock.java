@@ -1,6 +1,7 @@
 package com.topface.topface.ui.blocks;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -190,6 +191,11 @@ public class BannerBlock {
     }
 
     private void sendVirusLikeRequest() {
+        final ProgressDialog dialog = new ProgressDialog(mActivity);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setMessage(mActivity.getString(R.string.general_dialog_loading));
+        dialog.show();
+
         new VirusLikesRequest(mActivity).callback(new ApiHandler() {
             @Override
             public void success(final ApiResponse response) {
@@ -210,6 +216,12 @@ public class BannerBlock {
             @Override
             public void fail(int codeError, ApiResponse response) {
                 Utils.showErrorMessage(getContext());
+            }
+
+            @Override
+            public void always(ApiResponse response) {
+                super.always(response);
+                dialog.dismiss();
             }
         }).exec();
     }

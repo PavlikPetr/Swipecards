@@ -288,4 +288,14 @@
     <string name="general_reconnect_social">Impossibile collegarsi alla rete sociale. Riprova più tardi.</string>
     <string name="general_buying">Compra simpatie e monete</string>
     <string name="general_block">Blocca</string>
+    <string name="general_buying_disabled">Attualmente è impossibile effettuare l’acquisto</string>
+    <string name="ban_flood_detected">Invii troppo spesso le richieste al server. Attendere prego per continuare ad utilizzare l’applicazione.</string>
+    <string name="general_maintenance">Stiamo effettuando i lavori tecnici sul server e non possiamo completare la tua richiesta. Riprova più tardi.</string>
+    <string name="virus_chat_likes_request_title">Regalare simpatie agli amici</string>
+    <string name="virus_chat_btn">Ricevere simpatie</string>
+    <string name="virus_request_error">Non siamo riusciti ad inviare simpatie ai tuoi amici</string>
+    <plurals name="virus_request_likes_cnt">
+        <item quantity="other">Ora hai %d simpatie!</item>
+        <item quantity="one">Ora hai %d simpatia!</item>
+    </plurals>
 </resources>
