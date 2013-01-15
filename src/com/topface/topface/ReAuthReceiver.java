@@ -14,11 +14,11 @@ public class ReAuthReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         final String action = intent.getAction();
         if (action.equals(REAUTH_INTENT)) {
-            Intent authIntent = new Intent(context, NavigationActivity.class);
-            authIntent.putExtra(REAUTH_FROM_RECEIVER, true);
-            authIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            authIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            context.startActivity(authIntent);
+//            Intent authIntent = new Intent(context, NavigationActivity.class);
+//            authIntent.putExtra(REAUTH_FROM_RECEIVER, true);
+//            authIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            authIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//            context.startActivity(authIntent);
         }
     }
 

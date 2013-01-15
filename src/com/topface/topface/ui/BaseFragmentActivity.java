@@ -1,10 +1,14 @@
 package com.topface.topface.ui;
 
 import android.R;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.topface.ReAuthReceiver;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
@@ -21,6 +25,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     public static final String AUTH_TAG = "AUTH";
 
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
+    private BroadcastReceiver mReauthReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +34,22 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             startAuth();
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Если при запросе вернулась ошибка что нет токена, кидается соответствующий интент.
+        //здесь он ловится, и открывается фрагмент авторизации
+        mReauthReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                startAuth();
+            }
+        };
+        registerReceiver(mReauthReceiver, new IntentFilter(ReAuthReceiver.REAUTH_INTENT));
+    }
+
+
 
     public void startAuth() {
         AuthFragment af = AuthFragment.newInstance();
@@ -52,6 +73,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     protected void onPause() {
         super.onPause();
         removeAllRequests();
+        unregisterReceiver(mReauthReceiver);
     }
     private void removeAllRequests() {
         if (mRequests != null && mRequests.size() > 0) {
