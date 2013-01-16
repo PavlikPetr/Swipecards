@@ -1,4 +1,3 @@
-
 package com.topface.topface.data;
 
 import android.content.Context;
@@ -10,6 +9,7 @@ import android.widget.Toast;
 import com.facebook.topface.DialogError;
 import com.facebook.topface.Facebook;
 import com.facebook.topface.FacebookError;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.App;
 import com.topface.topface.Data;
 import com.topface.topface.R;
@@ -84,10 +84,11 @@ public class VirusLike extends AbstractData {
     /**
      * Отправляет приглашение в Topface через Facebook
      *
+     * @param from     контекст вызова, нужен для статистики
      * @param context  контекст
      * @param listener листенер диалога приглашений
      */
-    public void sendFacebookRequest(final Context context, final VirusLikeDialogListener listener) {
+    public void sendFacebookRequest(final String from, final Context context, final VirusLikeDialogListener listener) {
         if (mSocialIdArray != null && mSocialIdArray.size() > 0) {
             Bundle params = new Bundle();
             //Заголовок приглашения
@@ -105,11 +106,18 @@ public class VirusLike extends AbstractData {
             //Показываем диалог прилашения
             Data.facebook.setAccessToken(new AuthToken(context).getTokenKey());
             Data.facebook.dialog(context, "apprequests", params, new VirusLikeDialogListener(context) {
+
                 @Override
                 public void onComplete(Bundle values) {
+
+                    EasyTracker.getTracker().trackEvent(
+                            "VirusLikeRequest", "Complete",
+                            from, (long) socialIdForRequest.size()
+                    );
+
                     //Если есть еще друзья, которых можно пригласить, то отправляем запрос заново
                     if (mSocialIdArray != null && mSocialIdArray.size() > 0) {
-                        sendFacebookRequest(context, listener);
+                        sendFacebookRequest(from, context, listener);
                     } else {
                         //Когда все пользователи закончились, отправляем коллбэки
                         super.onComplete(values);
@@ -122,18 +130,36 @@ public class VirusLike extends AbstractData {
                 @Override
                 public void onFacebookError(FacebookError e) {
                     super.onFacebookError(e);
+
+                    EasyTracker.getTracker().trackEvent(
+                            "VirusLikeRequest", "FacebookError_" + e.getErrorType(),
+                            from, (long) socialIdForRequest.size()
+                    );
+
                     listener.onFacebookError(e);
                 }
 
                 @Override
                 public void onError(DialogError e) {
                     super.onError(e);
+
+                    EasyTracker.getTracker().trackEvent(
+                            "VirusLikeRequest", "DialogError",
+                            from, 0L
+                    );
+
                     listener.onError(e);
                 }
 
                 @Override
                 public void onCancel() {
                     super.onCancel();
+
+                    EasyTracker.getTracker().trackEvent(
+                            "VirusLikeRequest", "Cancel",
+                            from, 0L
+                    );
+
                     listener.onCancel();
                 }
             });
@@ -166,8 +192,9 @@ public class VirusLike extends AbstractData {
 
     /**
      * Устанавливает поле data в FbDialog, это дополнительные данные, которые получит Topface при клике на ссылку
+     *
      * @param context контекст
-     * @param params Bundle с параметрами диалога
+     * @param params  Bundle с параметрами диалога
      */
     private void setRequestDataParam(Context context, Bundle params) {
         AuthToken token = new AuthToken(context);
