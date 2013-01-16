@@ -1,10 +1,13 @@
 package com.topface.topface.ui.adapters;
 
+import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import com.topface.topface.R;
 
 /**
  * Adapter Operates with IListLoader interface.
@@ -20,11 +23,23 @@ public class LoadingListAdapter extends BaseAdapter {
     public static final int T_OTHER = 0;
     public static final int T_LOADER = 1;
     public static final int T_RETRIER = 2;
+    private static final int TYPE_COUNT = 3;
 
+    protected Context mContext;
+    protected LayoutInflater mInflater;
+    protected Updater mUpdateCallback;
     protected View mLoaderRetrier;
     protected TextView mLoaderRetrierText;
     protected ProgressBar mLoaderRetrierProgress;
-    private static final int TYPE_COUNT = 3;
+
+    public LoadingListAdapter(Context context, Updater updateCallback) {
+        mContext = context;
+        mInflater = LayoutInflater.from(context);
+        mUpdateCallback = updateCallback;
+        mLoaderRetrier = getLoaderRetrier();
+        mLoaderRetrierText = getLoaderRetrierText();
+        mLoaderRetrierProgress = getLoaderRetrierProgress();
+    }
 
     @Override
     public int getCount() {
@@ -51,6 +66,8 @@ public class LoadingListAdapter extends BaseAdapter {
      */
     @Override
     public int getItemViewType(int position) {
+        IListLoader item = getItem(position);
+        if (item == null) return T_OTHER;
         if (getItem(position).isLoader())
             return T_LOADER;
         else if (getItem(position).isLoaderRetry())
@@ -67,5 +84,21 @@ public class LoadingListAdapter extends BaseAdapter {
     @Override
     public int getViewTypeCount() {
         return TYPE_COUNT;
+    }
+
+    protected View getLoaderRetrier() {
+        return mInflater.inflate(R.layout.item_list_loader_retrier, null, false);
+    }
+
+    protected TextView getLoaderRetrierText() {
+        return (TextView) mLoaderRetrier.findViewById(R.id.tvLoaderText);
+    }
+
+    protected ProgressBar getLoaderRetrierProgress() {
+        return (ProgressBar) mLoaderRetrier.findViewById(R.id.prsLoader);
+    }
+
+    public static interface Updater {
+        void onFeedUpdate();
     }
 }

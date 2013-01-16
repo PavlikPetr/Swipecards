@@ -1,23 +1,16 @@
 package com.topface.topface.utils;
 
-import android.os.Handler;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
 import com.topface.topface.data.FeedGift;
+import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.views.ImageViewRemote;
 
-import java.util.ArrayList;
+public class GiftGalleryManager<T extends FeedGift> {
+    private FeedList<T> mDataList;
 
-public class GiftGalleryManager<T extends FeedGift> implements OnScrollListener {
-    private ArrayList<T> mDataList;
-    private Handler mHandler;
-
-
-    public GiftGalleryManager(ArrayList<T> dataList, Handler handler) {
-        mHandler = handler;
+    public GiftGalleryManager(FeedList<T> dataList) {
         mDataList = dataList;
         if (mDataList == null) {
-            mDataList = new ArrayList<T>();
+            mDataList = new FeedList<T>();
         }
     }
 
@@ -33,20 +26,14 @@ public class GiftGalleryManager<T extends FeedGift> implements OnScrollListener 
         imageView.setRemoteSrc(mDataList.get(position).gift.link);
     }
 
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
+    public boolean isEmpty() {
+        return mDataList.isEmpty();
     }
 
+    public T getLast() {
+        return mDataList.getLast();
 
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= totalItemCount - 1) {
-            if (mHandler != null && !mDataList.isEmpty() && mDataList.get(mDataList.size()-1).isLoader()) {
-                mHandler.sendEmptyMessage(0);
-            }
-        }
     }
-
 }
 
 

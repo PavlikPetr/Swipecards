@@ -3,8 +3,6 @@ package com.topface.topface.ui.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +20,7 @@ import com.topface.topface.requests.FeedGiftsRequest;
 import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
+import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.GiftsAdapter;
 import com.topface.topface.ui.adapters.GiftsAdapter.ViewHolder;
@@ -55,17 +54,10 @@ public class GiftsFragment extends BaseFragment {
         mGridView = (GridView) root.findViewById(R.id.fragmentGrid);
         mGridView.setAnimationCacheEnabled(false);
         mGridView.setScrollingCacheEnabled(true);
-        GiftGalleryManager<FeedGift> galleryManager = new GiftGalleryManager<FeedGift>(mGifts, new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                if (!mTag.equals(GIFTS_ALL_TAG) && !mIsUpdating && mGifts.getLast().isLoader()) {
-                    onNewFeeds();
-                }
-            }
-        });
-        mGridAdapter = new GiftsAdapter(getActivity().getApplicationContext(), galleryManager);
+        GiftGalleryManager<FeedGift> galleryManager = new GiftGalleryManager<FeedGift>(mGifts);
+        mGridAdapter = new GiftsAdapter(getActivity().getApplicationContext(), galleryManager, getUpdaterCallback());
         mGridView.setAdapter(mGridAdapter);
-        mGridView.setOnScrollListener(galleryManager);
+        mGridView.setOnScrollListener(mGridAdapter);
 
         mTitle = (TextView) root.findViewById(R.id.fragmentTitle);
 
@@ -331,5 +323,18 @@ public class GiftsFragment extends BaseFragment {
         Intent intent = new Intent(getActivity().getApplicationContext(),
                 GiftsActivity.class);
         startActivityForResult(intent, GiftsActivity.INTENT_REQUEST_GIFT);
+    }
+
+    protected FeedAdapter.Updater getUpdaterCallback() {
+        return new FeedAdapter.Updater() {
+            @Override
+            public void onFeedUpdate() {
+                if (!mIsUpdating) {
+                    if (!mTag.equals(GIFTS_ALL_TAG) && !mIsUpdating && mGifts.getLast().isLoader()) {
+                        onNewFeeds();
+                    }
+                }
+            }
+        };
     }
 }

@@ -29,6 +29,7 @@ import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
 import com.topface.topface.ui.*;
 import com.topface.topface.ui.adapters.ChatListAdapter;
+import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.ui.views.SwapControl;
@@ -46,6 +47,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     // Data
     private int mUserId;
 
+    private boolean mIsUpdating;
     private boolean mProfileInvoke;
     private boolean mIsAddPanelOpened;
     private PullToRefreshListView mListView;
@@ -178,16 +180,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void initChatHistory(View root) {
-        mListView = (PullToRefreshListView) root.findViewById(R.id.lvChatList);
-        mAdapter = new ChatListAdapter(getActivity().getApplicationContext(), mHistoryData);
+        mAdapter = new ChatListAdapter(getActivity().getApplicationContext(), mHistoryData, getUpdaterCallback());
         mAdapter.setOnAvatarListener(this);
-        mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
-            @Override
-            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                update(true, "pull to refresh");
-            }
-        });
-        mListView.setClickable(true);
         mAdapter.setOnItemLongClickListener(new OnListViewItemLongClickListener() {
 
             @Override
@@ -213,7 +207,16 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             }
         });
 
+        mListView = (PullToRefreshListView) root.findViewById(R.id.lvChatList);
+        mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                update(true, "pull to refresh");
+            }
+        });
+        mListView.setClickable(true);
         mListView.setAdapter(mAdapter);
+        mListView.setOnScrollListener(mAdapter);
     }
 
     private void initLockScreen(View root) {
@@ -326,6 +329,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void update(final boolean pullToRefresh, String type) {
+        mIsUpdating = true;
         if (!pullToRefresh) {
             mLoadingLocker.setVisibility(View.VISIBLE);
         }
@@ -359,7 +363,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                             if (pullToRefresh) {
                                 mAdapter.addAll(dataList.items);
                             } else {
-                                mAdapter.setDataList(dataList.items);
+                                mAdapter.setData(dataList.items);
                             }
                             if (dataList.items.size() > 0) {
                                 mAdapter.notifyDataSetChanged();
@@ -374,6 +378,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
                     }
                 });
+                mIsUpdating = false;
             }
 
             @Override
@@ -393,6 +398,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                         wasFailed = true;
                     }
                 });
+                mIsUpdating = false;
             }
         }).exec();
     }
@@ -907,7 +913,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
     private void startTimer() {
         if (mUpdater != null) {
-
             mUpdater.removeCallbacks(mUpdaterTask);
             mUpdater.postDelayed(mUpdaterTask, DEFAULT_CHAT_UPDATE_PERIOD);
         }
@@ -955,6 +960,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         return fragment;
     }
 
-
+    protected FeedAdapter.Updater getUpdaterCallback() {
+        return new FeedAdapter.Updater() {
+            @Override
+            public void onFeedUpdate() {
+                if (!mIsUpdating) {
+                    update(false, "scroll");
+                }
+            }
+        };
+    }
 
 }

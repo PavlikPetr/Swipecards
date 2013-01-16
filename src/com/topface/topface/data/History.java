@@ -11,6 +11,11 @@ public class History extends FeedDialog implements Parcelable{
 
     private String mJsonForParse;
 
+    public History(ItemType type) {
+        super(null);
+        setLoaderTypeFlags(type);
+    }
+
     public History(JSONObject data) {
         super(data);
         mJsonForParse = data.toString();

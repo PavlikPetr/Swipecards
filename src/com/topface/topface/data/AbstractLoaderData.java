@@ -9,6 +9,10 @@ public class AbstractLoaderData extends AbstractData implements IListLoader {
     private boolean mIsListLoaderRetry = false;
 
     public AbstractLoaderData(IListLoader.ItemType type) {
+         setLoaderTypeFlags(type);
+    }
+
+    protected void setLoaderTypeFlags(ItemType type) {
         switch (type) {
             case LOADER:
                 mIsListLoader = true;

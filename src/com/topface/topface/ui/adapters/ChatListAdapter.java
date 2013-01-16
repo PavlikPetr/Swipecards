@@ -5,28 +5,27 @@ import android.text.ClipboardManager;
 import android.text.Html;
 import android.text.format.DateFormat;
 import android.text.method.LinkMovementMethod;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.FeedDialog;
-import com.topface.topface.data.History;
-import com.topface.topface.data.VirusLike;
+import com.topface.topface.data.*;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.VirusLikesRequest;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.AddressesCache;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-@SuppressWarnings("deprecation")
-public class ChatListAdapter extends BaseAdapter {
+
+public class ChatListAdapter extends LoadingListAdapter implements AbsListView.OnScrollListener{
 
     // class ViewHolder
     static class ViewHolder {
@@ -42,8 +41,6 @@ public class ChatListAdapter extends BaseAdapter {
         // View mInfoGroup;
     }
 
-    private Context mContext;
-    private LayoutInflater mInflater;
     private FeedList<History> mDataList; // data
     private LinkedList<Integer> mItemLayoutList; // types
     private HashMap<Integer, String> mItemTimeList; // date
@@ -52,25 +49,25 @@ public class ChatListAdapter extends BaseAdapter {
     private AddressesCache mAddressesCache;
 
     // Type Item
-    private static final int T_USER_PHOTO = 0;
-    private static final int T_USER_EXT = 1;
-    private static final int T_FRIEND_PHOTO = 2;
-    private static final int T_FRIEND_EXT = 3;
-    private static final int T_DATE = 4;
-    private static final int T_USER_GIFT_PHOTO = 5;
-    private static final int T_USER_GIFT_EXT = 6;
-    private static final int T_FRIEND_GIFT_PHOTO = 7;
-    private static final int T_FRIEND_GIFT_EXT = 8;
-    private static final int T_USER_MAP_PHOTO = 9;
-    private static final int T_USER_MAP_EXT = 10;
-    private static final int T_FRIEND_MAP_PHOTO = 11;
-    private static final int T_FRIEND_MAP_EXT = 12;
-    private static final int T_USER_REQUEST = 13;
-    private static final int T_USER_REQUEST_EXT = 14;
-    private static final int T_FRIEND_REQUEST = 15;
-    private static final int T_FRIEND_REQUEST_EXT = 16;
+    private static final int T_USER_PHOTO = 3;
+    private static final int T_USER_EXT = 4;
+    private static final int T_FRIEND_PHOTO = 5;
+    private static final int T_FRIEND_EXT = 6;
+    private static final int T_DATE = 7;
+    private static final int T_USER_GIFT_PHOTO = 8;
+    private static final int T_USER_GIFT_EXT = 9;
+    private static final int T_FRIEND_GIFT_PHOTO = 10;
+    private static final int T_FRIEND_GIFT_EXT = 11;
+    private static final int T_USER_MAP_PHOTO = 12;
+    private static final int T_USER_MAP_EXT = 13;
+    private static final int T_FRIEND_MAP_PHOTO = 14;
+    private static final int T_FRIEND_MAP_EXT = 15;
+    private static final int T_USER_REQUEST = 16;
+    private static final int T_USER_REQUEST_EXT = 17;
+    private static final int T_FRIEND_REQUEST = 18;
+    private static final int T_FRIEND_REQUEST_EXT = 19;
 
-    private static final int T_COUNT = 17;
+    private static final int T_COUNT = 20;
 
     private final static SimpleDateFormat mDowFormat = new SimpleDateFormat("EEEE");
 
@@ -78,11 +75,11 @@ public class ChatListAdapter extends BaseAdapter {
     ChatFragment.OnListViewItemLongClickListener mLongClickListener;
 
 
-    public ChatListAdapter(Context context, ArrayList<History> dataList) {
+    public ChatListAdapter(Context context, ArrayList<History> dataList, Updater updateCallback) {
+        super(context, updateCallback);
         mContext = context;
         mItemLayoutList = new LinkedList<Integer>();
         mItemTimeList = new HashMap<Integer, String>();
-        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mAddressesCache = new AddressesCache();
 
         prepare(dataList, true);
@@ -118,7 +115,12 @@ public class ChatListAdapter extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        return mItemLayoutList.get(position);
+        int superType = super.getItemViewType(position);
+        if (superType == T_OTHER) {
+            return mItemLayoutList.get(position);
+        } else {
+            return superType;
+        }
     }
 
     @Override
@@ -266,7 +268,6 @@ public class ChatListAdapter extends BaseAdapter {
     }
 
     private boolean setImageInfo(ViewHolder holder, int type, History item) {
-        View convertView;
         if (type == T_USER_GIFT_PHOTO || type == T_USER_GIFT_EXT
                 || type == T_FRIEND_GIFT_PHOTO || type == T_FRIEND_GIFT_EXT) {
             holder.gift.setRemoteSrc(item.link);
@@ -358,7 +359,7 @@ public class ChatListAdapter extends BaseAdapter {
         return null;
     }
 
-    public void setDataList(ArrayList<History> dataList) {
+    public void setData(ArrayList<History> dataList) {
         prepare(dataList, true);
     }
 
@@ -552,6 +553,30 @@ public class ChatListAdapter extends BaseAdapter {
 
     public void addAll(ArrayList<History> dataList) {
         prepare(dataList, false);
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView absListView, int i) {
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= totalItemCount - 1) {
+            if (mUpdateCallback != null && !mDataList.isEmpty() && mDataList.getLast().isLoader()) {
+                mUpdateCallback.onFeedUpdate();
+            }
+        }
+    }
+
+    protected History getRetryItem() {
+        //noinspection unchecked
+        return (History) new HistoryLoader(IListLoader.ItemType.RETRY);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected History getLoaderItem() {
+        //noinspection unchecked
+        return (History) new HistoryLoader(IListLoader.ItemType.LOADER);
     }
 
     private View.OnClickListener mLikeRequestListener = new View.OnClickListener() {

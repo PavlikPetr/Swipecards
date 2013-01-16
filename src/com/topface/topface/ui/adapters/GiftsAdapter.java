@@ -1,9 +1,9 @@
 package com.topface.topface.ui.adapters;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.topface.topface.R;
@@ -13,21 +13,15 @@ import com.topface.topface.data.Gift;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.GiftGalleryManager;
 
-public class GiftsAdapter extends LoadingListAdapter {
+public class GiftsAdapter extends LoadingListAdapter implements AbsListView.OnScrollListener {
 
     public static final int T_SEND_BTN = 3;
 
-    private LayoutInflater mInflater;
-
     private GiftGalleryManager<FeedGift> mGalleryManager;
 
-    public GiftsAdapter(Context context, GiftGalleryManager<FeedGift> galleryManager) {
-        mInflater = LayoutInflater.from(context);
+    public GiftsAdapter(Context context, GiftGalleryManager<FeedGift> galleryManager, Updater updateCallback) {
+        super(context,updateCallback);
         mGalleryManager = galleryManager;
-
-        mLoaderRetrier = mInflater.inflate(R.layout.item_grid_loader_retrier, null, false);
-        mLoaderRetrierText = (TextView) mLoaderRetrier.findViewById(R.id.tvLoaderText);
-        mLoaderRetrierProgress = (ProgressBar) mLoaderRetrier.findViewById(R.id.prsLoader);
     }
 
     @Override
@@ -119,4 +113,31 @@ public class GiftsAdapter extends LoadingListAdapter {
         TextView giftText;
     }
 
+    @Override
+    protected View getLoaderRetrier() {
+        return mInflater.inflate(R.layout.item_grid_loader_retrier, null, false);
+    }
+
+    @Override
+    protected TextView getLoaderRetrierText() {
+        return (TextView) mLoaderRetrier.findViewById(R.id.tvLoaderText);
+    }
+
+    @Override
+    protected ProgressBar getLoaderRetrierProgress() {
+        return (ProgressBar) mLoaderRetrier.findViewById(R.id.prsLoader);
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView absListView, int i) {
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= totalItemCount - 1) {
+            if (mUpdateCallback != null && !mGalleryManager.isEmpty() && mGalleryManager.getLast().isLoader()) {
+                mUpdateCallback.onFeedUpdate();
+            }
+        }
+    }
 }

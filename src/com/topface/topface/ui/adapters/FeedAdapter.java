@@ -22,25 +22,17 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     protected static final int T_NEW_VIP = 3;
     protected static final int T_VIP = 4;
     protected static final int T_NEW = 5;
-    protected static final int T_COUNT = 3;
+    protected static final int T_COUNT = 6;
 
-    private Context mContext;
     private FeedList<T> mData;
-    private LayoutInflater mInflater;
-    private Updater mUpdateCallback;
     private long mLastUpdate = 0;
     public static final int LIMIT = 40;
     private static final long CACHE_TIMEOUT = 1000 * 5 * 60; //5 минут
     private OnAvatarClickListener<T> mOnAvatarClickListener;
 
     public FeedAdapter(Context context, FeedList<T> data, Updater updateCallback) {
-        mContext = context;
+        super(context, updateCallback);
         mData = data == null ? new FeedList<T>() : data;
-        mInflater = LayoutInflater.from(context);
-        mLoaderRetrier = getLoaderRetrier();
-        mLoaderRetrierText = getLoaderRetrierText();
-        mLoaderRetrierProgress = getLoaderRetrierProgress();
-        mUpdateCallback = updateCallback;
     }
 
     protected static class FeedViewHolder {
@@ -60,18 +52,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     public FeedAdapter(Context context, Updater updateCallback) {
         this(context, null, updateCallback);
-    }
-
-    private ProgressBar getLoaderRetrierProgress() {
-        return (ProgressBar) mLoaderRetrier.findViewById(R.id.prsLoader);
-    }
-
-    private TextView getLoaderRetrierText() {
-        return (TextView) mLoaderRetrier.findViewById(R.id.tvLoaderText);
-    }
-
-    private View getLoaderRetrier() {
-        return mInflater.inflate(R.layout.item_list_loader_retrier, null, false);
     }
 
     @Override
@@ -217,10 +197,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
                 mUpdateCallback.onFeedUpdate();
             }
         }
-    }
-
-    public static interface Updater {
-        void onFeedUpdate();
     }
 
     public void setData(FeedListData<T> data) {
