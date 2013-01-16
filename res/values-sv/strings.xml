@@ -228,7 +228,7 @@
     <string name="vip_text_visitors">Ta reda på vem som är intresserad av dig - se dina gäster!</string>
     <string name="vip_text_adm_unlock">Skicka beundran gratis - visa maximalt dina känslor!</string>
     <string name="vip_rest">Du är prenumererad på VIP</string>
-    <string name="vip_invis">"Osynlig" funktion</string>
+    <string name="vip_invis">\"Osynlig\" funktion</string>
     <string name="vip_messages_bg">Meddelandets bakgrund</string>
     <string name="vip_black_list">Svartlista</string>
     <string name="vip_profile_bg">Bakgrundsbild</string>
@@ -240,7 +240,7 @@
     <string name="black_list_empty">Din svartlista är tom</string>
     <string name="black_list_add">Lägg till svartlista</string>
     <string name="black_list_delete">Radera från svartlista</string>
-    <string name="vip_invisible_mode">"Osynlig" funktion</string>
+    <string name="vip_invisible_mode">\"Osynlig\" funktion</string>
     <string name="buying_profile_coins">På ditt konto</string>
     <string name="vip_buy_vip">Köpa VIP</string>
     <string name="vip_state_off">Din VIP-status är ej aktiverad</string>
@@ -249,7 +249,7 @@
     <string name="vip_why">Varför är det så viktigt för dig att vara VIP</string>
     <string name="vip_info_delight">Skicka beundran gratis - visa maximalt dina känslor!</string>
     <string name="vip_info_guest">Se vem som är intresserad av dig - se dina gäster!</string>
-    <string name="vip_info_invisible">Besök andra profiler osynligt genom att aktivera "Osynlig" funktionen</string>
+    <string name="vip_info_invisible">Besök andra profiler osynligt genom att aktivera \"Osynlig\" funktionen</string>
     <string name="vip_info_message">Ha en fördel - dina meddelanden kommer att särskilt synas bland de andra!</string>
     <string name="vip_info_gift">Välj exklusiva VIP-gåvor för att säkert bli uppmärksammad!</string>
     <string name="vip_info_blackList">Bli av med irriterande personer med hjälp av  \"svartlista\"</string>
