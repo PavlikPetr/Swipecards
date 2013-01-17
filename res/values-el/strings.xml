@@ -249,10 +249,10 @@
     <string name="vip_why">Γιατί είναι σημαντικό για εσάς να γίνετε VIP</string>
     <string name="vip_info_delight">Στείλτε θαυμασμό για δωρεάν - εκφράστε τα συναισθήματά σας στο μέγιστο!</string>
     <string name="vip_info_guest">Μάθετε ποιος είναι ενδιαφέρεται για σας - δείτε τους καλεσμένους σας!</string>
-    <string name="vip_info_invisible">Μείνετε απαρατήρητα, όταν επισκέπτεστε τις σελίδες κάποιου άλλου, χάρη στην \ "αόρατος \"</string>
+    <string name="vip_info_invisible">Μείνετε απαρατήρητα, όταν επισκέπτεστε τις σελίδες κάποιου άλλου, χάρη στην \"αόρατος\"</string>
     <string name="vip_info_message">Αποκτήστε το πλεονέκτημα - τα μηνύματα σας θα ξεχωρίσουν από το πλήθος!</string>
     <string name="vip_info_gift">Επιλέξτε αποκλειστικά VIP-δώρα, και θα σας μείνει αξέχαστο!</string>
-    <string name="vip_info_blackList">Απαλλαγείτε από τα ενοχλητικά άτομα με \ "μαύρη λίστα \"</string>
+    <string name="vip_info_blackList">Απαλλαγείτε από τα ενοχλητικά άτομα με \"μαύρη λίστα\"</string>
     <string name="vip_info_vip">Ξεχωρίστε με VIP-κατάστασή σας στην αναζήτηση και με το προφίλ σας!</string>
     <string name="vip_info_title">VIP τα προνόμια</string>
     <string name="black_list_retrieve">Αποκαταστήστε</string>

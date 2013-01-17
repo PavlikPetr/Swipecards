@@ -50,7 +50,7 @@
     <string name="auth_vk_name">ВКонтакте</string>
     <string name="dating_header_girls">Дівчата від %1$d до %2$d</string>
     <string name="dating_header_guys">Хлопці від %1$d до %2$d</string>
-    <string name="dating_switch_button">Ще …</string>
+    <string name="dating_switch_button">Ще…</string>
     <string name="dating_skip_button">Наступна</string>
     <string name="dating_prev_button">Попередня</string>
     <string name="dating_chat_button">Побалакати</string>
@@ -292,4 +292,15 @@
     <string name="general_reconnect_social">Неможливо підключитися до соцмережі. Повторіть спробу пізніше.</string>
     <string name="general_buying">Купити симпатії та монети</string>
     <string name="general_block">Блокувати</string>
+    <string name="general_buying_disabled">У даний момент покупка неможлива</string>
+    <string name="ban_flood_detected">Ви занадто часто здійснюєте запити до сервера. Для подальшого використання додатка почекайте.</string>
+    <string name="general_maintenance">На сервері проводяться технічні роботи і ваш запит не може бути виконаний. Спробуйте повторити пізніше.</string>
+    <string name="virus_chat_likes_request_title">Подарувати симпатії вашим друзям</string>
+    <string name="virus_chat_btn">Отримати симпатії</string>
+    <string name="virus_request_error">Не вдалося відправити симпатій вашим друзям</string>
+    <plurals name="virus_request_likes_cnt">
+        <item quantity="few">Зараз у вас %d симпатії!</item>
+        <item quantity="other">Зараз у вас %d симпатій!</item>
+        <item quantity="one">Зараз у вас %d симпатія!</item>
+    </plurals>
 </resources>

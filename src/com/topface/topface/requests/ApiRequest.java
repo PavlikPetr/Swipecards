@@ -3,14 +3,10 @@ package com.topface.topface.requests;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import com.topface.topface.*;
-import com.topface.topface.ui.AuthActivity;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.RequestConnection;
-import com.topface.topface.utils.social.AuthToken;
 
 import java.util.Calendar;
 

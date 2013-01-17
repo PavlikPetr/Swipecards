@@ -294,4 +294,13 @@
     <string name="general_block">Blokovat</string>
     <string name="general_buying_disabled">V tuto chvíli není možné nakupovat</string>
     <string name="ban_flood_detected">Příliš často odesíláte požadavky na server. Pro další použití aplikace musíte vyčkat.</string>
+    <string name="general_maintenance">Momentálně je server z technických důvodu mimo provoz a Váš požadavek nemůže být vyřízen. Zkuste to znovu později.</string>
+    <string name="virus_chat_likes_request_title">Darovat sympatie Vašim přátelům</string>
+    <string name="virus_chat_btn">Získat sympatie</string>
+    <string name="virus_request_error">Nepodařilo se odeslat sympatie Vašim přátelům</string>
+    <plurals name="virus_request_likes_cnt">
+        <item quantity="few">Teď máte %d sympatie!</item>
+        <item quantity="other">Teď máte %d sympatií!</item>
+        <item quantity="one">Teď máte %d sympatii!</item>
+    </plurals>
 </resources>

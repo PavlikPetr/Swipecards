@@ -200,7 +200,7 @@
     <string name="general_sex">Nem</string>
     <string name="general_girl">Nő</string>
     <string name="general_boy">Férfi</string>
-    <string name="filter_city_fail">Nincs találat a "%s" kezdőbetűjű városokra.</string>
+    <string name="filter_city_fail">Nincs találat a \"%s\" kezdőbetűjű városokra.</string>
     <string name="age_filter_man">Srácok érdekelnek</string>
     <string name="age_filter_girl">Lányok érdekelnek</string>
     <string name="dashbrd_popup_rating">Tetszett az alkalmazásunk? Növeld a népszerűségünket! Minél magasabb a népszerűségünk, annál több érdekes emberrel találkozhatsz a Topface-n</string>
@@ -288,4 +288,14 @@
     <string name="general_reconnect_social">A kapcsolódás a közösségi oldalhoz nem lehetséges. Próbáld meg később.</string>
     <string name="general_buying">Vegyél szimpátiát és érméket</string>
     <string name="general_block">Letiltás</string>
+    <string name="general_buying_disabled">A vásárlás nem elérhető most.</string>
+    <string name="ban_flood_detected">Túl gyakran küldesz felkéréseket a szerverre. Várj az alkalmazás további használatával.</string>
+    <string name="general_maintenance">Technikai munkák vannak folyamatban a szerveren, és a felkérésedet nem tudjuk most teljesíteni. Próbáld meg később.</string>
+    <string name="virus_chat_likes_request_title">Szimpátia adása barátaidnak</string>
+    <string name="virus_chat_btn">Szimpátia kapása</string>
+    <string name="virus_request_error">Nem tudtuk elküldeni a szimpátiákat a barátaidnak</string>
+    <plurals name="virus_request_likes_cnt">
+        <item quantity="other">Теп%d szimpátiát van!</item>
+        <item quantity="one">Те%d szimpátiát van!</item>
+    </plurals>
 </resources>

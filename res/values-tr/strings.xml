@@ -294,4 +294,9 @@
     <string name="virus_chat_likes_request_title">Arkadaşlarınıza sempatileri hediye etmek</string>
     <string name="virus_chat_btn">Sempati kazanmak</string>
     <string name="virus_request_error">Sempatiler arkadaşlarınıza gönderilemedi</string>
+    <plurals name="virus_request_likes_cnt">
+        <item quantity="zero">Artık sizin %d sempatiniz var!</item>
+        <item quantity="other">Artık sizin %d sempatiniz var!</item>
+        <item quantity="one">Artık sizin %d sempatiniz var!</item>
+    </plurals>
 </resources>

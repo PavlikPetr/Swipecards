@@ -18,12 +18,10 @@ import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
-import com.topface.topface.requests.SimpleApiHandler;
-import com.topface.topface.ui.analytics.TrackedFragmentActivity;
+import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.fragments.*;
 import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
 import com.topface.topface.ui.fragments.MenuFragment.FragmentMenuListener;
@@ -35,9 +33,10 @@ import com.topface.topface.utils.social.AuthorizationManager;
 
 import java.util.Calendar;
 
-public class NavigationActivity extends TrackedFragmentActivity implements View.OnClickListener {
+public class NavigationActivity extends BaseFragmentActivity implements View.OnClickListener {
 
     public static final String RATING_POPUP = "RATING_POPUP";
+    public static final String FROM_AUTH = "com.topface.topface.AUTH";
     public static final int RATE_POPUP_TIMEOUT = 86400000; // 1000 * 60 * 60 * 24 * 1 (1 сутки)
     public static final int UPDATE_INTERVAL = 1 * 60 * 1000;
     private FragmentManager mFragmentManager;
@@ -53,29 +52,18 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_navigation);
+
         Debug.log(this, "onCreate");
         mFragmentManager = getSupportFragmentManager();
 
-        mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
-        mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
-        mFragmentMenu.setOnMenuListener(mOnFragmentMenuListener);
+        initFragmentSwitcher();
 
-        mFragmentSwitcher = (FragmentSwitchController) findViewById(R.id.fragment_switcher);
-        mFragmentSwitcher.setFragmentSwitchListener(mFragmentSwitchListener);
-        mFragmentSwitcher.setFragmentManager(mFragmentManager);
-
-        Intent intent = getIntent();
-        int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
-        if (id != -1) {
-            mFragmentSwitcher.showFragmentWithAnimation(id);
-        } else {
-            mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
-            mFragmentMenu.selectDefaultMenu();
+        if (CacheProfile.isLoaded()) {
+            onInit();
         }
-        AuthorizationManager.getInstance(this).extendAccessToken();
+
 
         mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         setStopTime();
@@ -85,6 +73,48 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
         if (App.isOnline()) {
             ratingPopup();
         }
+    }
+
+    private void initFragmentSwitcher() {
+        mFragmentSwitcher = (FragmentSwitchController) findViewById(R.id.fragment_switcher);
+        mFragmentSwitcher.setFragmentSwitchListener(mFragmentSwitchListener);
+        mFragmentSwitcher.setFragmentManager(mFragmentManager);
+
+        mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
+        mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
+        mFragmentMenu.setOnMenuListener(mOnFragmentMenuListener);
+    }
+
+    @Override
+    public void onInit() {
+        Intent intent = getIntent();
+        int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
+        if (id != -1) {
+            mFragmentSwitcher.showFragmentWithAnimation(id);
+
+        } else {
+            mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
+            mFragmentMenu.selectDefaultMenu();
+        }
+        AuthorizationManager.getInstance(NavigationActivity.this).extendAccessToken();
+        //Если пользователь не заполнил необходимые поля, перекидываем его на EditProfile,
+        //чтобы исправлялся.
+        if (needChangeProfile()) {
+            Intent editIntent = new Intent(this, EditProfileActivity.class);
+            editIntent.putExtra(FROM_AUTH, true);
+            startActivity(editIntent);
+            finish();
+        }
+    }
+
+    private boolean needChangeProfile() {
+        return (CacheProfile.age == 0 || CacheProfile.city_id == 0 || CacheProfile.photo == null)
+                && shouldChangeProfile();
+    }
+
+    private boolean shouldChangeProfile() {
+        SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        return preferences != null && preferences.getBoolean(Static.PREFERENCES_TAG_NEED_EDIT, true);
     }
 
     @Override
@@ -152,35 +182,43 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
 
     @Override
     public void onBackPressed() {
-        if (mFragmentSwitcher.getAnimationState() == FragmentSwitchController.EXPAND) {
-            super.onBackPressed();
-        } else {
-            if (mFragmentSwitcher.isExtraFrameShown()) {
-                //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
-                //начало костыля--------------
-                if (mChatInvoke) {
-                    if (mFragmentSwitcher.getCurrentExtraFragment() instanceof ProfileFragment) {
-                        ((ProfileFragment) mFragmentSwitcher.getCurrentExtraFragment()).openChat();
-                        mChatInvoke = false;
-                    }
-                    //конец костыля--------------
-                } else {
-                    mFragmentSwitcher.closeExtraFragment();
-                }
+        if (mFragmentSwitcher != null) {
+            if (mFragmentSwitcher.getAnimationState() == FragmentSwitchController.EXPAND) {
+                super.onBackPressed();
             } else {
-                mFragmentMenu.refreshNotifications();
-                mFragmentSwitcher.openMenu();
+                if (mFragmentSwitcher.isExtraFrameShown()) {
+                    //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
+                    //начало костыля--------------
+                    if (mChatInvoke) {
+                        if (mFragmentSwitcher.getCurrentExtraFragment() instanceof ProfileFragment) {
+                            ((ProfileFragment) mFragmentSwitcher.getCurrentExtraFragment()).openChat();
+                            mChatInvoke = false;
+                        }
+                        //конец костыля--------------
+                    } else {
+                        mFragmentSwitcher.closeExtraFragment();
+                    }
+                } else {
+                    mFragmentMenu.refreshNotifications();
+                    mFragmentSwitcher.openMenu();
+                }
             }
+        } else {
+            super.onBackPressed();
         }
     }
 
     @Override
     public boolean onCreatePanelMenu(int featureId, Menu menu) {
-        if (mFragmentSwitcher.getAnimationState() != FragmentSwitchController.EXPAND) {
-            mFragmentMenu.refreshNotifications();
-            mFragmentSwitcher.openMenu();
-        } else {
-            mFragmentSwitcher.closeMenu();
+        if (mFragmentSwitcher != null) {
+            if (mFragmentSwitcher.getAnimationState() != FragmentSwitchController.EXPAND) {
+                if (mFragmentMenu != null) {
+                    mFragmentMenu.refreshNotifications();
+                }
+                mFragmentSwitcher.openMenu();
+            } else {
+                mFragmentSwitcher.closeMenu();
+            }
         }
         return false;
     }
@@ -359,6 +397,13 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
             }
             ((ViewGroup) view).removeAllViews();
         }
+    }
+
+    @Override
+    public void close(Fragment fragment) {
+        super.close(fragment);
+        mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
+        mFragmentMenu.selectDefaultMenu();
     }
 
 

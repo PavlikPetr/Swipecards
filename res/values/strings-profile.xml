@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="profile_form_status_male_0">Love and serious relationship</string>
-    <string name="profile_form_status_male_1">"No strings attached" relationship</string>
+    <string name="profile_form_status_male_1">\"No strings attached\" relationship</string>
     <string name="profile_form_status_male_2">Friendship</string>
     <string name="profile_form_status_male_3">I\'m here for sympathies</string>
     <string name="profile_form_status_male_4">I\'m here to chat</string>
     <string name="profile_form_status_female_0">Love and serious relationship</string>
-    <string name="profile_form_status_female_1">"No strings attached" relationship</string>
+    <string name="profile_form_status_female_1">\"No strings attached\" relationship</string>
     <string name="profile_form_status_female_2">Friendship</string>
     <string name="profile_form_status_female_3">I\'m here for sympathies</string>
     <string name="profile_form_status_female_4">I\'m here to chat</string>

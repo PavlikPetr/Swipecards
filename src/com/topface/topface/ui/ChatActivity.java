@@ -1,36 +1,78 @@
 package com.topface.topface.ui;
 
-@SuppressWarnings("deprecation")
-public class ChatActivity extends BaseFragmentActivity {
-//        implements View.OnClickListener,
-//        LocationListener {
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.*;
+import android.location.Location;
+import android.location.LocationListener;
+import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
+import android.widget.*;
+import com.google.analytics.tracking.android.EasyTracker;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.topface.topface.Data;
+import com.topface.topface.GCMUtils;
+import com.topface.topface.R;
+import com.topface.topface.Static;
+import com.topface.topface.data.*;
+import com.topface.topface.requests.*;
+import com.topface.topface.ui.adapters.ChatListAdapter;
+import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.fragments.BuyingFragment;
+import com.topface.topface.ui.fragments.DatingFragment;
+import com.topface.topface.ui.fragments.ProfileFragment;
+import com.topface.topface.ui.fragments.feed.DialogsFragment;
+import com.topface.topface.ui.fragments.feed.LikesFragment;
+import com.topface.topface.ui.fragments.feed.MutualFragment;
+import com.topface.topface.ui.fragments.feed.VisitorsFragment;
+import com.topface.topface.ui.views.LockerView;
+import com.topface.topface.ui.views.RetryView;
+import com.topface.topface.ui.views.SwapControl;
+import com.topface.topface.utils.*;
+import com.topface.topface.utils.GeoLocationManager.LocationProviderType;
 
-//    private Handler mUpdater;
+import java.util.LinkedList;
+import java.util.TimerTask;
+
+@SuppressWarnings("deprecation")
+public class ChatActivity extends BaseFragmentActivity implements View.OnClickListener,
+        LocationListener {
+
+    private Handler mUpdater;
     public static final String ADAPTER_DATA = "adapter";
     public static final String WAS_FAILED = "was_failed";
-//    // Data
-//    private int mUserId;
-//    private boolean mProfileInvoke;
-//    private boolean mIsAddPanelOpened;
-//    private PullToRefreshListView mListView;
-//    private ChatListAdapter mAdapter;
-//    private LinkedList<History> mHistoryList;
-//    private EditText mEditBox;
-//    private LockerView mLoadingLocker;
-//    private RetryView mRetryView;
-//
-//    private SwapControl mSwapControl;
-//    private static ProgressDialog mProgressDialog;
-//    private boolean mLocationDetected = false;
-//
-//    private String[] editButtonsNames;
-//
-//    private static final int DELETE_BUTTON = 1;
-//    private static final int COPY_BUTTON = 0;
-//
-//    private boolean mReceiverRegistered = false;
-//    // Constants
-//    private static final int LIMIT = 50; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // Data
+    private int mUserId;
+    private boolean mProfileInvoke;
+    private boolean mIsAddPanelOpened;
+    private PullToRefreshListView mListView;
+    private ChatListAdapter mAdapter;
+    private LinkedList<History> mHistoryList;
+    private EditText mEditBox;
+    private LockerView mLoadingLocker;
+    private RetryView mRetryView;
+
+    private SwapControl mSwapControl;
+    private static ProgressDialog mProgressDialog;
+    private boolean mLocationDetected = false;
+
+    private String[] editButtonsNames;
+
+    private static final int DELETE_BUTTON = 1;
+    private static final int COPY_BUTTON = 0;
+
+    private boolean mReceiverRegistered = false;
+    // Constants
+    private static final int LIMIT = 50; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_USER_NAME = "user_name";
     public static final String INTENT_USER_AVATAR = "user_avatar";

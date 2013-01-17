@@ -1,6 +1,7 @@
 package com.topface.topface.ui.blocks;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -13,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 import com.adfonic.android.AdfonicView;
 import com.adfonic.android.api.Request;
 import com.google.ads.AdRequest;
@@ -190,12 +192,21 @@ public class BannerBlock {
     }
 
     private void sendVirusLikeRequest() {
+        final ProgressDialog dialog = new ProgressDialog(mActivity);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setMessage(mActivity.getString(R.string.general_dialog_loading));
+        dialog.show();
+
+        EasyTracker.getTracker().trackEvent("VirusLike", "Click", "Banner", 0L);
+
         new VirusLikesRequest(mActivity).callback(new ApiHandler() {
             @Override
             public void success(final ApiResponse response) {
+                EasyTracker.getTracker().trackEvent("VirusLike", "Success", "Banner", 0L);
                 final Handler handler = this;
                 //И предлагаем отправить пользователю запрос своим друзьям не из приложения
                 new VirusLike(response).sendFacebookRequest(
+                        "Banner",
                         mActivity,
                         new VirusLike.VirusLikeDialogListener(mActivity) {
                             @Override
@@ -209,7 +220,19 @@ public class BannerBlock {
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                Utils.showErrorMessage(getContext());
+                EasyTracker.getTracker().trackEvent("VirusLike", "Fail", "Banner", 0L);
+
+                if (response.isError(ApiResponse.CODE_VIRUS_LIKES_ALREADY_RECEIVED)) {
+                    Toast.makeText(getContext(), R.string.virus_error, Toast.LENGTH_LONG).show();
+                } else {
+                    Utils.showErrorMessage(getContext());
+                }
+            }
+
+            @Override
+            public void always(ApiResponse response) {
+                super.always(response);
+                dialog.dismiss();
             }
         }).exec();
     }

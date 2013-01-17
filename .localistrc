@@ -1,11 +1,12 @@
-[urls]
-default = http://topface-mobile:Sonetica2012@l10n.topface.com/
+[project]
+name = Topface-mobile
+language = ru
+format = androidxml
 
 [translation]
-project = Topface-mobile
-format = androidxml
-source_locale = ru
+service = http://l10n.topface.com/
+user = topface-mobile
+password = Sonetica2012
 
 [androidxml]
 resource_dir = res
-

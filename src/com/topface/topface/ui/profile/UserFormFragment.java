@@ -6,12 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.data.User;
+import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.StandardMessageSendRequest;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.ProfileFragment;
@@ -28,6 +28,8 @@ public class UserFormFragment extends BaseFragment implements OnClickListener {
     private ImageView mState;
     private ViewGroup mEmptyFormLayout;
     private Button mAskToFillForm;
+    private ProgressBar mPgb;
+    private TextView mSuccessText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,8 +45,12 @@ public class UserFormFragment extends BaseFragment implements OnClickListener {
 
         mEmptyFormLayout = (ViewGroup) root.findViewById(R.id.loEmptyForm);
 
-        Button askToFillForm = (Button) mEmptyFormLayout.findViewById(R.id.btnEmptyForm);
-        askToFillForm.setOnClickListener(this);
+        mAskToFillForm =
+                (Button) mEmptyFormLayout.findViewById(R.id.btnEmptyForm);
+        mAskToFillForm.setOnClickListener(this);
+
+        mPgb = (ProgressBar) mEmptyFormLayout.findViewById(R.id.pgbProgress);
+        mSuccessText = (TextView) mEmptyFormLayout.findViewById(R.id.emptyFormSuccess);
 
         mTitleLayout = root.findViewById(R.id.fragmentTitle);
         mTitle = (TextView) root.findViewById(R.id.tvTitle);
@@ -104,15 +110,27 @@ public class UserFormFragment extends BaseFragment implements OnClickListener {
                 mUserFormListAdapter.notifyDataSetChanged();
                 break;
             case R.id.btnEmptyForm:
-                Intent intent = new Intent(getActivity(), ChatActivity.class);
-                intent.putExtra(ChatActivity.INTENT_USER_ID, mUser.uid);
-                intent.putExtra(ChatActivity.INTENT_USER_NAME, mUser.first_name);
-                intent.putExtra(ChatActivity.INTENT_USER_SEX, mUser.sex);
-                intent.putExtra(ChatActivity.INTENT_USER_AGE, mUser.age);
-                intent.putExtra(ChatActivity.INTENT_USER_CITY, mUser.city_name);
-                intent.putExtra(ChatActivity.INTENT_PROFILE_INVOKE, true);
-                intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, ProfileFragment.class.getSimpleName());
-                startActivity(intent);
+                StandardMessageSendRequest request = new StandardMessageSendRequest(getActivity(), StandardMessageSendRequest.MESSAGE_FILL_INTERESTS, mUser.uid);
+                registerRequest(request);
+                mAskToFillForm.setVisibility(View.GONE);
+                mPgb.setVisibility(View.VISIBLE);
+                request.callback(new ApiHandler() {
+                    @Override
+                    public void success(ApiResponse response) {
+                        if(mPgb != null && mSuccessText != null) {
+                            mPgb.setVisibility(View.GONE);
+                            mSuccessText.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void fail(int codeError, ApiResponse response) {
+                        if(mPgb != null && mAskToFillForm != null) {
+                            mPgb.setVisibility(View.GONE);
+                            mAskToFillForm.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }).exec();
                 break;
         }
     }

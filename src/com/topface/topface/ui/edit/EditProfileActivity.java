@@ -1,10 +1,7 @@
 package com.topface.topface.ui.edit;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.*;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -23,7 +20,6 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
-import com.topface.topface.ui.AuthActivity;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.ui.NavigationActivity;
@@ -66,7 +62,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         btnBackToProfile.setVisibility(View.VISIBLE);
         btnBackToProfile.setOnClickListener(this);
 
-        hasStartedFromAuthActivity = getIntent().getBooleanExtra(AuthActivity.FROM_AUTH_ACTIVITY, false);
+        hasStartedFromAuthActivity = getIntent().getBooleanExtra(NavigationActivity.FROM_AUTH, false);
 
         // ListView
         mEditItems = new LinkedList<EditProfileItem>();
@@ -192,7 +188,9 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
             case R.id.btnNavigationBackWithText:
                 if (hasStartedFromAuthActivity) {
                     Intent intent = new Intent(this, NavigationActivity.class);
-                    intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE);
+                    intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_VIP_PROFILE);
+                    SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                    preferences.edit().putBoolean(Static.PREFERENCES_TAG_NEED_EDIT,false).commit();
                     startActivity(intent);
                 }
                 finish();

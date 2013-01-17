@@ -81,6 +81,7 @@ public class AuthorizationManager {
 
     private void receiveToken(AuthToken authToken) {
         if (mHandler != null) {
+            mHandler.sendEmptyMessage(DIALOG_COMPLETED);
             Message msg = new Message();
             msg.what = TOKEN_RECEIVED;
             msg.obj = authToken;

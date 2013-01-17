@@ -18,6 +18,7 @@ import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
 import com.topface.topface.Data;
 import com.topface.topface.R;
+import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.ui.NavigationActivity;
 
 import java.util.Calendar;
@@ -355,11 +356,13 @@ public class Utils {
     }
 
     public static void showErrorMessage(Context context) {
-        Toast.makeText(
-                context,
-                context.getString(R.string.general_data_error),
-                Toast.LENGTH_SHORT
-        ).show();
+        if (context != null) {
+            Toast.makeText(
+                    context,
+                    context.getString(R.string.general_data_error),
+                    Toast.LENGTH_SHORT
+            ).show();
+        }
     }
 
     @SuppressWarnings("deprecation")
@@ -448,5 +451,17 @@ public class Utils {
         }
 
         return type;
+    }
+
+    public static String getClientVersion(Context context) {
+        String version;
+        context = context != null ? context : App.getContext();
+        try {
+            version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+        } catch (Exception e) {
+            Debug.error(e);
+            version = AuthRequest.FALLBACK_CLIENT_VERSION;
+        }
+        return version;
     }
 }

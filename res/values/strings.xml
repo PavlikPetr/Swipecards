@@ -249,7 +249,7 @@
     <string name="vip_why">Why you need to be VIP</string>
     <string name="vip_info_delight">Send admiration\'s for free - maximum express of feelings!</string>
     <string name="vip_info_guest">Find out who was interested in you - look through your guests!</string>
-    <string name="vip_info_invisible">Stay unnoticed looking through other people\'s profiles by "invisible" mode</string>
+    <string name="vip_info_invisible">Stay unnoticed looking through other people\'s profiles by \"invisible\" mode</string>
     <string name="vip_info_message">Receive odds - your messages will be notable against general background!</string>
     <string name="vip_info_gift">Choose exclusive VIP gifts, and you will be remembered by all means!</string>
     <string name="vip_info_blackList">Get rid of annoying individuals with the help of \"black list\"</string>
@@ -293,4 +293,12 @@
     <string name="virus_chat_likes_request_title">Give likes to your friends as a gift</string>
     <string name="virus_chat_btn">Receive likes</string>
     <string name="virus_request_error">Unable to send likes to your friends</string>
+    <string name="virus_error">During the day, your friend can send a sympathy only 1 time! Try it tomorrow!</string>
+    <string name="profile_ask_sent">Request is sent</string>
+    <string name="virus_error">During the day, your friend can send a sympathy only 1 time! Try it tomorrow!</string>
+    <string name="general_maintenance">On the server, perform technical work and your request can not be executed. Try again later.</string>
+    <plurals name="virus_request_likes_cnt">
+        <item quantity="one">You now have %d like!</item>
+        <item quantity="other">You now have %d likes!</item>
+    </plurals>
 </resources>

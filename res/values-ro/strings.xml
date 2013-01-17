@@ -253,10 +253,10 @@
     <string name="vip_why">De ce e atat de important sa fii VIP</string>
     <string name="vip_info_delight">Trimite admirari gratis - exprimativa sentimentele la maximum!</string>
     <string name="vip_info_guest">Afla, cine sa interesat de Dmv - vezi vizitatorii tai!</string>
-    <string name="vip_info_invisible">Ramai invizibil, vizitand alte pagini, datorita regimului \"invizibil"\</string>
+    <string name="vip_info_invisible">Ramai invizibil, vizitand alte pagini, datorita regimului \"invizibil\"</string>
     <string name="vip_info_message">Primeste avantaje - mesajele Dmv se vor deosebi pe fonul la restul!</string>
     <string name="vip_info_gift">Alege VIP cadouri excluzive, si va vor memoriza neaparat!</string>
-    <string name="vip_info_blackList">Scapa de persoanele plictisitoare cu ajutorul \"listei negre"\</string>
+    <string name="vip_info_blackList">Scapa de persoanele plictisitoare cu ajutorul \"listei negre\"</string>
     <string name="vip_info_vip">Deosebestete cu ajutorul VIP - statut in cautare si in profil!</string>
     <string name="vip_info_title">VIP - privilegii</string>
     <string name="black_list_retrieve">Restabileste</string>
@@ -290,4 +290,12 @@
     <string name="novice_energy_to_sympathies_message_girls">Incarcand rezerva de simpatii, veti primi\n numarul indicat de simpatii\nde la fete, la care le placi precis</string>
     <string name="novice_buy_sympathies">Daca dorinti garantat\nsa primiti simpatii, \nprocurati acum!</string>
     <string name="general_reconnect_social">Imposibila conectare la reteaua de socializare. Repetati Incercarea mai tarziu.</string>
+    <string name="general_buying">Cumpara simpatii si monede</string>
+    <string name="general_block">Blocare</string>
+    <string name="general_buying_disabled">La momentul dat cumpararea e imposibila</string>
+    <string name="ban_flood_detected">Dmv foarte des solicitati serverul. Pentru folosirea in continuarie a aplicatiei asteptati.</string>
+    <string name="general_maintenance">Pe server se petrec lucrari tehnice si cererea Dmv nu poate fi indeplinita. Incercati mai tarziu.</string>
+    <string name="virus_chat_likes_request_title">Fa cadou simpatii la prietenii tai</string>
+    <string name="virus_chat_btn">Primeste simpatii</string>
+    <string name="virus_request_error">Expediere de simpatii esuata catre prietenii Dmv</string>
 </resources>

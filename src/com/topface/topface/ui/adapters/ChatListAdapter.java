@@ -8,16 +8,21 @@ import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.*;
+import com.topface.topface.data.FeedDialog;
+import com.topface.topface.data.History;
+import com.topface.topface.data.VirusLike;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.VirusLikesRequest;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.AddressesCache;
+import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
@@ -41,6 +46,7 @@ public class ChatListAdapter extends LoadingListAdapter implements AbsListView.O
         // View mInfoGroup;
     }
 
+    private LockerView mLockerView;
     private FeedList<History> mDataList; // data
     private LinkedList<Integer> mItemLayoutList; // types
     private HashMap<Integer, String> mItemTimeList; // date
@@ -78,6 +84,7 @@ public class ChatListAdapter extends LoadingListAdapter implements AbsListView.O
     public ChatListAdapter(Context context, ArrayList<History> dataList, Updater updateCallback) {
         super(context, updateCallback);
         mContext = context;
+        mLockerView = lockerView;
         mItemLayoutList = new LinkedList<Integer>();
         mItemTimeList = new HashMap<Integer, String>();
         mAddressesCache = new AddressesCache();
@@ -159,6 +166,10 @@ public class ChatListAdapter extends LoadingListAdapter implements AbsListView.O
             convertView = mInflater.inflate(R.layout.chat_date_divider, null, false);
             holder.date = (TextView) convertView.findViewById(R.id.tvChatDateDivider);
             return convertView;
+        } else if (type == T_FRIEND_REQUEST || type == T_FRIEND_REQUEST_EXT) {
+            Button likeRequestBtn = (Button) convertView.findViewById(R.id.btn_chat_like_request);
+            likeRequestBtn.setTag(position);
+            likeRequestBtn.setOnClickListener(mLikeRequestListener);
         }
 
         boolean output = (item.target == FeedDialog.USER_MESSAGE);
@@ -585,14 +596,19 @@ public class ChatListAdapter extends LoadingListAdapter implements AbsListView.O
             final int position = (Integer) v.getTag();
             final History item = getItem(position);
             if (item != null) {
+                lockView();
+                EasyTracker.getTracker().trackEvent("VirusLike", "Click", "Chat", 0L);
+
                 new VirusLikesRequest(item.id, mContext).callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
+                        EasyTracker.getTracker().trackEvent("VirusLike", "Success", "Chat", 0L);
                         //После заврешения запроса удаляем элемент
                         removeItem(position);
 
                         //И предлагаем отправить пользователю запрос своим друзьям не из приложения
                         new VirusLike(response).sendFacebookRequest(
+                                "Chat",
                                 mContext,
                                 new VirusLike.VirusLikeDialogListener(mContext)
                         );
@@ -600,10 +616,29 @@ public class ChatListAdapter extends LoadingListAdapter implements AbsListView.O
 
                     @Override
                     public void fail(int codeError, ApiResponse response) {
+                        EasyTracker.getTracker().trackEvent("VirusLike", "Fail", "Chat", 0L);
                         Utils.showErrorMessage(getContext());
+                    }
+
+                    @Override
+                    public void always(ApiResponse response) {
+                        super.always(response);
+                        unlockView();
                     }
                 }).exec();
             }
         }
     };
+
+    private void lockView() {
+        if (mLockerView != null) {
+            mLockerView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void unlockView() {
+        if (mLockerView != null) {
+            mLockerView.setVisibility(View.GONE);
+        }
+    }
 }
