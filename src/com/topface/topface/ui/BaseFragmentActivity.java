@@ -15,6 +15,7 @@ import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.http.IRequestClient;
+import com.topface.topface.utils.social.AuthToken;
 
 import java.util.LinkedList;
 
@@ -47,8 +48,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         };
         registerReceiver(mReauthReceiver, new IntentFilter(ReAuthReceiver.REAUTH_INTENT));
     }
-
-
 
     public void startAuth() {
         AuthFragment af = AuthFragment.newInstance();

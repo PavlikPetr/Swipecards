@@ -29,4 +29,23 @@ public class MutualListAdapter extends FeedAdapter<FeedMutual> {
     protected int getNewVipItemLayout() {
         return  R.layout.item_new_vip_feed_like;
     }
+
+    @Override
+    public ILoaderRetrierFactory<FeedMutual> getLoaderReqtrierFactory() {
+        return new ILoaderRetrierFactory<FeedMutual>() {
+            @Override
+            public FeedMutual getLoader() {
+                FeedMutual result = new FeedMutual(null);
+                result.setLoaderTypeFlags(IListLoader.ItemType.LOADER);
+                return result;
+            }
+
+            @Override
+            public FeedMutual getRetrier() {
+                FeedMutual result = new FeedMutual(null);
+                result.setLoaderTypeFlags(IListLoader.ItemType.RETRY);
+                return result;
+            }
+        };
+    }
 }

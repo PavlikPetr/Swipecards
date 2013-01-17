@@ -334,7 +334,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                 "AdmirationSend" + (currentSearch.mutual ? "mutual" : ""),
                                 (long) CacheProfile.getOptions().price_highrate);
                     }
-                    // currentSearch.rated = true;
+                    //currentSearch.rated = true;
                 }
             }
             break;
@@ -353,7 +353,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         EasyTracker.getTracker().trackEvent("Dating", "Rate",
                                 "SympathySend" + (currentSearch.mutual ? "mutual" : ""), 0L);
                     }
-                    currentSearch.rated = true;
+                    //currentSearch.rated = true;
                 }
             }
             break;
@@ -499,7 +499,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void skipUser(SearchUser currentSearch) {
-        if (currentSearch != null && !currentSearch.skipped) {
+        if (currentSearch != null && !currentSearch.skipped && !currentSearch.rated) {
             SkipRateRequest skipRateRequest = new SkipRateRequest(getActivity());
             registerRequest(skipRateRequest);
             skipRateRequest.userid = currentSearch.id;

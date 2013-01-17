@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -13,11 +12,17 @@ import com.topface.topface.data.Gift;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.GiftGalleryManager;
 
-public class GiftsAdapter extends LoadingListAdapter implements AbsListView.OnScrollListener {
+public class GiftsAdapter extends LoadingListAdapter<FeedGift> implements AbsListView.OnScrollListener {
 
     public static final int T_SEND_BTN = 3;
 
     private GiftGalleryManager<FeedGift> mGalleryManager;
+
+    public class ViewHolder {
+        ImageViewRemote giftImage;
+        TextView priceText;
+        TextView giftText;
+    }
 
     public GiftsAdapter(Context context, GiftGalleryManager<FeedGift> galleryManager, Updater updateCallback) {
         super(context,updateCallback);
@@ -107,25 +112,13 @@ public class GiftsAdapter extends LoadingListAdapter implements AbsListView.OnSc
         return position;
     }
 
-    public class ViewHolder {
-        ImageViewRemote giftImage;
-        TextView priceText;
-        TextView giftText;
+    @Override
+    public FeedList<FeedGift> getData() {
+        return mGalleryManager.getData();
     }
 
-    @Override
-    protected View getLoaderRetrier() {
-        return mInflater.inflate(R.layout.item_grid_loader_retrier, null, false);
-    }
-
-    @Override
-    protected TextView getLoaderRetrierText() {
-        return (TextView) mLoaderRetrier.findViewById(R.id.tvLoaderText);
-    }
-
-    @Override
-    protected ProgressBar getLoaderRetrierProgress() {
-        return (ProgressBar) mLoaderRetrier.findViewById(R.id.prsLoader);
+    protected int getLoaderRetrierLayout() {
+        return R.layout.item_grid_loader_retrier;
     }
 
     @Override
@@ -139,5 +132,24 @@ public class GiftsAdapter extends LoadingListAdapter implements AbsListView.OnSc
                 mUpdateCallback.onFeedUpdate();
             }
         }
+    }
+
+    @Override
+    public ILoaderRetrierFactory<FeedGift> getLoaderReqtrierFactory() {
+        return new ILoaderRetrierFactory<FeedGift>() {
+            @Override
+            public FeedGift getLoader() {
+                FeedGift result = new FeedGift();
+                result.setLoaderTypeFlags(IListLoader.ItemType.LOADER);
+                return result;
+            }
+
+            @Override
+            public FeedGift getRetrier() {
+                FeedGift result = new FeedGift();
+                result.setLoaderTypeFlags(IListLoader.ItemType.RETRY);
+                return result;
+            }
+        };
     }
 }

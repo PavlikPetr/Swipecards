@@ -2,17 +2,17 @@ package com.topface.topface.data;
 
 import com.topface.topface.ui.adapters.IListLoader;
 
-public class AbstractLoaderData extends AbstractData implements IListLoader {
+public class LoaderData extends AbstractData implements IListLoader {
 
     //Loader indicators
     private boolean mIsListLoader = false;
     private boolean mIsListLoaderRetry = false;
 
-    public AbstractLoaderData(IListLoader.ItemType type) {
+    public LoaderData(IListLoader.ItemType type) {
          setLoaderTypeFlags(type);
     }
 
-    protected void setLoaderTypeFlags(ItemType type) {
+    public void setLoaderTypeFlags(ItemType type) {
         switch (type) {
             case LOADER:
                 mIsListLoader = true;
@@ -37,5 +37,4 @@ public class AbstractLoaderData extends AbstractData implements IListLoader {
     public boolean isLoaderRetry() {
         return mIsListLoaderRetry;
     }
-
 }

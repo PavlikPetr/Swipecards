@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.topface.topface.R;
+import com.topface.topface.data.LoaderData;
 
 /**
  * Adapter Operates with IListLoader interface.
@@ -18,12 +19,14 @@ import com.topface.topface.R;
  *
  * @author kirussell
  */
-public class LoadingListAdapter extends BaseAdapter {
+public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapter {
 
     public static final int T_OTHER = 0;
     public static final int T_LOADER = 1;
     public static final int T_RETRIER = 2;
     private static final int TYPE_COUNT = 3;
+
+    protected FeedList<T> mData;
 
     protected Context mContext;
     protected LayoutInflater mInflater;
@@ -43,12 +46,12 @@ public class LoadingListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 0;
+        return mData != null ? mData.size() : 0;
     }
 
     @Override
-    public IListLoader getItem(int position) {
-        return null;
+    public T getItem(int i) {
+        return mData.hasItem(i) ? mData.get(i) : null;
     }
 
     @Override
@@ -86,19 +89,112 @@ public class LoadingListAdapter extends BaseAdapter {
         return TYPE_COUNT;
     }
 
-    protected View getLoaderRetrier() {
-        return mInflater.inflate(R.layout.item_list_loader_retrier, null, false);
-    }
-
-    protected TextView getLoaderRetrierText() {
-        return (TextView) mLoaderRetrier.findViewById(R.id.tvLoaderText);
-    }
-
-    protected ProgressBar getLoaderRetrierProgress() {
-        return (ProgressBar) mLoaderRetrier.findViewById(R.id.prsLoader);
-    }
-
     public static interface Updater {
         void onFeedUpdate();
     }
+
+    public FeedList<T> getData() {
+        if (mData == null) {
+            mData = new FeedList<T>();
+        }
+        return mData;
+    }
+
+    public void showLoaderItem() {
+        removeLoaderItem();
+        getData().add(getLoaderItem());
+        notifyDataSetChanged();
+    }
+
+    public void showRetryItem() {
+        removeLoaderItem();
+        getData().add(getRetryItem());
+        notifyDataSetChanged();
+    }
+
+    protected View getRetrierView() {
+        mLoaderRetrierProgress.setVisibility(View.INVISIBLE);
+        mLoaderRetrierText.setVisibility(View.VISIBLE);
+        return mLoaderRetrier;
+    }
+
+    protected View getLoaderView() {
+        mLoaderRetrierProgress.setVisibility(View.VISIBLE);
+        mLoaderRetrierText.setVisibility(View.INVISIBLE);
+        return mLoaderRetrier;
+    }
+
+    protected int getLoaderRetrierLayout() {
+        return R.layout.item_list_loader_retrier;
+    }
+
+    protected int getLoaderTextViewId() {
+        return R.id.tvLoaderText;
+    }
+
+    protected int getLoaderProgreesBarId() {
+        return R.id.prsLoader;
+    }
+
+    protected void addLoaderItem(boolean hasMore) {
+        FeedList<T> currentData = getData();
+        if (hasMore && !currentData.isEmpty()) {
+            currentData.add(getLoaderItem());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private T getLoaderItem() {
+        //noinspection unchecked
+        return getLoaderReqtrierFactory().getLoader();
+    }
+
+    @SuppressWarnings("unchecked")
+    private T getRetryItem() {
+        //noinspection unchecked
+        return (T) new LoaderData(IListLoader.ItemType.RETRY);
+    }
+
+    protected void removeLoaderItem() {
+        FeedList<T> data = getData();
+        if (!data.isEmpty()) {
+            T lastItem = data.getLast();
+            if (lastItem.isLoader() || lastItem.isLoaderRetry()) {
+                data.removeLast();
+            } else {
+                T firstItem = data.getFirst();
+                if (firstItem.isLoader() || firstItem.isLoaderRetry()) {
+                    data.removeFirst();
+                }
+            }
+        }
+    }
+
+    private View getLoaderRetrier() {
+        return mInflater.inflate(getLoaderRetrierLayout(), null, false);
+    }
+
+    private TextView getLoaderRetrierText() {
+        return (TextView) mLoaderRetrier.findViewById(getLoaderTextViewId());
+    }
+
+    private ProgressBar getLoaderRetrierProgress() {
+        return (ProgressBar) mLoaderRetrier.findViewById(getLoaderProgreesBarId());
+    }
+
+    public abstract ILoaderRetrierFactory<T> getLoaderReqtrierFactory();
+
+    public interface ILoaderRetrierFactory<T> {
+        T getLoader();
+        T getRetrier();
+    }
+
+    public void release() {
+        if (mData != null) {
+            mData.clear();
+        }
+        mData = null;
+        mInflater = null;
+    }
+
 }

@@ -159,4 +159,22 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
         mMutualListener = listener;
     }
 
+    @Override
+    public ILoaderRetrierFactory<FeedLike> getLoaderReqtrierFactory() {
+        return new ILoaderRetrierFactory<FeedLike>() {
+            @Override
+            public FeedLike getLoader() {
+                FeedLike result = new FeedLike(null);
+                result.setLoaderTypeFlags(IListLoader.ItemType.LOADER);
+                return result;
+            }
+
+            @Override
+            public FeedLike getRetrier() {
+                FeedLike result = new FeedLike(null);
+                result.setLoaderTypeFlags(IListLoader.ItemType.RETRY);
+                return result;
+            }
+        };
+    }
 }

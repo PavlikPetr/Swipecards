@@ -63,4 +63,23 @@ public class VisitorsListAdapter extends FeedAdapter<Visitor> {
     public void allowUpdating(boolean allow) {
         allowUpdating = allow;
     }
+
+    @Override
+    public ILoaderRetrierFactory<Visitor> getLoaderReqtrierFactory() {
+        return new ILoaderRetrierFactory<Visitor>() {
+            @Override
+            public Visitor getLoader() {
+                Visitor result = new Visitor(null);
+                result.setLoaderTypeFlags(IListLoader.ItemType.LOADER);
+                return result;
+            }
+
+            @Override
+            public Visitor getRetrier() {
+                Visitor result = new Visitor(null);
+                result.setLoaderTypeFlags(IListLoader.ItemType.RETRY);
+                return result;
+            }
+        };
+    }
 }

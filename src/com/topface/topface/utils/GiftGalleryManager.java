@@ -32,7 +32,10 @@ public class GiftGalleryManager<T extends FeedGift> {
 
     public T getLast() {
         return mDataList.getLast();
+    }
 
+    public FeedList<T> getData() {
+        return mDataList;
     }
 }
 

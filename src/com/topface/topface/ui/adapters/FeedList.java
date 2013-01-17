@@ -23,6 +23,12 @@ public class FeedList<T> extends ArrayList<T> {
         this.add(0,item);
     }
 
+    public void removeFirst() {
+        if (!this.isEmpty()) {
+            this.remove(0);
+        }
+    }
+
     public void removeLast() {
         if (!this.isEmpty()) {
             this.remove(size()-1);

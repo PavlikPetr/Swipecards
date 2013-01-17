@@ -5,7 +5,7 @@ import org.json.JSONObject;
 /**
  * Абстрактный класс, реализующий основные поля и возможности элеметнов ленты (Диалоги, Лайки, Симпатии)
  */
-abstract public class FeedItem extends AbstractLoaderData {
+abstract public class FeedItem extends LoaderData {
 
     /**
      * идентификатор события в ленте

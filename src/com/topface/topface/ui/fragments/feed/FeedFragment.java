@@ -18,7 +18,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.*;
@@ -27,6 +26,7 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.blocks.FilterBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -216,8 +216,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
      */
     abstract protected FeedAdapter<T> getNewAdapter();
 
-    protected FeedAdapter.Updater getUpdaterCallback() {
-        return new FeedAdapter.Updater() {
+    protected LoadingListAdapter.Updater getUpdaterCallback() {
+        return new LoadingListAdapter.Updater() {
             @Override
             public void onFeedUpdate() {
                 if (!mIsUpdating) {
@@ -358,8 +358,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         intent.putExtra(ChatFragment.INTENT_USER_CITY, item.user.city.name);
         intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
         intent.putExtra(ChatFragment.INTENT_ITEM_ID, item.id);
-        intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_CHAT_FRAGMENT);
-        getActivity().startActivityForResult(intent, ChatFragment.INTENT_CHAT_REQUEST);
+        getActivity().startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
 
 //        Intent intent = new Intent(getActivity(), ChatActivity.class);
 //        intent.putExtra(ChatActivity.INTENT_USER_ID, item.user.id);

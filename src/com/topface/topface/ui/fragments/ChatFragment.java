@@ -41,34 +41,11 @@ import java.util.TimerTask;
 public class ChatFragment extends BaseFragment implements View.OnClickListener,
         LocationListener {
 
-    private Handler mUpdater;
-    public static final String ADAPTER_DATA = "adapter";
-    public static final String WAS_FAILED = "was_failed";
-    // Data
-    private int mUserId;
-
-    private boolean mIsUpdating;
-    private boolean mProfileInvoke;
-    private boolean mIsAddPanelOpened;
-    private PullToRefreshListView mListView;
-    private ChatListAdapter mAdapter;
-    private ArrayList<History> mHistoryData;
-    private EditText mEditBox;
-    private LockerView mLoadingLocker;
-    private RetryView mRetryView;
-
-    private SwapControl mSwapControl;
-    private static ProgressDialog mProgressDialog;
-    private boolean mLocationDetected = false;
-
-    private String[] editButtonsNames;
-
-    private static final int DELETE_BUTTON = 1;
-    private static final int COPY_BUTTON = 0;
-
-    private boolean mReceiverRegistered = false;
     // Constants
     private static final int LIMIT = 50; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    public static final String ADAPTER_DATA = "adapter";
+    public static final String WAS_FAILED = "was_failed";
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_USER_NAME = "user_name";
     public static final String INTENT_USER_AVATAR = "user_avatar";
@@ -78,18 +55,37 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
     public static final String INTENT_ITEM_ID = "item_id";
     public static final String MAKE_ITEM_READ = "com.topface.topface.feedfragment.MAKE_READ";
-    private static final int DIALOG_GPS_ENABLE_NO_AGPS_ID = 1;
-    private static final int DIALOG_LOCATION_PROGRESS_ID = 3;
+    private static final int  DIALOG_GPS_ENABLE_NO_AGPS_ID = 1;
+    private static final int  DIALOG_LOCATION_PROGRESS_ID = 3;
     private static final long LOCATION_PROVIDER_TIMEOUT = 10000;
-    private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
-
+    private static final int  DEFAULT_CHAT_UPDATE_PERIOD = 30000;
     //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
     public static final int INTENT_CHAT_REQUEST = 371;
 
-    private int itemId;
+    private static final int DELETE_BUTTON = 1;
+    private static final int COPY_BUTTON = 0;
 
+    // Data
+    private int mUserId;
+
+    private Handler mUpdater;
+    private boolean mIsUpdating;
+    private boolean mProfileInvoke;
+    private boolean mIsAddPanelOpened;
+    private boolean mLocationDetected = false;
+    private PullToRefreshListView mListView;
+    private ChatListAdapter mAdapter;
+    private ArrayList<History> mHistoryData;
+    private EditText mEditBox;
+    private LockerView mLoadingLocker;
+    private RetryView mRetryView;
+    private SwapControl mSwapControl;
+    private static ProgressDialog mProgressDialog;
     private Button btnBack;
 
+    private String[] editButtonsNames;
+    private boolean mReceiverRegistered = false;
+    private int itemId;
     private boolean wasFailed = false;
 
     // Managers
@@ -180,7 +176,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void initChatHistory(View root) {
-        mAdapter = new ChatListAdapter(getActivity().getApplicationContext(), mHistoryData, getUpdaterCallback());
+        mAdapter = new ChatListAdapter(getActivity().getApplicationContext(), mHistoryData, getUpdaterCallback(),mLoadingLocker);
         mAdapter.setOnAvatarListener(this);
         mAdapter.setOnItemLongClickListener(new OnListViewItemLongClickListener() {
 
@@ -965,7 +961,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             @Override
             public void onFeedUpdate() {
                 if (!mIsUpdating) {
-                    update(false, "scroll");
+                    update(true, "scroll");
                 }
             }
         };

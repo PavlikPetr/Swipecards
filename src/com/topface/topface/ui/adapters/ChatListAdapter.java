@@ -12,9 +12,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.FeedDialog;
-import com.topface.topface.data.History;
-import com.topface.topface.data.VirusLike;
+import com.topface.topface.data.*;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.VirusLikesRequest;
@@ -22,7 +20,6 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.AddressesCache;
-import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
@@ -30,7 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 
-public class ChatListAdapter extends LoadingListAdapter implements AbsListView.OnScrollListener{
+public class ChatListAdapter extends LoadingListAdapter<History> implements AbsListView.OnScrollListener{
 
     // class ViewHolder
     static class ViewHolder {
@@ -47,7 +44,6 @@ public class ChatListAdapter extends LoadingListAdapter implements AbsListView.O
     }
 
     private LockerView mLockerView;
-    private FeedList<History> mDataList; // data
     private LinkedList<Integer> mItemLayoutList; // types
     private HashMap<Integer, String> mItemTimeList; // date
     private View.OnClickListener mOnClickListener;
@@ -81,7 +77,7 @@ public class ChatListAdapter extends LoadingListAdapter implements AbsListView.O
     ChatFragment.OnListViewItemLongClickListener mLongClickListener;
 
 
-    public ChatListAdapter(Context context, ArrayList<History> dataList, Updater updateCallback) {
+    public ChatListAdapter(Context context, ArrayList<History> dataList, Updater updateCallback,LockerView lockerView) {
         super(context, updateCallback);
         mContext = context;
         mLockerView = lockerView;
@@ -98,16 +94,6 @@ public class ChatListAdapter extends LoadingListAdapter implements AbsListView.O
 
     public void setOnAvatarListener(View.OnClickListener onAvatarListener) {
         mOnClickListener = onAvatarListener;
-    }
-
-    @Override
-    public int getCount() {
-        return mDataList != null ? mDataList.size() : 0;
-    }
-
-    @Override
-    public History getItem(int position) {
-        return mDataList.hasItem(position) ? mDataList.get(position) : null;
     }
 
     @Override
@@ -343,7 +329,8 @@ public class ChatListAdapter extends LoadingListAdapter implements AbsListView.O
     }
 
     public void addSentMessage(History msg) {
-        int position = mDataList.size() - 1;
+        FeedList<History> dataList = getData();
+        int position = getData().size() - 1;
         History prevHistory = null;
         if (position >= 0) {
             prevHistory = getLastRealMessage(); //get(mDataList.size() - 1);
@@ -351,7 +338,7 @@ public class ChatListAdapter extends LoadingListAdapter implements AbsListView.O
 
         int type = getItemType(prevHistory, msg);
         mItemLayoutList.add(type);
-        mDataList.add(msg);
+        dataList.add(msg);
     }
 
     /**
@@ -359,8 +346,9 @@ public class ChatListAdapter extends LoadingListAdapter implements AbsListView.O
      */
     private History getLastRealMessage() {
         int cnt = getCount();
+        FeedList<History> dataList = getData();
         for (int i = cnt - 1; i >= 0; i--) {
-            History lastItem = mDataList != null ? mDataList.get(i) : null;
+            History lastItem = dataList != null ? dataList.get(i) : null;
             if (lastItem != null) {
                 if (lastItem.id > 0) {
                     return lastItem;
@@ -370,31 +358,36 @@ public class ChatListAdapter extends LoadingListAdapter implements AbsListView.O
         return null;
     }
 
+    public void addAll(ArrayList<History> dataList) {
+        removeLoaderItem();
+        prepare(dataList, false);
+    }
+
     public void setData(ArrayList<History> dataList) {
+        removeLoaderItem();
         prepare(dataList, true);
     }
 
-
-    private void prepare(ArrayList<History> dataList, boolean doNeedClear) {
+    private void prepare(ArrayList<History> inputData, boolean doNeedClear) {
         // because of stackFromBottom of PullToRefreshListView does not work
-        Collections.reverse(dataList);
+        Collections.reverse(inputData);
+        FeedList<History> dataList = getData();
 
-        if (mDataList == null) mDataList = new FeedList<History>();
-        if (doNeedClear) mDataList.clear();
+        if (doNeedClear) dataList.clear();
 
         long numb = Data.midnight - Utils.DAY * 5;
         History prevHistory = null;
         long prevDate = 0;
 
-        if (!doNeedClear && mDataList.size() != 0) {
-            if (mDataList.getLast() != null) {
-                prevDate = mDataList.getLast().created;
+        if (!doNeedClear && dataList.size() != 0) {
+            if (dataList.getLast() != null) {
+                prevDate = dataList.getLast().created;
             }
             prevDate = getSimplifiedDate(prevDate);
-            prevHistory = mDataList.getLast();
+            prevHistory = dataList.getLast();
         }
 
-        for (History history : dataList) {
+        for (History history : inputData) {
             if (history == null) continue;
 
             // Date
@@ -404,7 +397,7 @@ public class ChatListAdapter extends LoadingListAdapter implements AbsListView.O
 
             prevHistory = history;
             mItemLayoutList.add(itemType);
-            mDataList.add(history);
+            dataList.add(history);
         }
     }
 
@@ -438,7 +431,8 @@ public class ChatListAdapter extends LoadingListAdapter implements AbsListView.O
         if (prevDate != created) {
             mItemLayoutList.add(T_DATE);
             mItemTimeList.put(mItemLayoutList.size() - 1, formattedDate.toUpperCase());
-            mDataList.add(null);
+            FeedList<History> dataList = getData();
+            dataList.add(null);
             prevDate = created;
         }
 
@@ -521,21 +515,19 @@ public class ChatListAdapter extends LoadingListAdapter implements AbsListView.O
     }
 
     public void release() {
-        if (mDataList != null) {
-            mDataList.clear();
-        }
+        super.release();
         if (mItemLayoutList != null) {
             mItemLayoutList.clear();
         }
-        mDataList = null;
-        mInflater = null;
         mItemLayoutList = null;
+
     }
 
     public History removeItem(int position) {
+        FeedList<History> dataList = getData();
         History item = null;
-        if (!mDataList.isEmpty() && position < mDataList.size() && position > 0) {
-            item = mDataList.get(position);
+        if (!dataList.isEmpty() && position < dataList.size() && position > 0) {
+            item = dataList.get(position);
             removeAtPosition(position);
             notifyDataSetChanged();
         }
@@ -543,10 +535,11 @@ public class ChatListAdapter extends LoadingListAdapter implements AbsListView.O
     }
 
     private void removeAtPosition(int position) {
-        for (int i = position; i < mDataList.size() - 1; i++) {
-            mDataList.set(i, mDataList.get(i + 1));
+        FeedList<History> dataList = getData();
+        for (int i = position; i < dataList.size() - 1; i++) {
+            dataList.set(i, dataList.get(i + 1));
         }
-        mDataList.remove(mDataList.size() - 1);
+        dataList.remove(dataList.size() - 1);
         for (int i = position; i < mItemLayoutList.size() - 1; i++) {
             mItemLayoutList.set(i, mItemLayoutList.get(i + 1));
         }
@@ -556,14 +549,10 @@ public class ChatListAdapter extends LoadingListAdapter implements AbsListView.O
     @SuppressWarnings("unchecked")
     public ArrayList<History> getDataCopy() {
         //noinspection unchecked
-        ArrayList<History> dataClone = (ArrayList<History>) mDataList.clone();
+        ArrayList<History> dataClone = (ArrayList<History>) getData().clone();
         Collections.reverse(dataClone);
         return dataClone;
 
-    }
-
-    public void addAll(ArrayList<History> dataList) {
-        prepare(dataList, false);
     }
 
     @Override
@@ -572,22 +561,12 @@ public class ChatListAdapter extends LoadingListAdapter implements AbsListView.O
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        FeedList<History> dataList = getData();
         if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= totalItemCount - 1) {
-            if (mUpdateCallback != null && !mDataList.isEmpty() && mDataList.getLast().isLoader()) {
+            if (mUpdateCallback != null && !dataList.isEmpty() && dataList.getLast().isLoader()) {
                 mUpdateCallback.onFeedUpdate();
             }
         }
-    }
-
-    protected History getRetryItem() {
-        //noinspection unchecked
-        return (History) new HistoryLoader(IListLoader.ItemType.RETRY);
-    }
-
-    @SuppressWarnings("unchecked")
-    protected History getLoaderItem() {
-        //noinspection unchecked
-        return (History) new HistoryLoader(IListLoader.ItemType.LOADER);
     }
 
     private View.OnClickListener mLikeRequestListener = new View.OnClickListener() {
@@ -640,5 +619,24 @@ public class ChatListAdapter extends LoadingListAdapter implements AbsListView.O
         if (mLockerView != null) {
             mLockerView.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public ILoaderRetrierFactory<History> getLoaderReqtrierFactory() {
+        return new ILoaderRetrierFactory<History>() {
+            @Override
+            public History getLoader() {
+                History result = new History();
+                result.setLoaderTypeFlags(IListLoader.ItemType.LOADER);
+                return result;
+            }
+
+            @Override
+            public History getRetrier() {
+                History result = new History();
+                result.setLoaderTypeFlags(IListLoader.ItemType.RETRY);
+                return result;
+            }
+        };
     }
 }
