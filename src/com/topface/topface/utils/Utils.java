@@ -10,6 +10,7 @@ import android.content.pm.ResolveInfo;
 import android.graphics.*;
 import android.graphics.Bitmap.Config;
 import android.graphics.PorterDuff.Mode;
+import android.net.Uri;
 import android.os.Build;
 import android.view.Display;
 import android.view.WindowManager;
@@ -427,6 +428,9 @@ public class Utils {
         return email != null && EMAIL_ADDRESS_PATTERN.matcher(email).matches();
     }
 
+    public static void goToMarket(Context context) {
+        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(context.getString(R.string.default_market_link))));
+    }
 
     public static String getBuildType() {
         String type;
