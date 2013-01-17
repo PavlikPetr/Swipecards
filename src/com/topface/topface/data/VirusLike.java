@@ -17,7 +17,6 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.VirusLikesRequest;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -210,15 +209,6 @@ public class VirusLike extends AbstractData {
 
         @Override
         public void onComplete(Bundle values) {
-            Toast.makeText(
-                    mContext,
-                    Utils.getQuantityString(
-                            R.plurals.virus_request_likes_cnt,
-                            CacheProfile.likes,
-                            CacheProfile.likes
-                    ),
-                    Toast.LENGTH_SHORT
-            ).show();
         }
 
         @Override
@@ -237,15 +227,6 @@ public class VirusLike extends AbstractData {
 
         @Override
         public void onCancel() {
-            Toast.makeText(
-                    mContext,
-                    Utils.getQuantityString(
-                            R.plurals.virus_request_likes_cnt,
-                            CacheProfile.likes,
-                            CacheProfile.likes
-                    ),
-                    Toast.LENGTH_SHORT
-            ).show();
         }
 
     }
