@@ -390,8 +390,12 @@
     <string name="general_block">Блокировать</string>
     <string name="general_buying_disabled">В данный момент покупка невозможна</string>
 
-    <string name="ban_flood_detected">Вы слишком часто совершаете запросы к серверу. Для дальнейшего использования приложения подождите.</string>
-    <string name="general_maintenance">На сервере проводятся технические работы и ваш запрос не может быть выполнен. Попробуйте повторить позже.</string>
+    <string name="ban_flood_detected">Вы слишком часто совершаете запросы к серверу. Для дальнейшего использования
+        приложения подождите.
+    </string>
+    <string name="general_maintenance">На сервере проводятся технические работы и ваш запрос не может быть выполнен.
+        Попробуйте повторить позже.
+    </string>
 
     <string name="virus_chat_likes_request_title">Подарить симпатии вашим друзьям</string>
     <string name="virus_chat_btn">Получить симпатии</string>
@@ -411,9 +415,12 @@
     <string name="popup_version_update">Обновить</string>
     <string name="popup_version_cancel">Напомнить позже</string>
     <string name="general_internet_off">Пытаемся восстановить соединение с интернетом. Пожалуйста, подождите.</string>
-    <string name="general_version_not_supported">Ваша версия приложения устарела и больше не поддерживается. Пожалуйста обновите приложение</string>
-    <string name="general_version_not_supported">Ваша версия приложения устарела и больше не поддерживается. Пожалуйста обновите приложение</string>
-    <string name="leaders_select_photo_info">Выберите самое эффектное фото! Фотографии с низким рейтингом выбрать нельзя</string>
+    <string name="general_version_not_supported">Ваша версия приложения устарела и больше не поддерживается. Пожалуйста
+        обновите приложение
+    </string>
+    <string name="leaders_select_photo_info">Выберите самое эффектное фото! Фотографии с низким рейтингом выбрать
+        нельзя
+    </string>
 
 
 </resources>

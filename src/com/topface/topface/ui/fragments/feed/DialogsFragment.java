@@ -80,15 +80,10 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
                 .callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mLockView.setVisibility(View.GONE);
-                                FeedList<FeedDialog> mFeedList = mListAdapter.getData();
-                                mFeedList.remove(position);
-                                mListAdapter.setData(mFeedList);
-                            }
-                        });
+                        mLockView.setVisibility(View.GONE);
+                        FeedList<FeedDialog> mFeedList = mListAdapter.getData();
+                        mFeedList.remove(position);
+                        mListAdapter.setData(mFeedList);
                     }
 
                     @Override
