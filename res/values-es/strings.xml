@@ -244,6 +244,9 @@
     <string name="buying_profile_coins">En su cuenta</string>
     <string name="vip_buy_vip">Comprar VIP</string>
     <string name="vip_state_off">Tu estado VIP no está activado</string>
+    <string name="vip_state_on">Tu estado VIP está activado</string>
+    <string name="vip_abilities">Sus posibilidades VIP</string>
+    <string name="vip_why">Porqué es tan iportante que seas VIP</string>
     <string name="vip_info_delight">Envía admiraciones gratis - ¡expresa tus sentimientos a máximo!</string>
     <string name="vip_info_guest">Descubra quién se interesó por ti - ¡vea tus visitantes!</string>
     <string name="vip_info_invisible">Pasa sin dejar rastro visitando las páginas de otros, gracias al modo \"invisible\"</string>
@@ -257,6 +260,7 @@
     <string name="buying_vip_info">Para acceder a la información de visitantes hay que tener estado VIP</string>
     <string name="buy_play_market_not_available">Play Market sin acceso</string>
     <string name="buy_subscription_not_available">Suscripciones sin acceso</string>
+    <string name="default_economy_vip">Vip desde 10 USD al mes</string>
     <string name="profile_gifts_empty">A este usuario nadie aún le hizo regalos</string>
     <string name="profile_mygifts_empty">Nadie te hizo regalos aún</string>
     <string name="profile_mood">Describe tu humor</string>
@@ -267,6 +271,27 @@
     <string name="edit_my_city">Mi ciudad</string>
     <string name="edit_my_photos">Mis fotografías</string>
     <string name="general_search_empty_title">Lamentablemente, no se ha encontrado nada</string>
+    <string name="general_search_empty_text">Puedes intentar repetir la busqueda o cambiar las opciónes del filtro</string>
     <string name="profile_get_status">Decribe tu humor</string>
     <string name="map_title">Mapa</string>
+    <string name="settings_want_answer">Quiero que me respondan</string>
+    <string name="settings_feedback_email">Email para contacto</string>
+    <string name="settings_invalid_email">Email incorrecto</string>
+    <string name="leaders_select_cool_picture">Elige una foto impresionante:</string>
+    <string name="chat_write_message">Escribir mensaje</string>
+    <string name="buying_sympathies">Compra de simpatías</string>
+    <string name="novice_sympathies_bonus">¡Recibes %1$d simpatías de\nregalo! Esto significa que\nseguro les gustarás a las %2$d prsonas,\nque le mostrarán su simpatía</string>
+    <string name="novice_energy_to_sympathies_title">Hemos cambiado la energía por simpatías</string>
+    <string name="novice_energy_to_sympathies_message_boys">Aumentanto el monto de simpatías, recibirás\nla cantidad indicada de simpatías\nde los chicos a los que seguro les gustas</string>
+    <string name="novice_energy_to_sympathies_message_girls">Aumentanto el monto de simpatías, recibirás\nla cantidad indicada de simpatías\nde las chicas a las que seguro les gustas</string>
+    <string name="novice_buy_sympathies">Si quieres\nrecibir simpatías\nde forma garantizada ¡compralas ahora mismo!</string>
+    <string name="general_reconnect_social">Imposible de conectar a la red social. Prueba de nuevo más tarde.</string>
+    <string name="general_buying">Comprar simpatías y monedas</string>
+    <string name="general_block">Bloquear</string>
+    <string name="general_buying_disabled">Ahora mismo la compra es imposible</string>
+    <string name="ban_flood_detected">Haces solicitudes al servidor demasiado a menudo. Para seguir usando la aplicación espera un poco.</string>
+    <string name="general_maintenance">Se ejecutan trabajos técnicos en el servidor y tu solicitud no puede ser efectuada. Prueba de nuevo más tarde.</string>
+    <string name="virus_chat_likes_request_title">Regalar simpatías a tus amigos</string>
+    <string name="virus_chat_btn">Recibir simpatías</string>
+    <string name="virus_request_error">Fallo en envio de simpatías a tus amigos</string>
 </resources>

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -738,14 +739,18 @@ public class ChatListAdapter extends BaseAdapter {
             final History item = getItem(position);
             if (item != null) {
                 lockView();
+                EasyTracker.getTracker().trackEvent("VirusLike", "Click", "Chat", 0L);
+
                 new VirusLikesRequest(item.id, mContext).callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
+                        EasyTracker.getTracker().trackEvent("VirusLike", "Success", "Chat", 0L);
                         //После заврешения запроса удаляем элемент
                         removeItem(position);
 
                         //И предлагаем отправить пользователю запрос своим друзьям не из приложения
                         new VirusLike(response).sendFacebookRequest(
+                                "Chat",
                                 mContext,
                                 new VirusLike.VirusLikeDialogListener(mContext)
                         );
@@ -753,6 +758,7 @@ public class ChatListAdapter extends BaseAdapter {
 
                     @Override
                     public void fail(int codeError, ApiResponse response) {
+                        EasyTracker.getTracker().trackEvent("VirusLike", "Fail", "Chat", 0L);
                         Utils.showErrorMessage(getContext());
                     }
 

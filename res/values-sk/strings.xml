@@ -204,7 +204,7 @@
     <string name="general_sex">Pohlavie</string>
     <string name="general_girl">Ženský</string>
     <string name="general_boy">Mužské</string>
-    <string name="filter_city_fail">Nenájdené žiadne mesto, ktoré by začínalo na "%s"</string>
+    <string name="filter_city_fail">Nenájdené žiadne mesto, ktoré by začínalo na \"%s\"</string>
     <string name="age_filter_man">Máte záujem o mužov</string>
     <string name="age_filter_girl">Máte záujem o dievčatá</string>
     <string name="dashbrd_popup_rating">Páči sa naša aplikácia? Pomôžte zdvihnúť náš rating! Čím vyšší je rating, tým viac zaujímavých ľudí stretnete v Topface</string>
@@ -256,7 +256,7 @@
     <string name="vip_info_invisible">Zostaňte neodhalený pri návšteve cudzích stránok vďaka režimu \"neviditeľný\"</string>
     <string name="vip_info_message">Získajte výhodu - Vaše správy budú vyčnievať z davu!</string>
     <string name="vip_info_gift">Zvoľte exkluzívne VIP-darčeky a určite si Vás zapamätajú!</string>
-    <string name="vip_info_blackList">Zbavte sa otravných osôb pomocou "\čiernej listiny\"</string>
+    <string name="vip_info_blackList">Zbavte sa otravných osôb pomocou \"čiernej listiny\"</string>
     <string name="vip_info_vip">Vyniknite vďaka VIP statusu vo vyhľadávaní a vo svojom profile!</string>
     <string name="vip_info_title">VIP privilégiá</string>
     <string name="black_list_retrieve">Obnoviť</string>

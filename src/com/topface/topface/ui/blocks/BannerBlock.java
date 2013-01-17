@@ -197,12 +197,16 @@ public class BannerBlock {
         dialog.setMessage(mActivity.getString(R.string.general_dialog_loading));
         dialog.show();
 
+        EasyTracker.getTracker().trackEvent("VirusLike", "Click", "Banner", 0L);
+
         new VirusLikesRequest(mActivity).callback(new ApiHandler() {
             @Override
             public void success(final ApiResponse response) {
+                EasyTracker.getTracker().trackEvent("VirusLike", "Success", "Banner", 0L);
                 final Handler handler = this;
                 //И предлагаем отправить пользователю запрос своим друзьям не из приложения
                 new VirusLike(response).sendFacebookRequest(
+                        "Banner",
                         mActivity,
                         new VirusLike.VirusLikeDialogListener(mActivity) {
                             @Override
@@ -216,6 +220,8 @@ public class BannerBlock {
 
             @Override
             public void fail(int codeError, ApiResponse response) {
+                EasyTracker.getTracker().trackEvent("VirusLike", "Fail", "Banner", 0L);
+
                 if (response.isError(ApiResponse.CODE_VIRUS_LIKES_ALREADY_RECEIVED)) {
                     Toast.makeText(getContext(), R.string.virus_error, Toast.LENGTH_LONG).show();
                 } else {
