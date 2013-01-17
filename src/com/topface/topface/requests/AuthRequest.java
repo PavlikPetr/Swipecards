@@ -2,10 +2,8 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import com.topface.topface.R;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,7 +13,7 @@ import java.util.UUID;
 public class AuthRequest extends AbstractApiRequest {
     // Data
     public static final String SERVICE_NAME = "auth";
-    public static final String FALLBACK_CLIENT_VERSION = "fallback_client_version";
+    public static final String FALLBACK_CLIENT_VERSION = "unknown_client_version";
     public static final String FALLBACK_LOCALE = "en_US";
     public String sid; // id пользователя в социальной сети
     public String token; // токен авторизации в соц сети
@@ -33,7 +31,7 @@ public class AuthRequest extends AbstractApiRequest {
         doNeedAlert(false);
         clienttype = Utils.getBuildType();
         locale = getClientLocale(context);
-        clientversion = getClientVersion(context);
+        clientversion = Utils.getClientVersion(context);
         clientdevice = getClientDeviceName();
         clientid = getClientId(context);
     }
@@ -48,17 +46,6 @@ public class AuthRequest extends AbstractApiRequest {
         }
 
         return locale;
-    }
-
-    private String getClientVersion(Context context) {
-        String version;
-        try {
-            version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-            Debug.error(e);
-            version = FALLBACK_CLIENT_VERSION;
-        }
-        return version;
     }
 
     private String getClientDeviceName() {
