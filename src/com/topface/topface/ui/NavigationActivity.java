@@ -1,10 +1,9 @@
 package com.topface.topface.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,7 +20,6 @@ import com.topface.topface.Static;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
-import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.fragments.*;
 import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
@@ -44,11 +42,11 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private MenuFragment mFragmentMenu;
     private FragmentSwitchController mFragmentSwitcher;
 
-    public static NavigationActivity mThis = null;
-
     private SharedPreferences mPreferences;
     private NoviceLayout mNoviceLayout;
     private Novice mNovice;
+
+    private BroadcastReceiver mServerResponseReceiver;
 
 
     @Override
@@ -128,7 +126,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     protected void onResume() {
         super.onResume();
-        mThis = this;
         long startTime = Calendar.getInstance().getTimeInMillis();
         long stopTime = mPreferences.getLong(Static.PREFERENCES_STOP_TIME, -1);
         if (stopTime != -1) {
@@ -149,6 +146,13 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         //Отправляем не обработанные запросы на покупку
         BillingUtils.sendQueueItems();
 
+        mServerResponseReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+            }
+        };
+
         //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
         if (mDelayedFragment != null) {
             onExtraFragment(mDelayedFragment);
@@ -158,10 +162,26 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     }
 
+    private void showOldVersionPopup() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setPositiveButton(R.string.default_update_version, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.default_market_link)));
+                startActivity(intent);
+
+            }
+        });
+        builder.setNegativeButton(R.string.general_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {}
+        });
+        builder.setMessage("");
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
-        mThis = null;
         setStopTime();
     }
 
