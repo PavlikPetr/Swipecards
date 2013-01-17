@@ -21,7 +21,6 @@ import com.topface.topface.Static;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
-import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.fragments.*;
 import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
@@ -58,9 +57,14 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
         Debug.log(this, "onCreate");
         mFragmentManager = getSupportFragmentManager();
-        if(CacheProfile.isLoaded()) {
+
+        initFragmentSwitcher();
+
+        if (CacheProfile.isLoaded()) {
             onInit();
         }
+
+
         mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         setStopTime();
         mNovice = Novice.getInstance(mPreferences);
@@ -71,8 +75,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
     }
 
-    @Override
-    public void onInit() {
+    private void initFragmentSwitcher() {
         mFragmentSwitcher = (FragmentSwitchController) findViewById(R.id.fragment_switcher);
         mFragmentSwitcher.setFragmentSwitchListener(mFragmentSwitchListener);
         mFragmentSwitcher.setFragmentManager(mFragmentManager);
@@ -80,7 +83,10 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
         mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
         mFragmentMenu.setOnMenuListener(mOnFragmentMenuListener);
+    }
 
+    @Override
+    public void onInit() {
         Intent intent = getIntent();
         int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
         if (id != -1) {
@@ -93,7 +99,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         AuthorizationManager.getInstance(NavigationActivity.this).extendAccessToken();
         //Если пользователь не заполнил необходимые поля, перекидываем его на EditProfile,
         //чтобы исправлялся.
-        if(needChangeProfile()) {
+        if (needChangeProfile()) {
             Intent editIntent = new Intent(this, EditProfileActivity.class);
             editIntent.putExtra(FROM_AUTH, true);
             startActivity(editIntent);
@@ -102,18 +108,13 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     private boolean needChangeProfile() {
-        if(CacheProfile.age == 0 || CacheProfile.city_id == 0 || CacheProfile.photo == null) {
-            return shouldChangeProfile();
-        }
-        return false;
+        return (CacheProfile.age == 0 || CacheProfile.city_id == 0 || CacheProfile.photo == null)
+                && shouldChangeProfile();
     }
 
     private boolean shouldChangeProfile() {
         SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        if(preferences !=  null) {
-            return preferences.getBoolean(Static.PREFERENCES_TAG_NEED_EDIT, true);
-        }
-        return false;
+        return preferences != null && preferences.getBoolean(Static.PREFERENCES_TAG_NEED_EDIT, true);
     }
 
     @Override
@@ -181,7 +182,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     @Override
     public void onBackPressed() {
-        if(mFragmentSwitcher != null) {
+        if (mFragmentSwitcher != null) {
             if (mFragmentSwitcher.getAnimationState() == FragmentSwitchController.EXPAND) {
                 super.onBackPressed();
             } else {
@@ -209,11 +210,15 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     @Override
     public boolean onCreatePanelMenu(int featureId, Menu menu) {
-        if (mFragmentSwitcher.getAnimationState() != FragmentSwitchController.EXPAND) {
-            mFragmentMenu.refreshNotifications();
-            mFragmentSwitcher.openMenu();
-        } else {
-            mFragmentSwitcher.closeMenu();
+        if (mFragmentSwitcher != null) {
+            if (mFragmentSwitcher.getAnimationState() != FragmentSwitchController.EXPAND) {
+                if (mFragmentMenu != null) {
+                    mFragmentMenu.refreshNotifications();
+                }
+                mFragmentSwitcher.openMenu();
+            } else {
+                mFragmentSwitcher.closeMenu();
+            }
         }
         return false;
     }
@@ -400,7 +405,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
         mFragmentMenu.selectDefaultMenu();
     }
-
 
 
     @Override
