@@ -40,21 +40,7 @@ public abstract class ApiRequest {
         setHandler();
 
         if (context != null && !App.isOnline() && doNeedAlert) {
-            RetryDialog retryDialog = new RetryDialog(context);
-            retryDialog.setMessage(context.getString(R.string.general_internet_off));
-            retryDialog.setButton(Dialog.BUTTON_POSITIVE, context.getString(R.string.general_dialog_retry), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    exec();
-                }
-            });
-
-            retryDialog.setButton(Dialog.BUTTON_NEGATIVE, context.getString(R.string.general_cancel), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-//                    if (handler != null) handler.fail(0, new ApiResponse(""));
-                }
-            });
+            RetryDialog retryDialog = new RetryDialog(context, this);
             handler.fail(0, new ApiResponse(""));
             retryDialog.show();
         }
