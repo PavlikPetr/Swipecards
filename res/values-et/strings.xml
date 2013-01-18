@@ -232,4 +232,5 @@ Sa oled müksanud.</string>
     <string name="buying_sympathies">Sümpaatiate/meeldimiste ost/ostmine</string>
     <string name="general_buying">Osta sümpaatiad/meeldimised ja mündid</string>
     <string name="general_block">Blokeerida</string>
+    <string name="popup_version_update">Uuendada</string>
 </resources>

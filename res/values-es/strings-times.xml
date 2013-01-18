@@ -6,9 +6,9 @@
         <item quantity="one">hace %d hora</item>
     </plurals>
     <plurals name="time_minute">
-        <item quantity="zero">%d minuto atrás</item>
+        <item quantity="zero">Ahora mismo</item>
         <item quantity="other">hace %d minutos</item>
-        <item quantity="one">hace %d minutos</item>
+        <item quantity="one">hace %d minuto</item>
     </plurals>
     <plurals name="time_month">
         <item quantity="other">%d meses</item>
