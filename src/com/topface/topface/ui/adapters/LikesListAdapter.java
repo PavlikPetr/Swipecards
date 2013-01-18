@@ -160,8 +160,8 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
     }
 
     @Override
-    public ILoaderRetrierFactory<FeedLike> getLoaderReqtrierFactory() {
-        return new ILoaderRetrierFactory<FeedLike>() {
+    public ILoaderRetrierCreator<FeedLike> getLoaderRetrierCreator() {
+        return new ILoaderRetrierCreator<FeedLike>() {
             @Override
             public FeedLike getLoader() {
                 FeedLike result = new FeedLike(null);

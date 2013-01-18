@@ -141,8 +141,8 @@ public class BlackListAdapter extends FeedAdapter<BlackListItem> {
     }
 
     @Override
-    public ILoaderRetrierFactory<BlackListItem> getLoaderReqtrierFactory() {
-        return new ILoaderRetrierFactory<BlackListItem>() {
+    public ILoaderRetrierCreator<BlackListItem> getLoaderRetrierCreator() {
+        return new ILoaderRetrierCreator<BlackListItem>() {
             @Override
             public BlackListItem getLoader() {
                 BlackListItem result = new BlackListItem(null);

@@ -50,20 +50,12 @@ public class GiftsAdapter extends LoadingListAdapter<FeedGift> implements AbsLis
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    protected View getContentView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
 
         int type = getItemViewType(position);
 
-        if (type == T_LOADER) {
-            mLoaderRetrierProgress.setVisibility(View.VISIBLE);
-            mLoaderRetrierText.setVisibility(View.INVISIBLE);
-            return mLoaderRetrier;
-        } else if (type == T_RETRIER) {
-            mLoaderRetrierProgress.setVisibility(View.INVISIBLE);
-            mLoaderRetrierText.setVisibility(View.VISIBLE);
-            return mLoaderRetrier;
-        } else {
+
             if (convertView == null) {
                 convertView = mInflater.inflate(R.layout.item_gift, null, false);
 
@@ -97,7 +89,6 @@ public class GiftsAdapter extends LoadingListAdapter<FeedGift> implements AbsLis
                     holder.giftText.setVisibility(View.GONE);
                 }
             }
-        }
 
         return convertView;
     }
@@ -129,14 +120,14 @@ public class GiftsAdapter extends LoadingListAdapter<FeedGift> implements AbsLis
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= totalItemCount - 1) {
             if (mUpdateCallback != null && !mGalleryManager.isEmpty() && mGalleryManager.getLast().isLoader()) {
-                mUpdateCallback.onFeedUpdate();
+                mUpdateCallback.onUpdate();
             }
         }
     }
 
     @Override
-    public ILoaderRetrierFactory<FeedGift> getLoaderReqtrierFactory() {
-        return new ILoaderRetrierFactory<FeedGift>() {
+    public ILoaderRetrierCreator<FeedGift> getLoaderRetrierCreator() {
+        return new ILoaderRetrierCreator<FeedGift>() {
             @Override
             public FeedGift getLoader() {
                 FeedGift result = new FeedGift();

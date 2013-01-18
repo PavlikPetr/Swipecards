@@ -325,6 +325,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void update(final boolean pullToRefresh, String type) {
+        update(pullToRefresh,false,type);
+    }
+
+    private void update(final boolean scrollRefresh) {
+        update(false,scrollRefresh,"scroll refresh");
+    }
+
+    private void update(final boolean pullToRefresh,final boolean scrollRefresh, String type) {
         mIsUpdating = true;
         if (!pullToRefresh) {
             mLoadingLocker.setVisibility(View.VISIBLE);
@@ -334,11 +342,22 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         historyRequest.userid = mUserId;
         historyRequest.debug = type;
         historyRequest.limit = LIMIT;
-        if (pullToRefresh && mAdapter != null) {
-            ArrayList<History> data = mAdapter.getDataCopy();
-            if (!data.isEmpty()) {
-                if (data.get(0) != null) {
-                    historyRequest.from = data.get(0).id;
+        if (mAdapter != null) {
+            if (pullToRefresh) {
+                ArrayList<History> data = mAdapter.getDataCopy();
+                if (!data.isEmpty()) {
+                    History item = data.get(0);
+                    if (item != null) {
+                        historyRequest.from = item.id;
+                    }
+                }
+            } else if (scrollRefresh) {
+                ArrayList<History> data = mAdapter.getDataCopy();
+                if (!data.isEmpty()) {
+                    History item = data.get(data.size()-1);
+                    if (item != null) {
+                        historyRequest.to = item.id;
+                    }
                 }
             }
         }
@@ -357,9 +376,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     public void run() {
                         if (mAdapter != null) {
                             if (pullToRefresh) {
-                                mAdapter.addAll(dataList.items);
+                                mAdapter.addAll(dataList.items,dataList.more);
                             } else {
-                                mAdapter.setData(dataList.items);
+                                mAdapter.setData(dataList.items,dataList.more);
                             }
                             if (dataList.items.size() > 0) {
                                 mAdapter.notifyDataSetChanged();
@@ -959,9 +978,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     protected FeedAdapter.Updater getUpdaterCallback() {
         return new FeedAdapter.Updater() {
             @Override
-            public void onFeedUpdate() {
+            public void onUpdate() {
                 if (!mIsUpdating) {
-                    update(true, "scroll");
+                    update(true); //refresh on scroll
                 }
             }
         };

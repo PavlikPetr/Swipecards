@@ -31,8 +31,8 @@ public class MutualListAdapter extends FeedAdapter<FeedMutual> {
     }
 
     @Override
-    public ILoaderRetrierFactory<FeedMutual> getLoaderReqtrierFactory() {
-        return new ILoaderRetrierFactory<FeedMutual>() {
+    public ILoaderRetrierCreator<FeedMutual> getLoaderRetrierCreator() {
+        return new ILoaderRetrierCreator<FeedMutual>() {
             @Override
             public FeedMutual getLoader() {
                 FeedMutual result = new FeedMutual(null);

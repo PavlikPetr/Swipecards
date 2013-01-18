@@ -60,9 +60,26 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        return null;
+    public View getView(int position, View view, ViewGroup viewGroup) {
+
+        int type = getItemViewType(position);
+        View resultView;
+
+        switch (type) {
+            case T_LOADER:
+                resultView = getLoaderView();
+                break;
+            case T_RETRIER:
+                resultView = getRetrierView();
+                break;
+            default:
+                resultView = getContentView(position, view, viewGroup);
+        }
+
+        return resultView;
     }
+
+    protected abstract View getContentView(int position, View convertView, ViewGroup viewGroup);
 
     /**
      * returns T_LOADER, T_RETRIER and T_NONE for other types
@@ -90,7 +107,7 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
     }
 
     public static interface Updater {
-        void onFeedUpdate();
+        void onUpdate();
     }
 
     public FeedList<T> getData() {
@@ -144,28 +161,23 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
     }
 
     @SuppressWarnings("unchecked")
-    private T getLoaderItem() {
+    protected final T getLoaderItem() {
         //noinspection unchecked
-        return getLoaderReqtrierFactory().getLoader();
+        return getLoaderRetrierCreator().getLoader();
     }
 
     @SuppressWarnings("unchecked")
-    private T getRetryItem() {
+    protected final T getRetryItem() {
         //noinspection unchecked
-        return (T) new LoaderData(IListLoader.ItemType.RETRY);
+        return (T) getLoaderRetrierCreator().getRetrier();
     }
 
     protected void removeLoaderItem() {
         FeedList<T> data = getData();
         if (!data.isEmpty()) {
             T lastItem = data.getLast();
-            if (lastItem.isLoader() || lastItem.isLoaderRetry()) {
+            if (lastItem != null && (lastItem.isLoader() || lastItem.isLoaderRetry())) {
                 data.removeLast();
-            } else {
-                T firstItem = data.getFirst();
-                if (firstItem.isLoader() || firstItem.isLoaderRetry()) {
-                    data.removeFirst();
-                }
             }
         }
     }
@@ -182,9 +194,9 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
         return (ProgressBar) mLoaderRetrier.findViewById(getLoaderProgreesBarId());
     }
 
-    public abstract ILoaderRetrierFactory<T> getLoaderReqtrierFactory();
+    public abstract ILoaderRetrierCreator<T> getLoaderRetrierCreator();
 
-    public interface ILoaderRetrierFactory<T> {
+    public interface ILoaderRetrierCreator<T> {
         T getLoader();
         T getRetrier();
     }

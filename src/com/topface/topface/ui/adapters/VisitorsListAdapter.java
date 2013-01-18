@@ -65,8 +65,8 @@ public class VisitorsListAdapter extends FeedAdapter<Visitor> {
     }
 
     @Override
-    public ILoaderRetrierFactory<Visitor> getLoaderReqtrierFactory() {
-        return new ILoaderRetrierFactory<Visitor>() {
+    public ILoaderRetrierCreator<Visitor> getLoaderRetrierCreator() {
+        return new ILoaderRetrierCreator<Visitor>() {
             @Override
             public Visitor getLoader() {
                 Visitor result = new Visitor(null);

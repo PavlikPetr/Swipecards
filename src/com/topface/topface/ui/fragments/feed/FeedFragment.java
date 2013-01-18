@@ -219,7 +219,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected LoadingListAdapter.Updater getUpdaterCallback() {
         return new LoadingListAdapter.Updater() {
             @Override
-            public void onFeedUpdate() {
+            public void onUpdate() {
                 if (!mIsUpdating) {
                     updateData(false, true, false);
                 }

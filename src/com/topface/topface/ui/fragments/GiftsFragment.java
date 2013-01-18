@@ -328,7 +328,7 @@ public class GiftsFragment extends BaseFragment {
     protected FeedAdapter.Updater getUpdaterCallback() {
         return new FeedAdapter.Updater() {
             @Override
-            public void onFeedUpdate() {
+            public void onUpdate() {
                 if (!mIsUpdating) {
                     if (!mTag.equals(GIFTS_ALL_TAG) && !mIsUpdating && mGifts.getLast().isLoader()) {
                         onNewFeeds();

@@ -179,8 +179,8 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
     }
 
     @Override
-    public ILoaderRetrierFactory<FeedDialog> getLoaderReqtrierFactory() {
-        return new ILoaderRetrierFactory<FeedDialog>() {
+    public ILoaderRetrierCreator<FeedDialog> getLoaderRetrierCreator() {
+        return new ILoaderRetrierCreator<FeedDialog>() {
             @Override
             public FeedDialog getLoader() {
                 FeedDialog result = new FeedDialog(null);

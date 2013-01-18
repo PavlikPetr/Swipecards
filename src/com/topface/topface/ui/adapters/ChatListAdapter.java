@@ -117,7 +117,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    protected View getContentView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder holder;
         final int type = getItemViewType(position);
         final History item = getItem(position);
@@ -358,14 +358,16 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         return null;
     }
 
-    public void addAll(ArrayList<History> dataList) {
+    public void addAll(ArrayList<History> dataList, boolean more) {
         removeLoaderItem();
         prepare(dataList, false);
+        addLoaderItem(more);
     }
 
-    public void setData(ArrayList<History> dataList) {
+    public void setData(ArrayList<History> dataList, boolean more) {
         removeLoaderItem();
         prepare(dataList, true);
+        addLoaderItem(more);
     }
 
     private void prepare(ArrayList<History> inputData, boolean doNeedClear) {
@@ -470,6 +472,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     }
 
     private int getItemType(History prevHistory, History history) {
+        if (history.isLoader()){
+            return T_LOADER;
+        } else if ( history.isLoaderRetry()) {
+            return T_RETRIER;
+        }
         int item_type;
 
         boolean output = (history.target == FeedDialog.USER_MESSAGE);
@@ -563,8 +570,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         FeedList<History> dataList = getData();
         if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= totalItemCount - 1) {
-            if (mUpdateCallback != null && !dataList.isEmpty() && dataList.getLast().isLoader()) {
-                mUpdateCallback.onFeedUpdate();
+            if (mUpdateCallback != null && !dataList.isEmpty() && dataList.getFirst().isLoader()) {
+                mUpdateCallback.onUpdate();
             }
         }
     }
@@ -622,8 +629,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     }
 
     @Override
-    public ILoaderRetrierFactory<History> getLoaderReqtrierFactory() {
-        return new ILoaderRetrierFactory<History>() {
+    public ILoaderRetrierCreator<History> getLoaderRetrierCreator() {
+        return new ILoaderRetrierCreator<History>() {
             @Override
             public History getLoader() {
                 History result = new History();
@@ -638,5 +645,32 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 return result;
             }
         };
+    }
+
+    @Override
+    protected void removeLoaderItem() {
+        FeedList<History> data = getData();
+        if (!data.isEmpty()) {
+            History lastItem = data.getLast();
+            if (lastItem != null && (lastItem.isLoader() || lastItem.isLoaderRetry())) {
+                data.removeLast();
+                mItemLayoutList.remove(mItemLayoutList.size()-1);
+            }
+
+            History firstItem = data.getFirst();
+            if (firstItem != null && (firstItem.isLoader() || firstItem.isLoaderRetry())) {
+                data.removeFirst();
+                mItemLayoutList.remove(0);
+            }
+        }
+    }
+
+    @Override
+    protected void addLoaderItem(boolean hasMore) {
+        FeedList<History> currentData = getData();
+        if (hasMore && !currentData.isEmpty()) {
+            currentData.add(0,getLoaderItem());
+            mItemLayoutList.add(0,T_LOADER);
+        }
     }
 }

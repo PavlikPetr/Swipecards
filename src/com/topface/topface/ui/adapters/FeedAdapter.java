@@ -105,6 +105,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         return resultView;
     }
 
+    @Override
     protected View getContentView(int position, View convertView, ViewGroup viewGroup) {
         FeedViewHolder holder = null;
 
@@ -175,7 +176,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= totalItemCount - 1) {
             if (mUpdateCallback != null && !mData.isEmpty() && mData.getLast().isLoader()) {
-                mUpdateCallback.onFeedUpdate();
+                mUpdateCallback.onUpdate();
             }
         }
     }
