@@ -5,13 +5,10 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.*;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.StringBuilderPrinter;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,9 +108,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             editIntent.putExtra(FROM_AUTH, true);
             startActivity(editIntent);
             finish();
-        }  else {
+        } else {
 //            if(needShowUpdateAppPopup) {
-                checkVersion(CacheProfile.getOptions().max_version);
+            checkVersion(CacheProfile.getOptions().max_version);
 //            }
         }
 
@@ -185,18 +182,18 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         try {
             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             String curVersion = pInfo.versionName;
-            if(version != null && curVersion != null) {
+            if (version != null && curVersion != null) {
                 String[] splittedVersion = version.split("\\.");
                 String[] splittedCurVersion = curVersion.split("\\.");
-                for(int i = 0; i < splittedVersion.length; i++) {
-                    if(i < splittedCurVersion.length) {
-                        if(Integer.parseInt(splittedCurVersion[i]) < Integer.parseInt(splittedVersion[i])) {
+                for (int i = 0; i < splittedVersion.length; i++) {
+                    if (i < splittedCurVersion.length) {
+                        if (Long.parseLong(splittedCurVersion[i]) < Long.parseLong(splittedVersion[i])) {
                             showOldVersionPopup();
                             return;
                         }
                     }
                 }
-                if(splittedCurVersion.length < splittedVersion.length) {
+                if (splittedCurVersion.length < splittedVersion.length) {
                     showOldVersionPopup();
                 }
             }
@@ -210,13 +207,14 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-               Utils.goToMarket(NavigationActivity.this);
+                Utils.goToMarket(NavigationActivity.this);
 
             }
         });
         builder.setNegativeButton(R.string.popup_version_cancel, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {}
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
         });
         builder.setMessage(R.string.general_version_not_supported);
         builder.create().show();
