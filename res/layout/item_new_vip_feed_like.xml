@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/item_list_vip_new_selector">
+                android:background="@drawable/feed_vip_bg_full">
 
     <!-- аватар -->
 
