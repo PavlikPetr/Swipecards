@@ -12,6 +12,8 @@
         <framerect top="1600" left="0" bottom="1800" right="200" delayNextFrame="10" />
         <framerect top="1800" left="0" bottom="2000" right="200" delayNextFrame="10" />
         <framerect top="2000" left="0" bottom="2200" right="200" delayNextFrame="10" />
+        <framerect top="2200" left="0" bottom="2400" right="200" delayNextFrame="10" />
+
         <collisionrect top="0" left="0" bottom="200" right="200" />
     </animation>
 </animations>
