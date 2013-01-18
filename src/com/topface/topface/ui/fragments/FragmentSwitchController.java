@@ -200,10 +200,14 @@ public class FragmentSwitchController extends ViewGroup {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        // shadow
-        getChildAt(0).measure(getChildAt(0).getMeasuredWidth(), heightMeasureSpec);
-        // fragments
-        getChildAt(1).measure(widthMeasureSpec, heightMeasureSpec);
+        try {
+            // shadow
+            getChildAt(0).measure(getChildAt(0).getMeasuredWidth(), heightMeasureSpec);
+            // fragments
+            getChildAt(1).measure(widthMeasureSpec, heightMeasureSpec);
+        } catch (Exception e) {
+            Debug.error(e);
+        }
     }
 
     @Override
