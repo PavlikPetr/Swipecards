@@ -23,7 +23,7 @@
     <string name="general_back">Назад</string>
     <string name="general_server_error">Ошибка. Попробуйте позже</string>
     <string name="general_data_error">Ошибка. Попробуйте ещё раз</string>
-    <string name="general_internet_off">Нет подключения к интернету</string>
+    <string name="general_internet_off">Пытаемся восстановить соединение с интернетом. Пожалуйста, подождите.</string>
     <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru
     </string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
@@ -317,7 +317,6 @@
 
     <string name="vip_invisible_mode">Режим невидимки</string>
     <string name="buying_profile_coins">На вашем счете</string>
-    <string name="profile_services">Услуги</string>
 
     <string name="black_list_title">Черный список</string>
     <string name="black_list_empty">Ваш черный список пуст</string>
@@ -390,12 +389,8 @@
     <string name="general_block">Блокировать</string>
     <string name="general_buying_disabled">В данный момент покупка невозможна</string>
 
-    <string name="ban_flood_detected">Вы слишком часто совершаете запросы к серверу. Для дальнейшего использования
-        приложения подождите.
-    </string>
-    <string name="general_maintenance">На сервере проводятся технические работы и ваш запрос не может быть выполнен.
-        Попробуйте повторить позже.
-    </string>
+    <string name="ban_flood_detected">Вы слишком часто совершаете запросы к серверу. Для дальнейшего использования приложения подождите.</string>
+    <string name="general_maintenance">На сервере проводятся технические работы и ваш запрос не может быть выполнен. Попробуйте повторить позже.</string>
 
     <string name="virus_chat_likes_request_title">Подарить симпатии вашим друзьям</string>
     <string name="virus_chat_btn">Получить симпатии</string>
@@ -421,6 +416,5 @@
     <string name="leaders_select_photo_info">Выберите самое эффектное фото! Фотографии с низким рейтингом выбрать
         нельзя
     </string>
-
 
 </resources>

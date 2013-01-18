@@ -130,7 +130,7 @@ public class ConnectionManager {
                             activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    RetryDialog retryDialog = new RetryDialog(apiRequest.context);
+                                    RetryDialog retryDialog = new RetryDialog(apiRequest.context, apiRequest);
                                     retryDialog.setMessage(apiRequest.context.getString(R.string.general_maintenance));
                                     retryDialog.setButton(Dialog.BUTTON_POSITIVE, apiRequest.context.getString(R.string.general_dialog_retry), new DialogInterface.OnClickListener() {
                                         @Override

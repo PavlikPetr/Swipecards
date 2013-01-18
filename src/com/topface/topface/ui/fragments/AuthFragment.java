@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -32,6 +33,7 @@ import com.topface.topface.ui.views.IllustratedTextView;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 import com.topface.topface.utils.social.WebAuthActivity;
@@ -108,7 +110,7 @@ public class AuthFragment extends BaseFragment{
     }
 
     private void initRetryView(View root) {
-        mRetryView = new RetryView(getActivity().getApplicationContext());
+        mRetryView = new RetryView(getActivity().getApplicationContext(), R.id.ivAuthLogo);
         mRetryView.setErrorMsg(getString(R.string.general_data_error));
         mRetryView.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new View.OnClickListener() {
             @Override
@@ -192,7 +194,6 @@ public class AuthFragment extends BaseFragment{
         authRequest.platform = socialNet;
         authRequest.sid = token.getUserId();
         authRequest.token = token.getTokenKey();
-
         EasyTracker.getTracker().trackEvent("Profile", "Auth", "FromActivity" + socialNet, 1L);
 
         return authRequest;
@@ -259,28 +260,51 @@ public class AuthFragment extends BaseFragment{
         switch (codeError) {
             case ApiResponse.NETWORK_CONNECT_ERROR:
                 mRetryView.setErrorMsg(getString(R.string.general_reconnect_social));
+                mRetryView.setTextToButton1(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry));
+                mRetryView.setListenerToBtn(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mRetryView.setVisibility(View.GONE);
+                        mProgressBar.setVisibility(View.VISIBLE);
+                        request.canceled = false;
+                        registerRequest(request);
+                        request.exec();
+                    }
+                });
                 break;
             case ApiResponse.MAINTENANCE:
                 mRetryView.setErrorMsg(getString(R.string.general_maintenance));
+                mRetryView.setTextToButton1(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry));
+                mRetryView.setListenerToBtn(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mRetryView.setVisibility(View.GONE);
+                        mProgressBar.setVisibility(View.VISIBLE);
+                        request.canceled = false;
+                        registerRequest(request);
+                        request.exec();
+                    }
+                });
+                break;
+            case ApiResponse.CODE_OLD_APPLICATION_VERSION:
+                mRetryView.setErrorMsg(getString(R.string.general_version_not_supported));
+                mRetryView.setTextToButton1(getString(R.string.popup_version_update));
+                mRetryView.setListenerToBtn(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Utils.goToMarket(getActivity());
+                    }
+                });
                 break;
             default:
                 mRetryView.setErrorMsg(getString(R.string.general_data_error));
                 break;
         }
 
-        if(request != null) {
+        if(request != null ) {
             mRetryView.setVisibility(View.VISIBLE);
             mProgressBar.setVisibility(View.GONE);
-            mRetryView.setListenerToBtn(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mRetryView.setVisibility(View.GONE);
-                    mProgressBar.setVisibility(View.VISIBLE);
-                    request.canceled = false;
-                    registerRequest(request);
-                    request.exec();
-                }
-            });
+
 
         } else {
             showButtons();

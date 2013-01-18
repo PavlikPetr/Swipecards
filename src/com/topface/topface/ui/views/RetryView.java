@@ -35,6 +35,19 @@ public class RetryView extends LinearLayout {
         addView(initButtonContainer());
     }
 
+    public RetryView(Context context, int id) {
+        super(context);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.BELOW, id);
+        setLayoutParams(params);
+        setOrientation(VERTICAL);
+
+        setTextViewSettings();
+        addView(mErrorMsg);
+
+        addView(initButtonContainer());
+    }
+
     public void setErrorMsg(final String errorMsg) {
         mErrorMsg.post(new Runnable() {
             @Override
@@ -106,6 +119,10 @@ public class RetryView extends LinearLayout {
         btn.setGravity(Gravity.CENTER);
 
         return btn;
+    }
+
+    public void setTextToButton1(String text) {
+        mBtn1.setText(text);
     }
 
     @Override

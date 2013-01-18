@@ -37,7 +37,6 @@ public class Options extends AbstractData {
     public final static String PAGE_VISITORS = "VISITORS";
     public final static String PAGE_DIALOGS = "DIALOGS";
 
-
     public final static String GENERAL_MAIL_CONST = "true";
     public final static String GENERAL_APNS_CONST = "false";
     public final static String GENERAL_SEPARATOR = ":";
@@ -66,6 +65,8 @@ public class Options extends AbstractData {
     public LinkedList<BuyButton> premium = new LinkedList<BuyButton>();
     public LinkedList<BuyButton> others = new LinkedList<BuyButton>();
 
+    public String max_version;
+
     /**
      * Стоимость отправки "Восхищения"
      */
@@ -93,6 +94,8 @@ public class Options extends AbstractData {
 
                 options.pages.put(pageName, new Page(pageName, floatType, bannerType));
             }
+
+            options.max_version = response.jsonResult.optString("max_version");
 
             JSONObject purchases = response.jsonResult.optJSONObject("purchases");
             if(purchases != null) {
