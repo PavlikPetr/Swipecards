@@ -77,8 +77,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     ChatFragment.OnListViewItemLongClickListener mLongClickListener;
 
 
-    public ChatListAdapter(Context context, ArrayList<History> dataList, Updater updateCallback,LockerView lockerView) {
-        super(context, updateCallback);
+    public ChatListAdapter(Context context, FeedList<History> dataList, Updater updateCallback,LockerView lockerView) {
+        super(context,dataList, updateCallback);
         mContext = context;
         mLockerView = lockerView;
         mItemLayoutList = new LinkedList<Integer>();
@@ -569,7 +569,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         FeedList<History> dataList = getData();
-        if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= totalItemCount - 1) {
+        if (firstVisibleItem == 0) {
             if (mUpdateCallback != null && !dataList.isEmpty() && dataList.getFirst().isLoader()) {
                 mUpdateCallback.onUpdate();
             }
@@ -635,6 +635,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             public History getLoader() {
                 History result = new History();
                 result.setLoaderTypeFlags(IListLoader.ItemType.LOADER);
+                result.created = 0;
                 return result;
             }
 
@@ -642,6 +643,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             public History getRetrier() {
                 History result = new History();
                 result.setLoaderTypeFlags(IListLoader.ItemType.RETRY);
+                result.created = 0;
                 return result;
             }
         };

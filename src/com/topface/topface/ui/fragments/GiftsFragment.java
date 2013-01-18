@@ -26,7 +26,6 @@ import com.topface.topface.ui.adapters.GiftsAdapter;
 import com.topface.topface.ui.adapters.GiftsAdapter.ViewHolder;
 import com.topface.topface.ui.adapters.IListLoader.ItemType;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.GiftGalleryManager;
 
 import java.util.ArrayList;
 
@@ -54,8 +53,7 @@ public class GiftsFragment extends BaseFragment {
         mGridView = (GridView) root.findViewById(R.id.fragmentGrid);
         mGridView.setAnimationCacheEnabled(false);
         mGridView.setScrollingCacheEnabled(true);
-        GiftGalleryManager<FeedGift> galleryManager = new GiftGalleryManager<FeedGift>(mGifts);
-        mGridAdapter = new GiftsAdapter(getActivity().getApplicationContext(), galleryManager, getUpdaterCallback());
+        mGridAdapter = new GiftsAdapter(getActivity().getApplicationContext(), mGifts, getUpdaterCallback());
         mGridView.setAdapter(mGridAdapter);
         mGridView.setOnScrollListener(mGridAdapter);
 

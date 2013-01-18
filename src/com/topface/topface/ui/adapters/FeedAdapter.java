@@ -29,8 +29,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     private OnAvatarClickListener<T> mOnAvatarClickListener;
 
     public FeedAdapter(Context context, FeedList<T> data, Updater updateCallback) {
-        super(context, updateCallback);
-        mData = data == null ? new FeedList<T>() : data;
+        super(context,data, updateCallback);
     }
 
     protected static class FeedViewHolder {

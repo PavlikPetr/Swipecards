@@ -10,13 +10,11 @@ import com.topface.topface.Static;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Gift;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.GiftGalleryManager;
 
 public class GiftsAdapter extends LoadingListAdapter<FeedGift> implements AbsListView.OnScrollListener {
 
     public static final int T_SEND_BTN = 3;
-
-    private GiftGalleryManager<FeedGift> mGalleryManager;
+    public static final int T_COUNT = 4;
 
     public class ViewHolder {
         ImageViewRemote giftImage;
@@ -24,19 +22,14 @@ public class GiftsAdapter extends LoadingListAdapter<FeedGift> implements AbsLis
         TextView giftText;
     }
 
-    public GiftsAdapter(Context context, GiftGalleryManager<FeedGift> galleryManager, Updater updateCallback) {
-        super(context,updateCallback);
-        mGalleryManager = galleryManager;
+    public GiftsAdapter(Context context, FeedList<FeedGift> data, Updater updateCallback) {
+        super(context, data, updateCallback);
     }
 
-    @Override
-    public int getCount() {
-        return mGalleryManager.size();
-    }
 
     @Override
     public int getViewTypeCount() {
-        return (super.getViewTypeCount() + 1);
+        return T_COUNT;
     }
 
     @Override
@@ -54,58 +47,42 @@ public class GiftsAdapter extends LoadingListAdapter<FeedGift> implements AbsLis
         ViewHolder holder;
 
         int type = getItemViewType(position);
+        FeedGift item = getItem(position);
 
+        if (convertView == null) {
+            convertView = mInflater.inflate(R.layout.item_gift, null, false);
 
-            if (convertView == null) {
-                convertView = mInflater.inflate(R.layout.item_gift, null, false);
+            holder = new ViewHolder();
+            holder.giftImage = (ImageViewRemote) convertView.findViewById(R.id.giftImage);
+            holder.priceText = (TextView) convertView.findViewById(R.id.giftPrice);
+            holder.giftText = (TextView) convertView.findViewById(R.id.giftText);
 
-                holder = new ViewHolder();
-                holder.giftImage = (ImageViewRemote) convertView.findViewById(R.id.giftImage);
-                holder.priceText = (TextView) convertView.findViewById(R.id.giftPrice);
-                holder.giftText = (TextView) convertView.findViewById(R.id.giftText);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
 
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-
-            if (type == T_SEND_BTN) {
-                holder.giftImage.setImageBitmap(null);
-                holder.giftImage.setBackgroundResource(R.drawable.chat_gift_selector);
-                holder.giftText.setText(R.string.gifts_send_btn);
+        if (type == T_SEND_BTN) {
+            holder.giftImage.setImageBitmap(null);
+            holder.giftImage.setBackgroundResource(R.drawable.chat_gift_selector);
+            holder.giftText.setText(R.string.gifts_send_btn);
+            holder.giftText.setVisibility(View.VISIBLE);
+            holder.priceText.setVisibility(View.GONE);
+        } else {
+            if (item.gift.type == Gift.PROFILE || item.gift.type == Gift.PROFILE_NEW) {
+                holder.giftImage.setRemoteSrc(item.gift.link);
+                holder.giftText.setText(Static.EMPTY);
                 holder.giftText.setVisibility(View.VISIBLE);
                 holder.priceText.setVisibility(View.GONE);
             } else {
-                FeedGift item = getItem(position);
-                if (item.gift.type == Gift.PROFILE || item.gift.type == Gift.PROFILE_NEW) {
-                    mGalleryManager.getImage(position, holder.giftImage);
-                    holder.giftText.setText(Static.EMPTY);
-                    holder.giftText.setVisibility(View.VISIBLE);
-                    holder.priceText.setVisibility(View.GONE);
-                } else {
-                    mGalleryManager.getImage(position, holder.giftImage);
-                    holder.priceText.setVisibility(View.VISIBLE);
-                    holder.priceText.setText(Integer.toString(item.gift.price));
-                    holder.giftText.setVisibility(View.GONE);
-                }
+                holder.giftImage.setRemoteSrc(item.gift.link);
+                holder.priceText.setVisibility(View.VISIBLE);
+                holder.priceText.setText(Integer.toString(item.gift.price));
+                holder.giftText.setVisibility(View.GONE);
             }
+        }
 
         return convertView;
-    }
-
-    @Override
-    public FeedGift getItem(int position) {
-        return mGalleryManager.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public FeedList<FeedGift> getData() {
-        return mGalleryManager.getData();
     }
 
     protected int getLoaderRetrierLayout() {
@@ -119,7 +96,8 @@ public class GiftsAdapter extends LoadingListAdapter<FeedGift> implements AbsLis
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= totalItemCount - 1) {
-            if (mUpdateCallback != null && !mGalleryManager.isEmpty() && mGalleryManager.getLast().isLoader()) {
+            FeedList<FeedGift> data = getData();
+            if (mUpdateCallback != null && !data.isEmpty() && data.getLast().isLoader()) {
                 mUpdateCallback.onUpdate();
             }
         }

@@ -6,6 +6,14 @@
                 android:background="@android:color/transparent"
                 android:id="@+id/layout">
 
+    <include layout="@layout/chat_date_divider" android:id="@+id/loDateDivider"/>
+
+    <!-- avatar -->
+    <com.topface.topface.ui.views.ImageViewRemote
+            android:layout_below="@id/loDateDivider"
+            android:id="@+id/left_icon"
+            style="@style/ChatAvatar"/>
+
     <LinearLayout android:id="@+id/user_info"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
@@ -27,10 +35,5 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"/>
     </LinearLayout>
-
-    <!-- avatar -->
-    <com.topface.topface.ui.views.ImageViewRemote
-            android:id="@+id/left_icon"
-            style="@style/ChatAvatar"/>
 
 </RelativeLayout>    

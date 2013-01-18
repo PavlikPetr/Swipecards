@@ -3,7 +3,10 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content" >
 
+    <include layout="@layout/chat_date_divider" android:id="@+id/loDateDivider"/>
+
     <LinearLayout
+        android:layout_below="@id/loDateDivider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/left_icon"

@@ -30,6 +30,7 @@ import com.topface.topface.requests.*;
 import com.topface.topface.ui.*;
 import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.ui.views.SwapControl;
@@ -75,7 +76,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     private boolean mLocationDetected = false;
     private PullToRefreshListView mListView;
     private ChatListAdapter mAdapter;
-    private ArrayList<History> mHistoryData;
+    private FeedList<History> mHistoryData;
     private EditText mEditBox;
     private LockerView mLoadingLocker;
     private RetryView mRetryView;
@@ -164,13 +165,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         if (mHistoryData == null) {
             if (savedInstanceState != null) {
                 boolean was_failed = savedInstanceState.getBoolean(WAS_FAILED);
-                mHistoryData = savedInstanceState.getParcelableArrayList(ADAPTER_DATA);
+                ArrayList<History> list = savedInstanceState.getParcelableArrayList(ADAPTER_DATA);
+                mHistoryData = new FeedList<History>();
+                mHistoryData.addAll(list);
                 if (was_failed) mLockScreen.setVisibility(View.VISIBLE);
                 else mLockScreen.setVisibility(View.GONE);
                 mLoadingLocker.setVisibility(View.GONE);
             }
             if (mHistoryData == null) {
-                mHistoryData = new ArrayList<History>();
+                mHistoryData = new FeedList<History>();
             }
         }
     }
@@ -343,8 +346,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         historyRequest.debug = type;
         historyRequest.limit = LIMIT;
         if (mAdapter != null) {
+            ArrayList<History> data = mAdapter.getDataCopy();
             if (pullToRefresh) {
-                ArrayList<History> data = mAdapter.getDataCopy();
                 if (!data.isEmpty()) {
                     History item = data.get(0);
                     if (item != null) {
@@ -352,7 +355,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     }
                 }
             } else if (scrollRefresh) {
-                ArrayList<History> data = mAdapter.getDataCopy();
                 if (!data.isEmpty()) {
                     History item = data.get(data.size()-1);
                     if (item != null) {

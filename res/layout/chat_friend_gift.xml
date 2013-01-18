@@ -3,8 +3,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
+    <include layout="@layout/chat_date_divider" android:id="@+id/loDateDivider"/>
+
     <!-- avatar -->
     <com.topface.topface.ui.views.ImageViewRemote
+            android:layout_below="@id/loDateDivider"
             android:id="@+id/left_icon"
             style="@style/ChatFriendAvatarInvisible"/>
 

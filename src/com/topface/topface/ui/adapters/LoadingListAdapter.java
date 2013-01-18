@@ -35,9 +35,10 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
     protected TextView mLoaderRetrierText;
     protected ProgressBar mLoaderRetrierProgress;
 
-    public LoadingListAdapter(Context context, Updater updateCallback) {
+    public LoadingListAdapter(Context context,FeedList<T> data, Updater updateCallback) {
         mContext = context;
         mInflater = LayoutInflater.from(context);
+        mData = data == null ? new FeedList<T>() : data;
         mUpdateCallback = updateCallback;
         mLoaderRetrier = getLoaderRetrier();
         mLoaderRetrierText = getLoaderRetrierText();
