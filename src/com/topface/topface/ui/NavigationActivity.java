@@ -200,8 +200,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                     showOldVersionPopup();
                 }
             }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            Debug.error(e);
         }
     }
 
