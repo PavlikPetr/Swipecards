@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:drawable="@drawable/feed_vip_bg_new"
+            />
+    <item
+            android:drawable="@drawable/bg_list_vip"
+            android:top="0dp"
+            android:left="0dp"
+            android:bottom="0dp"/>
+</layer-list>
