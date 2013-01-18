@@ -113,8 +113,12 @@ public class SpriteTile extends Drawable {
         } catch (Exception e) {
             Log.e("ERROR", "ERROR IN SPRITE TILE CODE:" + e.toString());
         }
+        Rect firstFrameSize = new Rect(((FrameInfo)((AnimationSequece)animations.get(currentAnimation)).sequence.get(currentFrame)).rect);
+        frameSize.bottom = (int)(firstFrameSize.bottom * mDensity);
+        frameSize.top = (int)(firstFrameSize.top * mDensity);
+        frameSize.left = (int)(firstFrameSize.left * mDensity);
+        frameSize.right = (int)(firstFrameSize.right * mDensity);
         System.out.println("Sprite Loaded ");
-//        frameSize = ((FrameInfo)((AnimationSequece)animations.get(currentAnimation)).sequence.get(currentFrame)).rect;
     }
 
     //Draw sprite onto screen
