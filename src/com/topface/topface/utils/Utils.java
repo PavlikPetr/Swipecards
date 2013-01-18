@@ -413,6 +413,9 @@ public class Utils {
             mapClass = Class.forName("com.google.android.maps.MapActivity");
         } catch (ClassNotFoundException e) {
             mapClass = null;
+        } catch (Exception e) {
+            mapClass = null;
+            Debug.error(e);
         }
         return mapClass != null;
     }
