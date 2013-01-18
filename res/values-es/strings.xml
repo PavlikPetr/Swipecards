@@ -179,7 +179,7 @@
     <string name="leaders_go_date">Ponme aquí</string>
     <string name="leaders_leader_now">¡Ahora te verán todo!</string>
     <string name="leaders_need_photo">¡Primero hay que elegir la foto!</string>
-    <string name="leaders_select_photo">Elige una foto impresionante</string>
+    <string name="leaders_select_photo">Elige una foto impresionante:</string>
     <plurals name="leaders_price">
         <item quantity="other">Ponerme aquí por %d monedas</item>
         <item quantity="one">Ponerme aquí por %d moneda</item>
@@ -294,4 +294,16 @@
     <string name="virus_chat_likes_request_title">Regalar simpatías a tus amigos</string>
     <string name="virus_chat_btn">Recibir simpatías</string>
     <string name="virus_request_error">Fallo en envio de simpatías a tus amigos</string>
+    <plurals name="virus_request_likes_cnt">
+        <item quantity="other">¡Ahora tienes %d simpatías!</item>
+        <item quantity="one">¡Ahora tienes %d simpatía!</item>
+    </plurals>
+    <string name="profile_ask_sent">Solicitud enviada</string>
+    <string name="virus_error">¡Tu amigo puede regalar simpatías sólo 1 vez al día! ¡Prueba mañana!</string>
+    <string name="popup_version_title">Está disponible una nueva versión de la aplicación</string>
+    <string name="popup_version_message">¡Es hora de actualizar tu versión!</string>
+    <string name="popup_version_update">Actualizar</string>
+    <string name="popup_version_cancel">Recordar más tarde</string>
+    <string name="general_version_not_supported">Tu versión de la aplicación es obsoleta y ya no se soporta. Por favor actualiza la aplicación</string>
+    <string name="leaders_select_photo_info">¡Elige la foto más impresionante! Las fotografías con una puntuación baja no pueden ser elegidas</string>
 </resources>

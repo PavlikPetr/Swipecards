@@ -204,7 +204,7 @@
     <string name="general_sex">Lytis</string>
     <string name="general_girl">Moteriška</string>
     <string name="general_boy">Vyriška</string>
-    <string name="filter_city_fail">Nerastas nei vienas miestas prasidedantis "%s"</string>
+    <string name="filter_city_fail">Nerastas nei vienas miestas prasidedantis \"%s\"</string>
     <string name="age_filter_man">Jus domina vaikinai</string>
     <string name="age_filter_girl">Jus domina merginos</string>
     <string name="dashbrd_popup_rating">Patiko mūsų priedas? Pakelk mūsų reitingą! Kuo aukštesnis reitingas, tuo daugiau įdomių žmonių tu sutiksi Topface</string>

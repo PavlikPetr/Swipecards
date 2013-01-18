@@ -2,6 +2,7 @@
 <resources>
     <string name="time_now">Éppen most</string>
     <plurals name="time_hour">
+        <item quantity="zero">kevesebb, mint egy órával ezelőtt</item>
         <item quantity="other">%d órával ezelőtt</item>
         <item quantity="one">%d órával ezelőtt</item>
     </plurals>

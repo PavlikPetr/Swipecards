@@ -129,7 +129,7 @@
     <string name="form_habits">Alışkanlıklar</string>
     <string name="form_detail">Ayrıntılı</string>
     <plurals name="form_matches">
-        <item quantity="zero">Eşleşmeniz yok</item>
+        <item quantity="zero">Eşleşmeniniz yok</item>
         <item quantity="other">%d eşleşmeniz var</item>
         <item quantity="one">%d eşleşmeniz var</item>
     </plurals>
@@ -139,7 +139,7 @@
     <string name="invite_error">Davetiyeler gönderilemedi. Bir daha deneyin.</string>
     <string name="invite_completed">Davetiye gönderildi</string>
     <plurals name="invite_bonus_text">
-        <item quantity="zero">Arkadaşlarını davet et ve kişi başı 20şer .. kazan.</item>
+        <item quantity="zero">Arkadaşlarını davet et ve kişi başı 20şer … kazan.</item>
         <item quantity="other">Siz, %2$d arkadaşlarınıza davetiye göndermeyi düşünüyorsunuz ve bunun için %1$d kazanırsınız</item>
         <item quantity="one">Siz, %2$d arkadaşınıza davetiye göndermeyi düşünüyorsunuz ve bunun için %1$d kazanırsınız</item>
     </plurals>
@@ -181,6 +181,7 @@
     <string name="leaders_need_photo">Önce fotoğraf seçin!</string>
     <string name="leaders_select_photo">Etkileyici fotoğraf seçin:</string>
     <plurals name="leaders_price">
+        <item quantity="zero">%d paraya durmak</item>
         <item quantity="other">%d paraya durmak</item>
         <item quantity="one">%d paraya durmak</item>
     </plurals>
@@ -216,7 +217,7 @@
     <string name="ban_title">Tebrikler! Siz ban edildiniz</string>
     <string name="general_ready">Hazır</string>
     <string name="profile_deleted_user">Kullanıcı silinmiştir</string>
-    <string name="filter_main_parameters">%s ile İlgileniyorum</string>
+    <string name="filter_main_parameters">İlgi alanlarım</string>
     <string name="buying_store_ok">Alış başarılıyla tamamlanmıştır</string>
     <string name="dating_prev_button_ext">Önceki</string>
     <string name="dating_skip_button_ext">Sonraki</string>
@@ -299,4 +300,12 @@
         <item quantity="other">Artık sizin %d sempatiniz var!</item>
         <item quantity="one">Artık sizin %d sempatiniz var!</item>
     </plurals>
+    <string name="profile_ask_sent">İstek gönderildi</string>
+    <string name="virus_error">Yirmi dört saat içinde arkadaşınız sadece 1 defa sempati hediye edebilir! Yarın deneyin!</string>
+    <string name="popup_version_title">Uygulamanın yeni versiyonu mevcuttur</string>
+    <string name="popup_version_message">Versiyonu yenilemek için tam zamanı!</string>
+    <string name="popup_version_update">Yenilemek</string>
+    <string name="popup_version_cancel">Daha sonra hatırlat</string>
+    <string name="general_version_not_supported">Uygulamanızın versiyonu eskilindi ve artık desteklenmiyor. Lütfen, uygulamayı yenileyiniz</string>
+    <string name="leaders_select_photo_info">En etkileyici foto seçiniz! Düşük reytingle fotoğrafları seçilenmez</string>
 </resources>
