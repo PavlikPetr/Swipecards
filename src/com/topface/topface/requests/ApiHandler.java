@@ -39,7 +39,7 @@ abstract public class ApiHandler extends Handler {
             } else {
                 setCounters(response);
                 success(response);
-                sendProfileUpdateIntent(response);
+                sendUpdateIntent(response);
             }
         } catch (Exception e) {
             Debug.error("ApiHandler exception", e);
@@ -101,9 +101,11 @@ abstract public class ApiHandler extends Handler {
         }
     }
 
-    private void sendProfileUpdateIntent(ApiResponse response) {
+    private void sendUpdateIntent(ApiResponse response) {
         if (response.method.equals(ProfileRequest.SERVICE_NAME)) {
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+        } else if(response.method.equals(OptionsRequest.SERVICE_NAME)) {
+            LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(OptionsRequest.VERSION_INTENT));
         }
     }
 

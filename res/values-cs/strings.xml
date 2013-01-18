@@ -303,4 +303,12 @@
         <item quantity="other">Teď máte %d sympatií!</item>
         <item quantity="one">Teď máte %d sympatii!</item>
     </plurals>
+    <string name="profile_ask_sent">Žádost byla odeslána</string>
+    <string name="virus_error">Během 24 hodin může Váš přítel darovat sympatii pouze 1 krát! Zkuste to zítra!</string>
+    <string name="popup_version_title">Je k dispozici nová verze aplikace</string>
+    <string name="popup_version_message">Je na čase aktualizovat svou verzi!</string>
+    <string name="popup_version_update">Aktualizovat</string>
+    <string name="popup_version_cancel">Připomenout později</string>
+    <string name="general_version_not_supported">Vaše verze aplikace je zastaralá a již není podporována. Prosím aktualizujte aplikaci</string>
+    <string name="leaders_select_photo_info">Vyberte si tu nejzajimavejší fotku! Fotografie s nízkým hodnocením vybrat nelze</string>
 </resources>

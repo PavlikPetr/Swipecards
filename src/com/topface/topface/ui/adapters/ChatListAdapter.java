@@ -1,6 +1,7 @@
 package com.topface.topface.ui.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.text.ClipboardManager;
 import android.text.Html;
 import android.text.format.DateFormat;
@@ -596,7 +597,32 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                         new VirusLike(response).sendFacebookRequest(
                                 "Chat",
                                 mContext,
-                                new VirusLike.VirusLikeDialogListener(mContext)
+                                new VirusLike.VirusLikeDialogListener(mContext) {
+
+                                    private void showCompleteMessage() {
+                                        Toast.makeText(
+                                                mContext,
+                                                Utils.getQuantityString(
+                                                        R.plurals.virus_request_likes_cnt,
+                                                        CacheProfile.likes,
+                                                        CacheProfile.likes
+                                                ),
+                                                Toast.LENGTH_SHORT
+                                        ).show();
+                                    }
+
+                                    @Override
+                                    public void onComplete(Bundle values) {
+                                        super.onComplete(values);
+                                        showCompleteMessage();
+                                    }
+
+                                    @Override
+                                    public void onCancel() {
+                                        super.onCancel();
+                                        showCompleteMessage();
+                                    }
+                                }
                         );
                     }
 

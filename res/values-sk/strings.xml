@@ -292,4 +292,21 @@
     <string name="general_reconnect_social">Pripojenie k sieti nie je možné. Pokus skúste zopakovať neskôr.</string>
     <string name="general_buying">Kúpiť sympatie a mince</string>
     <string name="general_block">Blokovať</string>
+    <string name="general_buying_disabled">V tomto momente nákup nie je možný</string>
+    <string name="virus_chat_likes_request_title">Darovať sympatie Vašim priateľom</string>
+    <string name="virus_chat_btn">Získať sympatie</string>
+    <string name="virus_request_error">Nepodarilo sa odoslať sympatie Vašim priateľom</string>
+    <plurals name="virus_request_likes_cnt">
+        <item quantity="few">Teraz máte %d sympatie!</item>
+        <item quantity="other">Teraz máte %d sympatií!</item>
+        <item quantity="one">Teraz máte %d sympatiu!</item>
+    </plurals>
+    <string name="profile_ask_sent">Žiadosť je odoslaná</string>
+    <string name="virus_error">Za 24 hodín môže Váš priateľ darovať sympatiu iba 1 raz! Skúste zajtra!</string>
+    <string name="popup_version_title">Je dostupná nová verzia aplikácie</string>
+    <string name="popup_version_message">Je čas obnoviť svoju verziu!</string>
+    <string name="popup_version_update">Obnoviť</string>
+    <string name="popup_version_cancel">Pripomenúť neskôr</string>
+    <string name="general_version_not_supported">Vaša verzia aplikácie je stará a nepodporovaná. Prosím, obnovte aplikáciu</string>
+    <string name="leaders_select_photo_info">Vyberte najefektívnejšiu fotografiu! Fotografie z nízkym ratingom nemožno vyberať</string>
 </resources>

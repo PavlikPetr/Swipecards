@@ -1,14 +1,14 @@
 package com.topface.topface.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
+import android.content.*;
+import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +20,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.OptionsRequest;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.fragments.*;
@@ -29,6 +30,7 @@ import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Novice;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthorizationManager;
 
 import java.util.Calendar;
@@ -43,11 +45,13 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private MenuFragment mFragmentMenu;
     private FragmentSwitchController mFragmentSwitcher;
 
-    public static NavigationActivity mThis = null;
-
     private SharedPreferences mPreferences;
     private NoviceLayout mNoviceLayout;
     private Novice mNovice;
+
+    private boolean needShowUpdateAppPopup = false;
+
+    private BroadcastReceiver mServerResponseReceiver;
 
 
     @Override
@@ -104,7 +108,12 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             editIntent.putExtra(FROM_AUTH, true);
             startActivity(editIntent);
             finish();
+        } else {
+//            if(needShowUpdateAppPopup) {
+            checkVersion(CacheProfile.getOptions().max_version);
+//            }
         }
+
     }
 
     private boolean needChangeProfile() {
@@ -129,7 +138,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     protected void onResume() {
         super.onResume();
-        mThis = this;
         long startTime = Calendar.getInstance().getTimeInMillis();
         long stopTime = mPreferences.getLong(Static.PREFERENCES_STOP_TIME, -1);
         if (stopTime != -1) {
@@ -150,6 +158,17 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         //Отправляем не обработанные запросы на покупку
         BillingUtils.sendQueueItems();
 
+        mServerResponseReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+//                String version = intent.getStringExtra(OptionsRequest.MAX_VERSION);
+//                checkVersion(version);
+                needShowUpdateAppPopup = true;
+            }
+        };
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(mServerResponseReceiver, new IntentFilter(OptionsRequest.VERSION_INTENT));
+
         //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
         if (mDelayedFragment != null) {
             onExtraFragment(mDelayedFragment);
@@ -159,11 +178,53 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     }
 
+    private void checkVersion(String version) {
+        try {
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            String curVersion = pInfo.versionName;
+            if (version != null && curVersion != null) {
+                String[] splittedVersion = version.split("\\.");
+                String[] splittedCurVersion = curVersion.split("\\.");
+                for (int i = 0; i < splittedVersion.length; i++) {
+                    if (i < splittedCurVersion.length) {
+                        if (Long.parseLong(splittedCurVersion[i]) < Long.parseLong(splittedVersion[i])) {
+                            showOldVersionPopup();
+                            return;
+                        }
+                    }
+                }
+                if (splittedCurVersion.length < splittedVersion.length) {
+                    showOldVersionPopup();
+                }
+            }
+        } catch (Exception e) {
+            Debug.error(e);
+        }
+    }
+
+    private void showOldVersionPopup() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Utils.goToMarket(NavigationActivity.this);
+
+            }
+        });
+        builder.setNegativeButton(R.string.popup_version_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+        builder.setMessage(R.string.general_version_not_supported);
+        builder.create().show();
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
-        mThis = null;
         setStopTime();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mServerResponseReceiver);
     }
 
     /*
@@ -336,7 +397,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         ratingPopup.findViewById(R.id.btnRatingPopupRate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.default_market_link))));
+                Utils.goToMarket(NavigationActivity.this);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putLong(RATING_POPUP, 0);
                 editor.commit();

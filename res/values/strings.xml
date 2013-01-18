@@ -290,15 +290,21 @@
     <string name="general_block">Block</string>
     <string name="general_buying_disabled">The purchase is impossible at the moment</string>
     <string name="ban_flood_detected">You too often make requests to the server. Please wait.</string>
+    <string name="general_maintenance">The server is down for technical maintenance and your request can not be completed. Please try again later.</string>
     <string name="virus_chat_likes_request_title">Give likes to your friends as a gift</string>
     <string name="virus_chat_btn">Receive likes</string>
     <string name="virus_request_error">Unable to send likes to your friends</string>
-    <string name="virus_error">During the day, your friend can send a sympathy only 1 time! Try it tomorrow!</string>
+    <plurals name="virus_request_likes_cnt">
+        <item quantity="zero">Now you have %d of likes!</item>
+        <item quantity="other">Now you have %d of likes!</item>
+        <item quantity="one">Now you have %d of likes!</item>
+    </plurals>
     <string name="profile_ask_sent">Request is sent</string>
     <string name="virus_error">During the day, your friend can send a sympathy only 1 time! Try it tomorrow!</string>
-    <string name="general_maintenance">On the server, perform technical work and your request can not be executed. Try again later.</string>
-    <plurals name="virus_request_likes_cnt">
-        <item quantity="one">You now have %d like!</item>
-        <item quantity="other">You now have %d likes!</item>
-    </plurals>
+    <string name="popup_version_title">New application version is available</string>
+    <string name="popup_version_message">Time to update your version!</string>
+    <string name="popup_version_update">Update</string>
+    <string name="popup_version_cancel">Remind me later</string>
+    <string name="general_version_not_supported">Your application version is outdated and not supported. Please update it</string>
+    <string name="leaders_select_photo_info">Select the most spectacular photo! Photos with low rating cannot be selected</string>
 </resources>

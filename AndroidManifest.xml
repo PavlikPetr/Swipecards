@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.topface.topface"
           android:installLocation="auto"
-          android:versionCode="50"
-          android:versionName="2.2.2">
+          android:versionCode="52"
+          android:versionName="2.2.4">
 
     <uses-sdk
             android:minSdkVersion="7"
@@ -25,6 +25,13 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="com.android.vending.BILLING"/>
     <uses-permission android:name="android.permission.GET_TASKS"/>
+
+    <supports-screens
+            android:resizeable="true"
+            android:smallScreens="true"
+            android:normalScreens="true"
+            android:largeScreens="true"
+            android:anyDensity="true"/>
 
     <application
             android:name=".App"
@@ -92,6 +99,10 @@
         <!-- Алиас для главной активити из первой версии. На xвсякий случай, а то раньше уже были проблемы с FB -->
         <activity-alias
                 android:name=".ui.MainActivity"
+                android:targetActivity=".ui.NavigationActivity"/>
+
+        <activity-alias
+                android:name=".ui.AuthActivity"
                 android:targetActivity=".ui.NavigationActivity"/>
 
         <!-- services -->

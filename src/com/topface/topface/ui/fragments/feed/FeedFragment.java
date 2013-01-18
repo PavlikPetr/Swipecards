@@ -532,7 +532,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected void onUpdateSuccess(boolean isPushUpdating) {
         if (!isPushUpdating) {
             mListView.setVisibility(View.VISIBLE);
-
+            updateErrorMessage.setVisibility(View.GONE);
             if (getListAdapter().isEmpty()) {
                 mBackgroundText.setText(getEmptyFeedText());
             } else {

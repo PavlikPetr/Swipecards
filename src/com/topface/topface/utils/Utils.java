@@ -10,6 +10,7 @@ import android.content.pm.ResolveInfo;
 import android.graphics.*;
 import android.graphics.Bitmap.Config;
 import android.graphics.PorterDuff.Mode;
+import android.net.Uri;
 import android.os.Build;
 import android.view.Display;
 import android.view.WindowManager;
@@ -412,6 +413,9 @@ public class Utils {
             mapClass = Class.forName("com.google.android.maps.MapActivity");
         } catch (ClassNotFoundException e) {
             mapClass = null;
+        } catch (Exception e) {
+            mapClass = null;
+            Debug.error(e);
         }
         return mapClass != null;
     }
@@ -430,6 +434,9 @@ public class Utils {
         return email != null && EMAIL_ADDRESS_PATTERN.matcher(email).matches();
     }
 
+    public static void goToMarket(Context context) {
+        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(context.getString(R.string.default_market_link))));
+    }
 
     public static String getBuildType() {
         String type;

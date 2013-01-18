@@ -294,4 +294,16 @@
     <string name="virus_chat_likes_request_title">Να δώσω συμπάθειες προς τους φίλους σας</string>
     <string name="virus_chat_btn">Αποκτήσω συμπάθειες</string>
     <string name="virus_request_error">Απέτυχε η αποστολή τις συμπάθειες στους φίλους σας</string>
+    <plurals name="virus_request_likes_cnt">
+        <item quantity="other">Τώρα έχετε %d συμπάθειες!</item>
+        <item quantity="one">Τώρα έχετε %d συμπάθεια!</item>
+    </plurals>
+    <string name="profile_ask_sent">Αίτηση αποστέλλεται</string>
+    <string name="virus_error">Κατά τη διάρκεια της ημέρας, ο φίλος σας μπορεί να δώσει για δώρο τις συμπάθειες μόνο 1 φορά! Δοκιμάστε το αύριο!</string>
+    <string name="popup_version_title">Διαθέσιμα μια νέα έκδοση της εφαρμογής</string>
+    <string name="popup_version_message">Η ώρα να ενημερώσετε την έκδοση σας!</string>
+    <string name="popup_version_update">Ενημερώσω</string>
+    <string name="popup_version_cancel">Υπενθύμιση αργότερα</string>
+    <string name="general_version_not_supported">Δική σας έκδοση της εφαρμογής είναι ξεπερασμένη και δεν υποστηρίζεται πλέον. Σας παρακαλούμε να ενημερώστε την εφαρμογή</string>
+    <string name="leaders_select_photo_info">Επιλέξτε την πιο θεαματική φωτογραφία! Τις φωτογραφίες με χαμηλή βαθμολογία δεν μπορείτε να επιλέξετε</string>
 </resources>

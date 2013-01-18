@@ -45,6 +45,7 @@ public class ApiResponse {
     public static final int INVALID_PURCHASE_TOKEN = 34;
     public static final int CANNOT_BECOME_LEADER = 35;
     public static final int CODE_VIRUS_LIKES_ALREADY_RECEIVED = 36;
+    public static final int CODE_OLD_APPLICATION_VERSION = 37;
 
     // local
     public static final int NULL_RESPONSE = 100;

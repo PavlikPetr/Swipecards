@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ViewFlipper;
 import com.topface.topface.R;
+import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.utils.Debug;
 
@@ -30,7 +31,8 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
 
     @Override
     public int getItemViewType(int position) {
-        if (mSelectedForMutual == position && !getItem(position).mutualed) {
+        FeedItem item = getItem(position);
+        if (mSelectedForMutual == position && !item.isLoader() && !item.isLoaderRetry() && ((FeedLike) item).mutualed) {
             if (super.getItemViewType(position) == FeedAdapter.T_VIP || super.getItemViewType(position) == FeedAdapter.T_NEW_VIP) {
                 return T_SELECTED_FOR_MUTUAL_VIP;
             }
@@ -141,9 +143,9 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
     }
 
     @Override
-	protected int getNewItemLayout() {		
-		return R.layout.item_new_feed_like;
-	}
+    protected int getNewItemLayout() {
+        return R.layout.item_new_feed_like;
+    }
 
     @Override
     protected int getVipItemLayout() {
@@ -152,7 +154,7 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
 
     @Override
     protected int getNewVipItemLayout() {
-        return  R.layout.item_new_vip_feed_like;
+        return R.layout.item_new_vip_feed_like;
     }
 
     public void setOnMutualListener(OnMutualListener listener) {

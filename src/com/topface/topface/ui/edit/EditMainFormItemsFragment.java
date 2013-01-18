@@ -120,107 +120,120 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         loAge.setVisibility(View.GONE);
         ViewGroup loStatus = (ViewGroup) root.findViewById(R.id.loStatus);
         loStatus.setVisibility(View.GONE);
+        if (mTypes != null) {
+            for (final EditType type : mTypes) {
+                String data = getDataByEditType(type);
+                switch (type) {
+                    case NAME:
+                        setName(sexTitle, loName, type, data);
+                        break;
+                    case AGE:
+                        setAge(loAge, type, data);
+                        break;
+                    case STATUS:
+                        setStatus(subTitle, loStatus, type, data);
+                        break;
+                }
 
-        for (final EditType type : mTypes) {
-            String data = getDataByEditType(type);
-            switch (type) {
-                case NAME:
-                    sexTitle.setVisibility(View.VISIBLE);
-                    mLoBoy.setVisibility(View.VISIBLE);
-                    mLoGirl.setVisibility(View.VISIBLE);
-                    loName.setVisibility(View.VISIBLE);
-                    ((TextView) loName.findViewById(R.id.tvTitle)).setText(R.string.edit_name);
-                    mEdName = (EditText) loName.findViewById(R.id.edText);
-                    mEdName.setText(data);
-                    mEdName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-                    mEdName.addTextChangedListener(new TextWatcher() {
-                        String before = Static.EMPTY;
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        }
-
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                            before = s.toString();
-                        }
-
-                        @Override
-                        public void afterTextChanged(Editable s) {
-                            String after = s.toString();
-                            if (!before.equals(after)) {
-                                hashChangedData.put(type, after);
-                                refreshSaveState();
-                            }
-                        }
-                    });
-                    break;
-                case AGE:
-                    loAge.setVisibility(View.VISIBLE);
-                    ((TextView) loAge.findViewById(R.id.tvTitle)).setText(R.string.edit_age);
-                    mEdAge = (EditText) loAge.findViewById(R.id.edText);
-                    mEdAge.setText(data);
-                    mEdAge.setInputType(InputType.TYPE_CLASS_NUMBER);
-                    mEdAge.addTextChangedListener(new TextWatcher() {
-                        String before = Static.EMPTY;
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        }
-
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                            before = s.toString();
-                        }
-
-                        @Override
-                        public void afterTextChanged(Editable s) {
-                            String after = s.toString();
-                            if (!before.equals(after)) {
-                                hashChangedData.put(type, after);
-                                refreshSaveState();
-                            }
-                        }
-                    });
-                    break;
-                case STATUS:
-                    loStatus.setVisibility(View.VISIBLE);
-                    ((TextView) loStatus.findViewById(R.id.tvTitle)).setText(R.string.edit_status);
-                    mEdStatus = (EditText) loStatus.findViewById(R.id.edText);
-                    InputFilter[] filters = new InputFilter[1];
-                    filters[0] = new InputFilter.LengthFilter(MAX_STATUS_LENGTH);
-                    mEdStatus.setFilters(filters);
-                    mEdStatus.setText(data);
-                    mEdStatus.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-                    mEdStatus.addTextChangedListener(new TextWatcher() {
-                        String before = Static.EMPTY;
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                        }
-
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                            before = s.toString();
-                        }
-
-                        @Override
-                        public void afterTextChanged(Editable s) {
-                            String after = s.toString();
-                            if (!before.equals(after)) {
-                                hashChangedData.put(type, after);
-                                refreshSaveState();
-                            }
-                        }
-                    });
-                    subTitle.setText(R.string.edit_status);
-                    break;
+                hashChangedData.put(type, data);
             }
-
-            hashChangedData.put(type, data);
         }
         return root;
+    }
+
+    private void setName(TextView sexTitle, ViewGroup loName, final EditType type, String data) {
+        sexTitle.setVisibility(View.VISIBLE);
+        mLoBoy.setVisibility(View.VISIBLE);
+        mLoGirl.setVisibility(View.VISIBLE);
+        loName.setVisibility(View.VISIBLE);
+        ((TextView) loName.findViewById(R.id.tvTitle)).setText(R.string.edit_name);
+        mEdName = (EditText) loName.findViewById(R.id.edText);
+        mEdName.setText(data);
+        mEdName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        mEdName.addTextChangedListener(new TextWatcher() {
+            String before = Static.EMPTY;
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                before = s.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String after = s.toString();
+                if (!before.equals(after)) {
+                    hashChangedData.put(type, after);
+                    refreshSaveState();
+                }
+            }
+        });
+    }
+
+    private void setStatus(TextView subTitle, ViewGroup loStatus, final EditType type, String data) {
+        loStatus.setVisibility(View.VISIBLE);
+        ((TextView) loStatus.findViewById(R.id.tvTitle)).setText(R.string.edit_status);
+        mEdStatus = (EditText) loStatus.findViewById(R.id.edText);
+        InputFilter[] filters = new InputFilter[1];
+        filters[0] = new InputFilter.LengthFilter(MAX_STATUS_LENGTH);
+        mEdStatus.setFilters(filters);
+        mEdStatus.setText(data);
+        mEdStatus.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        mEdStatus.addTextChangedListener(new TextWatcher() {
+            String before = Static.EMPTY;
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                before = s.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String after = s.toString();
+                if (!before.equals(after)) {
+                    hashChangedData.put(type, after);
+                    refreshSaveState();
+                }
+            }
+        });
+        subTitle.setText(R.string.edit_status);
+    }
+
+    private void setAge(ViewGroup loAge, final EditType type, String data) {
+        loAge.setVisibility(View.VISIBLE);
+        ((TextView) loAge.findViewById(R.id.tvTitle)).setText(R.string.edit_age);
+        mEdAge = (EditText) loAge.findViewById(R.id.edText);
+        mEdAge.setText(data);
+        mEdAge.setInputType(InputType.TYPE_CLASS_NUMBER);
+        mEdAge.addTextChangedListener(new TextWatcher() {
+            String before = Static.EMPTY;
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                before = s.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String after = s.toString();
+                if (!before.equals(after)) {
+                    hashChangedData.put(type, after);
+                    refreshSaveState();
+                }
+            }
+        });
     }
 
     @Override

@@ -277,7 +277,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             addBodyPage(UserPhotoFragment.class.getName(), getResources().getString(R.string.profile_photo));
             addBodyPage(UserFormFragment.class.getName(), getResources().getString(R.string.profile_form));
             addBodyPage(GiftsFragment.class.getName(), getResources().getString(R.string.profile_gifts));
-            addBodyPage(ProfileBlackListControlFragment.class.getName(), getResources().getString(R.string.profile_services));
+            addBodyPage(ProfileBlackListControlFragment.class.getName(), getResources().getString(R.string.profile_actions));
         }
 
         ViewPager bodyPager = (ViewPager) root.findViewById(R.id.vpFragments);

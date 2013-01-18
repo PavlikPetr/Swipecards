@@ -127,6 +127,7 @@ Sa oled müksanud.</string>
     <string name="form_detail">Täpsemalt</string>
     <plurals name="form_matches">
         <item quantity="zero">Sul ei ole kokkusattumisi.</item>
+        <item quantity="other">Sul on %d kokkusattumist</item>
         <item quantity="one">Sul on %d kokkusattumist</item>
     </plurals>
     <string name="invite_search_hint">Leida sõpru</string>
@@ -232,4 +233,5 @@ Sa oled müksanud.</string>
     <string name="buying_sympathies">Sümpaatiate/meeldimiste ost/ostmine</string>
     <string name="general_buying">Osta sümpaatiad/meeldimised ja mündid</string>
     <string name="general_block">Blokeerida</string>
+    <string name="popup_version_update">Uuendada</string>
 </resources>
