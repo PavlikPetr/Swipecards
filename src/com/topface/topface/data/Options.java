@@ -65,7 +65,7 @@ public class Options extends AbstractData {
     public LinkedList<BuyButton> premium = new LinkedList<BuyButton>();
     public LinkedList<BuyButton> others = new LinkedList<BuyButton>();
 
-    public String max_version;
+    public String max_version = "2147483647"; //Integer.MAX_VALUE);
 
     /**
      * Стоимость отправки "Восхищения"
