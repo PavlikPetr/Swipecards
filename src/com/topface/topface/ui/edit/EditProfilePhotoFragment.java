@@ -13,7 +13,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.topface.topface.App;
-import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
@@ -311,9 +310,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             if (position == 0) {
                 mViewFlipper.setDisplayedChild(1);
-                return;
             }
-            Data.photos = CacheProfile.photos;
         }
     };
 
