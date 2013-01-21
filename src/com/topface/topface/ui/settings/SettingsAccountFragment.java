@@ -28,6 +28,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.social.AuthToken;
+import com.topface.topface.utils.social.AuthorizationManager;
 
 import java.util.LinkedList;
 
@@ -81,6 +82,7 @@ public class SettingsAccountFragment extends TrackedFragment {
                         GCMRegistrar.unregister(getActivity().getApplicationContext());
                         Data.removeSSID(getActivity().getApplicationContext());
                         token.removeToken();
+                        //noinspection unchecked
                         new FacebookLogoutTask().execute();
                         Settings.getInstance().resetSettings();
                         startActivity(new Intent(getActivity().getApplicationContext(), NavigationActivity.class));
@@ -88,7 +90,7 @@ public class SettingsAccountFragment extends TrackedFragment {
                         CacheProfile.clearProfile();
                         getActivity().finish();
                         SharedPreferences preferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-                        if(preferences != null) {
+                        if (preferences != null) {
                             preferences.edit().clear().commit();
                         }
                         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(Static.LOGOUT_INTENT));
@@ -115,7 +117,7 @@ public class SettingsAccountFragment extends TrackedFragment {
         @Override
         protected java.lang.Object doInBackground(java.lang.Object... params) {
             try {
-                Data.facebook.logout(getActivity().getApplicationContext());
+                AuthorizationManager.getFacebook().logout(getActivity().getApplicationContext());
 
             } catch (Exception e) {
                 Debug.error(e);
