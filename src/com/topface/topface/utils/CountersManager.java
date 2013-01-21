@@ -3,6 +3,7 @@ package com.topface.topface.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
+import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.LeadersRequest;
 
 public class CountersManager {
@@ -13,7 +14,7 @@ public class CountersManager {
 
     private Context mContext;
 
-    private final static String DeniedMethod = "banner";
+    private final static String[] DeniedMethod = {BannerRequest.SERVICE_NAME, LeadersRequest.SERVICE_NAME};
 
     public final static String UPDATE_COUNTERS = "com.topface.topface.UPDATE_COUNTERS";
 
@@ -135,11 +136,7 @@ public class CountersManager {
     }
 
     public void setMethod(String method) {
-        if (method == null || !method.equals(LeadersRequest.SERVICE_NAME)) {
-            lastRequestMethod = method;
-        } else {
-            lastRequestMethod = DeniedMethod;
-        }
+        lastRequestMethod = method;
     }
 
     private void commitCounters() {
@@ -154,11 +151,20 @@ public class CountersManager {
 
     private void updateUICounters() {
         String method = lastRequestMethod == null ? NULL_METHOD : lastRequestMethod;
-        if (!method.equals(DeniedMethod)) {
+        if (!checkMethodIsDenyed(method)) {
             Intent intent = new Intent(UPDATE_COUNTERS);
             intent.putExtra(METHOD_INTENT_STRING, method);
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
         }
         setMethod(NULL_METHOD);
+    }
+
+    private boolean checkMethodIsDenyed(String method) {
+        for (String denyed : DeniedMethod) {
+            if(denyed.equals(method)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
