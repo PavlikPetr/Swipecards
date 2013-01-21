@@ -49,8 +49,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private NoviceLayout mNoviceLayout;
     private Novice mNovice;
 
-    private boolean needShowUpdateAppPopup = false;
-
     private BroadcastReceiver mServerResponseReceiver;
 
 
@@ -74,9 +72,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mNovice = Novice.getInstance(mPreferences);
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
 
-        if (App.isOnline()) {
-            ratingPopup();
-        }
     }
 
     private void initFragmentSwitcher() {
@@ -109,9 +104,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             startActivity(editIntent);
             finish();
         } else {
-//            if(needShowUpdateAppPopup) {
             checkVersion(CacheProfile.getOptions().max_version);
-//            }
+
         }
 
     }
@@ -161,9 +155,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mServerResponseReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-//                String version = intent.getStringExtra(OptionsRequest.MAX_VERSION);
-//                checkVersion(version);
-                needShowUpdateAppPopup = true;
             }
         };
 
@@ -195,6 +186,14 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 }
                 if (splittedCurVersion.length < splittedVersion.length) {
                     showOldVersionPopup();
+                } else {
+                    if (App.isOnline()) {
+                        ratingPopup();
+                    }
+                }
+            } else {
+                if (App.isOnline()) {
+                    ratingPopup();
                 }
             }
         } catch (Exception e) {

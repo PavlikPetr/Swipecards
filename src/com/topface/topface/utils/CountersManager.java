@@ -15,7 +15,7 @@ public class CountersManager {
     private Context mContext;
 
     private final static String[] DeniedMethod = {BannerRequest.SERVICE_NAME, LeadersRequest.SERVICE_NAME};
-
+//    private final static String DeniedMethod = "banner";
     public final static String UPDATE_COUNTERS = "com.topface.topface.UPDATE_COUNTERS";
 
     public final static String NULL_METHOD = "null_method";
@@ -140,13 +140,15 @@ public class CountersManager {
     }
 
     private void commitCounters() {
+        if(likesCounter != CacheProfile.unread_likes || dialogsCounter != CacheProfile.unread_messages ||
+                sympathyCounter != CacheProfile.unread_mutual || visitorsCounter != CacheProfile.unread_visitors) {
+            updateUICounters(); //кидаем broadcast о том, что счетчики обновились и причину их обновления
+            //название метода, если это запрос, или константу, если это GCM
+        }
         CacheProfile.unread_likes = likesCounter;
         CacheProfile.unread_messages = dialogsCounter;
         CacheProfile.unread_mutual = sympathyCounter;
         CacheProfile.unread_visitors = visitorsCounter;
-
-        updateUICounters(); //кидаем broadcast о том, что счетчики обновились и причину их обновления
-        //название метода, если это запрос, или константу, если это GCM
     }
 
     private void updateUICounters() {
