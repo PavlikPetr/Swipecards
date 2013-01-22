@@ -3,7 +3,7 @@
           package="com.topface.topface"
           android:installLocation="auto"
           android:versionCode="52"
-          android:versionName="2.2.3">
+          android:versionName="2.2.4">
 
     <uses-sdk
             android:minSdkVersion="7"

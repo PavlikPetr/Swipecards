@@ -188,7 +188,7 @@ public class BuyingFragment extends BillingFragment {
         RelativeLayout vipTitle = (RelativeLayout) root.findViewById(R.id.fbVipTitle);
 
 
-        if (CacheProfile.getOptions().premium.isEmpty()) {
+        if (CacheProfile.getOptions().premium.isEmpty() || CacheProfile.premium) {
             vipTitle.setVisibility(View.GONE);
             vipBtn.setVisibility(View.GONE);
         } else {
