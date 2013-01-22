@@ -174,13 +174,13 @@ public class Options extends AbstractData {
 
             value.setText(
                     String.format(
-                            App.getContext().getString(R.string.general_default_currency),
-                            curBtn.price/100f
+                            App.getContext().getString(R.string.default_price_format),
+                            curBtn.price / 100f
                     )
             );
-            value.setTypeface(Typeface.DEFAULT_BOLD);
             value.setTextColor(Color.parseColor(color));
             TextView economy = (TextView) view.findViewById(R.id.itEconomy);
+            economy.setTextColor(Color.parseColor(color));
 
             if(!TextUtils.isEmpty(curBtn.hint)) {
                 economy.setText(curBtn.hint);

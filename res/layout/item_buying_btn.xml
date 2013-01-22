@@ -4,7 +4,6 @@
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
-              android:layout_margin="5dp"
               >
     <RelativeLayout
             android:id="@+id/itContainer"
@@ -15,32 +14,25 @@
         <TextView
                 android:id="@+id/itText"
                 android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:paddingLeft="10dp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
+                android:textSize="16sp"
+                android:layout_centerInParent="true"
                 />
 
-        <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:src="@drawable/dot_vip_btn"
-                android:layout_marginRight="75dp"
-                android:layout_alignParentRight="true"
-                android:scaleType="fitXY"
-                />
 
-        <TextView
-                android:id="@+id/itValue"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:paddingRight="10dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                />
 
     </RelativeLayout>
-
+    <TextView
+            android:id="@+id/itValue"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:paddingRight="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/itContainer"
+            android:textColor="#FFFFFF"
+            android:textSize="10sp"
+            />
     <TextView
             android:id="@+id/itEconomy"
             android:layout_below="@id/itContainer"
