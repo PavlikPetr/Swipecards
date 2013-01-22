@@ -232,7 +232,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 FeedItem item = (FeedItem) parent.getItemAtPosition(position);
-                if (!mIsUpdating && item.isLoaderRetry()) {
+                if (!mIsUpdating && item.isRetrier()) {
                     updateUI(new Runnable() {
                         public void run() {
                             getListAdapter().showLoaderItem();

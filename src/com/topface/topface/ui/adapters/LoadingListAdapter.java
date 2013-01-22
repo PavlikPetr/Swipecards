@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.LoaderData;
 
+import java.util.ArrayList;
+
 /**
  * Adapter Operates with IListLoader interface.
  * Contains 2 basic types of views:
@@ -91,7 +93,7 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
         if (item == null) return T_OTHER;
         if (getItem(position).isLoader())
             return T_LOADER;
-        else if (getItem(position).isLoaderRetry())
+        else if (getItem(position).isRetrier())
             return T_RETRIER;
         else
             return T_OTHER;
@@ -116,6 +118,45 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
             mData = new FeedList<T>();
         }
         return mData;
+    }
+
+    public void setData(ArrayList<T> data, boolean more) {
+        setData(data, more, true);
+    }
+
+    public void addAll(ArrayList<T> data, boolean more) {
+        addAll(data, more, true);
+    }
+
+    public void addFirst(ArrayList<T> data, boolean more) {
+        addFirst(data,more,true);
+    }
+
+    protected void setData(ArrayList<T> dataList, boolean more, boolean notify) {
+        removeLoaderItem();
+        ArrayList<T> data  = getData();
+        data.clear();
+        data.addAll(dataList);
+        addLoaderItem(more);
+        if (notify) notifyDataSetChanged();
+    }
+
+    protected void addAll(ArrayList<T> dataList, boolean more, boolean notify) {
+        removeLoaderItem();
+        getData().addAll(dataList);
+        addLoaderItem(more);
+        if (notify) notifyDataSetChanged();
+    }
+
+    protected void addFirst(ArrayList<T> data, boolean more, boolean notify) {
+        removeLoaderItem();
+        if (data != null) {
+            if (!data.isEmpty()) {
+                getData().addAllFirst(data);
+            }
+            addLoaderItem(more);
+        }
+        if (notify) notifyDataSetChanged();
     }
 
     public void showLoaderItem() {
@@ -177,7 +218,7 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
         FeedList<T> data = getData();
         if (!data.isEmpty()) {
             T lastItem = data.getLast();
-            if (lastItem != null && (lastItem.isLoader() || lastItem.isLoaderRetry())) {
+            if (lastItem != null && (lastItem.isLoader() || lastItem.isRetrier())) {
                 data.removeLast();
             }
         }

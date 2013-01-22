@@ -17,7 +17,6 @@ import android.view.WindowManager;
 import android.widget.Toast;
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
-import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.ui.NavigationActivity;
@@ -241,9 +240,9 @@ public class Utils {
         int currentYear = cal2.get(Calendar.YEAR);
         cal2.set(currentYear, Calendar.JANUARY, 1);
 
-        if (time > Data.midnight)
+        if (time > DateUtils.midnight)
             text = cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE);
-        else if (time > Data.midnight - day * 5)
+        else if (time > DateUtils.midnight - day * 5)
             text = formatDayOfWeek(context, cal.get(Calendar.DAY_OF_WEEK));
 
         else if (time > cal2.getTimeInMillis())

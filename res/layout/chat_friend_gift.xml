@@ -13,6 +13,7 @@
 
 
     <com.topface.topface.ui.views.ImageViewRemote
+            android:layout_below="@id/loDateDivider"
             android:id="@+id/ivChatGift"
             android:layout_toRightOf="@id/left_icon"
             style="@style/Gift"/>

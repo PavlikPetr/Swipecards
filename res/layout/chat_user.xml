@@ -14,13 +14,15 @@
             android:id="@+id/left_icon"
             style="@style/ChatAvatar"/>
 
-    <LinearLayout android:id="@+id/user_info"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_toLeftOf="@id/left_icon"
-                  android:layout_marginLeft="4dp"
-                  android:background="@drawable/bg_message_user"
-                  android:orientation="vertical">
+    <LinearLayout
+            android:layout_below="@id/loDateDivider"
+            android:id="@+id/user_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/left_icon"
+            android:layout_marginLeft="4dp"
+            android:background="@drawable/bg_message_user"
+            android:orientation="vertical">
 
         <!-- message -->
         <TextView

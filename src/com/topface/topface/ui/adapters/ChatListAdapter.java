@@ -10,10 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
-import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.*;
+import com.topface.topface.data.FeedDialog;
+import com.topface.topface.data.History;
+import com.topface.topface.data.VirusLike;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.VirusLikesRequest;
@@ -22,6 +23,7 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.AddressesCache;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
 
 import java.text.SimpleDateFormat;
@@ -378,7 +380,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
         if (doNeedClear) dataList.clear();
 
-        long numb = Data.midnight - Utils.DAY * 5;
+        long numb = DateUtils.midnight - Utils.DAY * 5;
         History prevHistory = null;
         long prevDate = 0;
 
@@ -428,7 +430,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
         } else {
             created = getSimplifiedDate(created);
-            formattedDate = getFormattedDate(history, created);
+            formattedDate = getFormattedDate(history.created, created);
         }
 
         if (prevDate != created) {
@@ -444,30 +446,30 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     private long getSimplifiedDate(long date) {
         long simplifiedDate = date;
-        if (simplifiedDate > Data.midnight) {
-            simplifiedDate = Data.midnight;
-        } else if (simplifiedDate > Data.midnight - Utils.DAY) {
-            simplifiedDate = Data.midnight - Utils.DAY;
-        } else if (simplifiedDate > Data.midnight - Utils.DAY * 2) {
-            simplifiedDate = Data.midnight - Utils.DAY * 2;
-        } else if (simplifiedDate > Data.midnight - Utils.DAY * 3) {
-            simplifiedDate = Data.midnight - Utils.DAY * 3;
-        } else if (simplifiedDate > Data.midnight - Utils.DAY * 4) {
-            simplifiedDate = Data.midnight - Utils.DAY * 4;
-        } else if (simplifiedDate > Data.midnight - Utils.DAY * 5) {
-            simplifiedDate = Data.midnight - Utils.DAY * 5;
+        if (simplifiedDate > DateUtils.midnight) {
+            simplifiedDate = DateUtils.midnight;
+        } else if (simplifiedDate > DateUtils.midnight - Utils.DAY) {
+            simplifiedDate = DateUtils.midnight - Utils.DAY;
+        } else if (simplifiedDate > DateUtils.midnight - Utils.DAY * 2) {
+            simplifiedDate = DateUtils.midnight - Utils.DAY * 2;
+        } else if (simplifiedDate > DateUtils.midnight - Utils.DAY * 3) {
+            simplifiedDate = DateUtils.midnight - Utils.DAY * 3;
+        } else if (simplifiedDate > DateUtils.midnight - Utils.DAY * 4) {
+            simplifiedDate = DateUtils.midnight - Utils.DAY * 4;
+        } else if (simplifiedDate > DateUtils.midnight - Utils.DAY * 5) {
+            simplifiedDate = DateUtils.midnight - Utils.DAY * 5;
         }
         return simplifiedDate;
     }
 
-    private String getFormattedDate(History history, long created) {
+    private String getFormattedDate(long created, long simplifiedDate) {
         String formattedDate;
-        if (created == Data.midnight) {
+        if (simplifiedDate == DateUtils.midnight) {
             formattedDate = mContext.getString(R.string.time_today);
-        } else if (created == Data.midnight - Utils.DAY) {
+        } else if (simplifiedDate == DateUtils.midnight - Utils.DAY) {
             formattedDate = mContext.getString(R.string.time_yesterday);
         } else {
-            formattedDate = mDowFormat.format(history.created);
+            formattedDate = mDowFormat.format(created);
         }
         return formattedDate;
     }
@@ -475,7 +477,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private int getItemType(History prevHistory, History history) {
         if (history.isLoader()){
             return T_LOADER;
-        } else if ( history.isLoaderRetry()) {
+        } else if ( history.isRetrier()) {
             return T_RETRIER;
         }
         int item_type;
@@ -680,13 +682,13 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         FeedList<History> data = getData();
         if (!data.isEmpty()) {
             History lastItem = data.getLast();
-            if (lastItem != null && (lastItem.isLoader() || lastItem.isLoaderRetry())) {
+            if (lastItem != null && (lastItem.isLoader() || lastItem.isRetrier())) {
                 data.removeLast();
                 mItemLayoutList.remove(mItemLayoutList.size()-1);
             }
 
             History firstItem = data.getFirst();
-            if (firstItem != null && (firstItem.isLoader() || firstItem.isLoaderRetry())) {
+            if (firstItem != null && (firstItem.isLoader() || firstItem.isRetrier())) {
                 data.removeFirst();
                 mItemLayoutList.remove(0);
             }

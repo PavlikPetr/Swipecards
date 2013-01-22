@@ -1,12 +1,13 @@
 package com.topface.topface.ui.adapters;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 
 @SuppressWarnings("serial")
 public class FeedList<T> extends ArrayList<T> {
     public boolean hasItem(int id) {
-        return size() > id;
+        return size() > id && id >= 0;
     }
 
     public T getLast() {
@@ -21,6 +22,10 @@ public class FeedList<T> extends ArrayList<T> {
 
     public void addFirst(T item) {
         this.add(0,item);
+    }
+
+    public void addAllFirst(Collection<T> item) {
+        this.addAll(0, item);
     }
 
     public void removeFirst() {

@@ -118,7 +118,7 @@ public class GiftsFragment extends BaseFragment {
                                 }
                             }
 
-                            if (mGifts.get(position).isLoaderRetry()) {
+                            if (mGifts.get(position).isRetrier()) {
                                 updateUI(new Runnable() {
                                     public void run() {
                                         updateUI(new Runnable() {
@@ -215,7 +215,7 @@ public class GiftsFragment extends BaseFragment {
 
     private void removeLoaderItem() {
         if (mGifts.size() > 0) {
-            if (mGifts.getLast().isLoader() || mGifts.getLast().isLoaderRetry()) {
+            if (mGifts.getLast().isLoader() || mGifts.getLast().isRetrier()) {
                 mGifts.remove(mGifts.size() - 1);
             }
         }
@@ -231,7 +231,7 @@ public class GiftsFragment extends BaseFragment {
         request.limit = GIFTS_LOAD_COUNT;
         request.uid = userId;
         if (!mGifts.isEmpty()) {
-            if (mGifts.getLast().isLoader() || mGifts.getLast().isLoaderRetry()) {
+            if (mGifts.getLast().isLoader() || mGifts.getLast().isRetrier()) {
                 request.from = mGifts.get(mGifts.size() - 2).gift.feedId;
             } else {
                 request.from = mGifts.get(mGifts.size() - 1).gift.feedId;

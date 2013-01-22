@@ -5,6 +5,6 @@ public interface IListLoader {
 
     public boolean isLoader();
 
-    public boolean isLoaderRetry();
+    public boolean isRetrier();
 
 }

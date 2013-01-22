@@ -28,9 +28,9 @@ import com.topface.topface.Static;
 import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
 import com.topface.topface.ui.*;
-import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
+import com.topface.topface.ui.adapters.NewChatListAdapter;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.ui.views.SwapControl;
@@ -75,7 +75,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     private boolean mIsAddPanelOpened;
     private boolean mLocationDetected = false;
     private PullToRefreshListView mListView;
-    private ChatListAdapter mAdapter;
+    private NewChatListAdapter mAdapter;
     private FeedList<History> mHistoryData;
     private EditText mEditBox;
     private LockerView mLoadingLocker;
@@ -179,7 +179,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void initChatHistory(View root) {
-        mAdapter = new ChatListAdapter(getActivity().getApplicationContext(), mHistoryData, getUpdaterCallback(),mLoadingLocker);
+        mAdapter = new NewChatListAdapter(getActivity().getApplicationContext(), mHistoryData, getUpdaterCallback());
         mAdapter.setOnAvatarListener(this);
         mAdapter.setOnItemLongClickListener(new OnListViewItemLongClickListener() {
 
@@ -337,7 +337,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
     private void update(final boolean pullToRefresh,final boolean scrollRefresh, String type) {
         mIsUpdating = true;
-        if (!pullToRefresh) {
+        if (!pullToRefresh && !scrollRefresh) {
             mLoadingLocker.setVisibility(View.VISIBLE);
         }
         HistoryRequest historyRequest = new HistoryRequest(getActivity());
@@ -378,6 +378,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     public void run() {
                         if (mAdapter != null) {
                             if (pullToRefresh) {
+                                mAdapter.addFirst(dataList.items,dataList.more);
+                            } else if (scrollRefresh) {
                                 mAdapter.addAll(dataList.items,dataList.more);
                             } else {
                                 mAdapter.setData(dataList.items,dataList.more);
@@ -392,7 +394,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                         if (mLoadingLocker != null) {
                             mLoadingLocker.setVisibility(View.GONE);
                         }
-
                     }
                 });
                 mIsUpdating = false;
@@ -904,14 +905,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         dialog.show();
     }
 
-//    @Override
-//    public Object onRetainCustomNonConfigurationInstance() {
-//        Bundle configurations = new Bundle();
-//        configurations.putBoolean(WAS_FAILED, wasFailed);
-//        configurations.putSerializable(ADAPTER_DATA, mAdapter.getDataCopy());
-//        return configurations;
-//    }
-
     private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -987,5 +980,4 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             }
         };
     }
-
 }

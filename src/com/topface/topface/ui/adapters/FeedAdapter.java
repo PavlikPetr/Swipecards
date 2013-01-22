@@ -247,7 +247,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             FeedList<T> data = getData();
             int dataSize = data.size();
 
-            int feedIndex = data.getLast().isLoader() || data.getLast().isLoaderRetry() ?
+            int feedIndex = data.getLast().isLoader() || data.getLast().isRetrier() ?
                     dataSize - 2 :
                     dataSize - 1;
             if (data.hasItem(feedIndex)) {
