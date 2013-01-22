@@ -4,6 +4,7 @@
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
+              android:layout_marginTop="5dp"
               >
     <RelativeLayout
             android:id="@+id/itContainer"
@@ -27,6 +28,8 @@
             android:id="@+id/itValue"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:paddingRight="10dp"
             android:layout_alignParentRight="true"
             android:layout_below="@id/itContainer"
@@ -36,6 +39,8 @@
     <TextView
             android:id="@+id/itEconomy"
             android:layout_below="@id/itContainer"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
