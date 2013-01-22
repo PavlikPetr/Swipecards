@@ -140,15 +140,22 @@ public class CountersManager {
     }
 
     private void commitCounters() {
+        //Хз как тут сделать по-другому, подумаю еще
         if(likesCounter != CacheProfile.unread_likes || dialogsCounter != CacheProfile.unread_messages ||
                 sympathyCounter != CacheProfile.unread_mutual || visitorsCounter != CacheProfile.unread_visitors) {
+            CacheProfile.unread_likes = likesCounter;
+            CacheProfile.unread_messages = dialogsCounter;
+            CacheProfile.unread_mutual = sympathyCounter;
+            CacheProfile.unread_visitors = visitorsCounter;
             updateUICounters(); //кидаем broadcast о том, что счетчики обновились и причину их обновления
             //название метода, если это запрос, или константу, если это GCM
+        } else {
+
+            CacheProfile.unread_likes = likesCounter;
+            CacheProfile.unread_messages = dialogsCounter;
+            CacheProfile.unread_mutual = sympathyCounter;
+            CacheProfile.unread_visitors = visitorsCounter;
         }
-        CacheProfile.unread_likes = likesCounter;
-        CacheProfile.unread_messages = dialogsCounter;
-        CacheProfile.unread_mutual = sympathyCounter;
-        CacheProfile.unread_visitors = visitorsCounter;
     }
 
     private void updateUICounters() {

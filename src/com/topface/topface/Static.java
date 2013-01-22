@@ -17,8 +17,8 @@ public class Static {
     public static final String AMPERSAND = "&";
     public static final String CLIENT_TYPE = "android";
     public static final String API_BETA_URL = "http://api.delta.topface.com/?v=" + API_VERSION; //Beta API URL
-//    public static final String API_URL = "https://api.topface.com/?v=" + API_VERSION;
-    public static final String API_URL = API_BETA_URL;
+    public static final String API_URL = "https://api.topface.com/?v=" + API_VERSION;
+//    public static final String API_URL = API_BETA_URL;
     /**
      * Ревизия серверной части, используется толькро при тестировании на бете
      */
