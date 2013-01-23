@@ -530,10 +530,14 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
     @Override
     public void clearContent() {
-        mHeaderPager.setCurrentItem(0);
-        mTitle.setText(Static.EMPTY);
-        mOnline.setVisibility(View.INVISIBLE);
-        mLoaderView.setVisibility(View.VISIBLE);
+        if(mHeaderPager != null) {
+            mHeaderPager.setCurrentItem(0);
+        }
+        if(mTitle != null && mOnline != null && mLoaderView != null) {
+            mTitle.setText(Static.EMPTY);
+            mOnline.setVisibility(View.INVISIBLE);
+            mLoaderView.setVisibility(View.VISIBLE);
+        }
         if (mHeaderMainFragment != null) mHeaderMainFragment.clearContent();
         if (mHeaderStatusFragment != null) mHeaderStatusFragment.clearContent();
         if (mUserPhotoFragment != null) mUserPhotoFragment.clearContent();
