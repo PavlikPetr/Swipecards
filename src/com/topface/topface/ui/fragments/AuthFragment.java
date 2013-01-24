@@ -1,13 +1,12 @@
 package com.topface.topface.ui.fragments;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
@@ -28,17 +27,14 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.*;
 import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.views.IllustratedTextView;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
-import com.topface.topface.utils.social.WebAuthActivity;
 
-public class AuthFragment extends BaseFragment{
+public class AuthFragment extends BaseFragment {
 
     private RetryView mRetryView;
     private Button mFBButton;
@@ -66,14 +62,14 @@ public class AuthFragment extends BaseFragment{
         initOtherViews(root);
     }
 
-    private void initAuthorizationHandler () {
+    private void initAuthorizationHandler() {
         mAuthorizationManager = AuthorizationManager.getInstance(getActivity());
         mAuthorizationManager.setOnAuthorizationHandler(new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 switch (msg.what) {
                     case AuthorizationManager.AUTHORIZATION_FAILED:
-                        authorizationFailed(ApiResponse.NETWORK_CONNECT_ERROR,null);
+                        authorizationFailed(ApiResponse.NETWORK_CONNECT_ERROR, null);
                         break;
                     case AuthorizationManager.DIALOG_COMPLETED:
                         hideButtons();
@@ -127,7 +123,7 @@ public class AuthFragment extends BaseFragment{
             @Override
             public void onReceive(Context context, Intent intent) {
                 int mConnectionType = intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE, -1);
-                if(mConnectionType != ConnectionChangeReceiver.CONNECTION_OFFLINE) {
+                if (mConnectionType != ConnectionChangeReceiver.CONNECTION_OFFLINE) {
                     IllustratedTextView btn = mRetryView.getBtn1();
                     if (btn != null) {
                         btn.performClick();
@@ -143,7 +139,7 @@ public class AuthFragment extends BaseFragment{
         super.onActivityResult(requestCode, resultCode, data);
         mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == getActivity().RESULT_CANCELED) {
+        if (resultCode == Activity.RESULT_CANCELED) {
             showButtons();
         }
     }
@@ -210,11 +206,17 @@ public class AuthFragment extends BaseFragment{
         final ProfileRequest profileRequest = new ProfileRequest(getActivity());
         profileRequest.part = ProfileRequest.P_ALL;
         registerRequest(profileRequest);
-        profileRequest.callback(new ApiHandler() {
+        profileRequest.callback(new DataApiHandler<Profile>() {
+
             @Override
-            public void success(ApiResponse response) {
-                CacheProfile.setProfile(Profile.parse(response), response);
+            protected void success(Profile data, ApiResponse response) {
+                CacheProfile.setProfile(data, response);
                 getOptions();
+            }
+
+            @Override
+            protected Profile parseResponse(ApiResponse response) {
+                return Profile.parse(response);
             }
 
             @Override
@@ -301,7 +303,7 @@ public class AuthFragment extends BaseFragment{
                 break;
         }
 
-        if(request != null ) {
+        if (request != null) {
             mRetryView.setVisibility(View.VISIBLE);
             mProgressBar.setVisibility(View.GONE);
 
@@ -329,16 +331,15 @@ public class AuthFragment extends BaseFragment{
     }
 
     private void btnVKClick() {
-        if(checkOnline()) {
+        if (checkOnline()) {
             mAuthorizationManager.vkontakteAuth();
         }
 //
     }
 
 
-
     private void btnFBClick() {
-        if(checkOnline()) {
+        if (checkOnline()) {
             mAuthorizationManager.facebookAuth();
         }
     }

@@ -1,16 +1,17 @@
 package com.topface.topface.requests;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import com.topface.topface.*;
+import com.topface.topface.App;
+import com.topface.topface.RetryDialog;
+import com.topface.topface.Static;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.RequestConnection;
 
 import java.util.Calendar;
 
 public abstract class ApiRequest {
+    private static final int MAX_RESEND_CNT = 4;
     // Data
     public String ssid;
     public ApiHandler handler;
@@ -19,7 +20,7 @@ public abstract class ApiRequest {
     private RequestConnection connection;
     private boolean doNeedAlert;
     private boolean doNeedAuthorize;
-    private boolean doNeedResend = true;
+    private int mResendCnt = 0;
 
     public ApiRequest(Context context) {
         //Нельзя передавать Application Context!!!! Только контекст Activity
@@ -100,11 +101,7 @@ public abstract class ApiRequest {
     }
 
     public boolean isNeedResend() {
-        return doNeedResend;
-    }
-
-    public void setNeedResend(boolean value) {
-        doNeedResend = value;
+        return mResendCnt < MAX_RESEND_CNT;
     }
 
     public boolean isCanceled() {
@@ -118,5 +115,10 @@ public abstract class ApiRequest {
         handler = null;
         connection = null;
         canceled = true;
+    }
+
+    public int incrementResend() {
+        mResendCnt++;
+        return mResendCnt;
     }
 }

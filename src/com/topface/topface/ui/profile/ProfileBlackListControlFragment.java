@@ -8,7 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import com.topface.topface.R;
-import com.topface.topface.requests.*;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.BlackListAddRequest;
+import com.topface.topface.requests.BlackListDeleteRequest;
+import com.topface.topface.requests.VipApiHandler;
 import com.topface.topface.ui.fragments.BaseFragment;
 
 
@@ -23,7 +26,7 @@ public class ProfileBlackListControlFragment extends BaseFragment {
     public static ProfileBlackListControlFragment newInstance(int userId, boolean inBlackList) {
         ProfileBlackListControlFragment mInstance = new ProfileBlackListControlFragment();
         Bundle args = new Bundle();
-        args.putInt("user_id",userId);
+        args.putInt("user_id", userId);
         args.putBoolean("in_blacklist", inBlackList);
         mInstance.setArguments(args);
         return mInstance;
@@ -31,8 +34,8 @@ public class ProfileBlackListControlFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_profile_blacklist,null);
-        if(savedInstanceState == null) {
+        View root = inflater.inflate(R.layout.fragment_profile_blacklist, null);
+        if (savedInstanceState == null) {
             initFieldsFromArguments();
         }
         initViews(root);
@@ -47,7 +50,7 @@ public class ProfileBlackListControlFragment extends BaseFragment {
     }
 
     private void initViews(View root) {
-        mBtnAddToBlackList = (Button)root.findViewById(R.id.fpbAddToBlackList);
+        mBtnAddToBlackList = (Button) root.findViewById(R.id.fpbAddToBlackList);
         mBtnAddToBlackList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,7 +58,7 @@ public class ProfileBlackListControlFragment extends BaseFragment {
             }
         });
 
-        mBtnRemoveFromBlackList = (Button)root.findViewById(R.id.fpbDeleteFromBlackList);
+        mBtnRemoveFromBlackList = (Button) root.findViewById(R.id.fpbDeleteFromBlackList);
         mBtnRemoveFromBlackList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,12 +76,7 @@ public class ProfileBlackListControlFragment extends BaseFragment {
             @Override
             public void success(ApiResponse response) {
                 super.success(response);
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        setChanges(true);
-                    }
-                });
+                setChanges(true);
             }
         }
         ).exec();
@@ -91,13 +89,7 @@ public class ProfileBlackListControlFragment extends BaseFragment {
             @Override
             public void success(ApiResponse response) {
                 super.success(response);
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        setChanges(false);
-                    }
-                });
-
+                setChanges(false);
             }
         }).exec();
     }
@@ -109,10 +101,10 @@ public class ProfileBlackListControlFragment extends BaseFragment {
     }
 
     private void switchButtons() {
-        if(mInBlackList) {
+        if (mInBlackList) {
             mBtnAddToBlackList.setVisibility(View.GONE);
             mBtnRemoveFromBlackList.setVisibility(View.VISIBLE);
-        } else  {
+        } else {
             mBtnRemoveFromBlackList.setVisibility(View.GONE);
             mBtnAddToBlackList.setVisibility(View.VISIBLE);
         }
@@ -120,7 +112,7 @@ public class ProfileBlackListControlFragment extends BaseFragment {
 
     private void sendUpdateIntent() {
         Intent intent = new Intent(UPDATE_ACTION);
-        intent.putExtra(BLACK_LIST_STATUS,mInBlackList);
+        intent.putExtra(BLACK_LIST_STATUS, mInBlackList);
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
     }
 }

@@ -290,12 +290,7 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         dr.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter.removeItem(position);
-                    }
-                });
+                mAdapter.removeItem(position);
             }
 
             @Override
@@ -330,57 +325,50 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 }
             }
         }
-        historyRequest.callback(new ApiHandler() {
+        historyRequest.callback(new DataApiHandler<FeedListData<History>>() {
             @Override
-            public void success(ApiResponse response) {
+            public void success(FeedListData<History> dataList, ApiResponse response) {
                 if (itemId != -1) {
                     LocalBroadcastManager.getInstance(ChatActivity.this).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID, itemId));
                     itemId = -1;
                 }
 
                 wasFailed = false;
-                final FeedListData<History> dataList = new FeedListData<History>(response.jsonResult, History.class);
-                post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mAdapter != null) {
-                            if (pullToRefresh) {
-                                mAdapter.addAll(dataList.items);
-                            } else {
-                                mAdapter.setDataList(dataList.items);
-                            }
-                            if (dataList.items.size() > 0) {
-                                mAdapter.notifyDataSetChanged();
-                            }
-                        }
-                        if (pullToRefresh && mListView != null) {
-                            mListView.onRefreshComplete();
-                        }
-                        if (mLoadingLocker != null) {
-                            mLoadingLocker.setVisibility(View.GONE);
-                        }
 
+                if (mAdapter != null) {
+                    if (pullToRefresh) {
+                        mAdapter.addAll(dataList.items);
+                    } else {
+                        mAdapter.setDataList(dataList.items);
                     }
-                });
+                    if (dataList.items.size() > 0) {
+                        mAdapter.notifyDataSetChanged();
+                    }
+                }
+                if (pullToRefresh && mListView != null) {
+                    mListView.onRefreshComplete();
+                }
+                if (mLoadingLocker != null) {
+                    mLoadingLocker.setVisibility(View.GONE);
+                }
+
+            }
+
+            @Override
+            protected FeedListData<History> parseResponse(ApiResponse response) {
+                return new FeedListData<History>(response.jsonResult, History.class);
             }
 
             @Override
             public void fail(final int codeError, ApiResponse response) {
-                post(new Runnable() {
-                    @Override
-                    public void run() {
-//                        Toast.makeText(ChatActivity.this, getString(R.string.general_data_error),
-//                                Toast.LENGTH_SHORT).show();
-                        mLoadingLocker.setVisibility(View.GONE);
-                        switch (codeError) {
-                            default:
-                                mRetryView.setErrorMsg(getString(R.string.general_data_error));
-                                break;
-                        }
-                        lockScreen.setVisibility(View.VISIBLE);
-                        wasFailed = true;
-                    }
-                });
+                mLoadingLocker.setVisibility(View.GONE);
+                switch (codeError) {
+                    default:
+                        mRetryView.setErrorMsg(getString(R.string.general_data_error));
+                        break;
+                }
+                lockScreen.setVisibility(View.VISIBLE);
+                wasFailed = true;
             }
         }).exec();
     }
@@ -547,42 +535,35 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
         registerRequest(messageRequest);
         messageRequest.message = mEditBox.getText().toString();
         messageRequest.userid = mUserId;
-        messageRequest.callback(new ApiHandler() {
+        messageRequest.callback(new DataApiHandler<History>() {
             @Override
-            public void success(final ApiResponse response) {
-                final Confirmation confirm = Confirmation.parse(response);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mAdapter != null) {
-                            if (confirm.completed) {
-                                History history = new History(response);
-                                mAdapter.addSentMessage(history);
-                                mAdapter.notifyDataSetChanged();
-                                mEditBox.getText().clear();
-                                mLoadingLocker.setVisibility(View.GONE);
+            public void success(History history, final ApiResponse response) {
+                if (mAdapter != null) {
+                    if (response.isCompleted()) {
+                        mAdapter.addSentMessage(history);
+                        mAdapter.notifyDataSetChanged();
+                        mEditBox.getText().clear();
+                        mLoadingLocker.setVisibility(View.GONE);
 
-                            } else {
-                                Toast.makeText(ChatActivity.this,
-                                        getString(R.string.general_server_error),
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }
+                    } else {
+                        Toast.makeText(ChatActivity.this,
+                                getString(R.string.general_server_error),
+                                Toast.LENGTH_SHORT).show();
                     }
-                });
+                }
+            }
+
+            @Override
+            protected History parseResponse(ApiResponse response) {
+                return new History(response);
             }
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(ChatActivity.this,
-                                getString(R.string.general_data_error), Toast.LENGTH_SHORT)
-                                .show();
-                        mLoadingLocker.setVisibility(View.GONE);
-                    }
-                });
+                Toast.makeText(ChatActivity.this,
+                        getString(R.string.general_data_error), Toast.LENGTH_SHORT)
+                        .show();
+                mLoadingLocker.setVisibility(View.GONE);
             }
         }).exec();
         return true;
@@ -606,43 +587,40 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 if (mIsAddPanelOpened)
                     mSwapControl.snapToScreen(0);
                 mIsAddPanelOpened = false;
-                sendGift.callback(new ApiHandler() {
+                sendGift.callback(new DataApiHandler<History>() {
+
                     @Override
-                    public void success(final ApiResponse response) {
+                    protected void success(History history, ApiResponse response) {
                         SendGiftAnswer answer = SendGiftAnswer.parse(response);
                         CacheProfile.likes = answer.likes;
                         CacheProfile.money = answer.money;
                         Debug.log(ChatActivity.this, "likes:" + answer.likes + " money:"
                                 + answer.money);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                History history = new History(response);
-                                history.target = FeedDialog.USER_MESSAGE;
-                                mAdapter.addSentMessage(history);
-                                mAdapter.notifyDataSetChanged();
-                                mLoadingLocker.setVisibility(View.GONE);
-                            }
-                        });
+
+                        history.target = FeedDialog.USER_MESSAGE;
+                        mAdapter.addSentMessage(history);
+                        mAdapter.notifyDataSetChanged();
+                        mLoadingLocker.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    protected History parseResponse(ApiResponse response) {
+                        return new History(response);
                     }
 
                     @Override
                     public void fail(int codeError, final ApiResponse response) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (response.code == ApiResponse.PAYMENT) {
-                                    Intent intent = new Intent(getApplicationContext(), ContainerActivity.class);
-                                    intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
-                                    intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
-                                    intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
-                                    startActivity(intent);
-                                }
-                                mLoadingLocker.setVisibility(View.GONE);
-                            }
-                        });
+                        if (response.code == ApiResponse.PAYMENT) {
+                            Intent intent = new Intent(getApplicationContext(), ContainerActivity.class);
+                            intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
+                            intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
+                            intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
+                            startActivity(intent);
+                        }
+                        mLoadingLocker.setVisibility(View.GONE);
                     }
                 }).exec();
+
             } else if (requestCode == GeoMapActivity.INTENT_REQUEST_GEO) {
                 Bundle extras = data.getExtras();
                 final Geo geo = extras.getParcelable(GeoMapActivity.INTENT_GEO);
@@ -658,39 +636,33 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 coordRequest.type = CoordinatesRequest.COORDINATES_TYPE_PLACE;
                 coordRequest.address = geo.getAddress();
                 mLoadingLocker.setVisibility(View.VISIBLE);
-                coordRequest.callback(new ApiHandler() {
+                coordRequest.callback(new DataApiHandler<History>() {
 
                     @Override
-                    public void success(final ApiResponse response) {
-                        final Confirmation confirm = Confirmation.parse(response);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (confirm.completed) {
-                                    History history = new History(response);
-                                    history.target = FeedDialog.USER_MESSAGE;
-                                    mAdapter.addSentMessage(history);
-                                    mAdapter.notifyDataSetChanged();
-                                } else {
-                                    Toast.makeText(ChatActivity.this,
-                                            R.string.general_server_error, Toast.LENGTH_SHORT)
-                                            .show();
-                                }
-                                mLoadingLocker.setVisibility(View.GONE);
-                            }
-                        });
+                    public void success(History history, final ApiResponse response) {
+                        if (response.isCompleted()) {
+                            history.target = FeedDialog.USER_MESSAGE;
+                            mAdapter.addSentMessage(history);
+                            mAdapter.notifyDataSetChanged();
+                        } else {
+                            Toast.makeText(ChatActivity.this,
+                                    R.string.general_server_error, Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                        mLoadingLocker.setVisibility(View.GONE);
                     }
 
                     @Override
+                    protected History parseResponse(ApiResponse response) {
+                        return new History(response);
+                    }
+
+
+                    @Override
                     public void fail(int codeError, ApiResponse response) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(ChatActivity.this, R.string.general_server_error,
-                                        Toast.LENGTH_SHORT).show();
-                                mLoadingLocker.setVisibility(View.GONE);
-                            }
-                        });
+                        Toast.makeText(ChatActivity.this, R.string.general_server_error,
+                                Toast.LENGTH_SHORT).show();
+                        mLoadingLocker.setVisibility(View.GONE);
                     }
                 }).exec();
 
@@ -758,48 +730,36 @@ public class ChatActivity extends BaseFragmentActivity implements View.OnClickLi
                 coordRequest.longitude = longitude;
                 coordRequest.type = CoordinatesRequest.COORDINATES_TYPE_SELF;
                 coordRequest.address = (String) msg.obj;
-                coordRequest.callback(new ApiHandler() {
+                coordRequest.callback(new DataApiHandler<History>() {
 
                     @Override
-                    public void success(final ApiResponse response) {
-                        final Confirmation confirm = Confirmation.parse(response);
-                        // final String address =
-                        // mGeoManager.getLocationAddress(latitude, longitude);
-                        runOnUiThread(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                if (confirm.completed) {
-                                    if (mIsAddPanelOpened)
-                                        mSwapControl.snapToScreen(0);
-                                    mIsAddPanelOpened = false;
-                                    History history = new History(response);
-//									history.target = FeedDialog.USER_MESSAGE;
-                                    mAdapter.addSentMessage(history);
-                                    mAdapter.notifyDataSetChanged();
-                                } else {
-                                    Toast.makeText(ChatActivity.this,
-                                            R.string.general_server_error, Toast.LENGTH_SHORT)
-                                            .show();
-                                }
-                                mProgressDialog.dismiss();
-                            }
-                        });
+                    public void success(History history, final ApiResponse response) {
+                        if (response.isCompleted()) {
+                            if (mIsAddPanelOpened)
+                                mSwapControl.snapToScreen(0);
+                            mIsAddPanelOpened = false;
+                            mAdapter.addSentMessage(history);
+                            mAdapter.notifyDataSetChanged();
+                        } else {
+                            Toast.makeText(ChatActivity.this,
+                                    R.string.general_server_error, Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                        mProgressDialog.dismiss();
 
                     }
 
                     @Override
+                    protected History parseResponse(ApiResponse response) {
+                        return new History(response);
+                    }
+
+
+                    @Override
                     public void fail(int codeError, ApiResponse response) {
-                        runOnUiThread(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                mProgressDialog.dismiss();
-                                Toast.makeText(ChatActivity.this, R.string.general_server_error,
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
+                        mProgressDialog.dismiss();
+                        Toast.makeText(ChatActivity.this, R.string.general_server_error,
+                                Toast.LENGTH_SHORT).show();
                     }
                 }).exec();
             }

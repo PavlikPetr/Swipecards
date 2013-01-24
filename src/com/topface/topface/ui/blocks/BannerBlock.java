@@ -144,7 +144,7 @@ public class BannerBlock {
             //Убираем старый баннер
             ((ImageView) mBannerView).setImageDrawable(null);
 
-            DefaultImageLoader.getInstance(mActivity).displayImage(banner.url, (ImageView) mBannerView, new SimpleImageLoadingListener() {
+            DefaultImageLoader.getInstance().displayImage(banner.url, (ImageView) mBannerView, new SimpleImageLoadingListener() {
                 @Override
                 public void onLoadingComplete(Bitmap loadedImage) {
                     super.onLoadingComplete(loadedImage);

@@ -8,8 +8,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.topface.topface.R;
 import com.topface.topface.data.Gift;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.GiftsRequest;
 import com.topface.topface.ui.fragments.GiftsFragment;
 import com.topface.topface.ui.views.LockerView;
@@ -117,42 +117,33 @@ public class GiftsActivity extends BaseFragmentActivity {
             mLoadingLocker.setVisibility(View.VISIBLE);
             GiftsRequest giftRequest = new GiftsRequest(this);
             registerRequest(giftRequest);
-            giftRequest.callback(new ApiHandler() {
+            giftRequest.callback(new DataApiHandler<LinkedList<Gift>>() {
+
                 @Override
-                public void success(final ApiResponse response) {
-                    mGiftsList.addAll(Gift.parse(response));
+                protected void success(LinkedList<Gift> data, ApiResponse response) {
+                    mGiftsList.addAll(data);
                     mGiftsCollection.add(mGiftsList);
                     mGiftFragment.setGifts(mGiftsCollection.getGifts());
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mLoadingLocker.setVisibility(View.GONE);
-                        }
-                    });
+                    mLoadingLocker.setVisibility(View.GONE);
+                }
+
+                @Override
+                protected LinkedList<Gift> parseResponse(ApiResponse response) {
+                    return Gift.parse(response);
                 }
 
                 @Override
                 public void fail(int codeError, ApiResponse response) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getApplicationContext(),
-                                    GiftsActivity.this.getString(R.string.general_data_error),
-                                    Toast.LENGTH_SHORT).show();
-                            mLoadingLocker.setVisibility(View.GONE);
-                        }
-                    });
+                    Toast.makeText(getApplicationContext(),
+                            GiftsActivity.this.getString(R.string.general_data_error),
+                            Toast.LENGTH_SHORT).show();
+                    mLoadingLocker.setVisibility(View.GONE);
                 }
             }).exec();
         } else {
             mGiftsCollection.add(mGiftsList);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mGiftFragment.setGifts(mGiftsCollection.getGifts());
-                }
-            });
+            mGiftFragment.setGifts(mGiftsCollection.getGifts());
         }
     }
 

@@ -10,8 +10,8 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedUserListData;
 import com.topface.topface.data.Leader;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.LeadersRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.LeadersActivity;
@@ -45,21 +45,23 @@ public class LeadersBlock {
         if (mActivity instanceof BaseFragmentActivity) {
             ((BaseFragmentActivity) mActivity).registerRequest(request);
         }
-        request.callback(new ApiHandler() {
+        request.callback(new DataApiHandler<FeedUserListData<Leader>>() {
+
             @Override
-            public void success(final ApiResponse response) {
-                mActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        setAdapter(new FeedUserListData<Leader>(response.jsonResult, Leader.class));
-                    }
-                });
+            protected void success(FeedUserListData<Leader> data, ApiResponse response) {
+                setAdapter(data);
+            }
+
+            @Override
+            protected FeedUserListData<Leader> parseResponse(ApiResponse response) {
+                return new FeedUserListData<Leader>(response.jsonResult, Leader.class);
             }
 
             @Override
             public void fail(int codeError, ApiResponse response) {
                 Debug.error("Leaders loading error: " + codeError + "-" + response.toString());
             }
+
         }).exec();
     }
 

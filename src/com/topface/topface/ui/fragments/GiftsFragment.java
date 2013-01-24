@@ -16,8 +16,8 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.*;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.FeedGiftsRequest;
 import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.ui.ContainerActivity;
@@ -177,43 +177,38 @@ public class GiftsFragment extends BaseFragment {
                             url,
                             0
                     );
-                    sendGift.callback(new ApiHandler() {
+                    sendGift.callback(new DataApiHandler<SendGiftAnswer>() {
+
                         @Override
-                        public void success(ApiResponse response) {
-                            SendGiftAnswer answer = SendGiftAnswer.parse(response);
+                        protected void success(SendGiftAnswer answer, ApiResponse response) {
                             CacheProfile.likes = answer.likes;
                             CacheProfile.money = answer.money;
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (mGifts.size() > 1) {
-                                        mGifts.add(1, sendedGift);
-                                    } else {
-                                        mGifts.addLast(sendedGift);
-                                    }
-                                    mGridAdapter.notifyDataSetChanged();
-                                }
-                            });
+                            if (mGifts.size() > 1) {
+                                mGifts.add(1, sendedGift);
+                            } else {
+                                mGifts.addLast(sendedGift);
+                            }
+                            mGridAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        protected SendGiftAnswer parseResponse(ApiResponse response) {
+                            return SendGiftAnswer.parse(response);
                         }
 
                         @Override
                         public void fail(int codeError, final ApiResponse response) {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (response.code == ApiResponse.PAYMENT) {
-                                        FragmentActivity activity = getActivity();
-                                        if (activity != null) {
-                                            Intent intent = new Intent(activity.getApplicationContext(),
-                                                    ContainerActivity.class);
-                                            intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
-                                            intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
-                                            intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
-                                            startActivity(intent);
-                                        }
-                                    }
+                            if (response.code == ApiResponse.PAYMENT) {
+                                FragmentActivity activity = getActivity();
+                                if (activity != null) {
+                                    Intent intent = new Intent(activity.getApplicationContext(),
+                                            ContainerActivity.class);
+                                    intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
+                                    intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
+                                    intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
+                                    startActivity(intent);
                                 }
-                            });
+                            }
                         }
                     }).exec();
                 }
@@ -248,38 +243,31 @@ public class GiftsFragment extends BaseFragment {
             }
         }
 
-        request.callback(new ApiHandler() {
+        request.callback(new DataApiHandler<FeedListData<FeedGift>>() {
 
             @Override
-            public void success(ApiResponse response) {
-                final FeedListData<FeedGift> feedGifts = new FeedListData<FeedGift>(response.jsonResult, FeedGift.class);
+            protected void success(FeedListData<FeedGift> gifts, ApiResponse response) {
 
-                updateUI(new Runnable() {
+                removeLoaderItem();
+                mGifts.addAll(gifts.items);
 
-                    @Override
-                    public void run() {
-                        removeLoaderItem();
-                        mGifts.addAll(feedGifts.items);
-
-                        if (feedGifts.more) {
-                            mGifts.add(new FeedGift(ItemType.LOADER));
-                        }
-                        mGridAdapter.notifyDataSetChanged();
-                    }
-                });
+                if (gifts.more) {
+                    mGifts.add(new FeedGift(ItemType.LOADER));
+                }
+                mGridAdapter.notifyDataSetChanged();
                 mIsUpdating = false;
             }
 
             @Override
+            protected FeedListData<FeedGift> parseResponse(ApiResponse response) {
+                return new FeedListData<FeedGift>(response.jsonResult, FeedGift.class);
+            }
+
+            @Override
             public void fail(int codeError, ApiResponse response) {
-                updateUI(new Runnable() {
-                    @Override
-                    public void run() {
-                        removeLoaderItem();
-                        mGifts.add(new FeedGift(ItemType.RETRY));
-                        mGridAdapter.notifyDataSetChanged();
-                    }
-                });
+                removeLoaderItem();
+                mGifts.add(new FeedGift(ItemType.RETRY));
+                mGridAdapter.notifyDataSetChanged();
                 mIsUpdating = false;
             }
         }).exec();

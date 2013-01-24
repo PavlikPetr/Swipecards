@@ -3,6 +3,12 @@ package com.topface.topface.data;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 
+/**
+ * @see ApiResponse#isCompleted()
+ * @deprecated
+ */
+@SuppressWarnings("deprecation")
+@Deprecated
 public class Confirmation extends AbstractData {
 
     public boolean completed;

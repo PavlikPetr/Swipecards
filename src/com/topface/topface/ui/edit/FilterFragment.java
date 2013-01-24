@@ -590,48 +590,32 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     @Override
     protected void refreshSaveState() {
         super.refreshSaveState();
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mExtraSaveButton != null) {
-                    if (hasChanges()) {
-                        mExtraSaveButton.setVisibility(View.VISIBLE);
-                    } else {
-                        mExtraSaveButton.setVisibility(View.INVISIBLE);
-                    }
-                }
+        if (mExtraSaveButton != null) {
+            if (hasChanges()) {
+                mExtraSaveButton.setVisibility(View.VISIBLE);
+            } else {
+                mExtraSaveButton.setVisibility(View.INVISIBLE);
             }
-        });
+        }
     }
 
     @Override
     protected void prepareRequestSend() {
         super.prepareRequestSend();
-        getActivity().runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-                if (mExtraSaveButton != null) {
-                    mExtraSaveButton.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
+        if (mExtraSaveButton != null) {
+            mExtraSaveButton.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
     protected void finishRequestSend() {
         super.finishRequestSend();
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mRightPrsBar != null) {
-                    if (hasChanges()) {
-                        if (mExtraSaveButton != null) {
-                            mExtraSaveButton.setVisibility(View.VISIBLE);
-                        }
-                    }
+        if (mRightPrsBar != null) {
+            if (hasChanges()) {
+                if (mExtraSaveButton != null) {
+                    mExtraSaveButton.setVisibility(View.VISIBLE);
                 }
             }
-        });
+        }
     }
 }

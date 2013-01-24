@@ -30,7 +30,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(new AuthToken(getApplicationContext()).isEmpty() || !CacheProfile.isLoaded()) {
+        if (new AuthToken(getApplicationContext()).isEmpty() || !CacheProfile.isLoaded()) {
             startAuth();
         }
     }
@@ -50,7 +50,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     }
 
 
-
     public void startAuth() {
         AuthFragment af = AuthFragment.newInstance();
         getSupportFragmentManager().beginTransaction().add(R.id.content, af, AUTH_TAG).commit();
@@ -61,7 +60,8 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         onInit();
     }
 
-    public void onInit() {}
+    public void onInit() {
+    }
 
     @Override
     public void onStart() {
@@ -75,6 +75,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         removeAllRequests();
         unregisterReceiver(mReauthReceiver);
     }
+
     private void removeAllRequests() {
         if (mRequests != null && mRequests.size() > 0) {
             for (ApiRequest request : mRequests) {
@@ -104,7 +105,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         //AuthFragment. Потому что фб приложение обязательно должно стартовать из активити
         //и ответ возвращать тоже в активити.
         Fragment authFragment = getSupportFragmentManager().findFragmentByTag(AUTH_TAG);
-        if(authFragment != null) {
+        if (authFragment != null) {
             authFragment.onActivityResult(requestCode, resultCode, data);
         }
     }

@@ -17,7 +17,7 @@ public class Static {
     public static final String AMPERSAND = "&";
     public static final String CLIENT_TYPE = "android";
     public static final String API_BETA_URL = "http://api.alpha.topface.com/?v=" + API_VERSION; //Beta API URL
-    public static final String API_URL = "https://api.topface.com/?v=" + API_VERSION;
+    public static final String API_URL = "http://api.topface.com/?v=" + API_VERSION;
 //    public static final String API_URL = API_BETA_URL;
     /**
      * Ревизия серверной части, используется толькро при тестировании на бете
@@ -48,6 +48,8 @@ public class Static {
     public static final String PREFERENCES_NOVICE_MENU_FILL_PROFILE_DATE = "novice_menu_fill_profile_date_tag";
     public static final String PREFERENCES_STOP_TIME = "preferences_stop_time";
     public static final String LOGOUT_INTENT = "com.topface.topface.intent.LOGOUT";
+    public static final boolean PAUSE_DOWNLOAD_ON_SCROLL = false;
+    public static final boolean PAUSE_DOWNLOAD_ON_FLING = true;
 
     // Profile
     //public static final String PREFERENCES_PROFILE_FILTER_GEO = "cache_profile_filter_geo";
