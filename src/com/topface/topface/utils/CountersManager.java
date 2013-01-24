@@ -3,6 +3,7 @@ package com.topface.topface.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
+import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.LeadersRequest;
 
 public class CountersManager {
@@ -13,8 +14,8 @@ public class CountersManager {
 
     private Context mContext;
 
-    private final static String DeniedMethod = "banner";
-
+    private final static String[] DeniedMethod = {BannerRequest.SERVICE_NAME, LeadersRequest.SERVICE_NAME};
+//    private final static String DeniedMethod = "banner";
     public final static String UPDATE_COUNTERS = "com.topface.topface.UPDATE_COUNTERS";
 
     public final static String NULL_METHOD = "null_method";
@@ -135,30 +136,44 @@ public class CountersManager {
     }
 
     public void setMethod(String method) {
-        if (method == null || !method.equals(LeadersRequest.SERVICE_NAME)) {
-            lastRequestMethod = method;
-        } else {
-            lastRequestMethod = DeniedMethod;
-        }
+        lastRequestMethod = method;
     }
 
     private void commitCounters() {
-        CacheProfile.unread_likes = likesCounter;
-        CacheProfile.unread_messages = dialogsCounter;
-        CacheProfile.unread_mutual = sympathyCounter;
-        CacheProfile.unread_visitors = visitorsCounter;
+        //Хз как тут сделать по-другому, подумаю еще
+        if(likesCounter != CacheProfile.unread_likes || dialogsCounter != CacheProfile.unread_messages ||
+                sympathyCounter != CacheProfile.unread_mutual || visitorsCounter != CacheProfile.unread_visitors) {
+            CacheProfile.unread_likes = likesCounter;
+            CacheProfile.unread_messages = dialogsCounter;
+            CacheProfile.unread_mutual = sympathyCounter;
+            CacheProfile.unread_visitors = visitorsCounter;
+            updateUICounters(); //кидаем broadcast о том, что счетчики обновились и причину их обновления
+            //название метода, если это запрос, или константу, если это GCM
+        } else {
 
-        updateUICounters(); //кидаем broadcast о том, что счетчики обновились и причину их обновления
-        //название метода, если это запрос, или константу, если это GCM
+            CacheProfile.unread_likes = likesCounter;
+            CacheProfile.unread_messages = dialogsCounter;
+            CacheProfile.unread_mutual = sympathyCounter;
+            CacheProfile.unread_visitors = visitorsCounter;
+        }
     }
 
     private void updateUICounters() {
         String method = lastRequestMethod == null ? NULL_METHOD : lastRequestMethod;
-        if (!method.equals(DeniedMethod)) {
+        if (!checkMethodIsDenyed(method)) {
             Intent intent = new Intent(UPDATE_COUNTERS);
             intent.putExtra(METHOD_INTENT_STRING, method);
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
         }
         setMethod(NULL_METHOD);
+    }
+
+    private boolean checkMethodIsDenyed(String method) {
+        for (String denyed : DeniedMethod) {
+            if(denyed.equals(method)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

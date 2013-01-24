@@ -34,6 +34,7 @@ import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryView;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.NavigationBarController;
@@ -633,9 +634,25 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     private void updateDataAfterReceivingCounters(String lastMethod) {
         if (!lastMethod.equals(CountersManager.NULL_METHOD) && !lastMethod.equals(getRequest().getServiceName())) {
-            if (CountersManager.getInstance(getActivity()).getCounter(getTypeForCounters()) > 0) {
-                updateData(true, false);
+            int counters = CountersManager.getInstance(getActivity()).getCounter(getTypeForCounters());
+            if (counters > 0) {
+                    updateData(true, false);
             }
+        }
+    }
+
+    private int getUnreadCountersByType(int type) {
+        switch (type) {
+            case CountersManager.LIKES:
+                return CacheProfile.unread_likes;
+            case CountersManager.DIALOGS:
+                return CacheProfile.unread_messages;
+            case CountersManager.SYMPATHY:
+                return CacheProfile.unread_mutual;
+            case CountersManager.VISITORS:
+                return CacheProfile.unread_visitors;
+            default:
+                return 0;
         }
     }
 

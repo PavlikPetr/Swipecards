@@ -41,6 +41,7 @@ abstract public class ApiHandler extends Handler {
                 success(response);
                 sendUpdateIntent(response);
             }
+            Debug.log("D_REQUEST::handler_end");
         } catch (Exception e) {
             Debug.error("ApiHandler exception", e);
             fail(ApiResponse.ERRORS_PROCCESED, new ApiResponse(ApiResponse.ERRORS_PROCCESED, e.getMessage()));

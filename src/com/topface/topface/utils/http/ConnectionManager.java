@@ -204,9 +204,10 @@ public class ConnectionManager {
 
         try {
             //BasicHttpContext httpContext = new BasicHttpContext();
+            Debug.log("D_REQUEST::start");
             HttpResponse httpResponse = httpClient.execute(httpPost/* ,
                                                                     * httpContext */);
-
+            Debug.log("D_REQUEST::end");
             HttpEntity httpEntity = httpResponse.getEntity();
             if (httpEntity != null) {
                 InputStream is = AndroidHttpClient.getUngzippedContent(httpEntity);

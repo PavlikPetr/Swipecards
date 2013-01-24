@@ -20,6 +20,7 @@ import com.adfonic.android.api.Request;
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -36,6 +37,7 @@ import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.Utils;
 import ru.wapstart.plus1.sdk.Plus1BannerAsker;
@@ -157,6 +159,12 @@ public class BannerBlock {
                         mBannerView.setLayoutParams(params);
                         mBannerView.invalidate();
                     }
+                }
+
+                @Override
+                public void onLoadingFailed(FailReason failReason) {
+                    super.onLoadingFailed(failReason);
+                    Debug.log("LOAD FAILED::" + failReason.toString());
                 }
             });
             sendStat(getBannerName(banner.url), "view");

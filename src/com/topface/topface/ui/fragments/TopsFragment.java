@@ -122,8 +122,10 @@ public class TopsFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 try {
-                    ((NavigationActivity) getActivity()).onExtraFragment(
-                            ProfileFragment.newInstance(mTopsList.get(position).uid, ProfileFragment.TYPE_USER_PROFILE));
+
+                    int type = (mTopsList.get(position).uid == CacheProfile.uid)? ProfileFragment.TYPE_MY_PROFILE : ProfileFragment.TYPE_USER_PROFILE;
+                    ((NavigationActivity)getActivity()).onExtraFragment(
+                            ProfileFragment.newInstance(mTopsList.get(position).uid, type));
                 } catch (Exception e) {
                     Debug.log(TopsFragment.this, "start UserProfileActivity exception:" + e.toString());
                 }
