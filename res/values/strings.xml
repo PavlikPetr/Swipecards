@@ -305,4 +305,7 @@
     <string name="popup_version_message">Time to update your version!</string>
     <string name="popup_version_update">Update</string>
     <string name="popup_version_cancel">Remind me later</string>
+    <string name="general_version_not_supported">Your application version is now unsupported. Please update your application.
+    </string>
+    <string name="default_price_format">Total: %.2f USD</string>
 </resources>
