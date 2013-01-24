@@ -303,4 +303,10 @@
         <item quantity="other">Зараз у вас %d симпатій!</item>
         <item quantity="one">Зараз у вас %d симпатія!</item>
     </plurals>
+    <string name="profile_ask_sent">Прохання відправлено</string>
+    <string name="virus_error">За добу ваш друг може подарувати симпатії тільки 1 раз! Спробуйте завтра!</string>
+    <string name="popup_version_title">Доступна нова версія додатка</string>
+    <string name="popup_version_message">Час оновити свою версію!</string>
+    <string name="popup_version_update">Оновити</string>
+    <string name="popup_version_cancel">Нагадати пізніше</string>
 </resources>
