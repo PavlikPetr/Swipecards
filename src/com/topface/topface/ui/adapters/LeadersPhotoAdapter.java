@@ -31,6 +31,39 @@ public class LeadersPhotoAdapter extends BaseAdapter {
         mAlbumsList = albumList;
         mInflater = LayoutInflater.from(context);
         mPhotoSelector = selector;
+
+        sortPhotosByRating();
+    }
+
+    private void sortPhotosByRating() {
+        int[] likes = new int[mAlbumsList.size()];
+        int i = 0;
+        for (Photo photo: mAlbumsList) {
+            likes[i] = photo.mLiked;
+            i++;
+        }
+
+        qSort(0, i-1);
+    }
+
+    public void qSort(int low, int high) {
+        int i = low;
+        int j = high;
+        int x = mAlbumsList.get((low+high)/2).mLiked;
+        do {
+            while(mAlbumsList.get(i).mLiked > x) ++i;  // поиск элемента для переноса в старшую часть
+            while(mAlbumsList.get(j).mLiked < x) --j;  // поиск элемента для переноса в младшую часть
+            if(i <= j){
+                // обмен элементов местами:
+                Photo temp = mAlbumsList.get(i);
+                mAlbumsList.set(i, mAlbumsList.get(j));
+                mAlbumsList.set(j, temp);
+                // переход к следующим элементам:
+                i++; j--;
+            }
+        } while(i < j);
+        if(low < j) qSort(low, j);
+        if(i < high) qSort(i, high);
     }
 
     @Override
