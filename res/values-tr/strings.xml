@@ -306,6 +306,4 @@
     <string name="popup_version_message">Versiyonu yenilemek için tam zamanı!</string>
     <string name="popup_version_update">Yenilemek</string>
     <string name="popup_version_cancel">Daha sonra hatırlat</string>
-    <string name="general_version_not_supported">Uygulamanızın versiyonu eskilindi ve artık desteklenmiyor. Lütfen, uygulamayı yenileyiniz</string>
-    <string name="leaders_select_photo_info">En etkileyici foto seçiniz! Düşük reytingle fotoğrafları seçilenmez</string>
 </resources>

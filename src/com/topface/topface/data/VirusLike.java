@@ -11,13 +11,13 @@ import com.facebook.topface.Facebook;
 import com.facebook.topface.FacebookError;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.App;
-import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.VirusLikesRequest;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.social.AuthToken;
+import com.topface.topface.utils.social.AuthorizationManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -103,8 +103,8 @@ public class VirusLike extends AbstractData {
             final ArrayList<Long> socialIdForRequest = getSocialIdForRequest();
             params.putString("to", TextUtils.join(",", socialIdForRequest));
             //Показываем диалог прилашения
-            Data.facebook.setAccessToken(new AuthToken(context).getTokenKey());
-            Data.facebook.dialog(context, "apprequests", params, new VirusLikeDialogListener(context) {
+            AuthorizationManager.getFacebook().setAccessToken(new AuthToken(context).getTokenKey());
+            AuthorizationManager.getFacebook().dialog(context, "apprequests", params, new VirusLikeDialogListener(context) {
 
                 @Override
                 public void onComplete(Bundle values) {

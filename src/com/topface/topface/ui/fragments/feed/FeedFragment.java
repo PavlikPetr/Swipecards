@@ -16,8 +16,10 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.*;
@@ -35,9 +37,7 @@ import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryView;
-import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.NavigationBarController;
+import com.topface.topface.utils.*;
 import org.json.JSONObject;
 
 import static android.widget.AdapterView.OnItemClickListener;
@@ -194,7 +194,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
         mListAdapter = getNewAdapter();
         getListAdapter().setOnAvatarClickListener(this);
-        mListView.setOnScrollListener(getListAdapter());
+        mListView.setOnScrollListener(
+                new PauseOnScrollListener(Static.PAUSE_DOWNLOAD_ON_SCROLL, Static.PAUSE_DOWNLOAD_ON_FLING, getListAdapter())
+        );
 
         ImageView iv = new ImageView(getActivity().getApplicationContext());
         iv.setBackgroundResource(R.drawable.im_header_item_list_bg);
@@ -297,14 +299,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 .callback(new VipApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (getListAdapter() != null) {
-                                    getListAdapter().removeItem(position);
-                                }
-                            }
-                        });
+                        if (getListAdapter() != null) {
+                            getListAdapter().removeItem(position);
+                        }
                     }
                 }).exec();
     }
@@ -316,13 +313,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         dr.callback(new SimpleApiHandler() {
             @Override
             public void success(ApiResponse response) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mLockView.setVisibility(View.GONE);
-                        getListAdapter().removeItem(position);
-                    }
-                });
+                mLockView.setVisibility(View.GONE);
+                getListAdapter().removeItem(position);
             }
 
             @Override
@@ -404,76 +396,79 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         }
         request.limit = FeedAdapter.LIMIT;
         request.unread = isShowUnreadItems();
-        request.callback(new ApiHandler() {
+        request.callback(new DataApiHandler<FeedListData<T>>() {
+
             @Override
-            public void success(final ApiResponse response) {
-                final FeedListData<T> dialogList = getFeedList(response.jsonResult);
-                updateUI(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (isHistoryLoad) {
-                            getListAdapter().addData(dialogList);
-                        } else if (isPushUpdating) {
-                            if (makeItemsRead) {
-                                makeAllItemsRead();
-                            }
-                            mListAdapter.addDataFirst(dialogList);
-                        } else {
-                            getListAdapter().setData(dialogList);
-                        }
-                        onUpdateSuccess(isPushUpdating || isHistoryLoad);
-                        mListView.onRefreshComplete();
-                        mListView.setVisibility(View.VISIBLE);
-                        mIsUpdating = false;
-                        if (mNavBarController != null) mNavBarController.refreshNotificators();
+            protected FeedListData<T> parseResponse(ApiResponse response) {
+                return getFeedList(response.jsonResult);
+            }
+
+            @Override
+            protected void success(FeedListData<T> data, ApiResponse response) {
+                if (isHistoryLoad) {
+                    getListAdapter().addData(data);
+                } else if (isPushUpdating) {
+                    if (makeItemsRead) {
+                        makeAllItemsRead();
                     }
-                });
+                    mListAdapter.addDataFirst(data);
+                } else {
+                    getListAdapter().setData(data);
+                }
+                onUpdateSuccess(isPushUpdating || isHistoryLoad);
+                mListView.onRefreshComplete();
+                mListView.setVisibility(View.VISIBLE);
+                mIsUpdating = false;
+                if (mNavBarController != null) mNavBarController.refreshNotificators();
             }
 
             @Override
             public void fail(final int codeError, ApiResponse response) {
-
-                updateUI(new Runnable() {
-                    @Override
-                    public void run() {
-                        Activity activity = getActivity();
-                        if (activity != null) {
-                            if (isHistoryLoad) {
-                                getListAdapter().showRetryItem();
-                            }
-                            if (updateErrorMessage != null) {
-                                switch (codeError) {
-                                    case ApiResponse.PREMIUM_ACCESS_ONLY:
-                                        updateErrorMessage.showOnlyMessage(false);
-                                        updateErrorMessage.addBlueButton(getString(R.string.buying_vip_status), new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
-                                                startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
-                                            }
-                                        });
-                                        if (FeedFragment.this instanceof VisitorsFragment) {
-                                            updateErrorMessage.setErrorMsg(getString(R.string.buying_vip_info));
-                                        } else {
-                                            updateErrorMessage.setErrorMsg(getString(R.string.general_premium_access_error));
-                                        }
-                                        break;
-                                    default:
-                                        updateErrorMessage.showOnlyMessage(false);
-                                        updateErrorMessage.setErrorMsg(getString(R.string.general_data_error));
-                                        break;
-                                }
-                            }
-                            Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                            onUpdateFail(isPushUpdating || isHistoryLoad);
-                            mListView.onRefreshComplete();
-                            mListView.setVisibility(View.VISIBLE);
-                            mIsUpdating = false;
-                        }
+                Activity activity = getActivity();
+                if (activity != null) {
+                    if (isHistoryLoad) {
+                        getListAdapter().showRetryItem();
                     }
-                });
+                    showUpdateErrorMessage(codeError);
+
+                    //Если это не ошибка доступа, то показываем стандартное сообщение об ошибке
+                    if (codeError != ApiResponse.PREMIUM_ACCESS_ONLY) {
+                        Utils.showErrorMessage(activity);
+                    }
+                    onUpdateFail(isPushUpdating || isHistoryLoad);
+                    mListView.onRefreshComplete();
+                    mListView.setVisibility(View.VISIBLE);
+                    mIsUpdating = false;
+                }
             }
+
         }).exec();
+    }
+
+    private void showUpdateErrorMessage(int codeError) {
+        if (updateErrorMessage != null) {
+            switch (codeError) {
+                case ApiResponse.PREMIUM_ACCESS_ONLY:
+                    updateErrorMessage.showOnlyMessage(false);
+                    updateErrorMessage.addBlueButton(getString(R.string.buying_vip_status), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
+                            startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                        }
+                    });
+                    if (FeedFragment.this instanceof VisitorsFragment) {
+                        updateErrorMessage.setErrorMsg(getString(R.string.buying_vip_info));
+                    } else {
+                        updateErrorMessage.setErrorMsg(getString(R.string.general_premium_access_error));
+                    }
+                    break;
+                default:
+                    updateErrorMessage.showOnlyMessage(false);
+                    updateErrorMessage.setErrorMsg(getString(R.string.general_data_error));
+                    break;
+            }
+        }
     }
 
     protected FeedAdapter<T> getListAdapter() {
@@ -649,9 +644,25 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     private void updateDataAfterReceivingCounters(String lastMethod) {
         if (!lastMethod.equals(CountersManager.NULL_METHOD) && !lastMethod.equals(getRequest().getServiceName())) {
-            if (CountersManager.getInstance(getActivity()).getCounter(getTypeForCounters()) > 0) {
+            int counters = CountersManager.getInstance(getActivity()).getCounter(getTypeForCounters());
+            if (counters > 0) {
                 updateData(true, false);
             }
+        }
+    }
+
+    private int getUnreadCountersByType(int type) {
+        switch (type) {
+            case CountersManager.LIKES:
+                return CacheProfile.unread_likes;
+            case CountersManager.DIALOGS:
+                return CacheProfile.unread_messages;
+            case CountersManager.SYMPATHY:
+                return CacheProfile.unread_mutual;
+            case CountersManager.VISITORS:
+                return CacheProfile.unread_visitors;
+            default:
+                return 0;
         }
     }
 

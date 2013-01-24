@@ -213,7 +213,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mNovice = Novice.getInstance(preferences);
         mNoviceLayout = (NoviceLayout) view.findViewById(R.id.loNovice);
 
-        mPreloadManager = new PreloadManager(getActivity());
+        mPreloadManager = new PreloadManager();
         emptySearchDialog = new RetryView(getActivity());
         emptySearchDialog.setErrorMsg(App.getContext().getString(R.string.general_search_null_response_error));
         emptySearchDialog.addButton(RetryView.REFRESH_TEMPLATE + App.getContext().getString(R.string.general_dialog_retry), new OnClickListener() {
@@ -255,52 +255,52 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         SearchRequest searchRequest = new SearchRequest(getActivity());
         registerRequest(searchRequest);
         searchRequest.limit = SEARCH_LIMIT;
-        searchRequest.geo = preferences.getBoolean(App.getContext().getString(R.string.cache_profile_filter_geo),
-                false);
+        searchRequest.geo = preferences.getBoolean(
+                App.getContext().getString(R.string.cache_profile_filter_geo),
+                false
+        );
         searchRequest.online = preferences.getBoolean(
-                App.getContext().getString(R.string.cache_profile_filter_online), false);
-        searchRequest.callback(new ApiHandler() {
+                App.getContext().getString(R.string.cache_profile_filter_online),
+                false
+        );
+
+        searchRequest.callback(new DataApiHandler<Search>() {
+
             @Override
-            public void success(ApiResponse response) {
-                final Search userList = new Search(response);
-                updateUI(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (userList.size() != 0) {
-                            mImageSwitcher.setVisibility(View.VISIBLE);
-                            if (isAddition) {
-                                mUserSearchList.addAll(userList);
-                                unlockControls();
-                            } else {
-                                mUserSearchList.clear();
-                                mUserSearchList.addAll(userList);
-                                Data.searchPosition = -1;
-                                onUpdateSuccess(isAddition);
-                                showNextUser();
-                                unlockControls();
-                            }
-                        } else {
-                            mImageSwitcher.setVisibility(View.GONE);
-                            mProgressBar.setVisibility(View.GONE);
-                            emptySearchDialog.setVisibility(View.VISIBLE);
-                        }
-
+            protected void success(Search search, ApiResponse response) {
+                if (search.size() != 0) {
+                    mImageSwitcher.setVisibility(View.VISIBLE);
+                    if (isAddition) {
+                        mUserSearchList.addAll(search);
+                        unlockControls();
+                    } else {
+                        mUserSearchList.clear();
+                        mUserSearchList.addAll(search);
+                        Data.searchPosition = -1;
+                        onUpdateSuccess(isAddition);
+                        showNextUser();
+                        unlockControls();
                     }
-                });
+                } else {
+                    mImageSwitcher.setVisibility(View.GONE);
+                    mProgressBar.setVisibility(View.GONE);
+                    emptySearchDialog.setVisibility(View.VISIBLE);
+                }
 
+            }
+
+
+            @Override
+            protected Search parseResponse(ApiResponse response) {
+                return new Search(response);
             }
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                updateUI(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getActivity(), App.getContext().getString(R.string.general_data_error),
-                                Toast.LENGTH_SHORT).show();
-                        onUpdateFail(isAddition);
-                        unlockControls();
-                    }
-                });
+                Toast.makeText(getActivity(), App.getContext().getString(R.string.general_data_error),
+                        Toast.LENGTH_SHORT).show();
+                onUpdateFail(isAddition);
+                unlockControls();
             }
         }).exec();
     }
@@ -548,30 +548,33 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mResourcesLikes.setText(getResources().getString(R.string.default_resource_value));
             NoviceLikesRequest noviceLikesRequest = new NoviceLikesRequest(getActivity());
             registerRequest(noviceLikesRequest);
-            noviceLikesRequest.callback(new ApiHandler() {
+            noviceLikesRequest.callback(new DataApiHandler<NoviceLikes>() {
+
                 @Override
-                public void success(ApiResponse response) {
-                    NoviceLikes noviceLikes = NoviceLikes.parse(response);
+                protected void success(NoviceLikes noviceLikes, ApiResponse response) {
                     CacheProfile.likes = noviceLikes.likes;
                     Novice.giveNoviceLikesQuantity = noviceLikes.increment;
                     final String text = String.format(
                             getResources().getString(R.string.novice_sympathies_bonus),
-                            Novice.giveNoviceLikesQuantity, Novice.giveNoviceLikesQuantity);
-                    updateUI(new Runnable() {
-                        @Override
-                        public void run() {
-                            mResourcesLikes.setText(Integer.toString(CacheProfile.likes));
-                            mNoviceLayout.setLayoutRes(R.layout.novice_sympathies_bonus, null,
-                                    null, text);
-                            mNoviceLayout.startAnimation(mAlphaAnimation);
-                            mNovice.completeShowBatteryBonus();
-                        }
-                    });
+                            Novice.giveNoviceLikesQuantity,
+                            Novice.giveNoviceLikesQuantity
+                    );
+                    mResourcesLikes.setText(Integer.toString(CacheProfile.likes));
+                    mNoviceLayout.setLayoutRes(R.layout.novice_sympathies_bonus, null,
+                            null, text);
+                    mNoviceLayout.startAnimation(mAlphaAnimation);
+                    mNovice.completeShowBatteryBonus();
+                }
+
+                @Override
+                protected NoviceLikes parseResponse(ApiResponse response) {
+                    return NoviceLikes.parse(response);
                 }
 
                 @Override
                 public void fail(int codeError, ApiResponse response) {
                 }
+
             }).exec();
         } else if (mNovice.isShowBuySympathies() && hasOneSympathyOrDelight && CacheProfile.likes <= Novice.MIN_LIKES_QUANTITY) {
             mNoviceLayout.setLayoutRes(R.layout.novice_energy, new OnClickListener() {
@@ -794,12 +797,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     };
 
     private void updateResources() {
-        updateUI(new Runnable() {
-            @Override
-            public void run() {
-                mResourcesLikes.setText(Integer.toString(CacheProfile.likes));
-                mResourcesMoney.setText(Integer.toString(CacheProfile.money));
-            }
-        });
+        mResourcesLikes.setText(Integer.toString(CacheProfile.likes));
+        mResourcesMoney.setText(Integer.toString(CacheProfile.money));
     }
 }

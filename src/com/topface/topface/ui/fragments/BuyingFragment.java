@@ -133,32 +133,32 @@ public class BuyingFragment extends BillingFragment {
             root.findViewById(R.id.likes_title).setVisibility(View.VISIBLE);
         }
 
-        if(CacheProfile.getOptions().likes.isEmpty() && CacheProfile.getOptions().coins.isEmpty()) {
+        if (CacheProfile.getOptions().likes.isEmpty() && CacheProfile.getOptions().coins.isEmpty()) {
             root.findViewById(R.id.fbBuyingDisabled).setVisibility(View.VISIBLE);
         }
 
-        for (Options.BuyButton curButton: CacheProfile.getOptions().likes) {
+        for (Options.BuyButton curButton : CacheProfile.getOptions().likes) {
             RelativeLayout newButton = Options.setButton(likesButtons, curButton, getActivity(), new Options.BuyButtonClickListener() {
                 @Override
                 public void onClick(String id) {
                     buyItem(id);
                 }
             });
-            if(newButton != null) {
+            if (newButton != null) {
                 purchaseButtons.add(newButton);
             }
         }
 
 
         LinearLayout coinsButtons = (LinearLayout) root.findViewById(R.id.fbCoins);
-        for (Options.BuyButton curButton: CacheProfile.getOptions().coins) {
+        for (Options.BuyButton curButton : CacheProfile.getOptions().coins) {
             RelativeLayout newButton = Options.setButton(coinsButtons, curButton, getActivity(), new Options.BuyButtonClickListener() {
                 @Override
                 public void onClick(String id) {
                     buyItem(id);
                 }
             });
-            if(newButton != null) {
+            if (newButton != null) {
                 purchaseButtons.add(newButton);
             }
         }
@@ -188,7 +188,7 @@ public class BuyingFragment extends BillingFragment {
         RelativeLayout vipTitle = (RelativeLayout) root.findViewById(R.id.fbVipTitle);
 
 
-        if (CacheProfile.getOptions().premium.isEmpty()) {
+        if (CacheProfile.getOptions().premium.isEmpty() || CacheProfile.premium) {
             vipTitle.setVisibility(View.GONE);
             vipBtn.setVisibility(View.GONE);
         } else {
@@ -206,7 +206,7 @@ public class BuyingFragment extends BillingFragment {
 
     @Override
     public void onInAppBillingSupported() {
-        for (RelativeLayout btn: purchaseButtons)  {
+        for (RelativeLayout btn : purchaseButtons) {
             btn.setEnabled(true);
         }
     }
@@ -218,7 +218,7 @@ public class BuyingFragment extends BillingFragment {
 
     @Override
     public void onInAppBillingUnsupported() {
-        for (RelativeLayout btn: purchaseButtons)  {
+        for (RelativeLayout btn : purchaseButtons) {
             btn.setEnabled(false);
         }
         Toast.makeText(getActivity().getApplicationContext(), getString(R.string.buy_play_market_not_available), Toast.LENGTH_SHORT).show();

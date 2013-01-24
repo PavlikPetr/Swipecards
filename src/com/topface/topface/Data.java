@@ -2,11 +2,8 @@ package com.topface.topface;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.Point;
-import com.facebook.topface.Facebook;
 import com.topface.topface.data.City;
-import com.topface.topface.data.Photos;
 import com.topface.topface.data.SearchUser;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Device;
@@ -18,10 +15,7 @@ import java.util.LinkedList;
 public class Data {
     // Data
     public static String SSID;
-    public static Bitmap friendAvatar;
-    public static Facebook facebook;
     public static LinkedList<City> cityList;
-    public static Photos photos;
     public static int screen_width;
     public static LinkedList<SearchUser> searchList;
     public static int searchPosition = 0;
@@ -29,9 +23,6 @@ public class Data {
     public static void init(Context context) {
         //removeSSID(context); // for test
         loadSSID(context);
-
-        // Facebook Connection
-        facebook = new Facebook(Static.AUTH_FACEBOOK_ID);
 
         //noinspection deprecation
         Point screenSize = Utils.getSrceenSize(context);

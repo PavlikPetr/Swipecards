@@ -1,9 +1,8 @@
 package com.topface.topface.imageloader;
 
-import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.widget.ImageView;
-import android.widget.ListView;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -23,6 +22,7 @@ public class DefaultImageLoader {
     public static final int DISC_CACHE_SIZE = 10 * 1024 * 1024;
     public static final int MEMORY_CACHE_SIZE = 2 * 1024 * 1024;
     private final Context mContext;
+    private DisplayImageOptions mOptimizedConfig;
 
     public DefaultImageLoader(Context context) {
         mContext = context;
@@ -42,13 +42,29 @@ public class DefaultImageLoader {
         return builder;
     }
 
+    /**
+     * Этот конфиг испольхуется только для показа фотографий не требующих прозрачности
+     */
+    protected DisplayImageOptions getOptimizedDisplayImageConfig() {
+        if (mOptimizedConfig == null) {
+            DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder();
+            builder.cacheInMemory();
+            builder.cacheOnDisc();
+            builder.imageScaleType(ImageScaleType.EXACTLY);
+            builder.bitmapConfig(Bitmap.Config.RGB_565);
+            builder.resetViewBeforeLoading();
+            builder.showImageForEmptyUri(R.drawable.im_photo_error);
+            mOptimizedConfig = builder.build();
+        }
+        return mOptimizedConfig;
+    }
+
     protected DisplayImageOptions.Builder getDisplayImageConfig() {
         DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder();
         builder.cacheInMemory();
         builder.cacheOnDisc();
-        builder.imageScaleType(ImageScaleType.EXACT);
+        builder.imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2);
         builder.resetViewBeforeLoading();
-        //builder.showStubImage(R.drawable.loader);
         builder.showImageForEmptyUri(R.drawable.im_photo_error);
         return builder;
     }
@@ -62,7 +78,6 @@ public class DefaultImageLoader {
      *
      * @return инстанс загрузчика изображений
      */
-    @Deprecated
     public static DefaultImageLoader getInstance() {
         if (mInstance == null) {
             mInstance = new DefaultImageLoader(App.getContext());
@@ -71,16 +86,12 @@ public class DefaultImageLoader {
         return mInstance;
     }
 
-    public static DefaultImageLoader getInstance(Activity activity) {
-        if (mInstance == null) {
-            mInstance = new DefaultImageLoader(activity);
-        }
-
-        return mInstance;
-    }
-
     public void displayImage(String uri, ImageView imageView, DisplayImageOptions options, ImageLoadingListener listener, ImagePostProcessor postProcessor) {
         try {
+            //Если не задан пост-процессор, то используем оптимизированную версию конфига
+            if (options == null && postProcessor == null) {
+                options = mOptimizedConfig;
+            }
             getImageLoader().displayImage(uri, imageView, options, listener, postProcessor);
         } catch (Exception e) {
             Debug.error("ImageLoader displayImage error", e);
@@ -119,9 +130,7 @@ public class DefaultImageLoader {
     }
 
     public void preloadImage(String uri, ImageLoadingListener listener) {
-        ImageView fakeImageView = new ImageView(mContext);
-        fakeImageView.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.MATCH_PARENT));
-        displayImage(uri, fakeImageView, listener);
+        getImageLoader().loadImage(mContext, uri, listener);
     }
 
 

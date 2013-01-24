@@ -8,11 +8,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
-import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.User;
-import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.Utils;
 
@@ -60,7 +58,6 @@ public class UserPhotoFragment extends BaseFragment {
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
-            Data.photos = mUser.photos;
             Intent intent = new Intent(getActivity().getApplicationContext(), PhotoSwitcherActivity.class);
             intent.putExtra(PhotoSwitcherActivity.INTENT_USER_ID, mUser.uid);
             intent.putExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, position);

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="time_now">지금 당장</string>
+    <string name="time_now">지금 바로</string>
     <plurals name="time_hour">
-        <item quantity="other">%d 시간 이전에</item>
+        <item quantity="zero">한 시간 전에</item>
+        <item quantity="other">%d 시간 전에</item>
     </plurals>
     <plurals name="time_minute">
         <item quantity="zero">%d 분 전에</item>
@@ -13,13 +14,13 @@
     </plurals>
     <string name="time_yesterday">어제</string>
     <string name="time_today">오늘</string>
-    <string name="time_monday">월요일</string>
-    <string name="time_tuesday">화요일</string>
-    <string name="time_wednesday">수요일</string>
-    <string name="time_thursday">목요일</string>
-    <string name="time_friday">금요일</string>
-    <string name="time_saturday">토요일</string>
-    <string name="time_sunday">일요일</string>
+    <string name="time_monday">월</string>
+    <string name="time_tuesday">화</string>
+    <string name="time_wednesday">수</string>
+    <string name="time_thursday">목</string>
+    <string name="time_friday">금</string>
+    <string name="time_saturday">토</string>
+    <string name="time_sunday">일</string>
     <string name="time_january">1월</string>
     <string name="time_february">2월</string>
     <string name="time_march">3월</string>

@@ -304,6 +304,4 @@
     <string name="popup_version_message">È ora di aggiornare la versione!</string>
     <string name="popup_version_update">Aggiorna</string>
     <string name="popup_version_cancel">Ricordamelo più tardi</string>
-    <string name="general_version_not_supported">La versione che stai usando è obsoleta e non viene più supportata. Per favore aggiorna la versione dell’applicazione</string>
-    <string name="leaders_select_photo_info">Scegli la tua foto migliore! Non puoi scegliere le foto con un voto basso</string>
 </resources>

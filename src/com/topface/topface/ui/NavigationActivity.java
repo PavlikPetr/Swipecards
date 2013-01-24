@@ -18,10 +18,7 @@ import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.OptionsRequest;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.fragments.*;
 import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
@@ -40,7 +37,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     public static final String RATING_POPUP = "RATING_POPUP";
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
     public static final int RATE_POPUP_TIMEOUT = 86400000; // 1000 * 60 * 60 * 24 * 1 (1 сутки)
-    public static final int UPDATE_INTERVAL = 1 * 60 * 1000;
+    public static final int UPDATE_INTERVAL = 10 * 60 * 1000;
     private FragmentManager mFragmentManager;
     private MenuFragment mFragmentMenu;
     private FragmentSwitchController mFragmentSwitcher;
@@ -48,8 +45,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private SharedPreferences mPreferences;
     private NoviceLayout mNoviceLayout;
     private Novice mNovice;
-
-    private boolean needShowUpdateAppPopup = false;
 
     private BroadcastReceiver mServerResponseReceiver;
 
@@ -74,9 +69,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mNovice = Novice.getInstance(mPreferences);
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
 
-        if (App.isOnline()) {
-            ratingPopup();
-        }
     }
 
     private void initFragmentSwitcher() {
@@ -109,9 +101,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             startActivity(editIntent);
             finish();
         } else {
-//            if(needShowUpdateAppPopup) {
             checkVersion(CacheProfile.getOptions().max_version);
-//            }
+
         }
 
     }
@@ -138,22 +129,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     protected void onResume() {
         super.onResume();
-        long startTime = Calendar.getInstance().getTimeInMillis();
-        long stopTime = mPreferences.getLong(Static.PREFERENCES_STOP_TIME, -1);
-        if (stopTime != -1) {
-            if (startTime - stopTime > UPDATE_INTERVAL) {
-                ProfileRequest pr = new ProfileRequest(this);
-                pr.callback(new ApiHandler() {
-                    @Override
-                    public void success(ApiResponse response) {
-                    }
-
-                    @Override
-                    public void fail(int codeError, ApiResponse response) {
-                    }
-                }).exec();
-            }
-        }
+        checkProfileUpdate();
 
         //Отправляем не обработанные запросы на покупку
         BillingUtils.sendQueueItems();
@@ -161,9 +137,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mServerResponseReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-//                String version = intent.getStringExtra(OptionsRequest.MAX_VERSION);
-//                checkVersion(version);
-                needShowUpdateAppPopup = true;
             }
         };
 
@@ -176,6 +149,16 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             mChatInvoke = true;
         }
 
+    }
+
+    private void checkProfileUpdate() {
+        long startTime = Calendar.getInstance().getTimeInMillis();
+        long stopTime = mPreferences.getLong(Static.PREFERENCES_STOP_TIME, -1);
+        if (stopTime != -1) {
+            if (startTime - stopTime > UPDATE_INTERVAL) {
+                App.sendProfileRequest();
+            }
+        }
     }
 
     private void checkVersion(String version) {
@@ -195,6 +178,14 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 }
                 if (splittedCurVersion.length < splittedVersion.length) {
                     showOldVersionPopup();
+                } else {
+                    if (App.isOnline()) {
+                        ratingPopup();
+                    }
+                }
+            } else {
+                if (App.isOnline()) {
+                    ratingPopup();
                 }
             }
         } catch (Exception e) {

@@ -1,10 +1,10 @@
 package com.topface.topface.ui.views;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -136,7 +136,7 @@ public class ImageViewRemote extends ImageView {
         }
 
 
-        if (remoteSrc != null && remoteSrc.trim().length() > 0) {
+        if (!TextUtils.isEmpty(remoteSrc) && !TextUtils.equals(mCurrentSrc, remoteSrc)) {
             if (!remoteSrc.equals(mCurrentSrc)) {
                 mCurrentSrc = remoteSrc;
                 mIsAnimationEnabled = true;
@@ -148,15 +148,10 @@ public class ImageViewRemote extends ImageView {
                 super.setImageBitmap(null);
             }
 
-            //Начинаем загрузку только если ImageViewRemote внутри контекста активити
-            Context context = getContext();
-            if (context instanceof Activity) {
-                getImageLoader((Activity) context)
-                        .displayImage(remoteSrc, this, null, getListener(handler, remoteSrc), getPostProcessor());
-            } else {
-                getImageLoader()
-                        .displayImage(remoteSrc, this, null, getListener(handler, remoteSrc), getPostProcessor());
-            }
+
+            getImageLoader()
+                    .displayImage(remoteSrc, this, null, getListener(handler, remoteSrc), getPostProcessor());
+
 
         } else {
             isCorrectSrc = false;
@@ -171,6 +166,9 @@ public class ImageViewRemote extends ImageView {
     @Override
     public void setImageBitmap(Bitmap bm) {
         super.setImageBitmap(bm);
+        if (bm == null) {
+            mCurrentSrc = null;
+        }
         if (bm != null && mLoader != null) {
             mLoader.setVisibility(View.GONE);
         }
@@ -189,10 +187,6 @@ public class ImageViewRemote extends ImageView {
         return setRemoteSrc(remoteSrc, null);
     }
 
-    public DefaultImageLoader getImageLoader(Activity activity) {
-        return DefaultImageLoader.getInstance(activity);
-    }
-
     public DefaultImageLoader getImageLoader() {
         //noinspection deprecation
         return DefaultImageLoader.getInstance();
@@ -203,7 +197,7 @@ public class ImageViewRemote extends ImageView {
     }
 
     public boolean setPhoto(Photo photo) {
-        return setPhoto(photo, null);
+        return setPhoto(photo, null, null);
     }
 
     public boolean setPhoto(Photo photo, Handler handler) {

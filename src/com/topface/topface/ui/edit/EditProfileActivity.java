@@ -190,7 +190,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     Intent intent = new Intent(this, NavigationActivity.class);
                     intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_VIP_PROFILE);
                     SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-                    preferences.edit().putBoolean(Static.PREFERENCES_TAG_NEED_EDIT,false).commit();
+                    preferences.edit().putBoolean(Static.PREFERENCES_TAG_NEED_EDIT, false).commit();
                     startActivity(intent);
                 }
                 finish();
@@ -249,14 +249,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                             CacheProfile.city_id = city_id;
                             CacheProfile.city_name = city_name;
                             CacheProfile.city_full = city_full;
-                            runOnUiThread(new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    mEditCity.setText(CacheProfile.city_name);
-
-                                }
-                            });
+                            mEditCity.setText(CacheProfile.city_name);
                         }
 
                         @Override

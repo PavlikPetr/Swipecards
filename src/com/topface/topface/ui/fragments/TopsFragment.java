@@ -9,14 +9,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.data.Top;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.CitiesRequest;
+import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.TopRequest;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.TopsAdapter;
@@ -121,8 +122,10 @@ public class TopsFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 try {
-                    ((NavigationActivity)getActivity()).onExtraFragment(
-                            ProfileFragment.newInstance(mTopsList.get(position).uid, ProfileFragment.TYPE_USER_PROFILE));
+
+                    int type = (mTopsList.get(position).uid == CacheProfile.uid) ? ProfileFragment.TYPE_MY_PROFILE : ProfileFragment.TYPE_USER_PROFILE;
+                    ((NavigationActivity) getActivity()).onExtraFragment(
+                            ProfileFragment.newInstance(mTopsList.get(position).uid, type));
                 } catch (Exception e) {
                     Debug.log(TopsFragment.this, "start UserProfileActivity exception:" + e.toString());
                 }
@@ -132,6 +135,9 @@ public class TopsFragment extends BaseFragment {
         // Control creating
         mGridAdapter = new TopsAdapter(getActivity(), mTopsList);
         mGallery.setAdapter(mGridAdapter);
+        mGallery.setOnScrollListener(
+                new PauseOnScrollListener(Static.PAUSE_DOWNLOAD_ON_SCROLL, Static.PAUSE_DOWNLOAD_ON_FLING)
+        );
 
         mFloatBlock = new FloatBlock(getActivity(), this, (ViewGroup) view);
 
@@ -160,33 +166,27 @@ public class TopsFragment extends BaseFragment {
         registerRequest(topRequest);
         topRequest.sex = mActionData.sex;
         topRequest.city = mActionData.city_id;
-        topRequest.callback(new ApiHandler() {
+        topRequest.callback(new DataApiHandler<LinkedList<Top>>() {
             @Override
-            public void success(final ApiResponse response) {
-                updateUI(new Runnable() {
-                    @Override
-                    public void run() {
-                        mTopsList.clear();
-                        mTopsList.addAll(Top.parse(response));
-                        onUpdateSuccess(false);
-                        if (mGridAdapter != null) {
-                            mGridAdapter.notifyDataSetChanged();
-                            mGallery.setVisibility(View.VISIBLE);
-                        }
+            protected void success(LinkedList<Top> data, ApiResponse response) {
+                mTopsList.clear();
+                mTopsList.addAll(data);
+                onUpdateSuccess(false);
+                if (mGridAdapter != null) {
+                    mGridAdapter.notifyDataSetChanged();
+                    mGallery.setVisibility(View.VISIBLE);
+                }
+            }
 
-                    }
-                });
+            @Override
+            protected LinkedList<Top> parseResponse(ApiResponse response) {
+                return Top.parse(response);
             }
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                updateUI(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                        onUpdateFail(false);
-                    }
-                });
+                Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                onUpdateFail(false);
             }
         }).exec();
     }
@@ -200,29 +200,26 @@ public class TopsFragment extends BaseFragment {
         CitiesRequest citiesRequest = new CitiesRequest(getActivity());
         registerRequest(citiesRequest);
         citiesRequest.type = "top";
-        citiesRequest.callback(new ApiHandler() {
+        citiesRequest.callback(new DataApiHandler<LinkedList<City>>() {
+
             @Override
-            public void success(ApiResponse response) {
-                Data.cityList = City.parse(response);
-                updateUI(new Runnable() {
-                    @Override
-                    public void run() {
-                        onUpdateSuccess(false);
-                        showCitiesDialog();
-                    }
-                });
+            protected void success(LinkedList<City> data, ApiResponse response) {
+                Data.cityList = data;
+                onUpdateSuccess(false);
+                showCitiesDialog();
+            }
+
+            @Override
+            protected LinkedList<City> parseResponse(ApiResponse response) {
+                return City.parse(response);
             }
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                updateUI(new Runnable() {
-                    @Override
-                    public void run() {
-                        onUpdateFail(false);
-                        Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                onUpdateFail(false);
+                Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
             }
+
         }).exec();
     }
 

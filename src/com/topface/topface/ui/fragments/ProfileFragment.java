@@ -198,48 +198,41 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             return;
         }
         UserRequest userRequest = new UserRequest(mProfileId, getActivity().getApplicationContext());
-        userRequest.callback(new ApiHandler() {
+        userRequest.callback(new DataApiHandler<User>() {
+
             @Override
-            public void success(final ApiResponse response) {
+            protected void success(User data, ApiResponse response) {
                 try {
                     Object test = response.jsonResult.get("profiles");
                     if (test.equals(new JSONArray("[]"))) mLockScreen.setVisibility(View.VISIBLE);
                 } catch (Exception e) {
                     Debug.error(e);
                 }
-                final User user = User.parse(mProfileId, response);
-                mUserProfile = user;
+
+                mUserProfile = data;
                 mRateController.setOnRateControllerListener(mRateControllerListener);
-                updateUI(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (user.mutual) {
-                            //TODO: manipulations with like & admiration buttons
-                        }
-                        //set info into views for user
-                        mTitle.setText(user.getNameAndAge());
-                        mOnline.setVisibility(user.online ? View.VISIBLE : View.INVISIBLE);
-                        setProfile(user);
-                        mLoaderView.setVisibility(View.INVISIBLE);
-                    }
-                });
+                //set info into views for user
+                mTitle.setText(data.getNameAndAge());
+                mOnline.setVisibility(data.online ? View.VISIBLE : View.INVISIBLE);
+                setProfile(data);
+                mLoaderView.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            protected User parseResponse(ApiResponse response) {
+                return User.parse(mProfileId, response);
             }
 
             @Override
             public void fail(final int codeError, ApiResponse response) {
-                updateUI(new Runnable() {
-                    @Override
-                    public void run() {
-                        mLoaderView.setVisibility(View.GONE);
-                        mLockScreen.setVisibility(View.VISIBLE);
-                        switch (codeError) {
-                            default:
-                                mRetryBtn.setErrorMsg(getString(R.string.general_profile_error));
-                                break;
-                        }
-                        mRetryBtn.showOnlyMessage(false);
-                    }
-                });
+                mLoaderView.setVisibility(View.GONE);
+                mLockScreen.setVisibility(View.VISIBLE);
+                switch (codeError) {
+                    default:
+                        mRetryBtn.setErrorMsg(getString(R.string.general_profile_error));
+                        break;
+                }
+                mRetryBtn.showOnlyMessage(false);
             }
         }).exec();
     }
@@ -537,10 +530,14 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
     @Override
     public void clearContent() {
-        mHeaderPager.setCurrentItem(0);
-        mTitle.setText(Static.EMPTY);
-        mOnline.setVisibility(View.INVISIBLE);
-        mLoaderView.setVisibility(View.VISIBLE);
+        if (mHeaderPager != null) {
+            mHeaderPager.setCurrentItem(0);
+        }
+        if (mTitle != null && mOnline != null && mLoaderView != null) {
+            mTitle.setText(Static.EMPTY);
+            mOnline.setVisibility(View.INVISIBLE);
+            mLoaderView.setVisibility(View.VISIBLE);
+        }
         if (mHeaderMainFragment != null) mHeaderMainFragment.clearContent();
         if (mHeaderStatusFragment != null) mHeaderStatusFragment.clearContent();
         if (mUserPhotoFragment != null) mUserPhotoFragment.clearContent();
@@ -563,10 +560,10 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     sendGift.userId = mUserProfile.uid;
                     final FeedGift sendedGift = new FeedGift();
                     sendedGift.gift = new Gift(sendGift.giftId, Gift.PROFILE_NEW, url, 0);
-                    sendGift.callback(new ApiHandler() {
+                    sendGift.callback(new DataApiHandler<SendGiftAnswer>() {
+
                         @Override
-                        public void success(ApiResponse response) throws NullPointerException {
-                            SendGiftAnswer answer = SendGiftAnswer.parse(response);
+                        protected void success(SendGiftAnswer answer, ApiResponse response) {
                             CacheProfile.likes = answer.likes;
                             CacheProfile.money = answer.money;
 
@@ -578,20 +575,19 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         }
 
                         @Override
-                        public void fail(int codeError, final ApiResponse response)
-                                throws NullPointerException {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (response.code == ApiResponse.PAYMENT) {
-                                        Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
-                                        intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
-                                        intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
-                                        intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
-                                        startActivity(intent);
-                                    }
-                                }
-                            });
+                        protected SendGiftAnswer parseResponse(ApiResponse response) {
+                            return SendGiftAnswer.parse(response);
+                        }
+
+                        @Override
+                        public void fail(int codeError, final ApiResponse response) throws NullPointerException {
+                            if (response.code == ApiResponse.PAYMENT) {
+                                Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
+                                intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
+                                intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
+                                intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
+                                startActivity(intent);
+                            }
                         }
                     }).exec();
                 }

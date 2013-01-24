@@ -18,12 +18,7 @@ public class SimpleApiHandler extends ApiHandler {
 
     public void fail(int codeError, ApiResponse response, boolean showError) {
         if (showError && hasContext() && getContext() instanceof Activity) {
-            ((Activity) getContext()).runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Utils.showErrorMessage(getContext());
-                }
-            });
+            Utils.showErrorMessage(getContext());
         }
     }
 

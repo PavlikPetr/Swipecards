@@ -10,7 +10,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.topface.topface.App;
-import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
@@ -128,7 +127,6 @@ public class ProfilePhotoFragment extends BaseFragment {
                 mViewFlipper.setDisplayedChild(1);
                 return;
             }
-            Data.photos = CacheProfile.photos;
             Intent intent = new Intent(getActivity().getApplicationContext(), PhotoSwitcherActivity.class);
             intent.putExtra(PhotoSwitcherActivity.INTENT_USER_ID, CacheProfile.uid);
             intent.putExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, --position);

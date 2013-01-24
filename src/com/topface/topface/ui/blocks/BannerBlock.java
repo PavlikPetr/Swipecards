@@ -20,6 +20,7 @@ import com.adfonic.android.api.Request;
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -36,6 +37,7 @@ import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.Utils;
 import ru.wapstart.plus1.sdk.Plus1BannerAsker;
@@ -144,7 +146,7 @@ public class BannerBlock {
             //Убираем старый баннер
             ((ImageView) mBannerView).setImageDrawable(null);
 
-            DefaultImageLoader.getInstance(mActivity).displayImage(banner.url, (ImageView) mBannerView, new SimpleImageLoadingListener() {
+            DefaultImageLoader.getInstance().displayImage(banner.url, (ImageView) mBannerView, new SimpleImageLoadingListener() {
                 @Override
                 public void onLoadingComplete(Bitmap loadedImage) {
                     super.onLoadingComplete(loadedImage);
@@ -158,6 +160,12 @@ public class BannerBlock {
                         mBannerView.invalidate();
                     }
                 }
+
+                @Override
+                public void onLoadingFailed(FailReason failReason) {
+                    super.onLoadingFailed(failReason);
+                    Debug.log("LOAD FAILED::" + failReason.toString());
+                }
             });
             sendStat(getBannerName(banner.url), "view");
             mBannerView.setOnClickListener(new View.OnClickListener() {
@@ -167,7 +175,11 @@ public class BannerBlock {
                     if (banner.action.equals(Banner.ACTION_PAGE)) {
                         EasyTracker.getTracker().trackEvent("Purchase", "Banner", "", 0L);
                         intent = new Intent(mActivity.getApplicationContext(), ContainerActivity.class);
-                        intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
+                        if(banner.parameter.equals("VIP")) {
+                            intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                        } else {
+                            intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
+                        }
 //                    } else if (banner.action.equals(Banner.INVITE_PAGE)) {
 //                        EasyTracker.getTracker().trackEvent("Banner", "Invite", "", 0L);
 //                        intent = new Intent(mActivity, InviteActivity.class);

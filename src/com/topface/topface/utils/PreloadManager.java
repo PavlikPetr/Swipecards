@@ -1,6 +1,5 @@
 package com.topface.topface.utils;
 
-import android.app.Activity;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
@@ -14,18 +13,16 @@ public class PreloadManager {
 
     int width, height;
     boolean canLoad = true;
-    Activity mActivity;
 
-    public PreloadManager(int width, int height, Activity activity) {
+    public PreloadManager(int width, int height) {
         this.width = width;
         this.height = height;
-        this.mActivity = activity;
 
         checkConnectionType(ConnectionChangeReceiver.getConnectionType());
     }
 
-    public PreloadManager(Activity activity) {
-        this(0, 0, activity);
+    public PreloadManager() {
+        this(0, 0);
     }
 
     public void preloadPhoto(LinkedList<SearchUser> userList, int position) {
@@ -78,7 +75,7 @@ public class PreloadManager {
     }
 
     private DefaultImageLoader getImageLoader() {
-        return DefaultImageLoader.getInstance(mActivity);
+        return DefaultImageLoader.getInstance();
     }
 
     public void checkConnectionType(int type) {

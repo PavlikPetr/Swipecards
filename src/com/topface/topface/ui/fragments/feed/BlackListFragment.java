@@ -122,12 +122,7 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
                         @Override
                         public void success(ApiResponse response) {
                             if (isAdded()) {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        adapter.removeDeleted();
-                                    }
-                                });
+                                adapter.removeDeleted();
                             }
                         }
 
@@ -135,14 +130,9 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
                         public void always(ApiResponse response) {
                             super.always(response);
                             if (isAdded()) {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (mLockView != null) {
-                                            mLockView.setVisibility(View.GONE);
-                                        }
-                                    }
-                                });
+                                if (mLockView != null) {
+                                    mLockView.setVisibility(View.GONE);
+                                }
                             }
                         }
                     })
@@ -172,26 +162,16 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
                     @Override
                     public void success(ApiResponse response) {
                         if (isAdded()) {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    getListAdapter().removeItem(position);
-                                }
-                            });
+                            getListAdapter().removeItem(position);
                         }
                     }
 
                     @Override
                     public void always(ApiResponse response) {
                         if (isAdded()) {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (mLockView != null) {
-                                        mLockView.setVisibility(View.GONE);
-                                    }
-                                }
-                            });
+                            if (mLockView != null) {
+                                mLockView.setVisibility(View.GONE);
+                            }
                         }
                     }
 

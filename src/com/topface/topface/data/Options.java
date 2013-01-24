@@ -65,7 +65,7 @@ public class Options extends AbstractData {
     public LinkedList<BuyButton> premium = new LinkedList<BuyButton>();
     public LinkedList<BuyButton> others = new LinkedList<BuyButton>();
 
-    public String max_version;
+    public String max_version = "2147483647"; //Integer.MAX_VALUE);
 
     /**
      * Стоимость отправки "Восхищения"
@@ -98,29 +98,29 @@ public class Options extends AbstractData {
             options.max_version = response.jsonResult.optString("max_version");
 
             JSONObject purchases = response.jsonResult.optJSONObject("purchases");
-            if(purchases != null) {
+            if (purchases != null) {
                 JSONArray coinsJSON = purchases.optJSONArray("coins");
                 if (coinsJSON != null) {
-                    for (int i=0; i < coinsJSON.length(); i++) {
+                    for (int i = 0; i < coinsJSON.length(); i++) {
                         options.coins.add(createBuyButtonFromJSON(coinsJSON.optJSONObject(i)));
                     }
                 }
 
                 JSONArray likesJSON = purchases.optJSONArray("likes");
-                for (int i=0; i < likesJSON.length(); i++) {
+                for (int i = 0; i < likesJSON.length(); i++) {
                     options.likes.add(createBuyButtonFromJSON(likesJSON.optJSONObject(i)));
                 }
 
                 JSONArray premiumJSON = purchases.optJSONArray("premium");
                 if (premiumJSON != null) {
-                    for (int i=0; i < premiumJSON.length(); i++) {
+                    for (int i = 0; i < premiumJSON.length(); i++) {
                         options.premium.add(createBuyButtonFromJSON(premiumJSON.optJSONObject(i)));
                     }
                 }
 
                 JSONArray othersJSON = purchases.optJSONArray("others");
                 if (othersJSON != null) {
-                    for (int i=0; i < othersJSON.length(); i++) {
+                    for (int i = 0; i < othersJSON.length(); i++) {
                         options.others.add(createBuyButtonFromJSON(othersJSON.optJSONObject(i)));
                     }
                 }
@@ -152,8 +152,8 @@ public class Options extends AbstractData {
 
     public static RelativeLayout setButton(LinearLayout root, final BuyButton curBtn, Context context, final BuyButtonClickListener l) {
         if (context != null && !curBtn.title.equals("")) {
-            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.item_buying_btn,root,false);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = inflater.inflate(R.layout.item_buying_btn, root, false);
             RelativeLayout container = (RelativeLayout) view.findViewById(R.id.itContainer);
             container.setBackgroundResource(
                     curBtn.showType == 0 ?
@@ -174,15 +174,15 @@ public class Options extends AbstractData {
 
             value.setText(
                     String.format(
-                            App.getContext().getString(R.string.general_default_currency),
-                            curBtn.price/100f
+                            App.getContext().getString(R.string.default_price_format),
+                            curBtn.price / 100f
                     )
             );
-            value.setTypeface(Typeface.DEFAULT_BOLD);
             value.setTextColor(Color.parseColor(color));
             TextView economy = (TextView) view.findViewById(R.id.itEconomy);
+            economy.setTextColor(Color.parseColor(color));
 
-            if(!TextUtils.isEmpty(curBtn.hint)) {
+            if (!TextUtils.isEmpty(curBtn.hint)) {
                 economy.setText(curBtn.hint);
             } else {
                 economy.setVisibility(View.GONE);
