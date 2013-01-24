@@ -26,8 +26,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class Utils {
-    public static final long WEEK = 604800L;
-    public static final long DAY = 86400L;
+    public static final long WEEK = 604800000;
+    public static final long DAY = 86400000;
 
     private static PluralResources mPluralResources;
 

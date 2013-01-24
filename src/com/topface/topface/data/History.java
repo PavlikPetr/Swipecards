@@ -9,6 +9,9 @@ import org.json.JSONObject;
 
 public class History extends FeedDialog implements Parcelable{
 
+    private boolean mEmptyRepeatItem = false;
+    private boolean mEmptyWaitingItem = false;
+
     private String mJsonForParse;
 
     public History(ItemType type) {
@@ -28,6 +31,26 @@ public class History extends FeedDialog implements Parcelable{
 
     public History() {
         super(null);
+    }
+
+    public boolean isWaitingItem() {
+        return mEmptyWaitingItem;
+    }
+
+    public boolean isRepeatItem() {
+        return mEmptyRepeatItem;
+    }
+
+    @Override
+    public void setLoaderTypeFlags(ItemType type) {
+        super.setLoaderTypeFlags(type);
+        if(type == ItemType.WAITING) {
+            mEmptyWaitingItem = true;
+            mEmptyRepeatItem = false;
+        } else if (type == ItemType.REPEAT) {
+            mEmptyWaitingItem = false;
+            mEmptyRepeatItem = true;
+        }
     }
 
     @Override

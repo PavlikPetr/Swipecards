@@ -15,6 +15,7 @@ import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.History;
 import com.topface.topface.data.VirusLike;
 import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.VirusLikesRequest;
 import com.topface.topface.ui.fragments.ChatFragment;
@@ -25,6 +26,8 @@ import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 
 
 public class NewChatListAdapter extends LoadingListAdapter<History> implements AbsListView.OnScrollListener{
@@ -40,28 +43,39 @@ public class NewChatListAdapter extends LoadingListAdapter<History> implements A
         ProgressBar prgsAddress;
         Button likeRequest;
         View userInfo;
+        View loader;
+        View retrier;
     }
 
-    private static final int T_USER = 3;
-    private static final int T_FRIEND = 4;
-    private static final int T_USER_GIFT = 6;
-    private static final int T_FRIEND_GIFT = 7;
-    private static final int T_USER_MAP = 8;
-    private static final int T_FRIEND_MAP = 9;
-    private static final int T_USER_REQUEST = 10;
-    private static final int T_FRIEND_REQUEST = 11;
+    private static final int T_WAITING = 3;
+    private static final int T_USER = 5;
+    private static final int T_FRIEND = 6;
+    private static final int T_USER_GIFT = 7;
+    private static final int T_FRIEND_GIFT = 8;
+    private static final int T_USER_MAP = 9;
+    private static final int T_FRIEND_MAP = 10;
+    private static final int T_USER_REQUEST = 11;
+    private static final int T_FRIEND_REQUEST = 12;
 
     private static final int T_COUNT = 12;
 
+    private HashMap<History,ApiRequest> mHashRepeatRequests;
+    private ArrayList<History> mWaitingItems;
+    private ArrayList<History> mUnrealItems;
     private ArrayList<History> mShowDatesList;
     private View.OnClickListener mOnClickListener;
     private ChatFragment.OnListViewItemLongClickListener mLongClickListener;
     private AddressesCache mAddressesCache;
 
+    private View mHeaderView;
+
     public NewChatListAdapter(Context context,FeedList<History> data, Updater updateCallback) {
         super(context,data, updateCallback);
         mAddressesCache = new AddressesCache();
         mShowDatesList = new ArrayList<History>();
+        mUnrealItems = new ArrayList<History>();
+        mWaitingItems = new ArrayList<History>();
+        mHashRepeatRequests = new HashMap<History, ApiRequest>();
     }
 
     @Override
@@ -74,6 +88,7 @@ public class NewChatListAdapter extends LoadingListAdapter<History> implements A
         History item = getItem(position);
         int superType = super.getItemViewType(position);
         if (superType == T_OTHER) {
+            if (item.isWaitingItem() || item.isRepeatItem()) return T_WAITING;
             boolean output = (item.target == FeedDialog.USER_MESSAGE);
             switch (item.type) {
                 case FeedDialog.GIFT:
@@ -113,11 +128,28 @@ public class NewChatListAdapter extends LoadingListAdapter<History> implements A
             holder = (ViewHolder) convertView.getTag();
 
         setTypeDifferences(position, holder, type, item);
-        setViewInfo(holder, item);
-        setLongClickListener(position, convertView, holder);
+        if (type != T_WAITING) {
+            setViewInfo(holder, item);
+            setLongClickListener(position, convertView, holder);
+        }
 
         return convertView;
 
+    }
+
+    private void addHeader(ListView parentView) {
+        if (mHeaderView == null) {
+            mHeaderView = mInflater.inflate(R.layout.list_header_chat_no_messages_informer, null);
+            parentView.addHeaderView(mHeaderView);
+            parentView.setStackFromBottom(false);
+        }
+    }
+
+    private void removeHeader(ListView parentView) {
+        if (mHeaderView != null) {
+            parentView.removeHeaderView(mHeaderView);
+            parentView.setStackFromBottom(true);
+        }
     }
 
     @Override
@@ -127,6 +159,16 @@ public class NewChatListAdapter extends LoadingListAdapter<History> implements A
         notifyDataSetChanged();
     }
 
+    public void setData(ArrayList<History> dataList, boolean more, ListView parentView) {
+        super.setData(dataList, more, false);
+        prepareDates();
+        notifyDataSetChanged();
+        parentView.setSelection(getCount()-1);
+        if(getCount() == 0) {
+            addHeader(parentView);
+        }
+    }
+
     @Override
     public void addAll(ArrayList<History> dataList, boolean more) {
         super.addAll(dataList, more, false);
@@ -134,11 +176,80 @@ public class NewChatListAdapter extends LoadingListAdapter<History> implements A
         notifyDataSetChanged();
     }
 
+    public void addAll(ArrayList<History> dataList, boolean more, ListView parentView) {
+        this.addAll(dataList, more);
+        parentView.setSelection(dataList.size()+(more ? 2 : 0));
+        if(getCount() > 0) {
+            removeHeader(parentView);
+        }
+    }
+
     @Override
     public void addFirst(ArrayList<History> data, boolean more) {
+        if (!mUnrealItems.isEmpty()) removeUnrealItems();
         super.addFirst(data, more, false);
         prepareDates();
         notifyDataSetChanged();
+    }
+
+    public void addFirst(ArrayList<History> data, boolean more,ListView parentView) {
+        int scroll = parentView.getScrollY();
+        this.addFirst(data, more);
+        parentView.setScrollY(scroll);
+        if(getCount() > 0) {
+            removeHeader(parentView);
+        }
+    }
+
+    private void addSentMessage(History item) {
+        getData().addFirst(item);
+        if(item.isWaitingItem()) {
+            mWaitingItems.add(item);
+        } else {
+            mUnrealItems.add(item);
+        }
+        notifyDataSetChanged();
+    }
+
+    public  void addSentMessage(History item, ListView parentView) {
+        this.addSentMessage(item);
+        parentView.setSelection(getCount()-1);
+        if(getCount() > 0) {
+            removeHeader(parentView);
+        }
+    }
+
+    public void replaceMessage(History emptyItem, History unrealItem, ListView parentView) {
+        FeedList<History> data = getData();
+        int positionToReplace = -1;
+        for (int i=0;i<data.size();i++) {
+            if (data.get(i) == emptyItem) {
+                positionToReplace = i;
+            }
+        }
+        if (positionToReplace != -1) {
+            data.remove(positionToReplace);
+            data.add(positionToReplace,unrealItem);
+            mWaitingItems.remove(emptyItem);
+            mUnrealItems.add(unrealItem);
+        }
+        notifyDataSetChanged();
+        parentView.setSelection(getCount()-1);
+    }
+
+    public void showRetrySendMessage(History emptyItem, ApiRequest request) {
+        emptyItem.setLoaderTypeFlags(IListLoader.ItemType.REPEAT);
+        mHashRepeatRequests.put(emptyItem,request);
+        notifyDataSetChanged();
+    }
+
+    private void removeUnrealItems() {
+        removeUnrealItems(getData());
+        mUnrealItems.clear();
+    }
+
+    private void removeUnrealItems(Collection<History> data) {
+        data.removeAll(mUnrealItems);
     }
 
     private void prepareDates() {
@@ -161,13 +272,33 @@ public class NewChatListAdapter extends LoadingListAdapter<History> implements A
 
     }
 
-    private void setTypeDifferences(int position, ViewHolder holder, int type, History item) {
+    private void setTypeDifferences(int position, ViewHolder holder, int type,final History item) {
         History prevItem = getItem(position-1);
         boolean avatar = prevItem == null || prevItem.target != item.target;
         boolean output = (item.target == FeedDialog.USER_MESSAGE);
         boolean showDate = mShowDatesList.contains(item);
 
         switch (type) {
+            case T_WAITING:
+                if (item.isRepeatItem()) {
+                    holder.loader.setVisibility(View.GONE);
+                    holder.retrier.setVisibility(View.VISIBLE);
+                    holder.retrier.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ApiRequest request = mHashRepeatRequests.get(item);
+                            if(request != null) request.exec();
+                            mHashRepeatRequests.remove(item);
+                            item.setLoaderTypeFlags(IListLoader.ItemType.WAITING);
+                            notifyDataSetChanged();
+                        }
+                    });
+                } else {
+                    holder.loader.setVisibility(View.VISIBLE);
+                    holder.retrier.setVisibility(View.GONE);
+                }
+
+                return;
             case T_FRIEND:
             case T_USER:
                 if (avatar) {
@@ -179,7 +310,6 @@ public class NewChatListAdapter extends LoadingListAdapter<History> implements A
                     holder.avatar.setVisibility(View.INVISIBLE);
                     holder.userInfo.setBackgroundResource(output ? R.drawable.bg_message_user_ext : R.drawable.bg_message_friend_ext);
                 }
-
                 break;
             case T_FRIEND_GIFT:
             case T_USER_GIFT:
@@ -214,7 +344,7 @@ public class NewChatListAdapter extends LoadingListAdapter<History> implements A
 
         if (showDate) {
             holder.dateDivider.setVisibility(View.VISIBLE);
-            holder.dateDividerText.setText(DateUtils.getFormattedDate(mContext, item.created));
+            holder.dateDividerText.setText(DateUtils.getFormattedDate(mContext, item.created).toUpperCase());
         } else {
             holder.dateDivider.setVisibility(View.GONE);
         }
@@ -223,6 +353,11 @@ public class NewChatListAdapter extends LoadingListAdapter<History> implements A
     private View inflateConvertView(View convertView, ViewHolder holder, int type, History item) {
         boolean output = (item.target == FeedDialog.USER_MESSAGE);
         switch (type) {
+            case T_WAITING:
+                convertView = mInflater.inflate(R.layout.item_chat_list_loader_retrier, null, false);
+                holder.retrier = convertView.findViewById(R.id.ivLoader);
+                holder.loader = convertView.findViewById(R.id.prsLoader);
+                return convertView;
             case T_FRIEND:
             case T_USER:
                 convertView = mInflater.inflate(output ? R.layout.chat_user : R.layout.chat_friend, null, false);
@@ -304,7 +439,7 @@ public class NewChatListAdapter extends LoadingListAdapter<History> implements A
             case FeedDialog.MESSAGE:
             case FeedDialog.PROMOTION:
             default:
-                holder.message.setText(Html.fromHtml(item.text));
+                if (holder !=null) holder.message.setText(Html.fromHtml(item.text));
                 break;
         }
 
@@ -331,8 +466,26 @@ public class NewChatListAdapter extends LoadingListAdapter<History> implements A
         notifyDataSetChanged();
     }
 
-    public void addSentMessage(History msg) {
-        getData().add(msg);
+    public int getFirstItemId() {
+        FeedList<History> data = getData();
+        for (int i=0; i < data.size(); i++) {
+            History item = data.get(i);
+            if(!item.isLoaderOrRetrier() && item.id > 0) {
+                return item.id;
+            }
+        }
+        return -1;
+    }
+
+    public int getLastItemId() {
+        FeedList<History> data = getData();
+        for (int i=data.size()-1; i >= 0; i--) {
+            History item = data.get(i);
+            if(!item.isLoaderOrRetrier() && item.id > 0) {
+                return item.id;
+            }
+        }
+        return -1;
     }
 
     @SuppressWarnings("unchecked")
@@ -342,6 +495,7 @@ public class NewChatListAdapter extends LoadingListAdapter<History> implements A
         if (!dataClone.isEmpty() && dataClone.get(dataClone.size()-1).isLoaderOrRetrier()) {
             dataClone.remove(dataClone.size() - 1);
         }
+        removeUnrealItems(dataClone);
         return dataClone;
     }
 
@@ -362,6 +516,11 @@ public class NewChatListAdapter extends LoadingListAdapter<History> implements A
                 }
             });
         }
+    }
+
+    @Override
+    protected int getLoaderRetrierLayout() {
+        return R.layout.item_chat_list_loader_retrier;
     }
 
     @Override

@@ -143,18 +143,16 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
 
     protected void addAll(ArrayList<T> dataList, boolean more, boolean notify) {
         removeLoaderItem();
-        getData().addAll(dataList);
+        if (!dataList.isEmpty()) getData().addAll(dataList);
         addLoaderItem(more);
         if (notify) notifyDataSetChanged();
     }
 
     protected void addFirst(ArrayList<T> data, boolean more, boolean notify) {
-        removeLoaderItem();
         if (data != null) {
             if (!data.isEmpty()) {
                 getData().addAllFirst(data);
             }
-            addLoaderItem(more);
         }
         if (notify) notifyDataSetChanged();
     }

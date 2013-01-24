@@ -30,6 +30,7 @@ import com.topface.topface.requests.*;
 import com.topface.topface.ui.*;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
+import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.adapters.NewChatListAdapter;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryView;
@@ -56,10 +57,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
     public static final String INTENT_ITEM_ID = "item_id";
     public static final String MAKE_ITEM_READ = "com.topface.topface.feedfragment.MAKE_READ";
-    private static final int  DIALOG_GPS_ENABLE_NO_AGPS_ID = 1;
-    private static final int  DIALOG_LOCATION_PROGRESS_ID = 3;
+    private static final int DIALOG_GPS_ENABLE_NO_AGPS_ID = 1;
+    private static final int DIALOG_LOCATION_PROGRESS_ID = 3;
     private static final long LOCATION_PROVIDER_TIMEOUT = 10000;
-    private static final int  DEFAULT_CHAT_UPDATE_PERIOD = 30000;
+    private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
     //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
     public static final int INTENT_CHAT_REQUEST = 371;
 
@@ -291,7 +292,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(WAS_FAILED, wasFailed);
-        outState.putParcelableArrayList(ADAPTER_DATA,mAdapter.getDataCopy());
+        outState.putParcelableArrayList(ADAPTER_DATA, mAdapter.getDataCopy());
     }
 
     private void deleteItem(final int position) {
@@ -328,14 +329,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void update(final boolean pullToRefresh, String type) {
-        update(pullToRefresh,false,type);
+        update(pullToRefresh, false, type);
     }
 
     private void update(final boolean scrollRefresh) {
-        update(false,scrollRefresh,"scroll refresh");
+        update(false, scrollRefresh, "scroll refresh");
     }
 
-    private void update(final boolean pullToRefresh,final boolean scrollRefresh, String type) {
+    private void update(final boolean pullToRefresh, final boolean scrollRefresh, String type) {
         mIsUpdating = true;
         if (!pullToRefresh && !scrollRefresh) {
             mLoadingLocker.setVisibility(View.VISIBLE);
@@ -346,20 +347,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         historyRequest.debug = type;
         historyRequest.limit = LIMIT;
         if (mAdapter != null) {
-            ArrayList<History> data = mAdapter.getDataCopy();
             if (pullToRefresh) {
-                if (!data.isEmpty()) {
-                    History item = data.get(0);
-                    if (item != null) {
-                        historyRequest.from = item.id;
-                    }
+                int id = mAdapter.getFirstItemId();
+                if (id > 0) {
+                    historyRequest.from = id;
                 }
             } else if (scrollRefresh) {
-                if (!data.isEmpty()) {
-                    History item = data.get(data.size()-1);
-                    if (item != null) {
-                        historyRequest.to = item.id;
-                    }
+                int id = mAdapter.getLastItemId();
+                if (id > 0) {
+                   historyRequest.to = id;
                 }
             }
         }
@@ -378,19 +374,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     public void run() {
                         if (mAdapter != null) {
                             if (pullToRefresh) {
-                                mAdapter.addFirst(dataList.items,dataList.more);
+                                mAdapter.addFirst(dataList.items, dataList.more, mListView.getRefreshableView());
+                                if (mListView != null) {
+                                    mListView.onRefreshComplete();
+                                }
                             } else if (scrollRefresh) {
-                                mAdapter.addAll(dataList.items,dataList.more);
+                                mAdapter.addAll(dataList.items, dataList.more, mListView.getRefreshableView());
                             } else {
-                                mAdapter.setData(dataList.items,dataList.more);
-                            }
-                            if (dataList.items.size() > 0) {
-                                mAdapter.notifyDataSetChanged();
+                                mAdapter.setData(dataList.items, dataList.more, mListView.getRefreshableView());
                             }
                         }
-                        if (pullToRefresh && mListView != null) {
-                            mListView.onRefreshComplete();
-                        }
+
                         if (mLoadingLocker != null) {
                             mLoadingLocker.setVisibility(View.GONE);
                         }
@@ -466,7 +460,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             }
             break;
             case R.id.btnChatPlace: {
-                sendUserCurrentLocation();
+                targetLocationToSend();
                 // Toast.makeText(getActivity(), "Place",
                 // Toast.LENGTH_SHORT).show();
                 EasyTracker.getTracker().trackEvent("Chat", "SendPlaceClick", "", 1L);
@@ -578,18 +572,136 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         }
     };
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
+                mLoadingLocker.setVisibility(View.VISIBLE);
+                Bundle extras = data.getExtras();
+                final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
+                final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
+                sendGift(id, price);
+            } else if (requestCode == GeoMapActivity.INTENT_REQUEST_GEO) {
+                Bundle extras = data.getExtras();
+                final Geo geo = extras.getParcelable(GeoMapActivity.INTENT_GEO);
+                sendCoordinates(geo);
+            }
+        }
+
+        if (mIsAddPanelOpened)
+            mSwapControl.snapToScreen(0);
+        mIsAddPanelOpened = false;
+    }
+
+    private void sendCoordinates(Geo geo) {
+        final History fakeItem = new History(IListLoader.ItemType.WAITING);
+        mAdapter.addSentMessage(fakeItem, mListView.getRefreshableView());
+
+        final CoordinatesRequest coordRequest = new CoordinatesRequest(getActivity());
+        registerRequest(coordRequest);
+        coordRequest.userid = mUserId;
+        final Coordinates coordinates = geo.getCoordinates();
+        if (coordinates != null) {
+            coordRequest.latitude = coordinates.getLatitude();
+            coordRequest.longitude = coordinates.getLongitude();
+        }
+        coordRequest.type = CoordinatesRequest.COORDINATES_TYPE_PLACE;
+        coordRequest.address = geo.getAddress();
+        coordRequest.callback(new ApiHandler() {
+
+            @Override
+            public void success(final ApiResponse response) {
+                final Confirmation confirm = Confirmation.parse(response);
+                updateUI(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (confirm.completed) {
+                            History history = new History(response);
+                            history.target = FeedDialog.USER_MESSAGE;
+                            mAdapter.replaceMessage(fakeItem,history, mListView.getRefreshableView());
+                        } else {
+                            Toast.makeText(getActivity(),
+                                    R.string.general_server_error, Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+                updateUI(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getActivity(), R.string.general_server_error,
+                                Toast.LENGTH_SHORT).show();
+                        mAdapter.showRetrySendMessage(fakeItem,coordRequest);
+                    }
+                });
+            }
+        }).exec();
+    }
+
+    private void sendGift(int id, final int price) {
+        final History fakeItem = new History(IListLoader.ItemType.WAITING);
+        mAdapter.addSentMessage(fakeItem, mListView.getRefreshableView());
+
+        final SendGiftRequest sendGift = new SendGiftRequest(getActivity());
+        registerRequest(sendGift);
+        sendGift.giftId = id;
+        sendGift.userId = mUserId;
+        sendGift.callback(new ApiHandler() {
+            @Override
+            public void success(final ApiResponse response) {
+                SendGiftAnswer answer = SendGiftAnswer.parse(response);
+                CacheProfile.likes = answer.likes;
+                CacheProfile.money = answer.money;
+                Debug.log(getActivity(), "likes:" + answer.likes + " money:"
+                        + answer.money);
+                updateUI(new Runnable() {
+                    @Override
+                    public void run() {
+                        History history = new History(response);
+                        history.target = FeedDialog.USER_MESSAGE;
+                        mAdapter.replaceMessage(fakeItem,history, mListView.getRefreshableView());
+                    }
+                });
+            }
+
+            @Override
+            public void fail(int codeError, final ApiResponse response) {
+                updateUI(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (response.code == ApiResponse.PAYMENT) {
+                            Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
+                            intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
+                            intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
+                            intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
+                            startActivity(intent);
+                        }
+                        mAdapter.showRetrySendMessage(fakeItem,sendGift);
+                    }
+                });
+            }
+        }).exec();
+    }
+
     private boolean sendMessage() {
+        final History fakeItem = new History(IListLoader.ItemType.WAITING);
+        mAdapter.addSentMessage(fakeItem, mListView.getRefreshableView());
+
         final String text = mEditBox.getText().toString();
         if (text == null || text.length() == 0)
             return false;
 
-        mLoadingLocker.setVisibility(View.VISIBLE);
-
-        MessageRequest messageRequest = new MessageRequest(
-                getActivity());
+        final MessageRequest messageRequest = new MessageRequest(getActivity());
         registerRequest(messageRequest);
         messageRequest.message = mEditBox.getText().toString();
         messageRequest.userid = mUserId;
+        mEditBox.getText().clear();
+
         messageRequest.callback(new ApiHandler() {
             @Override
             public void success(final ApiResponse response) {
@@ -600,10 +712,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                         if (mAdapter != null) {
                             if (confirm.completed) {
                                 History history = new History(response);
-                                mAdapter.addSentMessage(history);
-                                mAdapter.notifyDataSetChanged();
-                                mEditBox.getText().clear();
-                                mLoadingLocker.setVisibility(View.GONE);
+                                mAdapter.replaceMessage(fakeItem,history, mListView.getRefreshableView());
 
                             } else {
                                 Toast.makeText(getActivity(),
@@ -623,7 +732,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                         Toast.makeText(getActivity(),
                                 getString(R.string.general_data_error), Toast.LENGTH_SHORT)
                                 .show();
-                        mLoadingLocker.setVisibility(View.GONE);
+                        mAdapter.showRetrySendMessage(fakeItem,messageRequest);
                     }
                 });
             }
@@ -631,124 +740,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         return true;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
-                mLoadingLocker.setVisibility(View.VISIBLE);
-                Bundle extras = data.getExtras();
-                final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
-                final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
-                final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
-                Debug.log(this, "id:" + id + " url:" + url);
-                SendGiftRequest sendGift = new SendGiftRequest(getActivity());
-                registerRequest(sendGift);
-                sendGift.giftId = id;
-                sendGift.userId = mUserId;
-                if (mIsAddPanelOpened)
-                    mSwapControl.snapToScreen(0);
-                mIsAddPanelOpened = false;
-                sendGift.callback(new ApiHandler() {
-                    @Override
-                    public void success(final ApiResponse response) {
-                        SendGiftAnswer answer = SendGiftAnswer.parse(response);
-                        CacheProfile.likes = answer.likes;
-                        CacheProfile.money = answer.money;
-                        Debug.log(getActivity(), "likes:" + answer.likes + " money:"
-                                + answer.money);
-                        updateUI(new Runnable() {
-                            @Override
-                            public void run() {
-                                History history = new History(response);
-                                history.target = FeedDialog.USER_MESSAGE;
-                                mAdapter.addSentMessage(history);
-                                mAdapter.notifyDataSetChanged();
-                                mLoadingLocker.setVisibility(View.GONE);
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void fail(int codeError, final ApiResponse response) {
-                        updateUI(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (response.code == ApiResponse.PAYMENT) {
-                                    Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
-                                    intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
-                                    intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
-                                    intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
-                                    startActivity(intent);
-                                }
-                                mLoadingLocker.setVisibility(View.GONE);
-                            }
-                        });
-                    }
-                }).exec();
-            } else if (requestCode == GeoMapActivity.INTENT_REQUEST_GEO) {
-                Bundle extras = data.getExtras();
-                final Geo geo = extras.getParcelable(GeoMapActivity.INTENT_GEO);
-
-                CoordinatesRequest coordRequest = new CoordinatesRequest(getActivity());
-                registerRequest(coordRequest);
-                coordRequest.userid = mUserId;
-                final Coordinates coordinates = geo.getCoordinates();
-                if (coordinates != null) {
-                    coordRequest.latitude = coordinates.getLatitude();
-                    coordRequest.longitude = coordinates.getLongitude();
-                }
-                coordRequest.type = CoordinatesRequest.COORDINATES_TYPE_PLACE;
-                coordRequest.address = geo.getAddress();
-                mLoadingLocker.setVisibility(View.VISIBLE);
-                coordRequest.callback(new ApiHandler() {
-
-                    @Override
-                    public void success(final ApiResponse response) {
-                        final Confirmation confirm = Confirmation.parse(response);
-                        updateUI(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (confirm.completed) {
-                                    History history = new History(response);
-                                    history.target = FeedDialog.USER_MESSAGE;
-                                    mAdapter.addSentMessage(history);
-                                    mAdapter.notifyDataSetChanged();
-                                } else {
-                                    Toast.makeText(getActivity(),
-                                            R.string.general_server_error, Toast.LENGTH_SHORT)
-                                            .show();
-                                }
-                                mLoadingLocker.setVisibility(View.GONE);
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void fail(int codeError, ApiResponse response) {
-                        updateUI(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getActivity(), R.string.general_server_error,
-                                        Toast.LENGTH_SHORT).show();
-                                mLoadingLocker.setVisibility(View.GONE);
-                            }
-                        });
-                    }
-                }).exec();
-
-                if (mIsAddPanelOpened)
-                    mSwapControl.snapToScreen(0);
-                mIsAddPanelOpened = false;
-            }
-        } else {
-            if (mIsAddPanelOpened)
-                mSwapControl.snapToScreen(0);
-            mIsAddPanelOpened = false;
-        }
-    }
-
-    private void sendUserCurrentLocation() {
+    private void targetLocationToSend() {
         mLocationDetected = false;
 
         if (mGeoManager == null) {
@@ -818,7 +810,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                                     mIsAddPanelOpened = false;
                                     History history = new History(response);
 //									history.target = FeedDialog.USER_MESSAGE;
-                                    mAdapter.addSentMessage(history);
+                                    mAdapter.addSentMessage(history, mListView.getRefreshableView());
                                     mAdapter.notifyDataSetChanged();
                                 } else {
                                     Toast.makeText(getActivity(),
@@ -890,9 +882,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 return alert;
             case DIALOG_LOCATION_PROGRESS_ID:
                 mProgressDialog = new ProgressDialog(getActivity());
-                mProgressDialog.setCancelable(false);
+                mProgressDialog.setCancelable(true);
                 mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 mProgressDialog.setMessage(this.getText(R.string.map_location_progress));
+                mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        mGeoManager.removeLocationListener(ChatFragment.this);
+                    }
+                });
                 return mProgressDialog;
             default:
                 return null;
@@ -944,7 +942,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     if (mUpdater != null && !wasFailed) {
                         update(true, "timer");
                         mUpdater.postDelayed(this, DEFAULT_CHAT_UPDATE_PERIOD);
-
                     }
                 }
             });

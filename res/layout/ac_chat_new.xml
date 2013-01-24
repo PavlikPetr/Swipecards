@@ -6,7 +6,6 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true">
 
-    <!-- header bar -->
     <com.topface.topface.ui.views.SwapControl
             android:id="@+id/swapFormView"
             android:layout_width="fill_parent"
@@ -40,8 +39,7 @@
                     android:fadeScrollbars="true"
                     android:fadingEdge="none"
                     android:stackFromBottom="true"
-                    android:listSelector="@android:color/transparent"
-                    android:transcriptMode="alwaysScroll"/>
+                    android:listSelector="@android:color/transparent"/>
 
             <FrameLayout
                     android:id="@+id/loChatFooterSend"

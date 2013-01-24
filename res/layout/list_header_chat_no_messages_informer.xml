@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center">
+
+    <com.topface.topface.ui.views.ImageViewRemote
+            xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
+            ivr:postProcessor="rounded"
+            android:id="@+id/ivFriendAvatar"
+            style="@style/ProfileAvatar"
+            android:layout_marginTop="8dp"
+            />
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/chat_bubble_background"
+            android:gravity="left"
+            android:orientation="vertical"
+            android:layout_margin="8dp">
+
+        <TextView
+                android:id="@+id/tvFirstMessageTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Откройте, вам симпатия!"
+                style="@style/ItemTitleText"
+                android:textSize="14sp"
+                />
+
+        <TextView
+                android:id="@+id/tvFirstMessageText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Легкая, непринужденная беседа - лучшее начало хорошего знакомства."
+                style="@style/ItemTitleText"
+                android:textSize="12sp"
+                />
+
+    </LinearLayout>
+
+</LinearLayout>

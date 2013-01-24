@@ -17,10 +17,11 @@ public class DateUtils {
 
     public static void syncTime() {
         Calendar cal = Calendar.getInstance();
-
+        cal.set(Calendar.HOUR, 0);
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
         DateUtils.midnight = cal.getTimeInMillis();
 
         cal.set(Calendar.DAY_OF_YEAR,1);
