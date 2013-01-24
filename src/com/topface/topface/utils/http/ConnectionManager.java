@@ -169,6 +169,7 @@ public class ConnectionManager {
                             apiRequest.handler.sendMessage(msg);
                         }
                     } else if (!apiRequest.isCanceled()) {
+                        needResend = true;
                         Message msg = new Message();
                         msg.obj = apiResponse;
                         apiRequest.handler.sendMessage(msg);

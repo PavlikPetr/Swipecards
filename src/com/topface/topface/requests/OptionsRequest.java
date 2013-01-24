@@ -9,7 +9,7 @@ import org.json.JSONObject;
  */
 public class OptionsRequest extends AbstractApiRequest {
 
-    public static final String SERVICE_NAME = "optionsa";
+    public static final String SERVICE_NAME = "options";
     public static final String MAX_VERSION = "max_version";
     public static final String VERSION_INTENT = "com.topface.topface.OPTIONS";
 
