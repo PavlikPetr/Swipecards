@@ -157,7 +157,7 @@ public class LeadersActivity extends BaseFragmentActivity {
         }
 
         public boolean isSelected() {
-            return mItem > 0;
+            return mItem >= 0;
         }
 
         public int getPhotoId() {

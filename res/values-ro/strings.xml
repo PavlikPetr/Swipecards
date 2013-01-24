@@ -309,6 +309,4 @@
     <string name="popup_version_message">E timpul de actualizare a versiunii!</string>
     <string name="popup_version_update">Actualizare</string>
     <string name="popup_version_cancel">Aminteste mai tarziu</string>
-    <string name="general_version_not_supported">Aplicarea Dmv nu mai este sustinuta. Va rugam sa actualizati aplicarea.</string>
-    <string name="leaders_select_photo_info">Alegeti cea mai tare poza!</string>
 </resources>

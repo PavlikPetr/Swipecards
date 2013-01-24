@@ -307,6 +307,4 @@
     <string name="popup_version_message">Je čas obnoviť svoju verziu!</string>
     <string name="popup_version_update">Obnoviť</string>
     <string name="popup_version_cancel">Pripomenúť neskôr</string>
-    <string name="general_version_not_supported">Vaša verzia aplikácie je stará a nepodporovaná. Prosím, obnovte aplikáciu</string>
-    <string name="leaders_select_photo_info">Vyberte najefektívnejšiu fotografiu! Fotografie z nízkym ratingom nemožno vyberať</string>
 </resources>

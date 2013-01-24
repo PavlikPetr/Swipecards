@@ -300,6 +300,16 @@ public class AuthFragment extends BaseFragment {
                 break;
             default:
                 mRetryView.setErrorMsg(getString(R.string.general_data_error));
+                mRetryView.setListenerToBtn(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mRetryView.setVisibility(View.GONE);
+                        mProgressBar.setVisibility(View.VISIBLE);
+                        request.canceled = false;
+                        registerRequest(request);
+                        request.exec();
+                    }
+                });
                 break;
         }
 

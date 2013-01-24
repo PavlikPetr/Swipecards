@@ -304,6 +304,4 @@
     <string name="popup_version_message">Η ώρα να ενημερώσετε την έκδοση σας!</string>
     <string name="popup_version_update">Ενημερώσω</string>
     <string name="popup_version_cancel">Υπενθύμιση αργότερα</string>
-    <string name="general_version_not_supported">Δική σας έκδοση της εφαρμογής είναι ξεπερασμένη και δεν υποστηρίζεται πλέον. Σας παρακαλούμε να ενημερώστε την εφαρμογή</string>
-    <string name="leaders_select_photo_info">Επιλέξτε την πιο θεαματική φωτογραφία! Τις φωτογραφίες με χαμηλή βαθμολογία δεν μπορείτε να επιλέξετε</string>
 </resources>
