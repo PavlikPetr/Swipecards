@@ -15,7 +15,7 @@ public class CountersManager {
     private Context mContext;
 
     private final static String[] DeniedMethod = {BannerRequest.SERVICE_NAME, LeadersRequest.SERVICE_NAME};
-//    private final static String DeniedMethod = "banner";
+    //    private final static String DeniedMethod = "banner";
     public final static String UPDATE_COUNTERS = "com.topface.topface.UPDATE_COUNTERS";
 
     public final static String NULL_METHOD = "null_method";
@@ -141,7 +141,7 @@ public class CountersManager {
 
     private void commitCounters() {
         //Хз как тут сделать по-другому, подумаю еще
-        if(likesCounter != CacheProfile.unread_likes || dialogsCounter != CacheProfile.unread_messages ||
+        if (likesCounter != CacheProfile.unread_likes || dialogsCounter != CacheProfile.unread_messages ||
                 sympathyCounter != CacheProfile.unread_mutual || visitorsCounter != CacheProfile.unread_visitors) {
             CacheProfile.unread_likes = likesCounter;
             CacheProfile.unread_messages = dialogsCounter;
@@ -170,7 +170,7 @@ public class CountersManager {
 
     private boolean checkMethodIsDenyed(String method) {
         for (String denyed : DeniedMethod) {
-            if(denyed.equals(method)) {
+            if (denyed.equals(method)) {
                 return true;
             }
         }

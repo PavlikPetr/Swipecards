@@ -96,7 +96,7 @@ public class LeadersBlock {
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             //При клике на лидера, открываем его профиль
             Leader leader = (Leader) adapterView.getItemAtPosition(i);
-            int type = (leader.id == CacheProfile.uid)? ProfileFragment.TYPE_MY_PROFILE : ProfileFragment.TYPE_USER_PROFILE;
+            int type = (leader.id == CacheProfile.uid) ? ProfileFragment.TYPE_MY_PROFILE : ProfileFragment.TYPE_USER_PROFILE;
             ((NavigationActivity) mActivity).onExtraFragment(
                     ProfileFragment.newInstance(leader.id, type));
 

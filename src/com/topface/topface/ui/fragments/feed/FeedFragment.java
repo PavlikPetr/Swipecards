@@ -34,11 +34,7 @@ import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryView;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.NavigationBarController;
-import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.*;
 import org.json.JSONObject;
 
 import static android.widget.AdapterView.OnItemClickListener;
@@ -636,7 +632,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (!lastMethod.equals(CountersManager.NULL_METHOD) && !lastMethod.equals(getRequest().getServiceName())) {
             int counters = CountersManager.getInstance(getActivity()).getCounter(getTypeForCounters());
             if (counters > 0) {
-                    updateData(true, false);
+                updateData(true, false);
             }
         }
     }
