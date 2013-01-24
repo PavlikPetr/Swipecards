@@ -142,7 +142,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mServerResponseReceiver, new IntentFilter(OptionsRequest.VERSION_INTENT));
 
-        //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
+        //TODO костыль для ChatFragment, после перехода на фрагмент - выпилить
         if (mDelayedFragment != null) {
             onExtraFragment(mDelayedFragment);
             mDelayedFragment = null;
@@ -239,7 +239,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 super.onBackPressed();
             } else {
                 if (mFragmentSwitcher.isExtraFrameShown()) {
-                    //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
+                    //TODO костыль для ChatFragment, после перехода на фрагмент - выпилить
                     //начало костыля--------------
                     if (mChatInvoke) {
                         if (mFragmentSwitcher.getCurrentExtraFragment() instanceof ProfileFragment) {
@@ -468,13 +468,13 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mFragmentSwitcher.switchExtraFragment(fragment);
     }
 
-    //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
+    //TODO костыль для ChatFragment, после перехода на фрагмент - выпилить
     private Fragment mDelayedFragment;
     private boolean mChatInvoke = false;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK && requestCode == ChatFragment.INTENT_CHAT_REQUEST) {
+        if (resultCode == Activity.RESULT_OK && requestCode == ContainerActivity.INTENT_CHAT_FRAGMENT) {
             if (data != null) {
                 int user_id = data.getExtras().getInt(ChatFragment.INTENT_USER_ID);
                 mDelayedFragment = ProfileFragment.newInstance(user_id, ProfileFragment.TYPE_USER_PROFILE);

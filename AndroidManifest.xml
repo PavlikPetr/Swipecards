@@ -80,8 +80,6 @@
         <activity
                 android:name=".ui.edit.EditContainerActivity"
                 android:screenOrientation="portrait"/>
-        <activity android:name=".ui.ChatActivity">
-        </activity>
         <activity android:name=".ui.GiftsActivity"/>
         <activity
                 android:name=".ui.LeadersActivity"

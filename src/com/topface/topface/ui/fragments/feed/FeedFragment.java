@@ -24,7 +24,6 @@ import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.*;
 import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -88,7 +87,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
             @Override
             public void onReceive(Context context, Intent intent) {
-                int itemId = intent.getIntExtra(ChatActivity.INTENT_ITEM_ID, -1);
+                int itemId = intent.getIntExtra(ChatFragment.INTENT_ITEM_ID, -1);
                 if (itemId != -1) {
                     makeItemReadWithId(itemId);
                 } else {
@@ -100,7 +99,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
         };
 
-        IntentFilter filter = new IntentFilter(ChatActivity.MAKE_ITEM_READ);
+        IntentFilter filter = new IntentFilter(ChatFragment.MAKE_ITEM_READ);
         filter.addAction(CountersManager.UPDATE_COUNTERS);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(readItemReceiver, filter);
 
@@ -351,16 +350,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
         intent.putExtra(ChatFragment.INTENT_ITEM_ID, item.id);
         getActivity().startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
-
-//        Intent intent = new Intent(getActivity(), ChatActivity.class);
-//        intent.putExtra(ChatActivity.INTENT_USER_ID, item.user.id);
-//        intent.putExtra(ChatActivity.INTENT_USER_NAME, item.user.first_name);
-//        intent.putExtra(ChatActivity.INTENT_USER_SEX, item.user.sex);
-//        intent.putExtra(ChatActivity.INTENT_USER_AGE, item.user.age);
-//        intent.putExtra(ChatActivity.INTENT_USER_CITY, item.user.city.name);
-//        intent.putExtra(ChatActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
-//        intent.putExtra(ChatActivity.INTENT_ITEM_ID, item.id);
-//        getActivity().startActivityForResult(intent, ChatActivity.INTENT_CHAT_REQUEST);
     }
 
     public void onAvatarClick(T item, View view) {

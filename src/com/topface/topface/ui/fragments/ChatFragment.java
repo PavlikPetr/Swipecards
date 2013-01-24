@@ -27,10 +27,10 @@ import com.topface.topface.Static;
 import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
 import com.topface.topface.ui.*;
+import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.IListLoader;
-import com.topface.topface.ui.adapters.NewChatListAdapter;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.ui.views.SwapControl;
@@ -60,7 +60,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     private static final int DIALOG_LOCATION_PROGRESS_ID = 3;
     private static final long LOCATION_PROVIDER_TIMEOUT = 10000;
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
-    //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
+    //TODO костыль для ChatFragment, после перехода на фрагмент - выпилить
     public static final int INTENT_CHAT_REQUEST = 371;
 
     private static final int DELETE_BUTTON = 1;
@@ -75,7 +75,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     private boolean mIsAddPanelOpened;
     private boolean mLocationDetected = false;
     private PullToRefreshListView mListView;
-    private NewChatListAdapter mAdapter;
+    private ChatListAdapter mAdapter;
     private FeedList<History> mHistoryData;
     private EditText mEditBox;
     private LockerView mLoadingLocker;
@@ -179,7 +179,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void initChatHistory(View root) {
-        mAdapter = new NewChatListAdapter(getActivity().getApplicationContext(), mHistoryData, getUpdaterCallback());
+        mAdapter = new ChatListAdapter(getActivity().getApplicationContext(), mHistoryData, getUpdaterCallback());
         mAdapter.setOnAvatarListener(this);
         mAdapter.setOnItemLongClickListener(new OnListViewItemLongClickListener() {
 
@@ -484,18 +484,21 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
             }
             break;
-            default: {
+            case R.id.btnNavigationProfileBar: {
                 //TODO костыль для навигации
                 if (mProfileInvoke) {
                     getActivity().setResult(Activity.RESULT_CANCELED);
                 } else {
                     Intent intent = getActivity().getIntent();
-                    intent.putExtra(ChatActivity.INTENT_USER_ID, mUserId);
+                    intent.putExtra(INTENT_USER_ID, mUserId);
                     getActivity().setResult(Activity.RESULT_OK, intent);
                 }
                 getActivity().finish();
                 //TODO костыль для навигации
                 getActivity().setResult(Activity.RESULT_OK);
+            }
+            default: {
+
             }
             break;
         }

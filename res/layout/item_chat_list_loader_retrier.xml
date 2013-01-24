@@ -4,12 +4,14 @@
                 android:layout_height="wrap_content"
         android:padding="10dp">
 
-    <ImageView
-            android:id="@+id/ivLoader"
+    <TextView
+            android:id="@+id/tvLoaderText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
             android:layout_centerInParent="true"
-            android:background="@drawable/btn_refresh_selector"/>
+            android:text="@string/general_dialog_retry"
+            android:background="@drawable/btn_invite"/>
 
     <ProgressBar
             android:id="@+id/prsLoader"

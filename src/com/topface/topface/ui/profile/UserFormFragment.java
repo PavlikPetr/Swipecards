@@ -1,6 +1,5 @@
 package com.topface.topface.ui.profile;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +11,7 @@ import com.topface.topface.data.User;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.StandardMessageSendRequest;
-import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.Utils;
 
