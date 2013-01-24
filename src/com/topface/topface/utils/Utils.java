@@ -241,9 +241,10 @@ public class Utils {
         int currentYear = cal2.get(Calendar.YEAR);
         cal2.set(currentYear, Calendar.JANUARY, 1);
 
-        if (time > Data.midnight) {
+
+        if (time > DateUtils.midnight) {
             text = (String) DateFormat.format("HH:mm", time);
-        } else if (time > Data.midnight - day * 5) {
+        } else if (time > DateUtils.midnight - day * 5) {
             text = formatDayOfWeek(context, cal.get(Calendar.DAY_OF_WEEK));
         } else if (time > cal2.getTimeInMillis()) {
             text = cal.get(Calendar.DAY_OF_MONTH) + " " + formatMonth(context, cal.get(Calendar.MONTH));

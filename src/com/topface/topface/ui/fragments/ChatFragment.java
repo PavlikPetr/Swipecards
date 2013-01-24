@@ -21,7 +21,6 @@ import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.topface.topface.Data;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -323,7 +322,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public void onDestroy() {
         release();
-        Data.friendAvatar = null;
         Debug.log(this, "-onDestroy");
         super.onDestroy();
     }

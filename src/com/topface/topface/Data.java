@@ -9,7 +9,6 @@ import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.Utils;
 
-import java.util.Calendar;
 import java.util.LinkedList;
 
 public class Data {
