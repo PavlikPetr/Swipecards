@@ -6,6 +6,7 @@ import com.topface.topface.utils.Debug;
 public class SendGiftAnswer extends AbstractData {
     public int likes;
     public int money;
+    public History history;
 
     public static SendGiftAnswer parse(ApiResponse response) {
         SendGiftAnswer sendGift = new SendGiftAnswer();
@@ -13,6 +14,7 @@ public class SendGiftAnswer extends AbstractData {
         try {
             sendGift.likes = response.jsonResult.optInt("likes");
             sendGift.money = response.jsonResult.optInt("money");
+            sendGift.history = new History(response);
         } catch (Exception e) {
             Debug.error("SendGift.class: Wrong response parsing", e);
         }

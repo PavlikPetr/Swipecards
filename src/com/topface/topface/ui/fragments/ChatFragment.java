@@ -301,15 +301,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             return;
         dr.id = item.id;
         registerRequest(dr);
-        dr.callback(new ApiHandler() {
+        dr.callback(new DataApiHandler() {
             @Override
-            public void success(ApiResponse response) {
-                updateUI(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter.removeItem(position);
-                    }
-                });
+            protected void success(Object data, ApiResponse response) {
+                mAdapter.removeItem(position);
+            }
+
+            @Override
+            protected Object parseResponse(ApiResponse response) {
+                return null;
             }
 
             @Override
@@ -353,61 +353,55 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             } else if (scrollRefresh) {
                 int id = mAdapter.getLastItemId();
                 if (id > 0) {
-                   historyRequest.to = id;
+                    historyRequest.to = id;
                 }
             }
         }
-        historyRequest.callback(new ApiHandler() {
+
+        historyRequest.callback(new DataApiHandler<FeedListData<History>>() {
             @Override
-            public void success(ApiResponse response) {
+            protected void success(FeedListData<History> data, ApiResponse response) {
                 if (itemId != -1) {
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID, itemId));
                     itemId = -1;
                 }
-
                 wasFailed = false;
-                final FeedListData<History> dataList = new FeedListData<History>(response.jsonResult, History.class);
-                post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mAdapter != null) {
-                            if (pullToRefresh) {
-                                mAdapter.addFirst(dataList.items, dataList.more, mListView.getRefreshableView());
-                                if (mListView != null) {
-                                    mListView.onRefreshComplete();
-                                }
-                            } else if (scrollRefresh) {
-                                mAdapter.addAll(dataList.items, dataList.more, mListView.getRefreshableView());
-                            } else {
-                                mAdapter.setData(dataList.items, dataList.more, mListView.getRefreshableView());
-                            }
-                        }
 
-                        if (mLoadingLocker != null) {
-                            mLoadingLocker.setVisibility(View.GONE);
+                if (mAdapter != null) {
+                    if (pullToRefresh) {
+                        mAdapter.addFirst(data.items, data.more, mListView.getRefreshableView());
+                        if (mListView != null) {
+                            mListView.onRefreshComplete();
                         }
+                    } else if (scrollRefresh) {
+                        mAdapter.addAll(data.items, data.more, mListView.getRefreshableView());
+                    } else {
+                        mAdapter.setData(data.items, data.more, mListView.getRefreshableView());
                     }
-                });
+                }
+
+                if (mLoadingLocker != null) {
+                    mLoadingLocker.setVisibility(View.GONE);
+                }
+
                 mIsUpdating = false;
             }
 
             @Override
-            public void fail(final int codeError, ApiResponse response) {
-                post(new Runnable() {
-                    @Override
-                    public void run() {
-//                        Toast.makeText(getActivity(), getString(R.string.general_data_error),
-//                                Toast.LENGTH_SHORT).show();
-                        mLoadingLocker.setVisibility(View.GONE);
-                        switch (codeError) {
-                            default:
-                                mRetryView.setErrorMsg(getString(R.string.general_data_error));
-                                break;
-                        }
-                        mLockScreen.setVisibility(View.VISIBLE);
-                        wasFailed = true;
-                    }
-                });
+            protected FeedListData<History> parseResponse(ApiResponse response) {
+                return new FeedListData<History>(response.jsonResult, History.class);
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+                mLoadingLocker.setVisibility(View.GONE);
+                switch (codeError) {
+                    default:
+                        mRetryView.setErrorMsg(getString(R.string.general_data_error));
+                        break;
+                }
+                mLockScreen.setVisibility(View.VISIBLE);
+                wasFailed = true;
                 mIsUpdating = false;
             }
         }).exec();
@@ -609,37 +603,24 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         }
         coordRequest.type = CoordinatesRequest.COORDINATES_TYPE_PLACE;
         coordRequest.address = geo.getAddress();
-        coordRequest.callback(new ApiHandler() {
+        coordRequest.callback(new DataApiHandler<History>() {
+            @Override
+            protected void success(History data, ApiResponse response) {
+                data.target = FeedDialog.USER_MESSAGE;
+                if (mAdapter != null) {
+                    mAdapter.replaceMessage(fakeItem, data, mListView.getRefreshableView());
+                }
+            }
 
             @Override
-            public void success(final ApiResponse response) {
-                final Confirmation confirm = Confirmation.parse(response);
-                updateUI(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (confirm.completed) {
-                            History history = new History(response);
-                            history.target = FeedDialog.USER_MESSAGE;
-                            mAdapter.replaceMessage(fakeItem,history, mListView.getRefreshableView());
-                        } else {
-                            Toast.makeText(getActivity(),
-                                    R.string.general_server_error, Toast.LENGTH_SHORT)
-                                    .show();
-                        }
-                    }
-                });
+            protected History parseResponse(ApiResponse response) {
+                return new History(response);
             }
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                updateUI(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getActivity(), R.string.general_server_error,
-                                Toast.LENGTH_SHORT).show();
-                        mAdapter.showRetrySendMessage(fakeItem,coordRequest);
-                    }
-                });
+                Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                mAdapter.showRetrySendMessage(fakeItem, coordRequest);
             }
         }).exec();
     }
@@ -652,39 +633,34 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         registerRequest(sendGift);
         sendGift.giftId = id;
         sendGift.userId = mUserId;
-        sendGift.callback(new ApiHandler() {
+
+        sendGift.callback(new DataApiHandler<SendGiftAnswer>() {
             @Override
-            public void success(final ApiResponse response) {
-                SendGiftAnswer answer = SendGiftAnswer.parse(response);
-                CacheProfile.likes = answer.likes;
-                CacheProfile.money = answer.money;
-                Debug.log(getActivity(), "likes:" + answer.likes + " money:"
-                        + answer.money);
-                updateUI(new Runnable() {
-                    @Override
-                    public void run() {
-                        History history = new History(response);
-                        history.target = FeedDialog.USER_MESSAGE;
-                        mAdapter.replaceMessage(fakeItem,history, mListView.getRefreshableView());
-                    }
-                });
+            protected void success(SendGiftAnswer data, ApiResponse response) {
+                CacheProfile.likes = data.likes;
+                CacheProfile.money = data.money;
+                Debug.log(getActivity(), "likes:" + data.likes + " money:" + data.money);
+                data.history.target = FeedDialog.USER_MESSAGE;
+                if (mAdapter != null) {
+                    mAdapter.replaceMessage(fakeItem, data.history, mListView.getRefreshableView());
+                }
             }
 
             @Override
-            public void fail(int codeError, final ApiResponse response) {
-                updateUI(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (response.code == ApiResponse.PAYMENT) {
-                            Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
-                            intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
-                            intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
-                            intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
-                            startActivity(intent);
-                        }
-                        mAdapter.showRetrySendMessage(fakeItem,sendGift);
-                    }
-                });
+            protected SendGiftAnswer parseResponse(ApiResponse response) {
+                return SendGiftAnswer.parse(response);
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+                if (response.code == ApiResponse.PAYMENT) {
+                    Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
+                    intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
+                    intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
+                    intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
+                    startActivity(intent);
+                }
+                mAdapter.showRetrySendMessage(fakeItem, sendGift);
             }
         }).exec();
     }
@@ -703,39 +679,23 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         messageRequest.userid = mUserId;
         mEditBox.getText().clear();
 
-        messageRequest.callback(new ApiHandler() {
+        messageRequest.callback(new DataApiHandler<History>() {
             @Override
-            public void success(final ApiResponse response) {
-                final Confirmation confirm = Confirmation.parse(response);
-                updateUI(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mAdapter != null) {
-                            if (confirm.completed) {
-                                History history = new History(response);
-                                mAdapter.replaceMessage(fakeItem,history, mListView.getRefreshableView());
+            protected void success(History data, ApiResponse response) {
+                if (mAdapter != null) {
+                    mAdapter.replaceMessage(fakeItem, data, mListView.getRefreshableView());
+                }
+            }
 
-                            } else {
-                                Toast.makeText(getActivity(),
-                                        getString(R.string.general_server_error),
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
-                });
+            @Override
+            protected History parseResponse(ApiResponse response) {
+                return new History(response);
             }
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                updateUI(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getActivity(),
-                                getString(R.string.general_data_error), Toast.LENGTH_SHORT)
-                                .show();
-                        mAdapter.showRetrySendMessage(fakeItem,messageRequest);
-                    }
-                });
+                Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                mAdapter.showRetrySendMessage(fakeItem, messageRequest);
             }
         }).exec();
         return true;
@@ -787,57 +747,42 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         OsmManager.getAddress(latitude, longitude, new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                CoordinatesRequest coordRequest = new CoordinatesRequest(getActivity());
+                final History fakeItem = new History(IListLoader.ItemType.WAITING);
+                mAdapter.addSentMessage(fakeItem, mListView.getRefreshableView());
+
+                final CoordinatesRequest coordRequest = new CoordinatesRequest(getActivity());
                 registerRequest(coordRequest);
                 coordRequest.userid = mUserId;
                 coordRequest.latitude = latitude;
                 coordRequest.longitude = longitude;
                 coordRequest.type = CoordinatesRequest.COORDINATES_TYPE_SELF;
                 coordRequest.address = (String) msg.obj;
-                coordRequest.callback(new ApiHandler() {
+
+                coordRequest.callback(new DataApiHandler<History>() {
+                    @Override
+                    protected void success(History data, ApiResponse response) {
+                        if (mIsAddPanelOpened)
+                            mSwapControl.snapToScreen(0);
+                        mIsAddPanelOpened = false;
+                        if (mAdapter != null) {
+                            mAdapter.replaceMessage(fakeItem, data, mListView.getRefreshableView());
+                        }
+                        mProgressDialog.dismiss();
+                    }
 
                     @Override
-                    public void success(final ApiResponse response) {
-                        final Confirmation confirm = Confirmation.parse(response);
-                        // final String address =
-                        // mGeoManager.getLocationAddress(latitude, longitude);
-                        updateUI(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                if (confirm.completed) {
-                                    if (mIsAddPanelOpened)
-                                        mSwapControl.snapToScreen(0);
-                                    mIsAddPanelOpened = false;
-                                    History history = new History(response);
-//									history.target = FeedDialog.USER_MESSAGE;
-                                    mAdapter.addSentMessage(history, mListView.getRefreshableView());
-                                    mAdapter.notifyDataSetChanged();
-                                } else {
-                                    Toast.makeText(getActivity(),
-                                            R.string.general_server_error, Toast.LENGTH_SHORT)
-                                            .show();
-                                }
-                                mProgressDialog.dismiss();
-                            }
-                        });
-
+                    protected History parseResponse(ApiResponse response) {
+                        return new History(response);
                     }
 
                     @Override
                     public void fail(int codeError, ApiResponse response) {
-                        updateUI(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                mProgressDialog.dismiss();
-                                Toast.makeText(getActivity(), R.string.general_server_error,
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
+                        mProgressDialog.dismiss();
+                        Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                        mAdapter.showRetrySendMessage(fakeItem, coordRequest);
                     }
                 }).exec();
+
             }
         });
 
