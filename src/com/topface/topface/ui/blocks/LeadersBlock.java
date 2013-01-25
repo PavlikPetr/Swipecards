@@ -19,7 +19,6 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.LeadersAdapter;
 import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 
 /**
  * Блок с лидерами
@@ -59,9 +58,7 @@ public class LeadersBlock {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
-                Debug.error("Leaders loading error: " + codeError + "-" + response.toString());
-            }
+            public void fail(int codeError, ApiResponse response) {}
 
         }).exec();
     }
