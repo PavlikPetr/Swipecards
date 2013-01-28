@@ -285,7 +285,8 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             if (emailWanted && email != null) {
                 strBuilder.append("<p>Email for answer: ").append(email).append("</p>");
             }
-            strBuilder.append("<p>Topface version: ").append(topface_version).append("/").append(topface_versionCode).append("</p>");
+            strBuilder.append("<p>Topface version: ").append(topface_version).append("/").append(topface_versionCode)
+                    .append("</p>");
             strBuilder.append("<p>Device: ").append(device).append("/").append(model).append("</p>");
             strBuilder.append("<p>Device language: ").append(Locale.getDefault().getDisplayLanguage()).append("</p>");
 
@@ -297,6 +298,8 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
             strBuilder.append("<p>Android version: ").append(android_CODENAME).append("/");
             strBuilder.append(android_RELEASE).append("/").append(android_SDK).append("</p>");
+
+            strBuilder.append("<p>Build type: ").append(Utils.getBuildType()).append(android_SDK).append("</p>");
 
             return strBuilder.toString();
         }

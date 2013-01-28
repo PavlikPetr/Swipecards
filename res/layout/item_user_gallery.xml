@@ -10,7 +10,7 @@
             ivr:clipMask="@drawable/user_mask_album"
             android:scaleType="centerInside"
             android:background="@drawable/user_frame_album_center"
-            android:layout_width="98dp"
+            android:layout_width="105dp"
             android:layout_height="105dp"
             android:layout_centerInParent="true"/>
 
