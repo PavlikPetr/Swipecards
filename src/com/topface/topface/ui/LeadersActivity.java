@@ -20,9 +20,13 @@ import com.topface.topface.utils.Utils;
 
 public class LeadersActivity extends BaseFragmentActivity {
     private GridView mGridView;
+    private GridView mUselessGridView;
     private LockerView mLoadingLocker;
     private PhotoSelector mSelectedPhoto = new PhotoSelector();
     private Button mBuyButton;
+
+    private Photos usePhotos;
+    private Photos uselessPhotos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +43,12 @@ public class LeadersActivity extends BaseFragmentActivity {
             }
         });
 
+        usePhotos = new Photos();
+        uselessPhotos = new Photos();
+
 //        mProgressBar = (ProgressBar) findViewById(R.id.loader);
-        mGridView = (GridView) findViewById(R.id.fragmentGrid);
+        mGridView = (GridView) findViewById(R.id.usedGrid);
+        mUselessGridView = (GridView) findViewById(R.id.unusedGrid);
         mBuyButton = (Button) findViewById(R.id.btnLeadersBuy);
         mLoadingLocker = (LockerView) findViewById(R.id.llvLeaderSending);
 
@@ -111,10 +119,25 @@ public class LeadersActivity extends BaseFragmentActivity {
     }
 
     private void updateProfileInfo(Profile profile) {
-        LeadersPhotoAdapter leadersAdapter = new LeadersPhotoAdapter(getApplicationContext(), profile.photos, mSelectedPhoto);
+        splitPhotos(profile.photos);
+        LeadersPhotoAdapter leadersAdapter = new LeadersPhotoAdapter(getApplicationContext(), usePhotos, mSelectedPhoto);
+        LeadersPhotoAdapter uselessAdapter = new LeadersPhotoAdapter(getApplicationContext(), uselessPhotos, new PhotoSelector());
+        mUselessGridView.setAdapter(uselessAdapter);
         mGridView.setAdapter(leadersAdapter);
         if (mSelectedPhoto != null) {
             mSelectedPhoto.selectInitPhoto(profile.photo, profile.photos);
+        }
+    }
+
+    private void splitPhotos(Photos photos) {
+        for(int i = 0; i < 3; i++) {
+            for(Photo photo : photos) {
+                if(photo.mLiked >= 25) {
+                    usePhotos.add(new Photo(photo));
+                } else {
+                    uselessPhotos.add(new Photo(photo));
+                }
+            }
         }
     }
 

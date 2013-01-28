@@ -91,6 +91,13 @@ public class Photo extends AbstractData implements Parcelable {
         this.links = links;
     }
 
+    public Photo(Photo photo) {
+        this.mId = photo.mId;
+        this.mLiked = photo.mLiked;
+        this.links = photo.links;
+
+    }
+
     public Photo(JSONObject data) {
         super(data);
     }

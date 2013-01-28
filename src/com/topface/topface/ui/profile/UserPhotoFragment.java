@@ -30,11 +30,11 @@ public class UserPhotoFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_grid, container, false);
 
-        GridView gridAlbum = (GridView) root.findViewById(R.id.fragmentGrid);
+        GridView gridAlbum = (GridView) root.findViewById(R.id.usedGrid);
         gridAlbum.setAdapter(mUserPhotoGridAdapter);
         gridAlbum.setOnItemClickListener(mOnItemClickListener);
 
-        mTitle = (TextView) root.findViewById(R.id.fragmentTitle);
+        mTitle = (TextView) root.findViewById(R.id.usedTitle);
 
         if (mPhotoLinks != null) {
             setPhotos(mPhotoLinks);

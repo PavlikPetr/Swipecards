@@ -1,6 +1,5 @@
 package com.topface.topface.ui.profile;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +11,7 @@ import com.topface.topface.data.User;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.StandardMessageSendRequest;
-import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.Utils;
 
@@ -52,7 +49,7 @@ public class UserFormFragment extends BaseFragment implements OnClickListener {
         mPgb = (ProgressBar) mEmptyFormLayout.findViewById(R.id.pgbProgress);
         mSuccessText = (TextView) mEmptyFormLayout.findViewById(R.id.emptyFormSuccess);
 
-        mTitleLayout = root.findViewById(R.id.fragmentTitle);
+        mTitleLayout = root.findViewById(R.id.usedTitle);
         mTitle = (TextView) root.findViewById(R.id.tvTitle);
         mState = (ImageView) root.findViewById(R.id.ivState);
         if (mUser != null) {
@@ -104,7 +101,7 @@ public class UserFormFragment extends BaseFragment implements OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.fragmentTitle:
+            case R.id.usedTitle:
                 if (mUserFormListAdapter.isMatchedDataOnly()) mUserFormListAdapter.setAllData();
                 else mUserFormListAdapter.setMatchedDataOnly();
                 mUserFormListAdapter.notifyDataSetChanged();

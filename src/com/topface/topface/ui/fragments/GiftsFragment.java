@@ -52,7 +52,7 @@ public class GiftsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_grid, null);
 
-        mGridView = (GridView) root.findViewById(R.id.fragmentGrid);
+        mGridView = (GridView) root.findViewById(R.id.usedGrid);
         mGridView.setAnimationCacheEnabled(false);
         mGridView.setScrollingCacheEnabled(true);
         GiftGalleryManager<FeedGift> galleryManager = new GiftGalleryManager<FeedGift>(mGifts, new Handler() {
@@ -67,7 +67,7 @@ public class GiftsFragment extends BaseFragment {
         mGridView.setAdapter(mGridAdapter);
         mGridView.setOnScrollListener(galleryManager);
 
-        mTitle = (TextView) root.findViewById(R.id.fragmentTitle);
+        mTitle = (TextView) root.findViewById(R.id.usedTitle);
 
         if (mProfile != null) {
             setProfile(mProfile);

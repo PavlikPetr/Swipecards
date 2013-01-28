@@ -1,6 +1,7 @@
 package com.topface.topface.data;
 
 
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import com.topface.topface.utils.Debug;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,6 +14,12 @@ public class Photos extends ArrayList<Photo> {
     public Photos(JSONArray photos) {
         this();
         addAll(parse(photos));
+    }
+
+    public Photos(Photos photos) {
+        for (Photo photo : photos) {
+            add(new Photo(photo));
+        }
     }
 
     public Photos() {

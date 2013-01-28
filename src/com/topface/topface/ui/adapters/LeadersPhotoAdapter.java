@@ -12,6 +12,7 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.ui.LeadersActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.Debug;
 
 public class LeadersPhotoAdapter extends BaseAdapter {
     private LeadersActivity.PhotoSelector mPhotoSelector;
@@ -33,6 +34,7 @@ public class LeadersPhotoAdapter extends BaseAdapter {
         mPhotoSelector = selector;
 
         sortPhotosByRating();
+        Debug.log("LEADERSADAPTER::" + Integer.toString(mAlbumsList.size()));
     }
 
     private void sortPhotosByRating() {

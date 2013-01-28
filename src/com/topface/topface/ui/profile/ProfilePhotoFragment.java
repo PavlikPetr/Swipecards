@@ -80,11 +80,11 @@ public class ProfilePhotoFragment extends BaseFragment {
 
         mViewFlipper = (ViewFlipper) root.findViewById(R.id.vfFlipper);
 
-        GridView gridAlbum = (GridView) root.findViewById(R.id.fragmentGrid);
+        GridView gridAlbum = (GridView) root.findViewById(R.id.usedGrid);
         gridAlbum.setAdapter(mProfilePhotoGridAdapter);
         gridAlbum.setOnItemClickListener(mOnItemClickListener);
 
-        TextView title = (TextView) root.findViewById(R.id.fragmentTitle);
+        TextView title = (TextView) root.findViewById(R.id.usedTitle);
 
         if (mPhotoLinks != null && CacheProfile.photos != null) {
             title.setText(Utils.formatPhotoQuantity(CacheProfile.photos.size()));

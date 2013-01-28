@@ -58,7 +58,7 @@
                     android:layout_alignParentTop="true"
                     android:text="@string/leaders_select_cool_picture"/>
 
-            <GridView
+            <GridLayout
                     android:id="@+id/usedGrid"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
                     android:layout_alignParentTop="true"
                     android:text="@string/leaders_select_cool_picture"/>
 
-            <GridView
+            <GridLayout
                     android:id="@+id/unusedGrid"
 
                     android:layout_above="@id/loFooter"
