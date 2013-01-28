@@ -137,7 +137,8 @@ public class ImageViewRemote extends ImageView {
         }
 
 
-        if (!TextUtils.isEmpty(remoteSrc) && !TextUtils.equals(mCurrentSrc, remoteSrc)) {
+        //Если ссылка не пустая и мы не патаемся скачать уже установленный в View изображение, то начинаем загрузку
+        if (!TextUtils.isEmpty(remoteSrc)) {
             if (!remoteSrc.equals(mCurrentSrc)) {
                 mCurrentSrc = remoteSrc;
                 mIsAnimationEnabled = true;
