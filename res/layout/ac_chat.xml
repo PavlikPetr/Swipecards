@@ -6,21 +6,10 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true">
 
-    <!-- header bar -->
-
-    <FrameLayout
-            android:id="@+id/loNavigationBar"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-
-        <include layout="@layout/bar_navigation_header"/>
-    </FrameLayout>
-
     <com.topface.topface.ui.views.SwapControl
             android:id="@+id/swapFormView"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_below="@id/loNavigationBar">
+            android:layout_height="fill_parent">
 
         <LinearLayout
                 android:layout_width="fill_parent"
@@ -50,8 +39,7 @@
                     android:fadeScrollbars="true"
                     android:fadingEdge="none"
                     android:stackFromBottom="true"
-                    android:listSelector="@android:color/transparent"
-                    android:transcriptMode="alwaysScroll"/>
+                    android:listSelector="@android:color/transparent"/>
 
             <FrameLayout
                     android:id="@+id/loChatFooterSend"
@@ -104,7 +92,4 @@
             style="@style/LoadingLocker"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"/>
-
-    <ImageView
-            style="@style/HeaderShadow"/>
 </RelativeLayout>

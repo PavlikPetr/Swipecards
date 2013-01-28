@@ -16,7 +16,7 @@
                 xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
                 ivr:postProcessor="mask"
                 ivr:clipMask="@drawable/frame_menu_mask"
-                android:background="@drawable/frame_menu_mask"
+                android:background="@drawable/frame_menu"
                 android:id="@+id/ivMenuAvatar"
                 android:src="@drawable/topface_male_profile_button"
                 android:layout_centerVertical="true"

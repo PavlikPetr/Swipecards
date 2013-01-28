@@ -5,13 +5,7 @@
 
     <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/ivPhoto"
-            xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
-            ivr:postProcessor="mask"
-            ivr:clipMask="@drawable/user_mask_album"
-            android:scaleType="centerInside"
-            android:background="@drawable/user_frame_album_center"
-            android:layout_width="105dp"
-            android:layout_height="105dp"
+            style="@style/GalleryItem"
             android:layout_centerInParent="true"/>
 
 </RelativeLayout>
