@@ -99,16 +99,14 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
         };
 
-        IntentFilter filter = new IntentFilter(ChatFragment.MAKE_ITEM_READ);
-        filter.addAction(CountersManager.UPDATE_COUNTERS);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(readItemReceiver, filter);
-
         initFloatBlock((ViewGroup) view);
         createUpdateErrorMessage();
 
         GCMUtils.cancelNotification(getActivity(), getTypeForGCM());
         return view;
     }
+
+
 
     protected void initFloatBlock(ViewGroup view) {
         mFloatBlock = new FloatBlock(getActivity(), this, view);
@@ -134,6 +132,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (getListAdapter().isNeedUpdate()) {
             updateData(false, true);
         }
+
+        IntentFilter filter = new IntentFilter(ChatFragment.MAKE_ITEM_READ);
+        filter.addAction(CountersManager.UPDATE_COUNTERS);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(readItemReceiver, filter);
     }
 
     @Override
@@ -142,12 +144,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (mFloatBlock != null) {
             mFloatBlock.onPause();
         }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(readItemReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(readItemReceiver);
     }
 

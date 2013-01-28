@@ -83,7 +83,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private String mHeaderStartPageClassName;
     private int mStartBodyPage = 0;
     private int mStartHeaderPage = 0;
-    private BroadcastReceiver mMUpdateBlackListState;
+    private BroadcastReceiver mUpdateBlackListState;
 
     private Handler mHideActionControlsUpdater;
 
@@ -159,7 +159,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             if (mUserProfile == null) getUserProfile();
         }
 
-        mMUpdateBlackListState = new BroadcastReceiver() {
+        mUpdateBlackListState = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (mUserProfile != null) {
@@ -167,7 +167,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 }
             }
         };
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMUpdateBlackListState, new IntentFilter(ProfileBlackListControlFragment.UPDATE_ACTION));
+
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateBlackListState, new IntentFilter(ProfileBlackListControlFragment.UPDATE_ACTION));
         setProfile(mUserProfile);
 
         startWaitingActionControlsHide();
@@ -177,7 +178,16 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onPause() {
         super.onPause();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mMUpdateBlackListState);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateBlackListState);
+
+        //Вручную прокидываем событие onPause() в ViewPager, т.к. на onPause() мы отписываемся от событий
+        for (Fragment fragment : mBodyPagerAdapter.getFragmentCache().values()) {
+            fragment.onPause();
+        }
+
+        for (Fragment fragment : mHeaderPagerAdapter.getFragmentCache().values()) {
+            fragment.onPause();
+        }
 
         stopWaitingActionControlHiding();
     }
@@ -199,6 +209,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             return;
         }
         UserRequest userRequest = new UserRequest(mProfileId, getActivity().getApplicationContext());
+        registerRequest(userRequest);
         userRequest.callback(new DataApiHandler<User>() {
 
             @Override
@@ -226,14 +237,12 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
             @Override
             public void fail(final int codeError, ApiResponse response) {
-                mLoaderView.setVisibility(View.GONE);
-                mLockScreen.setVisibility(View.VISIBLE);
-                switch (codeError) {
-                    default:
-                        mRetryBtn.setErrorMsg(getString(R.string.general_profile_error));
-                        break;
+                if (mRetryBtn != null) {
+                    mLoaderView.setVisibility(View.GONE);
+                    mLockScreen.setVisibility(View.VISIBLE);
+                    mRetryBtn.setErrorMsg(getString(R.string.general_profile_error));
+                    mRetryBtn.showOnlyMessage(false);
                 }
-                mRetryBtn.showOnlyMessage(false);
             }
         }).exec();
     }
@@ -524,7 +533,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     refreshViews();
                 }
             };
-            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         }
 
         @Override
@@ -546,6 +554,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         public void onResume() {
             super.onResume();
             refreshViews();
+            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         }
 
         public void setProfile(Profile profile) {
@@ -617,8 +626,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         }
 
         @Override
-        public void onDestroy() {
-            super.onDestroy();
+        public void onPause() {
+            super.onPause();
             LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
         }
     }
