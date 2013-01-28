@@ -22,7 +22,10 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
-import com.topface.topface.ui.*;
+import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.GiftsActivity;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.profile.*;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -82,7 +85,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private String mHeaderStartPageClassName;
     private int mStartBodyPage = 0;
     private int mStartHeaderPage = 0;
-    private BroadcastReceiver mMUpdateBlackListState;
+    private BroadcastReceiver mUpdateBlackListState;
 
     private Handler mHideActionControlsUpdater;
 
@@ -158,7 +161,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             if (mUserProfile == null) getUserProfile();
         }
 
-        mMUpdateBlackListState = new BroadcastReceiver() {
+        mUpdateBlackListState = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (mUserProfile != null) {
@@ -166,7 +169,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 }
             }
         };
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMUpdateBlackListState, new IntentFilter(ProfileBlackListControlFragment.UPDATE_ACTION));
+
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateBlackListState, new IntentFilter(ProfileBlackListControlFragment.UPDATE_ACTION));
         setProfile(mUserProfile);
 
         startWaitingActionControlsHide();
@@ -176,7 +180,16 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onPause() {
         super.onPause();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mMUpdateBlackListState);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateBlackListState);
+
+        //Вручную прокидываем событие onPause() в ViewPager, т.к. на onPause() мы отписываемся от событий
+        for (Fragment fragment : mBodyPagerAdapter.getFragmentCache().values()) {
+            fragment.onPause();
+        }
+
+        for (Fragment fragment : mHeaderPagerAdapter.getFragmentCache().values()) {
+            fragment.onPause();
+        }
 
         stopWaitingActionControlHiding();
     }
@@ -445,6 +458,10 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             mFragmentsTitles = fragmentTitles;
         }
 
+        public HashMap<Integer, Fragment> getFragmentCache() {
+            return mFragmentCache;
+        }
+
         public int getFragmentIndexByClassName(String className) {
             for (int i = 0; i < mFragmentsClasses.size(); i++) {
                 if (mFragmentsClasses.get(i).equals(className)) {
@@ -611,7 +628,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     refreshViews();
                 }
             };
-            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         }
 
         @Override
@@ -633,6 +649,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         public void onResume() {
             super.onResume();
             refreshViews();
+            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         }
 
         public void setProfile(Profile profile) {
@@ -704,8 +721,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         }
 
         @Override
-        public void onDestroy() {
-            super.onDestroy();
+        public void onPause() {
+            super.onPause();
             LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
         }
     }

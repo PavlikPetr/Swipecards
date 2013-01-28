@@ -107,7 +107,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         String userName = getArguments().getString(INTENT_USER_NAME);
         int userAge = getArguments().getInt(INTENT_USER_AGE, 0);
         String userCity = getArguments().getString(INTENT_USER_CITY);
-        String prevEntity = getArguments().getString(BaseFragmentActivity.INTENT_PREV_ENTITY, null);
+        String prevEntity = getArguments().getString(BaseFragmentActivity.INTENT_PREV_ENTITY);
 
         // Locker
         mLoadingLocker = (LockerView) root.findViewById(R.id.llvChatLoading);
