@@ -8,8 +8,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -26,6 +24,7 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.adapters.ProfilePageAdapter;
 import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.profile.*;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -41,7 +40,6 @@ import com.viewpagerindicator.TabPageIndicator;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.TimerTask;
 
 public class ProfileFragment extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
@@ -262,7 +260,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         addHeaderPage(HeaderStatusFragment.class.getName());
 
         ViewPager headerPager = (ViewPager) root.findViewById(R.id.vpHeaderFragments);
-        mHeaderPagerAdapter = new ProfilePageAdapter(getActivity().getSupportFragmentManager(), HEADER_PAGES_CLASS_NAMES);
+        mHeaderPagerAdapter = new ProfilePageAdapter(getActivity().getSupportFragmentManager(),
+                HEADER_PAGES_CLASS_NAMES, mProfileUpdater);
         headerPager.setAdapter(mHeaderPagerAdapter);
         //Tabs for header
         CirclePageIndicator circleIndicator = (CirclePageIndicator) root.findViewById(R.id.cpiHeaderTabs);
@@ -288,7 +287,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
         ViewPager bodyPager = (ViewPager) root.findViewById(R.id.vpFragments);
         mBodyPagerAdapter = new ProfilePageAdapter(getActivity().getSupportFragmentManager(), BODY_PAGES_CLASS_NAMES,
-                BODY_PAGES_TITLES);
+                BODY_PAGES_TITLES, mProfileUpdater);
         bodyPager.setAdapter(mBodyPagerAdapter);
         //Tabs for Body
         TabPageIndicator tabIndicator = (TabPageIndicator) root.findViewById(R.id.tpiTabs);
@@ -438,99 +437,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             } else {
                 startWaitingActionControlsHide();
             }
-        }
-    }
-
-    public class ProfilePageAdapter extends FragmentStatePagerAdapter {
-
-        private ArrayList<String> mFragmentsClasses = new ArrayList<String>();
-        private ArrayList<String> mFragmentsTitles = new ArrayList<String>();
-        private HashMap<Integer, Fragment> mFragmentCache = new HashMap<Integer, Fragment>();
-
-        public ProfilePageAdapter(FragmentManager fm, ArrayList<String> fragmentsClasses) {
-            super(fm);
-            mFragmentsClasses = fragmentsClasses;
-        }
-
-        public ProfilePageAdapter(FragmentManager fm, ArrayList<String> fragmentsClasses, ArrayList<String> fragmentTitles) {
-            super(fm);
-            mFragmentsClasses = fragmentsClasses;
-            mFragmentsTitles = fragmentTitles;
-        }
-
-        public HashMap<Integer, Fragment> getFragmentCache() {
-            return mFragmentCache;
-        }
-
-        public int getFragmentIndexByClassName(String className) {
-            for (int i = 0; i < mFragmentsClasses.size(); i++) {
-                if (mFragmentsClasses.get(i).equals(className)) {
-                    return i;
-                }
-            }
-            return -1;
-        }
-
-        public String getClassNameByFragmentIndex(int i) {
-            if (mFragmentsClasses.isEmpty()) {
-                return "";
-            }
-            return mFragmentsClasses.get(i);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentsClasses.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            if (!mFragmentsTitles.isEmpty())
-                return mFragmentsTitles.get(position);
-
-            return super.getPageTitle(position);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            Fragment fragment = null;
-            if (mFragmentCache.containsKey(position)) {
-                return mFragmentCache.get(position);
-            }
-            try {
-                String fragmentClassName = mFragmentsClasses.get(position);
-
-                //create fragments
-                if (fragmentClassName.equals(HeaderMainFragment.class.getName())) {
-                    fragment = HeaderMainFragment.newInstance(mUserProfile);
-                } else if (fragmentClassName.equals(HeaderStatusFragment.class.getName())) {
-                    fragment = HeaderStatusFragment.newInstance(mUserProfile);
-                } else {
-                    Class fragmentClass = Class.forName(fragmentClassName);
-                    if (fragmentClassName.equals(ProfileBlackListControlFragment.class.getName())) {
-                        fragment = ProfileBlackListControlFragment.newInstance(mUserProfile.uid, mUserProfile.inBlackList);
-                    } else {
-                        fragment = (Fragment) fragmentClass.newInstance();
-                    }
-                }
-                //save variables for setting user data
-                if (fragment instanceof HeaderMainFragment) {
-                    mHeaderMainFragment = (HeaderMainFragment) fragment;
-                } else if (fragment instanceof HeaderStatusFragment) {
-                    mHeaderStatusFragment = (HeaderStatusFragment) fragment;
-                } else if (fragment instanceof UserPhotoFragment) {
-                    mUserPhotoFragment = (UserPhotoFragment) fragment;
-                } else if (fragment instanceof UserFormFragment) {
-                    mUserFormFragment = (UserFormFragment) fragment;
-                } else if (fragment instanceof GiftsFragment) {
-                    mGiftFragment = (GiftsFragment) fragment;
-                }
-                setProfile(mUserProfile);
-            } catch (Exception ex) {
-                Debug.error(ex);
-            }
-            mFragmentCache.put(position, fragment);
-            return fragment;
         }
     }
 
@@ -887,4 +793,35 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             }
         }
     };
+
+    ProfileUpdater mProfileUpdater = new ProfileUpdater() {
+        @Override
+        public void update() {
+            setProfile(getProfile());
+        }
+
+        public void bindFragment(Fragment fragment) {
+            if (fragment instanceof HeaderMainFragment) {
+                mHeaderMainFragment = (HeaderMainFragment) fragment;
+            } else if (fragment instanceof HeaderStatusFragment) {
+                mHeaderStatusFragment = (HeaderStatusFragment) fragment;
+            } else if (fragment instanceof UserPhotoFragment) {
+                mUserPhotoFragment = (UserPhotoFragment) fragment;
+            } else if (fragment instanceof UserFormFragment) {
+                mUserFormFragment = (UserFormFragment) fragment;
+            } else if (fragment instanceof GiftsFragment) {
+                mGiftFragment = (GiftsFragment) fragment;
+            }
+        }
+
+        public Profile getProfile() {
+            return mUserProfile;
+        }
+    };
+
+    public interface ProfileUpdater {
+        void update();
+        void bindFragment(Fragment fragment);
+        Profile getProfile();
+    }
 }
