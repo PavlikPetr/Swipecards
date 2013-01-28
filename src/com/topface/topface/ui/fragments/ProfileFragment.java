@@ -209,6 +209,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             return;
         }
         UserRequest userRequest = new UserRequest(mProfileId, getActivity().getApplicationContext());
+        registerRequest(userRequest);
         userRequest.callback(new DataApiHandler<User>() {
 
             @Override
@@ -236,14 +237,12 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
             @Override
             public void fail(final int codeError, ApiResponse response) {
-                mLoaderView.setVisibility(View.GONE);
-                mLockScreen.setVisibility(View.VISIBLE);
-                switch (codeError) {
-                    default:
-                        mRetryBtn.setErrorMsg(getString(R.string.general_profile_error));
-                        break;
+                if (mRetryBtn != null) {
+                    mLoaderView.setVisibility(View.GONE);
+                    mLockScreen.setVisibility(View.VISIBLE);
+                    mRetryBtn.setErrorMsg(getString(R.string.general_profile_error));
+                    mRetryBtn.showOnlyMessage(false);
                 }
-                mRetryBtn.showOnlyMessage(false);
             }
         }).exec();
     }
