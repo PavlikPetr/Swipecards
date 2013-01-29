@@ -12,6 +12,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedDialog;
+import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.History;
 import com.topface.topface.data.VirusLike;
 import com.topface.topface.requests.ApiHandler;
@@ -76,6 +77,12 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         mUnrealItems = new ArrayList<History>();
         mWaitingItems = new ArrayList<History>();
         mHashRepeatRequests = new HashMap<History, ApiRequest>();
+    }
+
+    public void setFriendProfile(FeedUser friend) {
+        if (mHeaderView != null && friend != null) {
+            ((ImageViewRemote)mHeaderView.findViewById(R.id.ivFriendAvatar)).setPhoto(friend.photo);
+        }
     }
 
     @Override
