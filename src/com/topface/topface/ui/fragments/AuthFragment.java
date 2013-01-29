@@ -342,14 +342,15 @@ public class AuthFragment extends BaseFragment {
 
     private void btnVKClick() {
         if (checkOnline()) {
+            hideButtons();
             mAuthorizationManager.vkontakteAuth();
         }
 //
     }
 
-
     private void btnFBClick() {
         if (checkOnline()) {
+            hideButtons();
             mAuthorizationManager.facebookAuth();
         }
     }
