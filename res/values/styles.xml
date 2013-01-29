@@ -187,7 +187,7 @@
     <style name="FeedAvatar">
         <item name="postProcessor">mask</item>
         <item name="clipMask">@drawable/small_avatar_frame_mask</item>
-        <item name="android:background">@drawable/im_avatar_list_frame</item>
+        <item name="android:background">@drawable/avatar_feed_frame_selector</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_marginRight">6dp</item>
@@ -305,8 +305,8 @@
 
     <style name="ChatAvatar">
         <item name="postProcessor">mask</item>
-        <item name="clipMask">@drawable/small_avatar_frame_mask</item>
-        <item name="android:background">@drawable/chat_avatar_frame</item>
+        <item name="clipMask">@drawable/avatar_chat_mask</item>
+        <item name="android:background">@drawable/avatar_chat_frame</item>
         <item name="android:layout_width">35dp</item>
         <item name="android:layout_height">37dp</item>
         <item name="android:scaleType">centerCrop</item>

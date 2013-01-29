@@ -198,7 +198,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     public void addFirst(ArrayList<History> data, boolean more,ListView parentView) {
         int scroll = parentView.getScrollY();
         this.addFirst(data, more);
-        parentView.setScrollY(scroll);
+        parentView.scrollTo(parentView.getScrollX(),scroll);
         if(getCount() > 0) {
             removeHeader(parentView);
         }
