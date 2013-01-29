@@ -172,11 +172,12 @@
     </style>
 
     <style name="EditAvatar">
-        <item name="postProcessor">rounded</item>
+        <item name="postProcessor">mask</item>
+        <item name="clipMask">@drawable/avatar_frame_mask</item>
+        <item name="android:background">@drawable/avatar_frame</item>
         <item name="android:layout_centerInParent">true</item>
         <item name="android:layout_width">100dp</item>
         <item name="android:layout_height">100dp</item>
-        <item name="android:background">@drawable/avatar_frame</item>
         <item name="android:paddingTop">5dp</item>
         <item name="android:paddingLeft">5dp</item>
         <item name="android:paddingRight">5dp</item>
@@ -184,14 +185,15 @@
     </style>
 
     <style name="FeedAvatar">
-        <item name="postProcessor">rounded</item>
+        <item name="postProcessor">mask</item>
+        <item name="clipMask">@drawable/avatar_feed_mask</item>
+        <item name="android:background">@drawable/avatar_feed_frame_selector</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_marginRight">6dp</item>
         <item name="android:layout_marginLeft">6dp</item>
         <item name="android:layout_width">62dp</item>
         <item name="android:layout_height">62dp</item>
-        <item name="android:background">@drawable/im_avatar_list_frame</item>
         <item name="android:paddingTop">1dp</item>
         <item name="android:paddingLeft">1dp</item>
         <item name="android:paddingRight">1dp</item>
@@ -302,7 +304,9 @@
     </style>
 
     <style name="ChatAvatar">
-        <item name="android:background">@drawable/chat_avatar_frame</item>
+        <item name="postProcessor">mask</item>
+        <item name="clipMask">@drawable/avatar_chat_mask</item>
+        <item name="android:background">@drawable/avatar_chat_frame</item>
         <item name="android:layout_width">35dp</item>
         <item name="android:layout_height">37dp</item>
         <item name="android:scaleType">centerCrop</item>
@@ -313,7 +317,6 @@
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:layout_marginLeft">3dp</item>
         <item name="android:layout_marginRight">3dp</item>
-        <item name="postProcessor">rounded</item>
     </style>
 
     <style name="ChatAvatarInvisible" parent="ChatAvatar">
@@ -331,7 +334,7 @@
     </style>
 
     <style name="Gift">
-        <item name="postProcessor">rounded</item>
+        <item name="postProcessor">circumCircle</item>
         <item name="android:layout_width">97dp</item>
         <item name="android:layout_height">99dp</item>
         <item name="android:paddingLeft">1dp</item>
@@ -386,13 +389,15 @@
     </style>
 
     <style name="ProfileAvatar">
+        <item name="postProcessor">mask</item>
+        <item name="clipMask">@drawable/avatar_frame_mask</item>
         <item name="android:layout_width">93dp</item>
         <item name="android:layout_height">93dp</item>
         <item name="android:paddingTop">0.5dp</item>
         <item name="android:paddingLeft">0.5dp</item>
         <item name="android:paddingRight">0.5dp</item>
         <item name="android:paddingBottom">2dp</item>
-        <item name="android:background">@drawable/avatar_frame_center</item>
+        <item name="android:background">@drawable/avatar_frame</item>
     </style>
 
     <style name="TopfaceCirclePageIndicator">
@@ -474,6 +479,28 @@
         <item name="android:layout_marginTop">3dp</item>
         <item name="android:layout_marginBottom">3dp</item>
         <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="GalleryItem">
+        <item name="postProcessor">mask</item>
+        <item name="clipMask">@drawable/user_mask_album</item>
+        <item name="android:scaleType">centerInside</item>
+        <item name="android:background">@drawable/user_frame_album_center</item>
+        <item name="android:layout_width">105dp</item>
+        <item name="android:layout_height">105dp</item>
+    </style>
+
+    <style name="TopItem">
+        <item name="postProcessor">mask</item>
+        <item name="clipMask">@drawable/frame_top_mask</item>
+        <item name="android:background">@drawable/frame_top</item>
+        <item name="android:paddingLeft">1dp</item>
+        <item name="android:paddingRight">1dp</item>
+        <item name="android:paddingTop">0.5dp</item>
+        <item name="android:paddingBottom">0.5dp</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:layout_width">106dp</item>
+        <item name="android:layout_height">108dp</item>
     </style>
 
 </resources>

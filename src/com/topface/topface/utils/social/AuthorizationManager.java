@@ -38,8 +38,6 @@ import java.net.MalformedURLException;
 //TODO make some Strategy or State pattern for different social networks 
 public class AuthorizationManager {
 
-    private static AuthorizationManager mInstance;
-
     public final static int AUTHORIZATION_FAILED = 0;
     public final static int TOKEN_RECEIVED = 1;
     public final static int DIALOG_COMPLETED = 2;
@@ -51,26 +49,18 @@ public class AuthorizationManager {
     // Facebook
     private AsyncFacebookRunner mAsyncFacebookRunner;
 
-    private static Handler mHandler;
-    private static Activity mParentActivity;
-    private static Facebook mFacebook;
+    private Handler mHandler;
+    private Activity mParentActivity;
+    private Facebook mFacebook;
 
-    private AuthorizationManager() {
-    }
-
-    public static AuthorizationManager getInstance(Activity parent) {
+    public AuthorizationManager(Activity parent) {
         mParentActivity = parent;
         mHandler = null;
-        if (mInstance == null)
-            mInstance = new AuthorizationManager();
-        return mInstance;
+        mFacebook = getFacebook();
     }
 
     public static Facebook getFacebook() {
-        if (mFacebook == null) {
-            mFacebook = new Facebook(Static.AUTH_FACEBOOK_ID);
-        }
-        return mFacebook;
+        return new Facebook(Static.AUTH_FACEBOOK_ID);
     }
 
     // common methods
@@ -84,8 +74,8 @@ public class AuthorizationManager {
         }
     }
 
-    public void extendAccessToken() {
-        getFacebook().extendAccessTokenIfNeeded(mParentActivity.getApplicationContext(), null);
+    public static void extendAccessToken(Activity parentActivity) {
+        getFacebook().extendAccessTokenIfNeeded(parentActivity.getApplicationContext(), null);
     }
 
     private void receiveToken(AuthToken authToken) {
@@ -117,7 +107,7 @@ public class AuthorizationManager {
                     receiveToken(authToken);
                 }
             } else {
-                getFacebook().authorizeCallback(requestCode, resultCode, data);
+                mFacebook.authorizeCallback(requestCode, resultCode, data);
             }
         }
     }
@@ -130,8 +120,8 @@ public class AuthorizationManager {
 
     // mFacebook methods
     public void facebookAuth() {
-        mAsyncFacebookRunner = new AsyncFacebookRunner(getFacebook());
-        getFacebook().authorize(mParentActivity, FB_PERMISSIONS, mDialogListener);
+        mAsyncFacebookRunner = new AsyncFacebookRunner(mFacebook);
+        mFacebook.authorize(mParentActivity, FB_PERMISSIONS, mDialogListener);
     }
 
     private DialogListener mDialogListener = new DialogListener() {
@@ -182,8 +172,8 @@ public class AuthorizationManager {
                 Settings.getInstance().setSocialAccountEmail(user_email);
 
                 final AuthToken authToken = new AuthToken(mParentActivity.getApplicationContext());
-                authToken.saveToken(AuthToken.SN_FACEBOOK, user_id, getFacebook().getAccessToken(),
-                        Long.toString(getFacebook().getAccessExpires()));
+                authToken.saveToken(AuthToken.SN_FACEBOOK, user_id, mFacebook.getAccessToken(),
+                        Long.toString(mFacebook.getAccessExpires()));
                 receiveToken(authToken);
             } catch (JSONException e) {
                 Debug.log("FB", "mRequestListener::onComplete:error");
@@ -267,7 +257,7 @@ public class AuthorizationManager {
     }
 
     public static void getFbName(final String token, final String user_id, final Handler handler) {
-        new AsyncFacebookRunner(getFacebook()).request("/" + user_id, new RequestListener() {
+        new AsyncFacebookRunner(new Facebook(Static.AUTH_FACEBOOK_ID)).request("/" + user_id, new RequestListener() {
 
             @Override
             public void onComplete(String response, Object state) {
