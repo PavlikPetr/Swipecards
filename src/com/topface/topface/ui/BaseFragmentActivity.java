@@ -123,4 +123,8 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         }
         super.startActivityForResult(intent, requestCode);
     }
+
+    protected boolean isNeedBroughtToFront(Intent intent) {
+        return intent != null && (intent.getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0;
+    }
 }

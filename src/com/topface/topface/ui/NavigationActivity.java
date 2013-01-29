@@ -52,6 +52,11 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (isNeedBroughtToFront(getIntent())) {
+            // При открытии активити из лаунчера перезапускаем ее
+            finish();
+            return;
+        }
         setContentView(R.layout.ac_navigation);
 
         Debug.log(this, "onCreate");
@@ -440,14 +445,16 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     private void unbindDrawables(View view) {
-        if (view.getBackground() != null) {
-            view.getBackground().setCallback(null);
-        }
-        if (view instanceof ViewGroup) {
-            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
-                unbindDrawables(((ViewGroup) view).getChildAt(i));
+        if (view != null) {
+            if (view.getBackground() != null) {
+                view.getBackground().setCallback(null);
             }
-            ((ViewGroup) view).removeAllViews();
+            if (view instanceof ViewGroup) {
+                for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                    unbindDrawables(((ViewGroup) view).getChildAt(i));
+                }
+                ((ViewGroup) view).removeAllViews();
+            }
         }
     }
 

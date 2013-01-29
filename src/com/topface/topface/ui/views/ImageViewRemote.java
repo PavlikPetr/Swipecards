@@ -69,6 +69,13 @@ public class ImageViewRemote extends ImageView {
         setAttributes(attrs);
     }
 
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        DefaultImageLoader.getInstance().getImageLoader().cancelDisplayTask(this);
+    }
+
     private void setAttributes(AttributeSet attrs) {
         TypedArray values = getContext().obtainStyledAttributes(attrs, R.styleable.ImageViewRemote);
 
