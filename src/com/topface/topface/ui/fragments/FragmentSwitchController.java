@@ -106,22 +106,26 @@ public class FragmentSwitchController extends ViewGroup {
     }
 
     private void switchFragment() {
-        BaseFragment fragment = getFragmentById(mCurrentFragmentId);
-        switchFragment(fragment);
-    }
+        Fragment oldFragment = mFragmentManager.findFragmentById(R.id.fragment_container);
 
-    public void switchFragment(BaseFragment fragment) {
-        if (mCurrentFragment != fragment) {
-            Fragment oldFragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+        BaseFragment newFragment = (BaseFragment) mFragmentManager.findFragmentByTag(getTagById(mCurrentFragmentId));
+        //Если не нашли в FragmentManager уже существующего инстанса, то создаем новый
+        if (newFragment == null) {
+            newFragment = getFragmentNewInstanceById(mCurrentFragmentId);
+        }
+
+        if (oldFragment == null || newFragment != oldFragment) {
             FragmentTransaction transaction = mFragmentManager.beginTransaction();
-            transaction.replace(R.id.fragment_container, fragment);
-            if (oldFragment != null) {
-                transaction.remove(oldFragment);
-            }
+
+            transaction.replace(R.id.fragment_container, newFragment, getTagById(mCurrentFragmentId));
             transaction.commit();
-            mCurrentFragment = fragment;
+            mCurrentFragment = newFragment;
         }
         closeExtraFragment();
+    }
+
+    private String getTagById(int id) {
+        return "fragment_switch_controller_" + id;
     }
 
     public void switchExtraFragment(Fragment fragment) {
@@ -141,6 +145,7 @@ public class FragmentSwitchController extends ViewGroup {
         if (mCurrentExtraFragment != null) {
             if (mCurrentExtraFragment instanceof BaseFragment) {
                 ((BaseFragment) mCurrentExtraFragment).clearContent();
+                mFragmentManager.beginTransaction().remove(mCurrentExtraFragment).commit();
             }
             mCurrentExtraFragment = null;
         }
@@ -158,7 +163,7 @@ public class FragmentSwitchController extends ViewGroup {
         return mCurrentExtraFragment;
     }
 
-    private BaseFragment getFragmentById(int id) {
+    private BaseFragment getFragmentNewInstanceById(int id) {
         BaseFragment fragment;
         switch (id) {
             case BaseFragment.F_VIP_PROFILE:

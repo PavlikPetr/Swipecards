@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -31,13 +32,11 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.ProfileActionsControl;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.NavigationBarController;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.viewpagerindicator.TabPageIndicator;
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.TimerTask;
@@ -86,6 +85,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private BroadcastReceiver mUpdateBlackListState;
 
     private Handler mHideActionControlsUpdater;
+    private TabPageIndicator mTabIndicator;
 
 
     @Override
@@ -192,6 +192,36 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         stopWaitingActionControlHiding();
     }
 
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //Вручную удаляем все фрагменты и вообще прибираемся за собой убираемся за себя
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        if (mBodyPagerAdapter != null) {
+            for (Fragment fragment : mBodyPagerAdapter.getFragmentCache().values()) {
+                transaction.remove(fragment);
+            }
+            mBodyPagerAdapter = null;
+        }
+        if (mHeaderPagerAdapter != null) {
+            for (Fragment fragment : mHeaderPagerAdapter.getFragmentCache().values()) {
+                transaction.remove(fragment);
+            }
+            mHeaderPagerAdapter = null;
+        }
+        transaction.commit();
+
+        if (mTabIndicator != null) {
+            mTabIndicator.setOnPageChangeListener(null);
+            mTabIndicator.removeAllViews();
+            mTabIndicator = null;
+        }
+
+        mBodyPager = null;
+        mHeaderPager = null;
+    }
+
     private void setProfile(Profile profile) {
         if (mHeaderMainFragment != null) mHeaderMainFragment.setProfile(profile);
         if (mHeaderStatusFragment != null) mHeaderStatusFragment.setProfile(profile);
@@ -214,13 +244,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
             @Override
             protected void success(User data, ApiResponse response) {
-                try {
-                    Object test = response.jsonResult.get("profiles");
-                    if (test.equals(new JSONArray("[]"))) mLockScreen.setVisibility(View.VISIBLE);
-                } catch (Exception e) {
-                    Debug.error(e);
-                }
-
                 mUserProfile = data;
                 mRateController.setOnRateControllerListener(mRateControllerListener);
                 //set info into views for user
@@ -289,16 +312,16 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 BODY_PAGES_TITLES, mProfileUpdater);
         bodyPager.setAdapter(mBodyPagerAdapter);
         //Tabs for Body
-        TabPageIndicator tabIndicator = (TabPageIndicator) root.findViewById(R.id.tpiTabs);
+        mTabIndicator = (TabPageIndicator) root.findViewById(R.id.tpiTabs);
         final Animation fadeOutAnimation = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out);
         final Animation fadeInAnimation = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in);
 
         fadeInAnimation.setAnimationListener(new FadeAnimationListener(false));
         fadeOutAnimation.setAnimationListener(new FadeAnimationListener(true));
 
-        tabIndicator.setViewPager(bodyPager);
+        mTabIndicator.setViewPager(bodyPager);
 
-        tabIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mTabIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             private boolean shouldAnimate;
 
             @Override
@@ -639,18 +662,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         private String mStatusVal;
         private BroadcastReceiver mBroadcastReceiver;
 
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            mBroadcastReceiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    refreshViews();
-                }
-            };
-            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
-        }
-
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             super.onCreateView(inflater, container, savedInstanceState);
 
@@ -666,6 +677,14 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         public void onResume() {
             super.onResume();
             refreshViews();
+
+            mBroadcastReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    refreshViews();
+                }
+            };
+            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         }
 
         public void setProfile(Profile profile) {
@@ -718,8 +737,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         }
 
         @Override
-        public void onDestroy() {
-            super.onDestroy();
+        public void onPause() {
+            super.onPause();
             LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
         }
     }
