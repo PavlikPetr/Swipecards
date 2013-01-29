@@ -186,7 +186,7 @@
 
     <style name="FeedAvatar">
         <item name="postProcessor">mask</item>
-        <item name="clipMask">@drawable/small_avatar_frame_mask</item>
+        <item name="clipMask">@drawable/avatar_feed_mask</item>
         <item name="android:background">@drawable/avatar_feed_frame_selector</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:layout_centerVertical">true</item>
