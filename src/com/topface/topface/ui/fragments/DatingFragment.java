@@ -239,7 +239,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
         };
 
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));
         showNextUser();
         return view;
     }
@@ -708,6 +707,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onResume() {
         super.onResume();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));
         updateResources();
     }
 

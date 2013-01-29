@@ -96,7 +96,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 //        super.onCreateView(inflater, container, savedInstanceState);
-        View root = inflater.inflate(R.layout.ac_chat_new, null);
+        View root = inflater.inflate(R.layout.ac_chat, null);
 
         Debug.log(this, "+onCreate");
         // arguments
@@ -107,7 +107,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         String userName = getArguments().getString(INTENT_USER_NAME);
         int userAge = getArguments().getInt(INTENT_USER_AGE, 0);
         String userCity = getArguments().getString(INTENT_USER_CITY);
-        String prevEntity = getArguments().getString(BaseFragmentActivity.INTENT_PREV_ENTITY, null);
+        String prevEntity = getArguments().getString(BaseFragmentActivity.INTENT_PREV_ENTITY);
 
         // Locker
         mLoadingLocker = (LockerView) root.findViewById(R.id.llvChatLoading);
@@ -214,6 +214,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             }
         });
         mListView.setClickable(true);
+        mAdapter.addHeader(mListView.getRefreshableView());
         mListView.setAdapter(mAdapter);
         mListView.setOnScrollListener(mAdapter);
     }
@@ -479,7 +480,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
             }
             break;
-            case R.id.btnNavigationProfileBar: {
+            case R.id.btnNavigationProfileBar:
+            case R.id.left_icon: {
                 //TODO костыль для навигации
                 if (mProfileInvoke) {
                     getActivity().setResult(Activity.RESULT_CANCELED);

@@ -15,10 +15,7 @@ import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.postprocessors.ImagePostProcessor;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
-import com.topface.topface.imageloader.DefaultImageLoader;
-import com.topface.topface.imageloader.MaskClipPostProcessor;
-import com.topface.topface.imageloader.RoundCornersPostProcessor;
-import com.topface.topface.imageloader.RoundPostProcessor;
+import com.topface.topface.imageloader.*;
 import com.topface.topface.utils.Debug;
 
 import java.util.Timer;
@@ -30,6 +27,7 @@ public class ImageViewRemote extends ImageView {
     private static final int POST_PROCESSOR_ROUNDED = 1;
     private static final int POST_PROCESSOR_ROUND_CORNERS = 2;
     private static final int POST_PROCESSOR_MASK = 3;
+    private static final int POST_PROCESSOR_CIRCUMCIRCLE = 4;
     public static final int LOADING_COMPLETE = 0;
     private static final int LOADING_ERROR = 1;
     /**
@@ -109,6 +107,9 @@ public class ImageViewRemote extends ImageView {
             case POST_PROCESSOR_MASK:
                 mPostProcessor = new MaskClipPostProcessor(maskId);
                 break;
+            case POST_PROCESSOR_CIRCUMCIRCLE:
+                mPostProcessor = new CircumCirclePostProcessor();
+                break;
             default:
                 mPostProcessor = null;
         }
@@ -136,7 +137,8 @@ public class ImageViewRemote extends ImageView {
         }
 
 
-        if (!TextUtils.isEmpty(remoteSrc) && !TextUtils.equals(mCurrentSrc, remoteSrc)) {
+        //Если ссылка не пустая и мы не патаемся скачать уже установленный в View изображение, то начинаем загрузку
+        if (!TextUtils.isEmpty(remoteSrc)) {
             if (!remoteSrc.equals(mCurrentSrc)) {
                 mCurrentSrc = remoteSrc;
                 mIsAnimationEnabled = true;

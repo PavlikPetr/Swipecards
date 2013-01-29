@@ -29,7 +29,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
 
     private ArrayList<Photo> mDeleted = new ArrayList<Photo>();
 
-    private ProfilePhotoGridAdapter mPhotoGridAdapter;
+    private EditProfileGridAdapter mPhotoGridAdapter;
     private int mLastSelectedAsMainId;
     private int mSelectedAsMainId;
 
@@ -61,7 +61,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         if (CacheProfile.photos != null) {
             mPhotoLinks.addAll(CacheProfile.photos);
         }
-        mPhotoGridAdapter = new EditProfileGrigAdapter(
+        mPhotoGridAdapter = new EditProfileGridAdapter(
                 getActivity().getApplicationContext(), mPhotoLinks);
 
         mAddPhotoHelper = new AddPhotoHelper(this, mLockerView);
@@ -195,9 +195,9 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         }
     }
 
-    class EditProfileGrigAdapter extends ProfilePhotoGridAdapter {
+    class EditProfileGridAdapter extends ProfilePhotoGridAdapter {
 
-        public EditProfileGrigAdapter(Context context,
+        public EditProfileGridAdapter(Context context,
                                       Photos photoLinks) {
             super(context, photoLinks);
         }

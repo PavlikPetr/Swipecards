@@ -109,7 +109,18 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
             }
         };
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
     }
 
     private void updateViews() {
@@ -166,12 +177,6 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
             prevFormItem = formItem;
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
     }
 
     @Override

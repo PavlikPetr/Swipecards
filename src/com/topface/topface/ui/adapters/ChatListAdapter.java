@@ -144,11 +144,12 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     }
 
-    private void addHeader(ListView parentView) {
+    public void addHeader(ListView parentView) {
         if (mHeaderView == null) {
             mHeaderView = mInflater.inflate(R.layout.list_header_chat_no_messages_informer, null);
             parentView.addHeaderView(mHeaderView);
             parentView.setStackFromBottom(false);
+            mHeaderView.setVisibility(View.GONE);
         }
     }
 
@@ -171,8 +172,10 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         prepareDates();
         notifyDataSetChanged();
         parentView.setSelection(getCount()-1);
-        if(getCount() == 0) {
-            addHeader(parentView);
+        if(getCount() > 0) {
+            removeHeader(parentView);
+        } else {
+            mHeaderView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -202,7 +205,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     public void addFirst(ArrayList<History> data, boolean more,ListView parentView) {
         int scroll = parentView.getScrollY();
         this.addFirst(data, more);
-        parentView.setScrollY(scroll);
+        parentView.scrollTo(parentView.getScrollX(),scroll);
         if(getCount() > 0) {
             removeHeader(parentView);
         }
@@ -309,7 +312,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case T_FRIEND:
             case T_USER:
                 if (avatar) {
-                    holder.avatar.setOnClickListener(!output ? null : mOnClickListener);
+                    holder.avatar.setOnClickListener(output ? null : mOnClickListener);
                     holder.avatar.setPhoto(output ? CacheProfile.photo : item.user.photo);
                     holder.avatar.setVisibility(View.VISIBLE);
                     holder.userInfo.setBackgroundResource(output ? R.drawable.bg_message_user : R.drawable.bg_message_friend);
@@ -323,7 +326,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case T_FRIEND_MAP:
             case T_USER_MAP:
                 if (avatar) {
-                    holder.avatar.setOnClickListener(!output ? null : mOnClickListener);
+                    holder.avatar.setOnClickListener(output ? null : mOnClickListener);
                     holder.avatar.setPhoto(output ? CacheProfile.photo : item.user.photo);
                     holder.avatar.setVisibility(View.VISIBLE);
                 } else {
@@ -333,7 +336,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case T_FRIEND_REQUEST:
             case T_USER_REQUEST:
                 if (avatar) {
-                    holder.avatar.setOnClickListener(mOnClickListener);
+                    holder.avatar.setOnClickListener(output ? null : mOnClickListener);
                     holder.avatar.setPhoto(item.user.photo);
                     holder.avatar.setVisibility(View.VISIBLE);
                 } else {

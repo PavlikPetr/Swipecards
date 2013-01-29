@@ -92,7 +92,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
             mFragmentMenu.selectDefaultMenu();
         }
-        AuthorizationManager.getInstance(NavigationActivity.this).extendAccessToken();
+        AuthorizationManager.extendAccessToken(NavigationActivity.this);
         //Если пользователь не заполнил необходимые поля, перекидываем его на EditProfile,
         //чтобы исправлялся.
         if (needChangeProfile()) {
