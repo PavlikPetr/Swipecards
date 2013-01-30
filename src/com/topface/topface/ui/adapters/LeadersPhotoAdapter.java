@@ -100,11 +100,11 @@ public class LeadersPhotoAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.checkbox.setVisibility(
-                mPhotoSelector.getItemId() == position ?
-                        View.VISIBLE :
-                        View.GONE
-        );
+//        holder.checkbox.setVisibility(
+//                mPhotoSelector.getItemId() == position ?
+//                        View.VISIBLE :
+//                        View.GONE
+//        );
         holder.textRating.setText(item.getRate() + "%");
         holder.imageView.setPhoto(item);
 

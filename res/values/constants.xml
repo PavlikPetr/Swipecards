@@ -36,5 +36,6 @@
 
     <string name="photo_is_set_tag">photo_is_set_tag</string>
 
+    <string name="default_percent_equation">%d%%</string>
 
 </resources>
