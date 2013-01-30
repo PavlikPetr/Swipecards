@@ -1,11 +1,13 @@
 package com.topface.topface.data;
 
+import android.text.TextUtils;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 import org.json.JSONObject;
 
 /* Класс чужого профиля */
 public class User extends Profile {
+    public static final String EMPTY_JSON_ARRAY = "[]";
     // Data
     public String platform; // платформа пользователя
     public int last_visit;  // таймстамп последнего посещения приложения
@@ -23,22 +25,25 @@ public class User extends Profile {
         User profile = new User();
 
         try {
-            JSONObject item = response.jsonResult.getJSONObject("profiles");
-            item = item.getJSONObject("" + userId);
+            Object profilesTest = response.jsonResult.opt("profiles");
+            if (!TextUtils.equals(profilesTest.toString(), EMPTY_JSON_ARRAY)) {
+                JSONObject item = (JSONObject) profilesTest;
+                item = item.getJSONObject("" + userId);
 
-            parse(profile, item);
+                parse(profile, item);
 
-            profile.platform = item.optString("platform");
-            profile.last_visit = item.optInt("last_visit");
-            profile.status = item.optString("status");
-            profile.online = item.optBoolean("online");
-            profile.ero = item.optBoolean("ero");
-            profile.mutual = item.optBoolean("mailmutual");
-            profile.score = item.optInt("score");
-            profile.photo = new Photo(item.getJSONObject("photo"));
-            profile.photos = Photos.parse(item.getJSONArray("photos"));
+                profile.platform = item.optString("platform");
+                profile.last_visit = item.optInt("last_visit");
+                profile.status = item.optString("status");
+                profile.online = item.optBoolean("online");
+                profile.ero = item.optBoolean("ero");
+                profile.mutual = item.optBoolean("mailmutual");
+                profile.score = item.optInt("score");
+                profile.photo = new Photo(item.getJSONObject("photo"));
+                profile.photos = Photos.parse(item.getJSONArray("photos"));
 
-            initPhotos(item, profile);
+                initPhotos(item, profile);
+            }
 
         } catch (Exception e) {
             Debug.error("Wrong response parsing", e);

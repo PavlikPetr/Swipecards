@@ -124,6 +124,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     @Override
     public void onDestroy() {
         super.onDestroy();
+        removeAllRequests();
         View rootView = getView();
         if (rootView != null) {
             unbindDrawables(getView());

@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -594,10 +595,19 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 public void run() {
                     mAvatarView.setPhoto(mAvatarVal);
                     mNameView.setText(mNameVal);
-                    mCityView.setText(mCityVal);
+                    setCity(mCityVal);
                     mBackgroundView.setImageResource(ProfileBackgrounds.getBackgroundResource(getActivity().getApplicationContext(), mBackgroundVal));
                 }
             });
+        }
+
+        private void setCity(String city) {
+            mCityView.setText(city);
+            mCityView.setVisibility(
+                    TextUtils.isEmpty(city) ?
+                    View.INVISIBLE :
+                    View.VISIBLE
+            );
         }
 
         private void restoreState() {
@@ -640,7 +650,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         public void clearContent() {
             mAvatarView.setPhoto(null);
             mNameView.setText(Static.EMPTY);
-            mCityView.setText(Static.EMPTY);
+            setCity(Static.EMPTY);
         }
 
         @Override
