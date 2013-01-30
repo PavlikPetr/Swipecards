@@ -28,7 +28,7 @@ public class ProfileFormFragment extends BaseFragment {
         ListView formListView = (ListView) root.findViewById(R.id.fragmentFormList);
         formListView.setAdapter(mProfileFormListAdapter);
 
-        View titleLayout = root.findViewById(R.id.fragmentTitle);
+        View titleLayout = root.findViewById(R.id.usedTitle);
         titleLayout.setVisibility(View.GONE);
         (root.findViewById(R.id.ivDivider)).setVisibility(View.GONE);
 
