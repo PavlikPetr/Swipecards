@@ -359,9 +359,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             }
         }
 
-        historyRequest.callback(new DataApiHandler<FeedListData<History>>() {
+        historyRequest.callback(new DataApiHandler<HistoryListData>() {
             @Override
-            protected void success(FeedListData<History> data, ApiResponse response) {
+            protected void success(HistoryListData data, ApiResponse response) {
                 if (itemId != -1) {
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID, itemId));
                     itemId = -1;
@@ -378,6 +378,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                         mAdapter.addAll(data.items, data.more, mListView.getRefreshableView());
                     } else {
                         mAdapter.setData(data.items, data.more, mListView.getRefreshableView());
+                        mAdapter.setFriendProfile(data.user);
                     }
                 }
 
@@ -389,8 +390,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             }
 
             @Override
-            protected FeedListData<History> parseResponse(ApiResponse response) {
-                return new FeedListData<History>(response.jsonResult, History.class);
+            protected HistoryListData parseResponse(ApiResponse response) {
+                return new HistoryListData(response.jsonResult, History.class);
             }
 
             @Override
