@@ -603,7 +603,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         try {
             return mUserSearchList.get(Data.searchPosition);
         } catch (Exception e) {
-            Debug.log(e.toString());
+            Debug.error(e);
             return null;
         }
     }
