@@ -30,6 +30,10 @@ public class ProfilePageAdapter extends FragmentStatePagerAdapter {
         mProfileUpdater = profileUpdater;
     }
 
+    public HashMap<Integer, Fragment> getFragmentCache() {
+        return  mFragmentCache;
+    }
+
     public int getFragmentIndexByClassName(String className) {
         for (int i = 0; i < mFragmentsClasses.size(); i++) {
             if (mFragmentsClasses.get(i).equals(className)) {

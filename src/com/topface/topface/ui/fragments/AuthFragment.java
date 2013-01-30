@@ -63,7 +63,7 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void initAuthorizationHandler() {
-        mAuthorizationManager = AuthorizationManager.getInstance(getActivity());
+        mAuthorizationManager = new AuthorizationManager(getActivity());
         mAuthorizationManager.setOnAuthorizationHandler(new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -342,14 +342,15 @@ public class AuthFragment extends BaseFragment {
 
     private void btnVKClick() {
         if (checkOnline()) {
+            hideButtons();
             mAuthorizationManager.vkontakteAuth();
         }
 //
     }
 
-
     private void btnFBClick() {
         if (checkOnline()) {
+            hideButtons();
             mAuthorizationManager.facebookAuth();
         }
     }

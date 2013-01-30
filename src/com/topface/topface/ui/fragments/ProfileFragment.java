@@ -8,8 +8,10 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,13 +33,11 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.ProfileActionsControl;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.NavigationBarController;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.viewpagerindicator.TabPageIndicator;
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.TimerTask;
@@ -83,9 +83,10 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private String mHeaderStartPageClassName;
     private int mStartBodyPage = 0;
     private int mStartHeaderPage = 0;
-    private BroadcastReceiver mMUpdateBlackListState;
+    private BroadcastReceiver mUpdateBlackListState;
 
     private Handler mHideActionControlsUpdater;
+    private TabPageIndicator mTabIndicator;
 
 
     @Override
@@ -159,7 +160,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             if (mUserProfile == null) getUserProfile();
         }
 
-        mMUpdateBlackListState = new BroadcastReceiver() {
+        mUpdateBlackListState = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (mUserProfile != null) {
@@ -167,7 +168,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 }
             }
         };
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMUpdateBlackListState, new IntentFilter(ProfileBlackListControlFragment.UPDATE_ACTION));
+
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateBlackListState, new IntentFilter(ProfileBlackListControlFragment.UPDATE_ACTION));
         setProfile(mUserProfile);
 
         startWaitingActionControlsHide();
@@ -177,9 +179,48 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onPause() {
         super.onPause();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mMUpdateBlackListState);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateBlackListState);
+
+        //Вручную прокидываем событие onPause() в ViewPager, т.к. на onPause() мы отписываемся от событий
+        for (Fragment fragment : mBodyPagerAdapter.getFragmentCache().values()) {
+            fragment.onPause();
+        }
+
+        for (Fragment fragment : mHeaderPagerAdapter.getFragmentCache().values()) {
+            fragment.onPause();
+        }
 
         stopWaitingActionControlHiding();
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //Вручную удаляем все фрагменты и вообще прибираемся за собой убираемся за себя
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        if (mBodyPagerAdapter != null) {
+            for (Fragment fragment : mBodyPagerAdapter.getFragmentCache().values()) {
+                transaction.remove(fragment);
+            }
+            mBodyPagerAdapter = null;
+        }
+        if (mHeaderPagerAdapter != null) {
+            for (Fragment fragment : mHeaderPagerAdapter.getFragmentCache().values()) {
+                transaction.remove(fragment);
+            }
+            mHeaderPagerAdapter = null;
+        }
+        transaction.commit();
+
+        if (mTabIndicator != null) {
+            mTabIndicator.setOnPageChangeListener(null);
+            mTabIndicator.removeAllViews();
+            mTabIndicator = null;
+        }
+
+        mBodyPager = null;
+        mHeaderPager = null;
     }
 
     private void setProfile(Profile profile) {
@@ -199,17 +240,11 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             return;
         }
         UserRequest userRequest = new UserRequest(mProfileId, getActivity().getApplicationContext());
+        registerRequest(userRequest);
         userRequest.callback(new DataApiHandler<User>() {
 
             @Override
             protected void success(User data, ApiResponse response) {
-                try {
-                    Object test = response.jsonResult.get("profiles");
-                    if (test.equals(new JSONArray("[]"))) mLockScreen.setVisibility(View.VISIBLE);
-                } catch (Exception e) {
-                    Debug.error(e);
-                }
-
                 mUserProfile = data;
                 mRateController.setOnRateControllerListener(mRateControllerListener);
                 //set info into views for user
@@ -226,14 +261,12 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
             @Override
             public void fail(final int codeError, ApiResponse response) {
-                mLoaderView.setVisibility(View.GONE);
-                mLockScreen.setVisibility(View.VISIBLE);
-                switch (codeError) {
-                    default:
-                        mRetryBtn.setErrorMsg(getString(R.string.general_profile_error));
-                        break;
+                if (mRetryBtn != null) {
+                    mLoaderView.setVisibility(View.GONE);
+                    mLockScreen.setVisibility(View.VISIBLE);
+                    mRetryBtn.setErrorMsg(getString(R.string.general_profile_error));
+                    mRetryBtn.showOnlyMessage(false);
                 }
-                mRetryBtn.showOnlyMessage(false);
             }
         }).exec();
     }
@@ -280,16 +313,16 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 BODY_PAGES_TITLES, mProfileUpdater);
         bodyPager.setAdapter(mBodyPagerAdapter);
         //Tabs for Body
-        TabPageIndicator tabIndicator = (TabPageIndicator) root.findViewById(R.id.tpiTabs);
+        mTabIndicator = (TabPageIndicator) root.findViewById(R.id.tpiTabs);
         final Animation fadeOutAnimation = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out);
         final Animation fadeInAnimation = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in);
 
         fadeInAnimation.setAnimationListener(new FadeAnimationListener(false));
         fadeOutAnimation.setAnimationListener(new FadeAnimationListener(true));
 
-        tabIndicator.setViewPager(bodyPager);
+        mTabIndicator.setViewPager(bodyPager);
 
-        tabIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mTabIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             private boolean shouldAnimate;
 
             @Override
@@ -524,7 +557,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     refreshViews();
                 }
             };
-            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         }
 
         @Override
@@ -546,6 +578,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         public void onResume() {
             super.onResume();
             refreshViews();
+            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         }
 
         public void setProfile(Profile profile) {
@@ -562,10 +595,19 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 public void run() {
                     mAvatarView.setPhoto(mAvatarVal);
                     mNameView.setText(mNameVal);
-                    mCityView.setText(mCityVal);
+                    setCity(mCityVal);
                     mBackgroundView.setImageResource(ProfileBackgrounds.getBackgroundResource(getActivity().getApplicationContext(), mBackgroundVal));
                 }
             });
+        }
+
+        private void setCity(String city) {
+            mCityView.setText(city);
+            mCityView.setVisibility(
+                    TextUtils.isEmpty(city) ?
+                    View.INVISIBLE :
+                    View.VISIBLE
+            );
         }
 
         private void restoreState() {
@@ -608,7 +650,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         public void clearContent() {
             mAvatarView.setPhoto(null);
             mNameView.setText(Static.EMPTY);
-            mCityView.setText(Static.EMPTY);
+            setCity(Static.EMPTY);
         }
 
         @Override
@@ -617,8 +659,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         }
 
         @Override
-        public void onDestroy() {
-            super.onDestroy();
+        public void onPause() {
+            super.onPause();
             LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
         }
     }
@@ -629,18 +671,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         private TextView mStatusView;
         private String mStatusVal;
         private BroadcastReceiver mBroadcastReceiver;
-
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            mBroadcastReceiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    refreshViews();
-                }
-            };
-            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
-        }
 
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             super.onCreateView(inflater, container, savedInstanceState);
@@ -657,6 +687,14 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         public void onResume() {
             super.onResume();
             refreshViews();
+
+            mBroadcastReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    refreshViews();
+                }
+            };
+            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         }
 
         public void setProfile(Profile profile) {
@@ -709,8 +747,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         }
 
         @Override
-        public void onDestroy() {
-            super.onDestroy();
+        public void onPause() {
+            super.onPause();
             LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
         }
     }
