@@ -12,7 +12,7 @@
             android:paddingTop="8dp">
 
         <TextView
-                android:id="@+id/fragmentTitle"
+                android:id="@+id/usedTitle"
                 style="@style/BackgroundTitleText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
                 android:layout_marginLeft="6dp"/>
 
         <GridView
-                android:id="@+id/fragmentGrid"
+                android:id="@+id/usedGrid"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_margin="0px"

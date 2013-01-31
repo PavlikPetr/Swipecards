@@ -49,7 +49,7 @@ public class UserFormFragment extends BaseFragment implements OnClickListener {
         mPgb = (ProgressBar) mEmptyFormLayout.findViewById(R.id.pgbProgress);
         mSuccessText = (TextView) mEmptyFormLayout.findViewById(R.id.emptyFormSuccess);
 
-        mTitleLayout = root.findViewById(R.id.fragmentTitle);
+        mTitleLayout = root.findViewById(R.id.usedTitle);
         mTitle = (TextView) root.findViewById(R.id.tvTitle);
         mState = (ImageView) root.findViewById(R.id.ivState);
         if (mUser != null) {
@@ -101,7 +101,7 @@ public class UserFormFragment extends BaseFragment implements OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.fragmentTitle:
+            case R.id.usedTitle:
                 if (mUserFormListAdapter.isMatchedDataOnly()) mUserFormListAdapter.setAllData();
                 else mUserFormListAdapter.setMatchedDataOnly();
                 mUserFormListAdapter.notifyDataSetChanged();

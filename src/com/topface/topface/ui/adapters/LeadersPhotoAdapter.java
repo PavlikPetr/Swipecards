@@ -12,6 +12,7 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.ui.LeadersActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.Debug;
 
 public class LeadersPhotoAdapter extends BaseAdapter {
     private LeadersActivity.PhotoSelector mPhotoSelector;
@@ -31,6 +32,40 @@ public class LeadersPhotoAdapter extends BaseAdapter {
         mAlbumsList = albumList;
         mInflater = LayoutInflater.from(context);
         mPhotoSelector = selector;
+
+        sortPhotosByRating();
+        Debug.log("LEADERSADAPTER::" + Integer.toString(mAlbumsList.size()));
+    }
+
+    private void sortPhotosByRating() {
+        int[] likes = new int[mAlbumsList.size()];
+        int i = 0;
+        for (Photo photo: mAlbumsList) {
+            likes[i] = photo.mLiked;
+            i++;
+        }
+
+        qSort(0, i-1);
+    }
+
+    public void qSort(int low, int high) {
+        int i = low;
+        int j = high;
+        int x = mAlbumsList.get((low+high)/2).mLiked;
+        do {
+            while(mAlbumsList.get(i).mLiked > x) ++i;  // поиск элемента для переноса в старшую часть
+            while(mAlbumsList.get(j).mLiked < x) --j;  // поиск элемента для переноса в младшую часть
+            if(i <= j){
+                // обмен элементов местами:
+                Photo temp = mAlbumsList.get(i);
+                mAlbumsList.set(i, mAlbumsList.get(j));
+                mAlbumsList.set(j, temp);
+                // переход к следующим элементам:
+                i++; j--;
+            }
+        } while(i < j);
+        if(low < j) qSort(low, j);
+        if(i < high) qSort(i, high);
     }
 
     @Override
@@ -65,11 +100,11 @@ public class LeadersPhotoAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.checkbox.setVisibility(
-                mPhotoSelector.getItemId() == position ?
-                        View.VISIBLE :
-                        View.GONE
-        );
+//        holder.checkbox.setVisibility(
+//                mPhotoSelector.getItemId() == position ?
+//                        View.VISIBLE :
+//                        View.GONE
+//        );
         holder.textRating.setText(item.getRate() + "%");
         holder.imageView.setPhoto(item);
 
