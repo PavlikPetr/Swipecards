@@ -139,7 +139,7 @@ public class TopsFragment extends BaseFragment {
                 new PauseOnScrollListener(Static.PAUSE_DOWNLOAD_ON_SCROLL, Static.PAUSE_DOWNLOAD_ON_FLING)
         );
 
-        mFloatBlock = new FloatBlock(getActivity(), this, (ViewGroup) view);
+        mFloatBlock = new FloatBlock(this, (ViewGroup) view);
 
         return view;
     }

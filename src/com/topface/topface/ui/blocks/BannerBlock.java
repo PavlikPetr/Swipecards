@@ -1,7 +1,7 @@
 package com.topface.topface.ui.blocks;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -11,10 +11,12 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
+import com.adfonic.android.AdListener;
 import com.adfonic.android.AdfonicView;
 import com.adfonic.android.api.Request;
 import com.google.ads.AdRequest;
@@ -29,8 +31,8 @@ import com.topface.topface.data.Options;
 import com.topface.topface.data.VirusLike;
 import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.requests.*;
-import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.TopsFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
@@ -45,6 +47,7 @@ import ru.wapstart.plus1.sdk.Plus1BannerRequest;
 import ru.wapstart.plus1.sdk.Plus1BannerView;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -58,40 +61,19 @@ public class BannerBlock {
     public static final int PLUS1_ID = 7227;
     public static final String VIRUS_LIKES_BANNER_PARAM = "viruslikes";
 
-    private Activity mActivity;
+    private LayoutInflater mInflater;
+    ViewGroup mBannerLayout;
     private Fragment mFragment;
     private View mBannerView;
     private Plus1BannerAsker mPLus1Asker;
     private Map<String, String> mBannersMap = new HashMap<String, String>();
 
-    public BannerBlock(Activity activity, Fragment fragment, ViewGroup layout) {
+    public BannerBlock(Fragment fragment, ViewGroup layout) {
         super();
-        mActivity = activity;
         mFragment = fragment;
+        mInflater = (LayoutInflater) mFragment.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mBannerLayout = (ViewGroup) layout.findViewById(R.id.loBannerContainer);
         setBannersMap();
-        String fragmentId = mFragment.getClass().toString();
-
-        if (mBannersMap.containsKey(fragmentId)) {
-            String bannerType = CacheProfile.getOptions().pages.get(mBannersMap.get(fragmentId)).banner;
-            if (bannerType.equals(Options.BANNER_TOPFACE)) {
-                mBannerView = layout.findViewById(R.id.ivBanner);
-                if (isCorrectResolution() && mBannersMap.containsKey(fragmentId)) {
-                    loadBanner();
-                }
-            } else {
-                if (bannerType.equals(Options.BANNER_ADMOB)) {
-                    mBannerView = layout.findViewById(R.id.adMobView);
-                } else if (bannerType.equals(Options.BANNER_ADFONIC)) {
-                    mBannerView = layout.findViewById(R.id.adFonicView);
-                } else if (bannerType.equals(Options.BANNER_WAPSTART)) {
-                    mBannerView = layout.findViewById(R.id.adPlus1View);
-                }
-                showBanner(null);
-            }
-        }
-
-//        mBannerView = (Plus1BannerView) layout.findViewById(R.id.adPlus1View);
-//        showBanner(null);
     }
 
     private void setBannersMap() {
@@ -102,12 +84,62 @@ public class BannerBlock {
         mBannersMap.put(VisitorsFragment.class.toString(), Options.PAGE_VISITORS);
     }
 
+    private void initBanner() {
+        if (mFragment != null && mBannersMap != null) {
+            String fragmentId = mFragment.getClass().toString();
+            if (mBannersMap.containsKey(fragmentId)) {
+                String bannerType = CacheProfile.getOptions().pages.get(mBannersMap.get(fragmentId)).banner;
+                mBannerView = getBannerView(bannerType);
+                mBannerLayout.addView(mBannerView);
+                if (bannerType.equals(Options.BANNER_TOPFACE)) {
+                    if (isCorrectResolution() && mBannersMap.containsKey(fragmentId)) {
+                        loadBanner();
+                    }
+                } else {
+                    showBanner(null);
+                }
+            }
+        }
+    }
+
+    private void removeBanner() {
+        unbindDrawables(mBannerView);
+    }
+
+    private void unbindDrawables(View view) {
+        if (view != null) {
+            if (view.getBackground() != null) {
+                view.getBackground().setCallback(null);
+            }
+            if (view instanceof ViewGroup) {
+                for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                    unbindDrawables(((ViewGroup) view).getChildAt(i));
+                }
+                ((ViewGroup) view).removeAllViews();
+            }
+        }
+    }
+
+    private View getBannerView(String bannerType) {
+        if (bannerType.equals(Options.BANNER_TOPFACE)) {
+            return mInflater.inflate(R.layout.banner_topface, null);
+        } else if (bannerType.equals(Options.BANNER_ADMOB)) {
+            return mInflater.inflate(R.layout.banner_admob, null);
+        } else if (bannerType.equals(Options.BANNER_ADFONIC)) {
+            return mInflater.inflate(R.layout.banner_adfonic, null);
+        } else if (bannerType.equals(Options.BANNER_WAPSTART)) {
+            return mInflater.inflate(R.layout.banner_wapstart, null);
+        } else {
+            return null;
+        }
+    }
+
     private void loadBanner() {
-        BannerRequest bannerRequest = new BannerRequest(mActivity.getApplicationContext());
+        BannerRequest bannerRequest = new BannerRequest(mFragment.getActivity().getApplicationContext());
         bannerRequest.place = mBannersMap.get(mFragment.getClass().toString());
 
-        if (mActivity instanceof BaseFragmentActivity) {
-            ((BaseFragmentActivity) mActivity).registerRequest(bannerRequest);
+        if (mFragment instanceof BaseFragment) {
+            ((BaseFragment) mFragment).registerRequest(bannerRequest);
         }
 
         bannerRequest.callback(new BaseApiHandler() {
@@ -126,12 +158,41 @@ public class BannerBlock {
             mBannerView.setVisibility(View.VISIBLE);
             ((AdView) mBannerView).loadAd(new AdRequest());
         } else if (mBannerView instanceof AdfonicView) {
-            mBannerView.setVisibility(View.VISIBLE);
             Request request = new Request();
-            request.setLanguage("en");
+            request.setLanguage(Locale.getDefault().getLanguage());
             request.setSlotId(ADFONIC_SLOT_ID);
-            request.setTest(true);
+            request.setRefreshAd(false);
             ((AdfonicView) mBannerView).loadAd(request);
+            ((AdfonicView) mBannerView).setAdListener(new AdListener() {
+                @Override
+                public void onReceivedAd() {
+                    mBannerView.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onPresentScreen() { }
+
+                @Override
+                public void onLeaveApplication() { }
+
+                @Override
+                public void onInvalidRequest() { }
+
+                @Override
+                public void onNetworkError() { }
+
+                @Override
+                public void onNoFill() { }
+
+                @Override
+                public void onInternalError() { }
+
+                @Override
+                public void onDismissScreen() { }
+
+                @Override
+                public void onClick() { }
+            });
         } else if (mBannerView instanceof Plus1BannerView) {
             mBannerView.setVisibility(View.VISIBLE);
             mPLus1Asker = new Plus1BannerAsker(new Plus1BannerRequest().setApplicationId(PLUS1_ID),
@@ -150,7 +211,7 @@ public class BannerBlock {
                 @Override
                 public void onLoadingComplete(Bitmap loadedImage) {
                     super.onLoadingComplete(loadedImage);
-                    float deviceWidth = Device.getDisplayMetrics(mActivity).widthPixels;
+                    float deviceWidth = Device.getDisplayMetrics(mFragment.getActivity()).widthPixels;
                     float imageWidth = loadedImage.getWidth();
                     //Если ширина экрана больше, чем у нашего баннера, то пропорционально увеличиваем высоту imageView
                     if (deviceWidth > imageWidth) {
@@ -174,15 +235,12 @@ public class BannerBlock {
                     Intent intent = null;
                     if (banner.action.equals(Banner.ACTION_PAGE)) {
                         EasyTracker.getTracker().trackEvent("Purchase", "Banner", "", 0L);
-                        intent = new Intent(mActivity.getApplicationContext(), ContainerActivity.class);
-                        if(banner.parameter.equals("VIP")) {
+                        intent = new Intent(mFragment.getActivity().getApplicationContext(), ContainerActivity.class);
+                        if (banner.parameter.equals("VIP")) {
                             intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                         } else {
                             intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
                         }
-//                    } else if (banner.action.equals(Banner.INVITE_PAGE)) {
-//                        EasyTracker.getTracker().trackEvent("Banner", "Invite", "", 0L);
-//                        intent = new Intent(mActivity, InviteActivity.class);
                     } else if (banner.action.equals(Banner.ACTION_URL)) {
                         intent = new Intent(Intent.ACTION_VIEW, Uri.parse(banner.parameter));
                     } else if (banner.action.equals(Banner.ACTION_METHOD)) {
@@ -190,7 +248,7 @@ public class BannerBlock {
                     }
                     sendStat(getBannerName(banner.url), "click");
                     if (intent != null) {
-                        mActivity.startActivity(intent);
+                        mFragment.startActivity(intent);
                     }
                 }
             });
@@ -204,14 +262,14 @@ public class BannerBlock {
     }
 
     private void sendVirusLikeRequest() {
-        final ProgressDialog dialog = new ProgressDialog(mActivity);
+        final ProgressDialog dialog = new ProgressDialog(mFragment.getActivity());
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        dialog.setMessage(mActivity.getString(R.string.general_dialog_loading));
+        dialog.setMessage(mFragment.getString(R.string.general_dialog_loading));
         dialog.show();
 
         EasyTracker.getTracker().trackEvent("VirusLike", "Click", "Banner", 0L);
 
-        new VirusLikesRequest(mActivity).callback(new ApiHandler() {
+        new VirusLikesRequest(mFragment.getActivity()).callback(new ApiHandler() {
             @Override
             public void success(final ApiResponse response) {
                 EasyTracker.getTracker().trackEvent("VirusLike", "Success", "Banner", 0L);
@@ -219,8 +277,8 @@ public class BannerBlock {
                 //И предлагаем отправить пользователю запрос своим друзьям не из приложения
                 new VirusLike(response).sendFacebookRequest(
                         "Banner",
-                        mActivity,
-                        new VirusLike.VirusLikeDialogListener(mActivity) {
+                        mFragment.getActivity(),
+                        new VirusLike.VirusLikeDialogListener(mFragment.getActivity()) {
                             @Override
                             public void onComplete(Bundle values) {
                                 super.onComplete(values);
@@ -253,7 +311,7 @@ public class BannerBlock {
      * Показываем баннер на всех устройствах, кроме устройств с маленьким экраном
      */
     private boolean isCorrectResolution() {
-        int screenSize = (mActivity.getResources().getConfiguration().screenLayout
+        int screenSize = (mFragment.getResources().getConfiguration().screenLayout
                 & Configuration.SCREENLAYOUT_SIZE_MASK);
         return screenSize != Configuration.SCREENLAYOUT_SIZE_SMALL;
     }
@@ -276,11 +334,14 @@ public class BannerBlock {
     }
 
     public void onResume() {
+        initBanner();
+        if (mBannerView instanceof AdfonicView) mBannerView.invalidate();
         if (mPLus1Asker != null) mPLus1Asker.onResume();
     }
 
     public void onPause() {
         if (mPLus1Asker != null) mPLus1Asker.onPause();
+        removeBanner();
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
