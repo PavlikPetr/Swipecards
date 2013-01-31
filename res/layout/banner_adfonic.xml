@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.adfonic.android.AdfonicView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:adfonic="http://schemas.android.com/apk/lib/com.adfonic.android"
+        android:id="@+id/adFonicView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        adfonic:refresh_ad="false"
+        android:visibility="gone"/>
