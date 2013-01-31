@@ -66,6 +66,8 @@ public class Profile extends AbstractDataWithPhotos {
     public ArrayList<Gift> gifts = new ArrayList<Gift>();
     public HashMap<Integer, TopfaceNotifications> notifications = new HashMap<Integer, TopfaceNotifications>();
     public boolean hasMail;
+    public boolean email_grabbed;
+    public boolean email_confirmed;
 
     public int background;
 
@@ -147,6 +149,14 @@ public class Profile extends AbstractDataWithPhotos {
 
             if (!resp.isNull("email")) {
                 profile.hasMail = resp.optBoolean("email");
+            }
+
+            if (!resp.isNull("email_grabbed")) {
+                profile.email_grabbed = resp.optBoolean("email_grabbed");
+            }
+
+            if (!resp.isNull("email_confirmed")) {
+               profile.email_confirmed = resp.optBoolean("email_confirmed");
             }
 
             if (!resp.isNull("premium")) {

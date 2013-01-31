@@ -33,6 +33,7 @@ public class LeadersActivity extends BaseFragmentActivity {
     private Photos uselessPhotos;
 
     private LinkedList<LeadersPhoto> mLeadersPhotos = new LinkedList<LeadersPhoto>();
+    private TextView mUselessTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,7 @@ public class LeadersActivity extends BaseFragmentActivity {
         mUselessGridView = (com.example.gridlayout.GridLayout) findViewById(R.id.unusedGrid);
         mBuyButton = (Button) findViewById(R.id.btnLeadersBuy);
         mLoadingLocker = (LockerView) findViewById(R.id.llvLeaderSending);
+        mUselessTitle = (TextView) findViewById(R.id.unusedTitle);
 
         setListeners();
         getProfile();
@@ -144,6 +146,11 @@ public class LeadersActivity extends BaseFragmentActivity {
             mUselessGridView.addView(view);
             ivr.setPhoto(photo);
         }
+
+        if(uselessPhotos.size() == 0) {
+            mUselessTitle.setVisibility(View.GONE);
+        }
+
         if (mSelectedPhoto != null) {
             mSelectedPhoto.select(mLeadersPhotos.get(0).view, mLeadersPhotos.get(0).photo);
         }

@@ -23,6 +23,8 @@ public class AuthRequest extends AbstractApiRequest {
     private String clientversion; // версия клиента
     private String clientdevice; // тип устройства клиента
     private String clientid; // уникальный идентификатор клиентского устройства
+    public String login;  // логин для нашей авторизации
+    public String password; // пароль для нашей авторизации
     private static String mDeviceId;
 
     public AuthRequest(Context context) {
