@@ -421,5 +421,6 @@
         нельзя
     </string>
     <string name="default_price_format">Итого: %.2f USD</string>
-    <string name="leaders_pick_condition">Можно выбрать только фото с процентом «понравилось» не меньше 25%</string>
+    <string name="leaders_pick_condition">Вы не можете выбрать фото с рейтингом ниже 25%:
+    </string>
 </resources>

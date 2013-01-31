@@ -3,6 +3,7 @@ package com.topface.topface.data;
 import android.text.TextUtils;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /* Класс чужого профиля */
@@ -27,8 +28,9 @@ public class User extends Profile {
         try {
             Object profilesTest = response.jsonResult.opt("profiles");
             if (!TextUtils.equals(profilesTest.toString(), EMPTY_JSON_ARRAY)) {
-                JSONObject item = (JSONObject) profilesTest;
-                item = item.getJSONObject("" + userId);
+                JSONArray itemArray = (JSONArray) profilesTest;
+
+                JSONObject item = itemArray.optJSONObject(0);
 
                 parse(profile, item);
 
