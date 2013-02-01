@@ -91,7 +91,9 @@ public class AuthRequest extends AbstractApiRequest {
                 .put("clienttype", clienttype)
                 .put("clientversion", clientversion)
                 .put("clientdevice", clientdevice)
-                .put("clientid", clientid);
+                .put("clientid", clientid)
+                .put("login", login)
+                .put("password", password);
     }
 
     @Override
