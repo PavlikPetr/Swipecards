@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/auth_bg"
+                android:id="@+id/authContainer">
+
+    <ImageView
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/auth_bg_spot"
+            />
+    <ProgressBar
+            android:id="@+id/prsLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            style="@android:style/Widget.ProgressBar.Small"/>
+
+
+    <LinearLayout
+            android:id="@+id/loLoginGroup"
+            android:layout_width="210dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+        <EditText
+                android:id="@+id/edLogin"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/text_input_signin"
+                />
+
+        <EditText
+                android:id="@+id/edPassword"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/text_input_signin"
+                />
+
+        <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Login"
+                android:background="@drawable/btn_signin"
+                />
+    </LinearLayout>
+
+    <ImageView
+            android:id="@+id/ivTopfaceLogo"
+            android:layout_above="@id/ivAuthGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/auth_logo"/>
+
+</RelativeLayout>
