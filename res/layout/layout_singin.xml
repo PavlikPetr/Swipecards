@@ -5,20 +5,16 @@
                 android:background="@drawable/auth_bg"
                 android:id="@+id/authContainer">
 
-    <ImageView
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
+    <TextView
+            android:id="@+id/tvWrongPassword"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/auth_bg_spot"
-            />
-    <ProgressBar
-            android:id="@+id/prsLoading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="gone"
-            style="@android:style/Widget.ProgressBar.Small"/>
-
+            android:text="@string/error_login_password"
+            android:background="@drawable/bg_wrong_login_password"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:visibility="invisible"/>
 
     <LinearLayout
             android:id="@+id/loLoginGroup"
@@ -33,26 +29,67 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/text_input_signin"
+                android:hint="@string/email"
+                android:singleLine="true"
+                android:inputType="textEmailAddress"
+                android:textColor="#000000"
+                android:padding="8dp"
+                android:gravity="center_vertical"
+                android:textSize="12sp"
                 />
 
-        <EditText
-                android:id="@+id/edPassword"
+        <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/text_input_signin"
-                />
+                android:layout_marginTop="16dp">
+
+            <EditText
+                    android:id="@+id/edPassword"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/text_input_signin"
+                    android:hint="@string/password"
+                    android:inputType="textPassword"
+                    android:textColor="#000000"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="24dp"
+                    android:gravity="center_vertical"
+                    android:layout_centerInParent="true"
+                    android:textSize="12sp"
+                    />
+
+            <ImageView
+                    android:id="@+id/ivShowPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_show_password"
+                    android:layout_centerVertical="true"
+                    android:layout_alignRight="@id/edPassword"
+                    android:layout_marginRight="8dp"
+                    />
+        </RelativeLayout>
 
         <Button
                 android:id="@+id/btnLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Login"
+                android:text="@string/sign_in"
                 style="@style/AuthButtonsBigText"
                 android:background="@drawable/btn_signin_selector"
                 />
     </LinearLayout>
+
+    <ImageView
+            android:id="@+id/ivTopfaceLogo"
+            android:layout_above="@id/loLoginGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/auth_logo"/>
 
     <TextView
             android:id="@+id/tvBackToMainAuth"
@@ -61,19 +98,11 @@
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="8dp"
-            android:text="Back"
+            android:text="@string/general_back"
             android:drawableLeft="@drawable/ic_back"
             android:drawablePadding="8dp"
             style="@style/AuthButtonsBigText"
+            android:gravity="center_vertical"
             />
-
-    <ImageView
-            android:id="@+id/ivTopfaceLogo"
-            android:layout_above="@id/ivAuthGroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/auth_logo"/>
 
 </RelativeLayout>

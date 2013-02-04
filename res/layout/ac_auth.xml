@@ -1,8 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
-             android:id="@+id/vfAuthViewFlipper"
-             android:layout_width="fill_parent"
-             android:layout_height="fill_parent">
-    <include layout="@layout/layout_main_auth"/>
-    <include layout="@layout/layout_singin"/>
-</ViewFlipper>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        >
+
+    <ImageView
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/auth_bg_spot"
+            />
+
+    <ProgressBar
+            android:id="@+id/prsLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            style="@android:style/Widget.ProgressBar.Small"/>
+
+    <ViewFlipper
+            android:id="@+id/vfAuthViewFlipper"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+        <include layout="@layout/layout_main_auth"/>
+
+        <include layout="@layout/layout_singin"/>
+
+    </ViewFlipper>
+</RelativeLayout>

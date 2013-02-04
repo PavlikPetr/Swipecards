@@ -430,7 +430,10 @@
     <string name="password">Пароль</string>
     <string name="error_login_password">Неправильная пара логин/пароль</string>
     <string name="recover_password">Восстановить пароль</string>
-
+    <string name="recovering_password">Восстановление пароля</string>
+    <string name="send_password">Выслать пароль</string>
     <string name="boy">парень</string>
     <string name="girl">девушка</string>
+    <string name="start_communication">Начать общение</string>
+
 </resources>

@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.method.PasswordTransformationMethod;
+import android.text.method.TransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +35,7 @@ import com.topface.topface.utils.social.AuthorizationManager;
 
 public class AuthFragment extends BaseFragment {
 
+    private View mWrongPasswordAlertView;
     private ViewFlipper mAuthViewsFlipper;
     private RetryView mRetryView;
     private Button mFBButton;
@@ -129,6 +132,7 @@ public class AuthFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 btnTFClick();
+                mWrongPasswordAlertView.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -181,6 +185,18 @@ public class AuthFragment extends BaseFragment {
 
     private void initOtherViews(View root) {
         mProgressBar = (ProgressBar) root.findViewById(R.id.prsAuthLoading);
+        mWrongPasswordAlertView = root.findViewById(R.id.tvWrongPassword);
+        mLogin = (EditText) root.findViewById(R.id.edLogin);
+        mPassword = (EditText) root.findViewById(R.id.edPassword);
+        root.findViewById(R.id.ivShowPassword).setOnClickListener(new View.OnClickListener() {
+            boolean toggle = false;
+            TransformationMethod passwordMethod = new PasswordTransformationMethod();
+            @Override
+            public void onClick(View v) {
+                toggle = !toggle;
+                mPassword.setTransformationMethod(toggle ? null : passwordMethod);
+            }
+        });
     }
 
     private boolean checkOnline() {
@@ -228,12 +244,35 @@ public class AuthFragment extends BaseFragment {
         return authRequest;
     }
 
-    private AuthRequest generateAuthRequest(String login, String password) {
-        AuthRequest authRequest = new AuthRequest(getActivity());
+    private AuthRequest generateTopfaceAuthRequest(final String login, final String password) {
+        final AuthRequest authRequest = new AuthRequest(getActivity());
         registerRequest(authRequest);
         authRequest.platform = AuthToken.SN_TOPFACE;
-        authRequest.login = mLogin.toString();
-        authRequest.password = mPassword.toString();
+        authRequest.login = login;
+        authRequest.password = password;
+        authRequest.callback(new ApiHandler() {
+            @Override
+            public void success(ApiResponse response) {
+                saveAuthInfo(response);
+                getProfileAndOptions(new ProfileIdReceiver() {
+                    @Override
+                    public void onProfileIdReceived(int profileId) {
+                        (new AuthToken(getActivity().getApplicationContext()))
+                                .saveToken(Integer.toString(profileId),login,password);
+                    }
+                });
+            }
+
+            @Override
+            public void fail(final int codeError, ApiResponse response) {
+                authorizationFailed(codeError, authRequest);
+            }
+
+            @Override
+            public void cancel() {
+                showButtons();
+            }
+        });
         EasyTracker.getTracker().trackEvent("Profile", "Auth", "FromActivity" + AuthToken.SN_TOPFACE, 1L);
 
         return authRequest;
@@ -246,6 +285,10 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void getProfileAndOptions() {
+        getProfileAndOptions(null);
+    }
+
+    private void getProfileAndOptions(final ProfileIdReceiver idReceiver) {
         final ProfileRequest profileRequest = new ProfileRequest(getActivity());
         profileRequest.part = ProfileRequest.P_ALL;
         registerRequest(profileRequest);
@@ -254,6 +297,7 @@ public class AuthFragment extends BaseFragment {
             @Override
             protected void success(Profile data, ApiResponse response) {
                 CacheProfile.setProfile(data, response);
+                if (idReceiver != null) idReceiver.onProfileIdReceived(CacheProfile.getProfile().uid);
                 getOptions();
             }
 
@@ -341,6 +385,10 @@ public class AuthFragment extends BaseFragment {
                     }
                 });
                 break;
+            case ApiResponse.INCORRECT_LOGIN:
+            case ApiResponse.INCORRECT_PASSWORD:
+                mWrongPasswordAlertView.setVisibility(View.VISIBLE);
+                break;
             default:
                 mRetryView.setErrorMsg(getString(R.string.general_data_error));
                 mRetryView.setListenerToBtn(new View.OnClickListener() {
@@ -405,14 +453,18 @@ public class AuthFragment extends BaseFragment {
     private void btnTFClick() {
         if (checkOnline()) {
             hideButtons();
-
+            String login = mLogin.getText().toString();
+            String password = mPassword.getText().toString();
+            AuthRequest authRequest = generateTopfaceAuthRequest(login, password);
+            authRequest.exec();
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(connectionChangeListener, new IntentFilter(ConnectionChangeReceiver.REAUTH));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(connectionChangeListener,
+                new IntentFilter(ConnectionChangeReceiver.REAUTH));
     }
 
     @Override
@@ -420,4 +472,12 @@ public class AuthFragment extends BaseFragment {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(connectionChangeListener);
     }
+
+    interface ProfileIdReceiver {
+        void onProfileIdReceived(int id);
+    }
+
+
 }
+
+
