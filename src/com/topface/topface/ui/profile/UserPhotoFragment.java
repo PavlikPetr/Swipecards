@@ -8,11 +8,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
-import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.User;
-import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.Utils;
 
@@ -32,11 +30,11 @@ public class UserPhotoFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_grid, container, false);
 
-        GridView gridAlbum = (GridView) root.findViewById(R.id.fragmentGrid);
+        GridView gridAlbum = (GridView) root.findViewById(R.id.usedGrid);
         gridAlbum.setAdapter(mUserPhotoGridAdapter);
         gridAlbum.setOnItemClickListener(mOnItemClickListener);
 
-        mTitle = (TextView) root.findViewById(R.id.fragmentTitle);
+        mTitle = (TextView) root.findViewById(R.id.usedTitle);
 
         if (mPhotoLinks != null) {
             setPhotos(mPhotoLinks);
@@ -60,7 +58,6 @@ public class UserPhotoFragment extends BaseFragment {
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
-            Data.photos = mUser.photos;
             Intent intent = new Intent(getActivity().getApplicationContext(), PhotoSwitcherActivity.class);
             intent.putExtra(PhotoSwitcherActivity.INTENT_USER_ID, mUser.uid);
             intent.putExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, position);

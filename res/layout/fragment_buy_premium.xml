@@ -4,11 +4,13 @@
             android:layout_width="fill_parent"
             android:background="@drawable/bg_main"
         >
+
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        >
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            >
+
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
@@ -16,19 +18,47 @@
                 android:id="@+id/fbpContainer"
                 android:padding="5dp"
                 >
-            <TextView
-                    android:layout_width="wrap_content"
+
+            <RelativeLayout
                     android:layout_height="wrap_content"
-                    android:text="@string/vip_not_activated"
+                    android:layout_width="fill_parent"
+                    android:padding="5dp"
+                    >
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/vip_not_activated"
+                        style="@style/TitleWhiteText"
+                        android:layout_alignParentLeft="true"
+                        />
+
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_rocket"
+                        android:layout_alignParentRight="true"
+
+                        />
+
+            </RelativeLayout>
+
+            <TextView
+                    android:id="@+id/fbpBuyingDisabled"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
                     style="@style/TitleWhiteText"
+                    android:text="@string/general_buying_disabled"
+                    android:visibility="gone"
                     android:layout_margin="5dp"
                     />
+
             <LinearLayout
-                android:id="@+id/fbpBtnContainer"
-                android:orientation="vertical"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                ></LinearLayout>
+                    android:id="@+id/fbpBtnContainer"
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    />
 
             <TextView
                     android:layout_width="wrap_content"
@@ -40,55 +70,205 @@
                     android:layout_marginTop="10dp"
                     />
 
+            <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_delight"
+
+                        />
+
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/vip_info_delight"
+                        android:layout_marginLeft="10dp"
+                        style="@style/VipItemTitleWhiteText"
+                        android:textSize="14sp"
+                        />
+            </LinearLayout>
+
             <ImageView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/vip_separator"
+                    android:src="@drawable/delimiter_rocket"
                     />
-            <TextView
+
+            <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_vip_invisible"
-                    android:text="@string/vip_info_guest"
-                    style="@style/VipItemTitleWhiteText"
-                    />
+                    android:orientation="horizontal"
+                    >
+
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_guests"
+
+                        />
+
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/vip_info_guest"
+                        android:layout_marginLeft="10dp"
+                        style="@style/VipItemTitleWhiteText"
+                        android:textSize="14sp"
+                        />
+            </LinearLayout>
+
             <ImageView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/vip_separator"
+                    android:src="@drawable/delimiter_rocket"
                     />
-            <TextView
+
+            <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_vip_unlock"
-                    android:text="@string/vip_info_delight"
-                    style="@style/VipItemTitleWhiteText"
-                    />
+                    android:orientation="horizontal"
+                    >
+
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_invisible"
+
+                        />
+
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/vip_info_invisible"
+                        android:layout_marginLeft="10dp"
+                        style="@style/VipItemTitleWhiteText"
+                        android:textSize="14sp"
+                        />
+            </LinearLayout>
+
             <ImageView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/vip_separator"
+                    android:src="@drawable/delimiter_rocket"
                     />
-            <TextView
+
+            <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_vip_blacklist"
-                    android:text="@string/vip_info_blackList"
-                    style="@style/VipItemTitleWhiteText"
-                    />
+                    android:orientation="horizontal"
+                    >
+
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_message"
+
+                        />
+
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/vip_info_message"
+                        android:layout_marginLeft="10dp"
+                        style="@style/VipItemTitleWhiteText"
+                        android:textSize="14sp"
+                        />
+            </LinearLayout>
+
             <ImageView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/vip_separator"
+                    android:src="@drawable/delimiter_rocket"
                     />
-            <TextView
+
+            <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_vip_dialog"
-                    android:text="@string/vip_info_message"
-                    style="@style/VipItemTitleWhiteText"
+                    android:orientation="horizontal"
+                    >
+
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_gift"
+
+                        />
+
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/vip_info_gift"
+                        android:layout_marginLeft="10dp"
+                        style="@style/VipItemTitleWhiteText"
+                        android:textSize="14sp"
+                        />
+            </LinearLayout>
+
+            <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/delimiter_rocket"
                     />
+
+            <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_blacklist"
+
+                        />
+
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/vip_info_blackList"
+                        android:layout_marginLeft="10dp"
+                        style="@style/VipItemTitleWhiteText"
+                        android:textSize="14sp"
+                        />
+            </LinearLayout>
+
+            <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/delimiter_rocket"
+                    />
+
+            <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_vip"
+
+                        />
+
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/vip_info_vip"
+                        android:layout_marginLeft="10dp"
+                        style="@style/VipItemTitleWhiteText"
+                        android:textSize="14sp"
+                        />
+            </LinearLayout>
+
         </LinearLayout>
+
         <LinearLayout
                 android:id="@+id/editPremiumContainer"
                 android:orientation="vertical"
@@ -96,11 +276,13 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="10dp"
                 >
+
             <RelativeLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     >
+
                 <TextView
                         android:id="@+id/fepVipRest"
                         android:layout_width="wrap_content"
@@ -110,11 +292,12 @@
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
                         />
+
                 <ImageButton
                         android:id="@+id/fepVipEdit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_vip_edit"
+                        android:src="@drawable/ic_edit"
                         android:layout_alignParentRight="true"
                         android:background="@android:color/transparent"
                         />
@@ -136,6 +319,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     layout="@layout/vip_item_edit_form_select"/>
+
             <include
                     android:id="@+id/fepProfileBG"
                     android:layout_width="fill_parent"

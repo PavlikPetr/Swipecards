@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="time_now">Kohe praegu</string>
+    <plurals name="time_hour">
+        <item quantity="other">%d tundi tagasi</item>
+        <item quantity="one">%d tund tagasi</item>
+    </plurals>
+    <plurals name="time_minute">
+        <item quantity="zero">%d minut tagasi</item>
+        <item quantity="one">%d minutit tagasiминуты назад</item>
+    </plurals>
+    <plurals name="time_month">
+        <item quantity="other">%d kuud</item>
+        <item quantity="one">%d kuud</item>
+    </plurals>
+    <string name="time_yesterday">Eile</string>
+    <string name="time_today">Täna</string>
+    <string name="time_monday">Esmaspäev</string>
+    <string name="time_tuesday">Teisipäev</string>
+    <string name="time_wednesday">Kolmapäev</string>
+    <string name="time_thursday">Neljapäev</string>
+    <string name="time_friday">Reede</string>
+    <string name="time_saturday">Laupäev</string>
+    <string name="time_sunday">Pühapäev</string>
+    <string name="time_january">Jaanuar</string>
+    <string name="time_february">Veebruar</string>
+    <string name="time_march">märts</string>
+    <string name="time_april">Aprill</string>
+    <string name="time_may">mai</string>
+    <string name="time_june">juuni</string>
+    <string name="time_july">Juuli</string>
+    <string name="time_august">August</string>
+    <string name="time_september">September</string>
+    <string name="time_october">Oktoober</string>
+    <string name="time_november">November</string>
+    <string name="time_december">Detsember</string>
+</resources>

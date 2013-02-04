@@ -33,7 +33,7 @@ public class PhotoSwitcherActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_photos);
-        mPreloadManager = new PreloadManager(this);
+        mPreloadManager = new PreloadManager();
         // Extras
         Intent intent = getIntent();
         int position = intent.getIntExtra(INTENT_ALBUM_POS, 0);

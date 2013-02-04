@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -62,7 +63,12 @@ public class CacheProfile {
 
     public static ArrayList<Gift> gifts = new ArrayList<Gift>();
     public static HashMap<Integer, Profile.TopfaceNotifications> notifications;
+
     public static boolean hasMail;
+    public static boolean emailGrabbed;
+    public static boolean emailConfirmed;
+
+    public static long profileUpdateTime;
 
     public static void setData(Profile profile) {
         updateCity(profile);
@@ -75,6 +81,12 @@ public class CacheProfile {
         if (response != null) {
             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit();
             editor.putString(PROFILE_CACHE_KEY, response.toString());
+            editor.commit();
+        } else {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.remove(PROFILE_CACHE_KEY);
+            editor.remove(OPTIONS_CACHE_KEY);
             editor.commit();
         }
     }
@@ -124,6 +136,8 @@ public class CacheProfile {
 
         profile.notifications = notifications;
         profile.hasMail = hasMail;
+        profile.email_confirmed = emailConfirmed;
+        profile.email_grabbed = emailGrabbed;
 
         profile.premium = premium;
         profile.invisible = invisible;
@@ -169,6 +183,8 @@ public class CacheProfile {
 
         notifications = profile.notifications;
         hasMail = profile.hasMail;
+        emailConfirmed = profile.email_confirmed;
+        emailGrabbed = profile.email_grabbed;
 
         premium = profile.premium;
         invisible = profile.invisible;
@@ -189,6 +205,7 @@ public class CacheProfile {
         background_id = profile.background;
 
         setProfileCache(response);
+        setProfileUpdateTime();
     }
 
     /**
@@ -258,6 +275,24 @@ public class CacheProfile {
             }
         }
         return options;
+    }
+
+    public static void clearProfile() {
+        options = null;
+        setProfile(new Profile(),null);
+    }
+
+    private static void setProfileUpdateTime() {
+        Calendar calendar = Calendar.getInstance();
+        profileUpdateTime = calendar.getTimeInMillis();
+    }
+
+    public static long getLastProfileUpdateTime() {
+        return profileUpdateTime;
+    }
+
+    public static boolean isLoaded() {
+        return uid > 0;
     }
 
     public static boolean isOptionsLoaded() {

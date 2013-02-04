@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+        >
+    <RelativeLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/dl_connection_lost"
+                    android:padding="10dp"
+            >
+        <RelativeLayout
+            android:id="@+id/image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            >
+                <ImageView
+                        android:id="@+id/sat"
+                        android:src="@drawable/satellite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        />
+                <ImageView
+                        android:src="@drawable/earth"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        />
+        </RelativeLayout>
+        <!--<com.topface.topface.ui.views.AnimatedView xmlns:av="http://schemas.android.com/apk/res/com.topface.topface"-->
+            <!--android:id="@+id/image"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_alignParentTop="true"-->
+            <!--av:src="@drawable/sprite8"-->
+            <!--av:settings="@anim/image_anim"-->
+            <!--/>-->
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:text="@string/general_internet_off"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/image"
+            />
+    </RelativeLayout>
+
+</RelativeLayout>

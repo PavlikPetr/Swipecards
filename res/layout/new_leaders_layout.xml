@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/bg_main">
+
+    <include
+            android:id="@+id/loNavigationBar"
+            layout="@layout/bar_navigation_header"/>
+
+    <RelativeLayout
+            android:layout_below="@id/loNavigationBar"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+        <RelativeLayout
+                android:id="@+id/loFooter"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                >
+
+            <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/leader_btn_bg_plate"
+                    android:scaleType="fitXY"
+                    />
+
+            <Button
+                    android:id="@+id/btnLeadersBuy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/btn_vip_super_sale_selector"
+                    />
+        </RelativeLayout>
+
+        <ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/loFooter"
+                android:layout_alignParentTop="true"
+                >
+
+            <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp"
+                    >
+
+                <com.example.gridlayout.GridLayout
+                        android:id="@+id/usedGrid"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:fadeScrollbars="true"
+                        android:fadingEdge="none"
+                        android:horizontalSpacing="0px"
+                        android:listSelector="@android:color/transparent"
+                        android:padding="0px"
+                        android:layout_marginLeft="10dp"
+                        app:columnsAutoFit = "true"
+                        android:layout_marginRight="10dp"
+                        app:columnWidth="95"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="0px"
+                        android:gravity="center">
+                </com.example.gridlayout.GridLayout>
+
+                <TextView
+                        android:id="@+id/unusedTitle"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:textSize="14sp"
+                        android:layout_alignParentTop="true"
+                        android:text="@string/leaders_pick_condition"/>
+
+                <com.example.gridlayout.GridLayout
+                        android:id="@+id/unusedGrid"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@android:color/transparent"
+                        android:fadeScrollbars="true"
+                        android:fadingEdge="none"
+                        android:horizontalSpacing="0px"
+                        android:listSelector="@android:color/transparent"
+                        android:padding="0px"
+                        app:columnWidth="95"
+                        app:columnsAutoFit="true"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="0px"
+                        android:gravity="center"/>
+            </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+
+    <ImageView style="@style/HeaderShadow"/>
+
+    <com.topface.topface.ui.views.LockerView
+            android:id="@+id/llvLeaderSending"
+            style="@style/LoadingLocker"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:visibility="gone"/>
+
+</RelativeLayout>

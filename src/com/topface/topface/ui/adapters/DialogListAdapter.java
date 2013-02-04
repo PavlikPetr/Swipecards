@@ -18,8 +18,6 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
     public static final int NEW_VIP_ITEM_LAYOUT = R.layout.item_new_feed_vip_dialog;
     public static final int VIP_ITEM_LAYOUT = R.layout.item_feed_vip_dialog;
 
-//    public static final int
-
     public static final String MESSAGE_OF_UNKNOWN_TYPE = "";
 
     public DialogListAdapter(Context context, Updater updateCallback) {
@@ -180,4 +178,22 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
         return NEW_VIP_ITEM_LAYOUT;
     }
 
+    @Override
+    public ILoaderRetrierCreator<FeedDialog> getLoaderRetrierCreator() {
+        return new ILoaderRetrierCreator<FeedDialog>() {
+            @Override
+            public FeedDialog getLoader() {
+                FeedDialog result = new FeedDialog(null);
+                result.setLoaderTypeFlags(IListLoader.ItemType.LOADER);
+                return result;
+            }
+
+            @Override
+            public FeedDialog getRetrier() {
+                FeedDialog result = new FeedDialog(null);
+                result.setLoaderTypeFlags(IListLoader.ItemType.RETRY);
+                return result;
+            }
+        };
+    }
 }

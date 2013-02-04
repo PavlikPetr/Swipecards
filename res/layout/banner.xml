@@ -1,37 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
-    <ImageView
-		android:id="@+id/ivBanner"
+    <LinearLayout
+        android:id="@+id/loBannerContainer"
+        android:orientation="vertical"
+        android:gravity="center"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY"
-        android:visibility="visible"/>
-    
-    <com.google.ads.AdView
-        xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"         
-        android:id="@+id/adMobView"
-		android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        ads:adUnitId="a1506c2c0d9899a"
-        ads:adSize="BANNER"
-        ads:testDevices="0009fefc45872f"
-        ads:loadAdOnCreate="false"
-        android:visibility="gone"/>
-    
-    <com.adfonic.android.AdfonicView
-       xmlns:adfonic="http://schemas.android.com/apk/lib/com.adfonic.android"
-       android:id="@+id/adFonicView"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       adfonic:refresh_ad="false"
-       android:visibility="gone"/>
-        
-    <ru.wapstart.plus1.sdk.Plus1BannerView
-       android:id="@+id/adPlus1View"
-       android:layout_width="320dp"
-       android:layout_height="50dp"
-       android:visibility="gone"
-       android:layout_gravity="top|center"/>
+        android:layout_height="wrap_content">
+
+    </LinearLayout>
 </merge>

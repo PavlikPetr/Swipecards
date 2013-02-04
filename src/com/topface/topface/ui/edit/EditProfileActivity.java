@@ -1,10 +1,7 @@
 package com.topface.topface.ui.edit;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.*;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -49,7 +46,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
     private boolean hasStartedFromAuthActivity;
 
-    public static String FROM_AUTH_ACTIVITY = "com.topface.topface.FROM_AUTH";
+
     private BroadcastReceiver mBroadcastReceiver;
 
     @Override
@@ -65,7 +62,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         btnBackToProfile.setVisibility(View.VISIBLE);
         btnBackToProfile.setOnClickListener(this);
 
-        hasStartedFromAuthActivity = getIntent().getBooleanExtra(FROM_AUTH_ACTIVITY, false);
+        hasStartedFromAuthActivity = getIntent().getBooleanExtra(NavigationActivity.FROM_AUTH, false);
 
         // ListView
         mEditItems = new LinkedList<EditProfileItem>();
@@ -112,7 +109,18 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
             }
         };
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
     }
 
     private void updateViews() {
@@ -172,12 +180,6 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivNameEditBackground:
@@ -191,7 +193,9 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
             case R.id.btnNavigationBackWithText:
                 if (hasStartedFromAuthActivity) {
                     Intent intent = new Intent(this, NavigationActivity.class);
-                    intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE);
+                    intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_VIP_PROFILE);
+                    SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                    preferences.edit().putBoolean(Static.PREFERENCES_TAG_NEED_EDIT, false).commit();
                     startActivity(intent);
                 }
                 finish();
@@ -250,14 +254,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                             CacheProfile.city_id = city_id;
                             CacheProfile.city_name = city_name;
                             CacheProfile.city_full = city_full;
-                            runOnUiThread(new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    mEditCity.setText(CacheProfile.city_name);
-
-                                }
-                            });
+                            mEditCity.setText(CacheProfile.city_name);
                         }
 
                         @Override

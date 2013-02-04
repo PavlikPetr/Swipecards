@@ -404,8 +404,9 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
             filterRequest.agebegin = mFilter.age_start;
             filterRequest.ageend = mFilter.age_end;
             filterRequest.xstatus = mFilter.xstatus_id;
-            filterRequest.character = mFilter.character_id;
             filterRequest.marriage = mFilter.marriage_id;
+            filterRequest.character = mFilter.character_id;
+            filterRequest.alcohol = mFilter.alcohol_id;
             //Финансовое положение и бюст - по сути одно поле, отправляем их оба, что бы не париться с опрееделением пола
             filterRequest.finances = filterRequest.breast = mFilter.showoff_id;
             prepareRequestSend();
@@ -589,48 +590,32 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     @Override
     protected void refreshSaveState() {
         super.refreshSaveState();
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mExtraSaveButton != null) {
-                    if (hasChanges()) {
-                        mExtraSaveButton.setVisibility(View.VISIBLE);
-                    } else {
-                        mExtraSaveButton.setVisibility(View.INVISIBLE);
-                    }
-                }
+        if (mExtraSaveButton != null) {
+            if (hasChanges()) {
+                mExtraSaveButton.setVisibility(View.VISIBLE);
+            } else {
+                mExtraSaveButton.setVisibility(View.INVISIBLE);
             }
-        });
+        }
     }
 
     @Override
     protected void prepareRequestSend() {
         super.prepareRequestSend();
-        getActivity().runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-                if (mExtraSaveButton != null) {
-                    mExtraSaveButton.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
+        if (mExtraSaveButton != null) {
+            mExtraSaveButton.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
     protected void finishRequestSend() {
         super.finishRequestSend();
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mRightPrsBar != null) {
-                    if (hasChanges()) {
-                        if (mExtraSaveButton != null) {
-                            mExtraSaveButton.setVisibility(View.VISIBLE);
-                        }
-                    }
+        if (mRightPrsBar != null) {
+            if (hasChanges()) {
+                if (mExtraSaveButton != null) {
+                    mExtraSaveButton.setVisibility(View.VISIBLE);
                 }
             }
-        });
+        }
     }
 }

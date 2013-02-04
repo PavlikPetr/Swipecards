@@ -13,8 +13,6 @@
             />
 
     <com.topface.topface.ui.views.ImageViewRemote
-            xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
-            ivr:postProcessor="rounded"
             android:id="@+id/ivUserAvatar"
             style="@style/ProfileAvatar"
             android:layout_centerVertical="true"
@@ -38,6 +36,7 @@
 
         <TextView
                 android:id="@+id/tvCity"
+                android:visibility="invisible"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/profile_ico_city"

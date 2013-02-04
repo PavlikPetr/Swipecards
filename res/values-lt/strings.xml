@@ -88,17 +88,6 @@
     <string name="buying_you_have_no_coins_for_gift">Jums nepakanka %d {{coins}} dovanos pirkimui</string>
     <string name="buying_default_message">Jūs galite siųsti dovanas ir susižavėjimus už monetas</string>
     <string name="buying_money">Monetų pirkimas</string>
-    <string name="buying_power">Energijos pirkimas</string>
-    <string name="buying_recharge">Įkrauti 100%</string>
-    <string name="buying_energy">3 USD</string>
-    <string name="buying_pack_6coins">Paketas iš 6 monetų</string>
-    <string name="buying_6coins">1 USD</string>
-    <string name="buying_pack_40coins">Paketas iš 40 monetų</string>
-    <string name="buying_40coins">5 USD</string>
-    <string name="buying_pack_100coins">Paketas iš 100 monetų</string>
-    <string name="buying_100coins">10 USD</string>
-    <string name="buying_pack_300coins">Paketas iš 300 monetų</string>
-    <string name="buying_300coins">25 USD</string>
     <string name="profile_header_title">Mano profilis</string>
     <string name="profile_btn_chat">Paplepėti</string>
     <string name="profile_add_title">Pridėti fotografiją</string>
@@ -207,8 +196,6 @@
         <item quantity="one">%d fotografija</item>
     </plurals>
     <string name="novice_sympathy">Siųskite simpatijas tiems, kas jums\ntikrai patinka,\nkad pradėtumėte malonią pažintį</string>
-    <string name="novice_energy">Kuo didesnis baterijos krūvis\ntuo dažniau jus rodo.\nNeužmirškite įkrauti\nbateriją, nusipirkę energijos.</string>
-    <string name="novice_battery_bonus">Energija duoda jums populiarumą\nir naujas simpatijas. Jūs galite\nįkrauti bateriją, nusipirkę\n100% energijos. Pirmą įkrovimą\nmes jums dovanojame nemokamai!</string>
     <string name="novice_fill_profile">Pridėkite savo geriausias fotografijas,\nkad gautumėte daugiau simpatijų.</string>
     <string name="general_edit_profile_message">Prašome užpildyti visus būtinus anketos laukelius</string>
     <string name="general_premium_access_error">Šiai funkcijai būtina turėti Premium</string>
@@ -217,7 +204,7 @@
     <string name="general_sex">Lytis</string>
     <string name="general_girl">Moteriška</string>
     <string name="general_boy">Vyriška</string>
-    <string name="filter_city_fail">Nerastas nei vienas miestas prasidedantis "%s"</string>
+    <string name="filter_city_fail">Nerastas nei vienas miestas prasidedantis \"%s\"</string>
     <string name="age_filter_man">Jus domina vaikinai</string>
     <string name="age_filter_girl">Jus domina merginos</string>
     <string name="dashbrd_popup_rating">Patiko mūsų priedas? Pakelk mūsų reitingą! Kuo aukštesnis reitingas, tuo daugiau įdomių žmonių tu sutiksi Topface</string>
@@ -241,8 +228,6 @@
     <string name="dating_search_empty_text">Jūs galite bandyti pakartoti paiešką arba pakeisti filtro nustatymus.</string>
     <string name="general_close">Uždaryti</string>
     <string name="vip_not_activated">Jūsų VIP-statusas neaktyvuotas</string>
-    <string name="vip_one_month_title">1 mėnuo</string>
-    <string name="vip_one_year_title">1 metai</string>
     <string name="vip_privileges">VIP privilegijos</string>
     <string name="vip_text_visitors">Sužinokite, kas jumis domėjosi - peržiūrėkite savo svečius!</string>
     <string name="vip_text_adm_unlock">Siųskite susižavėjimus nemokamai - maksimaliai išreikškite savo jausmus!</string>
@@ -253,7 +238,6 @@
     <string name="vip_profile_bg">Foninė fotografija</string>
     <string name="profile_services">Paslaugos</string>
     <string name="default_balance_constant">Jūsų sąskaitoje</string>
-    <string name="default_energy_balance_constant">Energijos atsargos</string>
     <string name="default_energy_coins_buy_btn_text">Pirkti monetas, papildyti energijos atsargas</string>
     <string name="black_list_title">Juodasis sąrašas</string>
     <string name="black_list_empty">Jūsų juodasis sąrašas tuščias</string>
@@ -261,8 +245,6 @@
     <string name="black_list_delete">Pašalinti iš juodojo sąrašo</string>
     <string name="vip_invisible_mode">Nematomas režimas</string>
     <string name="buying_profile_coins">Jūsų sąskaitoje</string>
-    <string name="buying_profile_energy">Energijos atsargos</string>
-    <string name="buying_buy_resources">Pirkti monetas, papildyti energijos atsargas</string>
     <string name="vip_buy_vip">VIP pirkimas</string>
     <string name="vip_state_off">Jūsų VIP-statusas neaktyvuotas</string>
     <string name="vip_state_on">Jūsų VIP-statusas aktyvuotas</string>
@@ -281,14 +263,7 @@
     <string name="buying_vip_info">Norint turėti priėjimą prie svečių būtinas VIP statusas</string>
     <string name="buy_play_market_not_available">Play Market neprieinamas</string>
     <string name="buy_subscription_not_available">Prenumeratos neprieinamos</string>
-    <string name="default_six_coins">6 monetos po 0.16$ už monetą</string>
-    <string name="default_coins_40">40 monetų po 0.12$ už monetą</string>
-    <string name="default_economy_25">Sutaupote 25%</string>
-    <string name="default_coins_100">100 monetų po 0.1$ už monetą</string>
     <string name="default_economy_vip">VIP nuo 10 USD per mėnesį</string>
-    <string name="default_economy_38">Sutaupote 38%</string>
-    <string name="default_coins_300">300 monetų po 0.08$ už monetą</string>
-    <string name="default_economy_50">Sutaupote 50%</string>
     <string name="profile_gifts_empty">Šiam vartotojui dar niekas nedovanojo dovanų</string>
     <string name="profile_mygifts_empty">Jums dar niekas nedovanojo dovanų</string>
     <string name="profile_mood">Aprašykite savo nuotaiką</string>

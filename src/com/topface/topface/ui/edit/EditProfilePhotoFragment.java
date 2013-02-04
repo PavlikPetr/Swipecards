@@ -13,7 +13,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.topface.topface.App;
-import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
@@ -30,7 +29,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
 
     private ArrayList<Photo> mDeleted = new ArrayList<Photo>();
 
-    private ProfilePhotoGridAdapter mPhotoGridAdapter;
+    private EditProfileGridAdapter mPhotoGridAdapter;
     private int mLastSelectedAsMainId;
     private int mSelectedAsMainId;
 
@@ -62,7 +61,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         if (CacheProfile.photos != null) {
             mPhotoLinks.addAll(CacheProfile.photos);
         }
-        mPhotoGridAdapter = new EditProfileGrigAdapter(
+        mPhotoGridAdapter = new EditProfileGridAdapter(
                 getActivity().getApplicationContext(), mPhotoLinks);
 
         mAddPhotoHelper = new AddPhotoHelper(this, mLockerView);
@@ -94,11 +93,11 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
 
         mViewFlipper = (ViewFlipper) root.findViewById(R.id.vfFlipper);
 
-        mPhotoGridView = (GridView) root.findViewById(R.id.fragmentGrid);
+        mPhotoGridView = (GridView) root.findViewById(R.id.usedGrid);
         mPhotoGridView.setAdapter(mPhotoGridAdapter);
         mPhotoGridView.setOnItemClickListener(mOnItemClickListener);
 
-        TextView title = (TextView) root.findViewById(R.id.fragmentTitle);
+        TextView title = (TextView) root.findViewById(R.id.usedTitle);
         title.setVisibility(View.GONE);
 
         root.findViewById(R.id.btnAddPhotoAlbum).setOnClickListener(mAddPhotoHelper.getAddPhotoClickListener());
@@ -196,9 +195,9 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         }
     }
 
-    class EditProfileGrigAdapter extends ProfilePhotoGridAdapter {
+    class EditProfileGridAdapter extends ProfilePhotoGridAdapter {
 
-        public EditProfileGrigAdapter(Context context,
+        public EditProfileGridAdapter(Context context,
                                       Photos photoLinks) {
             super(context, photoLinks);
         }
@@ -311,9 +310,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             if (position == 0) {
                 mViewFlipper.setDisplayedChild(1);
-                return;
             }
-            Data.photos = CacheProfile.photos;
         }
     };
 

@@ -1,24 +1,17 @@
 package com.topface.topface.requests;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import com.topface.topface.Data;
-import com.topface.topface.R;
+import com.topface.topface.App;
 import com.topface.topface.RetryDialog;
 import com.topface.topface.Static;
-import com.topface.topface.ui.AuthActivity;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.ConnectionManager;
-import com.topface.topface.utils.http.Http;
 import com.topface.topface.utils.http.RequestConnection;
-import com.topface.topface.utils.social.AuthToken;
 
 import java.util.Calendar;
 
 public abstract class ApiRequest {
+    private static final int MAX_RESEND_CNT = 4;
     // Data
     public String ssid;
     public ApiHandler handler;
@@ -27,7 +20,7 @@ public abstract class ApiRequest {
     private RequestConnection connection;
     private boolean doNeedAlert;
     private boolean doNeedAuthorize;
-    private boolean doNeedResend = true;
+    private int mResendCnt = 0;
 
     public ApiRequest(Context context) {
         //Нельзя передавать Application Context!!!! Только контекст Activity
@@ -47,30 +40,21 @@ public abstract class ApiRequest {
         setStopTime();
         setHandler();
 
-        if (!Http.isOnline(context) && doNeedAlert) {
-            RetryDialog retryDialog = new RetryDialog(context);
-            retryDialog.setMessage(context.getString(R.string.general_internet_off));
-            retryDialog.setButton(Dialog.BUTTON_POSITIVE, context.getString(R.string.general_dialog_retry), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    exec();
-                }
-            });
-
-            retryDialog.setButton(Dialog.BUTTON_NEGATIVE, context.getString(R.string.general_cancel), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-//                    if (handler != null) handler.fail(0, new ApiResponse(""));
-                }
-            });
+        if (context != null && !App.isOnline() && doNeedAlert) {
+            RetryDialog retryDialog = new RetryDialog(context, this);
             handler.fail(0, new ApiResponse(""));
             retryDialog.show();
-        } else if ((!Data.isSSID() || (new AuthToken(context)).isEmpty()) && doNeedAuthorize) {
-            if (!AuthActivity.isStarted()) {
-                Debug.log("SSID and Token is empty, need authorize");
-                context.startActivity(new Intent(context, AuthActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
-            }
-        } else {
+        }
+        //Вот эта штука скорее всего не нужна из-за того что такая проверка теперь идет в любой активити
+//         else if ((!Data.isSSID() || (new AuthToken(context)).isEmpty()) && doNeedAuthorize) {
+//            if (context != null && !AuthActivity.isStarted()) {
+//                Debug.log("SSID and Token is empty, need authorize");
+//
+//                context.startActivity(new Intent(context, AuthActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
+//            }
+//      }
+
+        else {
             connection = ConnectionManager.getInstance().sendRequest(this);
         }
 
@@ -117,11 +101,7 @@ public abstract class ApiRequest {
     }
 
     public boolean isNeedResend() {
-        return doNeedResend;
-    }
-
-    public void setNeedResend(boolean value) {
-        doNeedResend = value;
+        return mResendCnt < MAX_RESEND_CNT;
     }
 
     public boolean isCanceled() {
@@ -135,5 +115,10 @@ public abstract class ApiRequest {
         handler = null;
         connection = null;
         canceled = true;
+    }
+
+    public int incrementResend() {
+        mResendCnt++;
+        return mResendCnt;
     }
 }

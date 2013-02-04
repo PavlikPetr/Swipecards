@@ -37,9 +37,16 @@ public class ApiResponse {
     public static final int INVERIFIED_TOKEN = 20;
     public static final int INVALID_FORMAT = 21;
     public static final int UNVERIFIED_SIGNATURE = 22;
+    public static final int INCORRECT_VALUE = 23;
+    public static final int MAINTENANCE = 27;
     public static final int BAN = 28;
     public static final int NETWORK_CONNECT_ERROR = 29;
     public static final int PREMIUM_ACCESS_ONLY = 32;
+    public static final int INVALID_PURCHASE_TOKEN = 34;
+    public static final int CANNOT_BECOME_LEADER = 35;
+    public static final int CODE_VIRUS_LIKES_ALREADY_RECEIVED = 36;
+    public static final int CODE_OLD_APPLICATION_VERSION = 37;
+
     // local
     public static final int NULL_RESPONSE = 100;
     public static final int WRONG_RESPONSE = 101;
@@ -152,5 +159,10 @@ public class ApiResponse {
         return completed;
     }
 
-
+    /**
+     * Проверяет, является ли этот ответ от сервера ошибокой переданно в параметре errorCode
+     */
+    public boolean isError(int errorCode) {
+        return errorCode == code;
+    }
 }

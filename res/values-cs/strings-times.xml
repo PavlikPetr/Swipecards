@@ -7,6 +7,7 @@
         <item quantity="one">před %d hodinou</item>
     </plurals>
     <plurals name="time_minute">
+        <item quantity="few">před %d minutami</item>
         <item quantity="zero">před %d minutou</item>
         <item quantity="other">před %d minutami</item>
         <item quantity="one">před %d minutami</item>
@@ -18,7 +19,7 @@
     </plurals>
     <string name="time_yesterday">Včera</string>
     <string name="time_today">Dnes</string>
-    <string name="time_monday">Pondělí</string>
+    <string name="time_monday">Pon</string>
     <string name="time_tuesday">Úterý</string>
     <string name="time_wednesday">Středa</string>
     <string name="time_thursday">Čtvrtek</string>

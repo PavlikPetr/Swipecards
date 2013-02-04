@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 import com.topface.topface.App;
@@ -15,6 +16,12 @@ import org.json.JSONObject;
 abstract public class ApiHandler extends Handler {
 
     private Context mContext;
+
+    @Override
+    public void handleMessage(Message msg) {
+        super.handleMessage(msg);
+        response((ApiResponse) msg.obj);
+    }
 
     public void response(ApiResponse response) {
         try {
@@ -30,10 +37,11 @@ abstract public class ApiHandler extends Handler {
             } else if (response.code != ApiResponse.RESULT_OK) {
                 fail(response.code, response);
             } else {
-                sendProfileUpdateIntent(response);
                 setCounters(response);
                 success(response);
+                sendUpdateIntent(response);
             }
+            Debug.log("D_REQUEST::handler_end");
         } catch (Exception e) {
             Debug.error("ApiHandler exception", e);
             fail(ApiResponse.ERRORS_PROCCESED, new ApiResponse(ApiResponse.ERRORS_PROCCESED, e.getMessage()));
@@ -49,13 +57,7 @@ abstract public class ApiHandler extends Handler {
         if (mContext != null && mContext instanceof Activity) {
             try {
                 //показываем уведомление
-                final Activity activity = ((Activity) mContext);
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(App.getContext(), stringId, Toast.LENGTH_SHORT).show();
-                    }
-                });
+                Toast.makeText(App.getContext(), stringId, Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 Debug.error(e);
             }
@@ -94,9 +96,11 @@ abstract public class ApiHandler extends Handler {
         }
     }
 
-    private void sendProfileUpdateIntent(ApiResponse response) {
+    private void sendUpdateIntent(ApiResponse response) {
         if (response.method.equals(ProfileRequest.SERVICE_NAME)) {
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+        } else if (response.method.equals(OptionsRequest.SERVICE_NAME)) {
+            LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(OptionsRequest.VERSION_INTENT));
         }
     }
 

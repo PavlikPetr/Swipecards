@@ -1,11 +1,14 @@
 package com.topface.topface.utils.http;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import com.topface.topface.App;
-import com.topface.topface.Data;
-import com.topface.topface.ReAuthReceiver;
-import com.topface.topface.Static;
+import android.content.SharedPreferences;
+import android.os.Message;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import com.topface.topface.*;
 import com.topface.topface.data.Auth;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
@@ -39,21 +42,35 @@ public class ConnectionManager {
     public static final String BAN_RESPONSE = "ban_response";
 
     private ConnectionManager() {
-        mWorker = Executors.newFixedThreadPool(2);
+        mWorker = Executors.newFixedThreadPool(3);
         mDelayedRequestsThreads = new LinkedList<Thread>();
+        //Можно включить полный дебаг всех http заголовков и других данных Http клиента
+        //DebugLogConfig.enable();
+
     }
 
 
     public static ConnectionManager getInstance() {
-        if (mInstanse == null)
+        if (mInstanse == null) {
             mInstanse = new ConnectionManager();
+        }
         return mInstanse;
     }
 
 
     public RequestConnection sendRequest(final ApiRequest apiRequest) {
         final RequestConnection connection = new RequestConnection();
-        mWorker.execute(new Runnable() {
+
+        // Не посылать запросы пока не истечет время бана за флуд
+        if (isBlockedForFlood()) {
+            Intent intent = new Intent(apiRequest.context, BanActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(BanActivity.INTENT_TYPE, BanActivity.TYPE_FLOOD);
+            apiRequest.context.startActivity(intent);
+            return null;
+        }
+
+        mWorker.submit(new Runnable() {
             @Override
             public void run() {
                 String rawResponse;
@@ -75,6 +92,7 @@ public class ConnectionManager {
                 try {
                     httpClient = AndroidHttpClient.newInstance("Android");
                     httpPost = new HttpPost(Static.API_URL);
+                    httpClient.enableCurlLogging("Topface", Log.VERBOSE);
                     httpPost.setHeader("Accept-Encoding", "gzip");
                     httpPost.setHeader("Content-Type", "application/json");
                     setRevisionHeader(httpPost);
@@ -101,34 +119,64 @@ public class ConnectionManager {
                     if (apiResponse.code == ApiResponse.BAN) {
                         Intent intent = new Intent(apiRequest.context, BanActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra(BanActivity.BANNING_INTENT, apiResponse.jsonResult.get("message").toString());
+                        intent.putExtra(BanActivity.INTENT_TYPE, BanActivity.TYPE_BAN);
+                        intent.putExtra(BanActivity.BANNING_TEXT_INTENT, apiResponse.jsonResult.get("message").toString());
                         apiRequest.context.startActivity(intent);
-                        //В запрос отправлять ничего не будем, в finally его просто отменем
+                        //В запрос отправлять ничего не будем, в finally его просто отменим
+                    } else if (apiResponse.code == ApiResponse.DETECT_FLOOD) {
+                        Intent intent = new Intent(apiRequest.context, BanActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra(BanActivity.INTENT_TYPE, BanActivity.TYPE_FLOOD);
+                        apiRequest.context.startActivity(intent);
+                    } else if (apiResponse.code == ApiResponse.MAINTENANCE && apiRequest.handler != null) {
+                        needResend = true;
+                        apiRequest.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                RetryDialog retryDialog = new RetryDialog(apiRequest.context, apiRequest);
+                                retryDialog.setMessage(apiRequest.context.getString(R.string.general_maintenance));
+                                retryDialog.setButton(Dialog.BUTTON_POSITIVE, apiRequest.context.getString(R.string.general_dialog_retry), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        apiRequest.exec();
+                                    }
+                                });
+                                retryDialog.show();
+                            }
+                        });
 
                     } else if (apiResponse.code == ApiResponse.NULL_RESPONSE
                             || apiResponse.code == ApiResponse.WRONG_RESPONSE
                             //Если после переавторизации у нас все же не верный ssid, то пробуем все повторить
                             || apiResponse.code == ApiResponse.SESSION_NOT_FOUND) {
+
                         //Если пришел пустой ответ или пришел какой то мусор, то пробуем переотправить запрос
                         if (apiRequest.isNeedResend() && apiRequest.handler != null) {
                             needResend = true;
-                            Debug.error("Response error. Try resend");
                             apiRequest.handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
                                     sendRequest(apiRequest);
                                 }
                             }, WAITING_TIME);
-                            apiRequest.setNeedResend(false);
+                            int tryCnt = apiRequest.incrementResend();
+
+                            Debug.error("Response error. Try resend #" + tryCnt);
 
                             //Предварительно проверяем, что есть handler и запрос не отменен
                             // (если отменен, может возникнуть ситуация, когда handler уже не сможет
                             // обработать ответ из-за убитого контекста)
                         } else if (!apiRequest.isCanceled()) {
-                            apiRequest.handler.response(apiResponse);
+                            needResend = true;
+                            Message msg = new Message();
+                            msg.obj = apiResponse;
+                            apiRequest.handler.sendMessage(msg);
                         }
                     } else if (!apiRequest.isCanceled()) {
-                        apiRequest.handler.response(apiResponse);
+                        needResend = true;
+                        Message msg = new Message();
+                        msg.obj = apiResponse;
+                        apiRequest.handler.sendMessage(msg);
                     }
 
                 } catch (Exception e) {
@@ -157,9 +205,10 @@ public class ConnectionManager {
 
         try {
             //BasicHttpContext httpContext = new BasicHttpContext();
+            Debug.log("D_REQUEST::start");
             HttpResponse httpResponse = httpClient.execute(httpPost/* ,
                                                                     * httpContext */);
-
+            Debug.log("D_REQUEST::end");
             HttpEntity httpEntity = httpResponse.getEntity();
             if (httpEntity != null) {
                 InputStream is = AndroidHttpClient.getUngzippedContent(httpEntity);
@@ -285,5 +334,12 @@ public class ConnectionManager {
         }
 
         mDelayedRequestsThreads.clear();
+    }
+
+    private boolean isBlockedForFlood() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+        long endTime = preferences.getLong(BanActivity.FLOOD_ENDS_TIME, 0L);
+        long now = System.currentTimeMillis();
+        return endTime > now;
     }
 }

@@ -13,7 +13,6 @@ public class ProfileRequest extends AbstractApiRequest {
     //public String  fields;  //массив интересующих полей профиля
     // Constants
     public static final int P_ALL = 0;
-    public static final int P_NOTIFICATION = 1;
     public static final int P_FILTER = 2;
     public static final int P_QUESTIONARY = 3;
     public static final int P_ALBUM = 4;
@@ -30,9 +29,6 @@ public class ProfileRequest extends AbstractApiRequest {
 
         JSONArray fields;
         switch (part) {
-            case P_NOTIFICATION:
-                fields = getNotification();
-                break;
             case P_FILTER:
                 fields = getFilter();
                 break;

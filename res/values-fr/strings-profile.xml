@@ -3,7 +3,7 @@
     <string name="profile_form_status_male_0">L\'amour et les relations sérieuses</string>
     <string name="profile_form_status_male_1">Les relations libres</string>
     <string name="profile_form_status_male_2">L\'amitié et la communication</string>
-    <string name="profile_form_status_male_3">Je veux beaucoup de sympathies</string>
+    <string name="profile_form_status_male_3">Je veux recevoir beaucoup de sympathies</string>
     <string name="profile_form_status_male_4">Je veux bavarder</string>
     <string name="profile_form_status_female_0">L\'amour et les relations sérieuses</string>
     <string name="profile_form_status_female_1">Les relations libres</string>
@@ -229,4 +229,9 @@
     <string name="form_detail_archievements_1">Les meilleurs résultats dans la vie</string>
     <string name="form_detail_archievements_2">Vos meilleurs résultats dans la vie</string>
     <string name="form_detail_archievements_3">Vos meilleurs résultats dans la vie</string>
+    <string name="form_main_personal_status_0">Statut</string>
+    <string name="form_main_about_status_0">A propos de lui</string>
+    <string name="form_main_about_status_1">A propos d\'elle</string>
+    <string name="form_main_about_status_2">A propos de moi</string>
+    <string name="form_main_about_status_3">A propos de moi</string>
 </resources>

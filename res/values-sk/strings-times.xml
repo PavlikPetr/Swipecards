@@ -8,7 +8,7 @@
     </plurals>
     <plurals name="time_minute">
         <item quantity="zero">pred %d minútou</item>
-        <item quantity="other">pred %d minptami</item>
+        <item quantity="other">pred %d minútami</item>
         <item quantity="one">pred %d minútami</item>
     </plurals>
     <plurals name="time_month">

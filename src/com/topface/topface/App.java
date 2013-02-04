@@ -7,14 +7,17 @@ import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import com.topface.topface.data.Options;
+import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
+import com.topface.topface.requests.*;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 
-@ReportsCrashes(formUri = "https://api.zubhium.com/api2/acra/?secret_key=26d677a706e68e841ab85b286c5556",formKey="")
+@ReportsCrashes(formUri = "https://api.zubhium.com/api2/acra/?secret_key=26d677a706e68e841ab85b286c5556", formKey = "")
 public class App extends Application {
     // Constants
     public static final String TAG = "Topface";
@@ -50,11 +53,17 @@ public class App extends Application {
 
         Debug.log("App", "+onCreate");
         Data.init(getApplicationContext());
+
         CacheProfile.loadProfile();
+
         //Начинаем слушать подключение к интернету
         if (mConnectionIntent == null) {
             mConnectionReceiver = new ConnectionChangeReceiver(mContext);
             mConnectionIntent = registerReceiver(mConnectionReceiver, new IntentFilter(CONNECTIVITY_CHANGE_ACTION));
+        }
+
+        if (CacheProfile.isLoaded()) {
+            sendProfileRequest();
         }
         //Если приходим с нотификации незалогинеными, нужно вернуться в AuthActivity
         if (Data.isSSID() && (new AuthToken(getApplicationContext())).isEmpty()) {
@@ -70,6 +79,41 @@ public class App extends Application {
         if (mConnectionIntent != null && mConnectionReceiver != null) {
             unregisterReceiver(mConnectionReceiver);
         }
+    }
+
+    public static void sendProfileRequest() {
+        ProfileRequest profileRequest = new ProfileRequest(App.getContext());
+        profileRequest.part = ProfileRequest.P_ALL;
+        profileRequest.callback(new DataApiHandler<Profile>() {
+
+            @Override
+            protected void success(Profile data, ApiResponse response) {
+                CacheProfile.setProfile(data, response);
+            }
+
+            @Override
+            protected Profile parseResponse(ApiResponse response) {
+                return Profile.parse(response);
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+            }
+
+        }).exec();
+
+        OptionsRequest request = new OptionsRequest(App.getContext());
+        request.callback(new ApiHandler() {
+            @Override
+            public void success(ApiResponse response) {
+                Options.parse(response);
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+                Debug.log("options::fail");
+            }
+        }).exec();
     }
 
     public static Context getContext() {

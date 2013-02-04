@@ -39,6 +39,7 @@
             <flag name="rounded" value="1"/>
             <flag name="roundCorners" value="2"/>
             <flag name="mask" value="3"/>
+            <flag name="circumCircle" value="4"/>
         </attr>
     </declare-styleable>
 
@@ -50,5 +51,11 @@
             <attr name="fontSize" format="integer"/>
             <attr name="textWithoutBackground" format="string"/>
     </declare-styleable>
+
+    <declare-styleable name="AnimatedView">
+        <attr name="settings" format="reference"/>
+        <attr name="src" format="reference"/>
+    </declare-styleable>
+
 
 </resources>

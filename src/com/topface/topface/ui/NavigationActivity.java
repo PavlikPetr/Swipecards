@@ -1,33 +1,30 @@
 package com.topface.topface.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
+import android.content.*;
+import android.content.pm.PackageInfo;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.text.TextUtils;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
-import com.topface.billing.googleplay.GooglePlayV2Queue;
+import com.topface.billing.BillingUtils;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.ProfileRequest;
-import com.topface.topface.ui.analytics.TrackedFragmentActivity;
+import com.topface.topface.requests.OptionsRequest;
+import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.fragments.*;
 import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
 import com.topface.topface.ui.fragments.MenuFragment.FragmentMenuListener;
 import com.topface.topface.ui.views.NoviceLayout;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.Utils;
@@ -35,57 +32,94 @@ import com.topface.topface.utils.social.AuthorizationManager;
 
 import java.util.Calendar;
 
-public class NavigationActivity extends TrackedFragmentActivity implements View.OnClickListener {
+public class NavigationActivity extends BaseFragmentActivity implements View.OnClickListener {
 
     public static final String RATING_POPUP = "RATING_POPUP";
+    public static final String FROM_AUTH = "com.topface.topface.AUTH";
     public static final int RATE_POPUP_TIMEOUT = 86400000; // 1000 * 60 * 60 * 24 * 1 (1 сутки)
-    public static final int UPDATE_INTERVAL = 1 * 60 * 1000;
-    public static final int BILLING_QUEUE_CHECK_DELAY = 3000;
+    public static final int UPDATE_INTERVAL = 10 * 60 * 1000;
     private FragmentManager mFragmentManager;
     private MenuFragment mFragmentMenu;
     private FragmentSwitchController mFragmentSwitcher;
-
-    public static NavigationActivity mThis = null;
 
     private SharedPreferences mPreferences;
     private NoviceLayout mNoviceLayout;
     private Novice mNovice;
 
+    private BroadcastReceiver mServerResponseReceiver;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
+        if (isNeedBroughtToFront(getIntent())) {
+            // При открытии активити из лаунчера перезапускаем ее
+            finish();
+            return;
+        }
         setContentView(R.layout.ac_navigation);
+
         Debug.log(this, "onCreate");
         mFragmentManager = getSupportFragmentManager();
 
-        mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
-        mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
-        mFragmentMenu.setOnMenuListener(mOnFragmentMenuListener);
+        initFragmentSwitcher();
 
-        mFragmentSwitcher = (FragmentSwitchController) findViewById(R.id.fragment_switcher);
-        mFragmentSwitcher.setFragmentSwitchListener(mFragmentSwitchListener);
-        mFragmentSwitcher.setFragmentManager(mFragmentManager);
-
-        Intent intent = getIntent();
-        int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
-        if (id != -1) {
-            mFragmentSwitcher.showFragmentWithAnimation(id);
-        } else {
-            mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
-            mFragmentMenu.selectDefaultMenu();
+        if (CacheProfile.isLoaded()) {
+            onInit();
         }
-        AuthorizationManager.getInstance(this).extendAccessToken();
+
 
         mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         setStopTime();
         mNovice = Novice.getInstance(mPreferences);
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
 
-        if (App.isOnline()) {
-            ratingPopup();
+    }
+
+    private void initFragmentSwitcher() {
+        mFragmentSwitcher = (FragmentSwitchController) findViewById(R.id.fragment_switcher);
+        mFragmentSwitcher.setFragmentSwitchListener(mFragmentSwitchListener);
+        mFragmentSwitcher.setFragmentManager(mFragmentManager);
+
+        mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
+        mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
+        mFragmentMenu.setOnMenuListener(mOnFragmentMenuListener);
+    }
+
+    @Override
+    public void onInit() {
+        Intent intent = getIntent();
+        int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
+        if (id != -1) {
+            mFragmentSwitcher.showFragmentWithAnimation(id);
+
+        } else {
+            mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
+            mFragmentMenu.selectDefaultMenu();
         }
+        AuthorizationManager.extendAccessToken(NavigationActivity.this);
+        //Если пользователь не заполнил необходимые поля, перекидываем его на EditProfile,
+        //чтобы исправлялся.
+        if (needChangeProfile()) {
+            Intent editIntent = new Intent(this, EditProfileActivity.class);
+            editIntent.putExtra(FROM_AUTH, true);
+            startActivity(editIntent);
+            finish();
+        } else {
+            checkVersion(CacheProfile.getOptions().max_version);
+
+        }
+
+    }
+
+    private boolean needChangeProfile() {
+        return (CacheProfile.age == 0 || CacheProfile.city_id == 0 || CacheProfile.photo == null)
+                && shouldChangeProfile();
+    }
+
+    private boolean shouldChangeProfile() {
+        SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        return preferences != null && preferences.getBoolean(Static.PREFERENCES_TAG_NEED_EDIT, true);
     }
 
     @Override
@@ -100,27 +134,20 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
     @Override
     protected void onResume() {
         super.onResume();
-        mThis = this;
-        long startTime = Calendar.getInstance().getTimeInMillis();
-        long stopTime = mPreferences.getLong(Static.PREFERENCES_STOP_TIME, -1);
-        if (stopTime != -1) {
-            if (startTime - stopTime > UPDATE_INTERVAL) {
-                ProfileRequest pr = new ProfileRequest(this);
-                pr.callback(new ApiHandler() {
-                    @Override
-                    public void success(ApiResponse response) {
-                    }
+        checkProfileUpdate();
 
-                    @Override
-                    public void fail(int codeError, ApiResponse response) {
-                    }
-                }).exec();
+        //Отправляем не обработанные запросы на покупку
+        BillingUtils.sendQueueItems();
+
+        mServerResponseReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
             }
-        }
+        };
 
-        sendQueueItems();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mServerResponseReceiver, new IntentFilter(OptionsRequest.VERSION_INTENT));
 
-        //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
+        //TODO костыль для ChatFragment, после перехода на фрагмент - выпилить
         if (mDelayedFragment != null) {
             onExtraFragment(mDelayedFragment);
             mDelayedFragment = null;
@@ -129,25 +156,71 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
 
     }
 
-    /**
-     * Пробуем разобрать очередь запросов
-     */
-    private void sendQueueItems() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (TextUtils.equals(getString(R.string.build_google_play_v2), Utils.getBuildType())) {
-                    GooglePlayV2Queue.getInstance(App.getContext()).sendQueueItems();
+    private void checkProfileUpdate() {
+        long startTime = Calendar.getInstance().getTimeInMillis();
+        long stopTime = mPreferences.getLong(Static.PREFERENCES_STOP_TIME, -1);
+        if (stopTime != -1) {
+            if (startTime - stopTime > UPDATE_INTERVAL) {
+                App.sendProfileRequest();
+            }
+        }
+    }
+
+    private void checkVersion(String version) {
+        try {
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            String curVersion = pInfo.versionName;
+            if (version != null && curVersion != null) {
+                String[] splittedVersion = version.split("\\.");
+                String[] splittedCurVersion = curVersion.split("\\.");
+                for (int i = 0; i < splittedVersion.length; i++) {
+                    if (i < splittedCurVersion.length) {
+                        if (Long.parseLong(splittedCurVersion[i]) < Long.parseLong(splittedVersion[i])) {
+                            showOldVersionPopup();
+                            return;
+                        }
+                    }
+                }
+                if (splittedCurVersion.length < splittedVersion.length) {
+                    showOldVersionPopup();
+                } else {
+                    if (App.isOnline()) {
+                        ratingPopup();
+                    }
+                }
+            } else {
+                if (App.isOnline()) {
+                    ratingPopup();
                 }
             }
-        }, BILLING_QUEUE_CHECK_DELAY);
+        } catch (Exception e) {
+            Debug.error(e);
+        }
+    }
+
+    private void showOldVersionPopup() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Utils.goToMarket(NavigationActivity.this);
+
+            }
+        });
+        builder.setNegativeButton(R.string.popup_version_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+        builder.setMessage(R.string.general_version_not_supported);
+        builder.create().show();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mThis = null;
         setStopTime();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mServerResponseReceiver);
     }
 
     /*
@@ -166,35 +239,43 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
 
     @Override
     public void onBackPressed() {
-        if (mFragmentSwitcher.getAnimationState() == FragmentSwitchController.EXPAND) {
-            super.onBackPressed();
-        } else {
-            if (mFragmentSwitcher.isExtraFrameShown()) {
-                //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
-                //начало костыля--------------
-                if (mChatInvoke) {
-                    if (mFragmentSwitcher.getCurrentExtraFragment() instanceof ProfileFragment) {
-                        ((ProfileFragment) mFragmentSwitcher.getCurrentExtraFragment()).openChat();
-                        mChatInvoke = false;
-                    }
-                    //конец костыля--------------
-                } else {
-                    mFragmentSwitcher.closeExtraFragment();
-                }
+        if (mFragmentSwitcher != null) {
+            if (mFragmentSwitcher.getAnimationState() == FragmentSwitchController.EXPAND) {
+                super.onBackPressed();
             } else {
-                mFragmentMenu.refreshNotifications();
-                mFragmentSwitcher.openMenu();
+                if (mFragmentSwitcher.isExtraFrameShown()) {
+                    //TODO костыль для ChatFragment, после перехода на фрагмент - выпилить
+                    //начало костыля--------------
+                    if (mChatInvoke) {
+                        if (mFragmentSwitcher.getCurrentExtraFragment() instanceof ProfileFragment) {
+                            ((ProfileFragment) mFragmentSwitcher.getCurrentExtraFragment()).openChat();
+                            mChatInvoke = false;
+                        }
+                        //конец костыля--------------
+                    } else {
+                        mFragmentSwitcher.closeExtraFragment();
+                    }
+                } else {
+                    mFragmentMenu.refreshNotifications();
+                    mFragmentSwitcher.openMenu();
+                }
             }
+        } else {
+            super.onBackPressed();
         }
     }
 
     @Override
     public boolean onCreatePanelMenu(int featureId, Menu menu) {
-        if (mFragmentSwitcher.getAnimationState() != FragmentSwitchController.EXPAND) {
-            mFragmentMenu.refreshNotifications();
-            mFragmentSwitcher.openMenu();
-        } else {
-            mFragmentSwitcher.closeMenu();
+        if (mFragmentSwitcher != null) {
+            if (mFragmentSwitcher.getAnimationState() != FragmentSwitchController.EXPAND) {
+                if (mFragmentMenu != null) {
+                    mFragmentMenu.refreshNotifications();
+                }
+                mFragmentSwitcher.openMenu();
+            } else {
+                mFragmentSwitcher.closeMenu();
+            }
         }
         return false;
     }
@@ -312,7 +393,7 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
         ratingPopup.findViewById(R.id.btnRatingPopupRate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.default_market_link))));
+                Utils.goToMarket(NavigationActivity.this);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putLong(RATING_POPUP, 0);
                 editor.commit();
@@ -352,21 +433,36 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-        unbindDrawables(findViewById(R.id.NavigationLayout));
-        System.gc();
+        //В некоторых редких случаях выпадает NullPointerException при destroyDrawingCache,
+        //поэтому на всякий случай оборачиваем в try
+        try {
+            super.onDestroy();
+            unbindDrawables(findViewById(R.id.NavigationLayout));
+            System.gc();
+        } catch (Exception e) {
+            Debug.error(e);
+        }
     }
 
     private void unbindDrawables(View view) {
-        if (view.getBackground() != null) {
-            view.getBackground().setCallback(null);
-        }
-        if (view instanceof ViewGroup) {
-            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
-                unbindDrawables(((ViewGroup) view).getChildAt(i));
+        if (view != null) {
+            if (view.getBackground() != null) {
+                view.getBackground().setCallback(null);
             }
-            ((ViewGroup) view).removeAllViews();
+            if (view instanceof ViewGroup) {
+                for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                    unbindDrawables(((ViewGroup) view).getChildAt(i));
+                }
+                ((ViewGroup) view).removeAllViews();
+            }
         }
+    }
+
+    @Override
+    public void close(Fragment fragment) {
+        super.close(fragment);
+        mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
+        mFragmentMenu.selectDefaultMenu();
     }
 
 
@@ -379,15 +475,15 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
         mFragmentSwitcher.switchExtraFragment(fragment);
     }
 
-    //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
+    //TODO костыль для ChatFragment, после перехода на фрагмент - выпилить
     private Fragment mDelayedFragment;
     private boolean mChatInvoke = false;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK && requestCode == ChatActivity.INTENT_CHAT_REQUEST) {
+        if (resultCode == Activity.RESULT_OK && requestCode == ContainerActivity.INTENT_CHAT_FRAGMENT) {
             if (data != null) {
-                int user_id = data.getExtras().getInt(ChatActivity.INTENT_USER_ID);
+                int user_id = data.getExtras().getInt(ChatFragment.INTENT_USER_ID);
                 mDelayedFragment = ProfileFragment.newInstance(user_id, ProfileFragment.TYPE_USER_PROFILE);
                 return;
             }
@@ -399,19 +495,4 @@ public class NavigationActivity extends TrackedFragmentActivity implements View.
         mFragmentSwitcher.showFragment(BaseFragment.F_VIP_PROFILE);
     }
 
-// fullscreen mode
-//    public void fullScreenMode(boolean value) {
-//        if(value)
-//        {
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-//        }
-//        else
-//        {
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-//            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//        }
-//
-//        this.getWindow().getDecorView().requestLayout();
-//    }
 }

@@ -6,13 +6,23 @@
                 android:background="@android:color/transparent"
                 android:id="@+id/layout">
 
-    <LinearLayout android:id="@+id/user_info"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_toLeftOf="@id/left_icon"
-                  android:layout_marginLeft="4dp"
-                  android:background="@drawable/bg_message_user"
-                  android:orientation="vertical">
+    <include layout="@layout/chat_date_divider" android:id="@+id/loDateDivider"/>
+
+    <!-- avatar -->
+    <com.topface.topface.ui.views.ImageViewRemote
+            android:layout_below="@id/loDateDivider"
+            android:id="@+id/left_icon"
+            style="@style/ChatAvatar"/>
+
+    <LinearLayout
+            android:layout_below="@id/loDateDivider"
+            android:id="@+id/user_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/left_icon"
+            android:layout_marginLeft="4dp"
+            android:background="@drawable/bg_message_user"
+            android:orientation="vertical">
 
         <!-- message -->
         <TextView
@@ -27,17 +37,5 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"/>
     </LinearLayout>
-
-    <ImageView
-            android:id="@+id/chat_gift"
-            android:layout_toLeftOf="@id/left_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"/>
-
-    <!-- avatar -->
-    <com.topface.topface.ui.views.ImageViewRemote
-            android:id="@+id/left_icon"
-            style="@style/ChatAvatar"/>
 
 </RelativeLayout>    

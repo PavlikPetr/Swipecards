@@ -5,8 +5,8 @@ package com.topface.billing.googleplay;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Looper;
 import android.util.Log;
+import com.topface.billing.BillingUtils;
 import com.topface.billing.googleplay.BillingService.RequestPurchase;
 import com.topface.billing.googleplay.BillingService.RestoreTransactions;
 import com.topface.billing.googleplay.Consts.PurchaseState;
@@ -197,15 +197,9 @@ public class ResponseHandler {
 
             @Override
             public void fail(int codeError, final ApiResponse response) {
-                //Если сервер определил как не верный или поддельный, или мы не знаем такой продукт, удаляем его из очереди
-                if (
-                        codeError == ApiResponse.INVALID_PRODUCT ||
-                                codeError == ApiResponse.INVALID_TRANSACTION ||
-                                codeError == ApiResponse.INVALID_FORMAT ||
-                                codeError == ApiResponse.UNVERIFIED_SIGNATURE
-
-                        ) {
-
+                //Если сервер определил как не верный или поддельный,
+                //или мы не знаем такой продукт, удаляем его из очереди
+                if (BillingUtils.isExceptedBillingError(codeError)) {
                     GooglePlayV2Queue.getInstance(context).deleteQueueItem(queueId);
                 }
                 //В случае ошибки не забываем оповестить об этом
@@ -217,10 +211,12 @@ public class ResponseHandler {
             @Override
             public void always(ApiResponse response) {
                 super.always(response);
-                Looper.prepare();
-                //После завершения запроса, проверяем, есть ли элементы в очереди, если есть отправляем их на сервер
-                GooglePlayV2Queue.getInstance(App.getContext()).sendQueueItems();
-                Looper.loop();
+                postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        GooglePlayV2Queue.getInstance(App.getContext()).sendQueueItems();
+                    }
+                }, BillingUtils.BILLING_QUEUE_CHECK_DELAY);
             }
         }).exec();
     }

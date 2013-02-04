@@ -35,6 +35,19 @@ public class RetryView extends LinearLayout {
         addView(initButtonContainer());
     }
 
+    public RetryView(Context context, int id) {
+        super(context);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.BELOW, id);
+        setLayoutParams(params);
+        setOrientation(VERTICAL);
+
+        setTextViewSettings();
+        addView(mErrorMsg);
+
+        addView(initButtonContainer());
+    }
+
     public void setErrorMsg(final String errorMsg) {
         mErrorMsg.post(new Runnable() {
             @Override
@@ -58,6 +71,13 @@ public class RetryView extends LinearLayout {
         }
     }
 
+    public void setListenerToBtn(OnClickListener l) {
+        if(mBtn1 != null) {
+            mBtn1.setOnClickListener(null);
+            mBtn1.setOnClickListener(l);
+        }
+    }
+
     public void addBlueButton(String title, OnClickListener listener) {
         if (mBtnBlue == null) {
             mBtnBlue = generateBlueButton();
@@ -65,6 +85,14 @@ public class RetryView extends LinearLayout {
             mBtnBlue.setOnClickListener(listener);
             mButtonContainer.addView(mBtnBlue);
         }
+    }
+
+    public IllustratedTextView getBtn1() {
+        return mBtn1;
+    }
+
+    public IllustratedTextView getBtn2() {
+        return mBtn2;
     }
 
     private IllustratedTextView generateButton() {
@@ -91,6 +119,10 @@ public class RetryView extends LinearLayout {
         btn.setGravity(Gravity.CENTER);
 
         return btn;
+    }
+
+    public void setTextToButton1(String text) {
+        mBtn1.setText(text);
     }
 
     @Override

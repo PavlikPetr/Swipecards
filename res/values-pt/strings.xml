@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Topface</string>
-    <string name="app_locale">pt_PT</string>
+    <string name="app_locale">ru_RU</string>
     <string name="general_error">ERRO</string>
     <string name="general_warning">AVISO</string>
     <string name="general_ok">OK</string>
@@ -88,17 +88,6 @@
     <string name="buying_you_have_no_coins_for_gift">Está faltando-lhe %d {{coins}} para a compra de um presente</string>
     <string name="buying_default_message">Você pode enviar presentes e admirações por moedas</string>
     <string name="buying_money">Compra de moedas</string>
-    <string name="buying_power">Compra de enrgias</string>
-    <string name="buying_recharge">Carregar em 100%</string>
-    <string name="buying_energy">3 USD</string>
-    <string name="buying_pack_6coins">Pacote de 6 moedas</string>
-    <string name="buying_6coins">1 USD</string>
-    <string name="buying_pack_40coins">Pacote de 40 moedas</string>
-    <string name="buying_40coins">5 USD</string>
-    <string name="buying_pack_100coins">Pacote de 100 moedas</string>
-    <string name="buying_100coins">10 USD</string>
-    <string name="buying_pack_300coins">Um pacote de 300 moedas</string>
-    <string name="buying_300coins">25 USD</string>
     <string name="profile_header_title">Meu perfil</string>
     <string name="profile_btn_chat">Divertir</string>
     <string name="profile_add_title">Adicionar fotografia</string>
@@ -204,8 +193,6 @@
         <item quantity="one">%de fotografias</item>
     </plurals>
     <string name="novice_sympathy">Envie simpatias para aqueles que realmente você gosta, para travar um conhecimento agradável</string>
-    <string name="novice_energy">Quanto mais alta a carga de bateria \n, mais frequente você é apresentado. \n Não esqueça de carregar a bateria \n, comprando energia.</string>
-    <string name="novice_battery_bonus">A energia oferece-lhe a popularidade e\n novas simpatias. Você pode carregar \n baterias, comprando \n100% de energias. O primeiro carregamento \n nós daremos-lhe gratuitamente!</string>
     <string name="novice_fill_profile">Adicione as suas melhores fotografias, para ganhar mais simpatias.</string>
     <string name="general_edit_profile_message">Por favor, preencha espaços necessários do questonário</string>
     <string name="general_premium_access_error">É preciso Premium para esta função</string>
@@ -238,10 +225,6 @@
     <string name="dating_search_empty_text">Você pode tentar repetir a busca, ou alterar as configurações do filtro.</string>
     <string name="general_close">Fechar</string>
     <string name="vip_not_activated">O seu status-VIP não está ativado</string>
-    <string name="vip_one_month_title">1 mês</string>
-    <string name="vip_one_month_value">10 USD</string>
-    <string name="vip_one_year_title">1 ano</string>
-    <string name="vip_one_year_value">100 USD</string>
     <string name="vip_privileges">VIP-privilégios</string>
     <string name="vip_text_visitors">Descubra, quem está interessado em você - veja os seus visitantes!</string>
     <string name="vip_text_adm_unlock">Envie adimirações gratuitamente - manifeste os seus sentimentos ao máximo</string>
@@ -253,7 +236,6 @@
     <string name="profile_vip_status">Super Skills</string>
     <string name="profile_services">Serviços</string>
     <string name="default_balance_constant">Na sua conta</string>
-    <string name="default_energy_balance_constant">Reserva de energias</string>
     <string name="default_energy_coins_buy_btn_text">Comprar moedas, cpmpletando a reserva de energias</string>
     <string name="black_list_title">Lista negra</string>
     <string name="black_list_empty">A sua lista negra está vázia</string>
@@ -261,8 +243,6 @@
     <string name="black_list_delete">Eliminar da lista negra</string>
     <string name="vip_invisible_mode">Regime invisível</string>
     <string name="buying_profile_coins">Na sua conta</string>
-    <string name="buying_profile_energy">Reserva de enrgias</string>
-    <string name="buying_buy_resources">Comprar moeda, completando a reserva de energias</string>
     <string name="vip_buy_vip">Compra de VIP</string>
     <string name="vip_state_off">O seu status-VIP não está ativado</string>
     <string name="vip_state_on">Seu staus-VIP está ativado</string>
@@ -281,16 +261,7 @@
     <string name="buying_vip_info">Para ter acesso aos visitantes, é necessário ter status VIP</string>
     <string name="buy_play_market_not_available">Play Market não está disponível</string>
     <string name="buy_subscription_not_available">As assinaturas não estão disponíveis</string>
-    <string name="default_six_coins">6 moedas por 0.16$ para uma moeda</string>
-    <string name="default_six_coins_price">1 USD</string>
-    <string name="default_coins_40">40 moedas por 0.12$ para uma moeda</string>
-    <string name="default_coins_40_price">5 USD</string>
-    <string name="default_economy_25">Economia 25%</string>
-    <string name="default_coins_100">100 moedas por 0.1$ para uma moeda</string>
     <string name="default_economy_vip">VIP à partir de 10 USD num mês</string>
-    <string name="default_economy_38">Economia 38%</string>
-    <string name="default_coins_300">300 moedas por 0.08$ para uma moeda</string>
-    <string name="default_economy_50">Economia 50%</string>
     <string name="profile_gifts_empty">Ainda ninguém deu presentes a este utilizador</string>
     <string name="profile_mygifts_empty">Ainda ninguém deu presentes à você</string>
     <string name="profile_mood">Descreva o seu humor</string>
@@ -309,7 +280,6 @@
     <string name="settings_invalid_email">E-mail incorrecto</string>
     <string name="leaders_select_cool_picture">Selecione uma fotografia efectiva:</string>
     <string name="chat_write_message">Escrever mensagem</string>
-    <string name="default_coins_100_price">10 USD</string>
     <string name="buying_sympathies">Compra de simpatias</string>
     <string name="novice_sympathies_bonus">Você recebe %1$d de simpatias em \nprresente! Isto significa que %2$d de pessoas certamente gostam de você, \nque lhe revelam as suas simpatias</string>
     <string name="novice_energy_to_sympathies_title">Nós substituímos a energia pelas simpatias</string>
@@ -318,6 +288,21 @@
     <string name="novice_buy_sympathies">Se você quiser garantidamente\nreceber simpatias, \nadquira as mesmo agora!</string>
     <string name="general_reconnect_social">Não é possível conectar-se com a rede social. Tente repetir mais tarde.</string>
     <string name="general_buying">Comprar simpatias e moedas</string>
-    <string name="general_block">Bolquear</string>
-    <string name="general_default_currency">%.2f USD</string>
+    <string name="general_block">Bloquear</string>
+    <string name="general_buying_disabled">Neste preciso momento é impossível a compra</string>
+    <string name="ban_flood_detected">Você faz pedidos com muita frequência ao servidor. Aguardará para posterior utilização de aplicação.</string>
+    <string name="general_maintenance">No servidor está a decorrer o trabalho técnico e o seu pedido não pode ser executado. Tente repetir mais tarde.</string>
+    <string name="virus_chat_likes_request_title">Dar presente de simpatias para seus amigos</string>
+    <string name="virus_chat_btn">Receber simpatias</string>
+    <string name="virus_request_error">Não foi possível enviar simpatias para seus amigos</string>
+    <plurals name="virus_request_likes_cnt">
+        <item quantity="other">Agora vocês têm %d de simpatia!</item>
+        <item quantity="one">Agora vocês têm %d de simpatia!</item>
+    </plurals>
+    <string name="profile_ask_sent">Pedido enviado</string>
+    <string name="virus_error">O seu amigo pode dar presente de simpatias só uma vez por dia! Tente amanhã!</string>
+    <string name="popup_version_title">Está disponível nova versão de aplicação</string>
+    <string name="popup_version_message">É tempo de renovar sua versão!</string>
+    <string name="popup_version_update">Renovar</string>
+    <string name="popup_version_cancel">Lembrar mais tarde</string>
 </resources>

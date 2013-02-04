@@ -1,10 +1,10 @@
 package com.topface.topface.ui.views;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -15,10 +15,7 @@ import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.postprocessors.ImagePostProcessor;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
-import com.topface.topface.imageloader.DefaultImageLoader;
-import com.topface.topface.imageloader.MaskClipPostProcessor;
-import com.topface.topface.imageloader.RoundCornersPostProcessor;
-import com.topface.topface.imageloader.RoundPostProcessor;
+import com.topface.topface.imageloader.*;
 import com.topface.topface.utils.Debug;
 
 import java.util.Timer;
@@ -30,6 +27,7 @@ public class ImageViewRemote extends ImageView {
     private static final int POST_PROCESSOR_ROUNDED = 1;
     private static final int POST_PROCESSOR_ROUND_CORNERS = 2;
     private static final int POST_PROCESSOR_MASK = 3;
+    private static final int POST_PROCESSOR_CIRCUMCIRCLE = 4;
     public static final int LOADING_COMPLETE = 0;
     private static final int LOADING_ERROR = 1;
     /**
@@ -71,6 +69,13 @@ public class ImageViewRemote extends ImageView {
         setAttributes(attrs);
     }
 
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        DefaultImageLoader.getInstance().getImageLoader().cancelDisplayTask(this);
+    }
+
     private void setAttributes(AttributeSet attrs) {
         TypedArray values = getContext().obtainStyledAttributes(attrs, R.styleable.ImageViewRemote);
 
@@ -109,6 +114,9 @@ public class ImageViewRemote extends ImageView {
             case POST_PROCESSOR_MASK:
                 mPostProcessor = new MaskClipPostProcessor(maskId);
                 break;
+            case POST_PROCESSOR_CIRCUMCIRCLE:
+                mPostProcessor = new CircumCirclePostProcessor();
+                break;
             default:
                 mPostProcessor = null;
         }
@@ -136,7 +144,8 @@ public class ImageViewRemote extends ImageView {
         }
 
 
-        if (remoteSrc != null && remoteSrc.trim().length() > 0) {
+        //Если ссылка не пустая и мы не патаемся скачать уже установленный в View изображение, то начинаем загрузку
+        if (!TextUtils.isEmpty(remoteSrc)) {
             if (!remoteSrc.equals(mCurrentSrc)) {
                 mCurrentSrc = remoteSrc;
                 mIsAnimationEnabled = true;
@@ -148,15 +157,10 @@ public class ImageViewRemote extends ImageView {
                 super.setImageBitmap(null);
             }
 
-            //Начинаем загрузку только если ImageViewRemote внутри контекста активити
-            Context context = getContext();
-            if (context instanceof Activity) {
-                getImageLoader((Activity) context)
-                        .displayImage(remoteSrc, this, null, getListener(handler, remoteSrc), getPostProcessor());
-            } else {
-                getImageLoader()
-                        .displayImage(remoteSrc, this, null, getListener(handler, remoteSrc), getPostProcessor());
-            }
+
+            getImageLoader()
+                    .displayImage(remoteSrc, this, null, getListener(handler, remoteSrc), getPostProcessor());
+
 
         } else {
             isCorrectSrc = false;
@@ -171,6 +175,9 @@ public class ImageViewRemote extends ImageView {
     @Override
     public void setImageBitmap(Bitmap bm) {
         super.setImageBitmap(bm);
+        if (bm == null) {
+            mCurrentSrc = null;
+        }
         if (bm != null && mLoader != null) {
             mLoader.setVisibility(View.GONE);
         }
@@ -189,10 +196,6 @@ public class ImageViewRemote extends ImageView {
         return setRemoteSrc(remoteSrc, null);
     }
 
-    public DefaultImageLoader getImageLoader(Activity activity) {
-        return DefaultImageLoader.getInstance(activity);
-    }
-
     public DefaultImageLoader getImageLoader() {
         //noinspection deprecation
         return DefaultImageLoader.getInstance();
@@ -203,7 +206,7 @@ public class ImageViewRemote extends ImageView {
     }
 
     public boolean setPhoto(Photo photo) {
-        return setPhoto(photo, null);
+        return setPhoto(photo, null, null);
     }
 
     public boolean setPhoto(Photo photo, Handler handler) {

@@ -6,13 +6,14 @@ import org.json.JSONObject;
 
 public class Banner extends AbstractData {
     // Data
-    public String name; // - наименование баннера 
+    public String name; // - наименование баннера
     public String url; // - URL адрес изображения баннера
     public String action; // - идентификатор возможного действия с баннером. Возможные значения: URL, PAGE
     public String parameter; // - дополнительный параметр действия
     // Constants
     public static final String ACTION_URL = "URL";
     public static final String ACTION_PAGE = "PAGE";
+    public static final String ACTION_METHOD = "METHOD";
     public static final String INVITE_PAGE = "INVITE_PAGE";
 
     public static Banner parse(ApiResponse response) {

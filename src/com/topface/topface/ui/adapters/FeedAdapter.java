@@ -8,7 +8,6 @@ import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
-import com.topface.topface.data.FeedLoader;
 import com.topface.topface.ui.views.ImageViewRemote;
 
 import java.util.Collections;
@@ -17,30 +16,20 @@ import java.util.Collections;
 /**
  * @param <T>
  */
-public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter implements AbsListView.OnScrollListener {
+public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter<T> implements AbsListView.OnScrollListener {
 
     protected static final int T_NEW_VIP = 3;
     protected static final int T_VIP = 4;
     protected static final int T_NEW = 5;
-    protected static final int T_COUNT = 3;
+    protected static final int T_COUNT = 6;
 
-    private Context mContext;
-    private FeedList<T> mData;
-    private LayoutInflater mInflater;
-    private Updater mUpdateCallback;
     private long mLastUpdate = 0;
     public static final int LIMIT = 40;
     private static final long CACHE_TIMEOUT = 1000 * 5 * 60; //5 минут
     private OnAvatarClickListener<T> mOnAvatarClickListener;
 
     public FeedAdapter(Context context, FeedList<T> data, Updater updateCallback) {
-        mContext = context;
-        mData = data == null ? new FeedList<T>() : data;
-        mInflater = LayoutInflater.from(context);
-        mLoaderRetrier = getLoaderRetrier();
-        mLoaderRetrierText = getLoaderRetrierText();
-        mLoaderRetrierProgress = getLoaderRetrierProgress();
-        mUpdateCallback = updateCallback;
+        super(context,data, updateCallback);
     }
 
     protected static class FeedViewHolder {
@@ -62,26 +51,9 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         this(context, null, updateCallback);
     }
 
-    private ProgressBar getLoaderRetrierProgress() {
-        return (ProgressBar) mLoaderRetrier.findViewById(R.id.prsLoader);
-    }
-
-    private TextView getLoaderRetrierText() {
-        return (TextView) mLoaderRetrier.findViewById(R.id.tvLoaderText);
-    }
-
-    private View getLoaderRetrier() {
-        return mInflater.inflate(R.layout.item_list_loader_retrier, null, false);
-    }
-
     @Override
     public int getCount() {
         return mData.size();
-    }
-
-    @Override
-    public T getItem(int i) {
-        return mData.hasItem(i) ? mData.get(i) : null;
     }
 
     @Override
@@ -132,18 +104,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         return resultView;
     }
 
-    private View getRetrierView() {
-        mLoaderRetrierProgress.setVisibility(View.INVISIBLE);
-        mLoaderRetrierText.setVisibility(View.VISIBLE);
-        return mLoaderRetrier;
-    }
-
-    private View getLoaderView() {
-        mLoaderRetrierProgress.setVisibility(View.VISIBLE);
-        mLoaderRetrierText.setVisibility(View.INVISIBLE);
-        return mLoaderRetrier;
-    }
-
+    @Override
     protected View getContentView(int position, View convertView, ViewGroup viewGroup) {
         FeedViewHolder holder = null;
 
@@ -214,13 +175,9 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= totalItemCount - 1) {
             if (mUpdateCallback != null && !mData.isEmpty() && mData.getLast().isLoader()) {
-                mUpdateCallback.onFeedUpdate();
+                mUpdateCallback.onUpdate();
             }
         }
-    }
-
-    public static interface Updater {
-        void onFeedUpdate();
     }
 
     public void setData(FeedListData<T> data) {
@@ -244,13 +201,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     protected void setLastUpdate() {
         mLastUpdate = System.currentTimeMillis();
-    }
-
-    protected void addLoaderItem(boolean hasMore) {
-        FeedList<T> currentData = getData();
-        if (hasMore && !currentData.isEmpty()) {
-            currentData.add(getLoaderItem());
-        }
     }
 
     public void addData(FeedListData<T> data) {
@@ -280,35 +230,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         setLastUpdate();
     }
 
-    public FeedList<T> getData() {
-        if (mData == null) {
-            mData = new FeedList<T>();
-        }
-        return mData;
-    }
-
-    public void showLoaderItem() {
-        removeLoaderItem();
-        getData().add(getLoaderItem());
-        notifyDataSetChanged();
-    }
-
-    public void showRetryItem() {
-        removeLoaderItem();
-        getData().add(getRetryItem());
-        notifyDataSetChanged();
-    }
-
-    protected void removeLoaderItem() {
-        FeedList<T> data = getData();
-        if (!data.isEmpty()) {
-            T lastItem = data.getLast();
-            if (lastItem.isLoader() || lastItem.isLoaderRetry()) {
-                data.removeLast();
-            }
-        }
-    }
-
     public boolean removeItem(int id) {
         boolean result = false;
         FeedList<T> data = getData();
@@ -326,7 +247,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             FeedList<T> data = getData();
             int dataSize = data.size();
 
-            int feedIndex = data.getLast().isLoader() || data.getLast().isLoaderRetry() ?
+            int feedIndex = data.getLast().isLoader() || data.getLast().isRetrier() ?
                     dataSize - 2 :
                     dataSize - 1;
             if (data.hasItem(feedIndex)) {
@@ -357,18 +278,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         holder.flippedBtn = (Button) convertView.findViewById(R.id.btnMutual);
 
         return holder;
-    }
-
-    @SuppressWarnings("unchecked")
-    protected T getRetryItem() {
-        //noinspection unchecked
-        return (T) new FeedLoader(IListLoader.ItemType.RETRY);
-    }
-
-    @SuppressWarnings("unchecked")
-    protected T getLoaderItem() {
-        //noinspection unchecked
-        return (T) new FeedLoader(IListLoader.ItemType.LOADER);
     }
 
     abstract protected int getItemLayout();

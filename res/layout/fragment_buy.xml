@@ -91,10 +91,20 @@
                 android:padding="10dp"
                 android:orientation="vertical">
 
+            <TextView
+                    android:id="@+id/fbBuyingDisabled"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/TitleWhiteText"
+                    android:text="@string/general_buying_disabled"
+                    android:visibility="gone"
+                    />
+
             <RelativeLayout
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
                     android:layout_marginBottom="10dp"
+                    android:id="@+id/likes_title"
                     >
 
                 <TextView
@@ -116,15 +126,17 @@
 
             <!-- 10 000 power btn -->
             <LinearLayout
-                android:id="@+id/fbLikes"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-            />
+                    android:id="@+id/fbLikes"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    />
 
-            !-- Money -->
+            <!-- Money -->
 
             <RelativeLayout
+
+                    android:id="@+id/coins_title"
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
                     >
@@ -174,7 +186,7 @@
                 <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_rocket_small"
+                        android:src="@drawable/ic_rocket"
                         android:layout_alignParentRight="true"
                         />
             </RelativeLayout>
@@ -186,6 +198,8 @@
                     android:background="@drawable/btn_vip_sale_selector"
                     android:layout_marginTop="10dp"
                     android:padding="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     >
 
                 <TextView
@@ -207,6 +221,7 @@
                     android:text="@string/default_economy_vip"
                     android:textColor="#FFFFFF"
                     android:textSize="10sp"
+                    android:visibility="gone"
                     />
         </LinearLayout>
     </LinearLayout>

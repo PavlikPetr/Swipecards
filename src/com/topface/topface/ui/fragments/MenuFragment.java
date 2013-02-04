@@ -50,7 +50,20 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                 }
             }
         };
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileUpdateReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileUpdateReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
     }
 
     @Override
@@ -105,9 +118,11 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                 refreshNotifications();
             }
         };
-        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(mBroadcastReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
+
         return mRootLayout;
     }
+
+
 
     @Override
     public void onClick(View view) {
@@ -126,18 +141,6 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
     public void setOnMenuListener(FragmentMenuListener onFragmentMenuListener) {
         mFragmentMenuListener = onFragmentMenuListener;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileUpdateReceiver);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
     }
 
     public void refreshNotifications() {

@@ -88,17 +88,6 @@
     <string name="buying_you_have_no_coins_for_gift">Nu aveti suficient %d {{coins}} pentru a cumpara cadou</string>
     <string name="buying_default_message">Puteti trimite cadouri si admirari pentru monete</string>
     <string name="buying_money">Cumpararea monedelor</string>
-    <string name="buying_power">Cumpararea energiei</string>
-    <string name="buying_recharge">Incarca 100%</string>
-    <string name="buying_energy">3 USD</string>
-    <string name="buying_pack_6coins">Pachete de 6 monede</string>
-    <string name="buying_6coins">1USD</string>
-    <string name="buying_pack_40coins">Pachet de 40 de monede</string>
-    <string name="buying_40coins">5 USD</string>
-    <string name="buying_pack_100coins">Pachet de 100 de monede</string>
-    <string name="buying_100coins">10 USD</string>
-    <string name="buying_pack_300coins">Pechet din 300 monede</string>
-    <string name="buying_300coins">25 USD</string>
     <string name="profile_header_title">Profilul meu</string>
     <string name="profile_btn_chat">A sta la taifas</string>
     <string name="profile_add_title">Adauga poza</string>
@@ -207,8 +196,6 @@
         <item quantity="one">%d poza</item>
     </plurals>
     <string name="novice_sympathy">Trimiteti simpatii la cei \n care va sunt dragi cu adevarat, \n pentru a incepe o cunostinta placuta</string>
-    <string name="novice_energy">Cu cat mare mare e incarcatura la baterie,\nи cu atat mai des sunte-ti aratat. \nиNu uitati sa incarcati\nиbateria, cumparand energie.</string>
-    <string name="novice_battery_bonus">Energie va da popularitate\nи noi simpatii. Dmv puteti\nи sa incarcati bateria, cumparand\nи 100% energie. Prima incarcare\nи gratis!</string>
     <string name="novice_fill_profile">Adauga pozele tale cele mai tari, \n pentru a primi mai multe simpatii.</string>
     <string name="general_edit_profile_message">Fiti amabili, sa indepliniti campurile necesare a chestionarului</string>
     <string name="general_premium_access_error">Pentru aceasta functie aveti nevoie de Premium</string>
@@ -241,10 +228,6 @@
     <string name="dating_search_empty_text">Puteti incerca cautarea inca odata, sau sa schimbati setarile filtrului.</string>
     <string name="general_close">Inchide</string>
     <string name="vip_not_activated">Statutul VIP nu este activ</string>
-    <string name="vip_one_month_title">1 luna</string>
-    <string name="vip_one_month_value">10 USD</string>
-    <string name="vip_one_year_title">1 an</string>
-    <string name="vip_one_year_value">100 USD</string>
     <string name="vip_privileges">VIP - privilegii</string>
     <string name="vip_text_visitors">Afla, cine sa interesat de Dmv - vezi vizitatorii!</string>
     <string name="vip_text_adm_unlock">Trimite admirari gratis - exprima sentimentele la maximum</string>
@@ -256,7 +239,6 @@
     <string name="profile_vip_status">Super Skills</string>
     <string name="profile_services">Servicii</string>
     <string name="default_balance_constant">Pe contul Dmv</string>
-    <string name="default_energy_balance_constant">Rezerva de energie</string>
     <string name="default_energy_coins_buy_btn_text">Cumpara monede, incarca rezerva de energie</string>
     <string name="black_list_title">Lista neagra</string>
     <string name="black_list_empty">Lista neagra a Dmv este pustie</string>
@@ -264,8 +246,6 @@
     <string name="black_list_delete">Sterge din lista neagra</string>
     <string name="vip_invisible_mode">Regim invizibil</string>
     <string name="buying_profile_coins">Pe contul Dmv</string>
-    <string name="buying_profile_energy">Rezerva de energie</string>
-    <string name="buying_buy_resources">Cumpara monede, incarca rezerva de energie</string>
     <string name="vip_buy_vip">Cumpararea VIP</string>
     <string name="vip_state_off">VIP - statutul Dmv nu este activ</string>
     <string name="vip_state_on">VIP - statutul Dmv este activ</string>
@@ -273,10 +253,10 @@
     <string name="vip_why">De ce e atat de important sa fii VIP</string>
     <string name="vip_info_delight">Trimite admirari gratis - exprimativa sentimentele la maximum!</string>
     <string name="vip_info_guest">Afla, cine sa interesat de Dmv - vezi vizitatorii tai!</string>
-    <string name="vip_info_invisible">Ramai invizibil, vizitand alte pagini, datorita regimului \"invizibil"\</string>
+    <string name="vip_info_invisible">Ramai invizibil, vizitand alte pagini, datorita regimului \"invizibil\"</string>
     <string name="vip_info_message">Primeste avantaje - mesajele Dmv se vor deosebi pe fonul la restul!</string>
     <string name="vip_info_gift">Alege VIP cadouri excluzive, si va vor memoriza neaparat!</string>
-    <string name="vip_info_blackList">Scapa de persoanele plictisitoare cu ajutorul \"listei negre"\</string>
+    <string name="vip_info_blackList">Scapa de persoanele plictisitoare cu ajutorul \"listei negre\"</string>
     <string name="vip_info_vip">Deosebestete cu ajutorul VIP - statut in cautare si in profil!</string>
     <string name="vip_info_title">VIP - privilegii</string>
     <string name="black_list_retrieve">Restabileste</string>
@@ -284,16 +264,7 @@
     <string name="buying_vip_info">Pentru acces la vizitatori e nevoie de statut VIP</string>
     <string name="buy_play_market_not_available">Play Market inaccesibil</string>
     <string name="buy_subscription_not_available">Abonari inaccesibile</string>
-    <string name="default_six_coins">6 monede a cate 0.16$ pentru o moneda</string>
-    <string name="default_six_coins_price">1USD</string>
-    <string name="default_coins_40">40 monede a cate 0.12$ pentru o moneda</string>
-    <string name="default_coins_40_price">5 USD</string>
-    <string name="default_economy_25">Economie 25%</string>
-    <string name="default_coins_100">100 monede a cate 0.1$ pentru o moneda</string>
     <string name="default_economy_vip">Vip de la 10 USD lunar</string>
-    <string name="default_economy_38">Economie 38%</string>
-    <string name="default_coins_300">300 monede a cate 0.08$ pentru o moneda</string>
-    <string name="default_economy_50">Economie 50%</string>
     <string name="profile_gifts_empty">Acestui utilizator nimeni nu ea facut cadou</string>
     <string name="profile_mygifts_empty">Dmv nu ati primit nici un cadou</string>
     <string name="profile_mood">Descrieti dispozitia Dmv</string>
@@ -312,6 +283,30 @@
     <string name="settings_invalid_email">E-mail incorect</string>
     <string name="leaders_select_cool_picture">Alegeti poza cea mai tare:</string>
     <string name="chat_write_message">Scrie mesaj</string>
-    <string name="default_coins_100_price">10 USD</string>
     <string name="buying_sympathies">Cumpararea simpatiilor</string>
+    <string name="novice_sympathies_bonus">Dmv primiti %1$d simpatii \ncadou! Aceasta inseamna, ca Dmv\nprecis placeti %2$d la oameni,\ncare va exprima simpatia lor</string>
+    <string name="novice_energy_to_sympathies_title">Noi am schimbat energia pe simpatie</string>
+    <string name="novice_energy_to_sympathies_message_boys">Incarcand rezerva de simpatii, veti primi\n numarul indicat de simpatii\nde la baieti, la care le placi precis</string>
+    <string name="novice_energy_to_sympathies_message_girls">Incarcand rezerva de simpatii, veti primi\n numarul indicat de simpatii\nde la fete, la care le placi precis</string>
+    <string name="novice_buy_sympathies">Daca dorinti garantat\nsa primiti simpatii, \nprocurati acum!</string>
+    <string name="general_reconnect_social">Imposibila conectare la reteaua de socializare. Repetati Incercarea mai tarziu.</string>
+    <string name="general_buying">Cumpara simpatii si monede</string>
+    <string name="general_block">Blocare</string>
+    <string name="general_buying_disabled">La momentul dat cumpararea e imposibila</string>
+    <string name="ban_flood_detected">Dmv foarte des solicitati serverul. Pentru folosirea in continuarie a aplicatiei asteptati.</string>
+    <string name="general_maintenance">Pe server se petrec lucrari tehnice si cererea Dmv nu poate fi indeplinita. Incercati mai tarziu.</string>
+    <string name="virus_chat_likes_request_title">Fa cadou simpatii la prietenii tai</string>
+    <string name="virus_chat_btn">Primeste simpatii</string>
+    <string name="virus_request_error">Expediere de simpatii esuata catre prietenii Dmv</string>
+    <plurals name="virus_request_likes_cnt">
+        <item quantity="few">Acum aveti %d simpatii!</item>
+        <item quantity="other">Acum aveti %d simpatii!</item>
+        <item quantity="one">Acum aveti %d simpatii!</item>
+    </plurals>
+    <string name="profile_ask_sent">Cererea a fost trimisa</string>
+    <string name="virus_error">In 24 de ore prietenul Dmv poate face cadou o simpatie numai o singura data! Incercati maine!</string>
+    <string name="popup_version_title">Este accesibila o noua versiune a aplicatiei</string>
+    <string name="popup_version_message">E timpul de actualizare a versiunii!</string>
+    <string name="popup_version_update">Actualizare</string>
+    <string name="popup_version_cancel">Aminteste mai tarziu</string>
 </resources>

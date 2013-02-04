@@ -3,7 +3,16 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content" >
 
+    <include layout="@layout/chat_date_divider" android:id="@+id/loDateDivider"/>
+
+    <!-- avatar -->
+    <com.topface.topface.ui.views.ImageViewRemote
+            android:layout_below="@id/loDateDivider"
+            android:id="@+id/left_icon"
+            style="@style/ChatFriendAvatar" />
+
     <LinearLayout
+        android:layout_below="@id/loDateDivider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/left_icon"
@@ -12,7 +21,7 @@
         android:padding="13dp" >
 
         <ImageView
-            android:id="@+id/ivFriendMapBg"
+            android:id="@+id/ivMapBg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -30,18 +39,12 @@
                 android:textSize="10sp" />
 
             <ProgressBar
-                android:id="@+id/prgsFriendMapAddress"
+                android:id="@+id/prgsMapAddress"
                 android:layout_width="10dp"
                 android:layout_height="10dp"
                 android:layout_centerInParent="true"
                 android:visibility="gone" />
         </RelativeLayout>
     </LinearLayout>
-
-    <!-- avatar -->
-
-    <com.topface.topface.ui.views.ImageViewRemote
-        android:id="@+id/left_icon"
-        style="@style/ChatFriendAvatar" />
 
 </RelativeLayout>

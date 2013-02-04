@@ -4,6 +4,8 @@ import android.support.v4.app.FragmentActivity;
 import com.google.analytics.tracking.android.EasyTracker;
 
 public class TrackedFragmentActivity extends FragmentActivity {
+
+
     @Override
     public void onStart() {
         super.onStart();
@@ -26,4 +28,6 @@ public class TrackedFragmentActivity extends FragmentActivity {
     protected String getTrackName() {
         return this.getClass().getSimpleName().replace("Activity", "");
     }
+
+
 }

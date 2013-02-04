@@ -1,6 +1,5 @@
 package com.topface.topface.ui.blocks;
 
-import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
@@ -21,16 +20,14 @@ import java.util.Map;
 public class FloatBlock {
     private Map<String, String> mFloatTypeMap;
     private Options mOptions;
-    private Activity mActivity;
     private Fragment mFragment;
     private LeadersBlock mLeaders;
     private BannerBlock mBanner;
     private final ViewGroup mLayout;
 
-    public FloatBlock(Activity activity, Fragment fragment, ViewGroup layoutView) {
+    public FloatBlock(Fragment fragment, ViewGroup layoutView) {
         super();
         mOptions = CacheProfile.getOptions();
-        mActivity = activity;
         mFragment = fragment;
         mFloatTypeMap = new HashMap<String, String>();
         mLayout = layoutView;
@@ -43,9 +40,9 @@ public class FloatBlock {
         if (mFloatTypeMap.containsKey(currentFragment)) {
             String floatType = mFloatTypeMap.get(currentFragment);
             if (floatType.equals(Options.FLOAT_TYPE_BANNER)) {
-                mBanner = new BannerBlock(mActivity, mFragment, mLayout);
+                mBanner = new BannerBlock(mFragment, mLayout);
             } else if (floatType.equals(Options.FLOAT_TYPE_LEADERS)) {
-                mLeaders = new LeadersBlock(mActivity, mLayout);
+                mLeaders = new LeadersBlock(mFragment, mLayout);
             }
             //mLeaders = new LeadersBlock(mActivity, mLayout);
         }

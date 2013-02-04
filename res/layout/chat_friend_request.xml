@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                android:background="@android:color/transparent"
+                android:id="@+id/layout">
+
+    <include layout="@layout/chat_date_divider" android:id="@+id/loDateDivider"
+            android:layout_alignParentTop="true"/>
+
+    <!-- avatar -->
+    <com.topface.topface.ui.views.ImageViewRemote
+            android:layout_below="@id/loDateDivider"
+            android:id="@+id/left_icon"
+            style="@style/ChatFriendAvatar"/>
+
+    <LinearLayout
+            android:layout_below="@id/loDateDivider"
+            android:id="@+id/user_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/left_icon"
+            android:layout_marginRight="4dp"
+            android:background="@drawable/bg_message_friend"
+            android:orientation="vertical">
+
+        <!-- message -->
+        <TextView
+                android:id="@+id/chat_message"
+                style="@style/chat_message"/>
+
+        <Button
+                android:id="@+id/btn_chat_like_request"
+                android:text="@string/virus_chat_btn"
+                style="@style/LikeRequestButton"/>
+
+        <!-- date -->
+        <TextView
+                android:id="@+id/chat_date"
+                android:textColor="#acc2d8"
+                android:textSize="12sp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>
