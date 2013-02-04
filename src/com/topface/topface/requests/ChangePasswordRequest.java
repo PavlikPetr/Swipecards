@@ -1,11 +1,29 @@
 package com.topface.topface.requests;
 
-/**
- * Created with IntelliJ IDEA.
- * User: ilya
- * Date: 2/4/13
- * Time: 7:08 PM
- * To change this template use File | Settings | File Templates.
- */
-public class ChangePasswordRequest {
+import android.content.Context;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class ChangePasswordRequest extends AbstractApiRequest {
+
+    public static final String SERVICE_NAME = "changepassword";
+
+    private String currentPassword;
+    private String newPassword;
+
+    public ChangePasswordRequest(Context context, String currentPassword, String newPassword) {
+        super(context);
+        this.currentPassword = currentPassword;
+        this.newPassword = newPassword;
+    }
+
+    @Override
+    protected JSONObject getRequestData() throws JSONException {
+        return new JSONObject().put("current", currentPassword).put("new", newPassword);
+    }
+
+    @Override
+    public String getServiceName() {
+        return SERVICE_NAME;
+    }
 }
