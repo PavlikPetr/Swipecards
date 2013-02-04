@@ -17,7 +17,7 @@ public class RegisterRequestTest extends AbstractThreadTest {
             public void run() {
             Context context = getInstrumentation().getContext();
             RegisterRequest request = new RegisterRequest(context,
-                    "iovorobievw@gmail.com",
+                    "iovorobiev@mail.ru",
                     "asdasd",
                     "ilya",
                     123456,
