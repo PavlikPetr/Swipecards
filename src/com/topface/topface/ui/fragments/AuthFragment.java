@@ -12,10 +12,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
+import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.App;
 import com.topface.topface.Data;
@@ -36,9 +33,15 @@ import com.topface.topface.utils.social.AuthorizationManager;
 
 public class AuthFragment extends BaseFragment {
 
+    private ViewFlipper mAuthViewsFlipper;
     private RetryView mRetryView;
     private Button mFBButton;
     private Button mVKButton;
+    private Button mTFButton;
+    private View mSignInView;
+    private View mCreateAccountView;
+    private EditText mLogin;
+    private EditText mPassword;
     private ProgressBar mProgressBar;
     private AuthorizationManager mAuthorizationManager;
     private BroadcastReceiver connectionChangeListener;
@@ -57,6 +60,7 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void initViews(View root) {
+        mAuthViewsFlipper = (ViewFlipper) root.findViewById(R.id.vfAuthViewFlipper);
         initButtons(root);
         initRetryView(root);
         initOtherViews(root);
@@ -75,7 +79,7 @@ public class AuthFragment extends BaseFragment {
                         hideButtons();
                         break;
                     case AuthorizationManager.TOKEN_RECEIVED:
-                        auth((AuthToken) msg.obj);
+                        auth(generateAuthRequest((AuthToken) msg.obj));
                         break;
                     case AuthorizationManager.AUTHORIZATION_CANCELLED:
                         showButtons();
@@ -103,6 +107,37 @@ public class AuthFragment extends BaseFragment {
                 btnFBClick();
             }
         });
+
+        mSignInView = root.findViewById(R.id.loSignIn);
+        mSignInView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAuthViewsFlipper.setDisplayedChild(1);
+            }
+        });
+
+        mCreateAccountView = root.findViewById(R.id.loCreateAccount);
+        mCreateAccountView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO create account fragment;
+            }
+        });
+
+        mTFButton = (Button) root.findViewById(R.id.btnLogin);
+        mTFButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnTFClick();
+            }
+        });
+
+        root.findViewById(R.id.tvBackToMainAuth).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAuthViewsFlipper.setDisplayedChild(0);
+            }
+        });
     }
 
     private void initRetryView(View root) {
@@ -111,7 +146,7 @@ public class AuthFragment extends BaseFragment {
         mRetryView.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                 // инициализация обработчика происходит в методе authorizationFailed()
             }
         });
         mRetryView.setVisibility(View.GONE);
@@ -161,8 +196,7 @@ public class AuthFragment extends BaseFragment {
                 .show();
     }
 
-    private void auth(AuthToken token) {
-        final AuthRequest authRequest = generateAuthRequest(token);
+    private void auth(final AuthRequest authRequest) {
         authRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
@@ -172,7 +206,6 @@ public class AuthFragment extends BaseFragment {
 
             @Override
             public void fail(final int codeError, ApiResponse response) {
-
                 authorizationFailed(codeError, authRequest);
             }
 
@@ -195,11 +228,21 @@ public class AuthFragment extends BaseFragment {
         return authRequest;
     }
 
+    private AuthRequest generateAuthRequest(String login, String password) {
+        AuthRequest authRequest = new AuthRequest(getActivity());
+        registerRequest(authRequest);
+        authRequest.platform = AuthToken.SN_TOPFACE;
+        authRequest.login = mLogin.toString();
+        authRequest.password = mPassword.toString();
+        EasyTracker.getTracker().trackEvent("Profile", "Auth", "FromActivity" + AuthToken.SN_TOPFACE, 1L);
+
+        return authRequest;
+    }
+
     private void saveAuthInfo(ApiResponse response) {
         Auth auth = Auth.parse(response);
         Data.saveSSID(getActivity().getApplicationContext(), auth.ssid);
         GCMUtils.init(getActivity());
-
     }
 
     private void getProfileAndOptions() {
@@ -328,6 +371,8 @@ public class AuthFragment extends BaseFragment {
         if (mFBButton != null && mVKButton != null && mProgressBar != null) {
             mFBButton.setVisibility(View.VISIBLE);
             mVKButton.setVisibility(View.VISIBLE);
+            mSignInView.setVisibility(View.VISIBLE);
+            mCreateAccountView.setVisibility(View.VISIBLE);
             mProgressBar.setVisibility(View.GONE);
             mRetryView.setVisibility(View.GONE);
         }
@@ -336,6 +381,8 @@ public class AuthFragment extends BaseFragment {
     private void hideButtons() {
         mFBButton.setVisibility(View.GONE);
         mVKButton.setVisibility(View.GONE);
+        mSignInView.setVisibility(View.GONE);
+        mCreateAccountView.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
         mRetryView.setVisibility(View.GONE);
     }
@@ -352,6 +399,13 @@ public class AuthFragment extends BaseFragment {
         if (checkOnline()) {
             hideButtons();
             mAuthorizationManager.facebookAuth();
+        }
+    }
+
+    private void btnTFClick() {
+        if (checkOnline()) {
+            hideButtons();
+
         }
     }
 

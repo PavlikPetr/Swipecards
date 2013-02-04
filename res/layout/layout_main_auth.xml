@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/auth_bg"
+        android:id="@+id/authContainer">
+    <ImageView
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/auth_bg_spot"
+            />
+    <ProgressBar
+            android:id="@+id/prsAuthLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            style="@android:style/Widget.ProgressBar.Small"/>
+
+
+    <LinearLayout
+            android:id="@+id/ivAuthGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+        <Button
+                android:id="@+id/btnAuthVK"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/auth_vk_selector"
+                android:text="@string/auth_btn_vk"
+                style="@style/AuthButtonsText"/>
+
+        <Button
+                android:id="@+id/btnAuthFB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/auth_fb_selector"
+                android:text="@string/auth_btn_fb"
+                style="@style/AuthButtonsText"/>
+
+        <RelativeLayout
+                android:id="@+id/loSignIn"
+                android:layout_width="236dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/btn_sign_in">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:drawableLeft="@drawable/ic_sign_in"
+                    android:drawablePadding="8dp"
+                    style="@style/AuthButtonsText"
+                    android:text="Sign in"/>
+
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_arrow"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="4dp"
+                    />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+                android:id="@+id/loCreateAccount"
+                android:layout_width="236dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_create_account">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:drawableLeft="@drawable/ic_create_account"
+                    android:drawablePadding="8dp"
+                    style="@style/AuthButtonsText"
+                    android:text="Create account"
+                    />
+
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_arrow"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="4dp"
+                    />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <ImageView
+            android:id="@+id/ivAuthLogo"
+            android:layout_above="@id/ivAuthGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/auth_logo"/>
+
+</RelativeLayout>

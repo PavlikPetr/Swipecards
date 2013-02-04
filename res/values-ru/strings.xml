@@ -423,4 +423,14 @@
     <string name="default_price_format">Итого: %.2f USD</string>
     <string name="leaders_pick_condition">Вы не можете выбрать фото с рейтингом ниже 25%:
     </string>
+
+    <string name="sign_in">Войти</string>
+    <string name="create_account">Создать аккаунт</string>
+    <string name="email">E-mail</string>
+    <string name="password">Пароль</string>
+    <string name="error_login_password">Неправильная пара логин/пароль</string>
+    <string name="recover_password">Восстановить пароль</string>
+
+    <string name="boy">парень</string>
+    <string name="girl">девушка</string>
 </resources>

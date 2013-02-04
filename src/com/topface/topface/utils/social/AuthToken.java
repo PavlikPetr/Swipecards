@@ -21,6 +21,7 @@ public class AuthToken {
     // SN Types
     public static final String SN_FACEBOOK = "fb";
     public static final String SN_VKONTAKTE = "vk";
+    public static final String SN_TOPFACE = "st";
 
 
     public AuthToken(Context context) {

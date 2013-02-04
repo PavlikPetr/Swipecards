@@ -49,9 +49,23 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Login"
-                android:background="@drawable/btn_signin"
+                style="@style/AuthButtonsBigText"
+                android:background="@drawable/btn_signin_selector"
                 />
     </LinearLayout>
+
+    <TextView
+            android:id="@+id/tvBackToMainAuth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="8dp"
+            android:text="Back"
+            android:drawableLeft="@drawable/ic_back"
+            android:drawablePadding="8dp"
+            style="@style/AuthButtonsBigText"
+            />
 
     <ImageView
             android:id="@+id/ivTopfaceLogo"
