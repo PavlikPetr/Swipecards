@@ -4,16 +4,21 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import com.topface.topface.R;
+import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
+import com.topface.topface.ui.adapters.FeedList;
+import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.Debug;
+import org.json.JSONObject;
 
-public class ProfilePhotoGridAdapter extends BaseAdapter {
+public class ProfilePhotoGridAdapter extends ProfileGridAdapter {
     // Data
     protected LayoutInflater mInflater;
-    private Photos mPhotoLinks;
 
     protected static final int T_ADD_BTN = 0;
     protected static final int T_PHOTO = 1;
@@ -25,13 +30,12 @@ public class ProfilePhotoGridAdapter extends BaseAdapter {
     }
 
     public ProfilePhotoGridAdapter(Context context, Photos photoLinks) {
-        mInflater = LayoutInflater.from(context);
-        mPhotoLinks = photoLinks;
+        this(context, photoLinks, photoLinks.size(), null);
     }
 
-    @Override
-    public int getCount() {
-        return mPhotoLinks.size();
+    public ProfilePhotoGridAdapter(Context context, Photos photoLinks, int totalPhotos, LoadingListAdapter.Updater callback) {
+        super(context, photoLinks, totalPhotos, callback);
+        mInflater = LayoutInflater.from(context);
     }
 
     @Override
@@ -71,13 +75,7 @@ public class ProfilePhotoGridAdapter extends BaseAdapter {
     }
 
     @Override
-    public Photo getItem(int position) {
-        return mPhotoLinks.get(position);
-    }
-
-    @Override
     public long getItemId(int position) {
         return position;
     }
-
 }

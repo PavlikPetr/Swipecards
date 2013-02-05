@@ -11,12 +11,19 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
+import com.topface.topface.requests.AlbumRequest;
+import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.ui.adapters.FeedList;
+import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 
 public class ProfilePhotoFragment extends BaseFragment {
@@ -27,6 +34,7 @@ public class ProfilePhotoFragment extends BaseFragment {
     private static final String TAG = "PPF :: ";
     private ViewFlipper mViewFlipper;
     private LockerView lockerView;
+    private GridView mGridAlbum;
 
     public ProfilePhotoFragment() {
         super();
@@ -41,9 +49,31 @@ public class ProfilePhotoFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initPhotoLinks();
-        mProfilePhotoGridAdapter = new ProfilePhotoGridAdapter(getActivity().getApplicationContext(), mPhotoLinks);
+        mProfilePhotoGridAdapter = new ProfilePhotoGridAdapter(getActivity().getApplicationContext(), mPhotoLinks, CacheProfile.totalPhotos, new LoadingListAdapter.Updater() {
+            @Override
+            public void onUpdate() {
+                sendAlbumRequest();
+            }
+        });
         mAddPhotoHelper = new AddPhotoHelper(this, lockerView);
         mAddPhotoHelper.setOnResultHandler(mHandler);
+    }
+
+    private void sendAlbumRequest() {
+        AlbumRequest request = new AlbumRequest(getActivity(), CacheProfile.uid, AlbumRequest.DEFAULT_PHOTOS_LIMIT);
+        request.callback(new ApiHandler() {
+            @Override
+            public void success(ApiResponse response) {
+                if(mGridAlbum != null) {
+                    ((ProfilePhotoGridAdapter)mGridAlbum.getAdapter()).setData(Photos.parse(response.jsonResult.optJSONArray("photos")));
+                }
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+
+            }
+        }).exec();
     }
 
     private void initPhotoLinks() {
@@ -80,9 +110,10 @@ public class ProfilePhotoFragment extends BaseFragment {
 
         mViewFlipper = (ViewFlipper) root.findViewById(R.id.vfFlipper);
 
-        GridView gridAlbum = (GridView) root.findViewById(R.id.usedGrid);
-        gridAlbum.setAdapter(mProfilePhotoGridAdapter);
-        gridAlbum.setOnItemClickListener(mOnItemClickListener);
+        mGridAlbum = (GridView) root.findViewById(R.id.usedGrid);
+        mGridAlbum.setAdapter(mProfilePhotoGridAdapter);
+        mGridAlbum.setOnItemClickListener(mOnItemClickListener);
+        mGridAlbum.setOnScrollListener(mProfilePhotoGridAdapter);
 
         TextView title = (TextView) root.findViewById(R.id.usedTitle);
 
@@ -153,5 +184,7 @@ public class ProfilePhotoFragment extends BaseFragment {
             }
         }
     };
+
+
 }
  

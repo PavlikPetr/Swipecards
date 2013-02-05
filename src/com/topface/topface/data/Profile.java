@@ -69,6 +69,8 @@ public class Profile extends AbstractDataWithPhotos {
     public boolean email_grabbed;
     public boolean email_confirmed;
 
+    public int totalPhotos;
+
     public int background;
 
     // private static final String profileFileName = "profile.out";
@@ -535,6 +537,9 @@ public class Profile extends AbstractDataWithPhotos {
 
             initPhotos(resp, profile);
 
+            if (!resp.isNull("photos_count")) {
+                profile.totalPhotos = resp.optInt("photos_count");
+            }
             // newbie
             // if (!resp.isNull("flags")) {
             // JSONArray flags = resp.getJSONArray("flags");

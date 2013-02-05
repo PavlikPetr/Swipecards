@@ -11,7 +11,12 @@ import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.User;
+import com.topface.topface.requests.AlbumRequest;
+import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
 public class UserPhotoFragment extends BaseFragment {
@@ -19,27 +24,51 @@ public class UserPhotoFragment extends BaseFragment {
     private UserPhotoGridAdapter mUserPhotoGridAdapter;
     private TextView mTitle;
     private Photos mPhotoLinks;
+    private LoadingListAdapter.Updater mUpdater;
+    private int totalCount;
+    private GridView mGridAlbum;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserPhotoGridAdapter = new UserPhotoGridAdapter(getActivity().getApplicationContext());
+        mUpdater = new LoadingListAdapter.Updater() {
+            @Override
+            public void onUpdate() {
+                AlbumRequest request = new AlbumRequest(getActivity(), CacheProfile.uid, AlbumRequest.DEFAULT_PHOTOS_LIMIT);
+                request.callback(new ApiHandler() {
+                    @Override
+                    public void success(ApiResponse response) {
+                        if(mGridAlbum != null) {
+                            ((UserPhotoGridAdapter)mGridAlbum.getAdapter()).setData(Photos.parse(response.jsonResult.optJSONArray("photos")));
+                        }
+                    }
+
+                    @Override
+                    public void fail(int codeError, ApiResponse response) {
+
+                    }
+                }).exec();
+            }
+        };
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_grid, container, false);
 
-        GridView gridAlbum = (GridView) root.findViewById(R.id.usedGrid);
-        gridAlbum.setAdapter(mUserPhotoGridAdapter);
-        gridAlbum.setOnItemClickListener(mOnItemClickListener);
-
         mTitle = (TextView) root.findViewById(R.id.usedTitle);
 
         if (mPhotoLinks != null) {
-            setPhotos(mPhotoLinks);
+//            setPhotos(mPhotoLinks);
         } else {
             mTitle.setText(Utils.formatPhotoQuantity(0));
+        }
+
+        mGridAlbum = (GridView) root.findViewById(R.id.usedGrid);
+        mGridAlbum.setAdapter(mUserPhotoGridAdapter);
+        mGridAlbum.setOnItemClickListener(mOnItemClickListener);
+        if(mUserPhotoGridAdapter != null) {
+            mGridAlbum.setOnScrollListener(mUserPhotoGridAdapter);
         }
         mTitle.setVisibility(View.VISIBLE);
         return root;
@@ -69,7 +98,13 @@ public class UserPhotoFragment extends BaseFragment {
     public void setUserData(User user) {
         mUser = user;
         mPhotoLinks = user.photos;
-        setPhotos(mPhotoLinks);
+        if(mGridAlbum.getAdapter() != null) {
+//            ((UserPhotoGridAdapter)mGridAlbum.getAdapter()).setData(mPhotoLinks);
+        } else {
+            setPhotos(mPhotoLinks);
+            mGridAlbum.setAdapter(mUserPhotoGridAdapter);
+            mGridAlbum.setOnScrollListener(mUserPhotoGridAdapter);
+        }
     }
 
     private void setPhotos(Photos photos) {
@@ -77,8 +112,11 @@ public class UserPhotoFragment extends BaseFragment {
             mTitle.setText(Utils.formatPhotoQuantity(photos.size()));
         }
 
-        if (mUserPhotoGridAdapter != null) {
-            mUserPhotoGridAdapter.setUserData(photos);
+        if (mUserPhotoGridAdapter == null) {
+            mUserPhotoGridAdapter = new UserPhotoGridAdapter(getActivity().getApplicationContext(),
+                                                             photos,
+                                                             AlbumRequest.DEFAULT_PHOTOS_LIMIT,
+                                                                     mUpdater);
         }
     }
 
@@ -89,4 +127,3 @@ public class UserPhotoFragment extends BaseFragment {
         mUserPhotoGridAdapter.notifyDataSetChanged();
     }
 }
- 

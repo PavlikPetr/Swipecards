@@ -10,6 +10,7 @@ import com.topface.topface.Static;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Gift;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.Debug;
 
 public class GiftsAdapter extends LoadingListAdapter<FeedGift> implements AbsListView.OnScrollListener {
 
@@ -95,6 +96,7 @@ public class GiftsAdapter extends LoadingListAdapter<FeedGift> implements AbsLis
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        Debug.log("SCROLL_G");
         if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= totalItemCount - 1) {
             FeedList<FeedGift> data = getData();
             if (mUpdateCallback != null && !data.isEmpty() && data.getLast().isLoader()) {

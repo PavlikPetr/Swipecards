@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 /**
  * Фотографии пользователей из нашего стораджа фотографий (не напрямую из социальной сети)
  */
-public class Photo extends AbstractData implements Parcelable {
+public class Photo extends LoaderData implements Parcelable {
 
     public static final String SIZE_ORIGINAL = "original";
     public static final String SIZE_64 = "c64x64";
@@ -100,6 +100,10 @@ public class Photo extends AbstractData implements Parcelable {
 
     public Photo(JSONObject data) {
         super(data);
+    }
+
+    public Photo(ItemType type) {
+        super(type);
     }
 
     @Override
