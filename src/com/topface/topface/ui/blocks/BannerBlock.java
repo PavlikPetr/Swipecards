@@ -103,7 +103,7 @@ public class BannerBlock {
     }
 
     private void removeBanner() {
-        unbindDrawables(mBannerView);
+        unbindDrawables(mBannerLayout);
     }
 
     private void unbindDrawables(View view) {

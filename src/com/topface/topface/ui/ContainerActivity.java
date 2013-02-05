@@ -17,7 +17,7 @@ import com.topface.topface.ui.fragments.VipBuyFragment;
 
 public class ContainerActivity extends BaseFragmentActivity {
 
-    private int mCurrentFragmentId;
+    private int mCurrentFragmentId = -1;
     private Fragment mCurrentFragment;
 
     private static final String TAG_FRAGMENT = "current_fragment";
@@ -46,8 +46,14 @@ public class ContainerActivity extends BaseFragmentActivity {
             }
         });
 
-        Intent intent = getIntent();
-        mCurrentFragmentId = intent.getIntExtra(Static.INTENT_REQUEST_KEY,0);
+        initRequestKey();
+    }
+
+    private void initRequestKey() {
+        if (mCurrentFragmentId == -1) {
+            Intent intent = getIntent();
+            mCurrentFragmentId = intent.getIntExtra(Static.INTENT_REQUEST_KEY,0);
+        }
     }
 
     @Override
@@ -113,5 +119,11 @@ public class ContainerActivity extends BaseFragmentActivity {
     @Override
     public boolean isTrackable() {
         return false;
+    }
+
+    @Override
+    protected boolean isNeedAuth() {
+        initRequestKey();
+        return mCurrentFragmentId != INTENT_REGISTRATION_FRAGMENT && super.isNeedAuth();
     }
 }

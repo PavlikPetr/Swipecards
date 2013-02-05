@@ -30,7 +30,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (new AuthToken(getApplicationContext()).isEmpty() || !CacheProfile.isLoaded()) {
+        if (isNeedAuth() && (new AuthToken(getApplicationContext()).isEmpty() || !CacheProfile.isLoaded())) {
             startAuth();
         }
     }
@@ -126,5 +126,10 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     protected boolean isNeedBroughtToFront(Intent intent) {
         return intent != null && (intent.getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0;
+    }
+
+
+    protected boolean isNeedAuth() {
+        return true;
     }
 }

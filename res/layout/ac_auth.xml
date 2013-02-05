@@ -27,7 +27,7 @@
 
         <include layout="@layout/layout_main_auth"/>
 
-        <include layout="@layout/layout_singin"/>
+        <include layout="@layout/layout_signin"/>
 
     </ViewFlipper>
 </RelativeLayout>

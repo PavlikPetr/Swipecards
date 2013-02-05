@@ -435,5 +435,11 @@
     <string name="boy">парень</string>
     <string name="girl">девушка</string>
     <string name="start_communication">Начать общение</string>
+    <string name="birthdate">ДР</string>
+    <string name="welcome_to_topface">Добро пожаловать в Topface!</string>
+
+    <string name="incorrect_email">Неправильно введен e-mail</string>
+    <string name="empty_fields">Не все поля заполнены</string>
+    <string name="email_already_registered">Пользователь с таким e-mail уже существует</string>
 
 </resources>

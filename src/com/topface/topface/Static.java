@@ -6,6 +6,7 @@ public class Static {
     public static final int API_VERSION = 6;
     public static final int GIRL = 0;
     public static final int BOY = 1;
+    public static final int MAX_AGE = 16;
     public static final int PHOTO_WIDTH = 640;
     public static final int PHOTO_HEIGHT = 960;
     public static final int HEADER_SHADOW_SHIFT = -1;

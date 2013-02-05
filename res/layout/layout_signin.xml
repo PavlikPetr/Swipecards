@@ -6,15 +6,9 @@
                 android:id="@+id/authContainer">
 
     <TextView
-            android:id="@+id/tvWrongPassword"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/error_login_password"
-            android:background="@drawable/bg_wrong_login_password"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:textSize="14sp"
-            android:visibility="invisible"/>
+            android:id="@+id/tvRedAlert"
+            style="@style/RedAlertTextView"
+            android:text="@string/error_login_password"/>
 
     <LinearLayout
             android:id="@+id/loLoginGroup"
@@ -30,12 +24,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/text_input_signin"
                 android:hint="@string/email"
-                android:singleLine="true"
                 android:inputType="textEmailAddress"
-                android:textColor="#000000"
-                android:padding="8dp"
-                android:gravity="center_vertical"
-                android:textSize="12sp"
+                style="@style/EditTextAuth"
                 />
 
         <RelativeLayout
@@ -47,27 +37,23 @@
                     android:id="@+id/edPassword"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
                     android:background="@drawable/text_input_signin"
                     android:hint="@string/password"
                     android:inputType="textPassword"
-                    android:textColor="#000000"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:paddingLeft="8dp"
                     android:paddingRight="24dp"
-                    android:gravity="center_vertical"
-                    android:layout_centerInParent="true"
-                    android:textSize="12sp"
+                    style="@style/EditTextAuth"
                     />
 
-            <ImageView
+            <ImageButton
                     android:id="@+id/ivShowPassword"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="8dp"
                     android:src="@drawable/ic_show_password"
+                    android:background="@android:color/transparent"
                     android:layout_centerVertical="true"
                     android:layout_alignRight="@id/edPassword"
-                    android:layout_marginRight="8dp"
                     />
         </RelativeLayout>
 
