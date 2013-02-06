@@ -283,7 +283,7 @@ public class ConnectionManager {
     }
 
     private String getRevNum() {
-        return App.isDebugMode() ? Static.REV : "";
+        return App.DEBUG ? Static.REV : "";
     }
 
     /**

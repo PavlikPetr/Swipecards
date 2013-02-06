@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 public class ChangeLoginRequest extends AbstractApiRequest{
     public static final String LOGIN_FIELD_NAME = "login";
-    private static String SERVICE_NAME = "change";
+    private static String SERVICE_NAME = "changelogin";
 
     private String login;
 

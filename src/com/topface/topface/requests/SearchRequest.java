@@ -8,8 +8,6 @@ public class SearchRequest extends AbstractApiRequest {
     // Data
     public static final String SERVICE_NAME = "search";
     public int limit; // размер получаемой выборки 10 <= limit <= 50
-    public boolean geo; // необходимости геопозиционного поиска
-    public boolean ero; // флаг необходимости эротического поиска
     public boolean online; // необходимость выборки только онлайн-пользователей
 
     public SearchRequest(Context context) {
@@ -20,8 +18,6 @@ public class SearchRequest extends AbstractApiRequest {
     protected JSONObject getRequestData() throws JSONException {
         return new JSONObject()
                 .put("limit", limit)
-                .put("geo", geo)
-                .put("ero", ero)
                 .put("online", online);
     }
 

@@ -17,7 +17,7 @@ import com.google.android.gcm.GCMRegistrar;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.SearchUser;
+import com.topface.topface.data.search.SearchUser;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.LogoutRequest;

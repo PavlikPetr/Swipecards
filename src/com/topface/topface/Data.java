@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import com.topface.topface.data.City;
-import com.topface.topface.data.SearchUser;
+import com.topface.topface.data.search.SearchUser;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.Utils;
