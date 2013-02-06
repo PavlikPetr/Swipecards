@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -14,20 +15,30 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.LeaderRequest;
 import com.topface.topface.ui.adapters.LeadersPhotoAdapter;
+import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
+import java.util.LinkedList;
+
 public class LeadersActivity extends BaseFragmentActivity {
-    private GridView mGridView;
+    private com.example.gridlayout.GridLayout mGridView;
+    private com.example.gridlayout.GridLayout mUselessGridView;
     private LockerView mLoadingLocker;
     private PhotoSelector mSelectedPhoto = new PhotoSelector();
     private Button mBuyButton;
 
+    private Photos usePhotos;
+    private Photos uselessPhotos;
+
+    private LinkedList<LeadersPhoto> mLeadersPhotos = new LinkedList<LeadersPhoto>();
+    private TextView mUselessTitle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_leaders_new);
+        setContentView(R.layout.new_leaders_layout);
         ((TextView) findViewById(R.id.tvNavigationTitle)).setText(R.string.leaders_go_date);
         findViewById(R.id.btnNavigationHome).setVisibility(View.INVISIBLE);
         View backButton = findViewById(R.id.btnNavigationBack);
@@ -39,10 +50,15 @@ public class LeadersActivity extends BaseFragmentActivity {
             }
         });
 
+        usePhotos = new Photos();
+        uselessPhotos = new Photos();
+
 //        mProgressBar = (ProgressBar) findViewById(R.id.loader);
-        mGridView = (GridView) findViewById(R.id.fragmentGrid);
+        mGridView = (com.example.gridlayout.GridLayout) findViewById(R.id.usedGrid);
+        mUselessGridView = (com.example.gridlayout.GridLayout) findViewById(R.id.unusedGrid);
         mBuyButton = (Button) findViewById(R.id.btnLeadersBuy);
         mLoadingLocker = (LockerView) findViewById(R.id.llvLeaderSending);
+        mUselessTitle = (TextView) findViewById(R.id.unusedTitle);
 
         setListeners();
         getProfile();
@@ -101,20 +117,52 @@ public class LeadersActivity extends BaseFragmentActivity {
                 }
             }
         });
-
-        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                mSelectedPhoto.select(i, adapterView);
-            }
-        });
     }
 
     private void updateProfileInfo(Profile profile) {
-        LeadersPhotoAdapter leadersAdapter = new LeadersPhotoAdapter(getApplicationContext(), profile.photos, mSelectedPhoto);
-        mGridView.setAdapter(leadersAdapter);
+        splitPhotos(profile.photos);
+        for (final Photo photo : usePhotos) {
+            View view = getLayoutInflater().inflate(R.layout.leaders_photo_item, null);
+            ImageViewRemote ivr = (ImageViewRemote) view.findViewById(R.id.ivLeadPhoto);
+            final ImageView mask = (ImageView) view.findViewById(R.id.lpiMask);
+            mLeadersPhotos.add(new LeadersPhoto(photo, mask));
+            view.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(mSelectedPhoto != null) {
+                        mSelectedPhoto.select(mask, photo);
+                    }
+                }
+            });
+            mGridView.addView(view);
+            ivr.setPhoto(photo);
+        }
+
+        for (Photo photo : uselessPhotos) {
+            View view = getLayoutInflater().inflate(R.layout.leaders_photo_unused_item, null);
+            ImageViewRemote ivr = (ImageViewRemote) view.findViewById(R.id.ivLeadPhoto);
+            TextView tv = (TextView) view.findViewById(R.id.lpuRating);
+            tv.setText(getString(R.string.default_percent_equation, photo.mLiked));
+            mUselessGridView.addView(view);
+            ivr.setPhoto(photo);
+        }
+
+        if(uselessPhotos.size() == 0) {
+            mUselessTitle.setVisibility(View.GONE);
+        }
+
         if (mSelectedPhoto != null) {
-            mSelectedPhoto.selectInitPhoto(profile.photo, profile.photos);
+            mSelectedPhoto.select(mLeadersPhotos.get(0).view, mLeadersPhotos.get(0).photo);
+        }
+    }
+
+    private void splitPhotos(Photos photos) {
+        for(Photo photo : photos) {
+            if(photo.mLiked >= 25) {
+                usePhotos.add(new Photo(photo));
+            } else {
+                uselessPhotos.add(new Photo(photo));
+            }
         }
     }
 
@@ -127,44 +175,49 @@ public class LeadersActivity extends BaseFragmentActivity {
         updateProfileInfo(CacheProfile.getProfile());
     }
 
+    public static class LeadersPhoto {
+        public ImageView view;
+        public Photo photo;
+
+        public LeadersPhoto(Photo photo, ImageView view) {
+            this.photo = photo;
+            this.view = view;
+        }
+    }
+
     public static class PhotoSelector {
-        private int mItem;
+        private ImageView mItem;
         private int mPhotoId;
 
-        public void select(int item, AdapterView<?> adapterView) {
-            if (item >= 0) {
-                //При повторном клике на выбранный элемент, ничего не делаем
-                if (item == mItem) {
-//                    mItem = -1;
-//                    mPhotoId = -1;
+        public void select(ImageView item, Photo photo) {
+            if (item != null) {
+                //При повторном клике на выбранный элемент, отключаем
+                if (item.equals(mItem)) {
+                    mItem.setImageResource(R.drawable.mask_normal_photo);
+                    mItem = null;
+                    mPhotoId = -1;
+
                 } else {
-                    Photo photo = (Photo) adapterView.getItemAtPosition(item);
+                    if(mItem != null) {
+                        mItem.setImageResource(R.drawable.mask_normal_photo);
+                    }
+                    item.setImageResource(R.drawable.mask_selected_photo);
                     mItem = item;
                     mPhotoId = photo.getId();
                 }
-                ((LeadersPhotoAdapter) adapterView.getAdapter()).notifyDataSetChanged();
-            }
-        }
 
-        public void selectInitPhoto(Photo avatar, Photos photos) {
-            for (int i = 0; i < photos.size(); i++) {
-                if (avatar.getId() == photos.get(i).getId()) {
-                    mItem = i;
-                    break;
-                }
             }
-            mPhotoId = avatar.getId();
         }
 
         public boolean isSelected() {
-            return mItem >= 0;
+            return mItem != null;
         }
 
         public int getPhotoId() {
             return mPhotoId;
         }
 
-        public int getItemId() {
+        public ImageView getItem() {
             return mItem;
         }
     }

@@ -24,6 +24,8 @@ public class AuthRequest extends AbstractApiRequest {
     private String clientosversion; // версия операционной системы
     private String clientdevice; // тип устройства клиента
     private String clientid; // уникальный идентификатор клиентского устройства
+    public String login;  // логин для нашей авторизации
+    public String password; // пароль для нашей авторизации
     private static String mDeviceId;
 
     public AuthRequest(Context context) {
@@ -96,7 +98,9 @@ public class AuthRequest extends AbstractApiRequest {
                 .put("clientversion", clientversion)
                 .put("clientosversion", clientosversion)
                 .put("clientdevice", clientdevice)
-                .put("clientid", clientid);
+                .put("clientid", clientid)
+                .put("login", login)
+                .put("password", password);
     }
 
     @Override

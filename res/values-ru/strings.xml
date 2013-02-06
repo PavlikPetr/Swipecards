@@ -422,4 +422,6 @@
     </string>
     <string name="default_price_format">Итого: %.2f USD</string>
     <string name="dating_online_only">%s, только онлайн</string>
+    <string name="leaders_pick_condition">Вы не можете выбрать фото с рейтингом ниже 25%:
+    </string>
 </resources>

@@ -93,11 +93,11 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
 
         mViewFlipper = (ViewFlipper) root.findViewById(R.id.vfFlipper);
 
-        mPhotoGridView = (GridView) root.findViewById(R.id.fragmentGrid);
+        mPhotoGridView = (GridView) root.findViewById(R.id.usedGrid);
         mPhotoGridView.setAdapter(mPhotoGridAdapter);
         mPhotoGridView.setOnItemClickListener(mOnItemClickListener);
 
-        TextView title = (TextView) root.findViewById(R.id.fragmentTitle);
+        TextView title = (TextView) root.findViewById(R.id.usedTitle);
         title.setVisibility(View.GONE);
 
         root.findViewById(R.id.btnAddPhotoAlbum).setOnClickListener(mAddPhotoHelper.getAddPhotoClickListener());

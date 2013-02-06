@@ -57,7 +57,7 @@ public class ContainerActivity extends BaseFragmentActivity {
 
         if (mCurrentFragment != null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.loFrame, mCurrentFragment,TAG_FRAGMENT).commit();
+                    .replace(R.id.loFrame, mCurrentFragment,TAG_FRAGMENT).commit();
         }
     }
 

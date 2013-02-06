@@ -56,4 +56,6 @@
         <attr name="settings" format="reference"/>
         <attr name="src" format="reference"/>
     </declare-styleable>
+
+
 </resources>

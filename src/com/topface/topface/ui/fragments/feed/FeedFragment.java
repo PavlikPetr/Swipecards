@@ -109,7 +109,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
 
     protected void initFloatBlock(ViewGroup view) {
-        mFloatBlock = new FloatBlock(getActivity(), this, view);
+        mFloatBlock = new FloatBlock(this, view);
     }
 
     protected void initNavigationBar(View view) {

@@ -50,6 +50,8 @@ public class Profile extends AbstractDataWithPhotos {
     public ArrayList<Gift> gifts = new ArrayList<Gift>();
     public HashMap<Integer, TopfaceNotifications> notifications = new HashMap<Integer, TopfaceNotifications>();
     public boolean hasMail;
+    public boolean email_grabbed;
+    public boolean email_confirmed;
 
     public int background;
 
@@ -134,18 +136,20 @@ public class Profile extends AbstractDataWithPhotos {
             } else {
                 profile.forms.add(formItem);
             }
+            
+            
+            
 
-            // about status
-            String as = form.optString("status");
-            String aboutStatus = TextUtils.isEmpty(as.trim()) ? null : as;
-            formItem = new FormItem(R.array.form_main_about_status, aboutStatus,
-                    FormItem.DATA, headerItem);
-            formInfo.fillFormItem(formItem);
-            if (isUserProfile) {
-                if (aboutStatus != null)
-                    profile.forms.add(formItem);
-            } else {
-                profile.forms.add(formItem);
+            if (!resp.isNull("email")) {
+                profile.hasMail = resp.optBoolean("email");
+            }
+
+            if (!resp.isNull("email_grabbed")) {
+                profile.email_grabbed = resp.optBoolean("email_grabbed");
+            }
+
+            if (!resp.isNull("email_confirmed")) {
+               profile.email_confirmed = resp.optBoolean("email_confirmed");
             }
 
             // 2 character position 0
@@ -188,6 +192,19 @@ public class Profile extends AbstractDataWithPhotos {
                 position++;
                 compareFormItemData(formItem, position, profile,
                         form.optBoolean("fitness_goodness", false));
+            } else {
+                profile.forms.add(formItem);
+            }
+
+            // about status
+            String as = form.optString("status");
+            String aboutStatus = TextUtils.isEmpty(as.trim()) ? null : as;
+            formItem = new FormItem(R.array.form_main_about_status, aboutStatus,
+                    FormItem.DATA, headerItem);
+            formInfo.fillFormItem(formItem);
+            if (isUserProfile) {
+                if (aboutStatus != null)
+                    profile.forms.add(formItem);
             } else {
                 profile.forms.add(formItem);
             }

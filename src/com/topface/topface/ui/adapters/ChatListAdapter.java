@@ -15,16 +15,10 @@ import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.History;
 import com.topface.topface.data.VirusLike;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiRequest;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.VirusLikesRequest;
+import com.topface.topface.requests.*;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.AddressesCache;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.DateUtils;
-import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -58,7 +52,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private static final int T_USER_REQUEST = 11;
     private static final int T_FRIEND_REQUEST = 12;
 
-    private static final int T_COUNT = 12;
+    private static final int T_COUNT = 13;
 
     private HashMap<History,ApiRequest> mHashRepeatRequests;
     private ArrayList<History> mWaitingItems;
@@ -87,7 +81,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     @Override
     public History getItem(int i) {
-        return super.getItem(getCount()-i-1);
+        return super.getItem(getPosition(i));
+    }
+
+    private int getPosition(int index) {
+        return getCount()-index-1;
     }
 
     @Override
@@ -157,6 +155,9 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         if (mHeaderView != null) {
             parentView.removeHeaderView(mHeaderView);
             parentView.setStackFromBottom(true);
+            mHeaderView = null;
+        } else {
+            Debug.log("ChatListAdapter.removeHeader(): no header to remove remove header");
         }
     }
 
@@ -307,7 +308,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                     holder.loader.setVisibility(View.VISIBLE);
                     holder.retrier.setVisibility(View.GONE);
                 }
-
                 return;
             case T_FRIEND:
             case T_USER:
@@ -339,15 +339,15 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                     holder.avatar.setOnClickListener(output ? null : mOnClickListener);
                     holder.avatar.setPhoto(item.user.photo);
                     holder.avatar.setVisibility(View.VISIBLE);
+                    holder.userInfo.setBackgroundResource(output ? R.drawable.bg_message_user : R.drawable.bg_message_friend);
                 } else {
                     holder.avatar.setVisibility(View.INVISIBLE);
+                    holder.userInfo.setBackgroundResource(output ? R.drawable.bg_message_user_ext : R.drawable.bg_message_friend_ext);
                 }
 
                 if (type == T_FRIEND_REQUEST) {
                     holder.likeRequest.setTag(position);
                     holder.likeRequest.setOnClickListener(mLikeRequestListener);
-                } else {
-                    holder.likeRequest.setOnClickListener(null);
                 }
                 break;
         }
@@ -395,6 +395,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
                 holder.message = (TextView) convertView.findViewById(R.id.chat_message);
                 holder.date = (TextView) convertView.findViewById(R.id.chat_date);
+                holder.userInfo = convertView.findViewById(R.id.user_info);
                 holder.likeRequest = (Button) convertView.findViewById(R.id.btn_chat_like_request);
                 break;
             case T_USER_REQUEST:
@@ -402,6 +403,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 holder.avatar = (ImageViewRemote) convertView.findViewById(R.id.left_icon);
                 holder.message = (TextView) convertView.findViewById(R.id.chat_message);
                 holder.date = (TextView) convertView.findViewById(R.id.chat_date);
+                holder.userInfo = convertView.findViewById(R.id.user_info);
                 break;
         }
 
@@ -576,15 +578,15 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             if (item != null) {
                 EasyTracker.getTracker().trackEvent("VirusLike", "Click", "Chat", 0L);
 
-                new VirusLikesRequest(item.id, mContext).callback(new ApiHandler() {
+                new VirusLikesRequest(item.id, mContext).callback(new DataApiHandler<VirusLike>() {
+
                     @Override
-                    public void success(ApiResponse response) {
+                    protected void success(VirusLike data, ApiResponse response) {
                         EasyTracker.getTracker().trackEvent("VirusLike", "Success", "Chat", 0L);
                         //После заврешения запроса удаляем элемент
-                        removeItem(position);
-
+                        removeItem(getPosition(position));
                         //И предлагаем отправить пользователю запрос своим друзьям не из приложения
-                        new VirusLike(response).sendFacebookRequest(
+                        data.sendFacebookRequest(
                                 "Chat",
                                 mContext,
                                 new VirusLike.VirusLikeDialogListener(mContext) {
@@ -617,14 +619,14 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) {
-                        EasyTracker.getTracker().trackEvent("VirusLike", "Fail", "Chat", 0L);
-                        Utils.showErrorMessage(getContext());
+                    protected VirusLike parseResponse(ApiResponse response) {
+                        return new VirusLike(response);
                     }
 
                     @Override
-                    public void always(ApiResponse response) {
-                        super.always(response);
+                    public void fail(int codeError, ApiResponse response) {
+                        EasyTracker.getTracker().trackEvent("VirusLike", "Fail", "Chat", 0L);
+                        Utils.showErrorMessage(getContext());
                     }
                 }).exec();
             }

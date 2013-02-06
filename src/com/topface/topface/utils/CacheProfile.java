@@ -53,7 +53,10 @@ public class CacheProfile {
 
     public static ArrayList<Gift> gifts = new ArrayList<Gift>();
     public static HashMap<Integer, Profile.TopfaceNotifications> notifications;
+
     public static boolean hasMail;
+    public static boolean emailGrabbed;
+    public static boolean emailConfirmed;
 
     public static long profileUpdateTime;
 
@@ -90,6 +93,8 @@ public class CacheProfile {
 
         profile.notifications = notifications;
         profile.hasMail = hasMail;
+        profile.email_confirmed = emailConfirmed;
+        profile.email_grabbed = emailGrabbed;
 
         profile.premium = premium;
         profile.invisible = invisible;
@@ -120,6 +125,8 @@ public class CacheProfile {
 
         notifications = profile.notifications;
         hasMail = profile.hasMail;
+        emailConfirmed = profile.email_confirmed;
+        emailGrabbed = profile.email_grabbed;
 
         premium = profile.premium;
         invisible = profile.invisible;
