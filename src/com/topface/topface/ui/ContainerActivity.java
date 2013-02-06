@@ -10,10 +10,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.ui.fragments.BuyingFragment;
-import com.topface.topface.ui.fragments.ChatFragment;
-import com.topface.topface.ui.fragments.RegistrationFragment;
-import com.topface.topface.ui.fragments.VipBuyFragment;
+import com.topface.topface.ui.fragments.*;
 
 public class ContainerActivity extends BaseFragmentActivity {
 
@@ -26,6 +23,7 @@ public class ContainerActivity extends BaseFragmentActivity {
     public static final int INTENT_BUYING_FRAGMENT = 2;
     public static final int INTENT_CHAT_FRAGMENT = 3;
     public static final int INTENT_REGISTRATION_FRAGMENT = 4;
+    public static final int INTENT_RECOVER_PASSWORD = 5;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -110,6 +108,9 @@ public class ContainerActivity extends BaseFragmentActivity {
             case INTENT_REGISTRATION_FRAGMENT:
                 fragment = new RegistrationFragment();
                 break;
+            case INTENT_RECOVER_PASSWORD:
+                fragment = new RecoverPwdFragment();
+                break;
             default:
                 break;
         }
@@ -124,6 +125,7 @@ public class ContainerActivity extends BaseFragmentActivity {
     @Override
     protected boolean isNeedAuth() {
         initRequestKey();
-        return mCurrentFragmentId != INTENT_REGISTRATION_FRAGMENT && super.isNeedAuth();
+        return mCurrentFragmentId != INTENT_REGISTRATION_FRAGMENT &&
+                mCurrentFragmentId != INTENT_RECOVER_PASSWORD && super.isNeedAuth();
     }
 }

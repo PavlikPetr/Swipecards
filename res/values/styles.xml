@@ -43,6 +43,13 @@
         <item name="android:shadowDy">2</item>
     </style>
 
+    <style name="ShadowBlackSolidText">
+        <item name="android:shadowColor">#000000</item>
+        <item name="android:shadowRadius">1</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">-1</item>
+    </style>
+
     <style name="ShadowDatingButtons">
         <item name="android:shadowColor">#666666</item>
         <item name="android:shadowDx">1</item>
@@ -130,6 +137,16 @@
         <item name="android:textColor">#FFFFFF</item>
     </style>
 
+    <style name="AuthButtonsVerySmallText" parent="ShadowUserText">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="AuthButtonsSmallText" parent="ShadowUserText">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <style name="AuthButtonsText" parent="ShadowUserText">
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:textSize">14sp</item>
@@ -137,6 +154,11 @@
 
     <style name="AuthButtonsBigText" parent="ShadowUserText">
         <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="RecoveryButtonsBigText" parent="ShadowBlackSolidText">
+        <item name="android:textColor">@color/btn_signin</item>
         <item name="android:textSize">16sp</item>
     </style>
 
@@ -411,7 +433,6 @@
     </style>
 
     <style name="TopfaceCirclePageIndicator">
-
         <item name="pageColor">#99FFFFFF</item>
         <item name="fillColor">#FFFFFFFF</item>
         <item name="strokeWidth">0dp</item>

@@ -42,6 +42,7 @@ public class AuthFragment extends BaseFragment {
     private Button mTFButton;
     private View mSignInView;
     private View mCreateAccountView;
+    private TextView mRecoverPwd;
     private EditText mLogin;
     private EditText mPassword;
     private ProgressBar mProgressBar;
@@ -208,6 +209,14 @@ public class AuthFragment extends BaseFragment {
             public void onClick(View v) {
                 toggle = !toggle;
                 mPassword.setTransformationMethod(toggle ? null : passwordMethod);
+            }
+        });
+        mRecoverPwd = (TextView) root.findViewById(R.id.tvRecoverPwd);
+        mRecoverPwd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ContainerActivity.class);
+                startActivityForResult(intent, ContainerActivity.INTENT_RECOVER_PASSWORD);
             }
         });
     }

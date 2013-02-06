@@ -93,6 +93,16 @@
             android:src="@drawable/auth_logo"/>
 
     <TextView
+            android:id="@+id/tvRecoverPwd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/AuthButtonsText"
+            android:text="@string/recover_password"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/loLoginGroup"
+            android:layout_marginTop="16dp"/>
+
+    <TextView
             android:id="@+id/tvBackToMainAuth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
