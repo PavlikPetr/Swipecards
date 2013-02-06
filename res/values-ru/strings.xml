@@ -439,6 +439,8 @@
     <string name="welcome_to_topface">Добро пожаловать в Topface!</string>
 
     <string name="incorrect_email">Неправильно введен e-mail</string>
+    <string name="incorrect_login">Неправильно введен логин</string>
+    <string name="incorrect_password">Неправильно введен пароль</string>
     <string name="empty_fields">Не все поля заполнены</string>
     <string name="email_already_registered">Пользователь с таким e-mail уже существует</string>
 

@@ -161,7 +161,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         // Account
         frame = (ViewGroup) root.findViewById(R.id.loAccount);
         setBackground(R.drawable.edit_big_btn_middle_selector, frame);
-        AuthToken authToken = new AuthToken(getActivity().getApplicationContext());
+        AuthToken authToken = AuthToken.getInstance();
         if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
             setAccountNameText(R.string.settings_account, mSettings.getSocialAccountName(), R.drawable.ic_fb, frame);
         } else if (authToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {

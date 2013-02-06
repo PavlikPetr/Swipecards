@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="@drawable/auth_bg"
-                android:id="@+id/authContainer">
+                android:layout_height="fill_parent">
 
-    <TextView
-            android:id="@+id/tvRedAlert"
-            style="@style/RedAlertTextView"
-            android:text="@string/error_login_password"/>
+    <ImageView
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/auth_bg_bottom_spot"
+            />
 
     <LinearLayout
             android:id="@+id/loLoginGroup"
@@ -57,15 +58,29 @@
                     />
         </RelativeLayout>
 
-        <Button
-                android:id="@+id/btnLogin"
+        <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/sign_in"
-                style="@style/AuthButtonsBigText"
-                android:background="@drawable/btn_signin_selector"
-                />
+                >
+
+            <ProgressBar
+                    android:id="@+id/prsLoginSending"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone"
+                    style="@android:style/Widget.ProgressBar.Small"/>
+
+            <Button
+                    android:id="@+id/btnLogin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sign_in"
+                    style="@style/AuthButtonsBigText"
+                    android:background="@drawable/btn_signin_selector"
+                    />
+        </RelativeLayout>
     </LinearLayout>
 
     <ImageView

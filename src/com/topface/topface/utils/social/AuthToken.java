@@ -2,6 +2,7 @@ package com.topface.topface.utils.social;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import com.topface.topface.App;
 import com.topface.topface.Static;
 
 public class AuthToken {
@@ -27,10 +28,18 @@ public class AuthToken {
     public static final String SN_VKONTAKTE = "vk";
     public static final String SN_TOPFACE = "st";
 
+    private static AuthToken mInstance = new AuthToken();
 
-    public AuthToken(Context context) {
-        mPreferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+    private AuthToken() {
+        mPreferences = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         loadToken();
+    }
+
+    public static AuthToken getInstance() {
+        if (mInstance == null) {
+            mInstance = new AuthToken();
+        }
+        return mInstance;
     }
 
 

@@ -117,46 +117,50 @@
                     <TextView
                             android:id="@+id/tvBoy"
                             android:layout_width="wrap_content"
-                            android:maxWidth="80dp"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:text="@string/boy"
-                            style="@style/EditTextAuth"
-                            android:gravity="center_vertical"
-                            android:drawableLeft="@drawable/ic_sex"
-                            android:drawablePadding="2dp"
-                            android:ellipsize="end"
+                            style="@style/RegistrationSexTextView"
                             />
 
                     <TextView
                             android:id="@+id/tvGirl"
                             android:layout_width="wrap_content"
-                            android:maxWidth="80dp"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_toLeftOf="@id/tvBoy"
                             android:text="@string/girl"
-                            style="@style/EditTextAuth"
-                            android:gravity="center_vertical"
-                            android:drawableLeft="@drawable/ic_sex"
-                            android:drawablePadding="2dp"
-                            android:ellipsize="end"
+                            style="@style/RegistrationSexTextView"
                             />
 
                 </RelativeLayout>
             </LinearLayout>
         </RelativeLayout>
 
-        <Button
-                android:id="@+id/btnRegister"
+        <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/start_communication"
-                android:background="@drawable/btn_signin_selector"
-                style="@style/AuthButtonsText"
-                />
+                android:layout_marginTop="8dp"
+                >
+            <ProgressBar
+                    android:id="@+id/prsRegistrationSending"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone"
+                    style="@android:style/Widget.ProgressBar.Small"/>
+
+            <Button
+                    android:id="@+id/btnRegister"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/start_communication"
+                    android:background="@drawable/btn_signin_selector"
+                    style="@style/AuthButtonsText"
+                    />
+        </RelativeLayout>
 
 
     </LinearLayout>

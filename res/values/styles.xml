@@ -522,6 +522,16 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="RegistrationSexTextView" parent="EditTextAuth">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:drawableLeft">@drawable/ic_sex</item>
+        <item name="android:drawablePadding">4dp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxWidth">90dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
     <style name="RedAlertTextView">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>

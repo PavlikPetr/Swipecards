@@ -59,7 +59,7 @@ public class SettingsAccountFragment extends TrackedFragment {
         ((TextView) getActivity().findViewById(R.id.tvNavigationTitle)).setText(R.string.settings_account);
 
         Drawable icon = null;
-        final AuthToken token = new AuthToken(getActivity().getApplicationContext());
+        final AuthToken token = AuthToken.getInstance();
 
         if (token.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
             icon = getResources().getDrawable(R.drawable.fb_icon);

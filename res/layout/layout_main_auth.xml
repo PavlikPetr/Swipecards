@@ -4,22 +4,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@drawable/auth_bg"
-        android:id="@+id/authContainer">
-    <ImageView
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/auth_bg_spot"
-            />
-    <ProgressBar
-            android:id="@+id/prsAuthLoading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="gone"
-            style="@android:style/Widget.ProgressBar.Small"/>
-
+        >
 
     <LinearLayout
             android:id="@+id/ivAuthGroup"

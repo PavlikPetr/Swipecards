@@ -34,7 +34,7 @@ import com.topface.topface.utils.social.AuthorizationManager;
 
 public class AuthFragment extends BaseFragment {
 
-    private View mWrongPasswordAlertView;
+    private TextView mWrongPasswordAlertView;
     private ViewFlipper mAuthViewsFlipper;
     private RetryView mRetryView;
     private Button mFBButton;
@@ -45,6 +45,7 @@ public class AuthFragment extends BaseFragment {
     private EditText mLogin;
     private EditText mPassword;
     private ProgressBar mProgressBar;
+    private ProgressBar mLoginSendingProgress;
     private AuthorizationManager mAuthorizationManager;
     private BroadcastReceiver connectionChangeListener;
 
@@ -58,6 +59,7 @@ public class AuthFragment extends BaseFragment {
         initViews(root);
         initAuthorizationHandler();
         checkOnline();
+
         return root;
     }
 
@@ -145,14 +147,6 @@ public class AuthFragment extends BaseFragment {
         });
     }
 
-    private void removeRedAlert() {
-        if (mWrongPasswordAlertView.getVisibility() == View.VISIBLE) {
-            mWrongPasswordAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
-                    android.R.anim.fade_out));
-            mWrongPasswordAlertView.setVisibility(View.INVISIBLE);
-        }
-    }
-
     private void initRetryView(View root) {
         mRetryView = new RetryView(getActivity().getApplicationContext(), R.id.ivAuthLogo);
         mRetryView.setErrorMsg(getString(R.string.general_data_error));
@@ -191,6 +185,8 @@ public class AuthFragment extends BaseFragment {
                 Bundle extras = data.getExtras();
                 String login = extras.getString(RegistrationFragment.INTENT_LOGIN, Static.EMPTY);
                 String password = extras.getString(RegistrationFragment.INTENT_PASSWORD, Static.EMPTY);
+                String userId = extras.getString(RegistrationFragment.INTENT_USER_ID, Static.EMPTY);
+                AuthToken.getInstance().saveToken(userId, login, password);
                 hideButtons();
                 auth(generateTopfaceAuthRequest(login,password));
             }
@@ -201,7 +197,8 @@ public class AuthFragment extends BaseFragment {
 
     private void initOtherViews(View root) {
         mProgressBar = (ProgressBar) root.findViewById(R.id.prsAuthLoading);
-        mWrongPasswordAlertView = root.findViewById(R.id.tvRedAlert);
+        mLoginSendingProgress = (ProgressBar) root.findViewById(R.id.prsLoginSending);
+        mWrongPasswordAlertView = (TextView) root.findViewById(R.id.tvRedAlert);
         mLogin = (EditText) root.findViewById(R.id.edLogin);
         mPassword = (EditText) root.findViewById(R.id.edPassword);
         root.findViewById(R.id.ivShowPassword).setOnClickListener(new View.OnClickListener() {
@@ -273,8 +270,7 @@ public class AuthFragment extends BaseFragment {
                 getProfileAndOptions(new ProfileIdReceiver() {
                     @Override
                     public void onProfileIdReceived(int profileId) {
-                        (new AuthToken(getActivity().getApplicationContext()))
-                                .saveToken(Integer.toString(profileId),login,password);
+                        AuthToken.getInstance().saveToken(Integer.toString(profileId), login, password);
                     }
                 });
             }
@@ -403,8 +399,11 @@ public class AuthFragment extends BaseFragment {
                 });
                 break;
             case ApiResponse.INCORRECT_LOGIN:
+                redAlert(R.string.incorrect_login);
+                needShowRetry = false;
+                break;
             case ApiResponse.INCORRECT_PASSWORD:
-                redAlert();
+                redAlert(R.string.incorrect_password);
                 needShowRetry = false;
                 break;
             default:
@@ -430,10 +429,25 @@ public class AuthFragment extends BaseFragment {
         }
     }
 
-    private void redAlert() {
+    private void redAlert(int resId) {
+        redAlert(getString(resId));
+    }
+
+    private void redAlert(String text) {
+        if (text != null) {
+            mWrongPasswordAlertView.setText(text);
+        }
         mWrongPasswordAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
                 android.R.anim.fade_in));
         mWrongPasswordAlertView.setVisibility(View.VISIBLE);
+    }
+
+    private void removeRedAlert() {
+        if (mWrongPasswordAlertView.getVisibility() == View.VISIBLE) {
+            mWrongPasswordAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
+                    android.R.anim.fade_out));
+            mWrongPasswordAlertView.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void showButtons() {
@@ -442,8 +456,10 @@ public class AuthFragment extends BaseFragment {
             mFBButton.setVisibility(View.VISIBLE);
             mVKButton.setVisibility(View.VISIBLE);
             mSignInView.setVisibility(View.VISIBLE);
+            mTFButton.setVisibility(View.VISIBLE);
             mCreateAccountView.setVisibility(View.VISIBLE);
             mProgressBar.setVisibility(View.GONE);
+            mLoginSendingProgress.setVisibility(View.GONE);
             mRetryView.setVisibility(View.GONE);
         }
     }
@@ -453,8 +469,10 @@ public class AuthFragment extends BaseFragment {
         mVKButton.setVisibility(View.GONE);
         mSignInView.setVisibility(View.GONE);
         mCreateAccountView.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
         mRetryView.setVisibility(View.GONE);
+        mTFButton.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
+        mLoginSendingProgress.setVisibility(View.VISIBLE);
     }
 
     private void btnVKClick() {

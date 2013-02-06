@@ -30,7 +30,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (isNeedAuth() && (new AuthToken(getApplicationContext()).isEmpty() || !CacheProfile.isLoaded())) {
+        if (isNeedAuth() && (AuthToken.getInstance().isEmpty() || !CacheProfile.isLoaded())) {
             startAuth();
         }
     }

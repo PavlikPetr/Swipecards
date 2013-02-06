@@ -11,9 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Register;
@@ -30,12 +28,15 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
 
     public static final String INTENT_LOGIN = "registration_login";
     public static final String INTENT_PASSWORD = "registration_password";
+    public static final String INTENT_USER_ID = "registration_iser_id";
 
     private EditText mEdEmail;
     private EditText mEdName;
     private TextView mBirthdayText;
     private SexController mSexController;
     private TextView mRedAlertView;
+    private ProgressBar mProgressBar;
+    private Button mBtnRegister;
 
     private Date mBirthday;
 
@@ -61,6 +62,7 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
 
     private void initOtherViews(View root) {
         mRedAlertView = (TextView) root.findViewById(R.id.tvRedAlert);
+        mProgressBar  = (ProgressBar) root.findViewById(R.id.prsRegistrationSending);
     }
 
     private void initEditTextViews(View root) {
@@ -87,10 +89,12 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
     }
 
     private void initButtons(final View root) {
-        (root.findViewById(R.id.btnRegister)).setOnClickListener(new View.OnClickListener() {
+        mBtnRegister = (Button) root.findViewById(R.id.btnRegister);
+        mBtnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 removeRedAlert();
+                hideButtons();
                 sendRegistrationRequest();
             }
         });
@@ -104,6 +108,7 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
 
         if (TextUtils.isEmpty(email.trim()) || TextUtils.isEmpty(name.trim()) || sex == -1 || mBirthday == null) {
             redAlert(R.string.empty_fields);
+            showButtons();
         } else {
             RegisterRequest request = new RegisterRequest(getActivity().getApplicationContext(),email,password,name,
                     mBirthday.getTime(),sex);
@@ -115,6 +120,7 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
                     Intent intent = new Intent();
                     intent.putExtra(INTENT_LOGIN, email);
                     intent.putExtra(INTENT_PASSWORD, password);
+                    intent.putExtra(INTENT_USER_ID, data.getUserId());
                     getActivity().setResult(Activity.RESULT_OK,intent);
                     getActivity().finish();
                 }
@@ -141,7 +147,11 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
                         default:
                             break;
                     }
+                }
 
+                @Override
+                public void always(ApiResponse response) {
+                    showButtons();
                 }
             });
             request.exec();
@@ -184,6 +194,20 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
             String dateStr = DateFormat.getDateFormat(getActivity().getApplicationContext()).format(date);
             mBirthdayText.setText(dateStr);
             mBirthday = date;
+        }
+    }
+
+    private void showButtons() {
+        if (mBtnRegister != null && mProgressBar != null) {
+            mBtnRegister.setVisibility(View.VISIBLE);
+            mProgressBar.setVisibility(View.GONE);
+        }
+    }
+
+    private void hideButtons() {
+        if (mBtnRegister != null && mProgressBar != null) {
+            mBtnRegister.setVisibility(View.GONE);
+            mProgressBar.setVisibility(View.VISIBLE);
         }
     }
 
