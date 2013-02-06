@@ -16,10 +16,7 @@ import android.view.animation.AlphaAnimation;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.*;
-import com.topface.topface.data.NoviceLikes;
-import com.topface.topface.data.Search;
-import com.topface.topface.data.SearchUser;
-import com.topface.topface.data.SkipRate;
+import com.topface.topface.data.*;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.*;
 import com.topface.topface.ui.BaseFragmentActivity;
@@ -40,6 +37,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         RateController.OnRateControllerListener {
 
     public static final int SEARCH_LIMIT = 30;
+    public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 3;
     private int mCurrentPhotoPrevPos;
     private TextView mResourcesLikes;
     private TextView mResourcesMoney;
@@ -82,7 +80,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private NoviceLayout mNoviceLayout;
     private View mDatingResources;
 
+    private int photosLimit;
+
     private boolean hasOneSympathyOrDelight = false;
+    private boolean mCanSendAlbumReq;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -490,6 +491,18 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     currUser.mutual ? doubleDelight : singleDelight, null, null);
 
             // photos
+            int photosRest = currUser.photosCount - currUser.photos.size();
+            if (photosRest > 0) {
+                photosRest = photosRest - currUser.photos.size();
+                photosRest = (photosRest > photosLimit)? photosLimit : photosRest;
+            } else {
+                photosRest = 0;
+            }
+
+            for (int i = 0; i < photosRest; i++) {
+                currUser.photos.add(new Photo());
+            }
+
             mImageSwitcher.setData(currUser.photos);
             mImageSwitcher.setCurrentItem(0, true);
             mCurrentPhotoPrevPos = 0;
@@ -784,6 +797,35 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             mCurrentPhotoPrevPos = position;
             setCounter(mCurrentPhotoPrevPos);
+
+            if (position + DEFAULT_PRELOAD_ALBUM_RANGE == mImageSwitcher.getAdapter().getCount()) {
+                //Проверить надо ли вообще делать запрос
+                //кинуть запрос альбомов
+                //добавить оставшиеся фотки
+                //по возвращении убрать фэйковость из photosNumber пришедших фоток
+                //Надо заблокировать эту проверку до следующего раза.
+                final Photos data = ((ImageSwitcher.ImageSwitcherAdapter)mImageSwitcher.getAdapter()).getData();
+                int photosCount = getCurrentUser().photosCount;
+
+                if (photosCount > data.size()) {
+                    int photosRest = photosCount - data.size();
+                    if (photosRest > 0) {
+                        photosRest = photosRest - data.size();
+                        photosRest = (photosRest > photosLimit)? photosLimit : photosRest;
+                    } else {
+                        photosRest = 0;
+                    }
+                    for (int i = 0; i < photosRest; i++) {
+                        data.add(new Photo());
+                    }
+                    mImageSwitcher.getAdapter().notifyDataSetChanged();
+                    if (mCanSendAlbumReq) {
+                        mCanSendAlbumReq = false;
+                        sendAlbumRequest(data);
+                    }
+
+                }
+            }
         }
 
         @Override
@@ -795,6 +837,25 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         public void onPageScrollStateChanged(int arg0) {
         }
     };
+
+    private void sendAlbumRequest(final Photos data) {
+        AlbumRequest request = new AlbumRequest(getActivity(), getCurrentUser().id, AlbumRequest.DEFAULT_PHOTOS_LIMIT);
+        request.callback(new ApiHandler() {
+            @Override
+            public void success(ApiResponse response) {
+                Photos newPhotos = Photos.parse(response.jsonResult.optJSONArray("photos"));
+                for(Photo photo : newPhotos) {
+                    data.set(data.size() - AlbumRequest.DEFAULT_PHOTOS_LIMIT, photo);
+                }
+                mCanSendAlbumReq = true;
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+
+            }
+        }).exec();
+    }
 
     private void updateResources() {
         mResourcesLikes.setText(Integer.toString(CacheProfile.likes));

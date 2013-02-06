@@ -8,7 +8,7 @@ public class AlbumRequest extends AbstractApiRequest{
 
     public static final String SERVICE_NAME = "album";
 
-    public static final int DEFAULT_PHOTOS_LIMIT = 100;
+    public static final int DEFAULT_PHOTOS_LIMIT = 50;
 
     private int uid;
     private int limit;

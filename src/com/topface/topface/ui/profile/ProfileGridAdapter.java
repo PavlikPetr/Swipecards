@@ -80,6 +80,7 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= totalItemCount - 1 && needLoadNewItems) {
             if (mUpdater != null && !mPhotoLinks.isEmpty()) {
+                needLoadNewItems = false;
                 mUpdater.onUpdate();
             }
         }

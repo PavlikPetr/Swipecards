@@ -214,15 +214,18 @@ public class ImageViewRemote extends ImageView {
     }
 
     public boolean setPhoto(Photo photo, Handler handler, View loader) {
-        boolean result;
+        boolean result = true;
         mLoader = loader;
+
         if (photo != null) {
-            int size = Math.max(getLayoutParams().height, getLayoutParams().width);
-            if (size > 0) {
-                //noinspection SuspiciousNameCombination
-                result = setRemoteSrc(photo.getSuitableLink(getLayoutParams().height, getLayoutParams().width), handler);
-            } else {
-                result = setRemoteSrc(photo.getSuitableLink(Photo.SIZE_960), handler);
+            if (!photo.isFake()) {
+                int size = Math.max(getLayoutParams().height, getLayoutParams().width);
+                if (size > 0) {
+                    //noinspection SuspiciousNameCombination
+                    result = setRemoteSrc(photo.getSuitableLink(getLayoutParams().height, getLayoutParams().width), handler);
+                } else {
+                    result = setRemoteSrc(photo.getSuitableLink(Photo.SIZE_960), handler);
+                }
             }
         } else {
             result = setRemoteSrc(null);

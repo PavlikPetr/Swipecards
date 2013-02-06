@@ -34,7 +34,7 @@ public class UserPhotoFragment extends BaseFragment {
         mUpdater = new LoadingListAdapter.Updater() {
             @Override
             public void onUpdate() {
-                AlbumRequest request = new AlbumRequest(getActivity(), CacheProfile.uid, AlbumRequest.DEFAULT_PHOTOS_LIMIT);
+                AlbumRequest request = new AlbumRequest(getActivity(), mUser.uid, AlbumRequest.DEFAULT_PHOTOS_LIMIT);
                 request.callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
@@ -109,13 +109,13 @@ public class UserPhotoFragment extends BaseFragment {
 
     private void setPhotos(Photos photos) {
         if (photos != null) {
-            mTitle.setText(Utils.formatPhotoQuantity(photos.size()));
+            mTitle.setText(Utils.formatPhotoQuantity(mUser.totalPhotos));
         }
 
         if (mUserPhotoGridAdapter == null) {
             mUserPhotoGridAdapter = new UserPhotoGridAdapter(getActivity().getApplicationContext(),
                                                              photos,
-                                                             AlbumRequest.DEFAULT_PHOTOS_LIMIT,
+                                                             mUser.totalPhotos,
                                                                      mUpdater);
         }
     }

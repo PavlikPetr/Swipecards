@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 /**
  * Фотографии пользователей из нашего стораджа фотографий (не напрямую из социальной сети)
  */
-public class Photo extends LoaderData implements Parcelable {
+public class Photo extends AbstractData implements Parcelable {
 
     public static final String SIZE_ORIGINAL = "original";
     public static final String SIZE_64 = "c64x64";
@@ -30,6 +30,9 @@ public class Photo extends LoaderData implements Parcelable {
     public static final int MAX_SQUARE_DIFFERENCE = 2;
     public static final float MAX_DIFFERENCE = 1.5f;
     public static final int SMALL_PHOTO_SIZE = 100;
+
+    //Этот флаг нужен для того, чтобы ставить пустые фото в поиске, которые, будут подгружаться после запроса альбома
+    private boolean isFakePhoto = false;
 
     private String[] deprecatedSizes = {
             SIZE_64,
@@ -98,12 +101,13 @@ public class Photo extends LoaderData implements Parcelable {
 
     }
 
-    public Photo(JSONObject data) {
-        super(data);
+    //Конструктор по умолчанию создает фэйковую фотку
+    public Photo() {
+        isFakePhoto = true;
     }
 
-    public Photo(ItemType type) {
-        super(type);
+    public boolean isFake() {
+        return isFakePhoto;
     }
 
     @Override
@@ -138,6 +142,10 @@ public class Photo extends LoaderData implements Parcelable {
 
     public static Photo parse(JSONObject photoItem) {
         return new Photo(photoItem);
+    }
+
+    public Photo (JSONObject data) {
+        super(data);
     }
 
     /**
