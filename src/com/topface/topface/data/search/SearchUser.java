@@ -1,8 +1,12 @@
-package com.topface.topface.data;
+package com.topface.topface.data.search;
 
+import com.topface.topface.data.FeedUser;
+import com.topface.topface.data.Photos;
+import com.topface.topface.data.SerializableToJson;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-public class SearchUser extends FeedUser {
+public class SearchUser extends FeedUser implements SerializableToJson {
     /**
      * статус пользователя
      */
@@ -28,5 +32,14 @@ public class SearchUser extends FeedUser {
         status = user.optString("status");
         mutual = user.optBoolean("mailmutual");
         photos = new Photos(user.optJSONArray("photos"));
+    }
+
+    @Override
+    public JSONObject toJson() throws JSONException {
+        JSONObject json = super.toJson();
+        json.put("status", status);
+        json.put("mailmutual", mutual);
+        json.put("photos", photos.toJson());
+        return json;
     }
 }

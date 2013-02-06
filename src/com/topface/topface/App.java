@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.StrictMode;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
@@ -49,7 +50,12 @@ public class App extends Application {
         ACRA.init(this);
         super.onCreate();
         mContext = getApplicationContext();
-        DEBUG = isDebugMode();
+        checkDebugMode();
+
+        //Для разработчиков включаем StrictMode, что бы не расслоблялись
+        if (DEBUG) {
+            StrictMode.enableDefaults();
+        }
 
         Debug.log("App", "+onCreate");
         Data.init(getApplicationContext());
@@ -70,6 +76,10 @@ public class App extends Application {
             // GCM
             GCMUtils.init(getContext());
         }
+    }
+
+    private void checkDebugMode() {
+        DEBUG = isDebugMode();
     }
 
     @Override

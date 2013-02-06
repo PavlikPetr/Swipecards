@@ -421,4 +421,5 @@
         нельзя
     </string>
     <string name="default_price_format">Итого: %.2f USD</string>
+    <string name="dating_online_only">%s, только онлайн</string>
 </resources>

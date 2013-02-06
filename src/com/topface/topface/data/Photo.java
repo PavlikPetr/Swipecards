@@ -3,17 +3,19 @@ package com.topface.topface.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 import com.topface.topface.utils.Debug;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * Фотографии пользователей из нашего стораджа фотографий (не напрямую из социальной сети)
  */
-public class Photo extends AbstractData implements Parcelable {
+public class Photo extends AbstractData implements Parcelable, SerializableToJson {
 
     public static final String SIZE_ORIGINAL = "original";
     public static final String SIZE_64 = "c64x64";
@@ -136,15 +138,17 @@ public class Photo extends AbstractData implements Parcelable {
      */
     public String getSuitableLink(String sizeString) {
         String url = null;
-        if (links.containsKey(sizeString)) {
-            url = links.get(sizeString);
-        } else {
-            Size size = getSizeFromKey(sizeString);
-            getSuitableLink(size.width, size.height);
-        }
+        if (links != null) {
+            if (links.containsKey(sizeString)) {
+                url = links.get(sizeString);
+            } else {
+                Size size = getSizeFromKey(sizeString);
+                getSuitableLink(size.width, size.height);
+            }
 
-        if (url == null && links.containsKey(SIZE_ORIGINAL)) {
-            url = links.get(SIZE_ORIGINAL);
+            if (url == null && links.containsKey(SIZE_ORIGINAL)) {
+                url = links.get(SIZE_ORIGINAL);
+            }
         }
 
         return url;
@@ -332,4 +336,22 @@ public class Photo extends AbstractData implements Parcelable {
                     return new Photo[size];
                 }
             };
+
+    @Override
+    public JSONObject toJson() throws JSONException {
+        JSONObject json = new JSONObject();
+        json.put("id", mId);
+        JSONObject jsonLinks = new JSONObject();
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+        for (Map.Entry<String, String> entry : links.entrySet()) {
+            jsonLinks.put(
+                    entry.getKey(),
+                    entry.getValue()
+            );
+        }
+        json.put("links", jsonLinks);
+        json.put("liked", mLiked);
+
+        return json;
+    }
 }
