@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.gridlayout;
+package com.topface.topface.ui.gridlayout;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -30,15 +30,10 @@ import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.LinearLayout;
-
-import com.example.gridlayout.R;
+import com.topface.topface.R;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static android.view.Gravity.*;
 import static android.view.View.MeasureSpec.EXACTLY;
@@ -48,7 +43,7 @@ import static java.lang.Math.min;
 
 /**
  * A layout that places its children in a rectangular <em>grid</em>.
- * <p>
+ * <p/>
  * The grid is composed of a set of infinitely thin lines that separate the
  * viewing area into <em>cells</em>. Throughout the API, grid lines are referenced
  * by grid <em>indices</em>. A grid with {@code N} columns
@@ -57,9 +52,9 @@ import static java.lang.Math.min;
  * configured, grid index {@code 0} is fixed to the leading edge of the
  * container and grid index {@code N} is fixed to its trailing edge
  * (after padding is taken into account).
- *
+ * <p/>
  * <h4>Row and Column Specs</h4>
- *
+ * <p/>
  * Children occupy one or more contiguous cells, as defined
  * by their {@link GridLayout.LayoutParams#rowSpec rowSpec} and
  * {@link GridLayout.LayoutParams#columnSpec columnSpec} layout parameters.
@@ -69,25 +64,25 @@ import static java.lang.Math.min;
  * not prevent children being defined to occupy the same cell or group of cells.
  * In this case however, there is no guarantee that children will not themselves
  * overlap after the layout operation completes.
- *
+ * <p/>
  * <h4>Default Cell Assignment</h4>
- *
+ * <p/>
  * If a child does not specify the row and column indices of the cell it
  * wishes to occupy, GridLayout assigns cell locations automatically using its:
  * {@link GridLayout#setOrientation(int) orientation},
  * {@link GridLayout#setRowCount(int) rowCount} and
  * {@link GridLayout#setColumnCount(int) columnCount} properties.
- *
+ * <p/>
  * <h4>Space</h4>
- *
+ * <p/>
  * Space between children may be specified either by using instances of the
  * dedicated {@link Space} view or by setting the
- *
+ * <p/>
  * {@link ViewGroup.MarginLayoutParams#leftMargin leftMargin},
  * {@link ViewGroup.MarginLayoutParams#topMargin topMargin},
  * {@link ViewGroup.MarginLayoutParams#rightMargin rightMargin} and
  * {@link ViewGroup.MarginLayoutParams#bottomMargin bottomMargin}
- *
+ * <p/>
  * layout parameters. When the
  * {@link GridLayout#setUseDefaultMargins(boolean) useDefaultMargins}
  * property is set, default margins around children are automatically
@@ -96,47 +91,47 @@ import static java.lang.Math.min;
  * to the appropriate layout parameter.
  * Default values will generally produce a reasonable spacing between components
  * but values may change between different releases of the platform.
- *
+ * <p/>
  * <h4>Excess Space Distribution</h4>
- *
+ * <p/>
  * GridLayout's distribution of excess space is based on <em>priority</em>
  * rather than <em>weight</em>.
- * <p>
+ * <p/>
  * A child's ability to stretch is inferred from the alignment properties of
  * its row and column groups (which are typically set by setting the
  * {@link LayoutParams#setGravity(int) gravity} property of the child's layout parameters).
  * If alignment was defined along a given axis then the component
  * is taken as <em>flexible</em> in that direction. If no alignment was set,
  * the component is instead assumed to be <em>inflexible</em>.
- * <p>
+ * <p/>
  * Multiple components in the same row or column group are
  * considered to act in <em>parallel</em>. Such a
  * group is flexible only if <em>all</em> of the components
  * within it are flexible. Row and column groups that sit either side of a common boundary
  * are instead considered to act in <em>series</em>. The composite group made of these two
  * elements is flexible if <em>one</em> of its elements is flexible.
- * <p>
+ * <p/>
  * To make a column stretch, make sure all of the components inside it define a
  * gravity. To prevent a column from stretching, ensure that one of the components
  * in the column does not define a gravity.
- * <p>
+ * <p/>
  * When the principle of flexibility does not provide complete disambiguation,
  * GridLayout's algorithms favour rows and columns that are closer to its <em>right</em>
  * and <em>bottom</em> edges.
- *
+ * <p/>
  * <h5>Limitations</h5>
- *
+ * <p/>
  * GridLayout does not provide support for the principle of <em>weight</em>, as defined in
  * {@link LinearLayout.LayoutParams#weight}. In general, it is not therefore possible
  * to configure a GridLayout to distribute excess space between multiple components.
- * <p>
+ * <p/>
  * Some common use-cases may nevertheless be accommodated as follows.
  * To place equal amounts of space around a component in a cell group;
  * use {@link #CENTER} alignment (or {@link LayoutParams#setGravity(int) gravity}).
  * For complete control over excess space distribution in a row or column;
  * use a {@link LinearLayout} subview to hold the components in the associated cell group.
  * When using either of these techniques, bear in mind that cell groups may be defined to overlap.
- * <p>
+ * <p/>
  * See {@link GridLayout.LayoutParams} for a full description of the
  * layout parameters used by GridLayout.
  *
@@ -147,7 +142,8 @@ import static java.lang.Math.min;
  * @attr ref android.R.styleable#GridLayout_rowOrderPreserved
  * @attr ref android.R.styleable#GridLayout_columnOrderPreserved
  */
-public class GridLayout extends com.example.gridlayout.ViewGroup {
+@SuppressWarnings({"ForLoopReplaceableByForEach", "ConstantConditions"})
+public class GridLayout extends com.topface.topface.ui.gridlayout.ViewGroup {
 
     // Public constants
 
@@ -181,7 +177,7 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
      * {@link android.view.View#getLeft() left},
      * {@link android.view.View#getBottom() bottom} and
      * {@link android.view.View#getRight() right} properties.
-     * <p>
+     * <p/>
      * For example, when {@code GridLayout} is in {@link #ALIGN_BOUNDS} mode,
      * children that belong to a row group that uses {@link #TOP} alignment will
      * all return the same value when their {@link android.view.View#getTop()}
@@ -196,7 +192,7 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
      * When the {@code alignmentMode} is set to {@link #ALIGN_MARGINS},
      * the bounds of each view are extended outwards, according
      * to their margins, before the edges of the resulting rectangle are aligned.
-     * <p>
+     * <p/>
      * For example, when {@code GridLayout} is in {@link #ALIGN_MARGINS} mode,
      * the quantity {@code top - layoutParams.topMargin} is the same for all children that
      * belong to a row group that uses {@link #TOP} alignment.
@@ -296,10 +292,8 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
      * Returns the current orientation.
      *
      * @return either {@link #HORIZONTAL} or {@link #VERTICAL}
-     *
-     * @see #setOrientation(int)
-     *
      * @attr ref android.R.styleable#GridLayout_orientation
+     * @see #setOrientation(int)
      */
     public int getOrientation() {
         return orientation;
@@ -308,14 +302,12 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
     /**
      * Orientation is used only to generate default row/column indices when
      * they are not specified by a component's layout parameters.
-     * <p>
+     * <p/>
      * The default value of this property is {@link #HORIZONTAL}.
      *
      * @param orientation either {@link #HORIZONTAL} or {@link #VERTICAL}
-     *
-     * @see #getOrientation()
-     *
      * @attr ref android.R.styleable#GridLayout_orientation
+     * @see #getOrientation()
      */
     public void setOrientation(int orientation) {
         if (this.orientation != orientation) {
@@ -331,11 +323,9 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
      * value of each the upper bounds defined in {@link LayoutParams#rowSpec}.
      *
      * @return the current number of rows
-     *
+     * @attr ref android.R.styleable#GridLayout_rowCount
      * @see #setRowCount(int)
      * @see LayoutParams#rowSpec
-     *
-     * @attr ref android.R.styleable#GridLayout_rowCount
      */
     public int getRowCount() {
         return verticalAxis.getCount();
@@ -346,11 +336,9 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
      * they are not specified by a component's layout parameters.
      *
      * @param rowCount the number of rows
-     *
+     * @attr ref android.R.styleable#GridLayout_rowCount
      * @see #getRowCount()
      * @see LayoutParams#rowSpec
-     *
-     * @attr ref android.R.styleable#GridLayout_rowCount
      */
     public void setRowCount(int rowCount) {
         verticalAxis.setCount(rowCount);
@@ -364,11 +352,9 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
      * value of each the upper bounds defined in {@link LayoutParams#columnSpec}.
      *
      * @return the current number of columns
-     *
+     * @attr ref android.R.styleable#GridLayout_columnCount
      * @see #setColumnCount(int)
      * @see LayoutParams#columnSpec
-     *
-     * @attr ref android.R.styleable#GridLayout_columnCount
      */
     public int getColumnCount() {
         return horizontalAxis.getCount();
@@ -379,11 +365,9 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
      * they are not specified by a component's layout parameters.
      *
      * @param columnCount the number of columns.
-     *
+     * @attr ref android.R.styleable#GridLayout_columnCount
      * @see #getColumnCount()
      * @see LayoutParams#columnSpec
-     *
-     * @attr ref android.R.styleable#GridLayout_columnCount
      */
     public void setColumnCount(int columnCount) {
         horizontalAxis.setCount(columnCount);
@@ -396,10 +380,8 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
      * corresponding layout parameters are defined.
      *
      * @return {@code true} if default margins should be allocated
-     *
-     * @see #setUseDefaultMargins(boolean)
-     *
      * @attr ref android.R.styleable#GridLayout_useDefaultMargins
+     * @see #setUseDefaultMargins(boolean)
      */
     public boolean getUseDefaultMargins() {
         return useDefaultMargins;
@@ -410,26 +392,23 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
      * based on the child's visual characteristics. Each of the
      * margins so defined may be independently overridden by an assignment
      * to the appropriate layout parameter.
-     * <p>
+     * <p/>
      * When {@code false}, the default value of all margins is zero.
-     * <p>
+     * <p/>
      * When setting to {@code true}, consider setting the value of the
      * {@link #setAlignmentMode(int) alignmentMode}
      * property to {@link #ALIGN_BOUNDS}.
-     * <p>
+     * <p/>
      * The default value of this property is {@code false}.
      *
      * @param useDefaultMargins use {@code true} to make GridLayout allocate default margins
-     *
+     * @attr ref android.R.styleable#GridLayout_useDefaultMargins
      * @see #getUseDefaultMargins()
      * @see #setAlignmentMode(int)
-     *
      * @see MarginLayoutParams#leftMargin
      * @see MarginLayoutParams#topMargin
      * @see MarginLayoutParams#rightMargin
      * @see MarginLayoutParams#bottomMargin
-     *
-     * @attr ref android.R.styleable#GridLayout_useDefaultMargins
      */
     public void setUseDefaultMargins(boolean useDefaultMargins) {
         this.useDefaultMargins = useDefaultMargins;
@@ -440,13 +419,10 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
      * Returns the alignment mode.
      *
      * @return the alignment mode; either {@link #ALIGN_BOUNDS} or {@link #ALIGN_MARGINS}
-     *
+     * @attr ref android.R.styleable#GridLayout_alignmentMode
      * @see #ALIGN_BOUNDS
      * @see #ALIGN_MARGINS
-     *
      * @see #setAlignmentMode(int)
-     *
-     * @attr ref android.R.styleable#GridLayout_alignmentMode
      */
     public int getAlignmentMode() {
         return alignmentMode;
@@ -455,17 +431,14 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
     /**
      * Sets the alignment mode to be used for all of the alignments between the
      * children of this container.
-     * <p>
+     * <p/>
      * The default value of this property is {@link #ALIGN_MARGINS}.
      *
      * @param alignmentMode either {@link #ALIGN_BOUNDS} or {@link #ALIGN_MARGINS}
-     *
+     * @attr ref android.R.styleable#GridLayout_alignmentMode
      * @see #ALIGN_BOUNDS
      * @see #ALIGN_MARGINS
-     *
      * @see #getAlignmentMode()
-     *
-     * @attr ref android.R.styleable#GridLayout_alignmentMode
      */
     public void setAlignmentMode(int alignmentMode) {
         this.alignmentMode = alignmentMode;
@@ -477,10 +450,8 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
      *
      * @return {@code true} if row boundaries must appear in the order of their indices,
      *         {@code false} otherwise
-     *
-     * @see #setRowOrderPreserved(boolean)
-     *
      * @attr ref android.R.styleable#GridLayout_rowOrderPreserved
+     * @see #setRowOrderPreserved(boolean)
      */
     public boolean isRowOrderPreserved() {
         return verticalAxis.isOrderPreserved();
@@ -489,18 +460,16 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
     /**
      * When this property is {@code true}, GridLayout is forced to place the row boundaries
      * so that their associated grid indices are in ascending order in the view.
-     * <p>
+     * <p/>
      * When this property is {@code false} GridLayout is at liberty to place the vertical row
      * boundaries in whatever order best fits the given constraints.
-     * <p>
+     * <p/>
      * The default value of this property is {@code true}.
-
+     *
      * @param rowOrderPreserved {@code true} to force GridLayout to respect the order
-     *        of row boundaries
-     *
-     * @see #isRowOrderPreserved()
-     *
+     *                          of row boundaries
      * @attr ref android.R.styleable#GridLayout_rowOrderPreserved
+     * @see #isRowOrderPreserved()
      */
     public void setRowOrderPreserved(boolean rowOrderPreserved) {
         verticalAxis.setOrderPreserved(rowOrderPreserved);
@@ -513,10 +482,8 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
      *
      * @return {@code true} if column boundaries must appear in the order of their indices,
      *         {@code false} otherwise
-     *
-     * @see #setColumnOrderPreserved(boolean)
-     *
      * @attr ref android.R.styleable#GridLayout_columnOrderPreserved
+     * @see #setColumnOrderPreserved(boolean)
      */
     public boolean isColumnOrderPreserved() {
         return horizontalAxis.isOrderPreserved();
@@ -525,18 +492,16 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
     /**
      * When this property is {@code true}, GridLayout is forced to place the column boundaries
      * so that their associated grid indices are in ascending order in the view.
-     * <p>
+     * <p/>
      * When this property is {@code false} GridLayout is at liberty to place the horizontal column
      * boundaries in whatever order best fits the given constraints.
-     * <p>
+     * <p/>
      * The default value of this property is {@code true}.
      *
      * @param columnOrderPreserved use {@code true} to force GridLayout to respect the order
-     *        of column boundaries.
-     *
-     * @see #isColumnOrderPreserved()
-     *
+     *                             of column boundaries.
      * @attr ref android.R.styleable#GridLayout_columnOrderPreserved
+     * @see #isColumnOrderPreserved()
      */
     public void setColumnOrderPreserved(boolean columnOrderPreserved) {
         horizontalAxis.setOrderPreserved(columnOrderPreserved);
@@ -584,7 +549,9 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
         }
     }
 
-    /** @noinspection UnusedParameters*/
+    /**
+     * @noinspection UnusedParameters
+     */
     private int getDefaultMargin(View c, boolean horizontal, boolean leading) {
         if (c.getClass() == Space.class) {
             return 0;
@@ -651,7 +618,7 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
     }
 
     private void setColumnWidth(int width) {
-         mWidth = width;
+        mWidth = width;
     }
 
     private static void procrusteanFill(int[] a, int start, int end, int value) {
@@ -970,9 +937,9 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
         setMeasuredDimension(
                 resolveSizeAndState(measuredWidth, widthSpec, 0),
                 resolveSizeAndState(measuredHeight, heightSpec, 0));
-        if(mAutoFit) {
+        if (mAutoFit) {
             float scale = getContext().getResources().getDisplayMetrics().density;
-            setColumnCount((int)(getWidth() / (mWidth * scale)));
+            setColumnCount((int) (getWidth() / (mWidth * scale)));
         }
     }
 
@@ -1693,24 +1660,24 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
 
     /**
      * Layout information associated with each of the children of a GridLayout.
-     * <p>
+     * <p/>
      * GridLayout supports both row and column spanning and arbitrary forms of alignment within
      * each cell group. The fundamental parameters associated with each cell group are
      * gathered into their vertical and horizontal components and stored
      * in the {@link #rowSpec} and {@link #columnSpec} layout parameters.
      * {@link GridLayout.Spec Specs} are immutable structures
      * and may be shared between the layout parameters of different children.
-     * <p>
+     * <p/>
      * The row and column specs contain the leading and trailing indices along each axis
      * and together specify the four grid indices that delimit the cells of this cell group.
-     * <p>
+     * <p/>
      * The  alignment properties of the row and column specs together specify
      * both aspects of alignment within the cell group. It is also possible to specify a child's
      * alignment within its cell group by using the {@link GridLayout.LayoutParams#setGravity(int)}
      * method.
-     *
+     * <p/>
      * <h4>WRAP_CONTENT and MATCH_PARENT</h4>
-     *
+     * <p/>
      * Because the default values of the {@link #width} and {@link #height}
      * properties are both {@link #WRAP_CONTENT}, this value never needs to be explicitly
      * declared in the layout parameters of GridLayout's children. In addition,
@@ -1718,42 +1685,42 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
      * {@link #WRAP_CONTENT}. A component's ability to expand to the size of the parent is
      * instead controlled by the principle of <em>flexibility</em>,
      * as discussed in {@link GridLayout}.
-     *
+     * <p/>
      * <h4>Summary</h4>
-     *
+     * <p/>
      * You should not need to use either of the special size values:
      * {@code WRAP_CONTENT} or {@code MATCH_PARENT} when configuring the children of
      * a GridLayout.
-     *
+     * <p/>
      * <h4>Default values</h4>
-     *
+     * <p/>
      * <ul>
-     *     <li>{@link #width} = {@link #WRAP_CONTENT}</li>
-     *     <li>{@link #height} = {@link #WRAP_CONTENT}</li>
-     *     <li>{@link #topMargin} = 0 when
-     *          {@link GridLayout#setUseDefaultMargins(boolean) useDefaultMargins} is
-     *          {@code false}; otherwise {@link #UNDEFINED}, to
-     *          indicate that a default value should be computed on demand. </li>
-     *     <li>{@link #leftMargin} = 0 when
-     *          {@link GridLayout#setUseDefaultMargins(boolean) useDefaultMargins} is
-     *          {@code false}; otherwise {@link #UNDEFINED}, to
-     *          indicate that a default value should be computed on demand. </li>
-     *     <li>{@link #bottomMargin} = 0 when
-     *          {@link GridLayout#setUseDefaultMargins(boolean) useDefaultMargins} is
-     *          {@code false}; otherwise {@link #UNDEFINED}, to
-     *          indicate that a default value should be computed on demand. </li>
-     *     <li>{@link #rightMargin} = 0 when
-     *          {@link GridLayout#setUseDefaultMargins(boolean) useDefaultMargins} is
-     *          {@code false}; otherwise {@link #UNDEFINED}, to
-     *          indicate that a default value should be computed on demand. </li>
-     *     <li>{@link #rowSpec}<code>.row</code> = {@link #UNDEFINED} </li>
-     *     <li>{@link #rowSpec}<code>.rowSpan</code> = 1 </li>
-     *     <li>{@link #rowSpec}<code>.alignment</code> = {@link #BASELINE} </li>
-     *     <li>{@link #columnSpec}<code>.column</code> = {@link #UNDEFINED} </li>
-     *     <li>{@link #columnSpec}<code>.columnSpan</code> = 1 </li>
-     *     <li>{@link #columnSpec}<code>.alignment</code> = {@link #START} </li>
+     * <li>{@link #width} = {@link #WRAP_CONTENT}</li>
+     * <li>{@link #height} = {@link #WRAP_CONTENT}</li>
+     * <li>{@link #topMargin} = 0 when
+     * {@link GridLayout#setUseDefaultMargins(boolean) useDefaultMargins} is
+     * {@code false}; otherwise {@link #UNDEFINED}, to
+     * indicate that a default value should be computed on demand. </li>
+     * <li>{@link #leftMargin} = 0 when
+     * {@link GridLayout#setUseDefaultMargins(boolean) useDefaultMargins} is
+     * {@code false}; otherwise {@link #UNDEFINED}, to
+     * indicate that a default value should be computed on demand. </li>
+     * <li>{@link #bottomMargin} = 0 when
+     * {@link GridLayout#setUseDefaultMargins(boolean) useDefaultMargins} is
+     * {@code false}; otherwise {@link #UNDEFINED}, to
+     * indicate that a default value should be computed on demand. </li>
+     * <li>{@link #rightMargin} = 0 when
+     * {@link GridLayout#setUseDefaultMargins(boolean) useDefaultMargins} is
+     * {@code false}; otherwise {@link #UNDEFINED}, to
+     * indicate that a default value should be computed on demand. </li>
+     * <li>{@link #rowSpec}<code>.row</code> = {@link #UNDEFINED} </li>
+     * <li>{@link #rowSpec}<code>.rowSpan</code> = 1 </li>
+     * <li>{@link #rowSpec}<code>.alignment</code> = {@link #BASELINE} </li>
+     * <li>{@link #columnSpec}<code>.column</code> = {@link #UNDEFINED} </li>
+     * <li>{@link #columnSpec}<code>.columnSpan</code> = 1 </li>
+     * <li>{@link #columnSpec}<code>.alignment</code> = {@link #START} </li>
      * </ul>
-     *
+     * <p/>
      * See {@link GridLayout} for a more complete description of the conventions
      * used by GridLayout in the interpretation of the properties of this class.
      *
@@ -1883,7 +1850,7 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
 
         /**
          * {@inheritDoc}
-         *
+         * <p/>
          * Values not defined in the attribute set take the default values
          * defined in {@link LayoutParams}.
          */
@@ -1941,7 +1908,6 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
          * See {@link Gravity}.
          *
          * @param gravity the new gravity value
-         *
          * @attr ref android.R.styleable#GridLayout_Layout_layout_gravity
          */
         public void setGravity(int gravity) {
@@ -1970,10 +1936,8 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
 
             LayoutParams that = (LayoutParams) o;
 
-            if (!columnSpec.equals(that.columnSpec)) return false;
-            if (!rowSpec.equals(that.rowSpec)) return false;
+            return columnSpec.equals(that.columnSpec) && rowSpec.equals(that.rowSpec);
 
-            return true;
         }
 
         @Override
@@ -2169,7 +2133,7 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
             this.flexibility &= spec.getFlexibility();
             int size = gridLayout.getMeasurementIncludingMargin(c, axis.horizontal);
             Alignment alignment = gridLayout.getAlignment(spec.alignment, axis.horizontal);
-            // todo test this works correctly when the returned value is UNDEFINED
+            //this works correctly when the returned value is UNDEFINED
             int before = alignment.getAlignmentValue(c, size);
             include(before, size - before);
         }
@@ -2186,11 +2150,11 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
     /**
      * An Interval represents a contiguous range of values that lie between
      * the interval's {@link #min} and {@link #max} values.
-     * <p>
+     * <p/>
      * Intervals are immutable so may be passed as values and used as keys in hash tables.
      * It is not necessary to have multiple instances of Intervals which have the same
      * {@link #min} and {@link #max} values.
-     * <p>
+     * <p/>
      * Intervals are often written as {@code [min, max]} and represent the set of values
      * {@code x} such that {@code min <= x < max}.
      */
@@ -2208,8 +2172,8 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
         /**
          * Construct a new Interval, {@code interval}, where:
          * <ul>
-         *     <li> {@code interval.min = min} </li>
-         *     <li> {@code interval.max = max} </li>
+         * <li> {@code interval.min = min} </li>
+         * <li> {@code interval.max = max} </li>
          * </ul>
          *
          * @param min the minimum value.
@@ -2234,7 +2198,6 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
          * supplied parameter are pairwise equal; {@code false} otherwise.
          *
          * @param that the object to compare this interval with
-         *
          * @return {@code true} if the specified object is equal to this
          *         {@code Interval}, {@code false} otherwise.
          */
@@ -2277,23 +2240,22 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
      * A Spec defines the horizontal or vertical characteristics of a group of
      * cells. Each spec. defines the <em>grid indices</em> and <em>alignment</em>
      * along the appropriate axis.
-     * <p>
+     * <p/>
      * The <em>grid indices</em> are the leading and trailing edges of this cell group.
      * See {@link GridLayout} for a description of the conventions used by GridLayout
      * for grid indices.
-     * <p>
+     * <p/>
      * The <em>alignment</em> property specifies how cells should be aligned in this group.
      * For row groups, this specifies the vertical alignment.
      * For column groups, this specifies the horizontal alignment.
-     * <p>
+     * <p/>
      * Use the following static methods to create specs:
      * <ul>
-     *   <li>{@link #spec(int)}</li>
-     *   <li>{@link #spec(int, int)}</li>
-     *   <li>{@link #spec(int, Alignment)}</li>
-     *   <li>{@link #spec(int, int, Alignment)}</li>
+     * <li>{@link #spec(int)}</li>
+     * <li>{@link #spec(int, int)}</li>
+     * <li>{@link #spec(int, Alignment)}</li>
+     * <li>{@link #spec(int, int, Alignment)}</li>
      * </ul>
-     *
      */
     public static class Spec {
         static final Spec UNDEFINED = spec(GridLayout.UNDEFINED);
@@ -2330,7 +2292,6 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
          * {@code false} otherwise.
          *
          * @param that the object to compare this spec with
-         *
          * @return {@code true} if the specified object is equal to this
          *         {@code Spec}; {@code false} otherwise
          */
@@ -2367,8 +2328,8 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
     /**
      * Return a Spec, {@code spec}, where:
      * <ul>
-     *     <li> {@code spec.span = [start, start + size]} </li>
-     *     <li> {@code spec.alignment = alignment} </li>
+     * <li> {@code spec.span = [start, start + size]} </li>
+     * <li> {@code spec.alignment = alignment} </li>
      * </ul>
      *
      * @param start     the start
@@ -2382,8 +2343,8 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
     /**
      * Return a Spec, {@code spec}, where:
      * <ul>
-     *     <li> {@code spec.span = [start, start + 1]} </li>
-     *     <li> {@code spec.alignment = alignment} </li>
+     * <li> {@code spec.span = [start, start + 1]} </li>
+     * <li> {@code spec.alignment = alignment} </li>
      * </ul>
      *
      * @param start     the start index
@@ -2396,11 +2357,11 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
     /**
      * Return a Spec, {@code spec}, where:
      * <ul>
-     *     <li> {@code spec.span = [start, start + size]} </li>
+     * <li> {@code spec.span = [start, start + size]} </li>
      * </ul>
      *
-     * @param start     the start
-     * @param size      the size
+     * @param start the start
+     * @param size  the size
      */
     public static Spec spec(int start, int size) {
         return spec(start, size, UNDEFINED_ALIGNMENT);
@@ -2409,10 +2370,10 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
     /**
      * Return a Spec, {@code spec}, where:
      * <ul>
-     *     <li> {@code spec.span = [start, start + 1]} </li>
+     * <li> {@code spec.span = [start, start + 1]} </li>
      * </ul>
      *
-     * @param start     the start index
+     * @param start the start index
      */
     public static Spec spec(int start) {
         return spec(start, 1);
@@ -2421,13 +2382,13 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
     /**
      * Alignments specify where a view should be placed within a cell group and
      * what size it should be.
-     * <p>
+     * <p/>
      * The {@link LayoutParams} class contains a {@link LayoutParams#rowSpec rowSpec}
      * and a {@link LayoutParams#columnSpec columnSpec} each of which contains an
      * {@code alignment}. Overall placement of the view in the cell
      * group is specified by the two alignments which act along each axis independently.
-     * <p>
-     *  The GridLayout class defines the most common alignments used in general layout:
+     * <p/>
+     * The GridLayout class defines the most common alignments used in general layout:
      * {@link #TOP}, {@link #LEFT}, {@link #BOTTOM}, {@link #RIGHT}, {@link #START},
      * {@link #END}, {@link #CENTER}, {@link #BASELINE} and {@link #FILL}.
      */
@@ -2451,8 +2412,8 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
          * alignment location.
          * For horizontal alignments measurement is made from the left edge of the component.
          *
-         * @param view              the view to which this alignment should be applied
-         * @param viewSize          the measured size of the view
+         * @param view     the view to which this alignment should be applied
+         * @param viewSize the measured size of the view
          * @return the alignment value
          */
         abstract int getAlignmentValue(View view, int viewSize);
@@ -2461,12 +2422,12 @@ public class GridLayout extends com.example.gridlayout.ViewGroup {
          * Returns the size of the view specified by this alignment.
          * In the case of vertical alignments this method should return a height; for
          * horizontal alignments this method should return the width.
-         * <p>
+         * <p/>
          * The default implementation returns {@code viewSize}.
          *
-         * @param view              the view to which this alignment should be applied
-         * @param viewSize          the measured size of the view
-         * @param cellSize          the size of the cell into which this view will be placed
+         * @param view     the view to which this alignment should be applied
+         * @param viewSize the measured size of the view
+         * @param cellSize the size of the cell into which this view will be placed
          * @return the aligned size
          */
         int getSizeInCell(View view, int viewSize, int cellSize) {

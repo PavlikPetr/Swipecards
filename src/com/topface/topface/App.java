@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.StrictMode;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
@@ -51,11 +52,7 @@ public class App extends Application {
         super.onCreate();
         mContext = getApplicationContext();
         checkDebugMode();
-
-        //Для разработчиков включаем StrictMode, что бы не расслоблялись
-        if (DEBUG) {
-            StrictMode.enableDefaults();
-        }
+        initStrictMode();
 
         Debug.log("App", "+onCreate");
         Data.init(getApplicationContext());
@@ -75,6 +72,13 @@ public class App extends Application {
         if (Data.isSSID() && (new AuthToken(getApplicationContext())).isEmpty()) {
             // GCM
             GCMUtils.init(getContext());
+        }
+    }
+
+    private void initStrictMode() {
+        //Для разработчиков включаем StrictMode, что бы не расслоблялись
+        if (DEBUG && Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+            StrictMode.enableDefaults();
         }
     }
 

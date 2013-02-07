@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package com.example.gridlayout;
+package com.topface.topface.ui.gridlayout;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 
 /**
  * Space is a lightweight View subclass that may be used to create gaps between components

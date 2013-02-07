@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.gridlayout;
+package com.topface.topface.ui.gridlayout;
 
 import android.content.Context;
 import android.os.Build;
@@ -23,7 +23,6 @@ import android.view.View;
 
 /**
  * Custom ViewGroup providing some services to the support implementation of GridLayout.
- *
  */
 abstract class ViewGroup extends android.view.ViewGroup {
 
@@ -47,10 +46,10 @@ abstract class ViewGroup extends android.view.ViewGroup {
      * optionally the bit {@link #MEASURED_STATE_TOO_SMALL} set if the resulting
      * size is smaller than the size the view wants to be.
      *
-     * @param size How big the view wants to be
+     * @param size        How big the view wants to be
      * @param measureSpec Constraints imposed by the parent
      * @return Size information bit mask as defined by
-     * {@link #MEASURED_SIZE_MASK} and {@link #MEASURED_STATE_TOO_SMALL}.
+     *         {@link #MEASURED_SIZE_MASK} and {@link #MEASURED_STATE_TOO_SMALL}.
      */
     public static int resolveSizeAndState(int size, int measureSpec, int childMeasuredState) {
         if (Build.VERSION.SDK_INT >= 11) {
@@ -58,23 +57,23 @@ abstract class ViewGroup extends android.view.ViewGroup {
         }
         int result = size;
         int specMode = MeasureSpec.getMode(measureSpec);
-        int specSize =  MeasureSpec.getSize(measureSpec);
+        int specSize = MeasureSpec.getSize(measureSpec);
         switch (specMode) {
-        case MeasureSpec.UNSPECIFIED:
-            result = size;
-            break;
-        case MeasureSpec.AT_MOST:
-            if (specSize < size) {
-                result = specSize | MEASURED_STATE_TOO_SMALL;
-            } else {
+            case MeasureSpec.UNSPECIFIED:
                 result = size;
-            }
-            break;
-        case MeasureSpec.EXACTLY:
-            result = specSize;
-            break;
+                break;
+            case MeasureSpec.AT_MOST:
+                if (specSize < size) {
+                    result = specSize | MEASURED_STATE_TOO_SMALL;
+                } else {
+                    result = size;
+                }
+                break;
+            case MeasureSpec.EXACTLY:
+                result = specSize;
+                break;
         }
-        return result | (childMeasuredState&MEASURED_STATE_MASK);
+        return result | (childMeasuredState & MEASURED_STATE_MASK);
     }
 
     protected static boolean isLayoutRtl(View view) {
