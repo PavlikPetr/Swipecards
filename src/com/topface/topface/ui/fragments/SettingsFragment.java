@@ -159,17 +159,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         frame.setOnClickListener(this);
 
         // Account
-        frame = (ViewGroup) root.findViewById(R.id.loAccount);
-        setBackground(R.drawable.edit_big_btn_middle_selector, frame);
-        AuthToken authToken = AuthToken.getInstance();
-        if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
-            setAccountNameText(R.string.settings_account, mSettings.getSocialAccountName(), R.drawable.ic_fb, frame);
-        } else if (authToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
-            setAccountNameText(R.string.settings_account, mSettings.getSocialAccountName(), R.drawable.ic_vk, frame);
-        } else {
-            setText(R.string.settings_account, frame);
-        }
-        frame.setOnClickListener(this);
+        initAccountViews(root);
 
         // Rate app
         frame = (ViewGroup) root.findViewById(R.id.loFeedback);
@@ -184,6 +174,28 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         frame.setOnClickListener(this);
 
 
+    }
+
+    private void initAccountViews(View root) {
+        ViewGroup frame;
+        frame = (ViewGroup) root.findViewById(R.id.loAccount);
+        setBackground(R.drawable.edit_big_btn_middle_selector, frame);
+        AuthToken authToken = AuthToken.getInstance();
+        String name = mSettings.getSocialAccountName();
+        if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
+            setAccountNameText(R.string.settings_account, name, R.drawable.ic_fb, frame);
+        } else if (authToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
+            setAccountNameText(R.string.settings_account, name, R.drawable.ic_vk, frame);
+        } else if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+            if(TextUtils.isEmpty(name)) {
+                name = CacheProfile.first_name;
+                mSettings.setSocialAccountName(name);
+            }
+            setAccountNameText(R.string.settings_account, name, R.drawable.ic_sex_female, frame);
+        } else {
+            setText(R.string.settings_account, frame);
+        }
+        frame.setOnClickListener(this);
     }
 
     private void setText(int titleId, ViewGroup frame) {

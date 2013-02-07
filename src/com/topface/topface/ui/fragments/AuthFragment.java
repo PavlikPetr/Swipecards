@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.*;
@@ -136,7 +137,6 @@ public class AuthFragment extends BaseFragment {
             public void onClick(View v) {
                 btnTFClick();
                 removeRedAlert();
-
             }
         });
 
@@ -144,12 +144,21 @@ public class AuthFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 mAuthViewsFlipper.setDisplayedChild(0);
+                removeRedAlert();
+                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (mLogin != null) {
+                    imm.hideSoftInputFromWindow(mLogin.getWindowToken(), 0);
+                }
+
+                if (mPassword != null) {
+                    imm.hideSoftInputFromWindow(mPassword.getWindowToken(), 0);
+                }
             }
         });
     }
 
     private void initRetryView(View root) {
-        mRetryView = new RetryView(getActivity().getApplicationContext(), R.id.ivAuthLogo);
+        mRetryView = new RetryView(getActivity().getApplicationContext());
         mRetryView.setErrorMsg(getString(R.string.general_data_error));
         mRetryView.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new View.OnClickListener() {
             @Override
@@ -175,7 +184,6 @@ public class AuthFragment extends BaseFragment {
             }
         };
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -415,6 +423,10 @@ public class AuthFragment extends BaseFragment {
                 redAlert(R.string.incorrect_password);
                 needShowRetry = false;
                 break;
+            case ApiResponse.MISSING_REQUIRE_PARAMETER:
+                redAlert(R.string.empty_fields);
+                needShowRetry = false;
+                break;
             default:
                 mRetryView.setErrorMsg(getString(R.string.general_data_error));
                 mRetryView.setListenerToBtn(new View.OnClickListener() {
@@ -443,16 +455,18 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void redAlert(String text) {
-        if (text != null) {
-            mWrongPasswordAlertView.setText(text);
+        if (mWrongPasswordAlertView != null && mAuthViewsFlipper.getDisplayedChild() == 1) {
+            if (text != null) {
+                mWrongPasswordAlertView.setText(text);
+            }
+            mWrongPasswordAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
+                    android.R.anim.fade_in));
+            mWrongPasswordAlertView.setVisibility(View.VISIBLE);
         }
-        mWrongPasswordAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
-                android.R.anim.fade_in));
-        mWrongPasswordAlertView.setVisibility(View.VISIBLE);
     }
 
     private void removeRedAlert() {
-        if (mWrongPasswordAlertView.getVisibility() == View.VISIBLE) {
+        if (mWrongPasswordAlertView != null && mWrongPasswordAlertView.getVisibility() == View.VISIBLE) {
             mWrongPasswordAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
                     android.R.anim.fade_out));
             mWrongPasswordAlertView.setVisibility(View.INVISIBLE);
@@ -514,6 +528,7 @@ public class AuthFragment extends BaseFragment {
         super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(connectionChangeListener,
                 new IntentFilter(ConnectionChangeReceiver.REAUTH));
+        removeRedAlert();
     }
 
     @Override

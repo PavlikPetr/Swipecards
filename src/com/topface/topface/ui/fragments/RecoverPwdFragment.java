@@ -11,6 +11,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.RestorePwdRequest;
 import com.topface.topface.utils.Utils;
 
 public class RecoverPwdFragment extends BaseFragment{
@@ -45,7 +48,21 @@ public class RecoverPwdFragment extends BaseFragment{
         mBtnRecover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideButtons();
+                RestorePwdRequest request = new RestorePwdRequest(getActivity());
+                request.login =  mEdEmail.getText().toString();
+                request.callback(new ApiHandler() {
+                    @Override
+                    public void success(ApiResponse response) {
+                        showButtons();
+                        getActivity().finish();
+                    }
 
+                    @Override
+                    public void fail(int codeError, ApiResponse response) {
+                        showButtons();
+                    }
+                }).exec();
             }
         });
         mBtnRecover.setEnabled(false);
