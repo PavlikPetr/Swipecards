@@ -239,7 +239,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             mLockScreen.setVisibility(View.VISIBLE);
             return;
         }
-        UserRequest userRequest = new UserRequest(mProfileId, getActivity().getApplicationContext());
+        UserRequest userRequest = new UserRequest(mProfileId, getActivity());
         registerRequest(userRequest);
         userRequest.callback(new DataApiHandler<User>() {
 
