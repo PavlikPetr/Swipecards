@@ -422,8 +422,7 @@
     </string>
     <string name="default_price_format">Итого: %.2f USD</string>
     <string name="dating_online_only">%s, только онлайн</string>
-    <string name="leaders_pick_condition">Вы не можете выбрать фото с рейтингом ниже 25%:
-    </string>
+    <string name="leaders_pick_condition">Вы не можете выбрать фото с рейтингом ниже 25%: </string>
     <string name="map_popup_address">Адрес</string>
    <string name="black_list_info">Вы добавили собеседника в черный список. Изменить это можно в своем профиле, в настройках VIP-статуса.</string>
    <string name="general_gift">Подарок</string>
