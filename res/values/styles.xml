@@ -43,6 +43,13 @@
         <item name="android:shadowDy">2</item>
     </style>
 
+    <style name="ShadowBlackSolidText">
+        <item name="android:shadowColor">#000000</item>
+        <item name="android:shadowRadius">1</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">-1</item>
+    </style>
+
     <style name="ShadowDatingButtons">
         <item name="android:shadowColor">#666666</item>
         <item name="android:shadowDx">1</item>
@@ -128,6 +135,31 @@
 
     <style name="ButtonsText" parent="ShadowUserText">
         <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="AuthButtonsVerySmallText" parent="ShadowUserText">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="AuthButtonsSmallText" parent="ShadowUserText">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="AuthButtonsText" parent="ShadowUserText">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="AuthButtonsBigText" parent="ShadowUserText">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="RecoveryButtonsBigText" parent="ShadowBlackSolidText">
+        <item name="android:textColor">@color/btn_signin</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="NotificationText" parent="ShadowUserText">
@@ -401,7 +433,6 @@
     </style>
 
     <style name="TopfaceCirclePageIndicator">
-
         <item name="pageColor">#99FFFFFF</item>
         <item name="fillColor">#FFFFFFFF</item>
         <item name="strokeWidth">0dp</item>
@@ -503,4 +534,33 @@
         <item name="android:layout_height">108dp</item>
     </style>
 
+    <style name="EditTextAuth">
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">#454545</item>
+        <item name="android:textColorHint">#AAAAAA</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="RegistrationSexTextView" parent="EditTextAuth">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:drawableLeft">@drawable/ic_sex</item>
+        <item name="android:drawablePadding">4dp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxWidth">90dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
+    <style name="RedAlertTextView">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/bg_wrong_login_password</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:visibility">invisible</item>
+        <item name="android:layout_alignParentTop">true</item>
+    </style>
 </resources>

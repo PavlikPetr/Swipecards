@@ -11,7 +11,6 @@ import com.facebook.topface.DialogError;
 import com.facebook.topface.Facebook;
 import com.facebook.topface.Facebook.DialogListener;
 import com.facebook.topface.FacebookError;
-import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
@@ -65,7 +64,7 @@ public class AuthorizationManager {
 
     // common methods
     public void reAuthorize() {
-        AuthToken authToken = new AuthToken(mParentActivity.getApplicationContext());
+        AuthToken authToken = AuthToken.getInstance();
 
         if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
             facebookAuth();
@@ -102,7 +101,7 @@ public class AuthorizationManager {
                     String user_name = data.getExtras().getString(WebAuthActivity.USER_NAME);
                     Settings.getInstance().setSocialAccountName(user_name);
 
-                    AuthToken authToken = new AuthToken(mParentActivity.getApplicationContext());
+                    AuthToken authToken = AuthToken.getInstance();
                     authToken.saveToken(AuthToken.SN_VKONTAKTE, user_id, token_key, expires_in);
                     receiveToken(authToken);
                 }
@@ -171,7 +170,7 @@ public class AuthorizationManager {
                 Settings.getInstance().setSocialAccountName(user_name);
                 Settings.getInstance().setSocialAccountEmail(user_email);
 
-                final AuthToken authToken = new AuthToken(mParentActivity.getApplicationContext());
+                final AuthToken authToken = AuthToken.getInstance();
                 authToken.saveToken(AuthToken.SN_FACEBOOK, user_id, mFacebook.getAccessToken(),
                         Long.toString(mFacebook.getAccessExpires()));
                 receiveToken(authToken);
@@ -217,7 +216,7 @@ public class AuthorizationManager {
     };
 
     public static void getAccountName(Handler handler) {
-        AuthToken authToken = new AuthToken(App.getContext());
+        AuthToken authToken = AuthToken.getInstance();
 
         if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
             getFbName(authToken.getTokenKey(), authToken.getUserId(), handler);

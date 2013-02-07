@@ -69,7 +69,7 @@ public class App extends Application {
             sendProfileRequest();
         }
         //Если приходим с нотификации незалогинеными, нужно вернуться в AuthActivity
-        if (Data.isSSID() && (new AuthToken(getApplicationContext())).isEmpty()) {
+        if (Data.isSSID() && AuthToken.getInstance().isEmpty()) {
             // GCM
             GCMUtils.init(getContext());
         }

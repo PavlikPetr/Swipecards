@@ -157,7 +157,7 @@ public class WebAuthActivity extends Activity {
                 });
             } else if (mMatcherError.find() || mMatcherLogout.find()) {
                 view.stopLoading();
-                new AuthToken(getApplicationContext()).removeToken();
+                AuthToken.getInstance().removeToken();
                 mHandler.sendMessage(Message.obtain(null, AuthToken.AUTH_ERROR));
             }
         }
