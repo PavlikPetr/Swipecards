@@ -88,6 +88,8 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
 
     public int mLiked;
 
+    public boolean canBecomeLeader;
+
     public Photo(int id, HashMap<String, String> links) {
         this.mId = id;
         this.links = links;
@@ -97,7 +99,7 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
         this.mId = photo.mId;
         this.mLiked = photo.mLiked;
         this.links = photo.links;
-
+        this.canBecomeLeader = photo.canBecomeLeader;
     }
 
     public Photo(JSONObject data) {
@@ -122,7 +124,7 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
                     links.put(key, linksJson.optString(key));
                 }
             }
-
+            canBecomeLeader = photoItem.optBoolean("canBecomeLeader");
             mLiked = photoItem.optInt("liked");
         }
     }
