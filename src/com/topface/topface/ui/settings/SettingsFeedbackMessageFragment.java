@@ -126,7 +126,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             }
         });
 
-        initEmailViews(root,feedbackType);
+        initEmailViews(root, feedbackType);
 
         try {
             PackageInfo pInfo;
@@ -213,40 +213,23 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
                 public void success(ApiResponse response) {
                     mReport.body = Static.EMPTY;
                     finishRequestSend();
-                    updateUI(new Runnable() {
 
-                        @Override
-                        public void run() {
-                            mEditText.setText(Static.EMPTY);
-                            Toast.makeText(getActivity(),
-                                    getString(R.string.settings_feedback_success_msg),
-                                    Toast.LENGTH_SHORT).show();
-                            getActivity().finish();
-                        }
-                    });
+                    mEditText.setText(Static.EMPTY);
+                    Toast.makeText(getActivity(),
+                            getString(R.string.settings_feedback_success_msg),
+                            Toast.LENGTH_SHORT).show();
+                    getActivity().finish();
                 }
 
                 @Override
                 public void fail(int codeError, ApiResponse response) {
                     finishRequestSend();
-                    updateUI(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                 }
             }).exec();
         } else {
-            updateUI(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getActivity().getApplicationContext(), R.string.settings_invalid_email, Toast.LENGTH_LONG).show();
-                    mEditEmail.requestFocus();
-                }
-            });
-
+            Toast.makeText(getActivity().getApplicationContext(), R.string.settings_invalid_email, Toast.LENGTH_LONG).show();
+            mEditEmail.requestFocus();
         }
     }
 
@@ -302,7 +285,8 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             if (emailWanted && email != null) {
                 strBuilder.append("<p>Email for answer: ").append(email).append("</p>");
             }
-            strBuilder.append("<p>Topface version: ").append(topface_version).append("/").append(topface_versionCode).append("</p>");
+            strBuilder.append("<p>Topface version: ").append(topface_version).append("/").append(topface_versionCode)
+                    .append("</p>");
             strBuilder.append("<p>Device: ").append(device).append("/").append(model).append("</p>");
             strBuilder.append("<p>Device language: ").append(Locale.getDefault().getDisplayLanguage()).append("</p>");
 
@@ -314,6 +298,8 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
             strBuilder.append("<p>Android version: ").append(android_CODENAME).append("/");
             strBuilder.append(android_RELEASE).append("/").append(android_SDK).append("</p>");
+
+            strBuilder.append("<p>Build type: ").append(Utils.getBuildType()).append(android_SDK).append("</p>");
 
             return strBuilder.toString();
         }

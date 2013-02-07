@@ -1,36 +1,32 @@
 package com.topface.topface.utils;
 
-import android.app.Activity;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
-import com.topface.topface.data.SearchUser;
+import com.topface.topface.data.search.Search;
+import com.topface.topface.data.search.SearchUser;
 import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
-
-import java.util.LinkedList;
 
 public class PreloadManager {
 
     int width, height;
     boolean canLoad = true;
-    Activity mActivity;
 
-    public PreloadManager(int width, int height, Activity activity) {
+    public PreloadManager(int width, int height) {
         this.width = width;
         this.height = height;
-        this.mActivity = activity;
 
         checkConnectionType(ConnectionChangeReceiver.getConnectionType());
     }
 
-    public PreloadManager(Activity activity) {
-        this(0, 0, activity);
+    public PreloadManager() {
+        this(0, 0);
     }
 
-    public void preloadPhoto(LinkedList<SearchUser> userList, int position) {
-        if (position < userList.size()) {
-            preloadNextPhoto(userList.get(position).photos.getFirst());
+    public void preloadPhoto(Search userList) {
+        if (!userList.isEnded()) {
+            preloadNextPhoto(userList.get(userList.getSearchPosition() + 1).photos.getFirst());
         }
     }
 
@@ -78,7 +74,7 @@ public class PreloadManager {
     }
 
     private DefaultImageLoader getImageLoader() {
-        return DefaultImageLoader.getInstance(mActivity);
+        return DefaultImageLoader.getInstance();
     }
 
     public void checkConnectionType(int type) {

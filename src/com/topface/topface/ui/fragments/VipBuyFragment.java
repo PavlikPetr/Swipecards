@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
@@ -47,15 +46,14 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    public void onResume() {
+        super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onPause() {
+        super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
     }
 
@@ -87,12 +85,12 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     private void initBuyVipViews(View root) {
         mBuyVipViewsContainer = (LinearLayout) root.findViewById(R.id.fbpContainer);
         LinearLayout btnContainer = (LinearLayout) root.findViewById(R.id.fbpBtnContainer);
-        if(CacheProfile.getOptions().premium.isEmpty()) {
+        if (CacheProfile.getOptions().premium.isEmpty()) {
             root.findViewById(R.id.fbpBuyingDisabled).setVisibility(View.VISIBLE);
         } else {
             root.findViewById(R.id.fbpBuyingDisabled).setVisibility(View.GONE);
         }
-        for (Options.BuyButton curBtn: CacheProfile.getOptions().premium) {
+        for (Options.BuyButton curBtn : CacheProfile.getOptions().premium) {
             Options.setButton(btnContainer, curBtn, getActivity(), new Options.BuyButtonClickListener() {
                 @Override
                 public void onClick(String id) {
@@ -207,14 +205,9 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
             @Override
             public void success(ApiResponse response) throws NullPointerException {
                 if (mInvisLoadBar != null && getActivity() != null) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            CacheProfile.invisible = mInvisSwitcher.isChecked();
-                            mInvisLoadBar.setVisibility(View.GONE);
-                            mInvisSwitcher.setVisibility(View.VISIBLE);
-                        }
-                    });
+                    CacheProfile.invisible = mInvisSwitcher.isChecked();
+                    mInvisLoadBar.setVisibility(View.GONE);
+                    mInvisSwitcher.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -223,14 +216,9 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
                 if (mInvisSwitcher != null && getActivity() != null) {
                     if (CacheProfile.invisible != mInvisSwitcher.isChecked()) {
                         //TODO: Нужно как-то оповещать пользователя, что не получилось
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mInvisSwitcher.doSwitch();
-                                mInvisLoadBar.setVisibility(View.GONE);
-                                mInvisSwitcher.setVisibility(View.VISIBLE);
-                            }
-                        });
+                        mInvisSwitcher.doSwitch();
+                        mInvisLoadBar.setVisibility(View.GONE);
+                        mInvisSwitcher.setVisibility(View.VISIBLE);
 
                     }
                 }
@@ -298,9 +286,10 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     }
 
     @Override
-    public void onCancel() {}
+    public void onCancel() {
+    }
 
-    BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             switchLayouts();

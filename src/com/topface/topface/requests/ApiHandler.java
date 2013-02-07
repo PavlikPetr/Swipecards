@@ -57,13 +57,7 @@ abstract public class ApiHandler extends Handler {
         if (mContext != null && mContext instanceof Activity) {
             try {
                 //показываем уведомление
-                final Activity activity = ((Activity) mContext);
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(App.getContext(), stringId, Toast.LENGTH_SHORT).show();
-                    }
-                });
+                Toast.makeText(App.getContext(), stringId, Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 Debug.error(e);
             }
@@ -105,7 +99,7 @@ abstract public class ApiHandler extends Handler {
     private void sendUpdateIntent(ApiResponse response) {
         if (response.method.equals(ProfileRequest.SERVICE_NAME)) {
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
-        } else if(response.method.equals(OptionsRequest.SERVICE_NAME)) {
+        } else if (response.method.equals(OptionsRequest.SERVICE_NAME)) {
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(OptionsRequest.VERSION_INTENT));
         }
     }

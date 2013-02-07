@@ -18,10 +18,7 @@ import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.OptionsRequest;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.fragments.*;
 import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
@@ -40,7 +37,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     public static final String RATING_POPUP = "RATING_POPUP";
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
     public static final int RATE_POPUP_TIMEOUT = 86400000; // 1000 * 60 * 60 * 24 * 1 (1 сутки)
-    public static final int UPDATE_INTERVAL = 1 * 60 * 1000;
+    public static final int UPDATE_INTERVAL = 10 * 60 * 1000;
     private FragmentManager mFragmentManager;
     private MenuFragment mFragmentMenu;
     private FragmentSwitchController mFragmentSwitcher;
@@ -55,6 +52,11 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (isNeedBroughtToFront(getIntent())) {
+            // При открытии активити из лаунчера перезапускаем ее
+            finish();
+            return;
+        }
         setContentView(R.layout.ac_navigation);
 
         Debug.log(this, "onCreate");
@@ -95,7 +97,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
             mFragmentMenu.selectDefaultMenu();
         }
-        AuthorizationManager.getInstance(NavigationActivity.this).extendAccessToken();
+        AuthorizationManager.extendAccessToken(NavigationActivity.this);
         //Если пользователь не заполнил необходимые поля, перекидываем его на EditProfile,
         //чтобы исправлялся.
         if (needChangeProfile()) {
@@ -111,7 +113,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     private boolean needChangeProfile() {
-        return (CacheProfile.age == 0 || CacheProfile.city_id == 0 || CacheProfile.photo == null)
+        return (CacheProfile.age == 0 || CacheProfile.city.id == 0 || CacheProfile.photo == null)
                 && shouldChangeProfile();
     }
 
@@ -132,22 +134,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     protected void onResume() {
         super.onResume();
-        long startTime = Calendar.getInstance().getTimeInMillis();
-        long stopTime = mPreferences.getLong(Static.PREFERENCES_STOP_TIME, -1);
-        if (stopTime != -1) {
-            if (startTime - stopTime > UPDATE_INTERVAL) {
-                ProfileRequest pr = new ProfileRequest(this);
-                pr.callback(new ApiHandler() {
-                    @Override
-                    public void success(ApiResponse response) {
-                    }
-
-                    @Override
-                    public void fail(int codeError, ApiResponse response) {
-                    }
-                }).exec();
-            }
-        }
+        checkProfileUpdate();
 
         //Отправляем не обработанные запросы на покупку
         BillingUtils.sendQueueItems();
@@ -160,13 +147,23 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mServerResponseReceiver, new IntentFilter(OptionsRequest.VERSION_INTENT));
 
-        //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
+        //TODO костыль для ChatFragment, после перехода на фрагмент - выпилить
         if (mDelayedFragment != null) {
             onExtraFragment(mDelayedFragment);
             mDelayedFragment = null;
             mChatInvoke = true;
         }
 
+    }
+
+    private void checkProfileUpdate() {
+        long startTime = Calendar.getInstance().getTimeInMillis();
+        long stopTime = mPreferences.getLong(Static.PREFERENCES_STOP_TIME, -1);
+        if (stopTime != -1) {
+            if (startTime - stopTime > UPDATE_INTERVAL) {
+                App.sendProfileRequest();
+            }
+        }
     }
 
     private void checkVersion(String version) {
@@ -247,7 +244,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 super.onBackPressed();
             } else {
                 if (mFragmentSwitcher.isExtraFrameShown()) {
-                    //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
+                    //TODO костыль для ChatFragment, после перехода на фрагмент - выпилить
                     //начало костыля--------------
                     if (mChatInvoke) {
                         if (mFragmentSwitcher.getCurrentExtraFragment() instanceof ProfileFragment) {
@@ -448,14 +445,16 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     private void unbindDrawables(View view) {
-        if (view.getBackground() != null) {
-            view.getBackground().setCallback(null);
-        }
-        if (view instanceof ViewGroup) {
-            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
-                unbindDrawables(((ViewGroup) view).getChildAt(i));
+        if (view != null) {
+            if (view.getBackground() != null) {
+                view.getBackground().setCallback(null);
             }
-            ((ViewGroup) view).removeAllViews();
+            if (view instanceof ViewGroup) {
+                for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                    unbindDrawables(((ViewGroup) view).getChildAt(i));
+                }
+                ((ViewGroup) view).removeAllViews();
+            }
         }
     }
 
@@ -476,15 +475,15 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mFragmentSwitcher.switchExtraFragment(fragment);
     }
 
-    //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
+    //TODO костыль для ChatFragment, после перехода на фрагмент - выпилить
     private Fragment mDelayedFragment;
     private boolean mChatInvoke = false;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK && requestCode == ChatActivity.INTENT_CHAT_REQUEST) {
+        if (resultCode == Activity.RESULT_OK && requestCode == ContainerActivity.INTENT_CHAT_FRAGMENT) {
             if (data != null) {
-                int user_id = data.getExtras().getInt(ChatActivity.INTENT_USER_ID);
+                int user_id = data.getExtras().getInt(ChatFragment.INTENT_USER_ID);
                 mDelayedFragment = ProfileFragment.newInstance(user_id, ProfileFragment.TYPE_USER_PROFILE);
                 return;
             }

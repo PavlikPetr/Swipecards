@@ -32,7 +32,7 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
     @Override
     public int getItemViewType(int position) {
         FeedItem item = getItem(position);
-        if (mSelectedForMutual == position && !item.isLoader() && !item.isLoaderRetry() && ((FeedLike) item).mutualed) {
+        if (mSelectedForMutual == position && !item.isLoader() && !item.isRetrier() && ((FeedLike) item).mutualed) {
             if (super.getItemViewType(position) == FeedAdapter.T_VIP || super.getItemViewType(position) == FeedAdapter.T_NEW_VIP) {
                 return T_SELECTED_FOR_MUTUAL_VIP;
             }
@@ -161,4 +161,22 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
         mMutualListener = listener;
     }
 
+    @Override
+    public ILoaderRetrierCreator<FeedLike> getLoaderRetrierCreator() {
+        return new ILoaderRetrierCreator<FeedLike>() {
+            @Override
+            public FeedLike getLoader() {
+                FeedLike result = new FeedLike(null);
+                result.setLoaderTypeFlags(IListLoader.ItemType.LOADER);
+                return result;
+            }
+
+            @Override
+            public FeedLike getRetrier() {
+                FeedLike result = new FeedLike(null);
+                result.setLoaderTypeFlags(IListLoader.ItemType.RETRY);
+                return result;
+            }
+        };
+    }
 }

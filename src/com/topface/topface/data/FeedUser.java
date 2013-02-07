@@ -1,9 +1,10 @@
 package com.topface.topface.data;
 
 import android.text.TextUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-public class FeedUser extends AbstractData {
+public class FeedUser extends AbstractData implements SerializableToJson {
     /**
      * идентификатор отправителя
      */
@@ -23,7 +24,7 @@ public class FeedUser extends AbstractData {
     /**
      * флаг нахождения отправителя онлайн
      */
-    public boolean online; //
+    public boolean online;
     /**
      * Объект города пользователя
      */
@@ -58,5 +59,29 @@ public class FeedUser extends AbstractData {
             result = first_name;
         }
         return result;
+    }
+
+    @Override
+    public JSONObject toJson() throws JSONException {
+        JSONObject json = new JSONObject();
+        json.put("id", id);
+        json.put("first_name", first_name);
+        json.put("sex", sex);
+        json.put("age", age);
+        json.put("online", online);
+        json.put("city", city.toJson());
+        json.put("photo", photo.toJson());
+        json.put("premium", premium);
+
+        return json;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof FeedUser) {
+            return ((FeedUser) o).id == id;
+        } else {
+            return super.equals(o);
+        }
     }
 }

@@ -83,7 +83,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                             public void onTap(int position) {
                                 FeedItem item = (FeedItem) mListView.getRefreshableView().getItemAtPosition(position);
                                 if (item != null) {
-                                    if (!mIsUpdating && item.isLoaderRetry()) {
+                                    if (!mIsUpdating && item.isRetrier()) {
                                         updateUI(new Runnable() {
                                             public void run() {
                                                 mListAdapter.showLoaderItem();

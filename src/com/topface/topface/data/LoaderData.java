@@ -2,24 +2,28 @@ package com.topface.topface.data;
 
 import com.topface.topface.ui.adapters.IListLoader;
 
-public class AbstractLoaderData extends AbstractData implements IListLoader {
+public class LoaderData extends AbstractData implements IListLoader {
 
     //Loader indicators
     private boolean mIsListLoader = false;
-    private boolean mIsListLoaderRetry = false;
+    private boolean mIsListRetrier = false;
 
-    public AbstractLoaderData(IListLoader.ItemType type) {
+    public LoaderData(IListLoader.ItemType type) {
+         setLoaderTypeFlags(type);
+    }
+
+    public void setLoaderTypeFlags(ItemType type) {
         switch (type) {
             case LOADER:
                 mIsListLoader = true;
                 break;
             case RETRY:
-                mIsListLoaderRetry = true;
+                mIsListRetrier = true;
                 break;
             case NONE:
             default:
                 mIsListLoader = false;
-                mIsListLoaderRetry = false;
+                mIsListRetrier = false;
                 break;
         }
     }
@@ -30,8 +34,11 @@ public class AbstractLoaderData extends AbstractData implements IListLoader {
     }
 
     @Override
-    public boolean isLoaderRetry() {
-        return mIsListLoaderRetry;
+    public boolean isRetrier() {
+        return mIsListRetrier;
     }
 
+    public boolean isLoaderOrRetrier() {
+        return mIsListLoader || mIsListRetrier;
+    }
 }

@@ -8,17 +8,7 @@
 
     <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/ivTG"
-            xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
-            ivr:clipMask="@drawable/frame_top_mask"
-            ivr:postProcessor="mask"
-            android:background="@drawable/frame_top"
-            android:paddingLeft="1dp"
-            android:paddingRight="1dp"
-            android:paddingTop="0.5dp"
-            android:paddingBottom="0.5dp"
-            android:scaleType="centerCrop"
-            android:layout_width="106dp"
-            android:layout_height="108dp"/>
+            style="@style/TopItem"/>
 
     <ImageView
             android:src="@drawable/frame_top_shadow"

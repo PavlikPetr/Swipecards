@@ -4,11 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import com.topface.topface.data.City;
-import com.topface.topface.data.SearchUser;
+import com.topface.topface.data.search.SearchUser;
+import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.Utils;
 
-import java.util.Calendar;
 import java.util.LinkedList;
 
 public class Data {
@@ -16,7 +16,6 @@ public class Data {
     public static String SSID;
     public static LinkedList<City> cityList;
     public static int screen_width;
-    public static long midnight;
     public static LinkedList<SearchUser> searchList;
     public static int searchPosition = 0;
 
@@ -28,12 +27,7 @@ public class Data {
         Point screenSize = Utils.getSrceenSize(context);
         screen_width = (Device.getOrientation(context) == Device.LANDSCAPE) ? screenSize.y : screenSize.x;
 
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-
-        midnight = cal.getTimeInMillis();
+        DateUtils.syncTime();
 
         //LocalBroadcastManager.getInstance(context).registerReceiver(new ReAuthReceiver(), new IntentFilter(ReAuthReceiver.REAUTH_INTENT));
 

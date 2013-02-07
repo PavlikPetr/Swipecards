@@ -389,8 +389,12 @@
     <string name="general_block">Блокировать</string>
     <string name="general_buying_disabled">В данный момент покупка невозможна</string>
 
-    <string name="ban_flood_detected">Вы слишком часто совершаете запросы к серверу. Для дальнейшего использования приложения подождите.</string>
-    <string name="general_maintenance">На сервере проводятся технические работы и ваш запрос не может быть выполнен. Попробуйте повторить позже.</string>
+    <string name="ban_flood_detected">Вы слишком часто совершаете запросы к серверу. Для дальнейшего использования
+        приложения подождите.
+    </string>
+    <string name="general_maintenance">На сервере проводятся технические работы и ваш запрос не может быть выполнен.
+        Попробуйте повторить позже.
+    </string>
 
     <string name="virus_chat_likes_request_title">Подарить симпатии вашим друзьям</string>
     <string name="virus_chat_btn">Получить симпатии</string>
@@ -417,5 +421,13 @@
         нельзя
     </string>
     <string name="default_price_format">Итого: %.2f USD</string>
-    <string name="leaders_pick_condition">Можно выбрать только фото с процентом «понравилось» не меньше 25%</string>
+    <string name="dating_online_only">%s, только онлайн</string>
+    <string name="leaders_pick_condition">Вы не можете выбрать фото с рейтингом ниже %d%%: </string>
+    <string name="map_popup_address">Адрес</string>
+    <string name="black_list_info">Вы добавили собеседника в черный список. Изменить это можно в своем профиле, в настройках VIP-статуса.</string>
+    <string name="general_gift">Подарок</string>
+    <string name="general_place">Подарок</string>
+    <string name="general_soon">Скоро будет</string>
+    <string name="black_list_activation">Активируйте VIP-статус и используйте черный список</string>
+    <string name="profile_edit_age_ranges">Возраст должен быть в диапазоне от 16 до 99 лет. Пожалуйста, введите корректное число и повторите попытку.</string>
 </resources>

@@ -13,10 +13,7 @@ import android.widget.EditText;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Rate;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.MessageRequest;
-import com.topface.topface.requests.RateRequest;
+import com.topface.topface.requests.*;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 
@@ -70,35 +67,30 @@ public class RateController {
         RateRequest doRate = new RateRequest(mContext);
         doRate.userid = userid;
         doRate.rate = rate;
-        doRate.callback(new ApiHandler() {
+        doRate.callback(new DataApiHandler<Rate>() {
+
             @Override
-            public void success(ApiResponse response) {
-                Rate rate = Rate.parse(response);
+            protected void success(Rate rate, ApiResponse response) {
                 CacheProfile.likes = rate.likes;
                 CacheProfile.money = rate.money;
                 CacheProfile.average_rate = rate.average;
             }
 
             @Override
+            protected Rate parseResponse(ApiResponse response) {
+                return Rate.parse(response);
+            }
+
+            @Override
             public void fail(int codeError, ApiResponse response) {
                 if (mOnRateControllerListener != null) {
-                    mContext.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mOnRateControllerListener.failRate();
-                        }
-                    });
+                    mOnRateControllerListener.failRate();
                 }
             }
+
         }).exec();
 
-        //Отправляем симпатии асинхронно, это гораздо приятней смотрится
-        mContext.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mOnRateControllerListener.successRate();
-            }
-        });
+        mOnRateControllerListener.successRate();
     }
 
     public void onRate(final int userId, final int rate, final int mutualId) {
@@ -122,27 +114,28 @@ public class RateController {
         doRate.userid = userid;
         doRate.rate = rate;
         doRate.mutualid = mutualId;
-        doRate.callback(new ApiHandler() {
+        doRate.callback(new DataApiHandler<Rate>() {
+
             @Override
-            public void success(ApiResponse response) {
-                Rate rate = Rate.parse(response);
+            protected void success(Rate rate, ApiResponse response) {
                 CacheProfile.likes = rate.likes;
                 CacheProfile.money = rate.money;
                 CacheProfile.average_rate = rate.average;
             }
 
             @Override
+            protected Rate parseResponse(ApiResponse response) {
+                return Rate.parse(response);
+            }
+
+            @Override
             public void fail(int codeError, ApiResponse response) {
             }
+
         }).exec();
 
         if (mOnRateControllerListener != null) {
-            mContext.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mOnRateControllerListener.successRate();
-                }
-            });
+            mOnRateControllerListener.successRate();
         }
     }
 
@@ -190,16 +183,10 @@ public class RateController {
                 messageRequest.callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
-                        mContext.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                sendRate(userId, rate);
-                                mCommentDialog.cancel();
-                                mCommentText.setText("");
-                                mInputManager.hideSoftInputFromWindow(mCommentText.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
-                            }
-                        });
-
+                        sendRate(userId, rate);
+                        mCommentDialog.cancel();
+                        mCommentText.setText("");
+                        mInputManager.hideSoftInputFromWindow(mCommentText.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
                     }
 
                     @Override

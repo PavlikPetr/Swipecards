@@ -12,12 +12,12 @@ import android.graphics.Bitmap.Config;
 import android.graphics.PorterDuff.Mode;
 import android.net.Uri;
 import android.os.Build;
+import android.text.format.DateFormat;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.Toast;
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
-import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.ui.NavigationActivity;
@@ -27,8 +27,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class Utils {
-    public static final long WEEK = 604800L;
-    public static final long DAY = 86400L;
+    public static final long WEEK = 604800000;
+    public static final long DAY = 86400000;
 
     private static PluralResources mPluralResources;
 
@@ -241,16 +241,16 @@ public class Utils {
         int currentYear = cal2.get(Calendar.YEAR);
         cal2.set(currentYear, Calendar.JANUARY, 1);
 
-        if (time > Data.midnight)
-            text = cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE);
-        else if (time > Data.midnight - day * 5)
+
+        if (time > DateUtils.midnight) {
+            text = (String) DateFormat.format("HH:mm", time);
+        } else if (time > DateUtils.midnight - day * 5) {
             text = formatDayOfWeek(context, cal.get(Calendar.DAY_OF_WEEK));
-
-        else if (time > cal2.getTimeInMillis())
+        } else if (time > cal2.getTimeInMillis()) {
             text = cal.get(Calendar.DAY_OF_MONTH) + " " + formatMonth(context, cal.get(Calendar.MONTH));
-
-        else
+        } else {
             text = cal.get(Calendar.DAY_OF_MONTH) + " " + formatMonth(context, cal.get(Calendar.MONTH)) + " " + cal.get(Calendar.YEAR);
+        }
 
         return text;
     }
@@ -471,4 +471,5 @@ public class Utils {
         }
         return version;
     }
+
 }

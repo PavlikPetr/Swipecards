@@ -3,8 +3,6 @@ package com.topface.topface.ui.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,18 +14,18 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.*;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.FeedGiftsRequest;
 import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
+import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.GiftsAdapter;
 import com.topface.topface.ui.adapters.GiftsAdapter.ViewHolder;
 import com.topface.topface.ui.adapters.IListLoader.ItemType;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.GiftGalleryManager;
 
 import java.util.ArrayList;
 
@@ -55,17 +53,9 @@ public class GiftsFragment extends BaseFragment {
         mGridView = (GridView) root.findViewById(R.id.usedGrid);
         mGridView.setAnimationCacheEnabled(false);
         mGridView.setScrollingCacheEnabled(true);
-        GiftGalleryManager<FeedGift> galleryManager = new GiftGalleryManager<FeedGift>(mGifts, new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                if (!mTag.equals(GIFTS_ALL_TAG) && !mIsUpdating && mGifts.getLast().isLoader()) {
-                    onNewFeeds();
-                }
-            }
-        });
-        mGridAdapter = new GiftsAdapter(getActivity().getApplicationContext(), galleryManager);
+        mGridAdapter = new GiftsAdapter(getActivity().getApplicationContext(), mGifts, getUpdaterCallback());
         mGridView.setAdapter(mGridAdapter);
-        mGridView.setOnScrollListener(galleryManager);
+        mGridView.setOnScrollListener(mGridAdapter);
 
         mTitle = (TextView) root.findViewById(R.id.usedTitle);
 
@@ -128,7 +118,7 @@ public class GiftsFragment extends BaseFragment {
                                 }
                             }
 
-                            if (mGifts.get(position).isLoaderRetry()) {
+                            if (mGifts.get(position).isRetrier()) {
                                 updateUI(new Runnable() {
                                     public void run() {
                                         updateUI(new Runnable() {
@@ -177,43 +167,38 @@ public class GiftsFragment extends BaseFragment {
                             url,
                             0
                     );
-                    sendGift.callback(new ApiHandler() {
+                    sendGift.callback(new DataApiHandler<SendGiftAnswer>() {
+
                         @Override
-                        public void success(ApiResponse response) {
-                            SendGiftAnswer answer = SendGiftAnswer.parse(response);
+                        protected void success(SendGiftAnswer answer, ApiResponse response) {
                             CacheProfile.likes = answer.likes;
                             CacheProfile.money = answer.money;
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (mGifts.size() > 1) {
-                                        mGifts.add(1, sendedGift);
-                                    } else {
-                                        mGifts.addLast(sendedGift);
-                                    }
-                                    mGridAdapter.notifyDataSetChanged();
-                                }
-                            });
+                            if (mGifts.size() > 1) {
+                                mGifts.add(1, sendedGift);
+                            } else {
+                                mGifts.add(mGifts.size()-1,sendedGift);
+                            }
+                            mGridAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        protected SendGiftAnswer parseResponse(ApiResponse response) {
+                            return SendGiftAnswer.parse(response);
                         }
 
                         @Override
                         public void fail(int codeError, final ApiResponse response) {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (response.code == ApiResponse.PAYMENT) {
-                                        FragmentActivity activity = getActivity();
-                                        if (activity != null) {
-                                            Intent intent = new Intent(activity.getApplicationContext(),
-                                                    ContainerActivity.class);
-                                            intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
-                                            intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
-                                            intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
-                                            startActivity(intent);
-                                        }
-                                    }
+                            if (response.code == ApiResponse.PAYMENT) {
+                                FragmentActivity activity = getActivity();
+                                if (activity != null) {
+                                    Intent intent = new Intent(activity.getApplicationContext(),
+                                            ContainerActivity.class);
+                                    intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
+                                    intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
+                                    intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
+                                    startActivity(intent);
                                 }
-                            });
+                            }
                         }
                     }).exec();
                 }
@@ -225,7 +210,7 @@ public class GiftsFragment extends BaseFragment {
 
     private void removeLoaderItem() {
         if (mGifts.size() > 0) {
-            if (mGifts.getLast().isLoader() || mGifts.getLast().isLoaderRetry()) {
+            if (mGifts.getLast().isLoader() || mGifts.getLast().isRetrier()) {
                 mGifts.remove(mGifts.size() - 1);
             }
         }
@@ -241,45 +226,38 @@ public class GiftsFragment extends BaseFragment {
         request.limit = GIFTS_LOAD_COUNT;
         request.uid = userId;
         if (!mGifts.isEmpty()) {
-            if (mGifts.getLast().isLoader() || mGifts.getLast().isLoaderRetry()) {
+            if (mGifts.getLast().isLoader() || mGifts.getLast().isRetrier()) {
                 request.from = mGifts.get(mGifts.size() - 2).gift.feedId;
             } else {
                 request.from = mGifts.get(mGifts.size() - 1).gift.feedId;
             }
         }
 
-        request.callback(new ApiHandler() {
+        request.callback(new DataApiHandler<FeedListData<FeedGift>>() {
 
             @Override
-            public void success(ApiResponse response) {
-                final FeedListData<FeedGift> feedGifts = new FeedListData<FeedGift>(response.jsonResult, FeedGift.class);
+            protected void success(FeedListData<FeedGift> gifts, ApiResponse response) {
 
-                updateUI(new Runnable() {
+                removeLoaderItem();
+                mGifts.addAll(gifts.items);
 
-                    @Override
-                    public void run() {
-                        removeLoaderItem();
-                        mGifts.addAll(feedGifts.items);
-
-                        if (feedGifts.more) {
-                            mGifts.add(new FeedGift(ItemType.LOADER));
-                        }
-                        mGridAdapter.notifyDataSetChanged();
-                    }
-                });
+                if (gifts.more) {
+                    mGifts.add(new FeedGift(ItemType.LOADER));
+                }
+                mGridAdapter.notifyDataSetChanged();
                 mIsUpdating = false;
             }
 
             @Override
+            protected FeedListData<FeedGift> parseResponse(ApiResponse response) {
+                return new FeedListData<FeedGift>(response.jsonResult, FeedGift.class);
+            }
+
+            @Override
             public void fail(int codeError, ApiResponse response) {
-                updateUI(new Runnable() {
-                    @Override
-                    public void run() {
-                        removeLoaderItem();
-                        mGifts.add(new FeedGift(ItemType.RETRY));
-                        mGridAdapter.notifyDataSetChanged();
-                    }
-                });
+                removeLoaderItem();
+                mGifts.add(new FeedGift(ItemType.RETRY));
+                mGridAdapter.notifyDataSetChanged();
                 mIsUpdating = false;
             }
         }).exec();
@@ -331,5 +309,18 @@ public class GiftsFragment extends BaseFragment {
         Intent intent = new Intent(getActivity().getApplicationContext(),
                 GiftsActivity.class);
         startActivityForResult(intent, GiftsActivity.INTENT_REQUEST_GIFT);
+    }
+
+    protected FeedAdapter.Updater getUpdaterCallback() {
+        return new FeedAdapter.Updater() {
+            @Override
+            public void onUpdate() {
+                if (!mIsUpdating) {
+                    if (!mTag.equals(GIFTS_ALL_TAG) && !mIsUpdating && mGifts.getLast().isLoader()) {
+                        onNewFeeds();
+                    }
+                }
+            }
+        };
     }
 }

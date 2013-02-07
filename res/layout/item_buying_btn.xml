@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="5dp"
-              >
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+        >
+
     <RelativeLayout
             android:id="@+id/itContainer"
             android:layout_height="50dp"
             android:layout_width="fill_parent"
             android:padding="5dp"
             >
+
         <TextView
                 android:id="@+id/itText"
                 android:layout_height="wrap_content"
@@ -22,8 +24,8 @@
                 />
 
 
-
     </RelativeLayout>
+
     <TextView
             android:id="@+id/itValue"
             android:layout_height="wrap_content"
@@ -36,6 +38,7 @@
             android:textColor="#FFFFFF"
             android:textSize="10sp"
             />
+
     <TextView
             android:id="@+id/itEconomy"
             android:layout_below="@id/itContainer"

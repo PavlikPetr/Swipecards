@@ -7,13 +7,11 @@ import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.StrictMode;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
-import com.topface.topface.requests.ApiHandler;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.OptionsRequest;
-import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.requests.*;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
@@ -52,7 +50,12 @@ public class App extends Application {
         ACRA.init(this);
         super.onCreate();
         mContext = getApplicationContext();
-        DEBUG = isDebugMode();
+        checkDebugMode();
+
+        //Для разработчиков включаем StrictMode, что бы не расслоблялись
+        if (DEBUG) {
+            StrictMode.enableDefaults();
+        }
 
         Debug.log("App", "+onCreate");
         Data.init(getApplicationContext());
@@ -75,6 +78,10 @@ public class App extends Application {
         }
     }
 
+    private void checkDebugMode() {
+        DEBUG = isDebugMode();
+    }
+
     @Override
     public void onTerminate() {
         super.onTerminate();
@@ -84,22 +91,28 @@ public class App extends Application {
         }
     }
 
-    public void sendProfileRequest() {
-        ProfileRequest profileRequest = new ProfileRequest(getBaseContext());
+    public static void sendProfileRequest() {
+        ProfileRequest profileRequest = new ProfileRequest(App.getContext());
         profileRequest.part = ProfileRequest.P_ALL;
-        profileRequest.callback(new ApiHandler() {
-            @Override
-            public void success(ApiResponse response) {
-                CacheProfile.setProfile(Profile.parse(response),response);
+        profileRequest.callback(new DataApiHandler<Profile>() {
 
+            @Override
+            protected void success(Profile data, ApiResponse response) {
+                CacheProfile.setProfile(data, response);
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {}
+            protected Profile parseResponse(ApiResponse response) {
+                return Profile.parse(response);
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+            }
 
         }).exec();
 
-        OptionsRequest request = new OptionsRequest(getApplicationContext());
+        OptionsRequest request = new OptionsRequest(App.getContext());
         request.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {

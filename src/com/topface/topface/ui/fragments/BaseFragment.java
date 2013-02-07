@@ -53,15 +53,22 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     @Override
     public void onResume() {
-        if (mNavBarController != null) mNavBarController.refreshNotificators();
+        if (mNavBarController != null) {
+            mNavBarController.refreshNotificators();
+            setUpdateCountersReceiver();
+        }
         super.onResume();
-        setUpdateCountersReceiver();
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
         removeAllRequests();
+        if (updateCountersReceiver != null) {
+            LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(updateCountersReceiver);
+            updateCountersReceiver = null;
+        }
     }
 
     private void removeAllRequests() {
@@ -71,7 +78,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
             }
             mRequests.clear();
         }
-        mRequests.clear();
     }
 
     @Override
@@ -95,7 +101,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     private void setUpdateCountersReceiver() {
-        if (updateCountersReceiver == null) {
+        if (updateCountersReceiver == null && mNavBarController != null) {
             updateCountersReceiver = new BroadcastReceiver() {
 
                 @Override
@@ -118,6 +124,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     @Override
     public void onDestroy() {
         super.onDestroy();
+        removeAllRequests();
         View rootView = getView();
         if (rootView != null) {
             unbindDrawables(getView());

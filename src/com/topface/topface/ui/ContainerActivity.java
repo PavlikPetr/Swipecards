@@ -4,19 +4,26 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.fragments.BuyingFragment;
+import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.VipBuyFragment;
 
 public class ContainerActivity extends BaseFragmentActivity {
 
-    public static final int INTENT_BUY_VIP_FRAGMENT = 1;
+    private int mCurrentFragmentId;
+    private Fragment mCurrentFragment;
 
+    private static final String TAG_FRAGMENT = "current_fragment";
+
+    public static final int INTENT_BUY_VIP_FRAGMENT = 1;
     public static final int INTENT_BUYING_FRAGMENT = 2;
+    public static final int INTENT_CHAT_FRAGMENT = 3;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -38,10 +45,31 @@ public class ContainerActivity extends BaseFragmentActivity {
         });
 
         Intent intent = getIntent();
-        startFragment(intent.getIntExtra(Static.INTENT_REQUEST_KEY, 0));
+        mCurrentFragmentId = intent.getIntExtra(Static.INTENT_REQUEST_KEY,0);
     }
 
-    public void startFragment(int id) {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(mCurrentFragment == null) {
+            mCurrentFragment = getFragment(mCurrentFragmentId);
+        }
+
+        if (mCurrentFragment != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.loFrame, mCurrentFragment,TAG_FRAGMENT).commit();
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        FragmentManager manager = getSupportFragmentManager();
+        if (savedInstanceState != null) {
+            mCurrentFragment = manager.findFragmentByTag(TAG_FRAGMENT);
+        }
+    }
+
+    private Fragment getFragment(int id) {
         Fragment fragment = null;
         switch (id) {
             case INTENT_BUY_VIP_FRAGMENT:
@@ -58,13 +86,22 @@ public class ContainerActivity extends BaseFragmentActivity {
                 } else {
                     fragment = BuyingFragment.newInstance();
                 }
+                break;
+            case INTENT_CHAT_FRAGMENT:
+                Intent intent = getIntent();
+
+                fragment = ChatFragment.newInstance(intent.getIntExtra(ChatFragment.INTENT_ITEM_ID, -1),
+                        intent.getIntExtra(ChatFragment.INTENT_USER_ID, -1),
+                        false,
+                        intent.getIntExtra(ChatFragment.INTENT_USER_SEX, Static.BOY),
+                        intent.getStringExtra(ChatFragment.INTENT_USER_NAME),
+                        intent.getIntExtra(ChatFragment.INTENT_USER_AGE, 0),
+                        intent.getStringExtra(ChatFragment.INTENT_USER_CITY),
+                        intent.getStringExtra(BaseFragmentActivity.INTENT_PREV_ENTITY));
             default:
                 break;
         }
-        if (fragment != null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.loFrame, fragment).commit();
-        }
+        return fragment;
     }
 
     @Override

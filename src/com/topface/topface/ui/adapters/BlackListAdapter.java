@@ -140,4 +140,22 @@ public class BlackListAdapter extends FeedAdapter<BlackListItem> {
         setData(data);
     }
 
+    @Override
+    public ILoaderRetrierCreator<BlackListItem> getLoaderRetrierCreator() {
+        return new ILoaderRetrierCreator<BlackListItem>() {
+            @Override
+            public BlackListItem getLoader() {
+                BlackListItem result = new BlackListItem(null);
+                result.setLoaderTypeFlags(IListLoader.ItemType.LOADER);
+                return result;
+            }
+
+            @Override
+            public BlackListItem getRetrier() {
+                BlackListItem result = new BlackListItem(null);
+                result.setLoaderTypeFlags(IListLoader.ItemType.RETRY);
+                return result;
+            }
+        };
+    }
 }

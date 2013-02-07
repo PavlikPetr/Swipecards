@@ -3,7 +3,7 @@ package com.topface.topface;
 public class Static {
     // Constants
 
-    public static final int API_VERSION = 5;
+    public static final int API_VERSION = 6;
     public static final int GIRL = 0;
     public static final int BOY = 1;
     public static final int PHOTO_WIDTH = 640;
@@ -47,6 +47,8 @@ public class Static {
     public static final String PREFERENCES_NOVICE_MENU_FILL_PROFILE_DATE = "novice_menu_fill_profile_date_tag";
     public static final String PREFERENCES_STOP_TIME = "preferences_stop_time";
     public static final String LOGOUT_INTENT = "com.topface.topface.intent.LOGOUT";
+    public static final boolean PAUSE_DOWNLOAD_ON_SCROLL = false;
+    public static final boolean PAUSE_DOWNLOAD_ON_FLING = true;
 
     // Profile
     //public static final String PREFERENCES_PROFILE_FILTER_GEO = "cache_profile_filter_geo";
