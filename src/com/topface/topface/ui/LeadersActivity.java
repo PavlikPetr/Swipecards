@@ -58,6 +58,8 @@ public class LeadersActivity extends BaseFragmentActivity {
         mBuyButton = (Button) findViewById(R.id.btnLeadersBuy);
         mLoadingLocker = (LockerView) findViewById(R.id.llvLeaderSending);
 
+        TextView unusedTitle =
+
         setListeners();
         getProfile();
         setPrice();

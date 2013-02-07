@@ -76,6 +76,8 @@ public class Options extends AbstractData {
      */
     public int price_leader = 6;
 
+    public int minLeadersPercent = 25; //Не уверен в этом, возможно стоит использовать другое дефолтное значение
+
 
     public static Options parse(ApiResponse response) {
         Options options = new Options();
@@ -83,6 +85,7 @@ public class Options extends AbstractData {
         try {
             options.price_highrate = response.jsonResult.optInt("price_highrate");
             options.price_leader = response.jsonResult.optInt("price_leader");
+            options.minLeadersPercent = response.jsonResult.optInt("leader_percent");
             // Pages initialization
             JSONArray pages = response.jsonResult.optJSONArray("pages");
             for (int i = 0; i < pages.length(); i++) {
