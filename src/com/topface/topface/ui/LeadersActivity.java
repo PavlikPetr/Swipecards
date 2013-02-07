@@ -119,6 +119,7 @@ public class LeadersActivity extends BaseFragmentActivity {
 
     private void updateProfileInfo(Profile profile) {
         splitPhotos(profile.photos);
+
         for (final Photo photo : usePhotos) {
             View view = getLayoutInflater().inflate(R.layout.leaders_photo_item, null);
             ImageViewRemote ivr = (ImageViewRemote) view.findViewById(R.id.ivLeadPhoto);
@@ -145,18 +146,46 @@ public class LeadersActivity extends BaseFragmentActivity {
             ivr.setPhoto(photo);
         }
         if (mSelectedPhoto != null) {
-            mSelectedPhoto.select(mLeadersPhotos.get(0).view, mLeadersPhotos.get(0).photo);
+            if(mLeadersPhotos.size() > 0) {
+                mSelectedPhoto.select(mLeadersPhotos.get(0).view, mLeadersPhotos.get(0).photo);
+            }
         }
     }
 
     private void splitPhotos(Photos photos) {
         for(Photo photo : photos) {
-            if(photo.mLiked >= 25) {
+            if(photo.canBecomeLeader) {
                 usePhotos.add(new Photo(photo));
             } else {
                 uselessPhotos.add(new Photo(photo));
             }
         }
+        if (uselessPhotos.size() > 0) {
+            qSort(uselessPhotos, 0, uselessPhotos.size() - 1);
+        }
+        if (usePhotos.size() > 0) {
+            qSort(usePhotos, 0, uselessPhotos.size() - 1);
+        }
+    }
+
+    public void qSort(Photos photos, int low, int high) {
+        int i = low;
+        int j = high;
+        int x = photos.get((low+high)/2).mLiked;
+        do {
+            while(photos.get(i).mLiked > x) ++i;  // поиск элемента для переноса в старшую часть
+            while(photos.get(j).mLiked < x) --j;  // поиск элемента для переноса в младшую часть
+            if(i <= j){
+                // обмен элементов местами:
+                Photo temp = photos.get(i);
+                photos.set(i, photos.get(j));
+                photos.set(j, temp);
+                // переход к следующим элементам:
+                i++; j--;
+            }
+        } while(i < j);
+        if(low < j) qSort(photos, low, j);
+        if(i < high) qSort(photos, i, high);
     }
 
     @Override
