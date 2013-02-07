@@ -30,6 +30,7 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.views.IllustratedTextView;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.TopfaceNotificationManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -53,6 +54,8 @@ public class AuthFragment extends BaseFragment {
         initViews(root);
         initAuthorizationHandler();
         checkOnline();
+        TopfaceNotificationManager nm = TopfaceNotificationManager.getInstance(getActivity());
+        nm.showProgressNotification("asd","asd",null,new Intent());
         return root;
     }
 

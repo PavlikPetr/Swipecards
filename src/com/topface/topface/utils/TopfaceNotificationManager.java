@@ -63,4 +63,34 @@ public class TopfaceNotificationManager {
         //noinspection deprecation
         notificationManager.notify(id, notificationBuilder.getNotification());
     }
+
+    public void showProgressNotification(String title, String message, Bitmap icon, Intent intent) {
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(ctx);
+        notificationBuilder.setSmallIcon(R.drawable.ic_notification);
+
+        if (icon != null) {
+            Bitmap scaledIcon = Utils.clipAndScaleBitmap(icon, (int) width, (int) height);
+            if (scaledIcon != null) {
+                notificationBuilder.setLargeIcon(scaledIcon);
+            }
+        }
+
+        if (Settings.getInstance().isVibrationEnabled()) {
+            notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
+        }
+
+        notificationBuilder.setSound(Settings.getInstance().getRingtone());
+        notificationBuilder.setContentTitle(title);
+        notificationBuilder.setContentText(message);
+        notificationBuilder.setAutoCancel(true);
+        notificationBuilder.setProgress(0,0,true);
+
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(ctx, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        notificationBuilder.setContentIntent(resultPendingIntent);
+
+        NotificationManager notificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
+        //noinspection deprecation
+        notificationManager.notify(id, notificationBuilder.getNotification());
+    }
+
 }
