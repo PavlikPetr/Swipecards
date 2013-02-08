@@ -191,7 +191,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 name = CacheProfile.first_name;
                 mSettings.setSocialAccountName(name);
             }
-            setAccountNameText(R.string.settings_account, name, R.drawable.ic_sex_female, frame);
+            setAccountNameText(R.string.settings_account, name, R.drawable.ic_tf, frame);
         } else {
             setText(R.string.settings_account, frame);
         }
