@@ -192,9 +192,9 @@ public class AuthFragment extends BaseFragment {
         if (resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 Bundle extras = data.getExtras();
-                String login = extras.getString(RegistrationFragment.INTENT_LOGIN, Static.EMPTY);
-                String password = extras.getString(RegistrationFragment.INTENT_PASSWORD, Static.EMPTY);
-                String userId = extras.getString(RegistrationFragment.INTENT_USER_ID, Static.EMPTY);
+                String login = extras.getString(RegistrationFragment.INTENT_LOGIN);
+                String password = extras.getString(RegistrationFragment.INTENT_PASSWORD);
+                String userId = extras.getString(RegistrationFragment.INTENT_USER_ID);
                 AuthToken.getInstance().saveToken(userId, login, password);
                 hideButtons();
                 auth(generateTopfaceAuthRequest(login,password));
