@@ -257,7 +257,6 @@ public class Search extends LinkedList<SearchUser> implements SerializableToJson
         String currentSignature = getSignature();
         if (currentSignature == null) {
             mSignature = signature;
-            result = true;
         } else if (!TextUtils.equals(currentSignature, signature)) {
             log("Signature is changed. Clear search");
             clear();
@@ -282,5 +281,15 @@ public class Search extends LinkedList<SearchUser> implements SerializableToJson
     public void updateSignatureAndUpdate() {
         updateSignature();
         checkPreload();
+    }
+
+    /**
+     * Добавляет пользователей в поиск, обновляя подпись фильтра
+     *
+     * @param search поиск
+     */
+    public void addAndUpdateSignature(Search search) {
+        addAll(search);
+        updateSignature();
     }
 }

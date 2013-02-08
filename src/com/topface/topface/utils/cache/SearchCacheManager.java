@@ -20,22 +20,22 @@ public class SearchCacheManager extends PreferencesCacheManager {
         super();
     }
 
-    public void setCache(Search search) {
-        try {
-            getEditor()
-                    .putString(getDataCacheKey(CACHE_KEY), search.toJson().toString())
-                    .putLong(getExpireDateCacheKey(CACHE_KEY), getExpireDateTimestamp(LIFE_TIME))
-                    .putInt(getSearchPositionCacheKey(CACHE_KEY), search.getSearchPosition())
-                    .putString(getSearchSignatureCacheKey(CACHE_KEY), search.getSignature())
-                    .commit();
-        } catch (Exception e) {
-            Debug.error(e);
-        }
-    }
-
-    public void saveSearchPosition(Search search) {
-        Search.log("save search position to cache " + search.getSearchPosition());
-        getEditor().putInt(getSearchPositionCacheKey(CACHE_KEY), search.getSearchPosition()).commit();
+    public void setCache(final Search search) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    getEditor()
+                            .putString(getDataCacheKey(CACHE_KEY), search.toJson().toString())
+                            .putLong(getExpireDateCacheKey(CACHE_KEY), getExpireDateTimestamp(LIFE_TIME))
+                            .putInt(getSearchPositionCacheKey(CACHE_KEY), search.getSearchPosition())
+                            .putString(getSearchSignatureCacheKey(CACHE_KEY), search.getSignature())
+                            .commit();
+                } catch (Exception e) {
+                    Debug.error(e);
+                }
+            }
+        }).start();
     }
 
     public void saveSearchSignature(String searchSignature) {

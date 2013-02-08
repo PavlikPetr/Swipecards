@@ -3,8 +3,6 @@ package com.topface.topface.data.search;
 
 import com.topface.topface.utils.cache.SearchCacheManager;
 
-import java.util.Collection;
-
 public class CachableSearch extends Search {
 
     private final SearchCacheManager mCache;
@@ -26,80 +24,20 @@ public class CachableSearch extends Search {
     public void saveCache() {
         //В кеше храним ограниченное количество оцененных пользователей
         removeRatedUsers(RATED_USERS_IN_CACNE_CNT);
+        log("Save in cache " + size() + " users");
         mCache.setCache(this);
     }
 
-    protected boolean removeRatedUsers(int removeCnt) {
-        boolean result = super.removeRatedUsers(removeCnt);
-        if (result) {
-            mCache.setCache(this);
-        }
-
-        return result;
-    }
-
-    @Override
-    public void setSearchPosition(int position) {
-        if (getSearchPosition() != position) {
-            super.setSearchPosition(position);
-            mCache.saveSearchPosition(this);
-        }
-    }
-
-    @Override
-    public void add(int location, SearchUser object) {
-        super.add(location, object);
-        saveCache();
-    }
-
-    @Override
-    public boolean add(SearchUser object) {
-        boolean result = super.add(object);
-        saveCache();
-        return result;
-    }
-
-    @Override
-    public boolean addAll(int location, Collection<? extends SearchUser> collection) {
-        boolean result = super.addAll(location, collection);
-        saveCache();
-        return result;
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends SearchUser> collection) {
-        boolean result = super.addAll(collection);
-        saveCache();
-        return result;
-    }
-
-    @Override
-    public void addFirst(SearchUser object) {
-        super.addFirst(object);
-        saveCache();
-    }
-
-    @Override
-    public void addLast(SearchUser object) {
-        super.addLast(object);
-        saveCache();
-    }
-
-    @Override
-    public void replace(Search search) {
-        super.replace(search);
-        if (search != null) {
-            saveCache();
-        } else {
-            mCache.clearCache();
-        }
-    }
-
-    public boolean setSignature(String signature) {
+    public boolean setSignature(final String signature) {
         boolean result = super.setSignature(signature);
         if (result) {
-            mCache.clearCache();
-            mCache.saveSearchSignature(signature);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    mCache.clearCache();
+                    mCache.saveSearchSignature(signature);
+                }
+            }).start();
         }
 
         return result;

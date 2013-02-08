@@ -307,15 +307,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     Search.log("load success. Loaded " + search.size() + " users");
                     if (search.size() != 0) {
                         mImageSwitcher.setVisibility(View.VISIBLE);
-                        //Сохраняем текущий поиск, если он отличается от того, шд
-                        mUserSearchList.updateSignature();
                         //Добавляем новых пользователей
-                        mUserSearchList.addAll(search);
-                        if (isAddition) {
-                            unlockControls();
-                        } else {
-                            onUpdateSuccess(isAddition);
-                        }
+                        mUserSearchList.addAndUpdateSignature(search);
                         //если список был пуст, то просто показываем нового пользователя
                         SearchUser currentUser = mUserSearchList.getCurrentUser();
                         //NOTE: Если в поиске никого нет, то мы показываем следующего юзера
@@ -330,11 +323,15 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                             showUser(currentUser);
                         }
 
+                        //Скрываем кнопку отправки повтора
+                        mRetryBtn.setVisibility(View.GONE);
                         unlockControls();
                     } else {
-                        mImageSwitcher.setVisibility(View.GONE);
                         mProgressBar.setVisibility(View.GONE);
-                        emptySearchDialog.setVisibility(View.VISIBLE);
+                        if (!isAddition) {
+                            mImageSwitcher.setVisibility(View.GONE);
+                            emptySearchDialog.setVisibility(View.VISIBLE);
+                        }
                     }
                 }
 
@@ -822,12 +819,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        //При выходе из фрагмента на всякий случай сохраняем кэш поиска
+        //При выходе из фрагмента сохраняем кэш поиска
         if (mUserSearchList != null) {
             mUserSearchList.saveCache();
         }

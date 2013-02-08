@@ -8,8 +8,6 @@ import com.topface.topface.Static;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.RequestConnection;
 
-import java.util.Calendar;
-
 public abstract class ApiRequest {
     private static final int MAX_RESEND_CNT = 4;
     // Data
@@ -92,11 +90,21 @@ public abstract class ApiRequest {
 
     private void setStopTime() {
         if (context != null) {
-            SharedPreferences mPreferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-            if (mPreferences != null) {
-                long stopTime = Calendar.getInstance().getTimeInMillis();
-                mPreferences.edit().putLong(Static.PREFERENCES_STOP_TIME, stopTime).commit();
-            }
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    SharedPreferences preferences = context.getSharedPreferences(
+                            Static.PREFERENCES_TAG_SHARED,
+                            Context.MODE_PRIVATE
+                    );
+                    if (preferences != null) {
+                        preferences.edit().putLong(
+                                Static.PREFERENCES_STOP_TIME,
+                                System.currentTimeMillis()
+                        ).commit();
+                    }
+                }
+            }).start();
         }
     }
 
