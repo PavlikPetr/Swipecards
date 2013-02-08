@@ -7,4 +7,6 @@
     <dimen name="indicator_corner_radius">12dp</dimen>
     <dimen name="indicator_internal_padding">4dp</dimen>
 
+    <dimen name="default_gap">16dip</dimen>
+
 </resources>

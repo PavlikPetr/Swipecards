@@ -93,4 +93,9 @@ public class TopfaceNotificationManager {
         notificationManager.notify(id, notificationBuilder.getNotification());
     }
 
+    public void cancelNotification() {
+        NotificationManager notificationManager =
+                (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(TopfaceNotificationManager.id);
+    }
 }

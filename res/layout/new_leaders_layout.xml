@@ -36,6 +36,7 @@
                     android:layout_centerInParent="true"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
+                    style="@style/ButtonWhiteText"
                     android:background="@drawable/btn_vip_super_sale_selector"
                     />
         </RelativeLayout>
@@ -45,6 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_above="@id/loFooter"
                 android:layout_alignParentTop="true"
+                android:layout_margin="10dp"
                 >
 
             <LinearLayout
@@ -54,7 +56,7 @@
                     android:layout_marginTop="10dp"
                     >
 
-                <com.example.gridlayout.GridLayout
+                <com.topface.topface.ui.gridlayout.GridLayout
                         android:id="@+id/usedGrid"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -65,13 +67,13 @@
                         android:listSelector="@android:color/transparent"
                         android:padding="0px"
                         android:layout_marginLeft="10dp"
-                        app:columnsAutoFit = "true"
+                        app:columnsAutoFit="true"
                         android:layout_marginRight="10dp"
                         app:columnWidth="95"
                         android:stretchMode="columnWidth"
                         android:verticalSpacing="0px"
                         android:gravity="center">
-                </com.example.gridlayout.GridLayout>
+                </com.topface.topface.ui.gridlayout.GridLayout>
 
                 <TextView
                         android:id="@+id/unusedTitle"
@@ -82,10 +84,9 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
                         android:textSize="14sp"
-                        android:layout_alignParentTop="true"
-                        android:text="@string/leaders_pick_condition"/>
+                        android:layout_alignParentTop="true"/>
 
-                <com.example.gridlayout.GridLayout
+                <com.topface.topface.ui.gridlayout.GridLayout
                         android:id="@+id/unusedGrid"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"

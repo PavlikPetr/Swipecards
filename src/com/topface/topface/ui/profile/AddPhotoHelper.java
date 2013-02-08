@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import com.topface.topface.Data;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Confirmation;
@@ -23,6 +24,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.PhotoAddRequest;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.TopfaceNotificationManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.http.Http;
 import org.json.JSONException;
@@ -196,6 +198,8 @@ public class AddPhotoHelper {
         protected void onPreExecute() {
             super.onPreExecute();
             showProgressDialog();
+            TopfaceNotificationManager manager = TopfaceNotificationManager.getInstance(mContext);
+            manager.showProgressNotification("asd", "asd", null, new Intent());
         }
 
         @Override
@@ -243,6 +247,8 @@ public class AddPhotoHelper {
                 mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
             }
             hideProgressDialog();
+            TopfaceNotificationManager manager = TopfaceNotificationManager.getInstance(mContext);
+            manager.cancelNotification();
         }
     }
 

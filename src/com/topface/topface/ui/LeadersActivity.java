@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
@@ -14,7 +16,7 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.LeaderRequest;
-import com.topface.topface.ui.adapters.LeadersPhotoAdapter;
+import com.topface.topface.ui.gridlayout.GridLayout;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
@@ -23,8 +25,8 @@ import com.topface.topface.utils.Utils;
 import java.util.LinkedList;
 
 public class LeadersActivity extends BaseFragmentActivity {
-    private com.example.gridlayout.GridLayout mGridView;
-    private com.example.gridlayout.GridLayout mUselessGridView;
+    private com.topface.topface.ui.gridlayout.GridLayout mGridView;
+    private GridLayout mUselessGridView;
     private LockerView mLoadingLocker;
     private PhotoSelector mSelectedPhoto = new PhotoSelector();
     private Button mBuyButton;
@@ -54,11 +56,13 @@ public class LeadersActivity extends BaseFragmentActivity {
         uselessPhotos = new Photos();
 
 //        mProgressBar = (ProgressBar) findViewById(R.id.loader);
-        mGridView = (com.example.gridlayout.GridLayout) findViewById(R.id.usedGrid);
-        mUselessGridView = (com.example.gridlayout.GridLayout) findViewById(R.id.unusedGrid);
+        mGridView = (GridLayout) findViewById(R.id.usedGrid);
+        mUselessGridView = (GridLayout) findViewById(R.id.unusedGrid);
         mBuyButton = (Button) findViewById(R.id.btnLeadersBuy);
         mLoadingLocker = (LockerView) findViewById(R.id.llvLeaderSending);
         mUselessTitle = (TextView) findViewById(R.id.unusedTitle);
+
+        mUselessTitle.setText(String.format(getString(R.string.leaders_pick_condition), CacheProfile.getOptions().minLeadersPercent));
 
         setListeners();
         getProfile();
@@ -129,7 +133,7 @@ public class LeadersActivity extends BaseFragmentActivity {
             view.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(mSelectedPhoto != null) {
+                    if (mSelectedPhoto != null) {
                         mSelectedPhoto.select(mask, photo);
                     }
                 }
@@ -147,23 +151,52 @@ public class LeadersActivity extends BaseFragmentActivity {
             ivr.setPhoto(photo);
         }
 
-        if(uselessPhotos.size() == 0) {
+        if (uselessPhotos.size() == 0) {
             mUselessTitle.setVisibility(View.GONE);
         }
 
         if (mSelectedPhoto != null) {
-            mSelectedPhoto.select(mLeadersPhotos.get(0).view, mLeadersPhotos.get(0).photo);
+            if (mLeadersPhotos.size() > 0) {
+                mSelectedPhoto.select(mLeadersPhotos.get(0).view, mLeadersPhotos.get(0).photo);
+            }
         }
     }
 
     private void splitPhotos(Photos photos) {
-        for(Photo photo : photos) {
-            if(photo.mLiked >= 25) {
+        for (Photo photo : photos) {
+            if (photo.canBecomeLeader) {
                 usePhotos.add(new Photo(photo));
             } else {
                 uselessPhotos.add(new Photo(photo));
             }
         }
+        if (uselessPhotos.size() > 0) {
+            qSort(uselessPhotos, 0, uselessPhotos.size() - 1);
+        }
+        if (usePhotos.size() > 0) {
+            qSort(usePhotos, 0, usePhotos.size() - 1);
+        }
+    }
+
+    public void qSort(Photos photos, int low, int high) {
+        int i = low;
+        int j = high;
+        int x = photos.get((low + high) / 2).mLiked;
+        do {
+            while (photos.get(i).mLiked > x) ++i;  // поиск элемента для переноса в старшую часть
+            while (photos.get(j).mLiked < x) --j;  // поиск элемента для переноса в младшую часть
+            if (i <= j) {
+                // обмен элементов местами:
+                Photo temp = photos.get(i);
+                photos.set(i, photos.get(j));
+                photos.set(j, temp);
+                // переход к следующим элементам:
+                i++;
+                j--;
+            }
+        } while (i < j);
+        if (low < j) qSort(photos, low, j);
+        if (i < high) qSort(photos, i, high);
     }
 
     @Override
@@ -198,7 +231,7 @@ public class LeadersActivity extends BaseFragmentActivity {
                     mPhotoId = -1;
 
                 } else {
-                    if(mItem != null) {
+                    if (mItem != null) {
                         mItem.setImageResource(R.drawable.mask_normal_photo);
                     }
                     item.setImageResource(R.drawable.mask_selected_photo);
