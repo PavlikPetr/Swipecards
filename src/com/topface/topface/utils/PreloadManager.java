@@ -3,11 +3,10 @@ package com.topface.topface.utils;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
-import com.topface.topface.data.SearchUser;
+import com.topface.topface.data.search.Search;
+import com.topface.topface.data.search.SearchUser;
 import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
-
-import java.util.LinkedList;
 
 public class PreloadManager {
 
@@ -25,9 +24,9 @@ public class PreloadManager {
         this(0, 0);
     }
 
-    public void preloadPhoto(LinkedList<SearchUser> userList, int position) {
-        if (position < userList.size()) {
-            preloadNextPhoto(userList.get(position).photos.getFirst());
+    public void preloadPhoto(Search userList) {
+        if (!userList.isEnded()) {
+            preloadNextPhoto(userList.get(userList.getSearchPosition() + 1).photos.getFirst());
         }
     }
 

@@ -271,7 +271,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         String model = android.os.Build.MODEL;
 
         public String getSubject() {
-            AuthToken authToken = new AuthToken(getActivity().getApplicationContext());
+            AuthToken authToken = AuthToken.getInstance();
             return "[" + Static.PLATFORM + "]" + subject + " {" + authToken.getSocialNet() + "_id=" + authToken.getUserId() + "}";
         }
 
@@ -291,7 +291,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             strBuilder.append("<p>Device language: ").append(Locale.getDefault().getDisplayLanguage()).append("</p>");
 
             strBuilder.append("<p>Topface SSID: ").append(Data.SSID).append("</p>");
-            AuthToken authToken = new AuthToken(getActivity().getApplicationContext());
+            AuthToken authToken = AuthToken.getInstance();
             strBuilder.append("<p>Social net: ").append(authToken.getSocialNet()).append("</p>");
             strBuilder.append("<p>Social token: ").append(authToken.getTokenKey()).append("</p>");
             strBuilder.append("<p>Social id: ").append(authToken.getUserId()).append("</p>");

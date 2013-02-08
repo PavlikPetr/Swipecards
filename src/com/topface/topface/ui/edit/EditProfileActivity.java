@@ -16,6 +16,7 @@ import android.widget.*;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.City;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
@@ -87,7 +88,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
 
         mEditCity = (Button) header.findViewById(R.id.btnEditCity);
-        mEditCity.setText(CacheProfile.city_name);
+        mEditCity.setText(CacheProfile.city.name);
         mEditCity.setOnClickListener(this);
 
         mEditsListView.addHeaderView(header);
@@ -131,7 +132,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         mEditSex.setImageResource(CacheProfile.sex == Static.BOY ?
                 R.drawable.ico_boy :
                 R.drawable.ico_girl);
-        mEditCity.setText(CacheProfile.city_name);
+        mEditCity.setText(CacheProfile.city.name);
         mProfilePhoto.setPhoto(CacheProfile.photo);
     }
 
@@ -251,10 +252,8 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
                         @Override
                         public void success(ApiResponse response) {
-                            CacheProfile.city_id = city_id;
-                            CacheProfile.city_name = city_name;
-                            CacheProfile.city_full = city_full;
-                            mEditCity.setText(CacheProfile.city_name);
+                            CacheProfile.city = new City(city_id, city_name, city_full);
+                            mEditCity.setText(CacheProfile.city.name);
                         }
 
                         @Override

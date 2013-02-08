@@ -14,7 +14,6 @@ public class User extends Profile {
     public int last_visit;  // таймстамп последнего посещения приложения
     public String status;   // статус пользователя
     public boolean online;  // флаг наличия пользвоателя в онлайне
-    public boolean ero;     // флаг наличия эротических фотографий
     public boolean mutual;  // флаг наличия симпатии к авторизованному пользователю
     public int score;       // средний балл оценок пользователя    
     public Photos photos;
@@ -22,7 +21,7 @@ public class User extends Profile {
     public boolean rated;
     public int formMatches = 0;
 
-    public static User parse(int userId, ApiResponse response) { //нужно знать userId
+    public static User parse(int userId, ApiResponse response) {
         User profile = new User();
 
         try {
@@ -38,7 +37,6 @@ public class User extends Profile {
                 profile.last_visit = item.optInt("last_visit");
                 profile.status = item.optString("status");
                 profile.online = item.optBoolean("online");
-                profile.ero = item.optBoolean("ero");
                 profile.mutual = item.optBoolean("mailmutual");
                 profile.score = item.optInt("score");
                 profile.photo = new Photo(item.getJSONObject("photo"));
@@ -53,4 +51,5 @@ public class User extends Profile {
 
         return profile;
     }
+
 }

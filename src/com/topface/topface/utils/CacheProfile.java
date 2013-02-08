@@ -24,22 +24,12 @@ public class CacheProfile {
     public static int unread_likes;    // количество непрочитанных “понравилось” пользователя
     public static int unread_messages; // количество непрочитанных сообщений пользователя
     public static int unread_mutual;   // количество непрочитанных симпатий
-    public static int unread_visitors;   // количество непрочитанных гостей
-
-    // City
-    public static int city_id;      // идентификтаор города пользователя
-    public static String city_name; // название города пользователя
-    public static String city_full; // полное название города пользвоателя
-    public static int money;        // количество монет у пользователя
-    public static int likes;        // количество симпатий пользователя
-    public static int average_rate; // средняя оценка текущего пользователя
-    // Dating
-    public static int dating_sex; // пол пользователей для поиска
-    public static int dating_age_start; // начальный возраст для пользователей
-    public static int dating_age_end; // конечный возраст для пользователей
-    public static int dating_city_id; // идентификатор города для поиска пользователей
-    public static String dating_city_name; // наименование пользователя в русской локали
-    public static String dating_city_full; // полное наименование города
+    public static int unread_visitors; // количество непрочитанных гостей
+    public static City city;           // город пользователя
+    public static int money;           // количество монет у пользователя
+    public static int likes;           // количество симпатий пользователя
+    public static int average_rate;    // средняя оценка текущего пользователя
+    public static DatingFilter dating; //Фильтр поиска
 
     //Premium
     public static boolean premium;
@@ -73,13 +63,6 @@ public class CacheProfile {
 
     public static long profileUpdateTime;
 
-    public static void setData(Profile profile) {
-        updateCity(profile);
-        updateDating(profile);
-        updateNotifications(profile);
-        gifts = profile.gifts;
-    }
-
     private static void setProfileCache(ApiResponse response) {
         if (response != null) {
             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit();
@@ -94,30 +77,9 @@ public class CacheProfile {
         }
     }
 
-    public static void updateCity(Profile profile) {
-        city_id = profile.city_id;
-        city_name = profile.city_name;
-        city_full = profile.city_full;
-    }
-
-    public static void updateDating(Profile profile) {
-        dating_sex = profile.dating_sex;
-        dating_age_start = profile.dating_age_start;
-        dating_age_end = profile.dating_age_end;
-        dating_city_id = profile.dating_city_id;
-        dating_city_name = profile.dating_city_name;
-        dating_city_full = profile.dating_city_full;
-    }
-
     public static void updateNotifications(Profile profile) {
         money = profile.money;
         likes = profile.likes;
-        unread_rates = profile.unread_rates;
-        unread_likes = profile.unread_likes;
-        unread_messages = profile.unread_messages;
-        unread_mutual = profile.unread_mutual;
-        unread_visitors = profile.unread_visitors;
-        average_rate = profile.average_rate;
     }
 
     public static Profile getProfile() {
@@ -130,11 +92,6 @@ public class CacheProfile {
         profile.money = money;
         profile.likes = likes;
 
-        profile.unread_rates = unread_rates;
-        profile.unread_likes = unread_likes;
-        profile.unread_messages = unread_messages;
-        profile.unread_mutual = unread_mutual;
-        profile.unread_visitors = unread_visitors;
         profile.average_rate = average_rate;
 
         profile.notifications = notifications;
@@ -145,16 +102,9 @@ public class CacheProfile {
         profile.premium = premium;
         profile.invisible = invisible;
 
-        profile.city_id = city_id;
-        profile.city_name = city_name;
-        profile.city_full = city_full;
+        profile.city = city;
 
-        profile.dating_sex = dating_sex;
-        profile.dating_age_start = dating_age_start;
-        profile.dating_age_end = dating_age_end;
-        profile.dating_city_id = dating_city_id;
-        profile.dating_city_name = dating_city_name;
-        profile.dating_city_full = dating_city_full;
+        profile.dating = dating;
         profile.forms = forms;
         profile.photos = photos;
         profile.status = status;
@@ -171,20 +121,12 @@ public class CacheProfile {
         first_name = profile.first_name;
         age = profile.age;
         sex = profile.sex;
+        city = profile.city;
 
         money = profile.money;
         likes = profile.likes;
 
-        unread_rates = profile.unread_rates;
-        unread_likes = profile.unread_likes;
-        unread_messages = profile.unread_messages;
-        unread_mutual = profile.unread_mutual;
-        unread_visitors = profile.unread_visitors;
         average_rate = profile.average_rate;
-
-        city_id = profile.city_id;
-        city_name = profile.city_name;
-        city_full = profile.city_full;
 
         notifications = profile.notifications;
         hasMail = profile.hasMail;
@@ -193,14 +135,7 @@ public class CacheProfile {
 
         premium = profile.premium;
         invisible = profile.invisible;
-
-        dating_sex = profile.dating_sex;
-        dating_age_start = profile.dating_age_start;
-        dating_age_end = profile.dating_age_end;
-        dating_city_id = profile.dating_city_id;
-        dating_city_name = profile.dating_city_name;
-        dating_city_full = profile.dating_city_full;
-
+        dating = profile.dating;
         forms = profile.forms;
 
         photos = profile.photos;
@@ -233,11 +168,6 @@ public class CacheProfile {
                             new JSONObject(profileCache)
                     );
                     profile = Profile.parse(response);
-                    profile.unread_likes = 0;
-                    profile.unread_messages = 0;
-                    profile.unread_rates = 0;
-                    profile.unread_mutual = 0;
-                    profile.unread_visitors = 0;
                     setProfile(profile, response);
                     result = true;
                 } catch (JSONException e) {
@@ -255,8 +185,6 @@ public class CacheProfile {
 
     /**
      * Данные из сервиса options
-     *
-     * @return
      */
     public static Options getOptions() {
         if (options == null) {
@@ -286,7 +214,7 @@ public class CacheProfile {
 
     public static void clearProfile() {
         options = null;
-        setProfile(new Profile(),null);
+        setProfile(new Profile(), null);
     }
 
     private static void setProfileUpdateTime() {

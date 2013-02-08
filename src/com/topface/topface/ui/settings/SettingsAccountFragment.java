@@ -17,7 +17,7 @@ import com.google.android.gcm.GCMRegistrar;
 import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.SearchUser;
+import com.topface.topface.data.search.SearchUser;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.LogoutRequest;
@@ -59,7 +59,7 @@ public class SettingsAccountFragment extends TrackedFragment {
         ((TextView) getActivity().findViewById(R.id.tvNavigationTitle)).setText(R.string.settings_account);
 
         Drawable icon = null;
-        final AuthToken token = new AuthToken(getActivity().getApplicationContext());
+        final AuthToken token = AuthToken.getInstance();
 
         if (token.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
             icon = getResources().getDrawable(R.drawable.fb_icon);

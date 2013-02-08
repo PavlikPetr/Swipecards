@@ -21,6 +21,7 @@ public class AuthRequest extends AbstractApiRequest {
     private String locale; // локаль обращающегося клиента
     private String clienttype; // тип клиента
     private String clientversion; // версия клиента
+    private String clientosversion; // версия операционной системы
     private String clientdevice; // тип устройства клиента
     private String clientid; // уникальный идентификатор клиентского устройства
     public String login;  // логин для нашей авторизации
@@ -34,6 +35,7 @@ public class AuthRequest extends AbstractApiRequest {
         clienttype = Utils.getBuildType();
         locale = getClientLocale(context);
         clientversion = Utils.getClientVersion(context);
+        clientosversion = getClientOsVersion();
         clientdevice = getClientDeviceName();
         clientid = getClientId(context);
     }
@@ -51,8 +53,12 @@ public class AuthRequest extends AbstractApiRequest {
     }
 
     private String getClientDeviceName() {
-        return Build.MANUFACTURER + " " + Build.MODEL + " " + Build.PRODUCT +
-                " (Android " + Build.VERSION.RELEASE + ", build " + Build.ID + ")";
+        return Build.MANUFACTURER + " " + Build.MODEL + " " + Build.PRODUCT;
+
+    }
+
+    public static String getClientOsVersion() {
+        return "Android " + Build.VERSION.RELEASE + ", build " + Build.ID;
     }
 
     private static String uniqueID = null;
@@ -90,6 +96,7 @@ public class AuthRequest extends AbstractApiRequest {
                 .put("locale", locale)
                 .put("clienttype", clienttype)
                 .put("clientversion", clientversion)
+                .put("clientosversion", clientosversion)
                 .put("clientdevice", clientdevice)
                 .put("clientid", clientid)
                 .put("login", login)

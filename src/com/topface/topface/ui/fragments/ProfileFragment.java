@@ -239,7 +239,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             mLockScreen.setVisibility(View.VISIBLE);
             return;
         }
-        UserRequest userRequest = new UserRequest(mProfileId, getActivity().getApplicationContext());
+        UserRequest userRequest = new UserRequest(mProfileId, getActivity());
         registerRequest(userRequest);
         userRequest.callback(new DataApiHandler<User>() {
 
@@ -403,7 +403,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             intent.putExtra(ChatFragment.INTENT_USER_NAME, mUserProfile.first_name);
             intent.putExtra(ChatFragment.INTENT_USER_SEX, mUserProfile.sex);
             intent.putExtra(ChatFragment.INTENT_USER_AGE, mUserProfile.age);
-            intent.putExtra(ChatFragment.INTENT_USER_CITY, mUserProfile.city_name);
+            intent.putExtra(ChatFragment.INTENT_USER_CITY, mUserProfile.city.name);
             intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
             getActivity().startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
         }
@@ -605,8 +605,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             mCityView.setText(city);
             mCityView.setVisibility(
                     TextUtils.isEmpty(city) ?
-                    View.INVISIBLE :
-                    View.VISIBLE
+                            View.INVISIBLE :
+                            View.VISIBLE
             );
         }
 
@@ -622,7 +622,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         private void initState(Profile profile) {
             mAvatarVal = profile.photo;
             mNameVal = profile.getNameAndAge();
-            mCityVal = profile.city_name;
+            mCityVal = profile.city.name;
             mBackgroundVal = profile.background;
         }
 
@@ -634,7 +634,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 }
                 fragment.getArguments().putParcelable(ARG_TAG_AVATAR, profile.photo);
                 fragment.getArguments().putString(ARG_TAG_NAME, profile.getNameAndAge());
-                fragment.getArguments().putString(ARG_TAG_CITY, profile.city_name);
+                fragment.getArguments().putString(ARG_TAG_CITY, profile.city.name);
                 fragment.getArguments().putInt(ARG_TAG_BACKGROUND, profile.background);
             }
         }
@@ -849,7 +849,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
     public interface ProfileUpdater {
         void update();
+
         void bindFragment(Fragment fragment);
+
         Profile getProfile();
     }
 }

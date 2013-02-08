@@ -10,13 +10,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.ui.fragments.BuyingFragment;
-import com.topface.topface.ui.fragments.ChatFragment;
-import com.topface.topface.ui.fragments.VipBuyFragment;
+import com.topface.topface.ui.fragments.*;
 
 public class ContainerActivity extends BaseFragmentActivity {
 
-    private int mCurrentFragmentId;
+    private int mCurrentFragmentId = -1;
     private Fragment mCurrentFragment;
 
     private static final String TAG_FRAGMENT = "current_fragment";
@@ -24,6 +22,8 @@ public class ContainerActivity extends BaseFragmentActivity {
     public static final int INTENT_BUY_VIP_FRAGMENT = 1;
     public static final int INTENT_BUYING_FRAGMENT = 2;
     public static final int INTENT_CHAT_FRAGMENT = 3;
+    public static final int INTENT_REGISTRATION_FRAGMENT = 4;
+    public static final int INTENT_RECOVER_PASSWORD = 5;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -44,8 +44,14 @@ public class ContainerActivity extends BaseFragmentActivity {
             }
         });
 
-        Intent intent = getIntent();
-        mCurrentFragmentId = intent.getIntExtra(Static.INTENT_REQUEST_KEY,0);
+        initRequestKey();
+    }
+
+    private void initRequestKey() {
+        if (mCurrentFragmentId == -1) {
+            Intent intent = getIntent();
+            mCurrentFragmentId = intent.getIntExtra(Static.INTENT_REQUEST_KEY,0);
+        }
     }
 
     @Override
@@ -98,6 +104,13 @@ public class ContainerActivity extends BaseFragmentActivity {
                         intent.getIntExtra(ChatFragment.INTENT_USER_AGE, 0),
                         intent.getStringExtra(ChatFragment.INTENT_USER_CITY),
                         intent.getStringExtra(BaseFragmentActivity.INTENT_PREV_ENTITY));
+                break;
+            case INTENT_REGISTRATION_FRAGMENT:
+                fragment = new RegistrationFragment();
+                break;
+            case INTENT_RECOVER_PASSWORD:
+                fragment = new RecoverPwdFragment();
+                break;
             default:
                 break;
         }
@@ -107,5 +120,12 @@ public class ContainerActivity extends BaseFragmentActivity {
     @Override
     public boolean isTrackable() {
         return false;
+    }
+
+    @Override
+    protected boolean isNeedAuth() {
+        initRequestKey();
+        return mCurrentFragmentId != INTENT_REGISTRATION_FRAGMENT &&
+                mCurrentFragmentId != INTENT_RECOVER_PASSWORD && super.isNeedAuth();
     }
 }

@@ -274,7 +274,7 @@ public class ConnectionManager {
     }
 
     private AuthRequest getAuthRequest(Context context) {
-        AuthToken token = new AuthToken(context);
+        AuthToken token = AuthToken.getInstance();
         AuthRequest authRequest = new AuthRequest(context);
         authRequest.platform = token.getSocialNet();
         authRequest.sid = token.getUserId();
@@ -283,7 +283,7 @@ public class ConnectionManager {
     }
 
     private String getRevNum() {
-        return App.isDebugMode() ? Static.REV : "";
+        return App.DEBUG ? Static.REV : "";
     }
 
     /**

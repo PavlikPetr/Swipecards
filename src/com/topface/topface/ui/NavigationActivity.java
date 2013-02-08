@@ -113,7 +113,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     private boolean needChangeProfile() {
-        return (CacheProfile.age == 0 || CacheProfile.city_id == 0 || CacheProfile.photo == null)
+        return (CacheProfile.age == 0 || CacheProfile.city.id == 0 || CacheProfile.photo == null)
                 && shouldChangeProfile();
     }
 
