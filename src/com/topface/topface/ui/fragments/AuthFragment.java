@@ -137,6 +137,7 @@ public class AuthFragment extends BaseFragment {
             public void onClick(View v) {
                 btnTFClick();
                 removeRedAlert();
+                hideSoftKeyboard();
             }
         });
 
@@ -145,16 +146,20 @@ public class AuthFragment extends BaseFragment {
             public void onClick(View v) {
                 mAuthViewsFlipper.setDisplayedChild(0);
                 removeRedAlert();
-                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (mLogin != null) {
-                    imm.hideSoftInputFromWindow(mLogin.getWindowToken(), 0);
-                }
-
-                if (mPassword != null) {
-                    imm.hideSoftInputFromWindow(mPassword.getWindowToken(), 0);
-                }
+                hideSoftKeyboard();
             }
         });
+    }
+
+    private void hideSoftKeyboard() {
+        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (mLogin != null) {
+            imm.hideSoftInputFromWindow(mLogin.getWindowToken(), 0);
+        }
+
+        if (mPassword != null) {
+            imm.hideSoftInputFromWindow(mPassword.getWindowToken(), 0);
+        }
     }
 
     private void initRetryView(View root) {
@@ -192,9 +197,9 @@ public class AuthFragment extends BaseFragment {
         if (resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 Bundle extras = data.getExtras();
-                String login = extras.getString(RegistrationFragment.INTENT_LOGIN, Static.EMPTY);
-                String password = extras.getString(RegistrationFragment.INTENT_PASSWORD, Static.EMPTY);
-                String userId = extras.getString(RegistrationFragment.INTENT_USER_ID, Static.EMPTY);
+                String login = extras.getString(RegistrationFragment.INTENT_LOGIN);
+                String password = extras.getString(RegistrationFragment.INTENT_PASSWORD);
+                String userId = extras.getString(RegistrationFragment.INTENT_USER_ID);
                 AuthToken.getInstance().saveToken(userId, login, password);
                 hideButtons();
                 auth(generateTopfaceAuthRequest(login,password));
@@ -217,6 +222,7 @@ public class AuthFragment extends BaseFragment {
             public void onClick(View v) {
                 toggle = !toggle;
                 mPassword.setTransformationMethod(toggle ? null : passwordMethod);
+                mPassword.setSelection(mPassword.getText().length());
             }
         });
         mRecoverPwd = (TextView) root.findViewById(R.id.tvRecoverPwd);
@@ -416,6 +422,7 @@ public class AuthFragment extends BaseFragment {
                 });
                 break;
             case ApiResponse.INCORRECT_LOGIN:
+            case ApiResponse.UNKNOWN_SOCIAL_USER:
                 redAlert(R.string.incorrect_login);
                 needShowRetry = false;
                 break;
@@ -484,6 +491,9 @@ public class AuthFragment extends BaseFragment {
             mProgressBar.setVisibility(View.GONE);
             mLoginSendingProgress.setVisibility(View.GONE);
             mRetryView.setVisibility(View.GONE);
+            mRecoverPwd.setEnabled(true);
+            mLogin.setEnabled(true);
+            mPassword.setEnabled(true);
         }
     }
 
@@ -496,6 +506,9 @@ public class AuthFragment extends BaseFragment {
         mTFButton.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
         mLoginSendingProgress.setVisibility(View.VISIBLE);
+        mRecoverPwd.setEnabled(false);
+        mLogin.setEnabled(false);
+        mPassword.setEnabled(false);
     }
 
     private void btnVKClick() {

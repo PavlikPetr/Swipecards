@@ -105,12 +105,14 @@ public class ConnectionManager {
 
                     ApiResponse apiResponse = new ApiResponse(rawResponse);
                     //Если сессия кончилась, то переотправляем запрос авторизации, после этого обрабатываем обычным способом
+                    boolean sessionNotFound = false;
                     if (apiResponse.code == ApiResponse.SESSION_NOT_FOUND) {
                         apiResponse = reAuth(apiRequest.context, httpClient, httpPost, apiRequest);
+                        sessionNotFound = true;
                     }
                     //Если даже после переавторизации токен не верный,
                     //то отмечаем запрос как ошибку и ждем переавторизации пользователя
-                    if (apiResponse.code == ApiResponse.INVERIFIED_TOKEN) {
+                    if (apiResponse.code == ApiResponse.INVERIFIED_TOKEN || ((apiResponse.code == ApiResponse.INCORRECT_PASSWORD) && sessionNotFound)) {
                         sendBroadcastReauth(apiRequest.context);
                         addDelayedRequest(apiRequest);
                         apiResponse.code = ApiResponse.ERRORS_PROCCESED;
@@ -278,7 +280,14 @@ public class ConnectionManager {
         AuthRequest authRequest = new AuthRequest(context);
         authRequest.platform = token.getSocialNet();
         authRequest.sid = token.getUserId();
-        authRequest.token = token.getTokenKey();
+
+        if (token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+            authRequest.login = token.getLogin();
+            authRequest.password = token.getPassword();
+        } else {
+            authRequest.token = token.getTokenKey();
+        }
+
         return authRequest;
     }
 

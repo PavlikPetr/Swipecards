@@ -48,7 +48,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     private BroadcastReceiver mServerResponseReceiver;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,13 +67,13 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             onInit();
         }
 
-
         mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         setStopTime();
         mNovice = Novice.getInstance(mPreferences);
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
-
     }
+
+
 
     private void initFragmentSwitcher() {
         mFragmentSwitcher = (FragmentSwitchController) findViewById(R.id.fragment_switcher);

@@ -104,6 +104,7 @@ public class BannerBlock {
 
     private void removeBanner() {
         unbindDrawables(mBannerLayout);
+        mBannerView = null;
     }
 
     private void unbindDrawables(View view) {
@@ -211,14 +212,16 @@ public class BannerBlock {
                 @Override
                 public void onLoadingComplete(Bitmap loadedImage) {
                     super.onLoadingComplete(loadedImage);
-                    float deviceWidth = Device.getDisplayMetrics(mFragment.getActivity()).widthPixels;
-                    float imageWidth = loadedImage.getWidth();
-                    //Если ширина экрана больше, чем у нашего баннера, то пропорционально увеличиваем высоту imageView
-                    if (deviceWidth > imageWidth) {
-                        ViewGroup.LayoutParams params = mBannerView.getLayoutParams();
-                        params.height = (int) ((deviceWidth / imageWidth) * (float) loadedImage.getHeight());
-                        mBannerView.setLayoutParams(params);
-                        mBannerView.invalidate();
+                    if (mBannerView != null) {
+                        float deviceWidth = Device.getDisplayMetrics(mFragment.getActivity()).widthPixels;
+                        float imageWidth = loadedImage.getWidth();
+                        //Если ширина экрана больше, чем у нашего баннера, то пропорционально увеличиваем высоту imageView
+                        if (deviceWidth > imageWidth) {
+                            ViewGroup.LayoutParams params = mBannerView.getLayoutParams();
+                            params.height = (int) ((deviceWidth / imageWidth) * (float) loadedImage.getHeight());
+                            mBannerView.setLayoutParams(params);
+                            mBannerView.invalidate();
+                        }
                     }
                 }
 
@@ -335,7 +338,7 @@ public class BannerBlock {
 
     public void onResume() {
         initBanner();
-        if (mBannerView instanceof AdfonicView) mBannerView.invalidate();
+        if (mBannerView != null && mBannerView instanceof AdfonicView) mBannerView.invalidate();
         if (mPLus1Asker != null) mPLus1Asker.onResume();
     }
 

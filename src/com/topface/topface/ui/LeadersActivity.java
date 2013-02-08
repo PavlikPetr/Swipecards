@@ -174,7 +174,7 @@ public class LeadersActivity extends BaseFragmentActivity {
             qSort(uselessPhotos, 0, uselessPhotos.size() - 1);
         }
         if (usePhotos.size() > 0) {
-            qSort(usePhotos, 0, uselessPhotos.size() - 1);
+            qSort(usePhotos, 0, usePhotos.size() - 1);
         }
     }
 

@@ -62,9 +62,11 @@ public class SettingsAccountFragment extends TrackedFragment {
         final AuthToken token = AuthToken.getInstance();
 
         if (token.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
-            icon = getResources().getDrawable(R.drawable.fb_icon);
+            icon = getResources().getDrawable(R.drawable.fb_logo_account);
         } else if (token.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
-            icon = getResources().getDrawable(R.drawable.vk_icon);
+            icon = getResources().getDrawable(R.drawable.vk_logo_account);
+        } else if (token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+            icon = getResources().getDrawable(R.drawable.tf_logo_account);
         }
         TextView textName = (TextView) root.findViewById(R.id.tvName);
         textName.setText(Settings.getInstance().getSocialAccountName());
