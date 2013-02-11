@@ -14,10 +14,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import com.topface.topface.Data;
 import com.topface.topface.R;
+import com.topface.topface.Ssid;
 import com.topface.topface.Static;
-import com.topface.topface.data.Confirmation;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.PhotoAddRequest;
@@ -226,8 +225,7 @@ public class AddPhotoHelper {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             if (result != null) {
-                Confirmation c = Confirmation.parse(new ApiResponse(result));
-                if (c.completed) {
+                if (new ApiResponse(result).isCompleted()) {
                     Message msg = new Message();
                     msg.what = ADD_PHOTO_RESULT_OK;
                     try {
@@ -248,7 +246,7 @@ public class AddPhotoHelper {
 
     private String getRawResponse(Uri imageUri) throws IOException {
         PhotoAddRequest add = new PhotoAddRequest(AddPhotoHelper.this.mContext);
-        add.ssid = Data.SSID;
+        add.ssid = Ssid.SSID;
 
         Cursor cursor = mActivity.getContentResolver().query(imageUri, new String[]{android.provider.MediaStore.Images.ImageColumns.DATA}, null, null, null);
         cursor.moveToFirst();
@@ -265,7 +263,7 @@ public class AddPhotoHelper {
 
     private String getRawResponse(File file) throws IOException {
         PhotoAddRequest add = new PhotoAddRequest(AddPhotoHelper.this.mContext);
-        add.ssid = Data.SSID;
+        add.ssid = Ssid.SSID;
 
 
 //        String data = Base64.encodeFromFile(file.getAbsolutePath());

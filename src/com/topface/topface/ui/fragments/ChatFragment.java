@@ -94,6 +94,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     private RelativeLayout mLockScreen;
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        DateUtils.syncTime();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 //        super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.ac_chat, null);

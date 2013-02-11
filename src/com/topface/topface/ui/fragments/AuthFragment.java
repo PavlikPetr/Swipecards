@@ -18,7 +18,10 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
-import com.topface.topface.*;
+import com.topface.topface.App;
+import com.topface.topface.GCMUtils;
+import com.topface.topface.R;
+import com.topface.topface.Ssid;
 import com.topface.topface.data.Auth;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
@@ -152,7 +155,7 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void hideSoftKeyboard() {
-        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (mLogin != null) {
             imm.hideSoftInputFromWindow(mLogin.getWindowToken(), 0);
         }
@@ -168,7 +171,7 @@ public class AuthFragment extends BaseFragment {
         mRetryView.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 // инициализация обработчика происходит в методе authorizationFailed()
+                // инициализация обработчика происходит в методе authorizationFailed()
             }
         });
         mRetryView.setVisibility(View.GONE);
@@ -202,7 +205,7 @@ public class AuthFragment extends BaseFragment {
                 String userId = extras.getString(RegistrationFragment.INTENT_USER_ID);
                 AuthToken.getInstance().saveToken(userId, login, password);
                 hideButtons();
-                auth(generateTopfaceAuthRequest(login,password));
+                auth(generateTopfaceAuthRequest(login, password));
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
             showButtons();
@@ -218,6 +221,7 @@ public class AuthFragment extends BaseFragment {
         root.findViewById(R.id.ivShowPassword).setOnClickListener(new View.OnClickListener() {
             boolean toggle = false;
             TransformationMethod passwordMethod = new PasswordTransformationMethod();
+
             @Override
             public void onClick(View v) {
                 toggle = !toggle;
@@ -315,7 +319,7 @@ public class AuthFragment extends BaseFragment {
 
     private void saveAuthInfo(ApiResponse response) {
         Auth auth = Auth.parse(response);
-        Data.saveSSID(getActivity().getApplicationContext(), auth.ssid);
+        Ssid.save(getActivity().getApplicationContext(), auth.ssid);
         GCMUtils.init(getActivity());
     }
 

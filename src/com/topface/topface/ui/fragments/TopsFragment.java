@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
-import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
@@ -33,6 +32,7 @@ import java.util.LinkedList;
 
 public class TopsFragment extends BaseFragment {
 
+    private LinkedList<City> mCityList;
     // Data cache
     private LinkedList<Top> mTopsList = new LinkedList<Top>();
     private GridView mGallery;
@@ -192,7 +192,7 @@ public class TopsFragment extends BaseFragment {
     }
 
     private void choiceCity() {
-        if (Data.cityList != null && Data.cityList.size() > 0) {
+        if (mCityList != null && mCityList.size() > 0) {
             showCitiesDialog();
             return;
         }
@@ -204,7 +204,7 @@ public class TopsFragment extends BaseFragment {
 
             @Override
             protected void success(LinkedList<City> data, ApiResponse response) {
-                Data.cityList = data;
+                mCityList = data;
                 onUpdateSuccess(false);
                 showCitiesDialog();
             }
@@ -226,13 +226,13 @@ public class TopsFragment extends BaseFragment {
     private void showCitiesDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.filter_select_city));
-        int arraySize = Data.cityList.size();
+        int arraySize = mCityList.size();
         String[] cities = new String[arraySize];
         for (int i = 0; i < arraySize; ++i)
-            cities[i] = Data.cityList.get(i).name;
+            cities[i] = mCityList.get(i).name;
         builder.setSingleChoiceItems(cities, mActionData.city_popup_pos, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int position) {
-                City city = Data.cityList.get(position);
+                City city = mCityList.get(position);
                 if (mActionData.city_id != city.id) {
                     mActionData.city_id = city.id;
                     mActionData.city_name = city.name;

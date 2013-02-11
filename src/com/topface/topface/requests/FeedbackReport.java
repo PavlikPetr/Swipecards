@@ -23,7 +23,7 @@ public class FeedbackReport extends AbstractApiRequest {
                 .put("subject", subject)
                 .put("message", text)
                 .put("extra", extra)
-                .put("email",email);
+                .put("email", email);
     }
 
     @Override

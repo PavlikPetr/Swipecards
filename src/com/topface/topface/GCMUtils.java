@@ -121,7 +121,7 @@ public class GCMUtils {
                 if (intent != null) {
                     intent.putExtra("C2DM", true);
                     final TopfaceNotificationManager notificationManager = TopfaceNotificationManager.getInstance(context);
-                    if (!Data.isSSID()) {
+                    if (!Ssid.isLoaded()) {
                         if (type == GCM_TYPE_UPDATE || type == GCM_TYPE_NOTIFICATION) {
                             notificationManager.showNotification(
                                     title,
@@ -380,7 +380,7 @@ public class GCMUtils {
                 JSONObject obj = new JSONObject(json);
                 id = obj.optInt("id");
                 name = obj.optString("name");
-                sex = obj.optInt("sex",Static.BOY);
+                sex = obj.optInt("sex", Static.BOY);
                 JSONObject photo = obj.optJSONObject("photo");
                 if (photo != null && photo.has(Photo.SIZE_128)) {
                     photoUrl = obj.optJSONObject("photo").optString(Photo.SIZE_128);
