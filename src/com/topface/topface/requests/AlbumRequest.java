@@ -12,6 +12,8 @@ public class AlbumRequest extends AbstractApiRequest{
 
     private int uid;
     private int limit;
+    private int to;
+    private boolean firstmain;
 
     public AlbumRequest(Context context, int uid, int limit) {
         super(context);
@@ -19,9 +21,22 @@ public class AlbumRequest extends AbstractApiRequest{
         this.limit = limit;
     }
 
+    public AlbumRequest(Context context, int uid, int limit, int to, boolean  firstmain) {
+        super(context);
+        this.uid = uid;
+        this.limit = limit;
+        this.to = to;
+        this.firstmain = firstmain;
+    }
+
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        return new JSONObject().put("limit", limit).put("uid", uid);
+
+        return new JSONObject().put("limit", limit)
+                .put("userid", uid)
+                .put("to", to)
+                .put("firstmain", firstmain);
+
     }
 
     @Override

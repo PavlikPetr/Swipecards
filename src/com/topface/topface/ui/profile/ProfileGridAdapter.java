@@ -26,11 +26,11 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
         mPhotoLinks = new Photos();
         mTotalPhotos = totalPhotos;
         mUpdater = callback;
-        setData(photoLinks);
+        setData(photoLinks, totalPhotos > photoLinks.size());
     }
 
-    public void setData(Photos photoLinks) {
-        if (mPhotoLinks.size() > 0 && needLoadNewItems) {
+    public void setData(Photos photoLinks, boolean needMore) {
+        if (mPhotoLinks.size() > 0 && mPhotoLinks.get(mPhotoLinks.size() - 1).getId() == 0) {
             mPhotoLinks.remove(mPhotoLinks.size() - 1);
         }
 
@@ -38,7 +38,7 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
             mPhotoLinks.add(photo);
         }
 
-        if (mTotalPhotos > mPhotoLinks.size()) {
+        if (needMore) {
             mPhotoLinks.add(new Photo(new JSONObject()));
             needLoadNewItems = true;
         } else {

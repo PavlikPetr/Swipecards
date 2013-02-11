@@ -31,7 +31,6 @@ public class ProfilePhotoFragment extends BaseFragment {
     private ProfilePhotoGridAdapter mProfilePhotoGridAdapter;
     private Photos mPhotoLinks;
     private AddPhotoHelper mAddPhotoHelper;
-    private static final String TAG = "PPF :: ";
     private ViewFlipper mViewFlipper;
     private LockerView lockerView;
     private GridView mGridAlbum;
@@ -60,12 +59,12 @@ public class ProfilePhotoFragment extends BaseFragment {
     }
 
     private void sendAlbumRequest() {
-        AlbumRequest request = new AlbumRequest(getActivity(), CacheProfile.uid, AlbumRequest.DEFAULT_PHOTOS_LIMIT);
+        AlbumRequest request = new AlbumRequest(getActivity(), CacheProfile.uid, AlbumRequest.DEFAULT_PHOTOS_LIMIT, mPhotoLinks.get(mPhotoLinks.size() - 2).getId(), false);
         request.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
                 if(mGridAlbum != null) {
-                    ((ProfilePhotoGridAdapter)mGridAlbum.getAdapter()).setData(Photos.parse(response.jsonResult.optJSONArray("photos")));
+                    ((ProfilePhotoGridAdapter)mGridAlbum.getAdapter()).setData(Photos.parse(response.jsonResult.optJSONArray("items")), response.jsonResult.optBoolean("more"));
                 }
             }
 

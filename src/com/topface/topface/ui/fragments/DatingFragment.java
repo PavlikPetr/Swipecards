@@ -96,6 +96,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
      */
     private boolean mUpdateInProcess;
     private BroadcastReceiver mProfileReceiver;
+    private boolean mNeedMore;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -552,6 +553,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             if (photosRest > 0) {
                 photosRest = photosRest - currUser.photos.size();
                 photosRest = (photosRest > photosLimit)? photosLimit : photosRest;
+                mNeedMore = true;
             } else {
                 photosRest = 0;
             }
@@ -872,7 +874,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 final Photos data = ((ImageSwitcher.ImageSwitcherAdapter)mImageSwitcher.getAdapter()).getData();
                 int photosCount = mUserSearchList.getCurrentUser().photosCount;
 
-                if (photosCount > data.size()) {
+                if (mNeedMore) {
                     int photosRest = photosCount - data.size();
                     if (photosRest > 0) {
                         photosRest = photosRest - data.size();
@@ -904,11 +906,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     };
 
     private void sendAlbumRequest(final Photos data) {
-        AlbumRequest request = new AlbumRequest(getActivity(), mUserSearchList.getCurrentUser().id, AlbumRequest.DEFAULT_PHOTOS_LIMIT);
+        int id = data.get(data.size() - AlbumRequest.DEFAULT_PHOTOS_LIMIT).getId();
+        AlbumRequest request = new AlbumRequest(getActivity(), mUserSearchList.getCurrentUser().id, AlbumRequest.DEFAULT_PHOTOS_LIMIT, id, true);
         request.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
                 Photos newPhotos = Photos.parse(response.jsonResult.optJSONArray("photos"));
+                mNeedMore = response.jsonResult.optBoolean("more");
                 for(Photo photo : newPhotos) {
                     data.set(data.size() - AlbumRequest.DEFAULT_PHOTOS_LIMIT, photo);
                 }
