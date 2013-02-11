@@ -48,6 +48,7 @@ public class App extends Application {
 
     @Override
     public void onCreate() {
+        //android.os.Debug.startMethodTracing("topface_create");
         ACRA.init(this);
         super.onCreate();
         mContext = getApplicationContext();

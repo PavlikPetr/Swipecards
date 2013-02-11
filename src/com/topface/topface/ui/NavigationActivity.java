@@ -420,8 +420,13 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     private void setStopTime() {
-        long stopTime = Calendar.getInstance().getTimeInMillis();
-        mPreferences.edit().putLong(Static.PREFERENCES_STOP_TIME, stopTime).commit();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                long stopTime = Calendar.getInstance().getTimeInMillis();
+                mPreferences.edit().putLong(Static.PREFERENCES_STOP_TIME, System.currentTimeMillis()).commit();
+            }
+        }).start();
     }
 
     @Override
