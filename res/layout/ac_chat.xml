@@ -68,6 +68,8 @@
                     android:id="@+id/btnChatGift"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    style="@style/ChatButtonsText"
+                    android:text="@string/general_gift"
                     android:background="@drawable/chat_gift_selector"/>
 
             <Button
@@ -75,15 +77,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
+                    style="@style/ChatButtonsText"
+                    android:text="@string/general_place"
                     android:background="@drawable/chat_place_selector"/>
 
             <Button
-                    android:id="@+id/btnChatMap"
+                    android:id="@+id/btnChatPhoto"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
-                    android:visibility="gone"
-                    android:background="@drawable/chat_map_selector"/>
+                    style="@style/ChatButtonsText"
+                    android:text="@string/general_soon"
+                    android:background="@drawable/chat_photo_selector"/>
         </LinearLayout>
     </com.topface.topface.ui.views.SwapControl>
 

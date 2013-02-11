@@ -133,17 +133,20 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         root.findViewById(R.id.btnChatGift).setOnClickListener(this);
 
         // Place Button
-        root.findViewById(R.id.btnChatPlace).setOnClickListener(this);
+//        root.findViewById(R.id.btnChatPlace).setOnClickListener(this);
 
         // Map Button
         /**
          * Показываем кнопки отправки произвольного местоположения когда карты доступны
          */
         if (Utils.isGoogleMapsAvailable()) {
-            View chatMap = root.findViewById(R.id.btnChatMap);
+            View chatMap = root.findViewById(R.id.btnChatPlace);
             chatMap.setOnClickListener(this);
             chatMap.setVisibility(View.VISIBLE);
         }
+
+        // Photo Button
+        root.findViewById(R.id.btnChatPhoto).setEnabled(false);
 
         // Edit Box
         mEditBox = (EditText) root.findViewById(R.id.edChatBox);
@@ -459,14 +462,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 EasyTracker.getTracker().trackEvent("Chat", "SendGiftClick", "", 1L);
             }
             break;
+//            case R.id.btnChatPlace: {
+//                targetLocationToSend();
+//                // Toast.makeText(getActivity(), "Place",
+//                // Toast.LENGTH_SHORT).show();
+//                EasyTracker.getTracker().trackEvent("Chat", "SendPlaceClick", "", 1L);
+//            }
+//            break;
             case R.id.btnChatPlace: {
-                targetLocationToSend();
-                // Toast.makeText(getActivity(), "Place",
-                // Toast.LENGTH_SHORT).show();
-                EasyTracker.getTracker().trackEvent("Chat", "SendPlaceClick", "", 1L);
-            }
-            break;
-            case R.id.btnChatMap: {
                 if (Utils.isGoogleMapsAvailable()) {
                     startActivityForResult(new Intent(getActivity(), GeoMapActivity.class),
                             GeoMapActivity.INTENT_REQUEST_GEO);
