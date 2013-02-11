@@ -42,17 +42,7 @@ public abstract class ApiRequest {
             RetryDialog retryDialog = new RetryDialog(context, this);
             handler.fail(0, new ApiResponse(""));
             retryDialog.show();
-        }
-        //Вот эта штука скорее всего не нужна из-за того что такая проверка теперь идет в любой активити
-//         else if ((!Data.isSSID() || (new AuthToken(context)).isEmpty()) && doNeedAuthorize) {
-//            if (context != null && !AuthActivity.isStarted()) {
-//                Debug.log("SSID and Token is empty, need authorize");
-//
-//                context.startActivity(new Intent(context, AuthActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
-//            }
-//      }
-
-        else {
+        } else {
             connection = ConnectionManager.getInstance().sendRequest(this);
         }
 

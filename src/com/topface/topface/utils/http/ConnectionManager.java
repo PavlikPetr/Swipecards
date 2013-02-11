@@ -87,7 +87,7 @@ public class ConnectionManager {
                 connection.setHttpClient(httpClient);
                 connection.setHttpPost(httpPost);
 
-                apiRequest.ssid = Data.SSID;
+                apiRequest.ssid = Ssid.SSID;
 
                 try {
                     httpClient = AndroidHttpClient.newInstance("Android");
@@ -257,7 +257,7 @@ public class ConnectionManager {
             response = new ApiResponse(rawResponse);
             if (response.code == ApiResponse.RESULT_OK) {
                 Auth auth = Auth.parse(response);
-                Data.saveSSID(context, auth.ssid);
+                Ssid.save(context, auth.ssid);
                 request.ssid = auth.ssid;
                 Debug.logJson(TAG, "REAUTH REQUEST >>> " + Static.API_URL + " rev:" + getRevNum(), request.toString());
                 httpPost.setEntity(new ByteArrayEntity(request.toString().getBytes("UTF8")));
@@ -266,7 +266,7 @@ public class ConnectionManager {
                 response = new ApiResponse(rawResponse);
             } else {
                 //Если не удалос залогиниться, сбрасываем ssid целиком и в следующий раз будем авторизовываться
-                Data.removeSSID(context);
+                Ssid.remove(context);
             }
         } catch (Exception e) {
             Debug.log(TAG, "С exception:" + e.toString());
