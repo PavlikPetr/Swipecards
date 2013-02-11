@@ -426,7 +426,7 @@
     <string name="map_popup_address">Адрес</string>
     <string name="black_list_info">Вы добавили собеседника в черный список. Изменить это можно в своем профиле, в настройках VIP-статуса.</string>
     <string name="general_gift">Подарок</string>
-    <string name="general_place">Подарок</string>
+    <string name="general_place">Место</string>
     <string name="general_soon">Скоро будет</string>
     <string name="black_list_activation">Активируйте VIP-статус и используйте черный список</string>
     <string name="profile_edit_age_ranges">Возраст должен быть в диапазоне от 16 до 99 лет. Пожалуйста, введите корректное число и повторите попытку.</string>    
