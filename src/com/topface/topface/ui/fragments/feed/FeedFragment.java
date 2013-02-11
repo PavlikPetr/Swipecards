@@ -22,6 +22,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
+import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.requests.*;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
@@ -107,7 +108,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
 
-
     protected void initFloatBlock(ViewGroup view) {
         mFloatBlock = new FloatBlock(this, view);
     }
@@ -189,8 +189,14 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
         mListAdapter = getNewAdapter();
         getListAdapter().setOnAvatarClickListener(this);
+        //Пауза загрузки изображений при прокрутке списка
         mListView.setOnScrollListener(
-                new PauseOnScrollListener(Static.PAUSE_DOWNLOAD_ON_SCROLL, Static.PAUSE_DOWNLOAD_ON_FLING, getListAdapter())
+                new PauseOnScrollListener(
+                        DefaultImageLoader.getInstance().getImageLoader(),
+                        Static.PAUSE_DOWNLOAD_ON_SCROLL,
+                        Static.PAUSE_DOWNLOAD_ON_FLING,
+                        getListAdapter()
+                )
         );
 
         ImageView iv = new ImageView(getActivity().getApplicationContext());

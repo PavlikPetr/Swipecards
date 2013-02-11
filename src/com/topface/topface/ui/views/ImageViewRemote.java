@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
-import com.nostra13.universalimageloader.postprocessors.ImagePostProcessor;
+import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.imageloader.*;
@@ -38,7 +38,7 @@ public class ImageViewRemote extends ImageView {
      * Задержка перед следующей попыткой загрузки изображения
      */
     private static final long REPEAT_SCHEDULE = 2000;
-    private ImagePostProcessor mPostProcessor;
+    private BitmapProcessor mPostProcessor;
     private String mCurrentSrc;
     private boolean mIsAnimationEnabled;
     /**
@@ -86,11 +86,11 @@ public class ImageViewRemote extends ImageView {
                 ),
                 values.getDimension(
                         R.styleable.ImageViewRemote_cornersRadius,
-                        RoundCornersPostProcessor.DEFAULT_RADIUS
+                        RoundCornersProcessor.DEFAULT_RADIUS
                 ),
                 values.getResourceId(
                         R.styleable.ImageViewRemote_clipMask,
-                        MaskClipPostProcessor.DEFAULT_MASK
+                        MaskClipProcessor.DEFAULT_MASK
                 )
         );
 
@@ -106,16 +106,16 @@ public class ImageViewRemote extends ImageView {
 
         switch (postProcessorId) {
             case POST_PROCESSOR_ROUNDED:
-                mPostProcessor = new RoundPostProcessor();
+                mPostProcessor = new RoundProcessor();
                 break;
             case POST_PROCESSOR_ROUND_CORNERS:
-                mPostProcessor = new RoundCornersPostProcessor(cornerRadius);
+                mPostProcessor = new RoundCornersProcessor(cornerRadius);
                 break;
             case POST_PROCESSOR_MASK:
-                mPostProcessor = new MaskClipPostProcessor(maskId);
+                mPostProcessor = new MaskClipProcessor(maskId);
                 break;
             case POST_PROCESSOR_CIRCUMCIRCLE:
-                mPostProcessor = new CircumCirclePostProcessor();
+                mPostProcessor = new CircumCircleProcessor();
                 break;
             default:
                 mPostProcessor = null;
@@ -201,7 +201,7 @@ public class ImageViewRemote extends ImageView {
         return DefaultImageLoader.getInstance();
     }
 
-    public ImagePostProcessor getPostProcessor() {
+    public BitmapProcessor getPostProcessor() {
         return mPostProcessor;
     }
 
@@ -241,7 +241,8 @@ public class ImageViewRemote extends ImageView {
         }
 
         @Override
-        public void onLoadingFailed(FailReason failReason) {
+        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+            super.onLoadingFailed(imageUri, view, failReason);
             if (FailReason.OUT_OF_MEMORY != failReason) {
                 try {
                     if (mRepeatCounter >= MAX_REPEAT_COUNT) {
@@ -275,7 +276,9 @@ public class ImageViewRemote extends ImageView {
         }
 
         @Override
-        public void onLoadingComplete(Bitmap loadedImage) {
+        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+            super.onLoadingComplete(imageUri, view, loadedImage);
+
             mRepeatCounter = 0;
             if (mHandler != null) {
                 mHandler.sendEmptyMessage(LOADING_COMPLETE);
@@ -283,7 +286,8 @@ public class ImageViewRemote extends ImageView {
         }
 
         @Override
-        public void onLoadingCancelled() {
+        public void onLoadingCancelled(String imageUri, View view) {
+            super.onLoadingCancelled(imageUri, view);
             mRepeatCounter = 0;
             if (mHandler != null) {
                 mHandler.sendEmptyMessage(LOADING_ERROR);

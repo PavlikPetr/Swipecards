@@ -144,14 +144,18 @@ public class ImageSwitcher extends ViewPager {
          */
         private ImageLoadingListener getListener(final int position) {
             return new SimpleImageLoadingListener() {
+
                 @Override
-                public void onLoadingComplete(Bitmap loadedImage) {
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    super.onLoadingComplete(imageUri, view, loadedImage);
+
                     int currentItem = getCurrentItem();
                     if (currentItem + 1 == position || currentItem - 1 == position) {
                         Debug.log("IS: onLoadingComplete " + position);
                         setPhotoToPosition(position, true);
                     }
                 }
+
             };
         }
 
