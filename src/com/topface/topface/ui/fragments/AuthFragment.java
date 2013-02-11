@@ -197,7 +197,7 @@ public class AuthFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK && requestCode == ContainerActivity.INTENT_RECOVER_PASSWORD) {
             if (data != null) {
                 Bundle extras = data.getExtras();
                 String login = extras.getString(RegistrationFragment.INTENT_LOGIN);
