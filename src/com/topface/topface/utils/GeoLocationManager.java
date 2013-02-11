@@ -225,14 +225,14 @@ public class GeoLocationManager {
         List<Overlay> mapOverlays = mapView.getOverlays();
         mapOverlays.clear();
 //		mPinHeight = mPinDrawable.getIntrinsicHeight();
-        GeoItemizedOverlay itemizedoverlay = new GeoItemizedOverlay(mPinDrawable, context);
+        GeoItemizedOverlay itemizedOverlay = new GeoItemizedOverlay(mPinDrawable, context);
 
         String address = getLocationAddress(point);
         OverlayItem overlayitem = new OverlayItem(point, "", address);
 
         shiftToPoint(mapView, point, zoom);
-        itemizedoverlay.addOverlay(overlayitem, mapView);
-        mapOverlays.add(itemizedoverlay);
+        itemizedOverlay.addOverlay(overlayitem, mapView);
+        mapOverlays.add(itemizedOverlay);
     }
 
     /**
