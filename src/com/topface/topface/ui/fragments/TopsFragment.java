@@ -14,6 +14,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.data.Top;
+import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.CitiesRequest;
 import com.topface.topface.requests.DataApiHandler;
@@ -136,7 +137,11 @@ public class TopsFragment extends BaseFragment {
         mGridAdapter = new TopsAdapter(getActivity(), mTopsList);
         mGallery.setAdapter(mGridAdapter);
         mGallery.setOnScrollListener(
-                new PauseOnScrollListener(Static.PAUSE_DOWNLOAD_ON_SCROLL, Static.PAUSE_DOWNLOAD_ON_FLING)
+                new PauseOnScrollListener(
+                        DefaultImageLoader.getInstance().getImageLoader(),
+                        Static.PAUSE_DOWNLOAD_ON_SCROLL,
+                        Static.PAUSE_DOWNLOAD_ON_FLING
+                )
         );
 
         mFloatBlock = new FloatBlock(this, (ViewGroup) view);

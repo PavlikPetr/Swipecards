@@ -110,7 +110,7 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
     protected void fillData(JSONObject photoItem) {
         super.fillData(photoItem);
 
-        if (photoItem.has("id")) {
+        if (photoItem != null && photoItem.has("id")) {
             mId = photoItem.optInt("id");
             JSONObject linksJson = photoItem.optJSONObject("links");
             if (linksJson != null) {

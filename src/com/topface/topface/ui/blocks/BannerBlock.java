@@ -171,28 +171,36 @@ public class BannerBlock {
                 }
 
                 @Override
-                public void onPresentScreen() { }
+                public void onPresentScreen() {
+                }
 
                 @Override
-                public void onLeaveApplication() { }
+                public void onLeaveApplication() {
+                }
 
                 @Override
-                public void onInvalidRequest() { }
+                public void onInvalidRequest() {
+                }
 
                 @Override
-                public void onNetworkError() { }
+                public void onNetworkError() {
+                }
 
                 @Override
-                public void onNoFill() { }
+                public void onNoFill() {
+                }
 
                 @Override
-                public void onInternalError() { }
+                public void onInternalError() {
+                }
 
                 @Override
-                public void onDismissScreen() { }
+                public void onDismissScreen() {
+                }
 
                 @Override
-                public void onClick() { }
+                public void onClick() {
+                }
             });
         } else if (mBannerView instanceof Plus1BannerView) {
             mBannerView.setVisibility(View.VISIBLE);
@@ -209,9 +217,11 @@ public class BannerBlock {
             ((ImageView) mBannerView).setImageDrawable(null);
 
             DefaultImageLoader.getInstance().displayImage(banner.url, (ImageView) mBannerView, new SimpleImageLoadingListener() {
+
                 @Override
-                public void onLoadingComplete(Bitmap loadedImage) {
-                    super.onLoadingComplete(loadedImage);
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    super.onLoadingComplete(imageUri, view, loadedImage);
+
                     if (mBannerView != null) {
                         float deviceWidth = Device.getDisplayMetrics(mFragment.getActivity()).widthPixels;
                         float imageWidth = loadedImage.getWidth();
@@ -226,10 +236,11 @@ public class BannerBlock {
                 }
 
                 @Override
-                public void onLoadingFailed(FailReason failReason) {
-                    super.onLoadingFailed(failReason);
+                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                    super.onLoadingFailed(imageUri, view, failReason);
                     Debug.log("LOAD FAILED::" + failReason.toString());
                 }
+
             });
             sendStat(getBannerName(banner.url), "view");
             mBannerView.setOnClickListener(new View.OnClickListener() {
