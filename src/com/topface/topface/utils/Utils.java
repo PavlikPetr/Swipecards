@@ -55,8 +55,6 @@ public class Utils {
             clippedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, width, null, false);
         }
 
-        bitmap.recycle();
-
         return clippedBitmap;
     }
 
@@ -87,7 +85,6 @@ public class Utils {
 
             // сжатие изображения
             Bitmap scaledBitmap = Bitmap.createBitmap(rawBitmap, 0, 0, srcWidth, srcHeight, matrix, true);
-            rawBitmap.recycle();
 
             // вырезаем необходимый размер
             if (LAND) {
@@ -98,8 +95,6 @@ public class Utils {
                 // у вертикальной режим с верху
                 clippedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, dstWidth, dstHeight, null, false);
             }
-
-            scaledBitmap.recycle();
 
         } catch (OutOfMemoryError e) {
             Debug.error("ClipANdScaleImage:: " + e.toString());
@@ -234,7 +229,6 @@ public class Utils {
             scaledBitmap = output;
         }
 
-        output.recycle();
         bitmap.recycle();
 
         return scaledBitmap;
