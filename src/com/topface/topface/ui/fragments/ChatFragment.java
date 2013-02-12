@@ -84,11 +84,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     private static ProgressDialog mProgressDialog;
     private Button btnBack;
     private Button mAddToBlackList;
+    private ImageButton mBtnChatAdd;
 
     private String[] editButtonsNames;
     private boolean mReceiverRegistered = false;
     private int itemId;
     private boolean wasFailed = false;
+    private boolean isInBlackList = false;
 
     // Managers
     private GeoLocationManager mGeoManager = null;
@@ -153,7 +155,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         mSwapControl = ((SwapControl) root.findViewById(R.id.swapFormView));
 
         // Add Button
-        root.findViewById(R.id.btnChatAdd).setOnClickListener(this);
+        mBtnChatAdd = (ImageButton) root.findViewById(R.id.btnChatAdd);
+        mBtnChatAdd.setOnClickListener(this);
+        mBtnChatAdd.setSelected(false);
 
         // Gift Button
         root.findViewById(R.id.btnChatGift).setOnClickListener(this);
@@ -432,10 +436,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 EasyTracker.getTracker().trackEvent("Chat", "SendMessage", "", 1L);
                 break;
             case R.id.btnChatAdd:
-                if (mIsAddPanelOpened)
+                if (mIsAddPanelOpened) {
                     mSwapControl.snapToScreen(0);
-                else
+                    mBtnChatAdd.setSelected(false);
+                }else {
                     mSwapControl.snapToScreen(1);
+                    mBtnChatAdd.setSelected(true);
+                }
                 mIsAddPanelOpened = !mIsAddPanelOpened;
 
                 EasyTracker.getTracker().trackEvent("Chat", "AdditionalClick", "", 1L);
@@ -486,7 +493,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                 break;
             case R.id.btnAddToBlackList:
-                addToBlackList();
+                if (isInBlackList) {
+                    removeFromBlackList();
+                } else {
+                    addToBlackList();
+                }
                 break;
             default: {
 
@@ -495,13 +506,30 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         }
     }
 
+    private void removeFromBlackList() {
+        BlackListDeleteRequest deleteBlackListRequest = new BlackListDeleteRequest(mUserId,getActivity());
+        mAddToBlackList.setEnabled(false);
+        deleteBlackListRequest.callback(new VipApiHandler(){
+            @Override
+            public void always(ApiResponse response) {
+                super.always(response);
+                isInBlackList = false;
+                mAddToBlackList.setText(R.string.black_list_add);
+                mAddToBlackList.setEnabled(true);
+            }
+        }).exec();
+    }
+
     private void addToBlackList() {
         BlackListAddRequest blackListRequest = new BlackListAddRequest(mUserId, getActivity());
+        mAddToBlackList.setEnabled(false);
         blackListRequest.callback(new VipApiHandler() {
             @Override
-            public void success(ApiResponse response) {
-                super.success(response);
-                mAddToBlackList.setEnabled(false);
+            public void always(ApiResponse response) {
+                super.always(response);
+                isInBlackList = true;
+                mAddToBlackList.setText(R.string.black_list_delete);
+                mAddToBlackList.setEnabled(true);
             }
         }).exec();
     }

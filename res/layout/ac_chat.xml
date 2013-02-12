@@ -132,8 +132,8 @@
                         style="@style/ButtonGrayText"
                         android:text="@string/black_list_add"
                         android:layout_centerInParent="true"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginBottom="24dp"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginBottom="32dp"
                         />
             </RelativeLayout>
         </RelativeLayout>
