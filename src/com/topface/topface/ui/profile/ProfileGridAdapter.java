@@ -39,7 +39,7 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
         }
 
         if (needMore) {
-            mPhotoLinks.add(new Photo(new JSONObject()));
+            mPhotoLinks.add(new Photo());
             needLoadNewItems = true;
         } else {
             needLoadNewItems = false;

@@ -1,9 +1,13 @@
 package com.topface.topface.ui.profile;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,6 +30,8 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 
+import java.util.ArrayList;
+
 public class ProfilePhotoFragment extends BaseFragment {
 
     private ProfilePhotoGridAdapter mProfilePhotoGridAdapter;
@@ -34,6 +40,7 @@ public class ProfilePhotoFragment extends BaseFragment {
     private ViewFlipper mViewFlipper;
     private LockerView lockerView;
     private GridView mGridAlbum;
+    private BroadcastReceiver mPhotosReceiver;
 
     public ProfilePhotoFragment() {
         super();
@@ -133,6 +140,18 @@ public class ProfilePhotoFragment extends BaseFragment {
             }
         });
 
+        mPhotosReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                ArrayList<Photo> arrList = intent.getParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS);
+                Photos newPhotos = new Photos();
+                newPhotos.addAll(arrList);
+                ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).setData(newPhotos, intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_MORE, false));
+            }
+        };
+
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mPhotosReceiver, new IntentFilter(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT));
+
         return root;
     }
 
@@ -160,7 +179,7 @@ public class ProfilePhotoFragment extends BaseFragment {
             Intent intent = new Intent(getActivity().getApplicationContext(), PhotoSwitcherActivity.class);
             intent.putExtra(PhotoSwitcherActivity.INTENT_USER_ID, CacheProfile.uid);
             intent.putExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, --position);
-            intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, CacheProfile.photos);
+            intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, ((ProfileGridAdapter)mGridAlbum.getAdapter()).getData());
 
             startActivity(intent);
         }
@@ -184,6 +203,10 @@ public class ProfilePhotoFragment extends BaseFragment {
         }
     };
 
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mPhotosReceiver);
+    }
 }
  

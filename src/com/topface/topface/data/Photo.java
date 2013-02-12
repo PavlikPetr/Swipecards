@@ -108,6 +108,7 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
     //Конструктор по умолчанию создает фэйковую фотку
     public Photo() {
         isFakePhoto = true;
+        links = new HashMap<String, String>();
     }
 
     public boolean isFake() {

@@ -43,7 +43,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         RateController.OnRateControllerListener {
 
     public static final int SEARCH_LIMIT = 30;
-    public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 3;
+    public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 2;
     private int mCurrentPhotoPrevPos;
     private TextView mResourcesLikes;
     private TextView mResourcesMoney;
@@ -85,10 +85,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private NoviceLayout mNoviceLayout;
     private View mDatingResources;
 
-    private int photosLimit;
+    private int photosLimit = 5;
 
     private boolean hasOneSympathyOrDelight = false;
-    private boolean mCanSendAlbumReq;
+    private boolean mCanSendAlbumReq = true;
     private SearchCacheManager mCache;
     private SearchUser mCurrentUser;
     /**
@@ -97,6 +97,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private boolean mUpdateInProcess;
     private BroadcastReceiver mProfileReceiver;
     private boolean mNeedMore;
+    private int mLoadedCount;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -549,16 +550,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     currUser.mutual ? doubleDelight : singleDelight, null, null);
 
             // photos
-            int photosRest = currUser.photosCount - currUser.photos.size();
-            if (photosRest > 0) {
-                photosRest = photosRest - currUser.photos.size();
-                photosRest = (photosRest > photosLimit)? photosLimit : photosRest;
-                mNeedMore = true;
-            } else {
-                photosRest = 0;
-            }
+            mLoadedCount = currUser.photos.getRealPhotosCount();
+            mNeedMore = currUser.photosCount > mLoadedCount;
+            int rest = currUser.photosCount - currUser.photos.size();
 
-            for (int i = 0; i < photosRest; i++) {
+            for (int i = 0; i < rest; i++) {
                 currUser.photos.add(new Photo());
             }
 
@@ -865,26 +861,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mCurrentPhotoPrevPos = position;
             setCounter(mCurrentPhotoPrevPos);
 
-            if (position + DEFAULT_PRELOAD_ALBUM_RANGE == mImageSwitcher.getAdapter().getCount()) {
-                //Проверить надо ли вообще делать запрос
-                //кинуть запрос альбомов
-                //добавить оставшиеся фотки
-                //по возвращении убрать фэйковость из photosNumber пришедших фоток
-                //Надо заблокировать эту проверку до следующего раза.
+            if (position + DEFAULT_PRELOAD_ALBUM_RANGE == mLoadedCount) {
                 final Photos data = ((ImageSwitcher.ImageSwitcherAdapter)mImageSwitcher.getAdapter()).getData();
-                int photosCount = mUserSearchList.getCurrentUser().photosCount;
 
                 if (mNeedMore) {
-                    int photosRest = photosCount - data.size();
-                    if (photosRest > 0) {
-                        photosRest = photosRest - data.size();
-                        photosRest = (photosRest > photosLimit)? photosLimit : photosRest;
-                    } else {
-                        photosRest = 0;
-                    }
-                    for (int i = 0; i < photosRest; i++) {
-                        data.add(new Photo());
-                    }
+
                     mImageSwitcher.getAdapter().notifyDataSetChanged();
                     if (mCanSendAlbumReq) {
                         mCanSendAlbumReq = false;
@@ -906,22 +887,28 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     };
 
     private void sendAlbumRequest(final Photos data) {
-        int id = data.get(data.size() - AlbumRequest.DEFAULT_PHOTOS_LIMIT).getId();
-        AlbumRequest request = new AlbumRequest(getActivity(), mUserSearchList.getCurrentUser().id, AlbumRequest.DEFAULT_PHOTOS_LIMIT, id, true);
+        int id = data.get(mLoadedCount - 1).getId();
+        AlbumRequest request = new AlbumRequest(getActivity(), mUserSearchList.getCurrentUser().id, photosLimit, id, true);
         request.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
-                Photos newPhotos = Photos.parse(response.jsonResult.optJSONArray("photos"));
+                Photos newPhotos = Photos.parse(response.jsonResult.optJSONArray("items"));
                 mNeedMore = response.jsonResult.optBoolean("more");
+                int i = 0;
                 for(Photo photo : newPhotos) {
-                    data.set(data.size() - AlbumRequest.DEFAULT_PHOTOS_LIMIT, photo);
+                    data.set(mLoadedCount + i, photo);
+                    i++;
                 }
+                mLoadedCount += newPhotos.size();
                 mCanSendAlbumReq = true;
+                if(mImageSwitcher != null) {
+                    mImageSwitcher.getAdapter().notifyDataSetChanged();
+                }
             }
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-
+                mCanSendAlbumReq = true;
             }
         }).exec();
     }

@@ -42,6 +42,7 @@ public class SearchUser extends FeedUser implements SerializableToJson {
         json.put("status", status);
         json.put("mailmutual", mutual);
         json.put("photos", photos.toJson());
+        json.put("photos_count", photosCount);
         return json;
     }
 }
