@@ -889,21 +889,25 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private void sendAlbumRequest(final Photos data) {
         int id = data.get(mLoadedCount - 1).getId();
         AlbumRequest request = new AlbumRequest(getActivity(), mUserSearchList.getCurrentUser().id, photosLimit, id, true);
+        final int uid = mUserSearchList.getCurrentUser().id;
         request.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
-                Photos newPhotos = Photos.parse(response.jsonResult.optJSONArray("items"));
-                mNeedMore = response.jsonResult.optBoolean("more");
-                int i = 0;
-                for(Photo photo : newPhotos) {
-                    data.set(mLoadedCount + i, photo);
-                    i++;
+                if(uid == mUserSearchList.getCurrentUser().id) {
+                    Photos newPhotos = Photos.parse(response.jsonResult.optJSONArray("items"));
+                    mNeedMore = response.jsonResult.optBoolean("more");
+                    int i = 0;
+                    for(Photo photo : newPhotos) {
+                        data.set(mLoadedCount + i, photo);
+                        i++;
+                    }
+                    mLoadedCount += newPhotos.size();
+
+                    if(mImageSwitcher != null) {
+                        mImageSwitcher.getAdapter().notifyDataSetChanged();
+                    }
                 }
-                mLoadedCount += newPhotos.size();
                 mCanSendAlbumReq = true;
-                if(mImageSwitcher != null) {
-                    mImageSwitcher.getAdapter().notifyDataSetChanged();
-                }
             }
 
             @Override
