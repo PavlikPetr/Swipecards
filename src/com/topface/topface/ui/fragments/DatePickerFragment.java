@@ -3,14 +3,14 @@ package com.topface.topface.ui.fragments;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
 import com.topface.topface.Static;
+import com.topface.topface.ui.analytics.TrackedDialogFragment;
 import com.topface.topface.utils.DateUtils;
 
 import java.util.Calendar;
 
-public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+public class DatePickerFragment extends TrackedDialogFragment implements DatePickerDialog.OnDateSetListener {
 
     private static final int START_SHIFT = 33;
 
