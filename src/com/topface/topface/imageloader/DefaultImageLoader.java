@@ -3,14 +3,13 @@ package com.topface.topface.imageloader;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
-import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.postprocessors.ImagePostProcessor;
+import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.utils.Debug;
@@ -20,7 +19,7 @@ public class DefaultImageLoader {
     private static ImageLoader mImageLoader;
     private static DefaultImageLoader mInstance;
     public static final int DISC_CACHE_SIZE = 10 * 1024 * 1024;
-    public static final int MEMORY_CACHE_SIZE = 2 * 1024 * 1024;
+    public static final int MEMORY_CACHE_SIZE = 1536 * 1024; //1.5 Мб
     private final Context mContext;
     private DisplayImageOptions mOptimizedConfig;
 
@@ -36,7 +35,6 @@ public class DefaultImageLoader {
             builder.enableLogging();
         }
         builder.discCacheSize(DISC_CACHE_SIZE);
-        builder.memoryCache(new WeakMemoryCache());
         builder.memoryCacheSize(MEMORY_CACHE_SIZE);
         builder.defaultDisplayImageOptions(getDisplayImageConfig().build());
         return builder;
@@ -86,17 +84,29 @@ public class DefaultImageLoader {
         return mInstance;
     }
 
-    public void displayImage(String uri, ImageView imageView, DisplayImageOptions options, ImageLoadingListener listener, ImagePostProcessor postProcessor) {
+    public void displayImage(String uri, ImageView imageView, DisplayImageOptions options, ImageLoadingListener listener, BitmapProcessor processor) {
         try {
             //Если не задан пост-процессор, то используем оптимизированную версию конфига
-            if (options == null && postProcessor == null) {
-                options = mOptimizedConfig;
+            if (options == null && processor == null) {
+                options = getOptimizedDisplayImageConfig();
+            } else if (options == null) {
+                //Если же используется процессор, то собираем новую версию конфига с нужным процессором
+                options = getDisplayImageConfig()
+                        .preProcessor(processor)
+                        .build();
             }
-            getImageLoader().displayImage(uri, imageView, options, listener, postProcessor);
+
+            getImageLoader().displayImage(
+                    uri,
+                    imageView,
+                    options,
+                    listener
+            );
+
         } catch (Exception e) {
             Debug.error("ImageLoader displayImage error", e);
             if (listener != null) {
-                listener.onLoadingFailed(FailReason.UNKNOWN);
+                listener.onLoadingFailed(uri, imageView, FailReason.UNKNOWN);
             }
         }
     }
@@ -106,7 +116,7 @@ public class DefaultImageLoader {
     }
 
     public void displayImage(String uri, ImageView imageView, DisplayImageOptions options) {
-        displayImage(uri, imageView, options, getDefaultImageLoaderListener(imageView), null);
+        displayImage(uri, imageView, options, getDefaultImageLoaderListener(), null);
     }
 
     public void displayImage(String uri, ImageView imageView, ImageLoadingListener listener) {
@@ -114,15 +124,15 @@ public class DefaultImageLoader {
     }
 
     public void displayImage(String uri, ImageView imageView) {
-        displayImage(uri, imageView, null, getDefaultImageLoaderListener(imageView), null);
+        displayImage(uri, imageView, null, getDefaultImageLoaderListener(), null);
     }
 
-    public void displayImage(String uri, ImageView imageView, ImagePostProcessor postProcessor) {
-        displayImage(uri, imageView, null, getDefaultImageLoaderListener(imageView), postProcessor);
+    public void displayImage(String uri, ImageView imageView, BitmapProcessor postProcessor) {
+        displayImage(uri, imageView, null, getDefaultImageLoaderListener(), postProcessor);
     }
 
-    private ImageLoadingListener getDefaultImageLoaderListener(ImageView imageView) {
-        return new DefaultImageLoaderListener(imageView);
+    private ImageLoadingListener getDefaultImageLoaderListener() {
+        return new DefaultImageLoaderListener();
     }
 
     public void preloadImage(String uri) {
@@ -130,7 +140,7 @@ public class DefaultImageLoader {
     }
 
     public void preloadImage(String uri, ImageLoadingListener listener) {
-        getImageLoader().loadImage(mContext, uri, listener);
+        getImageLoader().loadImage(uri, listener);
     }
 
 

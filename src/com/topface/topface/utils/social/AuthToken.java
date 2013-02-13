@@ -11,6 +11,7 @@ public class AuthToken {
     private String mUserId;
     private String mTokenKey;
     private String mExpiresIn;
+
     private String mLogin;
     private String mPassword;
     private SharedPreferences mPreferences;
@@ -44,7 +45,10 @@ public class AuthToken {
 
 
     public boolean isToken() {
-        return mTokenKey != null && mTokenKey.length() > 0;
+        boolean hasSocialToken  = (mTokenKey != null && mTokenKey.length() > 0);
+        boolean hasTopfaceToken = (mLogin != null && mLogin.length() > 0
+                && mPassword != null && mPassword.length() > 0);
+        return mSnType.equals(SN_TOPFACE) ? hasTopfaceToken : hasSocialToken;
     }
 
 
@@ -97,6 +101,14 @@ public class AuthToken {
     }
 
     public boolean isEmpty() {
-        return mSnType.equals(Static.EMPTY);
+        return mSnType.equals(Static.EMPTY) || !isToken();
+    }
+
+    public String getLogin() {
+        return mLogin;
+    }
+
+    public String getPassword() {
+        return mPassword;
     }
 }

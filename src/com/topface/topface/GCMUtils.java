@@ -118,11 +118,10 @@ public class GCMUtils {
                 String title = getTitle(context, extra.getStringExtra("title"));
                 Intent intent = getIntentByType(context, type, user);
 
-
                 if (intent != null) {
                     intent.putExtra("C2DM", true);
                     final TopfaceNotificationManager notificationManager = TopfaceNotificationManager.getInstance(context);
-                    if (!Data.isSSID()) {
+                    if (!Ssid.isLoaded()) {
                         if (type == GCM_TYPE_UPDATE || type == GCM_TYPE_NOTIFICATION) {
                             notificationManager.showNotification(
                                     title,
@@ -234,13 +233,14 @@ public class GCMUtils {
                 if (showMessage) {
                     if (user.id != 0) {
                         lastNotificationType = GCM_TYPE_MESSAGE;
-                        Intent intent = new Intent(context, ContainerActivity.class);
-                        intent.putExtra(ChatFragment.INTENT_USER_ID, user.id);
-                        intent.putExtra(ChatFragment.INTENT_USER_NAME, user.name);
-                        intent.putExtra(ChatFragment.INTENT_USER_SEX, user.sex);
-                        intent.putExtra(ChatFragment.INTENT_USER_AGE, user.age);
-                        intent.putExtra(ChatFragment.INTENT_USER_CITY, user.city);
-                        intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, GCM_NOTIFICATION);
+                        i = new Intent(context, ContainerActivity.class);
+                        i.putExtra(ChatFragment.INTENT_USER_ID, user.id);
+                        i.putExtra(ChatFragment.INTENT_USER_NAME, user.name);
+                        i.putExtra(ChatFragment.INTENT_USER_SEX, user.sex);
+                        i.putExtra(ChatFragment.INTENT_USER_AGE, user.age);
+                        i.putExtra(ChatFragment.INTENT_USER_CITY, user.city);
+                        i.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, GCM_NOTIFICATION);
+                        i.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_CHAT_FRAGMENT);
                     } else {
                         i = new Intent(context, NavigationActivity.class);
                     }
@@ -380,7 +380,7 @@ public class GCMUtils {
                 JSONObject obj = new JSONObject(json);
                 id = obj.optInt("id");
                 name = obj.optString("name");
-                sex = obj.optInt("sex",Static.BOY);
+                sex = obj.optInt("sex", Static.BOY);
                 JSONObject photo = obj.optJSONObject("photo");
                 if (photo != null && photo.has(Photo.SIZE_128)) {
                     photoUrl = obj.optJSONObject("photo").optString(Photo.SIZE_128);

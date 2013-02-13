@@ -77,7 +77,6 @@ public class GeoMapActivity extends TrackedMapActivity implements LocationListen
             finish();
         }
 
-
         mGeoLocationManager = new GeoLocationManager(getApplicationContext());
 
         mMapView = (MapView) findViewById(R.id.mapView);

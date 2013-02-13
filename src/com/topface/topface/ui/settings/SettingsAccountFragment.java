@@ -14,10 +14,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import com.google.android.gcm.GCMRegistrar;
-import com.topface.topface.Data;
 import com.topface.topface.R;
+import com.topface.topface.Ssid;
 import com.topface.topface.Static;
-import com.topface.topface.data.search.SearchUser;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.LogoutRequest;
@@ -27,10 +26,9 @@ import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
+import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
-
-import java.util.LinkedList;
 
 public class SettingsAccountFragment extends TrackedFragment {
 
@@ -62,9 +60,11 @@ public class SettingsAccountFragment extends TrackedFragment {
         final AuthToken token = AuthToken.getInstance();
 
         if (token.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
-            icon = getResources().getDrawable(R.drawable.fb_icon);
+            icon = getResources().getDrawable(R.drawable.fb_logo_account);
         } else if (token.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
-            icon = getResources().getDrawable(R.drawable.vk_icon);
+            icon = getResources().getDrawable(R.drawable.vk_logo_account);
+        } else if (token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+            icon = getResources().getDrawable(R.drawable.tf_logo_account);
         }
         TextView textName = (TextView) root.findViewById(R.id.tvName);
         textName.setText(Settings.getInstance().getSocialAccountName());
@@ -80,7 +80,7 @@ public class SettingsAccountFragment extends TrackedFragment {
                     @Override
                     public void success(ApiResponse response) {
                         GCMRegistrar.unregister(getActivity().getApplicationContext());
-                        Data.removeSSID(getActivity().getApplicationContext());
+                        Ssid.remove(getActivity().getApplicationContext());
                         token.removeToken();
                         //noinspection unchecked
                         new FacebookLogoutTask().execute();
@@ -95,9 +95,12 @@ public class SettingsAccountFragment extends TrackedFragment {
                         }
                         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(Static.LOGOUT_INTENT));
                         //Чистим список тех, кого нужно оценить
-                        Data.searchList = new LinkedList<SearchUser>();
-                        Data.searchPosition = -1;
-
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                new SearchCacheManager().clearCache();
+                            }
+                        }).start();
                     }
 
                     @Override

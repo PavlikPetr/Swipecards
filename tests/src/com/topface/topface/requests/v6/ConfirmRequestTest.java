@@ -1,13 +1,12 @@
 package com.topface.topface.requests.v6;
 
 import android.content.Context;
-import com.topface.topface.Data;
-import com.topface.topface.data.Register;
+import com.topface.topface.Ssid;
 import com.topface.topface.requests.*;
 
-public class ConfirmRequestTest extends AbstractThreadTest{
+public class ConfirmRequestTest extends AbstractThreadTest {
 
-    public void testConfirmRequest() throws Throwable{
+    public void testConfirmRequest() throws Throwable {
         runAsyncTest(new Runnable() {
             @Override
             public void run() {
@@ -19,7 +18,7 @@ public class ConfirmRequestTest extends AbstractThreadTest{
                 auth.callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
-                        Data.saveSSID(context, response.jsonResult.optString("ssid"));
+                        Ssid.save(context, response.jsonResult.optString("ssid"));
                         ConfirmRequest request = new ConfirmRequest(context,
                                 "iovorobiev@mail.ru",
                                 "47829419-86866c0c937752a4a0d5c03ca7a49429-1359812235"
@@ -27,7 +26,7 @@ public class ConfirmRequestTest extends AbstractThreadTest{
                         request.callback(new ApiHandler() {
                             @Override
                             public void success(ApiResponse response) {
-                                assertEquals(true,response.jsonResult.optBoolean("completed"));
+                                assertEquals(true, response.jsonResult.optBoolean("completed"));
                                 stopTest("testConfirmRequest");
                             }
 
