@@ -356,7 +356,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     public void onAvatarClick(T item, View view) {
         // Open profile activity
-        if (item.unread) {
+        if (item.unread && !getFeedService().equals(FeedRequest.FeedService.DIALOGS)) {
             item.unread = false;
             decrementCounters();
             getListAdapter().notifyDataSetChanged();
