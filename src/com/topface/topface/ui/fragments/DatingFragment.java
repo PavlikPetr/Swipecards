@@ -19,9 +19,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.RetryRequestReceiver;
 import com.topface.topface.Static;
-import com.topface.topface.data.DatingFilter;
-import com.topface.topface.data.NoviceLikes;
-import com.topface.topface.data.SkipRate;
+import com.topface.topface.data.*;
 import com.topface.topface.data.search.CachableSearch;
 import com.topface.topface.data.search.OnSearchEventsListener;
 import com.topface.topface.data.search.Search;
@@ -44,7 +42,8 @@ import com.topface.topface.utils.cache.SearchCacheManager;
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
         RateController.OnRateControllerListener {
 
-    public static final int SEARCH_LIMIT = 25;
+    public static final int SEARCH_LIMIT = 30;
+    public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 2;
     private int mCurrentPhotoPrevPos;
     private TextView mResourcesLikes;
     private TextView mResourcesMoney;
@@ -86,7 +85,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private NoviceLayout mNoviceLayout;
     private View mDatingResources;
 
+    private int photosLimit = 5;
+
     private boolean hasOneSympathyOrDelight = false;
+    private boolean mCanSendAlbumReq = true;
     private SearchCacheManager mCache;
     private SearchUser mCurrentUser;
     /**
@@ -94,6 +96,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
      */
     private boolean mUpdateInProcess;
     private BroadcastReceiver mProfileReceiver;
+    private boolean mNeedMore;
+    private int mLoadedCount;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -543,6 +547,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     currUser.mutual ? doubleDelight : singleDelight, null, null);
 
             // photos
+            mLoadedCount = currUser.photos.getRealPhotosCount();
+            mNeedMore = currUser.photosCount > mLoadedCount;
+            int rest = currUser.photosCount - currUser.photos.size();
+
+            for (int i = 0; i < rest; i++) {
+                currUser.photos.add(new Photo());
+            }
+
             mImageSwitcher.setData(currUser.photos);
             mImageSwitcher.setCurrentItem(0, true);
             mCurrentPhotoPrevPos = 0;
@@ -840,6 +852,20 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             mCurrentPhotoPrevPos = position;
             setCounter(mCurrentPhotoPrevPos);
+
+            if (position + DEFAULT_PRELOAD_ALBUM_RANGE == mLoadedCount) {
+                final Photos data = ((ImageSwitcher.ImageSwitcherAdapter)mImageSwitcher.getAdapter()).getData();
+
+                if (mNeedMore) {
+
+                    mImageSwitcher.getAdapter().notifyDataSetChanged();
+                    if (mCanSendAlbumReq) {
+                        mCanSendAlbumReq = false;
+                        sendAlbumRequest(data);
+                    }
+
+                }
+            }
         }
 
         @Override
@@ -851,6 +877,37 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         public void onPageScrollStateChanged(int arg0) {
         }
     };
+
+    private void sendAlbumRequest(final Photos data) {
+        int id = data.get(mLoadedCount - 1).getId();
+        AlbumRequest request = new AlbumRequest(getActivity(), mUserSearchList.getCurrentUser().id, photosLimit, id, true);
+        final int uid = mUserSearchList.getCurrentUser().id;
+        request.callback(new ApiHandler() {
+            @Override
+            public void success(ApiResponse response) {
+                if(uid == mUserSearchList.getCurrentUser().id) {
+                    Photos newPhotos = Photos.parse(response.jsonResult.optJSONArray("items"));
+                    mNeedMore = response.jsonResult.optBoolean("more");
+                    int i = 0;
+                    for(Photo photo : newPhotos) {
+                        data.set(mLoadedCount + i, photo);
+                        i++;
+                    }
+                    mLoadedCount += newPhotos.size();
+
+                    if(mImageSwitcher != null) {
+                        mImageSwitcher.getAdapter().notifyDataSetChanged();
+                    }
+                }
+                mCanSendAlbumReq = true;
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+                mCanSendAlbumReq = true;
+            }
+        }).exec();
+    }
 
     private void updateResources() {
         mResourcesLikes.setText(Integer.toString(CacheProfile.likes));

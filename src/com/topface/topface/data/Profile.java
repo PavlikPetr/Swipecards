@@ -53,6 +53,8 @@ public class Profile extends AbstractDataWithPhotos {
     public boolean email_grabbed;
     public boolean email_confirmed;
 
+    public int totalPhotos;
+
     public int background;
 
     // private static final String profileFileName = "profile.out";
@@ -85,6 +87,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.premium = resp.optBoolean("premium");
             profile.invisible = resp.optBoolean("invisible");
             profile.background = resp.optInt("background", ProfileBackgrounds.DEFAULT_BACKGROUND_ID);
+            profile.totalPhotos = resp.optInt("photos_count");
 
             parseGifts(profile, resp);
             parseNotifications(profile, resp);
@@ -425,6 +428,24 @@ public class Profile extends AbstractDataWithPhotos {
 
                 profile.notifications.put(type, new TopfaceNotifications(apns, mail, type));
             }
+
+            initPhotos(resp, profile);
+
+            if (!resp.isNull("photos_count")) {
+                profile.totalPhotos = resp.optInt("photos_count");
+            }
+            // newbie
+            // if (!resp.isNull("flags")) {
+            // JSONArray flags = resp.getJSONArray("flags");
+            // for (int i = 0; i < flags.length(); i++) {
+            // profile.isNewbie = true;
+            // String item = flags.getString(i);
+            // if (item.equals("NOVICE_ENERGY")) {
+            // profile.isNewbie = false;
+            // break;
+            // }
+            // }
+            // }
         }
     }
 
