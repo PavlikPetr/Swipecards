@@ -69,6 +69,7 @@
 
                 <Button
                         android:id="@+id/btnChatGift"
+                        android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/ChatButtonsText"
@@ -77,6 +78,7 @@
 
                 <Button
                         android:id="@+id/btnChatPlace"
+                        android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
@@ -86,6 +88,7 @@
 
                 <Button
                         android:id="@+id/btnChatPhoto"
+                        android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"

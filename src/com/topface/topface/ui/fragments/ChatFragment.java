@@ -436,14 +436,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 EasyTracker.getTracker().trackEvent("Chat", "SendMessage", "", 1L);
                 break;
             case R.id.btnChatAdd:
-                if (mIsAddPanelOpened) {
-                    mSwapControl.snapToScreen(0);
-                    mBtnChatAdd.setSelected(false);
-                }else {
-                    mSwapControl.snapToScreen(1);
-                    mBtnChatAdd.setSelected(true);
-                }
-                mIsAddPanelOpened = !mIsAddPanelOpened;
+                toggleAddPanel();
 
                 EasyTracker.getTracker().trackEvent("Chat", "AdditionalClick", "", 1L);
                 break;
@@ -620,9 +613,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             }
         }
 
-        if (mIsAddPanelOpened)
-            mSwapControl.snapToScreen(0);
-        mIsAddPanelOpened = false;
+        toggleAddPanel();
+    }
+
+    private void toggleAddPanel() {
+        mSwapControl.snapToScreen(mIsAddPanelOpened ? 0 : 1);
+        mBtnChatAdd.setSelected(!mIsAddPanelOpened);
+        mIsAddPanelOpened = !mIsAddPanelOpened;
     }
 
     private void sendCoordinates(Geo geo) {
@@ -797,9 +794,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 coordRequest.callback(new DataApiHandler<History>() {
                     @Override
                     protected void success(History data, ApiResponse response) {
-                        if (mIsAddPanelOpened)
-                            mSwapControl.snapToScreen(0);
-                        mIsAddPanelOpened = false;
+                        toggleAddPanel();
                         if (mAdapter != null) {
                             mAdapter.replaceMessage(fakeItem, data, mListView.getRefreshableView());
                         }
