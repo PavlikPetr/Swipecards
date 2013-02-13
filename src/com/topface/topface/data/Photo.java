@@ -33,6 +33,9 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
     public static final float MAX_DIFFERENCE = 1.5f;
     public static final int SMALL_PHOTO_SIZE = 100;
 
+    //Этот флаг нужен для того, чтобы ставить пустые фото в поиске, которые, будут подгружаться после запроса альбома
+    private boolean isFakePhoto = false;
+
     private String[] deprecatedSizes = {
             SIZE_64,
             SIZE_64_ONLY,
@@ -102,8 +105,14 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
         this.canBecomeLeader = photo.canBecomeLeader;
     }
 
-    public Photo(JSONObject data) {
-        super(data);
+    //Конструктор по умолчанию создает фэйковую фотку
+    public Photo() {
+        isFakePhoto = true;
+        links = new HashMap<String, String>();
+    }
+
+    public boolean isFake() {
+        return isFakePhoto;
     }
 
     @Override
@@ -138,6 +147,10 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
 
     public static Photo parse(JSONObject photoItem) {
         return new Photo(photoItem);
+    }
+
+    public Photo (JSONObject data) {
+        super(data);
     }
 
     /**

@@ -131,7 +131,7 @@ public class ImageSwitcher extends ViewPager {
     /*
     *  class ImageSwitcherAdapter
     */
-    class ImageSwitcherAdapter extends PagerAdapter {
+    public class ImageSwitcherAdapter extends PagerAdapter {
         private boolean isFirstInstantiate = true;
         private Photos mPhotoLinks;
         private SparseArray<Boolean> mLoadedPhotos;
@@ -157,6 +157,10 @@ public class ImageSwitcher extends ViewPager {
                 }
 
             };
+        }
+
+        public Photos getData() {
+            return mPhotoLinks;
         }
 
         @Override

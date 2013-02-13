@@ -11,7 +11,7 @@ import java.util.ArrayList;
 @SuppressWarnings("serial")
 public class Photos extends ArrayList<Photo> implements SerializableToJsonArray {
 
-    public Photos(JSONArray photos) {
+     public Photos(JSONArray photos) {
         this();
         addAll(parse(photos));
     }
@@ -86,11 +86,24 @@ public class Photos extends ArrayList<Photo> implements SerializableToJsonArray 
         this.add(0, value);
     }
 
+
+    public int getRealPhotosCount() {
+        int realPhotosCount = 0;
+        for (Photo photo : this) {
+            if (!photo.isFake()) {
+                realPhotosCount++;
+            }
+        }
+        return realPhotosCount;
+    }
+
     @Override
     public JSONArray toJson() throws JSONException {
         JSONArray jsonArray = new JSONArray();
         for (Photo photo : this) {
-            jsonArray.put(photo.toJson());
+            if (!photo.isFake()) {
+                jsonArray.put(photo.toJson());
+            }
         }
         return jsonArray;
     }

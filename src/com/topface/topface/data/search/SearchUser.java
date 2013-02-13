@@ -20,6 +20,7 @@ public class SearchUser extends FeedUser implements SerializableToJson {
     public boolean skipped = false;
     public boolean rated = false;
     public Photos photos;
+    public int photosCount;
 
     public SearchUser(JSONObject user) {
         super(user);
@@ -32,6 +33,7 @@ public class SearchUser extends FeedUser implements SerializableToJson {
         status = user.optString("status");
         mutual = user.optBoolean("mailmutual");
         photos = new Photos(user.optJSONArray("photos"));
+        photosCount = user.optInt("photos_count", photos.size());
     }
 
     @Override
@@ -40,6 +42,7 @@ public class SearchUser extends FeedUser implements SerializableToJson {
         json.put("status", status);
         json.put("mailmutual", mutual);
         json.put("photos", photos.toJson());
+        json.put("photos_count", photosCount);
         return json;
     }
 }
