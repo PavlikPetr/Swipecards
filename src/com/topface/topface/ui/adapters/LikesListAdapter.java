@@ -32,7 +32,7 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
     @Override
     public int getItemViewType(int position) {
         FeedItem item = getItem(position);
-        if (mSelectedForMutual == position && !item.isLoader() && !item.isRetrier() && ((FeedLike) item).mutualed) {
+        if (mSelectedForMutual == position && !item.isLoader() && !item.isRetrier() && !((FeedLike) item).mutualed) {
             if (super.getItemViewType(position) == FeedAdapter.T_VIP || super.getItemViewType(position) == FeedAdapter.T_NEW_VIP) {
                 return T_SELECTED_FOR_MUTUAL_VIP;
             }
