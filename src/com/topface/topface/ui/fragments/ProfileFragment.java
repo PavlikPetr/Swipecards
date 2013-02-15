@@ -217,7 +217,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
         //Вручную удаляем все фрагменты и вообще прибираемся за собой убираемся за себя
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         if (mBodyPagerAdapter != null) {
@@ -233,6 +232,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             mHeaderPagerAdapter = null;
         }
         transaction.commit();
+
+        super.onSaveInstanceState(outState);
     }
 
     private void setProfile(Profile profile) {
