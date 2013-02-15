@@ -49,6 +49,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private static final String ARG_TAG_PROFILE_ID = "profile_id";
     private static final String ARG_TAG_INIT_BODY_PAGE = "profile_start_body_class";
     private static final String ARG_TAG_INIT_HEADER_PAGE = "profile_start_header_class";
+    public static final String ARG_FEED_ITEM_ID = "item_id";
 
     ArrayList<String> BODY_PAGES_TITLES = new ArrayList<String>();
     ArrayList<String> BODY_PAGES_CLASS_NAMES = new ArrayList<String>();
@@ -99,6 +100,12 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mLoaderView = root.findViewById(R.id.llvProfileLoading);
         mActionsControl = (ProfileActionsControl) root.findViewById(R.id.profileActionsControl);
         mRateController = new RateController(getActivity());
+
+        if(getArguments().getInt(ARG_FEED_ITEM_ID, -1) != -1) {
+            Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ);
+            intent.putExtra(ChatFragment.INTENT_ITEM_ID, getArguments().getInt(ARG_FEED_ITEM_ID, -1));
+            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+        }
 
         restoreState();
 
@@ -432,6 +439,19 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         args.putInt(ARG_TAG_PROFILE_ID, id);
         args.putInt(ARG_TAG_PROFILE_TYPE, type);
         args.putString(ARG_TAG_INIT_BODY_PAGE, startBodyPageClassName);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
+    //Этот метод добавлен для того, чтобы можно было отметить элемент ленты прочитанным
+    public static ProfileFragment newInstance(int id, int type, int itemId) {
+        ProfileFragment fragment = new ProfileFragment();
+
+        Bundle args = new Bundle();
+        args.putInt(ARG_TAG_PROFILE_ID, id);
+        args.putInt(ARG_TAG_PROFILE_TYPE, type);
+        args.putInt(ARG_FEED_ITEM_ID, itemId);
         fragment.setArguments(args);
 
         return fragment;

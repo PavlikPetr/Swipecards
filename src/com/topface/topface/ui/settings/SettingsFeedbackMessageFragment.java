@@ -290,7 +290,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             strBuilder.append("<p>Device: ").append(device).append("/").append(model).append("</p>");
             strBuilder.append("<p>Device language: ").append(Locale.getDefault().getDisplayLanguage()).append("</p>");
 
-            strBuilder.append("<p>Topface SSID: ").append(Ssid.SSID).append("</p>");
+            strBuilder.append("<p>Topface Ssid: ").append(Ssid.SSID).append("</p>");
             AuthToken authToken = AuthToken.getInstance();
             strBuilder.append("<p>Social net: ").append(authToken.getSocialNet()).append("</p>");
             strBuilder.append("<p>Social token: ").append(authToken.getTokenKey()).append("</p>");
