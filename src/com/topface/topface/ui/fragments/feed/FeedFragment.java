@@ -359,15 +359,15 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     public void onAvatarClick(T item, View view) {
         // Open profile activity
-        if (item.unread) {
-            item.unread = false;
-            decrementCounters();
-            getListAdapter().notifyDataSetChanged();
-        }
         FragmentActivity activity = getActivity();
         if (activity instanceof NavigationActivity) {
-            ((NavigationActivity) activity).onExtraFragment(
-                    ProfileFragment.newInstance(item.user.id, ProfileFragment.TYPE_USER_PROFILE));
+            ProfileFragment fragment;
+            if (getFeedService().equals(FeedRequest.FeedService.DIALOGS)) {
+                fragment = ProfileFragment.newInstance(item.user.id, ProfileFragment.TYPE_USER_PROFILE);
+            } else {
+                fragment =  ProfileFragment.newInstance(item.user.id, ProfileFragment.TYPE_USER_PROFILE, item.id);
+            }
+            ((NavigationActivity) activity).onExtraFragment(fragment);
         }
 
     }

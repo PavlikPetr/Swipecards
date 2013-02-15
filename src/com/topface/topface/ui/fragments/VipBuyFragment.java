@@ -112,7 +112,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
         RelativeLayout invisLayout =
                 initEditItem(root,
                         R.id.fepInvis,
-                        R.drawable.edit_big_btn_top_selector,
+                        R.drawable.edit_big_btn_selector,
                         R.drawable.ic_vip_invisible_min,
                         getString(R.string.vip_invis),
                         new OnClickListener() {

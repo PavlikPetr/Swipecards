@@ -12,8 +12,10 @@ import com.topface.billing.googleplay.BillingService.RestoreTransactions;
 import com.topface.billing.googleplay.Consts.PurchaseState;
 import com.topface.billing.googleplay.Consts.ResponseCode;
 import com.topface.topface.App;
+import com.topface.topface.data.Options;
 import com.topface.topface.data.Verify;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.OptionsRequest;
 import com.topface.topface.requests.VerifyRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.CacheProfile;
@@ -185,6 +187,7 @@ public class ResponseHandler {
                 if (sPurchaseObserver != null) {
                     sPurchaseObserver.postVerify(response);
                 }
+                sendOptionsRequest(context);
             }
 
             @Override
@@ -209,6 +212,21 @@ public class ResponseHandler {
                         GooglePlayV2Queue.getInstance(App.getContext()).sendQueueItems();
                     }
                 }, BillingUtils.BILLING_QUEUE_CHECK_DELAY);
+            }
+        }).exec();
+    }
+
+    private static void sendOptionsRequest(Context context) {
+        final OptionsRequest request = new OptionsRequest(context);
+        request.callback(new ApiHandler() {
+            @Override
+            public void success(final ApiResponse response) {
+                Options.parse(response);
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+
             }
         }).exec();
     }

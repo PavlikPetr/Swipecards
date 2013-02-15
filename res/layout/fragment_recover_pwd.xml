@@ -13,6 +13,12 @@
             android:src="@drawable/auth_bg_spot"
             />
 
+    <TextView
+            android:id="@+id/tvRedAlert"
+            style="@style/RedAlertTextView"
+            android:textSize="12sp"
+            android:text="@string/error_login_password"/>
+
     <LinearLayout
             android:id="@+id/loLoginGroup"
             android:layout_width="225dp"

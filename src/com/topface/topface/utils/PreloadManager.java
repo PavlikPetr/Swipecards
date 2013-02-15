@@ -53,13 +53,15 @@ public class PreloadManager {
     private boolean preloadNextPhoto(Photo photo, ImageLoadingListener listener) {
         boolean result = false;
         if (photo != null && canLoad) {
-            int size = Math.max(height, width);
-            if (size > 0) {
-                preloadImage(photo.getSuitableLink(width, height), listener);
-            } else {
-                preloadImage(photo.getSuitableLink(Photo.SIZE_960), listener);
+            if (!photo.isFake()) {
+                int size = Math.max(height, width);
+                if (size > 0) {
+                    preloadImage(photo.getSuitableLink(width, height), listener);
+                } else {
+                    preloadImage(photo.getSuitableLink(Photo.SIZE_960), listener);
+                }
+                result = true;
             }
-            result = true;
         }
 
         return result;

@@ -12,7 +12,6 @@ import android.graphics.Bitmap.Config;
 import android.graphics.PorterDuff.Mode;
 import android.net.Uri;
 import android.os.Build;
-import android.text.format.DateFormat;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -231,6 +230,8 @@ public class Utils {
         return scaledBitmap;
     }
 
+
+
     public static String formatTime(Context context, long time) {
         String text;
 
@@ -242,9 +243,8 @@ public class Utils {
         int currentYear = cal2.get(Calendar.YEAR);
         cal2.set(currentYear, Calendar.JANUARY, 1);
 
-
         if (time > DateUtils.midnight) {
-            text = (String) DateFormat.format("HH:mm", time);
+            text = DateUtils.mDateFormatHours.format(time);
         } else if (time > DateUtils.midnight - day * 5) {
             text = formatDayOfWeek(context, cal.get(Calendar.DAY_OF_WEEK));
         } else if (time > cal2.getTimeInMillis()) {

@@ -44,6 +44,9 @@ public class CacheProfile {
     public static int background_id;
     public static Photos photos;
     public static Photo photo;
+
+    public static int totalPhotos;
+
     public static final String PROFILE_CACHE_KEY = "profile_cache";
     public static final String OPTIONS_CACHE_KEY = "options_cache";
 
@@ -105,6 +108,8 @@ public class CacheProfile {
         profile.photo = photo;
         profile.gifts = gifts;
         profile.background = background_id;
+
+        profile.totalPhotos = totalPhotos;
         return profile;
     }
 
@@ -135,6 +140,8 @@ public class CacheProfile {
         status = profile.status;
         gifts = profile.gifts;
         background_id = profile.background;
+
+        totalPhotos = profile.totalPhotos;
 
         setProfileCache(response);
         setProfileUpdateTime();
