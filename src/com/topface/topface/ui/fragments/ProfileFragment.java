@@ -197,6 +197,20 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        if (mTabIndicator != null) {
+            mTabIndicator.setOnPageChangeListener(null);
+            mTabIndicator.removeAllViews();
+            mTabIndicator = null;
+        }
+
+        mBodyPager = null;
+        mHeaderPager = null;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
         //Вручную удаляем все фрагменты и вообще прибираемся за собой убираемся за себя
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         if (mBodyPagerAdapter != null) {
@@ -212,15 +226,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             mHeaderPagerAdapter = null;
         }
         transaction.commit();
-
-        if (mTabIndicator != null) {
-            mTabIndicator.setOnPageChangeListener(null);
-            mTabIndicator.removeAllViews();
-            mTabIndicator = null;
-        }
-
-        mBodyPager = null;
-        mHeaderPager = null;
     }
 
     private void setProfile(Profile profile) {
