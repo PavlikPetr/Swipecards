@@ -4,7 +4,7 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class QuestionaryRequest extends AbstractApiRequest {
+public class QuestionaryRequest extends ApiRequest {
     // Data
     public static final String service = "questionary";
     public int jobid = -1; // идентификатор рабочей партии пользователя

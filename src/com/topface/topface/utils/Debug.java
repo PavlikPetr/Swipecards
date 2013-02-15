@@ -102,7 +102,7 @@ public class Debug {
                 stack.append(st.toString()).append("\n");
             }
             msg = msg != null && !msg.equals("") ? msg + " : " : "";
-            String errorText = e.getMessage() == null ? e.toString() : " :: " + e.getMessage();
+            String errorText = e.toString();
             errorText = "\n" + errorText + "\n";
             showChunkedLogError(App.TAG, msg + errorText + stack.toString());
         }
@@ -115,7 +115,7 @@ public class Debug {
                 stack.append(st.toString()).append("\n");
             }
             msg = msg != null && !msg.equals("") ? msg + " : " : "";
-            String errorText = e.getMessage() == null ? e.toString() : " :: " + e.getMessage();
+            String errorText = e.toString();
             errorText = "\n" + errorText + "\n";
             showChunkedLogError(App.TAG, msg + errorText + stack.toString());
         }
@@ -144,6 +144,7 @@ public class Debug {
                         Debug.debug(tag, title + "\n" + finalResult.toString());
                     }
                 } catch (JSONException ignored) {
+                    Debug.debug(tag, title + "\n" + json);
                 }
             }
         }

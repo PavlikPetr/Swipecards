@@ -4,7 +4,7 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ConfirmRequest extends AbstractApiRequest {
+public class ConfirmRequest extends ApiRequest {
 
     private static final String SERVICE_NAME = "confirm";
     private static final String LOGIN_FIELD_NAME = "login";
@@ -22,7 +22,7 @@ public class ConfirmRequest extends AbstractApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         return new JSONObject().put(LOGIN_FIELD_NAME, login)
-                            .put(CODE_FIELD_NAME, code);
+                .put(CODE_FIELD_NAME, code);
     }
 
     @Override

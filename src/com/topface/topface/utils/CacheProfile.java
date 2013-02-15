@@ -20,7 +20,6 @@ public class CacheProfile {
     public static String first_name;   // имя пользователя
     public static int age;             // возраст пользователя
     public static int sex;             // секс пользователя
-    public static int unread_rates;    // количество непрочитанных оценок пользователя
     public static int unread_likes;    // количество непрочитанных “понравилось” пользователя
     public static int unread_messages; // количество непрочитанных сообщений пользователя
     public static int unread_mutual;   // количество непрочитанных симпатий
@@ -35,12 +34,9 @@ public class CacheProfile {
     public static boolean premium;
     public static boolean invisible;
 
-    //Notifications constants
-    public final static int NOTIFICATIONS_UNKNOWN = -1;
     public final static int NOTIFICATIONS_MESSAGE = 0;
     public final static int NOTIFICATIONS_SYMPATHY = 1;
     public final static int NOTIFICATIONS_LIKES = 2;
-    public final static int NOTIFICATIONS_RATE = 3;
     public final static int NOTIFICATIONS_VISITOR = 4;
 
     public static LinkedList<FormItem> forms;
@@ -67,7 +63,7 @@ public class CacheProfile {
             public void run() {
                 if (response != null) {
                     SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit();
-                    editor.putString(PROFILE_CACHE_KEY, response.toString());
+                    editor.putString(PROFILE_CACHE_KEY, response.toJson().toString());
                     editor.commit();
                 } else {
                     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
@@ -78,11 +74,6 @@ public class CacheProfile {
                 }
             }
         }).start();
-    }
-
-    public static void updateNotifications(Profile profile) {
-        money = profile.money;
-        likes = profile.likes;
     }
 
     public static Profile getProfile() {
@@ -171,6 +162,11 @@ public class CacheProfile {
                     result = true;
                 } catch (JSONException e) {
                     Debug.error(e);
+                    //Если произошла ошибка, то чистим кэш, т.к. ошибка связана скорее всего с ним
+                    PreferenceManager.getDefaultSharedPreferences(App.getContext())
+                            .edit()
+                            .remove(PROFILE_CACHE_KEY)
+                            .commit();
                 }
             }
         }
@@ -221,16 +217,8 @@ public class CacheProfile {
         profileUpdateTime = calendar.getTimeInMillis();
     }
 
-    public static long getLastProfileUpdateTime() {
-        return profileUpdateTime;
-    }
-
     public static boolean isLoaded() {
         return uid > 0;
-    }
-
-    public static boolean isOptionsLoaded() {
-        return options != null;
     }
 
     public static void setOptions(Options newOptions, final JSONObject response) {
@@ -246,12 +234,4 @@ public class CacheProfile {
         }).start();
     }
 
-    public static String getUserNameAgeString() {
-        return CacheProfile.first_name +
-                (CacheProfile.isAgeOk(CacheProfile.age) ? ", " + CacheProfile.age : "");
-    }
-
-    private static boolean isAgeOk(int age) {
-        return age > 0;
-    }
 }

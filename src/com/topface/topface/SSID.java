@@ -2,37 +2,52 @@ package com.topface.topface;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 public class Ssid {
     // Data
-    public static String SSID;
+    private static volatile String mSsid;
+    private static Context mContext = App.getContext();
 
-    public static void init(Context context) {
-        load(context);
+    public static void init() {
+        load();
     }
 
     public static boolean isLoaded() {
-        return SSID != null && SSID.length() > 0;
+        return !TextUtils.isEmpty(mSsid);
     }
 
-    public static String load(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        SSID = preferences.getString(Static.PREFERENCES_SSID, Static.EMPTY);
-        return SSID;
+    public static boolean isEmpty() {
+        return TextUtils.isEmpty(get());
     }
 
-    public static void save(Context context, String ssid) {
-        SSID = (ssid == null || ssid.length() == 0) ? Static.EMPTY : ssid;
-        SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+    public synchronized static String load() {
+        SharedPreferences preferences = mContext.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        mSsid = preferences.getString(Static.PREFERENCES_SSID, Static.EMPTY);
+        return mSsid;
+    }
+
+    public synchronized static String get() {
+        if (mSsid == null) {
+            load();
+        }
+
+        return mSsid;
+    }
+
+    public synchronized static void save(String ssid) {
+        mSsid = TextUtils.isEmpty(ssid) ? Static.EMPTY : ssid;
+        SharedPreferences preferences = mContext.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(Static.PREFERENCES_SSID, SSID);
+        editor.putString(Static.PREFERENCES_SSID, mSsid);
         editor.commit();
     }
 
-    public static void remove(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+    public synchronized static void remove() {
+        mSsid = Static.EMPTY;
+        SharedPreferences preferences = mContext.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(Static.PREFERENCES_SSID, SSID = Static.EMPTY);
+        editor.putString(Static.PREFERENCES_SSID, Static.EMPTY);
         editor.commit();
     }
 }

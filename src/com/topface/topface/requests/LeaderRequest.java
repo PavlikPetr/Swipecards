@@ -6,7 +6,7 @@ import com.topface.topface.utils.CacheProfile;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LeaderRequest extends AbstractApiRequest {
+public class LeaderRequest extends ApiRequest {
     public static final String SERVICE_NAME = "leader";
     private int mPhotoId;
 

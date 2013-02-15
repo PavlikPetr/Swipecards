@@ -7,7 +7,7 @@ import com.topface.topface.data.DatingFilter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class FilterRequest extends AbstractApiRequest {
+public class FilterRequest extends ApiRequest {
     private static final String SERVICE_NAME = "filter";
 
     protected DatingFilter filter;

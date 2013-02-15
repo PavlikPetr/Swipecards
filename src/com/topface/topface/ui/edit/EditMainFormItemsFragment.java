@@ -16,9 +16,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.SettingsRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormItem;
@@ -50,6 +50,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
     }
 
     public EditMainFormItemsFragment(EditType[] type) {
+        this();
         mTypes = type;
     }
 

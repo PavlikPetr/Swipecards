@@ -4,7 +4,7 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class SkipRateRequest extends AbstractApiRequest {
+public class SkipRateRequest extends ApiRequest {
     public static final String SERVICE_NAME = "skipRate";
     public int userid; // идентификатор пользователя для оценки
 

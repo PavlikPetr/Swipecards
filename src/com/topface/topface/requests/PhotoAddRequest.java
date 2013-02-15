@@ -5,7 +5,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class PhotoAddRequest extends AbstractApiRequest {
+public class PhotoAddRequest extends ApiRequest {
     // Data
     public static final String service = "photoAdd";
 

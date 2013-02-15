@@ -11,7 +11,7 @@ import com.topface.topface.R;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BlackListAddRequest;
 import com.topface.topface.requests.BlackListDeleteRequest;
-import com.topface.topface.requests.VipApiHandler;
+import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.fragments.BaseFragment;
 
 

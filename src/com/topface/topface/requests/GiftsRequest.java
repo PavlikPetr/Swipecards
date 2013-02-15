@@ -4,7 +4,7 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class GiftsRequest extends AbstractApiRequest {
+public class GiftsRequest extends ApiRequest {
 
     public static final String service = "gifts";
 

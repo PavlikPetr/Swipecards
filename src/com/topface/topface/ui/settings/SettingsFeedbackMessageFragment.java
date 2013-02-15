@@ -19,9 +19,9 @@ import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FeedbackReport;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.edit.AbstractEditFragment;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.utils.Debug;
@@ -290,7 +290,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             strBuilder.append("<p>Device: ").append(device).append("/").append(model).append("</p>");
             strBuilder.append("<p>Device language: ").append(Locale.getDefault().getDisplayLanguage()).append("</p>");
 
-            strBuilder.append("<p>Topface SSID: ").append(Ssid.SSID).append("</p>");
+            strBuilder.append("<p>Topface SSID: ").append(Ssid.get()).append("</p>");
             AuthToken authToken = AuthToken.getInstance();
             strBuilder.append("<p>Social net: ").append(authToken.getSocialNet()).append("</p>");
             strBuilder.append("<p>Social token: ").append(authToken.getTokenKey()).append("</p>");

@@ -1,47 +1,38 @@
 package com.topface.topface.utils.http;
 
+import com.topface.topface.requests.IApiRequest;
 import com.topface.topface.utils.Debug;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
+
+import java.net.HttpURLConnection;
 
 public class RequestConnection {
-    HttpPost mHttpPost;
-    HttpClient mHttpClient;
+    private HttpURLConnection mConnection;
+    private IApiRequest mApiRequest;
 
-    public RequestConnection() {
-    }
-
-    public RequestConnection(HttpPost httpPost, HttpClient httpClient) {
-        mHttpPost = httpPost;
-        mHttpClient = httpClient;
-    }
-
-    public HttpPost getHttpPost() {
-        return mHttpPost;
-    }
-
-    public void setHttpPost(HttpPost httpPost) {
-        this.mHttpPost = httpPost;
-    }
-
-    public HttpClient getHttpClient() {
-        return mHttpClient;
-    }
-
-    public void setHttpClient(HttpClient httpClient) {
-        this.mHttpClient = httpClient;
+    public RequestConnection(IApiRequest apiRequest) {
+        mApiRequest = apiRequest;
     }
 
     public void abort() {
         try {
-            if (mHttpPost != null) {
-                mHttpPost.abort();
+            if (mConnection != null) {
+                mConnection.disconnect();
+                mConnection = null;
             }
-            if (mHttpClient != null) {
-                mHttpClient.getConnectionManager().closeExpiredConnections();
-            }
-        } catch (Exception localException) {
-            Debug.log(this, localException.toString());
+
+            mApiRequest = null;
+
+        } catch (Exception e) {
+            Debug.error(e);
         }
     }
+
+    public void setConnection(HttpURLConnection connection) {
+        mConnection = connection;
+    }
+
+    public IApiRequest getApiRequest() {
+        return mApiRequest;
+    }
+
 }

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 /**
  * Запрос удаляет пользователя из черного списка
  */
-public class BlackListDeleteRequest extends AbstractApiRequest {
+public class BlackListDeleteRequest extends ApiRequest {
     public static final String SERVICE_NAME = "blacklistDelete";
     /**
      * id пользователя, котогорого нужно добавить в черный список
@@ -18,7 +18,6 @@ public class BlackListDeleteRequest extends AbstractApiRequest {
     private final ArrayList<Integer> mUserIds;
 
     /**
-     *
      * @param userIds массив id пользовтелей, которые нужно добавить в черный список
      */
     public BlackListDeleteRequest(ArrayList<Integer> userIds, Context context) {
@@ -27,7 +26,6 @@ public class BlackListDeleteRequest extends AbstractApiRequest {
     }
 
     /**
-     *
      * @param userId пользователя, которого нужно добавить в черный список
      */
     public BlackListDeleteRequest(int userId, Context context) {
@@ -36,7 +34,7 @@ public class BlackListDeleteRequest extends AbstractApiRequest {
         list.add(userId);
         mUserIds = list;
     }
-    
+
     @Override
     protected JSONObject getRequestData() throws JSONException {
         return new JSONObject().put("userids", new JSONArray(mUserIds));

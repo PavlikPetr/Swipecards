@@ -4,7 +4,11 @@ package com.topface.topface.requests.blacklist;
 import android.content.Context;
 import com.topface.topface.data.BlackListItem;
 import com.topface.topface.data.FeedListData;
-import com.topface.topface.requests.*;
+import com.topface.topface.requests.AbstractThreadTest;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.BlackListDeleteRequest;
+import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.Debug;
 
 import java.util.ArrayList;
@@ -112,7 +116,6 @@ public class BlackListDeleteTest extends AbstractThreadTest {
         new FeedRequest(FeedRequest.FeedService.BLACK_LIST, context)
                 .callback(handler).exec();
     }
-
 
 
 }

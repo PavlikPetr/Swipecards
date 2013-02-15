@@ -8,7 +8,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class VirusLikesRequest extends AbstractApiRequest {
+public class VirusLikesRequest extends ApiRequest {
     public static final String SERVICE_NAME = "VirusLikes";
     /**
      * идентификатор сообщения из ленты для получения лайков. Если параметр указан, данное сообщение будет удалено

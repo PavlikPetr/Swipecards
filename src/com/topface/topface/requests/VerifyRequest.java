@@ -4,7 +4,7 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class VerifyRequest extends AbstractApiRequest {
+public class VerifyRequest extends ApiRequest {
     // Data
     public static final String service = "verify";
     public String data; // строка данных заказа от Google Play

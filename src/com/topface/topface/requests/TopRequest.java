@@ -4,7 +4,7 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class TopRequest extends AbstractApiRequest {
+public class TopRequest extends ApiRequest {
     // Data
     public static final String service = "top";
     public int sex; // пол самых красивых 

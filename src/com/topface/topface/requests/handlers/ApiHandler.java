@@ -1,4 +1,4 @@
-package com.topface.topface.requests;
+package com.topface.topface.requests.handlers;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,6 +9,9 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.OptionsRequest;
+import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import org.json.JSONObject;
@@ -31,7 +34,7 @@ abstract public class ApiHandler extends Handler {
                 Debug.error(App.getContext().getString(R.string.general_premium_access_error));
 
                 //Сообщение о необходимости Премиум-статуса
-                showToast(response.code, R.string.general_premium_access_error);
+                showToast(R.string.general_premium_access_error);
 
                 fail(response.code, response);
             } else if (response.code != ApiResponse.RESULT_OK) {
@@ -52,7 +55,7 @@ abstract public class ApiHandler extends Handler {
         }
     }
 
-    private void showToast(int code, final int stringId) {
+    private void showToast(final int stringId) {
         if (mContext != null && mContext instanceof Activity) {
             try {
                 //показываем уведомление

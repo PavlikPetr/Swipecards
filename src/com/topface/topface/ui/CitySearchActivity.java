@@ -15,10 +15,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.CitiesRequest;
 import com.topface.topface.requests.SearchCitiesRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.Debug;
 
 import java.util.LinkedList;

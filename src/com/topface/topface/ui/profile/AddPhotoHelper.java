@@ -1,7 +1,6 @@
 package com.topface.topface.ui.profile;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -11,7 +10,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import com.topface.topface.R;
@@ -23,7 +21,7 @@ import com.topface.topface.requests.PhotoAddRequest;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.http.Http;
+import com.topface.topface.utils.http.HttpUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,18 +30,11 @@ import java.io.IOException;
 
 /**
  * Хелпер для загрузки фотографий в любой активити
- * <p/>
- * Как использовать:
- * 1) Вызвать метод addPhoto или addEroPhoto, для показа диалога
- * 1а) Вы можете добавить коллбэк на окончание загрузки фото через метод setOnResultHandler
- * 2) В методе onActivityResult вашей активити вызвать метод checkActivityResult
- * (если это результат с загрузкой фото, то фотография начнет загружаться на сервер)
  */
 public class AddPhotoHelper {
 
     public static final String PATH_TO_FILE = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp.jpg";
     private Context mContext;
-    private AlertDialog mAddPhotoDialog;
     private Activity mActivity;
     private Fragment mFragment;
     private Handler mHandler;
@@ -89,28 +80,6 @@ public class AddPhotoHelper {
         if (mLockerView != null) {
             mLockerView.setVisibility(View.GONE);
         }
-//        FragmentManager fm = ((FragmentActivity) mActivity).getSupportFragmentManager();
-//        FragmentTransaction ft = fm.beginTransaction();
-//
-//        Fragment prev = fm.findFragmentByTag(ProgressDialogFragment.PROGRESS_DIALOG_TAG);
-//        if (prev != null) {
-//            ft.remove(prev);
-//        }
-//        ft.commitAllowingStateLoss();
-    }
-
-    /**
-     * Добавление фотографии
-     */
-    public void addPhoto() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
-        builder.setTitle(mContext.getString(R.string.album_add_photo_title));
-        View view = LayoutInflater.from(mContext).inflate(R.layout.profile_add_photo, null);
-        view.findViewById(R.id.btnAddPhotoAlbum).setOnClickListener(mOnAddPhotoClickListener);
-        view.findViewById(R.id.btnAddPhotoCamera).setOnClickListener(mOnAddPhotoClickListener);
-        builder.setView(view);
-        mAddPhotoDialog = builder.create();
-        mAddPhotoDialog.show();
     }
 
     public OnClickListener getAddPhotoClickListener() {
@@ -148,8 +117,6 @@ public class AddPhotoHelper {
                 }
                 break;
             }
-            if (mAddPhotoDialog != null && mAddPhotoDialog.isShowing())
-                mAddPhotoDialog.cancel();
         }
     };
 
@@ -246,7 +213,7 @@ public class AddPhotoHelper {
 
     private String getRawResponse(Uri imageUri) throws IOException {
         PhotoAddRequest add = new PhotoAddRequest(AddPhotoHelper.this.mContext);
-        add.ssid = Ssid.SSID;
+        add.setSsid(Ssid.get());
 
         Cursor cursor = mActivity.getContentResolver().query(imageUri, new String[]{android.provider.MediaStore.Images.ImageColumns.DATA}, null, null, null);
         cursor.moveToFirst();
@@ -255,20 +222,14 @@ public class AddPhotoHelper {
         final String file = cursor.getString(0);
         cursor.close();
 
-//        String data = Base64.encodeFromFile(file);
-//        new Base64.OutputStream()
-
-        return Http.httpDataRequest(Http.HTTP_POST_REQUEST, Static.API_URL, add.toString(), file);
+        return HttpUtils.httpDataRequest(Static.API_URL, add.toPostData(), file);
     }
 
     private String getRawResponse(File file) throws IOException {
         PhotoAddRequest add = new PhotoAddRequest(AddPhotoHelper.this.mContext);
-        add.ssid = Ssid.SSID;
+        add.setSsid(Ssid.get());
 
-
-//        String data = Base64.encodeFromFile(file.getAbsolutePath());
-
-        return Http.httpDataRequest(Http.HTTP_POST_REQUEST, Static.API_URL, add.toString(), file.getAbsolutePath());
+        return HttpUtils.httpDataRequest(Static.API_URL, add.toPostData(), file.getAbsolutePath());
     }
 
 }

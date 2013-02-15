@@ -1,5 +1,6 @@
-package com.topface.topface.requests;
+package com.topface.topface.requests.handlers;
 
+import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 
 /**

@@ -28,6 +28,7 @@ import com.topface.topface.data.search.Search;
 import com.topface.topface.data.search.SearchUser;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.*;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
@@ -39,7 +40,6 @@ import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.*;
-import com.topface.topface.utils.cache.SearchCacheManager;
 
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
         RateController.OnRateControllerListener {
@@ -87,7 +87,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private View mDatingResources;
 
     private boolean hasOneSympathyOrDelight = false;
-    private SearchCacheManager mCache;
     private SearchUser mCurrentUser;
     /**
      * Флаг того, что запущено обновление поиска и запускать дополнительные обновления не нужно
@@ -343,7 +342,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
                 @Override
                 public void fail(int codeError, ApiResponse response) {
-                    Search.log("load error" + codeError);
+                    Search.log("load error: " + response.message);
                     Toast.makeText(getActivity(), App.getContext().getString(R.string.general_data_error),
                             Toast.LENGTH_SHORT).show();
                     onUpdateFail(isAddition);
@@ -654,6 +653,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void lockControls() {
         mProgressBar.setVisibility(View.VISIBLE);
+        mCounter.setVisibility(View.GONE);
         mUserInfoName.setVisibility(View.GONE);
         mUserInfoCity.setVisibility(View.GONE);
         mUserInfoStatus.setVisibility(View.GONE);
@@ -671,6 +671,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void unlockControls() {
         mProgressBar.setVisibility(View.GONE);
+        mCounter.setVisibility(View.VISIBLE);
         mUserInfoName.setVisibility(mCurrentUser != null ? View.VISIBLE : View.GONE);
         mUserInfoCity.setVisibility(mCurrentUser != null ? View.VISIBLE : View.GONE);
         mUserInfoStatus.setVisibility(View.VISIBLE);
@@ -692,7 +693,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mDatingLoveBtnLayout.setEnabled(true);
         mSwitchNextBtn.setEnabled(true);
         mSwitchPrevBtn.setEnabled(true);
-        mCounter.setVisibility(View.VISIBLE);
     }
 
     @Override

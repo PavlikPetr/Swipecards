@@ -27,6 +27,7 @@ import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.*;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.views.IllustratedTextView;
@@ -62,7 +63,14 @@ public class AuthFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.ac_auth, null);
         initViews(root);
-        initAuthorizationHandler();
+        //Если у нас нет токена
+        if (AuthToken.getInstance().isEmpty()) {
+            initAuthorizationHandler();
+        } else {
+            //Если мы попали на этот фрагмент с работающей авторизацией, то просто перезапрашиваем профиль
+            hideButtons();
+            getProfileAndOptions();
+        }
         checkOnline();
 
         return root;
@@ -273,23 +281,16 @@ public class AuthFragment extends BaseFragment {
     }
 
     private AuthRequest generateAuthRequest(AuthToken token) {
-        AuthRequest authRequest = new AuthRequest(getActivity());
-        String socialNet = token.getSocialNet();
+        AuthRequest authRequest = new AuthRequest(token, getActivity());
         registerRequest(authRequest);
-        authRequest.platform = socialNet;
-        authRequest.sid = token.getUserId();
-        authRequest.token = token.getTokenKey();
-        EasyTracker.getTracker().trackEvent("Profile", "Auth", "FromActivity" + socialNet, 1L);
+        EasyTracker.getTracker().trackEvent("Profile", "Auth", "FromActivity" + token.getSocialNet(), 1L);
 
         return authRequest;
     }
 
     private AuthRequest generateTopfaceAuthRequest(final String login, final String password) {
-        final AuthRequest authRequest = new AuthRequest(getActivity());
+        final AuthRequest authRequest = new AuthRequest(login, password, getActivity());
         registerRequest(authRequest);
-        authRequest.platform = AuthToken.SN_TOPFACE;
-        authRequest.login = login;
-        authRequest.password = password;
         authRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
@@ -319,7 +320,7 @@ public class AuthFragment extends BaseFragment {
 
     private void saveAuthInfo(ApiResponse response) {
         Auth auth = Auth.parse(response);
-        Ssid.save(getActivity().getApplicationContext(), auth.ssid);
+        Ssid.save(auth.ssid);
         GCMUtils.init(getActivity());
     }
 

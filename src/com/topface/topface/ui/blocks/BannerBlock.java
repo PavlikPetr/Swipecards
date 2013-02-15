@@ -7,10 +7,8 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +28,11 @@ import com.topface.topface.data.Banner;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.VirusLike;
 import com.topface.topface.imageloader.DefaultImageLoader;
-import com.topface.topface.requests.*;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.BannerRequest;
+import com.topface.topface.requests.VirusLikesRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.BaseApiHandler;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.TopsFragment;
@@ -287,7 +289,6 @@ public class BannerBlock {
             @Override
             public void success(final ApiResponse response) {
                 EasyTracker.getTracker().trackEvent("VirusLike", "Success", "Banner", 0L);
-                final Handler handler = this;
                 //И предлагаем отправить пользователю запрос своим друзьям не из приложения
                 new VirusLike(response).sendFacebookRequest(
                         "Banner",
@@ -306,7 +307,7 @@ public class BannerBlock {
             public void fail(int codeError, ApiResponse response) {
                 EasyTracker.getTracker().trackEvent("VirusLike", "Fail", "Banner", 0L);
 
-                if (response.isError(ApiResponse.CODE_VIRUS_LIKES_ALREADY_RECEIVED)) {
+                if (response.isCodeEqual(ApiResponse.CODE_VIRUS_LIKES_ALREADY_RECEIVED)) {
                     Toast.makeText(getContext(), R.string.virus_error, Toast.LENGTH_LONG).show();
                 } else {
                     Utils.showErrorMessage(getContext());
@@ -358,15 +359,4 @@ public class BannerBlock {
         removeBanner();
     }
 
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            if (mBannerView instanceof Plus1BannerView) {
-                if (((Plus1BannerView) mBannerView).canGoBack()) {
-                    ((Plus1BannerView) mBannerView).goBack();
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 }

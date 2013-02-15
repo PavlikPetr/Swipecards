@@ -4,7 +4,7 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class RateRequest extends AbstractApiRequest {
+public class RateRequest extends ApiRequest {
 
     public static final int DEFAULT_MUTUAL = 1;
     public static final int DEFAULT_NO_MUTUAL = 0;

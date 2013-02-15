@@ -1,20 +1,24 @@
 package com.topface.topface.requests;
 
+import com.topface.topface.data.SerializableToJson;
 import com.topface.topface.utils.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ApiResponse {
+import java.util.Arrays;
+
+@SuppressWarnings("UnusedDeclaration")
+public class ApiResponse implements SerializableToJson {
     // Data
-    public int code = -1;
+    public int code = RESULT_DONT_SET;
+    public String message;
     public JSONObject jsonResult;
     public JSONObject counters;
     public String method;
-    private boolean mIsErrorResponse;
     // Constants
     public static final int ERRORS_PROCCESED = -2;
     public static final int RESULT_OK = -1;
-    public static final int SYSTEM = 0;
+    public static final int RESULT_DONT_SET = 0;
     public static final int UNKNOWN_SOCIAL_USER = 1;
     public static final int UNKNOWN_PLATFORM = 2;
     public static final int SESSION_NOT_FOUND = 3;
@@ -34,7 +38,7 @@ public class ApiResponse {
     public static final int INVALID_PRODUCT = 17;
     public static final int INVERIFIED_RECEIPT = 18;
     public static final int ITUNES_CONNECTION = 19;
-    public static final int INVERIFIED_TOKEN = 20;
+    public static final int UNVERIFIED_TOKEN = 20;
     public static final int INVALID_FORMAT = 21;
     public static final int UNVERIFIED_SIGNATURE = 22;
     public static final int INCORRECT_VALUE = 23;
@@ -80,18 +84,17 @@ public class ApiResponse {
 
 
     public ApiResponse(String response) {
-        JSONObject json = null;
+        JSONObject json;
 
         if (response != null && response.length() > 0) {
             try {
                 json = new JSONObject(response);
+                parseJson(json);
             } catch (JSONException e) {
                 code = WRONG_RESPONSE;
                 Debug.error("json response is wrong: " + response, e);
             }
         }
-
-        parseJson(json);
     }
 
     public ApiResponse(JSONObject response) {
@@ -102,18 +105,18 @@ public class ApiResponse {
     }
 
     public void parseJson(JSONObject response) {
-        try {
-            if (response == null) {
-                Debug.error("JSON response is null");
-                code = NULL_RESPONSE;
-                return;
-            }
+        if (response == null) {
+            Debug.error("JSON response is null");
+            code = NULL_RESPONSE;
+            return;
+        }
 
+        try {
             jsonResult = response;
             if (!jsonResult.isNull("error")) {
                 jsonResult = jsonResult.getJSONObject("error");
-                mIsErrorResponse = true;
                 code = jsonResult.getInt("code");
+                message = jsonResult.optString("message", "");
             } else if (!jsonResult.isNull("result")) {
                 if (!jsonResult.isNull("counters")) {
                     counters = jsonResult.getJSONObject("counters");
@@ -122,26 +125,26 @@ public class ApiResponse {
                     method = jsonResult.optString("method");
                 }
                 jsonResult = jsonResult.getJSONObject("result");
-            } else
+                code = RESULT_OK;
+            } else {
                 code = WRONG_RESPONSE;
+            }
         } catch (Exception e) {
             code = WRONG_RESPONSE;
-            Debug.error("json resonse is wrong:" + response, e);
+            Debug.error("Json response is wrong:" + response, e);
         }
     }
 
 
     @Override
     public String toString() {
-        if (jsonResult != null) {
+        if (method == null && jsonResult != null) {
+            return String.format("Response error #%d: %s", code, message);
+        } else if (jsonResult != null) {
             return jsonResult.toString();
         } else {
-            return "response is null";
+            return "Response is null";
         }
-    }
-
-    public boolean isError() {
-        return mIsErrorResponse;
     }
 
     /**
@@ -150,22 +153,38 @@ public class ApiResponse {
      * @return флаг выполенения запроса
      */
     public boolean isCompleted() {
-        boolean completed = false;
-        try {
-            if (jsonResult != null && jsonResult.has("completed")) {
-                completed = jsonResult.optBoolean("completed", false);
-            }
-        } catch (Exception e) {
-            Debug.error(e);
-        }
-
-        return completed;
+        return isCodeEqual(RESULT_OK);
     }
 
     /**
      * Проверяет, является ли этот ответ от сервера ошибокой переданно в параметре errorCode
      */
-    public boolean isError(int errorCode) {
+    public boolean isCodeEqual(int errorCode) {
         return errorCode == code;
+    }
+
+    /**
+     * Проверяет, является ли код ошибки кодом неверной авторизации
+     */
+    public boolean isWrongAuthError() {
+        return Arrays.asList(
+                UNKNOWN_PLATFORM,
+                UNKNOWN_SOCIAL_USER,
+                UNVERIFIED_TOKEN,
+                INCORRECT_LOGIN,
+                INCORRECT_PASSWORD
+        ).contains(code);
+    }
+
+    public boolean isCorrectJson() {
+        return jsonResult != null && !Arrays.asList(
+                NULL_RESPONSE,
+                WRONG_RESPONSE
+        ).contains(code);
+    }
+
+    @Override
+    public JSONObject toJson() {
+        return jsonResult;
     }
 }
