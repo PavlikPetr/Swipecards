@@ -1,14 +1,18 @@
 package com.topface.topface.ui.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiHandler;
@@ -16,11 +20,19 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.RestorePwdRequest;
 import com.topface.topface.utils.Utils;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class RecoverPwdFragment extends BaseFragment{
+
+    private static final int RED_ALERT_APPEARANCE_TIME = 3000;
 
     private Button mBtnRecover;
     private EditText mEdEmail;
     private ProgressBar mProgressBar;
+    private TextView mRedAlertView;
+
+    private Timer mTimer = new Timer();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,6 +53,7 @@ public class RecoverPwdFragment extends BaseFragment{
 
     private void initOtherViews(View root) {
         mProgressBar = (ProgressBar) root.findViewById(R.id.prsRecoverSending);
+        mRedAlertView = (TextView) root.findViewById(R.id.tvRedAlert);
     }
 
     private void initButtonViews(View root) {
@@ -49,6 +62,8 @@ public class RecoverPwdFragment extends BaseFragment{
             @Override
             public void onClick(View v) {
                 hideButtons();
+                removeRedAlert();
+                hideSoftKeyboard();
                 RestorePwdRequest request = new RestorePwdRequest(getActivity());
                 request.login =  mEdEmail.getText().toString();
                 request.callback(new ApiHandler() {
@@ -61,6 +76,18 @@ public class RecoverPwdFragment extends BaseFragment{
                     @Override
                     public void fail(int codeError, ApiResponse response) {
                         showButtons();
+                        redAlert(R.string.enter_email_from_registration);
+                        mTimer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        removeRedAlert();
+                                    }
+                                });
+                            }
+                        }, RED_ALERT_APPEARANCE_TIME);
                     }
                 }).exec();
             }
@@ -73,6 +100,13 @@ public class RecoverPwdFragment extends BaseFragment{
                 getActivity().finish();
             }
         });
+    }
+
+    private void hideSoftKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (mEdEmail != null) {
+            imm.hideSoftInputFromWindow(mEdEmail.getWindowToken(), 0);
+        }
     }
 
     private void initEditViews(View root) {
@@ -110,6 +144,31 @@ public class RecoverPwdFragment extends BaseFragment{
         if (mBtnRecover != null && mProgressBar != null) {
             mBtnRecover.setVisibility(View.GONE);
             mProgressBar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void redAlert(String text) {
+        if (mRedAlertView != null) {
+            if(text != null) {
+                mRedAlertView.setText(text);
+            }
+            mRedAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
+                    android.R.anim.fade_in));
+            mRedAlertView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void redAlert(int resId) {
+        redAlert(getString(resId));
+    }
+
+    private void removeRedAlert() {
+        if (mRedAlertView != null) {
+            if (mRedAlertView.getVisibility() == View.VISIBLE) {
+                mRedAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
+                        android.R.anim.fade_out));
+                mRedAlertView.setVisibility(View.INVISIBLE);
+            }
         }
     }
 }
