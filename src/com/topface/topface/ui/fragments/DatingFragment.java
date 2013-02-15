@@ -86,7 +86,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private NoviceLayout mNoviceLayout;
     private View mDatingResources;
 
-    private int photosLimit = 5;
+    public static final int PHOTOS_LIMIT = 5;
 
     private boolean hasOneSympathyOrDelight = false;
     private boolean mCanSendAlbumReq = true;
@@ -155,7 +155,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         showUser(mUserSearchList.getCurrentUser());
         return view;
     }
-
 
 
     private void initMutualDrawables() {
@@ -857,7 +856,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             setCounter(mCurrentPhotoPrevPos);
 
             if (position + DEFAULT_PRELOAD_ALBUM_RANGE == mLoadedCount) {
-                final Photos data = ((ImageSwitcher.ImageSwitcherAdapter)mImageSwitcher.getAdapter()).getData();
+                final Photos data = ((ImageSwitcher.ImageSwitcherAdapter) mImageSwitcher.getAdapter()).getData();
 
                 if (mNeedMore) {
 
@@ -883,22 +882,22 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void sendAlbumRequest(final Photos data) {
         int id = data.get(mLoadedCount - 1).getId();
-        AlbumRequest request = new AlbumRequest(getActivity(), mUserSearchList.getCurrentUser().id, photosLimit, id, true);
+        AlbumRequest request = new AlbumRequest(getActivity(), mUserSearchList.getCurrentUser().id, PHOTOS_LIMIT, id, true);
         final int uid = mUserSearchList.getCurrentUser().id;
         request.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
-                if(uid == mUserSearchList.getCurrentUser().id) {
+                if (uid == mUserSearchList.getCurrentUser().id) {
                     Photos newPhotos = Photos.parse(response.jsonResult.optJSONArray("items"));
                     mNeedMore = response.jsonResult.optBoolean("more");
                     int i = 0;
-                    for(Photo photo : newPhotos) {
+                    for (Photo photo : newPhotos) {
                         data.set(mLoadedCount + i, photo);
                         i++;
                     }
                     mLoadedCount += newPhotos.size();
 
-                    if(mImageSwitcher != null) {
+                    if (mImageSwitcher != null) {
                         mImageSwitcher.getAdapter().notifyDataSetChanged();
                     }
                 }

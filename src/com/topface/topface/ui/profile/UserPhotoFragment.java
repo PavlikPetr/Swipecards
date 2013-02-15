@@ -17,11 +17,10 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.User;
 import com.topface.topface.requests.AlbumRequest;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
@@ -32,7 +31,6 @@ public class UserPhotoFragment extends BaseFragment {
     private TextView mTitle;
     private Photos mPhotoLinks;
     private LoadingListAdapter.Updater mUpdater;
-    private int totalCount;
     private GridView mGridAlbum;
     private BroadcastReceiver mPhotosReceiver;
 
@@ -42,13 +40,13 @@ public class UserPhotoFragment extends BaseFragment {
         mUpdater = new LoadingListAdapter.Updater() {
             @Override
             public void onUpdate() {
-                Photos data = ((ProfileGridAdapter)mGridAlbum.getAdapter()).getData();
+                Photos data = ((ProfileGridAdapter) mGridAlbum.getAdapter()).getData();
                 AlbumRequest request = new AlbumRequest(getActivity(), mUser.uid, AlbumRequest.DEFAULT_PHOTOS_LIMIT, data.get(data.size() - 2).getId(), false);
                 request.callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
-                        if(mGridAlbum != null) {
-                            ((UserPhotoGridAdapter)mGridAlbum.getAdapter()).setData(Photos.parse(response.jsonResult.optJSONArray("items")), response.jsonResult.optBoolean("more"));
+                        if (mGridAlbum != null) {
+                            ((UserPhotoGridAdapter) mGridAlbum.getAdapter()).setData(Photos.parse(response.jsonResult.optJSONArray("items")), response.jsonResult.optBoolean("more"));
                         }
                     }
 
@@ -76,7 +74,7 @@ public class UserPhotoFragment extends BaseFragment {
         mGridAlbum = (GridView) root.findViewById(R.id.usedGrid);
         mGridAlbum.setAdapter(mUserPhotoGridAdapter);
         mGridAlbum.setOnItemClickListener(mOnItemClickListener);
-        if(mUserPhotoGridAdapter != null) {
+        if (mUserPhotoGridAdapter != null) {
             mGridAlbum.setOnScrollListener(mUserPhotoGridAdapter);
         }
         mPhotosReceiver = new BroadcastReceiver() {
@@ -112,7 +110,7 @@ public class UserPhotoFragment extends BaseFragment {
             intent.putExtra(PhotoSwitcherActivity.INTENT_USER_ID, mUser.uid);
             intent.putExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, position);
             intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS_COUNT, mUser.totalPhotos);
-            intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, ((ProfileGridAdapter)mGridAlbum.getAdapter()).getData());
+            intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, ((ProfileGridAdapter) mGridAlbum.getAdapter()).getData());
             startActivity(intent);
         }
     };
@@ -120,7 +118,7 @@ public class UserPhotoFragment extends BaseFragment {
     public void setUserData(User user) {
         mUser = user;
         mPhotoLinks = user.photos;
-        if(mGridAlbum.getAdapter() != null) {
+        if (mGridAlbum.getAdapter() != null) {
 //            ((UserPhotoGridAdapter)mGridAlbum.getAdapter()).setData(mPhotoLinks);
         } else {
             setPhotos(mPhotoLinks);
@@ -136,9 +134,9 @@ public class UserPhotoFragment extends BaseFragment {
 
         if (mUserPhotoGridAdapter == null) {
             mUserPhotoGridAdapter = new UserPhotoGridAdapter(getActivity().getApplicationContext(),
-                                                             photos,
-                                                             mUser.totalPhotos,
-                                                                     mUpdater);
+                    photos,
+                    mUser.totalPhotos,
+                    mUpdater);
         }
     }
 

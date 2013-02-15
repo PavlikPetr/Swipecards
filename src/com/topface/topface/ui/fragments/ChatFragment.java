@@ -2,13 +2,10 @@ package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.*;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
@@ -26,7 +23,11 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
-import com.topface.topface.ui.*;
+import com.topface.topface.requests.handlers.VipApiHandler;
+import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.GeoMapActivity;
+import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
@@ -42,26 +43,23 @@ import java.util.TimerTask;
 public class ChatFragment extends BaseFragment implements View.OnClickListener,
         LocationListener {
 
-    // Constants
-    private static final int LIMIT = 50; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    private static final int LIMIT = 50;
 
     public static final String ADAPTER_DATA = "adapter";
     public static final String WAS_FAILED = "was_failed";
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_USER_NAME = "user_name";
-    public static final String INTENT_USER_AVATAR = "user_avatar";
     public static final String INTENT_USER_SEX = "user_sex";
     public static final String INTENT_USER_AGE = "user_age";
     public static final String INTENT_USER_CITY = "user_city";
     public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
     public static final String INTENT_ITEM_ID = "item_id";
     public static final String MAKE_ITEM_READ = "com.topface.topface.feedfragment.MAKE_READ";
-    private static final int DIALOG_GPS_ENABLE_NO_AGPS_ID = 1;
-    private static final int DIALOG_LOCATION_PROGRESS_ID = 3;
-    private static final long LOCATION_PROVIDER_TIMEOUT = 10000;
+
+    static {
+    }
+
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
-    //TODO костыль для ChatFragment, после перехода на фрагмент - выпилить
-    public static final int INTENT_CHAT_REQUEST = 371;
 
     private static final int DELETE_BUTTON = 1;
     private static final int COPY_BUTTON = 0;
@@ -73,7 +71,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     private boolean mIsUpdating;
     private boolean mProfileInvoke;
     private boolean mIsAddPanelOpened;
-    private boolean mLocationDetected = false;
     private PullToRefreshListView mListView;
     private ChatListAdapter mAdapter;
     private FeedList<History> mHistoryData;
@@ -81,8 +78,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     private LockerView mLoadingLocker;
     private RetryView mRetryView;
     private SwapControl mSwapControl;
-    private static ProgressDialog mProgressDialog;
-    private Button btnBack;
     private Button mAddToBlackList;
     private ImageButton mBtnChatAdd;
 
@@ -116,7 +111,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         String userName = getArguments().getString(INTENT_USER_NAME);
         int userAge = getArguments().getInt(INTENT_USER_AGE, 0);
         String userCity = getArguments().getString(INTENT_USER_CITY);
-        String prevEntity = getArguments().getString(BaseFragmentActivity.INTENT_PREV_ENTITY);
 
         // Locker
         mLoadingLocker = (LockerView) root.findViewById(R.id.llvChatLoading);
@@ -446,7 +440,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 EasyTracker.getTracker().trackEvent("Chat", "SendGiftClick", "", 1L);
                 break;
 //            case R.id.btnChatPlace: {
-//                targetLocationToSend();
 //                // Toast.makeText(getActivity(), "Place",
 //                // Toast.LENGTH_SHORT).show();
 //                EasyTracker.getTracker().trackEvent("Chat", "SendPlaceClick", "", 1L);
@@ -500,9 +493,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void removeFromBlackList() {
-        BlackListDeleteRequest deleteBlackListRequest = new BlackListDeleteRequest(mUserId,getActivity());
+        BlackListDeleteRequest deleteBlackListRequest = new BlackListDeleteRequest(mUserId, getActivity());
         mAddToBlackList.setEnabled(false);
-        deleteBlackListRequest.callback(new VipApiHandler(){
+        deleteBlackListRequest.callback(new VipApiHandler() {
             @Override
             public void always(ApiResponse response) {
                 super.always(response);
@@ -544,38 +537,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         }
         mUpdater = new Handler();
         startTimer();
-        GCMUtils.lastUserId = mUserId; //Не показываем нотификации в чате с пользователем,
-        //чтобы, в случае задержки нотификации, не делать лишних
-        //оповещений
-        if (!Utils.isThereNavigationActivity(getActivity()) && btnBack != null) {
-            btnBack.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), NavigationActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_DIALOGS);
-                    startActivity(intent);
-                    //TODO close fragment
-                    getActivity().finish();
-                    //TODO костыль для навигации
-                    getActivity().setResult(Activity.RESULT_CANCELED);
-                }
-            });
-            btnBack.setText(R.string.general_dialogs);
-        } else {
-            if (btnBack != null) {
-                btnBack.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //TODO close fragment
-                        getActivity().finish();
-                        //TODO костыль для навигации
-                        getActivity().setResult(Activity.RESULT_CANCELED);
-                    }
-                });
-            }
-
-        }
+        GCMUtils.lastUserId = mUserId;
     }
 
     @Override
@@ -734,43 +696,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         return true;
     }
 
-    private void targetLocationToSend() {
-        mLocationDetected = false;
-
-        if (mGeoManager == null) {
-            mGeoManager = new GeoLocationManager(getActivity().getApplicationContext());
-        }
-
-        if (mGeoManager.availableLocationProvider(GeoLocationManager.LocationProviderType.AGPS)) {
-            mGeoManager.setLocationListener(GeoLocationManager.LocationProviderType.AGPS, this);
-            showDialog(DIALOG_LOCATION_PROGRESS_ID);
-        } else if (mGeoManager.availableLocationProvider(GeoLocationManager.LocationProviderType.GPS)) {
-            mGeoManager.setLocationListener(GeoLocationManager.LocationProviderType.GPS, this);
-            (new CountDownTimer(LOCATION_PROVIDER_TIMEOUT, LOCATION_PROVIDER_TIMEOUT) {
-
-                @Override
-                public void onTick(long millisUntilFinished) {
-                }
-
-                @Override
-                public void onFinish() {
-                    // noinspection SynchronizeOnNonFinalField
-                    synchronized (mGeoManager) {
-                        if (!mLocationDetected) {
-                            mGeoManager.removeLocationListener(ChatFragment.this);
-                            mProgressDialog.dismiss();
-                            Toast.makeText(getActivity(), R.string.chat_toast_fail_location,
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }
-            }).start();
-            showDialog(DIALOG_LOCATION_PROGRESS_ID);
-        } else {
-            showDialog(DIALOG_GPS_ENABLE_NO_AGPS_ID);
-        }
-    }
-
     @Override
     public void onLocationChanged(Location location) {
         // Debug.log(this, location.getLatitude() + " / " +
@@ -798,7 +723,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                         if (mAdapter != null) {
                             mAdapter.replaceMessage(fakeItem, data, mListView.getRefreshableView());
                         }
-                        mProgressDialog.dismiss();
                     }
 
                     @Override
@@ -808,7 +732,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
                     @Override
                     public void fail(int codeError, ApiResponse response) {
-                        mProgressDialog.dismiss();
                         Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                         mAdapter.showRetrySendMessage(fakeItem, coordRequest);
                     }
@@ -818,7 +741,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         });
 
         mGeoManager.removeLocationListener(this);
-        mLocationDetected = true;
     }
 
     @Override
@@ -831,53 +753,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void onProviderDisabled(String provider) {
-    }
-
-    protected Dialog onCreateDialog(int id) {
-        AlertDialog.Builder builder;
-        AlertDialog alert;
-        switch (id) {
-            case DIALOG_GPS_ENABLE_NO_AGPS_ID:
-                builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage(this.getText(R.string.chat_dialog_gps))
-                        .setCancelable(false)
-                        .setPositiveButton(this.getText(R.string.general_settings),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        Intent gpsOptionsIntent = new Intent(
-                                                android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                                        startActivity(gpsOptionsIntent);
-                                    }
-                                });
-                builder.setNegativeButton(this.getText(R.string.general_cancel),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-                alert = builder.create();
-                return alert;
-            case DIALOG_LOCATION_PROGRESS_ID:
-                mProgressDialog = new ProgressDialog(getActivity());
-                mProgressDialog.setCancelable(true);
-                mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                mProgressDialog.setMessage(this.getText(R.string.map_location_progress));
-                mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        mGeoManager.removeLocationListener(ChatFragment.this);
-                    }
-                });
-                return mProgressDialog;
-            default:
-                return null;
-
-        }
-    }
-
-    private void showDialog(int id) {
-        Dialog dialog = onCreateDialog(id);
-        dialog.show();
     }
 
     private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {

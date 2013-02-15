@@ -4,7 +4,7 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class AlbumRequest extends AbstractApiRequest{
+public class AlbumRequest extends ApiRequest {
 
     public static final String SERVICE_NAME = "album";
 
@@ -15,13 +15,7 @@ public class AlbumRequest extends AbstractApiRequest{
     private int to;
     private boolean firstmain;
 
-    public AlbumRequest(Context context, int uid, int limit) {
-        super(context);
-        this.uid = uid;
-        this.limit = limit;
-    }
-
-    public AlbumRequest(Context context, int uid, int limit, int to, boolean  firstmain) {
+    public AlbumRequest(Context context, int uid, int limit, int to, boolean firstmain) {
         super(context);
         this.uid = uid;
         this.limit = limit;
