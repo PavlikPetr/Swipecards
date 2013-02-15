@@ -77,17 +77,6 @@ public class RecoverPwdFragment extends BaseFragment{
                     public void fail(int codeError, ApiResponse response) {
                         showButtons();
                         redAlert(R.string.enter_email_from_registration);
-                        mTimer.schedule(new TimerTask() {
-                            @Override
-                            public void run() {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        removeRedAlert();
-                                    }
-                                });
-                            }
-                        }, RED_ALERT_APPEARANCE_TIME);
                     }
                 }).exec();
             }
@@ -155,6 +144,17 @@ public class RecoverPwdFragment extends BaseFragment{
             mRedAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
                     android.R.anim.fade_in));
             mRedAlertView.setVisibility(View.VISIBLE);
+            mTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            removeRedAlert();
+                        }
+                    });
+                }
+            }, RED_ALERT_APPEARANCE_TIME);
         }
     }
 
