@@ -4,21 +4,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.Profile;
+import com.topface.topface.requests.AlbumRequest;
 import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.LeaderRequest;
 import com.topface.topface.ui.gridlayout.GridLayout;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.LockerView;
+import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
@@ -34,8 +33,11 @@ public class LeadersActivity extends BaseFragmentActivity {
     private Photos usePhotos;
     private Photos uselessPhotos;
 
+
+
     private LinkedList<LeadersPhoto> mLeadersPhotos = new LinkedList<LeadersPhoto>();
     private TextView mUselessTitle;
+    private RelativeLayout mContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,8 @@ public class LeadersActivity extends BaseFragmentActivity {
                 finish();
             }
         });
+
+        mContainer = (RelativeLayout) findViewById(R.id.leadersCont);
 
         usePhotos = new Photos();
         uselessPhotos = new Photos();
@@ -124,7 +128,48 @@ public class LeadersActivity extends BaseFragmentActivity {
     }
 
     private void updateProfileInfo(Profile profile) {
-        splitPhotos(profile.photos);
+        mLoadingLocker.setVisibility(View.VISIBLE);
+        final AlbumRequest request = new AlbumRequest(this, profile.uid, AlbumRequest.DEFAULT_PHOTOS_LIMIT, AlbumRequest.MODE_LEADER);
+        final RetryView rv = new RetryView(this);
+        rv.setErrorMsg(getString(R.string.general_server_error));
+        rv.addButton(getString(R.string.general_dialog_retry), new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                request.exec();
+            }
+        });
+        mContainer.addView(rv);
+        mUselessTitle.setVisibility(View.GONE);
+        request.callback(new ApiHandler() {
+
+            @Override
+            public void always(ApiResponse response) {
+                super.always(response);
+                if(mLoadingLocker != null) {
+                    mLoadingLocker.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void success(ApiResponse response) {
+                Photos photos = Photos.parse(response.jsonResult.optJSONArray("items"));
+                fillPhotos(photos);
+                rv.setVisibility(View.GONE);
+                mUselessTitle.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+
+                rv.setVisibility(View.VISIBLE);
+
+            }
+        }).exec();
+
+    }
+
+    private void fillPhotos(Photos photos) {
+        splitPhotos(photos);
         for (final Photo photo : usePhotos) {
             View view = getLayoutInflater().inflate(R.layout.leaders_photo_item, null);
             ImageViewRemote ivr = (ImageViewRemote) view.findViewById(R.id.ivLeadPhoto);
@@ -170,33 +215,6 @@ public class LeadersActivity extends BaseFragmentActivity {
                 uselessPhotos.add(new Photo(photo));
             }
         }
-        if (uselessPhotos.size() > 0) {
-            qSort(uselessPhotos, 0, uselessPhotos.size() - 1);
-        }
-        if (usePhotos.size() > 0) {
-            qSort(usePhotos, 0, usePhotos.size() - 1);
-        }
-    }
-
-    public void qSort(Photos photos, int low, int high) {
-        int i = low;
-        int j = high;
-        int x = photos.get((low + high) / 2).mLiked;
-        do {
-            while (photos.get(i).mLiked > x) ++i;  // поиск элемента для переноса в старшую часть
-            while (photos.get(j).mLiked < x) --j;  // поиск элемента для переноса в младшую часть
-            if (i <= j) {
-                // обмен элементов местами:
-                Photo temp = photos.get(i);
-                photos.set(i, photos.get(j));
-                photos.set(j, temp);
-                // переход к следующим элементам:
-                i++;
-                j--;
-            }
-        } while (i < j);
-        if (low < j) qSort(photos, low, j);
-        if (i < high) qSort(photos, i, high);
     }
 
     @Override
