@@ -37,6 +37,7 @@ public class Static {
     public static final String PREFERENCES_PROFILE_BACKGROUND_ID = "profile_background_id";
     public static final String PREFERENCES_NAVIGATION_LAST_FRAGMENT = "navigation_last_fragment";
     public static final String PREFERENCES_TAG_NEED_EDIT = "need_edit";
+    public static final String PREFERENCES_TAG_CITY_ASKED = "city_asked";
 
     public static final String PREFERENCES_NOVICE_DATING_ENERGY = "novice_dating_energy";
     public static final String PREFERENCES_NOVICE_DATING_ENERGY_DATE = "novice_dating_energy_date_tag";

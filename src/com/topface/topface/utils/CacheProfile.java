@@ -1,8 +1,10 @@
 package com.topface.topface.utils;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import com.topface.topface.App;
+import com.topface.topface.Static;
 import com.topface.topface.data.*;
 import com.topface.topface.requests.ApiResponse;
 import org.json.JSONException;
@@ -261,4 +263,11 @@ public class CacheProfile {
     private static boolean isAgeOk(int age) {
         return age > 0;
     }
+
+    public static boolean shouldChangeProfile(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        return preferences != null && preferences.getBoolean(Static.PREFERENCES_TAG_NEED_EDIT, true);
+    }
+
+    public static boolean wasCityAsked = false;
 }
