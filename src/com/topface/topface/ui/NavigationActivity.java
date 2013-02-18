@@ -48,7 +48,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     private BroadcastReceiver mServerResponseReceiver;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,13 +67,13 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             onInit();
         }
 
-
         mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         setStopTime();
         mNovice = Novice.getInstance(mPreferences);
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
-
     }
+
+
 
     private void initFragmentSwitcher() {
         mFragmentSwitcher = (FragmentSwitchController) findViewById(R.id.fragment_switcher);
@@ -91,7 +90,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         Intent intent = getIntent();
         int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
         if (id != -1) {
-            mFragmentSwitcher.showFragmentWithAnimation(id);
+            mFragmentSwitcher.showFragment(id);
 
         } else {
             mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
@@ -421,8 +420,13 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     private void setStopTime() {
-        long stopTime = Calendar.getInstance().getTimeInMillis();
-        mPreferences.edit().putLong(Static.PREFERENCES_STOP_TIME, stopTime).commit();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                long stopTime = Calendar.getInstance().getTimeInMillis();
+                mPreferences.edit().putLong(Static.PREFERENCES_STOP_TIME, System.currentTimeMillis()).commit();
+            }
+        }).start();
     }
 
     @Override

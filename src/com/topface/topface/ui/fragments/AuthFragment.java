@@ -18,7 +18,10 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
-import com.topface.topface.*;
+import com.topface.topface.App;
+import com.topface.topface.GCMUtils;
+import com.topface.topface.R;
+import com.topface.topface.Ssid;
 import com.topface.topface.data.Auth;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
@@ -62,8 +65,6 @@ public class AuthFragment extends BaseFragment {
         initViews(root);
         initAuthorizationHandler();
         checkOnline();
-        TopfaceNotificationManager nm = TopfaceNotificationManager.getInstance(getActivity());
-        nm.showProgressNotification("asd","asd",null,new Intent());
         return root;
     }
 
@@ -139,6 +140,7 @@ public class AuthFragment extends BaseFragment {
             public void onClick(View v) {
                 btnTFClick();
                 removeRedAlert();
+                hideSoftKeyboard();
             }
         });
 
@@ -147,16 +149,20 @@ public class AuthFragment extends BaseFragment {
             public void onClick(View v) {
                 mAuthViewsFlipper.setDisplayedChild(0);
                 removeRedAlert();
-                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (mLogin != null) {
-                    imm.hideSoftInputFromWindow(mLogin.getWindowToken(), 0);
-                }
-
-                if (mPassword != null) {
-                    imm.hideSoftInputFromWindow(mPassword.getWindowToken(), 0);
-                }
+                hideSoftKeyboard();
             }
         });
+    }
+
+    private void hideSoftKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (mLogin != null) {
+            imm.hideSoftInputFromWindow(mLogin.getWindowToken(), 0);
+        }
+
+        if (mPassword != null) {
+            imm.hideSoftInputFromWindow(mPassword.getWindowToken(), 0);
+        }
     }
 
     private void initRetryView(View root) {
@@ -165,7 +171,7 @@ public class AuthFragment extends BaseFragment {
         mRetryView.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 // инициализация обработчика происходит в методе authorizationFailed()
+                // инициализация обработчика происходит в методе authorizationFailed()
             }
         });
         mRetryView.setVisibility(View.GONE);
@@ -191,7 +197,7 @@ public class AuthFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK && requestCode == ContainerActivity.INTENT_RECOVER_PASSWORD) {
             if (data != null) {
                 Bundle extras = data.getExtras();
                 String login = extras.getString(RegistrationFragment.INTENT_LOGIN);
@@ -199,7 +205,7 @@ public class AuthFragment extends BaseFragment {
                 String userId = extras.getString(RegistrationFragment.INTENT_USER_ID);
                 AuthToken.getInstance().saveToken(userId, login, password);
                 hideButtons();
-                auth(generateTopfaceAuthRequest(login,password));
+                auth(generateTopfaceAuthRequest(login, password));
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
             showButtons();
@@ -215,10 +221,12 @@ public class AuthFragment extends BaseFragment {
         root.findViewById(R.id.ivShowPassword).setOnClickListener(new View.OnClickListener() {
             boolean toggle = false;
             TransformationMethod passwordMethod = new PasswordTransformationMethod();
+
             @Override
             public void onClick(View v) {
                 toggle = !toggle;
                 mPassword.setTransformationMethod(toggle ? null : passwordMethod);
+                mPassword.setSelection(mPassword.getText().length());
             }
         });
         mRecoverPwd = (TextView) root.findViewById(R.id.tvRecoverPwd);
@@ -311,7 +319,7 @@ public class AuthFragment extends BaseFragment {
 
     private void saveAuthInfo(ApiResponse response) {
         Auth auth = Auth.parse(response);
-        Data.saveSSID(getActivity().getApplicationContext(), auth.ssid);
+        Ssid.save(getActivity().getApplicationContext(), auth.ssid);
         GCMUtils.init(getActivity());
     }
 
@@ -418,6 +426,7 @@ public class AuthFragment extends BaseFragment {
                 });
                 break;
             case ApiResponse.INCORRECT_LOGIN:
+            case ApiResponse.UNKNOWN_SOCIAL_USER:
                 redAlert(R.string.incorrect_login);
                 needShowRetry = false;
                 break;
@@ -486,6 +495,9 @@ public class AuthFragment extends BaseFragment {
             mProgressBar.setVisibility(View.GONE);
             mLoginSendingProgress.setVisibility(View.GONE);
             mRetryView.setVisibility(View.GONE);
+            mRecoverPwd.setEnabled(true);
+            mLogin.setEnabled(true);
+            mPassword.setEnabled(true);
         }
     }
 
@@ -498,6 +510,9 @@ public class AuthFragment extends BaseFragment {
         mTFButton.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
         mLoginSendingProgress.setVisibility(View.VISIBLE);
+        mRecoverPwd.setEnabled(false);
+        mLogin.setEnabled(false);
+        mPassword.setEnabled(false);
     }
 
     private void btnVKClick() {

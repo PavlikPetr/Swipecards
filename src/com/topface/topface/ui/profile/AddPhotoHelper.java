@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -14,14 +16,16 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import com.topface.topface.Data;
+import android.widget.ListView;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
+import com.topface.topface.Ssid;
 import com.topface.topface.Static;
-import com.topface.topface.data.Confirmation;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.PhotoAddRequest;
+import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.TopfaceNotificationManager;
@@ -179,40 +183,63 @@ public class AddPhotoHelper {
                     data = new Intent();
                 }
                 data.putExtra("isCamera", true);
-                new AsyncTaskUploader().execute(data);
+                new AsyncTaskUploader(data).execute();
                 return true;
             } else if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY) {
                 if (data == null) {
                     data = new Intent();
                 }
                 data.putExtra("isCamera", false);
-                new AsyncTaskUploader().execute(data);
+                new AsyncTaskUploader(data).execute();
                 return true;
             }
         }
         return false;
     }
 
-    class AsyncTaskUploader extends AsyncTask<Intent, Void, String> {
+    class AsyncTaskUploader extends AsyncTask<Void, Void, String> {
+        Intent imageIntent;
+        private GCMUtils.TempImageViewRemote mFake;
+
+        public AsyncTaskUploader(Intent imageIntent) {
+            this.imageIntent = imageIntent;
+        }
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             showProgressDialog();
-            TopfaceNotificationManager manager = TopfaceNotificationManager.getInstance(mContext);
-            manager.showProgressNotification("asd", "asd", null, new Intent());
+            final TopfaceNotificationManager manager = TopfaceNotificationManager.getInstance(mContext);
+
+            mFake = new GCMUtils.TempImageViewRemote(mContext);
+            mFake.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.MATCH_PARENT));
+
+            String url;
+            if (imageIntent.getBooleanExtra("isCamera", false)) {
+                url = PATH_TO_FILE;
+            } else {
+                url = imageIntent.getData().toString();
+            }
+            mFake.setRemoteSrc(url, new Handler() {
+                @Override
+                public void handleMessage(Message msg) {
+                    super.handleMessage(msg);
+                    manager.showProgressNotification(mContext.getString(R.string.default_photo_upload), "", mFake.getImageBitmap(), new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE));
+                }
+            });
         }
 
         @Override
-        protected String doInBackground(Intent... intentList) {
+        protected String doInBackground(Void... voids) {
             String rawResponse = null;
-            Intent intent = intentList[0];
             try {
 
-                if (intent.getBooleanExtra("isCamera", false)) {
+                if (imageIntent.getBooleanExtra("isCamera", false)) {
                     File receivedImage = new File(PATH_TO_FILE);
                     rawResponse = getRawResponse(receivedImage);
+
                 } else {
-                    rawResponse = getRawResponse(intent.getData());
+                    rawResponse = getRawResponse(imageIntent.getData());
                 }
 
             } catch (Exception e) {
@@ -221,40 +248,41 @@ public class AddPhotoHelper {
                 Debug.error("Photo upload OOM: ", e);
 
             }
-
-
             return rawResponse;
         }
 
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            TopfaceNotificationManager manager = TopfaceNotificationManager.getInstance(mContext);
             if (result != null) {
-                Confirmation c = Confirmation.parse(new ApiResponse(result));
-                if (c.completed) {
+                if (new ApiResponse(result).isCompleted()) {
                     Message msg = new Message();
+
                     msg.what = ADD_PHOTO_RESULT_OK;
                     try {
                         msg.obj = new Photo((new JSONObject(result)).optJSONObject("result").optJSONObject("photo"));
+                        manager.cancelNotification(TopfaceNotificationManager.PROGRESS_ID);
+                        manager.showNotification(mContext.getString(R.string.default_photo_upload_complete), "", mFake.getImageBitmap(), 1, new Intent());
                     } catch (JSONException e) {
                         Debug.log(e.toString());
                     }
                     mHandler.sendMessage(msg);
                 } else {
                     mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
+                    manager.showNotification(mContext.getString(R.string.default_photo_upload_error), mContext.getString(R.string.default_photo_upload_repeat), mFake.getImageBitmap(), 1, new Intent());
                 }
             } else {
                 mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
+                manager.showNotification(mContext.getString(R.string.default_photo_upload_error), mContext.getString(R.string.default_photo_upload_repeat), mFake.getImageBitmap(), 1, new Intent());
             }
             hideProgressDialog();
-            TopfaceNotificationManager manager = TopfaceNotificationManager.getInstance(mContext);
-            manager.cancelNotification();
         }
     }
 
     private String getRawResponse(Uri imageUri) throws IOException {
         PhotoAddRequest add = new PhotoAddRequest(AddPhotoHelper.this.mContext);
-        add.ssid = Data.SSID;
+        add.ssid = Ssid.SSID;
 
         Cursor cursor = mActivity.getContentResolver().query(imageUri, new String[]{android.provider.MediaStore.Images.ImageColumns.DATA}, null, null, null);
         cursor.moveToFirst();
@@ -271,7 +299,7 @@ public class AddPhotoHelper {
 
     private String getRawResponse(File file) throws IOException {
         PhotoAddRequest add = new PhotoAddRequest(AddPhotoHelper.this.mContext);
-        add.ssid = Data.SSID;
+        add.ssid = Ssid.SSID;
 
 
 //        String data = Base64.encodeFromFile(file.getAbsolutePath());

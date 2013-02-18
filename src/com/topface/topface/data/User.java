@@ -39,8 +39,8 @@ public class User extends Profile {
                 profile.online = item.optBoolean("online");
                 profile.mutual = item.optBoolean("mailmutual");
                 profile.score = item.optInt("score");
-                profile.photo = new Photo(item.getJSONObject("photo"));
-                profile.photos = Photos.parse(item.getJSONArray("photos"));
+                profile.photo = new Photo(item.optJSONObject("photo"));
+                profile.photos = Photos.parse(item.optJSONArray("photos"));
 
                 initPhotos(item, profile);
             }

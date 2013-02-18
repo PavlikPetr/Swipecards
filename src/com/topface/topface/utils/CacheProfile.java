@@ -48,6 +48,9 @@ public class CacheProfile {
     public static int background_id;
     public static Photos photos;
     public static Photo photo;
+
+    public static int totalPhotos;
+
     public static final String PROFILE_CACHE_KEY = "profile_cache";
     public static final String OPTIONS_CACHE_KEY = "options_cache";
 
@@ -60,18 +63,24 @@ public class CacheProfile {
 
     public static long profileUpdateTime;
 
-    private static void setProfileCache(ApiResponse response) {
-        if (response != null) {
-            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit();
-            editor.putString(PROFILE_CACHE_KEY, response.toString());
-            editor.commit();
-        } else {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.remove(PROFILE_CACHE_KEY);
-            editor.remove(OPTIONS_CACHE_KEY);
-            editor.commit();
-        }
+    private static void setProfileCache(final ApiResponse response) {
+        //Пишем в SharedPreferences в отдельном потоке
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (response != null) {
+                    SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit();
+                    editor.putString(PROFILE_CACHE_KEY, response.toString());
+                    editor.commit();
+                } else {
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.remove(PROFILE_CACHE_KEY);
+                    editor.remove(OPTIONS_CACHE_KEY);
+                    editor.commit();
+                }
+            }
+        }).start();
     }
 
     public static void updateNotifications(Profile profile) {
@@ -108,6 +117,8 @@ public class CacheProfile {
         profile.photo = photo;
         profile.gifts = gifts;
         profile.background = background_id;
+
+        profile.totalPhotos = totalPhotos;
         return profile;
     }
 
@@ -138,6 +149,8 @@ public class CacheProfile {
         status = profile.status;
         gifts = profile.gifts;
         background_id = profile.background;
+
+        totalPhotos = profile.totalPhotos;
 
         setProfileCache(response);
         setProfileUpdateTime();
@@ -227,12 +240,17 @@ public class CacheProfile {
         return options != null;
     }
 
-    public static void setOptions(Options newOptions, JSONObject response) {
+    public static void setOptions(Options newOptions, final JSONObject response) {
         options = newOptions;
-        //Каждый раз не забываем кешировать запрос опций
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit();
-        editor.putString(OPTIONS_CACHE_KEY, response.toString());
-        editor.commit();
+        //Каждый раз не забываем кешировать запрос опций, но делаем это в отдельном потоке
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit();
+                editor.putString(OPTIONS_CACHE_KEY, response.toString());
+                editor.commit();
+            }
+        }).start();
     }
 
     public static String getUserNameAgeString() {

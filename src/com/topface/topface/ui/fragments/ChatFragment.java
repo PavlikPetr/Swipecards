@@ -83,15 +83,24 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     private SwapControl mSwapControl;
     private static ProgressDialog mProgressDialog;
     private Button btnBack;
+    private Button mAddToBlackList;
+    private ImageButton mBtnChatAdd;
 
     private String[] editButtonsNames;
     private boolean mReceiverRegistered = false;
     private int itemId;
     private boolean wasFailed = false;
+    private boolean isInBlackList = false;
 
     // Managers
     private GeoLocationManager mGeoManager = null;
     private RelativeLayout mLockScreen;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        DateUtils.syncTime();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -118,26 +127,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         editButtonsNames = new String[]{getString(R.string.general_copy_title), getString(R.string.general_delete_title)};
 
         // Swap Control
-        mSwapControl = ((SwapControl) root.findViewById(R.id.swapFormView));
-
-        // Add Button
-        root.findViewById(R.id.btnChatAdd).setOnClickListener(this);
-
-        // Gift Button
-        root.findViewById(R.id.btnChatGift).setOnClickListener(this);
-
-        // Place Button
-        root.findViewById(R.id.btnChatPlace).setOnClickListener(this);
-
-        // Map Button
-        /**
-         * Показываем кнопки отправки произвольного местоположения когда карты доступны
-         */
-        if (Utils.isGoogleMapsAvailable()) {
-            View chatMap = root.findViewById(R.id.btnChatMap);
-            chatMap.setOnClickListener(this);
-            chatMap.setVisibility(View.VISIBLE);
-        }
+        initAddPanel(root);
 
         // Edit Box
         mEditBox = (EditText) root.findViewById(R.id.edChatBox);
@@ -159,6 +149,49 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         GCMUtils.cancelNotification(getActivity().getApplicationContext(), GCMUtils.GCM_TYPE_MESSAGE);
 
         return root;
+    }
+
+    private void initAddPanel(View root) {
+        mSwapControl = ((SwapControl) root.findViewById(R.id.swapFormView));
+
+        // Add Button
+        mBtnChatAdd = (ImageButton) root.findViewById(R.id.btnChatAdd);
+        mBtnChatAdd.setOnClickListener(this);
+        mBtnChatAdd.setSelected(false);
+
+        // Gift Button
+        root.findViewById(R.id.btnChatGift).setOnClickListener(this);
+
+        // Map Button
+        View chatMap = root.findViewById(R.id.btnChatPlace);
+        if (Utils.isGoogleMapsAvailable()) {
+            chatMap.setOnClickListener(this);
+            chatMap.setVisibility(View.VISIBLE);
+        } else {
+            chatMap.setVisibility(View.GONE);
+        }
+
+        // Photo Button
+        root.findViewById(R.id.btnChatPhoto).setEnabled(false);
+
+        //Add to blacklist button
+        mAddToBlackList = (Button) root.findViewById(R.id.btnAddToBlackList);
+
+        //Buy VIP button
+        Button buyVip = (Button) root.findViewById(R.id.btnBuyVip);
+        TextView title = (TextView) root.findViewById(R.id.tvBuyVipTitle);
+
+        // Check premium possibilities
+        if (CacheProfile.premium) {
+            mAddToBlackList.setOnClickListener(this);
+            title.setVisibility(View.INVISIBLE);
+            buyVip.setVisibility(View.GONE);
+        } else {
+            buyVip.setOnClickListener(this);
+            title.setVisibility(View.VISIBLE);
+            buyVip.setVisibility(View.VISIBLE);
+            mAddToBlackList.setVisibility(View.GONE);
+        }
     }
 
     private void restoreData(Bundle savedInstanceState) {
@@ -241,36 +274,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         headerSubtitle.setVisibility(View.VISIBLE);
         headerSubtitle.setText(userCity);
 
-        //        getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
-        //        btnBack = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
-        //        btnBack.setVisibility(View.VISIBLE);
-        //
-        //        if (prevEntity != null && Utils.isThereNavigationActivity(getActivity())) {
-        //            btnBack.setOnClickListener(new View.OnClickListener() {
-        //                @Override
-        //                public void onClick(View v) {
-        //                    //TODO close fragment
-        //                    getActivity().finish();
-        //                }
-        //            });
-        //            if (prevEntity.equals(ChatFragment.class.getSimpleName())) {
-        //                btnBack.setText(R.string.general_chat);
-        //            } else if (prevEntity.equals(DatingFragment.class.getSimpleName())) {
-        //                btnBack.setText(R.string.general_dating);
-        //            } else if (prevEntity.equals(DialogsFragment.class.getSimpleName())) {
-        //                btnBack.setText(R.string.general_dialogs);
-        //            } else if (prevEntity.equals(LikesFragment.class.getSimpleName())) {
-        //                btnBack.setText(R.string.general_likes);
-        //            } else if (prevEntity.equals(MutualFragment.class.getSimpleName())) {
-        //                btnBack.setText(R.string.general_mutual);
-        //            } else if (prevEntity.equals(VisitorsFragment.class.getSimpleName())) {
-        //                btnBack.setText(R.string.general_dating);
-        //            } else if (prevEntity.equals(ProfileFragment.class.getSimpleName())) {
-        //                btnBack.setText(R.string.general_profile);
-        //            }
-        //
-        //        }
-
         final ImageButton btnProfile = (ImageButton) getActivity().findViewById(R.id.btnNavigationProfileBar);
         switch (userSex) {
             case Static.BOY:
@@ -282,10 +285,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         }
         btnProfile.setVisibility(View.VISIBLE);
         btnProfile.setOnClickListener(this);
-
-        // View btnProfile = root.findViewById(R.id.btnHeaderProfile);
-        // btnProfile.setVisibility(View.VISIBLE);
-        // btnProfile.setOnClickListener(this);
     }
 
     @Override
@@ -432,35 +431,28 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             }
         }
         switch (v.getId()) {
-            case R.id.btnSend: {
+            case R.id.btnSend:
                 sendMessage();
                 EasyTracker.getTracker().trackEvent("Chat", "SendMessage", "", 1L);
-            }
-            break;
-            case R.id.btnChatAdd: {
-                if (mIsAddPanelOpened)
-                    mSwapControl.snapToScreen(0);
-                else
-                    mSwapControl.snapToScreen(1);
-                mIsAddPanelOpened = !mIsAddPanelOpened;
+                break;
+            case R.id.btnChatAdd:
+                toggleAddPanel();
 
                 EasyTracker.getTracker().trackEvent("Chat", "AdditionalClick", "", 1L);
-            }
-            break;
-            case R.id.btnChatGift: {
+                break;
+            case R.id.btnChatGift:
                 startActivityForResult(new Intent(getActivity(), GiftsActivity.class),
                         GiftsActivity.INTENT_REQUEST_GIFT);
                 EasyTracker.getTracker().trackEvent("Chat", "SendGiftClick", "", 1L);
-            }
-            break;
-            case R.id.btnChatPlace: {
-                targetLocationToSend();
-                // Toast.makeText(getActivity(), "Place",
-                // Toast.LENGTH_SHORT).show();
-                EasyTracker.getTracker().trackEvent("Chat", "SendPlaceClick", "", 1L);
-            }
-            break;
-            case R.id.btnChatMap: {
+                break;
+//            case R.id.btnChatPlace: {
+//                targetLocationToSend();
+//                // Toast.makeText(getActivity(), "Place",
+//                // Toast.LENGTH_SHORT).show();
+//                EasyTracker.getTracker().trackEvent("Chat", "SendPlaceClick", "", 1L);
+//            }
+//            break;
+            case R.id.btnChatPlace:
                 if (Utils.isGoogleMapsAvailable()) {
                     startActivityForResult(new Intent(getActivity(), GeoMapActivity.class),
                             GeoMapActivity.INTENT_REQUEST_GEO);
@@ -468,20 +460,16 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     // Toast.LENGTH_SHORT).show();
                     EasyTracker.getTracker().trackEvent("Chat", "SendMapClick", "§", 1L);
                 }
-            }
-            break;
-            case R.id.btnNavigationBackWithText: {
+                break;
+            case R.id.btnNavigationBackWithText:
                 getActivity().finish();
                 //TODO костыль для навигации
                 getActivity().setResult(Activity.RESULT_CANCELED);
-            }
-            break;
-            case R.id.chat_message: {
-
-            }
-            break;
+                break;
+            case R.id.chat_message:
+                break;
             case R.id.btnNavigationProfileBar:
-            case R.id.left_icon: {
+            case R.id.left_icon:
                 //TODO костыль для навигации
                 if (mProfileInvoke) {
                     getActivity().setResult(Activity.RESULT_CANCELED);
@@ -493,12 +481,50 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 getActivity().finish();
                 //TODO костыль для навигации
                 getActivity().setResult(Activity.RESULT_OK);
-            }
+            case R.id.btnBuyVip:
+                Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
+                startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                break;
+            case R.id.btnAddToBlackList:
+                if (isInBlackList) {
+                    removeFromBlackList();
+                } else {
+                    addToBlackList();
+                }
+                break;
             default: {
 
             }
             break;
         }
+    }
+
+    private void removeFromBlackList() {
+        BlackListDeleteRequest deleteBlackListRequest = new BlackListDeleteRequest(mUserId,getActivity());
+        mAddToBlackList.setEnabled(false);
+        deleteBlackListRequest.callback(new VipApiHandler(){
+            @Override
+            public void always(ApiResponse response) {
+                super.always(response);
+                isInBlackList = false;
+                mAddToBlackList.setText(R.string.black_list_add);
+                mAddToBlackList.setEnabled(true);
+            }
+        }).exec();
+    }
+
+    private void addToBlackList() {
+        BlackListAddRequest blackListRequest = new BlackListAddRequest(mUserId, getActivity());
+        mAddToBlackList.setEnabled(false);
+        blackListRequest.callback(new VipApiHandler() {
+            @Override
+            public void always(ApiResponse response) {
+                super.always(response);
+                isInBlackList = true;
+                mAddToBlackList.setText(R.string.black_list_delete);
+                mAddToBlackList.setEnabled(true);
+            }
+        }).exec();
     }
 
     @Override
@@ -587,9 +613,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             }
         }
 
-        if (mIsAddPanelOpened)
-            mSwapControl.snapToScreen(0);
-        mIsAddPanelOpened = false;
+        toggleAddPanel();
+    }
+
+    private void toggleAddPanel() {
+        mSwapControl.snapToScreen(mIsAddPanelOpened ? 0 : 1);
+        mBtnChatAdd.setSelected(!mIsAddPanelOpened);
+        mIsAddPanelOpened = !mIsAddPanelOpened;
     }
 
     private void sendCoordinates(Geo geo) {
@@ -764,9 +794,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 coordRequest.callback(new DataApiHandler<History>() {
                     @Override
                     protected void success(History data, ApiResponse response) {
-                        if (mIsAddPanelOpened)
-                            mSwapControl.snapToScreen(0);
-                        mIsAddPanelOpened = false;
+                        toggleAddPanel();
                         if (mAdapter != null) {
                             mAdapter.replaceMessage(fakeItem, data, mListView.getRefreshableView());
                         }

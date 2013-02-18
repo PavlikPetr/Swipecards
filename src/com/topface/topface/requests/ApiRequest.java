@@ -8,8 +8,6 @@ import com.topface.topface.Static;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.RequestConnection;
 
-import java.util.Calendar;
-
 public abstract class ApiRequest {
     private static final int MAX_RESEND_CNT = 4;
     // Data
@@ -44,17 +42,7 @@ public abstract class ApiRequest {
             RetryDialog retryDialog = new RetryDialog(context, this);
             handler.fail(0, new ApiResponse(""));
             retryDialog.show();
-        }
-        //Вот эта штука скорее всего не нужна из-за того что такая проверка теперь идет в любой активити
-//         else if ((!Data.isSSID() || (new AuthToken(context)).isEmpty()) && doNeedAuthorize) {
-//            if (context != null && !AuthActivity.isStarted()) {
-//                Debug.log("SSID and Token is empty, need authorize");
-//
-//                context.startActivity(new Intent(context, AuthActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
-//            }
-//      }
-
-        else {
+        } else {
             connection = ConnectionManager.getInstance().sendRequest(this);
         }
 
@@ -92,11 +80,21 @@ public abstract class ApiRequest {
 
     private void setStopTime() {
         if (context != null) {
-            SharedPreferences mPreferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-            if (mPreferences != null) {
-                long stopTime = Calendar.getInstance().getTimeInMillis();
-                mPreferences.edit().putLong(Static.PREFERENCES_STOP_TIME, stopTime).commit();
-            }
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    SharedPreferences preferences = context.getSharedPreferences(
+                            Static.PREFERENCES_TAG_SHARED,
+                            Context.MODE_PRIVATE
+                    );
+                    if (preferences != null) {
+                        preferences.edit().putLong(
+                                Static.PREFERENCES_STOP_TIME,
+                                System.currentTimeMillis()
+                        ).commit();
+                    }
+                }
+            }).start();
         }
     }
 

@@ -2,23 +2,20 @@ package com.topface.topface.imageloader;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import com.nostra13.universalimageloader.postprocessors.ImagePostProcessor;
+import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.utils.Utils;
 
 import java.util.HashMap;
 
-public class MaskClipPostProcessor extends ImagePostProcessor {
+public class MaskClipProcessor implements BitmapProcessor {
 
     public static final int DEFAULT_MASK = R.drawable.user_mask_album;
-    private String mCacheKey;
-    private static final String CACHE_KEY = "maskclip";
     private final Bitmap mMask;
     private static HashMap<Integer, Bitmap> cachedMaskBitmaps = new HashMap<Integer, Bitmap>();
 
-    public MaskClipPostProcessor(int mask) {
-        mCacheKey = CACHE_KEY;
+    public MaskClipProcessor(int mask) {
         if (cachedMaskBitmaps.containsKey(mask)) {
             mMask = cachedMaskBitmaps.get(mask);
         } else {
@@ -28,12 +25,8 @@ public class MaskClipPostProcessor extends ImagePostProcessor {
     }
 
     @Override
-    public String getCachePrefix() {
-        return mCacheKey;
-    }
-
-    @Override
-    public Bitmap processBitmap(Bitmap bitmap) {
+    public Bitmap process(Bitmap bitmap) {
         return Utils.getRoundedCornerBitmapByMask(bitmap, mMask);
     }
+
 }

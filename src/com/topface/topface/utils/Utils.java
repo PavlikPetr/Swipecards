@@ -12,7 +12,6 @@ import android.graphics.Bitmap.Config;
 import android.graphics.PorterDuff.Mode;
 import android.net.Uri;
 import android.os.Build;
-import android.text.format.DateFormat;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -61,6 +60,7 @@ public class Utils {
     public static Bitmap clipAndScaleBitmap(Bitmap rawBitmap, int dstWidth, int dstHeight) {
         if (rawBitmap == null || rawBitmap.getWidth() <= 0 || rawBitmap.getHeight() <= 0 || dstWidth <= 0 || dstHeight <= 0)
             return null;
+
         Bitmap clippedBitmap = null;
         try {
             // Исходный размер загруженного изображения
@@ -86,14 +86,15 @@ public class Utils {
             Bitmap scaledBitmap = Bitmap.createBitmap(rawBitmap, 0, 0, srcWidth, srcHeight, matrix, true);
 
             // вырезаем необходимый размер
-
             if (LAND) {
                 // у горизонтальной, вырезаем по центру
                 int offset_x = (scaledBitmap.getWidth() - dstWidth) / 2;
                 clippedBitmap = Bitmap.createBitmap(scaledBitmap, offset_x, 0, dstWidth, dstHeight, null, false);
-            } else
+            } else {
                 // у вертикальной режим с верху
                 clippedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, dstWidth, dstHeight, null, false);
+            }
+
         } catch (OutOfMemoryError e) {
             Debug.error("ClipANdScaleImage:: " + e.toString());
         }
@@ -118,6 +119,8 @@ public class Utils {
         canvas.drawBitmap(mask, 0, 0, paint);
         paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
         canvas.drawBitmap(clippedBitmap, 0, 0, paint);
+
+        clippedBitmap.recycle();
 
         return output;
     }
@@ -167,8 +170,8 @@ public class Utils {
         paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
         canvas.drawBitmap(clippedBitmap, rect, rect, paint);
 
-        //noinspection UnusedAssignment
-        bitmap = null;
+        bitmap.recycle();
+        clippedBitmap.recycle();
 
         return output;
     }
@@ -221,14 +224,16 @@ public class Utils {
 
         if (multWidth != width)
             scaledBitmap = Bitmap.createScaledBitmap(output, width, height, true);
-        else
+        else {
             scaledBitmap = output;
+        }
 
-        //noinspection UnusedAssignment
-        output = bitmap = null;
+        bitmap.recycle();
 
         return scaledBitmap;
     }
+
+
 
     public static String formatTime(Context context, long time) {
         String text;
@@ -241,9 +246,8 @@ public class Utils {
         int currentYear = cal2.get(Calendar.YEAR);
         cal2.set(currentYear, Calendar.JANUARY, 1);
 
-
         if (time > DateUtils.midnight) {
-            text = (String) DateFormat.format("HH:mm", time);
+            text = DateUtils.mDateFormatHours.format(time);
         } else if (time > DateUtils.midnight - day * 5) {
             text = formatDayOfWeek(context, cal.get(Calendar.DAY_OF_WEEK));
         } else if (time > cal2.getTimeInMillis()) {

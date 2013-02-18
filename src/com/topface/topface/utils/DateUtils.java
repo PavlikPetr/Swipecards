@@ -14,7 +14,7 @@ public class DateUtils {
     private final static SimpleDateFormat mDateFormatDayYear = new SimpleDateFormat("dd MMMM yyyy");
     private final static SimpleDateFormat mDateFormatDay = new SimpleDateFormat("dd MMMM");
     private final static SimpleDateFormat mDateFormatDayOfWeek = new SimpleDateFormat("EEEE");
-    private final static SimpleDateFormat mDateFormatHours = new SimpleDateFormat("HH:mm");
+    public final static SimpleDateFormat mDateFormatHours = new SimpleDateFormat("HH:mm");
 
     public static void syncTime() {
         Calendar cal = Calendar.getInstance();

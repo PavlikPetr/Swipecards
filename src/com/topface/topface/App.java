@@ -14,6 +14,7 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.*;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
 import org.acra.ACRA;
@@ -48,6 +49,7 @@ public class App extends Application {
 
     @Override
     public void onCreate() {
+        //android.os.Debug.startMethodTracing("topface_create");
         ACRA.init(this);
         super.onCreate();
         mContext = getApplicationContext();
@@ -55,7 +57,8 @@ public class App extends Application {
         initStrictMode();
 
         Debug.log("App", "+onCreate");
-        Data.init(getApplicationContext());
+        Ssid.init(getApplicationContext());
+        DateUtils.syncTime();
 
         CacheProfile.loadProfile();
 
@@ -69,7 +72,7 @@ public class App extends Application {
             sendProfileRequest();
         }
         //Если приходим с нотификации незалогинеными, нужно вернуться в AuthActivity
-        if (Data.isSSID() && AuthToken.getInstance().isEmpty()) {
+        if (Ssid.isLoaded() && AuthToken.getInstance().isEmpty()) {
             // GCM
             GCMUtils.init(getContext());
         }

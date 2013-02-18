@@ -15,7 +15,7 @@ import java.util.UUID;
  */
 public abstract class AbstractApiRequest extends ApiRequest {
 
-    private final String requestId = getRequestId();
+    private String requestId;
 
     public AbstractApiRequest(Context context) {
         super(context);
@@ -24,7 +24,7 @@ public abstract class AbstractApiRequest extends ApiRequest {
     protected JSONObject getRequest() {
         JSONObject root = new JSONObject();
         try {
-            root.put("id", requestId);
+            root.put("id", getRequestId());
             root.put("service", getServiceName());
             root.put("ssid", ssid);
             JSONObject data = getRequestData();

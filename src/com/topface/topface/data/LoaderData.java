@@ -1,6 +1,7 @@
 package com.topface.topface.data;
 
 import com.topface.topface.ui.adapters.IListLoader;
+import org.json.JSONObject;
 
 public class LoaderData extends AbstractData implements IListLoader {
 
@@ -10,6 +11,12 @@ public class LoaderData extends AbstractData implements IListLoader {
 
     public LoaderData(IListLoader.ItemType type) {
          setLoaderTypeFlags(type);
+    }
+
+    public LoaderData() {}
+
+    public LoaderData(JSONObject data) {
+        super(data);
     }
 
     public void setLoaderTypeFlags(ItemType type) {
