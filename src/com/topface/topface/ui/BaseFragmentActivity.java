@@ -24,6 +24,8 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     public static final String INTENT_PREV_ENTITY = "prev_entity";
     public static final String AUTH_TAG = "AUTH";
 
+    private boolean needToUnregisterReceiver = true;
+
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
     private BroadcastReceiver mReauthReceiver;
 
@@ -46,6 +48,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
                 startAuth();
             }
         };
+        needToUnregisterReceiver = true;
         registerReceiver(mReauthReceiver, new IntentFilter(ReAuthReceiver.REAUTH_INTENT));
     }
 
@@ -65,6 +68,16 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        needToUnregisterReceiver = false;
+        if (needToUnregisterReceiver) {
+            unregisterReceiver(mReauthReceiver);
+            needToUnregisterReceiver = false;
+        }
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         EasyTracker.getInstance().activityStart(this);
@@ -74,7 +87,10 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     protected void onPause() {
         super.onPause();
         removeAllRequests();
-        unregisterReceiver(mReauthReceiver);
+        if (needToUnregisterReceiver) {
+            unregisterReceiver(mReauthReceiver);
+            needToUnregisterReceiver = false;
+        }
     }
 
     private void removeAllRequests() {
