@@ -453,5 +453,6 @@
 
     <string name="enter_email_from_registration">Введите e-mail, который вы указывали при регистрации</string>
 
+    <string name="search_city_by_name">Поиск города по названию</string>
 
 </resources>
