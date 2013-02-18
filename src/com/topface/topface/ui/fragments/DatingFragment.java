@@ -59,6 +59,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private TextView mUserInfoCity;
     private TextView mUserInfoStatus;
     private TextView mCounter;
+    private TextView mDatingLovePrice;
     private View mDatingGroup;
     private ImageSwitcher mImageSwitcher;
     private CachableSearch mUserSearchList;
@@ -146,7 +147,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         initDatingAlbum(view);
         initNewbieLayout(view);
 
-        setHighRatePrice(view);
+        mDatingLovePrice = (TextView) view.findViewById(R.id.tvDatingLovePrice);
 
         final ImageButton settingsButton = initNavigationHeader(view);
         initEmptySearchDialog(view, settingsButton);
@@ -155,6 +156,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         showUser(mUserSearchList.getCurrentUser());
         return view;
     }
+
+
 
     private void initMutualDrawables() {
         if (isAdded()) {
@@ -166,14 +169,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
-    private void setHighRatePrice(View view) {
+    private void setHighRatePrice() {
         // Dating Love Price
-        int delightPrice = CacheProfile.getOptions().price_highrate;
-        TextView datingLovePrice = (TextView) view.findViewById(R.id.tvDatingLovePrice);
+        final int delightPrice = CacheProfile.getOptions().price_highrate;
         if (delightPrice > 0) {
-            datingLovePrice.setText(Integer.toString(CacheProfile.getOptions().price_highrate));
+            mDatingLovePrice.setText(Integer.toString(CacheProfile.getOptions().price_highrate));
         } else {
-            datingLovePrice.setVisibility(View.GONE);
+            mDatingLovePrice.setVisibility(View.GONE);
         }
     }
 
@@ -764,6 +766,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
+        setHighRatePrice();
         updateResources();
     }
 

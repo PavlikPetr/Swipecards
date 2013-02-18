@@ -8,7 +8,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -204,21 +203,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //Вручную удаляем все фрагменты и вообще прибираемся за собой убираемся за себя
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        if (mBodyPagerAdapter != null) {
-            for (Fragment fragment : mBodyPagerAdapter.getFragmentCache().values()) {
-                transaction.remove(fragment);
-            }
-            mBodyPagerAdapter = null;
-        }
-        if (mHeaderPagerAdapter != null) {
-            for (Fragment fragment : mHeaderPagerAdapter.getFragmentCache().values()) {
-                transaction.remove(fragment);
-            }
-            mHeaderPagerAdapter = null;
-        }
-        transaction.commit();
 
         if (mTabIndicator != null) {
             mTabIndicator.setOnPageChangeListener(null);
@@ -228,6 +212,11 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
         mBodyPager = null;
         mHeaderPager = null;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     private void setProfile(Profile profile) {
