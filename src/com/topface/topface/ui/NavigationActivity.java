@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.*;
 import android.content.pm.PackageInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -71,6 +72,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         setStopTime();
         mNovice = Novice.getInstance(mPreferences);
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
+
     }
 
 
@@ -135,6 +137,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         super.onResume();
         checkProfileUpdate();
 
+
         //Отправляем не обработанные запросы на покупку
         BillingUtils.sendQueueItems();
 
@@ -152,7 +155,22 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             mDelayedFragment = null;
             mChatInvoke = true;
         }
+        startProfileFragmentIfNeed();
+    }
 
+    private void startProfileFragmentIfNeed() {
+        if(getIntent() != null) {
+            Uri data = getIntent().getData();
+            if (data != null && data.getHost().equals(getString(R.string.settings_topface_host))) { //заменить на константу
+                String path = data.getPath();
+                String[] splittedPath = path.split("/");
+                if (splittedPath[1].equals(getString(R.string.settings_topface_profile)) && splittedPath.length >= 3) {
+                    int profileId = Integer.parseInt(splittedPath[2]);
+                    int profileType = profileId == CacheProfile.uid? ProfileFragment.TYPE_MY_PROFILE : ProfileFragment.TYPE_USER_PROFILE;
+                    onExtraFragment(ProfileFragment.newInstance(profileId, profileType));
+                }
+            }
+        }
     }
 
     private void checkProfileUpdate() {

@@ -4,6 +4,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/authContainer"
+
         android:background="@drawable/auth_bg"
         >
 
@@ -22,7 +23,7 @@
     <ProgressBar
             android:id="@+id/prsAuthLoading"
             android:layout_width="wrap_content"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:visibility="gone"
             style="@android:style/Widget.ProgressBar.Small"/>

@@ -42,8 +42,8 @@
 
         <!-- Тип сборки. При релизе приложения не забываем его указать! -->
         <meta-data
-                android:name="@string/build_type_key"
-                android:value="@string/build_default"/>
+                android:name="com.topface.topface.build"
+                android:value="google-play-v2"/>
 
         <uses-library
                 android:required="false"
@@ -59,11 +59,20 @@
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
+
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http" android:host="topface.com" android:path="profile/*" android:pathPrefix="/"/>
             </intent-filter>
         </activity>
         <activity
                 android:name=".utils.social.WebAuthActivity"
-                android:screenOrientation="portrait"/>
+                android:screenOrientation="portrait">
+
+        </activity>
 
         <activity
                 android:name=".ui.CitySearchActivity"
