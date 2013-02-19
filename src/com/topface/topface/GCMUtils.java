@@ -156,8 +156,8 @@ public class GCMUtils {
         }
     }
 
-    private static TempImageViewRemote getTempImageViewRemote(Context context) {
-        final TempImageViewRemote fakeImageView = new TempImageViewRemote(context);
+    private static TopfaceNotificationManager.TempImageViewRemote getTempImageViewRemote(Context context) {
+        final TopfaceNotificationManager.TempImageViewRemote fakeImageView = new TopfaceNotificationManager.TempImageViewRemote(context);
 
         fakeImageView.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.MATCH_PARENT));
         return fakeImageView;
@@ -202,7 +202,7 @@ public class GCMUtils {
         return title;
     }
 
-    private static void showNotificationWithIcon(final int unread, final String data, final User user, final TopfaceNotificationManager notificationManager, final TempImageViewRemote fakeImageView, final Intent newI, final String finalTitle) {
+    private static void showNotificationWithIcon(final int unread, final String data, final User user, final TopfaceNotificationManager notificationManager, final TopfaceNotificationManager.TempImageViewRemote fakeImageView, final Intent newI, final String finalTitle) {
         fakeImageView.setRemoteSrc(user.photoUrl, new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -342,23 +342,7 @@ public class GCMUtils {
         }).start();
     }
 
-    public static class TempImageViewRemote extends ImageViewRemote {
-        private Bitmap mImageBitmap;
 
-        public TempImageViewRemote(Context context) {
-            super(context);
-        }
-
-        @Override
-        public void setImageBitmap(Bitmap bm) {
-            super.setImageBitmap(bm);
-            mImageBitmap = bm;
-        }
-
-        public Bitmap getImageBitmap() {
-            return mImageBitmap;
-        }
-    }
 
     private static class User {
         public int id;

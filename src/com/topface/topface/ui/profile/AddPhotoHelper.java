@@ -11,6 +11,7 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ListView;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.ApiResponse;
@@ -139,14 +140,27 @@ public class AddPhotoHelper {
      *
      * @param uri фотографии
      */
-    private void sendRequest(Uri uri) {
+    private void sendRequest(final Uri uri) {
         if (uri == null && mHandler != null) {
             mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
             return;
         }
         showProgressDialog();
         mNotificationManager = TopfaceNotificationManager.getInstance(mContext);
-        mNotificationManager.showProgressNotification(mContext.getString(R.string.default_photo_upload), "", BitmapFactory.decodeFile(uri.toString()), new Intent());
+
+        final TopfaceNotificationManager.TempImageViewRemote fakeImageView = new TopfaceNotificationManager.TempImageViewRemote(mContext);
+        fakeImageView.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.MATCH_PARENT));
+
+
+        fakeImageView.setRemoteSrc(uri.toString(), new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                mNotificationManager.showProgressNotification(mContext.getString(R.string.default_photo_upload), "", fakeImageView.getImageBitmap(), new Intent());
+            }
+        });
+
+
         new PhotoAddRequest(uri, mContext).callback(new DataApiHandler<Photo>() {
             @Override
             protected void success(Photo photo, ApiResponse response) {
@@ -156,7 +170,7 @@ public class AddPhotoHelper {
                     msg.obj = photo;
                     mHandler.sendMessage(msg);
                 }
-                mNotificationManager.showNotification(mContext.getString(R.string.default_photo_upload_complete), "", BitmapFactory.decodeFile(uri.toString()), new Intent());
+                mNotificationManager.showNotification(mContext.getString(R.string.default_photo_upload_complete), "", fakeImageView.getImageBitmap(), 1, new Intent());
             }
 
             @Override
@@ -169,6 +183,7 @@ public class AddPhotoHelper {
                 if (mHandler != null) {
                     mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
                 }
+                mNotificationManager.showNotification(mContext.getString(R.string.default_photo_upload_error), "", fakeImageView.getImageBitmap(), 1, new Intent());
             }
 
             @Override
