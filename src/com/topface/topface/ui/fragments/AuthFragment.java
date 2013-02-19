@@ -32,6 +32,7 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.views.IllustratedTextView;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.TopfaceNotificationManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -64,7 +65,6 @@ public class AuthFragment extends BaseFragment {
         initViews(root);
         initAuthorizationHandler();
         checkOnline();
-
         return root;
     }
 
@@ -197,7 +197,9 @@ public class AuthFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK && requestCode == ContainerActivity.INTENT_RECOVER_PASSWORD) {
+        if (resultCode == Activity.RESULT_OK &&
+                (requestCode == ContainerActivity.INTENT_RECOVER_PASSWORD
+                        || requestCode == ContainerActivity.INTENT_REGISTRATION_FRAGMENT)) {
             if (data != null) {
                 Bundle extras = data.getExtras();
                 String login = extras.getString(RegistrationFragment.INTENT_LOGIN);

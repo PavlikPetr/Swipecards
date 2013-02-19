@@ -19,6 +19,7 @@ import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.CitiesRequest;
 import com.topface.topface.requests.SearchCitiesRequest;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 
 import java.util.LinkedList;
@@ -58,21 +59,47 @@ public class CitySearchActivity extends BaseFragmentActivity {
         mNameList = new LinkedList<String>();
 
         // Title Header        
-        ((TextView) findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.general_city));
-        findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
-        View btnBack = findViewById(R.id.btnNavigationBack);
-        btnBack.setVisibility(View.VISIBLE);
-        btnBack.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        initHeader();
+
+        //My City
+        initMyCity();
 
         // Progress
         mProgressBar = (ProgressBar) findViewById(R.id.prsCityLoading);
 
-        // ListAdapter
+        // ListView
+        initListView();
+
+        // EditText
+        initEditText();
+
+        update();
+    }
+
+    private void initEditText() {
+        EditText cityInputView = (EditText) findViewById(R.id.etCityInput);
+        cityInputView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 2)
+                    city(s.toString());
+                else {
+                    fillData(mTopCitiesList);
+                    mListAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+    }
+
+    private void initListView() {
         final LayoutInflater mInflater = LayoutInflater.from(getApplicationContext());
         mListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, mNameList) {
             class ViewHolder {
@@ -141,30 +168,32 @@ public class CitySearchActivity extends BaseFragmentActivity {
                 CitySearchActivity.this.finish();
             }
         });
+    }
 
-        // EditText
-        EditText cityInputView = (EditText) findViewById(R.id.etCityInput);
-        cityInputView.addTextChangedListener(new TextWatcher() {
+    private void initHeader() {
+        ((TextView) findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.general_city));
+        findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
+        View btnBack = findViewById(R.id.btnNavigationBack);
+        btnBack.setVisibility(View.VISIBLE);
+        btnBack.setOnClickListener(new OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() > 2)
-                    city(s.toString());
-                else {
-                    fillData(mTopCitiesList);
-                    mListAdapter.notifyDataSetChanged();
-                }
+            public void onClick(View v) {
+                finish();
             }
         });
+    }
 
-        update();
+    private void initMyCity() {
+        if (CacheProfile.city.isEmpty()) {
+            findViewById(R.id.cbMyCity).setVisibility(View.GONE);
+            findViewById(R.id.tvMyCity).setVisibility(View.GONE);
+        } else {
+            final ViewGroup myCity = (ViewGroup) findViewById(R.id.cbMyCity);
+            ((ImageView) myCity.findViewById(R.id.ivEditBackground)).setImageDrawable(getResources().getDrawable(
+                    R.drawable.edit_big_btn_selector));
+            ((TextView) myCity.findViewById(R.id.tvTitle)).setText(CacheProfile.city.name);
+            myCity.findViewById(R.id.ivCheck).setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -263,18 +292,3 @@ public class CitySearchActivity extends BaseFragmentActivity {
         overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
     }
 }
-
-/*ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
- * android.R.layout.simple_list_item_1,
- * android.R.id.text1,
- * strings); */
-/*SimpleAdapter adapter = new SimpleAdapter(this,
- * createSensorsList(),
- * android.R.layout.simple_list_item_2,
- * new String[] {"title", "vendor"},
- * new int[] {android.R.id.text1, android.R.id.text2}); */
-/*SimpleAdapter adapter = new SimpleAdapter(this,
- * createSensorsList(),
- * R.layout.sensor_layout,
- * new String[] {"title", "vendor", "power"},
- * new int[] {R.id.title, R.id.content, R.id.range}); */

@@ -47,13 +47,14 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
     private boolean hasStartedFromAuthActivity;
 
-
     private BroadcastReceiver mBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_edit_profile);
+
+        hasStartedFromAuthActivity = getIntent().getBooleanExtra(NavigationActivity.FROM_AUTH, false);
 
         // Navigation bar
         ((TextView) findViewById(R.id.tvNavigationTitle)).setText(R.string.edit_title);
@@ -62,8 +63,6 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         btnBackToProfile.setText(R.string.general_profile);
         btnBackToProfile.setVisibility(View.VISIBLE);
         btnBackToProfile.setOnClickListener(this);
-
-        hasStartedFromAuthActivity = getIntent().getBooleanExtra(NavigationActivity.FROM_AUTH, false);
 
         // ListView
         mEditItems = new LinkedList<EditProfileItem>();
@@ -98,6 +97,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         mProfilePhoto = (ImageViewRemote) header.findViewById(R.id.ivProfilePhoto);
         mProfilePhoto.setOnClickListener(this);
         mProfilePhoto.setPhoto(CacheProfile.photo);
+
         if (hasStartedFromAuthActivity) {
             editProfileMsg = (TextView) findViewById(R.id.EditProfileMessage);
             editProfileMsg.setVisibility(View.VISIBLE);
@@ -116,6 +116,13 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
     protected void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
+
+        if (hasStartedFromAuthActivity) {
+            if(CacheProfile.city.isEmpty() && !CacheProfile.wasCityAsked) {
+                selectCity();
+                CacheProfile.wasCityAsked = true;
+            }
+        }
     }
 
     @Override
@@ -188,11 +195,10 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                         EditContainerActivity.INTENT_EDIT_NAME_AGE);
                 break;
             case R.id.btnEditCity:
-                startActivityForResult(new Intent(getApplicationContext(), CitySearchActivity.class),
-                        CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
+                selectCity();
                 break;
             case R.id.btnNavigationBackWithText:
-                if (hasStartedFromAuthActivity) {
+                if (hasStartedFromAuthActivity && !CacheProfile.city.isEmpty()) {
                     Intent intent = new Intent(this, NavigationActivity.class);
                     intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_VIP_PROFILE);
                     SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
@@ -206,6 +212,11 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                         EditContainerActivity.INTENT_EDIT_PROFILE_PHOTO);
                 break;
         }
+    }
+
+    private void selectCity() {
+        startActivityForResult(new Intent(getApplicationContext(), CitySearchActivity.class),
+                CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
     }
 
     @Override

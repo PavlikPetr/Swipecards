@@ -90,7 +90,7 @@ public class Photos extends ArrayList<Photo> implements SerializableToJsonArray 
     public int getRealPhotosCount() {
         int realPhotosCount = 0;
         for (Photo photo : this) {
-            if (!photo.isFake()) {
+            if (photo != null && !photo.isFake()) {
                 realPhotosCount++;
             }
         }

@@ -90,7 +90,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         Intent intent = getIntent();
         int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
         if (id != -1) {
-            mFragmentSwitcher.showFragmentWithAnimation(id);
+            mFragmentSwitcher.showFragment(id);
 
         } else {
             mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
@@ -106,19 +106,12 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             finish();
         } else {
             checkVersion(CacheProfile.getOptions().max_version);
-
         }
-
     }
 
     private boolean needChangeProfile() {
-        return (CacheProfile.age == 0 || CacheProfile.city.id == 0 || CacheProfile.photo == null)
-                && shouldChangeProfile();
-    }
-
-    private boolean shouldChangeProfile() {
-        SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        return preferences != null && preferences.getBoolean(Static.PREFERENCES_TAG_NEED_EDIT, true);
+        return (CacheProfile.age == 0 || CacheProfile.city.isEmpty() || CacheProfile.photo == null)
+                && CacheProfile.shouldChangeProfile(getApplicationContext());
     }
 
     @Override

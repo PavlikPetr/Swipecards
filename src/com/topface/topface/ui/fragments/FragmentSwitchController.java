@@ -55,7 +55,7 @@ public class FragmentSwitchController extends ViewGroup {
 
     public FragmentSwitchController(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mCurrentFragmentId = BaseFragment.F_PROFILE;
+//        mCurrentFragmentId = BaseFragment.F_PROFILE;
         Interpolator mPrixingInterpolator = new Interpolator() {
             public float getInterpolation(float t) {
                 return (t - 1) * (t - 1) * (t - 1) * (t - 1) * (t - 1) + 1.0f;
