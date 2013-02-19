@@ -5,7 +5,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ProfileRequest extends AbstractApiRequest {
+public class ProfileRequest extends ApiRequest {
     // Data
     public static final String PROFILE_UPDATE_ACTION = "com.topface.topface.UPDATE_PROFILE";
     public static final String SERVICE_NAME = "profile";

@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.data.User;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.StandardMessageSendRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.Utils;
@@ -114,7 +114,7 @@ public class UserFormFragment extends BaseFragment implements OnClickListener {
                 request.callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
-                        if(mPgb != null && mSuccessText != null) {
+                        if (mPgb != null && mSuccessText != null) {
                             mPgb.setVisibility(View.GONE);
                             mSuccessText.setVisibility(View.VISIBLE);
                         }
@@ -122,7 +122,7 @@ public class UserFormFragment extends BaseFragment implements OnClickListener {
 
                     @Override
                     public void fail(int codeError, ApiResponse response) {
-                        if(mPgb != null && mAskToFillForm != null) {
+                        if (mPgb != null && mAskToFillForm != null) {
                             mPgb.setVisibility(View.GONE);
                             mAskToFillForm.setVisibility(View.VISIBLE);
                         }

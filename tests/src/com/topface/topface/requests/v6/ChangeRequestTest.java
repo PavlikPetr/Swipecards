@@ -2,8 +2,10 @@ package com.topface.topface.requests.v6;
 
 
 import android.content.Context;
-import com.topface.topface.data.Register;
-import com.topface.topface.requests.*;
+import com.topface.topface.requests.AbstractThreadTest;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.ChangeLoginRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 
 public class ChangeRequestTest extends AbstractThreadTest {
 

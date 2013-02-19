@@ -6,7 +6,7 @@ import com.topface.topface.utils.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class RegisterRequest extends  AbstractApiRequest{
+public class RegisterRequest extends ApiRequest {
     public static final String SERVICE_NAME = "register";
 
     private String login;
@@ -38,10 +38,10 @@ public class RegisterRequest extends  AbstractApiRequest{
                 .put("login", login)
                 .put("password", password)
                 .put("name", name)
-                .put("birthday",birthday)
+                .put("birthday", birthday)
                 .put("sex", sex)
                 .put("clienttype", clientType)
-                .put("locale",locale);
+                .put("locale", locale);
     }
 
     @Override

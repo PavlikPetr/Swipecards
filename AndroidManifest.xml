@@ -42,7 +42,7 @@
 
         <!-- Тип сборки. При релизе приложения не забываем его указать! -->
         <meta-data
-                android:name="@string/build_type_key"
+                android:name="com.topface.topface.build"
                 android:value="@string/build_default"/>
 
         <uses-library
@@ -94,8 +94,9 @@
         <activity android:name="com.adfonic.android.AdfonicActivity"/>
         <activity android:name="ru.wapstart.plus1.sdk.MraidBrowser"/>
         <activity android:name=".ui.profile.BlackListActivity"/>
-        <activity android:name=".ui.ContainerActivity"
-                  android:windowSoftInputMode="stateHidden|adjustResize"/>
+        <activity
+                android:name=".ui.ContainerActivity"
+                android:windowSoftInputMode="stateHidden|adjustResize"/>
 
         <activity android:name="com.mad.ad.ImageActivity"
                   android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>

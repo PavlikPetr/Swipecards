@@ -16,7 +16,11 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
-import com.topface.topface.requests.*;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.PhotoDeleteRequest;
+import com.topface.topface.requests.PhotoMainRequest;
+import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.ui.profile.ProfilePhotoGridAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -46,7 +50,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
     }
 
     public EditProfilePhotoFragment(LockerView lockerView) {
-        super();
+        this();
         mLockerView = lockerView;
     }
 
@@ -302,7 +306,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mAddPhotoHelper.checkActivityResult(requestCode, resultCode, data);
+        mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
     }
 
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
@@ -323,9 +327,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                 Photo photo = (Photo) msg.obj;
 
                 CacheProfile.photos.addFirst(photo);
-                mPhotoLinks.add(1, photo);
-
-                mPhotoGridAdapter.notifyDataSetChanged();
+                mPhotoGridAdapter.addFirst(photo);
 
                 if (activity != null) {
                     Toast.makeText(activity, R.string.photo_add_or, Toast.LENGTH_SHORT).show();

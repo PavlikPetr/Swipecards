@@ -15,19 +15,15 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.requests.AlbumRequest;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.ui.adapters.FeedList;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
@@ -38,17 +34,11 @@ public class ProfilePhotoFragment extends BaseFragment {
     private Photos mPhotoLinks;
     private AddPhotoHelper mAddPhotoHelper;
     private ViewFlipper mViewFlipper;
-    private LockerView lockerView;
     private GridView mGridAlbum;
     private BroadcastReceiver mPhotosReceiver;
 
     public ProfilePhotoFragment() {
         super();
-    }
-
-    public ProfilePhotoFragment(LockerView lockerView) {
-        super();
-        this.lockerView = lockerView;
     }
 
     @Override
@@ -61,7 +51,7 @@ public class ProfilePhotoFragment extends BaseFragment {
                 sendAlbumRequest();
             }
         });
-        mAddPhotoHelper = new AddPhotoHelper(this, lockerView);
+        mAddPhotoHelper = new AddPhotoHelper(this, null);
         mAddPhotoHelper.setOnResultHandler(mHandler);
     }
 
@@ -70,8 +60,8 @@ public class ProfilePhotoFragment extends BaseFragment {
         request.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
-                if(mGridAlbum != null) {
-                    ((ProfilePhotoGridAdapter)mGridAlbum.getAdapter()).setData(Photos.parse(response.jsonResult.optJSONArray("items")), response.jsonResult.optBoolean("more"));
+                if (mGridAlbum != null) {
+                    ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).setData(Photos.parse(response.jsonResult.optJSONArray("items")), response.jsonResult.optBoolean("more"));
                 }
             }
 
@@ -166,7 +156,7 @@ public class ProfilePhotoFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        mAddPhotoHelper.checkActivityResult(requestCode, resultCode, data);
+        mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
     }
 
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
@@ -179,7 +169,7 @@ public class ProfilePhotoFragment extends BaseFragment {
             Intent intent = new Intent(getActivity().getApplicationContext(), PhotoSwitcherActivity.class);
             intent.putExtra(PhotoSwitcherActivity.INTENT_USER_ID, CacheProfile.uid);
             intent.putExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, --position);
-            intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, ((ProfileGridAdapter)mGridAlbum.getAdapter()).getData());
+            intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, ((ProfileGridAdapter) mGridAlbum.getAdapter()).getData());
 
             startActivity(intent);
         }
@@ -193,9 +183,8 @@ public class ProfilePhotoFragment extends BaseFragment {
                 Photo photo = (Photo) msg.obj;
 
                 CacheProfile.photos.addFirst(photo);
-                mPhotoLinks.add(1, photo);
+                mProfilePhotoGridAdapter.addFirst(photo);
 
-                mProfilePhotoGridAdapter.notifyDataSetChanged();
                 Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
             } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
                 Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();

@@ -16,10 +16,10 @@ import com.topface.billing.BillingFragment;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.profile.BlackListActivity;
@@ -33,8 +33,6 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     EditSwitcher mInvisSwitcher;
 
     ProgressBar mInvisLoadBar;
-
-    public static final String BROADCAST_PURCHASE_ACTION = "com.topface.topface.PURCHASE_NOTIFICATION";
 
     private LinearLayout mBuyVipViewsContainer;
     private LinearLayout mEditPremiumContainer;

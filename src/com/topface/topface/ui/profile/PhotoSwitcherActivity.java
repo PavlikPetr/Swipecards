@@ -13,8 +13,8 @@ import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.requests.AlbumRequest;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.PreloadManager;
@@ -31,7 +31,6 @@ public class PhotoSwitcherActivity extends Activity {
 
     public static final String DEFAULT_UPDATE_PHOTOS_INTENT = "com.topface.topface.updatePhotos";
 
-    public static final String INTENT_OWNER = "owner";
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_ALBUM_POS = "album_position";
     public static final String INTENT_PHOTOS = "album_photos";
@@ -41,7 +40,6 @@ public class PhotoSwitcherActivity extends Activity {
     private boolean mNeedMore;
     private boolean mCanSendAlbumReq = true;
     private int mUid;
-    private int photosCount;
     private int mLoadedCount;
     public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 3;
 
@@ -52,7 +50,7 @@ public class PhotoSwitcherActivity extends Activity {
         mPreloadManager = new PreloadManager();
         // Extras
         Intent intent = getIntent();
-        photosCount = intent.getIntExtra(INTENT_PHOTOS_COUNT, 0);
+        int photosCount = intent.getIntExtra(INTENT_PHOTOS_COUNT, 0);
         int position = intent.getIntExtra(INTENT_ALBUM_POS, 0);
         mUid = intent.getIntExtra(INTENT_USER_ID, -1);
         ArrayList<Photo> arrList = intent.getExtras().getParcelableArrayList(INTENT_PHOTOS);
@@ -126,7 +124,7 @@ public class PhotoSwitcherActivity extends Activity {
             setCounter(position);
 
             if (position + DEFAULT_PRELOAD_ALBUM_RANGE == mLoadedCount) {
-                final Photos data = ((ImageSwitcher.ImageSwitcherAdapter)mImageSwitcher.getAdapter()).getData();
+                final Photos data = ((ImageSwitcher.ImageSwitcherAdapter) mImageSwitcher.getAdapter()).getData();
 
                 if (mNeedMore) {
 
@@ -160,18 +158,18 @@ public class PhotoSwitcherActivity extends Activity {
                 Photos newPhotos = Photos.parse(response.jsonResult.optJSONArray("items"));
                 mNeedMore = response.jsonResult.optBoolean("more");
                 int i = -1;
-                for(Photo photo : newPhotos) {
+                for (Photo photo : newPhotos) {
                     data.set(mLoadedCount + i, photo);
                     i++;
                 }
                 mLoadedCount += newPhotos.size();
                 mCanSendAlbumReq = true;
 
-                if(mImageSwitcher != null) {
+                if (mImageSwitcher != null) {
                     mImageSwitcher.getAdapter().notifyDataSetChanged();
                     LocalBroadcastManager.getInstance(PhotoSwitcherActivity.this).sendBroadcast(new Intent(DEFAULT_UPDATE_PHOTOS_INTENT)
-                               .putExtra(INTENT_PHOTOS, newPhotos)
-                               .putExtra(INTENT_MORE, mNeedMore));
+                            .putExtra(INTENT_PHOTOS, newPhotos)
+                            .putExtra(INTENT_MORE, mNeedMore));
                 }
             }
 

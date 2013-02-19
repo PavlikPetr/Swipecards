@@ -5,7 +5,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class RestorePwdRequest extends AbstractApiRequest {
+public class RestorePwdRequest extends ApiRequest {
     public String login;
 
     public RestorePwdRequest(Context context) {

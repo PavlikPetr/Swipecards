@@ -9,17 +9,15 @@ import android.widget.Button;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.BlackListItem;
-import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BlackListDeleteRequest;
 import com.topface.topface.requests.FeedRequest;
-import com.topface.topface.requests.VipApiHandler;
+import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.adapters.BlackListAdapter;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 /**
  * Черный список. Сюда попадают заблокированые пользователи, отныне от них не приходит никакая активность
@@ -27,8 +25,6 @@ import java.util.LinkedList;
 public class BlackListFragment extends FeedFragment<BlackListItem> implements View.OnClickListener {
 
     private static final int BLACK_LIST_DELETE_BUTTON = 0;
-
-    private LinkedList<Integer> mDeleteList = new LinkedList<Integer>();
 
     @Override
     protected int getLayout() {
@@ -198,8 +194,6 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 BlackListAdapter adapter = (BlackListAdapter) getListAdapter();
                 if (adapter.isEditMode()) {
-                    //Добавляем в список пользователей для удаления
-                    FeedItem item = (FeedItem) parent.getItemAtPosition(position);
                     adapter.toggleItemDeleteMark((int) id);
                 } else {
                     baseListener.onItemClick(parent, view, position, id);

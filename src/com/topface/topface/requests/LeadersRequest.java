@@ -4,7 +4,7 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LeadersRequest extends AbstractApiRequest {
+public class LeadersRequest extends ApiRequest {
 
     public static final String SERVICE_NAME = "leaders";
 

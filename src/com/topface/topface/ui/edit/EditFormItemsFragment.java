@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.QuestionaryRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
@@ -35,6 +35,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
     }
 
     public EditFormItemsFragment(int titleId, int dataId, String data) {
+        this();
         mTitleId = titleId;
         mDataId = dataId;
         mSeletedDataId = mDataId;

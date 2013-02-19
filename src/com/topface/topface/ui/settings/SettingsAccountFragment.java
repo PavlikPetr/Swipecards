@@ -17,9 +17,9 @@ import com.google.android.gcm.GCMRegistrar;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.LogoutRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.ui.views.LockerView;
@@ -80,7 +80,7 @@ public class SettingsAccountFragment extends TrackedFragment {
                     @Override
                     public void success(ApiResponse response) {
                         GCMRegistrar.unregister(getActivity().getApplicationContext());
-                        Ssid.remove(getActivity().getApplicationContext());
+                        Ssid.remove();
                         token.removeToken();
                         //noinspection unchecked
                         new FacebookLogoutTask().execute();

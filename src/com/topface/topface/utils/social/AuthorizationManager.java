@@ -14,7 +14,7 @@ import com.facebook.topface.FacebookError;
 import com.topface.topface.Static;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
-import com.topface.topface.utils.http.Http;
+import com.topface.topface.utils.http.HttpUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,17 +60,6 @@ public class AuthorizationManager {
 
     public static Facebook getFacebook() {
         return new Facebook(Static.AUTH_FACEBOOK_ID);
-    }
-
-    // common methods
-    public void reAuthorize() {
-        AuthToken authToken = AuthToken.getInstance();
-
-        if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
-            facebookAuth();
-        } else if (authToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
-            vkontakteAuth();
-        }
     }
 
     public static void extendAccessToken(Activity parentActivity) {
@@ -219,7 +208,7 @@ public class AuthorizationManager {
         AuthToken authToken = AuthToken.getInstance();
 
         if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
-            getFbName(authToken.getTokenKey(), authToken.getUserId(), handler);
+            getFbName(authToken.getUserId(), handler);
         } else if (authToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
             getVkName(authToken.getTokenKey(), authToken.getUserId(), handler);
         }
@@ -233,7 +222,7 @@ public class AuthorizationManager {
         (new Thread() {
             @Override
             public void run() {
-                String responseRaw = Http.httpGetRequest(String.format(VK_NAME_URL, user_id, token));
+                String responseRaw = HttpUtils.httpGetRequest(String.format(VK_NAME_URL, user_id, token));
                 try {
                     String result = "";
                     JSONObject response = new JSONObject(responseRaw);
@@ -255,7 +244,7 @@ public class AuthorizationManager {
         }).start();
     }
 
-    public static void getFbName(final String token, final String user_id, final Handler handler) {
+    public static void getFbName(final String user_id, final Handler handler) {
         new AsyncFacebookRunner(new Facebook(Static.AUTH_FACEBOOK_ID)).request("/" + user_id, new RequestListener() {
 
             @Override

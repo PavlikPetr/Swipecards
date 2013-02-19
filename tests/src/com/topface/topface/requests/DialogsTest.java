@@ -2,6 +2,7 @@ package com.topface.topface.requests;
 
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedListData;
+import com.topface.topface.requests.handlers.ApiHandler;
 
 public class DialogsTest extends FeedTest<FeedDialog> {
 

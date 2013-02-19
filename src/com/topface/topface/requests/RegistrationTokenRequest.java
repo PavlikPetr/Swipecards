@@ -4,7 +4,7 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class RegistrationTokenRequest extends AbstractApiRequest {
+public class RegistrationTokenRequest extends ApiRequest {
     // Data
     public static final String service = "registrationToken";
     public String token; //Токен регистрации в C2DM

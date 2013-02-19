@@ -1,6 +1,7 @@
-package com.topface.topface.requests;
+package com.topface.topface.requests.handlers;
 
 import android.app.Activity;
+import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Utils;
 
 public class SimpleApiHandler extends ApiHandler {
@@ -12,11 +13,11 @@ public class SimpleApiHandler extends ApiHandler {
     @Override
     public void fail(int codeError, ApiResponse response) {
         //По умолчанию показываем Toast с ошибкой
-        fail(codeError, response, true);
+        fail(true);
         //Этот метод можно переопределить
     }
 
-    public void fail(int codeError, ApiResponse response, boolean showError) {
+    public void fail(boolean showError) {
         if (showError && hasContext() && getContext() instanceof Activity) {
             Utils.showErrorMessage(getContext());
         }

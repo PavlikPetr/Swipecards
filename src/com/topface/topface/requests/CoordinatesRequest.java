@@ -5,7 +5,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class CoordinatesRequest extends AbstractApiRequest {
+public class CoordinatesRequest extends ApiRequest {
     public static final int COORDINATES_TYPE_SELF = 1;
     public static final int COORDINATES_TYPE_PLACE = 2;
     // Data

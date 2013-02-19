@@ -4,7 +4,7 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MessageRequest extends AbstractApiRequest {
+public class MessageRequest extends ApiRequest {
     // Data
     public static final String service = "message";
     public int userid; // идентификатор пользователя, кому послали сообщение

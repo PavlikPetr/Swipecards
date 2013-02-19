@@ -9,7 +9,7 @@ import org.json.JSONObject;
  * Метод тестирования запросов к сервер и ошибок сервера
  */
 @SuppressWarnings("UnusedDeclaration")
-public class TestRequest extends AbstractApiRequest {
+public class TestRequest extends ApiRequest {
 
     public static final String SERVICE_NAME = "test";
     public String required;

@@ -12,9 +12,9 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.*;
 import com.topface.topface.R;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.SettingsRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.http.ProfileBackgrounds;
@@ -171,7 +171,7 @@ public class EditBackgroundFragment extends AbstractEditFragment {
                     @Override
                     public void onClick(View v) {
                         if (item.isForVip()) {
-                            if(CacheProfile.premium) {
+                            if (CacheProfile.premium) {
                                 mData.get(mSelectedIndex).setSelected(false);
                                 item.setSelected(true);
                                 setSelectedBackground(item);

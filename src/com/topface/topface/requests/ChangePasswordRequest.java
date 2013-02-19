@@ -4,7 +4,8 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ChangePasswordRequest extends AbstractApiRequest {
+@SuppressWarnings("UnusedDeclaration")
+public class ChangePasswordRequest extends ApiRequest {
 
     public static final String SERVICE_NAME = "changepassword";
 

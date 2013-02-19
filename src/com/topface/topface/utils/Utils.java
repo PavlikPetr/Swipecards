@@ -30,6 +30,7 @@ public class Utils {
     public static final long DAY = 86400000;
 
     private static PluralResources mPluralResources;
+    private static String mClientVersion;
 
     public static int unixtime() {
         return (int) (System.currentTimeMillis() / 1000L);
@@ -123,10 +124,6 @@ public class Utils {
         clippedBitmap.recycle();
 
         return output;
-    }
-
-    public static Bitmap getRoundedBitmap(Bitmap bitmap) {
-        return getRoundedBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight());
     }
 
     public static Bitmap getRoundedBitmap(Bitmap bitmap, int dstWidth, int dstHeight) {
@@ -259,10 +256,6 @@ public class Utils {
         return text;
     }
 
-    public static String formatMinute(Context context, long minutes) {
-        return Utils.getQuantityString(R.plurals.time_minute, (int) minutes, (int) minutes);
-    }
-
     public static String formatDayOfWeek(Context context, int dayOfWeek) {
         int resurseId = 0;
         switch (dayOfWeek) {
@@ -332,15 +325,6 @@ public class Utils {
                 break;
         }
         return context.getString(resurseId);
-    }
-
-    public static String formatHour(long hours) {
-        return Utils.getQuantityString(R.plurals.time_hour, (int) hours, (int) hours);
-    }
-
-
-    public static String formatMinute(long minutes) {
-        return Utils.getQuantityString(R.plurals.time_minute, (int) minutes, (int) minutes);
     }
 
     public static String formatPhotoQuantity(int quantity) {
@@ -456,7 +440,7 @@ public class Utils {
             type = info.metaData.getString(
                     context.getString(R.string.build_type_key)
             );
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (Exception e) {
             Debug.error("BuildType error", e);
             type = context.getString(R.string.build_default);
         }
@@ -464,16 +448,26 @@ public class Utils {
         return type;
     }
 
-    public static String getClientVersion(Context context) {
-        String version;
-        context = context != null ? context : App.getContext();
-        try {
-            version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
-        } catch (Exception e) {
-            Debug.error(e);
-            version = AuthRequest.FALLBACK_CLIENT_VERSION;
+    public static String getClientVersion() {
+        if (mClientVersion == null) {
+            try {
+                Context context = App.getContext();
+                mClientVersion = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+            } catch (Exception e) {
+                Debug.error(e);
+                mClientVersion = AuthRequest.FALLBACK_CLIENT_VERSION;
+            }
         }
-        return version;
+        return mClientVersion;
+    }
+
+    public static String getClientDeviceName() {
+        return Build.MANUFACTURER + " " + Build.MODEL + " " + Build.PRODUCT;
+
+    }
+
+    public static String getClientOsVersion() {
+        return "Android " + Build.VERSION.RELEASE + "; Build/" + Build.ID;
     }
 
 }

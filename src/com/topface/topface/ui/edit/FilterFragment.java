@@ -18,9 +18,9 @@ import com.topface.topface.data.City;
 import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FilterRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -288,9 +288,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         int age_end = mFilter.age_end == webAbsoluteMaxAge ? EditAgeFragment.absoluteMax : mFilter.age_end;
         return getString(R.string.filter_age_string, mFilter.age_start, age_end) + plus;
     }
-
-    int leftPosition;
-    int rightPosition;
 
     @Override
     protected boolean hasChanges() {

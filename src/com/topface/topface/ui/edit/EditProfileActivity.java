@@ -17,10 +17,10 @@ import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.ui.NavigationActivity;
@@ -35,7 +35,6 @@ import java.util.LinkedList;
 
 public class EditProfileActivity extends BaseFragmentActivity implements OnClickListener {
 
-    private ListView mEditsListView;
     private EditsAdapter mAdapter;
     private LinkedList<EditProfileItem> mEditItems;
     private TextView mEditName;
@@ -43,7 +42,6 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
     private ImageView mEditSex;
     private Button mEditCity;
     private ImageViewRemote mProfilePhoto;
-    private TextView editProfileMsg;
 
     private boolean hasStartedFromAuthActivity;
 
@@ -68,11 +66,11 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         mEditItems = new LinkedList<EditProfileItem>();
         initEditItems();
 
-        mEditsListView = (ListView) findViewById(R.id.lvEdits);
+        ListView editsListView = (ListView) findViewById(R.id.lvEdits);
 
         // Header
         LayoutInflater inflater = getLayoutInflater();
-        ViewGroup header = (ViewGroup) inflater.inflate(R.layout.item_edit_profile_header, mEditsListView, false);
+        ViewGroup header = (ViewGroup) inflater.inflate(R.layout.item_edit_profile_header, editsListView, false);
 
         ViewGroup profileNameLayout = (ViewGroup) header.findViewById(R.id.loProfileName);
         profileNameLayout.findViewById(R.id.ivNameEditBackground).setOnClickListener(this);
@@ -90,16 +88,16 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         mEditCity.setText(CacheProfile.city.name);
         mEditCity.setOnClickListener(this);
 
-        mEditsListView.addHeaderView(header);
+        editsListView.addHeaderView(header);
         mAdapter = new EditsAdapter(getApplicationContext(), mEditItems);
-        mEditsListView.setAdapter(mAdapter);
+        editsListView.setAdapter(mAdapter);
 
         mProfilePhoto = (ImageViewRemote) header.findViewById(R.id.ivProfilePhoto);
         mProfilePhoto.setOnClickListener(this);
         mProfilePhoto.setPhoto(CacheProfile.photo);
 
         if (hasStartedFromAuthActivity) {
-            editProfileMsg = (TextView) findViewById(R.id.EditProfileMessage);
+            TextView editProfileMsg = (TextView) findViewById(R.id.EditProfileMessage);
             editProfileMsg.setVisibility(View.VISIBLE);
         }
 

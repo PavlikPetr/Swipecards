@@ -1,7 +1,6 @@
 package com.topface.topface.ui.blocks;
 
 import android.support.v4.app.Fragment;
-import android.view.KeyEvent;
 import android.view.ViewGroup;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.fragments.TopsFragment;
@@ -78,7 +77,4 @@ public class FloatBlock {
         if (mBanner != null) mBanner.onPause();
     }
 
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return mBanner != null && mBanner.onKeyDown(keyCode, event);
-    }
 }

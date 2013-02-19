@@ -4,7 +4,7 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class HistoryRequest extends AbstractApiRequest {
+public class HistoryRequest extends ApiRequest {
     // Data
     public static final String service = "history";
     public int userid; // идентификатор пользователя для получения истории сообщений с ним текущего пользвоателя
