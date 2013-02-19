@@ -334,7 +334,7 @@ public class BannerBlock {
     private void sendStat(String action, String label) {
         action = action == null ? "" : action;
         label = label == null ? "" : label;
-        EasyTracker.getTracker().trackEvent("Banner", action, label, 0L);
+        EasyTracker.getTracker().trackEvent("Banner", action, label, TextUtils.equals(label, "click") ? 1L : 0L);
     }
 
     private String getBannerName(String bannerUrl) {
