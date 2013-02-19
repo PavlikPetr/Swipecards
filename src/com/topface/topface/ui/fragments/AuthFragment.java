@@ -319,7 +319,7 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void saveAuthInfo(ApiResponse response) {
-        Auth auth = Auth.parse(response);
+        Auth auth = new Auth(response);
         Ssid.save(auth.ssid);
         GCMUtils.init(getActivity());
     }

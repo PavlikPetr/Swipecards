@@ -34,4 +34,8 @@ public interface IApiRequest {
     public void closeConnection();
 
     public String readRequestResult() throws IOException;
+
+    IApiResponse constructApiResponse(int code, String message);
+
+    IApiResponse constructApiResponse(String response);
 }

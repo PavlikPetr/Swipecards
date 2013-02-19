@@ -306,4 +306,13 @@ public abstract class ApiRequest implements IApiRequest {
         return App.DEBUG ? Static.REV : "";
     }
 
+    @Override
+    public IApiResponse constructApiResponse(String response) {
+        return new ApiResponse(response);
+    }
+
+    @Override
+    public IApiResponse constructApiResponse(int code, String message) {
+        return new ApiResponse(code, message);
+    }
 }

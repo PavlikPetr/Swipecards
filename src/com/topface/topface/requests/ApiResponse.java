@@ -7,56 +7,13 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
-@SuppressWarnings("UnusedDeclaration")
-public class ApiResponse implements SerializableToJson {
+public class ApiResponse implements IApiResponse, SerializableToJson {
     // Data
     public int code = RESULT_DONT_SET;
     public String message;
     public JSONObject jsonResult;
     public JSONObject counters;
     public String method;
-    // Constants
-    public static final int ERRORS_PROCCESED = -2;
-    public static final int RESULT_OK = -1;
-    public static final int RESULT_DONT_SET = 0;
-    public static final int UNKNOWN_SOCIAL_USER = 1;
-    public static final int UNKNOWN_PLATFORM = 2;
-    public static final int SESSION_NOT_FOUND = 3;
-    public static final int UNSUPPORTED_CITIES_FILTER = 4;
-    public static final int MISSING_REQUIRE_PARAMETER = 5;
-    public static final int USER_NOT_FOUND = 6;
-    public static final int UNSUPPORTED_LOCALE = 7;
-    public static final int CANNOT_SENT_RATE = 8;
-    public static final int MESSAGE_TOO_SHORT = 9;
-    public static final int CANNOT_SENT_MESSAGE = 10;
-    public static final int DETECT_FLOOD = 11;
-    public static final int INCORRECT_PHOTO_URL = 12;
-    public static final int DEFAULT_ERO_PHOTO = 13;
-    public static final int PAYMENT = 14;
-    public static final int INCORRECT_VOTE = 15;
-    public static final int INVALID_TRANSACTION = 16;
-    public static final int INVALID_PRODUCT = 17;
-    public static final int INVERIFIED_RECEIPT = 18;
-    public static final int ITUNES_CONNECTION = 19;
-    public static final int UNVERIFIED_TOKEN = 20;
-    public static final int INVALID_FORMAT = 21;
-    public static final int UNVERIFIED_SIGNATURE = 22;
-    public static final int INCORRECT_VALUE = 23;
-    public static final int MAINTENANCE = 27;
-    public static final int BAN = 28;
-    public static final int NETWORK_CONNECT_ERROR = 29;
-    public static final int PREMIUM_ACCESS_ONLY = 32;
-    public static final int INVALID_PURCHASE_TOKEN = 34;
-    public static final int CANNOT_BECOME_LEADER = 35;
-    public static final int CODE_VIRUS_LIKES_ALREADY_RECEIVED = 36;
-    public static final int CODE_OLD_APPLICATION_VERSION = 37;
-    public static final int USER_ALREADY_REGISTERED = 39;
-    public static final int INCORRECT_LOGIN = 42;
-    public static final int INCORRECT_PASSWORD = 43;
-
-    // local
-    public static final int NULL_RESPONSE = 100;
-    public static final int WRONG_RESPONSE = 101;
 
     /**
      * Конструиерует объект ответа от сервера с указаной ошибкой
@@ -137,6 +94,11 @@ public class ApiResponse implements SerializableToJson {
 
 
     @Override
+    public String getErrorMessage() {
+        return message;
+    }
+
+    @Override
     public String toString() {
         if (method == null && jsonResult != null) {
             return String.format("Response error #%d: %s", code, message);
@@ -159,32 +121,35 @@ public class ApiResponse implements SerializableToJson {
     /**
      * Проверяет, является ли этот ответ от сервера ошибокой переданно в параметре errorCode
      */
-    public boolean isCodeEqual(int errorCode) {
-        return errorCode == code;
+    public boolean isCodeEqual(Integer... errorCode) {
+        return Arrays.asList(errorCode).contains(code);
     }
 
     /**
      * Проверяет, является ли код ошибки кодом неверной авторизации
      */
     public boolean isWrongAuthError() {
-        return Arrays.asList(
+        return isCodeEqual(
                 UNKNOWN_PLATFORM,
                 UNKNOWN_SOCIAL_USER,
                 UNVERIFIED_TOKEN,
                 INCORRECT_LOGIN,
                 INCORRECT_PASSWORD
-        ).contains(code);
-    }
-
-    public boolean isCorrectJson() {
-        return jsonResult != null && !Arrays.asList(
-                NULL_RESPONSE,
-                WRONG_RESPONSE
-        ).contains(code);
+        );
     }
 
     @Override
     public JSONObject toJson() {
         return jsonResult;
+    }
+
+    @Override
+    public JSONObject getJsonResult() {
+        return jsonResult;
+    }
+
+    @Override
+    public int getResultCode() {
+        return code;
     }
 }

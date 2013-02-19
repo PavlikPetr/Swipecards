@@ -10,15 +10,14 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import com.topface.topface.*;
 import com.topface.topface.data.Auth;
-import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.IApiRequest;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BanActivity;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -99,10 +98,10 @@ public class ConnectionManager {
 
         try {
             //Отправляем запрос
-            ApiResponse response = executeRequest(request);
+            IApiResponse response = executeRequest(request);
 
             //Проверяем запрос на ошибку неверной сессии
-            if (response.code == ApiResponse.SESSION_NOT_FOUND) {
+            if (response.isCodeEqual(IApiResponse.SESSION_NOT_FOUND)) {
                 //если сессия истекла, то переотправляем запрос авторизации в том же потоке
                 response = resendAfterAuth(request);
 
@@ -131,16 +130,16 @@ public class ConnectionManager {
         }
     }
 
-    private boolean processResponse(IApiRequest apiRequest, ApiResponse apiResponse) {
+    private boolean processResponse(IApiRequest apiRequest, IApiResponse apiResponse) {
         boolean needResend = false;
         //Некоторые ошибки обрабатываем дополнительно, не возвращая в клиентский код
-        if (apiResponse.code == ApiResponse.BAN) {
+        if (apiResponse.isCodeEqual(IApiResponse.BAN)) {
             //Если в результате получили ответ, что забанен, прекращаем обработку, сообщаем об этом
             showBanActivity(apiRequest, apiResponse);
-        } else if (apiResponse.code == ApiResponse.DETECT_FLOOD) {
+        } else if (apiResponse.isCodeEqual(IApiResponse.DETECT_FLOOD)) {
             //Если пользователь заблокирован за флуд, показываем соответсвующий экран
             showFloodActivity(apiRequest);
-        } else if (apiResponse.code == ApiResponse.MAINTENANCE) {
+        } else if (apiResponse.isCodeEqual(IApiResponse.MAINTENANCE)) {
             //Если на сервере ведуться работы, то показыаем диалог повтора
             needResend = showRetryDialog(apiRequest);
         } else if (isNeedResend(apiResponse)) {
@@ -164,7 +163,7 @@ public class ConnectionManager {
         }
     }
 
-    private boolean checkAuthError(IApiRequest request, ApiResponse response) {
+    private boolean checkAuthError(IApiRequest request, IApiResponse response) {
         boolean result = false;
         //Эти ошибки могут возникать, если это запрос авторизации
         // или когда наши регистрационные данные устарели (сменился токен, пароль и т.п)
@@ -184,7 +183,7 @@ public class ConnectionManager {
         return result;
     }
 
-    private boolean sendHandlerMessage(IApiRequest apiRequest, ApiResponse apiResponse) {
+    private boolean sendHandlerMessage(IApiRequest apiRequest, IApiResponse apiResponse) {
         ApiHandler handler = apiRequest.getHandler();
         if (handler != null) {
             Message msg = new Message();
@@ -202,7 +201,7 @@ public class ConnectionManager {
      * @param apiResponse ответ сервера
      * @return удалось ли переотправить запрос
      */
-    private boolean resendRequest(IApiRequest apiRequest, ApiResponse apiResponse) {
+    private boolean resendRequest(IApiRequest apiRequest, IApiResponse apiResponse) {
         boolean needResend = false;
         //Пробуем переотправить запрос
         if (apiRequest.isCanResend()) {
@@ -221,22 +220,22 @@ public class ConnectionManager {
      * @param apiResponse ответ сервера
      * @return флаг необходимости повтора запроса
      */
-    private boolean isNeedResend(ApiResponse apiResponse) {
-        return Arrays.asList(
+    private boolean isNeedResend(IApiResponse apiResponse) {
+        return apiResponse.isCodeEqual(
                 //Если ответ пустой
-                ApiResponse.NULL_RESPONSE,
+                IApiResponse.NULL_RESPONSE,
                 //Если с сервера пришел не корректный json
-                ApiResponse.WRONG_RESPONSE,
+                IApiResponse.WRONG_RESPONSE,
                 //Если после переавторизации у нас все же не верный ssid, то пробуем все повторить
-                ApiResponse.SESSION_NOT_FOUND
-        ).contains(apiResponse.code);
+                IApiResponse.SESSION_NOT_FOUND
+        );
     }
 
-    private void showBanActivity(IApiRequest apiRequest, ApiResponse apiResponse) {
+    private void showBanActivity(IApiRequest apiRequest, IApiResponse apiResponse) {
         Intent intent = new Intent(apiRequest.getContext(), BanActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(BanActivity.INTENT_TYPE, BanActivity.TYPE_BAN);
-        intent.putExtra(BanActivity.BANNING_TEXT_INTENT, apiResponse.jsonResult.optString("message", ""));
+        intent.putExtra(BanActivity.BANNING_TEXT_INTENT, apiResponse.getErrorMessage());
         apiRequest.getContext().startActivity(intent);
     }
 
@@ -283,8 +282,8 @@ public class ConnectionManager {
         return false;
     }
 
-    private ApiResponse executeRequest(IApiRequest apiRequest) {
-        ApiResponse response = null;
+    private IApiResponse executeRequest(IApiRequest apiRequest) {
+        IApiResponse response = null;
         String rawResponse = null;
 
         try {
@@ -292,31 +291,31 @@ public class ConnectionManager {
 
             //Проверяем ответ
             if (HttpUtils.isCorrectResponseCode(responseCode)) {
-                //Если код ответа верный, то читаем данные из потока и создаем ApiResponse
+                //Если код ответа верный, то читаем данные из потока и создаем IApiResponse
                 rawResponse = apiRequest.readRequestResult();
                 //Если ответ не пустой, то создаем объект ответа
                 if (!TextUtils.isEmpty(rawResponse)) {
-                    response = new ApiResponse(rawResponse);
+                    response = apiRequest.constructApiResponse(rawResponse);
                 }
             } else {
                 //Если не верный, то конструируем соответсвующий ответ
-                response = new ApiResponse(ApiResponse.WRONG_RESPONSE, "Wrong http response code HTTP/" + responseCode);
+                response = apiRequest.constructApiResponse(IApiResponse.WRONG_RESPONSE, "Wrong http response code HTTP/" + responseCode);
             }
 
         } catch (Exception e) {
             Debug.error(TAG + "::Exception", e);
             //Это ошибка нашего кода, не нужно автоматически переотправлять такой запрос
-            response = new ApiResponse(ApiResponse.ERRORS_PROCCESED, "Request exception: " + e.toString());
+            response = apiRequest.constructApiResponse(IApiResponse.ERRORS_PROCCESED, "Request exception: " + e.toString());
         } catch (OutOfMemoryError e) {
             Debug.error(TAG + "::" + e.toString());
             //Если OutOfMemory, то отменяем запросы, толку от этого все равно нет
-            response = new ApiResponse(ApiResponse.ERRORS_PROCCESED, "Request OutOfMemory: " + e.toString());
+            response = apiRequest.constructApiResponse(IApiResponse.ERRORS_PROCCESED, "Request OutOfMemory: " + e.toString());
         } finally {
             //Закрываем соединение
             apiRequest.closeConnection();
 
             if (response == null) {
-                response = new ApiResponse(ApiResponse.NULL_RESPONSE, "Null response");
+                response = apiRequest.constructApiResponse(IApiResponse.NULL_RESPONSE, "Null response");
             }
         }
 
@@ -334,19 +333,19 @@ public class ConnectionManager {
      * @param request запрос, который будет выполнен после авторизации
      * @return ответ сервера
      */
-    private ApiResponse sendAuthAndExecute(IApiRequest request) {
+    private IApiResponse sendAuthAndExecute(IApiRequest request) {
         Debug.log(TAG + "::Reauth");
-        ApiResponse response = null;
+        IApiResponse response = null;
         Context context = request.getContext();
 
         //Отправляем запрос авторизации
-        ApiResponse authResponse = executeRequest(
+        IApiResponse authResponse = executeRequest(
                 new AuthRequest(AuthToken.getInstance(), context)
         );
 
         //Проверяем, что авторизация прошла и нет ошибки
-        if (authResponse.code == ApiResponse.RESULT_OK) {
-            Auth auth = Auth.parse(authResponse);
+        if (authResponse.isCodeEqual(IApiResponse.RESULT_OK)) {
+            Auth auth = new Auth(authResponse);
             //Сохраняем новый SSID в SharedPreferences
             Ssid.save(auth.ssid);
 
@@ -357,7 +356,7 @@ public class ConnectionManager {
         } else if (authResponse.isWrongAuthError()) {
             //Пробрасываем ошибку авторизации в основной запрос, может не очень красиво, зато работает
             //Может стоит сделать отдельный, внутренний, тип ошибки
-            response = new ApiResponse(authResponse.code, "Auth error: " + authResponse.message);
+            response = request.constructApiResponse(authResponse.getResultCode(), "Auth error: " + authResponse.getErrorMessage());
         }
 
         return response;
@@ -405,8 +404,8 @@ public class ConnectionManager {
         }
     }
 
-    private ApiResponse resendAfterAuth(IApiRequest request) {
-        ApiResponse resultResponse = null;
+    private IApiResponse resendAfterAuth(IApiRequest request) {
+        IApiResponse resultResponse = null;
         //Проверяем, что еще не запущен запрос авторизации
         if (mAuthUpdateFlag.compareAndSet(false, true)) {
             //Отправляем запрос авторизации, после чего будем перезапрашивать ответ
