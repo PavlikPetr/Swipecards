@@ -343,7 +343,7 @@ public class GCMUtils {
         }).start();
     }
 
-    private static class TempImageViewRemote extends ImageViewRemote {
+    public static class TempImageViewRemote extends ImageViewRemote {
         private Bitmap mImageBitmap;
 
         public TempImageViewRemote(Context context) {

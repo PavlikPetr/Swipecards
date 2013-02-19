@@ -452,6 +452,10 @@
     <string name="email_already_registered">Пользователь с таким e-mail уже существует</string>
 
     <string name="enter_email_from_registration">Введите e-mail, который вы указывали при регистрации</string>
+    <string name="default_photo_upload">Загрузка фотографии</string>
+    <string name="default_photo_upload_error">Ошибка загрузки</string>
+    <string name="default_photo_upload_repeat">Попробуйте повторить позже</string>
+    <string name="default_photo_upload_complete">Загрузка завершена!</string>
 
     <string name="search_city_by_name">Поиск города по названию</string>
 

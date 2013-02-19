@@ -629,10 +629,12 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         }
 
         private void initState(Profile profile) {
-            mAvatarVal = profile.photo;
-            mNameVal = profile.getNameAndAge();
-            mCityVal = profile.city.name;
-            mBackgroundVal = profile.background;
+            if (profile != null) {
+                mAvatarVal = profile.photo;
+                mNameVal = profile.getNameAndAge();
+                mCityVal = profile.city.name;
+                mBackgroundVal = profile.background;
+            }
         }
 
         private static void saveState(Fragment fragment, Profile profile) {

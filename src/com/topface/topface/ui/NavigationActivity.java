@@ -90,7 +90,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         Intent intent = getIntent();
         int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
         if (id != -1) {
-            mFragmentSwitcher.showFragmentWithAnimation(id);
+            mFragmentSwitcher.showFragment(id);
 
         } else {
             mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
