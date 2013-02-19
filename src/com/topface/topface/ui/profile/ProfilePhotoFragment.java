@@ -156,7 +156,7 @@ public class ProfilePhotoFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        mAddPhotoHelper.checkActivityResult(requestCode, resultCode, data);
+        mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
     }
 
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
@@ -183,9 +183,8 @@ public class ProfilePhotoFragment extends BaseFragment {
                 Photo photo = (Photo) msg.obj;
 
                 CacheProfile.photos.addFirst(photo);
-                mPhotoLinks.add(1, photo);
+                mProfilePhotoGridAdapter.addFirst(photo);
 
-                mProfilePhotoGridAdapter.notifyDataSetChanged();
                 Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
             } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
                 Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();

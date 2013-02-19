@@ -4,9 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import com.topface.topface.R;
-import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -21,7 +19,7 @@ public class UserPhotoGridAdapter extends ProfileGridAdapter {
     }
 
     public UserPhotoGridAdapter(Context context, Photos photoLinks, int totalPhotos, LoadingListAdapter.Updater callback) {
-        super(context, photoLinks, totalPhotos, callback);
+        super(photoLinks, totalPhotos, callback);
         mInflater = LayoutInflater.from(context);
     }
 

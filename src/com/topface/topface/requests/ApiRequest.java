@@ -5,25 +5,33 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 import com.topface.topface.App;
 import com.topface.topface.RetryDialog;
+import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.ConnectionManager;
-import com.topface.topface.utils.http.RequestConnection;
+import com.topface.topface.utils.http.HttpUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.UUID;
 
 public abstract class ApiRequest implements IApiRequest {
     /**
      * Максимальное количество попыток отправить запрос
      */
-    private static final int MAX_RESEND_CNT = 4;
+    public static final int MAX_RESEND_CNT = 4;
     /**
      * Задержка между попытками
      */
     public static final int RESEND_WAITING_TIME = 2000;
+
+    /**
+     * Mime type наших запросов к серверу
+     */
+    public static final String CONTENT_TYPE = "application/json";
 
     // Data
     private String mId;
@@ -31,7 +39,7 @@ public abstract class ApiRequest implements IApiRequest {
     public ApiHandler handler;
     public Context context;
     public boolean canceled = false;
-    private RequestConnection connection;
+    protected HttpURLConnection mURLConnection;
     private boolean doNeedAlert;
     private int mResendCnt = 0;
     private String mPostData;
@@ -56,10 +64,10 @@ public abstract class ApiRequest implements IApiRequest {
 
         if (context != null && !App.isOnline() && doNeedAlert) {
             RetryDialog retryDialog = new RetryDialog(context, this);
-            handler.fail(0, new ApiResponse(""));
+            handler.fail(0, new ApiResponse(ApiResponse.ERRORS_PROCCESED, "App is offline"));
             retryDialog.show();
         } else {
-            connection = ConnectionManager.getInstance().sendRequest(this);
+            ConnectionManager.getInstance().sendRequest(this);
         }
     }
 
@@ -144,12 +152,12 @@ public abstract class ApiRequest implements IApiRequest {
 
     @Override
     public void setFinished() {
-        if (connection != null) {
-            connection.abort();
+        if (mURLConnection != null) {
+            mURLConnection.disconnect();
         }
         mPostData = null;
         handler = null;
-        connection = null;
+        mURLConnection = null;
         canceled = true;
     }
 
@@ -221,6 +229,81 @@ public abstract class ApiRequest implements IApiRequest {
 
     protected void handleFail(int errorCode, String errorMessage) {
         handler.response(new ApiResponse(errorCode, errorMessage));
+    }
+
+    public HttpURLConnection openConnection() throws IOException {
+        //Если открываем новое подключение, то старое закрываем
+        if (mURLConnection != null) {
+            mURLConnection.disconnect();
+        }
+
+        mURLConnection = HttpUtils.openPostConnection(getApiUrl(), CONTENT_TYPE);
+        return mURLConnection;
+    }
+
+    public void closeConnection() {
+        if (mURLConnection != null) {
+            mURLConnection.disconnect();
+            mURLConnection = null;
+        }
+    }
+
+    public HttpURLConnection getConnection() throws IOException {
+        if (mURLConnection == null) {
+            mURLConnection = openConnection();
+        }
+
+        return mURLConnection;
+    }
+
+    protected String getApiUrl() {
+        return Static.API_URL;
+    }
+
+    @Override
+    public int sendRequest() throws IOException {
+        HttpURLConnection connection = getConnection();
+        //Непосредственно перед отправкой запроса устанавливаем новый SSID
+        setSsid(Ssid.get());
+        //Ставим, если это нужно, ревизию (только на тестовых платформах)
+        setRevisionHeader(connection);
+
+        //Формируем свои данные для отправки POST запросом
+        String requestJson = toPostData();
+        //Переводим строку запроса в байты
+        byte[] requestData = requestJson.getBytes();
+        Debug.logJson(
+                ConnectionManager.TAG,
+                "REQUEST >>> " + Static.API_URL + " rev:" + getRevNum(),
+                requestJson
+        );
+
+        //Отправляем наш  POST запрос
+        HttpUtils.sendPostData(requestData, connection);
+
+        //Возвращаем HTTP статус ответа
+        return connection.getResponseCode();
+    }
+
+    @Override
+    public String readRequestResult() throws IOException {
+        return HttpUtils.readStringFromConnection(getConnection());
+    }
+
+    /**
+     * Добавляет в http запрос куки с номером ревизии для тестирования беты
+     *
+     * @param connection соединение к которому будет добавлен заголовок
+     */
+    protected void setRevisionHeader(HttpURLConnection connection) {
+        String rev = getRevNum();
+        if (rev != null && rev.length() > 0) {
+            connection.setRequestProperty("Cookie", "revnum=" + rev + ";");
+        }
+    }
+
+    protected static String getRevNum() {
+        return App.DEBUG ? Static.REV : "";
     }
 
 }

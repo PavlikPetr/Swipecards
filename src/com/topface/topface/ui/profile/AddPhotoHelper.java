@@ -3,9 +3,7 @@ package com.topface.topface.ui.profile;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -13,20 +11,15 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import com.topface.topface.R;
-import com.topface.topface.Ssid;
-import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.PhotoAddRequest;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.http.HttpUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Хелпер для загрузки фотографий в любой активити
@@ -61,19 +54,6 @@ public class AddPhotoHelper {
         if (mLockerView != null) {
             mLockerView.setVisibility(View.VISIBLE);
         }
-//        if(lock)
-//        FragmentManager fm = ((FragmentActivity) mActivity).getSupportFragmentManager();
-//        FragmentTransaction ft = fm.beginTransaction();
-//
-//        Fragment prev = fm.findFragmentByTag(ProgressDialogFragment.PROGRESS_DIALOG_TAG);
-//        if (prev != null) {
-//            ft.remove(prev);
-//        }
-//        ft.addToBackStack(null);
-//
-//        DialogFragment newFragment = ProgressDialogFragment.newInstance();
-//        ft.add(newFragment, ProgressDialogFragment.PROGRESS_DIALOG_TAG);
-//        ft.commitAllowingStateLoss();
     }
 
     public void hideProgressDialog() {
@@ -95,7 +75,6 @@ public class AddPhotoHelper {
                     intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.profile_add_title));
                     if (mFragment != null) {
                         mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
-//                        mFragment.getActivity().startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
                     } else {
                         mActivity.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
                     }
@@ -109,7 +88,6 @@ public class AddPhotoHelper {
                     if (Utils.isIntentAvailable(mContext, intent.getAction())) {
                         if (mFragment != null) {
                             mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
-//                            mFragment.getActivity().startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
                         } else {
                             mActivity.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
                         }
@@ -131,105 +109,68 @@ public class AddPhotoHelper {
         return this;
     }
 
-    public boolean checkActivityResult(int requestCode, int resultCode, Intent data) {
+    public void processActivityResult(int requestCode, int resultCode, Intent data) {
         if (mFragment != null) {
             if (mFragment.getActivity() != null && !mFragment.isAdded()) {
                 Debug.log("APH::detached");
             }
         }
         if (resultCode == Activity.RESULT_OK) {
+            Uri photoUri = null;
             if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA) {
-                if (data == null) {
-                    data = new Intent();
-                }
-                data.putExtra("isCamera", true);
-                new AsyncTaskUploader().execute(data);
-                return true;
+                //Если фотография сделана, то ищем ее во временном файле
+                photoUri = Uri.fromParts("file", PATH_TO_FILE, null);
             } else if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY) {
-                if (data == null) {
-                    data = new Intent();
-                }
-                data.putExtra("isCamera", false);
-                new AsyncTaskUploader().execute(data);
-                return true;
+                //Если она взята из галереи, то получаем URL из данных интента и преобразуем его в путь до файла
+                photoUri = data.getData();
             }
+
+            //Отправляем запрос
+            sendRequest(photoUri);
         }
-        return false;
     }
 
-    class AsyncTaskUploader extends AsyncTask<Intent, Void, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            showProgressDialog();
+    /**
+     * Отправляет запрос к API с прикрепленной фотографией
+     *
+     * @param uri фотографии
+     */
+    private void sendRequest(Uri uri) {
+        if (uri == null && mHandler != null) {
+            mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
+            return;
         }
+        showProgressDialog();
 
-        @Override
-        protected String doInBackground(Intent... intentList) {
-            String rawResponse = null;
-            Intent intent = intentList[0];
-            try {
-
-                if (intent.getBooleanExtra("isCamera", false)) {
-                    File receivedImage = new File(PATH_TO_FILE);
-                    rawResponse = getRawResponse(receivedImage);
-                } else {
-                    rawResponse = getRawResponse(intent.getData());
-                }
-
-            } catch (Exception e) {
-                Debug.error("Photo not uploaded", e);
-            } catch (OutOfMemoryError e) {
-                Debug.error("Photo upload OOM: ", e);
-
-            }
-
-
-            return rawResponse;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            if (result != null) {
-                if (new ApiResponse(result).isCompleted()) {
+        new PhotoAddRequest(uri, mContext).callback(new DataApiHandler<Photo>() {
+            @Override
+            protected void success(Photo photo, ApiResponse response) {
+                if (mHandler != null) {
                     Message msg = new Message();
                     msg.what = ADD_PHOTO_RESULT_OK;
-                    try {
-                        msg.obj = new Photo((new JSONObject(result)).optJSONObject("result").optJSONObject("photo"));
-                    } catch (JSONException e) {
-                        Debug.log(e.toString());
-                    }
+                    msg.obj = photo;
                     mHandler.sendMessage(msg);
-                } else {
+                }
+            }
+
+            @Override
+            protected Photo parseResponse(ApiResponse response) {
+                return new Photo(response);
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+                if (mHandler != null) {
                     mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
                 }
-            } else {
-                mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
             }
-            hideProgressDialog();
-        }
-    }
 
-    private String getRawResponse(Uri imageUri) throws IOException {
-        PhotoAddRequest add = new PhotoAddRequest(AddPhotoHelper.this.mContext);
-        add.setSsid(Ssid.get());
-
-        Cursor cursor = mActivity.getContentResolver().query(imageUri, new String[]{android.provider.MediaStore.Images.ImageColumns.DATA}, null, null, null);
-        cursor.moveToFirst();
-
-        //Link to the image
-        final String file = cursor.getString(0);
-        cursor.close();
-
-        return HttpUtils.httpDataRequest(Static.API_URL, add.toPostData(), file);
-    }
-
-    private String getRawResponse(File file) throws IOException {
-        PhotoAddRequest add = new PhotoAddRequest(AddPhotoHelper.this.mContext);
-        add.setSsid(Ssid.get());
-
-        return HttpUtils.httpDataRequest(Static.API_URL, add.toPostData(), file.getAbsolutePath());
+            @Override
+            public void always(ApiResponse response) {
+                super.always(response);
+                hideProgressDialog();
+            }
+        }).exec();
     }
 
 }

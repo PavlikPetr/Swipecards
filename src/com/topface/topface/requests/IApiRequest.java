@@ -3,6 +3,8 @@ package com.topface.topface.requests;
 import android.content.Context;
 import com.topface.topface.requests.handlers.ApiHandler;
 
+import java.io.IOException;
+
 public interface IApiRequest {
 
     public void exec();
@@ -26,4 +28,10 @@ public interface IApiRequest {
     void setSsid(String ssid);
 
     public String getId();
+
+    public int sendRequest() throws IOException;
+
+    public void closeConnection();
+
+    public String readRequestResult() throws IOException;
 }

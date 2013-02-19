@@ -100,7 +100,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mActionsControl = (ProfileActionsControl) root.findViewById(R.id.profileActionsControl);
         mRateController = new RateController(getActivity());
 
-        if(getArguments().getInt(ARG_FEED_ITEM_ID, -1) != -1) {
+        if (getArguments().getInt(ARG_FEED_ITEM_ID, -1) != -1) {
             Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ);
             intent.putExtra(ChatFragment.INTENT_ITEM_ID, getArguments().getInt(ARG_FEED_ITEM_ID, -1));
             LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
@@ -319,7 +319,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mTabIndicator.setViewPager(bodyPager);
 
         mTabIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            private boolean shouldAnimate;
 
             @Override
             public void onPageScrolled(int i, float v, int i2) {
@@ -631,7 +630,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         private void initState(Profile profile) {
             mAvatarVal = profile.photo;
             mNameVal = profile.getNameAndAge();
-            mCityVal = profile.city.name;
+            if (profile.city != null) {
+                mCityVal = profile.city.name;
+            }
             mBackgroundVal = profile.background;
         }
 

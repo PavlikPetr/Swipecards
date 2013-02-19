@@ -142,9 +142,15 @@ public class UserPhotoFragment extends BaseFragment {
 
     @Override
     public void clearContent() {
-        if (mPhotoLinks != null) mPhotoLinks.clear();
-        mTitle.setText(Utils.formatPhotoQuantity(0));
-        mUserPhotoGridAdapter.notifyDataSetChanged();
+        if (mPhotoLinks != null) {
+            mPhotoLinks.clear();
+        }
+        if (mTitle != null) {
+            mTitle.setText(Utils.formatPhotoQuantity(0));
+        }
+        if (mUserPhotoGridAdapter != null) {
+            mUserPhotoGridAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override

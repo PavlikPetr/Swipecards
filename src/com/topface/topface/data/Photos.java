@@ -1,7 +1,6 @@
 package com.topface.topface.data;
 
 
-import android.telephony.PhoneNumberFormattingTextWatcher;
 import com.topface.topface.utils.Debug;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,7 +10,7 @@ import java.util.ArrayList;
 @SuppressWarnings("serial")
 public class Photos extends ArrayList<Photo> implements SerializableToJsonArray {
 
-     public Photos(JSONArray photos) {
+    public Photos(JSONArray photos) {
         this();
         addAll(parse(photos));
     }
@@ -90,7 +89,7 @@ public class Photos extends ArrayList<Photo> implements SerializableToJsonArray 
     public int getRealPhotosCount() {
         int realPhotosCount = 0;
         for (Photo photo : this) {
-            if (!photo.isFake()) {
+            if (photo != null && !photo.isFake()) {
                 realPhotosCount++;
             }
         }

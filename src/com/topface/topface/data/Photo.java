@@ -2,6 +2,7 @@ package com.topface.topface.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,11 +23,11 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
     public static final String SIZE_150 = "r150x-";
     public static final String SIZE_64_ONLY = "c64x-";
     public static final String SIZE_128 = "c128x128";
+    @SuppressWarnings("UnusedDeclaration")
     public static final String SIZE_192 = "c192x192";
+    @SuppressWarnings("UnusedDeclaration")
     public static final String SIZE_256 = "c256x256";
     public static final String SIZE_960 = "r640x960";
-
-    public static final int MIN_AVAILABLE_DIFFERENCE = 20;
 
     public static final String PHOTO_KEY_SIZE_PATTERN = "(\\d+|-)x(\\d+|-)";
     public static final int MAX_SQUARE_DIFFERENCE = 2;
@@ -111,6 +112,10 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
         links = new HashMap<String, String>();
     }
 
+    public Photo(ApiResponse response) {
+        fillData(response.jsonResult.optJSONObject("photo"));
+    }
+
     public boolean isFake() {
         return isFakePhoto;
     }
@@ -149,7 +154,7 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
         return new Photo(photoItem);
     }
 
-    public Photo (JSONObject data) {
+    public Photo(JSONObject data) {
         super(data);
     }
 
@@ -339,7 +344,7 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
 
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({"rawtypes", "UnusedDeclaration"})
     public static final Parcelable.Creator CREATOR =
             new Parcelable.Creator() {
                 public Photo createFromParcel(Parcel in) {
@@ -364,7 +369,6 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
         JSONObject json = new JSONObject();
         json.put("id", mId);
         JSONObject jsonLinks = new JSONObject();
-        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
         for (Map.Entry<String, String> entry : links.entrySet()) {
             jsonLinks.put(
                     entry.getKey(),

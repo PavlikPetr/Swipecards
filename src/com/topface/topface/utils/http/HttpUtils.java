@@ -1,7 +1,6 @@
 package com.topface.topface.utils.http;
 
 import android.os.Build;
-import com.topface.topface.utils.Base64;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 
@@ -22,9 +21,7 @@ public class HttpUtils {
         POST, GET
     }
 
-    public static final int HTTP_TIMEOUT = 40 * 1000;
     public static final int BUFFER_SIZE = 8192;
-    private static final String TAG = "Http";
     private static String mUserAgent;
 
     //Параметры соединения
@@ -141,10 +138,26 @@ public class HttpUtils {
         connection.setFixedLengthStreamingMode(requestData.length);
 
         //Отправляем данные
-        OutputStream outputStream = connection.getOutputStream();
+        OutputStream outputStream = getOutputStream(requestData.length, connection);
         outputStream.write(requestData);
         outputStream.close();
     }
+
+    public static OutputStream getOutputStream(int contentLength, HttpURLConnection connection) throws IOException {
+        //Устанавливаем длину данных
+        if (contentLength > 0) {
+            connection.setFixedLengthStreamingMode(contentLength);
+        } else {
+            connection.setChunkedStreamingMode(0);
+        }
+
+        return connection.getOutputStream();
+    }
+
+    public static OutputStream getOutputStream(HttpURLConnection connection) throws IOException {
+        return getOutputStream(0, connection);
+    }
+
 
     /**
      * Проверяет что код ответа от сервера верный и можно получать данные
@@ -153,7 +166,7 @@ public class HttpUtils {
      * @throws IOException
      */
     public static boolean isCorrectResponseCode(int code) throws IOException {
-        return code >= 200 && code < 400;
+        return code >= HttpURLConnection.HTTP_OK && code < HttpURLConnection.HTTP_BAD_REQUEST;
     }
 
     public static String getUserAgent() {
@@ -169,106 +182,6 @@ public class HttpUtils {
         }
 
         return mUserAgent;
-    }
-
-    public static String httpDataRequest(String request, String postParams, String data) {
-        String response = null;
-        InputStream in = null;
-        OutputStream out = null;
-        BufferedReader buffReader = null;
-        HttpURLConnection httpConnection = null;
-
-        try {
-            Debug.log(TAG, "enter");
-            // запрос
-            httpConnection = (HttpURLConnection) new URL(request).openConnection();
-            httpConnection.setConnectTimeout(HTTP_TIMEOUT);
-            httpConnection.setReadTimeout(HTTP_TIMEOUT);
-            httpConnection.setRequestMethod("POST");
-            httpConnection.setDoOutput(true);
-            httpConnection.setDoInput(true);
-            httpConnection.setRequestProperty("Content-Type", "application/json");
-
-            //httpConnection.connect();
-
-            Debug.log(TAG, "req:" + postParams);   // REQUEST
-
-            // отправляем post параметры
-            if (postParams != null && data == null) {
-                Debug.log(TAG, "begin:");
-                out = httpConnection.getOutputStream();
-                byte[] buffer = postParams.getBytes("UTF8");
-                out.write(buffer);
-                out.flush();
-                out.close();
-                Debug.log(TAG, "end:");
-            }
-
-            if (postParams != null && data != null) {
-                String lineEnd = "\r\n";
-                String twoHH = "--";
-                String boundary = "FAfsadkfn23412034aHJSAdnk";
-                httpConnection.setRequestProperty("Content-Type", "multipart/mixed; boundary=" + boundary);
-                BufferedOutputStream bos = new BufferedOutputStream(httpConnection.getOutputStream());
-                DataOutputStream dos = new DataOutputStream(bos);
-                dos.writeBytes(lineEnd);
-                dos.writeBytes(twoHH + boundary);
-                dos.writeBytes(lineEnd);
-                dos.writeBytes("Content-Disposition: mixed");
-                dos.writeBytes(lineEnd);
-                dos.writeBytes("Content-Type: application/json");
-                dos.writeBytes(lineEnd + lineEnd);
-                dos.writeBytes(postParams);
-                dos.writeBytes(lineEnd);
-                dos.writeBytes(twoHH + boundary);
-                dos.writeBytes(lineEnd);
-                dos.writeBytes("Content-Disposition: mixed");
-                dos.writeBytes(lineEnd);
-                dos.writeBytes("Content-Type: image/jpeg");
-                dos.writeBytes(lineEnd + lineEnd);
-//                dos.writeBytes(data);
-                Base64.encodeFromFileToOutputStream(data, bos);
-
-                dos.writeBytes(lineEnd);
-                dos.writeBytes(twoHH + boundary + twoHH);
-                dos.writeBytes(lineEnd);
-                dos.flush();
-                dos.close();
-//                out.close();
-            }
-
-            in = httpConnection.getInputStream();
-
-            // проверяет код ответа сервера и считываем данные
-            if (httpConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                StringBuilder responseBuilder = new StringBuilder();
-                BufferedInputStream bis = new BufferedInputStream(in = httpConnection.getInputStream());
-                byte[] buffer = new byte[1024];
-                int n;
-                while ((n = bis.read(buffer)) > 0)
-                    responseBuilder.append(new String(buffer, 0, n));
-                response = responseBuilder.toString();
-                bis.close();
-            }
-
-            Debug.log(TAG, "resp:" + response);   // RESPONSE
-            Debug.log(TAG, "exit");
-        } catch (Exception e) {
-            Debug.error("HTTP::http exception", e);
-        } catch (OutOfMemoryError e) {
-            Debug.error("HTTP::OOM ", e);
-        } finally {
-            try {
-                Debug.log(TAG, "disconnect");
-                if (in != null) in.close();
-                if (out != null) out.close();
-                if (buffReader != null) buffReader.close();
-                if (httpConnection != null) httpConnection.disconnect();
-            } catch (Exception e) {
-                Debug.log(TAG, "http closing error:" + e);
-            }
-        }
-        return response;
     }
 
 }
