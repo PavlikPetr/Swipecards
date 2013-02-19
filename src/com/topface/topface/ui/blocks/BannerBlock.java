@@ -92,9 +92,6 @@ public class BannerBlock {
             if (mBannersMap.containsKey(fragmentId)) {
                 String bannerType = CacheProfile.getOptions().pages.get(mBannersMap.get(fragmentId)).banner;
 
-                //TODO temp remove after debug
-                bannerType = Options.BANNER_MADNET;
-
                 mBannerView = getBannerView(bannerType);
                 mBannerLayout.addView(mBannerView);
                 if (bannerType.equals(Options.BANNER_TOPFACE)) {
