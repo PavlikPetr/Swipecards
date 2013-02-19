@@ -11,8 +11,8 @@ import com.topface.billing.BillingSupportListener;
 import com.topface.billing.BillingUtils;
 import com.topface.topface.App;
 import com.topface.topface.requests.AmazonValidateRequest;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.Debug;
 
 /**

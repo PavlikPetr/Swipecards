@@ -24,6 +24,8 @@ import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.requests.*;
+import com.topface.topface.requests.handlers.SimpleApiHandler;
+import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
@@ -37,7 +39,10 @@ import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryView;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.NavigationBarController;
+import com.topface.topface.utils.Utils;
 import org.json.JSONObject;
 
 import static android.widget.AdapterView.OnItemClickListener;
@@ -51,8 +56,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     private RetryView updateErrorMessage;
     private RelativeLayout mContainer;
     protected LockerView mLockView;
-
-    protected static boolean mEditMode;
 
     private BroadcastReceiver readItemReceiver;
 
@@ -466,10 +469,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         return mListAdapter;
     }
 
-    protected void setIsDeletable(boolean value) {
-        isDeletable = value;
-    }
-
     protected boolean isShowUnreadItems() {
         return mDoubleButton != null && mDoubleButton.isRightButtonChecked();
     }
@@ -639,21 +638,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             if (counters > 0) {
                 updateData(true, false);
             }
-        }
-    }
-
-    private int getUnreadCountersByType(int type) {
-        switch (type) {
-            case CountersManager.LIKES:
-                return CacheProfile.unread_likes;
-            case CountersManager.DIALOGS:
-                return CacheProfile.unread_messages;
-            case CountersManager.SYMPATHY:
-                return CacheProfile.unread_mutual;
-            case CountersManager.VISITORS:
-                return CacheProfile.unread_visitors;
-            default:
-                return 0;
         }
     }
 

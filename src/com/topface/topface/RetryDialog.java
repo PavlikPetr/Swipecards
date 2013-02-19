@@ -1,7 +1,6 @@
 package com.topface.topface;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,14 +8,11 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
-import com.topface.topface.requests.ApiRequest;
-import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.ui.views.SpriteTile;
+import com.topface.topface.requests.IApiRequest;
 import com.topface.topface.utils.Debug;
 
 /**
@@ -25,9 +21,9 @@ import com.topface.topface.utils.Debug;
 public class RetryDialog extends AlertDialog {
     private BroadcastReceiver mReciever;
     private Context mContext;
-    private ApiRequest mRequest;
+    private IApiRequest mRequest;
 
-    public RetryDialog(Context context, ApiRequest request) {
+    public RetryDialog(Context context, IApiRequest request) {
         super(context);
         mContext = context;
         mRequest = request;
@@ -39,7 +35,7 @@ public class RetryDialog extends AlertDialog {
         setContentView(R.layout.retry_dialog_layout);
 
         ImageView satelite = (ImageView) findViewById(R.id.sat);
-        Animation anim = new RotateAnimation(0f, 358f,Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        Animation anim = new RotateAnimation(0f, 358f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
 
         anim.setRepeatCount(Animation.INFINITE);
         anim.setDuration(3000);

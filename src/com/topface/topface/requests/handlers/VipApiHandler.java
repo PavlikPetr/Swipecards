@@ -1,9 +1,10 @@
-package com.topface.topface.requests;
+package com.topface.topface.requests.handlers;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import com.topface.topface.Static;
+import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.ui.ContainerActivity;
 
 public class VipApiHandler extends SimpleApiHandler {

@@ -4,10 +4,8 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class StandardMessageSendRequest extends AbstractApiRequest {
+public class StandardMessageSendRequest extends ApiRequest {
     public static final int MESSAGE_FILL_INTERESTS = 14;
-    public static final int MESSAGE_LIKE_GIFT = 15;
-    public static final int MESSAGE_FILL_QUESTIONARY = 16;
 
 
     public final static String SERVICE_NAME = "StandardMessageSend";
@@ -23,8 +21,8 @@ public class StandardMessageSendRequest extends AbstractApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         JSONObject request = new JSONObject();
-        request.put("messageid",messageId);
-        request.put("userid",userId);
+        request.put("messageid", messageId);
+        request.put("userid", userId);
         return request;
     }
 

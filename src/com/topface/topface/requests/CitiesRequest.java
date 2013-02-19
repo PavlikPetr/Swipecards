@@ -4,7 +4,7 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class CitiesRequest extends AbstractApiRequest {
+public class CitiesRequest extends ApiRequest {
     // Data
     public static final String SERVICE_NAME = "cities";
     public String type; // тип выборки перечня городов. Пока поддерживается только “top”

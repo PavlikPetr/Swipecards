@@ -1,7 +1,5 @@
 package com.topface.topface.utils;
 
-import java.io.BufferedOutputStream;
-
 @SuppressWarnings("ALL")
 public class Base64 {
 
@@ -1459,46 +1457,41 @@ public class Base64 {
     }   // end encodeFromFile
 
 
-    public static String encodeFromFileToOutputStream(String filename, BufferedOutputStream output)
+    public static void encodeFromInputToOutputStream(java.io.InputStream stream, java.io.OutputStream output)
             throws java.io.IOException {
 
-        String encodedData = null;
         Base64.InputStream bis = null;
         try {
-            // Set up some useful variables
-            java.io.File file = new java.io.File(filename);
-            byte[] buffer = new byte[8192]; // Need max() for math on small files (v2.2.1); Need +1 for a few corner cases (v2.3.5)
+            byte[] buffer = new byte[8192];
             int length = 0;
             int numBytes = 0;
 
-            // Open a stream
+            //Create from InputStream Base64.InputStream for encoding
             bis = new Base64.InputStream(
-                    new java.io.BufferedInputStream(
-                            new java.io.FileInputStream(file)), Base64.ENCODE);
+                    new java.io.BufferedInputStream(stream, 8192),
+                    Base64.ENCODE
+            );
 
-            // Read until done
+            //Write until done
             while ((bis.read(buffer)) >= 0) {
                 output.write(buffer);
 
-            }   // end while
+            }
 
-            // Save in a variable to return
-        }   // end try
-        catch (java.io.IOException e) {
+        } catch (java.io.IOException e) {
             Debug.error("EncodeFromFile :: ", e);
-            throw e; // Catch and release to execute finally{}
-        }   // end catch: java.io.IOException
-        finally {
+            throw e;
+        } finally {
             try {
                 if (bis != null) {
                     bis.close();
+                    stream.close();
                 }
             } catch (Exception e) {
                 Debug.error(e);
             }
-        }   // end finally
+        }
 
-        return encodedData;
     }
 
     /**

@@ -101,7 +101,7 @@ public class WebAuthActivity extends Activity {
                 finish();
             } else {
                 Debug.log(WebAuthActivity.this, "web auth token is wrong");
-                Ssid.remove(getApplicationContext());
+                Ssid.remove();
                 setResult(Activity.RESULT_CANCELED);
                 finish();
             }

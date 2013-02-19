@@ -4,17 +4,10 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.BaseAdapter;
 import com.topface.topface.R;
-import com.topface.topface.data.FeedGift;
-import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
-import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.Debug;
-import org.json.JSONObject;
 
 public class ProfilePhotoGridAdapter extends ProfileGridAdapter {
     // Data
@@ -34,7 +27,7 @@ public class ProfilePhotoGridAdapter extends ProfileGridAdapter {
     }
 
     public ProfilePhotoGridAdapter(Context context, Photos photoLinks, int totalPhotos, LoadingListAdapter.Updater callback) {
-        super(context, photoLinks, totalPhotos, callback);
+        super(photoLinks, totalPhotos, callback);
         mInflater = LayoutInflater.from(context);
     }
 

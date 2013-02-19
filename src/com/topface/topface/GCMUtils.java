@@ -13,9 +13,9 @@ import android.text.TextUtils;
 import android.widget.ListView;
 import com.google.android.gcm.GCMRegistrar;
 import com.topface.topface.data.Photo;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.RegistrationTokenRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
@@ -90,7 +90,7 @@ public class GCMUtils {
      *
      * @param context контекст приложения
      */
-    public static void generateFakeNotification(Context context) {
+    /*public static void generateFakeNotification(Context context) {
         Intent intent = new Intent();
         intent.putExtra("text", "asd");
         intent.putExtra("title", "da");
@@ -104,8 +104,7 @@ public class GCMUtils {
 //            e.printStackTrace();
 //        }
         showNotification(intent, context);
-    }
-
+    }*/
     public static void showNotification(final Intent extra, Context context) {
         try {
             final String data = extra.getStringExtra("text");

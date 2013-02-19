@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,7 +73,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mNovice = Novice.getInstance(mPreferences);
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
     }
-
 
 
     private void initFragmentSwitcher() {
@@ -162,7 +162,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         try {
             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             String curVersion = pInfo.versionName;
-            if (version != null && curVersion != null) {
+            if (!TextUtils.isEmpty(version) && TextUtils.isEmpty(curVersion)) {
                 String[] splittedVersion = version.split("\\.");
                 String[] splittedCurVersion = curVersion.split("\\.");
                 for (int i = 0; i < splittedVersion.length; i++) {
@@ -186,7 +186,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 }
             }
         } catch (Exception e) {
-            Debug.error(e);
+            Debug.error("Check Version Error: " + version, e);
+
         }
     }
 
@@ -416,7 +417,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         new Thread(new Runnable() {
             @Override
             public void run() {
-                long stopTime = Calendar.getInstance().getTimeInMillis();
                 mPreferences.edit().putLong(Static.PREFERENCES_STOP_TIME, System.currentTimeMillis()).commit();
             }
         }).start();
@@ -486,10 +486,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    public void onVipRecieved() {
-        mFragmentSwitcher.showFragment(BaseFragment.F_VIP_PROFILE);
     }
 
 }

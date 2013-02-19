@@ -1,23 +1,25 @@
 package com.topface.topface.data;
 
-import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.Debug;
+import org.json.JSONObject;
 
 public class Auth extends AbstractData {
     // Data
     public int api_version;
     public String ssid;
 
-    public static Auth parse(ApiResponse response) {
-        Auth auth = new Auth();
+    public Auth(IApiResponse response) {
+        fillData(response.getJsonResult());
+    }
 
+    @Override
+    protected void fillData(JSONObject jsonResult) {
         try {
-            auth.ssid = response.jsonResult.getString("ssid");
-            auth.api_version = response.jsonResult.optInt("version");
+            ssid = jsonResult.getString("ssid");
+            api_version = jsonResult.optInt("version");
         } catch (Exception e) {
             Debug.error("Auth: Wrong response parsing: ", e);
         }
-
-        return auth;
     }
 }

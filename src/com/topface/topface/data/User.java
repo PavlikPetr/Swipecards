@@ -1,14 +1,11 @@
 package com.topface.topface.data;
 
-import android.text.TextUtils;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 /* Класс чужого профиля */
 public class User extends Profile {
-    public static final String EMPTY_JSON_ARRAY = "[]";
     // Data
     public String platform; // платформа пользователя
     public int last_visit;  // таймстамп последнего посещения приложения
@@ -16,40 +13,32 @@ public class User extends Profile {
     public boolean online;  // флаг наличия пользвоателя в онлайне
     public boolean mutual;  // флаг наличия симпатии к авторизованному пользователю
     public int score;       // средний балл оценок пользователя    
-    public Photos photos;
-    public Photo photo;
-    public boolean rated;
     public int formMatches = 0;
 
     public static User parse(int userId, ApiResponse response) {
-        User profile = new User();
+        User user = new User();
 
         try {
-            Object profilesTest = response.jsonResult.opt("profiles");
-            if (!TextUtils.equals(profilesTest.toString(), EMPTY_JSON_ARRAY)) {
-                JSONArray itemArray = (JSONArray) profilesTest;
+            JSONObject profiles = response.jsonResult.optJSONObject("profiles");
+            String profileId = Integer.toString(userId);
 
-                JSONObject item = itemArray.optJSONObject(0);
+            if (profiles != null && profiles.has(profileId)) {
+                JSONObject item = profiles.getJSONObject(profileId);
 
-                parse(profile, item);
-
-                profile.platform = item.optString("platform");
-                profile.last_visit = item.optInt("last_visit");
-                profile.status = item.optString("status");
-                profile.online = item.optBoolean("online");
-                profile.mutual = item.optBoolean("mailmutual");
-                profile.score = item.optInt("score");
-                profile.photo = new Photo(item.optJSONObject("photo"));
-                profile.photos = Photos.parse(item.optJSONArray("photos"));
-
-                initPhotos(item, profile);
+                parse(user, item);
+                user.platform = item.optString("platform");
+                user.last_visit = item.optInt("last_visit");
+                user.status = item.optString("status");
+                user.online = item.optBoolean("online");
+                user.mutual = item.optBoolean("mailmutual");
+                user.score = item.optInt("score");
             }
 
         } catch (Exception e) {
             Debug.error("Wrong response parsing", e);
         }
 
-        return profile;
+        return user;
     }
 
 }

@@ -7,13 +7,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.*;
 
+@SuppressWarnings("UnusedDeclaration")
 public class DebugLogConfig {
 
     static DalvikLogHandler activeHandler;
 
     protected static class DalvikLogHandler extends Handler {
 
-        private static final String LOG_TAG = "HttpClient";
+        private static final String LOG_TAG = "HttpDebug";
 
         @Override
         public void close() {
@@ -27,9 +28,10 @@ public class DebugLogConfig {
 
         @Override
         public void publish(LogRecord record) {
-            if (record.getLoggerName().startsWith("org.apache")) {
-                Log.d(LOG_TAG, record.getMessage());
-            }
+            String loggerName = record.getLoggerName();
+            //if (loggerName.startsWith("org.apache.http") || loggerName.contains("HttpURLConnection")) {
+            Log.d(LOG_TAG, record.getMessage());
+            //}
         }
     }
 
@@ -37,6 +39,9 @@ public class DebugLogConfig {
         try {
             String config = "org.apache.http.impl.conn.level = FINEST\n"
                     + "org.apache.http.impl.client.level = FINEST\n"
+                    + "sun.net.www.protocol.http.HttpURLConnection.level = FINEST\n"
+                    + "sun.net.www.protocol.http.HttpsURLConnection.level = FINEST\n"
+                    + "java.util.logging.ConsoleHandler.level = FINEST\n"
                     + "org.apache.http.client.level = FINEST\n" + "org.apache.http.level = FINEST";
             InputStream in = new ByteArrayInputStream(config.getBytes());
             LogManager.getLogManager().readConfiguration(in);
@@ -47,7 +52,7 @@ public class DebugLogConfig {
         }
         Logger rootLogger = LogManager.getLogManager().getLogger("");
         activeHandler = new DalvikLogHandler();
-        activeHandler.setLevel(Level.ALL);
+        activeHandler.setLevel(Level.FINEST);
         rootLogger.addHandler(activeHandler);
     }
 

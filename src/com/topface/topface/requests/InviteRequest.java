@@ -8,7 +8,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class InviteRequest extends AbstractApiRequest {
+@SuppressWarnings("UnusedDeclaration")
+public class InviteRequest extends ApiRequest {
     public static final int MIN_PHONE_LENGTH = 10;
     public static final String SERVICE_NAME = "invite";
     private ArrayList<Recipient> recipients;       // строка данных заказа от Google Play
