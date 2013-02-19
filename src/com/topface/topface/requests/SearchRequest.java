@@ -4,7 +4,7 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class SearchRequest extends AbstractApiRequest {
+public class SearchRequest extends ApiRequest {
     // Data
     public static final String SERVICE_NAME = "search";
     public int limit; // размер получаемой выборки 10 <= limit <= 50

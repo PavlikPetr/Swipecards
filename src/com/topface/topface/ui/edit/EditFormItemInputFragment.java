@@ -20,9 +20,9 @@ import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.QuestionaryRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
@@ -43,6 +43,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
     }
 
     public EditFormItemInputFragment(int titleId, String data) {
+        this();
         mTitleId = titleId;
         mData = data == null ? Static.EMPTY : data;
         mProfile = CacheProfile.getProfile();

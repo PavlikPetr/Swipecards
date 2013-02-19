@@ -4,7 +4,7 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class DialogDeleteRequest extends AbstractApiRequest {
+public class DialogDeleteRequest extends ApiRequest {
     private static final String SERVICE_NAME = "dialogDelete";
     private final int mUserId;
 

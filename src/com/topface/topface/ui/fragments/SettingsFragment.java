@@ -17,9 +17,9 @@ import android.widget.*;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.SendMailNotificationsRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.settings.SettingsAccountFragment;
@@ -187,7 +187,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         } else if (authToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
             setAccountNameText(R.string.settings_account, name, R.drawable.ic_vk, frame);
         } else if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
-            if(TextUtils.isEmpty(name)) {
+            if (TextUtils.isEmpty(name)) {
                 name = CacheProfile.first_name;
                 mSettings.setSocialAccountName(name);
             }

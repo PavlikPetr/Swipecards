@@ -1,6 +1,5 @@
 package com.topface.topface.ui.profile;
 
-import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -8,25 +7,27 @@ import android.widget.BaseAdapter;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
-import com.topface.topface.ui.fragments.BaseFragment;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScrollListener {
     private final LoadingListAdapter.Updater mUpdater;
     private Photos mPhotoLinks;
-    private int mTotalPhotos;
     private boolean needLoadNewItems = false;
 
-    public ProfileGridAdapter(Context context,
-                              Photos photoLinks,
+    public ProfileGridAdapter(Photos photoLinks,
                               int totalPhotos,
                               LoadingListAdapter.Updater callback) {
         mPhotoLinks = new Photos();
-        mTotalPhotos = totalPhotos;
         mUpdater = callback;
         setData(photoLinks, totalPhotos > photoLinks.size());
+    }
+
+    public void addFirst(Photo photo) {
+        if (mPhotoLinks.size() > 0 && mPhotoLinks.get(mPhotoLinks.size() - 1).getId() == 0) {
+            mPhotoLinks.add(1, photo);
+        } else {
+            mPhotoLinks.add(0, photo);
+        }
+        notifyDataSetChanged();
     }
 
     public void setData(Photos photoLinks, boolean needMore) {

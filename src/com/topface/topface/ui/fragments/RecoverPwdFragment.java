@@ -15,9 +15,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.RestorePwdRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.Utils;
 
 import java.util.Timer;
@@ -65,7 +65,7 @@ public class RecoverPwdFragment extends BaseFragment{
                 removeRedAlert();
                 hideSoftKeyboard();
                 RestorePwdRequest request = new RestorePwdRequest(getActivity());
-                request.login =  mEdEmail.getText().toString();
+                request.login = mEdEmail.getText().toString();
                 request.callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) {

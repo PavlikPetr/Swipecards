@@ -5,9 +5,9 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ChangeLoginRequest extends AbstractApiRequest{
+public class ChangeLoginRequest extends ApiRequest {
     public static final String LOGIN_FIELD_NAME = "login";
-    private static String SERVICE_NAME = "changelogin";
+    public static final String SERVICE_NAME = "changelogin";
 
     private String login;
 

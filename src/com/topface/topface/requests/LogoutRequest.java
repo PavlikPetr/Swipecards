@@ -5,7 +5,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LogoutRequest extends AbstractApiRequest {
+public class LogoutRequest extends ApiRequest {
     public static final String service = "logout";
 
     public LogoutRequest(Context context) {

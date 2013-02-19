@@ -10,7 +10,8 @@
         <item name="android:textAppearanceLarge">@style/TopfaceTextAppearance.Large</item>
         <item name="android:textAppearanceMedium">@style/TopfaceTextAppearance.Medium</item>
         <item name="android:textAppearanceSmall">@style/TopfaceTextAppearance.Small</item>
-
+        <!-- Начертание шрифта -->
+        <item name="android:typeface">sans</item>
         <!-- Цвет ссылок (для TextView свойства autoLink)  -->
         <item name="android:textColorLink">#2371B9</item>
     </style>

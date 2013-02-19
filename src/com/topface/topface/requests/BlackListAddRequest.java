@@ -7,7 +7,7 @@ import org.json.JSONObject;
 /**
  * Запрос добавляющий пользователя в черный список
  */
-public class BlackListAddRequest extends AbstractApiRequest {
+public class BlackListAddRequest extends ApiRequest {
     public static final String SERVICE_NAME = "blacklistAdd";
     /**
      * id пользователя, котогорого нужно добавить в черный список
@@ -15,14 +15,13 @@ public class BlackListAddRequest extends AbstractApiRequest {
     private final int mUserId;
 
     /**
-     *
      * @param userId пользователя, которого нужно добавить в черный список
      */
     public BlackListAddRequest(int userId, Context context) {
         super(context);
         mUserId = userId;
     }
-    
+
     @Override
     protected JSONObject getRequestData() throws JSONException {
         return new JSONObject().put("userid", mUserId);

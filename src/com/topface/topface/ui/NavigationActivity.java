@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,7 +77,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
 
-
     private void initFragmentSwitcher() {
         mFragmentSwitcher = (FragmentSwitchController) findViewById(R.id.fragment_switcher);
         mFragmentSwitcher.setFragmentSwitchListener(mFragmentSwitchListener);
@@ -108,19 +108,12 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             finish();
         } else {
             checkVersion(CacheProfile.getOptions().max_version);
-
         }
-
     }
 
     private boolean needChangeProfile() {
-        return (CacheProfile.age == 0 || CacheProfile.city.id == 0 || CacheProfile.photo == null)
-                && shouldChangeProfile();
-    }
-
-    private boolean shouldChangeProfile() {
-        SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        return preferences != null && preferences.getBoolean(Static.PREFERENCES_TAG_NEED_EDIT, true);
+        return (CacheProfile.age == 0 || CacheProfile.city.isEmpty() || CacheProfile.photo == null)
+                && CacheProfile.shouldChangeProfile(getApplicationContext());
     }
 
     @Override
@@ -187,7 +180,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         try {
             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             String curVersion = pInfo.versionName;
-            if (version != null && curVersion != null) {
+            if (!TextUtils.isEmpty(version) && TextUtils.isEmpty(curVersion)) {
                 String[] splittedVersion = version.split("\\.");
                 String[] splittedCurVersion = curVersion.split("\\.");
                 for (int i = 0; i < splittedVersion.length; i++) {
@@ -211,7 +204,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 }
             }
         } catch (Exception e) {
-            Debug.error(e);
+            Debug.error("Check Version Error: " + version, e);
+
         }
     }
 
@@ -441,7 +435,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         new Thread(new Runnable() {
             @Override
             public void run() {
-                long stopTime = Calendar.getInstance().getTimeInMillis();
                 mPreferences.edit().putLong(Static.PREFERENCES_STOP_TIME, System.currentTimeMillis()).commit();
             }
         }).start();
@@ -511,10 +504,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    public void onVipRecieved() {
-        mFragmentSwitcher.showFragment(BaseFragment.F_VIP_PROFILE);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.topface.topface.requests;
 
 import android.os.Message;
+import com.topface.topface.requests.handlers.ApiHandler;
 
 /**
  * Handler с методом для парсинга ответа, который выполняется вне UI треда
@@ -11,7 +12,11 @@ abstract public class DataApiHandler<T> extends ApiHandler {
     @Override
     public boolean sendMessageAtTime(Message msg, long uptimeMillis) {
         if (msg.obj != null) {
-            mData = parseResponse((ApiResponse) msg.obj);
+            ApiResponse response = (ApiResponse) msg.obj;
+            //Парсим запрос только если запрос завершился удачно
+            if (response.isCompleted()) {
+                mData = parseResponse(response);
+            }
         }
         return super.sendMessageAtTime(msg, uptimeMillis);
     }
