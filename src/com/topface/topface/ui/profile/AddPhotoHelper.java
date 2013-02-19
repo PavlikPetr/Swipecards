@@ -3,6 +3,7 @@ package com.topface.topface.ui.profile;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
@@ -17,6 +18,7 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.PhotoAddRequest;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.TopfaceNotificationManager;
 import com.topface.topface.utils.Utils;
 
 import java.io.File;
@@ -37,6 +39,7 @@ public class AddPhotoHelper {
     public static final int ADD_PHOTO_RESULT_ERROR = 1;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA = 101;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY = 100;
+    private TopfaceNotificationManager mNotificationManager;
 
 
     public AddPhotoHelper(Fragment fragment, LockerView mLockerView) {
@@ -125,6 +128,7 @@ public class AddPhotoHelper {
                 photoUri = data.getData();
             }
 
+
             //Отправляем запрос
             sendRequest(photoUri);
         }
@@ -141,7 +145,8 @@ public class AddPhotoHelper {
             return;
         }
         showProgressDialog();
-
+        mNotificationManager = TopfaceNotificationManager.getInstance(mContext);
+        mNotificationManager.showProgressNotification(mContext.getString(R.string.default_photo_upload), "", BitmapFactory.decodeFile(uri.toString()), new Intent());
         new PhotoAddRequest(uri, mContext).callback(new DataApiHandler<Photo>() {
             @Override
             protected void success(Photo photo, ApiResponse response) {
@@ -151,6 +156,7 @@ public class AddPhotoHelper {
                     msg.obj = photo;
                     mHandler.sendMessage(msg);
                 }
+                mNotificationManager.showNotification(mContext.getString(R.string.default_photo_upload_complete), "", BitmapFactory.decodeFile(uri.toString()), new Intent());
             }
 
             @Override
@@ -169,6 +175,7 @@ public class AddPhotoHelper {
             public void always(ApiResponse response) {
                 super.always(response);
                 hideProgressDialog();
+                mNotificationManager.cancelNotification(TopfaceNotificationManager.PROGRESS_ID);
             }
         }).exec();
     }
