@@ -20,6 +20,7 @@ import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.requests.ConfirmRequest;
 import com.topface.topface.requests.OptionsRequest;
 import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.fragments.*;
@@ -30,9 +31,12 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
 import java.util.Calendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class NavigationActivity extends BaseFragmentActivity implements View.OnClickListener {
 
@@ -148,22 +152,51 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             mDelayedFragment = null;
             mChatInvoke = true;
         }
-        startProfileFragmentIfNeed();
+        checkExternalLink();
     }
 
-    private void startProfileFragmentIfNeed() {
+    private void checkExternalLink() {
         if(getIntent() != null) {
             Uri data = getIntent().getData();
-            if (data != null && data.getHost().equals(getString(R.string.settings_topface_host))) { //заменить на константу
+
+            if (checkHost(data)) {
+
                 String path = data.getPath();
                 String[] splittedPath = path.split("/");
-                if (splittedPath[1].equals(getString(R.string.settings_topface_profile)) && splittedPath.length >= 3) {
-                    int profileId = Integer.parseInt(splittedPath[2]);
-                    int profileType = profileId == CacheProfile.uid? ProfileFragment.TYPE_MY_PROFILE : ProfileFragment.TYPE_USER_PROFILE;
-                    onExtraFragment(ProfileFragment.newInstance(profileId, profileType));
-                }
+
+                executeLinkAction(splittedPath);
             }
         }
+    }
+
+    private void executeLinkAction(String[] splittedPath) {
+        Pattern profilePattern = Pattern.compile("profile");
+        Pattern confirmPattern = Pattern.compile("confirm.*");
+
+        if (profilePattern.matcher(splittedPath[1]).matches() && splittedPath.length >= 3) {
+
+            int profileId = Integer.parseInt(splittedPath[2]);
+            int profileType = profileId == CacheProfile.uid? ProfileFragment.TYPE_MY_PROFILE : ProfileFragment.TYPE_USER_PROFILE;
+            onExtraFragment(ProfileFragment.newInstance(profileId, profileType));
+
+        } else if (confirmPattern.matcher(splittedPath[1]).matches()) {
+
+            Pattern codePattern = Pattern.compile("[0-9]+-[0-f]+-[0-9]*");
+            Matcher matcher =  codePattern.matcher(splittedPath[1]);
+            matcher.find();
+
+            String code = matcher.group();
+            AuthToken token = AuthToken.getInstance();
+            if (!token.isEmpty() && token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+                ConfirmRequest request = new ConfirmRequest(this, token.getLogin(), code);
+                request.exec();
+            }
+        }
+    }
+
+    private boolean checkHost(Uri data) {
+        Pattern topfacePattern = Pattern.compile(".*topface\\.ru|.*topface\\.com");
+        return data != null && topfacePattern.matcher(data.getHost()).matches();
     }
 
     private void checkProfileUpdate() {
