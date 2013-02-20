@@ -262,4 +262,19 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
             return mSex;
         }
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 }

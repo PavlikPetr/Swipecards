@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+        android:background="@android:color/transparent">
+
+    <ImageView
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            />
+
+    <TextView
+            android:id="@+id/tvText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="С вами никто не может познакомиться!\n Сделайте фото или выберите имеющиеся из альбома"
+            />
+
+    <com.topface.topface.ui.views.ImageViewRemote
+            android:id="@+id/ivrPhoto"
+            android:layout_width="wrap_content"
+            android:layout_height=" wrap_content"
+            android:layout_below="@id/tvText"
+            />
+
+
+
+</RelativeLayout>

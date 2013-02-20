@@ -176,7 +176,6 @@ public class ConnectionManager {
             sendBroadcastReauth(request.getContext());
 
             //Изначальный же запрос отменяем, нам не нужно что бы он обрабатывался дальше
-            request.setFinished();
             result = true;
         }
 

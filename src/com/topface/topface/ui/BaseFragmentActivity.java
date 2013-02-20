@@ -45,7 +45,9 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         mReauthReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                startAuth();
+                if (isNeedAuth()) {
+                    startAuth();
+                }
             }
         };
         needToUnregisterReceiver = true;
