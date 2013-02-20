@@ -105,6 +105,9 @@
         <activity android:name="com.mad.view.OrmmaActionHandler"
                   android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
 
+        <activity android:name="com.tapjoy.TJCOffersWebView" android:configChanges="keyboardHidden|orientation"/>
+        <activity android:name="com.tapjoy.TapjoyVideoView" android:configChanges="keyboardHidden|orientation"/>
+
         <!-- Алиас для главной активити из первой версии. На xвсякий случай, а то раньше уже были проблемы с FB -->
         <activity-alias
                 android:name=".ui.MainActivity"
