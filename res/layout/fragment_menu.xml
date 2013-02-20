@@ -69,7 +69,7 @@
     <!-- UNREAD MUTUAL -->
     <TextView
             android:id="@+id/tvNotifyMutual"
-            android:layout_alignBaseline="@+id/btnFragmentMutual"
+            android:layout_alignBaseline="@id/btnFragmentMutual"
             style="@style/Informer"/>
 
     <!-- Dialogs - Messages - Chat -->
@@ -113,7 +113,13 @@
             android:layout_below="@id/btnFragmentVisitors"
             android:text="@string/general_settings"
             android:drawableLeft="@drawable/topface_settings"
-            style="@style/LeftMenuButtons"/>    
+            style="@style/LeftMenuButtons"/>
+
+    <Button
+            android:id="@+id/btnFragmentOfferwall"
+            android:layout_below="@id/btnFragmentSettings"
+            android:text="Offerwall"
+            style="@style/LeftMenuButtons"/>
             
     <ImageView 
         android:layout_below="@id/btnFragmentSettings"

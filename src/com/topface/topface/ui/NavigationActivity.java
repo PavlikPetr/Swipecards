@@ -14,6 +14,8 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import com.tapjoy.TapjoyConnect;
+import com.tapjoy.TapjoyEarnedPointsNotifier;
 import com.topface.billing.BillingUtils;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
@@ -52,6 +54,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TapjoyConnect.requestTapjoyConnect(getApplicationContext(), "9b411065-e3f9-4e30-9c5a-e4246c291f49","I67YTAsltAvGaalpAGi5");
         if (isNeedBroughtToFront(getIntent())) {
             // При открытии активити из лаунчера перезапускаем ее
             finish();
@@ -276,6 +279,16 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private FragmentMenuListener mOnFragmentMenuListener = new FragmentMenuListener() {
         @Override
         public void onMenuClick(int buttonId) {
+            if (buttonId == R.id.btnFragmentOfferwall) {
+                TapjoyConnect.getTapjoyConnectInstance().showOffers();
+                TapjoyConnect.getTapjoyConnectInstance().setEarnedPointsNotifier(new TapjoyEarnedPointsNotifier() {
+                    @Override
+                    public void earnedTapPoints(int i) {
+                        Debug.log(Integer.toString(i));
+                    }
+                });
+                return;
+            }
             int fragmentId;
             switch (buttonId) {
                 case R.id.btnFragmentProfile:
