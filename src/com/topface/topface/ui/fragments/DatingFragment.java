@@ -881,8 +881,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     };
 
     private void sendAlbumRequest(final Photos data) {
-        int id = data.get(mLoadedCount - 1).getId();
-        AlbumRequest request = new AlbumRequest(getActivity(), mUserSearchList.getCurrentUser().id, PHOTOS_LIMIT, id, AlbumRequest.MODE_SEARCH);
+        int position = data.get(mLoadedCount - 1).getPosition() + 1
+                ;
+        AlbumRequest request = new AlbumRequest(getActivity(), mUserSearchList.getCurrentUser().id, PHOTOS_LIMIT, position, AlbumRequest.MODE_SEARCH);
         final int uid = mUserSearchList.getCurrentUser().id;
         request.callback(new ApiHandler() {
             @Override

@@ -16,7 +16,7 @@ public class AlbumRequest extends ApiRequest {
 
     private int uid;
     private int limit;
-    private int to;
+    private int from;
     private String mode;
 
     public AlbumRequest(Context context, int uid, int limit, String mode) {
@@ -26,11 +26,11 @@ public class AlbumRequest extends ApiRequest {
         this.mode = mode;
     }
 
-    public AlbumRequest(Context context, int uid, int limit, int to, String mode) {
+    public AlbumRequest(Context context, int uid, int limit, int from, String mode) {
         super(context);
         this.uid = uid;
         this.limit = limit;
-        this.to = to;
+        this.from = from;
         this.mode = mode;
     }
 
@@ -38,8 +38,8 @@ public class AlbumRequest extends ApiRequest {
     protected JSONObject getRequestData() throws JSONException {
         JSONObject response =  new JSONObject().put("limit", limit)
                 .put("userid", uid);
-        if (to != 0) {
-            response.put("to", to);
+        if (from != 0) {
+            response.put("from", from);
         }
         if (mode != null) {
             response.put("mode", mode);

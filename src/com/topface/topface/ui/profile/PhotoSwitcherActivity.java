@@ -150,8 +150,8 @@ public class PhotoSwitcherActivity extends Activity {
 
     private void sendAlbumRequest(final Photos data) {
 
-        int id = data.get(mLoadedCount - 2).getId();
-        AlbumRequest request = new AlbumRequest(this, mUid, AlbumRequest.DEFAULT_PHOTOS_LIMIT, id, AlbumRequest.MODE_SEARCH);
+        int position = data.get(mLoadedCount - 2).getPosition() + 1;
+        AlbumRequest request = new AlbumRequest(this, mUid, AlbumRequest.DEFAULT_PHOTOS_LIMIT, position, AlbumRequest.MODE_SEARCH);
         request.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
