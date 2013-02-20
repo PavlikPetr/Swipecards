@@ -66,9 +66,13 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="http" android:host="topface.com" android:path="profile/*" android:pathPrefix="/"/>
-                <data android:scheme="http" android:host="m.topface.com" android:path="profile/*" android:pathPrefix="/"/>
-                <data android:scheme="http" android:host="vk.topface.com" android:path="profile/*" android:pathPrefix="/"/>
-                <data android:scheme="http" android:host="fb.topface.com" android:path="profile/*" android:pathPrefix="/"/>
+                <data android:scheme="http" android:host="*.topface.com" android:path="profile/*" android:pathPrefix="/"/>
+                <data android:scheme="http" android:host="topface.ru" android:path="profile/*" android:pathPrefix="/"/>
+                <data android:scheme="http" android:host="*.topface.ru" android:path="profile/*" android:pathPrefix="/"/>
+                <data android:scheme="https" android:host="topface.com" android:path="profile/*" android:pathPrefix="/"/>
+                <data android:scheme="https" android:host="*.topface.com" android:path="profile/*" android:pathPrefix="/"/>
+                <data android:scheme="https" android:host="topface.ru" android:path="profile/*" android:pathPrefix="/"/>
+                <data android:scheme="https" android:host="*.topface.ru" android:path="profile/*" android:pathPrefix="/"/>
             </intent-filter>
         </activity>
         <activity

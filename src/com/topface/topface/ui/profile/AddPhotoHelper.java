@@ -12,11 +12,14 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ListView;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.PhotoAddRequest;
+import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.TopfaceNotificationManager;
@@ -156,7 +159,7 @@ public class AddPhotoHelper {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                mNotificationManager.showProgressNotification(mContext.getString(R.string.default_photo_upload), "", fakeImageView.getImageBitmap(), new Intent());
+                mNotificationManager.showProgressNotification(mContext.getString(R.string.default_photo_upload), "", fakeImageView.getImageBitmap(),  new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE));
             }
         });
 
@@ -170,7 +173,9 @@ public class AddPhotoHelper {
                     msg.obj = photo;
                     mHandler.sendMessage(msg);
                 }
-                mNotificationManager.showNotification(mContext.getString(R.string.default_photo_upload_complete), "", fakeImageView.getImageBitmap(), 1, new Intent());
+
+                mNotificationManager.cancelNotification(TopfaceNotificationManager.PROGRESS_ID);
+                mNotificationManager.showNotification(mContext.getString(R.string.default_photo_upload_complete), "", fakeImageView.getImageBitmap(), 1, new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE));
             }
 
             @Override
@@ -183,14 +188,15 @@ public class AddPhotoHelper {
                 if (mHandler != null) {
                     mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
                 }
-                mNotificationManager.showNotification(mContext.getString(R.string.default_photo_upload_error), "", fakeImageView.getImageBitmap(), 1, new Intent());
+
+                mNotificationManager.cancelNotification(TopfaceNotificationManager.PROGRESS_ID);
+                mNotificationManager.showNotification(mContext.getString(R.string.default_photo_upload_error), "", fakeImageView.getImageBitmap(), 1,  new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE));
             }
 
             @Override
             public void always(ApiResponse response) {
                 super.always(response);
                 hideProgressDialog();
-                mNotificationManager.cancelNotification(TopfaceNotificationManager.PROGRESS_ID);
             }
         }).exec();
     }
