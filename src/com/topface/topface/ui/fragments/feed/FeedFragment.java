@@ -103,6 +103,11 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
         };
 
+
+        IntentFilter filter = new IntentFilter(ChatFragment.MAKE_ITEM_READ);
+        filter.addAction(CountersManager.UPDATE_COUNTERS);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(readItemReceiver, filter);
+
         initFloatBlock((ViewGroup) view);
         createUpdateErrorMessage();
 
@@ -136,9 +141,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             updateData(false, true);
         }
 
-        IntentFilter filter = new IntentFilter(ChatFragment.MAKE_ITEM_READ);
-        filter.addAction(CountersManager.UPDATE_COUNTERS);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(readItemReceiver, filter);
     }
 
     @Override
@@ -147,7 +149,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (mFloatBlock != null) {
             mFloatBlock.onPause();
         }
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(readItemReceiver);
+
     }
 
     protected void init() {
@@ -165,6 +167,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 mBackgroundText.getCompoundDrawables()[2],
                 mBackgroundText.getCompoundDrawables()[3]
         );
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(readItemReceiver);
     }
 
     protected abstract Drawable getBackIcon();
