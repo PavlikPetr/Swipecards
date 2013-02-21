@@ -111,7 +111,7 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
             showButtons();
         } else {
             RegisterRequest request = new RegisterRequest(getActivity().getApplicationContext(),email,password,name,
-                    mBirthday.getTime(),sex);
+                    DateUtils.getSeconds(mBirthday), sex);
             registerRequest(request);
             request.callback(new DataApiHandler<Register>() {
 
