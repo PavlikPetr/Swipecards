@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.*;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
@@ -20,6 +21,7 @@ import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.OptionsRequest;
+import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.fragments.*;
 import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
@@ -72,8 +74,15 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         setStopTime();
         mNovice = Novice.getInstance(mPreferences);
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
+
+
+        showDialog();
     }
 
+    void showDialog() {
+        DialogFragment newFragment = TakePhotoDialog.newInstance();
+        newFragment.show(getSupportFragmentManager(), TakePhotoDialog.TAG);
+    }
 
     private void initFragmentSwitcher() {
         mFragmentSwitcher = (FragmentSwitchController) findViewById(R.id.fragment_switcher);
@@ -307,6 +316,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                     break;
             }
             mFragmentSwitcher.showFragmentWithAnimation(fragmentId);
+            showDialog();
         }
     };
 

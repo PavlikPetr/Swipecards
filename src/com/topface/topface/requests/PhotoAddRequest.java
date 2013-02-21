@@ -5,14 +5,16 @@ import android.net.Uri;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.Ssid;
 import com.topface.topface.utils.Base64;
+import com.topface.topface.utils.BitmapUtils;
 import com.topface.topface.utils.http.HttpUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Arrays;
 
 public class PhotoAddRequest extends ApiRequest {
     public static final String SERVICE_NAME = "photoAdd";
@@ -60,7 +62,7 @@ public class PhotoAddRequest extends ApiRequest {
         //Мы отправляем картинку в виде строки Base64, о чем сообщаем в заголовке
         dos.writeBytes("Content-Transfer-Encoding: base64" + LINE_END + LINE_END);
         //Открываем InputStream к файлу и пропуская через Base64.InputStream для кодирования картинку в виде Base64
-        Base64.encodeFromInputToOutputStream(getInputStream(), dos);
+        Base64.encodeFromInputToOutputStream(BitmapUtils.getInputStream(getContext(),mUri), dos);
 
         dos.writeBytes(
                 LINE_END +
@@ -70,34 +72,6 @@ public class PhotoAddRequest extends ApiRequest {
 
         dos.flush();
         dos.close();
-    }
-
-    private InputStream getInputStream() throws IOException {
-        InputStream stream;
-
-        if (mUri == null) {
-            stream = null;
-        } else if (isInternetUri(mUri)) {
-            stream = new URL(mUri.toString()).openStream();
-        } else {
-            stream = getContext().getContentResolver().openInputStream(mUri);
-        }
-
-        return stream;
-    }
-
-    /**
-     * Проверяет, ссылается ли данный Uri на ресурс в интернете
-     *
-     * @param uri ресурса
-     * @return является ресурс ссылкой на файл в интернете
-     */
-    private boolean isInternetUri(Uri uri) {
-        return Arrays.asList(
-                "http",
-                "https",
-                "ftp"
-        ).contains(uri.getScheme());
     }
 
     @Override
