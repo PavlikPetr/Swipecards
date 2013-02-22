@@ -4,13 +4,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.analytics.TrackedFragment;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.NavigationBarController;
@@ -24,6 +28,8 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
 
+    private ActionBar mActionBar;
+
     private BroadcastReceiver updateCountersReceiver;
     public static final int F_UNKNOWN = -1;
     public static final int F_VIP_PROFILE = 1000;
@@ -35,6 +41,14 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public static final int F_TOPS = 1006;
     public static final int F_SETTINGS = 1007;
     public static final int F_VISITORS = 1008;
+
+
+    protected ActionBar getActionBar(View view) {
+        if(mActionBar == null) {
+            mActionBar = new ActionBar((ViewGroup) view.findViewById(R.id.loNavigationBar));
+        }
+        return mActionBar;
+    }
 
     protected void onUpdateStart(boolean isFlyUpdating) {
     }
@@ -53,8 +67,8 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     @Override
     public void onResume() {
-        if (mNavBarController != null) {
-            mNavBarController.refreshNotificators();
+        if (mActionBar != null) {
+            mActionBar.refreshNotificators();
             setUpdateCountersReceiver();
         }
         super.onResume();
@@ -106,8 +120,8 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    if (mNavBarController != null) {
-                        mNavBarController.refreshNotificators();
+                    if (mActionBar != null) {
+                        mActionBar.refreshNotificators();
                     }
                 }
             };
