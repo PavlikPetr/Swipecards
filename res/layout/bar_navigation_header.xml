@@ -149,11 +149,11 @@
                 android:layout_height="fill_parent"
                 android:layout_marginRight="5dp">
 
-            <Button
+            <ImageButton
                     android:id="@+id/btnNavigationRightWithText"
                     style="@style/ButtonsText"
                     android:layout_width="wrap_content"
-                    android:layout_height="33.5dp"
+                    android:layout_height="fill_parent"
                     android:background="@drawable/navigation_edit_selector"
                     android:ellipsize="end"
                     android:maxLines="1"

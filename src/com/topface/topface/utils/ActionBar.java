@@ -15,7 +15,7 @@ public class ActionBar {
     private TextView mTitle;
     private TextView mSubTitle;
     private ImageButton mSettingsButton;
-    private Button mEditButton;
+    private ImageButton mEditButton;
     private ImageButton mProfileButton;
 
     private NavigationBarController mNavBarController;
@@ -32,7 +32,7 @@ public class ActionBar {
         mTitle = (TextView) actionView.findViewById(R.id.tvNavigationTitle);
         mSubTitle = (TextView) actionView.findViewById(R.id.tvNavigationSubtitle);
         mSettingsButton = (ImageButton) actionView.findViewById(R.id.btnNavigationSettingsBar);
-        mEditButton = (Button) actionView.findViewById(R.id.btnNavigationRightWithText);
+        mEditButton = (ImageButton) actionView.findViewById(R.id.btnNavigationRightWithText);
         mProfileButton = (ImageButton) actionView.findViewById(R.id.btnNavigationProfileBar);
     }
 
@@ -86,5 +86,13 @@ public class ActionBar {
 
         mProfileButton.setVisibility(View.GONE);
         mProfileButton.setOnClickListener(listener);
+    }
+
+    public void hide() {
+        actionView.setVisibility(View.GONE);
+    }
+
+    public void show() {
+        actionView.setVisibility(View.VISIBLE);
     }
 }

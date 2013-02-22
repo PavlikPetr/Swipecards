@@ -98,6 +98,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private BroadcastReceiver mProfileReceiver;
     private boolean mNeedMore;
     private int mLoadedCount;
+    private ActionBar mActionBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -116,6 +117,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         super.onCreateView(inflater, container, saved);
 
         View view = inflater.inflate(R.layout.ac_dating, null);
+
+        mActionBar = getActionBar(view);
 
         mRetryBtn = (ImageButton) view.findViewById(R.id.btnUpdate);
         mRetryBtn.setOnClickListener(this);
@@ -225,7 +228,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private OnClickListener initNavigationHeader(View view) {
         // Navigation Header
         ActionBar actionBar = getActionBar(view);
-        actionBar.showHomeButton((NavigationActivity)getActivity());
+        setHeader(view);
+        actionBar.showHomeButton((NavigationActivity) getActivity());
         OnClickListener listener = new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -694,8 +698,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void showControls() {
-        mNavigationHeader.setVisibility(View.VISIBLE);
-        mNavigationHeaderShadow.setVisibility(View.VISIBLE);
+        mActionBar.show();
         mDatingGroup.setVisibility(View.VISIBLE);
         mIsHide = false;
     }
@@ -703,8 +706,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void hideControls() {
         mDatingGroup.setVisibility(View.GONE);
-        mNavigationHeader.setVisibility(View.GONE);
-        mNavigationHeaderShadow.setVisibility(View.GONE);
+        mActionBar.hide();
         mIsHide = true;
     }
 
@@ -769,15 +771,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         String plus = CacheProfile.dating.age_end == FilterFragment.webAbsoluteMaxAge ? "+" : "";
         int age = CacheProfile.dating.age_end == FilterFragment.webAbsoluteMaxAge ? EditAgeFragment.absoluteMax : CacheProfile.dating.age_end;
         Context context = App.getContext();
-        ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(context.getString(
+        getActionBar(view).setTitleText(context.getString(
                 CacheProfile.dating.sex == Static.BOY ? R.string.dating_header_guys
                         : R.string.dating_header_girls, CacheProfile.dating.age_start,
                 age) + plus);
 
-        TextView subTitle = (TextView) view.findViewById(R.id.tvNavigationSubtitle);
-        subTitle.setVisibility(View.VISIBLE);
-
-        subTitle.setText(getSubtitle(context));
+        getActionBar(view).setSubTitleText(getSubtitle(context));
     }
 
     private String getSubtitle(Context context) {

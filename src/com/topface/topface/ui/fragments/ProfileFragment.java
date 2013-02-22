@@ -133,9 +133,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         if (mProfileType == TYPE_MY_PROFILE) {
             mActionsControl.setOnCheckChangedListener(this);
             mTitle.setText(R.string.profile_header_title);
-            Button editButton = (Button) root.findViewById(R.id.btnNavigationRightWithText);
+            ImageButton editButton = (ImageButton) root.findViewById(R.id.btnNavigationRightWithText);
             editButton.setVisibility(View.VISIBLE);
-            editButton.setText(getResources().getString(R.string.general_edit_button));
             editButton.setOnClickListener(this);
         } else if (mProfileType == TYPE_USER_PROFILE) {
             mActionsControl.setOnCheckChangedListener(this);
