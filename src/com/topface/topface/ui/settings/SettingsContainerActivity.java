@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.utils.social.AuthToken;
 
 public class SettingsContainerActivity extends BaseFragmentActivity {
 
@@ -15,6 +16,7 @@ public class SettingsContainerActivity extends BaseFragmentActivity {
     public static final int INTENT_FEEDBACK = 202;
     public static final int INTENT_ABOUT = 203;
     public static final int INTENT_SEND_FEEDBACK = 204;
+    public static final int INTENT_CHANGE_PASSWORD = 205;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -27,7 +29,15 @@ public class SettingsContainerActivity extends BaseFragmentActivity {
 
         switch (intent.getIntExtra(Static.INTENT_REQUEST_KEY, 0)) {
             case INTENT_ACCOUNT:
-                mFragment = new SettingsAccountFragment();
+                AuthToken token = AuthToken.getInstance();
+                if (token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+                    mFragment = new SettingsTopfaceAccountFragment();
+                } else {
+                    mFragment = new SettingsAccountFragment();
+                }
+                break;
+            case INTENT_CHANGE_PASSWORD:
+                mFragment = new SettingsChangePasswordFragment();
                 break;
             case INTENT_FEEDBACK:
                 mFragment = new SettingsFeedbackFragment();
