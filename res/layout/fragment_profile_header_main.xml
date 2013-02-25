@@ -15,15 +15,14 @@
     <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/ivUserAvatar"
             style="@style/ProfileAvatar"
-            android:layout_centerVertical="true"
             android:layout_marginLeft="8dp"/>
 
     <LinearLayout
-            android:layout_toRightOf="@id/ivUserAvatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="26dp"
-            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/ivUserAvatar"
             android:orientation="vertical"
             android:gravity="left">
 

@@ -419,14 +419,14 @@
 
     <style name="ProfileAvatar">
         <item name="postProcessor">mask</item>
-        <item name="clipMask">@drawable/avatar_frame_mask</item>
-        <item name="android:layout_width">93dp</item>
-        <item name="android:layout_height">93dp</item>
-        <item name="android:paddingTop">0.5dp</item>
-        <item name="android:paddingLeft">0.5dp</item>
-        <item name="android:paddingRight">0.5dp</item>
-        <item name="android:paddingBottom">2dp</item>
-        <item name="android:background">@drawable/avatar_frame</item>
+        <item name="clipMask">@drawable/photo_mask</item>
+        <item name="android:background">@drawable/photo_border</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_marginRight">6dp</item>
+        <item name="android:layout_marginLeft">6dp</item>
+        <item name="android:layout_width">72dp</item>
+        <item name="android:layout_height">72dp</item>
     </style>
 
     <style name="TopfaceCirclePageIndicator">
