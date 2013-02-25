@@ -309,4 +309,14 @@
     <string name="popup_version_message">Je na čase aktualizovat svou verzi!</string>
     <string name="popup_version_update">Aktualizovat</string>
     <string name="popup_version_cancel">Připomenout později</string>
+    <string name="general_version_not_supported">Vaše verze aplikace je zastaralá a již není podporována. Prosím, aktualizujte aplikaci</string>
+    <string name="leaders_select_photo_info">Vyberte si tu nejatraktivnější fotku! Nelze zvolit fotografii s nízkým hodnocením</string>
+    <string name="default_price_format">Celkem: %.2f USD</string>
+    <string name="dating_online_only">%s, pouze online</string>
+    <string name="map_popup_address">Adresa</string>
+    <string name="black_list_info">Přidali jste účastníka dialogu do své černé listiny. Toto  můžete změnit ve Vašem profilu, v nastaveních VIP-statusu.</string>
+    <string name="general_gift">Dárek</string>
+    <string name="general_soon">Už brzy</string>
+    <string name="black_list_activation">Aktivujte VIP-status a používejte černou listinu</string>
+    <string name="profile_edit_age_ranges">Věk má být mezi 16 až 99 let. Zadejte prosím platné číslo a zkuste to znovu.</string>
 </resources>

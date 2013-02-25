@@ -458,5 +458,9 @@
     <string name="general_error_try_again_later">Невозможно подключиться к Topface. Повторите попытку позже.</string>
 
     <string name="search_city_by_name">Поиск города по названию</string>
-
+    <string name="default_no_photos_alert">С вами никто не может познакомиться! Сделайте фото или загрузите имеющееся из альбома</string>
+    <string name="default_gallery">Галерея</string>
+    <string name="dafault_save">Сохранить</string>
+    <string name="default_other">Другая</string>
+    <string name="default_make_picture">Сделать фото</string>
 </resources>
