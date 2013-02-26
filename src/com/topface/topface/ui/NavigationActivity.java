@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.content.*;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
@@ -15,11 +14,13 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.Toast;
 import com.topface.billing.BillingUtils;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.Photo;
 import com.topface.topface.requests.OptionsRequest;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.edit.EditProfileActivity;
@@ -74,14 +75,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         setStopTime();
         mNovice = Novice.getInstance(mPreferences);
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
-
-
-        showDialog();
-    }
-
-    void showDialog() {
-        DialogFragment newFragment = TakePhotoDialog.newInstance();
-        newFragment.show(getSupportFragmentManager(), TakePhotoDialog.TAG);
     }
 
     private void initFragmentSwitcher() {
@@ -119,7 +112,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     private boolean needChangeProfile() {
-        return (CacheProfile.age == 0 || CacheProfile.city.isEmpty() || CacheProfile.photo == null)
+        return (CacheProfile.age == 0
+                || (CacheProfile.city.isEmpty())
+                || (CacheProfile.photo == null))
                 && CacheProfile.shouldChangeProfile(getApplicationContext());
     }
 
@@ -155,6 +150,27 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             mChatInvoke = true;
         }
 
+        //Открыть диалог для захвата фото к аватарке
+        if (CacheProfile.photo == null && !CacheProfile.wasAvatarAsked) {
+            CacheProfile.wasAvatarAsked = true;
+            takePhoto(new TakePhotoDialog.TakePhotoListener() {
+                @Override
+                public void onPhotoSentSuccess(Photo photo) {
+                    CacheProfile.photo = photo;
+                }
+
+                @Override
+                public void onPhotoSentFailure(int codeError) {
+                    Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onPhotoTaken() { }
+
+                @Override
+                public void onPhotoChosen() { }
+            });
+        }
     }
 
     private void checkProfileUpdate() {
@@ -316,7 +332,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                     break;
             }
             mFragmentSwitcher.showFragmentWithAnimation(fragmentId);
-            showDialog();
         }
     };
 
@@ -449,6 +464,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         } catch (Exception e) {
             Debug.error(e);
         }
+
+        //Для запроса фото при следующем создании NavigationActivity
+        if (CacheProfile.photo == null) CacheProfile.wasAvatarAsked = false;
     }
 
     private void unbindDrawables(View view) {

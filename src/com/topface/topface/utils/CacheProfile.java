@@ -259,4 +259,5 @@ public class CacheProfile {
     }
 
     public static boolean wasCityAsked = false;
+    public static boolean wasAvatarAsked = false;
 }
