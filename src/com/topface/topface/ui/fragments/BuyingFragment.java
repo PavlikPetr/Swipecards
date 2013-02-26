@@ -196,6 +196,13 @@ public class BuyingFragment extends BillingFragment {
             vipBtn.setVisibility(View.VISIBLE);
         }
 
+        root.findViewById(R.id.btnOfferwall).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO open Offerwall
+            }
+        });
+
     }
 
     private void goToVipSettings() {
