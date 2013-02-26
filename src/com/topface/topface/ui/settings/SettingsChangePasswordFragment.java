@@ -18,6 +18,7 @@ import com.topface.topface.requests.ChangePasswordRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.social.AuthToken;
 
 public class SettingsChangePasswordFragment extends BaseFragment implements OnClickListener{
@@ -83,7 +84,8 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
                         public void success(ApiResponse response) {
                             if (response.isCompleted()) {
                                 Toast.makeText(getActivity(), R.string.passwords_changed, Toast.LENGTH_LONG).show();
-                                mToken.saveToken(mToken.getUserId(),mToken.getLogin(),password);
+                                mToken.saveToken(mToken.getUserId(), mToken.getLogin(), password);
+                                CacheProfile.onPasswordChanged(getContext());
                                 mEdPassword.getText().clear();
                                 mEdPasswordConfirmation.getText().clear();
                             }

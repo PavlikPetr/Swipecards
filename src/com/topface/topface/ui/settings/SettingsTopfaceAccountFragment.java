@@ -61,10 +61,15 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
         initTextViews(root);
         initButtons(root);
-        setViewsState();
         initEmailConfirmedFlag();
 
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setViewsState();
     }
 
     private void initEmailConfirmedFlag() {
@@ -140,7 +145,12 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
     private void setButtonsState() {
         if (CacheProfile.emailConfirmed) {
+//            if(!CacheProfile.isPasswordChanged(getActivity().getApplicationContext())) {
+//                  mBtnLogout.setVisibility(View.GONE);
+//            } else {
             mBtnLogout.setVisibility(View.VISIBLE);
+//            }
+
             setChangeBtnAction(ACTION_CHANGE_PASSWORD);
         } else {
             mBtnLogout.setVisibility(View.GONE);
