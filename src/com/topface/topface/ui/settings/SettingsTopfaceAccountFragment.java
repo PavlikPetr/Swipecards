@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.google.android.gcm.GCMRegistrar;
 import com.topface.topface.R;
@@ -34,7 +35,6 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
     public static final int RESULT_LOGOUT = 666;
     private LockerView mLockerView;
-    private ViewFlipper mViewPlipper;
     private EditText mEditText;
     private TextView mText;
     private Button mBtnChange;
@@ -57,8 +57,6 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
         mLockerView = (LockerView) root.findViewById(R.id.llvLogoutLoading);
         mLockerView.setVisibility(View.GONE);
-
-        mViewPlipper = (ViewFlipper) root.findViewById(R.id.vfFlipper);
 
 
         initTextViews(root);
@@ -174,6 +172,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
             @Override
             public void onClick(View v) {
+                hideSoftKeyboard();
                 getActivity().finish();
             }
         });
@@ -182,6 +181,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
     @Override
     public void onClick(View v) {
+        hideSoftKeyboard();
         switch (v.getId()) {
             case R.id.btnLogout:
                 logout(mToken);
@@ -191,6 +191,13 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                 break;
             default:
                 break;
+        }
+    }
+
+    private void hideSoftKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (mEditText != null) {
+            imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
         }
     }
 
@@ -294,4 +301,6 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     private void unlock() {
         mLockerView.setVisibility(View.GONE);
     }
+
+
 }
