@@ -118,7 +118,13 @@
     <Button
             android:id="@+id/btnFragmentOfferwall"
             android:layout_below="@id/btnFragmentSettings"
-            android:text="Offerwall"
+            android:text="OfferwallTapjoy"
+            style="@style/LeftMenuButtons"/>
+
+    <Button
+            android:id="@+id/btnFragmentSponsorpay"
+            android:layout_below="@id/btnFragmentOfferwall"
+            android:text="OfferwallSponsorPay"
             style="@style/LeftMenuButtons"/>
             
     <ImageView 

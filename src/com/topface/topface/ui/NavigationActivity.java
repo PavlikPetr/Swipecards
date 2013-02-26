@@ -14,6 +14,8 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import com.sponsorpay.sdk.android.SponsorPay;
+import com.sponsorpay.sdk.android.publisher.SponsorPayPublisher;
 import com.tapjoy.TapjoyConnect;
 import com.tapjoy.TapjoyEarnedPointsNotifier;
 import com.topface.billing.BillingUtils;
@@ -54,7 +56,10 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TapjoyConnect.requestTapjoyConnect(getApplicationContext(), "9b411065-e3f9-4e30-9c5a-e4246c291f49","I67YTAsltAvGaalpAGi5");
+
+        TapjoyConnect.requestTapjoyConnect(getApplicationContext(), "9b411065-e3f9-4e30-9c5a-e4246c291f49", "I67YTAsltAvGaalpAGi5");
+        SponsorPay.start("appId", Integer.toString(CacheProfile.uid), "securityToken", getApplicationContext());
+
         if (isNeedBroughtToFront(getIntent())) {
             // При открытии активити из лаунчера перезапускаем ее
             finish();
@@ -288,7 +293,12 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                     }
                 });
                 return;
+            } else if (buttonId == R.id.btnFragmentSponsorpay) {
+                Intent offerWallIntent = SponsorPayPublisher.getIntentForOfferWallActivity(getApplicationContext(), true);
+                startActivityForResult(offerWallIntent, SponsorPayPublisher.DEFAULT_OFFERWALL_REQUEST_CODE);
+                return;
             }
+
             int fragmentId;
             switch (buttonId) {
                 case R.id.btnFragmentProfile:
