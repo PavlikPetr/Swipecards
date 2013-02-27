@@ -259,4 +259,17 @@ public class CacheProfile {
     }
 
     public static boolean wasCityAsked = false;
+
+    public static boolean isPasswordChanged(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+
+        return preferences != null && preferences.getBoolean(Static.PREFERENCES_TAG_PASSWORD_CHAGED, false);
+    }
+
+    public static void onPasswordChanged(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(Static.PREFERENCES_TAG_PASSWORD_CHAGED, true);
+        editor.commit();
+    }
 }

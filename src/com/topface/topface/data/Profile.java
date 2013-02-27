@@ -433,6 +433,7 @@ public class Profile extends AbstractDataWithPhotos {
 
     private static void parseGifts(Profile profile, JSONObject resp) throws JSONException {
         JSONArray arrGifts = resp.optJSONArray("gifts");
+        if (arrGifts == null) return;
         for (int i = 0; i < arrGifts.length(); i++) {
             JSONObject itemGift = arrGifts.getJSONObject(i);
             Gift gift = new Gift(
