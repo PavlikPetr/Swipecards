@@ -259,6 +259,7 @@ public class CacheProfile {
     }
 
     public static boolean wasCityAsked = false;
+    public static boolean wasAvatarAsked = false;
 
     public static boolean needToChangePassword(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);

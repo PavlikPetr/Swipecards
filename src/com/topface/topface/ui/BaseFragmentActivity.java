@@ -14,6 +14,7 @@ import com.topface.topface.ReAuthReceiver;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
+import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.http.IRequestClient;
@@ -57,8 +58,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         needToUnregisterReceiver = true;
         registerReceiver(mReauthReceiver, new IntentFilter(ReAuthReceiver.REAUTH_INTENT));
     }
-
-
 
     public void startAuth() {
         AuthFragment af = AuthFragment.newInstance();
@@ -153,5 +152,11 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     protected boolean isNeedAuth() {
         return true;
+    }
+
+    protected void takePhoto(TakePhotoDialog.TakePhotoListener listener) {
+        TakePhotoDialog newFragment = TakePhotoDialog.newInstance();
+        newFragment.setOnTakePhotoListener(listener);
+        newFragment.show(getSupportFragmentManager(), TakePhotoDialog.TAG);
     }
 }

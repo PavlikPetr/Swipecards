@@ -16,7 +16,7 @@
 
         <LinearLayout
                 android:id="@+id/loInfo"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
@@ -39,9 +39,11 @@
                     android:visibility="gone">
                 <ImageView
                         android:id="@+id/ivPhoto"
-                        android:layout_width="275dp"
+                        android:layout_width="wrap_content"
+                        android:maxWidth="275dp"
                         android:layout_height="wrap_content"
-                        android:background="#00ff00"
+                        android:maxHeight="360dp"
+                        android:layout_centerHorizontal="true"
                         />
                 <ImageView
                         android:id="@+id/ivFrame"

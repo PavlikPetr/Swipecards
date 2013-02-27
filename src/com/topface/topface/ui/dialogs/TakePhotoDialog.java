@@ -21,6 +21,8 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.PhotoAddRequest;
+import com.topface.topface.requests.PhotoMainRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.BitmapUtils;
 import com.topface.topface.utils.Utils;
 
@@ -44,6 +46,8 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
     private ImageButton mBtnClose;
 
     private Uri mPhotoUri = null;
+
+    private TakePhotoListener mTakePhotoListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -91,15 +95,21 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
         return dialog;
     }
 
+    public void setOnTakePhotoListener(TakePhotoListener listener) {
+        mTakePhotoListener = listener;
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA) {
                 //Если фотография сделана, то ищем ее во временном файле
                 mPhotoUri = Uri.fromParts("file", PATH_TO_FILE, null);
+                mTakePhotoListener.onPhotoTaken();
             } else if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY) {
                 //Если она взята из галереи, то получаем URL из данных интента и преобразуем его в путь до файла
                 mPhotoUri = data.getData();
+                mTakePhotoListener.onPhotoChosen();
             }
 
             setPhoto(mPhotoUri, mPhoto);
@@ -112,8 +122,14 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
 
         if(bitmap == null) return;
 
-        if (bitmap.getWidth() >= photo.getLayoutParams().width) {
-            photo.setImageBitmap(BitmapUtils.getScaledBitmap(bitmap,photo.getLayoutParams().width,0));
+        if (bitmap.getWidth() >= photo.getMaxWidth() || bitmap.getHeight() >= photo.getMaxHeight()) {
+            Bitmap scaledBitmap = null;
+            if (bitmap.getWidth() >= bitmap.getHeight()) {
+                scaledBitmap = BitmapUtils.getScaledBitmap(bitmap, photo.getMaxWidth(), 0);
+            } else {
+                scaledBitmap = BitmapUtils.getScaledBitmap(bitmap, 0, photo.getMaxHeight());
+            }
+            photo.setImageBitmap(scaledBitmap);
         } else {
             photo.setImageBitmap(bitmap);
         }
@@ -152,9 +168,27 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
     private void sendRequest(Uri uri) {
         new PhotoAddRequest(uri, getActivity().getApplicationContext()).callback(new DataApiHandler<Photo>() {
             @Override
-            protected void success(Photo photo, ApiResponse response) {
-                //TODO result callback with photo
-                getDialog().dismiss();
+            protected void success(final Photo photo, ApiResponse response) {
+                PhotoMainRequest request = new PhotoMainRequest(getActivity().getApplicationContext());
+                request.photoid = photo.getId();
+                mTakePhotoListener.onPhotoSentSuccess(photo);
+                request.callback(new ApiHandler() {
+
+                    @Override
+                    public void success(ApiResponse response) {
+                    }
+
+                    @Override
+                    public void fail(int codeError, ApiResponse response) {
+                        mTakePhotoListener.onPhotoSentFailure(codeError);
+                    }
+
+                    @Override
+                    public void always(ApiResponse response) {
+                        super.always(response);
+                        getDialog().dismiss();
+                    }
+                });
             }
 
             @Override
@@ -164,7 +198,7 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                //TODO result callback with codeError
+                mTakePhotoListener.onPhotoSentFailure(codeError);
             }
 
             @Override
@@ -172,5 +206,12 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
                 super.always(response);
             }
         }).exec();
+    }
+
+    public interface TakePhotoListener {
+        void onPhotoSentSuccess(Photo photo);
+        void onPhotoSentFailure(int codeError);
+        void onPhotoTaken();
+        void onPhotoChosen();
     }
 }

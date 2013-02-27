@@ -16,12 +16,14 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.Toast;
 import com.topface.billing.BillingUtils;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ConfirmRequest;
+import com.topface.topface.data.Photo;
 import com.topface.topface.requests.OptionsRequest;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.edit.EditProfileActivity;
@@ -124,7 +126,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     private boolean needChangeProfile() {
-        return (CacheProfile.age == 0 || CacheProfile.city.isEmpty() || CacheProfile.photo == null)
+        return (CacheProfile.age == 0
+                || (CacheProfile.city.isEmpty())
+                || (CacheProfile.photo == null))
                 && CacheProfile.shouldChangeProfile(getApplicationContext());
     }
 
@@ -141,7 +145,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     protected void onResume() {
         super.onResume();
         checkProfileUpdate();
-
 
         //Отправляем не обработанные запросы на покупку
         BillingUtils.sendQueueItems();
@@ -161,8 +164,29 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             mChatInvoke = true;
         }
         checkExternalLink();
-    }
 
+        //Открыть диалог для захвата фото к аватарке
+        if (CacheProfile.photo == null && !CacheProfile.wasAvatarAsked) {
+            CacheProfile.wasAvatarAsked = true;
+            takePhoto(new TakePhotoDialog.TakePhotoListener() {
+                @Override
+                public void onPhotoSentSuccess(Photo photo) {
+                    CacheProfile.photo = photo;
+                }
+
+                @Override
+                public void onPhotoSentFailure(int codeError) {
+                    Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onPhotoTaken() { }
+
+                @Override
+                public void onPhotoChosen() { }
+            });
+        }
+    }
     private void checkExternalLink() {
         if(getIntent() != null) {
             Uri data = getIntent().getData();
@@ -498,6 +522,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         } catch (Exception e) {
             Debug.error(e);
         }
+
+        //Для запроса фото при следующем создании NavigationActivity
+        if (CacheProfile.photo == null) CacheProfile.wasAvatarAsked = false;
     }
 
     private void unbindDrawables(View view) {

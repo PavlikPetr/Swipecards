@@ -197,10 +197,10 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                 break;
             case R.id.btnNavigationBackWithText:
                 if (hasStartedFromAuthActivity && !CacheProfile.city.isEmpty()) {
-                    Intent intent = new Intent(this, NavigationActivity.class);
-                    intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_VIP_PROFILE);
                     SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
                     preferences.edit().putBoolean(Static.PREFERENCES_TAG_NEED_EDIT, false).commit();
+                    Intent intent = new Intent(this, NavigationActivity.class);
+                    intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_VIP_PROFILE);
                     startActivity(intent);
                 }
                 finish();
