@@ -152,12 +152,9 @@ public abstract class ApiRequest implements IApiRequest {
 
     @Override
     public void setFinished() {
-        if (mURLConnection != null) {
-            mURLConnection.disconnect();
-        }
+        closeConnection();
         mPostData = null;
         handler = null;
-        mURLConnection = null;
         canceled = true;
     }
 
@@ -233,11 +230,11 @@ public abstract class ApiRequest implements IApiRequest {
 
     public HttpURLConnection openConnection() throws IOException {
         //Если открываем новое подключение, то старое закрываем
-        if (mURLConnection != null) {
-            mURLConnection.disconnect();
-        }
+        closeConnection();
 
         mURLConnection = HttpUtils.openPostConnection(getApiUrl(), CONTENT_TYPE);
+        setRevisionHeader(mURLConnection);
+
         return mURLConnection;
     }
 
@@ -261,13 +258,18 @@ public abstract class ApiRequest implements IApiRequest {
     }
 
     @Override
-    public int sendRequest() throws IOException {
+    final public int sendRequest() throws Exception {
         HttpURLConnection connection = getConnection();
         //Непосредственно перед отправкой запроса устанавливаем новый SSID
         setSsid(Ssid.get());
-        //Ставим, если это нужно, ревизию (только на тестовых платформах)
-        setRevisionHeader(connection);
+        //Непосредственно пишим данные в подключение
+        writeData(connection);
 
+        //Возвращаем HTTP статус ответа
+        return getResponseCode(connection);
+    }
+
+    protected void writeData(HttpURLConnection connection) throws IOException {
         //Формируем свои данные для отправки POST запросом
         String requestJson = toPostData();
         //Переводим строку запроса в байты
@@ -280,9 +282,18 @@ public abstract class ApiRequest implements IApiRequest {
 
         //Отправляем наш  POST запрос
         HttpUtils.sendPostData(requestData, connection);
+    }
 
-        //Возвращаем HTTP статус ответа
-        return connection.getResponseCode();
+    protected int getResponseCode(HttpURLConnection connection) {
+        int responseCode = -1;
+        //Мы не хотим что бы при ошибке получения ответа от сервера происходила внутренняя ошибка,
+        //иначе запрос не отправится еще раз
+        try {
+            responseCode = connection.getResponseCode();
+        } catch (IOException e) {
+            Debug.error("Get response code exception: " + e.toString());
+        }
+        return responseCode;
     }
 
     @Override
