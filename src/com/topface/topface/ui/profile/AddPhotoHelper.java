@@ -126,7 +126,7 @@ public class AddPhotoHelper {
             Uri photoUri = null;
             if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA) {
                 //Если фотография сделана, то ищем ее во временном файле
-                photoUri = Uri.fromParts("file", PATH_TO_FILE, null);
+                photoUri = Uri.fromFile(new File(PATH_TO_FILE));
             } else if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY) {
                 //Если она взята из галереи, то получаем URL из данных интента и преобразуем его в путь до файла
                 photoUri = data.getData();

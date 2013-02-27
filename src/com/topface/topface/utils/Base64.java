@@ -1462,30 +1462,27 @@ public class Base64 {
 
         Base64.InputStream bis = null;
         try {
-            byte[] buffer = new byte[8192];
+            byte[] buffer = new byte[Math.min(stream.available(), 8192)];
             int length = 0;
             int numBytes = 0;
 
             //Create from InputStream Base64.InputStream for encoding
             bis = new Base64.InputStream(
-                    new java.io.BufferedInputStream(stream, 8192),
+                    new java.io.BufferedInputStream(stream),
                     Base64.ENCODE
             );
 
             //Write until done
-            while ((bis.read(buffer)) >= 0) {
-                output.write(buffer);
-
+            while ((numBytes = bis.read(buffer)) >= 0) {
+                length += numBytes;
+                Debug.log("Write bytes: " + length);
+                output.write(buffer, 0, numBytes);
             }
 
-        } catch (java.io.IOException e) {
-            Debug.error("EncodeFromFile :: ", e);
-            throw e;
         } finally {
             try {
                 if (bis != null) {
                     bis.close();
-                    stream.close();
                 }
             } catch (Exception e) {
                 Debug.error(e);
