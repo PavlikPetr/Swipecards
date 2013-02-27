@@ -474,6 +474,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 getActivity().finish();
                 //TODO костыль для навигации
                 getActivity().setResult(Activity.RESULT_OK);
+                break;
             case R.id.btnBuyVip:
                 Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
                 startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);

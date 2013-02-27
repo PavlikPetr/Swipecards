@@ -145,11 +145,11 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
     private void setButtonsState() {
         if (CacheProfile.emailConfirmed) {
-//            if(!CacheProfile.isPasswordChanged(getActivity().getApplicationContext())) {
-//                  mBtnLogout.setVisibility(View.GONE);
-//            } else {
-            mBtnLogout.setVisibility(View.VISIBLE);
-//            }
+            if(CacheProfile.needToChangePassword(getActivity().getApplicationContext())) {
+                mBtnLogout.setVisibility(View.GONE);
+            } else {
+                mBtnLogout.setVisibility(View.VISIBLE);
+            }
 
             setChangeBtnAction(ACTION_CHANGE_PASSWORD);
         } else {
