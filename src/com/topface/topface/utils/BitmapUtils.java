@@ -16,19 +16,18 @@ import java.util.Arrays;
 public class BitmapUtils {
 
     public static Bitmap getBitmap(Context context, Uri uri) {
-        Bitmap result = null;
+        Bitmap bitmap = null;
         BufferedInputStream bis = null;
         try
         {
             bis = new BufferedInputStream(getInputStream(context,uri), 8192);
-            result = BitmapFactory.decodeStream(bis);
+            bitmap = BitmapFactory.decodeStream(bis);
             bis.close();
-            bis = null;
         } catch(Exception ex) {
             Debug.error(ex);
         }
 
-        return result;
+        return bitmap;
     }
 
     public static InputStream getInputStream(Context context, Uri uri) throws IOException {

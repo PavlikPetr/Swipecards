@@ -7,7 +7,6 @@ import android.content.*;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
@@ -22,9 +21,12 @@ import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.requests.ConfirmRequest;
 import com.topface.topface.data.Photo;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.ConfirmRequest;
 import com.topface.topface.requests.OptionsRequest;
+import com.topface.topface.requests.PhotoMainRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.fragments.*;
@@ -81,14 +83,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         setStopTime();
         mNovice = Novice.getInstance(mPreferences);
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
-
-
-        showDialog();
-    }
-
-    void showDialog() {
-        DialogFragment newFragment = TakePhotoDialog.newInstance();
-        newFragment.show(getSupportFragmentManager(), TakePhotoDialog.TAG);
     }
 
     private void initFragmentSwitcher() {
@@ -166,24 +160,36 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         checkExternalLink();
 
         //Открыть диалог для захвата фото к аватарке
-        if (CacheProfile.photo == null && !CacheProfile.wasAvatarAsked) {
+        if (CacheProfile.photo == null && !CacheProfile.wasAvatarAsked && !AuthToken.getInstance().isEmpty()) {
             CacheProfile.wasAvatarAsked = true;
             takePhoto(new TakePhotoDialog.TakePhotoListener() {
                 @Override
-                public void onPhotoSentSuccess(Photo photo) {
-                    CacheProfile.photo = photo;
+                public void onPhotoSentSuccess(final Photo photo) {
+                    PhotoMainRequest request = new PhotoMainRequest(getApplicationContext());
+                    request.photoid = photo.getId();
+                    request.callback(new ApiHandler() {
+
+                        @Override
+                        public void success(ApiResponse response) {
+                            CacheProfile.photo = photo;
+                        }
+
+                        @Override
+                        public void fail(int codeError, ApiResponse response) {
+
+                        }
+
+                        @Override
+                        public void always(ApiResponse response) {
+                            super.always(response);
+                        }
+                    }).exec();
                 }
 
                 @Override
-                public void onPhotoSentFailure(int codeError) {
+                public void onPhotoSentFailure() {
                     Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
                 }
-
-                @Override
-                public void onPhotoTaken() { }
-
-                @Override
-                public void onPhotoChosen() { }
             });
         }
     }

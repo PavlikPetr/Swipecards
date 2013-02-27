@@ -1,13 +1,13 @@
 package com.topface.topface.ui.dialogs;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,24 +18,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.PhotoAddRequest;
-import com.topface.topface.requests.PhotoMainRequest;
-import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.utils.BitmapUtils;
-import com.topface.topface.utils.Utils;
 
-import java.io.File;
-
-public class TakePhotoDialog extends DialogFragment implements View.OnClickListener{
+public class TakePhotoDialog extends DialogFragment implements View.OnClickListener {
 
     public static final String TAG = "Topface_TakePhotoDialog_Tag";
-
-    public static final String PATH_TO_FILE = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp.jpg";
-
-    public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA = 101;
-    public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY = 100;
 
     private TextView mText;
     private ImageView mPhoto;
@@ -48,6 +36,7 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
     private Uri mPhotoUri = null;
 
     private TakePhotoListener mTakePhotoListener;
+    private AddPhotoHelper mAddPhotoHelper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,6 +46,9 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
         color.setAlpha(175);
         getDialog().getWindow().setBackgroundDrawable(color);
         getDialog().setCanceledOnTouchOutside(false);
+
+        mAddPhotoHelper = new AddPhotoHelper(this);
+        mAddPhotoHelper.setOnResultHandler(mAddPhotoHandler);
 
         mText = (TextView) root.findViewById(R.id.tvText);
 
@@ -89,6 +81,11 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
         }
     }
 
+    public  TakePhotoDialog() {
+        super();
+    }
+
+
     public static TakePhotoDialog newInstance() {
         TakePhotoDialog dialog = new TakePhotoDialog();
         dialog.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.Theme_Topface);
@@ -101,19 +98,8 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA) {
-                //Если фотография сделана, то ищем ее во временном файле
-                mPhotoUri = Uri.fromParts("file", PATH_TO_FILE, null);
-                mTakePhotoListener.onPhotoTaken();
-            } else if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY) {
-                //Если она взята из галереи, то получаем URL из данных интента и преобразуем его в путь до файла
-                mPhotoUri = data.getData();
-                mTakePhotoListener.onPhotoChosen();
-            }
-
-            setPhoto(mPhotoUri, mPhoto);
-        }
+        mPhotoUri = mAddPhotoHelper.processActivityResult(requestCode,resultCode,data,false);
+        setPhoto(mPhotoUri, mPhoto);
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -122,12 +108,15 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
 
         if(bitmap == null) return;
 
-        if (bitmap.getWidth() >= photo.getMaxWidth() || bitmap.getHeight() >= photo.getMaxHeight()) {
+        int maxWidth = getResources().getDimensionPixelSize(R.dimen.take_photo_max_width);
+        int maxHeight = getResources().getDimensionPixelSize(R.dimen.take_photo_max_height);
+
+        if (bitmap.getWidth() >= maxWidth || bitmap.getHeight() >= maxHeight) {
             Bitmap scaledBitmap = null;
             if (bitmap.getWidth() >= bitmap.getHeight()) {
-                scaledBitmap = BitmapUtils.getScaledBitmap(bitmap, photo.getMaxWidth(), 0);
+                scaledBitmap = BitmapUtils.getScaledBitmap(bitmap, maxWidth, 0);
             } else {
-                scaledBitmap = BitmapUtils.getScaledBitmap(bitmap, 0, photo.getMaxHeight());
+                scaledBitmap = BitmapUtils.getScaledBitmap(bitmap, 0, maxHeight);
             }
             photo.setImageBitmap(scaledBitmap);
         } else {
@@ -137,25 +126,17 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        Intent intent;
         switch (v.getId()) {
             case R.id.btnTakePhoto:
-                intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(PATH_TO_FILE)));
-                intent = Intent.createChooser(intent, getActivity().getApplicationContext().getResources().getString(R.string.profile_add_title));
-
-                if (Utils.isIntentAvailable(getActivity().getApplicationContext(), intent.getAction())) {
-                    startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
-                }
+                mAddPhotoHelper.getAddPhotoClickListener().onClick(v);
                 break;
             case R.id.btnTakeFormGallery:
-                intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                intent = Intent.createChooser(intent, getActivity().getApplicationContext().getResources().getString(R.string.profile_add_title));
-                startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
+                mAddPhotoHelper.getAddPhotoClickListener().onClick(v);
                 break;
             case R.id.btnSendPhoto:
-                if (mPhotoUri != null)
+                if (mPhotoUri != null) {
                     sendRequest(mPhotoUri);
+                }
                 break;
             case R.id.btnClose:
                 getDialog().dismiss();
@@ -166,52 +147,29 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
     }
 
     private void sendRequest(Uri uri) {
-        new PhotoAddRequest(uri, getActivity().getApplicationContext()).callback(new DataApiHandler<Photo>() {
-            @Override
-            protected void success(final Photo photo, ApiResponse response) {
-                PhotoMainRequest request = new PhotoMainRequest(getActivity().getApplicationContext());
-                request.photoid = photo.getId();
-                mTakePhotoListener.onPhotoSentSuccess(photo);
-                request.callback(new ApiHandler() {
-
-                    @Override
-                    public void success(ApiResponse response) {
-                    }
-
-                    @Override
-                    public void fail(int codeError, ApiResponse response) {
-                        mTakePhotoListener.onPhotoSentFailure(codeError);
-                    }
-
-                    @Override
-                    public void always(ApiResponse response) {
-                        super.always(response);
-                        getDialog().dismiss();
-                    }
-                });
-            }
-
-            @Override
-            protected Photo parseResponse(ApiResponse response) {
-                return new Photo(response);
-            }
-
-            @Override
-            public void fail(int codeError, ApiResponse response) {
-                mTakePhotoListener.onPhotoSentFailure(codeError);
-            }
-
-            @Override
-            public void always(ApiResponse response) {
-                super.always(response);
-            }
-        }).exec();
+        if (uri != null) {
+            mAddPhotoHelper.sendRequest(uri);
+        }
     }
 
     public interface TakePhotoListener {
         void onPhotoSentSuccess(Photo photo);
-        void onPhotoSentFailure(int codeError);
-        void onPhotoTaken();
-        void onPhotoChosen();
+        void onPhotoSentFailure();
     }
+
+    private Handler mAddPhotoHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
+                Photo photo = (Photo) msg.obj;
+                mTakePhotoListener.onPhotoSentSuccess(photo);
+                getDialog().dismiss();
+            } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
+                mTakePhotoListener.onPhotoSentFailure();
+            }
+
+        }
+    };
 }

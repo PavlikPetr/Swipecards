@@ -480,4 +480,6 @@
     <string name="passwords_mismatched">Пароли не совпадают</string>
     <string name="passwords_changed">Пароль изменен</string>
 
+    <string name="take_photo">Сделать фото</string>
+
 </resources>

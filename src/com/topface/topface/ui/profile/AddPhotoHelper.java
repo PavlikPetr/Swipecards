@@ -3,7 +3,6 @@ package com.topface.topface.ui.profile;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
@@ -52,6 +51,11 @@ public class AddPhotoHelper {
         this.mLockerView = mLockerView;
     }
 
+    public AddPhotoHelper(Fragment fragment) {
+        this(fragment.getActivity());
+        mFragment = fragment;
+    }
+
     public AddPhotoHelper(Activity activity) {
         mActivity = activity;
         mContext = activity.getApplicationContext();
@@ -77,33 +81,41 @@ public class AddPhotoHelper {
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
-                case R.id.btnAddPhotoAlbum: {
-                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.profile_add_title));
-                    if (mFragment != null) {
-                        mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
-                    } else {
-                        mActivity.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
-                    }
-                }
-                break;
-                case R.id.btnAddPhotoCamera: {
-                    Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(PATH_TO_FILE)));
-                    intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.profile_add_title));
-
-                    if (Utils.isIntentAvailable(mContext, intent.getAction())) {
-                        if (mFragment != null) {
-                            mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
-                        } else {
-                            mActivity.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
-                        }
-                    }
-                }
-                break;
+                case R.id.btnAddPhotoAlbum:
+                case R.id.btnTakeFormGallery:
+                    startChooseFromGallery();
+                    break;
+                case R.id.btnAddPhotoCamera:
+                case R.id.btnTakePhoto:
+                    startCamera();
+                    break;
             }
         }
     };
+
+    private void startCamera() {
+        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(PATH_TO_FILE)));
+        intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.profile_add_title));
+
+        if (Utils.isIntentAvailable(mContext, intent.getAction())) {
+            if (mFragment != null) {
+                mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
+            } else {
+                mActivity.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
+            }
+        }
+    }
+
+    private void startChooseFromGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.profile_add_title));
+        if (mFragment != null) {
+            mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
+        } else {
+            mActivity.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
+        }
+    }
 
     /**
      * Коллбэк, вызываемый после загрузки фотографии
@@ -116,14 +128,18 @@ public class AddPhotoHelper {
         return this;
     }
 
-    public void processActivityResult(int requestCode, int resultCode, Intent data) {
+    public Uri processActivityResult(int requestCode, int resultCode, Intent data) {
+        return processActivityResult(requestCode, resultCode, data, true);
+    }
+
+    public Uri processActivityResult(int requestCode, int resultCode, Intent data, boolean sendPhotoRequest) {
+        Uri photoUri = null;
         if (mFragment != null) {
             if (mFragment.getActivity() != null && !mFragment.isAdded()) {
                 Debug.log("APH::detached");
             }
         }
         if (resultCode == Activity.RESULT_OK) {
-            Uri photoUri = null;
             if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA) {
                 //Если фотография сделана, то ищем ее во временном файле
                 photoUri = Uri.fromFile(new File(PATH_TO_FILE));
@@ -132,10 +148,13 @@ public class AddPhotoHelper {
                 photoUri = data.getData();
             }
 
-
             //Отправляем запрос
-            sendRequest(photoUri);
+            if (sendPhotoRequest) {
+                sendRequest(photoUri);
+            }
         }
+
+        return photoUri;
     }
 
     /**
@@ -143,7 +162,7 @@ public class AddPhotoHelper {
      *
      * @param uri фотографии
      */
-    private void sendRequest(final Uri uri) {
+    public void sendRequest(final Uri uri) {
         if (uri == null && mHandler != null) {
             mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
             return;
