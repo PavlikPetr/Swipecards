@@ -56,7 +56,7 @@ public class ProfilePhotoFragment extends BaseFragment {
     }
 
     private void sendAlbumRequest() {
-        AlbumRequest request = new AlbumRequest(getActivity(), CacheProfile.uid, AlbumRequest.DEFAULT_PHOTOS_LIMIT, mPhotoLinks.get(mPhotoLinks.size() - 2).getId(), AlbumRequest.MODE_ALBUM);
+        AlbumRequest request = new AlbumRequest(getActivity(), CacheProfile.uid, AlbumRequest.DEFAULT_PHOTOS_LIMIT, mPhotoLinks.get(mPhotoLinks.size() - 2).getPosition() + 1, AlbumRequest.MODE_ALBUM);
         request.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {

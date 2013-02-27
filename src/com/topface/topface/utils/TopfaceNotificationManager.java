@@ -134,4 +134,22 @@ public class TopfaceNotificationManager {
                 (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(id);
     }
+
+    public static class TempImageViewRemote extends ImageViewRemote {
+        private Bitmap mImageBitmap;
+
+        public TempImageViewRemote(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void setImageBitmap(Bitmap bm) {
+            super.setImageBitmap(bm);
+            mImageBitmap = bm;
+        }
+
+        public Bitmap getImageBitmap() {
+            return mImageBitmap;
+        }
+    }
 }

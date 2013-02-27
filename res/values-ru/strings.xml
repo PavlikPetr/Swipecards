@@ -464,4 +464,20 @@
     <string name="photo_is_too_small">Вы отлично выглядете на этой фотографии, но для того, чтобы все пользователи оценили ваш снимок, от должен быть чуть больше: не менее %s</string>
     <string name="photo_for_avatar">Фотография готова к отправке в профиль! Это ваша первая фотография и она будет использоваться как ваша аватарка</string>
 
+    <string name="get_it_for_free">Получить бесплатно</string>
+    <string name="vip_advantages">Преимущества VIP</string>
+
+    <string name="change_email">Сменить e-mail</string>
+    <string name="send_confirmation_email">Выслать подтверждение на e-mail</string>
+    <string name="change_password">Изменить пароль</string>
+    <string name="password_changing">Изменение пароля</string>
+    <string name="save">Сохранить</string>
+    <string name="confirmation_successfully_sent">Подтверждение выслано на указанный вами e-mail</string>
+    <string name="password_hint">пароль</string>
+    <string name="password_confirmation_hint">подтверждение пароля</string>
+    <string name="enter_new_password">Введите новый пароль</string>
+    <string name="enter_password_confirmation">Введите подтверждение пароля</string>
+    <string name="passwords_mismatched">Пароли не совпадают</string>
+    <string name="passwords_changed">Пароль изменен</string>
+
 </resources>

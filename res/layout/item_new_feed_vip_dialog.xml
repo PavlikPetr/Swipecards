@@ -68,11 +68,6 @@
 
     </RelativeLayout>
 
-    <!-- стрелка -->
-    <ImageView
-            android:id="@+id/ivArrow"
-            style="@style/ListArrow"/>
-
     <!-- online -->
     <ImageView
             android:id="@+id/ivOnline"

@@ -18,6 +18,7 @@ import com.topface.topface.ui.BanActivity;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
 
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -226,7 +227,9 @@ public class ConnectionManager {
                 //Если с сервера пришел не корректный json
                 IApiResponse.WRONG_RESPONSE,
                 //Если после переавторизации у нас все же не верный ssid, то пробуем все повторить
-                IApiResponse.SESSION_NOT_FOUND
+                IApiResponse.SESSION_NOT_FOUND,
+                //Если у нас ошибки подключения
+                IApiResponse.CONNECTION_ERROR
         );
     }
 
@@ -300,7 +303,10 @@ public class ConnectionManager {
                 //Если не верный, то конструируем соответсвующий ответ
                 response = apiRequest.constructApiResponse(IApiResponse.WRONG_RESPONSE, "Wrong http response code HTTP/" + responseCode);
             }
-
+        } catch (UnknownHostException e) {
+            Debug.error(TAG + "::Exception", e);
+            //Это ошибка соединение, такие запросы мы будем переотправлять
+            response = apiRequest.constructApiResponse(IApiResponse.CONNECTION_ERROR, "Connection exception: " + e.toString());
         } catch (Exception e) {
             Debug.error(TAG + "::Exception", e);
             //Это ошибка нашего кода, не нужно автоматически переотправлять такой запрос

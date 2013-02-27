@@ -3,6 +3,7 @@ package com.topface.topface.ui.profile;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
@@ -10,13 +11,18 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ListView;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.PhotoAddRequest;
+import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.TopfaceNotificationManager;
 import com.topface.topface.utils.Utils;
 
 import java.io.File;
@@ -37,6 +43,7 @@ public class AddPhotoHelper {
     public static final int ADD_PHOTO_RESULT_ERROR = 1;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA = 101;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY = 100;
+    private TopfaceNotificationManager mNotificationManager;
 
 
     public AddPhotoHelper(Fragment fragment, LockerView mLockerView) {
@@ -119,11 +126,12 @@ public class AddPhotoHelper {
             Uri photoUri = null;
             if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA) {
                 //Если фотография сделана, то ищем ее во временном файле
-                photoUri = Uri.fromParts("file", PATH_TO_FILE, null);
+                photoUri = Uri.fromFile(new File(PATH_TO_FILE));
             } else if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY) {
                 //Если она взята из галереи, то получаем URL из данных интента и преобразуем его в путь до файла
                 photoUri = data.getData();
             }
+
 
             //Отправляем запрос
             sendRequest(photoUri);
@@ -135,12 +143,26 @@ public class AddPhotoHelper {
      *
      * @param uri фотографии
      */
-    private void sendRequest(Uri uri) {
+    private void sendRequest(final Uri uri) {
         if (uri == null && mHandler != null) {
             mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
             return;
         }
         showProgressDialog();
+        mNotificationManager = TopfaceNotificationManager.getInstance(mContext);
+
+        final TopfaceNotificationManager.TempImageViewRemote fakeImageView = new TopfaceNotificationManager.TempImageViewRemote(mContext);
+        fakeImageView.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.MATCH_PARENT));
+
+
+        fakeImageView.setRemoteSrc(uri.toString(), new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                mNotificationManager.showProgressNotification(mContext.getString(R.string.default_photo_upload), "", fakeImageView.getImageBitmap(),  new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE));
+            }
+        });
+
 
         new PhotoAddRequest(uri, mContext).callback(new DataApiHandler<Photo>() {
             @Override
@@ -151,6 +173,9 @@ public class AddPhotoHelper {
                     msg.obj = photo;
                     mHandler.sendMessage(msg);
                 }
+
+                mNotificationManager.cancelNotification(TopfaceNotificationManager.PROGRESS_ID);
+                mNotificationManager.showNotification(mContext.getString(R.string.default_photo_upload_complete), "", fakeImageView.getImageBitmap(), 1, new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE));
             }
 
             @Override
@@ -163,6 +188,9 @@ public class AddPhotoHelper {
                 if (mHandler != null) {
                     mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
                 }
+
+                mNotificationManager.cancelNotification(TopfaceNotificationManager.PROGRESS_ID);
+                mNotificationManager.showNotification(mContext.getString(R.string.default_photo_upload_error), "", fakeImageView.getImageBitmap(), 1,  new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE));
             }
 
             @Override

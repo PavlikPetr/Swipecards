@@ -129,7 +129,10 @@ public class FragmentSwitchController extends ViewGroup {
     }
 
     public void switchExtraFragment(Fragment fragment) {
-        if (mExtraFrame != null) mExtraFrame.setVisibility(View.VISIBLE);
+        if (mExtraFrame == null) {
+            mExtraFrame = (FrameLayout) this.findViewById(R.id.fragment_extra_container);
+        }
+        mExtraFrame.setVisibility(View.VISIBLE);
         mCurrentExtraFragment = fragment;
 
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
@@ -225,7 +228,9 @@ public class FragmentSwitchController extends ViewGroup {
         mOpenDX = mWidth - mClosedDX;
         mFullOpenDX = mWidth - mOpenDX;
 
-        mExtraFrame = (FrameLayout) this.findViewById(R.id.fragment_extra_container);
+        if(mExtraFrame == null) {
+            mExtraFrame = (FrameLayout) this.findViewById(R.id.fragment_extra_container);
+        }
     }
 
     private void snapToScreen(int typeAnimation) {

@@ -18,6 +18,7 @@ import com.topface.topface.data.Register;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.RegisterRequest;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 
 import java.util.Calendar;
@@ -111,7 +112,7 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
             showButtons();
         } else {
             RegisterRequest request = new RegisterRequest(getActivity().getApplicationContext(),email,password,name,
-                    mBirthday.getTime(),sex);
+                    DateUtils.getSeconds(mBirthday), sex);
             registerRequest(request);
             request.callback(new DataApiHandler<Register>() {
 
@@ -121,6 +122,7 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
                     intent.putExtra(INTENT_LOGIN, email);
                     intent.putExtra(INTENT_PASSWORD, password);
                     intent.putExtra(INTENT_USER_ID, data.getUserId());
+                    CacheProfile.onRegistration(getActivity().getApplicationContext());
                     getActivity().setResult(Activity.RESULT_OK,intent);
                     getActivity().finish();
                 }

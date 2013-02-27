@@ -1,6 +1,5 @@
 package com.topface.topface.utils.http;
 
-import android.os.Build;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 
@@ -116,11 +115,13 @@ public class HttpUtils {
         connection.setConnectTimeout(CONNECT_TIMEOUT);
         connection.setReadTimeout(READ_TIMEOUT);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
             connection.setRequestProperty("Connection", "Keep-Alive");
         } else {
-            connection.setRequestProperty("connection", "close");
-        }
+            connection.setRequestProperty("Connection", "close");
+        }*/
+
+        connection.setRequestProperty("Connection", "close");
 
         return connection;
     }
@@ -134,9 +135,6 @@ public class HttpUtils {
     }
 
     public static void sendPostData(byte[] requestData, HttpURLConnection connection) throws IOException {
-        //Устанавливаем длину данных
-        connection.setFixedLengthStreamingMode(requestData.length);
-
         //Отправляем данные
         OutputStream outputStream = getOutputStream(requestData.length, connection);
         outputStream.write(requestData);
@@ -147,15 +145,13 @@ public class HttpUtils {
         //Устанавливаем длину данных
         if (contentLength > 0) {
             connection.setFixedLengthStreamingMode(contentLength);
-        } else {
-            connection.setChunkedStreamingMode(0);
         }
+        /*else {
+            //У нас какие то проблемы с поддержкой сервера
+            connection.setChunkedStreamingMode(-1);
+        }*/
 
         return connection.getOutputStream();
-    }
-
-    public static OutputStream getOutputStream(HttpURLConnection connection) throws IOException {
-        return getOutputStream(0, connection);
     }
 
 
@@ -173,7 +169,7 @@ public class HttpUtils {
         if (mUserAgent == null) {
             final Locale locale = Locale.getDefault();
             mUserAgent = String.format(
-                    USER_AGENT_APP_NAME + "/%s (%s); %s-%s",
+                    USER_AGENT_APP_NAME + "/%s (%s; %s-%s)",
                     Utils.getClientVersion(),
                     Utils.getClientOsVersion(),
                     locale.getLanguage(),

@@ -34,14 +34,15 @@
                         android:textStyle="bold"
                         />
 
-                <com.topface.topface.ui.views.ServicesTextView xmlns:stv="http://schemas.android.com/apk/res/com.topface.topface"
-                                                               android:id="@+id/fbCurCoins"
-                                                               stv:maxChars="5"
-                                                               stv:charPadding="7"
-                                                               android:layout_width="wrap_content"
-                                                               android:layout_height="wrap_content"
-                                                               stv:fontSize="24"
-                                                               stv:image="@drawable/ic_coins"
+                <com.topface.topface.ui.views.ServicesTextView
+                        xmlns:stv="http://schemas.android.com/apk/res/com.topface.topface"
+                        android:id="@+id/fbCurCoins"
+                        stv:maxChars="5"
+                        stv:charPadding="7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        stv:fontSize="24"
+                        stv:image="@drawable/ic_coins"
                         />
             </LinearLayout>
 
@@ -103,7 +104,6 @@
             <RelativeLayout
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
-                    android:layout_marginBottom="10dp"
                     android:id="@+id/likes_title"
                     >
 
@@ -139,7 +139,7 @@
                     android:id="@+id/coins_title"
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
-                    >
+                    android:layout_marginTop="10dp">
 
                 <TextView
                         style="@style/TitleWhiteText"
@@ -200,16 +200,15 @@
                     android:padding="5dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    >
+                    android:gravity="clip_horizontal">
 
                 <TextView
                         android:id="@+id/fbVipBtnText"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
-                        android:paddingLeft="5dp"
                         style="@style/ButtonWhiteTextMini"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
+                        android:layout_centerInParent="true"
+
                         />
             </RelativeLayout>
 
@@ -224,5 +223,24 @@
                     android:visibility="gone"
                     />
         </LinearLayout>
+
+        <include
+                layout="@layout/item_divider"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+                />
+        <Button
+                android:id="@+id/btnOfferwall"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/btn_vip_sale_selector"
+                style="@style/ButtonWhiteTextMini"
+                android:text="@string/get_it_for_free"
+                android:visibility="gone"
+                />
     </LinearLayout>
 </ScrollView>
