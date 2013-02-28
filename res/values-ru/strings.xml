@@ -481,5 +481,6 @@
     <string name="passwords_changed">Пароль изменен</string>
 
     <string name="take_photo">Сделать фото</string>
+    <string name="take_another_photo">Другое фото</string>
 
 </resources>

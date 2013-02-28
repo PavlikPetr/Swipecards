@@ -22,10 +22,7 @@ import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.ConfirmRequest;
-import com.topface.topface.requests.OptionsRequest;
-import com.topface.topface.requests.PhotoMainRequest;
+import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.edit.EditProfileActivity;
@@ -165,6 +162,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             takePhoto(new TakePhotoDialog.TakePhotoListener() {
                 @Override
                 public void onPhotoSentSuccess(final Photo photo) {
+                    CacheProfile.photos.add(photo);
                     PhotoMainRequest request = new PhotoMainRequest(getApplicationContext());
                     request.photoid = photo.getId();
                     request.callback(new ApiHandler() {
@@ -172,6 +170,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                         @Override
                         public void success(ApiResponse response) {
                             CacheProfile.photo = photo;
+                            LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
                         }
 
                         @Override

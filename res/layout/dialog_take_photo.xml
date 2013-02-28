@@ -67,31 +67,40 @@
                 >
             <Button
                     android:id="@+id/btnTakePhoto"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginRight="4dp"
                     android:background="@drawable/btn_gray_small_selector"
                     android:text="@string/take_photo"/>
 
-            <Button
-                    android:id="@+id/btnTakeFormGallery"
-                    android:layout_width="wrap_content"
+            <RelativeLayout
+                    android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginLeft="4dp"
-                    android:background="@drawable/btn_gray_small_selector"
-                    android:text="@string/gallery"/>
+                    >
+
+                <Button
+                        android:id="@+id/btnTakeFormGallery"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_gray_small_selector"
+                        android:text="@string/gallery"/>
+
+                <Button
+                        android:id="@+id/btnSendPhoto"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_alignLeft="@id/btnTakeFormGallery"
+                        android:layout_alignTop="@id/btnTakeFormGallery"
+                        android:layout_alignRight="@id/btnTakeFormGallery"
+                        android:layout_alignBottom="@id/btnTakeFormGallery"
+                        android:background="@drawable/btn_blue_selector"
+                        android:text="@string/general_send_full"/>
+            </RelativeLayout>
         </LinearLayout>
 
-        <Button
-                android:id="@+id/btnSendPhoto"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/loControlButtons"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/btn_blue_selector"
-                android:text="@string/general_send_full"/>
     </RelativeLayout>
 
 

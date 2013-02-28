@@ -18,13 +18,21 @@ public class BitmapUtils {
     public static Bitmap getBitmap(Context context, Uri uri) {
         Bitmap bitmap = null;
         BufferedInputStream bis = null;
+        InputStream is = null;
         try
         {
-            bis = new BufferedInputStream(getInputStream(context,uri), 8192);
+            is = getInputStream(context,uri);
+            bis = new BufferedInputStream(is, 8192);
             bitmap = BitmapFactory.decodeStream(bis);
-            bis.close();
         } catch(Exception ex) {
             Debug.error(ex);
+        } finally {
+            try {
+                if (bis != null) bis.close();
+                if (is != null) is.close();
+            } catch (Exception e) {
+                Debug.error(e);
+            }
         }
 
         return bitmap;

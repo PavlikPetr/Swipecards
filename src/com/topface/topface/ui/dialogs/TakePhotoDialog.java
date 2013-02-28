@@ -72,12 +72,20 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
     @Override
     public void onResume() {
         super.onResume();
+        initButtonsState();
+    }
+
+    private void initButtonsState() {
         if(mPhotoUri == null) {
             mBtnSendPhoto.setVisibility(View.GONE);
+            mBtnFromGallery.setVisibility(View.VISIBLE);
             mPhotoLayout.setVisibility(View.GONE);
+            mBtnTakePhoto.setText(R.string.take_photo);
         } else {
             mBtnSendPhoto.setVisibility(View.VISIBLE);
+            mBtnFromGallery.setVisibility(View.INVISIBLE);
             mPhotoLayout.setVisibility(View.VISIBLE);
+            mBtnTakePhoto.setText(R.string.take_another_photo);
         }
     }
 
@@ -128,7 +136,12 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnTakePhoto:
-                mAddPhotoHelper.getAddPhotoClickListener().onClick(v);
+                if (mPhotoUri == null) {
+                    mAddPhotoHelper.getAddPhotoClickListener().onClick(v);
+                } else {
+                    mPhotoUri = null;
+                    initButtonsState();
+                }
                 break;
             case R.id.btnTakeFormGallery:
                 mAddPhotoHelper.getAddPhotoClickListener().onClick(v);
@@ -136,6 +149,7 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
             case R.id.btnSendPhoto:
                 if (mPhotoUri != null) {
                     sendRequest(mPhotoUri);
+                    getDialog().dismiss();
                 }
                 break;
             case R.id.btnClose:
@@ -165,11 +179,9 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
             if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
                 Photo photo = (Photo) msg.obj;
                 mTakePhotoListener.onPhotoSentSuccess(photo);
-                getDialog().dismiss();
             } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
                 mTakePhotoListener.onPhotoSentFailure();
             }
-
         }
     };
 }
