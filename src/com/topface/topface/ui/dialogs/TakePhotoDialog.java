@@ -81,11 +81,13 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
             mBtnFromGallery.setVisibility(View.VISIBLE);
             mPhotoLayout.setVisibility(View.GONE);
             mBtnTakePhoto.setText(R.string.take_photo);
+            mText.setText(R.string.no_photo_take_photo);
         } else {
             mBtnSendPhoto.setVisibility(View.VISIBLE);
             mBtnFromGallery.setVisibility(View.INVISIBLE);
             mPhotoLayout.setVisibility(View.VISIBLE);
             mBtnTakePhoto.setText(R.string.take_another_photo);
+            mText.setText(R.string.photo_for_avatar);
         }
     }
 
@@ -112,12 +114,11 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
     }
 
     private void setPhoto(Uri uri, ImageView photo) {
-        Bitmap bitmap = BitmapUtils.getBitmap(getActivity().getApplicationContext(), uri);
-
-        if(bitmap == null) return;
-
         int maxWidth = getResources().getDimensionPixelSize(R.dimen.take_photo_max_width);
         int maxHeight = getResources().getDimensionPixelSize(R.dimen.take_photo_max_height);
+
+        Bitmap bitmap = BitmapUtils.getBitmap(getActivity().getApplicationContext(), uri, maxWidth, maxHeight);
+        if(bitmap == null) return;
 
         if (bitmap.getWidth() >= maxWidth || bitmap.getHeight() >= maxHeight) {
             Bitmap scaledBitmap = null;

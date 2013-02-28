@@ -44,6 +44,7 @@ public class BanActivity extends TrackedActivity {
             case TYPE_BAN:
                 title = getString(R.string.ban_title);
                 message = getIntent().getStringExtra(BANNING_TEXT_INTENT);
+                mTimerContainer.setVisibility(View.GONE);
                 break;
             case TYPE_FLOOD:
                 message = getString(R.string.ban_flood_detected);

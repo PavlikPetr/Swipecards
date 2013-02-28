@@ -31,7 +31,9 @@ import java.io.File;
  */
 public class AddPhotoHelper {
 
-    public static final String PATH_TO_FILE = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp.jpg";
+    public static final String PATH_TO_FILE = Environment.getExternalStorageDirectory().getAbsolutePath();
+    private String mFileName = "/tmp.jpg";
+
     private Context mContext;
     private Activity mActivity;
     private Fragment mFragment;
@@ -43,7 +45,6 @@ public class AddPhotoHelper {
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA = 101;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY = 100;
     private TopfaceNotificationManager mNotificationManager;
-
 
     public AddPhotoHelper(Fragment fragment, LockerView mLockerView) {
         this(fragment.getActivity());
@@ -95,7 +96,7 @@ public class AddPhotoHelper {
 
     private void startCamera() {
         Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(PATH_TO_FILE)));
+        intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(PATH_TO_FILE+mFileName)));
         intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.profile_add_title));
 
         if (Utils.isIntentAvailable(mContext, intent.getAction())) {
@@ -142,7 +143,7 @@ public class AddPhotoHelper {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA) {
                 //Если фотография сделана, то ищем ее во временном файле
-                photoUri = Uri.fromFile(new File(PATH_TO_FILE));
+                photoUri = Uri.fromFile(new File(PATH_TO_FILE + mFileName));
             } else if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY) {
                 //Если она взята из галереи, то получаем URL из данных интента и преобразуем его в путь до файла
                 photoUri = data.getData();

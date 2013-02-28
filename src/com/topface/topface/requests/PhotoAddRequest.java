@@ -5,6 +5,7 @@ import android.net.Uri;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.Static;
 import com.topface.topface.utils.Base64;
+import com.topface.topface.utils.BitmapUtils;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.HttpUtils;
@@ -13,8 +14,6 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Arrays;
 
 public class PhotoAddRequest extends ApiRequest {
     public static final String SERVICE_NAME = "photoAdd";
@@ -42,7 +41,7 @@ public class PhotoAddRequest extends ApiRequest {
         //Это просто закрывающие данные запроса с boundary и переносами строк
         byte[] endBytes = HTTP_REQUEST_CLOSE_DATA.getBytes();
         //Открываем InputStream к файлу который будем отправлять
-        InputStream inputStream = getInputStream();
+        InputStream inputStream = BitmapUtils.getInputStream(getContext(),mUri);
         //Считаем длинну файла в виде строки base64
         Debug.log("File size: " + inputStream.available());
         int fileSize = (int) Math.ceil(inputStream.available() * 4 / 3);
@@ -96,34 +95,6 @@ public class PhotoAddRequest extends ApiRequest {
                 "Content-Type: image/jpeg" + LINE_END +
                 //Мы отправляем картинку в виде строки Base64, о чем сообщаем в заголовке
                 "Content-Transfer-Encoding: base64" + LINE_END + LINE_END;
-    }
-
-    private InputStream getInputStream() throws IOException {
-        InputStream stream;
-
-        if (mUri == null) {
-            stream = null;
-        } else if (isInternetUri(mUri)) {
-            stream = new URL(mUri.toString()).openStream();
-        } else {
-            stream = getContext().getContentResolver().openInputStream(mUri);
-        }
-
-        return stream;
-    }
-
-    /**
-     * Проверяет, ссылается ли данный Uri на ресурс в интернете
-     *
-     * @param uri ресурса
-     * @return является ресурс ссылкой на файл в интернете
-     */
-    private boolean isInternetUri(Uri uri) {
-        return Arrays.asList(
-                "http",
-                "https",
-                "ftp"
-        ).contains(uri.getScheme());
     }
 
     @Override
