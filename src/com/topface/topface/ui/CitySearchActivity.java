@@ -232,15 +232,15 @@ public class CitySearchActivity extends BaseFragmentActivity {
     private void initMyCity() {
         mCbMyCity = findViewById(R.id.cbMyCity);
         mMyCityTitle = (TextView) findViewById(R.id.tvMyCity);
-        if (mRequestKey == INTENT_CITY_SEARCH_AFTER_REGISTRATION) {
-            mMyCityTitle.setText(R.string.we_detect_your_city);
-        } else {
-            mMyCityTitle.setText(R.string.edit_my_city);
-        }
-        if (CacheProfile.city.isEmpty()) {
+        if (mRequestKey == INTENT_CITY_SEARCH_FROM_FILTER_ACTIVITY || CacheProfile.city.isEmpty()) {
             mCbMyCity.setVisibility(View.GONE);
             mMyCityTitle.setVisibility(View.GONE);
         } else {
+            if (mRequestKey == INTENT_CITY_SEARCH_AFTER_REGISTRATION){
+                mMyCityTitle.setText(R.string.we_detect_your_city);
+            } else {
+                mMyCityTitle.setText(R.string.edit_my_city);
+            }
             ((ImageView) mCbMyCity.findViewById(R.id.ivEditBackground)).setImageDrawable(getResources().getDrawable(
                     R.drawable.edit_big_btn_selector));
             ((TextView) mCbMyCity.findViewById(R.id.tvTitle)).setText(CacheProfile.city.name);
