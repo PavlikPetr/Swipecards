@@ -1,5 +1,6 @@
 package com.topface.topface.ui.dialogs;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -46,6 +47,18 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
         color.setAlpha(175);
         getDialog().getWindow().setBackgroundDrawable(color);
         getDialog().setCanceledOnTouchOutside(false);
+        getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                mTakePhotoListener.onDialogClose();
+            }
+        });
+        getDialog().setOnCancelListener(new DialogInterface.OnCancelListener(){
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                mTakePhotoListener.onDialogClose();
+            }
+        });
 
         mAddPhotoHelper = new AddPhotoHelper(this);
         mAddPhotoHelper.setOnResultHandler(mAddPhotoHandler);
@@ -74,6 +87,8 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
         super.onResume();
         initButtonsState();
     }
+
+
 
     private void initButtonsState() {
         if(mPhotoUri == null) {
@@ -154,6 +169,7 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
                 }
                 break;
             case R.id.btnClose:
+                mTakePhotoListener.onDialogClose();
                 getDialog().dismiss();
                 break;
             default:
@@ -170,6 +186,7 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
     public interface TakePhotoListener {
         void onPhotoSentSuccess(Photo photo);
         void onPhotoSentFailure();
+        void onDialogClose();
     }
 
     private Handler mAddPhotoHandler = new Handler(){

@@ -273,10 +273,23 @@ public class CacheProfile {
         editor.commit();
     }
 
+    public static boolean needCityConfirmation(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        return preferences != null && preferences.getBoolean(Static.PREFERENCES_TAG_NEED_CITY_CONFIRM, false);
+    }
+
+    public static void onCityConfirmed(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(Static.PREFERENCES_TAG_NEED_CITY_CONFIRM, false);
+        editor.commit();
+    }
+
     public static void onRegistration(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(Static.PREFERENCES_TAG_NEED_CHANGE_PASSWORD, true);
+        editor.putBoolean(Static.PREFERENCES_TAG_NEED_CITY_CONFIRM, true);
         editor.commit();
     }
 }

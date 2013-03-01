@@ -14,6 +14,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.view.Display;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Toast;
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
@@ -470,4 +472,12 @@ public class Utils {
         return "Android " + Build.VERSION.RELEASE + "; Build/" + Build.ID;
     }
 
+    public static void hideSoftKeyboard(Context context, EditText... edTexts) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        for (EditText edText : edTexts) {
+            if (edText != null) {
+                imm.hideSoftInputFromWindow(edText.getWindowToken(), 0);
+            }
+        }
+    }
 }

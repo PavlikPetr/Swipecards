@@ -455,9 +455,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 }
                 break;
             case R.id.btnNavigationBackWithText:
-                getActivity().finish();
                 //TODO костыль для навигации
                 getActivity().setResult(Activity.RESULT_CANCELED);
+                getActivity().finish();
                 break;
             case R.id.chat_message:
                 break;
@@ -550,6 +550,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         }
         stopTimer();
         GCMUtils.lastUserId = -1; //Ставим значение на дефолтное, чтобы нотификации снова показывались
+        Utils.hideSoftKeyboard(getActivity(),mEditBox);
     }
 
     private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
