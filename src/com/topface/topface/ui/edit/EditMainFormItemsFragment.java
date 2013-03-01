@@ -19,6 +19,7 @@ import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormItem;
@@ -26,6 +27,8 @@ import com.topface.topface.utils.FormItem;
 import java.util.HashMap;
 
 public class EditMainFormItemsFragment extends AbstractEditFragment implements OnClickListener {
+
+    private ActionBar mActionBar;
 
     public enum EditType {NAME, AGE, STATUS}
 
@@ -59,16 +62,10 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_edit_main_form_items, null, false);
 
         // Navigation bar
-        ((TextView) getActivity().findViewById(R.id.tvNavigationTitle))
-                .setText(R.string.edit_title);
-        TextView subTitle = (TextView) getActivity().findViewById(R.id.tvNavigationSubtitle);
-        subTitle.setVisibility(View.VISIBLE);
+        mActionBar = getActionBar(root);
 
-        getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
-        mBackButton = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
-        mBackButton.setVisibility(View.VISIBLE);
-        mBackButton.setText(R.string.general_edit_button);
-        mBackButton.setOnClickListener(new OnClickListener() {
+        mActionBar.setTitleText(getString(R.string.edit_title));
+        mActionBar.showBackButton(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().finish();
@@ -132,7 +129,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                         setAge(loAge, type, data);
                         break;
                     case STATUS:
-                        setStatus(subTitle, loStatus, type, data);
+                        setStatus(loStatus, type, data);
                         break;
                 }
 
@@ -174,7 +171,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         });
     }
 
-    private void setStatus(TextView subTitle, ViewGroup loStatus, final EditType type, String data) {
+    private void setStatus(ViewGroup loStatus, final EditType type, String data) {
         loStatus.setVisibility(View.VISIBLE);
         ((TextView) loStatus.findViewById(R.id.tvTitle)).setText(R.string.edit_status);
         mEdStatus = (EditText) loStatus.findViewById(R.id.edText);
@@ -205,7 +202,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                 }
             }
         });
-        subTitle.setText(R.string.edit_status);
+        mActionBar.setSubTitleText(getString(R.string.edit_status));
     }
 
     private void setAge(ViewGroup loAge, final EditType type, String data) {

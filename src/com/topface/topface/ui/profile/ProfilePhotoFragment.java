@@ -23,6 +23,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
@@ -87,16 +88,10 @@ public class ProfilePhotoFragment extends BaseFragment {
 
         //Navigation bar
         if (getActivity() instanceof EditContainerActivity) {
-            ((TextView) getActivity().findViewById(R.id.tvNavigationTitle)).setText(R.string.edit_title);
-            TextView subTitle = (TextView) getActivity().findViewById(R.id.tvNavigationSubtitle);
-            subTitle.setVisibility(View.VISIBLE);
-            subTitle.setText(R.string.edit_album);
-
-            getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
-            Button btnBack = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
-            btnBack.setVisibility(View.VISIBLE);
-            btnBack.setText(R.string.general_edit_button);
-            btnBack.setOnClickListener(new OnClickListener() {
+            ActionBar actionBar = getActionBar(root);
+            actionBar.setTitleText(getString(R.string.edit_title));
+            actionBar.setSubTitleText(getString(R.string.edit_album));
+            actionBar.showBackButton(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     getActivity().finish();

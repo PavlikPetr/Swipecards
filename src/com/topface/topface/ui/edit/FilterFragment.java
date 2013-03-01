@@ -8,10 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
@@ -22,6 +19,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FilterRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.CitySearchActivity;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
@@ -66,14 +64,10 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_filter, container, false);
 
         // Navigation bar
-        ((TextView) getActivity().findViewById(R.id.tvNavigationTitle))
-                .setText(R.string.filter_filter);
+        ActionBar actionBar = getActionBar(root);
+        actionBar.setTitleText(getString(R.string.filter_filter));
 
-        getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
-        mBackButton = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
-        mBackButton.setVisibility(View.VISIBLE);
-        mBackButton.setText(R.string.general_dating);
-        mBackButton.setOnClickListener(new OnClickListener() {
+        actionBar.showBackButton(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -81,7 +75,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
             }
         });
 
-        mExtraSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
+        mExtraSaveButton = (Button) root.findViewById(R.id.btnNavigationRightWithText);
         mExtraSaveButton.setText(getResources().getString(R.string.general_save_button));
         mExtraSaveButton.setOnClickListener(new OnClickListener() {
 

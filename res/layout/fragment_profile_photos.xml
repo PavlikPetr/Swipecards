@@ -5,7 +5,7 @@
              android:layout_height="fill_parent"
              android:inAnimation="@android:anim/fade_in">
 
-    <LinearLayout
+    <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical"
@@ -19,10 +19,12 @@
                 android:layout_marginBottom="4dp"
                 android:layout_marginLeft="6dp"/>
 
+
         <GridView
                 android:id="@+id/usedGrid"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
+                android:layout_below="@id/usedTitle"
                 android:layout_margin="0px"
                 android:background="@android:color/transparent"
                 android:fadeScrollbars="true"
@@ -34,7 +36,12 @@
                 android:stretchMode="columnWidth"
                 android:columnWidth="105dp"
                 android:verticalSpacing="0px"/>
-    </LinearLayout>
+
+        <ImageView android:layout_width="fill_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_below="@id/usedTitle"
+                   android:background="@drawable/background_profile_info"/>
+    </RelativeLayout>
 
     <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"

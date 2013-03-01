@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.ui.views.RangeSeekBar;
+import com.topface.topface.utils.ActionBar;
 
 public class EditAgeFragment extends AbstractEditFragment {
     private int age_start;
@@ -45,13 +46,11 @@ public class EditAgeFragment extends AbstractEditFragment {
             baseSexString = getString(R.string.age_filter_man);
         }
 
-        ((TextView) getActivity().findViewById(R.id.tvNavigationTitle)).setText(R.string.filter_age);
+        ActionBar actionBar = getActionBar(view);
 
-        getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
-        mBackButton = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
-        mBackButton.setVisibility(View.VISIBLE);
-        mBackButton.setText(R.string.general_edit_button);
-        mBackButton.setOnClickListener(new View.OnClickListener() {
+        actionBar.setTitleText(getString(R.string.filter_age));
+
+        actionBar.showBackButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().finish();

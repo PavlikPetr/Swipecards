@@ -45,7 +45,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     protected ActionBar getActionBar(View view) {
         if(mActionBar == null) {
-            mActionBar = new ActionBar((ViewGroup) view.findViewById(R.id.loNavigationBar));
+            mActionBar = new ActionBar(view.findViewById(R.id.loNavigationBar));
         }
         return mActionBar;
     }
@@ -162,6 +162,12 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
             } catch (Exception e) {
                 Debug.error(e);
             }
+        }
+    }
+
+    public void activateActionBar() {
+        if(mActionBar != null) {
+            mActionBar.activateHomeButton();
         }
     }
 

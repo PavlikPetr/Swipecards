@@ -24,21 +24,36 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@id/ivUserAvatar"
             android:orientation="vertical"
-            android:gravity="left">
+            android:gravity="center">
+        <RelativeLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            >
 
-        <TextView
-                android:id="@+id/tvName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"/>
+            <TextView
+                    android:id="@+id/tvName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#FFFFFF"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="20dp"
+                    android:textSize="18sp"/>
+            <ImageView
+                    android:id="@+id/ivOnline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ico_online"
+                    android:layout_centerVertical="true"
+                    android:visibility="gone"
+                    />
+        </RelativeLayout>
+
 
         <TextView
                 android:id="@+id/tvCity"
                 android:visibility="invisible"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/profile_ico_city"
                 android:drawablePadding="5dp"
                 android:textColor="#FFFFFF"
                 android:textSize="14sp"/>

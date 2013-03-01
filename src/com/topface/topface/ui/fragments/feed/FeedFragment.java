@@ -39,10 +39,7 @@ import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryView;
-import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.NavigationBarController;
-import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.*;
 import org.json.JSONObject;
 
 import static android.widget.AdapterView.OnItemClickListener;
@@ -69,6 +66,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected boolean isDeletable = true;
     private Drawable mLoader0;
     private AnimationDrawable mLoader;
+    private ActionBar mActionBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -76,6 +74,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         View view = inflater.inflate(getLayout(), null);
         mContainer = (RelativeLayout) view.findViewById(R.id.feedContainer);
         initNavigationBar(view);
+
+
 
         mLockView = (LockerView) view.findViewById(R.id.llvFeedLoading);
         mLockView.setVisibility(View.GONE);
@@ -122,12 +122,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     protected void initNavigationBar(View view) {
         // Navigation bar
-        mNavBarController = new NavigationBarController((ViewGroup) view.findViewById(R.id.loNavigationBar));
-        Activity activity = getActivity();
-        if (activity instanceof View.OnClickListener) {
-            view.findViewById(R.id.btnNavigationHome).setOnClickListener((View.OnClickListener) activity);
-        }
-        ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(getTitle());
+        mActionBar = getActionBar(view);
+        mActionBar.showHomeButton((View.OnClickListener)getActivity());
+        mActionBar.setTitleText(getString(getTitle()));
     }
 
 
@@ -494,7 +491,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     protected void initFilter(View view) {
-        new FilterBlock((ViewGroup) view, R.id.loControlsGroup, R.id.btnNavigationSettingsBar, R.id.loToolsBar);
+        new FilterBlock((ViewGroup) view, R.id.loControlsGroup, mActionBar, R.id.loToolsBar);
         initDoubleButton(view);
     }
 

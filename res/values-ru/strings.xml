@@ -304,7 +304,7 @@
     <string name="vip_black_list">Черный список</string>
     <string name="vip_profile_bg">Фоновая фотография</string>
 
-    <string name="profile_vip_status">Super Skills</string>
+    <string name="profile_vip_status">Super {{rocket}} Skills</string>
     <string name="profile_services">Услуги</string>
     <string name="default_balance_constant">На вашем счете</string>
     <string name="default_energy_coins_buy_btn_text">Купить монеты и симпатии</string>
@@ -463,4 +463,5 @@
     <string name="dafault_save">Сохранить</string>
     <string name="default_other">Другая</string>
     <string name="default_make_picture">Сделать фото</string>
+    <string name="user_actions_chat">Разговор</string>
 </resources>

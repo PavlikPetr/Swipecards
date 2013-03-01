@@ -2,12 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@drawable/bg_main">
+                android:background="@drawable/bg_main"
+        >
 
     <!-- header bar -->
-    <include
-            layout="@layout/bar_navigation_header"
-            android:id="@+id/loNavigationBar"/>
 
     <LinearLayout
             android:layout_width="fill_parent"
@@ -26,7 +24,8 @@
                     android:id="@+id/vpHeaderFragments"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:fadingEdge="none"/>
+                    android:fadingEdge="none"
+                    />
 
             <com.viewpagerindicator.CirclePageIndicator
                     android:id="@+id/cpiHeaderTabs"
@@ -54,30 +53,27 @@
             <android.support.v4.view.ViewPager
                     android:id="@+id/vpFragments"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    />
         </LinearLayout>
 
     </LinearLayout>
 
-    <ImageView
-            android:id="@+id/ivOnline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ico_profile_online"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/loNavigationBar"
-            android:layout_marginRight="8dp"
-            android:visibility="gone"
-            />
-
-    <com.topface.topface.ui.views.ProfileActionsControl
-            android:id="@+id/profileActionsControl"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"/>
-
     <ImageView style="@style/HeaderShadow"/>
 
+
+    <include
+            android:id="@+id/mUserActions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="-270dp"
+            android:layout_marginRight="5dp"
+            layout="@layout/user_actions_layout"
+        />
+    <include
+            layout="@layout/bar_navigation_header"
+            android:id="@+id/loNavigationBar"/>
     <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"

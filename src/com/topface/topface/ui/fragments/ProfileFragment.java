@@ -15,12 +15,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
+import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
@@ -29,19 +30,15 @@ import com.topface.topface.ui.adapters.ProfilePageAdapter;
 import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.profile.*;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.ui.views.ProfileActionsControl;
 import com.topface.topface.ui.views.RetryView;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.NavigationBarController;
-import com.topface.topface.utils.RateController;
+import com.topface.topface.utils.*;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.ArrayList;
-import java.util.TimerTask;
 
-public class ProfileFragment extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+public class ProfileFragment extends BaseFragment implements View.OnClickListener {
     public final static int TYPE_MY_PROFILE = 1;
     public final static int TYPE_USER_PROFILE = 2;
     private static final String ARG_TAG_PROFILE_TYPE = "profile_type";
@@ -62,7 +59,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private UserFormFragment mUserFormFragment;
 
     private Profile mUserProfile = null;
-    private int mProfileType;
+    private static int mProfileType;
     private int mProfileId;
 
     private ImageView mOnline;
@@ -76,7 +73,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private ProfilePageAdapter mBodyPagerAdapter;
     private ViewPager mHeaderPager;
     private ProfilePageAdapter mHeaderPagerAdapter;
-    private ProfileActionsControl mActionsControl;
     private GiftsFragment mGiftFragment;
 
     private String mBodyStartPageClassName;
@@ -87,6 +83,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
     private Handler mHideActionControlsUpdater;
     private TabPageIndicator mTabIndicator;
+    private ActionBar mActionBar;
+    private static boolean isOnline;
+    private LinearLayout mUserActions;
 
 
     @Override
@@ -96,8 +95,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         //init views
         View root = inflater.inflate(R.layout.ac_profile, null);
 
+        mActionBar = getActionBar(root);
+
         mLoaderView = root.findViewById(R.id.llvProfileLoading);
-        mActionsControl = (ProfileActionsControl) root.findViewById(R.id.profileActionsControl);
         mRateController = new RateController(getActivity());
 
         if (getArguments().getInt(ARG_FEED_ITEM_ID, -1) != -1) {
@@ -107,6 +107,11 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         }
 
         restoreState();
+        mUserActions = (LinearLayout) root.findViewById(R.id.mUserActions);
+        mUserActions.findViewById(R.id.acGift).setOnClickListener(this);
+        mUserActions.findViewById(R.id.acSympathy).setOnClickListener(this);
+        mUserActions.findViewById(R.id.acDelight).setOnClickListener(this);
+        mUserActions.findViewById(R.id.acChat).setOnClickListener(this);
 
         mNavBarController = new NavigationBarController((ViewGroup) root.findViewById(R.id.loNavigationBar));
         root.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
@@ -127,18 +132,75 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         });
         mLockScreen.addView(mRetryBtn);
 
-        mActionsControl.setType(mProfileType);
-        mActionsControl.setOnClickListener(this);
-
         if (mProfileType == TYPE_MY_PROFILE) {
-            mActionsControl.setOnCheckChangedListener(this);
             mTitle.setText(R.string.profile_header_title);
-            ImageButton editButton = (ImageButton) root.findViewById(R.id.btnNavigationRightWithText);
-            editButton.setVisibility(View.VISIBLE);
-            editButton.setOnClickListener(this);
+            mActionBar.showEditButton(this);
         } else if (mProfileType == TYPE_USER_PROFILE) {
-            mActionsControl.setOnCheckChangedListener(this);
-            mOnline = (ImageView) root.findViewById(R.id.ivOnline);
+
+            mActionBar.showUserActionsButton(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    double density = getResources().getDisplayMetrics().density;
+                    TranslateAnimation ta = new TranslateAnimation(0, 0, 0, mUserActions.getHeight() + mActionBar.getHeight() + (int)(5 * density));
+                    ta.setDuration(500);
+                    ta.setFillAfter(true);
+                    ta.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+                            mActionBar.disableActionsButton(true);
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            mUserActions.clearAnimation();
+                            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            params.setMargins(0, 5, 5, 0);
+                            params.addRule(RelativeLayout.BELOW, R.id.loNavigationBar);
+                            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                            mUserActions.setLayoutParams(params);
+                            mActionBar.disableActionsButton(false);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                    mUserActions.startAnimation(ta);
+                }
+            }, new View.OnClickListener() {
+                 @Override
+                 public void onClick(View view) {
+                     double density = getResources().getDisplayMetrics().density;
+                     TranslateAnimation ta = new TranslateAnimation(0, 0, 0, (int) (-270 * density));
+                     ta.setDuration(500);
+                     ta.setFillAfter(true);
+                     ta.setAnimationListener(new Animation.AnimationListener() {
+                         @Override
+                         public void onAnimationStart(Animation animation) {
+                            mActionBar.disableActionsButton(true);
+                         }
+
+                         @Override
+                         public void onAnimationEnd(Animation animation) {
+
+                             mUserActions.clearAnimation();
+                             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                             params.setMargins(0, 5, 5, 0);
+                             params.addRule(RelativeLayout.ABOVE, R.id.loNavigationBar);
+                             params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                             mUserActions.setLayoutParams(params);
+                             mActionBar.disableActionsButton(false);
+                         }
+
+                         @Override
+                         public void onAnimationRepeat(Animation animation) {
+                         }
+                     });
+                     mUserActions.startAnimation(ta);
+                 }
+             });
         }
 
         // start pages initialization
@@ -177,7 +239,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateBlackListState, new IntentFilter(ProfileBlackListControlFragment.UPDATE_ACTION));
         setProfile(mUserProfile);
 
-        startWaitingActionControlsHide();
         mNavBarController.refreshNotificators();
     }
 
@@ -194,8 +255,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         for (Fragment fragment : mHeaderPagerAdapter.getFragmentCache().values()) {
             fragment.onPause();
         }
-
-        stopWaitingActionControlHiding();
     }
 
 
@@ -244,8 +303,10 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 mRateController.setOnRateControllerListener(mRateControllerListener);
                 //set info into views for user
                 mTitle.setText(data.getNameAndAge());
-                mOnline.setVisibility(data.online ? View.VISIBLE : View.INVISIBLE);
+//                mOnline.setVisibility(data.online ? View.VISIBLE : View.INVISIBLE);
+
                 setProfile(data);
+                mHeaderMainFragment.setOnline(data.online);
                 mLoaderView.setVisibility(View.INVISIBLE);
             }
 
@@ -309,36 +370,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         bodyPager.setAdapter(mBodyPagerAdapter);
         //Tabs for Body
         mTabIndicator = (TabPageIndicator) root.findViewById(R.id.tpiTabs);
-        final Animation fadeOutAnimation = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out);
-        final Animation fadeInAnimation = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in);
-
-        fadeInAnimation.setAnimationListener(new FadeAnimationListener(false));
-        fadeOutAnimation.setAnimationListener(new FadeAnimationListener(true));
 
         mTabIndicator.setViewPager(bodyPager);
 
-        mTabIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-            @Override
-            public void onPageScrolled(int i, float v, int i2) {
-            }
-
-            @Override
-            public void onPageSelected(int i) {
-                if (((ProfilePageAdapter) mBodyPager.getAdapter()).getClassNameByFragmentIndex(i).equals(VipBuyFragment.class.getName())) {
-                    if (mActionsControl.getVisibility() == View.VISIBLE) {
-                        mActionsControl.hide();
-                    }
-                } else {
-                    mActionsControl.show();
-                    startWaitingActionControlsHide();
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
-            }
-        });
         mBodyPager = bodyPager;
     }
 
@@ -352,28 +386,31 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(final View v) {
+
         switch (v.getId()) {
-            case R.id.btnNavigationRightWithText:
+            case R.id.btnEdit:
                 startActivity(new Intent(getActivity().getApplicationContext(), EditProfileActivity.class));
                 break;
-            case R.id.actionDelight:
+            case R.id.acDelight:
                 if (v.isEnabled()) {
                     mRateController.onRate(mUserProfile.uid, 10, ((User) mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
                     v.setEnabled(false);
+                    v.setSelected(true);
                     //noinspection deprecation
-                    ((ImageButton) v).setAlpha(80);
+//                    ((TextView) v).setAlpha(80);
                 }
                 break;
-            case R.id.actionSympathy:
+            case R.id.acSympathy:
                 if (v.isEnabled()) {
                     mRateController.onRate(mUserProfile.uid, 9, ((User) mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
                     v.setEnabled(false);
+                    v.setSelected(true);
                     //noinspection deprecation
-                    ((ImageButton) v).setAlpha(80);
+//                    ((TextView) v).setAlpha(80);
                 }
                 break;
-            case R.id.actionGift:
+            case R.id.acGift:
                 if (mGiftFragment != null && mGiftFragment.getActivity() != null) {
                     mGiftFragment.sendGift();
                 } else {
@@ -382,8 +419,19 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     startActivityForResult(intent, GiftsActivity.INTENT_REQUEST_GIFT);
                 }
                 break;
-            case R.id.actionChat:
+            case R.id.acChat:
                 openChat();
+                break;
+            case R.id.acBlock:
+                BlackListAddRequest blaRequest = new BlackListAddRequest(mUserProfile.uid, getActivity());
+                blaRequest.callback(new VipApiHandler() {
+                    @Override
+                    public void success(ApiResponse response) {
+                        super.success(response);
+                        v.setEnabled(false);
+                    }
+                }
+                ).exec();
                 break;
             default:
                 break;
@@ -452,23 +500,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         return fragment;
     }
 
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (mProfileType == TYPE_MY_PROFILE) {
-            if (isChecked) {
-                int index = mBodyPagerAdapter.getFragmentIndexByClassName(VipBuyFragment.class.getName());
-                mBodyPager.setCurrentItem(index);
-                buttonView.setChecked(false);
-            }
-        } else if (mProfileType == TYPE_USER_PROFILE) {
-            if (isChecked) {
-                stopWaitingActionControlHiding();
-                mActionsControl.show();
-            } else {
-                startWaitingActionControlsHide();
-            }
-        }
-    }
 
     @Override
     public void clearContent() {
@@ -554,6 +585,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         private ImageView mBackgroundView;
         private int mBackgroundVal;
         private BroadcastReceiver mBroadcastReceiver;
+        private ImageView mOnline;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -577,8 +609,13 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             mNameView = (TextView) root.findViewById(R.id.tvName);
             mCityView = (TextView) root.findViewById(R.id.tvCity);
             mBackgroundView = (ImageView) root.findViewById(R.id.ivProfileBackground);
+            mOnline = (ImageView) root.findViewById(R.id.ivOnline);
 
             return root;
+        }
+
+        public void setOnline(boolean online) {
+            mOnline.setVisibility(online? View.VISIBLE : View.GONE);
         }
 
         @Override
@@ -782,56 +819,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         }
     };
 
-    private class FadeAnimationListener implements Animation.AnimationListener {
-        private boolean mShouldHide;
 
-        public FadeAnimationListener(boolean shouldHide) {
-            mShouldHide = shouldHide;
-        }
-
-        @Override
-        public void onAnimationStart(Animation animation) {
-        }
-
-        @Override
-        public void onAnimationEnd(Animation animation) {
-            if (mShouldHide) {
-                mActionsControl.setVisibility(View.GONE);
-            } else {
-                mActionsControl.setVisibility(View.VISIBLE);
-            }
-        }
-
-        @Override
-        public void onAnimationRepeat(Animation animation) {
-        }
-    }
-
-    private void startWaitingActionControlsHide() {
-        if (mHideActionControlsUpdater != null) {
-            mHideActionControlsUpdater.removeCallbacks(mHideActionControlsTask);
-            mHideActionControlsUpdater.postDelayed(mHideActionControlsTask, HIDE_ACTION_CONTROL_TIME);
-        } else {
-            mHideActionControlsUpdater = new Handler();
-            mHideActionControlsUpdater.postDelayed(mHideActionControlsTask, HIDE_ACTION_CONTROL_TIME);
-        }
-    }
-
-    private void stopWaitingActionControlHiding() {
-        if (mHideActionControlsUpdater != null) {
-            mHideActionControlsUpdater.removeCallbacks(mHideActionControlsTask);
-            mHideActionControlsUpdater = null;
-        }
-    }
-
-    TimerTask mHideActionControlsTask = new TimerTask() {
-        @Override
-        public void run() {
-            if (mActionsControl != null) {
-                mActionsControl.hide();
-            }
-        }
-    };
 
     ProfileUpdater mProfileUpdater = new ProfileUpdater() {
         @Override

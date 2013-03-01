@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.utils.NavigationBarController;
 
 public class ActionBar {
@@ -17,12 +18,13 @@ public class ActionBar {
     private ImageButton mSettingsButton;
     private ImageButton mEditButton;
     private ImageButton mProfileButton;
+    private ImageButton mUserActionsControl;
 
     private NavigationBarController mNavBarController;
 
-    public ActionBar(ViewGroup actionView) {
-        this.actionView = actionView;
-        mNavBarController = new NavigationBarController(actionView);
+    public ActionBar(View actionView) {
+        this.actionView = (ViewGroup) actionView.findViewById(R.id.loNavigationBar);
+        mNavBarController = new NavigationBarController(this.actionView);
         initViews();
     }
 
@@ -32,8 +34,9 @@ public class ActionBar {
         mTitle = (TextView) actionView.findViewById(R.id.tvNavigationTitle);
         mSubTitle = (TextView) actionView.findViewById(R.id.tvNavigationSubtitle);
         mSettingsButton = (ImageButton) actionView.findViewById(R.id.btnNavigationSettingsBar);
-        mEditButton = (ImageButton) actionView.findViewById(R.id.btnNavigationRightWithText);
+        mEditButton = (ImageButton) actionView.findViewById(R.id.btnEdit);
         mProfileButton = (ImageButton) actionView.findViewById(R.id.btnNavigationProfileBar);
+        mUserActionsControl = (ImageButton) actionView.findViewById(R.id.btnUserProfActions);
     }
 
     public void refreshNotificators() {
@@ -42,16 +45,25 @@ public class ActionBar {
         }
     }
 
-    public void showHomeButton(View.OnClickListener listener) {
+    public void showHomeButton(final View.OnClickListener listener) {
         mNavigationBack.setVisibility(View.GONE);
         mNavigationHome.setVisibility(View.VISIBLE);
+        mNavigationHome.setSelected(false);
         mNavigationHome.setOnClickListener(listener);
+    }
+
+    public void activateHomeButton() {
+        if (mNavigationHome.isSelected()) {
+            mNavigationHome.setSelected(false);
+        } else {
+            mNavigationHome.setSelected(true);
+        }
     }
 
     public void showBackButton(View.OnClickListener listener) {
         mNavigationBack.setVisibility(View.VISIBLE);
         mNavigationHome.setVisibility(View.GONE);
-        mNavigationHome.setOnClickListener(listener);
+        mNavigationBack.setOnClickListener(listener);
     }
 
     public  void showEditButton(View.OnClickListener listener) {
@@ -62,13 +74,25 @@ public class ActionBar {
         mProfileButton.setVisibility(View.GONE);
     }
 
-    public void showSettingsButton(View.OnClickListener listener) {
+    public void showSettingsButton(final View.OnClickListener listener) {
         mEditButton.setVisibility(View.GONE);
 
         mSettingsButton.setVisibility(View.VISIBLE);
-        mSettingsButton.setOnClickListener(listener);
+        mSettingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mSettingsButton.isSelected()) {
+                    mSettingsButton.setSelected(false);
+                } else {
+                    mSettingsButton.setSelected(true);
+                }
+                listener.onClick(view);
+            }
+
+        });
 
         mProfileButton.setVisibility(View.GONE);
+        mUserActionsControl.setVisibility(View.GONE);
     }
 
     public void setTitleText(String text) {
@@ -80,12 +104,46 @@ public class ActionBar {
         mSubTitle.setText(text);
     }
 
-    public void showProfileButton(View.OnClickListener listener) {
+    public void showProfileButton(View.OnClickListener listener, int userSex) {
         mEditButton.setVisibility(View.GONE);
         mSettingsButton.setVisibility(View.GONE);
 
-        mProfileButton.setVisibility(View.GONE);
+        mProfileButton.setVisibility(View.VISIBLE);
+        switch (userSex) {
+            case Static.BOY:
+                mProfileButton.setImageResource(R.drawable.navigation_male_profile_selector);
+                break;
+            case Static.GIRL:
+                mProfileButton.setImageResource(R.drawable.navigation_female_profile_selector);
+                break;
+        }
         mProfileButton.setOnClickListener(listener);
+
+        mUserActionsControl.setVisibility(View.GONE);
+    }
+
+    public void showUserActionsButton(final View.OnClickListener nonActiveListener, final View.OnClickListener activeListener) {
+        mEditButton.setVisibility(View.GONE);
+        mSettingsButton.setVisibility(View.GONE);
+        mProfileButton.setVisibility(View.GONE);
+
+        mUserActionsControl.setVisibility(View.VISIBLE);
+        mUserActionsControl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mUserActionsControl.isSelected()) {
+                    mUserActionsControl.setSelected(false);
+                    activeListener.onClick(view);
+                } else {
+                    mUserActionsControl.setSelected(true);
+                    nonActiveListener.onClick(view);
+                }
+            }
+        });
+    }
+
+    public void disableActionsButton(boolean disabled) {
+        mUserActionsControl.setEnabled(!disabled);
     }
 
     public void hide() {
@@ -94,5 +152,9 @@ public class ActionBar {
 
     public void show() {
         actionView.setVisibility(View.VISIBLE);
+    }
+
+    public int getHeight() {
+        return actionView.getHeight();
     }
 }

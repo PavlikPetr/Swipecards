@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.utils.ActionBar;
 
 public class SettingsFeedbackFragment extends BaseFragment implements OnClickListener {
 
@@ -20,18 +21,15 @@ public class SettingsFeedbackFragment extends BaseFragment implements OnClickLis
         View root = inflater.inflate(R.layout.fragment_feedback, null);
 
         // Navigation bar
-        getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
-        Button btnBack = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
-        btnBack.setVisibility(View.VISIBLE);
-        btnBack.setText(R.string.settings_header_title);
-        btnBack.setOnClickListener(new OnClickListener() {
+        ActionBar actionBar = getActionBar(root);
+        actionBar.showBackButton(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 getActivity().finish();
             }
         });
-        ((TextView) getActivity().findViewById(R.id.tvNavigationTitle)).setText(R.string.settings_feedback);
+        actionBar.setTitleText(getString(R.string.settings_feedback));
 
         // Init settings views
         initViews(root);
