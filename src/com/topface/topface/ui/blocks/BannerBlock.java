@@ -40,10 +40,10 @@ import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.Utils;
+import ru.ideast.adwired.AWView;
 import ru.wapstart.plus1.sdk.Plus1BannerAsker;
 import ru.wapstart.plus1.sdk.Plus1BannerRequest;
 import ru.wapstart.plus1.sdk.Plus1BannerView;
@@ -90,7 +90,8 @@ public class BannerBlock {
         if (mFragment != null && mBannersMap != null) {
             String fragmentId = mFragment.getClass().toString();
             if (mBannersMap.containsKey(fragmentId)) {
-                String bannerType = CacheProfile.getOptions().pages.get(mBannersMap.get(fragmentId)).banner;
+//                String bannerType = CacheProfile.getOptions().pages.get(mBannersMap.get(fragmentId)).banner;
+                String bannerType = Options.BANNER_ADWIRED;
                 mBannerView = getBannerView(bannerType);
                 mBannerLayout.addView(mBannerView);
                 if (bannerType.equals(Options.BANNER_TOPFACE)) {
@@ -132,6 +133,8 @@ public class BannerBlock {
             return mInflater.inflate(R.layout.banner_adfonic, null);
         } else if (bannerType.equals(Options.BANNER_WAPSTART)) {
             return mInflater.inflate(R.layout.banner_wapstart, null);
+        } else if (bannerType.equals(Options.BANNER_ADWIRED)) {
+            return mInflater.inflate(R.layout.banner_adwired, null);
         } else {
             return null;
         }
@@ -210,6 +213,8 @@ public class BannerBlock {
                     ((Plus1BannerView) mBannerView).setAutorefreshEnabled(false));
             mPLus1Asker.setRemoveBannersOnPause(true);
             mPLus1Asker.setDisabledWebViewCorePausing(true);
+        } else if (mBannerView instanceof AWView) {
+
         } else if (mBannerView instanceof ImageView) {
             //Это нужно, что бы сбросить размеры баннера, для правильного расчета размера в ImageLoader
             ViewGroup.LayoutParams params = mBannerView.getLayoutParams();
@@ -351,6 +356,9 @@ public class BannerBlock {
     public void onResume() {
         initBanner();
         if (mBannerView != null && mBannerView instanceof AdfonicView) mBannerView.invalidate();
+        if (mBannerView != null && mBannerView instanceof AWView) {
+            ((AWView)mBannerView).request('1');
+        }
         if (mPLus1Asker != null) mPLus1Asker.onResume();
     }
 
