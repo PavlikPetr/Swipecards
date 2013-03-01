@@ -18,6 +18,7 @@ import com.topface.topface.requests.ChangePasswordRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -36,11 +37,8 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
         final FragmentActivity activity = getActivity();
 
         // Navigation bar
-        activity.findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
-        Button btnBack = (Button) activity.findViewById(R.id.btnNavigationBackWithText);
-        btnBack.setVisibility(View.VISIBLE);
-        btnBack.setText(R.string.settings_account);
-        btnBack.setOnClickListener(new OnClickListener() {
+        ActionBar actionBar = getActionBar(root);
+        actionBar.showBackButton(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -48,7 +46,7 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
                 activity.finish();
             }
         });
-        ((TextView) activity.findViewById(R.id.tvNavigationTitle)).setText(R.string.password_changing);
+        actionBar.setTitleText(getString(R.string.password_changing));
 
 
         mLockerView = (LockerView) root.findViewById(R.id.llvLogoutLoading);
