@@ -40,4 +40,6 @@
 
     <string name="default_percent_equation">%d%%</string>
 
+    <dimen name="take_photo_max_width">275dp</dimen>
+    <dimen name="take_photo_max_height">400dp</dimen>
 </resources>

@@ -14,6 +14,8 @@
             android:layout_height="fill_parent"
             android:layout_below="@id/loNavigationBar"
             android:orientation="vertical"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             >
 
         <TextView
@@ -27,13 +29,15 @@
                 style="@style/ItemTitleText"
                 />
 
-        <include layout="@layout/item_edit_form_check"
-                 android:layout_width="fill_parent"
-                 android:layout_height="wrap_content"
-                 android:id="@+id/cbMyCity"
-                 android:layout_marginTop="8dp"/>
+        <include
+                layout="@layout/item_edit_form_check"
+                android:id="@+id/cbMyCity"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"/>
 
         <TextView
+                android:id="@+id/tvCityInputTitle"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/search_city_by_name"
@@ -41,6 +45,8 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 style="@style/ItemTitleText"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 />
 
         <EditText

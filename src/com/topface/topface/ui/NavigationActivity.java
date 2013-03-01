@@ -15,14 +15,16 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.Toast;
 import com.topface.billing.BillingUtils;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.requests.ConfirmRequest;
-import com.topface.topface.requests.OptionsRequest;
-import com.topface.topface.ui.edit.EditProfileActivity;
+import com.topface.topface.data.Photo;
+import com.topface.topface.requests.*;
+import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.*;
 import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
 import com.topface.topface.ui.fragments.MenuFragment.FragmentMenuListener;
@@ -77,9 +79,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         setStopTime();
         mNovice = Novice.getInstance(mPreferences);
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
-
     }
-
 
     private void initFragmentSwitcher() {
         mFragmentSwitcher = (FragmentSwitchController) findViewById(R.id.fragment_switcher);
@@ -105,18 +105,20 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         AuthorizationManager.extendAccessToken(NavigationActivity.this);
         //Если пользователь не заполнил необходимые поля, перекидываем его на EditProfile,
         //чтобы исправлялся.
-        if (needChangeProfile()) {
-            Intent editIntent = new Intent(this, EditProfileActivity.class);
-            editIntent.putExtra(FROM_AUTH, true);
-            startActivity(editIntent);
-            finish();
-        } else {
+//        if (needChangeProfile()) {
+//            Intent editIntent = new Intent(this, EditProfileActivity.class);
+//            editIntent.putExtra(FROM_AUTH, true);
+//            startActivity(editIntent);
+//            finish();
+//        } else {
             checkVersion(CacheProfile.getOptions().max_version);
-        }
+//        }
     }
 
     private boolean needChangeProfile() {
-        return (CacheProfile.age == 0 || CacheProfile.city.isEmpty() || CacheProfile.photo == null)
+        return (CacheProfile.age == 0
+                || (CacheProfile.city.isEmpty())
+                || (CacheProfile.photo == null))
                 && CacheProfile.shouldChangeProfile(getApplicationContext());
     }
 
@@ -133,7 +135,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     protected void onResume() {
         super.onResume();
         checkProfileUpdate();
-
 
         //Отправляем не обработанные запросы на покупку
         BillingUtils.sendQueueItems();
@@ -154,8 +155,60 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             mChatInvoke = true;
         }
         checkExternalLink();
-    }
 
+        //Открыть диалог для захвата фото к аватарке
+        if (!AuthToken.getInstance().isEmpty()) {
+            if (CacheProfile.photo == null && !CacheProfile.wasAvatarAsked) {
+                CacheProfile.wasAvatarAsked = true;
+                takePhoto(new TakePhotoDialog.TakePhotoListener() {
+                    @Override
+                    public void onPhotoSentSuccess(final Photo photo) {
+                        CacheProfile.photos.add(photo);
+                        PhotoMainRequest request = new PhotoMainRequest(getApplicationContext());
+                        request.photoid = photo.getId();
+                        request.callback(new ApiHandler() {
+
+                            @Override
+                            public void success(ApiResponse response) {
+                                CacheProfile.photo = photo;
+                                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                            }
+
+                            @Override
+                            public void fail(int codeError, ApiResponse response) {
+
+                            }
+
+                            @Override
+                            public void always(ApiResponse response) {
+                                super.always(response);
+                            }
+                        }).exec();
+                    }
+
+                    @Override
+                    public void onPhotoSentFailure() {
+                        Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onDialogClose() {
+                        if((CacheProfile.city.isEmpty() || CacheProfile.needCityConfirmation(getApplicationContext()))
+                                && !CacheProfile.wasCityAsked){
+                            CacheProfile.wasCityAsked = true;
+                            CacheProfile.onCityConfirmed(getApplicationContext());
+                            startActivityForResult(new Intent(getApplicationContext(), CitySearchActivity.class),
+                                    CitySearchActivity.INTENT_CITY_SEARCH_AFTER_REGISTRATION);
+                        }
+                    }
+                });
+            } else if((CacheProfile.city == null || CacheProfile.city.isEmpty()) && !CacheProfile.wasCityAsked){
+                CacheProfile.wasCityAsked = true;
+                startActivityForResult(new Intent(getApplicationContext(), CitySearchActivity.class),
+                        CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
+            }
+        }
+    }
     private void checkExternalLink() {
         if(getIntent() != null) {
             Uri data = getIntent().getData();
@@ -495,6 +548,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         } catch (Exception e) {
             Debug.error(e);
         }
+
+        //Для запроса фото при следующем создании NavigationActivity
+        if (CacheProfile.photo == null) CacheProfile.wasAvatarAsked = false;
     }
 
     private void unbindDrawables(View view) {

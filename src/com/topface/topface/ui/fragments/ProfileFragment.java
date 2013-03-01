@@ -80,6 +80,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private int mStartBodyPage = 0;
     private int mStartHeaderPage = 0;
     private BroadcastReceiver mUpdateBlackListState;
+    private BroadcastReceiver mUpdateProfileReceiver;
 
     private Handler mHideActionControlsUpdater;
     private TabPageIndicator mTabIndicator;
@@ -235,8 +236,18 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 }
             }
         };
+        mUpdateProfileReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (mProfileType == TYPE_MY_PROFILE) {
+                    mUserProfile = CacheProfile.getProfile();
+                    setProfile(mUserProfile);
+                }
+            }
+        };
 
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateBlackListState, new IntentFilter(ProfileBlackListControlFragment.UPDATE_ACTION));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateProfileReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         setProfile(mUserProfile);
 
         mNavBarController.refreshNotificators();
@@ -246,6 +257,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateBlackListState);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateProfileReceiver);
 
         //Вручную прокидываем событие onPause() в ViewPager, т.к. на onPause() мы отписываемся от событий
         for (Fragment fragment : mBodyPagerAdapter.getFragmentCache().values()) {
@@ -584,18 +596,11 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         private String mCityVal;
         private ImageView mBackgroundView;
         private int mBackgroundVal;
-        private BroadcastReceiver mBroadcastReceiver;
         private ImageView mOnline;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            mBroadcastReceiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    refreshViews();
-                }
-            };
         }
 
         @Override
@@ -622,7 +627,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         public void onResume() {
             super.onResume();
             refreshViews();
-            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         }
 
         public void setProfile(Profile profile) {
@@ -709,7 +713,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         @Override
         public void onPause() {
             super.onPause();
-            LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
         }
     }
 
@@ -718,7 +721,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
         private TextView mStatusView;
         private String mStatusVal;
-        private BroadcastReceiver mBroadcastReceiver;
 
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             super.onCreateView(inflater, container, savedInstanceState);
@@ -735,14 +737,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         public void onResume() {
             super.onResume();
             refreshViews();
-
-            mBroadcastReceiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    refreshViews();
-                }
-            };
-            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         }
 
         public void setProfile(Profile profile) {
@@ -797,7 +791,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         @Override
         public void onPause() {
             super.onPause();
-            LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
         }
     }
 

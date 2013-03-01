@@ -78,28 +78,7 @@ public class SettingsAccountFragment extends BaseFragment {
                 logoutRequest.callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
-                        GCMRegistrar.unregister(getActivity().getApplicationContext());
-                        Ssid.remove();
-                        token.removeToken();
-                        //noinspection unchecked
-                        new FacebookLogoutTask().execute();
-                        Settings.getInstance().resetSettings();
-                        startActivity(new Intent(getActivity().getApplicationContext(), NavigationActivity.class));
-                        getActivity().setResult(RESULT_LOGOUT);
-                        CacheProfile.clearProfile();
-                        getActivity().finish();
-                        SharedPreferences preferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-                        if (preferences != null) {
-                            preferences.edit().clear().commit();
-                        }
-                        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(Static.LOGOUT_INTENT));
-                        //Чистим список тех, кого нужно оценить
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                new SearchCacheManager().clearCache();
-                            }
-                        }).start();
+                        logout(getContext(), token);
                     }
 
                     @Override
@@ -112,6 +91,31 @@ public class SettingsAccountFragment extends BaseFragment {
         });
 
         return root;
+    }
+
+    private void logout(Context context, AuthToken token) {
+        GCMRegistrar.unregister(getActivity().getApplicationContext());
+        Ssid.remove();
+        token.removeToken();
+        //noinspection unchecked
+        new FacebookLogoutTask().execute();
+        Settings.getInstance().resetSettings();
+        startActivity(new Intent(getActivity().getApplicationContext(), NavigationActivity.class));
+        getActivity().setResult(RESULT_LOGOUT);
+        CacheProfile.clearProfile();
+        getActivity().finish();
+        SharedPreferences preferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        if (preferences != null) {
+            preferences.edit().clear().commit();
+        }
+        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(Static.LOGOUT_INTENT));
+        //Чистим список тех, кого нужно оценить
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                new SearchCacheManager().clearCache();
+            }
+        }).start();
     }
 
     @SuppressWarnings({"rawtypes", "hiding"})

@@ -3,16 +3,17 @@ package com.topface.topface.requests;
 import android.content.Context;
 import android.net.Uri;
 import com.google.analytics.tracking.android.EasyTracker;
-import com.topface.topface.Ssid;
+import com.topface.topface.Static;
 import com.topface.topface.utils.Base64;
+import com.topface.topface.utils.BitmapUtils;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.HttpUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Arrays;
 
 public class PhotoAddRequest extends ApiRequest {
     public static final String SERVICE_NAME = "photoAdd";
@@ -22,6 +23,7 @@ public class PhotoAddRequest extends ApiRequest {
     public static final String PHOTO_ADD_CONTENT_TYPE = "multipart/mixed; boundary=" + BOUNDARY;
     public static final String LINE_END = "\r\n";
     public static final String TWO_HH = "--";
+    public static final String HTTP_REQUEST_CLOSE_DATA = LINE_END + TWO_HH + BOUNDARY + TWO_HH + LINE_END;
 
     private Uri mUri = null;
 
@@ -31,73 +33,68 @@ public class PhotoAddRequest extends ApiRequest {
     }
 
     @Override
-    public int sendRequest() throws IOException {
-        HttpURLConnection connection = getConnection();
-        //Непосредственно перед отправкой запроса устанавливаем новый SSID
-        setSsid(Ssid.get());
-        //Ставим, если это нужно, ревизию (только на тестовых платформах)
-        setRevisionHeader(connection);
+    protected void writeData(HttpURLConnection connection) throws IOException {
+        //Формируем базовую часть запроса (Заголовки, json данные)
+        String headers = getHeaders();
+        //Переводим в байты
+        byte[] headersBytes = headers.getBytes();
+        //Это просто закрывающие данные запроса с boundary и переносами строк
+        byte[] endBytes = HTTP_REQUEST_CLOSE_DATA.getBytes();
+        //Открываем InputStream к файлу который будем отправлять
+        InputStream inputStream = BitmapUtils.getInputStream(getContext(),mUri);
+        //Считаем длинну файла в виде строки base64
+        Debug.log("File size: " + inputStream.available());
+        int fileSize = (int) Math.ceil(inputStream.available() * 4 / 3);
+        Debug.log("Base64 size: " + fileSize);
+        int padding = (fileSize % 4) == 0 ? 0 : 4 - (fileSize % 4);
+        Debug.log("Base64 padding:  " + padding);
+        fileSize += padding;
+        Debug.log("Base64 file size: " + fileSize);
+        //Считаем общую длинну получившегося запроса
+        int contentLength = headersBytes.length + endBytes.length + fileSize;
 
         //Отправляем наш  POST запрос
-        writeDatatToConnection(toPostData(), HttpUtils.getOutputStream(connection));
-
-        return connection.getResponseCode();
-    }
-
-    private void writeDatatToConnection(String postParams, OutputStream stream) throws IOException {
-        DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(stream));
-        dos.writeBytes(LINE_END + TWO_HH + BOUNDARY + LINE_END);
-        //Это составной запрос
-        dos.writeBytes("Content-Disposition: mixed" + LINE_END);
-        //Первая часть обычный json с данными запроса
-        dos.writeBytes("Content-Type: application/json" + LINE_END + LINE_END);
-        //Записываем оснонвые данные запроса
-        dos.writeBytes(postParams + LINE_END);
-        dos.writeBytes(TWO_HH + BOUNDARY + LINE_END);
-        dos.writeBytes("Content-Disposition: mixed" + LINE_END);
-        //Вторая часть это Картинка в формате Base64
-        dos.writeBytes("Content-Type: image/jpeg" + LINE_END);
-        //Мы отправляем картинку в виде строки Base64, о чем сообщаем в заголовке
-        dos.writeBytes("Content-Transfer-Encoding: base64" + LINE_END + LINE_END);
-        //Открываем InputStream к файлу и пропуская через Base64.InputStream для кодирования картинку в виде Base64
-        Base64.encodeFromInputToOutputStream(getInputStream(), dos);
-
-        dos.writeBytes(
-                LINE_END +
-                        TWO_HH + BOUNDARY + TWO_HH +
-                        LINE_END
+        writeRequest(
+                headersBytes,
+                endBytes,
+                inputStream,
+                HttpUtils.getOutputStream(contentLength, connection)
         );
 
+        Debug.logJson(
+                ConnectionManager.TAG,
+                "REQUEST >>> " + Static.API_URL + " rev:" + getRevNum(),
+                headers
+        );
+    }
+
+    private void writeRequest(byte[] headersBytes, byte[] endBytes, InputStream inputStream, OutputStream outputStream) throws IOException {
+        DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(
+                outputStream
+        ));
+        dos.write(headersBytes);
+        Base64.encodeFromInputToOutputStream(inputStream, dos);
+        dos.write(endBytes);
         dos.flush();
         dos.close();
+        outputStream.close();
     }
 
-    private InputStream getInputStream() throws IOException {
-        InputStream stream;
 
-        if (mUri == null) {
-            stream = null;
-        } else if (isInternetUri(mUri)) {
-            stream = new URL(mUri.toString()).openStream();
-        } else {
-            stream = getContext().getContentResolver().openInputStream(mUri);
-        }
-
-        return stream;
-    }
-
-    /**
-     * Проверяет, ссылается ли данный Uri на ресурс в интернете
-     *
-     * @param uri ресурса
-     * @return является ресурс ссылкой на файл в интернете
-     */
-    private boolean isInternetUri(Uri uri) {
-        return Arrays.asList(
-                "http",
-                "https",
-                "ftp"
-        ).contains(uri.getScheme());
+    private String getHeaders() {
+        return LINE_END + TWO_HH + BOUNDARY + LINE_END +
+                //Это составной запрос
+                "Content-Disposition: mixed" + LINE_END +
+                //Первая часть обычный json с данными запроса
+                "Content-Type: application/json" + LINE_END + LINE_END +
+                //Записываем оснонвые данные запроса (json с нужными для API данными)
+                toPostData() + LINE_END +
+                TWO_HH + BOUNDARY + LINE_END +
+                "Content-Disposition: mixed" + LINE_END +
+                //Вторая часть это Картинка в формате Base64
+                "Content-Type: image/jpeg" + LINE_END +
+                //Мы отправляем картинку в виде строки Base64, о чем сообщаем в заголовке
+                "Content-Transfer-Encoding: base64" + LINE_END + LINE_END;
     }
 
     @Override
@@ -123,9 +120,7 @@ public class PhotoAddRequest extends ApiRequest {
     @Override
     public HttpURLConnection openConnection() throws IOException {
         //Если открываем новое подключение, то старое закрываем
-        if (mURLConnection != null) {
-            mURLConnection.disconnect();
-        }
+        closeConnection();
 
         mURLConnection = HttpUtils.openPostConnection(getApiUrl(), PHOTO_ADD_CONTENT_TYPE);
         return mURLConnection;
