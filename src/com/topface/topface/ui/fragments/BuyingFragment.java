@@ -175,7 +175,7 @@ public class BuyingFragment extends BillingFragment {
             vipBtnText.setText(R.string.vip_abilities);
         } else {
             status.setText(R.string.vip_state_off);
-            vipBtnText.setText(R.string.vip_why);
+            vipBtnText.setText(R.string.vip_advantages);
         }
 
         vipBtn.setOnClickListener(new View.OnClickListener() {
@@ -195,6 +195,14 @@ public class BuyingFragment extends BillingFragment {
             vipTitle.setVisibility(View.VISIBLE);
             vipBtn.setVisibility(View.VISIBLE);
         }
+
+        root.findViewById(R.id.btnOfferwall).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO open Offerwall
+            }
+        });
+
     }
 
     private void goToVipSettings() {

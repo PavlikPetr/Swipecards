@@ -93,10 +93,13 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
     public int mLiked;
 
     public boolean canBecomeLeader;
+    public int position;
 
-    public Photo(int id, HashMap<String, String> links) {
+    public Photo(int id, HashMap<String, String> links, int position, int liked) {
         this.mId = id;
         this.links = links;
+        this.mLiked = liked;
+        this.position = position;
     }
 
     public Photo(Photo photo) {
@@ -104,6 +107,7 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
         this.mLiked = photo.mLiked;
         this.links = photo.links;
         this.canBecomeLeader = photo.canBecomeLeader;
+        this.position = photo.position;
     }
 
     //Конструктор по умолчанию создает фэйковую фотку
@@ -140,6 +144,7 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
             }
             canBecomeLeader = photoItem.optBoolean("canBecomeLeader");
             mLiked = photoItem.optInt("liked");
+            position = photoItem.optInt("position", 0);
         }
     }
 
@@ -324,6 +329,10 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
         return mId;
     }
 
+    public int getPosition() {
+        return position;
+    }
+
     public int getRate() {
         return mLiked;
     }
@@ -337,6 +346,8 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(mId);
         dest.writeInt(links.size());
+        dest.writeInt(mLiked);
+        dest.writeInt(position);
         for (String key : links.keySet()) {
             dest.writeString(key);
             dest.writeString(links.get(key));
@@ -350,13 +361,15 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
                 public Photo createFromParcel(Parcel in) {
                     int id = in.readInt();
                     int hashSize = in.readInt();
+                    int liked = in.readInt();
+                    int pos = in.readInt();
                     HashMap<String, String> links = new HashMap<String, String>();
 
                     for (int i = 0; i < hashSize; i++) {
                         links.put(in.readString(), in.readString());
                     }
 
-                    return new Photo(id, links);
+                    return new Photo(id, links, pos, liked);
                 }
 
                 public Photo[] newArray(int size) {
@@ -368,6 +381,8 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
     public JSONObject toJson() throws JSONException {
         JSONObject json = new JSONObject();
         json.put("id", mId);
+        json.put("liked", mLiked);
+        json.put("position", position);
         JSONObject jsonLinks = new JSONObject();
         for (Map.Entry<String, String> entry : links.entrySet()) {
             jsonLinks.put(
@@ -376,8 +391,6 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
             );
         }
         json.put("links", jsonLinks);
-        json.put("liked", mLiked);
-
         return json;
     }
 }

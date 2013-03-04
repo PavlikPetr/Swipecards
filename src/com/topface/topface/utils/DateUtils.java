@@ -85,4 +85,8 @@ public class DateUtils {
         return cal.getTimeInMillis();
     }
 
+    public static long getSeconds(Date date) {
+        return date.getTime()/1000;
+    }
+
 }

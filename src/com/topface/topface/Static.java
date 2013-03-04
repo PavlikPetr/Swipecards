@@ -40,7 +40,8 @@ public class Static {
     public static final String PREFERENCES_TOPS_CITY_NAME = "tops_city_name";
     public static final String PREFERENCES_TOPS_CITY_POS = "tops_city_pos";
     public static final String PREFERENCES_TAG_NEED_EDIT = "need_edit";
-    public static final String PREFERENCES_TAG_CITY_ASKED = "city_asked";
+    public static final String PREFERENCES_TAG_NEED_CHANGE_PASSWORD = "need_change_password";
+    public static final String PREFERENCES_TAG_NEED_CITY_CONFIRM = "city_need_confirm";
 
     public static final String PREFERENCES_NOVICE_DATING_ENERGY = "novice_dating_energy";
     public static final String PREFERENCES_NOVICE_DATING_ENERGY_TO_SYMPATHIES = "novice_dating_energy_to_sympathies";

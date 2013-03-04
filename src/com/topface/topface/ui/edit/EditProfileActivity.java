@@ -16,11 +16,7 @@ import android.widget.*;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.City;
-import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
-import com.topface.topface.requests.SettingsRequest;
-import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.ui.NavigationActivity;
@@ -114,13 +110,6 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
     protected void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
-
-        if (hasStartedFromAuthActivity) {
-            if(CacheProfile.city.isEmpty() && !CacheProfile.wasCityAsked) {
-                selectCity();
-                CacheProfile.wasCityAsked = true;
-            }
-        }
     }
 
     @Override
@@ -197,10 +186,10 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                 break;
             case R.id.btnNavigationBackWithText:
                 if (hasStartedFromAuthActivity && !CacheProfile.city.isEmpty()) {
-                    Intent intent = new Intent(this, NavigationActivity.class);
-                    intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_VIP_PROFILE);
                     SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
                     preferences.edit().putBoolean(Static.PREFERENCES_TAG_NEED_EDIT, false).commit();
+                    Intent intent = new Intent(this, NavigationActivity.class);
+                    intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_VIP_PROFILE);
                     startActivity(intent);
                 }
                 finish();
@@ -253,24 +242,8 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     final String city_name = extras.getString(CitySearchActivity.INTENT_CITY_NAME);
                     final String city_full = extras.getString(CitySearchActivity.INTENT_CITY_FULL_NAME);
                     final int city_id = extras.getInt(CitySearchActivity.INTENT_CITY_ID);
-
-                    SettingsRequest request = new SettingsRequest(this);
-                    request.cityid = city_id;
+                    mEditCity.setText(city_name);
                     sendBroadcast(new Intent().setAction("com.topface.receivers.ConnectionChangeReceiver"));
-                    request.callback(new ApiHandler() {
-
-                        @Override
-                        public void success(ApiResponse response) {
-                            CacheProfile.city = new City(city_id, city_name, city_full);
-                            mEditCity.setText(CacheProfile.city.name);
-                        }
-
-                        @Override
-                        public void fail(int codeError, ApiResponse response) {
-                            Toast.makeText(EditProfileActivity.this, getString(R.string.general_data_error),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }).exec();
                 default:
                     break;
             }

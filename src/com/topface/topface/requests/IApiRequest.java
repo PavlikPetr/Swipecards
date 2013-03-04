@@ -29,7 +29,7 @@ public interface IApiRequest {
 
     public String getId();
 
-    public int sendRequest() throws IOException;
+    public int sendRequest() throws Exception;
 
     public void closeConnection();
 

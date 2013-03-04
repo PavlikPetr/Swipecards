@@ -5,13 +5,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.WindowManager;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.ReAuthReceiver;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
+import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.http.IRequestClient;
@@ -32,6 +35,8 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFormat(PixelFormat.RGBA_8888);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
         if (isNeedAuth() && (AuthToken.getInstance().isEmpty() || !CacheProfile.isLoaded())) {
             startAuth();
         }
@@ -45,14 +50,14 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         mReauthReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                startAuth();
+                if (isNeedAuth()) {
+                    startAuth();
+                }
             }
         };
         needToUnregisterReceiver = true;
         registerReceiver(mReauthReceiver, new IntentFilter(ReAuthReceiver.REAUTH_INTENT));
     }
-
-
 
     public void startAuth() {
         AuthFragment af = AuthFragment.newInstance();
@@ -147,5 +152,11 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     protected boolean isNeedAuth() {
         return true;
+    }
+
+    protected void takePhoto(TakePhotoDialog.TakePhotoListener listener) {
+        TakePhotoDialog newFragment = TakePhotoDialog.newInstance();
+        newFragment.setOnTakePhotoListener(listener);
+        newFragment.show(getSupportFragmentManager(), TakePhotoDialog.TAG);
     }
 }

@@ -13,6 +13,7 @@ public class ProfileRequest extends ApiRequest {
     //public String  fields;  //массив интересующих полей профиля
     // Constants
     public static final int P_ALL = 0;
+    public static final int P_EMAIL_CONFIRMED = 1;
 
     public ProfileRequest(Context context) {
         super(context);
@@ -26,6 +27,10 @@ public class ProfileRequest extends ApiRequest {
         switch (part) {
             case P_ALL:
                 fields = null;
+                break;
+            case P_EMAIL_CONFIRMED:
+                fields = new JSONArray();
+                fields.put("email_confirmed");
                 break;
             default:
                 fields = new JSONArray();

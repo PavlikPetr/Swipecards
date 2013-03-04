@@ -2,7 +2,7 @@
 
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:drawable="@drawable/feed_vip_bg"
+        android:drawable="@drawable/feed_bg"
         />
     <item
         android:drawable="@drawable/feed_vip_bg_front"

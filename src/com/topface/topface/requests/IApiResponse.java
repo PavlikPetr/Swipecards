@@ -5,6 +5,7 @@ import org.json.JSONObject;
 @SuppressWarnings("UnusedDeclaration")
 public interface IApiResponse {
     // Constants
+    public static final int CONNECTION_ERROR = -3;
     public static final int ERRORS_PROCCESED = -2;
     public static final int RESULT_OK = -1;
     public static final int RESULT_DONT_SET = 0;

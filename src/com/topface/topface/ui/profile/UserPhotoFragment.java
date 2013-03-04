@@ -41,7 +41,7 @@ public class UserPhotoFragment extends BaseFragment {
             @Override
             public void onUpdate() {
                 Photos data = ((ProfileGridAdapter)mGridAlbum.getAdapter()).getData();
-                AlbumRequest request = new AlbumRequest(getActivity(), mUser.uid, AlbumRequest.DEFAULT_PHOTOS_LIMIT, data.get(data.size() - 2).getId(), AlbumRequest.MODE_ALBUM);
+                AlbumRequest request = new AlbumRequest(getActivity(), mUser.uid, AlbumRequest.DEFAULT_PHOTOS_LIMIT, data.get(data.size() - 2).getPosition() + 1, AlbumRequest.MODE_ALBUM);
                 request.callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
