@@ -23,6 +23,7 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditProfileItem.Type;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.http.ProfileBackgrounds;
@@ -51,12 +52,21 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         hasStartedFromAuthActivity = getIntent().getBooleanExtra(NavigationActivity.FROM_AUTH, false);
 
         // Navigation bar
-        ((TextView) findViewById(R.id.tvNavigationTitle)).setText(R.string.edit_title);
-        findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
-        Button btnBackToProfile = (Button) findViewById(R.id.btnNavigationBackWithText);
-        btnBackToProfile.setText(R.string.general_profile);
-        btnBackToProfile.setVisibility(View.VISIBLE);
-        btnBackToProfile.setOnClickListener(this);
+        ActionBar actionBar = new ActionBar(findViewById(R.id.editContainer));
+        actionBar.setTitleText(getString(R.string.edit_title));
+        actionBar.showBackButton(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (hasStartedFromAuthActivity && !CacheProfile.city.isEmpty()) {
+                    Intent intent = new Intent(EditProfileActivity.this, NavigationActivity.class);
+                    intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_VIP_PROFILE);
+                    SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                    preferences.edit().putBoolean(Static.PREFERENCES_TAG_NEED_EDIT, false).commit();
+                    startActivity(intent);
+                }
+                finish();
+            }
+        });
 
         // ListView
         mEditItems = new LinkedList<EditProfileItem>();
@@ -183,16 +193,6 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                 break;
             case R.id.btnEditCity:
                 selectCity();
-                break;
-            case R.id.btnNavigationBackWithText:
-                if (hasStartedFromAuthActivity && !CacheProfile.city.isEmpty()) {
-                    SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-                    preferences.edit().putBoolean(Static.PREFERENCES_TAG_NEED_EDIT, false).commit();
-                    Intent intent = new Intent(this, NavigationActivity.class);
-                    intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_VIP_PROFILE);
-                    startActivity(intent);
-                }
-                finish();
                 break;
             case R.id.ivProfilePhoto:
                 startActivityForResult(new Intent(getApplicationContext(), EditContainerActivity.class),

@@ -4,6 +4,11 @@
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:orientation="vertical" >
+    <include
+            layout="@layout/bar_navigation_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/loNavigationBar"/>
 
     <TextView
         android:id="@+id/tvSexTitle" 

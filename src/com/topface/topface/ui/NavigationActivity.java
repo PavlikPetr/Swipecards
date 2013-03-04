@@ -149,6 +149,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mServerResponseReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+
             }
         };
 
@@ -472,10 +473,14 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         public void afterClosing() {
             mFragmentMenu.setClickable(false);
             mFragmentMenu.hide();
+            mFragmentSwitcher.getCurrentFragment().activateActionBar(false);
         }
 
         @Override
         public void afterOpening() {
+            if(mFragmentSwitcher.getCurrentFragment() !=  null) {
+                mFragmentSwitcher.getCurrentFragment().activateActionBar(true);
+            }
             if (mNovice.isMenuCompleted()) return;
 
             if (mNovice.isShowFillProfile()) {

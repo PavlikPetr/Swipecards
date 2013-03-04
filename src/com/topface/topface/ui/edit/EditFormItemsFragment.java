@@ -14,6 +14,7 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.QuestionaryRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
@@ -51,18 +52,12 @@ public class EditFormItemsFragment extends AbstractEditFragment {
                 false);
 
         // Navigation bar
-        ((TextView) getActivity().findViewById(R.id.tvNavigationTitle)).setText(R.string.edit_title);
-        TextView subTitle = (TextView) getActivity().findViewById(R.id.tvNavigationSubtitle);
-        subTitle.setVisibility(View.VISIBLE);
-
+        ActionBar actionBar = getActionBar(root);
+        actionBar.setTitleText(getString(R.string.edit_title));
         String formItemTitle = mFormInfo.getFormTitle(mTitleId);
-        subTitle.setText(formItemTitle);
+        actionBar.setSubTitleText(formItemTitle);
 
-        getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
-        mBackButton = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
-        mBackButton.setVisibility(View.VISIBLE);
-        mBackButton.setText(R.string.general_edit_button);
-        mBackButton.setOnClickListener(new OnClickListener() {
+        actionBar.showBackButton(new OnClickListener() {
 
             @Override
             public void onClick(View v) {

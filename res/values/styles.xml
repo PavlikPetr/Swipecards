@@ -16,6 +16,16 @@
         <item name="android:textColorLink">#2371B9</item>
     </style>
 
+    <style name="actionsFont">
+        <item name="android:textSize">16sp</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:background">@drawable/actions_menu_delimiter</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:drawablePadding">5dp</item>
+    </style>
+
     <style name="ShadowItemFont">
         <item name="android:shadowColor">#222222</item>
         <item name="android:shadowRadius">1</item>
@@ -439,14 +449,14 @@
 
     <style name="ProfileAvatar">
         <item name="postProcessor">mask</item>
-        <item name="clipMask">@drawable/avatar_frame_mask</item>
-        <item name="android:layout_width">93dp</item>
-        <item name="android:layout_height">93dp</item>
-        <item name="android:paddingTop">0.5dp</item>
-        <item name="android:paddingLeft">0.5dp</item>
-        <item name="android:paddingRight">0.5dp</item>
-        <item name="android:paddingBottom">2dp</item>
-        <item name="android:background">@drawable/avatar_frame</item>
+        <item name="clipMask">@drawable/photo_mask</item>
+        <item name="android:background">@drawable/photo_border</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_marginRight">6dp</item>
+        <item name="android:layout_marginLeft">6dp</item>
+        <item name="android:layout_width">72dp</item>
+        <item name="android:layout_height">72dp</item>
     </style>
 
     <style name="TopfaceCirclePageIndicator">
@@ -458,14 +468,16 @@
     </style>
 
     <style name="Widget.TopfaceTabPageIndicator" parent="Widget">
-        <item name="android:gravity">center</item>
+        <item name="android:gravity">center_horizontal</item>
         <item name="android:background">@drawable/topface_tab_indicator</item>
-        <item name="android:paddingTop">10dp</item>
-        <item name="android:paddingBottom">12dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <!--<item name="android:paddingTop">10dp</item>-->
+        <!--<item name="android:paddingBottom">12dp</item>-->
         <item name="android:textAppearance">@style/TextAppearance.TopfaceTabPageIndicator</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:maxLines">1</item>
-        <item name="android:singleLine">true</item>
+        <!--<item name="android:singleLine">true</item>-->
     </style>
 
     <style name="TextAppearance.TopfaceTabPageIndicator" parent="Widget">

@@ -4,7 +4,13 @@
               android:layout_height="wrap_content"
               android:gravity="center_horizontal"
               android:orientation="vertical"
-              android:paddingTop="8dp">
+              >
+    <include
+            layout="@layout/bar_navigation_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/loNavigationBar"
+            android:layout_marginBottom="8dp"/>
 
     <TextView style="@style/BackgroundFormTitleText"/>
 

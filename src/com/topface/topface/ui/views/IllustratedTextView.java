@@ -20,8 +20,13 @@ import java.util.ArrayList;
  */
 public class IllustratedTextView extends TextView {
 
-    public static final int ICON_ALIGN = ImageSpan.ALIGN_BASELINE;
+    public static final int ICON_ALIGN = TfImageSpan.ALIGN_CENTER;
     private boolean mIsTextChanged = false;
+
+    public IllustratedTextView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+
+    }
 
     public IllustratedTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -51,7 +56,7 @@ public class IllustratedTextView extends TextView {
             Context ctx = getContext();
             for (int spanStart : indexes) {
                 spannableString.setSpan(
-                        new ImageSpan(ctx, icon, ICON_ALIGN),
+                        new TfImageSpan(ctx, icon, ICON_ALIGN),
                         spanStart,
                         spanStart + templateLength,
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE

@@ -3,6 +3,7 @@
     <string name="time_now">Прямо зараз</string>
     <plurals name="time_hour">
         <item quantity="few">%d години тому</item>
+        <item quantity="zero">менше години тому</item>
         <item quantity="other">%d годин тому</item>
         <item quantity="one">%d годину тому</item>
     </plurals>

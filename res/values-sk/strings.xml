@@ -307,4 +307,9 @@
     <string name="popup_version_message">Je čas obnoviť svoju verziu!</string>
     <string name="popup_version_update">Obnoviť</string>
     <string name="popup_version_cancel">Pripomenúť neskôr</string>
+    <string name="default_price_format">Celkovo: %.2f USD</string>
+    <string name="dating_online_only">%s, iba online</string>
+    <string name="map_popup_address">Adresa</string>
+    <string name="general_gift">Darček</string>
+    <string name="general_soon">Čoskoro</string>
 </resources>
