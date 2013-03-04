@@ -18,6 +18,7 @@ import com.sponsorpay.sdk.android.SponsorPay;
 import com.sponsorpay.sdk.android.publisher.SponsorPayPublisher;
 import com.tapjoy.TapjoyConnect;
 import com.tapjoy.TapjoyEarnedPointsNotifier;
+import com.tapjoy.TapjoyNotifier;
 import com.topface.billing.BillingUtils;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
@@ -56,8 +57,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TapjoyConnect.requestTapjoyConnect(getApplicationContext(), "f0563cf4-9e7c-4962-b333-098810c477d2","AS0AE9vmrWvkyNNGPsyu");
+        TapjoyConnect.getTapjoyConnectInstance().setUserID(Integer.toString(CacheProfile.uid));
 
-        TapjoyConnect.requestTapjoyConnect(getApplicationContext(), "9b411065-e3f9-4e30-9c5a-e4246c291f49", "I67YTAsltAvGaalpAGi5");
         SponsorPay.start("appId", Integer.toString(CacheProfile.uid), "securityToken", getApplicationContext());
 
         if (isNeedBroughtToFront(getIntent())) {
@@ -153,7 +155,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             mDelayedFragment = null;
             mChatInvoke = true;
         }
-
+        TapjoyConnect.getTapjoyConnectInstance().getTapPoints(mTapjoyNotifier);
     }
 
     private void checkProfileUpdate() {
@@ -286,12 +288,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         public void onMenuClick(int buttonId) {
             if (buttonId == R.id.btnFragmentOfferwall) {
                 TapjoyConnect.getTapjoyConnectInstance().showOffers();
-                TapjoyConnect.getTapjoyConnectInstance().setEarnedPointsNotifier(new TapjoyEarnedPointsNotifier() {
-                    @Override
-                    public void earnedTapPoints(int i) {
-                        Debug.log(Integer.toString(i));
-                    }
-                });
+                TapjoyConnect.getTapjoyConnectInstance().setEarnedPointsNotifier(mTapjoyEarnedNotifier);
                 return;
             } else if (buttonId == R.id.btnFragmentSponsorpay) {
                 Intent offerWallIntent = SponsorPayPublisher.getIntentForOfferWallActivity(getApplicationContext(), true);
@@ -511,4 +508,22 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    private TapjoyNotifier mTapjoyNotifier = new TapjoyNotifier() {
+        @Override
+        public void getUpdatePoints(String s, int i) {
+            Debug.log(s);
+        }
+
+        @Override
+        public void getUpdatePointsFailed(String s) {
+            Debug.log(s);
+        }
+    };
+
+    private TapjoyEarnedPointsNotifier mTapjoyEarnedNotifier = new TapjoyEarnedPointsNotifier() {
+        @Override
+        public void earnedTapPoints(int i) {
+            Debug.log(Integer.toString(i));
+        }
+    };
 }
