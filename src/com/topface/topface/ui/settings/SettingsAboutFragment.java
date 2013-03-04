@@ -12,11 +12,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.ui.analytics.TrackedFragment;
+import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.Debug;
 
 import java.util.Calendar;
 
-public class SettingsAboutFragment extends TrackedFragment {
+public class SettingsAboutFragment extends BaseFragment {
 
 
     @Override
@@ -26,18 +28,15 @@ public class SettingsAboutFragment extends TrackedFragment {
         final FragmentActivity activity = getActivity();
 
         // Navigation bar
-        activity.findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
-        Button btnBack = (Button) activity.findViewById(R.id.btnNavigationBackWithText);
-        btnBack.setVisibility(View.VISIBLE);
-        btnBack.setText(R.string.settings_header_title);
-        btnBack.setOnClickListener(new OnClickListener() {
+        ActionBar actionBar = getActionBar(root);
+        actionBar.showBackButton(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 activity.finish();
             }
         });
-        ((TextView) activity.findViewById(R.id.tvNavigationTitle)).setText(R.string.settings_about);
+        actionBar.setTitleText(getString(R.string.settings_about));
 
         // Version
         TextView version = (TextView) root.findViewById(R.id.tvVersion);

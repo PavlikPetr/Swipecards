@@ -304,4 +304,14 @@
     <string name="popup_version_message">Η ώρα να ενημερώσετε την έκδοση σας!</string>
     <string name="popup_version_update">Ενημερώσω</string>
     <string name="popup_version_cancel">Υπενθύμιση αργότερα</string>
+    <string name="general_version_not_supported">Δική σας έκδοση της εφαρμογής είναι ξεπερασμένη και δεν υποστηρίζεται πλέον. Σας παρακαλούμε να ενημερώστε την εφαρμογή</string>
+    <string name="leaders_select_photo_info">Επιλέξτε την πιο θεαματική φωτογραφία! Τις φωτογραφίες με χαμηλή βαθμολογία δεν μπορείτε να επιλέξετε</string>
+    <string name="default_price_format">Στη συνολική: %.2f USD</string>
+    <string name="dating_online_only">%s, σε σύνδεση μόνο</string>
+    <string name="map_popup_address">Η διεύθυνση</string>
+    <string name="black_list_info">Έχετε προσθέσει του συνομιλητής στη μαύρη λίστα. Μπορείτε να αλλάξετε αυτό στο προφίλ σας στις ρυθμίσεις  τη VIP-κατάσταση.</string>
+    <string name="general_gift">Το δώρω</string>
+    <string name="general_soon">Σύντομα θα είναι</string>
+    <string name="black_list_activation">Ενεργοποιήστε το VIP-κατάσταση, και χρησιμοποιήστε μια μαύρη λίστα</string>
+    <string name="profile_edit_age_ranges">Ηλικία θα πρέπει να είναι μεταξύ 16 - 99 ετών. Παρακαλώ εισάγετε έναν έγκυρο αριθμό και προσπαθήστε ξανά.</string>
 </resources>

@@ -8,7 +8,6 @@ import com.topface.topface.ui.fragments.BaseFragment;
 
 public abstract class AbstractEditFragment extends BaseFragment {
 
-    protected Button mSaveButton;
     protected Button mBackButton;
     protected ProgressBar mRightPrsBar;
     protected Handler mFinishHandler;
@@ -31,9 +30,6 @@ public abstract class AbstractEditFragment extends BaseFragment {
                     mRightPrsBar.setVisibility(View.VISIBLE);
                 }
 
-                if (mSaveButton != null) {
-                    mSaveButton.setVisibility(View.INVISIBLE);
-                }
             }
         });
     }
@@ -48,11 +44,7 @@ public abstract class AbstractEditFragment extends BaseFragment {
 
                 if (mRightPrsBar != null) {
                     mRightPrsBar.setVisibility(View.GONE);
-                    if (hasChanges()) {
-                        if (mSaveButton != null) {
-                            mSaveButton.setVisibility(View.VISIBLE);
-                        }
-                    } else {
+                    if (!hasChanges()) {
                         mRightPrsBar.setVisibility(View.INVISIBLE);
                     }
                 }
@@ -62,18 +54,7 @@ public abstract class AbstractEditFragment extends BaseFragment {
     }
 
     protected void refreshSaveState() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mSaveButton != null) {
-                    if (hasChanges()) {
-                        mSaveButton.setVisibility(View.VISIBLE);
-                    } else {
-                        mSaveButton.setVisibility(View.INVISIBLE);
-                    }
-                }
-            }
-        });
+
     }
 
     protected abstract void lockUi();

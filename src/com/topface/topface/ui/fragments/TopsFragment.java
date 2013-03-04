@@ -25,6 +25,7 @@ import com.topface.topface.ui.blocks.FilterBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.views.DoubleButton;
 import com.topface.topface.ui.views.LockerView;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.NavigationBarController;
@@ -60,12 +61,12 @@ public class TopsFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.ac_tops, null);
 
         // Navigation bar
-        mNavBarController = new NavigationBarController((ViewGroup) view.findViewById(R.id.loNavigationBar));
-        view.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
-        ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(R.string.general_tops);
-
+//        mNavBarController = new NavigationBarController((ViewGroup) view.findViewById(R.id.loNavigationBar));
+        ActionBar actionBar = getActionBar(view);
+        actionBar.showHomeButton((View.OnClickListener)getActivity());
+        actionBar.setTitleText(getString(R.string.general_tops));
         //Инициализируем кнопку фильтров
-        new FilterBlock((ViewGroup) view, R.id.loControlsGroup, R.id.btnNavigationSettingsBar, R.id.toolsBar);
+        new FilterBlock((ViewGroup) view, R.id.loControlsGroup, actionBar, R.id.toolsBar);
 
         // Data
         mTopsList = new LinkedList<Top>();

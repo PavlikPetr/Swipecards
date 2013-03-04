@@ -13,8 +13,12 @@ import java.util.Calendar;
 public class DatePickerFragment extends TrackedDialogFragment implements DatePickerDialog.OnDateSetListener {
 
     private static final int START_SHIFT = 33;
+    public static final String YEAR = "year";
+    public static final String MONTH = "month";
+    public static final String DAY = "day";
 
     private static long MAX_DATE;
+    private static long MIN_DATE;
 
     public static final String TAG = "datePickerTag";
 
@@ -23,13 +27,15 @@ public class DatePickerFragment extends TrackedDialogFragment implements DatePic
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final Calendar c = Calendar.getInstance();
-        c.add(Calendar.YEAR, -Static.MAX_AGE);
+        c.add(Calendar.YEAR, -Static.MIN_AGE);
         MAX_DATE = c.getTimeInMillis();
+        c.add(Calendar.YEAR, -(Static.MAX_AGE - Static.MIN_AGE));
+        MIN_DATE = c.getTimeInMillis();
 
         c.add(Calendar.YEAR, -(START_SHIFT-Static.MAX_AGE));
-        final int year = c.get(Calendar.YEAR);
-        final int month = c.get(Calendar.MONTH);
-        final int day = c.get(Calendar.DAY_OF_MONTH);
+        final int year = getArguments().getInt(YEAR);
+        final int month = getArguments().getInt(MONTH);
+        final int day = getArguments().getInt(DAY);
 
         DatePickerDialog dialog = new DatePickerDialog(getActivity(),this,year,month,day) {
             int lastYear = year;
@@ -37,7 +43,7 @@ public class DatePickerFragment extends TrackedDialogFragment implements DatePic
             int lastDay = day;
             @Override
             public void onDateChanged(DatePicker view, int year, int month, int day) {
-                if(!isValidDate(year, month, day, 0, MAX_DATE)){
+                if(!isValidDate(year, month, day, MIN_DATE, MAX_DATE)){
                     view.init(lastYear,lastMonth,lastDay, this);
                 } else {
                     lastYear = year;
@@ -61,8 +67,14 @@ public class DatePickerFragment extends TrackedDialogFragment implements DatePic
         mDateSetListener = listener;
     }
 
-    public static DatePickerFragment newInstance() {
-        return new DatePickerFragment();
+    public static DatePickerFragment newInstance(int year, int month, int day) {
+        DatePickerFragment datePickerFragment = new DatePickerFragment();
+        Bundle arguments = new Bundle();
+        arguments.putInt(YEAR, year);
+        arguments.putInt(MONTH, month);
+        arguments.putInt(DAY, day);
+        datePickerFragment.setArguments(arguments);
+        return datePickerFragment;
     }
 
     public static boolean isValidDate(final int year,final  int month,final  int day,final  long minDate,
@@ -70,4 +82,5 @@ public class DatePickerFragment extends TrackedDialogFragment implements DatePic
         final long millis = DateUtils.getDateInMilliseconds(year,month,day);
         return (millis >= minDate && millis <= maxDate);
     }
+
 }

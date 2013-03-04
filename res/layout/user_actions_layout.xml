@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:id="@+id/mUserActions"
+              android:background="@drawable/drop_menu_backgroud"
+        >
+
+        <TextView
+                android:id="@+id/acDelight"
+                style="@style/actionsFont"
+                android:text="@string/general_delight"
+                android:drawableLeft="@drawable/us_ac_delight_selector"
+
+                />
+
+        <TextView
+                android:id="@+id/acSympathy"
+                android:text="@string/general_sympathy"
+                style="@style/actionsFont"
+                android:drawableLeft="@drawable/us_ac_sympathy_selector"
+                />
+
+        <TextView
+                android:id="@+id/acChat"
+                android:text="@string/user_actions_chat"
+                style="@style/actionsFont"
+                android:drawableLeft="@drawable/us_ac_chat_selector"
+                />
+
+
+        <TextView
+                android:id="@+id/acGift"
+                style="@style/actionsFont"
+                android:drawableLeft="@drawable/us_ac_gift_selector"
+                android:text="@string/general_gift"
+                />
+
+        <TextView
+                android:id="@+id/acBlock"
+                style="@style/actionsFont"
+                android:drawableLeft="@drawable/us_ac_block"
+                android:text="@string/general_block"
+                />
+
+
+</LinearLayout>
