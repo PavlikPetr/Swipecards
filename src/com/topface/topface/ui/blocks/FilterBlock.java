@@ -34,7 +34,7 @@ public class FilterBlock {
             public void onClick(View view) {
                 mControlGroup.startAnimation(new SwapAnimation(mControlGroup, mToolsBar));
             }
-        });
+        }, true);
 
         ViewTreeObserver vto = mToolsBar.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

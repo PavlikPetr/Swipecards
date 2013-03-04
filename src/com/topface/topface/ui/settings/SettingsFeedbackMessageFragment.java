@@ -62,15 +62,6 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             }
         });
 
-        mSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
-        mSaveButton.setText(R.string.general_send_button);
-        mSaveButton.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                saveChanges(null);
-            }
-        });
 
         mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
 

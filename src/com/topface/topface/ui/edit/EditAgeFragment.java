@@ -53,6 +53,12 @@ public class EditAgeFragment extends AbstractEditFragment {
         actionBar.showBackButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Intent intent = getActivity().getIntent();
+                intent.putExtra(EditContainerActivity.INTENT_AGE_START, age_start);
+                intent.putExtra(EditContainerActivity.INTENT_AGE_END, age_end);
+
+                getActivity().setResult(Activity.RESULT_OK, intent);
                 getActivity().finish();
             }
         });
@@ -75,20 +81,6 @@ public class EditAgeFragment extends AbstractEditFragment {
         });
         ((LinearLayout) view.findViewById(R.id.apContainer)).addView(rsb);
 
-        mSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
-        mSaveButton.setVisibility(View.VISIBLE);
-        mSaveButton.setText(R.string.general_save_button);
-        mSaveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = getActivity().getIntent();
-                intent.putExtra(EditContainerActivity.INTENT_AGE_START, age_start);
-                intent.putExtra(EditContainerActivity.INTENT_AGE_END, age_end);
-
-                getActivity().setResult(Activity.RESULT_OK, intent);
-                getActivity().finish();
-            }
-        });
 
         return view;
     }

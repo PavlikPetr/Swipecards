@@ -52,12 +52,9 @@ public class ActionBar {
         mNavigationHome.setOnClickListener(listener);
     }
 
-    public void activateHomeButton() {
-        if (mNavigationHome.isSelected()) {
-            mNavigationHome.setSelected(false);
-        } else {
-            mNavigationHome.setSelected(true);
-        }
+    public void activateHomeButton(boolean activate) {
+        mNavigationHome.setSelected(activate);
+
     }
 
     public void showBackButton(View.OnClickListener listener) {
@@ -74,17 +71,19 @@ public class ActionBar {
         mProfileButton.setVisibility(View.GONE);
     }
 
-    public void showSettingsButton(final View.OnClickListener listener) {
+    public void showSettingsButton(final View.OnClickListener listener, final boolean changeSelection) {
         mEditButton.setVisibility(View.GONE);
 
         mSettingsButton.setVisibility(View.VISIBLE);
         mSettingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mSettingsButton.isSelected()) {
-                    mSettingsButton.setSelected(false);
-                } else {
-                    mSettingsButton.setSelected(true);
+                if(changeSelection) {
+                    if (mSettingsButton.isSelected()) {
+                        mSettingsButton.setSelected(false);
+                    } else {
+                        mSettingsButton.setSelected(true);
+                    }
                 }
                 listener.onClick(view);
             }

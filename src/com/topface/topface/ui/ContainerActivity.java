@@ -33,16 +33,16 @@ public class ContainerActivity extends BaseFragmentActivity {
         overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
 
         // Title Header
-        findViewById(R.id.btnNavigationHome).setVisibility(View.INVISIBLE);
-        ImageButton backButton = ((ImageButton) findViewById(R.id.btnNavigationBack));
-        backButton.setVisibility(View.VISIBLE);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setResult(Activity.RESULT_CANCELED);
-                finish();
-            }
-        });
+
+//        ImageButton backButton = ((ImageButton) findViewById(R.id.btnNavigationBack));
+//        backButton.setVisibility(View.VISIBLE);
+//        backButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                setResult(Activity.RESULT_CANCELED);
+//                finish();
+//            }
+//        });
 
         initRequestKey();
     }

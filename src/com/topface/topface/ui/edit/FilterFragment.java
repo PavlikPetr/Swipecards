@@ -50,7 +50,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     private EditSwitcher mSwitchOnline;
     private EditSwitcher mSwitchBeautifull;
 
-    private Button mExtraSaveButton;
     private boolean mExtraSavingPerformed = false;
 
     public static final int webAbsoluteMaxAge = 99;
@@ -75,16 +74,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
             }
         });
 
-        mExtraSaveButton = (Button) root.findViewById(R.id.btnNavigationRightWithText);
-        mExtraSaveButton.setText(getResources().getString(R.string.general_save_button));
-        mExtraSaveButton.setOnClickListener(new OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                saveChanges(null);
-                mExtraSavingPerformed = true;
-            }
-        });
 
         mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
 
@@ -436,7 +426,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     @Override
     protected void lockUi() {
-        mBackButton.setEnabled(false);
+//        mBackButton.setEnabled(false);
         mLoGirls.setEnabled(false);
         mLoBoys.setEnabled(false);
         mAgeFrame.setEnabled(false);
@@ -452,7 +442,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     @Override
     protected void unlockUi() {
-        mBackButton.setEnabled(true);
+//        mBackButton.setEnabled(true);
         mLoGirls.setEnabled(true);
         mLoBoys.setEnabled(true);
         mAgeFrame.setEnabled(true);
@@ -469,32 +459,18 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     @Override
     protected void refreshSaveState() {
         super.refreshSaveState();
-        if (mExtraSaveButton != null) {
-            if (hasChanges()) {
-                mExtraSaveButton.setVisibility(View.VISIBLE);
-            } else {
-                mExtraSaveButton.setVisibility(View.INVISIBLE);
-            }
-        }
+
     }
 
     @Override
     protected void prepareRequestSend() {
         super.prepareRequestSend();
-        if (mExtraSaveButton != null) {
-            mExtraSaveButton.setVisibility(View.INVISIBLE);
-        }
+
     }
 
     @Override
     protected void finishRequestSend() {
         super.finishRequestSend();
-        if (mRightPrsBar != null) {
-            if (hasChanges()) {
-                if (mExtraSaveButton != null) {
-                    mExtraSaveButton.setVisibility(View.VISIBLE);
-                }
-            }
-        }
+
     }
 }

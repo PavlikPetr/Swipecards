@@ -134,23 +134,7 @@
                 android:layout_height="fill_parent"
                 android:layout_marginRight="5dp">
 
-            <Button
-                    android:id="@+id/btnNavigationRightWithText"
-                    style="@style/ButtonsText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:background="@drawable/navigation_edit_selector"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:maxWidth="47dp"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:scrollHorizontally="true"
-                    android:layout_centerVertical="true"
-                    android:singleLine="true"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:visibility="gone"/>
+
             <ImageButton
                     android:id="@+id/btnEdit"
                     style="@style/ButtonsText"

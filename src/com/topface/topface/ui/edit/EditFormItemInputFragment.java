@@ -35,7 +35,6 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
     private String mInputData = "";
     private Profile mProfile;
     private FormInfo mFormInfo;
-    private Button mExtraSaveButton;
 
     private EditText mEditText;
 
@@ -68,15 +67,6 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
             }
         });
 
-        mExtraSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
-        mExtraSaveButton.setText(getResources().getString(R.string.general_save_button));
-        mExtraSaveButton.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                saveChanges(null);
-            }
-        });
 
         mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
 
@@ -178,48 +168,18 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
     @Override
     protected void refreshSaveState() {
         super.refreshSaveState();
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mExtraSaveButton != null) {
-                    if (hasChanges()) {
-                        mExtraSaveButton.setVisibility(View.VISIBLE);
-                    } else {
-                        mExtraSaveButton.setVisibility(View.INVISIBLE);
-                    }
-                }
-            }
-        });
+
     }
 
     @Override
     protected void prepareRequestSend() {
         super.prepareRequestSend();
-        getActivity().runOnUiThread(new Runnable() {
 
-            @Override
-            public void run() {
-                if (mExtraSaveButton != null) {
-                    mExtraSaveButton.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
     }
 
     @Override
     protected void finishRequestSend() {
         super.finishRequestSend();
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mRightPrsBar != null) {
-                    if (hasChanges()) {
-                        if (mExtraSaveButton != null) {
-                            mExtraSaveButton.setVisibility(View.VISIBLE);
-                        }
-                    }
-                }
-            }
-        });
+
     }
 }

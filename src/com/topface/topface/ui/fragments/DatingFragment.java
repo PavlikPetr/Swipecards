@@ -238,7 +238,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FILTER);
             }
         };
-        actionBar.showSettingsButton(listener);
+        actionBar.showSettingsButton(listener, false);
         return listener;
     }
 
@@ -864,8 +864,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     };
 
     private void sendAlbumRequest(final Photos data) {
-        int position = data.get(mLoadedCount - 1).getPosition() + 1
-                ;
+        int position = data.get(mLoadedCount - 1).getPosition() + 1;
         AlbumRequest request = new AlbumRequest(getActivity(), mUserSearchList.getCurrentUser().id, PHOTOS_LIMIT, position, AlbumRequest.MODE_SEARCH);
         final int uid = mUserSearchList.getCurrentUser().id;
         request.callback(new ApiHandler() {

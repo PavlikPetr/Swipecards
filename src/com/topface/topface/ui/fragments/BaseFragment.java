@@ -165,9 +165,9 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         }
     }
 
-    public void activateActionBar() {
+    public void activateActionBar(boolean activate) {
         if(mActionBar != null) {
-            mActionBar.activateHomeButton();
+            mActionBar.activateHomeButton(activate);
         }
     }
 
