@@ -464,7 +464,6 @@ public class AuthFragment extends BaseFragment {
         if ((request != null) && needShowRetry) {
             mRetryView.setVisibility(View.VISIBLE);
             mProgressBar.setVisibility(View.GONE);
-//            mLoginSendingProgress.setVisibility(View.GONE);
         } else {
             showButtons();
         }
