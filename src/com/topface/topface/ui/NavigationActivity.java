@@ -17,8 +17,6 @@ import android.view.animation.AlphaAnimation;
 import com.sponsorpay.sdk.android.SponsorPay;
 import com.sponsorpay.sdk.android.publisher.SponsorPayPublisher;
 import com.tapjoy.TapjoyConnect;
-import com.tapjoy.TapjoyEarnedPointsNotifier;
-import com.tapjoy.TapjoyNotifier;
 import com.topface.billing.BillingUtils;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
@@ -60,7 +58,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         TapjoyConnect.requestTapjoyConnect(getApplicationContext(), "f0563cf4-9e7c-4962-b333-098810c477d2","AS0AE9vmrWvkyNNGPsyu");
         TapjoyConnect.getTapjoyConnectInstance().setUserID(Integer.toString(CacheProfile.uid));
 
-        SponsorPay.start("appId", Integer.toString(CacheProfile.uid), "securityToken", getApplicationContext());
+        SponsorPay.start("11625", Integer.toString(CacheProfile.uid), "0a4c64db64ed3c1ca14a5e5d81aaa23c", getApplicationContext());
 
         if (isNeedBroughtToFront(getIntent())) {
             // При открытии активити из лаунчера перезапускаем ее
@@ -155,7 +153,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             mDelayedFragment = null;
             mChatInvoke = true;
         }
-        TapjoyConnect.getTapjoyConnectInstance().getTapPoints(mTapjoyNotifier);
     }
 
     private void checkProfileUpdate() {
@@ -288,7 +285,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         public void onMenuClick(int buttonId) {
             if (buttonId == R.id.btnFragmentOfferwall) {
                 TapjoyConnect.getTapjoyConnectInstance().showOffers();
-                TapjoyConnect.getTapjoyConnectInstance().setEarnedPointsNotifier(mTapjoyEarnedNotifier);
                 return;
             } else if (buttonId == R.id.btnFragmentSponsorpay) {
                 Intent offerWallIntent = SponsorPayPublisher.getIntentForOfferWallActivity(getApplicationContext(), true);
@@ -507,23 +503,4 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
-    private TapjoyNotifier mTapjoyNotifier = new TapjoyNotifier() {
-        @Override
-        public void getUpdatePoints(String s, int i) {
-            Debug.log(s);
-        }
-
-        @Override
-        public void getUpdatePointsFailed(String s) {
-            Debug.log(s);
-        }
-    };
-
-    private TapjoyEarnedPointsNotifier mTapjoyEarnedNotifier = new TapjoyEarnedPointsNotifier() {
-        @Override
-        public void earnedTapPoints(int i) {
-            Debug.log(Integer.toString(i));
-        }
-    };
 }
