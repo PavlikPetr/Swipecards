@@ -115,18 +115,6 @@
             android:drawableLeft="@drawable/topface_settings"
             style="@style/LeftMenuButtons"/>
 
-    <Button
-            android:id="@+id/btnFragmentOfferwall"
-            android:layout_below="@id/btnFragmentSettings"
-            android:text="OfferwallTapjoy"
-            style="@style/LeftMenuButtons"/>
-
-    <Button
-            android:id="@+id/btnFragmentSponsorpay"
-            android:layout_below="@id/btnFragmentOfferwall"
-            android:text="OfferwallSponsorPay"
-            style="@style/LeftMenuButtons"/>
-            
     <ImageView 
         android:layout_below="@id/btnFragmentSettings"
         android:layout_width="fill_parent"

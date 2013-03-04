@@ -227,7 +227,6 @@
         <include
                 layout="@layout/item_divider"
                 android:layout_marginTop="10dp"
-                android:visibility="gone"
                 />
         <Button
                 android:id="@+id/btnOfferwall"
@@ -240,7 +239,6 @@
                 android:background="@drawable/btn_vip_sale_selector"
                 style="@style/ButtonWhiteTextMini"
                 android:text="@string/get_it_for_free"
-                android:visibility="gone"
                 />
     </LinearLayout>
 </ScrollView>

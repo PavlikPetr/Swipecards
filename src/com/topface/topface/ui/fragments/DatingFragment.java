@@ -280,6 +280,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             @Override
             public void onReceive(Context context, Intent intent) {
                 updateFilterData();
+                updateResources();
             }
         };
     }

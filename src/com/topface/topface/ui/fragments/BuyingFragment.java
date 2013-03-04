@@ -14,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.sponsorpay.sdk.android.publisher.SponsorPayPublisher;
+import com.tapjoy.TapjoyConnect;
 import com.topface.billing.BillingFragment;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -199,11 +201,17 @@ public class BuyingFragment extends BillingFragment {
         root.findViewById(R.id.btnOfferwall).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO open Offerwall
+                if ((CacheProfile.uid % 2) == 0) {
+                    TapjoyConnect.getTapjoyConnectInstance().showOffers();
+                } else {
+                    Intent offerWallIntent = SponsorPayPublisher.getIntentForOfferWallActivity(getActivity().getApplicationContext(), true);
+                    startActivityForResult(offerWallIntent, SponsorPayPublisher.DEFAULT_OFFERWALL_REQUEST_CODE);
+                }
             }
-        });
+        }
+    );
 
-    }
+}
 
     private void goToVipSettings() {
         Intent intent = new Intent(getActivity(), ContainerActivity.class);
