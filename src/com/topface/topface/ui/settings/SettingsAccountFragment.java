@@ -53,7 +53,7 @@ public class SettingsAccountFragment extends BaseFragment {
         });
         lockerView = (LockerView) root.findViewById(R.id.llvLogoutLoading);
         lockerView.setVisibility(View.GONE);
-        ((TextView) getActivity().findViewById(R.id.tvNavigationTitle)).setText(R.string.settings_account);
+        actionBar.setTitleText(getString(R.string.settings_account));
 
         Drawable icon = null;
         final AuthToken token = AuthToken.getInstance();

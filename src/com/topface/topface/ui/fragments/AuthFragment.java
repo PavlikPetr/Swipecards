@@ -194,6 +194,7 @@ public class AuthFragment extends BaseFragment {
             @Override
             public void onReceive(Context context, Intent intent) {
                 int mConnectionType = intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE, -1);
+
                 if (mConnectionType != ConnectionChangeReceiver.CONNECTION_OFFLINE) {
                     IllustratedTextView btn = mRetryView.getBtn1();
                     if (btn != null) {
@@ -315,7 +316,7 @@ public class AuthFragment extends BaseFragment {
 
             @Override
             public void cancel() {
-                showButtons();
+//                showButtons();
             }
         });
         EasyTracker.getTracker().trackEvent("Profile", "Auth", "FromActivity" + AuthToken.SN_TOPFACE, 1L);
@@ -392,6 +393,7 @@ public class AuthFragment extends BaseFragment {
     private void authorizationFailed(int codeError, final ApiRequest request) {
         hideButtons();
         boolean needShowRetry = true;
+
         switch (codeError) {
             case ApiResponse.NETWORK_CONNECT_ERROR:
                 mRetryView.setErrorMsg(getString(R.string.general_reconnect_social));

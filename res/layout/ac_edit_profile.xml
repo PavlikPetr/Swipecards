@@ -7,7 +7,7 @@
 
     <!-- header bar -->
 
-        <include android:id="@+id/loNavigationBar" layout="@layout/bar_navigation_header"/>
+    <include android:id="@+id/loNavigationBar" layout="@layout/bar_navigation_header"/>
 
     <ListView
             android:id="@+id/lvEdits"
