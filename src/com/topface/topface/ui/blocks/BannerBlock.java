@@ -95,6 +95,9 @@ public class BannerBlock {
                 String bannerType = CacheProfile.getOptions().pages.get(mBannersMap.get(fragmentId)).banner;
 
                 mBannerView = getBannerView(bannerType);
+                if (mBannerView == null) {
+                    return;
+                }
                 mBannerLayout.addView(mBannerView);
                 if (bannerType.equals(Options.BANNER_TOPFACE)) {
                     if (isCorrectResolution() && mBannersMap.containsKey(fragmentId)) {
