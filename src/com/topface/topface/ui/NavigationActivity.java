@@ -16,12 +16,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.Toast;
+import com.sponsorpay.sdk.android.SponsorPay;
+import com.tapjoy.TapjoyConnect;
 import com.topface.billing.BillingUtils;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
+import com.topface.topface.data.Profile;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
@@ -61,6 +64,10 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TapjoyConnect.requestTapjoyConnect(getApplicationContext(), "f0563cf4-9e7c-4962-b333-098810c477d2","AS0AE9vmrWvkyNNGPsyu");
+        TapjoyConnect.getTapjoyConnectInstance().setUserID(Integer.toString(CacheProfile.uid));
+        SponsorPay.start("11625", Integer.toString(CacheProfile.uid), "0a4c64db64ed3c1ca14a5e5d81aaa23c", getApplicationContext());
+
         if (isNeedBroughtToFront(getIntent())) {
             // При открытии активити из лаунчера перезапускаем ее
             finish();
@@ -167,6 +174,36 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         checkExternalLink();
 
         //Открыть диалог для захвата фото к аватарке
+        actionsAfterRegistration();
+
+        requestBalance();
+    }
+
+    private void requestBalance() {
+        ProfileRequest request = new ProfileRequest(this);
+        request.part = ProfileRequest.P_BALANCE_COUNTERS;
+        request.callback(new DataApiHandler<Profile>() {
+
+            @Override
+            protected void success(Profile data, ApiResponse response) {
+                CacheProfile.likes = data.likes;
+                CacheProfile.money = data.money;
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+            }
+
+            @Override
+            protected Profile parseResponse(ApiResponse response) {
+                return Profile.parse(response);
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+
+            }
+        }).exec();
+    }
+
+    private void actionsAfterRegistration() {
         if (!AuthToken.getInstance().isEmpty()) {
             if (CacheProfile.photo == null && !CacheProfile.wasAvatarAsked) {
                 CacheProfile.wasAvatarAsked = true;
@@ -219,6 +256,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             }
         }
     }
+
     private void checkExternalLink() {
         if(getIntent() != null) {
             Uri data = getIntent().getData();
@@ -608,5 +646,4 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
 }
