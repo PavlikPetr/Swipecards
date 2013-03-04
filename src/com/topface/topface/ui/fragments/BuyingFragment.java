@@ -195,7 +195,6 @@ public class BuyingFragment extends BillingFragment {
             vipTitle.setVisibility(View.VISIBLE);
             vipBtn.setVisibility(View.VISIBLE);
         }
-
     }
 
     private void goToVipSettings() {

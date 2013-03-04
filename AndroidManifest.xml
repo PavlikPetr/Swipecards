@@ -160,6 +160,13 @@
             </intent-filter>
         </receiver>
 
+        <receiver
+                android:exported="true"
+                android:name="com.sponsorpay.sdk.android.advertiser.InstallReferrerReceiver" >
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER"/>
+            </intent-filter></receiver>
+
         <!-- providers -->
         <provider
                 android:name="com.mad.provider.MadProvider"

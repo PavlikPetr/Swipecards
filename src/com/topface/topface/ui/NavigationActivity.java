@@ -57,7 +57,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         super.onCreate(savedInstanceState);
         TapjoyConnect.requestTapjoyConnect(getApplicationContext(), "f0563cf4-9e7c-4962-b333-098810c477d2","AS0AE9vmrWvkyNNGPsyu");
         TapjoyConnect.getTapjoyConnectInstance().setUserID(Integer.toString(CacheProfile.uid));
-
         SponsorPay.start("11625", Integer.toString(CacheProfile.uid), "0a4c64db64ed3c1ca14a5e5d81aaa23c", getApplicationContext());
 
         if (isNeedBroughtToFront(getIntent())) {
@@ -153,6 +152,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             mDelayedFragment = null;
             mChatInvoke = true;
         }
+
     }
 
     private void checkProfileUpdate() {
