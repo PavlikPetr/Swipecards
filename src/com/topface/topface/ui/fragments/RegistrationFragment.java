@@ -31,6 +31,8 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
     public static final String INTENT_PASSWORD = "registration_password";
     public static final String INTENT_USER_ID = "registration_iser_id";
 
+    private static final int START_SHIFT = 33;
+
     private EditText mEdEmail;
     private EditText mEdName;
     private TextView mBirthdayText;
@@ -40,15 +42,23 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
     private Button mBtnRegister;
 
     private Date mBirthday;
+    private int mYear;
+    private int mMonthOfYear;
+    private int mDayOfMonth;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_create_account, null);
 
-        getActivity().findViewById(R.id.loNavigationBar).setVisibility(View.GONE);
+//        getActivity().findViewById(R.id.loNavigationBar).setVisibility(View.GONE);
 
         initViews(root);
-
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.YEAR, - START_SHIFT);
+        mYear = c.get(Calendar.YEAR);
+        mMonthOfYear = c.get(Calendar.MONTH);
+        mDayOfMonth = c.get(Calendar.DAY_OF_MONTH);
 
         return root;
     }
@@ -78,7 +88,7 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
         birthday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatePickerFragment datePicker = DatePickerFragment.newInstance();
+                DatePickerFragment datePicker = DatePickerFragment.newInstance(mYear, mMonthOfYear, mDayOfMonth);
                 datePicker.setOnDateSetListener(RegistrationFragment.this);
                 datePicker.show(getActivity().getSupportFragmentManager(),DatePickerFragment.TAG);
             }
@@ -188,11 +198,17 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
         final Calendar c = Calendar.getInstance();
-        c.add(Calendar.YEAR, -Static.MAX_AGE);
+        c.add(Calendar.YEAR, -Static.MIN_AGE);
         long maxDate = c.getTimeInMillis();
 
-        if (DatePickerFragment.isValidDate(year,monthOfYear,dayOfMonth,0,maxDate)) {
+        c.add(Calendar.YEAR, -(Static.MAX_AGE - Static.MIN_AGE));
+        long minDate = c.getTimeInMillis();
+
+        if (DatePickerFragment.isValidDate(year,monthOfYear,dayOfMonth,minDate,maxDate)) {
             Date date = DateUtils.getDate(year,monthOfYear,dayOfMonth);
+            mYear = year;
+            mMonthOfYear = monthOfYear;
+            mDayOfMonth = dayOfMonth;
             String dateStr = DateFormat.getDateFormat(getActivity().getApplicationContext()).format(date);
             mBirthdayText.setText(dateStr);
             mBirthday = date;

@@ -2,6 +2,7 @@ package com.topface.topface.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -77,11 +78,13 @@ public class ContainerActivity extends BaseFragmentActivity {
 
     private Fragment getFragment(int id) {
         Fragment fragment = null;
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
         switch (id) {
             case INTENT_BUY_VIP_FRAGMENT:
                 ((TextView) findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.profile_vip_status));
                 fragment = VipBuyFragment.newInstance();
 //                Toast.makeText(App.getContext(), R.string.general_premium_access_error, Toast.LENGTH_SHORT).show();
+
                 break;
             case INTENT_BUYING_FRAGMENT:
                 ((TextView) findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.buying_header_title));
@@ -104,6 +107,7 @@ public class ContainerActivity extends BaseFragmentActivity {
                         intent.getIntExtra(ChatFragment.INTENT_USER_AGE, 0),
                         intent.getStringExtra(ChatFragment.INTENT_USER_CITY),
                         intent.getStringExtra(BaseFragmentActivity.INTENT_PREV_ENTITY));
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
                 break;
             case INTENT_REGISTRATION_FRAGMENT:
                 fragment = new RegistrationFragment();

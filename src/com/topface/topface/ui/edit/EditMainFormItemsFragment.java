@@ -72,7 +72,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         });
 
 
-        mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
+//        mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
 
         TextView sexTitle = (TextView) root.findViewById(R.id.tvSexTitle);
         sexTitle.setVisibility(View.GONE);

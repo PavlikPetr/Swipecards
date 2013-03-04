@@ -32,6 +32,8 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
     private BroadcastReceiver mReauthReceiver;
 
+    private boolean needAuth = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +64,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     public void startAuth() {
         AuthFragment af = AuthFragment.newInstance();
         getSupportFragmentManager().beginTransaction().add(R.id.content, af, AUTH_TAG).commit();
+        needAuth = false;
     }
 
     public void close(Fragment fragment) {
@@ -151,7 +154,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
 
     protected boolean isNeedAuth() {
-        return true;
+        return needAuth;
     }
 
     protected void takePhoto(TakePhotoDialog.TakePhotoListener listener) {

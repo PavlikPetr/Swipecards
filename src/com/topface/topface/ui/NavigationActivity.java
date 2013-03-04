@@ -56,6 +56,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     private BroadcastReceiver mServerResponseReceiver;
 
+    private boolean isNeedAuth = true;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +75,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
         if (CacheProfile.isLoaded()) {
             onInit();
+        } else {
+            isNeedAuth = false;
         }
 
         mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
@@ -94,6 +98,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     public void onInit() {
         Intent intent = getIntent();
+        isNeedAuth = true;
         int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
         if (id != -1) {
             mFragmentSwitcher.showFragment(id);
@@ -129,6 +134,11 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         if (id != -1) {
             mFragmentSwitcher.showFragmentWithAnimation(id);
         }
+    }
+
+    @Override
+    protected boolean isNeedAuth() {
+        return isNeedAuth;
     }
 
     @Override
@@ -573,7 +583,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
         mFragmentMenu.selectDefaultMenu();
     }
-
 
     @Override
     public boolean isTrackable() {

@@ -7,7 +7,8 @@ public class Static {
     public static final int API_VERSION = 6;
     public static final int GIRL = 0;
     public static final int BOY = 1;
-    public static final int MAX_AGE = 16;
+    public static final int MIN_AGE = 16;
+    public static final int MAX_AGE = 99;
     public static final int HEADER_SHADOW_SHIFT = -1;
     public static final String PLATFORM = "Android";
     public static final String EMPTY = "";
