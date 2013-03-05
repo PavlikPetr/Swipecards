@@ -38,8 +38,10 @@ import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
+import ru.ideast.adwired.AWView;
 
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -64,7 +66,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TapjoyConnect.requestTapjoyConnect(getApplicationContext(), "f0563cf4-9e7c-4962-b333-098810c477d2","AS0AE9vmrWvkyNNGPsyu");
+        TapjoyConnect.requestTapjoyConnect(getApplicationContext(), "f0563cf4-9e7c-4962-b333-098810c477d2", "AS0AE9vmrWvkyNNGPsyu");
         TapjoyConnect.getTapjoyConnectInstance().setUserID(Integer.toString(CacheProfile.uid));
         SponsorPay.start("11625", Integer.toString(CacheProfile.uid), "0a4c64db64ed3c1ca14a5e5d81aaa23c", getApplicationContext());
 
@@ -90,6 +92,15 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         setStopTime();
         mNovice = Novice.getInstance(mPreferences);
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
+
+        Locale ukraineLocale = new Locale("uk","UA","");
+        AWView adwiredView = (AWView)findViewById(R.id.adAdwired);
+        if ( Locale.getDefault().equals(ukraineLocale)) {
+            adwiredView.setVisibility(View.VISIBLE);
+            adwiredView.request('0');
+        } else {
+            adwiredView.setVisibility(View.GONE);
+        }
     }
 
     private void initFragmentSwitcher() {
@@ -240,8 +251,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
                     @Override
                     public void onDialogClose() {
-                        if((CacheProfile.city.isEmpty() || CacheProfile.needCityConfirmation(getApplicationContext()))
-                                && !CacheProfile.wasCityAsked){
+                        if ((CacheProfile.city.isEmpty() || CacheProfile.needCityConfirmation(getApplicationContext()))
+                                && !CacheProfile.wasCityAsked) {
                             CacheProfile.wasCityAsked = true;
                             CacheProfile.onCityConfirmed(getApplicationContext());
                             startActivityForResult(new Intent(getApplicationContext(), CitySearchActivity.class),
