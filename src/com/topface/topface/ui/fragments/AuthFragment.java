@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,7 +14,6 @@ import android.text.method.TransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
@@ -35,7 +33,6 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.views.IllustratedTextView;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.TopfaceNotificationManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -57,6 +54,7 @@ public class AuthFragment extends BaseFragment {
     private ProgressBar mLoginSendingProgress;
     private AuthorizationManager mAuthorizationManager;
     private BroadcastReceiver connectionChangeListener;
+    private TextView mBackButton;
 
     public static AuthFragment newInstance() {
         return new AuthFragment();
@@ -154,7 +152,8 @@ public class AuthFragment extends BaseFragment {
             }
         });
 
-        root.findViewById(R.id.tvBackToMainAuth).setOnClickListener(new View.OnClickListener() {
+        mBackButton = (TextView) root.findViewById(R.id.tvBackToMainAuth);
+        mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAuthViewsFlipper.setDisplayedChild(0);
@@ -508,6 +507,7 @@ public class AuthFragment extends BaseFragment {
             mRecoverPwd.setEnabled(true);
             mLogin.setEnabled(true);
             mPassword.setEnabled(true);
+            mBackButton.setEnabled(true);
         }
     }
 
@@ -517,12 +517,13 @@ public class AuthFragment extends BaseFragment {
         mSignInView.setVisibility(View.GONE);
         mCreateAccountView.setVisibility(View.GONE);
         mRetryView.setVisibility(View.GONE);
-        mTFButton.setVisibility(View.GONE);
+        mTFButton.setVisibility(View.INVISIBLE);
         mProgressBar.setVisibility(View.VISIBLE);
         mLoginSendingProgress.setVisibility(View.VISIBLE);
         mRecoverPwd.setEnabled(false);
         mLogin.setEnabled(false);
         mPassword.setEnabled(false);
+        mBackButton.setEnabled(false);
     }
 
     private void btnVKClick() {

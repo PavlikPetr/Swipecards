@@ -38,8 +38,10 @@ import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
+import ru.ideast.adwired.AWView;
 
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -64,7 +66,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TapjoyConnect.requestTapjoyConnect(getApplicationContext(), "f0563cf4-9e7c-4962-b333-098810c477d2","AS0AE9vmrWvkyNNGPsyu");
+        TapjoyConnect.requestTapjoyConnect(getApplicationContext(), "f0563cf4-9e7c-4962-b333-098810c477d2", "AS0AE9vmrWvkyNNGPsyu");
         TapjoyConnect.getTapjoyConnectInstance().setUserID(Integer.toString(CacheProfile.uid));
         SponsorPay.start("11625", Integer.toString(CacheProfile.uid), "0a4c64db64ed3c1ca14a5e5d81aaa23c", getApplicationContext());
 
@@ -90,6 +92,17 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         setStopTime();
         mNovice = Novice.getInstance(mPreferences);
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
+    }
+
+    private void requestAdwired() {
+        Locale ukraineLocale = new Locale("","RU","");
+        AWView adwiredView = (AWView)findViewById(R.id.adAdwired);
+        if ( Locale.getDefault().equals(ukraineLocale)) {
+            adwiredView.setVisibility(View.VISIBLE);
+            adwiredView.request('0');
+        } else {
+            adwiredView.setVisibility(View.GONE);
+        }
     }
 
     private void initFragmentSwitcher() {
@@ -128,6 +141,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         //Открыть диалог для захвата фото к аватарке
         actionsAfterRegistration();
 //        }
+        if (CacheProfile.isLoaded())
+            requestAdwired();
     }
 
     private boolean needChangeProfile() {
@@ -181,27 +196,29 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     private void requestBalance() {
-        ProfileRequest request = new ProfileRequest(this);
-        request.part = ProfileRequest.P_BALANCE_COUNTERS;
-        request.callback(new DataApiHandler<Profile>() {
+        if (CacheProfile.isLoaded()) {
+            ProfileRequest request = new ProfileRequest(this);
+            request.part = ProfileRequest.P_BALANCE_COUNTERS;
+            request.callback(new DataApiHandler<Profile>() {
 
-            @Override
-            protected void success(Profile data, ApiResponse response) {
-                CacheProfile.likes = data.likes;
-                CacheProfile.money = data.money;
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
-            }
+                @Override
+                protected void success(Profile data, ApiResponse response) {
+                    CacheProfile.likes = data.likes;
+                    CacheProfile.money = data.money;
+                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                }
 
-            @Override
-            protected Profile parseResponse(ApiResponse response) {
-                return Profile.parse(response);
-            }
+                @Override
+                protected Profile parseResponse(ApiResponse response) {
+                    return Profile.parse(response);
+                }
 
-            @Override
-            public void fail(int codeError, ApiResponse response) {
+                @Override
+                public void fail(int codeError, ApiResponse response) {
 
-            }
-        }).exec();
+                }
+            }).exec();
+        }
     }
 
     private void actionsAfterRegistration() {
