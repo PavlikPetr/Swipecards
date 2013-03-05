@@ -198,7 +198,7 @@ Sa oled müksanud.</string>
     <string name="vip_messages_bg">Sõnumite taust</string>
     <string name="vip_black_list">Must nimekiri</string>
     <string name="vip_profile_bg">Taustafoto/ taustapilt</string>
-    <string name="profile_vip_status">Super Skills</string>
+    <string name="profile_vip_status">Super {{rocket}} Skills</string>
     <string name="profile_services">Teenused</string>
     <string name="default_balance_constant">Sinu kontol/ sinu arvel</string>
     <string name="black_list_title">Must nimekiri</string>

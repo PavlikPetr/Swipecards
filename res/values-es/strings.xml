@@ -232,7 +232,7 @@
     <string name="vip_messages_bg">Fondo de mensajes</string>
     <string name="vip_black_list">Lista negra</string>
     <string name="vip_profile_bg">Fotografía de fondo</string>
-    <string name="profile_vip_status">Super Skills</string>
+    <string name="profile_vip_status">Super {{rocket}} Skills</string>
     <string name="profile_services">Servicios</string>
     <string name="default_balance_constant">En su cuenta</string>
     <string name="default_energy_coins_buy_btn_text">Comprar monedas, rellenar la energía</string>

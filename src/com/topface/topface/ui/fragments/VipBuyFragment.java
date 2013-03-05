@@ -23,6 +23,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.profile.BlackListActivity;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
@@ -30,6 +31,7 @@ import static android.view.View.OnClickListener;
 
 public class VipBuyFragment extends BillingFragment implements OnClickListener {
 
+    public static final String ACTION_BAR_CONST = "needActionBar";
     EditSwitcher mInvisSwitcher;
 
     ProgressBar mInvisLoadBar;
@@ -41,6 +43,14 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     // чтобы потом установить их с помощью setArguments();
     public static VipBuyFragment newInstance() {
         return new VipBuyFragment();
+    }
+
+    public static VipBuyFragment newInstance(boolean needActionBar) {
+        VipBuyFragment fragment = new VipBuyFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(ACTION_BAR_CONST, needActionBar);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -59,6 +69,16 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_buy_premium, null);
         initViews(view);
+        if( getArguments() != null && getArguments().getBoolean(ACTION_BAR_CONST, false) ) {
+            view.findViewById(R.id.navBar).setVisibility(View.VISIBLE);
+            ActionBar actionBar = getActionBar(view);
+            actionBar.showBackButton(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getActivity().finish();
+                }
+            });
+        }
         return view;
     }
 

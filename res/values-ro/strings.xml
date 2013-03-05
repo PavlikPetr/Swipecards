@@ -236,7 +236,7 @@
     <string name="vip_messages_bg">Fon mesaje</string>
     <string name="vip_black_list">Lista neagra</string>
     <string name="vip_profile_bg">Poza de fon</string>
-    <string name="profile_vip_status">Super Skills</string>
+    <string name="profile_vip_status">Super {{rocket}} Skills</string>
     <string name="profile_services">Servicii</string>
     <string name="default_balance_constant">Pe contul Dmv</string>
     <string name="default_energy_coins_buy_btn_text">Cumpara monede, incarca rezerva de energie</string>
