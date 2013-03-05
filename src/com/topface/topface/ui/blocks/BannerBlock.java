@@ -422,7 +422,7 @@ public class BannerBlock {
         initBanner();
         if (mBannerView != null && mBannerView instanceof AdfonicView) mBannerView.invalidate();
         if (mBannerView != null && mBannerView instanceof AWView) {
-            ((AWView)mBannerView).request('1');
+            ((AWView)mBannerView).request(mAdwiredMap.get(mFragment.getClass().toString()));
         }
         if (mPLus1Asker != null) mPLus1Asker.onResume();
     }
