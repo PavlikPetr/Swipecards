@@ -356,7 +356,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     itemId = -1;
                 }
                 wasFailed = false;
-
+                mAdapter.setUser(data.user);
                 if (mAdapter != null) {
                     if (pullToRefresh) {
                         mAdapter.addFirst(data.items, data.more, mListView.getRefreshableView());

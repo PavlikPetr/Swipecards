@@ -41,7 +41,9 @@ public class ActionBar {
 
     public void refreshNotificators() {
         if (mNavBarController != null) {
-            mNavBarController.refreshNotificators();
+            if(mNavigationHome.getVisibility() == View.VISIBLE) {
+                mNavBarController.refreshNotificators();
+            }
         }
     }
 
@@ -139,6 +141,14 @@ public class ActionBar {
                 }
             }
         });
+    }
+
+    public void activateEditButton() {
+        if(mEditButton.isSelected()) {
+            mEditButton.setSelected(false);
+        } else {
+            mEditButton.setSelected(true);
+        }
     }
 
     public void disableActionsButton(boolean disabled) {

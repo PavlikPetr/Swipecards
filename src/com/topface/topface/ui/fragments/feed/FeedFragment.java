@@ -1,3 +1,4 @@
+
 package com.topface.topface.ui.fragments.feed;
 
 import android.app.Activity;
@@ -445,6 +446,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     private void showUpdateErrorMessage(int codeError) {
+        mListView.setVisibility(View.GONE);
         if (updateErrorMessage != null) {
             switch (codeError) {
                 case ApiResponse.PREMIUM_ACCESS_ONLY:
@@ -616,6 +618,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     private void showUpdateErrorMessage() {
         if (updateErrorMessage != null) {
+
             updateErrorMessage.setVisibility(View.VISIBLE);
         }
     }
