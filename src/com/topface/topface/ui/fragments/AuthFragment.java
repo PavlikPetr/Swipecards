@@ -447,11 +447,13 @@ public class AuthFragment extends BaseFragment {
                 needShowRetry = false;
                 break;
             default:
+                mAuthViewsFlipper.setVisibility(View.GONE);
                 mRetryView.setErrorMsg(getString(R.string.general_data_error));
                 mRetryView.setListenerToBtn(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         mRetryView.setVisibility(View.GONE);
+                        mAuthViewsFlipper.setVisibility(View.VISIBLE);
                         mProgressBar.setVisibility(View.VISIBLE);
                         request.canceled = false;
                         registerRequest(request);

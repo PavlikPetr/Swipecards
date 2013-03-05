@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 public class TopRequest extends ApiRequest {
     // Data
-    public static final String service = "tops";
+    public static final String service = "top";
     public int sex; // пол самых красивых 
     public int city; // город самых красивых
 
