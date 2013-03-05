@@ -92,7 +92,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         setStopTime();
         mNovice = Novice.getInstance(mPreferences);
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
+    }
 
+    private void requestAdwired() {
         Locale ukraineLocale = new Locale("uk","UA","");
         AWView adwiredView = (AWView)findViewById(R.id.adAdwired);
         if ( Locale.getDefault().equals(ukraineLocale)) {
@@ -136,6 +138,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 //        } else {
             checkVersion(CacheProfile.getOptions().max_version);
 //        }
+        if (CacheProfile.isLoaded())
+            requestAdwired();
     }
 
     private boolean needChangeProfile() {
