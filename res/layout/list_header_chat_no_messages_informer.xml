@@ -10,8 +10,8 @@
             xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
             ivr:postProcessor="rounded"
             android:id="@+id/ivFriendAvatar"
-            style="@style/ProfileAvatar"
             android:layout_marginTop="8dp"
+            style="@style/FeedAvatar"
             />
 
     <LinearLayout

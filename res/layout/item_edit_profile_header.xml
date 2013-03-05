@@ -46,7 +46,7 @@
                     android:gravity="center"
                     android:text="@string/edit_profile_photo"
                     android:textSize="10sp"
-                    android:background="@drawable/edit_profile_avatar_frame"/>
+                    android:background="@drawable/edit_main_avatar_cover"/>
         </RelativeLayout>
 
         <RelativeLayout

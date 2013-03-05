@@ -236,8 +236,8 @@
 
     <style name="EditAvatar">
         <item name="postProcessor">mask</item>
-        <item name="clipMask">@drawable/avatar_frame_mask</item>
-        <item name="android:background">@drawable/avatar_frame</item>
+        <item name="clipMask">@drawable/edit_main_avatar_mask</item>
+        <item name="android:background">@drawable/edit_main_avatar_background</item>
         <item name="android:layout_centerInParent">true</item>
         <item name="android:layout_width">100dp</item>
         <item name="android:layout_height">100dp</item>
