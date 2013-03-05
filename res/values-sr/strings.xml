@@ -235,7 +235,7 @@
     <string name="vip_messages_bg">Pozadina poruka</string>
     <string name="vip_black_list">Crni spisak</string>
     <string name="vip_profile_bg">Fotografija sa pozadinom</string>
-    <string name="profile_vip_status">Super Skills</string>
+    <string name="profile_vip_status">Super {{rocket}} Skills</string>
     <string name="profile_services">Usluge</string>
     <string name="default_balance_constant">Na vašem računu je</string>
     <string name="black_list_title">Crni spisak</string>

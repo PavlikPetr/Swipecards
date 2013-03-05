@@ -23,6 +23,7 @@ import com.topface.topface.data.Options;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.views.ServicesTextView;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 
 import java.util.LinkedList;
@@ -60,6 +61,13 @@ public class BuyingFragment extends BillingFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_buy, null);
         initViews(root);
+        ActionBar actionBar = getActionBar(root);
+        actionBar.showBackButton(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().finish();
+            }
+        });
         return root;
     }
 

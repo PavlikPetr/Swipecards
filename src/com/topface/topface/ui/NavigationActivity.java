@@ -137,6 +137,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 //            finish();
 //        } else {
             checkVersion(CacheProfile.getOptions().max_version);
+
+        //Открыть диалог для захвата фото к аватарке
+        actionsAfterRegistration();
 //        }
         if (CacheProfile.isLoaded())
             requestAdwired();
@@ -188,8 +191,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
         checkExternalLink();
 
-        //Открыть диалог для захвата фото к аватарке
-        actionsAfterRegistration();
 
         requestBalance();
     }
@@ -255,8 +256,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
                     @Override
                     public void onDialogClose() {
-                        if ((CacheProfile.city.isEmpty() || CacheProfile.needCityConfirmation(getApplicationContext()))
-                                && !CacheProfile.wasCityAsked) {
+                        if(CacheProfile.isLoaded() && (CacheProfile.city.isEmpty() || CacheProfile.needCityConfirmation(getApplicationContext()))
+                                && !CacheProfile.wasCityAsked){
                             CacheProfile.wasCityAsked = true;
                             CacheProfile.onCityConfirmed(getApplicationContext());
                             startActivityForResult(new Intent(getApplicationContext(), CitySearchActivity.class),

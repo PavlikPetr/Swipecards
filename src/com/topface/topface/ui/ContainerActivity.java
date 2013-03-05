@@ -81,13 +81,13 @@ public class ContainerActivity extends BaseFragmentActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
         switch (id) {
             case INTENT_BUY_VIP_FRAGMENT:
-                ((TextView) findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.profile_vip_status));
-                fragment = VipBuyFragment.newInstance();
+//                ((TextView) findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.profile_vip_status));
+                fragment = VipBuyFragment.newInstance(true);
 //                Toast.makeText(App.getContext(), R.string.general_premium_access_error, Toast.LENGTH_SHORT).show();
 
                 break;
             case INTENT_BUYING_FRAGMENT:
-                ((TextView) findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.buying_header_title));
+//                ((TextView) findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.buying_header_title));
                 Bundle extras = getIntent().getExtras();
                 if (extras.containsKey(BuyingFragment.ARG_ITEM_TYPE) && extras.containsKey(BuyingFragment.ARG_ITEM_PRICE)) {
                     fragment = BuyingFragment.newInstance(extras.getInt(BuyingFragment.ARG_ITEM_TYPE),
