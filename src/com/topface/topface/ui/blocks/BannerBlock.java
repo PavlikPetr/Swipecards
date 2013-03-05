@@ -104,8 +104,7 @@ public class BannerBlock {
         if (mFragment != null && mBannersMap != null) {
             String fragmentId = mFragment.getClass().toString();
             if (mBannersMap.containsKey(fragmentId)) {
-//                String bannerType = CacheProfile.getOptions().pages.get(mBannersMap.get(fragmentId)).banner;
-                String bannerType = Options.BANNER_ADWIRED;
+                String bannerType = CacheProfile.getOptions().pages.get(mBannersMap.get(fragmentId)).banner;
 
                 mBannerView = getBannerView(bannerType);
                 if (mBannerView == null) {

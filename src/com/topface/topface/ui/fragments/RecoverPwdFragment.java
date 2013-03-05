@@ -131,7 +131,7 @@ public class RecoverPwdFragment extends BaseFragment{
 
     private void hideButtons() {
         if (mBtnRecover != null && mProgressBar != null) {
-            mBtnRecover.setVisibility(View.GONE);
+            mBtnRecover.setVisibility(View.INVISIBLE);
             mProgressBar.setVisibility(View.VISIBLE);
         }
     }

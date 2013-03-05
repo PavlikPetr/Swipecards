@@ -95,7 +95,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     private void requestAdwired() {
-        Locale ukraineLocale = new Locale("uk","UA","");
+        Locale ukraineLocale = new Locale("","RU","");
         AWView adwiredView = (AWView)findViewById(R.id.adAdwired);
         if ( Locale.getDefault().equals(ukraineLocale)) {
             adwiredView.setVisibility(View.VISIBLE);
@@ -196,27 +196,29 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     private void requestBalance() {
-        ProfileRequest request = new ProfileRequest(this);
-        request.part = ProfileRequest.P_BALANCE_COUNTERS;
-        request.callback(new DataApiHandler<Profile>() {
+        if (CacheProfile.isLoaded()) {
+            ProfileRequest request = new ProfileRequest(this);
+            request.part = ProfileRequest.P_BALANCE_COUNTERS;
+            request.callback(new DataApiHandler<Profile>() {
 
-            @Override
-            protected void success(Profile data, ApiResponse response) {
-                CacheProfile.likes = data.likes;
-                CacheProfile.money = data.money;
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
-            }
+                @Override
+                protected void success(Profile data, ApiResponse response) {
+                    CacheProfile.likes = data.likes;
+                    CacheProfile.money = data.money;
+                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                }
 
-            @Override
-            protected Profile parseResponse(ApiResponse response) {
-                return Profile.parse(response);
-            }
+                @Override
+                protected Profile parseResponse(ApiResponse response) {
+                    return Profile.parse(response);
+                }
 
-            @Override
-            public void fail(int codeError, ApiResponse response) {
+                @Override
+                public void fail(int codeError, ApiResponse response) {
 
-            }
-        }).exec();
+                }
+            }).exec();
+        }
     }
 
     private void actionsAfterRegistration() {
