@@ -22,10 +22,10 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
     }
 
     public void addFirst(Photo photo) {
-        if (mPhotoLinks.size() > 0 && mPhotoLinks.get(mPhotoLinks.size() - 1).getId() == 0) {
-            mPhotoLinks.add(1, photo);
+        if (mPhotoLinks.size() > 1 && mPhotoLinks.get(mPhotoLinks.size() - 1).getId() == 0) {
+            mPhotoLinks.add(2, photo);
         } else {
-            mPhotoLinks.add(0, photo);
+            mPhotoLinks.add(1, photo);
         }
         notifyDataSetChanged();
     }
