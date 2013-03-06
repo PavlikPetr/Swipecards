@@ -13,7 +13,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -53,7 +52,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mFormInfo = new FormInfo(getActivity(), mProfile);
 
-        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.item_edit_form_input, null, false);
+        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_edit_input, null, false);
 
         // Navigation bar
         ActionBar actionBar = getActionBar(root);

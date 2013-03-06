@@ -343,7 +343,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case T_USER_REQUEST:
                 if (avatar) {
                     holder.avatar.setOnClickListener(output ? null : mOnClickListener);
-                    holder.avatar.setPhoto(user.photo);
+                    holder.avatar.setPhoto(output ? CacheProfile.photo : user.photo);
                     holder.avatar.setVisibility(View.VISIBLE);
                     holder.userInfo.setBackgroundResource(output ? R.drawable.bg_message_user : R.drawable.bg_message_friend);
                 } else {

@@ -10,6 +10,7 @@ public class Static {
     public static final int MIN_AGE = 16;
     public static final int MAX_AGE = 99;
     public static final int HEADER_SHADOW_SHIFT = -1;
+    public static final int RED_ALERT_APPEARANCE_TIME = 3000;
     public static final String PLATFORM = "Android";
     public static final String EMPTY = "";
     public static final String SLASH = "/";

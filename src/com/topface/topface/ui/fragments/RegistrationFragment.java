@@ -21,9 +21,7 @@ import com.topface.topface.requests.RegisterRequest;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 public class RegistrationFragment extends BaseFragment implements DatePickerDialog.OnDateSetListener{
 
@@ -45,7 +43,7 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
     private int mYear;
     private int mMonthOfYear;
     private int mDayOfMonth;
-
+    private Timer mTimer = new Timer();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -181,6 +179,17 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
         mRedAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
                 android.R.anim.fade_in));
         mRedAlertView.setVisibility(View.VISIBLE);
+        mTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        removeRedAlert();
+                    }
+                });
+            }
+        }, Static.RED_ALERT_APPEARANCE_TIME);
     }
 
     private void redAlert(int resId) {

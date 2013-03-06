@@ -18,10 +18,7 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
-import com.topface.topface.App;
-import com.topface.topface.GCMUtils;
-import com.topface.topface.R;
-import com.topface.topface.Ssid;
+import com.topface.topface.*;
 import com.topface.topface.data.Auth;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
@@ -36,6 +33,9 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class AuthFragment extends BaseFragment {
 
@@ -55,6 +55,7 @@ public class AuthFragment extends BaseFragment {
     private AuthorizationManager mAuthorizationManager;
     private BroadcastReceiver connectionChangeListener;
     private TextView mBackButton;
+    private Timer mTimer = new Timer();
 
     public static AuthFragment newInstance() {
         return new AuthFragment();
@@ -482,6 +483,17 @@ public class AuthFragment extends BaseFragment {
             mWrongPasswordAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
                     android.R.anim.fade_in));
             mWrongPasswordAlertView.setVisibility(View.VISIBLE);
+            mTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            removeRedAlert();
+                        }
+                    });
+                }
+            }, Static.RED_ALERT_APPEARANCE_TIME);
         }
     }
 

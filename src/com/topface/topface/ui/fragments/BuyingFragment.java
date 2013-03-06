@@ -68,6 +68,7 @@ public class BuyingFragment extends BillingFragment {
                 getActivity().finish();
             }
         });
+        actionBar.setTitleText(getString(R.string.buying_header_title));
         return root;
     }
 
