@@ -284,12 +284,12 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 String path = data.getPath();
                 String[] splittedPath = path.split("/");
 
-                executeLinkAction(splittedPath);
+                executeLinkAction(splittedPath,data);
             }
         }
     }
 
-    private void executeLinkAction(String[] splittedPath) {
+    private void executeLinkAction(String[] splittedPath, Uri data) {
         Pattern profilePattern = Pattern.compile("profile");
         Pattern confirmPattern = Pattern.compile("confirm.*");
 
@@ -311,6 +311,11 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 ConfirmRequest request = new ConfirmRequest(this, token.getLogin(), code);
                 request.exec();
             }
+        } else {
+
+            Intent intent = new Intent(Intent.ACTION_VIEW, data);
+            startActivity(intent);
+            finish();
         }
     }
 

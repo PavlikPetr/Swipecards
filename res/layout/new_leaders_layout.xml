@@ -47,16 +47,25 @@
                 android:layout_height="wrap_content"
                 android:layout_above="@id/loFooter"
                 android:layout_alignParentTop="true"
-                android:layout_margin="10dp"
+                android:layout_margin="5dp"
                 >
 
             <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginTop="10dp"
                     >
-
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:textSize="14sp"
+                        android:layout_alignParentTop="true"
+                        android:text="@string/choose_cool_photo"
+                        />
                 <com.topface.topface.ui.gridlayout.GridLayout
                         android:id="@+id/usedGrid"
                         android:layout_width="fill_parent"
