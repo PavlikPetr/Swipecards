@@ -113,6 +113,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mUserActions.findViewById(R.id.acSympathy).setOnClickListener(this);
         mUserActions.findViewById(R.id.acDelight).setOnClickListener(this);
         mUserActions.findViewById(R.id.acChat).setOnClickListener(this);
+        mUserActions.findViewById(R.id.acBlock).setOnClickListener(this);
 
         mNavBarController = new NavigationBarController((ViewGroup) root.findViewById(R.id.loNavigationBar));
         root.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
@@ -435,15 +436,21 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 openChat();
                 break;
             case R.id.acBlock:
-                BlackListAddRequest blaRequest = new BlackListAddRequest(mUserProfile.uid, getActivity());
-                blaRequest.callback(new VipApiHandler() {
-                    @Override
-                    public void success(ApiResponse response) {
-                        super.success(response);
-                        v.setEnabled(false);
+                if (CacheProfile.premium) {
+                    BlackListAddRequest blaRequest = new BlackListAddRequest(mUserProfile.uid, getActivity());
+                    blaRequest.callback(new VipApiHandler() {
+                        @Override
+                        public void success(ApiResponse response) {
+                            super.success(response);
+                            v.setEnabled(false);
+                        }
                     }
+                    ).exec();
+                } else {
+                    Intent intent = new Intent(getActivity(), ContainerActivity.class);
+                    intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                    startActivity(intent);
                 }
-                ).exec();
                 break;
             default:
                 break;

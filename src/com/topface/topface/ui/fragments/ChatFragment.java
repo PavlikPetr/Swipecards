@@ -630,6 +630,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 CacheProfile.money = data.money;
                 Debug.log(getActivity(), "likes:" + data.likes + " money:" + data.money);
                 data.history.target = FeedDialog.USER_MESSAGE;
+                mLoadingLocker.setVisibility(View.GONE);
                 if (mAdapter != null) {
                     mAdapter.replaceMessage(fakeItem, data.history, mListView.getRefreshableView());
                 }

@@ -437,7 +437,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     }
                     onUpdateFail(isPushUpdating || isHistoryLoad);
                     mListView.onRefreshComplete();
-                    mListView.setVisibility(View.VISIBLE);
+//                    mListView.setVisibility(View.VISIBLE);
                     mIsUpdating = false;
                 }
             }
@@ -463,10 +463,13 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     } else {
                         updateErrorMessage.setErrorMsg(getString(R.string.general_premium_access_error));
                     }
+                    updateErrorMessage.setVisibility(View.VISIBLE);
                     break;
+
                 default:
                     updateErrorMessage.showOnlyMessage(false);
                     updateErrorMessage.setErrorMsg(getString(R.string.general_data_error));
+                    updateErrorMessage.setVisibility(View.VISIBLE);
                     break;
             }
         }
@@ -618,7 +621,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     private void showUpdateErrorMessage() {
         if (updateErrorMessage != null) {
-
+            mListView.setVisibility(View.GONE);
             updateErrorMessage.setVisibility(View.VISIBLE);
         }
     }
