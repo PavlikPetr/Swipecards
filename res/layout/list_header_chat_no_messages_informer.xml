@@ -8,7 +8,6 @@
 
     <com.topface.topface.ui.views.ImageViewRemote
             xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
-            ivr:postProcessor="rounded"
             android:id="@+id/ivFriendAvatar"
             android:layout_marginTop="8dp"
             style="@style/FeedAvatar"

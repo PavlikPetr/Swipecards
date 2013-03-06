@@ -25,8 +25,6 @@ import java.util.TimerTask;
 
 public class RecoverPwdFragment extends BaseFragment{
 
-    private static final int RED_ALERT_APPEARANCE_TIME = 3000;
-
     private Button mBtnRecover;
     private EditText mEdEmail;
     private ProgressBar mProgressBar;
@@ -154,7 +152,7 @@ public class RecoverPwdFragment extends BaseFragment{
                         }
                     });
                 }
-            }, RED_ALERT_APPEARANCE_TIME);
+            }, Static.RED_ALERT_APPEARANCE_TIME);
         }
     }
 

@@ -19,4 +19,5 @@
             android:fadeScrollbars="true"
             android:fadingEdge="none"
             android:listSelector="@android:color/transparent"/>
+    <ImageView style="@style/HeaderShadow"/>
 </RelativeLayout>

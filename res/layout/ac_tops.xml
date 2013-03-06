@@ -45,14 +45,15 @@
         <include layout="@layout/banner"/>
     </LinearLayout>
 
+    <ImageView
+            style="@style/HeaderShadow"/>
+
     <com.topface.topface.ui.views.LockerView
             android:id="@+id/llvTopsLoading"
             style="@style/LoadingLocker"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:layout_below="@id/loNavigationBar"
             android:visibility="gone"/>
-
-    <ImageView
-            style="@style/HeaderShadow"/>
 
 </RelativeLayout>

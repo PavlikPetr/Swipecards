@@ -71,6 +71,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
         initViews(view);
         if( getArguments() != null && getArguments().getBoolean(ACTION_BAR_CONST, false) ) {
             view.findViewById(R.id.navBar).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.headerShadow).setVisibility(View.VISIBLE);
             ActionBar actionBar = getActionBar(view);
             actionBar.showBackButton(new OnClickListener() {
                 @Override
@@ -78,6 +79,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
                     getActivity().finish();
                 }
             });
+            actionBar.setTitleText(getString(R.string.vip_buy_vip));
         }
         return view;
     }

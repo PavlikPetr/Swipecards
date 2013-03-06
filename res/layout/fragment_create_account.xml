@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@drawable/auth_bg"
                 android:id="@+id/authContainer">
 
     <ImageView
@@ -26,7 +25,8 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:orientation="vertical"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:background="@drawable/auth_bg">
 
         <RelativeLayout
                 android:layout_width="wrap_content"

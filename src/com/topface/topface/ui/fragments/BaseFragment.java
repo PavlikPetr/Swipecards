@@ -1,12 +1,11 @@
 package com.topface.topface.ui.fragments;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -46,6 +45,13 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     protected ActionBar getActionBar(View view) {
         if(mActionBar == null) {
             mActionBar = new ActionBar(view.findViewById(R.id.loNavigationBar));
+        }
+        return mActionBar;
+    }
+
+    protected ActionBar getActionBar(Activity activity) {
+        if(mActionBar == null) {
+            mActionBar = new ActionBar(activity.findViewById(R.id.loNavigationBar));
         }
         return mActionBar;
     }

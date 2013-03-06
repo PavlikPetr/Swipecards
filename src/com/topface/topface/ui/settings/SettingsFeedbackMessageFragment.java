@@ -50,7 +50,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
-        View root = inflater.inflate(R.layout.item_feedback_input, null);
+        View root = inflater.inflate(R.layout.fragment_feedback_message, null);
 
         // Navigation bar
         ActionBar actionBar = getActionBar(root);
@@ -84,8 +84,6 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
                 mReport.subject = getResources().getString(R.string.settings_feedback_internal);
                 break;
         }
-
-        ((TextView) getActivity().findViewById(R.id.tvNavigationTitle)).setText(mReport.subject);
 
         // EditText
         root.findViewById(R.id.tvTitle).setVisibility(View.GONE);
