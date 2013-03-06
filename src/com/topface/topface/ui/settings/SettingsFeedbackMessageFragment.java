@@ -61,7 +61,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
                 getActivity().finish();
             }
         });
-
+        actionBar.setTitleText(getString(R.string.settings_feedback));
 
         mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
 
@@ -70,15 +70,19 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         switch (feedbackType) {
             case ERROR_MESSAGE:
                 mReport.subject = getResources().getString(R.string.settings_error_message_internal);
+                actionBar.setSubTitleText(getString(R.string.settings_error_message));
                 break;
             case DEVELOPERS_MESSAGE:
                 mReport.subject = getResources().getString(R.string.settings_ask_developer_internal);
+                actionBar.setSubTitleText(getString(R.string.settings_ask_developer));
                 break;
             case PAYMENT_MESSAGE:
                 mReport.subject = getResources().getString(R.string.settings_payment_problems_internal);
+                actionBar.setSubTitleText(getString(R.string.settings_payment_problems));
                 break;
             case COOPERATION_MESSAGE:
                 mReport.subject = getResources().getString(R.string.settings_cooperation_internal);
+                actionBar.setSubTitleText(getString(R.string.settings_cooperation));
                 break;
             case UNKNOWN:
                 mReport.subject = getResources().getString(R.string.settings_feedback_internal);

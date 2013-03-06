@@ -20,6 +20,7 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.RegisterRequest;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
+import com.topface.topface.utils.Utils;
 
 import java.util.*;
 
@@ -44,12 +45,11 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
     private int mMonthOfYear;
     private int mDayOfMonth;
     private Timer mTimer = new Timer();
+    private View mBtnBack;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_create_account, null);
-
-//        getActivity().findViewById(R.id.loNavigationBar).setVisibility(View.GONE);
 
         initViews(root);
         Calendar c = Calendar.getInstance();
@@ -104,7 +104,17 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
             public void onClick(View v) {
                 removeRedAlert();
                 hideButtons();
+                Utils.hideSoftKeyboard(getActivity(),mEdEmail,mEdName);
                 sendRegistrationRequest();
+            }
+        });
+
+        mBtnBack = root.findViewById(R.id.tvBackToMainAuth);
+        mBtnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.hideSoftKeyboard(getActivity(),mEdName,mEdEmail);
+                getActivity().finish();
             }
         });
     }
@@ -287,6 +297,16 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
 
         public int getSex() {
             return mSex;
+        }
+
+        public void setFocusable(boolean focusable) {
+            mBoy.setFocusable(focusable);
+            mGirl.setFocusable(focusable);
+        }
+
+        public void setOnFocusChangeListener(View.OnFocusChangeListener listener) {
+            mBoy.setOnFocusChangeListener(listener);
+            mGirl.setOnFocusChangeListener(listener);
         }
     }
 

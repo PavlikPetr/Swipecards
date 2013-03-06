@@ -6,10 +6,19 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true">
 
+    <include
+            layout="@layout/bar_navigation_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/loNavigationBar"
+            android:layout_alignParentTop="true"
+            />
+
     <com.topface.topface.ui.views.SwapControl
             android:id="@+id/swapFormView"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="fill_parent"
+            android:layout_below="@id/loNavigationBar">
 
         <LinearLayout
                 android:layout_width="fill_parent"
@@ -23,13 +32,7 @@
                     android:background="@drawable/bg_main"
                     android:visibility="gone"
                     android:id="@+id/llvLockScreen"/>
-            <include
-                    layout="@layout/bar_navigation_header"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/loNavigationBar"
-                    android:layout_alignParentTop="true"
-                    />
+
             <com.handmark.pulltorefresh.library.PullToRefreshListView
                     xmlns:p2r="http://schemas.android.com/apk/res-auto"
                     p2r:ptrShowIndicator="false"
@@ -150,6 +153,8 @@
         </RelativeLayout>
     </com.topface.topface.ui.views.SwapControl>
 
+
+    <ImageView style="@style/HeaderShadow"/>
 
     <com.topface.topface.ui.views.LockerView
             android:id="@+id/llvChatLoading"
