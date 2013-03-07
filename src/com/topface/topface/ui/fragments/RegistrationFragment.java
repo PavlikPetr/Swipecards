@@ -243,7 +243,7 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
 
     private void hideButtons() {
         if (mBtnRegister != null && mProgressBar != null) {
-            mBtnRegister.setVisibility(View.GONE);
+            mBtnRegister.setVisibility(View.INVISIBLE);
             mProgressBar.setVisibility(View.VISIBLE);
         }
     }
