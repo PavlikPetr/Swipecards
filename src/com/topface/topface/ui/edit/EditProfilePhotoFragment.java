@@ -207,8 +207,13 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder holder;
             final Photo item = getItem(position);
+            int type = getItemViewType(position);
 
             if (convertView == null) {
+                if (type == T_ADD_BTN) {
+                    convertView = mInflater.inflate(R.layout.item_user_gallery_add_btn, null, false);
+                    return convertView;
+                }
                 convertView = mInflater.inflate(R.layout.item_edit_user_gallery, null, false);
                 holder = new ViewHolder();
                 holder.photo = (ImageViewRemote) convertView.findViewById(R.id.ivPhoto);
@@ -219,16 +224,11 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                 holder.mShadow = (ImageView) convertView.findViewById(R.id.ivShadow);
                 convertView.setTag(holder);
             } else {
+                if (type == T_ADD_BTN) return convertView;
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            if (getItemViewType(position) == T_ADD_BTN) {
-                holder.photo.setBackgroundResource(R.drawable.profile_add_photo_selector);
-                holder.mBtnSetAsMain.setVisibility(View.INVISIBLE);
-                holder.mBtnDelete.setVisibility(View.INVISIBLE);
-                holder.mBtnSelectedAsMain.setVisibility(View.INVISIBLE);
-                holder.mShadow.setVisibility(View.INVISIBLE);
-            } else {
+            if (type != T_ADD_BTN) {
                 final int itemId = item.getId();
                 holder.photo.setPhoto(item);
                 if (mDeleted.contains(item)) {

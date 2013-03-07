@@ -21,7 +21,7 @@ public class DeleteRequest extends ApiRequest {
 
     @Override
     public String getServiceName() {
-        return "delete";
+        return "feedDelete";
     }
 
     @Override

@@ -90,7 +90,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.invisible = resp.optBoolean("invisible");
             profile.background = resp.optInt("background", ProfileBackgrounds.DEFAULT_BACKGROUND_ID);
             profile.totalPhotos = resp.optInt("photos_count");
-            profile.paid = resp.optBoolean("paid",false);
+            profile.paid = resp.optBoolean("paid");
 
             parseGifts(profile, resp);
             parseNotifications(profile, resp);

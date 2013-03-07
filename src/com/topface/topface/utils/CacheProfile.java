@@ -32,6 +32,8 @@ public class CacheProfile {
     public static int average_rate;    // средняя оценка текущего пользователя
     public static DatingFilter dating; //Фильтр поиска
 
+    public static boolean paid; // признак платящего пользоателя
+
     //Premium
     public static boolean premium;
     public static boolean invisible;
@@ -112,6 +114,8 @@ public class CacheProfile {
         profile.background = background_id;
 
         profile.totalPhotos = totalPhotos;
+
+        profile.paid = paid;
         return profile;
     }
 
@@ -144,6 +148,8 @@ public class CacheProfile {
         background_id = profile.background;
 
         totalPhotos = profile.totalPhotos;
+
+        paid = profile.paid;
 
         setProfileCache(response);
         setProfileUpdateTime();
