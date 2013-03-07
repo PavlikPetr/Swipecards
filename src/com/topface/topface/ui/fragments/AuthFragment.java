@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,15 +14,11 @@ import android.text.method.TransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
-import com.topface.topface.App;
-import com.topface.topface.GCMUtils;
-import com.topface.topface.R;
-import com.topface.topface.Ssid;
+import com.topface.topface.*;
 import com.topface.topface.data.Auth;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
@@ -35,10 +30,12 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.views.IllustratedTextView;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.TopfaceNotificationManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class AuthFragment extends BaseFragment {
 
@@ -57,6 +54,8 @@ public class AuthFragment extends BaseFragment {
     private ProgressBar mLoginSendingProgress;
     private AuthorizationManager mAuthorizationManager;
     private BroadcastReceiver connectionChangeListener;
+    private TextView mBackButton;
+    private Timer mTimer = new Timer();
 
     public static AuthFragment newInstance() {
         return new AuthFragment();
@@ -154,7 +153,8 @@ public class AuthFragment extends BaseFragment {
             }
         });
 
-        root.findViewById(R.id.tvBackToMainAuth).setOnClickListener(new View.OnClickListener() {
+        mBackButton = (TextView) root.findViewById(R.id.tvBackToMainAuth);
+        mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAuthViewsFlipper.setDisplayedChild(0);
@@ -194,6 +194,7 @@ public class AuthFragment extends BaseFragment {
             @Override
             public void onReceive(Context context, Intent intent) {
                 int mConnectionType = intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE, -1);
+
                 if (mConnectionType != ConnectionChangeReceiver.CONNECTION_OFFLINE) {
                     IllustratedTextView btn = mRetryView.getBtn1();
                     if (btn != null) {
@@ -315,7 +316,7 @@ public class AuthFragment extends BaseFragment {
 
             @Override
             public void cancel() {
-                showButtons();
+//                showButtons();
             }
         });
         EasyTracker.getTracker().trackEvent("Profile", "Auth", "FromActivity" + AuthToken.SN_TOPFACE, 1L);
@@ -392,6 +393,7 @@ public class AuthFragment extends BaseFragment {
     private void authorizationFailed(int codeError, final ApiRequest request) {
         hideButtons();
         boolean needShowRetry = true;
+
         switch (codeError) {
             case ApiResponse.NETWORK_CONNECT_ERROR:
                 mRetryView.setErrorMsg(getString(R.string.general_reconnect_social));
@@ -445,11 +447,13 @@ public class AuthFragment extends BaseFragment {
                 needShowRetry = false;
                 break;
             default:
+                mAuthViewsFlipper.setVisibility(View.GONE);
                 mRetryView.setErrorMsg(getString(R.string.general_data_error));
                 mRetryView.setListenerToBtn(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         mRetryView.setVisibility(View.GONE);
+                        mAuthViewsFlipper.setVisibility(View.VISIBLE);
                         mProgressBar.setVisibility(View.VISIBLE);
                         request.canceled = false;
                         registerRequest(request);
@@ -479,6 +483,17 @@ public class AuthFragment extends BaseFragment {
             mWrongPasswordAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
                     android.R.anim.fade_in));
             mWrongPasswordAlertView.setVisibility(View.VISIBLE);
+            mTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            removeRedAlert();
+                        }
+                    });
+                }
+            }, Static.RED_ALERT_APPEARANCE_TIME);
         }
     }
 
@@ -504,6 +519,7 @@ public class AuthFragment extends BaseFragment {
             mRecoverPwd.setEnabled(true);
             mLogin.setEnabled(true);
             mPassword.setEnabled(true);
+            mBackButton.setEnabled(true);
         }
     }
 
@@ -513,12 +529,13 @@ public class AuthFragment extends BaseFragment {
         mSignInView.setVisibility(View.GONE);
         mCreateAccountView.setVisibility(View.GONE);
         mRetryView.setVisibility(View.GONE);
-        mTFButton.setVisibility(View.GONE);
+        mTFButton.setVisibility(View.INVISIBLE);
         mProgressBar.setVisibility(View.VISIBLE);
         mLoginSendingProgress.setVisibility(View.VISIBLE);
         mRecoverPwd.setEnabled(false);
         mLogin.setEnabled(false);
         mPassword.setEnabled(false);
+        mBackButton.setEnabled(false);
     }
 
     private void btnVKClick() {

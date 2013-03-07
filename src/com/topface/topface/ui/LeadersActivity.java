@@ -65,8 +65,13 @@ public class LeadersActivity extends BaseFragmentActivity {
         mBuyButton = (Button) findViewById(R.id.btnLeadersBuy);
         mLoadingLocker = (LockerView) findViewById(R.id.llvLeaderSending);
         mUselessTitle = (TextView) findViewById(R.id.unusedTitle);
-
         mUselessTitle.setText(String.format(getString(R.string.leaders_pick_condition), CacheProfile.getOptions().minLeadersPercent));
+        if(CacheProfile.getOptions().minLeadersPercent == 0) {
+            mUselessTitle.setVisibility(View.GONE);
+        } else {
+            mUselessTitle.setVisibility(View.VISIBLE);
+        }
+
 
         setListeners();
         getProfile();
@@ -139,6 +144,7 @@ public class LeadersActivity extends BaseFragmentActivity {
             }
         });
         mContainer.addView(rv);
+        rv.setVisibility(View.GONE);
         mUselessTitle.setVisibility(View.GONE);
         request.callback(new ApiHandler() {
 
@@ -154,13 +160,14 @@ public class LeadersActivity extends BaseFragmentActivity {
             public void success(ApiResponse response) {
                 Photos photos = Photos.parse(response.jsonResult.optJSONArray("items"));
                 fillPhotos(photos);
+                mLoadingLocker.setVisibility(View.GONE);
                 rv.setVisibility(View.GONE);
-                mUselessTitle.setVisibility(View.VISIBLE);
+//                mUselessTitle.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-
+                mLoadingLocker.setVisibility(View.GONE);
                 rv.setVisibility(View.VISIBLE);
 
             }
@@ -209,7 +216,7 @@ public class LeadersActivity extends BaseFragmentActivity {
 
     private void splitPhotos(Photos photos) {
         for (Photo photo : photos) {
-            if (photo.canBecomeLeader) {
+            if (photo.canBecomeLeader || CacheProfile.getOptions().minLeadersPercent == 0) {
                 usePhotos.add(new Photo(photo));
             } else {
                 uselessPhotos.add(new Photo(photo));

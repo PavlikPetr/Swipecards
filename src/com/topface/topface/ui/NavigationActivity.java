@@ -16,12 +16,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.Toast;
+import com.sponsorpay.sdk.android.SponsorPay;
+import com.tapjoy.TapjoyConnect;
 import com.topface.billing.BillingUtils;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
+import com.topface.topface.data.Profile;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
@@ -35,8 +38,10 @@ import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
+import ru.ideast.adwired.AWView;
 
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,9 +61,15 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     private BroadcastReceiver mServerResponseReceiver;
 
+    private boolean isNeedAuth = true;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TapjoyConnect.requestTapjoyConnect(getApplicationContext(), "f0563cf4-9e7c-4962-b333-098810c477d2", "AS0AE9vmrWvkyNNGPsyu");
+        TapjoyConnect.getTapjoyConnectInstance().setUserID(Integer.toString(CacheProfile.uid));
+        SponsorPay.start("11625", Integer.toString(CacheProfile.uid), "0a4c64db64ed3c1ca14a5e5d81aaa23c", getApplicationContext());
+
         if (isNeedBroughtToFront(getIntent())) {
             // При открытии активити из лаунчера перезапускаем ее
             finish();
@@ -73,12 +84,25 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
         if (CacheProfile.isLoaded()) {
             onInit();
+        } else {
+            isNeedAuth = false;
         }
 
         mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         setStopTime();
         mNovice = Novice.getInstance(mPreferences);
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
+    }
+
+    private void requestAdwired() {
+        Locale ukraineLocale = new Locale("","RU","");
+        AWView adwiredView = (AWView)findViewById(R.id.adAdwired);
+        if ( Locale.getDefault().equals(ukraineLocale)) {
+            adwiredView.setVisibility(View.VISIBLE);
+            adwiredView.request('0');
+        } else {
+            adwiredView.setVisibility(View.GONE);
+        }
     }
 
     private void initFragmentSwitcher() {
@@ -94,6 +118,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     public void onInit() {
         Intent intent = getIntent();
+        isNeedAuth = true;
         int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
         if (id != -1) {
             mFragmentSwitcher.showFragment(id);
@@ -112,7 +137,12 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 //            finish();
 //        } else {
             checkVersion(CacheProfile.getOptions().max_version);
+
+        //Открыть диалог для захвата фото к аватарке
+        actionsAfterRegistration();
 //        }
+        if (CacheProfile.isLoaded())
+            requestAdwired();
     }
 
     private boolean needChangeProfile() {
@@ -132,6 +162,11 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     @Override
+    protected boolean isNeedAuth() {
+        return isNeedAuth;
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         checkProfileUpdate();
@@ -142,6 +177,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mServerResponseReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+
             }
         };
 
@@ -155,7 +191,37 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
         checkExternalLink();
 
-        //Открыть диалог для захвата фото к аватарке
+
+        requestBalance();
+    }
+
+    private void requestBalance() {
+        if (CacheProfile.isLoaded()) {
+            ProfileRequest request = new ProfileRequest(this);
+            request.part = ProfileRequest.P_BALANCE_COUNTERS;
+            request.callback(new DataApiHandler<Profile>() {
+
+                @Override
+                protected void success(Profile data, ApiResponse response) {
+                    CacheProfile.likes = data.likes;
+                    CacheProfile.money = data.money;
+                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                }
+
+                @Override
+                protected Profile parseResponse(ApiResponse response) {
+                    return Profile.parse(response);
+                }
+
+                @Override
+                public void fail(int codeError, ApiResponse response) {
+
+                }
+            }).exec();
+        }
+    }
+
+    private void actionsAfterRegistration() {
         if (!AuthToken.getInstance().isEmpty()) {
             if (CacheProfile.photo == null && !CacheProfile.wasAvatarAsked) {
                 CacheProfile.wasAvatarAsked = true;
@@ -192,7 +258,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
                     @Override
                     public void onDialogClose() {
-                        if((CacheProfile.city.isEmpty() || CacheProfile.needCityConfirmation(getApplicationContext()))
+                        if(CacheProfile.isLoaded() && (CacheProfile.city.isEmpty() || CacheProfile.needCityConfirmation(getApplicationContext()))
                                 && !CacheProfile.wasCityAsked){
                             CacheProfile.wasCityAsked = true;
                             CacheProfile.onCityConfirmed(getApplicationContext());
@@ -208,6 +274,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             }
         }
     }
+
     private void checkExternalLink() {
         if(getIntent() != null) {
             Uri data = getIntent().getData();
@@ -217,12 +284,12 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 String path = data.getPath();
                 String[] splittedPath = path.split("/");
 
-                executeLinkAction(splittedPath);
+                executeLinkAction(splittedPath,data);
             }
         }
     }
 
-    private void executeLinkAction(String[] splittedPath) {
+    private void executeLinkAction(String[] splittedPath, Uri data) {
         Pattern profilePattern = Pattern.compile("profile");
         Pattern confirmPattern = Pattern.compile("confirm.*");
 
@@ -244,6 +311,11 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 ConfirmRequest request = new ConfirmRequest(this, token.getLogin(), code);
                 request.exec();
             }
+        } else {
+
+            Intent intent = new Intent(Intent.ACTION_VIEW, data);
+            startActivity(intent);
+            finish();
         }
     }
 
@@ -434,10 +506,14 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         public void afterClosing() {
             mFragmentMenu.setClickable(false);
             mFragmentMenu.hide();
+            mFragmentSwitcher.getCurrentFragment().activateActionBar(false);
         }
 
         @Override
         public void afterOpening() {
+            if(mFragmentSwitcher.getCurrentFragment() !=  null) {
+                mFragmentSwitcher.getCurrentFragment().activateActionBar(true);
+            }
             if (mNovice.isMenuCompleted()) return;
 
             if (mNovice.isShowFillProfile()) {
@@ -569,7 +645,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mFragmentMenu.selectDefaultMenu();
     }
 
-
     @Override
     public boolean isTrackable() {
         return false;
@@ -594,5 +669,4 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
 }

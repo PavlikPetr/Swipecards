@@ -20,12 +20,14 @@ import com.adfonic.android.api.Request;
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.mad.ad.AdStaticView;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Banner;
 import com.topface.topface.data.Options;
+import com.topface.topface.data.Profile;
 import com.topface.topface.data.VirusLike;
 import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.requests.ApiResponse;
@@ -44,6 +46,10 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.Utils;
+import ru.ideast.adwired.AWView;
+import ru.ideast.adwired.events.OnNoBannerListener;
+import ru.ideast.adwired.events.OnStartListener;
+import ru.ideast.adwired.events.OnStopListener;
 import ru.wapstart.plus1.sdk.Plus1BannerAsker;
 import ru.wapstart.plus1.sdk.Plus1BannerRequest;
 import ru.wapstart.plus1.sdk.Plus1BannerView;
@@ -70,6 +76,8 @@ public class BannerBlock {
     private Plus1BannerAsker mPLus1Asker;
     private Map<String, String> mBannersMap = new HashMap<String, String>();
 
+    private Map<String, Character> mAdwiredMap = new HashMap<String, Character>();
+
     public BannerBlock(Fragment fragment, ViewGroup layout) {
         super();
         mFragment = fragment;
@@ -84,6 +92,12 @@ public class BannerBlock {
         mBannersMap.put(DialogsFragment.class.toString(), Options.PAGE_DIALOGS);
         mBannersMap.put(TopsFragment.class.toString(), Options.PAGE_TOP);
         mBannersMap.put(VisitorsFragment.class.toString(), Options.PAGE_VISITORS);
+
+        mAdwiredMap.put(LikesFragment.class.toString(), '1');
+        mAdwiredMap.put(MutualFragment.class.toString(), '2');
+        mAdwiredMap.put(DialogsFragment.class.toString(), '3');
+        mAdwiredMap.put(TopsFragment.class.toString(), '4');
+        mAdwiredMap.put(VisitorsFragment.class.toString(), '5');
     }
 
     private void initBanner() {
@@ -91,7 +105,11 @@ public class BannerBlock {
             String fragmentId = mFragment.getClass().toString();
             if (mBannersMap.containsKey(fragmentId)) {
                 String bannerType = CacheProfile.getOptions().pages.get(mBannersMap.get(fragmentId)).banner;
+
                 mBannerView = getBannerView(bannerType);
+                if (mBannerView == null) {
+                    return;
+                }
                 mBannerLayout.addView(mBannerView);
                 if (bannerType.equals(Options.BANNER_TOPFACE)) {
                     if (isCorrectResolution() && mBannersMap.containsKey(fragmentId)) {
@@ -132,6 +150,10 @@ public class BannerBlock {
             return mInflater.inflate(R.layout.banner_adfonic, null);
         } else if (bannerType.equals(Options.BANNER_WAPSTART)) {
             return mInflater.inflate(R.layout.banner_wapstart, null);
+        } else if (bannerType.equals(Options.BANNER_ADWIRED)) {
+            return mInflater.inflate(R.layout.banner_adwired, null);
+        } else if (bannerType.equals(Options.BANNER_MADNET)) {
+            return mInflater.inflate(R.layout.banner_madnet, null);
         } else {
             return null;
         }
@@ -210,6 +232,53 @@ public class BannerBlock {
                     ((Plus1BannerView) mBannerView).setAutorefreshEnabled(false));
             mPLus1Asker.setRemoveBannersOnPause(true);
             mPLus1Asker.setDisabledWebViewCorePausing(true);
+        } else if (mBannerView instanceof AWView) {
+            // request onResume
+            ((AWView)mBannerView).setOnStartListener(new OnStartListener() {
+                @Override
+                public void onStart() {
+                    Debug.log("Adwired: Start");
+                }
+            });
+
+            ((AWView)mBannerView).setOnStopListener(new OnStopListener() {
+                @Override
+                public void onStop() {
+                    Debug.log("Adwired: Start");
+                }
+            });
+
+            ((AWView)mBannerView).setOnNoBannerListener(new OnNoBannerListener() {
+                @Override
+                public void onNoBanner() {
+                    Debug.log("Adwired: No banner");
+                }
+            });
+        } else if (mBannerView instanceof AdStaticView) {
+            mBannerView.setVisibility(View.VISIBLE);
+            Profile profile = CacheProfile.getProfile();
+            com.mad.ad.AdRequest.Builder requestBuilder = new com.mad.ad.AdRequest.Builder();
+//            requestBuilder.setEducation(com.mad.ad.AdRequest.Education.UNIVERSITY);
+//            requestBuilder.setEthnicity(com.mad.ad.AdRequest.Ethnicity.WHITE);
+            requestBuilder.setGender(profile.sex == Static.BOY ?
+                    com.mad.ad.AdRequest.Gender.MALE : com.mad.ad.AdRequest.Gender.FEMALE);
+            requestBuilder.setGenderInterest(profile.dating.sex == Static.BOY ?
+                    com.mad.ad.AdRequest.GenderInterest.MALE : com.mad.ad.AdRequest.GenderInterest.FEMALE);
+            //requestBuilder.setIncome(com.mad.ad.AdRequest.Income.FROM_15_TO_25);
+            //requestBuilder.setMaritalStatus(com.mad.ad.AdRequest.MaritalStatus.MARRIED);
+
+//            requestBuilder.setGps(location);
+//            requestBuilder.setRegion(region);
+//            requestBuilder.setCity(city);
+//            requestBuilder.setZip(zip);
+//            requestBuilder.setAreaCode(LAC);
+
+//            requestBuilder.setPrimaryCategory("cars");
+//            requestBuilder.setSecodaryCategory("sportcars");
+//            requestBuilder.addKeyword("Ferrari");
+
+            com.mad.ad.AdRequest request = requestBuilder.getRequest();
+            ((AdStaticView)mBannerView).showBanners(request);
         } else if (mBannerView instanceof ImageView) {
             //Это нужно, что бы сбросить размеры баннера, для правильного расчета размера в ImageLoader
             ViewGroup.LayoutParams params = mBannerView.getLayoutParams();
@@ -351,6 +420,9 @@ public class BannerBlock {
     public void onResume() {
         initBanner();
         if (mBannerView != null && mBannerView instanceof AdfonicView) mBannerView.invalidate();
+        if (mBannerView != null && mBannerView instanceof AWView) {
+            ((AWView)mBannerView).request(mAdwiredMap.get(mFragment.getClass().toString()));
+        }
         if (mPLus1Asker != null) mPLus1Asker.onResume();
     }
 

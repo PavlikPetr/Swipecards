@@ -20,16 +20,17 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.RegisterRequest;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
+import com.topface.topface.utils.Utils;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 public class RegistrationFragment extends BaseFragment implements DatePickerDialog.OnDateSetListener{
 
     public static final String INTENT_LOGIN = "registration_login";
     public static final String INTENT_PASSWORD = "registration_password";
     public static final String INTENT_USER_ID = "registration_iser_id";
+
+    private static final int START_SHIFT = 33;
 
     private EditText mEdEmail;
     private EditText mEdName;
@@ -40,15 +41,22 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
     private Button mBtnRegister;
 
     private Date mBirthday;
+    private int mYear;
+    private int mMonthOfYear;
+    private int mDayOfMonth;
+    private Timer mTimer = new Timer();
+    private View mBtnBack;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_create_account, null);
 
-        getActivity().findViewById(R.id.loNavigationBar).setVisibility(View.GONE);
-
         initViews(root);
-
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.YEAR, - START_SHIFT);
+        mYear = c.get(Calendar.YEAR);
+        mMonthOfYear = c.get(Calendar.MONTH);
+        mDayOfMonth = c.get(Calendar.DAY_OF_MONTH);
 
         return root;
     }
@@ -78,7 +86,7 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
         birthday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatePickerFragment datePicker = DatePickerFragment.newInstance();
+                DatePickerFragment datePicker = DatePickerFragment.newInstance(mYear, mMonthOfYear, mDayOfMonth);
                 datePicker.setOnDateSetListener(RegistrationFragment.this);
                 datePicker.show(getActivity().getSupportFragmentManager(),DatePickerFragment.TAG);
             }
@@ -96,7 +104,17 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
             public void onClick(View v) {
                 removeRedAlert();
                 hideButtons();
+                Utils.hideSoftKeyboard(getActivity(),mEdEmail,mEdName);
                 sendRegistrationRequest();
+            }
+        });
+
+        mBtnBack = root.findViewById(R.id.tvBackToMainAuth);
+        mBtnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.hideSoftKeyboard(getActivity(),mEdName,mEdEmail);
+                getActivity().finish();
             }
         });
     }
@@ -171,6 +189,17 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
         mRedAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
                 android.R.anim.fade_in));
         mRedAlertView.setVisibility(View.VISIBLE);
+        mTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        removeRedAlert();
+                    }
+                });
+            }
+        }, Static.RED_ALERT_APPEARANCE_TIME);
     }
 
     private void redAlert(int resId) {
@@ -188,11 +217,17 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
         final Calendar c = Calendar.getInstance();
-        c.add(Calendar.YEAR, -Static.MAX_AGE);
+        c.add(Calendar.YEAR, -Static.MIN_AGE);
         long maxDate = c.getTimeInMillis();
 
-        if (DatePickerFragment.isValidDate(year,monthOfYear,dayOfMonth,0,maxDate)) {
+        c.add(Calendar.YEAR, -(Static.MAX_AGE - Static.MIN_AGE));
+        long minDate = c.getTimeInMillis();
+
+        if (DatePickerFragment.isValidDate(year,monthOfYear,dayOfMonth,minDate,maxDate)) {
             Date date = DateUtils.getDate(year,monthOfYear,dayOfMonth);
+            mYear = year;
+            mMonthOfYear = monthOfYear;
+            mDayOfMonth = dayOfMonth;
             String dateStr = DateFormat.getDateFormat(getActivity().getApplicationContext()).format(date);
             mBirthdayText.setText(dateStr);
             mBirthday = date;
@@ -262,6 +297,16 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
 
         public int getSex() {
             return mSex;
+        }
+
+        public void setFocusable(boolean focusable) {
+            mBoy.setFocusable(focusable);
+            mGirl.setFocusable(focusable);
+        }
+
+        public void setOnFocusChangeListener(View.OnFocusChangeListener listener) {
+            mBoy.setOnFocusChangeListener(listener);
+            mGirl.setOnFocusChangeListener(listener);
         }
     }
 

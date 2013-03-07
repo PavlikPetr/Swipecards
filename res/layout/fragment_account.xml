@@ -3,12 +3,18 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
  >
+    <include
+            layout="@layout/bar_navigation_header"
+            android:id="@+id/loNavigationBar"/>
+
     <LinearLayout
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
                   android:gravity="center_horizontal"
-                  android:orientation="vertical">
-
+                  android:orientation="vertical"
+                  android:id="@+id/acContainer"
+                  android:layout_below="@id/loNavigationBar"
+            >
         <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -41,6 +47,9 @@
                 />
 
     </LinearLayout>
+
+    <ImageView style="@style/HeaderShadow"/>
+
     <com.topface.topface.ui.views.LockerView
             android:id="@+id/llvLogoutLoading"
             style="@style/LoadingLocker"

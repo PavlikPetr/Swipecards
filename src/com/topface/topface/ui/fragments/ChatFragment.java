@@ -116,7 +116,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         mLoadingLocker = (LockerView) root.findViewById(R.id.llvChatLoading);
 
         // Navigation bar
-        initNavigationbar(userSex, userName, userAge, userCity);
+        initNavigationbar(root, userSex, userName, userAge, userCity);
 
         editButtonsNames = new String[]{getString(R.string.general_copy_title), getString(R.string.general_delete_title)};
 
@@ -260,25 +260,21 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         mLockScreen.addView(mRetryView);
     }
 
-    private void initNavigationbar(int userSex, String userName, int userAge, String userCity) {
-        TextView headerTitle = ((TextView) getActivity().findViewById(R.id.tvNavigationTitle));
-        headerTitle.setText(userName + ", "
-                + userAge);
-        TextView headerSubtitle = ((TextView) getActivity().findViewById(R.id.tvNavigationSubtitle));
-        headerSubtitle.setVisibility(View.VISIBLE);
-        headerSubtitle.setText(userCity);
+    private void initNavigationbar(View root, int userSex, String userName, int userAge, String userCity) {
+        ActionBar actionBar = getActionBar(root);
 
-        final ImageButton btnProfile = (ImageButton) getActivity().findViewById(R.id.btnNavigationProfileBar);
-        switch (userSex) {
-            case Static.BOY:
-                btnProfile.setImageResource(R.drawable.navigation_male_profile_selector);
-                break;
-            case Static.GIRL:
-                btnProfile.setImageResource(R.drawable.navigation_female_profile_selector);
-                break;
-        }
-        btnProfile.setVisibility(View.VISIBLE);
-        btnProfile.setOnClickListener(this);
+        actionBar.setTitleText(userName + ", "
+                + userAge);
+        actionBar.setSubTitleText(userCity);
+        actionBar.showBackButton(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().finish();
+                //TODO костыль для навигации
+                getActivity().setResult(Activity.RESULT_CANCELED);
+            }
+        });
+        actionBar.showProfileButton(this, userSex);
     }
 
     @Override
@@ -360,7 +356,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     itemId = -1;
                 }
                 wasFailed = false;
-
+                mAdapter.setUser(data.user);
                 if (mAdapter != null) {
                     if (pullToRefresh) {
                         mAdapter.addFirst(data.items, data.more, mListView.getRefreshableView());
@@ -454,11 +450,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     EasyTracker.getTracker().trackEvent("Chat", "SendMapClick", "§", 1L);
                 }
                 break;
-            case R.id.btnNavigationBackWithText:
-                //TODO костыль для навигации
-                getActivity().setResult(Activity.RESULT_CANCELED);
-                getActivity().finish();
-                break;
+
             case R.id.chat_message:
                 break;
             case R.id.btnNavigationProfileBar:
@@ -638,6 +630,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 CacheProfile.money = data.money;
                 Debug.log(getActivity(), "likes:" + data.likes + " money:" + data.money);
                 data.history.target = FeedDialog.USER_MESSAGE;
+                mLoadingLocker.setVisibility(View.GONE);
                 if (mAdapter != null) {
                     mAdapter.replaceMessage(fakeItem, data.history, mListView.getRefreshableView());
                 }

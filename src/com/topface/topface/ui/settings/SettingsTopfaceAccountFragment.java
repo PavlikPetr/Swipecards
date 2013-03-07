@@ -23,10 +23,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Settings;
-import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.*;
 import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -53,7 +50,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_topface_account, container, false);
 
         // Navigation bar
-        initNavigationBar();
+        initNavigationBar(root);
 
         mLockerView = (LockerView) root.findViewById(R.id.llvLogoutLoading);
         mLockerView.setVisibility(View.GONE);
@@ -173,12 +170,9 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         mChangeButtonAction = action;
     }
 
-    private void initNavigationBar() {
-        getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
-        Button btnBack = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
-        btnBack.setVisibility(View.VISIBLE);
-        btnBack.setText(R.string.settings_header_title);
-        btnBack.setOnClickListener(new OnClickListener() {
+    private void initNavigationBar(View view) {
+        ActionBar actionBar = getActionBar(view);
+        actionBar.showBackButton(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -186,7 +180,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                 getActivity().finish();
             }
         });
-        ((TextView) getActivity().findViewById(R.id.tvNavigationTitle)).setText(R.string.settings_account);
+        actionBar.setTitleText(getString(R.string.settings_account));
     }
 
     @Override

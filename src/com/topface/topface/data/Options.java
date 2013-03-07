@@ -55,6 +55,8 @@ public class Options extends AbstractData {
     public final static String BANNER_ADFONIC = "ADFONIC";
     public final static String BANNER_ADMOB = "ADMOB";
     public final static String BANNER_WAPSTART = "WAPSTART";
+    public static final String BANNER_ADWIRED = "ADWIRED";
+    public final static String BANNER_MADNET = "MADNET";
 
     /**
      * Настройки для каждого типа страниц

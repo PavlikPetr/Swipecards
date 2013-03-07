@@ -64,6 +64,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     private View mHeaderView;
 
+    private FeedUser user;
+
     public ChatListAdapter(Context context, FeedList<History> data, Updater updateCallback) {
         super(context,data, updateCallback);
         mAddressesCache = new AddressesCache();
@@ -75,7 +77,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     public void setFriendProfile(FeedUser friend) {
         if (mHeaderView != null && friend != null) {
-            ((ImageViewRemote)mHeaderView.findViewById(R.id.ivFriendAvatar)).setPhoto(friend.photo);
+            ((ImageViewRemote)mHeaderView.findViewById(R.id.ivFriendAvatar)).setPhoto(user.photo);
         }
     }
 
@@ -140,6 +142,10 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
         return convertView;
 
+    }
+
+    public void setUser(FeedUser user) {
+        this.user = user;
     }
 
     public void addHeader(ListView parentView) {
@@ -313,7 +319,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case T_USER:
                 if (avatar) {
                     holder.avatar.setOnClickListener(output ? null : mOnClickListener);
-                    holder.avatar.setPhoto(output ? CacheProfile.photo : item.user.photo);
+                    holder.avatar.setPhoto(output ? CacheProfile.photo : user.photo);
                     holder.avatar.setVisibility(View.VISIBLE);
                     holder.userInfo.setBackgroundResource(output ? R.drawable.bg_message_user : R.drawable.bg_message_friend);
                 } else {
@@ -327,7 +333,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case T_USER_MAP:
                 if (avatar) {
                     holder.avatar.setOnClickListener(output ? null : mOnClickListener);
-                    holder.avatar.setPhoto(output ? CacheProfile.photo : item.user.photo);
+                    holder.avatar.setPhoto(output ? CacheProfile.photo : user.photo);
                     holder.avatar.setVisibility(View.VISIBLE);
                 } else {
                     holder.avatar.setVisibility(View.INVISIBLE);
@@ -337,7 +343,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case T_USER_REQUEST:
                 if (avatar) {
                     holder.avatar.setOnClickListener(output ? null : mOnClickListener);
-                    holder.avatar.setPhoto(item.user.photo);
+                    holder.avatar.setPhoto(output ? CacheProfile.photo : user.photo);
                     holder.avatar.setVisibility(View.VISIBLE);
                     holder.userInfo.setBackgroundResource(output ? R.drawable.bg_message_user : R.drawable.bg_message_friend);
                 } else {

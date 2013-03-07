@@ -233,7 +233,6 @@
     <string name="vip_messages_bg">Mesajların arka planı</string>
     <string name="vip_black_list">Kara liste</string>
     <string name="vip_profile_bg">Arka plan fotoğrafı</string>
-    <string name="profile_vip_status">Super Skills</string>
     <string name="profile_services">Hizmetler</string>
     <string name="default_balance_constant">Hesabınızda</string>
     <string name="default_energy_coins_buy_btn_text">Para satın almak, enerji deposu doldurmak</string>
@@ -290,8 +289,8 @@
     <string name="general_buying">Sempati ve paraları satın almak</string>
     <string name="general_block">Engellemek</string>
     <string name="general_buying_disabled">Şu anda alışveriş mümkün değildir</string>
-    <string name="ban_flood_detected">Server\'i çok sık kullanıyorsunuz. Uygulamayı kullanmaya devam etmek için bekleyin.</string>
-    <string name="general_maintenance">Serverde teknik çalışmalar yapılmaktadır ve isteğiniz şu anda uygulanamaz. Daha sonra tekrar deneyebilirsiniz.</string>
+    <string name="ban_flood_detected">Sonucuya çok sık istek gönderiyorsunuz. Ugulamayı kullanmaya devam etmek için bekleyin.</string>
+    <string name="general_maintenance">Sunucuda teknik çalışmalar yapmaktadır. Daha sonra yeniden deneyin.</string>
     <string name="virus_chat_likes_request_title">Arkadaşlarınıza sempatileri hediye etmek</string>
     <string name="virus_chat_btn">Sempati kazanmak</string>
     <string name="virus_request_error">Sempatiler arkadaşlarınıza gönderilemedi</string>
@@ -306,4 +305,14 @@
     <string name="popup_version_message">Versiyonu yenilemek için tam zamanı!</string>
     <string name="popup_version_update">Yenilemek</string>
     <string name="popup_version_cancel">Daha sonra hatırlat</string>
+    <string name="general_version_not_supported">Uygulamanızın versiyonu eskimiş ve artık desteklenmiyor. Lütfen, uygulamayı güncelleyin</string>
+    <string name="leaders_select_photo_info">En etkili fotoğraf seçin! Düşük reytingli fotoğraf seçilemez</string>
+    <string name="default_price_format">Toplam: %.2f USD</string>
+    <string name="dating_online_only">%s, sadece çevrimiçi</string>
+    <string name="map_popup_address">Adres</string>
+    <string name="black_list_info">Muhabbet ettiğiniz kişiyi kara listeye eklediniz. Bu durumu profilinizde, VIP-durumu ayarlarınızda değiştirebilirsiniz.</string>
+    <string name="general_gift">Hediye</string>
+    <string name="general_soon">Yakında olacak</string>
+    <string name="black_list_activation">VIP-durumunu güncelleyin ve kara listeyi kullanın.</string>
+    <string name="profile_edit_age_ranges">Yaş 16 ile 99 arasında olmalıdır. Lütfen doğru rakam yazın ve tekrar deneyin.</string>
 </resources>

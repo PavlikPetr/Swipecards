@@ -104,11 +104,8 @@ public class EditContainerActivity extends BaseFragmentActivity {
     public void finish() {
         if (mFragment instanceof AbstractEditFragment) {
             AbstractEditFragment editFragment = (AbstractEditFragment) mFragment;
-            if (editFragment.mSaveButton == null) {
-                editFragment.saveChanges(mFinishHandler);
-            } else {
-                super.finish();
-            }
+            editFragment.saveChanges(mFinishHandler);
+
         } else {
             super.finish();
         }

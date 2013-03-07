@@ -2,17 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/editContainer"
                 android:background="@drawable/bg_main">
 
     <!-- header bar -->
 
-    <FrameLayout
-            android:id="@+id/loNavigationBar"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-
-        <include layout="@layout/bar_navigation_header"/>
-    </FrameLayout>
+    <include android:id="@+id/loNavigationBar" layout="@layout/bar_navigation_header"/>
 
     <ListView
             android:id="@+id/lvEdits"

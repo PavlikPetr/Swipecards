@@ -25,8 +25,6 @@ import java.util.TimerTask;
 
 public class RecoverPwdFragment extends BaseFragment{
 
-    private static final int RED_ALERT_APPEARANCE_TIME = 3000;
-
     private Button mBtnRecover;
     private EditText mEdEmail;
     private ProgressBar mProgressBar;
@@ -38,7 +36,7 @@ public class RecoverPwdFragment extends BaseFragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_recover_pwd, null);
 
-        getActivity().findViewById(R.id.loNavigationBar).setVisibility(View.GONE);
+//        getActivity().findViewById(R.id.loNavigationBar).setVisibility(View.GONE);
 
         initViews(root);
 
@@ -131,7 +129,7 @@ public class RecoverPwdFragment extends BaseFragment{
 
     private void hideButtons() {
         if (mBtnRecover != null && mProgressBar != null) {
-            mBtnRecover.setVisibility(View.GONE);
+            mBtnRecover.setVisibility(View.INVISIBLE);
             mProgressBar.setVisibility(View.VISIBLE);
         }
     }
@@ -154,7 +152,7 @@ public class RecoverPwdFragment extends BaseFragment{
                         }
                     });
                 }
-            }, RED_ALERT_APPEARANCE_TIME);
+            }, Static.RED_ALERT_APPEARANCE_TIME);
         }
     }
 

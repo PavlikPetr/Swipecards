@@ -3,6 +3,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+    <include
+            layout="@layout/bar_navigation_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/loNavigationBar"/>
+
     <ListView
             android:id="@+id/lvList"
             android:layout_below="@id/loNavigationBar"
@@ -13,4 +19,5 @@
             android:fadeScrollbars="true"
             android:fadingEdge="none"
             android:listSelector="@android:color/transparent"/>
+    <ImageView style="@style/HeaderShadow"/>
 </RelativeLayout>

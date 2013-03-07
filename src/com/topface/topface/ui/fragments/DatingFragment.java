@@ -98,6 +98,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private BroadcastReceiver mProfileReceiver;
     private boolean mNeedMore;
     private int mLoadedCount;
+    private ActionBar mActionBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -116,6 +117,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         super.onCreateView(inflater, container, saved);
 
         View view = inflater.inflate(R.layout.ac_dating, null);
+
+        mActionBar = getActionBar(view);
 
         mRetryBtn = (ImageButton) view.findViewById(R.id.btnUpdate);
         mRetryBtn.setOnClickListener(this);
@@ -148,8 +151,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         mDatingLovePrice = (TextView) view.findViewById(R.id.tvDatingLovePrice);
 
-        final ImageButton settingsButton = initNavigationHeader(view);
-        initEmptySearchDialog(view, settingsButton);
+        initEmptySearchDialog(view, initNavigationHeader(view));
 
         //Показываем последнего пользователя
         showUser(mUserSearchList.getCurrentUser());
@@ -223,33 +225,24 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mSwitchPrevBtn.setOnClickListener(this);
     }
 
-    private ImageButton initNavigationHeader(View view) {
+    private OnClickListener initNavigationHeader(View view) {
         // Navigation Header
-        mNavBarController = new NavigationBarController(
-                (ViewGroup) view.findViewById(R.id.loNavigationBar));
-        view.findViewById(R.id.btnNavigationHome).setOnClickListener(
-                (NavigationActivity) getActivity());
-
+        ActionBar actionBar = getActionBar(view);
         setHeader(view);
-
-        mNavigationHeader = view.findViewById(R.id.loNavigationBar);
-        final ImageButton settingsButton = (ImageButton) view.findViewById(R.id.btnNavigationSettingsBar);
-        settingsButton.setVisibility(View.VISIBLE);
-        settingsButton.setOnClickListener(new OnClickListener() {
+        actionBar.showHomeButton((NavigationActivity) getActivity());
+        OnClickListener listener = new OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 Intent intent = new Intent(getActivity().getApplicationContext(),
                         EditContainerActivity.class);
                 startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FILTER);
             }
-        });
-
-
-        mNavigationHeaderShadow = view.findViewById(R.id.ivHeaderShadow);
-        return settingsButton;
+        };
+        actionBar.showSettingsButton(listener, false);
+        return listener;
     }
 
-    private void initEmptySearchDialog(View view, final ImageButton settingsButton) {
+    private void initEmptySearchDialog(View view, OnClickListener settingsListener) {
         emptySearchDialog = new RetryView(getActivity());
         emptySearchDialog.setErrorMsg(App.getContext().getString(R.string.general_search_null_response_error));
         emptySearchDialog.addButton(RetryView.REFRESH_TEMPLATE + App.getContext().getString(R.string.general_dialog_retry), new OnClickListener() {
@@ -258,12 +251,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 updateData(false);
             }
         });
-        emptySearchDialog.addButton(App.getContext().getString(R.string.change_filters), new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                settingsButton.performClick();
-            }
-        });
+        emptySearchDialog.addButton(App.getContext().getString(R.string.change_filters), settingsListener);
         emptySearchDialog.setVisibility(View.GONE);
         ((RelativeLayout) view.findViewById(R.id.ac_dating_container)).addView(emptySearchDialog);
 
@@ -280,6 +268,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             @Override
             public void onReceive(Context context, Intent intent) {
                 updateFilterData();
+                updateResources();
             }
         };
     }
@@ -710,8 +699,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void showControls() {
-        mNavigationHeader.setVisibility(View.VISIBLE);
-        mNavigationHeaderShadow.setVisibility(View.VISIBLE);
+        mActionBar.show();
         mDatingGroup.setVisibility(View.VISIBLE);
         mIsHide = false;
     }
@@ -719,8 +707,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void hideControls() {
         mDatingGroup.setVisibility(View.GONE);
-        mNavigationHeader.setVisibility(View.GONE);
-        mNavigationHeaderShadow.setVisibility(View.GONE);
+        mActionBar.hide();
         mIsHide = true;
     }
 
@@ -785,15 +772,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         String plus = CacheProfile.dating.age_end == FilterFragment.webAbsoluteMaxAge ? "+" : "";
         int age = CacheProfile.dating.age_end == FilterFragment.webAbsoluteMaxAge ? EditAgeFragment.absoluteMax : CacheProfile.dating.age_end;
         Context context = App.getContext();
-        ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(context.getString(
+        getActionBar(view).setTitleText(context.getString(
                 CacheProfile.dating.sex == Static.BOY ? R.string.dating_header_guys
                         : R.string.dating_header_girls, CacheProfile.dating.age_start,
                 age) + plus);
 
-        TextView subTitle = (TextView) view.findViewById(R.id.tvNavigationSubtitle);
-        subTitle.setVisibility(View.VISIBLE);
-
-        subTitle.setText(getSubtitle(context));
+        getActionBar(view).setSubTitleText(getSubtitle(context));
     }
 
     private String getSubtitle(Context context) {
@@ -881,8 +865,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     };
 
     private void sendAlbumRequest(final Photos data) {
-        int position = data.get(mLoadedCount - 1).getPosition() + 1
-                ;
+        int position = data.get(mLoadedCount - 1).getPosition() + 1;
         AlbumRequest request = new AlbumRequest(getActivity(), mUserSearchList.getCurrentUser().id, PHOTOS_LIMIT, position, AlbumRequest.MODE_SEARCH);
         final int uid = mUserSearchList.getCurrentUser().id;
         request.callback(new ApiHandler() {
@@ -910,6 +893,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 mCanSendAlbumReq = true;
             }
         }).exec();
+
     }
 
     private void updateResources() {

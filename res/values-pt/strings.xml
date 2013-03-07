@@ -233,7 +233,7 @@
     <string name="vip_messages_bg">Fundo de mensagens</string>
     <string name="vip_black_list">Lista negra</string>
     <string name="vip_profile_bg">Fotografia de fundo</string>
-    <string name="profile_vip_status">Super Skills</string>
+    <string name="profile_vip_status">Super {{rocket}} Skills</string>
     <string name="profile_services">Serviços</string>
     <string name="default_balance_constant">Na sua conta</string>
     <string name="default_energy_coins_buy_btn_text">Comprar moedas, cpmpletando a reserva de energias</string>

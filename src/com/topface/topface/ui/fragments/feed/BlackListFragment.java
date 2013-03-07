@@ -15,6 +15,7 @@ import com.topface.topface.requests.BlackListDeleteRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.adapters.BlackListAdapter;
+import com.topface.topface.utils.ActionBar;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 public class BlackListFragment extends FeedFragment<BlackListItem> implements View.OnClickListener {
 
     private static final int BLACK_LIST_DELETE_BUTTON = 0;
+    private ActionBar mActionBar;
 
     @Override
     protected int getLayout() {
@@ -78,33 +80,28 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
     @Override
     protected void initNavigationBar(View view) {
         // Navigation bar
-        View backButton = view.findViewById(R.id.btnNavigationBack);
-        backButton.setVisibility(View.VISIBLE);
-        backButton.setOnClickListener(new View.OnClickListener() {
+        mActionBar = getActionBar(view);
+        mActionBar.showBackButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().finish();
             }
         });
 
-        final Button editButton = (Button) view.findViewById(R.id.btnEditList);
-        editButton.setVisibility(View.VISIBLE);
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleEditList(editButton);
-            }
-        });
+        mActionBar.showEditButton(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               toggleEditList();
+           }
+       });
     }
 
-    private void toggleEditList(Button editButton) {
-        editButton.setText(((BlackListAdapter) getListAdapter()).isEditMode() ?
-                R.string.general_edit_button :
-                R.string.general_save_button
-        );
+    private void toggleEditList() {
+
         final BlackListAdapter adapter = ((BlackListAdapter) mListAdapter);
         //Удаляем отмеченные элементы, отправляя запрос на сервер
         deleteMarkedItems(adapter);
+        mActionBar.activateEditButton();
         //Переключаем адаптер
         adapter.toggleEditMode();
     }

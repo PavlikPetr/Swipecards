@@ -22,7 +22,9 @@ import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
@@ -30,7 +32,7 @@ import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-public class SettingsAccountFragment extends TrackedFragment {
+public class SettingsAccountFragment extends BaseFragment {
 
     public static final int RESULT_LOGOUT = 666;
     private LockerView lockerView;
@@ -41,11 +43,8 @@ public class SettingsAccountFragment extends TrackedFragment {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_account, container, false);
 
         // Navigation bar
-        getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
-        Button btnBack = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
-        btnBack.setVisibility(View.VISIBLE);
-        btnBack.setText(R.string.settings_header_title);
-        btnBack.setOnClickListener(new OnClickListener() {
+        ActionBar actionBar = getActionBar(root);
+        actionBar.showBackButton(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -54,7 +53,7 @@ public class SettingsAccountFragment extends TrackedFragment {
         });
         lockerView = (LockerView) root.findViewById(R.id.llvLogoutLoading);
         lockerView.setVisibility(View.GONE);
-        ((TextView) getActivity().findViewById(R.id.tvNavigationTitle)).setText(R.string.settings_account);
+        actionBar.setTitleText(getString(R.string.settings_account));
 
         Drawable icon = null;
         final AuthToken token = AuthToken.getInstance();

@@ -304,7 +304,7 @@
     <string name="vip_black_list">Черный список</string>
     <string name="vip_profile_bg">Фоновая фотография</string>
 
-    <string name="profile_vip_status">Super Skills</string>
+    <string name="profile_vip_status">Super {{rocket}} Skills</string>
     <string name="profile_services">Услуги</string>
     <string name="default_balance_constant">На вашем счете</string>
     <string name="default_energy_coins_buy_btn_text">Купить монеты и симпатии</string>
@@ -425,6 +425,7 @@
     <string name="map_popup_address">Адрес</string>
     <string name="black_list_info">Вы добавили собеседника в черный список. Изменить это можно в своем профиле, в настройках VIP-статуса.</string>
     <string name="general_gift">Подарок</string>
+    <string name="user_actions_chat">Разговор</string>
     <string name="general_place">Место</string>
     <string name="general_soon">Скоро будет</string>
     <string name="black_list_activation">Активируйте VIP-статус и используйте черный список</string>
@@ -484,5 +485,6 @@
     <string name="take_another_photo">Другое фото</string>
     <string name="we_detect_your_city">Мы определили ваш город:</string>
     <string name="reselect_city">Выбрать другой город:</string>
+    <string name="choose_cool_photo">Выберите свою лучшую фотографию и статус, который отражает ваше настроение!</string>
 
 </resources>

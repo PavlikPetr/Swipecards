@@ -19,6 +19,7 @@ import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormItem;
@@ -26,6 +27,8 @@ import com.topface.topface.utils.FormItem;
 import java.util.HashMap;
 
 public class EditMainFormItemsFragment extends AbstractEditFragment implements OnClickListener {
+
+    private ActionBar mActionBar;
 
     public enum EditType {NAME, AGE, STATUS}
 
@@ -40,7 +43,6 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
     private int mSex;
     private View mLoGirl;
     private View mLoBoy;
-    private Button mExtraSaveButton;
 
     private ImageView mCheckGirl;
     private ImageView mCheckBoy;
@@ -59,33 +61,18 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_edit_main_form_items, null, false);
 
         // Navigation bar
-        ((TextView) getActivity().findViewById(R.id.tvNavigationTitle))
-                .setText(R.string.edit_title);
-        TextView subTitle = (TextView) getActivity().findViewById(R.id.tvNavigationSubtitle);
-        subTitle.setVisibility(View.VISIBLE);
+        mActionBar = getActionBar(root);
 
-        getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
-        mBackButton = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
-        mBackButton.setVisibility(View.VISIBLE);
-        mBackButton.setText(R.string.general_edit_button);
-        mBackButton.setOnClickListener(new OnClickListener() {
+        mActionBar.setTitleText(getString(R.string.edit_title));
+        mActionBar.showBackButton(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().finish();
             }
         });
 
-        mExtraSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
-        mExtraSaveButton.setText(getResources().getString(R.string.general_save_button));
-        mExtraSaveButton.setOnClickListener(new OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                saveChanges(null);
-            }
-        });
-
-        mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
+//        mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
 
         TextView sexTitle = (TextView) root.findViewById(R.id.tvSexTitle);
         sexTitle.setVisibility(View.GONE);
@@ -132,7 +119,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                         setAge(loAge, type, data);
                         break;
                     case STATUS:
-                        setStatus(subTitle, loStatus, type, data);
+                        setStatus(loStatus, type, data);
                         break;
                 }
 
@@ -174,7 +161,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         });
     }
 
-    private void setStatus(TextView subTitle, ViewGroup loStatus, final EditType type, String data) {
+    private void setStatus(ViewGroup loStatus, final EditType type, String data) {
         loStatus.setVisibility(View.VISIBLE);
         ((TextView) loStatus.findViewById(R.id.tvTitle)).setText(R.string.edit_status);
         mEdStatus = (EditText) loStatus.findViewById(R.id.edText);
@@ -205,7 +192,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                 }
             }
         });
-        subTitle.setText(R.string.edit_status);
+        mActionBar.setSubTitleText(getString(R.string.edit_status));
     }
 
     private void setAge(ViewGroup loAge, final EditType type, String data) {
@@ -400,48 +387,15 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
     @Override
     protected void refreshSaveState() {
         super.refreshSaveState();
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mExtraSaveButton != null) {
-                    if (hasChanges()) {
-                        mExtraSaveButton.setVisibility(View.VISIBLE);
-                    } else {
-                        mExtraSaveButton.setVisibility(View.INVISIBLE);
-                    }
-                }
-            }
-        });
     }
 
     @Override
     protected void prepareRequestSend() {
         super.prepareRequestSend();
-        getActivity().runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-                if (mExtraSaveButton != null) {
-                    mExtraSaveButton.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
-    }
+   }
 
     @Override
     protected void finishRequestSend() {
         super.finishRequestSend();
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mRightPrsBar != null) {
-                    if (hasChanges()) {
-                        if (mExtraSaveButton != null) {
-                            mExtraSaveButton.setVisibility(View.VISIBLE);
-                        }
-                    }
-                }
-            }
-        });
     }
 }

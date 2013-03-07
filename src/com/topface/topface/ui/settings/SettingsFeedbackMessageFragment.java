@@ -24,6 +24,7 @@ import com.topface.topface.requests.FeedbackReport;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.edit.AbstractEditFragment;
 import com.topface.topface.ui.edit.EditSwitcher;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
@@ -49,31 +50,18 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
-        View root = inflater.inflate(R.layout.item_feedback_input, null);
+        View root = inflater.inflate(R.layout.fragment_feedback_message, null);
 
         // Navigation bar
-        getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
-
-        mBackButton = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
-        mBackButton.setVisibility(View.VISIBLE);
-        mBackButton.setText(R.string.settings_feedback);
-        mBackButton.setOnClickListener(new OnClickListener() {
+        ActionBar actionBar = getActionBar(root);
+        actionBar.showBackButton(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 getActivity().finish();
             }
         });
-
-        mSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
-        mSaveButton.setText(R.string.general_send_button);
-        mSaveButton.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                saveChanges(null);
-            }
-        });
+        actionBar.setTitleText(getString(R.string.settings_feedback));
 
         mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
 
@@ -82,22 +70,24 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         switch (feedbackType) {
             case ERROR_MESSAGE:
                 mReport.subject = getResources().getString(R.string.settings_error_message_internal);
+                actionBar.setSubTitleText(getString(R.string.settings_error_message));
                 break;
             case DEVELOPERS_MESSAGE:
                 mReport.subject = getResources().getString(R.string.settings_ask_developer_internal);
+                actionBar.setSubTitleText(getString(R.string.settings_ask_developer));
                 break;
             case PAYMENT_MESSAGE:
                 mReport.subject = getResources().getString(R.string.settings_payment_problems_internal);
+                actionBar.setSubTitleText(getString(R.string.settings_payment_problems));
                 break;
             case COOPERATION_MESSAGE:
                 mReport.subject = getResources().getString(R.string.settings_cooperation_internal);
+                actionBar.setSubTitleText(getString(R.string.settings_cooperation));
                 break;
             case UNKNOWN:
                 mReport.subject = getResources().getString(R.string.settings_feedback_internal);
                 break;
         }
-
-        ((TextView) getActivity().findViewById(R.id.tvNavigationTitle)).setText(mReport.subject);
 
         // EditText
         root.findViewById(R.id.tvTitle).setVisibility(View.GONE);

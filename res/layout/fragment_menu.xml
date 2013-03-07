@@ -16,7 +16,7 @@
                 xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
                 ivr:postProcessor="mask"
                 ivr:clipMask="@drawable/frame_menu_mask"
-                android:background="@drawable/frame_menu"
+                android:background="@drawable/frame_menu_selector"
                 android:id="@+id/ivMenuAvatar"
                 android:src="@drawable/topface_male_profile_button"
                 android:layout_centerVertical="true"
@@ -69,7 +69,7 @@
     <!-- UNREAD MUTUAL -->
     <TextView
             android:id="@+id/tvNotifyMutual"
-            android:layout_alignBaseline="@+id/btnFragmentMutual"
+            android:layout_alignBaseline="@id/btnFragmentMutual"
             style="@style/Informer"/>
 
     <!-- Dialogs - Messages - Chat -->
@@ -113,8 +113,8 @@
             android:layout_below="@id/btnFragmentVisitors"
             android:text="@string/general_settings"
             android:drawableLeft="@drawable/topface_settings"
-            style="@style/LeftMenuButtons"/>    
-            
+            style="@style/LeftMenuButtons"/>
+
     <ImageView 
         android:layout_below="@id/btnFragmentSettings"
         android:layout_width="fill_parent"

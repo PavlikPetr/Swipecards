@@ -236,7 +236,6 @@
     <string name="vip_messages_bg">Фон повідомлень</string>
     <string name="vip_black_list">Чорний список</string>
     <string name="vip_profile_bg">Фонова фотографія</string>
-    <string name="profile_vip_status">Super Skills</string>
     <string name="profile_services">Послуги</string>
     <string name="default_balance_constant">На вашому рахунку</string>
     <string name="default_energy_coins_buy_btn_text">Купити монет, поповнити запас енергії</string>
@@ -309,4 +308,14 @@
     <string name="popup_version_message">Час оновити свою версію!</string>
     <string name="popup_version_update">Оновити</string>
     <string name="popup_version_cancel">Нагадати пізніше</string>
+    <string name="general_version_not_supported">Ваша версія додатку застаріла і більше не підтримується. Будь ласка, поновіть додаток</string>
+    <string name="leaders_select_photo_info">Вибрати найефектніше фото! Фотографії з низьким рейтингом вибрати не можна</string>
+    <string name="default_price_format">Разом: %.2f USD</string>
+    <string name="dating_online_only">%s, тільки онлайн</string>
+    <string name="map_popup_address">Адреса</string>
+    <string name="black_list_info">Ви додали співрозмовника в чорний список. Змінити це можна у своєму профілі, у налаштуваннях VIP-статусу.</string>
+    <string name="general_gift">Подарунок</string>
+    <string name="general_soon">Скоро буде</string>
+    <string name="black_list_activation">Активируйте VIP-статус и используйте черный список</string>
+    <string name="profile_edit_age_ranges">Вік повинен бути у діапазоні від 16 до 99 років. Будь ласка, введіть коректне число і повторіть спробу.</string>
 </resources>
