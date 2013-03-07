@@ -606,17 +606,19 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 @Override
                 protected void success(NoviceLikes noviceLikes, ApiResponse response) {
                     CacheProfile.likes = noviceLikes.likes;
-                    Novice.giveNoviceLikesQuantity = noviceLikes.increment;
-                    final String text = String.format(
-                            getResources().getString(R.string.novice_sympathies_bonus),
-                            Novice.giveNoviceLikesQuantity,
-                            Novice.giveNoviceLikesQuantity
-                    );
-                    mResourcesLikes.setText(Integer.toString(CacheProfile.likes));
-                    mNoviceLayout.setLayoutRes(R.layout.novice_sympathies_bonus, null,
-                            null, text);
-                    mNoviceLayout.startAnimation(mAlphaAnimation);
-                    mNovice.completeShowBatteryBonus();
+                    if(noviceLikes.increment > 0) {
+                        Novice.giveNoviceLikesQuantity = noviceLikes.increment;
+                        final String text = String.format(
+                                getResources().getString(R.string.novice_sympathies_bonus),
+                                Novice.giveNoviceLikesQuantity,
+                                Novice.giveNoviceLikesQuantity
+                        );
+                        mResourcesLikes.setText(Integer.toString(CacheProfile.likes));
+                        mNoviceLayout.setLayoutRes(R.layout.novice_sympathies_bonus, null,
+                                null, text);
+                        mNoviceLayout.startAnimation(mAlphaAnimation);
+                        mNovice.completeShowBatteryBonus();
+                    }
                 }
 
                 @Override
