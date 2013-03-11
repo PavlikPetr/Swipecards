@@ -17,8 +17,8 @@ import java.util.Map;
  * Блок для страниц, где нужно показывать баннеры или лидеров
  */
 public class FloatBlock {
-    private Map<String, String> mFloatTypeMap;
-    private Options mOptions;
+    private static Map<String, String> mFloatTypeMap;
+    private static Options mOptions;
     private Fragment mFragment;
     private LeadersBlock mLeaders;
     private BannerBlock mBanner;
@@ -48,7 +48,7 @@ public class FloatBlock {
         //Если переданого активити нет в карте, то не инициализируем ни один блок
     }
 
-    private void setActivityMap() {
+    public static void setActivityMap() {
         mFloatTypeMap = new HashMap<String, String>();
         if (mOptions.pages.containsKey(Options.PAGE_LIKES))
             mFloatTypeMap.put(LikesFragment.class.toString(), mOptions.pages.get(Options.PAGE_LIKES).floatType);
