@@ -130,7 +130,9 @@ public class AuthFragment extends BaseFragment {
         mSignInView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAuthViewsFlipper.setDisplayedChild(1);
+               mAuthViewsFlipper.setDisplayedChild(1);
+               mLogin.requestFocus();
+               Utils.showSoftKeyboard(getActivity(),mLogin);
             }
         });
 
@@ -251,6 +253,7 @@ public class AuthFragment extends BaseFragment {
                 startActivityForResult(intent, ContainerActivity.INTENT_RECOVER_PASSWORD);
             }
         });
+        mRecoverPwd.setVisibility(View.GONE);
     }
 
     private boolean checkOnline() {
@@ -440,6 +443,7 @@ public class AuthFragment extends BaseFragment {
                 break;
             case ApiResponse.INCORRECT_PASSWORD:
                 redAlert(R.string.incorrect_password);
+                mRecoverPwd.setVisibility(View.VISIBLE);
                 needShowRetry = false;
                 break;
             case ApiResponse.MISSING_REQUIRE_PARAMETER:
@@ -481,7 +485,7 @@ public class AuthFragment extends BaseFragment {
                 mWrongPasswordAlertView.setText(text);
             }
             mWrongPasswordAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
-                    android.R.anim.fade_in));
+                    R.anim.slide_down_fade_in));
             mWrongPasswordAlertView.setVisibility(View.VISIBLE);
             mTimer.schedule(new TimerTask() {
                 @Override

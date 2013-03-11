@@ -10,10 +10,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import com.sponsorpay.sdk.android.publisher.SponsorPayPublisher;
 import com.tapjoy.TapjoyConnect;
 import com.topface.billing.BillingFragment;
@@ -208,7 +205,8 @@ public class BuyingFragment extends BillingFragment {
         }
 
         // Button for offerwalls (Tapjoy and Sponsorpay)
-        root.findViewById(R.id.btnOfferwall).setOnClickListener(new View.OnClickListener() {
+        View offerwall = root.findViewById(R.id.btnOfferwall);
+        offerwall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if ((CacheProfile.uid % 2) == 0) {
@@ -218,10 +216,9 @@ public class BuyingFragment extends BillingFragment {
                     startActivityForResult(offerWallIntent, SponsorPayPublisher.DEFAULT_OFFERWALL_REQUEST_CODE);
                 }
             }
-        }
-    );
-
-}
+        });
+        offerwall.setVisibility(CacheProfile.paid ? View.GONE : View.VISIBLE);
+    }
 
     private void goToVipSettings() {
         Intent intent = new Intent(getActivity(), ContainerActivity.class);

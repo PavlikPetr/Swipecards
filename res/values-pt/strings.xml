@@ -18,7 +18,7 @@
     <string name="general_back">Atrás</string>
     <string name="general_server_error">Erro. Tenet mais tarde</string>
     <string name="general_data_error">Erro. Tente mais uma vez</string>
-    <string name="general_internet_off">Não há conexão com a Internet</string>
+    <string name="general_internet_off">Tentamos reinstalar a conexão com a internet. Por favor, espere.</string>
     <string name="general_purchasing_error">Por favor, escreva mensagem sobre erro de compra em support@topface.ru</string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">O texto foi copiado</string>
@@ -313,6 +313,7 @@
     <string name="map_popup_address">Adreço</string>
     <string name="black_list_info">Você adicionou seu correspondente à lista negra. Cancelar isso só é possivel no seu perfil, nas definições de status-VIP</string>
     <string name="general_gift">Presente</string>
+    <string name="user_actions_chat">Diálogo</string>
     <string name="general_place">Lugar</string>
     <string name="general_soon">Será em breve</string>
     <string name="black_list_activation">Ative status-VIP e use a lista negra</string>
@@ -342,7 +343,27 @@
     <string name="default_photo_upload_complete">Carregamento concluído!</string>
     <string name="general_error_try_again_later">Não é possível conectar-se com Topface. Tente experimentar mais tarde.</string>
     <string name="search_city_by_name">Busca de cidade pelo nome</string>
+    <string name="gallery">Galeria</string>
+    <string name="no_photo_take_photo">Ninguém pode travar conhecimento consigo! Faça uma nova foto ou selecione uma das que existem no álbum</string>
+    <string name="photo_is_too_small">Você está com um excelente visual nesta foto, mas para todos os usuários possam  avaliar sua foto, deve ser um pouco mais: não menos que %s</string>
+    <string name="photo_for_avatar">A fotografia</string>
+    <string name="get_it_for_free">Receber gratuitamente</string>
+    <string name="vip_advantages">Vantagens de VIP</string>
+    <string name="change_email">Trocar e-mail</string>
+    <string name="send_confirmation_email">Enviar a confirmação para e-mail</string>
+    <string name="change_password">Alterar palavra-passe</string>
+    <string name="password_changing">Alteração de palavra-passe</string>
+    <string name="save">Guardar</string>
+    <string name="confirmation_successfully_sent">Confirmação enviada para e-mail indicado por você</string>
+    <string name="password_hint">palavra-passe</string>
+    <string name="password_confirmation_hint">confirmação de palavra-passe</string>
+    <string name="enter_new_password">Introduza uma nova palavra-passe</string>
+    <string name="enter_password_confirmation">Introduza a confirmação de palavra-passe</string>
+    <string name="passwords_mismatched">Palavras-passe não coincidem</string>
+    <string name="passwords_changed">Palavra-passe alterada</string>
+    <string name="take_photo">Fazer fotos</string>
     <string name="take_another_photo">Outra foto</string>
     <string name="we_detect_your_city">Nós determinamos sua cidade:</string>
     <string name="reselect_city">Escolher outra cidade:</string>
+    <string name="choose_cool_photo">Escolha a sua melhor foto e status que reflete seu humor!</string>
 </resources>

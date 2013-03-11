@@ -100,7 +100,8 @@
             android:text="@string/recover_password"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/loLoginGroup"
-            android:layout_marginTop="16dp"/>
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"/>
 
     <TextView
             android:id="@+id/tvBackToMainAuth"
@@ -113,7 +114,7 @@
             android:drawableLeft="@drawable/ic_back"
             android:drawablePadding="8dp"
             style="@style/AuthButtonsBigText"
-            android:gravity="center_vertical"
+            android:gravity="top"
             />
 
 </RelativeLayout>

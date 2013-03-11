@@ -687,7 +687,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
         private static void saveState(Fragment fragment, Profile profile) {
             if (!fragment.isVisible()) {
-                if (fragment.getArguments() == null) {
+                if (fragment.getArguments() == null && !fragment.isAdded()) {
                     Bundle args = new Bundle();
                     fragment.setArguments(args);
                 }

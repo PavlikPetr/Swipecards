@@ -480,4 +480,9 @@ public class Utils {
             }
         }
     }
+
+    public static void showSoftKeyboard(Context context, EditText editText) {
+        InputMethodManager keyboard = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        keyboard.showSoftInput(editText, 0);
+    }
 }
