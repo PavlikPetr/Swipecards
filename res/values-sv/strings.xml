@@ -341,7 +341,15 @@
     <string name="default_photo_upload_complete">Uppladdning klar!</string>
     <string name="general_error_try_again_later">Det har uppstått ett fel. Vänligen försök senare.</string>
     <string name="search_city_by_name">Sök stad efter namn</string>
+    <string name="gallery">Galleri</string>
+    <string name="get_it_for_free">Erhåll gratis</string>
+    <string name="change_email">Ändra epost-adress</string>
+    <string name="change_password">Ändra lösenord</string>
+    <string name="confirmation_successfully_sent">Bekräftelsen har mailats till den adress du angivit</string>
+    <string name="enter_new_password">Skriv ett nytt lösenord</string>
+    <string name="enter_password_confirmation">Ange bekräftelsen</string>
     <string name="take_another_photo">Annan bild</string>
     <string name="we_detect_your_city">Vi har identifierat din stad:</string>
     <string name="reselect_city">Välj annan stad</string>
+    <string name="choose_cool_photo">Välj din bästa bild och status som beskriver hur du känner dig!</string>
 </resources>
