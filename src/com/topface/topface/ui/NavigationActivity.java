@@ -58,6 +58,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private SharedPreferences mPreferences;
     private NoviceLayout mNoviceLayout;
     private Novice mNovice;
+    private boolean needAnimate = false;
 
     private BroadcastReceiver mServerResponseReceiver;
 
@@ -172,7 +173,10 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     protected void onResume() {
         super.onResume();
         checkProfileUpdate();
-
+//        if(needAnimate) {
+//            overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
+//        }
+//        needAnimate = true;
         //Отправляем не обработанные запросы на покупку
         BillingUtils.sendQueueItems();
 

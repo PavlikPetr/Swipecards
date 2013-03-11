@@ -340,4 +340,7 @@
     <string name="default_photo_upload_complete">Ανέβασμα ολοκληρώθηκε!</string>
     <string name="general_error_try_again_later">Δεν είναι δυνατή η σύνδεση στο Topface</string>
     <string name="search_city_by_name">Αναζήτηση πόλεων με το όνομα</string>
+    <string name="take_another_photo">Άλλη μια φωτογραφία</string>
+    <string name="we_detect_your_city">Έχουμε καθορίσει τη πόλη σας:</string>
+    <string name="reselect_city">Επιλέξτε άλλη μια πόλη:</string>
 </resources>

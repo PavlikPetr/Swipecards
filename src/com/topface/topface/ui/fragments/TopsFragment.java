@@ -25,6 +25,7 @@ import com.topface.topface.ui.blocks.FilterBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.views.DoubleButton;
 import com.topface.topface.ui.views.LockerView;
+import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -47,6 +48,7 @@ public class TopsFragment extends BaseFragment {
 
     private static int GIRLS = 0;
     private static int BOYS = 1;
+    private RetryView mRetryView;
 
     private class ActionData {
         public int sex;
@@ -116,6 +118,20 @@ public class TopsFragment extends BaseFragment {
             }
         });
 
+        //Retry view
+        RelativeLayout cont = (RelativeLayout)view.findViewById(R.id.topContainer);
+
+        mRetryView = new RetryView(getActivity());
+        mRetryView.setErrorMsg(getString(R.string.general_error_try_again_later));
+        mRetryView.addButton(getString(R.string.general_dialog_retry), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mRetryView.setVisibility(View.GONE);
+                updateData();
+            }
+        });
+        mRetryView.setVisibility(View.GONE);
+        cont.addView(mRetryView);
         // Gallery
         mGallery = (GridView) view.findViewById(R.id.grdTopsGallary);
         mGallery.setAnimationCacheEnabled(false);
@@ -168,13 +184,14 @@ public class TopsFragment extends BaseFragment {
         onUpdateStart(false);
         mGallery.setSelection(0);
 
-        TopRequest topRequest = new TopRequest(getActivity());
+        final TopRequest topRequest = new TopRequest(getActivity());
         registerRequest(topRequest);
         topRequest.sex = mActionData.sex;
         topRequest.city = mActionData.city_id;
         topRequest.callback(new DataApiHandler<LinkedList<Top>>() {
             @Override
             protected void success(LinkedList<Top> data, ApiResponse response) {
+                mGallery.setVisibility(View.VISIBLE);
                 mTopsList.clear();
                 mTopsList.addAll(data);
                 onUpdateSuccess(false);
@@ -192,6 +209,8 @@ public class TopsFragment extends BaseFragment {
             @Override
             public void fail(int codeError, ApiResponse response) {
                 Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                mRetryView.setVisibility(View.VISIBLE);
+                mGallery.setVisibility(View.INVISIBLE);
                 onUpdateFail(false);
             }
         }).exec();
