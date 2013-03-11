@@ -51,7 +51,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
-                    android:src="@drawable/ic_show_password"
+                    android:src="@drawable/ic_show_password_selector"
                     android:background="@android:color/transparent"
                     android:layout_centerVertical="true"
                     android:layout_alignRight="@id/edPassword"

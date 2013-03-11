@@ -229,8 +229,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     private void actionsAfterRegistration() {
         if (!AuthToken.getInstance().isEmpty()) {
-            if (CacheProfile.photo == null && !CacheProfile.wasAvatarAsked) {
-                CacheProfile.wasAvatarAsked = true;
+            if (CacheProfile.photo == null) {
                 takePhoto(new TakePhotoDialog.TakePhotoListener() {
                     @Override
                     public void onPhotoSentSuccess(final Photo photo) {
@@ -513,6 +512,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             mFragmentMenu.setClickable(false);
             mFragmentMenu.hide();
             mFragmentSwitcher.getCurrentFragment().activateActionBar(false);
+            actionsAfterRegistration();
         }
 
         @Override
