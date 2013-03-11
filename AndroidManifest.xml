@@ -68,29 +68,21 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="http" android:host="topface.com" android:path="profile/*" android:pathPrefix="/"/>
-                <data android:scheme="http" android:host="*.topface.com" android:path="profile/*" android:pathPrefix="/"/>
+                <data android:scheme="http" android:host="topface.com" android:pathPrefix="/profile/" />
 
-                <data android:scheme="http" android:host="topface.ru" android:path="profile/*" android:pathPrefix="/"/>
-                <data android:scheme="http" android:host="*.topface.ru" android:path="profile/*" android:pathPrefix="/"/>
+                <data android:scheme="http" android:host="topface.ru" android:pathPrefix="/profile/" />
 
-                <data android:scheme="http" android:host="topface.com" android:path="confirm*" android:pathPrefix="/"/>
-                <data android:scheme="http" android:host="*.topface.com" android:path="confirm*" android:pathPrefix="/"/>
+                <data android:scheme="http" android:host="topface.com" android:pathPrefix="/confirm"/>
 
-                <data android:scheme="http" android:host="topface.ru" android:path="confirm*" android:pathPrefix="/"/>
-                <data android:scheme="http" android:host="*.topface.ru" android:path="confirm*" android:pathPrefix="/"/>
+                <data android:scheme="http" android:host="topface.ru" android:pathPrefix="/confirm" />
 
-                <data android:scheme="https" android:host="topface.com" android:path="profile/*" android:pathPrefix="/"/>
-                <data android:scheme="https" android:host="*.topface.com" android:path="profile/*" android:pathPrefix="/"/>
+                <data android:scheme="https" android:host="topface.com" android:pathPrefix="/profile/" />
 
-                <data android:scheme="https" android:host="topface.ru" android:path="profile/*" android:pathPrefix="/"/>
-                <data android:scheme="https" android:host="*.topface.ru" android:path="profile/*" android:pathPrefix="/"/>
+                <data android:scheme="https" android:host="topface.ru" android:pathPrefix="/profile/" />
 
-                <data android:scheme="https" android:host="topface.com" android:path="confirm*" android:pathPrefix="/"/>
-                <data android:scheme="https" android:host="*.topface.com" android:path="confirm*" android:pathPrefix="/"/>
+                <data android:scheme="https" android:host="topface.com" android:pathPrefix="/confirm"/>
 
-                <data android:scheme="https" android:host="topface.ru" android:path="confirm*" android:pathPrefix="/"/>
-                <data android:scheme="https" android:host="*.topface.ru" android:path="confirm*" android:pathPrefix="/"/>
+                <data android:scheme="https" android:host="topface.ru" android:pathPrefix="/confirm"/>
             </intent-filter>
         </activity>
         <activity
