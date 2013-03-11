@@ -84,6 +84,7 @@ public class RecoverPwdFragment extends BaseFragment{
         root.findViewById(R.id.tvBackToMainAuth).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Utils.hideSoftKeyboard(getActivity(),mEdEmail);
                 getActivity().finish();
             }
         });

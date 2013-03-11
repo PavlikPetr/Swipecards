@@ -207,6 +207,7 @@ public class BuyingFragment extends BillingFragment {
             vipBtn.setVisibility(View.VISIBLE);
         }
 
+        // Button for offerwalls (Tapjoy and Sponsorpay)
         root.findViewById(R.id.btnOfferwall).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

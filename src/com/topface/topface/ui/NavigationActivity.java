@@ -95,13 +95,15 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     private void requestAdwired() {
-        Locale ukraineLocale = new Locale("","RU","");
-        AWView adwiredView = (AWView)findViewById(R.id.adAdwired);
-        if ( Locale.getDefault().equals(ukraineLocale)) {
-            adwiredView.setVisibility(View.VISIBLE);
-            adwiredView.request('0');
-        } else {
-            adwiredView.setVisibility(View.GONE);
+        if (CacheProfile.isLoaded() && !CacheProfile.paid) {
+            Locale ukraineLocale = new Locale("uk","UA","");
+            AWView adwiredView = (AWView)findViewById(R.id.adAdwired);
+            if (Locale.getDefault().equals(ukraineLocale)) {
+                adwiredView.setVisibility(View.VISIBLE);
+                adwiredView.request('0');
+            } else {
+                adwiredView.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -141,8 +143,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         //Открыть диалог для захвата фото к аватарке
         actionsAfterRegistration();
 //        }
-        if (CacheProfile.isLoaded())
-            requestAdwired();
+
+        requestAdwired();
     }
 
     private boolean needChangeProfile() {

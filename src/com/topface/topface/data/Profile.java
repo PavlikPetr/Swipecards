@@ -57,6 +57,8 @@ public class Profile extends AbstractDataWithPhotos {
 
     public int background;
 
+    public boolean paid;
+
     // private static final String profileFileName = "profile.out";
     // private static final long serialVersionUID = 2748391675222256671L;
 
@@ -88,6 +90,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.invisible = resp.optBoolean("invisible");
             profile.background = resp.optInt("background", ProfileBackgrounds.DEFAULT_BACKGROUND_ID);
             profile.totalPhotos = resp.optInt("photos_count");
+            profile.paid = resp.optBoolean("paid");
 
             parseGifts(profile, resp);
             parseNotifications(profile, resp);
