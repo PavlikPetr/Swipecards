@@ -55,10 +55,9 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         mLockerView = (LockerView) root.findViewById(R.id.llvLogoutLoading);
         mLockerView.setVisibility(View.GONE);
 
-
         initTextViews(root);
         initButtons(root);
-        initEmailConfirmedFlag();
+        requestEmailConfirmedFlag();
 
         return root;
     }
@@ -69,10 +68,9 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         setViewsState();
     }
 
-    private void initEmailConfirmedFlag() {
+    private void requestEmailConfirmedFlag() {
         ProfileRequest profileRequest = new ProfileRequest(getActivity());
         profileRequest.part = ProfileRequest.P_EMAIL_CONFIRMED;
-        lock();
         profileRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {

@@ -212,6 +212,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
                 Debug.log(CitySearchActivity.this, "1.city_id:" + mDataList.get(position).id);
                 CitySearchActivity.this.setResult(RESULT_OK, intent);
                 CitySearchActivity.this.finish();
+                Utils.hideSoftKeyboard(CitySearchActivity.this, mCityInputView);
             }
         });
     }
@@ -224,6 +225,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
         btnBack.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                Utils.hideSoftKeyboard(CitySearchActivity.this, mCityInputView);
                 finish();
             }
         });
