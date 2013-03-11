@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@drawable/bg_main">
+                android:background="@drawable/bg_main"
+                android:id="@+id/topContainer">
 
     <!-- header bar -->
     <include
@@ -42,12 +43,13 @@
                 android:verticalSpacing="0px">
         </GridView>
 
-        <include layout="@layout/banner"/>
+
+        <include layout="@layout/banner"
+                 android:layout_alignParentBottom="true"/>
     </LinearLayout>
 
     <ImageView
             style="@style/HeaderShadow"/>
-
     <com.topface.topface.ui.views.LockerView
             android:id="@+id/llvTopsLoading"
             style="@style/LoadingLocker"

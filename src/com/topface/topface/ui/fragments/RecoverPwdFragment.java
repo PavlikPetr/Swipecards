@@ -141,7 +141,7 @@ public class RecoverPwdFragment extends BaseFragment{
                 mRedAlertView.setText(text);
             }
             mRedAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
-                    android.R.anim.fade_in));
+                    R.anim.slide_down_fade_in));
             mRedAlertView.setVisibility(View.VISIBLE);
             mTimer.schedule(new TimerTask() {
                 @Override

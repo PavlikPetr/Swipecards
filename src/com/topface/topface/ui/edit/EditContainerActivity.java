@@ -102,6 +102,7 @@ public class EditContainerActivity extends BaseFragmentActivity {
 
     @Override
     public void finish() {
+
         if (mFragment instanceof AbstractEditFragment) {
             AbstractEditFragment editFragment = (AbstractEditFragment) mFragment;
             editFragment.saveChanges(mFinishHandler);
@@ -109,7 +110,6 @@ public class EditContainerActivity extends BaseFragmentActivity {
         } else {
             super.finish();
         }
-        overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
     }
 
     Handler mFinishHandler = new Handler() {

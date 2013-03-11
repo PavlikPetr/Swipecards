@@ -16,11 +16,13 @@ import com.topface.topface.ui.views.ImageViewRemote;
 
 public class TopfaceNotificationManager {
     private static TopfaceNotificationManager mInstance;
-    public static final int id = 1312; //Completely random number
+    public static final int NOTIFICATION_ID = 1312; //Completely random number
     public static final int PROGRESS_ID = 1313;
     private float width = 64;
     private float height = 64;
     private Context ctx;
+
+    private static int lastId = 1314;
 
     public static TopfaceNotificationManager getInstance(Context context) {
         if (mInstance == null) {
@@ -37,7 +39,7 @@ public class TopfaceNotificationManager {
         ctx = context;
     }
 
-    public void showNotification(String title, String message, Bitmap icon, int unread, Intent intent) {
+    public int showNotification(String title, String message, Bitmap icon, int unread, Intent intent, boolean doNeedReplace) {
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(ctx);
         notificationBuilder.setSmallIcon(R.drawable.ic_notification);
@@ -62,25 +64,31 @@ public class TopfaceNotificationManager {
             notificationBuilder.setNumber(unread);
         }
 
+        int id = NOTIFICATION_ID;
+        if (doNeedReplace) {
+            id = ++lastId;
+        }
+
         PendingIntent resultPendingIntent = PendingIntent.getActivity(ctx, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         notificationBuilder.setContentIntent(resultPendingIntent);
 
         NotificationManager notificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
         //noinspection deprecation
         notificationManager.notify(id, notificationBuilder.getNotification());
+        return id;
     }
 
-    public void showProgressNotification(String title, String message, Bitmap icon, Intent intent) {
+    public int showProgressNotification(String title, String message, Bitmap icon, Intent intent) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            showNotificationForOldVersions(title, message, icon, intent);
+            return showNotificationForOldVersions(title, message, icon, intent);
         } else {
-            showNotificationsForNewVersions(title, message, icon, intent);
+            return showNotificationsForNewVersions(title, message, icon, intent);
         }
     }
 
 
 
-    private void showNotificationsForNewVersions(String title, String message, Bitmap icon, Intent intent) {
+    private int showNotificationsForNewVersions(String title, String message, Bitmap icon, Intent intent) {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(ctx);
         notificationBuilder.setSmallIcon(android.R.drawable.stat_sys_upload);
 
@@ -99,13 +107,15 @@ public class TopfaceNotificationManager {
         PendingIntent resultPendingIntent = PendingIntent.getActivity(ctx, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         notificationBuilder.setContentIntent(resultPendingIntent);
 
+        int id = ++lastId;
 
         NotificationManager notificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
         //noinspection deprecation
-        notificationManager.notify(PROGRESS_ID, notificationBuilder.build());
+        notificationManager.notify(id, notificationBuilder.build());
+        return id;
     }
 
-    private void showNotificationForOldVersions(String title, String message, Bitmap icon, Intent intent) {
+    private int showNotificationForOldVersions(String title, String message, Bitmap icon, Intent intent) {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(ctx);
         notificationBuilder.setSmallIcon(android.R.drawable.stat_sys_upload);
         RemoteViews views = new RemoteViews(ctx.getPackageName(), R.layout.notifications_progress_layout);
@@ -124,9 +134,12 @@ public class TopfaceNotificationManager {
 
         not.contentView = views;
 
+        int id = ++lastId;
+
         NotificationManager notificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
         //noinspection deprecation
         notificationManager.notify(PROGRESS_ID, not);
+        return id;
     }
 
     public void cancelNotification(int id) {

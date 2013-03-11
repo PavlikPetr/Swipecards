@@ -3,7 +3,6 @@ package com.topface.topface;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -21,7 +20,6 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.ChatFragment;
-import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
@@ -127,8 +125,8 @@ public class GCMUtils {
                                     data,
                                     null,
                                     getUnread(extra),
-                                    intent
-                            );
+                                    intent,
+                                    false);
                         }
                     } else if (user != null && !TextUtils.isEmpty(user.photoUrl)) {
                         showNotificationWithIcon(
@@ -146,8 +144,8 @@ public class GCMUtils {
                                 data,
                                 null,
                                 getUnread(extra),
-                                intent
-                        );
+                                intent,
+                                false);
                     }
                 }
             }
@@ -208,7 +206,7 @@ public class GCMUtils {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 if (user.id != lastUserId) {
-                    notificationManager.showNotification(finalTitle, data, fakeImageView.getImageBitmap(), unread, newI);
+                    notificationManager.showNotification(finalTitle, data, fakeImageView.getImageBitmap(), unread, newI, false);
                 }
             }
         });
@@ -308,7 +306,7 @@ public class GCMUtils {
                 if (type == lastNotificationType) {
                     NotificationManager notificationManager =
                             (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationManager.cancel(TopfaceNotificationManager.id);
+                    notificationManager.cancel(TopfaceNotificationManager.NOTIFICATION_ID);
                 }
             }
         }, NOTIFICATION_CANCEL_DELAY);

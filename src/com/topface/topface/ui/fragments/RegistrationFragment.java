@@ -57,8 +57,13 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
         mYear = c.get(Calendar.YEAR);
         mMonthOfYear = c.get(Calendar.MONTH);
         mDayOfMonth = c.get(Calendar.DAY_OF_MONTH);
-
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mSexController != null) mSexController.switchSex(Static.BOY);
     }
 
     private void initViews(View root) {
@@ -187,7 +192,7 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
             mRedAlertView.setText(text);
         }
         mRedAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
-                android.R.anim.fade_in));
+                R.anim.slide_down_fade_in));
         mRedAlertView.setVisibility(View.VISIBLE);
         mTimer.schedule(new TimerTask() {
             @Override
@@ -277,7 +282,7 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
             mContext = context;
         }
 
-        private void switchSex(int sex) {
+        public void switchSex(int sex) {
             mSex = sex;
             switch (mSex){
                 case Static.BOY:
@@ -308,20 +313,5 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
             mBoy.setOnFocusChangeListener(listener);
             mGirl.setOnFocusChangeListener(listener);
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 }
