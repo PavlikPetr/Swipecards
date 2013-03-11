@@ -66,6 +66,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        mNeedAnimate = false;
         super.onCreate(savedInstanceState);
         TapjoyConnect.requestTapjoyConnect(getApplicationContext(), "f0563cf4-9e7c-4962-b333-098810c477d2", "AS0AE9vmrWvkyNNGPsyu");
         TapjoyConnect.getTapjoyConnectInstance().setUserID(Integer.toString(CacheProfile.uid));
@@ -173,10 +174,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     protected void onResume() {
         super.onResume();
         checkProfileUpdate();
-//        if(needAnimate) {
-//            overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
-//        }
-//        needAnimate = true;
+
         //Отправляем не обработанные запросы на покупку
         BillingUtils.sendQueueItems();
 
@@ -188,6 +186,11 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         };
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mServerResponseReceiver, new IntentFilter(OptionsRequest.VERSION_INTENT));
+
+        if(needAnimate) {
+            overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
+        }
+        needAnimate = true;
 
         //TODO костыль для ChatFragment, после перехода на фрагмент - выпилить
         if (mDelayedFragment != null) {

@@ -31,7 +31,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
     private BroadcastReceiver mReauthReceiver;
-
+    protected boolean mNeedAnimate = true;
     private boolean needAuth = true;
 
     @Override
@@ -41,6 +41,9 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
         if (isNeedAuth() && (AuthToken.getInstance().isEmpty() || !CacheProfile.isLoaded())) {
             startAuth();
+        }
+        if(mNeedAnimate) {
+            overridePendingTransition(com.topface.topface.R.anim.slide_in_from_right, com.topface.topface.R.anim.slide_out_left);
         }
     }
 
@@ -57,6 +60,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
                 }
             }
         };
+
         needToUnregisterReceiver = true;
         registerReceiver(mReauthReceiver, new IntentFilter(ReAuthReceiver.REAUTH_INTENT));
     }
