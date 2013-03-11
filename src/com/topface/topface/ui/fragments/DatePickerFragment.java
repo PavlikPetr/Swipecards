@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.DatePicker;
 import com.topface.topface.Static;
@@ -53,6 +54,10 @@ public class DatePickerFragment extends TrackedDialogFragment implements DatePic
                 }
             }
         };
+        if (Build.VERSION.SDK_INT > 11) {
+            dialog.getDatePicker().setMinDate(MIN_DATE);
+            dialog.getDatePicker().setMaxDate(MAX_DATE);
+        }
         return dialog;
     }
 
