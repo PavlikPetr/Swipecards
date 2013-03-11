@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="time_now">Now</string>
+    <string name="time_now">Right now</string>
     <plurals name="time_hour">
+        <item quantity="zero">less than a hour ago</item>
         <item quantity="other">%d hours ago</item>
         <item quantity="one">%d hour ago</item>
     </plurals>
     <plurals name="time_minute">
-        <item quantity="zero">%d minute ago</item>
+        <item quantity="zero">%d Just now</item>
         <item quantity="other">%d minutes ago</item>
         <item quantity="one">%d minute ago</item>
     </plurals>
