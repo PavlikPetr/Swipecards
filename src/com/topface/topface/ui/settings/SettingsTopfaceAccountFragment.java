@@ -13,8 +13,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 import com.google.android.gcm.GCMRegistrar;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
@@ -28,7 +32,7 @@ import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-public class SettingsTopfaceAccountFragment extends BaseFragment implements OnClickListener{
+public class SettingsTopfaceAccountFragment extends BaseFragment implements OnClickListener {
 
     public static final int RESULT_LOGOUT = 666;
     private LockerView mLockerView;
@@ -102,10 +106,12 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         mEditText.setSelection(mEditText.getText().length());
         mEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -140,7 +146,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
     private void setButtonsState() {
         if (CacheProfile.emailConfirmed) {
-            if(CacheProfile.needToChangePassword(getActivity().getApplicationContext())) {
+            if (CacheProfile.needToChangePassword(App.getContext())) {
                 mBtnLogout.setVisibility(View.GONE);
             } else {
                 mBtnLogout.setVisibility(View.VISIBLE);
@@ -221,8 +227,8 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                 break;
             case ACTION_CHANGE_EMAIL:
                 final String email = mEditText.getText().toString();
-                if(Utils.isValidEmail(email)) {
-                    ChangeLoginRequest changeLoginRequest = new ChangeLoginRequest(getActivity(),email);
+                if (Utils.isValidEmail(email)) {
+                    ChangeLoginRequest changeLoginRequest = new ChangeLoginRequest(getActivity(), email);
                     changeLoginRequest.callback(new ApiHandler() {
                         @Override
                         public void success(ApiResponse response) {
@@ -294,10 +300,6 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             }
             return null;
         }
-    }
-
-    private void lock() {
-        mLockerView.setVisibility(View.VISIBLE);
     }
 
     private void unlock() {
