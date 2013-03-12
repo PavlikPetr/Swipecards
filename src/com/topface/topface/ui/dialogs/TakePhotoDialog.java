@@ -50,13 +50,13 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
         getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                mTakePhotoListener.onDialogClose();
+                if (mTakePhotoListener != null) mTakePhotoListener.onDialogClose();
             }
         });
         getDialog().setOnCancelListener(new DialogInterface.OnCancelListener(){
             @Override
             public void onCancel(DialogInterface dialog) {
-                mTakePhotoListener.onDialogClose();
+                if (mTakePhotoListener != null) mTakePhotoListener.onDialogClose();
             }
         });
 
@@ -153,14 +153,14 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
         switch (v.getId()) {
             case R.id.btnTakePhoto:
                 if (mPhotoUri == null) {
-                    mAddPhotoHelper.getAddPhotoClickListener().onClick(v);
+                    if (mAddPhotoHelper != null) mAddPhotoHelper.getAddPhotoClickListener().onClick(v);
                 } else {
                     mPhotoUri = null;
                     initButtonsState();
                 }
                 break;
             case R.id.btnTakeFormGallery:
-                mAddPhotoHelper.getAddPhotoClickListener().onClick(v);
+                if (mAddPhotoHelper != null) mAddPhotoHelper.getAddPhotoClickListener().onClick(v);
                 break;
             case R.id.btnSendPhoto:
                 if (mPhotoUri != null) {
@@ -169,7 +169,7 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
                 }
                 break;
             case R.id.btnClose:
-                mTakePhotoListener.onDialogClose();
+                if (mTakePhotoListener != null) mTakePhotoListener.onDialogClose();
                 getDialog().dismiss();
                 break;
             default:
@@ -179,7 +179,7 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
 
     private void sendRequest(Uri uri) {
         if (uri != null) {
-            mAddPhotoHelper.sendRequest(uri);
+            if (mAddPhotoHelper != null) mAddPhotoHelper.sendRequest(uri);
         }
     }
 
@@ -196,9 +196,9 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
 
             if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
                 Photo photo = (Photo) msg.obj;
-                mTakePhotoListener.onPhotoSentSuccess(photo);
+                if (mTakePhotoListener != null) mTakePhotoListener.onPhotoSentSuccess(photo);
             } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
-                mTakePhotoListener.onPhotoSentFailure();
+                if (mTakePhotoListener != null) mTakePhotoListener.onPhotoSentFailure();
             }
         }
     };
