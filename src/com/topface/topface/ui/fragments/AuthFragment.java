@@ -210,7 +210,7 @@ public class AuthFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
+        if (mAuthorizationManager != null) mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK &&
                 (requestCode == ContainerActivity.INTENT_RECOVER_PASSWORD
                         || requestCode == ContainerActivity.INTENT_REGISTRATION_FRAGMENT)) {
