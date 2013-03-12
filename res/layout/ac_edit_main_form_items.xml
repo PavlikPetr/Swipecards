@@ -45,6 +45,7 @@
                 layout="@layout/item_edit_form_input"/>
 
         <include
+                android:layout_marginTop="8dp"
                 android:id="@+id/loStatus"
                 layout="@layout/item_edit_form_input"/>
 
