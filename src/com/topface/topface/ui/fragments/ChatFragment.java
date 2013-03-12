@@ -206,7 +206,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void initChatHistory(View root) {
-        mAdapter = new ChatListAdapter(getActivity().getApplicationContext(), mHistoryData, getUpdaterCallback());
+        mAdapter = new ChatListAdapter(getActivity(), mHistoryData, getUpdaterCallback());
         mAdapter.setOnAvatarListener(this);
         mAdapter.setOnItemLongClickListener(new OnListViewItemLongClickListener() {
 
@@ -542,7 +542,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         }
         stopTimer();
         GCMUtils.lastUserId = -1; //Ставим значение на дефолтное, чтобы нотификации снова показывались
-        Utils.hideSoftKeyboard(getActivity(),mEditBox);
+        Utils.hideSoftKeyboard(getActivity(), mEditBox);
     }
 
     private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
