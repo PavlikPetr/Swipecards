@@ -10,9 +10,10 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
-import com.sponsorpay.sdk.android.publisher.SponsorPayPublisher;
-import com.tapjoy.TapjoyConnect;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 import com.topface.billing.BillingFragment;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -22,6 +23,7 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Offerwalls;
 
 import java.util.LinkedList;
 
@@ -209,12 +211,7 @@ public class BuyingFragment extends BillingFragment {
         offerwall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if ((CacheProfile.uid % 2) == 0) {
-                    TapjoyConnect.getTapjoyConnectInstance().showOffers();
-                } else {
-                    Intent offerWallIntent = SponsorPayPublisher.getIntentForOfferWallActivity(getActivity().getApplicationContext(), true);
-                    startActivityForResult(offerWallIntent, SponsorPayPublisher.DEFAULT_OFFERWALL_REQUEST_CODE);
-                }
+                Offerwalls.startOfferwall(getActivity());
             }
         });
         offerwall.setVisibility(CacheProfile.paid ? View.GONE : View.VISIBLE);
