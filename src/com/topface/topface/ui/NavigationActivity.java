@@ -515,7 +515,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         public void afterClosing() {
             mFragmentMenu.setClickable(false);
             mFragmentMenu.hide();
-            mFragmentSwitcher.getCurrentFragment().activateActionBar(false);
+            if(mFragmentSwitcher.getCurrentFragment() != null) {
+                mFragmentSwitcher.getCurrentFragment().activateActionBar(false);
+            }
             actionsAfterRegistration();
         }
 
