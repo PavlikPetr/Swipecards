@@ -6,6 +6,7 @@
     <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/ivPhoto"
             style="@style/GalleryItem"
+            android:layout_marginTop="14dp"
             android:layout_centerInParent="true"/>
 
 </RelativeLayout>

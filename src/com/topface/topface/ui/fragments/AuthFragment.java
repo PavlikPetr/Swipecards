@@ -376,6 +376,7 @@ public class AuthFragment extends BaseFragment {
             @Override
             public void success(final ApiResponse response) {
                 Options.parse(response);
+                Utils.hideSoftKeyboard(getActivity(),mLogin,mPassword);
                 ((BaseFragmentActivity) getActivity()).close(AuthFragment.this);
             }
 

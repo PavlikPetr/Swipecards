@@ -126,20 +126,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             mFragmentMenu.selectDefaultMenu();
         }
         AuthorizationManager.extendAccessToken(NavigationActivity.this);
-        //Если пользователь не заполнил необходимые поля, перекидываем его на EditProfile,
-        //чтобы исправлялся.
-//        if (needChangeProfile()) {
-//            Intent editIntent = new Intent(this, EditProfileActivity.class);
-//            editIntent.putExtra(FROM_AUTH, true);
-//            startActivity(editIntent);
-//            finish();
-//        } else {
-            checkVersion(CacheProfile.getOptions().max_version);
-
-        //Открыть диалог для захвата фото к аватарке
+        checkVersion(CacheProfile.getOptions().max_version);
         actionsAfterRegistration();
-//        }
-
         requestAdwired();
     }
 
