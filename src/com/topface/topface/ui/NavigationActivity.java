@@ -68,9 +68,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     public void onCreate(Bundle savedInstanceState) {
         mNeedAnimate = false;
         super.onCreate(savedInstanceState);
-        TapjoyConnect.requestTapjoyConnect(getApplicationContext(), "f0563cf4-9e7c-4962-b333-098810c477d2", "AS0AE9vmrWvkyNNGPsyu");
-        TapjoyConnect.getTapjoyConnectInstance().setUserID(Integer.toString(CacheProfile.uid));
-        SponsorPay.start("11625", Integer.toString(CacheProfile.uid), "0a4c64db64ed3c1ca14a5e5d81aaa23c", getApplicationContext());
 
         if (isNeedBroughtToFront(getIntent())) {
             // При открытии активити из лаунчера перезапускаем ее
@@ -121,6 +118,10 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     @Override
     public void onInit() {
+        TapjoyConnect.requestTapjoyConnect(getApplicationContext(), "f0563cf4-9e7c-4962-b333-098810c477d2", "AS0AE9vmrWvkyNNGPsyu");
+        TapjoyConnect.getTapjoyConnectInstance().setUserID(Integer.toString(CacheProfile.uid));
+        SponsorPay.start("11625", Integer.toString(CacheProfile.uid), "0a4c64db64ed3c1ca14a5e5d81aaa23c", getApplicationContext());
+
         Intent intent = getIntent();
         isNeedAuth = true;
         int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
@@ -292,7 +293,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 String path = data.getPath();
                 String[] splittedPath = path.split("/");
 
-                executeLinkAction(splittedPath,data);
+                executeLinkAction(splittedPath, data);
             }
         }
     }
