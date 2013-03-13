@@ -36,6 +36,7 @@ public interface IApiResponse {
     public static final int BAN = 28;
     public static final int NETWORK_CONNECT_ERROR = 29;
     public static final int PREMIUM_ACCESS_ONLY = 32;
+    public static final int NON_EXIST_PHOTO_ERROR = 33;
     public static final int INVALID_PURCHASE_TOKEN = 34;
     public static final int CANNOT_BECOME_LEADER = 35;
     public static final int CODE_VIRUS_LIKES_ALREADY_RECEIVED = 36;
@@ -47,6 +48,7 @@ public interface IApiResponse {
     // local
     public static final int NULL_RESPONSE = 100;
     public static final int WRONG_RESPONSE = 101;
+
 
     /**
      * Проверяет, равен ли один из переданных кодов текущему коду ответа

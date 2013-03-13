@@ -1,14 +1,10 @@
 package com.topface.topface.ui;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.fragments.*;
@@ -61,7 +57,11 @@ public class ContainerActivity extends BaseFragmentActivity {
         if(mCurrentFragment == null) {
             mCurrentFragment = getFragment(mCurrentFragmentId);
         }
+    }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
         if (mCurrentFragment != null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.loFrame, mCurrentFragment,TAG_FRAGMENT).commit();

@@ -21,6 +21,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.utils.BitmapUtils;
+import com.topface.topface.utils.Debug;
 
 public class TakePhotoDialog extends DialogFragment implements View.OnClickListener {
 
@@ -150,30 +151,34 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btnTakePhoto:
-                if (mPhotoUri == null) {
-                    if (mAddPhotoHelper != null) mAddPhotoHelper.getAddPhotoClickListener().onClick(v);
-                } else {
-                    mPhotoUri = null;
-                    initButtonsState();
-                }
-                break;
-            case R.id.btnTakeFormGallery:
-                if (mAddPhotoHelper != null) mAddPhotoHelper.getAddPhotoClickListener().onClick(v);
-                break;
-            case R.id.btnSendPhoto:
-                if (mPhotoUri != null) {
-                    sendRequest(mPhotoUri);
+        if(mTakePhotoListener != null) {
+            switch (v.getId()) {
+                case R.id.btnTakePhoto:
+                    if (mPhotoUri == null) {
+                        mAddPhotoHelper.getAddPhotoClickListener().onClick(v);
+                    } else {
+                        mPhotoUri = null;
+                        initButtonsState();
+                    }
+                    break;
+                case R.id.btnTakeFormGallery:
+                    mAddPhotoHelper.getAddPhotoClickListener().onClick(v);
+                    break;
+                case R.id.btnSendPhoto:
+                    if (mPhotoUri != null) {
+                        sendRequest(mPhotoUri);
+                        getDialog().dismiss();
+                    }
+                    break;
+                case R.id.btnClose:
+                    mTakePhotoListener.onDialogClose();
                     getDialog().dismiss();
-                }
-                break;
-            case R.id.btnClose:
-                if (mTakePhotoListener != null) mTakePhotoListener.onDialogClose();
-                getDialog().dismiss();
-                break;
-            default:
-                break;
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            getDialog().dismiss();
         }
     }
 
