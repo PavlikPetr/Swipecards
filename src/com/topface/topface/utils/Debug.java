@@ -146,6 +146,8 @@ public class Debug {
                 } catch (JSONException ignored) {
                     Debug.debug(tag, title + "\n" + json);
                 }
+            } else {
+                Debug.debug(tag, title + "\n" + json);
             }
         }
     }

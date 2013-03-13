@@ -1,11 +1,7 @@
 package com.topface.topface.ui.profile;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +9,6 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 import com.topface.topface.R;
-import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.User;
 import com.topface.topface.requests.AlbumRequest;
@@ -23,8 +18,6 @@ import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.Utils;
 
-import java.util.ArrayList;
-
 public class UserPhotoFragment extends BaseFragment {
     private User mUser;
     private UserPhotoGridAdapter mUserPhotoGridAdapter;
@@ -32,7 +25,6 @@ public class UserPhotoFragment extends BaseFragment {
     private Photos mPhotoLinks;
     private LoadingListAdapter.Updater mUpdater;
     private GridView mGridAlbum;
-    private BroadcastReceiver mPhotosReceiver;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,7 +32,7 @@ public class UserPhotoFragment extends BaseFragment {
         mUpdater = new LoadingListAdapter.Updater() {
             @Override
             public void onUpdate() {
-                Photos data = ((ProfileGridAdapter)mGridAlbum.getAdapter()).getData();
+                Photos data = ((ProfileGridAdapter) mGridAlbum.getAdapter()).getData();
                 AlbumRequest request = new AlbumRequest(getActivity(), mUser.uid, AlbumRequest.DEFAULT_PHOTOS_LIMIT, data.get(data.size() - 2).getPosition() + 1, AlbumRequest.MODE_ALBUM);
                 request.callback(new ApiHandler() {
                     @Override
@@ -77,17 +69,6 @@ public class UserPhotoFragment extends BaseFragment {
         if (mUserPhotoGridAdapter != null) {
             mGridAlbum.setOnScrollListener(mUserPhotoGridAdapter);
         }
-        mPhotosReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                ArrayList<Photo> arrList = intent.getParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS);
-                Photos newPhotos = new Photos();
-                newPhotos.addAll(arrList);
-                ((UserPhotoGridAdapter) mGridAlbum.getAdapter()).setData(newPhotos, intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_MORE, false));
-            }
-        };
-
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mPhotosReceiver, new IntentFilter(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT));
 
         mTitle.setVisibility(View.VISIBLE);
         return root;
@@ -151,11 +132,7 @@ public class UserPhotoFragment extends BaseFragment {
         if (mUserPhotoGridAdapter != null) {
             mUserPhotoGridAdapter.notifyDataSetChanged();
         }
+        mGridAlbum = null;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mPhotosReceiver);
-    }
 }
