@@ -28,6 +28,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     public static final String AUTH_TAG = "AUTH";
 
     private boolean needToUnregisterReceiver = true;
+    protected boolean needOpenDialog = true;
 
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
     private BroadcastReceiver mReauthReceiver;
@@ -162,8 +163,11 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     }
 
     protected void takePhoto(TakePhotoDialog.TakePhotoListener listener) {
-        TakePhotoDialog newFragment = TakePhotoDialog.newInstance();
-        newFragment.setOnTakePhotoListener(listener);
-        newFragment.show(getSupportFragmentManager(), TakePhotoDialog.TAG);
+        if(needOpenDialog) {
+            TakePhotoDialog newFragment = TakePhotoDialog.newInstance();
+            newFragment.setOnTakePhotoListener(listener);
+            newFragment.show(getSupportFragmentManager(), TakePhotoDialog.TAG);
+            needOpenDialog = false;
+        }
     }
 }

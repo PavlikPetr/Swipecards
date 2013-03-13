@@ -71,7 +71,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         TapjoyConnect.requestTapjoyConnect(getApplicationContext(), "f0563cf4-9e7c-4962-b333-098810c477d2", "AS0AE9vmrWvkyNNGPsyu");
         TapjoyConnect.getTapjoyConnectInstance().setUserID(Integer.toString(CacheProfile.uid));
         SponsorPay.start("11625", Integer.toString(CacheProfile.uid), "0a4c64db64ed3c1ca14a5e5d81aaa23c", getApplicationContext());
-
         if (isNeedBroughtToFront(getIntent())) {
             // При открытии активити из лаунчера перезапускаем ее
             finish();
@@ -249,7 +248,12 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
                             @Override
                             public void fail(int codeError, ApiResponse response) {
-
+                                if (codeError == ApiResponse.NON_EXIST_PHOTO_ERROR) {
+                                    if (CacheProfile.photos.contains(photo)) {
+                                        CacheProfile.photos.remove(photo);
+                                    }
+                                    Toast.makeText(NavigationActivity.this, "Ваша фотография не соответствует правилам. Попробуйте сделать другую", 2000);
+                                }
                             }
 
                             @Override
@@ -257,11 +261,13 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                                 super.always(response);
                             }
                         }).exec();
+                        needOpenDialog = true;
                     }
 
                     @Override
                     public void onPhotoSentFailure() {
                         Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
+                        needOpenDialog = true;
                     }
 
                     @Override
