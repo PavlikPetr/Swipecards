@@ -169,8 +169,31 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
+                        android:layout_marginBottom="10dp"
                         />
+
+                <include
+                        layout="@layout/item_divider"
+                        />
+
+                <Button
+                        android:id="@+id/btnOfferwall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/btn_vip_sale_selector"
+                        style="@style/ButtonWhiteTextMini"
+                        android:text="@string/get_it_for_free"
+                        />
+
                 <!-- Power -->
+
+                <include
+                        android:id="@+id/vipDivider"
+                        layout="@layout/item_divider"
+                        android:layout_marginTop="10dp"
+                        />
 
                 <RelativeLayout
                         android:id="@+id/fbVipTitle"
@@ -229,23 +252,6 @@
                         android:visibility="gone"
                         />
             </LinearLayout>
-
-            <include
-                    layout="@layout/item_divider"
-                    android:layout_marginTop="10dp"
-                    />
-            <Button
-                    android:id="@+id/btnOfferwall"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/btn_vip_sale_selector"
-                    style="@style/ButtonWhiteTextMini"
-                    android:text="@string/get_it_for_free"
-                    />
         </LinearLayout>
     </ScrollView>
     <ImageView style="@style/HeaderShadow"/>

@@ -51,13 +51,13 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
         getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                mTakePhotoListener.onDialogClose();
+                if (mTakePhotoListener != null) mTakePhotoListener.onDialogClose();
             }
         });
         getDialog().setOnCancelListener(new DialogInterface.OnCancelListener(){
             @Override
             public void onCancel(DialogInterface dialog) {
-                mTakePhotoListener.onDialogClose();
+                if (mTakePhotoListener != null) mTakePhotoListener.onDialogClose();
             }
         });
 
@@ -184,7 +184,7 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
 
     private void sendRequest(Uri uri) {
         if (uri != null) {
-            mAddPhotoHelper.sendRequest(uri);
+            if (mAddPhotoHelper != null) mAddPhotoHelper.sendRequest(uri);
         }
     }
 
@@ -201,9 +201,9 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
 
             if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
                 Photo photo = (Photo) msg.obj;
-                mTakePhotoListener.onPhotoSentSuccess(photo);
+                if (mTakePhotoListener != null) mTakePhotoListener.onPhotoSentSuccess(photo);
             } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
-                mTakePhotoListener.onPhotoSentFailure();
+                if (mTakePhotoListener != null) mTakePhotoListener.onPhotoSentFailure();
             }
         }
     };

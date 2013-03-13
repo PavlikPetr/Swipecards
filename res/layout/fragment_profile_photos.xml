@@ -19,8 +19,7 @@
                  android:layout_width="fill_parent"
                  android:layout_height="fill_parent"
                  android:layout_below="@id/navBar"
-                 android:inAnimation="@android:anim/fade_in"
-            android:layout_marginTop="8dp">
+                 android:inAnimation="@android:anim/fade_in">
 
         <RelativeLayout
                 android:layout_width="fill_parent"
@@ -33,9 +32,7 @@
                     style="@style/BackgroundTitleText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
                     android:layout_marginLeft="6dp"/>
-
 
             <GridView
                     android:id="@+id/usedGrid"
@@ -48,11 +45,12 @@
                     android:fadingEdge="none"
                     android:horizontalSpacing="0px"
                     android:listSelector="@android:color/transparent"
-                    android:padding="0px"
+                    android:padding="0dp"
                     android:numColumns="auto_fit"
                     android:stretchMode="columnWidth"
                     android:columnWidth="105dp"
-                    android:verticalSpacing="0px"/>
+                    android:verticalSpacing="0px"
+                    />
 
             <ImageView android:layout_width="fill_parent"
                        android:layout_height="wrap_content"

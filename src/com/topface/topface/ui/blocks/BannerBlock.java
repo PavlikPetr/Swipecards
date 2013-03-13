@@ -42,10 +42,7 @@ import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Device;
-import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.*;
 import ru.ideast.adwired.AWView;
 import ru.ideast.adwired.events.OnNoBannerListener;
 import ru.ideast.adwired.events.OnStartListener;
@@ -330,7 +327,16 @@ public class BannerBlock {
                         intent = new Intent(Intent.ACTION_VIEW, Uri.parse(banner.parameter));
                     } else if (banner.action.equals(Banner.ACTION_METHOD)) {
                         invokeBannerMethod(banner.parameter);
+                    } else if (banner.action.equals(Banner.ACTION_OFFERWALL)) {
+                        if (banner.parameter.equals(Offerwalls.TAPJOY)) {
+                            Offerwalls.startTapjoy();
+                        } else if (banner.parameter.equals(Offerwalls.SPONSORPAY)) {
+                            Offerwalls.startSponsorpay(mFragment.getActivity());
+                        } else {
+                            Offerwalls.startOfferwall(mFragment.getActivity());
+                        }
                     }
+
                     sendStat(getBannerName(banner.url), "click");
                     if (intent != null) {
                         mFragment.startActivity(intent);

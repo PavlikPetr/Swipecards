@@ -19,6 +19,7 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -309,6 +310,10 @@ public class ConnectionManager {
             //Это ошибка соединение, такие запросы мы будем переотправлять
             response = apiRequest.constructApiResponse(IApiResponse.CONNECTION_ERROR, "Connection exception: " + e.toString());
         } catch (SocketException e) {
+            Debug.error(TAG + "::Exception", e);
+            //Это ошибка подключения, такие запросы мы будем переотправлять
+            response = apiRequest.constructApiResponse(IApiResponse.CONNECTION_ERROR, "Socket exception: " + e.toString());
+        } catch (SocketTimeoutException e) {
             Debug.error(TAG + "::Exception", e);
             //Это ошибка подключения, такие запросы мы будем переотправлять
             response = apiRequest.constructApiResponse(IApiResponse.CONNECTION_ERROR, "Socket exception: " + e.toString());
