@@ -75,12 +75,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         mHashRepeatRequests = new HashMap<History, ApiRequest>();
     }
 
-    public void setFriendProfile(FeedUser friend) {
-        if (mHeaderView != null && friend != null) {
-            ((ImageViewRemote)mHeaderView.findViewById(R.id.ivFriendAvatar)).setPhoto(user != null ? user.photo : null);
-        }
-    }
-
     @Override
     public History getItem(int i) {
         return super.getItem(getPosition(i));
@@ -146,6 +140,13 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     public void setUser(FeedUser user) {
         this.user = user;
+        if (mHeaderView != null && user != null) {
+            ((ImageViewRemote)mHeaderView.findViewById(R.id.ivFriendAvatar)).setPhoto(user.photo);
+        }
+    }
+
+    public FeedUser getUser() {
+        return this.user;
     }
 
     public void addHeader(ListView parentView) {

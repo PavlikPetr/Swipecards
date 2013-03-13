@@ -36,6 +36,8 @@ import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.ui.views.SwapControl;
 import com.topface.topface.utils.*;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.TimerTask;
@@ -45,6 +47,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
     private static final int LIMIT = 50;
 
+    public static final String FRIEND_FEED_USER = "user_profile";
     public static final String ADAPTER_DATA = "adapter";
     public static final String WAS_FAILED = "was_failed";
     public static final String INTENT_USER_ID = "user_id";
@@ -74,6 +77,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     private PullToRefreshListView mListView;
     private ChatListAdapter mAdapter;
     private FeedList<History> mHistoryData;
+    private FeedUser mUser;
     private EditText mEditBox;
     private LockerView mLoadingLocker;
     private RetryView mRetryView;
@@ -195,6 +199,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 ArrayList<History> list = savedInstanceState.getParcelableArrayList(ADAPTER_DATA);
                 mHistoryData = new FeedList<History>();
                 mHistoryData.addAll(list);
+                try {
+                    mUser = new FeedUser(new JSONObject(savedInstanceState.getString(FRIEND_FEED_USER)));
+                } catch (JSONException e) {
+                    Debug.error(e);
+                }
                 if (was_failed) mLockScreen.setVisibility(View.VISIBLE);
                 else mLockScreen.setVisibility(View.GONE);
                 mLoadingLocker.setVisibility(View.GONE);
@@ -207,6 +216,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
     private void initChatHistory(View root) {
         mAdapter = new ChatListAdapter(getActivity(), mHistoryData, getUpdaterCallback());
+        mAdapter.setUser(mUser);
         mAdapter.setOnAvatarListener(this);
         mAdapter.setOnItemLongClickListener(new OnListViewItemLongClickListener() {
 
@@ -282,6 +292,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         super.onSaveInstanceState(outState);
         outState.putBoolean(WAS_FAILED, wasFailed);
         outState.putParcelableArrayList(ADAPTER_DATA, mAdapter.getDataCopy());
+
+        try {
+            outState.putString(FRIEND_FEED_USER, mAdapter.getUser().toJson().toString());
+        } catch (JSONException e) {
+            Debug.error(e);
+        }
     }
 
     private void deleteItem(final int position) {
@@ -367,7 +383,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                         mAdapter.addAll(data.items, data.more, mListView.getRefreshableView());
                     } else {
                         mAdapter.setData(data.items, data.more, mListView.getRefreshableView());
-                        mAdapter.setFriendProfile(data.user);
                     }
                 }
 
