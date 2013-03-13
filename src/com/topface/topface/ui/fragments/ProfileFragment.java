@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
@@ -16,7 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.widget.*;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.*;
@@ -31,7 +33,10 @@ import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.profile.*;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RetryView;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.NavigationBarController;
+import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.viewpagerindicator.TabPageIndicator;
@@ -51,8 +56,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     ArrayList<String> BODY_PAGES_CLASS_NAMES = new ArrayList<String>();
     ArrayList<String> HEADER_PAGES_CLASS_NAMES = new ArrayList<String>();
 
-    private final static long HIDE_ACTION_CONTROL_TIME = 3000;
-
     private HeaderMainFragment mHeaderMainFragment;
     private HeaderStatusFragment mHeaderStatusFragment;
     private UserPhotoFragment mUserPhotoFragment;
@@ -62,7 +65,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private static int mProfileType;
     private int mProfileId;
 
-    private ImageView mOnline;
     private TextView mTitle;
     private View mLoaderView;
     private RateController mRateController;
@@ -82,10 +84,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private BroadcastReceiver mUpdateBlackListState;
     private BroadcastReceiver mUpdateProfileReceiver;
 
-    private Handler mHideActionControlsUpdater;
     private TabPageIndicator mTabIndicator;
     private ActionBar mActionBar;
-    private static boolean isOnline;
     private LinearLayout mUserActions;
 
 
@@ -140,69 +140,70 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         } else if (mProfileType == TYPE_USER_PROFILE) {
 
             mActionBar.showUserActionsButton(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                                                 @Override
+                                                 public void onClick(View view) {
 
-                    double density = getResources().getDisplayMetrics().density;
-                    TranslateAnimation ta = new TranslateAnimation(0, 0, 0, mUserActions.getHeight() + mActionBar.getHeight() + (int)(5 * density));
-                    ta.setDuration(500);
-                    ta.setFillAfter(true);
-                    ta.setAnimationListener(new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {
-                            mActionBar.disableActionsButton(true);
-                        }
+                                                     double density = getResources().getDisplayMetrics().density;
+                                                     TranslateAnimation ta = new TranslateAnimation(0, 0, 0, mUserActions.getHeight() + mActionBar.getHeight() + (int) (5 * density));
+                                                     ta.setDuration(500);
+                                                     ta.setFillAfter(true);
+                                                     ta.setAnimationListener(new Animation.AnimationListener() {
+                                                         @Override
+                                                         public void onAnimationStart(Animation animation) {
+                                                             mActionBar.disableActionsButton(true);
+                                                         }
 
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            mUserActions.clearAnimation();
-                            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                            params.setMargins(0, 5, 5, 0);
-                            params.addRule(RelativeLayout.BELOW, R.id.loNavigationBar);
-                            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                            mUserActions.setLayoutParams(params);
-                            mActionBar.disableActionsButton(false);
-                        }
+                                                         @Override
+                                                         public void onAnimationEnd(Animation animation) {
+                                                             mUserActions.clearAnimation();
+                                                             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                                             params.setMargins(0, 5, 5, 0);
+                                                             params.addRule(RelativeLayout.BELOW, R.id.loNavigationBar);
+                                                             params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                                                             mUserActions.setLayoutParams(params);
+                                                             mActionBar.disableActionsButton(false);
+                                                         }
 
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {
+                                                         @Override
+                                                         public void onAnimationRepeat(Animation animation) {
 
-                        }
-                    });
-                    mUserActions.startAnimation(ta);
-                }
-            }, new View.OnClickListener() {
-                 @Override
-                 public void onClick(View view) {
-                     double density = getResources().getDisplayMetrics().density;
-                     TranslateAnimation ta = new TranslateAnimation(0, 0, 0, (int) (-270 * density));
-                     ta.setDuration(500);
-                     ta.setFillAfter(true);
-                     ta.setAnimationListener(new Animation.AnimationListener() {
-                         @Override
-                         public void onAnimationStart(Animation animation) {
-                            mActionBar.disableActionsButton(true);
-                         }
+                                                         }
+                                                     });
+                                                     mUserActions.startAnimation(ta);
+                                                 }
+                                             }, new View.OnClickListener() {
+                                                 @Override
+                                                 public void onClick(View view) {
+                                                     double density = getResources().getDisplayMetrics().density;
+                                                     TranslateAnimation ta = new TranslateAnimation(0, 0, 0, (int) (-270 * density));
+                                                     ta.setDuration(500);
+                                                     ta.setFillAfter(true);
+                                                     ta.setAnimationListener(new Animation.AnimationListener() {
+                                                         @Override
+                                                         public void onAnimationStart(Animation animation) {
+                                                             mActionBar.disableActionsButton(true);
+                                                         }
 
-                         @Override
-                         public void onAnimationEnd(Animation animation) {
+                                                         @Override
+                                                         public void onAnimationEnd(Animation animation) {
 
-                             mUserActions.clearAnimation();
-                             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                             params.setMargins(0, 5, 5, 0);
-                             params.addRule(RelativeLayout.ABOVE, R.id.loNavigationBar);
-                             params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                             mUserActions.setLayoutParams(params);
-                             mActionBar.disableActionsButton(false);
-                         }
+                                                             mUserActions.clearAnimation();
+                                                             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                                             params.setMargins(0, 5, 5, 0);
+                                                             params.addRule(RelativeLayout.ABOVE, R.id.loNavigationBar);
+                                                             params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                                                             mUserActions.setLayoutParams(params);
+                                                             mActionBar.disableActionsButton(false);
+                                                         }
 
-                         @Override
-                         public void onAnimationRepeat(Animation animation) {
-                         }
-                     });
-                     mUserActions.startAnimation(ta);
-                 }
-             });
+                                                         @Override
+                                                         public void onAnimationRepeat(Animation animation) {
+                                                         }
+                                                     });
+                                                     mUserActions.startAnimation(ta);
+                                                 }
+                                             }
+            );
         }
 
         // start pages initialization
@@ -316,7 +317,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 mRateController.setOnRateControllerListener(mRateControllerListener);
                 //set info into views for user
                 mTitle.setText(data.getNameAndAge());
-//                mOnline.setVisibility(data.online ? View.VISIBLE : View.INVISIBLE);
 
                 setProfile(data);
                 mHeaderMainFragment.setOnline(data.online);
@@ -352,7 +352,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         addHeaderPage(HeaderStatusFragment.class.getName());
 
         ViewPager headerPager = (ViewPager) root.findViewById(R.id.vpHeaderFragments);
-        mHeaderPagerAdapter = new ProfilePageAdapter(getActivity().getSupportFragmentManager(),
+        mHeaderPagerAdapter = new ProfilePageAdapter(getChildFragmentManager(),
                 HEADER_PAGES_CLASS_NAMES, mProfileUpdater);
         headerPager.setAdapter(mHeaderPagerAdapter);
         //Tabs for header
@@ -378,7 +378,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         }
 
         ViewPager bodyPager = (ViewPager) root.findViewById(R.id.vpFragments);
-        mBodyPagerAdapter = new ProfilePageAdapter(getActivity().getSupportFragmentManager(), BODY_PAGES_CLASS_NAMES,
+        mBodyPagerAdapter = new ProfilePageAdapter(getChildFragmentManager(), BODY_PAGES_CLASS_NAMES,
                 BODY_PAGES_TITLES, mProfileUpdater);
         bodyPager.setAdapter(mBodyPagerAdapter);
         //Tabs for Body
@@ -525,9 +525,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         if (mHeaderPager != null) {
             mHeaderPager.setCurrentItem(0);
         }
-        if (mTitle != null && mOnline != null && mLoaderView != null) {
+        if (mTitle != null && mLoaderView != null) {
             mTitle.setText(Static.EMPTY);
-            mOnline.setVisibility(View.INVISIBLE);
             mLoaderView.setVisibility(View.VISIBLE);
         }
         if (mHeaderMainFragment != null) mHeaderMainFragment.clearContent();
@@ -627,7 +626,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         }
 
         public void setOnline(boolean online) {
-            mOnline.setVisibility(online? View.VISIBLE : View.GONE);
+            mOnline.setVisibility(online ? View.VISIBLE : View.GONE);
         }
 
         @Override
@@ -818,7 +817,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 //            mUserMutual.setEnabled(!mUser.rated);
         }
     };
-
 
 
     ProfileUpdater mProfileUpdater = new ProfileUpdater() {
