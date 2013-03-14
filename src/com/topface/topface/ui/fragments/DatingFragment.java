@@ -868,34 +868,35 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void sendAlbumRequest(final Photos data) {
         int position = data.get(mLoadedCount - 1).getPosition() + 1;
-        AlbumRequest request = new AlbumRequest(getActivity(), mUserSearchList.getCurrentUser().id, PHOTOS_LIMIT, position, AlbumRequest.MODE_SEARCH);
-        final int uid = mUserSearchList.getCurrentUser().id;
-        request.callback(new ApiHandler() {
-            @Override
-            public void success(ApiResponse response) {
-                if (uid == mUserSearchList.getCurrentUser().id) {
-                    Photos newPhotos = Photos.parse(response.jsonResult.optJSONArray("items"));
-                    mNeedMore = response.jsonResult.optBoolean("more");
-                    int i = 0;
-                    for (Photo photo : newPhotos) {
-                        data.set(mLoadedCount + i, photo);
-                        i++;
-                    }
-                    mLoadedCount += newPhotos.size();
+        if (mUserSearchList != null && mUserSearchList.getCurrentUser() != null) {
+            AlbumRequest request = new AlbumRequest(getActivity(), mUserSearchList.getCurrentUser().id, PHOTOS_LIMIT, position, AlbumRequest.MODE_SEARCH);
+            final int uid = mUserSearchList.getCurrentUser().id;
+            request.callback(new ApiHandler() {
+                @Override
+                public void success(ApiResponse response) {
+                    if (uid == mUserSearchList.getCurrentUser().id) {
+                        Photos newPhotos = Photos.parse(response.jsonResult.optJSONArray("items"));
+                        mNeedMore = response.jsonResult.optBoolean("more");
+                        int i = 0;
+                        for (Photo photo : newPhotos) {
+                            data.set(mLoadedCount + i, photo);
+                            i++;
+                        }
+                        mLoadedCount += newPhotos.size();
 
-                    if (mImageSwitcher != null) {
-                        mImageSwitcher.getAdapter().notifyDataSetChanged();
+                        if (mImageSwitcher != null) {
+                            mImageSwitcher.getAdapter().notifyDataSetChanged();
+                        }
                     }
+                    mCanSendAlbumReq = true;
                 }
-                mCanSendAlbumReq = true;
-            }
 
-            @Override
-            public void fail(int codeError, ApiResponse response) {
-                mCanSendAlbumReq = true;
-            }
-        }).exec();
-
+                @Override
+                public void fail(int codeError, ApiResponse response) {
+                    mCanSendAlbumReq = true;
+                }
+            }).exec();
+        }
     }
 
     private void updateResources() {
