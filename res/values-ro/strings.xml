@@ -317,6 +317,7 @@
     <string name="map_popup_address">Adresa</string>
     <string name="black_list_info">Ati adaugat o persoana in lista neagra. De schimbat acest lucru se poate in profilul Dmv, in setarile VIP-statut.</string>
     <string name="general_gift">Cadou</string>
+    <string name="user_actions_chat">Discutie</string>
     <string name="general_place">Loc</string>
     <string name="general_soon">In curand se</string>
     <string name="black_list_activation">Activati VIP-statut si utilizati lista neagra</string>
@@ -345,7 +346,27 @@
     <string name="default_photo_upload_complete">Incarcare reusita!</string>
     <string name="general_error_try_again_later">Conectare Topface imposibila. Incarcati mai tarziu</string>
     <string name="search_city_by_name">Cautare orasi dupa denumire</string>
+    <string name="gallery">Galerie</string>
+    <string name="no_photo_take_photo">Cu Dmv nimeni nu poate face cunostinta! Faceti o poza sau alegeti din album</string>
+    <string name="photo_is_too_small">Aratati foarte bine pe aceasta poza, dar pentru ca utilizatorii sa poata sa o aprecieze e nevoie sa fie un pic mai mare: nu mai putin de %s</string>
+    <string name="photo_for_avatar">Poza este gata pentru trimitere in profil! Este prima poza a Dmv si va fi folosita in calitate de avatar.</string>
+    <string name="get_it_for_free">Primeste gratis</string>
+    <string name="vip_advantages">Avantaje VIP</string>
+    <string name="change_email">Schimba e-mailul</string>
+    <string name="send_confirmation_email">Trimite confirmare pe e-mail</string>
+    <string name="change_password">Schimba parola</string>
+    <string name="password_changing">Schimbare de parola</string>
+    <string name="save">Salvare</string>
+    <string name="confirmation_successfully_sent">Confirmarea a fost trimesa la e-mailul indicat de Dmv</string>
+    <string name="password_hint">parola</string>
+    <string name="password_confirmation_hint">confirmare parola</string>
+    <string name="enter_new_password">Introduceti parola noua</string>
+    <string name="enter_password_confirmation">Introduceti confirmarea parolei</string>
+    <string name="passwords_mismatched">Parolele nu coincid</string>
+    <string name="passwords_changed">Parola schimbata</string>
+    <string name="take_photo">A face poza</string>
     <string name="take_another_photo">Alta poza</string>
     <string name="we_detect_your_city">Noi am identificat orasul tau:</string>
     <string name="reselect_city">Alege alt orasi:</string>
+    <string name="choose_cool_photo">Alege cea mare tare poza si statut, care reflecta dispozitia Dmv!</string>
 </resources>
