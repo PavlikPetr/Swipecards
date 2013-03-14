@@ -29,6 +29,7 @@ import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.*;
 import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
 import com.topface.topface.ui.fragments.MenuFragment.FragmentMenuListener;
+import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.utils.*;
 import com.topface.topface.utils.social.AuthToken;
@@ -274,6 +275,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     private void checkExternalLink() {
         if(getIntent() != null) {
+
             Uri data = getIntent().getData();
 
             if (checkHost(data)) {
@@ -295,7 +297,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             int profileId = Integer.parseInt(splittedPath[2]);
             int profileType = profileId == CacheProfile.uid? ProfileFragment.TYPE_MY_PROFILE : ProfileFragment.TYPE_USER_PROFILE;
             onExtraFragment(ProfileFragment.newInstance(profileId, profileType));
-
         } else if (confirmPattern.matcher(splittedPath[1]).matches()) {
 
             Pattern codePattern = Pattern.compile("[0-9]+-[0-f]+-[0-9]*");
@@ -305,15 +306,15 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             String code = matcher.group();
             AuthToken token = AuthToken.getInstance();
             if (!token.isEmpty() && token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
-                ConfirmRequest request = new ConfirmRequest(this, token.getLogin(), code);
-                request.exec();
-            }
-        } else {
 
-            Intent intent = new Intent(Intent.ACTION_VIEW, data);
-            startActivity(intent);
-            finish();
+                Intent intent = new Intent(this, SettingsContainerActivity.class);
+                intent.putExtra(Static.INTENT_REQUEST_KEY, SettingsContainerActivity.INTENT_ACCOUNT);
+                intent.putExtra(SettingsContainerActivity.CONFIRMATION_CODE, code);
+                startActivity(intent);
+
+            }
         }
+        getIntent().setData(null);
     }
 
     private boolean checkHost(Uri data) {

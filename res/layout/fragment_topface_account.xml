@@ -57,17 +57,6 @@
         </RelativeLayout>
 
         <Button
-                android:id="@+id/btnChange"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:background="@drawable/btn_light_gray_selector"
-                android:text="@string/settings_logout"
-                style="@style/ButtonGrayText"
-                />
-
-        <Button
                 android:id="@+id/btnLogout"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -79,6 +68,17 @@
                 style="@style/ItemtText"
                 android:textSize="16sp"
                 android:textStyle="bold"
+                />
+
+        <Button
+                android:id="@+id/btnChange"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/btn_light_gray_selector"
+                android:text="@string/settings_logout"
+                style="@style/ButtonGrayText"
                 />
     </LinearLayout>
 

@@ -1,6 +1,8 @@
 package com.topface.topface.ui.settings;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -59,9 +61,38 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         mLockerView = (LockerView) root.findViewById(R.id.llvLogoutLoading);
         mLockerView.setVisibility(View.GONE);
 
+        String code = ((SettingsContainerActivity)getActivity()).getConfirmationCode();
+
+        if (code != null) {
+            ConfirmRequest request = new ConfirmRequest(getActivity(), AuthToken.getInstance().getLogin(), code);
+            mLockerView.setVisibility(View.VISIBLE);
+            request.callback(new ApiHandler() {
+                @Override
+                public void success(ApiResponse response) {
+                    Toast.makeText(getActivity(), getString(R.string.email_confirmed), 1500).show();
+                    CacheProfile.emailConfirmed = true;
+                    setViewsState();
+                }
+
+                @Override
+                public void fail(int codeError, ApiResponse response) {
+                    Toast.makeText(getActivity(), R.string.general_server_error, 1500).show();
+                }
+
+                @Override
+                public void always(ApiResponse response) {
+                    super.always(response);
+                    mLockerView.setVisibility(View.GONE);
+                }
+            }).exec();
+        } else {
+            requestEmailConfirmedFlag();
+        }
+
         initTextViews(root);
+
+
         initButtons(root);
-        requestEmailConfirmedFlag();
 
         return root;
     }
@@ -192,7 +223,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         hideSoftKeyboard();
         switch (v.getId()) {
             case R.id.btnLogout:
-                logout(mToken);
+                showExitPopup();
                 break;
             case R.id.btnChange:
                 onChangeButtonClick();
@@ -287,6 +318,24 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                 mLockerView.setVisibility(View.GONE);
             }
         }).exec();
+    }
+
+    private void showExitPopup() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(R.string.settings_logout_msg);
+        builder.setNegativeButton(R.string.general_no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.setPositiveButton(R.string.general_yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                logout(mToken);
+            }
+        });
+        builder.create().show();
     }
 
     @SuppressWarnings({"rawtypes", "hiding"})

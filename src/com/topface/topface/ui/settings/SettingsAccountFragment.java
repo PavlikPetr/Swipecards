@@ -1,6 +1,8 @@
 package com.topface.topface.ui.settings;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -13,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.google.android.gcm.GCMRegistrar;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
@@ -73,19 +76,7 @@ public class SettingsAccountFragment extends BaseFragment {
 
             @Override
             public void onClick(View v) {
-                LogoutRequest logoutRequest = new LogoutRequest(getActivity());
-                lockerView.setVisibility(View.VISIBLE);
-                logoutRequest.callback(new ApiHandler() {
-                    @Override
-                    public void success(ApiResponse response) {
-                        logout(getContext(), token);
-                    }
-
-                    @Override
-                    public void fail(int codeError, ApiResponse response) {
-                        lockerView.setVisibility(View.GONE);
-                    }
-                }).exec();
+                showExitPopup();
 
             }
         });
@@ -116,6 +107,38 @@ public class SettingsAccountFragment extends BaseFragment {
                 new SearchCacheManager().clearCache();
             }
         }).start();
+    }
+
+    private void showExitPopup() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(R.string.settings_logout_msg);
+        builder.setNegativeButton(R.string.general_no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.setPositiveButton(R.string.general_yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                LogoutRequest logoutRequest = new LogoutRequest(getActivity());
+                lockerView.setVisibility(View.VISIBLE);
+                logoutRequest.callback(new ApiHandler() {
+                    @Override
+                    public void success(ApiResponse response) {
+                        logout(getActivity(), AuthToken.getInstance());
+                    }
+
+                    @Override
+                    public void fail(int codeError, ApiResponse response) {
+                        lockerView.setVisibility(View.GONE);
+                        Toast.makeText(getActivity(), R.string.general_server_error, 1500).show();
+                    }
+                }).exec();
+
+            }
+        });
+        builder.create().show();
     }
 
     @SuppressWarnings({"rawtypes", "hiding"})
