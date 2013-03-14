@@ -464,7 +464,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             intent.putExtra(ChatFragment.INTENT_USER_NAME, mUserProfile.first_name);
             intent.putExtra(ChatFragment.INTENT_USER_SEX, mUserProfile.sex);
             intent.putExtra(ChatFragment.INTENT_USER_AGE, mUserProfile.age);
-            intent.putExtra(ChatFragment.INTENT_USER_CITY, mUserProfile.city.name);
+            intent.putExtra(ChatFragment.INTENT_USER_CITY, mUserProfile.city == null ? "" : mUserProfile.city.name);
             intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
             getActivity().startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
         }
