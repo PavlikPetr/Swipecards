@@ -11,6 +11,7 @@ public class Offerwalls {
 
     public static final String TAPJOY = "TAPJOY";
     public static final String SPONSORPAY = "SPONSORPAY";
+    private static boolean first_or_second = false;
 
     public static void init(Context context) {
         TapjoyConnect.requestTapjoyConnect(context, "f0563cf4-9e7c-4962-b333-098810c477d2", "AS0AE9vmrWvkyNNGPsyu");
@@ -19,11 +20,12 @@ public class Offerwalls {
     }
 
     public static void startOfferwall(Activity activity) {
-        if ((CacheProfile.uid % 2) == 0) {
+        if (first_or_second) {
             startTapjoy();
         } else {
             startSponsorpay(activity);
         }
+        first_or_second = !first_or_second;
     }
 
     public static void startTapjoy() {

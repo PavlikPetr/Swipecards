@@ -486,5 +486,6 @@
     <string name="we_detect_your_city">Мы определили ваш город:</string>
     <string name="reselect_city">Выбрать другой город:</string>
     <string name="choose_cool_photo">Выберите свою лучшую фотографию и статус, который отражает ваше настроение!</string>
+    <string name="email_confirmed">e-mail подтвержден!</string>
 
 </resources>
