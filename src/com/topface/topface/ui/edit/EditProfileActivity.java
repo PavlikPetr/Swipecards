@@ -390,7 +390,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
         @Override
         public String getTitle() {
-            if (CacheProfile.status.trim().length() != 0) {
+            if (CacheProfile.status.trim().length() == 0 || CacheProfile.status.equals("-")) {
                 return getString(R.string.edit_refresh_status);
             }
             return CacheProfile.status;

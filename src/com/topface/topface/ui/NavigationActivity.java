@@ -90,15 +90,19 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     private void requestAdwired() {
-        if (CacheProfile.isLoaded() && !CacheProfile.paid) {
-            Locale ukraineLocale = new Locale("uk","UA","");
-            AWView adwiredView = (AWView)findViewById(R.id.adAdwired);
-            if (Locale.getDefault().equals(ukraineLocale)) {
-                adwiredView.setVisibility(View.VISIBLE);
-                adwiredView.request('0');
-            } else {
-                adwiredView.setVisibility(View.GONE);
+
+        try {
+            if (CacheProfile.isLoaded() && !CacheProfile.paid) {
+                Locale ukraineLocale = new Locale("uk","UA","");
+                if (Locale.getDefault().equals(ukraineLocale)) {
+                    AWView adwiredView = (AWView) getLayoutInflater().inflate(R.layout.banner_adwired, null);
+                    ((ViewGroup)findViewById(R.id.loBannerContainer)).addView(adwiredView);
+                    adwiredView.setVisibility(View.VISIBLE);
+                    adwiredView.request('0');
+                }
             }
+        } catch (Exception ex) {
+            Debug.error(ex);
         }
     }
 
