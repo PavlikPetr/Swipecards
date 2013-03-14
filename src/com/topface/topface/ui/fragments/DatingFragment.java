@@ -67,8 +67,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private Novice mNovice;
     private AlphaAnimation mAlphaAnimation;
     private RateController mRateController;
-    private View mNavigationHeader;
-    private View mNavigationHeaderShadow;
     private RelativeLayout mDatingLoveBtnLayout;
     private ViewFlipper mViewFlipper;
 
@@ -381,7 +379,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingLove: {
                 if (mCurrentUser != null) {
-                    if (mUserSearchList.isEnded()) {
+                    if (mUserSearchList == null || mUserSearchList.isEnded()) {
                         updateData(true);
                         return;
                     } else {
@@ -403,7 +401,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingSympathy: {
                 if (mCurrentUser != null) {
-                    if (mUserSearchList.isEnded()) {
+                    if (mUserSearchList == null || mUserSearchList.isEnded()) {
                         updateData(true);
                         return;
                     } else {
@@ -436,10 +434,16 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
             break;
             case R.id.btnDatingProfile: {
-                ((NavigationActivity) getActivity()).onExtraFragment(
-                        ProfileFragment.newInstance(mUserSearchList.get(mUserSearchList.getSearchPosition()).id, ProfileFragment.TYPE_USER_PROFILE));
+                if (mUserSearchList != null) {
+                    ((NavigationActivity) getActivity()).onExtraFragment(
+                            ProfileFragment.newInstance(
+                                    mUserSearchList.get(mUserSearchList.getSearchPosition()).id,
+                                    ProfileFragment.TYPE_USER_PROFILE
+                            )
+                    );
 
-                EasyTracker.getTracker().trackEvent("Dating", "Additional", "Profile", 1L);
+                    EasyTracker.getTracker().trackEvent("Dating", "Additional", "Profile", 1L);
+                }
             }
             break;
             case R.id.btnDatingChat: {
@@ -606,7 +610,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 @Override
                 protected void success(NoviceLikes noviceLikes, ApiResponse response) {
                     CacheProfile.likes = noviceLikes.likes;
-                    if(noviceLikes.increment > 0) {
+                    if (noviceLikes.increment > 0) {
                         Novice.giveNoviceLikesQuantity = noviceLikes.increment;
                         final String text = String.format(
                                 getResources().getString(R.string.novice_sympathies_bonus),
