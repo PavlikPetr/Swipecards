@@ -21,7 +21,7 @@ public class Static {
     public static final String API_BETA_URL = "http://api.beta.topface.com/?v=" + API_VERSION;
     public static final String API_GAMMA_URL = "http://api.gamma.topface.com/?v=" + API_VERSION;
     public static final String API_DELTA_URL = "http://api.delta.topface.com/?v=" + API_VERSION;
-    public static final String API_URL = "http://api.delta.topface.com/?v=" + API_VERSION;
+    public static final String API_URL = "https://api.topface.com/?v=" + API_VERSION;
     //Wrong API URL
 //    public static final String API_URL = "http://httpstat.us/500";
 
