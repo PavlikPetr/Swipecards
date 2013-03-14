@@ -143,7 +143,9 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     public void success(ApiResponse response) {
                         CacheProfile.photos.removeAll(mDeleted);
                         mDeleted.clear();
+                        LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
                         finishOperations(handler);
+
                     }
 
                     @Override
