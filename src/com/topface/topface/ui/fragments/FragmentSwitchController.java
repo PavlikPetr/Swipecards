@@ -133,11 +133,15 @@ public class FragmentSwitchController extends ViewGroup {
             mExtraFrame = (FrameLayout) this.findViewById(R.id.fragment_extra_container);
         }
         mExtraFrame.setVisibility(View.VISIBLE);
-        mCurrentExtraFragment = fragment;
+
 
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
-        transaction.replace(R.id.fragment_extra_container, mCurrentExtraFragment);
+        transaction.replace(R.id.fragment_extra_container, fragment);
+        if (mCurrentExtraFragment != null) {
+            transaction.remove(mCurrentFragment);
+        }
         transaction.commit();
+        mCurrentExtraFragment = fragment;
 
         mFragmentSwitchListener.onExtraFrameOpen();
         mCurrentFragmentId = BaseFragment.F_UNKNOWN;
@@ -228,7 +232,7 @@ public class FragmentSwitchController extends ViewGroup {
         mOpenDX = mWidth - mClosedDX;
         mFullOpenDX = mWidth - mOpenDX;
 
-        if(mExtraFrame == null) {
+        if (mExtraFrame == null) {
             mExtraFrame = (FrameLayout) this.findViewById(R.id.fragment_extra_container);
         }
     }

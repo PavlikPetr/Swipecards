@@ -263,25 +263,37 @@ public abstract class ApiRequest implements IApiRequest {
         //Непосредственно перед отправкой запроса устанавливаем новый SSID
         setSsid(Ssid.get());
         //Непосредственно пишим данные в подключение
-        writeData(connection);
+        if (writeData(connection)) {
+            //Возвращаем HTTP статус ответа
+            return getResponseCode(connection);
+        } else {
+            //Если не удалось записать данные, то пишем ошибку запроса
+            return -1;
+        }
 
-        //Возвращаем HTTP статус ответа
-        return getResponseCode(connection);
     }
 
-    protected void writeData(HttpURLConnection connection) throws IOException {
+    protected boolean writeData(HttpURLConnection connection) throws IOException {
         //Формируем свои данные для отправки POST запросом
         String requestJson = toPostData();
+
         //Переводим строку запроса в байты
         byte[] requestData = requestJson.getBytes();
-        Debug.logJson(
-                ConnectionManager.TAG,
-                "REQUEST >>> " + Static.API_URL + " rev:" + getRevNum(),
-                requestJson
-        );
+        if (requestData.length > 0 && !isCanceled()) {
+            Debug.logJson(
+                    ConnectionManager.TAG,
+                    "REQUEST >>> " + Static.API_URL + " rev:" + getRevNum(),
+                    requestJson
+            );
 
-        //Отправляем наш  POST запрос
-        HttpUtils.sendPostData(requestData, connection);
+            //Отправляем наш  POST запрос
+            HttpUtils.sendPostData(requestData, connection);
+
+            return true;
+        } else {
+            Debug.error(String.format("ConnectionManager: Api request %s is empty", getServiceName()));
+            return false;
+        }
     }
 
     protected int getResponseCode(HttpURLConnection connection) {

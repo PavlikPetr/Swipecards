@@ -33,7 +33,7 @@ public class PhotoAddRequest extends ApiRequest {
     }
 
     @Override
-    protected void writeData(HttpURLConnection connection) throws IOException {
+    protected boolean writeData(HttpURLConnection connection) throws IOException {
         //Формируем базовую часть запроса (Заголовки, json данные)
         String headers = getHeaders();
         //Переводим в байты
@@ -41,11 +41,12 @@ public class PhotoAddRequest extends ApiRequest {
         //Это просто закрывающие данные запроса с boundary и переносами строк
         byte[] endBytes = HTTP_REQUEST_CLOSE_DATA.getBytes();
         //Открываем InputStream к файлу который будем отправлять
-        InputStream inputStream = BitmapUtils.getInputStream(getContext(),mUri);
+        InputStream inputStream = BitmapUtils.getInputStream(getContext(), mUri);
         //Считаем длинну файла в виде строки base64
         Debug.log("File size: " + inputStream.available());
         int fileSize = (int) Math.ceil(inputStream.available() * 4 / 3);
         Debug.log("Base64 size: " + fileSize);
+        //Дополнительные символы
         int padding = (fileSize % 4) == 0 ? 0 : 4 - (fileSize % 4);
         Debug.log("Base64 padding:  " + padding);
         fileSize += padding;
@@ -53,19 +54,24 @@ public class PhotoAddRequest extends ApiRequest {
         //Считаем общую длинну получившегося запроса
         int contentLength = headersBytes.length + endBytes.length + fileSize;
 
-        //Отправляем наш  POST запрос
-        writeRequest(
-                headersBytes,
-                endBytes,
-                inputStream,
-                HttpUtils.getOutputStream(contentLength, connection)
-        );
+        if (contentLength > 0) {
+            //Отправляем наш  POST запрос
+            writeRequest(
+                    headersBytes,
+                    endBytes,
+                    inputStream,
+                    HttpUtils.getOutputStream(contentLength, connection)
+            );
 
-        Debug.logJson(
-                ConnectionManager.TAG,
-                "REQUEST >>> " + Static.API_URL + " rev:" + getRevNum(),
-                headers
-        );
+            Debug.logJson(
+                    ConnectionManager.TAG,
+                    "REQUEST >>> " + Static.API_URL + " rev:" + getRevNum(),
+                    headers
+            );
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void writeRequest(byte[] headersBytes, byte[] endBytes, InputStream inputStream, OutputStream outputStream) throws IOException {

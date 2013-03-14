@@ -29,7 +29,6 @@ import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.NavigationBarController;
 
 import java.util.LinkedList;
 
@@ -65,7 +64,7 @@ public class TopsFragment extends BaseFragment {
         // Navigation bar
 //        mNavBarController = new NavigationBarController((ViewGroup) view.findViewById(R.id.loNavigationBar));
         ActionBar actionBar = getActionBar(view);
-        actionBar.showHomeButton((View.OnClickListener)getActivity());
+        actionBar.showHomeButton((View.OnClickListener) getActivity());
         actionBar.setTitleText(getString(R.string.general_tops));
         //Инициализируем кнопку фильтров
         new FilterBlock((ViewGroup) view, R.id.loControlsGroup, actionBar, R.id.toolsBar);
@@ -119,7 +118,7 @@ public class TopsFragment extends BaseFragment {
         });
 
         //Retry view
-        RelativeLayout cont = (RelativeLayout)view.findViewById(R.id.topContainer);
+        RelativeLayout cont = (RelativeLayout) view.findViewById(R.id.topContainer);
 
         mRetryView = new RetryView(getActivity());
         mRetryView.setErrorMsg(getString(R.string.general_error_try_again_later));
@@ -191,13 +190,15 @@ public class TopsFragment extends BaseFragment {
         topRequest.callback(new DataApiHandler<LinkedList<Top>>() {
             @Override
             protected void success(LinkedList<Top> data, ApiResponse response) {
-                mGallery.setVisibility(View.VISIBLE);
-                mTopsList.clear();
-                mTopsList.addAll(data);
-                onUpdateSuccess(false);
-                if (mGridAdapter != null) {
-                    mGridAdapter.notifyDataSetChanged();
+                if (mGallery != null) {
                     mGallery.setVisibility(View.VISIBLE);
+                    mTopsList.clear();
+                    mTopsList.addAll(data);
+                    onUpdateSuccess(false);
+                    if (mGridAdapter != null) {
+                        mGridAdapter.notifyDataSetChanged();
+                        mGallery.setVisibility(View.VISIBLE);
+                    }
                 }
             }
 

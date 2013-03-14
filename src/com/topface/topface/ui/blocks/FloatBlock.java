@@ -20,7 +20,6 @@ public class FloatBlock {
     private static Map<String, String> mFloatTypeMap;
     private static Options mOptions;
     private Fragment mFragment;
-    private LeadersBlock mLeaders;
     private BannerBlock mBanner;
     private final ViewGroup mLayout;
 
@@ -41,7 +40,7 @@ public class FloatBlock {
             if (floatType.equals(Options.FLOAT_TYPE_BANNER)) {
                 mBanner = new BannerBlock(mFragment, mLayout);
             } else if (floatType.equals(Options.FLOAT_TYPE_LEADERS)) {
-                mLeaders = new LeadersBlock(mFragment, mLayout);
+                new LeadersBlock(mFragment, mLayout);
             }
             //mLeaders = new LeadersBlock(mActivity, mLayout);
         }
@@ -62,15 +61,8 @@ public class FloatBlock {
             mFloatTypeMap.put(VisitorsFragment.class.toString(), mOptions.pages.get(Options.PAGE_VISITORS).floatType);
     }
 
-    public void update() {
-        if (mLeaders != null) {
-            mLeaders.loadLeaders();
-        }
-    }
-
     public void onResume() {
         if (mBanner != null) mBanner.onResume();
-        update();
     }
 
     public void onPause() {
