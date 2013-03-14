@@ -391,7 +391,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         }
                         mRateController.onRate(mCurrentUser.id, 10,
                                 mCurrentUser.mutual ? RateRequest.DEFAULT_MUTUAL
-                                        : RateRequest.DEFAULT_NO_MUTUAL);
+                                        : RateRequest.DEFAULT_NO_MUTUAL, null);
 
                         EasyTracker.getTracker().trackEvent("Dating", "Rate",
                                 "AdmirationSend" + (mCurrentUser.mutual ? "mutual" : ""),
@@ -410,7 +410,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         lockControls();
                         mRateController.onRate(mCurrentUser.id, 9,
                                 mCurrentUser.mutual ? RateRequest.DEFAULT_MUTUAL
-                                        : RateRequest.DEFAULT_NO_MUTUAL);
+                                        : RateRequest.DEFAULT_NO_MUTUAL, null);
 
                         EasyTracker.getTracker().trackEvent("Dating", "Rate",
                                 "SympathySend" + (mCurrentUser.mutual ? "mutual" : ""), 0L);

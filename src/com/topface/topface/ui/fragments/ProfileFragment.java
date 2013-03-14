@@ -16,10 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.*;
@@ -53,6 +50,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private static final String ARG_TAG_INIT_HEADER_PAGE = "profile_start_header_class";
     public static final String ARG_FEED_ITEM_ID = "item_id";
     public static final String DEFAULT_ACTIVATED_COLOR = "#AAAAAA";
+    public static final String DEFAULT_NON_ACTIVATED = "#FFFFFF";
 
     ArrayList<String> BODY_PAGES_TITLES = new ArrayList<String>();
     ArrayList<String> BODY_PAGES_CLASS_NAMES = new ArrayList<String>();
@@ -409,22 +407,64 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 break;
             case R.id.acDelight:
                 if (v.isEnabled()) {
-                    mRateController.onRate(mUserProfile.uid, 10, ((User) mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
-                    v.setEnabled(false);
                     v.setSelected(true);
                     TextView view = (TextView)v;
                     view.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+
+                    v.setEnabled(false);
+                    mRateController.onRate(mUserProfile.uid, 10, ((User) mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL, new RateController.OnRateListener() {
+                        @Override
+                        public void onRateCompleted() {
+                            if (v != null && getActivity() != null) {
+                                Toast.makeText(getActivity(), R.string.sympathy_sended, 1500).show();
+
+                            }
+                        }
+
+                        @Override
+                        public void onRateFailed() {
+                            if(v != null && getActivity() != null) {
+                                Toast.makeText(getActivity(), R.string.general_server_error, 1500).show();
+                                v.setEnabled(true);
+                                v.setSelected(false);
+                                TextView view = (TextView)v;
+                                view.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
+                            }
+                        }
+                    });
+
                     //noinspection deprecation
 //                    ((TextView) v).setAlpha(80);
                 }
                 break;
             case R.id.acSympathy:
                 if (v.isEnabled()) {
-                    mRateController.onRate(mUserProfile.uid, 9, ((User) mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
-                    v.setEnabled(false);
                     v.setSelected(true);
                     TextView view = (TextView)v;
                     view.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+                    v.setEnabled(false);
+                    mRateController.onRate(mUserProfile.uid, 9, ((User) mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL, new RateController.OnRateListener() {
+                        @Override
+                        public void onRateCompleted() {
+                            if (v != null && getActivity() != null) {
+                                Toast.makeText(getActivity(), R.string.sympathy_sended, 1500).show();
+
+                            }
+                        }
+
+                        @Override
+                        public void onRateFailed() {
+                            if(v != null && getActivity() != null) {
+                                Toast.makeText(getActivity(), R.string.general_server_error, 1500).show();
+                                v.setEnabled(true);
+                                v.setSelected(false);
+                                TextView view = (TextView)v;
+                                view.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
+                            }
+                        }
+                    });
+
+
                     //noinspection deprecation
 //                    ((TextView) v).setAlpha(80);
                 }
