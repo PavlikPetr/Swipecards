@@ -51,11 +51,11 @@
             android:layout_height="fill_parent"
             android:visibility="gone"/>
 
-    <ru.ideast.adwired.AWView
-        android:id="@+id/adAdwired"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:visibility="gone"
-        />
+    <FrameLayout
+            android:id="@+id/loBannerContainer"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_centerInParent="true"
+            />
 </RelativeLayout>
 
