@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.topface.topface.R;
@@ -33,7 +32,6 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
     private Button mBtnTakePhoto;
     private Button mBtnFromGallery;
     private Button mBtnSendPhoto;
-    private ImageButton mBtnClose;
 
     private Uri mPhotoUri = null;
 
@@ -77,8 +75,7 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
         mBtnSendPhoto = (Button) root.findViewById(R.id.btnSendPhoto);
         mBtnSendPhoto.setOnClickListener(this);
 
-        mBtnClose = (ImageButton) root.findViewById(R.id.btnClose);
-        mBtnClose.setOnClickListener(this);
+        root.findViewById(R.id.btnClose).setOnClickListener(this);
 
         return root;
     }
@@ -132,7 +129,7 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
         int maxWidth = getResources().getDimensionPixelSize(R.dimen.take_photo_max_width);
         int maxHeight = getResources().getDimensionPixelSize(R.dimen.take_photo_max_height);
 
-        Bitmap bitmap = BitmapUtils.getBitmap(getActivity().getApplicationContext(), uri, maxWidth, maxHeight);
+        Bitmap bitmap = BitmapUtils.getBitmap(getActivity(), uri, maxWidth, maxHeight);
         if (bitmap == null) return;
 
         if (bitmap.getWidth() >= maxWidth || bitmap.getHeight() >= maxHeight) {

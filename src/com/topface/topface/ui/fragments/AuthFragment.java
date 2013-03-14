@@ -179,7 +179,7 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void initRetryView(View root) {
-        mRetryView = new RetryView(getActivity().getApplicationContext());
+        mRetryView = new RetryView(getActivity());
         mRetryView.setErrorMsg(getString(R.string.general_data_error));
         mRetryView.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new View.OnClickListener() {
             @Override

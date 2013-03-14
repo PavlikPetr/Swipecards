@@ -45,7 +45,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         public void onFinish() {
             Activity activity = getActivity();
             if (activity != null) {
-                SendMailNotificationsRequest request = mSettings.getMailNotificationRequest(activity.getApplicationContext());
+                SendMailNotificationsRequest request = mSettings.getMailNotificationRequest(activity);
                 if (request != null) {
                     request.callback(new ApiHandler() {
                         @Override
