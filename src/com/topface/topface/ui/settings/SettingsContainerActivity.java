@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.ConfirmRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -12,11 +15,14 @@ public class SettingsContainerActivity extends BaseFragmentActivity {
 
     Fragment mFragment;
 
+    public static final String CONFIRMATION_CODE = "confirmation";
+
     public static final int INTENT_ACCOUNT = 201;
     public static final int INTENT_FEEDBACK = 202;
     public static final int INTENT_ABOUT = 203;
     public static final int INTENT_SEND_FEEDBACK = 204;
     public static final int INTENT_CHANGE_PASSWORD = 205;
+    private String mConfirmCode;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -26,6 +32,8 @@ public class SettingsContainerActivity extends BaseFragmentActivity {
         overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
 
         Intent intent = getIntent();
+
+        mConfirmCode = getIntent().getStringExtra(CONFIRMATION_CODE);
 
         switch (intent.getIntExtra(Static.INTENT_REQUEST_KEY, 0)) {
             case INTENT_ACCOUNT:
@@ -51,9 +59,16 @@ public class SettingsContainerActivity extends BaseFragmentActivity {
                 break;
         }
 
+
+
+
         if (mFragment != null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.loFrame, mFragment).commit();
         }
+    }
+
+    public String getConfirmationCode () {
+        return mConfirmCode;
     }
 
     @Override
