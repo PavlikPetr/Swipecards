@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -51,6 +52,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private static final String ARG_TAG_INIT_BODY_PAGE = "profile_start_body_class";
     private static final String ARG_TAG_INIT_HEADER_PAGE = "profile_start_header_class";
     public static final String ARG_FEED_ITEM_ID = "item_id";
+    public static final String DEFAULT_ACTIVATED_COLOR = "#AAAAAA";
 
     ArrayList<String> BODY_PAGES_TITLES = new ArrayList<String>();
     ArrayList<String> BODY_PAGES_CLASS_NAMES = new ArrayList<String>();
@@ -410,6 +412,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     mRateController.onRate(mUserProfile.uid, 10, ((User) mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
                     v.setEnabled(false);
                     v.setSelected(true);
+                    TextView view = (TextView)v;
+                    view.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
                     //noinspection deprecation
 //                    ((TextView) v).setAlpha(80);
                 }
@@ -419,6 +423,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     mRateController.onRate(mUserProfile.uid, 9, ((User) mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL);
                     v.setEnabled(false);
                     v.setSelected(true);
+                    TextView view = (TextView)v;
+                    view.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
                     //noinspection deprecation
 //                    ((TextView) v).setAlpha(80);
                 }
@@ -443,6 +449,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         public void success(ApiResponse response) {
                             super.success(response);
                             v.setEnabled(false);
+                            TextView view = (TextView)v;
+                            view.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
                         }
                     }
                     ).exec();
