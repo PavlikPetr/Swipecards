@@ -335,7 +335,7 @@ public class ConnectionManager {
         }
 
         //Если наш пришли данные от сервера, то логируем их, если нет, то логируем объект запроса
-        Debug.logJson(TAG, "RESPONSE <<<",
+        Debug.logJson(TAG, "RESPONSE <<< Request ID #" + apiRequest.getId(),
                 rawResponse != null ? rawResponse : response.toString()
         );
 
@@ -413,6 +413,9 @@ public class ConnectionManager {
                     //Если запрос еще не отменен, то отправляем
                     if (request != null && !request.isCanceled()) {
                         sendRequest(request);
+                    } else {
+                        String requestId = (request != null) ? request.getId() : "request in null";
+                        Debug.log(TAG + "::Pendign request is canceled " + requestId);
                     }
                 }
             }

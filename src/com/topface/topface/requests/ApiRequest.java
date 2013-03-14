@@ -277,9 +277,9 @@ public abstract class ApiRequest implements IApiRequest {
         //Формируем свои данные для отправки POST запросом
         String requestJson = toPostData();
 
-        if (!TextUtils.isEmpty(requestJson)) {
-            //Переводим строку запроса в байты
-            byte[] requestData = requestJson.getBytes();
+        //Переводим строку запроса в байты
+        byte[] requestData = requestJson.getBytes();
+        if (requestData.length > 0 && !isCanceled()) {
             Debug.logJson(
                     ConnectionManager.TAG,
                     "REQUEST >>> " + Static.API_URL + " rev:" + getRevNum(),
