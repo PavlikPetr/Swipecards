@@ -295,7 +295,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
         try {
             outState.putString(FRIEND_FEED_USER, mAdapter.getUser().toJson().toString());
-        } catch (JSONException e) {
+        } catch (Exception e) {
             Debug.error(e);
         }
     }
