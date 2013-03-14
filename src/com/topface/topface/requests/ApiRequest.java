@@ -246,7 +246,7 @@ public abstract class ApiRequest implements IApiRequest {
     }
 
     public HttpURLConnection getConnection() throws IOException {
-        if (mURLConnection == null) {
+        if (mURLConnection == null && !isCanceled()) {
             mURLConnection = openConnection();
         }
 
