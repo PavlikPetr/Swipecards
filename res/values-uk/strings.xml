@@ -318,4 +318,17 @@
     <string name="general_soon">Скоро буде</string>
     <string name="black_list_activation">Активируйте VIP-статус и используйте черный список</string>
     <string name="profile_edit_age_ranges">Вік повинен бути у діапазоні від 16 до 99 років. Будь ласка, введіть коректне число і повторіть спробу.</string>
+    <string name="email">E-mail</string>
+    <string name="error_login_password">Неправильна пара логін/пароль</string>
+    <string name="empty_fields">Не всі поля заповнені</string>
+    <string name="email_already_registered">Користувач з таким e-mail вже існує</string>
+    <string name="enter_email_from_registration">Введіть e-mail, який ви вказували при реєстрації</string>
+    <string name="default_photo_upload">Завантаження фотографії</string>
+    <string name="default_photo_upload_error">Помилка завантаження</string>
+    <string name="default_photo_upload_repeat">Спробуйте повторити пізніше</string>
+    <string name="default_photo_upload_complete">Звантаження завершено!</string>
+    <string name="general_error_try_again_later">Неможливо підключитися до Topface. Повторіть спробу пізніше.</string>
+    <string name="gallery">Галерея</string>
+    <string name="enter_new_password">Введіть новий пароль</string>
+    <string name="enter_password_confirmation">Введіть підтвердження пароля</string>
 </resources>

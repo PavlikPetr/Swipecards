@@ -341,6 +341,7 @@
     <string name="default_photo_upload_complete">Yükleme tamamlanmıştır!</string>
     <string name="general_error_try_again_later">Topface’ye bağlanamıyor. Daha sonra tekrar deneyin.</string>
     <string name="search_city_by_name">İsmine göre şehir araması</string>
+    <string name="password_hint">parola</string>
     <string name="take_another_photo">Diğer foto</string>
     <string name="we_detect_your_city">Biz şehrinizi belirledik:</string>
     <string name="reselect_city">Diğer şehir seçmek:</string>

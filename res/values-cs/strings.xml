@@ -92,7 +92,7 @@
     <string name="profile_btn_chat">Pokecat</string>
     <string name="profile_add_title">Přidat fotku</string>
     <string name="profile_add_album">Vybrat z toho, co je k dispozici</string>
-    <string name="profile_add_camera">Vyfotit</string>
+    <string name="profile_add_camera">Vytvořit fotku</string>
     <string name="profile_photo">Fotky</string>
     <string name="profile_form">Dotazník</string>
     <string name="profile_gifts">Dárky</string>
@@ -236,6 +236,7 @@
     <string name="vip_messages_bg">Pozadí zpráv</string>
     <string name="vip_black_list">Černá listina</string>
     <string name="vip_profile_bg">Fotka na pozadi</string>
+    <string name="profile_vip_status">Super {{rocket}} Skills</string>
     <string name="profile_services">Služby</string>
     <string name="default_balance_constant">Na Vašem účtu</string>
     <string name="default_energy_coins_buy_btn_text">Koupit mince, doplnit zásobu energie</string>
@@ -316,6 +317,7 @@
     <string name="map_popup_address">Adresa</string>
     <string name="black_list_info">Přidali jste účastníka dialogu do své černé listiny. Toto  můžete změnit ve Vašem profilu, v nastaveních VIP-statusu.</string>
     <string name="general_gift">Dárek</string>
+    <string name="user_actions_chat">Rozhovor</string>
     <string name="general_place">Místo</string>
     <string name="general_soon">Už brzy</string>
     <string name="black_list_activation">Aktivujte VIP-status a používejte černou listinu</string>
@@ -345,7 +347,27 @@
     <string name="default_photo_upload_complete">Načítání je dokončeno</string>
     <string name="general_error_try_again_later">Nelze se připojit k Topface. Zkuste to později.</string>
     <string name="search_city_by_name">Vyhledávání města dle názvu</string>
+    <string name="gallery">Galerie</string>
+    <string name="no_photo_take_photo">Nikdo se s Vámi nemůže seznámit! Vytvořte fotku nebo vyberte některou fotku ze svých alb</string>
+    <string name="photo_is_too_small">Vypadáte na teto fotce skvěle, ale proto, aby ostatní uživatelé mohli tuto fotku ohodnotit, musi být o něco větší: minimálně %s</string>
+    <string name="photo_for_avatar">Fotka je připravena k odeslání do profilu! To je Vaše první fotografie a bude použita jako Vaše profilová   fotka.</string>
+    <string name="get_it_for_free">Získat zdarma</string>
+    <string name="vip_advantages">Výhody VIP</string>
+    <string name="change_email">Změnit e-mail</string>
+    <string name="send_confirmation_email">Odeslat potvrzení na e-mail</string>
+    <string name="change_password">Změnit heslo</string>
+    <string name="password_changing">Změna hesla</string>
+    <string name="save">Uložit</string>
+    <string name="confirmation_successfully_sent">Potvrzení bylo odesláno na uvedenou emailovou adresu</string>
+    <string name="password_hint">heslo</string>
+    <string name="password_confirmation_hint">potvrzení hesla</string>
+    <string name="enter_new_password">Zadejte nové heslo</string>
+    <string name="enter_password_confirmation">Zadejte heslo ještě jednou</string>
+    <string name="passwords_mismatched">Hesla se neshodují</string>
+    <string name="passwords_changed">Heslo bylo změněno</string>
+    <string name="take_photo">Vytvořit fotku</string>
     <string name="take_another_photo">Jiná fotka</string>
     <string name="we_detect_your_city">Určili jsme Vaše město:</string>
     <string name="reselect_city">Zvolit jiné město</string>
+    <string name="choose_cool_photo">Zvolte svou nejlepší fotku a status, který odráží vaši náladu!</string>
 </resources>

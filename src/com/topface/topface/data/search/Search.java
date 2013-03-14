@@ -150,6 +150,9 @@ public class Search extends LinkedList<SearchUser> implements SerializableToJson
     }
 
     public int getSearchPosition() {
+        if (mPosition > (this.size()-1)) {
+            mPosition = this.size();
+        }
         return mPosition;
     }
 
