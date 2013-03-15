@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.topface.topface"
           android:installLocation="auto"
-          android:versionCode="56"
-          android:versionName="2.3.2">
+          android:versionCode="57"
+          android:versionName="2.3.3">
 
     <uses-sdk
             android:minSdkVersion="7"
