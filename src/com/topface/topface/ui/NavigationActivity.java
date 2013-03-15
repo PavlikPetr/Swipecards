@@ -93,10 +93,10 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
         try {
             if (CacheProfile.isLoaded() && !CacheProfile.paid) {
-                Locale ukraineLocale = new Locale("uk","UA","");
+                Locale ukraineLocale = new Locale("uk", "UA", "");
                 if (Locale.getDefault().equals(ukraineLocale)) {
                     AWView adwiredView = (AWView) getLayoutInflater().inflate(R.layout.banner_adwired, null);
-                    ((ViewGroup)findViewById(R.id.loBannerContainer)).addView(adwiredView);
+                    ((ViewGroup) findViewById(R.id.loBannerContainer)).addView(adwiredView);
                     adwiredView.setVisibility(View.VISIBLE);
                     adwiredView.request('0');
                 }
@@ -136,13 +136,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         requestAdwired();
     }
 
-    private boolean needChangeProfile() {
-        return (CacheProfile.age == 0
-                || (CacheProfile.city.isEmpty())
-                || (CacheProfile.photo == null))
-                && CacheProfile.shouldChangeProfile(getApplicationContext());
-    }
-
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -174,7 +167,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mServerResponseReceiver, new IntentFilter(OptionsRequest.VERSION_INTENT));
 
-        if(needAnimate) {
+        if (needAnimate) {
             overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
         }
         needAnimate = true;
@@ -269,7 +262,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                         }
                     }
                 });
-            } else if((CacheProfile.city == null || CacheProfile.city.isEmpty()) && !CacheProfile.wasCityAsked){
+            } else if ((CacheProfile.city == null || CacheProfile.city.isEmpty()) && !CacheProfile.wasCityAsked) {
                 CacheProfile.wasCityAsked = true;
                 startActivityForResult(new Intent(getApplicationContext(), CitySearchActivity.class),
                         CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
@@ -278,7 +271,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     private void checkExternalLink() {
-        if(getIntent() != null) {
+        if (getIntent() != null) {
 
             Uri data = getIntent().getData();
 
@@ -287,24 +280,24 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 String path = data.getPath();
                 String[] splittedPath = path.split("/");
 
-                executeLinkAction(splittedPath, data);
+                executeLinkAction(splittedPath);
             }
         }
     }
 
-    private void executeLinkAction(String[] splittedPath, Uri data) {
+    private void executeLinkAction(String[] splittedPath) {
         Pattern profilePattern = Pattern.compile("profile");
         Pattern confirmPattern = Pattern.compile("confirm.*");
 
         if (profilePattern.matcher(splittedPath[1]).matches() && splittedPath.length >= 3) {
 
             int profileId = Integer.parseInt(splittedPath[2]);
-            int profileType = profileId == CacheProfile.uid? ProfileFragment.TYPE_MY_PROFILE : ProfileFragment.TYPE_USER_PROFILE;
+            int profileType = profileId == CacheProfile.uid ? ProfileFragment.TYPE_MY_PROFILE : ProfileFragment.TYPE_USER_PROFILE;
             onExtraFragment(ProfileFragment.newInstance(profileId, profileType));
         } else if (confirmPattern.matcher(splittedPath[1]).matches()) {
 
             Pattern codePattern = Pattern.compile("[0-9]+-[0-f]+-[0-9]*");
-            Matcher matcher =  codePattern.matcher(splittedPath[1]);
+            Matcher matcher = codePattern.matcher(splittedPath[1]);
             matcher.find();
 
             String code = matcher.group();
@@ -399,6 +392,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     */
     @Override
     public void onClick(View view) {
+        findViewById(R.id.acGift).setVisibility(View.VISIBLE);
         if (view.getId() != R.id.btnNavigationHome)
             return;
         if (mFragmentSwitcher.getAnimationState() == FragmentSwitchController.EXPAND) {
@@ -508,7 +502,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         public void afterClosing() {
             mFragmentMenu.setClickable(false);
             mFragmentMenu.hide();
-            if(mFragmentSwitcher.getCurrentFragment() != null) {
+            if (mFragmentSwitcher.getCurrentFragment() != null) {
                 mFragmentSwitcher.getCurrentFragment().activateActionBar(false);
             }
             actionsAfterRegistration();
@@ -516,7 +510,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
         @Override
         public void afterOpening() {
-            if(mFragmentSwitcher.getCurrentFragment() !=  null) {
+            if (mFragmentSwitcher.getCurrentFragment() != null) {
                 mFragmentSwitcher.getCurrentFragment().activateActionBar(true);
             }
             if (mNovice.isMenuCompleted()) return;

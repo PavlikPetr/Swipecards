@@ -20,7 +20,7 @@ public class BitmapUtils {
         try {
             int orientation = resolveBitmapOrientation(uri);
             bitmap = decodeSampledBitmap(context, uri, reqWidth, reqHeight, orientation);
-            bitmap = applyOrientation(bitmap,orientation);
+            bitmap = applyOrientation(bitmap, orientation);
         } catch (Exception e) {
             Debug.error(e);
         }
@@ -38,7 +38,7 @@ public class BitmapUtils {
             // First decode with inJustDecodeBounds=true to check dimensions
             options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(bis,null,options);
+            BitmapFactory.decodeStream(bis, null, options);
         } catch (Exception ex) {
             Debug.error(ex);
         } finally {
@@ -53,7 +53,7 @@ public class BitmapUtils {
         return options;
     }
 
-    public static Bitmap decodeSampledBitmap(Context context, Uri uri, int reqWidth, int reqHeight,int orientation) {
+    public static Bitmap decodeSampledBitmap(Context context, Uri uri, int reqWidth, int reqHeight, int orientation) {
         Bitmap bitmap = null;
         BufferedInputStream bis = null;
         InputStream is = null;
@@ -62,6 +62,7 @@ public class BitmapUtils {
             // Calculate inSampleSize
             if (orientation == ExifInterface.ORIENTATION_ROTATE_90 ||
                     orientation == ExifInterface.ORIENTATION_ROTATE_270) {
+                //noinspection SuspiciousNameCombination
                 options.inSampleSize = calculateInSampleSize(options, reqHeight, reqWidth);
             } else {
                 options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
@@ -186,7 +187,13 @@ public class BitmapUtils {
     }
 
     public static int resolveBitmapOrientation(Uri bitmapUri) throws IOException {
-        ExifInterface exif = new ExifInterface(bitmapUri.getPath());
-        return exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+        int attribute = ExifInterface.ORIENTATION_UNDEFINED;
+        try {
+            ExifInterface exif = new ExifInterface(bitmapUri.getPath());
+            attribute = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+        } catch (Exception e) {
+            Debug.error(e);
+        }
+        return attribute;
     }
 }

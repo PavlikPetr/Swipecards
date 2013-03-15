@@ -19,11 +19,12 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.HockeySender;
 import com.topface.topface.utils.social.AuthToken;
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 
-@ReportsCrashes(formUri = "https://api.zubhium.com/api2/acra/?secret_key=26d677a706e68e841ab85b286c5556", formKey = "", disableSSLCertValidation = true)
+@ReportsCrashes(formKey = "817b00ae731c4a663272b4c4e53e4b61")
 public class App extends Application {
 
     public static final String TAG = "Topface";
@@ -49,12 +50,12 @@ public class App extends Application {
         }
         return debug;
     }
-//    private static PluralResources mPluralResources;
 
     @Override
     public void onCreate() {
         //android.os.Debug.startMethodTracing("topface_create");
         ACRA.init(this);
+        ACRA.getErrorReporter().setReportSender(new HockeySender());
         super.onCreate();
         mContext = getApplicationContext();
 

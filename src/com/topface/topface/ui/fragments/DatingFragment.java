@@ -775,15 +775,17 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void setHeader(View view) {
-        String plus = CacheProfile.dating.age_end == FilterFragment.webAbsoluteMaxAge ? "+" : "";
-        int age = CacheProfile.dating.age_end == FilterFragment.webAbsoluteMaxAge ? EditAgeFragment.absoluteMax : CacheProfile.dating.age_end;
-        Context context = App.getContext();
-        getActionBar(view).setTitleText(context.getString(
-                CacheProfile.dating.sex == Static.BOY ? R.string.dating_header_guys
-                        : R.string.dating_header_girls, CacheProfile.dating.age_start,
-                age) + plus);
+        if (CacheProfile.dating != null) {
+            String plus = CacheProfile.dating.age_end == FilterFragment.webAbsoluteMaxAge ? "+" : "";
+            int age = CacheProfile.dating.age_end == FilterFragment.webAbsoluteMaxAge ? EditAgeFragment.absoluteMax : CacheProfile.dating.age_end;
+            Context context = App.getContext();
+            getActionBar(view).setTitleText(context.getString(
+                    CacheProfile.dating.sex == Static.BOY ? R.string.dating_header_guys
+                            : R.string.dating_header_girls, CacheProfile.dating.age_start,
+                    age) + plus);
 
-        getActionBar(view).setSubTitleText(getSubtitle(context));
+            getActionBar(view).setSubTitleText(getSubtitle(context));
+        }
     }
 
     private String getSubtitle(Context context) {
