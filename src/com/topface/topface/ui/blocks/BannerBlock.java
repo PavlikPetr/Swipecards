@@ -139,25 +139,30 @@ public class BannerBlock {
     }
 
     private View getBannerView(String bannerType) {
-        if (bannerType.equals(Options.BANNER_TOPFACE)) {
-            return mInflater.inflate(R.layout.banner_topface, null);
-        } else if (bannerType.equals(Options.BANNER_ADMOB)) {
-            return mInflater.inflate(R.layout.banner_admob, null);
-        } else if (bannerType.equals(Options.BANNER_ADFONIC)) {
-            return mInflater.inflate(R.layout.banner_adfonic, null);
-        } else if (bannerType.equals(Options.BANNER_WAPSTART)) {
-            return mInflater.inflate(R.layout.banner_wapstart, null);
-        } else if (bannerType.equals(Options.BANNER_ADWIRED)) {
-            return mInflater.inflate(R.layout.banner_adwired, null);
-        } else if (bannerType.equals(Options.BANNER_MADNET)) {
-            return mInflater.inflate(R.layout.banner_madnet, null);
-        } else {
+        try {
+            if (bannerType.equals(Options.BANNER_TOPFACE)) {
+                return mInflater.inflate(R.layout.banner_topface, null);
+            } else if (bannerType.equals(Options.BANNER_ADMOB)) {
+                return mInflater.inflate(R.layout.banner_admob, null);
+            } else if (bannerType.equals(Options.BANNER_ADFONIC)) {
+                return mInflater.inflate(R.layout.banner_adfonic, null);
+            } else if (bannerType.equals(Options.BANNER_WAPSTART)) {
+                return mInflater.inflate(R.layout.banner_wapstart, null);
+            } else if (bannerType.equals(Options.BANNER_ADWIRED)) {
+                return mInflater.inflate(R.layout.banner_adwired, null);
+            } else if (bannerType.equals(Options.BANNER_MADNET)) {
+                return mInflater.inflate(R.layout.banner_madnet, null);
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            Debug.error(e);
             return null;
         }
     }
 
     private void loadBanner() {
-        BannerRequest bannerRequest = new BannerRequest(mFragment.getActivity().getApplicationContext());
+        BannerRequest bannerRequest = new BannerRequest(mFragment.getActivity());
         bannerRequest.place = mBannersMap.get(mFragment.getClass().toString());
 
         if (mFragment instanceof BaseFragment) {
@@ -317,7 +322,7 @@ public class BannerBlock {
                     Intent intent = null;
                     if (banner.action.equals(Banner.ACTION_PAGE)) {
                         EasyTracker.getTracker().trackEvent("Purchase", "Banner", "", 0L);
-                        intent = new Intent(mFragment.getActivity().getApplicationContext(), ContainerActivity.class);
+                        intent = new Intent(mFragment.getActivity(), ContainerActivity.class);
                         if (banner.parameter.equals("VIP")) {
                             intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                         } else {

@@ -367,4 +367,5 @@
     <string name="reselect_city">Select a different city:</string>
     <string name="choose_cool_photo">Select a photo and status that reflects your mood!</string>
     <string name="email_confirmed">e-mail confirmed!</string>
+    <string name="sympathy_sended">Sympathy has been sent!</string>
 </resources>

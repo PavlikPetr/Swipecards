@@ -130,9 +130,9 @@ public class AuthFragment extends BaseFragment {
         mSignInView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               mAuthViewsFlipper.setDisplayedChild(1);
-               mLogin.requestFocus();
-               Utils.showSoftKeyboard(getActivity(),mLogin);
+                mAuthViewsFlipper.setDisplayedChild(1);
+                mLogin.requestFocus();
+                Utils.showSoftKeyboard(getActivity(), mLogin);
             }
         });
 
@@ -179,7 +179,7 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void initRetryView(View root) {
-        mRetryView = new RetryView(getActivity().getApplicationContext());
+        mRetryView = new RetryView(getActivity());
         mRetryView.setErrorMsg(getString(R.string.general_data_error));
         mRetryView.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new View.OnClickListener() {
             @Override
@@ -376,7 +376,7 @@ public class AuthFragment extends BaseFragment {
             @Override
             public void success(final ApiResponse response) {
                 Options.parse(response);
-                Utils.hideSoftKeyboard(getActivity(),mLogin,mPassword);
+                Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
                 ((BaseFragmentActivity) getActivity()).close(AuthFragment.this);
             }
 
@@ -491,12 +491,14 @@ public class AuthFragment extends BaseFragment {
             mTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            removeRedAlert();
-                        }
-                    });
+                    if (isAdded()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                removeRedAlert();
+                            }
+                        });
+                    }
                 }
             }, Static.RED_ALERT_APPEARANCE_TIME);
         }

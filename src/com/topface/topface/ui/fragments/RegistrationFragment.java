@@ -195,12 +195,14 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
         mTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        removeRedAlert();
-                    }
-                });
+                if (isAdded()) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            removeRedAlert();
+                        }
+                    });
+                }
             }
         }, Static.RED_ALERT_APPEARANCE_TIME);
     }

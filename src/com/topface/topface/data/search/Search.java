@@ -239,9 +239,13 @@ public class Search extends LinkedList<SearchUser> implements SerializableToJson
         if (searchPosition > removeCnt + REMOVE_RATED_BUFFER_SIZE && size() > removeCnt) {
             int deleteCnt = searchPosition - removeCnt;
             log("Remove rated from 0 to " + deleteCnt);
-            removeRange(0, deleteCnt);
-            setSearchPosition(searchPosition - deleteCnt);
-            result = true;
+            try {
+                removeRange(0, deleteCnt);
+                setSearchPosition(searchPosition - deleteCnt);
+                result = true;
+            } catch (Exception e) {
+                Debug.error("Remove rated exception", e);
+            }
         }
 
         return result;
