@@ -489,4 +489,15 @@
     <string name="email_confirmed">e-mail подтвержден!</string>
     <string name="sympathy_sended">Симпатия отправлена</string>
 
+    <string name="buying_total">Итого</string>
+    <string name="buying_economy">Экономия</string>
+    <string name="general_change">Изменить</string>
+    <string name="general_correct">Все правильно</string>
+    <string name="we_dont_detect_your_city">Чтобы найти людей поблизости нам нужно знать где вы находитесь. Пожалуйста, укажите ваш город.</string>
+    <string name="confirm_email">Пожалуйста, подтвердите e-mail.</string>
+    <string name="password_sent">Новый пароль отправлен на ваш E-mail</string>
+    <string name="buy_vip_month_one">%1$d месяц за %2$.2f %3$@</string>
+    <string name="buy_vip_month_few">%1$d месяца по %2$.2f %3$@</string>
+    <string name="buy_vip_month_other">%1$d месяцев по %2$.2f %3$@</string>
+
 </resources>
