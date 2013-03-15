@@ -83,7 +83,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         actionBar.setTitleText(getString(R.string.edit_title));
         actionBar.setSubTitleText(getString(R.string.edit_album));
 
-        mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
+        mRightPrsBar = actionBar.getRightProgressBar();
 
         actionBar.showBackButton(new OnClickListener() {
             @Override

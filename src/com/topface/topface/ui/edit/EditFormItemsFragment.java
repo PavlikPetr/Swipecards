@@ -65,17 +65,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
             }
         });
 
-//        mSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
-//        mSaveButton.setText(getResources().getString(R.string.navigation_save));
-//        mSaveButton.setOnClickListener(new OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                saveChanges();
-//            }
-//        });
-
-        mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
+        mRightPrsBar = actionBar.getRightProgressBar();
 
         // List
         mListView = (ListView) root.findViewById(R.id.lvList);
