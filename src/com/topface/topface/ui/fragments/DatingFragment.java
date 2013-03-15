@@ -67,8 +67,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private Novice mNovice;
     private AlphaAnimation mAlphaAnimation;
     private RateController mRateController;
-    private View mNavigationHeader;
-    private View mNavigationHeaderShadow;
     private RelativeLayout mDatingLoveBtnLayout;
     private ViewFlipper mViewFlipper;
 
@@ -354,19 +352,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private SearchRequest getSearchRequest() {
         SearchRequest searchRequest = new SearchRequest(getActivity());
-        SharedPreferences preferences = App.getContext().getSharedPreferences(
-                Static.PREFERENCES_TAG_PROFILE, Context.MODE_PRIVATE);
         searchRequest.limit = SEARCH_LIMIT;
-        searchRequest.online = getFilterOnline(preferences);
+        searchRequest.online = getFilterOnline();
         registerRequest(searchRequest);
         return searchRequest;
     }
 
-    private boolean getFilterOnline(SharedPreferences preferences) {
-        return preferences.getBoolean(
-                App.getContext().getString(R.string.cache_profile_filter_online),
-                false
-        );
+    private boolean getFilterOnline() {
+        return DatingFilter.getOnlineField();
     }
 
     @Override
@@ -381,7 +374,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingLove: {
                 if (mCurrentUser != null) {
-                    if (mUserSearchList.isEnded()) {
+                    if (mUserSearchList == null || mUserSearchList.isEnded()) {
                         updateData(true);
                         return;
                     } else {
@@ -403,7 +396,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingSympathy: {
                 if (mCurrentUser != null) {
-                    if (mUserSearchList.isEnded()) {
+                    if (mUserSearchList == null || mUserSearchList.isEnded()) {
                         updateData(true);
                         return;
                     } else {
@@ -436,10 +429,16 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
             break;
             case R.id.btnDatingProfile: {
-                ((NavigationActivity) getActivity()).onExtraFragment(
-                        ProfileFragment.newInstance(mUserSearchList.get(mUserSearchList.getSearchPosition()).id, ProfileFragment.TYPE_USER_PROFILE));
+                if (mUserSearchList != null) {
+                    ((NavigationActivity) getActivity()).onExtraFragment(
+                            ProfileFragment.newInstance(
+                                    mUserSearchList.get(mUserSearchList.getSearchPosition()).id,
+                                    ProfileFragment.TYPE_USER_PROFILE
+                            )
+                    );
 
-                EasyTracker.getTracker().trackEvent("Dating", "Additional", "Profile", 1L);
+                    EasyTracker.getTracker().trackEvent("Dating", "Additional", "Profile", 1L);
+                }
             }
             break;
             case R.id.btnDatingChat: {
@@ -606,7 +605,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 @Override
                 protected void success(NoviceLikes noviceLikes, ApiResponse response) {
                     CacheProfile.likes = noviceLikes.likes;
-                    if(noviceLikes.increment > 0) {
+                    if (noviceLikes.increment > 0) {
                         Novice.giveNoviceLikesQuantity = noviceLikes.increment;
                         final String text = String.format(
                                 getResources().getString(R.string.novice_sympathies_bonus),
@@ -763,8 +762,30 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (resultCode == Activity.RESULT_OK
                 && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
             lockControls();
-            updateFilterData();
-            updateData(false);
+            if (data != null && data.getExtras() != null) {
+                final DatingFilter filter = data.getExtras().getParcelable(FilterFragment.INTENT_DATING_FILTER);
+                FilterRequest filterRequest = new FilterRequest(filter, getActivity());
+                registerRequest(filterRequest);
+                filterRequest.callback(new ApiHandler() {
+
+                    @Override
+                    public void success(ApiResponse response) {
+                        try {
+                            CacheProfile.dating = filter.clone();
+                        } catch (CloneNotSupportedException e) {
+                            Debug.error(e);
+                        }
+
+                        updateFilterData();
+                        updateData(false);
+                    }
+
+                    @Override
+                    public void fail(int codeError, ApiResponse response) {
+                        unlockControls();
+                    }
+                }).exec();
+            }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }

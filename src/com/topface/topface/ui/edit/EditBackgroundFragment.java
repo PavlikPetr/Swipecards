@@ -50,7 +50,7 @@ public class EditBackgroundFragment extends AbstractEditFragment {
             }
         });
 
-        mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
+        mRightPrsBar = actionBar.getRightProgressBar();
 
         // List
         mBackgroundImagesListView = (ListView) root.findViewById(R.id.lvList);

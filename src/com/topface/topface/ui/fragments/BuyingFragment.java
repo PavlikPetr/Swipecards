@@ -27,6 +27,7 @@ import com.topface.topface.utils.Offerwalls;
 
 import java.util.LinkedList;
 
+@SuppressWarnings("UnusedDeclaration")
 public class BuyingFragment extends BillingFragment {
 
     public static final String ARG_ITEM_TYPE = "type_of_buying_item";
@@ -176,7 +177,6 @@ public class BuyingFragment extends BillingFragment {
 
         TextView status = (TextView) root.findViewById(R.id.vip_status);
         TextView vipBtnText = (TextView) root.findViewById(R.id.fbVipBtnText);
-        TextView vipPrice = (TextView) root.findViewById(R.id.vipPrice);
 
         RelativeLayout vipBtn = (RelativeLayout) root.findViewById(R.id.fbVipButton);
 
@@ -242,7 +242,7 @@ public class BuyingFragment extends BillingFragment {
         for (RelativeLayout btn : purchaseButtons) {
             btn.setEnabled(false);
         }
-        Toast.makeText(getActivity().getApplicationContext(), getString(R.string.buy_play_market_not_available), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), getString(R.string.buy_play_market_not_available), Toast.LENGTH_SHORT).show();
     }
 
     @Override

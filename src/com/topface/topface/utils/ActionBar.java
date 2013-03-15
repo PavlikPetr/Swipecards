@@ -1,12 +1,12 @@
 package com.topface.topface.utils;
 
-import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.utils.NavigationBarController;
 
 public class ActionBar {
 
@@ -19,6 +19,7 @@ public class ActionBar {
     private ImageButton mEditButton;
     private ImageButton mProfileButton;
     private ImageButton mUserActionsControl;
+    private ProgressBar mRightProgressBar;
 
     private NavigationBarController mNavBarController;
 
@@ -37,6 +38,7 @@ public class ActionBar {
         mEditButton = (ImageButton) actionView.findViewById(R.id.btnEdit);
         mProfileButton = (ImageButton) actionView.findViewById(R.id.btnNavigationProfileBar);
         mUserActionsControl = (ImageButton) actionView.findViewById(R.id.btnUserProfActions);
+        mRightProgressBar = (ProgressBar) actionView.findViewById(R.id.prsNavigationRight);
     }
 
     public void refreshNotificators() {
@@ -165,5 +167,9 @@ public class ActionBar {
 
     public int getHeight() {
         return actionView.getHeight();
+    }
+
+    public ProgressBar getRightProgressBar() {
+        return mRightProgressBar;
     }
 }

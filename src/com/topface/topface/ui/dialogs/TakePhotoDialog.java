@@ -1,5 +1,6 @@
 package com.topface.topface.ui.dialogs;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,14 +15,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.utils.BitmapUtils;
-import com.topface.topface.utils.Debug;
 
 public class TakePhotoDialog extends DialogFragment implements View.OnClickListener {
 
@@ -33,7 +32,6 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
     private Button mBtnTakePhoto;
     private Button mBtnFromGallery;
     private Button mBtnSendPhoto;
-    private ImageButton mBtnClose;
 
     private Uri mPhotoUri = null;
 
@@ -54,7 +52,7 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
                 if (mTakePhotoListener != null) mTakePhotoListener.onDialogClose();
             }
         });
-        getDialog().setOnCancelListener(new DialogInterface.OnCancelListener(){
+        getDialog().setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
                 if (mTakePhotoListener != null) mTakePhotoListener.onDialogClose();
@@ -77,8 +75,7 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
         mBtnSendPhoto = (Button) root.findViewById(R.id.btnSendPhoto);
         mBtnSendPhoto.setOnClickListener(this);
 
-        mBtnClose = (ImageButton) root.findViewById(R.id.btnClose);
-        mBtnClose.setOnClickListener(this);
+        root.findViewById(R.id.btnClose).setOnClickListener(this);
 
         return root;
     }
@@ -90,9 +87,8 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
     }
 
 
-
     private void initButtonsState() {
-        if(mPhotoUri == null) {
+        if (mPhotoUri == null) {
             mBtnSendPhoto.setVisibility(View.GONE);
             mBtnFromGallery.setVisibility(View.VISIBLE);
             mPhotoLayout.setVisibility(View.GONE);
@@ -107,7 +103,7 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
         }
     }
 
-    public  TakePhotoDialog() {
+    public TakePhotoDialog() {
         super();
     }
 
@@ -124,7 +120,7 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        mPhotoUri = mAddPhotoHelper.processActivityResult(requestCode,resultCode,data,false);
+        mPhotoUri = mAddPhotoHelper.processActivityResult(requestCode, resultCode, data, false);
         setPhoto(mPhotoUri, mPhoto);
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -133,11 +129,11 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
         int maxWidth = getResources().getDimensionPixelSize(R.dimen.take_photo_max_width);
         int maxHeight = getResources().getDimensionPixelSize(R.dimen.take_photo_max_height);
 
-        Bitmap bitmap = BitmapUtils.getBitmap(getActivity().getApplicationContext(), uri, maxWidth, maxHeight);
-        if(bitmap == null) return;
+        Bitmap bitmap = BitmapUtils.getBitmap(getActivity(), uri, maxWidth, maxHeight);
+        if (bitmap == null) return;
 
         if (bitmap.getWidth() >= maxWidth || bitmap.getHeight() >= maxHeight) {
-            Bitmap scaledBitmap = null;
+            Bitmap scaledBitmap;
             if (bitmap.getWidth() >= bitmap.getHeight()) {
                 scaledBitmap = BitmapUtils.getScaledBitmap(bitmap, maxWidth, 0);
             } else {
@@ -151,7 +147,8 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if(mTakePhotoListener != null) {
+        Dialog dialog = getDialog();
+        if (mTakePhotoListener != null) {
             switch (v.getId()) {
                 case R.id.btnTakePhoto:
                     if (mPhotoUri == null) {
@@ -165,20 +162,22 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
                     mAddPhotoHelper.getAddPhotoClickListener().onClick(v);
                     break;
                 case R.id.btnSendPhoto:
-                    if (mPhotoUri != null) {
+                    if (mPhotoUri != null && dialog != null) {
                         sendRequest(mPhotoUri);
-                        getDialog().dismiss();
+                        dialog.dismiss();
                     }
                     break;
                 case R.id.btnClose:
+                    if (dialog != null) {
+                        dialog.dismiss();
+                    }
                     mTakePhotoListener.onDialogClose();
-                    getDialog().dismiss();
                     break;
                 default:
                     break;
             }
-        } else {
-            getDialog().dismiss();
+        } else if (dialog != null) {
+            dialog.dismiss();
         }
     }
 
@@ -190,11 +189,13 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
 
     public interface TakePhotoListener {
         void onPhotoSentSuccess(Photo photo);
+
         void onPhotoSentFailure();
+
         void onDialogClose();
     }
 
-    private Handler mAddPhotoHandler = new Handler(){
+    private Handler mAddPhotoHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);

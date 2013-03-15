@@ -1,8 +1,10 @@
 package com.topface.topface.utils;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.topface.topface.Static;
 
-public class FormItem {
+public class FormItem implements Parcelable{
     // Data
     public int type;
     public String title;
@@ -84,4 +86,37 @@ public class FormItem {
         }
         return divider;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(type);
+        dest.writeString(title);
+        dest.writeString(value);
+        dest.writeInt(equal ? 1 : 0);
+        dest.writeInt(titleId);
+        dest.writeInt(dataId);
+    }
+
+    public static final Parcelable.Creator CREATOR =
+            new Parcelable.Creator() {
+                public FormItem createFromParcel(Parcel in) {
+                    FormItem result = new FormItem();
+                    result.type = in.readInt();
+                    result.title =  in.readString();
+                    result.value = in.readString();
+                    result.equal = in.readInt() == 1;
+                    result.titleId = in.readInt();
+                    result.dataId = in.readInt();
+                    return result;
+                }
+
+                public FormItem[] newArray(int size) {
+                    return new FormItem[size];
+                }
+            };
 }

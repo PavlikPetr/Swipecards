@@ -262,12 +262,16 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateProfileReceiver);
 
         //Вручную прокидываем событие onPause() в ViewPager, т.к. на onPause() мы отписываемся от событий
-        for (Fragment fragment : mBodyPagerAdapter.getFragmentCache().values()) {
-            fragment.onPause();
+        if (mBodyPagerAdapter != null) {
+            for (Fragment fragment : mBodyPagerAdapter.getFragmentCache().values()) {
+                fragment.onPause();
+            }
         }
 
-        for (Fragment fragment : mHeaderPagerAdapter.getFragmentCache().values()) {
-            fragment.onPause();
+        if (mHeaderPagerAdapter != null) {
+            for (Fragment fragment : mHeaderPagerAdapter.getFragmentCache().values()) {
+                fragment.onPause();
+            }
         }
     }
 
