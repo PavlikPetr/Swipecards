@@ -375,7 +375,7 @@
     <string name="we_dont_detect_your_city">Para encontrar pessoas próximas, nós precisamos de saber onde você se encontra. Por favor, indique a sua cidade.</string>
     <string name="confirm_email">Por favor, confirme o e-mail.</string>
     <string name="password_sent">Uma nova palavra-passe foi enviada à seu E-mail</string>
-    <string name="buy_vip_month_one">%1$d um mês para %2%.2f%3$@</string>
-    <string name="buy_vip_month_few">%1$d meses para %2$.2f%3</string>
-    <string name="buy_vip_month_other">%1$d meses para %2$.2f%3$@</string>
+    <string name="buy_vip_month_one">%1$d um mês para %2$.2f %3$@</string>
+    <string name="buy_vip_month_few">%1$d meses para %2$.2f %3$@</string>
+    <string name="buy_vip_month_other">%1$d meses para %2$.2f %3$@</string>
 </resources>
