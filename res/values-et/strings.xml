@@ -314,13 +314,20 @@ Sa oled müksanud.</string>
     <string name="search_city_by_name">Linna otsing nimetuse järgi</string>
     <string name="gallery">Galerii</string>
     <string name="get_it_for_free">Saada tasuta</string>
+    <string name="vip_advantages">VIP\'i eeldused</string>
     <string name="password_changing">Salasõna muutmine</string>
     <string name="save">Salvestada</string>
     <string name="password_hint">salasõna</string>
     <string name="password_confirmation_hint">salasõna kinnitus</string>
     <string name="enter_new_password">Sisesta uus salasõna</string>
     <string name="enter_password_confirmation">Sisesta salasõna kinnitus</string>
+    <string name="passwords_mismatched">Salasõnad ei lange kokku</string>
+    <string name="passwords_changed">Salasõna on ära muudetud</string>
     <string name="take_another_photo">Teine foto</string>
     <string name="we_detect_your_city">Meie oleme sinu linna kindlaks määranud/teinud:</string>
     <string name="reselect_city">Valida teine linn:</string>
+    <string name="buying_total">Kokku</string>
+    <string name="buying_economy">Sääst</string>
+    <string name="general_change">Ära muuta</string>
+    <string name="general_correct">Kõik on õige</string>
 </resources>

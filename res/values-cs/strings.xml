@@ -370,4 +370,5 @@
     <string name="we_detect_your_city">Určili jsme Vaše město:</string>
     <string name="reselect_city">Zvolit jiné město</string>
     <string name="choose_cool_photo">Zvolte svou nejlepší fotku a status, který odráží vaši náladu!</string>
+    <string name="email_confirmed">e-mailová adresa byla potvrzena!</string>
 </resources>

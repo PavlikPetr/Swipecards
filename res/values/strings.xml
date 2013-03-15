@@ -368,5 +368,15 @@
     <string name="choose_cool_photo">Select a photo and status that reflects your mood!</string>
     <string name="email_confirmed">e-mail confirmed!</string>
     <string name="sympathy_sended">Sympathy has been sent!</string>
-    <string name="general_photo_deleted">Your photo does not match our regulations, so it was bannded</string>
+    <string name="general_photo_deleted">Your photo has been removed</string>
+    <string name="buying_total">Total</string>
+    <string name="buying_economy">Economy</string>
+    <string name="general_change">Change</string>
+    <string name="general_correct">Correct</string>
+    <string name="we_dont_detect_your_city">To find people nearby, we need to know where you are. Please provide your city.</string>
+    <string name="confirm_email">Please, confirm the e-mail</string>
+    <string name="password_sent">The new password was sent to your E-mail</string>
+    <string name="buy_vip_month_one">%1$d month for %2$.2f %3$@</string>
+    <string name="buy_vip_month_few">%1$d a months for %2$.2f %3$@ per month</string>
+    <string name="buy_vip_month_other">%1$d months for %2$.2f %3$@ per month</string>
 </resources>

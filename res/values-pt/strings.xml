@@ -78,7 +78,7 @@
     <string name="filter_only_online">Somente em linha</string>
     <string name="filter_only_beautiful">Somente bonitos</string>
     <string name="filter_extra_parameters">Parâmetros adicionais</string>
-    <string name="filter_age">Idade</string>
+    <string name="filter_age">Escolha de idade</string>
     <string name="filter_online">Em linha</string>
     <string name="filter_all">Todos</string>
     <string name="filter_cities_all">Para todas as cidades</string>
@@ -332,8 +332,8 @@
     <string name="birthdate">DR</string>
     <string name="welcome_to_topface">Bem-vindo à Topface!</string>
     <string name="incorrect_email">E-mail incorretamente introduzido</string>
-    <string name="incorrect_login">Login incorretamente introduzido</string>
-    <string name="incorrect_password">Palavra-passe incorretamente introduzido</string>
+    <string name="incorrect_login">Login incorretamente introduzida</string>
+    <string name="incorrect_password">Palavra-passe incorretamente introduzida</string>
     <string name="empty_fields">Nem todos os espaços são preenchidos</string>
     <string name="email_already_registered">Já existe um usuário com este e-mail</string>
     <string name="enter_email_from_registration">Introduza o e-mail que você apontou à quando da inscrição</string>
@@ -366,4 +366,16 @@
     <string name="we_detect_your_city">Nós determinamos sua cidade:</string>
     <string name="reselect_city">Escolher outra cidade:</string>
     <string name="choose_cool_photo">Escolha a sua melhor foto e status que reflete seu humor!</string>
+    <string name="email_confirmed">O e-mail foi confirmado!</string>
+    <string name="sympathy_sended">A simpatia foi enviada</string>
+    <string name="buying_total">Total</string>
+    <string name="buying_economy">Economia</string>
+    <string name="general_change">Alterar</string>
+    <string name="general_correct">Tudo certo</string>
+    <string name="we_dont_detect_your_city">Para encontrar pessoas próximas, nós precisamos de saber onde você se encontra. Por favor, indique a sua cidade.</string>
+    <string name="confirm_email">Por favor, confirme o e-mail.</string>
+    <string name="password_sent">Uma nova palavra-passe foi enviada à seu E-mail</string>
+    <string name="buy_vip_month_one">%1$d um mês para %2%.2f%3$@</string>
+    <string name="buy_vip_month_few">%1$d meses para %2$.2f%3</string>
+    <string name="buy_vip_month_other">%1$d meses para %2$.2f%3$@</string>
 </resources>

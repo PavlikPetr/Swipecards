@@ -341,7 +341,17 @@
     <string name="default_photo_upload_complete">Il caricamento è stato completato!</string>
     <string name="general_error_try_again_later">Impossibile collegarsi a Topface. Riprova più tardi.</string>
     <string name="search_city_by_name">Ricerca città per nome</string>
+    <string name="change_email">Cambia e-mail</string>
+    <string name="change_password">Cambia password</string>
+    <string name="confirmation_successfully_sent">All’e-mail da te indicata è stata inviata la conferma</string>
     <string name="take_another_photo">Altra foto</string>
     <string name="we_detect_your_city">Abbiamo identificato la tua città:</string>
     <string name="reselect_city">Scegli un’altra città:</string>
+    <string name="choose_cool_photo">Scegli la tua foto migliore e lo stato che rispecchia il tuo umore!</string>
+    <string name="buying_total">Totale</string>
+    <string name="buying_economy">Risparmio</string>
+    <string name="confirm_email">Per favore, conferma e-mail.</string>
+    <string name="buy_vip_month_one">%1$d mese a %2$.2f %3$@</string>
+    <string name="buy_vip_month_few">%1$d mesi a %2$.2f %3$@</string>
+    <string name="buy_vip_month_other">%1$d mesi a %2$.2f %3$@</string>
 </resources>

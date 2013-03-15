@@ -429,7 +429,7 @@
     <string name="general_place">Место</string>
     <string name="general_soon">Скоро будет</string>
     <string name="black_list_activation">Активируйте VIP-статус и используйте черный список</string>
-    <string name="profile_edit_age_ranges">Возраст должен быть в диапазоне от 16 до 99 лет. Пожалуйста, введите корректное число и повторите попытку.</string>    
+    <string name="profile_edit_age_ranges">Возраст должен быть в диапазоне от 16 до 99 лет. Пожалуйста, введите корректное число и повторите попытку.</string>
 
     <string name="sign_in">Войти</string>
     <string name="create_account">Создать аккаунт</string>
@@ -459,7 +459,7 @@
     <string name="general_error_try_again_later">Невозможно подключиться к Topface. Повторите попытку позже.</string>
 
     <string name="search_city_by_name">Поиск города по названию</string>
-    
+
     <string name="gallery">Галерея</string>
     <string name="no_photo_take_photo">С вами никто не может познакомится! Сделайте фото или выберите имеющееся из альбома</string>
     <string name="photo_is_too_small">Вы отлично выглядете на этой фотографии, но для того, чтобы все пользователи оценили ваш снимок, от должен быть чуть больше: не менее %s</string>
