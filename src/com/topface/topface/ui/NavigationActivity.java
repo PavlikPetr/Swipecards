@@ -393,7 +393,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     */
     @Override
     public void onClick(View view) {
-        findViewById(R.id.acGift).setVisibility(View.VISIBLE);
         if (view.getId() != R.id.btnNavigationHome)
             return;
         if (mFragmentSwitcher.getAnimationState() == FragmentSwitchController.EXPAND) {
