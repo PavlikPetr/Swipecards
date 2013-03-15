@@ -65,7 +65,11 @@ public abstract class ApiRequest implements IApiRequest {
         if (context != null && !App.isOnline() && doNeedAlert) {
             RetryDialog retryDialog = new RetryDialog(context, this);
             handler.fail(0, new ApiResponse(ApiResponse.ERRORS_PROCCESED, "App is offline"));
-            retryDialog.show();
+            try {
+                retryDialog.show();
+            } catch (Exception e) {
+                Debug.error(e);
+            }
         } else {
             ConnectionManager.getInstance().sendRequest(this);
         }

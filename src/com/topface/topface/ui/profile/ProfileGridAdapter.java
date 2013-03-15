@@ -18,7 +18,9 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
                               LoadingListAdapter.Updater callback) {
         mPhotoLinks = new Photos();
         mUpdater = callback;
-        setData(photoLinks, totalPhotos > photoLinks.size());
+        if (photoLinks != null) {
+            setData(photoLinks, totalPhotos > photoLinks.size());
+        }
     }
 
     public void addFirst(Photo photo) {

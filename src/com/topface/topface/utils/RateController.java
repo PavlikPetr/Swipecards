@@ -10,7 +10,6 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.Toast;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Rate;
@@ -32,7 +31,6 @@ public class RateController {
     private EditText mCommentText;
     private InputMethodManager mInputManager;
     private OnRateControllerListener mOnRateControllerListener;
-    private boolean needShowToast = false;
 
     public interface OnRateControllerListener {
         public void successRate();
@@ -110,7 +108,7 @@ public class RateController {
                 CacheProfile.likes = rate.likes;
                 CacheProfile.money = rate.money;
                 CacheProfile.average_rate = rate.average;
-                if(listener != null) {
+                if (listener != null) {
                     listener.onRateCompleted();
                 }
             }
@@ -122,7 +120,9 @@ public class RateController {
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                listener.onRateFailed();
+                if (listener != null) {
+                    listener.onRateFailed();
+                }
             }
 
         }).exec();
@@ -197,6 +197,7 @@ public class RateController {
 
     public interface OnRateListener {
         public void onRateCompleted();
+
         public void onRateFailed();
     }
 }
