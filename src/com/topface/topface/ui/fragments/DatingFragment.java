@@ -352,19 +352,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private SearchRequest getSearchRequest() {
         SearchRequest searchRequest = new SearchRequest(getActivity());
-        SharedPreferences preferences = App.getContext().getSharedPreferences(
-                Static.PREFERENCES_TAG_PROFILE, Context.MODE_PRIVATE);
         searchRequest.limit = SEARCH_LIMIT;
-        searchRequest.online = getFilterOnline(preferences);
+        searchRequest.online = getFilterOnline();
         registerRequest(searchRequest);
         return searchRequest;
     }
 
-    private boolean getFilterOnline(SharedPreferences preferences) {
-        return preferences.getBoolean(
-                App.getContext().getString(R.string.cache_profile_filter_online),
-                false
-        );
+    private boolean getFilterOnline() {
+        return DatingFilter.getOnlineField();
     }
 
     @Override

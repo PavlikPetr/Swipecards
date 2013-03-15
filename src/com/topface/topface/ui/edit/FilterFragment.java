@@ -276,8 +276,10 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     protected void saveChanges(final Handler handler) {
         if (hasChanges()) {
             Intent intent = new Intent();
-            intent.putExtra(INTENT_DATING_FILTER,mFilter);
+            intent.putExtra(INTENT_DATING_FILTER, mFilter);
+
             getActivity().setResult(Activity.RESULT_OK, intent);
+
             saveFilter();
         } else {
             if (mExtraSavingPerformed) {
