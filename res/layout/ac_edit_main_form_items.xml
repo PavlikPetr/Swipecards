@@ -16,13 +16,14 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:layout_below="@id/loNavigationBar">
+            android:layout_below="@id/loNavigationBar"
+            android:layout_marginTop="10dp">
 
         <TextView
                 android:id="@+id/tvSexTitle"
                 style="@style/BackgroundFormTitleText"
                 android:text="@string/general_sex"
-                android:layout_marginTop="10dp"/>
+                />
 
         <include
                 android:id="@+id/loGirl"
@@ -45,7 +46,6 @@
                 layout="@layout/item_edit_form_input"/>
 
         <include
-                android:layout_marginTop="8dp"
                 android:id="@+id/loStatus"
                 layout="@layout/item_edit_form_input"/>
 

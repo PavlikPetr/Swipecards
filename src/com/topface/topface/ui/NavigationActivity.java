@@ -21,6 +21,7 @@ import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.City;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.*;
@@ -659,11 +660,37 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK && requestCode == ContainerActivity.INTENT_CHAT_FRAGMENT) {
-            if (data != null) {
-                int user_id = data.getExtras().getInt(ChatFragment.INTENT_USER_ID);
-                mDelayedFragment = ProfileFragment.newInstance(user_id, ProfileFragment.TYPE_USER_PROFILE);
-                return;
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == ContainerActivity.INTENT_CHAT_FRAGMENT) {
+                if (data != null) {
+                    int user_id = data.getExtras().getInt(ChatFragment.INTENT_USER_ID);
+                    mDelayedFragment = ProfileFragment.newInstance(user_id, ProfileFragment.TYPE_USER_PROFILE);
+                    return;
+                }
+            } else if (requestCode == CitySearchActivity.INTENT_CITY_SEARCH_AFTER_REGISTRATION ||
+                    requestCode == CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY) {
+                if (data != null) {
+                    Bundle extras = data.getExtras();
+                    final String city_name = extras.getString(CitySearchActivity.INTENT_CITY_NAME);
+                    final String city_full = extras.getString(CitySearchActivity.INTENT_CITY_FULL_NAME);
+                    final int city_id = extras.getInt(CitySearchActivity.INTENT_CITY_ID);
+                    SettingsRequest request = new SettingsRequest(this);
+                    request.cityid = city_id;
+                    request.callback(new ApiHandler() {
+
+                        @Override
+                        public void success(ApiResponse response) {
+                            CacheProfile.city = new City(city_id, city_name,
+                                    city_full);
+                            LocalBroadcastManager.getInstance(getApplicationContext())
+                                    .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                        }
+
+                        @Override
+                        public void fail(int codeError, ApiResponse response) {
+                        }
+                    }).exec();
+                }
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

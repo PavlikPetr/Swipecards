@@ -8,16 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.ImageView;
+import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.FilterRequest;
-import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
@@ -29,6 +27,7 @@ import java.util.HashMap;
 public class FilterFragment extends AbstractEditFragment implements OnClickListener {
 
     public static Profile mTargetUser = new User();
+    public static final String INTENT_DATING_FILTER = "Topface_Dating_Filter";
 
     private FormInfo mFormInfo;
     private DatingFilter mInitFilter;
@@ -74,10 +73,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
             }
         });
 
-
-
-        mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
-
         // Preferences
         initFilter();
         initViews(root);
@@ -97,7 +92,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     private void saveFilter() {
         try {
-            CacheProfile.dating = mFilter.clone();
             mInitFilter = mFilter.clone();
             mInitFilterOnline = DatingFilter.getOnlineField();
         } catch (CloneNotSupportedException e) {
@@ -281,43 +275,20 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     @Override
     protected void saveChanges(final Handler handler) {
         if (hasChanges()) {
-            FilterRequest filterRequest = new FilterRequest(mFilter, getActivity());
-            registerRequest(filterRequest);
-            prepareRequestSend();
-            filterRequest.callback(new ApiHandler() {
+            Intent intent = new Intent();
+            intent.putExtra(INTENT_DATING_FILTER, mFilter);
 
-                @Override
-                public void success(ApiResponse response) {
-                    saveFilter();
-                    refreshSaveState();
-                    getActivity().setResult(Activity.RESULT_OK);
-                    finishRequestSend();
-                    if (handler != null) {
-                        handler.sendEmptyMessage(0);
-                    }
-                }
+            getActivity().setResult(Activity.RESULT_OK, intent);
 
-                @Override
-                public void fail(int codeError, ApiResponse response) {
-                    getActivity().setResult(Activity.RESULT_CANCELED);
-                    refreshSaveState();
-                    finishRequestSend();
-                    if (handler != null) {
-                        handler.sendEmptyMessage(0);
-                    }
-                }
-            }).exec();
+            saveFilter();
         } else {
             if (mExtraSavingPerformed) {
                 getActivity().setResult(Activity.RESULT_OK);
             } else {
                 getActivity().setResult(Activity.RESULT_CANCELED);
             }
-
-            if (handler != null) {
-                handler.sendEmptyMessage(0);
-            }
         }
+        handler.sendEmptyMessage(0);
     }
 
     @Override

@@ -352,19 +352,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private SearchRequest getSearchRequest() {
         SearchRequest searchRequest = new SearchRequest(getActivity());
-        SharedPreferences preferences = App.getContext().getSharedPreferences(
-                Static.PREFERENCES_TAG_PROFILE, Context.MODE_PRIVATE);
         searchRequest.limit = SEARCH_LIMIT;
-        searchRequest.online = getFilterOnline(preferences);
+        searchRequest.online = getFilterOnline();
         registerRequest(searchRequest);
         return searchRequest;
     }
 
-    private boolean getFilterOnline(SharedPreferences preferences) {
-        return preferences.getBoolean(
-                App.getContext().getString(R.string.cache_profile_filter_online),
-                false
-        );
+    private boolean getFilterOnline() {
+        return DatingFilter.getOnlineField();
     }
 
     @Override
@@ -767,8 +762,30 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (resultCode == Activity.RESULT_OK
                 && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
             lockControls();
-            updateFilterData();
-            updateData(false);
+            if (data != null && data.getExtras() != null) {
+                final DatingFilter filter = data.getExtras().getParcelable(FilterFragment.INTENT_DATING_FILTER);
+                FilterRequest filterRequest = new FilterRequest(filter, getActivity());
+                registerRequest(filterRequest);
+                filterRequest.callback(new ApiHandler() {
+
+                    @Override
+                    public void success(ApiResponse response) {
+                        try {
+                            CacheProfile.dating = filter.clone();
+                        } catch (CloneNotSupportedException e) {
+                            Debug.error(e);
+                        }
+
+                        updateFilterData();
+                        updateData(false);
+                    }
+
+                    @Override
+                    public void fail(int codeError, ApiResponse response) {
+                        unlockControls();
+                    }
+                }).exec();
+            }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }

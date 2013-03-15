@@ -7,6 +7,7 @@ import android.widget.BaseAdapter;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
+import com.topface.topface.utils.CacheProfile;
 
 public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScrollListener {
     private final LoadingListAdapter.Updater mUpdater;
@@ -28,6 +29,15 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
             mPhotoLinks.add(2, photo);
         } else {
             mPhotoLinks.add(1, photo);
+        }
+        notifyDataSetChanged();
+    }
+
+    public void updateData() {
+        mPhotoLinks.clear();
+        mPhotoLinks.add(null);
+        for(Photo photo: CacheProfile.photos) {
+            mPhotoLinks.add(photo);
         }
         notifyDataSetChanged();
     }

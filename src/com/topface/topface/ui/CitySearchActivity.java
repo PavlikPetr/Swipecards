@@ -3,7 +3,6 @@ package com.topface.topface.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.*;
@@ -13,7 +12,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
-import com.topface.topface.requests.*;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.CitiesRequest;
+import com.topface.topface.requests.SearchCitiesRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -184,27 +185,6 @@ public class CitySearchActivity extends BaseFragmentActivity {
         cityListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1,final int position, long arg3) {
-
-                SettingsRequest request = new SettingsRequest(CitySearchActivity.this);
-                request.cityid = mDataList.get(position).id;
-                sendBroadcast(new Intent().setAction("com.topface.receivers.ConnectionChangeReceiver"));
-                request.callback(new ApiHandler() {
-
-                    @Override
-                    public void success(ApiResponse response) {
-                        CacheProfile.city = new City(mDataList.get(position).id, mDataList.get(position).name,
-                                mDataList.get(position).full);
-                        LocalBroadcastManager.getInstance(getApplicationContext())
-                                .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
-                    }
-
-                    @Override
-                    public void fail(int codeError, ApiResponse response) {
-                        Toast.makeText(CitySearchActivity.this, getString(R.string.general_data_error),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }).exec();
-
                 Intent intent = CitySearchActivity.this.getIntent();
                 intent.putExtra(INTENT_CITY_ID, mDataList.get(position).id);
                 intent.putExtra(INTENT_CITY_NAME, mDataList.get(position).name);

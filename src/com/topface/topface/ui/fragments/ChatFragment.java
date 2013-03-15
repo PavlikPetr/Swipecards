@@ -36,7 +36,6 @@ import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.ui.views.SwapControl;
 import com.topface.topface.utils.*;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -201,7 +200,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 mHistoryData.addAll(list);
                 try {
                     mUser = new FeedUser(new JSONObject(savedInstanceState.getString(FRIEND_FEED_USER)));
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     Debug.error(e);
                 }
                 if (was_failed) mLockScreen.setVisibility(View.VISIBLE);
@@ -532,8 +531,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     public void onResume() {
         super.onResume();
 
-        // Если адаптер пустой, грузим с сервера
-        if (mAdapter == null || mAdapter.getCount() == 0) {
+        // Если адаптер пустой или пользователя нет, грузим с сервера
+        if (mAdapter == null || mAdapter.getCount() == 0 || mUser == null) {
             update(false, "initial");
         }
 
