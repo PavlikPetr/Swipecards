@@ -45,6 +45,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
 
     private ViewFlipper mViewFlipper;
     private LockerView mLockerView;
+    private LockerView mLoadingLocker;
 
     public EditProfilePhotoFragment() {
         super();
@@ -83,8 +84,8 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         actionBar.setTitleText(getString(R.string.edit_title));
         actionBar.setSubTitleText(getString(R.string.edit_album));
 
-        mRightPrsBar = actionBar.getRightProgressBar();
-
+        mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
+        mLoadingLocker = (LockerView) root.findViewById(R.id.fppLocker);
         actionBar.showBackButton(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,7 +126,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
     protected void saveChanges(final Handler handler) {
         if (hasChanges()) {
             prepareRequestSend();
-
+            mLoadingLocker.setVisibility(View.VISIBLE);
             if (!mDeleted.isEmpty()) {
                 mOperationsFinished = false;
                 PhotoDeleteRequest deleteRequest = new PhotoDeleteRequest(getActivity());
@@ -150,7 +151,15 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
 
                     @Override
                     public void fail(int codeError, ApiResponse response) {
-                        finishOperations(handler);
+//                        finishOperations(handler);
+                        Toast.makeText(getActivity(), R.string.general_server_error, 1500).show();
+                    }
+
+
+                    @Override
+                    public void always(ApiResponse response) {
+                        super.always(response);
+                        mLoadingLocker.setVisibility(View.GONE);
                     }
                 }).exec();
             }
@@ -168,14 +177,32 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                         mSelectedAsMainId = mLastSelectedAsMainId;
                         LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
                         finishOperations(handler);
-
                     }
 
                     @Override
                     public void fail(int codeError, ApiResponse response) {
-                        getActivity().setResult(Activity.RESULT_CANCELED);
-                        finishOperations(handler);
+                        if(getActivity() != null) {
+                            getActivity().setResult(Activity.RESULT_CANCELED);
+    //                        finishOperations(handler);
+                            if (codeError == ApiResponse.NON_EXIST_PHOTO_ERROR) {
+                                Photo removedPhoto = mPhotoLinks.getByPhotoId(mLastSelectedAsMainId);
+                                mPhotoGridAdapter.getData().remove(removedPhoto);
+                                mPhotoGridAdapter.notifyDataSetChanged();
+                                if (CacheProfile.photos.contains(removedPhoto)) {
+                                    CacheProfile.photos.remove(removedPhoto);
+                                    mLastSelectedAsMainId = mSelectedAsMainId;
+                                    Toast.makeText(getActivity(), R.string.general_photo_deleted, 1500).show();
+                                } else {
+                                    Toast.makeText(getActivity(), R.string.general_server_error, 1500).show();
+                                }
+                            }
+                        }
+                    }
 
+                    @Override
+                    public void always(ApiResponse response) {
+                        super.always(response);
+                        mLoadingLocker.setVisibility(View.GONE);
                     }
                 }).exec();
             } else {

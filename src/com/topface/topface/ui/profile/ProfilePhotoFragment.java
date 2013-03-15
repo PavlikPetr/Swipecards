@@ -143,6 +143,7 @@ public class ProfilePhotoFragment extends BaseFragment {
     @Override
     public void onResume() {
         initPhotoLinks();
+        mProfilePhotoGridAdapter.updateData();
         mProfilePhotoGridAdapter.notifyDataSetChanged();
         super.onResume();
     }

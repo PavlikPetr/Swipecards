@@ -488,5 +488,6 @@
     <string name="choose_cool_photo">Выберите свою лучшую фотографию и статус, который отражает ваше настроение!</string>
     <string name="email_confirmed">e-mail подтвержден!</string>
     <string name="sympathy_sended">Симпатия отправлена</string>
+    <string name="general_photo_deleted">Ваша фотография не соответствует правилам и была удалена</string>
 
 </resources>
