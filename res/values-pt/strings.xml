@@ -368,6 +368,7 @@
     <string name="choose_cool_photo">Escolha a sua melhor foto e status que reflete seu humor!</string>
     <string name="email_confirmed">O e-mail foi confirmado!</string>
     <string name="sympathy_sended">A simpatia foi enviada</string>
+    <string name="general_photo_deleted">A sua foto foi removida porque não corresponde às regras</string>
     <string name="buying_total">Total</string>
     <string name="buying_economy">Economia</string>
     <string name="general_change">Alterar</string>

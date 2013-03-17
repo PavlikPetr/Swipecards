@@ -7,12 +7,12 @@
         android:background="@drawable/auth_bg"
         >
 
-    <ImageView
+    <!--ImageView
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/auth_bg_spot"
-            />
+            /-->
 
     <TextView
             android:id="@+id/tvRedAlert"

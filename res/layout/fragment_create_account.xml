@@ -14,12 +14,12 @@
                         android:id="@+id/authContainer"
                         android:background="@drawable/auth_bg">
 
-            <ImageView
+            <!--ImageView
                     android:layout_centerInParent="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/auth_bg_spot"
-                    />
+                    /-->
             <ProgressBar
                     android:id="@+id/prsLoading"
                     android:layout_width="wrap_content"

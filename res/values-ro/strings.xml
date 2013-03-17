@@ -369,4 +369,17 @@
     <string name="we_detect_your_city">Noi am identificat orasul tau:</string>
     <string name="reselect_city">Alege alt orasi:</string>
     <string name="choose_cool_photo">Alege cea mare tare poza si statut, care reflecta dispozitia Dmv!</string>
+    <string name="email_confirmed">e-mail confirmat!</string>
+    <string name="sympathy_sended">Simpatia a fost trimisa</string>
+    <string name="general_photo_deleted">Poza Dmv nu corespunde regulilor si a fost stearsa</string>
+    <string name="buying_total">Total</string>
+    <string name="buying_economy">Economie</string>
+    <string name="general_change">Schimba</string>
+    <string name="general_correct">Totul este corect</string>
+    <string name="we_dont_detect_your_city">Pentru a gasi oameni in aproprierea Dmv, e nevoie ca noi sa stim unde va aflati. Va rugam sa indicati orasul Dmv.</string>
+    <string name="confirm_email">Va rugam sa confirmati e-mailul.</string>
+    <string name="password_sent">Parola noua a fost trimisa la e-mailul Dmv</string>
+    <string name="buy_vip_month_one">%1$d luni pentru %2$.2f %3$@</string>
+    <string name="buy_vip_month_few">%1$d luni pana pe %2$.2f %3$@</string>
+    <string name="buy_vip_month_other">%1$d luni pana pe %2$.2f %3$@</string>
 </resources>

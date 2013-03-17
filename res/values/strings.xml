@@ -347,7 +347,7 @@
     <string name="no_photo_take_photo">No one will be able to meet you! Take a photo or select a photo from an existing album</string>
     <string name="photo_is_too_small">You look great in this photo, but for all users to appreciate your photo, it should be a little bigger than: at least%s</string>
     <string name="photo_for_avatar">Photos are ready to be sent to my profile! This is your first photo and it will be used as your profile photo.</string>
-    <string name="get_it_for_free">Get it for free</string>
+    <string name="get_it_for_free">get it for free</string>
     <string name="vip_advantages">VIP advantages</string>
     <string name="change_email">Change e-mail</string>
     <string name="send_confirmation_email">Confirmation e-mail was sent</string>
@@ -368,7 +368,7 @@
     <string name="choose_cool_photo">Select a photo and status that reflects your mood!</string>
     <string name="email_confirmed">e-mail confirmed!</string>
     <string name="sympathy_sended">Sympathy has been sent!</string>
-    <string name="general_photo_deleted">Your photo has been removed</string>
+    <string name="general_photo_deleted">Your photo was deleted because it violated the rules</string>
     <string name="buying_total">Total</string>
     <string name="buying_economy">Economy</string>
     <string name="general_change">Change</string>

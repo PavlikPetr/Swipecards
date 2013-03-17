@@ -371,4 +371,16 @@
     <string name="reselect_city">Zvolit jiné město</string>
     <string name="choose_cool_photo">Zvolte svou nejlepší fotku a status, který odráží vaši náladu!</string>
     <string name="email_confirmed">e-mailová adresa byla potvrzena!</string>
+    <string name="sympathy_sended">Sympatie byla odeslána</string>
+    <string name="general_photo_deleted">Vaše fotka neodpovídá pravidlům a bude odstraněna</string>
+    <string name="buying_total">Celkem</string>
+    <string name="buying_economy">Ušetříte</string>
+    <string name="general_change">Změnit</string>
+    <string name="general_correct">Všechno je správně</string>
+    <string name="we_dont_detect_your_city">Pokud chcete najít v blízkém okolí, potřebujeme vědět, kde se nacházíte. Uveďte prosím své město.</string>
+    <string name="confirm_email">Prosím, podtvrďte e-mail</string>
+    <string name="password_sent">Nové heslo bylo odesláno na Vaš E-mail</string>
+    <string name="buy_vip_month_one">%1$d měsíc za %2$.2f %3$@</string>
+    <string name="buy_vip_month_few">%1$d měsíce za %2$.2f %3$@</string>
+    <string name="buy_vip_month_other">%1$d měsíců za %2$.2f %3$@</string>
 </resources>
