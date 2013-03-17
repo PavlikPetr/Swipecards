@@ -356,6 +356,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         addHeaderPage(HeaderStatusFragment.class.getName());
 
         ViewPager headerPager = (ViewPager) root.findViewById(R.id.vpHeaderFragments);
+        headerPager.setSaveEnabled(false);
         mHeaderPagerAdapter = new ProfilePageAdapter(getChildFragmentManager(),
                 HEADER_PAGES_CLASS_NAMES, mProfileUpdater);
         headerPager.setAdapter(mHeaderPagerAdapter);
@@ -412,11 +413,12 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             case R.id.acDelight:
                 if (v.isEnabled()) {
                     v.setSelected(true);
-                    TextView view = (TextView)v;
+                    TextView view = (TextView) v;
                     view.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
 
                     v.setEnabled(false);
                     mRateController.onRate(mUserProfile.uid, 10, ((User) mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL, new RateController.OnRateListener() {
+                        @SuppressWarnings("ConstantConditions")
                         @Override
                         public void onRateCompleted() {
                             if (v != null && getActivity() != null) {
@@ -425,13 +427,14 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                             }
                         }
 
+                        @SuppressWarnings("ConstantConditions")
                         @Override
                         public void onRateFailed() {
-                            if(v != null && getActivity() != null) {
+                            if (v != null && getActivity() != null) {
                                 Toast.makeText(getActivity(), R.string.general_server_error, 1500).show();
                                 v.setEnabled(true);
                                 v.setSelected(false);
-                                TextView view = (TextView)v;
+                                TextView view = (TextView) v;
                                 view.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
                             }
                         }
@@ -444,10 +447,11 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             case R.id.acSympathy:
                 if (v.isEnabled()) {
                     v.setSelected(true);
-                    TextView view = (TextView)v;
+                    TextView view = (TextView) v;
                     view.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
                     v.setEnabled(false);
                     mRateController.onRate(mUserProfile.uid, 9, ((User) mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL, new RateController.OnRateListener() {
+                        @SuppressWarnings("ConstantConditions")
                         @Override
                         public void onRateCompleted() {
                             if (v != null && getActivity() != null) {
@@ -456,13 +460,14 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                             }
                         }
 
+                        @SuppressWarnings("ConstantConditions")
                         @Override
                         public void onRateFailed() {
-                            if(v != null && getActivity() != null) {
+                            if (v != null && getActivity() != null) {
                                 Toast.makeText(getActivity(), R.string.general_server_error, 1500).show();
                                 v.setEnabled(true);
                                 v.setSelected(false);
-                                TextView view = (TextView)v;
+                                TextView view = (TextView) v;
                                 view.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
                             }
                         }
@@ -493,7 +498,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         public void success(ApiResponse response) {
                             super.success(response);
                             v.setEnabled(false);
-                            TextView view = (TextView)v;
+                            TextView view = (TextView) v;
                             view.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
                         }
                     }

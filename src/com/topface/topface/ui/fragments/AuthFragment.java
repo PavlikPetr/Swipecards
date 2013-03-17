@@ -407,9 +407,7 @@ public class AuthFragment extends BaseFragment {
                     public void onClick(View view) {
                         mRetryView.setVisibility(View.GONE);
                         mProgressBar.setVisibility(View.VISIBLE);
-                        request.canceled = false;
-                        registerRequest(request);
-                        request.exec();
+                        resendRequest(request);
                     }
                 });
                 break;
@@ -421,9 +419,7 @@ public class AuthFragment extends BaseFragment {
                     public void onClick(View view) {
                         mRetryView.setVisibility(View.GONE);
                         mProgressBar.setVisibility(View.VISIBLE);
-                        request.canceled = false;
-                        registerRequest(request);
-                        request.exec();
+                        resendRequest(request);
                     }
                 });
                 break;
@@ -460,9 +456,7 @@ public class AuthFragment extends BaseFragment {
                         mRetryView.setVisibility(View.GONE);
                         mAuthViewsFlipper.setVisibility(View.VISIBLE);
                         mProgressBar.setVisibility(View.VISIBLE);
-                        request.canceled = false;
-                        registerRequest(request);
-                        request.exec();
+                        resendRequest(request);
                     }
                 });
                 break;
@@ -473,6 +467,14 @@ public class AuthFragment extends BaseFragment {
             mProgressBar.setVisibility(View.GONE);
         } else {
             showButtons();
+        }
+    }
+
+    private void resendRequest(ApiRequest request) {
+        if (request != null) {
+            request.canceled = false;
+            registerRequest(request);
+            request.exec();
         }
     }
 
@@ -546,7 +548,7 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void btnVKClick() {
-        if (checkOnline()) {
+        if (checkOnline() && mAuthorizationManager != null) {
             hideButtons();
             mAuthorizationManager.vkontakteAuth();
         }
@@ -554,7 +556,7 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void btnFBClick() {
-        if (checkOnline()) {
+        if (checkOnline() && mAuthorizationManager != null) {
             hideButtons();
             mAuthorizationManager.facebookAuth();
         }

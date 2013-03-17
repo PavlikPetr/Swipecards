@@ -236,8 +236,8 @@ public class AuthorizationManager {
                     } else {
                         handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
                     }
-                } catch (JSONException e) {
-                    Debug.log(AuthorizationManager.class, "can't get name in vk:" + e);
+                } catch (Exception e) {
+                    Debug.error("AuthorizationManager can't get name in vk", e);
                     handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
                 }
             }

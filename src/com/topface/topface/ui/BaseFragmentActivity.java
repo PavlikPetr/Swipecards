@@ -17,6 +17,7 @@ import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.IRequestClient;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -43,7 +44,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         if (isNeedAuth() && (AuthToken.getInstance().isEmpty() || !CacheProfile.isLoaded())) {
             startAuth();
         }
-        if(mNeedAnimate) {
+        if (mNeedAnimate) {
             overridePendingTransition(com.topface.topface.R.anim.slide_in_from_right, com.topface.topface.R.anim.slide_out_left);
         }
     }
@@ -57,7 +58,11 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (isNeedAuth()) {
-                    startAuth();
+                    try {
+                        startAuth();
+                    } catch (Exception e) {
+                        Debug.error(e);
+                    }
                 }
             }
         };
@@ -83,7 +88,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        needToUnregisterReceiver = false;
         if (needToUnregisterReceiver) {
             unregisterReceiver(mReauthReceiver);
             needToUnregisterReceiver = false;
@@ -163,7 +167,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     }
 
     protected void takePhoto(TakePhotoDialog.TakePhotoListener listener) {
-        if(needOpenDialog) {
+        if (needOpenDialog) {
             TakePhotoDialog newFragment = TakePhotoDialog.newInstance();
             newFragment.setOnTakePhotoListener(listener);
             newFragment.show(getSupportFragmentManager(), TakePhotoDialog.TAG);

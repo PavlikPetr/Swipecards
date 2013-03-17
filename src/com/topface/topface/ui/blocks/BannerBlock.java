@@ -100,8 +100,9 @@ public class BannerBlock {
     private void initBanner() {
         if (mFragment != null && mBannersMap != null) {
             String fragmentId = mFragment.getClass().toString();
-            if (mBannersMap.containsKey(fragmentId)) {
-                String bannerType = CacheProfile.getOptions().pages.get(mBannersMap.get(fragmentId)).banner;
+            Options options = CacheProfile.getOptions();
+            if (mBannersMap.containsKey(fragmentId) && options != null && options.pages != null) {
+                String bannerType = options.pages.get(mBannersMap.get(fragmentId)).banner;
 
                 mBannerView = getBannerView(bannerType);
                 if (mBannerView == null) {
@@ -236,21 +237,21 @@ public class BannerBlock {
             mPLus1Asker.setDisabledWebViewCorePausing(true);
         } else if (mBannerView instanceof AWView) {
             // request onResume
-            ((AWView)mBannerView).setOnStartListener(new OnStartListener() {
+            ((AWView) mBannerView).setOnStartListener(new OnStartListener() {
                 @Override
                 public void onStart() {
                     Debug.log("Adwired: Start");
                 }
             });
 
-            ((AWView)mBannerView).setOnStopListener(new OnStopListener() {
+            ((AWView) mBannerView).setOnStopListener(new OnStopListener() {
                 @Override
                 public void onStop() {
                     Debug.log("Adwired: Start");
                 }
             });
 
-            ((AWView)mBannerView).setOnNoBannerListener(new OnNoBannerListener() {
+            ((AWView) mBannerView).setOnNoBannerListener(new OnNoBannerListener() {
                 @Override
                 public void onNoBanner() {
                     Debug.log("Adwired: No banner");
@@ -280,7 +281,7 @@ public class BannerBlock {
 //            requestBuilder.addKeyword("Ferrari");
 
             com.mad.ad.AdRequest request = requestBuilder.getRequest();
-            ((AdStaticView)mBannerView).showBanners(request);
+            ((AdStaticView) mBannerView).showBanners(request);
         } else if (mBannerView instanceof ImageView) {
             //Это нужно, что бы сбросить размеры баннера, для правильного расчета размера в ImageLoader
             ViewGroup.LayoutParams params = mBannerView.getLayoutParams();
@@ -432,7 +433,7 @@ public class BannerBlock {
         initBanner();
         if (mBannerView != null && mBannerView instanceof AdfonicView) mBannerView.invalidate();
         if (mBannerView != null && mBannerView instanceof AWView) {
-            ((AWView)mBannerView).request(mAdwiredMap.get(mFragment.getClass().toString()));
+            ((AWView) mBannerView).request(mAdwiredMap.get(mFragment.getClass().toString()));
         }
         if (mPLus1Asker != null) mPLus1Asker.onResume();
     }

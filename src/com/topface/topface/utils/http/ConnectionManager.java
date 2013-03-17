@@ -187,7 +187,7 @@ public class ConnectionManager {
 
     private boolean sendHandlerMessage(IApiRequest apiRequest, IApiResponse apiResponse) {
         ApiHandler handler = apiRequest.getHandler();
-        if (handler != null) {
+        if (handler != null && !apiRequest.isCanceled()) {
             Message msg = new Message();
             msg.obj = apiResponse;
             handler.sendMessage(msg);

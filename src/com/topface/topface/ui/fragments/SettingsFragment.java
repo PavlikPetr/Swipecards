@@ -347,7 +347,9 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 }).exec();
             }
         } else {
-            CacheProfile.notifications.get(type).apns = isChecked;
+            if (CacheProfile.notifications != null) {
+                CacheProfile.notifications.get(type).apns = isChecked;
+            }
             mSendTimer.cancel();
             mSendTimer.start();
         }

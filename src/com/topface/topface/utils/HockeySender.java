@@ -31,7 +31,13 @@ public class HockeySender implements ReportSender {
 
             List<NameValuePair> parameters = new ArrayList<NameValuePair>();
             parameters.add(new BasicNameValuePair("raw", log));
-            parameters.add(new BasicNameValuePair("userID", report.get(ReportField.INSTALLATION_ID)));
+            String uid;
+            if (CacheProfile.uid > 0) {
+                uid = Integer.toString(CacheProfile.uid);
+            } else {
+                uid = report.get(ReportField.INSTALLATION_ID);
+            }
+            parameters.add(new BasicNameValuePair("userID", uid));
             parameters.add(new BasicNameValuePair("contact", report.get(ReportField.USER_EMAIL)));
             parameters.add(new BasicNameValuePair("description", report.get(ReportField.USER_COMMENT)));
 

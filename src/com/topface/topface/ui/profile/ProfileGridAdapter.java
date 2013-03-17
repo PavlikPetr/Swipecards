@@ -36,8 +36,10 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
     public void updateData() {
         mPhotoLinks.clear();
         mPhotoLinks.add(null);
-        for(Photo photo: CacheProfile.photos) {
-            mPhotoLinks.add(photo);
+        if (CacheProfile.photos != null) {
+            for (Photo photo : CacheProfile.photos) {
+                mPhotoLinks.add(photo);
+            }
         }
         notifyDataSetChanged();
     }

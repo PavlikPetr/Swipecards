@@ -89,7 +89,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (mCityInputView != null) mCityInputView.clearFocus();
-                Utils.hideSoftKeyboard(CitySearchActivity.this,mCityInputView);
+                Utils.hideSoftKeyboard(CitySearchActivity.this, mCityInputView);
                 return true;
             }
         });
@@ -171,7 +171,9 @@ public class CitySearchActivity extends BaseFragmentActivity {
                     convertView.setPadding(0, 0, 0, 0);
                 }
 
-                holder.mTitle.setText(getItem(position));
+                if (getCount() > position) {
+                    holder.mTitle.setText(getItem(position));
+                }
 
                 return convertView;
             }
@@ -184,7 +186,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
         // возврат значения и выход
         cityListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1,final int position, long arg3) {
+            public void onItemClick(AdapterView<?> arg0, View arg1, final int position, long arg3) {
                 Intent intent = CitySearchActivity.this.getIntent();
                 intent.putExtra(INTENT_CITY_ID, mDataList.get(position).id);
                 intent.putExtra(INTENT_CITY_NAME, mDataList.get(position).name);
@@ -218,7 +220,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
             mCbMyCity.setVisibility(View.GONE);
             mMyCityTitle.setVisibility(View.GONE);
         } else {
-            if (mRequestKey == INTENT_CITY_SEARCH_AFTER_REGISTRATION){
+            if (mRequestKey == INTENT_CITY_SEARCH_AFTER_REGISTRATION) {
                 mMyCityTitle.setText(R.string.we_detect_your_city);
             } else {
                 mMyCityTitle.setText(R.string.edit_my_city);

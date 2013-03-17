@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -334,11 +335,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
                 @Override
                 public void fail(int codeError, ApiResponse response) {
-                    Search.log("load error: " + response.message);
-                    Toast.makeText(getActivity(), App.getContext().getString(R.string.general_data_error),
-                            Toast.LENGTH_SHORT).show();
-                    onUpdateFail(isAddition);
-                    unlockControls();
+                    FragmentActivity activity = getActivity();
+                    if (activity != null) {
+                        Search.log("load error: " + response.message);
+                        Toast.makeText(activity, App.getContext().getString(R.string.general_data_error),
+                                Toast.LENGTH_SHORT).show();
+                        onUpdateFail(isAddition);
+                        unlockControls();
+                    }
                 }
 
                 @Override
@@ -364,10 +368,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
+        FragmentActivity activity = getActivity();
         switch (view.getId()) {
             case R.id.loDatingResources: {
                 EasyTracker.getTracker().trackEvent("Dating", "BuyClick", "", 1L);
-                Intent intent = new Intent(getActivity(), ContainerActivity.class);
+                Intent intent = new Intent(activity, ContainerActivity.class);
                 intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
                 startActivity(intent);
             }
@@ -429,10 +434,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
             break;
             case R.id.btnDatingProfile: {
-                if (mUserSearchList != null) {
-                    ((NavigationActivity) getActivity()).onExtraFragment(
+                if (mCurrentUser != null && activity != null) {
+                    ((NavigationActivity) activity).onExtraFragment(
                             ProfileFragment.newInstance(
-                                    mUserSearchList.get(mUserSearchList.getSearchPosition()).id,
+                                    mCurrentUser.id,
                                     ProfileFragment.TYPE_USER_PROFILE
                             )
                     );
@@ -442,7 +447,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             break;
             case R.id.btnDatingChat: {
-                Intent intent = new Intent(getActivity(), ContainerActivity.class);
+                Intent intent = new Intent(activity, ContainerActivity.class);
 
                 intent.putExtra(ChatFragment.INTENT_USER_ID, mCurrentUser.id);
                 intent.putExtra(ChatFragment.INTENT_USER_NAME, mCurrentUser.first_name);
@@ -450,7 +455,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 intent.putExtra(ChatFragment.INTENT_USER_AGE, mCurrentUser.age);
                 intent.putExtra(ChatFragment.INTENT_USER_CITY, mCurrentUser.city.name);
                 intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
-                getActivity().startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
+                activity.startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
 
                 EasyTracker.getTracker().trackEvent("Dating", "Additional", "Chat", 1L);
             }
