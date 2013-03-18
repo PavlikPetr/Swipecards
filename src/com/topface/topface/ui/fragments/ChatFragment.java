@@ -400,7 +400,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             @Override
             public void fail(int codeError, ApiResponse response) {
                 mLoadingLocker.setVisibility(View.GONE);
-                if (mRetryView != null) {
+                if (mRetryView != null && isAdded()) {
                     mRetryView.setErrorMsg(getString(R.string.general_data_error));
                 }
                 mLockScreen.setVisibility(View.VISIBLE);

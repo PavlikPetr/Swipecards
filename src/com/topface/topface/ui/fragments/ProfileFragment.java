@@ -334,7 +334,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
             @Override
             public void fail(final int codeError, ApiResponse response) {
-                if (mRetryBtn != null) {
+                if (mRetryBtn != null && isAdded()) {
                     mLoaderView.setVisibility(View.GONE);
                     mLockScreen.setVisibility(View.VISIBLE);
                     mRetryBtn.setErrorMsg(getString(R.string.general_profile_error));
