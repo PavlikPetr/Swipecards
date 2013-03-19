@@ -139,6 +139,25 @@
                         />
 
                 <!-- Money -->
+                <TextView
+                        style="@style/TitleWhiteText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:text="@string/get_free_coins"
+                        android:layout_alignParentLeft="true"
+                        android:textStyle="bold"/>
+
+                <Button
+                        android:id="@+id/btnOfferwall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/btn_vip_super_sale_selector"
+                        style="@style/ButtonWhiteText"
+                        android:text="@string/get_it_for_free"
+                        />
 
                 <RelativeLayout
 
@@ -176,16 +195,7 @@
                         layout="@layout/item_divider"
                         />
 
-                <Button
-                        android:id="@+id/btnOfferwall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:background="@drawable/btn_vip_sale_selector"
-                        style="@style/ButtonGrayText"
-                        android:text="@string/get_it_for_free"
-                        />
+
 
                 <!-- Power -->
 

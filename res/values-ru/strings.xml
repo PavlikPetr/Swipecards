@@ -500,5 +500,5 @@
     <string name="buy_vip_month_one">%1$d месяц за %2$.2f %3$@</string>
     <string name="buy_vip_month_few">%1$d месяца по %2$.2f %3$@</string>
     <string name="buy_vip_month_other">%1$d месяцев по %2$.2f %3$@</string>
-
+    <string name="get_free_coins">Получить монеты бесплатно</string>
 </resources>

@@ -61,7 +61,11 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
 
             @Override
             public void onClick(View v) {
-                setSelectedForMutual(position);
+                if(mMutualListener != null) {
+                    mMutualListener.onMutual(getItem(position).user.id, 9, like.id);
+                    like.mutualed = true;
+                    notifyDataSetChanged();
+                }
             }
         });
 
