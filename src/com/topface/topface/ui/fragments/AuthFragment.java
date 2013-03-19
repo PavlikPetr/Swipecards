@@ -140,6 +140,7 @@ public class AuthFragment extends BaseFragment {
         mCreateAccountView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                EasyTracker.getTracker().trackEvent("Registration", "StartActivity", "FromAuth", 1L);
                 Intent intent = new Intent(getActivity(), ContainerActivity.class);
                 startActivityForResult(intent, ContainerActivity.INTENT_REGISTRATION_FRAGMENT);
             }
@@ -208,7 +209,8 @@ public class AuthFragment extends BaseFragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void
+    onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (mAuthorizationManager != null) mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK &&

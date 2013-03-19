@@ -1,210 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="fill_parent"
-             android:layout_height="fill_parent">
-    <ScrollView
 
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:fillViewport="true">
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fillViewport="true">
 
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:id="@+id/authContainer"
-                        android:background="@drawable/auth_bg">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/authContainer"
+                    android:background="@drawable/auth_bg">
 
-            <!--ImageView
-                    android:layout_centerInParent="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/auth_bg_spot"
-                    /-->
-            <ProgressBar
-                    android:id="@+id/prsLoading"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:visibility="gone"
-                    style="@android:style/Widget.ProgressBar.Small"/>
+        <!--ImageView
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/auth_bg_spot"
+                /-->
+        <ProgressBar
+                android:id="@+id/prsLoading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone"
+                style="@android:style/Widget.ProgressBar.Small"/>
 
+
+        <LinearLayout
+                android:id="@+id/loLoginGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
 
             <LinearLayout
-                    android:id="@+id/loLoginGroup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:orientation="vertical"
-                    android:gravity="center_horizontal">
+                    android:background="@drawable/bg_registration_folder"
+                    android:gravity="center"
+                    android:paddingTop="75dp"
+                    android:paddingBottom="50dp"
+                    >
 
-                <RelativeLayout
-                        android:layout_width="wrap_content"
+                <LinearLayout
+                        android:id="@+id/loForm"
+                        android:layout_width="210dp"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/bg_registration_form_folder"
+                        android:orientation="vertical"
+                        android:padding="0dp"
                         >
 
-                    <ImageView
-                            android:id="@+id/ivFolderBg"
-                            android:layout_width="wrap_content"
+                    <EditText
+                            android:id="@+id/edEmail"
+                            android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:src="@drawable/bg_registration_folder"
+                            android:hint="@string/email"
+                            style="@style/EditTextAuth"
+                            android:background="@drawable/textlines"
+                            android:inputType="textEmailAddress"
                             />
 
-                    <LinearLayout
-                            android:id="@+id/loForm"
-                            android:layout_width="210dp"
+                    <EditText
+                            android:id="@+id/edPassword"
+                            android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignBottom="@id/ivFolderBg"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginBottom="60dp"
-                            android:background="@drawable/bg_registration_form_folder"
-                            android:padding="0dp"
-                            android:orientation="vertical">
-
-                        <EditText
-                                android:id="@+id/edEmail"
-                                android:layout_width="fill_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/email"
-                                style="@style/EditTextAuth"
-                                android:background="@drawable/textlines"
-                                android:inputType="textEmailAddress"
-                                />
-
-                        <EditText
-                                android:id="@+id/edName"
-                                android:layout_width="fill_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/edit_name"
-                                style="@style/EditTextAuth"
-                                android:background="@drawable/textlines"
-                                />
-
-                        <RelativeLayout
-                                android:id="@+id/loBirthday"
-                                android:layout_width="fill_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/textlines"
-                                >
-                            <TextView
-                                    android:id="@+id/tvBirthday"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentLeft="true"
-                                    android:layout_centerVertical="true"
-                                    android:hint="@string/birthdate"
-                                    style="@style/EditTextAuth"
-                                    />
-
-                            <ImageButton
-                                    android:id="@+id/ibBirthday"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentRight="true"
-                                    android:layout_centerVertical="true"
-                                    android:padding="8dp"
-                                    android:src="@drawable/ic_dropdown"
-                                    android:background="@android:color/transparent"
-                                    />
-
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                                android:id="@+id/loSex"
-                                android:layout_width="fill_parent"
-                                android:layout_height="wrap_content"
-                                >
-                            <TextView
-                                    android:id="@+id/tvSex"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentLeft="true"
-                                    android:layout_centerVertical="true"
-                                    android:hint="@string/general_sex"
-                                    style="@style/EditTextAuth"
-                                    />
-
-                            <TextView
-                                    android:id="@+id/tvBoy"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentRight="true"
-                                    android:layout_centerVertical="true"
-                                    android:text="@string/boy"
-                                    style="@style/RegistrationSexTextView"
-                                    android:drawableLeft="@drawable/ic_sex_male"
-                                    />
-
-                            <TextView
-                                    android:id="@+id/tvGirl"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    android:layout_toLeftOf="@id/tvBoy"
-                                    android:text="@string/girl"
-                                    style="@style/RegistrationSexTextView"
-                                    />
-
-                        </RelativeLayout>
-                    </LinearLayout>
-                </RelativeLayout>
-
-                <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        >
-                    <ProgressBar
-                            android:id="@+id/prsRegistrationSending"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
+                            android:hint="@string/password_hint"
+                            style="@style/EditTextAuth"
+                            android:background="@drawable/textlines"
+                            android:inputType="textPassword"
                             android:visibility="gone"
-                            style="@android:style/Widget.ProgressBar.Small"/>
-
-                    <Button
-                            android:id="@+id/btnRegister"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:text="@string/start_communication"
-                            android:background="@drawable/btn_signin_selector"
-                            style="@style/AuthButtonsText"
                             />
-                </RelativeLayout>
+
+                    <EditText
+                            android:id="@+id/edName"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/edit_name"
+                            style="@style/EditTextAuth"
+                            android:background="@drawable/textlines"
+                            />
+
+                    <RelativeLayout
+                            android:id="@+id/loBirthday"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/textlines"
+                            >
+                        <TextView
+                                android:id="@+id/tvBirthday"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_centerVertical="true"
+                                android:hint="@string/birthdate"
+                                style="@style/EditTextAuth"
+                                />
+
+                        <ImageButton
+                                android:id="@+id/ibBirthday"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:padding="8dp"
+                                android:src="@drawable/ic_dropdown"
+                                android:background="@android:color/transparent"
+                                />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                            android:id="@+id/loSex"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            >
+                        <TextView
+                                android:id="@+id/tvSex"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_centerVertical="true"
+                                android:hint="@string/general_sex"
+                                style="@style/EditTextAuth"
+                                />
+
+                        <TextView
+                                android:id="@+id/tvBoy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:text="@string/boy"
+                                style="@style/RegistrationSexTextView"
+                                android:drawableLeft="@drawable/ic_sex_male"
+                                />
+
+                        <TextView
+                                android:id="@+id/tvGirl"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_toLeftOf="@id/tvBoy"
+                                android:text="@string/girl"
+                                style="@style/RegistrationSexTextView"
+                                />
+
+                    </RelativeLayout>
+                </LinearLayout>
             </LinearLayout>
 
-            <TextView
+            <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/AuthButtonsBigText"
-                    android:text="@string/welcome_to_topface"
-                    android:layout_centerHorizontal="true"
-                    android:layout_above="@id/loLoginGroup"
-                    android:layout_marginBottom="30dp"
-                    />
+                    android:layout_marginTop="8dp"
+                    >
+                <ProgressBar
+                        android:id="@+id/prsRegistrationSending"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:visibility="gone"
+                        style="@android:style/Widget.ProgressBar.Small"/>
 
-            <TextView
-                    android:id="@+id/tvRedAlert"
-                    style="@style/RedAlertTextView"
-                    android:text="@string/error_login_password"/>
+                <Button
+                        android:id="@+id/btnRegister"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="@string/start_communication"
+                        android:background="@drawable/btn_signin_selector"
+                        style="@style/AuthButtonsText"
+                        />
+            </RelativeLayout>
+        </LinearLayout>
 
-            <TextView
-                    android:id="@+id/tvBackToMainAuth"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="8dp"
-                    android:text="@string/general_back"
-                    android:drawableLeft="@drawable/ic_back"
-                    android:drawablePadding="8dp"
-                    style="@style/AuthButtonsBigText"
-                    android:gravity="top"
-                    android:paddingBottom="1dp"
-                    />
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/AuthButtonsBigText"
+                android:text="@string/welcome_to_topface"
+                android:layout_centerHorizontal="true"
+                android:layout_above="@id/loLoginGroup"
+                android:layout_marginBottom="30dp"
+                />
 
+        <TextView
+                android:id="@+id/tvRedAlert"
+                style="@style/RedAlertTextView"
+                android:text="@string/error_login_password"/>
+
+        <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_below="@id/loLoginGroup"
+                android:paddingTop="30dp"
+                >
+        <TextView
+                android:id="@+id/tvBackToMainAuth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="8dp"
+                android:text="@string/general_back"
+                android:drawableLeft="@drawable/ic_back"
+                android:drawablePadding="8dp"
+                style="@style/AuthButtonsBigText"
+                android:gravity="top"
+                android:paddingBottom="1dp"
+                />
         </RelativeLayout>
 
-    </ScrollView>
-</FrameLayout>
+    </RelativeLayout>
+
+</ScrollView>
