@@ -23,7 +23,7 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Offerwalls;
+import com.topface.topface.utils.offerwalls.Offerwalls;
 
 import java.util.LinkedList;
 

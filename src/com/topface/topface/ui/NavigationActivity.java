@@ -33,6 +33,7 @@ import com.topface.topface.ui.fragments.MenuFragment.FragmentMenuListener;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.utils.*;
+import com.topface.topface.utils.offerwalls.Offerwalls;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 import ru.ideast.adwired.AWView;

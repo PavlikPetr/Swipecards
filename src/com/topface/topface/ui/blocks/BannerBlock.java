@@ -43,6 +43,7 @@ import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.utils.*;
+import com.topface.topface.utils.offerwalls.Offerwalls;
 import ru.ideast.adwired.AWView;
 import ru.ideast.adwired.events.OnNoBannerListener;
 import ru.ideast.adwired.events.OnStartListener;
