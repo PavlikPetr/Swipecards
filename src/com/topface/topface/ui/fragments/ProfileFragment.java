@@ -40,6 +40,7 @@ import com.viewpagerindicator.CirclePageIndicator;
 import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ProfileFragment extends BaseFragment implements View.OnClickListener {
     public final static int TYPE_MY_PROFILE = 1;
@@ -604,6 +605,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
                 Bundle extras = data.getExtras();
@@ -651,8 +654,13 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 }
             }
         }
+    }
 
-        super.onActivityResult(requestCode, resultCode, data);
+    public void resultToNestedFragments(int requestCode, int resultCode, Intent data) {
+        HashMap<Integer, Fragment> mBodyFragments = mBodyPagerAdapter.getFragmentCache();
+        for (Fragment fragment : mBodyFragments.values()) {
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     public static class HeaderMainFragment extends BaseFragment {

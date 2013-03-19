@@ -30,6 +30,7 @@ import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.*;
 import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
 import com.topface.topface.ui.fragments.MenuFragment.FragmentMenuListener;
+import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.utils.*;
@@ -659,6 +660,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == ContainerActivity.INTENT_CHAT_FRAGMENT) {
                 if (data != null) {
@@ -689,9 +691,11 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                         public void fail(int codeError, ApiResponse response) {
                         }
                     }).exec();
+                } else if (requestCode == AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA) {
+                    ((ProfileFragment)mFragmentSwitcher.getCurrentFragment()).resultToNestedFragments(requestCode, resultCode, data);
                 }
             }
         }
-        super.onActivityResult(requestCode, resultCode, data);
+
     }
 }
