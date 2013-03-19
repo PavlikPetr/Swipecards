@@ -116,7 +116,17 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mUserActions.findViewById(R.id.acBlock).setOnClickListener(this);
 
         mNavBarController = new NavigationBarController((ViewGroup) root.findViewById(R.id.loNavigationBar));
-        root.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
+        if (mProfileType == TYPE_USER_PROFILE) {
+            mActionBar.showBackButton(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getActivity().onBackPressed();
+                }
+            });
+        } else {
+            mActionBar.showHomeButton((NavigationActivity) getActivity());
+        }
+
         mTitle = (TextView) root.findViewById(R.id.tvNavigationTitle);
 
         initHeaderPages(root);
