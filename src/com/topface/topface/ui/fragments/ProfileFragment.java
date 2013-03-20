@@ -606,8 +606,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (resultCode == Activity.RESULT_OK) {
+            resultToNestedFragments(requestCode, resultCode, data);
             if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
                 Bundle extras = data.getExtras();
                 final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);

@@ -691,8 +691,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                         public void fail(int codeError, ApiResponse response) {
                         }
                     }).exec();
-                } else if (requestCode == AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA) {
-                    ((ProfileFragment)mFragmentSwitcher.getCurrentFragment()).resultToNestedFragments(requestCode, resultCode, data);
                 }
             }
         }

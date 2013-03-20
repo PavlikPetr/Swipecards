@@ -97,15 +97,17 @@ public class AddPhotoHelper {
 
     private void startCamera() {
         Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-//        UUID uuid = UUID.randomUUID();
-//        Debug.log("UUID::" + uuid.toString());
 
         intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(PATH_TO_FILE + mFileName)));
         intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.profile_add_title));
 
         if (Utils.isIntentAvailable(mContext, intent.getAction())) {
             if (mFragment != null) {
-                mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
+                if(mFragment instanceof ProfilePhotoFragment) {
+                    mFragment.getParentFragment().startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
+                } else {
+                    mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
+                }
             } else {
                 mActivity.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
             }
@@ -116,7 +118,11 @@ public class AddPhotoHelper {
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.profile_add_title));
         if (mFragment != null) {
-            mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
+            if(mFragment instanceof ProfilePhotoFragment) {
+                mFragment.getParentFragment().startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
+            } else {
+                mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
+            }
         } else {
             mActivity.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
         }
