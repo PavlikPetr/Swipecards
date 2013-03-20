@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -12,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.*;
+import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Register;
@@ -20,11 +25,14 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.RegisterRequest;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 
 import java.util.*;
 
 public class RegistrationFragment extends BaseFragment implements DatePickerDialog.OnDateSetListener {
+
+    private static final String SHOW_PASSWORD_FOR_REGISTRATION = "show_password_for_registration";
 
     public static final String INTENT_LOGIN = "registration_login";
     public static final String INTENT_PASSWORD = "registration_password";
@@ -34,6 +42,7 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
 
     private EditText mEdEmail;
     private EditText mEdName;
+    private EditText mEdPassword;
     private TextView mBirthdayText;
     private SexController mSexController;
     private TextView mRedAlertView;
@@ -81,12 +90,17 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
     private void initEditTextViews(View root) {
         mEdEmail = (EditText) root.findViewById(R.id.edEmail);
         mEdName = (EditText) root.findViewById(R.id.edName);
+        mEdPassword = (EditText) root.findViewById(R.id.edPassword);
+        if (needPassword()) {
+            mEdPassword.setVisibility(View.VISIBLE);
+        } else {
+            mEdPassword.setVisibility(View.GONE);
+        }
     }
 
     private void initBirthdayViews(View root) {
         View birthday = root.findViewById(R.id.loBirthday);
         mBirthdayText = (TextView) birthday.findViewById(R.id.tvBirthday);
-        //birthday.findViewById(R.id.ibBirthday);
         birthday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,10 +139,12 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
     private void sendRegistrationRequest() {
         final String email = mEdEmail.getText().toString();
         final String name = mEdName.getText().toString();
-        final String password = generatePassword();
+        final String password = mEdPassword.getVisibility() == View.VISIBLE ?
+                mEdPassword.getText().toString() : generatePassword();
         int sex = mSexController.getSex();
 
-        if (TextUtils.isEmpty(email.trim()) || TextUtils.isEmpty(name.trim()) || sex == -1 || mBirthday == null) {
+        if (TextUtils.isEmpty(email.trim()) || TextUtils.isEmpty(name.trim()) || sex == -1 || mBirthday == null
+                || password.trim().length() == 0) {
             redAlert(R.string.empty_fields);
             showButtons();
         } else {
@@ -143,6 +159,14 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
                     intent.putExtra(INTENT_LOGIN, email);
                     intent.putExtra(INTENT_PASSWORD, password);
                     intent.putExtra(INTENT_USER_ID, data.getUserId());
+
+                    EasyTracker.getTracker().trackEvent(
+                            "Registration",
+                            "SubmitRegister",
+                            mEdPassword.getVisibility() == View.VISIBLE ? "PasswordEntered" : "PasswordGenerated",
+                            1L
+                    );
+
                     CacheProfile.onRegistration(getActivity().getApplicationContext());
                     getActivity().setResult(Activity.RESULT_OK, intent);
                     getActivity().finish();
@@ -251,6 +275,33 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
             mBtnRegister.setVisibility(View.INVISIBLE);
             mProgressBar.setVisibility(View.VISIBLE);
         }
+    }
+
+    private boolean needPassword() {
+        boolean result;
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+
+        if (!prefs.contains(SHOW_PASSWORD_FOR_REGISTRATION)) {
+
+            try {
+                String androidHexId = Settings.Secure.getString(App.getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+                if (androidHexId == null || androidHexId.length() == 0) {
+                    result = (new Random(System.currentTimeMillis())).nextBoolean();
+                } else {
+                    int androidId = androidHexId.hashCode();
+                    result = (androidId % 2) == 0;
+                }
+            } catch(Exception ex) {
+                Debug.error(ex);
+                result = (new Random(System.currentTimeMillis())).nextBoolean();
+            }
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean(SHOW_PASSWORD_FOR_REGISTRATION, result);
+            editor.commit();
+        } else {
+            result = prefs.getBoolean(SHOW_PASSWORD_FOR_REGISTRATION, false);
+        }
+        return result;
     }
 
     private static class SexController {

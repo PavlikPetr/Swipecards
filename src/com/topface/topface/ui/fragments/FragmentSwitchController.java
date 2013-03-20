@@ -134,11 +134,10 @@ public class FragmentSwitchController extends ViewGroup {
         }
         mExtraFrame.setVisibility(View.VISIBLE);
 
-
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
         transaction.replace(R.id.fragment_extra_container, fragment);
         if (mCurrentExtraFragment != null) {
-            transaction.remove(mCurrentFragment);
+            transaction.remove(mCurrentExtraFragment);
         }
         transaction.commit();
         mCurrentExtraFragment = fragment;
@@ -340,6 +339,7 @@ public class FragmentSwitchController extends ViewGroup {
     private float mMaximumVelocity;
     private int mMinimumVelocity;
     private float mVelocitySlop;
+    private boolean mActionDownOnBezier = false;
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
@@ -356,14 +356,11 @@ public class FragmentSwitchController extends ViewGroup {
             mVelocityTracker = null;
         }
 
-        if (!inBezierThreshold(x) && (mAnimation == COLLAPSE || mAnimation == COLLAPSE_FULL)) {
-            return false;
-        }
-
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 mLastMotionX = x;
                 mLastMotionY = y;
+                mActionDownOnBezier = !(!inBezierThreshold(x) && (mAnimation == COLLAPSE || mAnimation == COLLAPSE_FULL));
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (mAnimation == EXPAND) {
@@ -377,6 +374,10 @@ public class FragmentSwitchController extends ViewGroup {
                 float yDiff = Math.abs(dy);
 
                 if (canScroll(getChildAt(1), false, (int) dx, (int) x, (int) y)) {
+                    return false;
+                }
+
+                if (!mActionDownOnBezier) {
                     return false;
                 }
 
@@ -424,6 +425,7 @@ public class FragmentSwitchController extends ViewGroup {
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 mLastMotionX = x;
+                mActionDownOnBezier = !(!inBezierThreshold(x) && (mAnimation == COLLAPSE || mAnimation == COLLAPSE_FULL));
                 mVelocityTracker.addMovement(event);
                 break;
             case MotionEvent.ACTION_MOVE:
