@@ -264,13 +264,17 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         //Вручную прокидываем событие onPause() в ViewPager, т.к. на onPause() мы отписываемся от событий
         if (mBodyPagerAdapter != null) {
             for (Fragment fragment : mBodyPagerAdapter.getFragmentCache().values()) {
-                fragment.onPause();
+                if (fragment != null) {
+                    fragment.onPause();
+                }
             }
         }
 
         if (mHeaderPagerAdapter != null) {
             for (Fragment fragment : mHeaderPagerAdapter.getFragmentCache().values()) {
-                fragment.onPause();
+                if (fragment != null) {
+                    fragment.onPause();
+                }
             }
         }
     }

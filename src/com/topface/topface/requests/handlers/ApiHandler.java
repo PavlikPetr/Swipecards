@@ -19,6 +19,7 @@ import org.json.JSONObject;
 abstract public class ApiHandler extends Handler {
 
     private Context mContext;
+    private boolean mCancel = false;
 
     @Override
     public void handleMessage(Message msg) {
@@ -27,31 +28,33 @@ abstract public class ApiHandler extends Handler {
     }
 
     public void response(ApiResponse response) {
-        try {
-            if (response.code == ApiResponse.ERRORS_PROCCESED) {
-                fail(ApiResponse.ERRORS_PROCCESED, new ApiResponse(ApiResponse.ERRORS_PROCCESED, "Client exception"));
-            } else if (response.code == ApiResponse.PREMIUM_ACCESS_ONLY) {
-                Debug.error(App.getContext().getString(R.string.general_premium_access_error));
+        if (!mCancel) {
+            try {
+                if (response.code == ApiResponse.ERRORS_PROCCESED) {
+                    fail(ApiResponse.ERRORS_PROCCESED, new ApiResponse(ApiResponse.ERRORS_PROCCESED, "Client exception"));
+                } else if (response.code == ApiResponse.PREMIUM_ACCESS_ONLY) {
+                    Debug.error(App.getContext().getString(R.string.general_premium_access_error));
 
-                //Сообщение о необходимости Премиум-статуса
-                showToast(R.string.general_premium_access_error);
+                    //Сообщение о необходимости Премиум-статуса
+                    showToast(R.string.general_premium_access_error);
 
-                fail(response.code, response);
-            } else if (response.code != ApiResponse.RESULT_OK) {
-                fail(response.code, response);
-            } else {
-                setCounters(response);
-                success(response);
-                sendUpdateIntent(response);
+                    fail(response.code, response);
+                } else if (response.code != ApiResponse.RESULT_OK) {
+                    fail(response.code, response);
+                } else {
+                    setCounters(response);
+                    success(response);
+                    sendUpdateIntent(response);
+                }
+            } catch (Exception e) {
+                Debug.error("ApiHandler exception", e);
+                fail(ApiResponse.ERRORS_PROCCESED, new ApiResponse(ApiResponse.ERRORS_PROCCESED, e.getMessage()));
             }
-        } catch (Exception e) {
-            Debug.error("ApiHandler exception", e);
-            fail(ApiResponse.ERRORS_PROCCESED, new ApiResponse(ApiResponse.ERRORS_PROCCESED, e.getMessage()));
-        }
-        try {
-            always(response);
-        } catch (Exception e) {
-            Debug.error("ApiHandler always callback exception", e);
+            try {
+                always(response);
+            } catch (Exception e) {
+                Debug.error("ApiHandler always callback exception", e);
+            }
         }
     }
 
@@ -75,8 +78,10 @@ abstract public class ApiHandler extends Handler {
     }
 
     public void cancel() {
-        always(new ApiResponse());
-        //Можно переопределить, если вам нужен коллбэк отмены запроса
+        if (!mCancel) {
+            always(new ApiResponse());
+            mCancel = true;
+        }
     }
 
     private void setCounters(ApiResponse response) {

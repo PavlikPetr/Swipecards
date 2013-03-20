@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.BlackListItem;
@@ -89,11 +88,11 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
         });
 
         mActionBar.showEditButton(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               toggleEditList();
-           }
-       });
+            @Override
+            public void onClick(View v) {
+                toggleEditList();
+            }
+        });
     }
 
     private void toggleEditList() {
@@ -122,10 +121,8 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
                         @Override
                         public void always(ApiResponse response) {
                             super.always(response);
-                            if (isAdded()) {
-                                if (mLockView != null) {
-                                    mLockView.setVisibility(View.GONE);
-                                }
+                            if (mLockView != null) {
+                                mLockView.setVisibility(View.GONE);
                             }
                         }
                     })

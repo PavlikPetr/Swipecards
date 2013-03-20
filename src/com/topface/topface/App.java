@@ -53,7 +53,7 @@ public class App extends Application {
 
     @Override
     public void onCreate() {
-        //android.os.Debug.startMethodTracing("topface_create");
+//        android.os.Debug.startMethodTracing("topface_create");
         ACRA.init(this);
         ACRA.getErrorReporter().setReportSender(new HockeySender());
         super.onCreate();

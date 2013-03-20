@@ -159,7 +159,9 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     @Override
                     public void always(ApiResponse response) {
                         super.always(response);
-                        mLoadingLocker.setVisibility(View.GONE);
+                        if (mLoadingLocker != null) {
+                            mLoadingLocker.setVisibility(View.GONE);
+                        }
                     }
                 }).exec();
             }
@@ -181,9 +183,9 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
 
                     @Override
                     public void fail(int codeError, ApiResponse response) {
-                        if(getActivity() != null) {
+                        if (getActivity() != null) {
                             getActivity().setResult(Activity.RESULT_CANCELED);
-    //                        finishOperations(handler);
+                            //                        finishOperations(handler);
                             if (codeError == ApiResponse.NON_EXIST_PHOTO_ERROR) {
                                 Photo removedPhoto = mPhotoLinks.getByPhotoId(mLastSelectedAsMainId);
                                 mPhotoGridAdapter.getData().remove(removedPhoto);
@@ -202,7 +204,9 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     @Override
                     public void always(ApiResponse response) {
                         super.always(response);
-                        mLoadingLocker.setVisibility(View.GONE);
+                        if (mLoadingLocker != null) {
+                            mLoadingLocker.setVisibility(View.GONE);
+                        }
                     }
                 }).exec();
             } else {
@@ -257,52 +261,50 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            if (type != T_ADD_BTN) {
-                final int itemId = item.getId();
-                holder.photo.setPhoto(item);
-                if (mDeleted.contains(item)) {
-                    holder.mBtnDelete.setVisibility(View.INVISIBLE);
-                    holder.mBtnSetAsMain.setVisibility(View.INVISIBLE);
-                    holder.mBtnRestore.setVisibility(View.VISIBLE);
-                    holder.mBtnSelectedAsMain.setVisibility(View.INVISIBLE);
-                    holder.mBtnRestore.setOnClickListener(new OnClickListener() {
+            final int itemId = item.getId();
+            holder.photo.setPhoto(item);
+            if (mDeleted.contains(item)) {
+                holder.mBtnDelete.setVisibility(View.INVISIBLE);
+                holder.mBtnSetAsMain.setVisibility(View.INVISIBLE);
+                holder.mBtnRestore.setVisibility(View.VISIBLE);
+                holder.mBtnSelectedAsMain.setVisibility(View.INVISIBLE);
+                holder.mBtnRestore.setOnClickListener(new OnClickListener() {
 
-                        @Override
-                        public void onClick(View v) {
-                            mDeleted.remove(item);
-                            notifyDataSetChanged();
-                        }
-                    });
-                } else {
-                    holder.mBtnRestore.setVisibility(View.INVISIBLE);
-
-                    holder.mBtnDelete.setVisibility(View.VISIBLE);
-                    holder.mBtnDelete.setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (itemId == mLastSelectedAsMainId) {
-                                mLastSelectedAsMainId = mSelectedAsMainId;
-                            }
-                            mDeleted.add(item);
-                            notifyDataSetChanged();
-                        }
-                    });
-
-                    if (mLastSelectedAsMainId == itemId) {
-                        holder.mBtnSetAsMain.setVisibility(View.INVISIBLE);
-                        holder.mBtnSelectedAsMain.setVisibility(View.VISIBLE);
-                        holder.mBtnDelete.setVisibility(View.GONE);
-                    } else {
-                        holder.mBtnSelectedAsMain.setVisibility(View.INVISIBLE);
-                        holder.mBtnSetAsMain.setVisibility(View.VISIBLE);
-                        holder.mBtnSetAsMain.setOnClickListener(new OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                mLastSelectedAsMainId = itemId;
-                                notifyDataSetChanged();
-                            }
-                        });
+                    @Override
+                    public void onClick(View v) {
+                        mDeleted.remove(item);
+                        notifyDataSetChanged();
                     }
+                });
+            } else {
+                holder.mBtnRestore.setVisibility(View.INVISIBLE);
+
+                holder.mBtnDelete.setVisibility(View.VISIBLE);
+                holder.mBtnDelete.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (itemId == mLastSelectedAsMainId) {
+                            mLastSelectedAsMainId = mSelectedAsMainId;
+                        }
+                        mDeleted.add(item);
+                        notifyDataSetChanged();
+                    }
+                });
+
+                if (mLastSelectedAsMainId == itemId) {
+                    holder.mBtnSetAsMain.setVisibility(View.INVISIBLE);
+                    holder.mBtnSelectedAsMain.setVisibility(View.VISIBLE);
+                    holder.mBtnDelete.setVisibility(View.GONE);
+                } else {
+                    holder.mBtnSelectedAsMain.setVisibility(View.INVISIBLE);
+                    holder.mBtnSetAsMain.setVisibility(View.VISIBLE);
+                    holder.mBtnSetAsMain.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mLastSelectedAsMainId = itemId;
+                            notifyDataSetChanged();
+                        }
+                    });
                 }
             }
 

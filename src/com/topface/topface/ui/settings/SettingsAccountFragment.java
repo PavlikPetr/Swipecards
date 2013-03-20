@@ -8,12 +8,12 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gcm.GCMRegistrar;
@@ -24,7 +24,6 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.ActionBar;
@@ -131,8 +130,11 @@ public class SettingsAccountFragment extends BaseFragment {
 
                     @Override
                     public void fail(int codeError, ApiResponse response) {
-                        lockerView.setVisibility(View.GONE);
-                        Toast.makeText(getActivity(), R.string.general_server_error, 1500).show();
+                        FragmentActivity activity = getActivity();
+                        if (activity != null) {
+                            lockerView.setVisibility(View.GONE);
+                            Toast.makeText(activity, R.string.general_server_error, 1500).show();
+                        }
                     }
                 }).exec();
 
