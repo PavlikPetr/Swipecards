@@ -375,8 +375,10 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     holder.mTitle.setText(item.getTitle());
                 } else if (item instanceof EditForm) {
                     holder.mTitle.setText(item.getTitle());
-                    holder.mText.setVisibility(View.VISIBLE);
-                    holder.mText.setText(item.getText());
+                    if (item != null && item.getText() != null && item.getText().trim().length() > 0) {
+                        holder.mText.setVisibility(View.VISIBLE);
+                        holder.mText.setText(item.getText());
+                    }
                 }
 
                 convertView.setOnClickListener(new OnClickListener() {
