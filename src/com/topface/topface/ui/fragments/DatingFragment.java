@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -67,8 +68,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private Novice mNovice;
     private AlphaAnimation mAlphaAnimation;
     private RateController mRateController;
-    private View mNavigationHeader;
-    private View mNavigationHeaderShadow;
     private RelativeLayout mDatingLoveBtnLayout;
     private ViewFlipper mViewFlipper;
 
@@ -336,11 +335,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
                 @Override
                 public void fail(int codeError, ApiResponse response) {
-                    Search.log("load error: " + response.message);
-                    Toast.makeText(getActivity(), App.getContext().getString(R.string.general_data_error),
-                            Toast.LENGTH_SHORT).show();
-                    onUpdateFail(isAddition);
-                    unlockControls();
+                    FragmentActivity activity = getActivity();
+                    if (activity != null) {
+                        Search.log("load error: " + response.message);
+                        Toast.makeText(activity, App.getContext().getString(R.string.general_data_error),
+                                Toast.LENGTH_SHORT).show();
+                        onUpdateFail(isAddition);
+                        unlockControls();
+                    }
                 }
 
                 @Override
@@ -354,34 +356,30 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private SearchRequest getSearchRequest() {
         SearchRequest searchRequest = new SearchRequest(getActivity());
-        SharedPreferences preferences = App.getContext().getSharedPreferences(
-                Static.PREFERENCES_TAG_PROFILE, Context.MODE_PRIVATE);
         searchRequest.limit = SEARCH_LIMIT;
-        searchRequest.online = getFilterOnline(preferences);
+        searchRequest.online = getFilterOnline();
         registerRequest(searchRequest);
         return searchRequest;
     }
 
-    private boolean getFilterOnline(SharedPreferences preferences) {
-        return preferences.getBoolean(
-                App.getContext().getString(R.string.cache_profile_filter_online),
-                false
-        );
+    private boolean getFilterOnline() {
+        return DatingFilter.getOnlineField();
     }
 
     @Override
     public void onClick(View view) {
+        FragmentActivity activity = getActivity();
         switch (view.getId()) {
             case R.id.loDatingResources: {
                 EasyTracker.getTracker().trackEvent("Dating", "BuyClick", "", 1L);
-                Intent intent = new Intent(getActivity(), ContainerActivity.class);
+                Intent intent = new Intent(activity, ContainerActivity.class);
                 intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
                 startActivity(intent);
             }
             break;
             case R.id.btnDatingLove: {
                 if (mCurrentUser != null) {
-                    if (mUserSearchList.isEnded()) {
+                    if (mUserSearchList == null || mUserSearchList.isEnded()) {
                         updateData(true);
                         return;
                     } else {
@@ -391,7 +389,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         }
                         mRateController.onRate(mCurrentUser.id, 10,
                                 mCurrentUser.mutual ? RateRequest.DEFAULT_MUTUAL
-                                        : RateRequest.DEFAULT_NO_MUTUAL);
+                                        : RateRequest.DEFAULT_NO_MUTUAL, null);
 
                         EasyTracker.getTracker().trackEvent("Dating", "Rate",
                                 "AdmirationSend" + (mCurrentUser.mutual ? "mutual" : ""),
@@ -403,14 +401,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingSympathy: {
                 if (mCurrentUser != null) {
-                    if (mUserSearchList.isEnded()) {
+                    if (mUserSearchList == null || mUserSearchList.isEnded()) {
                         updateData(true);
                         return;
                     } else {
                         lockControls();
                         mRateController.onRate(mCurrentUser.id, 9,
                                 mCurrentUser.mutual ? RateRequest.DEFAULT_MUTUAL
-                                        : RateRequest.DEFAULT_NO_MUTUAL);
+                                        : RateRequest.DEFAULT_NO_MUTUAL, null);
 
                         EasyTracker.getTracker().trackEvent("Dating", "Rate",
                                 "SympathySend" + (mCurrentUser.mutual ? "mutual" : ""), 0L);
@@ -436,14 +434,20 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
             break;
             case R.id.btnDatingProfile: {
-                ((NavigationActivity) getActivity()).onExtraFragment(
-                        ProfileFragment.newInstance(mUserSearchList.get(mUserSearchList.getSearchPosition()).id, ProfileFragment.TYPE_USER_PROFILE));
+                if (mCurrentUser != null && activity != null) {
+                    ((NavigationActivity) activity).onExtraFragment(
+                            ProfileFragment.newInstance(
+                                    mCurrentUser.id,
+                                    ProfileFragment.TYPE_USER_PROFILE
+                            )
+                    );
 
-                EasyTracker.getTracker().trackEvent("Dating", "Additional", "Profile", 1L);
+                    EasyTracker.getTracker().trackEvent("Dating", "Additional", "Profile", 1L);
+                }
             }
             break;
             case R.id.btnDatingChat: {
-                Intent intent = new Intent(getActivity(), ContainerActivity.class);
+                Intent intent = new Intent(activity, ContainerActivity.class);
 
                 intent.putExtra(ChatFragment.INTENT_USER_ID, mCurrentUser.id);
                 intent.putExtra(ChatFragment.INTENT_USER_NAME, mCurrentUser.first_name);
@@ -451,7 +455,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 intent.putExtra(ChatFragment.INTENT_USER_AGE, mCurrentUser.age);
                 intent.putExtra(ChatFragment.INTENT_USER_CITY, mCurrentUser.city.name);
                 intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
-                getActivity().startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
+                activity.startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
 
                 EasyTracker.getTracker().trackEvent("Dating", "Additional", "Chat", 1L);
             }
@@ -606,7 +610,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 @Override
                 protected void success(NoviceLikes noviceLikes, ApiResponse response) {
                     CacheProfile.likes = noviceLikes.likes;
-                    if(noviceLikes.increment > 0) {
+                    if (noviceLikes.increment > 0) {
                         Novice.giveNoviceLikesQuantity = noviceLikes.increment;
                         final String text = String.format(
                                 getResources().getString(R.string.novice_sympathies_bonus),
@@ -763,23 +767,47 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (resultCode == Activity.RESULT_OK
                 && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
             lockControls();
-            updateFilterData();
-            updateData(false);
+            if (data != null && data.getExtras() != null) {
+                final DatingFilter filter = data.getExtras().getParcelable(FilterFragment.INTENT_DATING_FILTER);
+                FilterRequest filterRequest = new FilterRequest(filter, getActivity());
+                registerRequest(filterRequest);
+                filterRequest.callback(new ApiHandler() {
+
+                    @Override
+                    public void success(ApiResponse response) {
+                        try {
+                            CacheProfile.dating = filter.clone();
+                        } catch (CloneNotSupportedException e) {
+                            Debug.error(e);
+                        }
+
+                        updateFilterData();
+                        updateData(false);
+                    }
+
+                    @Override
+                    public void fail(int codeError, ApiResponse response) {
+                        unlockControls();
+                    }
+                }).exec();
+            }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
     private void setHeader(View view) {
-        String plus = CacheProfile.dating.age_end == FilterFragment.webAbsoluteMaxAge ? "+" : "";
-        int age = CacheProfile.dating.age_end == FilterFragment.webAbsoluteMaxAge ? EditAgeFragment.absoluteMax : CacheProfile.dating.age_end;
-        Context context = App.getContext();
-        getActionBar(view).setTitleText(context.getString(
-                CacheProfile.dating.sex == Static.BOY ? R.string.dating_header_guys
-                        : R.string.dating_header_girls, CacheProfile.dating.age_start,
-                age) + plus);
+        if (CacheProfile.dating != null) {
+            String plus = CacheProfile.dating.age_end == FilterFragment.webAbsoluteMaxAge ? "+" : "";
+            int age = CacheProfile.dating.age_end == FilterFragment.webAbsoluteMaxAge ? EditAgeFragment.absoluteMax : CacheProfile.dating.age_end;
+            Context context = App.getContext();
+            getActionBar(view).setTitleText(context.getString(
+                    CacheProfile.dating.sex == Static.BOY ? R.string.dating_header_guys
+                            : R.string.dating_header_girls, CacheProfile.dating.age_start,
+                    age) + plus);
 
-        getActionBar(view).setSubTitleText(getSubtitle(context));
+            getActionBar(view).setSubTitleText(getSubtitle(context));
+        }
     }
 
     private String getSubtitle(Context context) {
@@ -868,34 +896,35 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void sendAlbumRequest(final Photos data) {
         int position = data.get(mLoadedCount - 1).getPosition() + 1;
-        AlbumRequest request = new AlbumRequest(getActivity(), mUserSearchList.getCurrentUser().id, PHOTOS_LIMIT, position, AlbumRequest.MODE_SEARCH);
-        final int uid = mUserSearchList.getCurrentUser().id;
-        request.callback(new ApiHandler() {
-            @Override
-            public void success(ApiResponse response) {
-                if (uid == mUserSearchList.getCurrentUser().id) {
-                    Photos newPhotos = Photos.parse(response.jsonResult.optJSONArray("items"));
-                    mNeedMore = response.jsonResult.optBoolean("more");
-                    int i = 0;
-                    for (Photo photo : newPhotos) {
-                        data.set(mLoadedCount + i, photo);
-                        i++;
-                    }
-                    mLoadedCount += newPhotos.size();
+        if (mUserSearchList != null && mUserSearchList.getCurrentUser() != null) {
+            AlbumRequest request = new AlbumRequest(getActivity(), mUserSearchList.getCurrentUser().id, PHOTOS_LIMIT, position, AlbumRequest.MODE_SEARCH);
+            final int uid = mUserSearchList.getCurrentUser().id;
+            request.callback(new ApiHandler() {
+                @Override
+                public void success(ApiResponse response) {
+                    if (uid == mUserSearchList.getCurrentUser().id) {
+                        Photos newPhotos = Photos.parse(response.jsonResult.optJSONArray("items"));
+                        mNeedMore = response.jsonResult.optBoolean("more");
+                        int i = 0;
+                        for (Photo photo : newPhotos) {
+                            data.set(mLoadedCount + i, photo);
+                            i++;
+                        }
+                        mLoadedCount += newPhotos.size();
 
-                    if (mImageSwitcher != null) {
-                        mImageSwitcher.getAdapter().notifyDataSetChanged();
+                        if (mImageSwitcher != null) {
+                            mImageSwitcher.getAdapter().notifyDataSetChanged();
+                        }
                     }
+                    mCanSendAlbumReq = true;
                 }
-                mCanSendAlbumReq = true;
-            }
 
-            @Override
-            public void fail(int codeError, ApiResponse response) {
-                mCanSendAlbumReq = true;
-            }
-        }).exec();
-
+                @Override
+                public void fail(int codeError, ApiResponse response) {
+                    mCanSendAlbumReq = true;
+                }
+            }).exec();
+        }
     }
 
     private void updateResources() {

@@ -11,11 +11,11 @@ import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.FeedDialog;
-import com.topface.topface.data.FeedUser;
-import com.topface.topface.data.History;
-import com.topface.topface.data.VirusLike;
-import com.topface.topface.requests.*;
+import com.topface.topface.data.*;
+import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.VirusLikesRequest;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.*;
@@ -73,12 +73,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         mUnrealItems = new ArrayList<History>();
         mWaitingItems = new ArrayList<History>();
         mHashRepeatRequests = new HashMap<History, ApiRequest>();
-    }
-
-    public void setFriendProfile(FeedUser friend) {
-        if (mHeaderView != null && friend != null) {
-            ((ImageViewRemote)mHeaderView.findViewById(R.id.ivFriendAvatar)).setPhoto(user.photo);
-        }
     }
 
     @Override
@@ -146,6 +140,13 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     public void setUser(FeedUser user) {
         this.user = user;
+        if (mHeaderView != null && user != null) {
+            ((ImageViewRemote)mHeaderView.findViewById(R.id.ivFriendAvatar)).setPhoto(user.photo);
+        }
+    }
+
+    public FeedUser getUser() {
+        return this.user;
     }
 
     public void addHeader(ListView parentView) {
@@ -295,6 +296,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         boolean output = (item.target == FeedDialog.USER_MESSAGE);
         boolean showDate = mShowDatesList.contains(item);
 
+        Photo userPhoto = user != null ? user.photo : null;
+
         switch (type) {
             case T_WAITING:
                 if (item.isRepeatItem()) {
@@ -319,7 +322,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case T_USER:
                 if (avatar) {
                     holder.avatar.setOnClickListener(output ? null : mOnClickListener);
-                    holder.avatar.setPhoto(output ? CacheProfile.photo : user.photo);
+                    holder.avatar.setPhoto(output ? CacheProfile.photo : userPhoto);
                     holder.avatar.setVisibility(View.VISIBLE);
                     holder.userInfo.setBackgroundResource(output ? R.drawable.bg_message_user : R.drawable.bg_message_friend);
                 } else {
@@ -333,7 +336,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case T_USER_MAP:
                 if (avatar) {
                     holder.avatar.setOnClickListener(output ? null : mOnClickListener);
-                    holder.avatar.setPhoto(output ? CacheProfile.photo : user.photo);
+                    holder.avatar.setPhoto(output ? CacheProfile.photo : userPhoto);
                     holder.avatar.setVisibility(View.VISIBLE);
                 } else {
                     holder.avatar.setVisibility(View.INVISIBLE);
@@ -343,7 +346,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case T_USER_REQUEST:
                 if (avatar) {
                     holder.avatar.setOnClickListener(output ? null : mOnClickListener);
-                    holder.avatar.setPhoto(output ? CacheProfile.photo : user.photo);
+                    holder.avatar.setPhoto(output ? CacheProfile.photo : userPhoto);
                     holder.avatar.setVisibility(View.VISIBLE);
                     holder.userInfo.setBackgroundResource(output ? R.drawable.bg_message_user : R.drawable.bg_message_friend);
                 } else {

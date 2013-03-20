@@ -131,6 +131,8 @@ public class AuthFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 mAuthViewsFlipper.setDisplayedChild(1);
+                mLogin.requestFocus();
+                Utils.showSoftKeyboard(getActivity(), mLogin);
             }
         });
 
@@ -138,6 +140,7 @@ public class AuthFragment extends BaseFragment {
         mCreateAccountView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                EasyTracker.getTracker().trackEvent("Registration", "StartActivity", "FromAuth", 1L);
                 Intent intent = new Intent(getActivity(), ContainerActivity.class);
                 startActivityForResult(intent, ContainerActivity.INTENT_REGISTRATION_FRAGMENT);
             }
@@ -177,7 +180,7 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void initRetryView(View root) {
-        mRetryView = new RetryView(getActivity().getApplicationContext());
+        mRetryView = new RetryView(getActivity());
         mRetryView.setErrorMsg(getString(R.string.general_data_error));
         mRetryView.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new View.OnClickListener() {
             @Override
@@ -206,9 +209,10 @@ public class AuthFragment extends BaseFragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void
+    onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
+        if (mAuthorizationManager != null) mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK &&
                 (requestCode == ContainerActivity.INTENT_RECOVER_PASSWORD
                         || requestCode == ContainerActivity.INTENT_REGISTRATION_FRAGMENT)) {
@@ -251,6 +255,7 @@ public class AuthFragment extends BaseFragment {
                 startActivityForResult(intent, ContainerActivity.INTENT_RECOVER_PASSWORD);
             }
         });
+        mRecoverPwd.setVisibility(View.GONE);
     }
 
     private boolean checkOnline() {
@@ -373,6 +378,7 @@ public class AuthFragment extends BaseFragment {
             @Override
             public void success(final ApiResponse response) {
                 Options.parse(response);
+                Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
                 ((BaseFragmentActivity) getActivity()).close(AuthFragment.this);
             }
 
@@ -403,9 +409,7 @@ public class AuthFragment extends BaseFragment {
                     public void onClick(View view) {
                         mRetryView.setVisibility(View.GONE);
                         mProgressBar.setVisibility(View.VISIBLE);
-                        request.canceled = false;
-                        registerRequest(request);
-                        request.exec();
+                        resendRequest(request);
                     }
                 });
                 break;
@@ -417,9 +421,7 @@ public class AuthFragment extends BaseFragment {
                     public void onClick(View view) {
                         mRetryView.setVisibility(View.GONE);
                         mProgressBar.setVisibility(View.VISIBLE);
-                        request.canceled = false;
-                        registerRequest(request);
-                        request.exec();
+                        resendRequest(request);
                     }
                 });
                 break;
@@ -440,6 +442,7 @@ public class AuthFragment extends BaseFragment {
                 break;
             case ApiResponse.INCORRECT_PASSWORD:
                 redAlert(R.string.incorrect_password);
+                mRecoverPwd.setVisibility(View.VISIBLE);
                 needShowRetry = false;
                 break;
             case ApiResponse.MISSING_REQUIRE_PARAMETER:
@@ -455,9 +458,7 @@ public class AuthFragment extends BaseFragment {
                         mRetryView.setVisibility(View.GONE);
                         mAuthViewsFlipper.setVisibility(View.VISIBLE);
                         mProgressBar.setVisibility(View.VISIBLE);
-                        request.canceled = false;
-                        registerRequest(request);
-                        request.exec();
+                        resendRequest(request);
                     }
                 });
                 break;
@@ -471,6 +472,14 @@ public class AuthFragment extends BaseFragment {
         }
     }
 
+    private void resendRequest(ApiRequest request) {
+        if (request != null) {
+            request.canceled = false;
+            registerRequest(request);
+            request.exec();
+        }
+    }
+
     private void redAlert(int resId) {
         redAlert(getString(resId));
     }
@@ -481,17 +490,19 @@ public class AuthFragment extends BaseFragment {
                 mWrongPasswordAlertView.setText(text);
             }
             mWrongPasswordAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
-                    android.R.anim.fade_in));
+                    R.anim.slide_down_fade_in));
             mWrongPasswordAlertView.setVisibility(View.VISIBLE);
             mTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            removeRedAlert();
-                        }
-                    });
+                    if (isAdded()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                removeRedAlert();
+                            }
+                        });
+                    }
                 }
             }, Static.RED_ALERT_APPEARANCE_TIME);
         }
@@ -539,7 +550,7 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void btnVKClick() {
-        if (checkOnline()) {
+        if (checkOnline() && mAuthorizationManager != null) {
             hideButtons();
             mAuthorizationManager.vkontakteAuth();
         }
@@ -547,7 +558,7 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void btnFBClick() {
-        if (checkOnline()) {
+        if (checkOnline() && mAuthorizationManager != null) {
             hideButtons();
             mAuthorizationManager.facebookAuth();
         }

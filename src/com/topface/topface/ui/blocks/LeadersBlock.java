@@ -67,7 +67,7 @@ public class LeadersBlock {
             public void onClick(View view) {
                 mFragment.startActivity(
                         new Intent(
-                                mFragment.getActivity().getApplicationContext(),
+                                mFragment.getActivity(),
                                 LeadersActivity.class
                         )
                 );
@@ -78,7 +78,7 @@ public class LeadersBlock {
     private void setAdapter(FeedUserListData<Leader> leaders) {
         HorizontalListView list = (HorizontalListView) mLayout.findViewById(R.id.leadersList);
         if (list != null) {
-            list.setAdapter(new LeadersAdapter(mFragment.getActivity().getApplicationContext(), leaders));
+            list.setAdapter(new LeadersAdapter(mFragment.getActivity(), leaders));
             //Обработчик нажатия на лидера
             list.setOnItemClickListener(mItemClickListener);
         }

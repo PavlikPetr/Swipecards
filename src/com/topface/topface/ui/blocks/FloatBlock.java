@@ -17,10 +17,9 @@ import java.util.Map;
  * Блок для страниц, где нужно показывать баннеры или лидеров
  */
 public class FloatBlock {
-    private Map<String, String> mFloatTypeMap;
-    private Options mOptions;
+    private static Map<String, String> mFloatTypeMap;
+    private static Options mOptions;
     private Fragment mFragment;
-    private LeadersBlock mLeaders;
     private BannerBlock mBanner;
     private final ViewGroup mLayout;
 
@@ -41,14 +40,14 @@ public class FloatBlock {
             if (floatType.equals(Options.FLOAT_TYPE_BANNER)) {
                 mBanner = new BannerBlock(mFragment, mLayout);
             } else if (floatType.equals(Options.FLOAT_TYPE_LEADERS)) {
-                mLeaders = new LeadersBlock(mFragment, mLayout);
+                new LeadersBlock(mFragment, mLayout);
             }
             //mLeaders = new LeadersBlock(mActivity, mLayout);
         }
         //Если переданого активити нет в карте, то не инициализируем ни один блок
     }
 
-    private void setActivityMap() {
+    public static void setActivityMap() {
         mFloatTypeMap = new HashMap<String, String>();
         if (mOptions.pages.containsKey(Options.PAGE_LIKES))
             mFloatTypeMap.put(LikesFragment.class.toString(), mOptions.pages.get(Options.PAGE_LIKES).floatType);
@@ -62,15 +61,8 @@ public class FloatBlock {
             mFloatTypeMap.put(VisitorsFragment.class.toString(), mOptions.pages.get(Options.PAGE_VISITORS).floatType);
     }
 
-    public void update() {
-        if (mLeaders != null) {
-            mLeaders.loadLeaders();
-        }
-    }
-
     public void onResume() {
         if (mBanner != null) mBanner.onResume();
-        update();
     }
 
     public void onPause() {

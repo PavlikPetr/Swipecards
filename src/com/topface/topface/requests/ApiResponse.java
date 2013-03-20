@@ -10,7 +10,7 @@ import java.util.Arrays;
 public class ApiResponse implements IApiResponse, SerializableToJson {
     // Data
     public int code = RESULT_DONT_SET;
-    public String message;
+    public String message = "";
     public JSONObject jsonResult;
     public JSONObject counters;
     public String method;

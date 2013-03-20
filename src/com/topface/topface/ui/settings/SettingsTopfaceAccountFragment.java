@@ -1,6 +1,8 @@
 package com.topface.topface.ui.settings;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -13,8 +15,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 import com.google.android.gcm.GCMRegistrar;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
@@ -28,7 +34,7 @@ import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-public class SettingsTopfaceAccountFragment extends BaseFragment implements OnClickListener{
+public class SettingsTopfaceAccountFragment extends BaseFragment implements OnClickListener {
 
     public static final int RESULT_LOGOUT = 666;
     private LockerView mLockerView;
@@ -55,10 +61,38 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         mLockerView = (LockerView) root.findViewById(R.id.llvLogoutLoading);
         mLockerView.setVisibility(View.GONE);
 
+        String code = ((SettingsContainerActivity)getActivity()).getConfirmationCode();
+
+        if (code != null) {
+            ConfirmRequest request = new ConfirmRequest(getActivity(), AuthToken.getInstance().getLogin(), code);
+            mLockerView.setVisibility(View.VISIBLE);
+            request.callback(new ApiHandler() {
+                @Override
+                public void success(ApiResponse response) {
+                    Toast.makeText(getActivity(), getString(R.string.email_confirmed), 1500).show();
+                    CacheProfile.emailConfirmed = true;
+                    setViewsState();
+                }
+
+                @Override
+                public void fail(int codeError, ApiResponse response) {
+                    Toast.makeText(getActivity(), R.string.general_server_error, 1500).show();
+                }
+
+                @Override
+                public void always(ApiResponse response) {
+                    super.always(response);
+                    mLockerView.setVisibility(View.GONE);
+                }
+            }).exec();
+        } else {
+            requestEmailConfirmedFlag();
+        }
 
         initTextViews(root);
+
+
         initButtons(root);
-        initEmailConfirmedFlag();
 
         return root;
     }
@@ -69,10 +103,9 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         setViewsState();
     }
 
-    private void initEmailConfirmedFlag() {
+    private void requestEmailConfirmedFlag() {
         ProfileRequest profileRequest = new ProfileRequest(getActivity());
         profileRequest.part = ProfileRequest.P_EMAIL_CONFIRMED;
-        lock();
         profileRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
@@ -104,10 +137,12 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         mEditText.setSelection(mEditText.getText().length());
         mEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -142,7 +177,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
     private void setButtonsState() {
         if (CacheProfile.emailConfirmed) {
-            if(CacheProfile.needToChangePassword(getActivity().getApplicationContext())) {
+            if (CacheProfile.needToChangePassword(App.getContext())) {
                 mBtnLogout.setVisibility(View.GONE);
             } else {
                 mBtnLogout.setVisibility(View.VISIBLE);
@@ -188,7 +223,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         hideSoftKeyboard();
         switch (v.getId()) {
             case R.id.btnLogout:
-                logout(mToken);
+                showExitPopup();
                 break;
             case R.id.btnChange:
                 onChangeButtonClick();
@@ -223,8 +258,8 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                 break;
             case ACTION_CHANGE_EMAIL:
                 final String email = mEditText.getText().toString();
-                if(Utils.isValidEmail(email)) {
-                    ChangeLoginRequest changeLoginRequest = new ChangeLoginRequest(getActivity(),email);
+                if (Utils.isValidEmail(email)) {
+                    ChangeLoginRequest changeLoginRequest = new ChangeLoginRequest(getActivity(), email);
                     changeLoginRequest.callback(new ApiHandler() {
                         @Override
                         public void success(ApiResponse response) {
@@ -285,6 +320,24 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         }).exec();
     }
 
+    private void showExitPopup() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(R.string.settings_logout_msg);
+        builder.setNegativeButton(R.string.general_no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.setPositiveButton(R.string.general_yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                logout(mToken);
+            }
+        });
+        builder.create().show();
+    }
+
     @SuppressWarnings({"rawtypes", "hiding"})
     class FacebookLogoutTask extends AsyncTask {
         @Override
@@ -296,10 +349,6 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             }
             return null;
         }
-    }
-
-    private void lock() {
-        mLockerView.setVisibility(View.VISIBLE);
     }
 
     private void unlock() {

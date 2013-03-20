@@ -70,7 +70,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                 getActivity().finish();
             }
         });
-
+        mRightPrsBar = mActionBar.getRightProgressBar();
 
 //        mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
 

@@ -3,7 +3,6 @@ package com.topface.topface.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.*;
@@ -13,7 +12,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
-import com.topface.topface.requests.*;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.CitiesRequest;
+import com.topface.topface.requests.SearchCitiesRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -88,7 +89,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (mCityInputView != null) mCityInputView.clearFocus();
-                Utils.hideSoftKeyboard(CitySearchActivity.this,mCityInputView);
+                Utils.hideSoftKeyboard(CitySearchActivity.this, mCityInputView);
                 return true;
             }
         });
@@ -170,7 +171,9 @@ public class CitySearchActivity extends BaseFragmentActivity {
                     convertView.setPadding(0, 0, 0, 0);
                 }
 
-                holder.mTitle.setText(getItem(position));
+                if (getCount() > position) {
+                    holder.mTitle.setText(getItem(position));
+                }
 
                 return convertView;
             }
@@ -183,28 +186,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
         // возврат значения и выход
         cityListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1,final int position, long arg3) {
-
-                SettingsRequest request = new SettingsRequest(CitySearchActivity.this);
-                request.cityid = mDataList.get(position).id;
-                sendBroadcast(new Intent().setAction("com.topface.receivers.ConnectionChangeReceiver"));
-                request.callback(new ApiHandler() {
-
-                    @Override
-                    public void success(ApiResponse response) {
-                        CacheProfile.city = new City(mDataList.get(position).id, mDataList.get(position).name,
-                                mDataList.get(position).full);
-                        LocalBroadcastManager.getInstance(getApplicationContext())
-                                .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
-                    }
-
-                    @Override
-                    public void fail(int codeError, ApiResponse response) {
-                        Toast.makeText(CitySearchActivity.this, getString(R.string.general_data_error),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }).exec();
-
+            public void onItemClick(AdapterView<?> arg0, View arg1, final int position, long arg3) {
                 Intent intent = CitySearchActivity.this.getIntent();
                 intent.putExtra(INTENT_CITY_ID, mDataList.get(position).id);
                 intent.putExtra(INTENT_CITY_NAME, mDataList.get(position).name);
@@ -212,6 +194,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
                 Debug.log(CitySearchActivity.this, "1.city_id:" + mDataList.get(position).id);
                 CitySearchActivity.this.setResult(RESULT_OK, intent);
                 CitySearchActivity.this.finish();
+                Utils.hideSoftKeyboard(CitySearchActivity.this, mCityInputView);
             }
         });
     }
@@ -224,6 +207,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
         btnBack.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                Utils.hideSoftKeyboard(CitySearchActivity.this, mCityInputView);
                 finish();
             }
         });
@@ -236,7 +220,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
             mCbMyCity.setVisibility(View.GONE);
             mMyCityTitle.setVisibility(View.GONE);
         } else {
-            if (mRequestKey == INTENT_CITY_SEARCH_AFTER_REGISTRATION){
+            if (mRequestKey == INTENT_CITY_SEARCH_AFTER_REGISTRATION) {
                 mMyCityTitle.setText(R.string.we_detect_your_city);
             } else {
                 mMyCityTitle.setText(R.string.edit_my_city);

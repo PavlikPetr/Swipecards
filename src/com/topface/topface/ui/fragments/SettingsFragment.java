@@ -45,7 +45,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         public void onFinish() {
             Activity activity = getActivity();
             if (activity != null) {
-                SendMailNotificationsRequest request = mSettings.getMailNotificationRequest(activity.getApplicationContext());
+                SendMailNotificationsRequest request = mSettings.getMailNotificationRequest(activity);
                 if (request != null) {
                     request.callback(new ApiHandler() {
                         @Override
@@ -93,7 +93,8 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 
         boolean mail = false;
         boolean apns = false;
-        if (CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES) != null) {
+
+        if (CacheProfile.notifications != null && CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES) != null) {
             mail = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).mail;
             apns = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns;
         }
@@ -103,7 +104,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         frame = (ViewGroup) root.findViewById(R.id.loMutual);
         setBackground(R.drawable.edit_big_btn_middle, frame);
         setText(R.string.settings_mutual, frame);
-        if (CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY) != null) {
+        if (CacheProfile.notifications != null && CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY) != null) {
             mail = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).mail;
             apns = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns;
         } else {
@@ -116,7 +117,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         frame = (ViewGroup) root.findViewById(R.id.loChat);
         setBackground(R.drawable.edit_big_btn_middle, frame);
         setText(R.string.settings_messages, frame);
-        if (CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE) != null) {
+        if (CacheProfile.notifications != null && CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE) != null) {
             mail = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).mail;
             apns = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns;
         } else {
@@ -129,7 +130,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         frame = (ViewGroup) root.findViewById(R.id.loGuests);
         setBackground(R.drawable.edit_big_btn_bottom, frame);
         setText(R.string.settings_guests, frame);
-        if (CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR) != null) {
+        if (CacheProfile.notifications != null && CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR) != null) {
             mail = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).mail;
             apns = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).apns;
         } else {
@@ -346,7 +347,9 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 }).exec();
             }
         } else {
-            CacheProfile.notifications.get(type).apns = isChecked;
+            if (CacheProfile.notifications != null) {
+                CacheProfile.notifications.get(type).apns = isChecked;
+            }
             mSendTimer.cancel();
             mSendTimer.start();
         }

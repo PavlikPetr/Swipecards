@@ -16,13 +16,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.Toast;
-import com.sponsorpay.sdk.android.SponsorPay;
-import com.tapjoy.TapjoyConnect;
 import com.topface.billing.BillingUtils;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.City;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.*;
@@ -31,11 +30,10 @@ import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.*;
 import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
 import com.topface.topface.ui.fragments.MenuFragment.FragmentMenuListener;
+import com.topface.topface.ui.profile.AddPhotoHelper;
+import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.ui.views.NoviceLayout;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Novice;
-import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.*;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 import ru.ideast.adwired.AWView;
@@ -58,6 +56,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private SharedPreferences mPreferences;
     private NoviceLayout mNoviceLayout;
     private Novice mNovice;
+    private boolean needAnimate = false;
 
     private BroadcastReceiver mServerResponseReceiver;
 
@@ -65,10 +64,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        mNeedAnimate = false;
         super.onCreate(savedInstanceState);
-        TapjoyConnect.requestTapjoyConnect(getApplicationContext(), "f0563cf4-9e7c-4962-b333-098810c477d2", "AS0AE9vmrWvkyNNGPsyu");
-        TapjoyConnect.getTapjoyConnectInstance().setUserID(Integer.toString(CacheProfile.uid));
-        SponsorPay.start("11625", Integer.toString(CacheProfile.uid), "0a4c64db64ed3c1ca14a5e5d81aaa23c", getApplicationContext());
 
         if (isNeedBroughtToFront(getIntent())) {
             // При открытии активити из лаунчера перезапускаем ее
@@ -95,15 +92,19 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     private void requestAdwired() {
-        if (CacheProfile.isLoaded() && !CacheProfile.paid) {
-            Locale ukraineLocale = new Locale("uk","UA","");
-            AWView adwiredView = (AWView)findViewById(R.id.adAdwired);
-            if (Locale.getDefault().equals(ukraineLocale)) {
-                adwiredView.setVisibility(View.VISIBLE);
-                adwiredView.request('0');
-            } else {
-                adwiredView.setVisibility(View.GONE);
+
+        try {
+            if (CacheProfile.isLoaded() && !CacheProfile.paid) {
+                Locale ukraineLocale = new Locale("uk", "UA", "");
+                if (Locale.getDefault().equals(ukraineLocale)) {
+                    AWView adwiredView = (AWView) getLayoutInflater().inflate(R.layout.banner_adwired, null);
+                    ((ViewGroup) findViewById(R.id.loBannerContainer)).addView(adwiredView);
+                    adwiredView.setVisibility(View.VISIBLE);
+                    adwiredView.request('0');
+                }
             }
+        } catch (Exception ex) {
+            Debug.error(ex);
         }
     }
 
@@ -119,6 +120,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     @Override
     public void onInit() {
+        Offerwalls.init(getApplicationContext());
+
         Intent intent = getIntent();
         isNeedAuth = true;
         int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
@@ -130,28 +133,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             mFragmentMenu.selectDefaultMenu();
         }
         AuthorizationManager.extendAccessToken(NavigationActivity.this);
-        //Если пользователь не заполнил необходимые поля, перекидываем его на EditProfile,
-        //чтобы исправлялся.
-//        if (needChangeProfile()) {
-//            Intent editIntent = new Intent(this, EditProfileActivity.class);
-//            editIntent.putExtra(FROM_AUTH, true);
-//            startActivity(editIntent);
-//            finish();
-//        } else {
-            checkVersion(CacheProfile.getOptions().max_version);
-
-        //Открыть диалог для захвата фото к аватарке
+        checkVersion(CacheProfile.getOptions().max_version);
         actionsAfterRegistration();
-//        }
-
         requestAdwired();
-    }
-
-    private boolean needChangeProfile() {
-        return (CacheProfile.age == 0
-                || (CacheProfile.city.isEmpty())
-                || (CacheProfile.photo == null))
-                && CacheProfile.shouldChangeProfile(getApplicationContext());
     }
 
     @Override
@@ -184,6 +168,11 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         };
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mServerResponseReceiver, new IntentFilter(OptionsRequest.VERSION_INTENT));
+
+        if (needAnimate) {
+            overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
+        }
+        needAnimate = true;
 
         //TODO костыль для ChatFragment, после перехода на фрагмент - выпилить
         if (mDelayedFragment != null) {
@@ -225,8 +214,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     private void actionsAfterRegistration() {
         if (!AuthToken.getInstance().isEmpty()) {
-            if (CacheProfile.photo == null && !CacheProfile.wasAvatarAsked) {
-                CacheProfile.wasAvatarAsked = true;
+            if (CacheProfile.photo == null) {
                 takePhoto(new TakePhotoDialog.TakePhotoListener() {
                     @Override
                     public void onPhotoSentSuccess(final Photo photo) {
@@ -243,7 +231,12 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
                             @Override
                             public void fail(int codeError, ApiResponse response) {
-
+                                if (codeError == ApiResponse.NON_EXIST_PHOTO_ERROR) {
+                                    if (CacheProfile.photos.contains(photo)) {
+                                        CacheProfile.photos.remove(photo);
+                                    }
+                                    Toast.makeText(NavigationActivity.this, "Ваша фотография не соответствует правилам. Попробуйте сделать другую", 2000);
+                                }
                             }
 
                             @Override
@@ -251,17 +244,19 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                                 super.always(response);
                             }
                         }).exec();
+                        needOpenDialog = true;
                     }
 
                     @Override
                     public void onPhotoSentFailure() {
                         Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
+                        needOpenDialog = true;
                     }
 
                     @Override
                     public void onDialogClose() {
-                        if(CacheProfile.isLoaded() && (CacheProfile.city.isEmpty() || CacheProfile.needCityConfirmation(getApplicationContext()))
-                                && !CacheProfile.wasCityAsked){
+                        if (CacheProfile.isLoaded() && (CacheProfile.city.isEmpty() || CacheProfile.needCityConfirmation(getApplicationContext()))
+                                && !CacheProfile.wasCityAsked) {
                             CacheProfile.wasCityAsked = true;
                             CacheProfile.onCityConfirmed(getApplicationContext());
                             startActivityForResult(new Intent(getApplicationContext(), CitySearchActivity.class),
@@ -269,7 +264,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                         }
                     }
                 });
-            } else if((CacheProfile.city == null || CacheProfile.city.isEmpty()) && !CacheProfile.wasCityAsked){
+            } else if ((CacheProfile.city == null || CacheProfile.city.isEmpty()) && !CacheProfile.wasCityAsked) {
                 CacheProfile.wasCityAsked = true;
                 startActivityForResult(new Intent(getApplicationContext(), CitySearchActivity.class),
                         CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
@@ -278,7 +273,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     private void checkExternalLink() {
-        if(getIntent() != null) {
+        if (getIntent() != null) {
+
             Uri data = getIntent().getData();
 
             if (checkHost(data)) {
@@ -286,39 +282,38 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 String path = data.getPath();
                 String[] splittedPath = path.split("/");
 
-                executeLinkAction(splittedPath,data);
+                executeLinkAction(splittedPath);
             }
         }
     }
 
-    private void executeLinkAction(String[] splittedPath, Uri data) {
+    private void executeLinkAction(String[] splittedPath) {
         Pattern profilePattern = Pattern.compile("profile");
         Pattern confirmPattern = Pattern.compile("confirm.*");
 
         if (profilePattern.matcher(splittedPath[1]).matches() && splittedPath.length >= 3) {
 
             int profileId = Integer.parseInt(splittedPath[2]);
-            int profileType = profileId == CacheProfile.uid? ProfileFragment.TYPE_MY_PROFILE : ProfileFragment.TYPE_USER_PROFILE;
+            int profileType = profileId == CacheProfile.uid ? ProfileFragment.TYPE_MY_PROFILE : ProfileFragment.TYPE_USER_PROFILE;
             onExtraFragment(ProfileFragment.newInstance(profileId, profileType));
-
         } else if (confirmPattern.matcher(splittedPath[1]).matches()) {
 
             Pattern codePattern = Pattern.compile("[0-9]+-[0-f]+-[0-9]*");
-            Matcher matcher =  codePattern.matcher(splittedPath[1]);
+            Matcher matcher = codePattern.matcher(splittedPath[1]);
             matcher.find();
 
             String code = matcher.group();
             AuthToken token = AuthToken.getInstance();
             if (!token.isEmpty() && token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
-                ConfirmRequest request = new ConfirmRequest(this, token.getLogin(), code);
-                request.exec();
-            }
-        } else {
 
-            Intent intent = new Intent(Intent.ACTION_VIEW, data);
-            startActivity(intent);
-            finish();
+                Intent intent = new Intent(this, SettingsContainerActivity.class);
+                intent.putExtra(Static.INTENT_REQUEST_KEY, SettingsContainerActivity.INTENT_ACCOUNT);
+                intent.putExtra(SettingsContainerActivity.CONFIRMATION_CODE, code);
+                startActivity(intent);
+
+            }
         }
+        getIntent().setData(null);
     }
 
     private boolean checkHost(Uri data) {
@@ -508,12 +503,15 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         public void afterClosing() {
             mFragmentMenu.setClickable(false);
             mFragmentMenu.hide();
-            mFragmentSwitcher.getCurrentFragment().activateActionBar(false);
+            if (mFragmentSwitcher.getCurrentFragment() != null) {
+                mFragmentSwitcher.getCurrentFragment().activateActionBar(false);
+            }
+            actionsAfterRegistration();
         }
 
         @Override
         public void afterOpening() {
-            if(mFragmentSwitcher.getCurrentFragment() !=  null) {
+            if (mFragmentSwitcher.getCurrentFragment() != null) {
                 mFragmentSwitcher.getCurrentFragment().activateActionBar(true);
             }
             if (mNovice.isMenuCompleted()) return;
@@ -662,13 +660,40 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK && requestCode == ContainerActivity.INTENT_CHAT_FRAGMENT) {
-            if (data != null) {
-                int user_id = data.getExtras().getInt(ChatFragment.INTENT_USER_ID);
-                mDelayedFragment = ProfileFragment.newInstance(user_id, ProfileFragment.TYPE_USER_PROFILE);
-                return;
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == ContainerActivity.INTENT_CHAT_FRAGMENT) {
+                if (data != null) {
+                    int user_id = data.getExtras().getInt(ChatFragment.INTENT_USER_ID);
+                    mDelayedFragment = ProfileFragment.newInstance(user_id, ProfileFragment.TYPE_USER_PROFILE);
+                    return;
+                }
+            } else if (requestCode == CitySearchActivity.INTENT_CITY_SEARCH_AFTER_REGISTRATION ||
+                    requestCode == CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY) {
+                if (data != null) {
+                    Bundle extras = data.getExtras();
+                    final String city_name = extras.getString(CitySearchActivity.INTENT_CITY_NAME);
+                    final String city_full = extras.getString(CitySearchActivity.INTENT_CITY_FULL_NAME);
+                    final int city_id = extras.getInt(CitySearchActivity.INTENT_CITY_ID);
+                    SettingsRequest request = new SettingsRequest(this);
+                    request.cityid = city_id;
+                    request.callback(new ApiHandler() {
+
+                        @Override
+                        public void success(ApiResponse response) {
+                            CacheProfile.city = new City(city_id, city_name,
+                                    city_full);
+                            LocalBroadcastManager.getInstance(getApplicationContext())
+                                    .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                        }
+
+                        @Override
+                        public void fail(int codeError, ApiResponse response) {
+                        }
+                    }).exec();
+                }
             }
         }
-        super.onActivityResult(requestCode, resultCode, data);
+
     }
 }

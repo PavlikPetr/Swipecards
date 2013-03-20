@@ -80,7 +80,7 @@ public class RateController {
         mOnRateControllerListener.successRate();
     }
 
-    public void onRate(final int userId, final int rate, final int mutualId) {
+    public void onRate(final int userId, final int rate, final int mutualId, OnRateListener listener) {
         if (rate == 10 && CacheProfile.money <= 0) {
             Intent intent = new Intent(mContext, ContainerActivity.class);
             intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
@@ -92,11 +92,11 @@ public class RateController {
         if (isHighRateDialogEnabled() && rate >= 10) {
             showCommentDialog(userId, rate);
         } else {
-            sendRate(userId, rate, mutualId);
+            sendRate(userId, rate, mutualId, listener);
         }
     }
 
-    private void sendRate(final int userid, final int rate, final int mutualId) {
+    private void sendRate(final int userid, final int rate, final int mutualId, final OnRateListener listener) {
         RateRequest doRate = new RateRequest(mContext);
         doRate.userid = userid;
         doRate.rate = rate;
@@ -108,6 +108,9 @@ public class RateController {
                 CacheProfile.likes = rate.likes;
                 CacheProfile.money = rate.money;
                 CacheProfile.average_rate = rate.average;
+                if (listener != null) {
+                    listener.onRateCompleted();
+                }
             }
 
             @Override
@@ -117,6 +120,9 @@ public class RateController {
 
             @Override
             public void fail(int codeError, ApiResponse response) {
+                if (listener != null) {
+                    listener.onRateFailed();
+                }
             }
 
         }).exec();
@@ -187,5 +193,11 @@ public class RateController {
             }
         });
         mCommentDialog.show();
+    }
+
+    public interface OnRateListener {
+        public void onRateCompleted();
+
+        public void onRateFailed();
     }
 }

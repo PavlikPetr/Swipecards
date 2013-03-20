@@ -16,7 +16,11 @@ import android.widget.*;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.City;
+import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.requests.SettingsRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.ui.NavigationActivity;
@@ -242,8 +246,23 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     final String city_name = extras.getString(CitySearchActivity.INTENT_CITY_NAME);
                     final String city_full = extras.getString(CitySearchActivity.INTENT_CITY_FULL_NAME);
                     final int city_id = extras.getInt(CitySearchActivity.INTENT_CITY_ID);
+                    SettingsRequest request = new SettingsRequest(this);
+                    request.cityid = city_id;
+                    request.callback(new ApiHandler() {
+
+                        @Override
+                        public void success(ApiResponse response) {
+                            CacheProfile.city = new City(city_id, city_name,
+                                    city_full);
+                            LocalBroadcastManager.getInstance(getApplicationContext())
+                                    .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                        }
+
+                        @Override
+                        public void fail(int codeError, ApiResponse response) {
+                        }
+                    }).exec();
                     mEditCity.setText(city_name);
-                    sendBroadcast(new Intent().setAction("com.topface.receivers.ConnectionChangeReceiver"));
                 default:
                     break;
             }
@@ -390,7 +409,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
         @Override
         public String getTitle() {
-            if (CacheProfile.status.trim().length() != 0) {
+            if (CacheProfile.status.trim().length() == 0 || CacheProfile.status.equals("-")) {
                 return getString(R.string.edit_refresh_status);
             }
             return CacheProfile.status;

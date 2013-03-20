@@ -42,7 +42,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
             @Override
             public void onMutual(int userId, int rate, int mutualId) {
-                mRateController.onRate(userId, rate, mutualId);
+                mRateController.onRate(userId, rate, mutualId, null);
             }
         });
         return adapter;

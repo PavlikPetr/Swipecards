@@ -25,6 +25,7 @@ import com.topface.topface.utils.TopfaceNotificationManager;
 import com.topface.topface.utils.Utils;
 
 import java.io.File;
+import java.util.UUID;
 
 /**
  * Хелпер для загрузки фотографий в любой активити
@@ -96,12 +97,17 @@ public class AddPhotoHelper {
 
     private void startCamera() {
         Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(PATH_TO_FILE+mFileName)));
+
+        intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(PATH_TO_FILE + mFileName)));
         intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.profile_add_title));
 
         if (Utils.isIntentAvailable(mContext, intent.getAction())) {
             if (mFragment != null) {
-                mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
+                if(mFragment instanceof ProfilePhotoFragment) {
+                    mFragment.getParentFragment().startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
+                } else {
+                    mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
+                }
             } else {
                 mActivity.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
             }
@@ -112,7 +118,11 @@ public class AddPhotoHelper {
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.profile_add_title));
         if (mFragment != null) {
-            mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
+            if(mFragment instanceof ProfilePhotoFragment) {
+                mFragment.getParentFragment().startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
+            } else {
+                mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
+            }
         } else {
             mActivity.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
         }
@@ -173,13 +183,16 @@ public class AddPhotoHelper {
 
         final TopfaceNotificationManager.TempImageViewRemote fakeImageView = new TopfaceNotificationManager.TempImageViewRemote(mContext);
         fakeImageView.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.MATCH_PARENT));
-
+        final boolean[] doNeedSendProgressNotification = {true};
+        final int[] progressId = new int[1];
 
         fakeImageView.setRemoteSrc(uri.toString(), new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                mNotificationManager.showProgressNotification(mContext.getString(R.string.default_photo_upload), "", fakeImageView.getImageBitmap(),  new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE));
+                if(doNeedSendProgressNotification[0]) {
+                    progressId[0] = mNotificationManager.showProgressNotification(mContext.getString(R.string.default_photo_upload), "", fakeImageView.getImageBitmap(),  new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE));
+                }
             }
         });
 
@@ -193,9 +206,9 @@ public class AddPhotoHelper {
                     msg.obj = photo;
                     mHandler.sendMessage(msg);
                 }
-
-                mNotificationManager.cancelNotification(TopfaceNotificationManager.PROGRESS_ID);
-                mNotificationManager.showNotification(mContext.getString(R.string.default_photo_upload_complete), "", fakeImageView.getImageBitmap(), 1, new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE));
+                doNeedSendProgressNotification[0] = false;
+                mNotificationManager.cancelNotification(progressId[0]);
+                mNotificationManager.showNotification(mContext.getString(R.string.default_photo_upload_complete), "", fakeImageView.getImageBitmap(), 1, new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE), true);
             }
 
             @Override
@@ -208,9 +221,9 @@ public class AddPhotoHelper {
                 if (mHandler != null) {
                     mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
                 }
-
-                mNotificationManager.cancelNotification(TopfaceNotificationManager.PROGRESS_ID);
-                mNotificationManager.showNotification(mContext.getString(R.string.default_photo_upload_error), "", fakeImageView.getImageBitmap(), 1,  new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE));
+                doNeedSendProgressNotification[0] = false;
+                mNotificationManager.cancelNotification(progressId[0]);
+                mNotificationManager.showNotification(mContext.getString(R.string.default_photo_upload_error), "", fakeImageView.getImageBitmap(), 1,  new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE), true);
             }
 
             @Override

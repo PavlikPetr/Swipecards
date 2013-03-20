@@ -25,10 +25,10 @@ import com.topface.topface.ui.blocks.FilterBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.views.DoubleButton;
 import com.topface.topface.ui.views.LockerView;
+import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.NavigationBarController;
 
 import java.util.LinkedList;
 
@@ -47,6 +47,7 @@ public class TopsFragment extends BaseFragment {
 
     private static int GIRLS = 0;
     private static int BOYS = 1;
+    private RetryView mRetryView;
 
     private class ActionData {
         public int sex;
@@ -63,7 +64,7 @@ public class TopsFragment extends BaseFragment {
         // Navigation bar
 //        mNavBarController = new NavigationBarController((ViewGroup) view.findViewById(R.id.loNavigationBar));
         ActionBar actionBar = getActionBar(view);
-        actionBar.showHomeButton((View.OnClickListener)getActivity());
+        actionBar.showHomeButton((View.OnClickListener) getActivity());
         actionBar.setTitleText(getString(R.string.general_tops));
         //Инициализируем кнопку фильтров
         new FilterBlock((ViewGroup) view, R.id.loControlsGroup, actionBar, R.id.toolsBar);
@@ -80,8 +81,10 @@ public class TopsFragment extends BaseFragment {
         // Action
         mActionData = new ActionData();
         mActionData.sex = preferences.getInt(Static.PREFERENCES_TOPS_SEX, GIRLS);
-        mActionData.city_id = preferences.getInt(Static.PREFERENCES_TOPS_CITY_ID, CacheProfile.city.id);
-        mActionData.city_name = preferences.getString(Static.PREFERENCES_TOPS_CITY_NAME, CacheProfile.city.name);
+        if (CacheProfile.city != null) {
+            mActionData.city_id = preferences.getInt(Static.PREFERENCES_TOPS_CITY_ID, CacheProfile.city.id);
+            mActionData.city_name = preferences.getString(Static.PREFERENCES_TOPS_CITY_NAME, CacheProfile.city.name);
+        }
         mActionData.city_popup_pos = preferences.getInt(Static.PREFERENCES_TOPS_CITY_POS, -1);
 
         // Double Button
@@ -116,6 +119,20 @@ public class TopsFragment extends BaseFragment {
             }
         });
 
+        //Retry view
+        RelativeLayout cont = (RelativeLayout) view.findViewById(R.id.topContainer);
+
+        mRetryView = new RetryView(getActivity());
+        mRetryView.setErrorMsg(getString(R.string.general_error_try_again_later));
+        mRetryView.addButton(getString(R.string.general_dialog_retry), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mRetryView.setVisibility(View.GONE);
+                updateData();
+            }
+        });
+        mRetryView.setVisibility(View.GONE);
+        cont.addView(mRetryView);
         // Gallery
         mGallery = (GridView) view.findViewById(R.id.grdTopsGallary);
         mGallery.setAnimationCacheEnabled(false);
@@ -168,19 +185,22 @@ public class TopsFragment extends BaseFragment {
         onUpdateStart(false);
         mGallery.setSelection(0);
 
-        TopRequest topRequest = new TopRequest(getActivity());
+        final TopRequest topRequest = new TopRequest(getActivity());
         registerRequest(topRequest);
         topRequest.sex = mActionData.sex;
         topRequest.city = mActionData.city_id;
         topRequest.callback(new DataApiHandler<LinkedList<Top>>() {
             @Override
             protected void success(LinkedList<Top> data, ApiResponse response) {
-                mTopsList.clear();
-                mTopsList.addAll(data);
-                onUpdateSuccess(false);
-                if (mGridAdapter != null) {
-                    mGridAdapter.notifyDataSetChanged();
+                if (mGallery != null) {
                     mGallery.setVisibility(View.VISIBLE);
+                    mTopsList.clear();
+                    mTopsList.addAll(data);
+                    onUpdateSuccess(false);
+                    if (mGridAdapter != null) {
+                        mGridAdapter.notifyDataSetChanged();
+                        mGallery.setVisibility(View.VISIBLE);
+                    }
                 }
             }
 
@@ -192,6 +212,8 @@ public class TopsFragment extends BaseFragment {
             @Override
             public void fail(int codeError, ApiResponse response) {
                 Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                mRetryView.setVisibility(View.VISIBLE);
+                mGallery.setVisibility(View.INVISIBLE);
                 onUpdateFail(false);
             }
         }).exec();

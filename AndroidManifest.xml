@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.topface.topface"
           android:installLocation="auto"
-          android:versionCode="54"
-          android:versionName="2.3">
+          android:versionCode="58"
+          android:versionName="2.3.4">
 
     <uses-sdk
             android:minSdkVersion="7"
@@ -63,34 +63,50 @@
 
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
-                <data android:scheme="http" android:host="topface.com" android:path="profile/*" android:pathPrefix="/"/>
-                <data android:scheme="http" android:host="*.topface.com" android:path="profile/*" android:pathPrefix="/"/>
+                <data
+                        android:scheme="http"
+                        android:host="topface.com"
+                        android:pathPattern="/profile"/>
 
-                <data android:scheme="http" android:host="topface.ru" android:path="profile/*" android:pathPrefix="/"/>
-                <data android:scheme="http" android:host="*.topface.ru" android:path="profile/*" android:pathPrefix="/"/>
+                <data
+                        android:scheme="http"
+                        android:host="topface.ru"
+                        android:pathPattern="/profile"/>
 
-                <data android:scheme="http" android:host="topface.com" android:path="confirm*" android:pathPrefix="/"/>
-                <data android:scheme="http" android:host="*.topface.com" android:path="confirm*" android:pathPrefix="/"/>
+                <data
+                        android:scheme="http"
+                        android:host="topface.com"
+                        android:pathPrefix="/confirm"/>
 
-                <data android:scheme="http" android:host="topface.ru" android:path="confirm*" android:pathPrefix="/"/>
-                <data android:scheme="http" android:host="*.topface.ru" android:path="confirm*" android:pathPrefix="/"/>
+                <data
+                        android:scheme="http"
+                        android:host="topface.ru"
+                        android:pathPrefix="/confirm"/>
 
-                <data android:scheme="https" android:host="topface.com" android:path="profile/*" android:pathPrefix="/"/>
-                <data android:scheme="https" android:host="*.topface.com" android:path="profile/*" android:pathPrefix="/"/>
+                <data
+                        android:scheme="https"
+                        android:host="topface.com"
+                        android:pathPattern="/profile"/>
 
-                <data android:scheme="https" android:host="topface.ru" android:path="profile/*" android:pathPrefix="/"/>
-                <data android:scheme="https" android:host="*.topface.ru" android:path="profile/*" android:pathPrefix="/"/>
+                <data
+                        android:scheme="https"
+                        android:host="topface.ru"
+                        android:pathPattern="/profile"/>
 
-                <data android:scheme="https" android:host="topface.com" android:path="confirm*" android:pathPrefix="/"/>
-                <data android:scheme="https" android:host="*.topface.com" android:path="confirm*" android:pathPrefix="/"/>
+                <data
+                        android:scheme="https"
+                        android:host="topface.com"
+                        android:pathPrefix="/confirm"/>
 
-                <data android:scheme="https" android:host="topface.ru" android:path="confirm*" android:pathPrefix="/"/>
-                <data android:scheme="https" android:host="*.topface.ru" android:path="confirm*" android:pathPrefix="/"/>
+                <data
+                        android:scheme="https"
+                        android:host="topface.ru"
+                        android:pathPrefix="/confirm"/>
             </intent-filter>
         </activity>
         <activity
@@ -121,7 +137,9 @@
         <activity
                 android:name=".ui.LeadersActivity"
                 android:screenOrientation="portrait"/>
-        <activity android:name=".ui.settings.SettingsContainerActivity"/>
+        <activity
+                android:name=".ui.settings.SettingsContainerActivity"
+                android:screenOrientation="portrait"/>
         <activity android:name=".ui.BanActivity"/>
         <activity
                 android:name="com.google.ads.AdActivity"
@@ -132,6 +150,27 @@
         <activity
                 android:name=".ui.ContainerActivity"
                 android:windowSoftInputMode="stateHidden|adjustResize"/>
+
+        <activity
+                android:name="com.mad.ad.ImageActivity"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+        <activity
+                android:name="com.mad.view.Browser"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+        <activity
+                android:name="com.mad.view.OrmmaActionHandler"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+
+        <activity
+                android:name="com.tapjoy.TJCOffersWebView"
+                android:configChanges="keyboardHidden|orientation"/>
+        <activity
+                android:name="com.tapjoy.TapjoyVideoView"
+                android:configChanges="keyboardHidden|orientation"/>
+
+        <activity
+                android:name="com.sponsorpay.sdk.android.publisher.OfferWallActivity"
+                android:configChanges="orientation"/>
 
         <!-- Алиас для главной активити из первой версии. На xвсякий случай, а то раньше уже были проблемы с FB -->
         <activity-alias
@@ -183,6 +222,20 @@
             </intent-filter>
         </receiver>
 
+        <receiver
+                android:exported="true"
+                android:name="com.sponsorpay.sdk.android.advertiser.InstallReferrerReceiver">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER"/>
+            </intent-filter>
+        </receiver>
+
+        <!-- providers -->
+        <provider
+                android:name="com.mad.provider.MadProvider"
+                android:authorities="com.topface.topface.mad.provider"
+                android:exported="false"
+                android:multiprocess="true"/>
     </application>
 
 </manifest>

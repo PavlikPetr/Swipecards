@@ -67,8 +67,8 @@ public class OsmManager {
 //				Debug.log("OSM", val+"::"+details.getString(val));
 //			}
 
-        } catch (JSONException e) {
-            Debug.log("OSM", e.toString());
+        } catch (Exception e) {
+            Debug.error(e);
         }
         return resultSB.toString();
     }

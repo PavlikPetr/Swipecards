@@ -1,14 +1,18 @@
 package com.topface.topface.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import com.topface.topface.App;
 import com.topface.topface.Static;
+import com.topface.topface.utils.Debug;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * Класс реализующий параметры фильтров поиска
  */
-public class DatingFilter extends AbstractData implements Cloneable {
+public class DatingFilter extends AbstractData implements Cloneable, Parcelable {
 
     public static final String DATING_ONLINE_FIELD = "dating_online";
     public City city;
@@ -138,4 +142,60 @@ public class DatingFilter extends AbstractData implements Cloneable {
                 finances + "#" +
                 DatingFilter.getOnlineField();
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        try {
+            dest.writeString(city.toJson().toString());
+        } catch (JSONException e) {
+            Debug.error(e);
+        }
+        dest.writeInt(sex);
+        dest.writeInt(age_start);
+        dest.writeInt(age_end);
+        dest.writeInt(alcohol);
+        dest.writeInt(beautiful ? 1 : 0);
+        dest.writeInt(xstatus);
+        dest.writeInt(marriage);
+        dest.writeInt(character);
+        dest.writeInt(breast);
+        dest.writeInt(finances);
+    }
+
+    @SuppressWarnings({"rawtypes", "UnusedDeclaration"})
+    public static final Parcelable.Creator CREATOR =
+            new Parcelable.Creator() {
+                public DatingFilter createFromParcel(Parcel in) {
+
+                    DatingFilter result = new DatingFilter();
+
+                    try {
+                        result.city = new City(new JSONObject(in.readString()));
+                    } catch (JSONException e) {
+                        Debug.error(e);
+                    }
+
+                    result.sex = in.readInt();
+                    result.age_start = in.readInt();
+                    result.age_end = in.readInt();
+                    result.alcohol = in.readInt();
+                    result.beautiful = in.readInt() == 1;
+                    result.xstatus = in.readInt();
+                    result.marriage = in.readInt();
+                    result.character = in.readInt();
+                    result.breast = in.readInt();
+                    result.finances = in.readInt();
+
+                    return result;
+                }
+
+                public DatingFilter[] newArray(int size) {
+                    return new DatingFilter[size];
+                }
+            };
 }

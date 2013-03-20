@@ -23,7 +23,7 @@ import com.topface.topface.utils.Utils;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class RecoverPwdFragment extends BaseFragment{
+public class RecoverPwdFragment extends BaseFragment {
 
     private Button mBtnRecover;
     private EditText mEdEmail;
@@ -84,7 +84,7 @@ public class RecoverPwdFragment extends BaseFragment{
         root.findViewById(R.id.tvBackToMainAuth).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.hideSoftKeyboard(getActivity(),mEdEmail);
+                Utils.hideSoftKeyboard(getActivity(), mEdEmail);
                 getActivity().finish();
             }
         });
@@ -137,21 +137,23 @@ public class RecoverPwdFragment extends BaseFragment{
 
     private void redAlert(String text) {
         if (mRedAlertView != null) {
-            if(text != null) {
+            if (text != null) {
                 mRedAlertView.setText(text);
             }
             mRedAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
-                    android.R.anim.fade_in));
+                    R.anim.slide_down_fade_in));
             mRedAlertView.setVisibility(View.VISIBLE);
             mTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            removeRedAlert();
-                        }
-                    });
+                    if (isAdded()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                removeRedAlert();
+                            }
+                        });
+                    }
                 }
             }, Static.RED_ALERT_APPEARANCE_TIME);
         }

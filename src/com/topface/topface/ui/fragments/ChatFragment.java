@@ -36,6 +36,7 @@ import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.ui.views.SwapControl;
 import com.topface.topface.utils.*;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.TimerTask;
@@ -45,6 +46,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
     private static final int LIMIT = 50;
 
+    public static final String FRIEND_FEED_USER = "user_profile";
     public static final String ADAPTER_DATA = "adapter";
     public static final String WAS_FAILED = "was_failed";
     public static final String INTENT_USER_ID = "user_id";
@@ -74,6 +76,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     private PullToRefreshListView mListView;
     private ChatListAdapter mAdapter;
     private FeedList<History> mHistoryData;
+    private FeedUser mUser;
     private EditText mEditBox;
     private LockerView mLoadingLocker;
     private RetryView mRetryView;
@@ -195,6 +198,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 ArrayList<History> list = savedInstanceState.getParcelableArrayList(ADAPTER_DATA);
                 mHistoryData = new FeedList<History>();
                 mHistoryData.addAll(list);
+                try {
+                    mUser = new FeedUser(new JSONObject(savedInstanceState.getString(FRIEND_FEED_USER)));
+                } catch (Exception e) {
+                    Debug.error(e);
+                }
                 if (was_failed) mLockScreen.setVisibility(View.VISIBLE);
                 else mLockScreen.setVisibility(View.GONE);
                 mLoadingLocker.setVisibility(View.GONE);
@@ -206,7 +214,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void initChatHistory(View root) {
-        mAdapter = new ChatListAdapter(getActivity().getApplicationContext(), mHistoryData, getUpdaterCallback());
+        mAdapter = new ChatListAdapter(getActivity(), mHistoryData, getUpdaterCallback());
+        mAdapter.setUser(mUser);
         mAdapter.setOnAvatarListener(this);
         mAdapter.setOnItemLongClickListener(new OnListViewItemLongClickListener() {
 
@@ -282,6 +291,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         super.onSaveInstanceState(outState);
         outState.putBoolean(WAS_FAILED, wasFailed);
         outState.putParcelableArrayList(ADAPTER_DATA, mAdapter.getDataCopy());
+
+        try {
+            outState.putString(FRIEND_FEED_USER, mAdapter.getUser().toJson().toString());
+        } catch (Exception e) {
+            Debug.error(e);
+        }
     }
 
     private void deleteItem(final int position) {
@@ -367,7 +382,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                         mAdapter.addAll(data.items, data.more, mListView.getRefreshableView());
                     } else {
                         mAdapter.setData(data.items, data.more, mListView.getRefreshableView());
-                        mAdapter.setFriendProfile(data.user);
                     }
                 }
 
@@ -386,10 +400,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             @Override
             public void fail(int codeError, ApiResponse response) {
                 mLoadingLocker.setVisibility(View.GONE);
-                switch (codeError) {
-                    default:
-                        mRetryView.setErrorMsg(getString(R.string.general_data_error));
-                        break;
+                if (mRetryView != null && isAdded()) {
+                    mRetryView.setErrorMsg(getString(R.string.general_data_error));
                 }
                 mLockScreen.setVisibility(View.VISIBLE);
                 wasFailed = true;
@@ -517,8 +529,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     public void onResume() {
         super.onResume();
 
-        // Если адаптер пустой, грузим с сервера
-        if (mAdapter == null || mAdapter.getCount() == 0) {
+        // Если адаптер пустой или пользователя нет, грузим с сервера
+        if (mAdapter == null || mAdapter.getCount() == 0 || mUser == null) {
             update(false, "initial");
         }
 
@@ -542,7 +554,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         }
         stopTimer();
         GCMUtils.lastUserId = -1; //Ставим значение на дефолтное, чтобы нотификации снова показывались
-        Utils.hideSoftKeyboard(getActivity(),mEditBox);
+        Utils.hideSoftKeyboard(getActivity(), mEditBox);
     }
 
     private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {

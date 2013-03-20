@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Topface</string>
-    <string name="app_locale">el_GR</string>
+    <string name="app_locale">ru_RU</string>
     <string name="general_error">ΛΑΘΟΣ</string>
     <string name="general_warning">ΠΡΟΕΙΔΟΠΟΙΗΣΗ</string>
     <string name="general_ok">ΚΑΛ\'Α</string>
@@ -44,9 +44,9 @@
     <string name="general_profile">Προφίλ</string>
     <string name="general_settings">Ρυθμίσεις</string>
     <string name="general_chat">Συνομιλία</string>
-    <string name="auth_btn_vk">Να συνδεθείτε με Vkontakte</string>
-    <string name="auth_btn_fb">Να συνδεθείτε με Facebook</string>
-    <string name="auth_retry">Να δοκιμάστε ξανά</string>
+    <string name="auth_btn_vk">Εισάγετε με Vkontakte</string>
+    <string name="auth_btn_fb">Εισάγετε με Facebook</string>
+    <string name="auth_retry">Δοκιμάστε ξανά</string>
     <string name="auth_vk_name">Vkontakte</string>
     <string name="dating_header_girls">Της κοπέλες από %1$d έως %2$d</string>
     <string name="dating_header_guys">Άντρες από %1$d έως %2$d</string>
@@ -92,7 +92,7 @@
     <string name="profile_btn_chat">Να κάνουμε ένα κουβέντα</string>
     <string name="profile_add_title">Προσθέστε μια φωτογραφία</string>
     <string name="profile_add_album">Επιλέξτε από τις διαθέσιμες</string>
-    <string name="profile_add_camera">Κάντε μια εικόνα</string>
+    <string name="profile_add_camera">Τραβήξτε μια εικόνα</string>
     <string name="profile_photo">Φωτογραφία</string>
     <string name="profile_form">Το ερωτηματολόγιο</string>
     <string name="profile_gifts">Δώρα</string>
@@ -109,10 +109,10 @@
     <string name="edit_name">\'Ονομα</string>
     <string name="edit_age">Ηλικία</string>
     <string name="edit_status">Η κατάσταση</string>
-    <string name="edit_set_as_main">Να κάνουμε κύρια</string>
+    <string name="edit_set_as_main">Κάντε τη κύρια</string>
     <string name="edit_delete">Κατάργηστε</string>
     <string name="edit_restore">Αποκαταστήστε</string>
-    <string name="album_add_photo_title">Να προσθέσετε μια φωτογραφία</string>
+    <string name="album_add_photo_title">Προσθέστε μια φωτογραφία</string>
     <string name="gifts_romantic">Ρομαντικές</string>
     <string name="gifts_friends">Φιλικός</string>
     <string name="gifts">Δώρα</string>
@@ -137,7 +137,7 @@
     <string name="invite_title">Προσκλήσεις</string>
     <string name="invite_is_free">Αποστολή δωρεάν</string>
     <string name="invite_error">Απέτυχε η αποστολή προσκλήσεων. Δοκιμάστε ξανά</string>
-    <string name="invite_completed">Πρόσκληση αποστέλλονται</string>
+    <string name="invite_completed">Πρόσκληση έχει σταλεί.</string>
     <plurals name="invite_bonus_text">
         <item quantity="zero">Προσκαλέστε τους φίλους σας και να παρέτε για καθεμία από τις 20</item>
         <item quantity="other">Θα πάμε για να στείλετε προσκλήσεις %2$d στους φίλους και να παρέτε γι \'αυτό %1$d</item>
@@ -232,6 +232,7 @@
     <string name="vip_messages_bg">Το φόντο μηνυμάτων</string>
     <string name="vip_black_list">Η μαύρη λίστα</string>
     <string name="vip_profile_bg">Ιστορικό φωτογραφία</string>
+    <string name="profile_vip_status">Super {{rocket}} Skills</string>
     <string name="profile_services">Τα υπηρεσίες</string>
     <string name="default_balance_constant">Στο λογαριασμό σας</string>
     <string name="default_energy_coins_buy_btn_text">Να αγοράσετε τα κέρματα, να ξαναγεμίσετε της ενέργειας</string>
@@ -291,13 +292,13 @@
     <string name="ban_flood_detected">Εσείς πολύ συχνά κάνετε αιτήματα στο διακομιστή. Για την περαιτέρω χρήση της εφαρμογής, να περιμένετε.</string>
     <string name="general_maintenance">Στο διακομιστή διεξάγονται τεχνικές εργασίες, και το αίτημά σας δεν μπορεί να εκτελεστεί. Παρακαλώ δοκιμάστε ξανά αργότερα.</string>
     <string name="virus_chat_likes_request_title">Να δώσω συμπάθειες προς τους φίλους σας</string>
-    <string name="virus_chat_btn">Αποκτήσω συμπάθειες</string>
+    <string name="virus_chat_btn">Αποκτήστε τις συμπάθειες</string>
     <string name="virus_request_error">Απέτυχε η αποστολή τις συμπάθειες στους φίλους σας</string>
     <plurals name="virus_request_likes_cnt">
         <item quantity="other">Τώρα έχετε %d συμπάθειες!</item>
         <item quantity="one">Τώρα έχετε %d συμπάθεια!</item>
     </plurals>
-    <string name="profile_ask_sent">Αίτηση αποστέλλεται</string>
+    <string name="profile_ask_sent">Αίτηση έχει σταλεί.</string>
     <string name="virus_error">Κατά τη διάρκεια της ημέρας, ο φίλος σας μπορεί να δώσει για δώρο τις συμπάθειες μόνο 1 φορά! Δοκιμάστε το αύριο!</string>
     <string name="popup_version_title">Διαθέσιμα μια νέα έκδοση της εφαρμογής</string>
     <string name="popup_version_message">Η ώρα να ενημερώσετε την έκδοση σας!</string>
@@ -311,6 +312,7 @@
     <string name="map_popup_address">Η διεύθυνση</string>
     <string name="black_list_info">Έχετε προσθέσει του συνομιλητής στη μαύρη λίστα. Μπορείτε να αλλάξετε αυτό στο προφίλ σας στις ρυθμίσεις  τη VIP-κατάσταση.</string>
     <string name="general_gift">Το δώρω</string>
+    <string name="user_actions_chat">Συνομιλία</string>
     <string name="general_place">Τόπος</string>
     <string name="general_soon">Σύντομα θα είναι</string>
     <string name="black_list_activation">Ενεργοποιήστε το VIP-κατάσταση, και χρησιμοποιήστε μια μαύρη λίστα</string>
@@ -322,7 +324,7 @@
     <string name="error_login_password">Λάθος συνδεση/κωδικός</string>
     <string name="recover_password">Ανάκτηση του κωδικού</string>
     <string name="recovering_password">Ανάκτηση του κωδικού</string>
-    <string name="send_password">Στέλνω τον κωδικό</string>
+    <string name="send_password">Στείλτε τον κωδικό</string>
     <string name="boy">άντρας</string>
     <string name="girl">κοπέλα</string>
     <string name="start_communication">Ξεκινάω μια συνομιλία</string>
@@ -340,4 +342,38 @@
     <string name="default_photo_upload_complete">Ανέβασμα ολοκληρώθηκε!</string>
     <string name="general_error_try_again_later">Δεν είναι δυνατή η σύνδεση στο Topface</string>
     <string name="search_city_by_name">Αναζήτηση πόλεων με το όνομα</string>
+    <string name="gallery">Έκθεση</string>
+    <string name="no_photo_take_photo">Με εσάς, δεν μπορεί κανείς να εξοικειωθεί! Τραβήξτε μια φωτογραφία ή κατεβάστε διαθέσιμη από το άλμπουμ</string>
+    <string name="photo_is_too_small">φαίνεστε πολύ καλή/καλός στη φωτογραφία σας, αλλά η φωτογραφία πρέπει να είναι λίγο πιο μεγάλη, με τουλάχιστον %s, για να μπορούν να σας  αξιολογίσουν οι χρήστες</string>
+    <string name="photo_for_avatar">Η φωτογραφία είναι έτοιμη να σταλεί στο προφίλ σας! Αυτή είναι η πρώτη φωτογραφία σας και θα χρησιμοποιηθεί ως avatar.</string>
+    <string name="get_it_for_free">Αποκτήστε δώρεαν</string>
+    <string name="vip_advantages">Tα πλεονεκτήματα VIP</string>
+    <string name="change_email">Αλλάξτε e-mail</string>
+    <string name="send_confirmation_email">Στείλτε ένα επιβεβαίωση στο e-mail</string>
+    <string name="change_password">Αλλάξτε τον κωδικό</string>
+    <string name="password_changing">Αλλαγή κωδικού</string>
+    <string name="save">Αποθήκευση</string>
+    <string name="confirmation_successfully_sent">Η επιβεβαίωση θα αποσταλεί στο e-mail σας</string>
+    <string name="password_hint">το κωδικό</string>
+    <string name="password_confirmation_hint">επιβεβαίωση κωδικού</string>
+    <string name="enter_new_password">Εισάγετε τον νέο κωδικό</string>
+    <string name="enter_password_confirmation">Επιβεβαίωση κωδικού</string>
+    <string name="passwords_mismatched">Οι κωδικοί πρόσβασης δεν ταιριάζουν</string>
+    <string name="passwords_changed">Το κωδικό άλλαξε</string>
+    <string name="take_photo">Τραβήξτε μια φωτογραφία</string>
+    <string name="take_another_photo">Άλλη μια φωτογραφία</string>
+    <string name="we_detect_your_city">Έχουμε καθορίσει τη πόλη σας:</string>
+    <string name="reselect_city">Επιλέξτε άλλη μια πόλη:</string>
+    <string name="choose_cool_photo">Επιλέξτε μια καλύτερη φωτογραφία σας και την κατάσταση που αντικατοπτρίζει τη διάθεσή σας!</string>
+    <string name="email_confirmed">επιβεβαίωση e-mail !</string>
+    <string name="sympathy_sended">Συμπάθεια έχει σταλεί.</string>
+    <string name="buying_total">Στη συνολική</string>
+    <string name="buying_economy">Eξοικονομήσει</string>
+    <string name="general_change">Αλλάξτε</string>
+    <string name="general_correct">\'Ολα είναι σωστά</string>
+    <string name="confirm_email">Παρακαλώ, επιβεβαιώστε e-mail</string>
+    <string name="password_sent">Το νέο κωδικό έχει σταλεί στο E-mail σας</string>
+    <string name="buy_vip_month_one">μήνα</string>
+    <string name="buy_vip_month_few">%1$d μήνες για %2$.2f %3$@</string>
+    <string name="buy_vip_month_other">%1$d μήνες για %2$.2f %3$@</string>
 </resources>

@@ -14,6 +14,7 @@ public class Banner extends AbstractData {
     public static final String ACTION_URL = "URL";
     public static final String ACTION_PAGE = "PAGE";
     public static final String ACTION_METHOD = "METHOD";
+    public static final String ACTION_OFFERWALL = "OFFERWALL";
     public static final String INVITE_PAGE = "INVITE_PAGE";
 
     public static Banner parse(ApiResponse response) {

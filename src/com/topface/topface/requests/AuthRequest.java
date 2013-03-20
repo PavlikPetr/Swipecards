@@ -84,7 +84,7 @@ public class AuthRequest extends ApiRequest {
      * @return id устройства в виде строки UUID
      */
     public synchronized static String getClientId(Context context) {
-        if (uniqueID == null) {
+        if (uniqueID == null && context != null) {
             SharedPreferences sharedPrefs = context.getSharedPreferences(
                     PREF_UNIQUE_ID, Context.MODE_PRIVATE);
             uniqueID = sharedPrefs.getString(PREF_UNIQUE_ID, null);

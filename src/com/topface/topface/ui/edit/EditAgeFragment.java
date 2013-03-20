@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.topface.topface.R;
@@ -47,22 +46,19 @@ public class EditAgeFragment extends AbstractEditFragment {
         }
 
         ActionBar actionBar = getActionBar(view);
-
         actionBar.setTitleText(getString(R.string.filter_age));
-
         actionBar.showBackButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = getActivity().getIntent();
                 intent.putExtra(EditContainerActivity.INTENT_AGE_START, age_start);
                 intent.putExtra(EditContainerActivity.INTENT_AGE_END, age_end);
-
                 getActivity().setResult(Activity.RESULT_OK, intent);
                 getActivity().finish();
             }
         });
 
+        mRightPrsBar = actionBar.getRightProgressBar();
 
         final TextView tv = (TextView) view.findViewById(R.id.apValue);
         tv.setText(makeString(age_start, age_end));

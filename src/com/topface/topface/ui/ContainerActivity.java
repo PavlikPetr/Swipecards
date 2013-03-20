@@ -1,17 +1,14 @@
 package com.topface.topface.ui;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.fragments.*;
+import com.topface.topface.utils.Debug;
 
 public class ContainerActivity extends BaseFragmentActivity {
 
@@ -33,25 +30,18 @@ public class ContainerActivity extends BaseFragmentActivity {
 
         overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
 
-        // Title Header
-
-//        ImageButton backButton = ((ImageButton) findViewById(R.id.btnNavigationBack));
-//        backButton.setVisibility(View.VISIBLE);
-//        backButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                setResult(Activity.RESULT_CANCELED);
-//                finish();
-//            }
-//        });
-
         initRequestKey();
     }
 
     private void initRequestKey() {
         if (mCurrentFragmentId == -1) {
             Intent intent = getIntent();
-            mCurrentFragmentId = intent.getIntExtra(Static.INTENT_REQUEST_KEY,0);
+            try {
+                mCurrentFragmentId = intent.getIntExtra(Static.INTENT_REQUEST_KEY,0);
+            } catch (Exception ex) {
+                Debug.error(ex);
+                finish();
+            }
         }
     }
 
@@ -61,7 +51,11 @@ public class ContainerActivity extends BaseFragmentActivity {
         if(mCurrentFragment == null) {
             mCurrentFragment = getFragment(mCurrentFragmentId);
         }
+    }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
         if (mCurrentFragment != null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.loFrame, mCurrentFragment,TAG_FRAGMENT).commit();

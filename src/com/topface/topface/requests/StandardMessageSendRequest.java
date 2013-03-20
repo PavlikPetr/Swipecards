@@ -8,7 +8,7 @@ public class StandardMessageSendRequest extends ApiRequest {
     public static final int MESSAGE_FILL_INTERESTS = 14;
 
 
-    public final static String SERVICE_NAME = "StandardMessageSend";
+    public final static String SERVICE_NAME = "standardMessageSend";
     private int userId;
     private int messageId;
 

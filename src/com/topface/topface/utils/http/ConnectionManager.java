@@ -18,6 +18,8 @@ import com.topface.topface.ui.BanActivity;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
 
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -185,7 +187,7 @@ public class ConnectionManager {
 
     private boolean sendHandlerMessage(IApiRequest apiRequest, IApiResponse apiResponse) {
         ApiHandler handler = apiRequest.getHandler();
-        if (handler != null) {
+        if (handler != null && !apiRequest.isCanceled()) {
             Message msg = new Message();
             msg.obj = apiResponse;
             handler.sendMessage(msg);
@@ -307,6 +309,14 @@ public class ConnectionManager {
             Debug.error(TAG + "::Exception", e);
             //Это ошибка соединение, такие запросы мы будем переотправлять
             response = apiRequest.constructApiResponse(IApiResponse.CONNECTION_ERROR, "Connection exception: " + e.toString());
+        } catch (SocketException e) {
+            Debug.error(TAG + "::Exception", e);
+            //Это ошибка подключения, такие запросы мы будем переотправлять
+            response = apiRequest.constructApiResponse(IApiResponse.CONNECTION_ERROR, "Socket exception: " + e.toString());
+        } catch (SocketTimeoutException e) {
+            Debug.error(TAG + "::Exception", e);
+            //Это ошибка подключения, такие запросы мы будем переотправлять
+            response = apiRequest.constructApiResponse(IApiResponse.CONNECTION_ERROR, "Socket exception: " + e.toString());
         } catch (Exception e) {
             Debug.error(TAG + "::Exception", e);
             //Это ошибка нашего кода, не нужно автоматически переотправлять такой запрос
@@ -325,7 +335,7 @@ public class ConnectionManager {
         }
 
         //Если наш пришли данные от сервера, то логируем их, если нет, то логируем объект запроса
-        Debug.logJson(TAG, "RESPONSE <<<",
+        Debug.logJson(TAG, "RESPONSE <<< Request ID #" + apiRequest.getId(),
                 rawResponse != null ? rawResponse : response.toString()
         );
 
@@ -403,6 +413,9 @@ public class ConnectionManager {
                     //Если запрос еще не отменен, то отправляем
                     if (request != null && !request.isCanceled()) {
                         sendRequest(request);
+                    } else {
+                        String requestId = (request != null) ? request.getId() : "request in null";
+                        Debug.log(TAG + "::Pendign request is canceled " + requestId);
                     }
                 }
             }
