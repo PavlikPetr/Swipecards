@@ -50,6 +50,7 @@ public class AddPhotoHelper {
     private File outputFile;
     private static HashMap<String, File> fileNames = new HashMap<String, File>();
 
+
     public AddPhotoHelper(Fragment fragment, LockerView mLockerView) {
         this(fragment.getActivity());
         mFragment = fragment;

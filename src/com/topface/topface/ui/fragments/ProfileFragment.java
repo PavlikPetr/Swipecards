@@ -69,7 +69,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private TextView mTitle;
     private View mLoaderView;
     private RateController mRateController;
-    protected NavigationBarController mNavBarController;
+//    protected NavigationBarController mNavBarController;
     private RelativeLayout mLockScreen;
     private RetryView mRetryBtn;
     private ViewPager mBodyPager;
@@ -115,8 +115,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mUserActions.findViewById(R.id.acDelight).setOnClickListener(this);
         mUserActions.findViewById(R.id.acChat).setOnClickListener(this);
         mUserActions.findViewById(R.id.acBlock).setOnClickListener(this);
-
-        mNavBarController = new NavigationBarController((ViewGroup) root.findViewById(R.id.loNavigationBar));
+//
+//        mNavBarController = new NavigationBarController((ViewGroup) root.findViewById(R.id.loNavigationBar));
         if (mProfileType == TYPE_USER_PROFILE) {
             mActionBar.showBackButton(new View.OnClickListener() {
                 @Override
@@ -263,7 +263,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateProfileReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         setProfile(mUserProfile);
 
-        mNavBarController.refreshNotificators();
+        mActionBar.refreshNotificators();
     }
 
     @Override
