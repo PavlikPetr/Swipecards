@@ -371,6 +371,7 @@
     <string name="choose_cool_photo">¡Elige tu mejor fotografía y un estado que refleja tu estado de humor!</string>
     <string name="email_confirmed">¡e-mail confirmado!</string>
     <string name="sympathy_sended">simpatía enviada</string>
+    <string name="general_photo_deleted">Tu fotografía no cumple con los requisitos y fue eliminada</string>
     <string name="buying_total">Total</string>
     <string name="buying_economy">Economía</string>
     <string name="general_change">Cambiar</string>
