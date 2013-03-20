@@ -1,4 +1,3 @@
-
 package com.topface.topface.ui.fragments.feed;
 
 import android.app.Activity;
@@ -40,7 +39,10 @@ import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryView;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Utils;
 import org.json.JSONObject;
 
 import static android.widget.AdapterView.OnItemClickListener;
@@ -75,7 +77,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         View view = inflater.inflate(getLayout(), null);
         mContainer = (RelativeLayout) view.findViewById(R.id.feedContainer);
         initNavigationBar(view);
-
 
 
         mLockView = (LockerView) view.findViewById(R.id.llvFeedLoading);
@@ -124,7 +125,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected void initNavigationBar(View view) {
         // Navigation bar
         mActionBar = getActionBar(view);
-        mActionBar.showHomeButton((View.OnClickListener)getActivity());
+        mActionBar.showHomeButton((View.OnClickListener) getActivity());
         mActionBar.setTitleText(getString(getTitle()));
     }
 
@@ -330,7 +331,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             @Override
             public void always(ApiResponse response) {
                 super.always(response);
-                mLockView.setVisibility(View.GONE);
+                if (mLockView != null) {
+                    mLockView.setVisibility(View.GONE);
+                }
             }
         }).exec();
 
@@ -371,7 +374,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             if (getFeedService().equals(FeedRequest.FeedService.DIALOGS)) {
                 fragment = ProfileFragment.newInstance(item.user.id, ProfileFragment.TYPE_USER_PROFILE);
             } else {
-                fragment =  ProfileFragment.newInstance(item.user.id, ProfileFragment.TYPE_USER_PROFILE, item.id);
+                fragment = ProfileFragment.newInstance(item.user.id, ProfileFragment.TYPE_USER_PROFILE, item.id);
             }
             ((NavigationActivity) activity).onExtraFragment(fragment);
         }

@@ -362,4 +362,15 @@
     <string name="choose_cool_photo">자신의 상태과 기분을 잘 나타내는 가장 잘 나온 사진을 선택하여 주세요!</string>
     <string name="email_confirmed">이메일이 확인 되었습니다!</string>
     <string name="sympathy_sended">호감도가 전송되었습니다.</string>
+    <string name="general_photo_deleted">업로딩한 사진이 톱페이스 규칙에 어긋나는 사항이 있어 삭제 되었습니다.</string>
+    <string name="buying_total">총합</string>
+    <string name="buying_economy">경제적인 방법</string>
+    <string name="general_change">변경하기</string>
+    <string name="general_correct">전체 형식이 옳바릅니다.</string>
+    <string name="we_dont_detect_your_city">더 많은 사람과 가깝게 교제를 하기 위해서 당신의 위치를 알아야 합니다. 자신의 도시를 선택해보세요.</string>
+    <string name="confirm_email">이메일을 확인해 주십시오.</string>
+    <string name="password_sent">새로운 비밀번호가 당신의 이메일로 전송되었습니다.</string>
+    <string name="buy_vip_month_one">%1$d 달 이용을 %2$.2f %3$@가격에</string>
+    <string name="buy_vip_month_few">%1$d 달 이용을 %2$.2f %3$@가격에</string>
+    <string name="buy_vip_month_other">%1$d 달 이용을 %2$.2f %3$@가격에</string>
 </resources>

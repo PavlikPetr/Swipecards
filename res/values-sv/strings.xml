@@ -367,6 +367,7 @@
     <string name="choose_cool_photo">Välj din bästa bild och status som beskriver hur du känner dig!</string>
     <string name="email_confirmed">Epost-adressen bekräftat!</string>
     <string name="sympathy_sended">Sympatin avsänd</string>
+    <string name="general_photo_deleted">Ditt foto motsvarar inte våra regler och har raderats.</string>
     <string name="buying_total">Totalt</string>
     <string name="buying_economy">Spara</string>
     <string name="general_change">Ändra</string>

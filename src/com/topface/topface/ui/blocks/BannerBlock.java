@@ -398,7 +398,11 @@ public class BannerBlock {
             @Override
             public void always(ApiResponse response) {
                 super.always(response);
-                dialog.dismiss();
+                try {
+                    dialog.dismiss();
+                } catch (Exception e) {
+                    Debug.error(e);
+                }
             }
         }).exec();
     }

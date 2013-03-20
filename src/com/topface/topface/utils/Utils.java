@@ -1,7 +1,5 @@
 package com.topface.topface.utils;
 
-import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -21,7 +19,6 @@ import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.AuthRequest;
-import com.topface.topface.ui.NavigationActivity;
 
 import java.util.Calendar;
 import java.util.List;
@@ -112,8 +109,9 @@ public class Utils {
         Bitmap output = Bitmap.createBitmap(width, height, Config.ARGB_8888);
         Bitmap clippedBitmap = clipAndScaleBitmap(bitmap, width, height);
 
-        if (clippedBitmap == null)
+        if (clippedBitmap == null) {
             return null;
+        }
 
         Canvas canvas = new Canvas(output);
 
@@ -169,7 +167,12 @@ public class Utils {
         paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
         canvas.drawBitmap(clippedBitmap, rect, rect, paint);
 
-        bitmap.recycle();
+        if (!bitmap.isRecycled()) {
+            bitmap.recycle();
+        } else {
+            Debug.error("Bitmap is already recycled");
+        }
+
         clippedBitmap.recycle();
 
         return output;
@@ -227,11 +230,14 @@ public class Utils {
             scaledBitmap = output;
         }
 
-        bitmap.recycle();
+        if (!bitmap.isRecycled()) {
+            bitmap.recycle();
+        } else {
+            Debug.error("Bitmap is already recycled");
+        }
 
         return scaledBitmap;
     }
-
 
 
     public static String formatTime(Context context, long time) {
@@ -378,22 +384,6 @@ public class Utils {
         return list.size() > 0;
     }
 
-    public static boolean isThereNavigationActivity(Activity activity) {
-        ActivityManager mngr = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
-        if (taskList != null) {
-            if (taskList.size() > 1) {
-                if (
-                        taskList.get(0).baseActivity.getClassName().equals(NavigationActivity.class.getName())
-                                || taskList.get(1).topActivity.getClassName().equals(NavigationActivity.class.getName())
-                        ) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     /**
      * @return флаг наличия API Google карт
      */
@@ -482,7 +472,7 @@ public class Utils {
     }
 
     public static void showSoftKeyboard(Context context, EditText editText) {
-        InputMethodManager keyboard = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager keyboard = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         keyboard.showSoftInput(editText, 0);
     }
 }
