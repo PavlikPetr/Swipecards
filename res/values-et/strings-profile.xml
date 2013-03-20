@@ -106,12 +106,14 @@
     <string name="profile_form_smoking_female_3">Ainult kui joon</string>
     <string name="profile_form_smoking_female_5">Suitsetan, aga mitte tubakat</string>
     <string name="profile_form_hair_male_0">Brünett</string>
+    <string name="profile_form_hair_male_1">Šatään</string>
     <string name="profile_form_hair_male_2">Blond</string>
     <string name="profile_form_hair_male_3">Blond</string>
     <string name="profile_form_hair_male_4">Punapea</string>
     <string name="profile_form_hair_male_5">Kiilaspäine</string>
     <string name="profile_form_hair_male_6">Ekstriim</string>
     <string name="profile_form_hair_female_0">Brünett</string>
+    <string name="profile_form_hair_female_1">Šatään</string>
     <string name="profile_form_hair_female_2">Blond</string>
     <string name="profile_form_hair_female_3">Blond</string>
     <string name="profile_form_hair_female_4">Punapea</string>

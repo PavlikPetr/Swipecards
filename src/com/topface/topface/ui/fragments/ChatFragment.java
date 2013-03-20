@@ -505,8 +505,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             public void always(ApiResponse response) {
                 super.always(response);
                 isInBlackList = false;
-                mAddToBlackList.setText(R.string.black_list_add);
-                mAddToBlackList.setEnabled(true);
+                if (mAddToBlackList != null) {
+                    mAddToBlackList.setText(R.string.black_list_add);
+                    mAddToBlackList.setEnabled(true);
+                }
             }
         }).exec();
     }
@@ -519,8 +521,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             public void always(ApiResponse response) {
                 super.always(response);
                 isInBlackList = true;
-                mAddToBlackList.setText(R.string.black_list_delete);
-                mAddToBlackList.setEnabled(true);
+                if (mAddToBlackList != null) {
+                    mAddToBlackList.setText(R.string.black_list_delete);
+                    mAddToBlackList.setEnabled(true);
+                }
             }
         }).exec();
     }

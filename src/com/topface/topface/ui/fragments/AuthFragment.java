@@ -362,7 +362,6 @@ public class AuthFragment extends BaseFragment {
                 if (response.code == ApiResponse.BAN)
                     showButtons();
                 else {
-                    profileRequest.handler = this;
                     authorizationFailed(codeError, profileRequest);
                     Toast.makeText(getActivity(), getString(R.string.general_data_error),
                             Toast.LENGTH_SHORT).show();

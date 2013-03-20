@@ -61,7 +61,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         mLockerView = (LockerView) root.findViewById(R.id.llvLogoutLoading);
         mLockerView.setVisibility(View.GONE);
 
-        String code = ((SettingsContainerActivity)getActivity()).getConfirmationCode();
+        String code = ((SettingsContainerActivity) getActivity()).getConfirmationCode();
 
         if (code != null) {
             ConfirmRequest request = new ConfirmRequest(getActivity(), AuthToken.getInstance().getLogin(), code);
@@ -82,7 +82,9 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                 @Override
                 public void always(ApiResponse response) {
                     super.always(response);
-                    mLockerView.setVisibility(View.GONE);
+                    if (mLockerView != null) {
+                        mLockerView.setVisibility(View.GONE);
+                    }
                 }
             }).exec();
         } else {
@@ -352,7 +354,9 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     }
 
     private void unlock() {
-        mLockerView.setVisibility(View.GONE);
+        if (mLockerView != null) {
+            mLockerView.setVisibility(View.GONE);
+        }
     }
 
 
