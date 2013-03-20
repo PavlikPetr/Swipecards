@@ -61,12 +61,15 @@ public class FloatBlock {
             mFloatTypeMap.put(VisitorsFragment.class.toString(), mOptions.pages.get(Options.PAGE_VISITORS).floatType);
     }
 
-    public void onResume() {
-        if (mBanner != null) mBanner.onResume();
+    public void onCreate() {
+        if (mBanner != null) mBanner.onCreate();
     }
 
     public void onPause() {
         if (mBanner != null) mBanner.onPause();
     }
 
+    public void onDestroy() {
+        if (mBanner != null) mBanner.onDestroy();
+    }
 }

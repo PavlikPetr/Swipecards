@@ -234,7 +234,7 @@ public class ConnectionManager {
      * @return флаг необходимости повтора запроса
      */
     private boolean isNeedResend(IApiResponse apiResponse) {
-        return apiResponse.isCodeEqual(
+        return App.isOnline() && apiResponse.isCodeEqual(
                 //Если ответ пустой
                 IApiResponse.NULL_RESPONSE,
                 //Если с сервера пришел не корректный json

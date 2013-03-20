@@ -179,7 +179,7 @@ public class TopsFragment extends BaseFragment {
         editor.putInt(Static.PREFERENCES_TOPS_CITY_POS, mActionData.city_popup_pos);
         editor.commit();
 
-        super.onDestroy();
+        super.onDestroyView();
     }
 
     private void updateData() {
@@ -285,6 +285,7 @@ public class TopsFragment extends BaseFragment {
 
         mGallery = null;
         mGridAdapter = null;
+        mFloatBlock.onDestroy();
     }
 
     @Override
@@ -293,7 +294,12 @@ public class TopsFragment extends BaseFragment {
         if (mTopsList.isEmpty()) {
             updateData();
         }
-        mFloatBlock.onResume();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mFloatBlock.onCreate();
     }
 
     @Override
