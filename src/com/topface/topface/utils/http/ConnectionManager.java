@@ -102,8 +102,8 @@ public class ConnectionManager {
 
         try {
             IApiResponse response;
-            //Отправляем запрос, если есть SSID
-            if (!Ssid.isEmpty() && !AuthToken.getInstance().isEmpty()) {
+            //Отправляем запрос, если есть SSID и Токен или если запрос не требует авторизации
+            if (!Ssid.isEmpty() && !AuthToken.getInstance().isEmpty() || !request.isNeedAuth()) {
                 response = executeRequest(request);
             } else if (AuthToken.getInstance().isEmpty()) {
                 //Если токен пустой, то сразу конструируем ошибку

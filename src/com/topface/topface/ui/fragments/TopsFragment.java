@@ -163,7 +163,9 @@ public class TopsFragment extends BaseFragment {
                 )
         );
 
+
         mFloatBlock = new FloatBlock(this, (ViewGroup) view);
+        mFloatBlock.onCreate();
 
         return view;
     }
@@ -294,12 +296,6 @@ public class TopsFragment extends BaseFragment {
         if (mTopsList.isEmpty()) {
             updateData();
         }
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mFloatBlock.onCreate();
     }
 
     @Override

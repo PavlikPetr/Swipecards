@@ -46,7 +46,9 @@ public abstract class ApiRequest implements IApiRequest {
 
     public ApiRequest(Context context) {
         //Нельзя передавать Application Context!!!! Только контекст Activity
-        ssid = Static.EMPTY;
+        if (isNeedAuth()) {
+            ssid = Static.EMPTY;
+        }
         this.context = context;
         doNeedAlert = true;
     }
@@ -185,11 +187,13 @@ public abstract class ApiRequest implements IApiRequest {
 
     @Override
     public void setSsid(String ssid) {
-        //Если SSID изменился, то сбрасываем кэш данных запроса
-        if (!TextUtils.equals(ssid, this.ssid)) {
-            mPostData = null;
+        if (isNeedAuth()) {
+            //Если SSID изменился, то сбрасываем кэш данных запроса
+            if (!TextUtils.equals(ssid, this.ssid)) {
+                mPostData = null;
+            }
+            this.ssid = ssid;
         }
-        this.ssid = ssid;
     }
 
     @Override
@@ -210,7 +214,9 @@ public abstract class ApiRequest implements IApiRequest {
         try {
             root.put("id", getId());
             root.put("service", getServiceName());
-            root.put("ssid", ssid);
+            if (isNeedAuth()) {
+                root.put("ssid", ssid);
+            }
             JSONObject data = getRequestData();
             if (data != null) {
                 root.put("data", data);
@@ -352,5 +358,10 @@ public abstract class ApiRequest implements IApiRequest {
     @Override
     public IApiResponse constructApiResponse(int code, String message) {
         return new ApiResponse(code, message);
+    }
+
+    @Override
+    public boolean isNeedAuth() {
+        return true;
     }
 }

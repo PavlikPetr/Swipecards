@@ -126,4 +126,9 @@ public class AuthRequest extends ApiRequest {
         //В AuthRequest у нас нет ssid
         this.ssid = null;
     }
+
+    @Override
+    public boolean isNeedAuth() {
+        return false;
+    }
 }
