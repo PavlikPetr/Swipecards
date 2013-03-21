@@ -400,7 +400,7 @@ public class AuthFragment extends BaseFragment {
         boolean needShowRetry = true;
 
         switch (codeError) {
-            case ApiResponse.NETWORK_CONNECT_ERROR:
+            case IApiResponse.NETWORK_CONNECT_ERROR:
                 mRetryView.setErrorMsg(getString(R.string.general_reconnect_social));
                 mRetryView.setTextToButton1(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry));
                 mRetryView.setListenerToBtn(new View.OnClickListener() {
@@ -412,7 +412,7 @@ public class AuthFragment extends BaseFragment {
                     }
                 });
                 break;
-            case ApiResponse.MAINTENANCE:
+            case IApiResponse.MAINTENANCE:
                 mRetryView.setErrorMsg(getString(R.string.general_maintenance));
                 mRetryView.setTextToButton1(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry));
                 mRetryView.setListenerToBtn(new View.OnClickListener() {
@@ -424,7 +424,7 @@ public class AuthFragment extends BaseFragment {
                     }
                 });
                 break;
-            case ApiResponse.CODE_OLD_APPLICATION_VERSION:
+            case IApiResponse.CODE_OLD_APPLICATION_VERSION:
                 mRetryView.setErrorMsg(getString(R.string.general_version_not_supported));
                 mRetryView.setTextToButton1(getString(R.string.popup_version_update));
                 mRetryView.setListenerToBtn(new View.OnClickListener() {
@@ -434,17 +434,17 @@ public class AuthFragment extends BaseFragment {
                     }
                 });
                 break;
-            case ApiResponse.INCORRECT_LOGIN:
-            case ApiResponse.UNKNOWN_SOCIAL_USER:
+            case IApiResponse.INCORRECT_LOGIN:
+            case IApiResponse.UNKNOWN_SOCIAL_USER:
                 redAlert(R.string.incorrect_login);
                 needShowRetry = false;
                 break;
-            case ApiResponse.INCORRECT_PASSWORD:
+            case IApiResponse.INCORRECT_PASSWORD:
                 redAlert(R.string.incorrect_password);
                 mRecoverPwd.setVisibility(View.VISIBLE);
                 needShowRetry = false;
                 break;
-            case ApiResponse.MISSING_REQUIRE_PARAMETER:
+            case IApiResponse.MISSING_REQUIRE_PARAMETER:
                 redAlert(R.string.empty_fields);
                 needShowRetry = false;
                 break;
