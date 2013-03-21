@@ -325,6 +325,12 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 setProfile(data);
                 mHeaderMainFragment.setOnline(data.online);
                 mLoaderView.setVisibility(View.INVISIBLE);
+
+                if (mProfileType == TYPE_USER_PROFILE) {
+                    if (mUserProfile == null || mUserProfile.status == null || TextUtils.isEmpty(mUserProfile.status)) {
+                        mHeaderPagerAdapter.removeItem(HeaderStatusFragment.class.getName());
+                    }
+                }
             }
 
             @Override
@@ -364,6 +370,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         CirclePageIndicator circleIndicator = (CirclePageIndicator) root.findViewById(R.id.cpiHeaderTabs);
         circleIndicator.setViewPager(headerPager);
         circleIndicator.setSnap(true);
+        mHeaderPagerAdapter.setPageIndicator(circleIndicator);
 
         mHeaderPager = headerPager;
     }
@@ -388,8 +395,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         bodyPager.setAdapter(mBodyPagerAdapter);
         //Tabs for Body
         mTabIndicator = (TabPageIndicator) root.findViewById(R.id.tpiTabs);
-
         mTabIndicator.setViewPager(bodyPager);
+
+        mBodyPagerAdapter.setPageIndicator(mTabIndicator);
 
         mBodyPager = bodyPager;
     }
