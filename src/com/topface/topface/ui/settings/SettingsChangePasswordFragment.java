@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiResponse;
@@ -22,7 +21,7 @@ import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.social.AuthToken;
 
-public class SettingsChangePasswordFragment extends BaseFragment implements OnClickListener{
+public class SettingsChangePasswordFragment extends BaseFragment implements OnClickListener {
 
     private LockerView mLockerView;
     private EditText mEdPassword;
@@ -68,14 +67,14 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
                 hideSoftKeyboard();
                 final String password = mEdPassword.getText().toString();
                 final String passwordConfirmation = mEdPasswordConfirmation.getText().toString();
-                if(password.trim().length() <= 0) {
+                if (password.trim().length() <= 0) {
                     Toast.makeText(getActivity(), R.string.enter_new_password, Toast.LENGTH_LONG).show();
                 } else if (passwordConfirmation.trim().length() <= 0) {
                     Toast.makeText(getActivity(), R.string.enter_password_confirmation, Toast.LENGTH_LONG).show();
                 } else if (!password.equals(passwordConfirmation)) {
                     Toast.makeText(getActivity(), R.string.passwords_mismatched, Toast.LENGTH_LONG).show();
                 } else {
-                    ChangePasswordRequest request = new ChangePasswordRequest(getActivity(),mToken.getPassword(),password);
+                    ChangePasswordRequest request = new ChangePasswordRequest(getActivity(), mToken.getPassword(), password);
                     lock();
                     request.callback(new ApiHandler() {
                         @Override
@@ -119,10 +118,14 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
     }
 
     private void lock() {
-        mLockerView.setVisibility(View.VISIBLE);
+        if (mLockerView != null) {
+            mLockerView.setVisibility(View.VISIBLE);
+        }
     }
 
     private void unlock() {
-        mLockerView.setVisibility(View.GONE);
+        if (mLockerView != null) {
+            mLockerView.setVisibility(View.GONE);
+        }
     }
 }

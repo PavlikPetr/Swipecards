@@ -153,7 +153,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         initEmptySearchDialog(view, initNavigationHeader(view));
 
         //Показываем последнего пользователя
-        showUser(mUserSearchList.getCurrentUser());
+        SearchUser currentUser = mUserSearchList.getCurrentUser();
+        if (currentUser != null) {
+            showUser(currentUser);
+        } else {
+            showNextUser();
+        }
         return view;
     }
 

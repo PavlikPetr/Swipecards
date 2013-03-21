@@ -30,6 +30,7 @@ import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.*;
 import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
 import com.topface.topface.ui.fragments.MenuFragment.FragmentMenuListener;
+import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.utils.*;
@@ -659,6 +660,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == ContainerActivity.INTENT_CHAT_FRAGMENT) {
                 if (data != null) {
@@ -692,6 +694,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 }
             }
         }
-        super.onActivityResult(requestCode, resultCode, data);
+
     }
 }

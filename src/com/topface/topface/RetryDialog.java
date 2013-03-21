@@ -13,7 +13,6 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.IApiRequest;
-import com.topface.topface.utils.Debug;
 
 /**
  * Диалог, показываемый при ошибке отправки запроса и предлагающий его повторить
@@ -40,22 +39,6 @@ public class RetryDialog extends AlertDialog {
         anim.setRepeatCount(Animation.INFINITE);
         anim.setDuration(3000);
         anim.setInterpolator(new LinearInterpolator());
-        anim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                Debug.log("ANIMATION:: start");
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                Debug.log("ANIMATION:: end");
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-                Debug.log("ANIMATION:: repeat");
-            }
-        });
 //        satelite.setAnimation(anim);
         satelite.startAnimation(anim);
 

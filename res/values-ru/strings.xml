@@ -465,7 +465,7 @@
     <string name="photo_is_too_small">Вы отлично выглядете на этой фотографии, но для того, чтобы все пользователи оценили ваш снимок, от должен быть чуть больше: не менее %s</string>
     <string name="photo_for_avatar">Фотография готова к отправке в профиль! Это ваша первая фотография и она будет использоваться как ваша аватарка.</string>
 
-    <string name="get_it_for_free">Получить бесплатно</string>
+    <string name="get_it_for_free">Получить монеты бесплатно</string>
     <string name="vip_advantages">Преимущества VIP</string>
 
     <string name="change_email">Сменить e-mail</string>
@@ -500,5 +500,5 @@
     <string name="buy_vip_month_one">%1$d месяц за %2$.2f %3$@</string>
     <string name="buy_vip_month_few">%1$d месяца по %2$.2f %3$@</string>
     <string name="buy_vip_month_other">%1$d месяцев по %2$.2f %3$@</string>
-
+    <string name="buy_special_offers">Специальные предложения</string>
 </resources>

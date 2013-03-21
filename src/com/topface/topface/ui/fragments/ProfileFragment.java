@@ -40,6 +40,7 @@ import com.viewpagerindicator.CirclePageIndicator;
 import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ProfileFragment extends BaseFragment implements View.OnClickListener {
     public final static int TYPE_MY_PROFILE = 1;
@@ -68,7 +69,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private TextView mTitle;
     private View mLoaderView;
     private RateController mRateController;
-    protected NavigationBarController mNavBarController;
+//    protected NavigationBarController mNavBarController;
     private RelativeLayout mLockScreen;
     private RetryView mRetryBtn;
     private ViewPager mBodyPager;
@@ -114,9 +115,19 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mUserActions.findViewById(R.id.acDelight).setOnClickListener(this);
         mUserActions.findViewById(R.id.acChat).setOnClickListener(this);
         mUserActions.findViewById(R.id.acBlock).setOnClickListener(this);
+//
+//        mNavBarController = new NavigationBarController((ViewGroup) root.findViewById(R.id.loNavigationBar));
+        if (mProfileType == TYPE_USER_PROFILE) {
+            mActionBar.showBackButton(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getActivity().onBackPressed();
+                }
+            });
+        } else {
+            mActionBar.showHomeButton((NavigationActivity) getActivity());
+        }
 
-        mNavBarController = new NavigationBarController((ViewGroup) root.findViewById(R.id.loNavigationBar));
-        root.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
         mTitle = (TextView) root.findViewById(R.id.tvNavigationTitle);
 
         initHeaderPages(root);
@@ -252,7 +263,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateProfileReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         setProfile(mUserProfile);
 
-        mNavBarController.refreshNotificators();
+        mActionBar.refreshNotificators();
     }
 
     @Override
@@ -264,13 +275,17 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         //Вручную прокидываем событие onPause() в ViewPager, т.к. на onPause() мы отписываемся от событий
         if (mBodyPagerAdapter != null) {
             for (Fragment fragment : mBodyPagerAdapter.getFragmentCache().values()) {
-                fragment.onPause();
+                if (fragment != null) {
+                    fragment.onPause();
+                }
             }
         }
 
         if (mHeaderPagerAdapter != null) {
             for (Fragment fragment : mHeaderPagerAdapter.getFragmentCache().values()) {
-                fragment.onPause();
+                if (fragment != null) {
+                    fragment.onPause();
+                }
             }
         }
     }
@@ -602,7 +617,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
+            resultToNestedFragments(requestCode, resultCode, data);
             if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
                 Bundle extras = data.getExtras();
                 final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
@@ -649,8 +666,13 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 }
             }
         }
+    }
 
-        super.onActivityResult(requestCode, resultCode, data);
+    public void resultToNestedFragments(int requestCode, int resultCode, Intent data) {
+        HashMap<Integer, Fragment> mBodyFragments = mBodyPagerAdapter.getFragmentCache();
+        for (Fragment fragment : mBodyFragments.values()) {
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     public static class HeaderMainFragment extends BaseFragment {

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -178,7 +179,7 @@ public class TopsFragment extends BaseFragment {
         editor.putInt(Static.PREFERENCES_TOPS_CITY_POS, mActionData.city_popup_pos);
         editor.commit();
 
-        super.onDestroy();
+        super.onDestroyView();
     }
 
     private void updateData() {
@@ -211,10 +212,13 @@ public class TopsFragment extends BaseFragment {
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                mRetryView.setVisibility(View.VISIBLE);
-                mGallery.setVisibility(View.INVISIBLE);
-                onUpdateFail(false);
+                FragmentActivity activity = getActivity();
+                if (activity != null) {
+                    Toast.makeText(activity, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                    mRetryView.setVisibility(View.VISIBLE);
+                    mGallery.setVisibility(View.INVISIBLE);
+                    onUpdateFail(false);
+                }
             }
         }).exec();
     }
@@ -281,6 +285,7 @@ public class TopsFragment extends BaseFragment {
 
         mGallery = null;
         mGridAdapter = null;
+        mFloatBlock.onDestroy();
     }
 
     @Override
@@ -289,7 +294,12 @@ public class TopsFragment extends BaseFragment {
         if (mTopsList.isEmpty()) {
             updateData();
         }
-        mFloatBlock.onResume();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mFloatBlock.onCreate();
     }
 
     @Override

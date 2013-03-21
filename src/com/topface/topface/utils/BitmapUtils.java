@@ -152,7 +152,11 @@ public class BitmapUtils {
         matrix.postScale(ratio, ratio);
 
         Bitmap result = Bitmap.createBitmap(rawBitmap, 0, 0, srcWidth, srcHeight, matrix, true);
-        rawBitmap.recycle();
+        if (!rawBitmap.isRecycled()) {
+            rawBitmap.recycle();
+        } else {
+            Debug.error("Bitmap is already recycled");
+        }
         // сжатие изображения
         return result;
     }
@@ -182,7 +186,11 @@ public class BitmapUtils {
         Matrix mtx = new Matrix();
         mtx.postRotate(rotate);
         Bitmap result = Bitmap.createBitmap(bitmap, 0, 0, w, h, mtx, true);
-        bitmap.recycle();
+        if (!bitmap.isRecycled()) {
+            bitmap.recycle();
+        } else {
+            Debug.error("Bitmap is already recycled");
+        }
         return result;
     }
 
