@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.ui.profile.ProfileBlackListControlFragment;
 import com.topface.topface.utils.Debug;
+import com.viewpagerindicator.CirclePageIndicator;
+import com.viewpagerindicator.PageIndicator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +18,7 @@ public class ProfilePageAdapter extends FragmentStatePagerAdapter {
     private ArrayList<String> mFragmentsTitles = new ArrayList<String>();
     private HashMap<Integer, Fragment> mFragmentCache = new HashMap<Integer, Fragment>();
     private ProfileFragment.ProfileUpdater mProfileUpdater;
+    private PageIndicator mPageIndicator;
 
     public ProfilePageAdapter(FragmentManager fm, ArrayList<String> fragmentsClasses, ProfileFragment.ProfileUpdater profileUpdater) {
         super(fm);
@@ -91,5 +94,24 @@ public class ProfilePageAdapter extends FragmentStatePagerAdapter {
         }
         mFragmentCache.put(position, fragment);
         return fragment;
+    }
+
+    public void removeItem(int position) {
+        mFragmentsClasses.remove(position);
+        if (position >= 0 && position < mFragmentsTitles.size())
+            mFragmentsTitles.remove(position);
+        notifyDataSetChanged();
+        if (mPageIndicator != null) mPageIndicator.notifyDataSetChanged();
+    }
+
+    public void removeItem(String className) {
+        int position = getFragmentIndexByClassName(className);
+        if (position >= 0 && position < getCount()) {
+            removeItem(position);
+        }
+    }
+
+    public void setPageIndicator(PageIndicator indicator){
+        mPageIndicator = indicator;
     }
 }
