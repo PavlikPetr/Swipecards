@@ -433,7 +433,7 @@ public class BannerBlock {
         return (name == null || name.length() < 1) ? bannerUrl : name;
     }
 
-    public void onResume() {
+    public void onCreate() {
         initBanner();
         if (mBannerView != null && mBannerView instanceof AdfonicView) mBannerView.invalidate();
         if (mBannerView != null && mBannerView instanceof AWView) {
@@ -442,9 +442,10 @@ public class BannerBlock {
         if (mPLus1Asker != null) mPLus1Asker.onResume();
     }
 
-    public void onPause() {
+    public void onPause() {}
+
+    public void onDestroy() {
         if (mPLus1Asker != null) mPLus1Asker.onPause();
         removeBanner();
     }
-
 }

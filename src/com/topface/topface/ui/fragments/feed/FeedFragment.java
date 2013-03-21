@@ -120,6 +120,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     protected void initFloatBlock(ViewGroup view) {
         mFloatBlock = new FloatBlock(this, view);
+        mFloatBlock.onCreate();
     }
 
     protected void initNavigationBar(View view) {
@@ -133,9 +134,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     @Override
     public void onResume() {
         super.onResume();
-        if (mFloatBlock != null) {
-            mFloatBlock.onResume();
-        }
         if (getListAdapter().isNeedUpdate()) {
             updateData(false, true);
         }
@@ -148,13 +146,17 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (mFloatBlock != null) {
             mFloatBlock.onPause();
         }
-
     }
 
-    protected void init() {
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mFloatBlock != null) {
+            mFloatBlock.onDestroy();
+        }
     }
 
+    protected void init() {}
 
     private void initBackground(View view) {
         // ListView background

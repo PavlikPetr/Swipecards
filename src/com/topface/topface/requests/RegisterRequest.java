@@ -48,4 +48,9 @@ public class RegisterRequest extends ApiRequest {
     public String getServiceName() {
         return SERVICE_NAME;
     }
+
+    @Override
+    public boolean isNeedAuth() {
+        return false;
+    }
 }
