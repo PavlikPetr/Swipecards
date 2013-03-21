@@ -374,7 +374,8 @@ public class ConnectionManager {
             Auth auth = new Auth(authResponse);
             //Сохраняем новый SSID в SharedPreferences
             Ssid.save(auth.ssid);
-
+            //Снимаем блокировку
+            mAuthUpdateFlag.set(false);
             //Заново отправляем исходный запрос с уже новым SSID
             response = executeRequest(request);
             //После этого выполняем все отложенные запросы
