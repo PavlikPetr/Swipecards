@@ -102,8 +102,8 @@ public class ConnectionManager {
 
         try {
             IApiResponse response;
-            //Отправляем запрос, если есть SSID
-            if (!Ssid.isEmpty() && !AuthToken.getInstance().isEmpty()) {
+            //Отправляем запрос, если есть SSID и Токен или если запрос не требует авторизации
+            if (!Ssid.isEmpty() && !AuthToken.getInstance().isEmpty() || !request.isNeedAuth()) {
                 response = executeRequest(request);
             } else if (AuthToken.getInstance().isEmpty()) {
                 //Если токен пустой, то сразу конструируем ошибку
@@ -374,7 +374,8 @@ public class ConnectionManager {
             Auth auth = new Auth(authResponse);
             //Сохраняем новый SSID в SharedPreferences
             Ssid.save(auth.ssid);
-
+            //Снимаем блокировку
+            mAuthUpdateFlag.set(false);
             //Заново отправляем исходный запрос с уже новым SSID
             response = executeRequest(request);
             //После этого выполняем все отложенные запросы

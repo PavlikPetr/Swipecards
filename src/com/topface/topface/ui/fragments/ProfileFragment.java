@@ -33,7 +33,6 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.NavigationBarController;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.viewpagerindicator.CirclePageIndicator;
@@ -69,7 +68,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private TextView mTitle;
     private View mLoaderView;
     private RateController mRateController;
-//    protected NavigationBarController mNavBarController;
+    //    protected NavigationBarController mNavBarController;
     private RelativeLayout mLockScreen;
     private RetryView mRetryBtn;
     private ViewPager mBodyPager;
@@ -338,7 +337,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 mTitle.setText(data.getNameAndAge());
 
                 setProfile(data);
-                mHeaderMainFragment.setOnline(data.online);
+                if (mHeaderMainFragment != null) {
+                    mHeaderMainFragment.setOnline(data.online);
+                }
                 mLoaderView.setVisibility(View.INVISIBLE);
 
                 if (mProfileType == TYPE_USER_PROFILE) {
