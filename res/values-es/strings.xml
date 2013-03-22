@@ -382,4 +382,5 @@
     <string name="buy_vip_month_one">%1$d mes por %2$.2f %3$@</string>
     <string name="buy_vip_month_few">%1$d meses por %2$.2f %3$@</string>
     <string name="buy_vip_month_other">%1$d meses por %2$.2f %3$@</string>
+    <string name="buy_special_offers">Ofertas especiales</string>
 </resources>
