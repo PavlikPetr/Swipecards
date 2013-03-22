@@ -77,7 +77,7 @@
                 </LinearLayout>
             </RelativeLayout>
 
-            <com.topface.topface.ui.views.IllustratedTextView
+            <com.topface.IllustratedTextView.IllustratedTextView
                     android:id="@+id/tvResourcesInfo"
                     style="@style/ItemTitleText"
                     android:layout_width="fill_parent"

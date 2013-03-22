@@ -53,7 +53,7 @@
                     android:visibility="gone"
                     android:layout_marginRight="5dp"/>
             <!-- текст -->
-            <com.topface.topface.ui.views.IllustratedTextView
+            <com.topface.IllustratedTextView.IllustratedTextView
                     android:id="@+id/tvText"
                     style="@style/ListMessageText"
                     android:textColor="#CFEDFF"/>

@@ -71,7 +71,7 @@
                 <data
                         android:scheme="http"
                         android:host="topface.com"
-                        android:pathPattern="/profile"/>
+                        android:pathPattern="/profile*"/>
 
                 <data
                         android:scheme="http"
@@ -107,6 +107,8 @@
                         android:scheme="https"
                         android:host="topface.ru"
                         android:pathPrefix="/confirm"/>
+
+                    />
             </intent-filter>
         </activity>
         <activity

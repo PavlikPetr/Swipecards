@@ -1,4 +1,4 @@
-package com.topface.topface.ui.views;
+package com.topface.IllustratedTextView;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -7,7 +7,6 @@ import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
 import android.widget.TextView;
-import com.topface.topface.R;
 
 import java.util.ArrayList;
 
