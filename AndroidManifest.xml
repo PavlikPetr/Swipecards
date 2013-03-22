@@ -71,7 +71,7 @@
                 <data
                         android:scheme="http"
                         android:host="topface.com"
-                        android:pathPattern="/profile*|/m/profile*"/>
+                        android:pathPattern="/profile*"/>
 
                 <data
                         android:scheme="http"
