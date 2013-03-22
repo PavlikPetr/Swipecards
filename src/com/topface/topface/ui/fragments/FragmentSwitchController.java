@@ -576,7 +576,7 @@ public class FragmentSwitchController extends ViewGroup {
     }
 
     protected boolean inBezierThreshold(float x) {
-        return x < mWidth / 5;
+        return x < getContext().getResources().getDimensionPixelSize(R.dimen.bezier_threshold);
     }
 
 
