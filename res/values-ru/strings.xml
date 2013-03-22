@@ -501,4 +501,6 @@
     <string name="buy_vip_month_few">%1$d месяца по %2$.2f %3$@</string>
     <string name="buy_vip_month_other">%1$d месяцев по %2$.2f %3$@</string>
     <string name="buy_special_offers">Специальные предложения</string>
+
+    <string name="user_does_not_have_gifts">У этого пользователя пока нет подарков, будьте первым и вас заметят</string>
 </resources>
