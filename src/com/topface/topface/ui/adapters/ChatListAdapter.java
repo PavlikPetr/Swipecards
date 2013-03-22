@@ -25,7 +25,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 
-public class ChatListAdapter extends LoadingListAdapter<History> implements AbsListView.OnScrollListener{
+public class ChatListAdapter extends LoadingListAdapter<History> implements AbsListView.OnScrollListener {
 
     static class ViewHolder {
         View dateDivider;
@@ -54,7 +54,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     private static final int T_COUNT = 13;
 
-    private HashMap<History,ApiRequest> mHashRepeatRequests;
+    private HashMap<History, ApiRequest> mHashRepeatRequests;
     private ArrayList<History> mWaitingItems;
     private ArrayList<History> mUnrealItems;
     private ArrayList<History> mShowDatesList;
@@ -67,7 +67,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private FeedUser user;
 
     public ChatListAdapter(Context context, FeedList<History> data, Updater updateCallback) {
-        super(context,data, updateCallback);
+        super(context, data, updateCallback);
         mAddressesCache = new AddressesCache();
         mShowDatesList = new ArrayList<History>();
         mUnrealItems = new ArrayList<History>();
@@ -81,7 +81,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     }
 
     private int getPosition(int index) {
-        return getCount()-index-1;
+        return getCount() - index - 1;
     }
 
     @Override
@@ -141,7 +141,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     public void setUser(FeedUser user) {
         this.user = user;
         if (mHeaderView != null && user != null) {
-            ((ImageViewRemote)mHeaderView.findViewById(R.id.ivFriendAvatar)).setPhoto(user.photo);
+            ((ImageViewRemote) mHeaderView.findViewById(R.id.ivFriendAvatar)).setPhoto(user.photo);
         }
     }
 
@@ -179,8 +179,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         super.setData(dataList, more, false);
         prepareDates();
         notifyDataSetChanged();
-        parentView.setSelection(getCount()-1);
-        if(getCount() > 0) {
+        parentView.setSelection(getCount() - 1);
+        if (getCount() > 0) {
             removeHeader(parentView);
         } else {
             mHeaderView.setVisibility(View.VISIBLE);
@@ -196,8 +196,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     public void addAll(ArrayList<History> dataList, boolean more, ListView parentView) {
         this.addAll(dataList, more);
-        parentView.setSelection(dataList.size()+(more ? 2 : 0));
-        if(getCount() > 0) {
+        parentView.setSelection(dataList.size() + (more ? 2 : 0));
+        if (getCount() > 0) {
             removeHeader(parentView);
         }
     }
@@ -210,18 +210,18 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         notifyDataSetChanged();
     }
 
-    public void addFirst(ArrayList<History> data, boolean more,ListView parentView) {
+    public void addFirst(ArrayList<History> data, boolean more, ListView parentView) {
         int scroll = parentView.getScrollY();
         this.addFirst(data, more);
-        parentView.scrollTo(parentView.getScrollX(),scroll);
-        if(getCount() > 0) {
+        parentView.scrollTo(parentView.getScrollX(), scroll);
+        if (getCount() > 0) {
             removeHeader(parentView);
         }
     }
 
     private void addSentMessage(History item) {
         getData().addFirst(item);
-        if(item.isWaitingItem()) {
+        if (item.isWaitingItem()) {
             mWaitingItems.add(item);
         } else {
             mUnrealItems.add(item);
@@ -229,10 +229,10 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         notifyDataSetChanged();
     }
 
-    public  void addSentMessage(History item, ListView parentView) {
+    public void addSentMessage(History item, ListView parentView) {
         this.addSentMessage(item);
-        parentView.setSelection(getCount()-1);
-        if(getCount() > 0) {
+        parentView.setSelection(getCount() - 1);
+        if (getCount() > 0) {
             removeHeader(parentView);
         }
     }
@@ -240,24 +240,24 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     public void replaceMessage(History emptyItem, History unrealItem, ListView parentView) {
         FeedList<History> data = getData();
         int positionToReplace = -1;
-        for (int i=0;i<data.size();i++) {
+        for (int i = 0; i < data.size(); i++) {
             if (data.get(i) == emptyItem) {
                 positionToReplace = i;
             }
         }
         if (positionToReplace != -1) {
             data.remove(positionToReplace);
-            data.add(positionToReplace,unrealItem);
+            data.add(positionToReplace, unrealItem);
             mWaitingItems.remove(emptyItem);
             mUnrealItems.add(unrealItem);
         }
         notifyDataSetChanged();
-        parentView.setSelection(getCount()-1);
+        parentView.setSelection(getCount() - 1);
     }
 
     public void showRetrySendMessage(History emptyItem, ApiRequest request) {
         emptyItem.setLoaderTypeFlags(IListLoader.ItemType.REPEAT);
-        mHashRepeatRequests.put(emptyItem,request);
+        mHashRepeatRequests.put(emptyItem, request);
         notifyDataSetChanged();
     }
 
@@ -273,25 +273,25 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private void prepareDates() {
         FeedList<History> data = getData();
         mShowDatesList.clear();
-        for (int i = data.size()-1; i >= 0; i--) {
+        for (int i = data.size() - 1; i >= 0; i--) {
             History currItem = data.get(i);
             if (currItem.isLoaderOrRetrier()) continue;
 
-            History prevItem = (i+1>=data.size()) ? null : data.get(i+1);
-            if(prevItem == null || prevItem.isLoaderOrRetrier()) {
+            History prevItem = (i + 1 >= data.size()) ? null : data.get(i + 1);
+            if (prevItem == null || prevItem.isLoaderOrRetrier()) {
                 mShowDatesList.add(currItem);
                 continue;
             }
 
-            if (DateUtils.isWithinADay(prevItem.created,currItem.created)) {
+            if (DateUtils.isWithinADay(prevItem.created, currItem.created)) {
                 mShowDatesList.add(currItem);
             }
         }
 
     }
 
-    private void setTypeDifferences(int position, ViewHolder holder, int type,final History item) {
-        History prevItem = getItem(position-1);
+    private void setTypeDifferences(int position, ViewHolder holder, int type, final History item) {
+        History prevItem = getItem(position - 1);
         boolean avatar = prevItem == null || prevItem.target != item.target;
         boolean output = (item.target == FeedDialog.USER_MESSAGE);
         boolean showDate = mShowDatesList.contains(item);
@@ -307,7 +307,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                         @Override
                         public void onClick(View v) {
                             ApiRequest request = mHashRepeatRequests.get(item);
-                            if(request != null) request.exec();
+                            if (request != null) request.exec();
                             mHashRepeatRequests.remove(item);
                             item.setLoaderTypeFlags(IListLoader.ItemType.WAITING);
                             notifyDataSetChanged();
@@ -460,12 +460,18 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case FeedDialog.MESSAGE:
             case FeedDialog.PROMOTION:
             default:
-                if (holder !=null) holder.message.setText(Html.fromHtml(item.text));
+                if (holder != null && holder.message != null) {
+                    holder.message.setText(
+                            Html.fromHtml(item.text != null ? item.text : "")
+                    );
+                }
                 break;
         }
+        if (holder != null) {
+            if (holder.message != null) holder.message.setMovementMethod(LinkMovementMethod.getInstance());
+            if (holder.date != null) holder.date.setText(DateUtils.getFormattedDateHHmm(item.created));
+        }
 
-        if(holder.message != null) holder.message.setMovementMethod(LinkMovementMethod.getInstance());
-        if(holder.date != null) holder.date.setText(DateUtils.getFormattedDateHHmm(item.created));
     }
 
     public void setOnItemLongClickListener(ChatFragment.OnListViewItemLongClickListener listener) {
@@ -476,6 +482,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         mOnClickListener = listener;
     }
 
+    @SuppressWarnings("deprecation")
     public void copyText(String text) {
         ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
         clipboard.setText(text);
@@ -489,9 +496,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     public int getFirstItemId() {
         FeedList<History> data = getData();
-        for (int i=0; i < data.size(); i++) {
-            History item = data.get(i);
-            if(!item.isLoaderOrRetrier() && item.id > 0) {
+        for (History item : data) {
+            if (!item.isLoaderOrRetrier() && item.id > 0) {
                 return item.id;
             }
         }
@@ -500,9 +506,9 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     public int getLastItemId() {
         FeedList<History> data = getData();
-        for (int i=data.size()-1; i >= 0; i--) {
+        for (int i = data.size() - 1; i >= 0; i--) {
             History item = data.get(i);
-            if(!item.isLoaderOrRetrier() && item.id > 0) {
+            if (!item.isLoaderOrRetrier() && item.id > 0) {
                 return item.id;
             }
         }
@@ -513,7 +519,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     public ArrayList<History> getDataCopy() {
         //noinspection unchecked
         ArrayList<History> dataClone = (ArrayList<History>) getData().clone();
-        if (!dataClone.isEmpty() && dataClone.get(dataClone.size()-1).isLoaderOrRetrier()) {
+        if (!dataClone.isEmpty() && dataClone.get(dataClone.size() - 1).isLoaderOrRetrier()) {
             dataClone.remove(dataClone.size() - 1);
         }
         removeUnrealItems(dataClone);
