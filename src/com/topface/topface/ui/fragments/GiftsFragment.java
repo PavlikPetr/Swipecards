@@ -102,7 +102,10 @@ public class GiftsFragment extends BaseFragment {
                         }
                     }
                 } else if (mTag.equals(GIFTS_USER_PROFILE_TAG)) {
-                    mTitle.setText(R.string.gifts);
+                    if (mGifts.size() > 1)
+                        mTitle.setText(R.string.gifts);
+                    else
+                        mTitle.setText(R.string.user_does_not_have_gifts);
                     mTitle.setVisibility(View.VISIBLE);
                     mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
@@ -111,9 +114,7 @@ public class GiftsFragment extends BaseFragment {
                                 FeedGift item = (FeedGift) parent.getItemAtPosition(position);
                                 if (item.gift != null) {
                                     if (item.gift.type == Gift.SEND_BTN) {
-                                        Intent intent = new Intent(getActivity().getApplicationContext(),
-                                                GiftsActivity.class);
-                                        startActivityForResult(intent, GiftsActivity.INTENT_REQUEST_GIFT);
+                                        sendGift();
                                     }
                                 }
                             }
@@ -176,7 +177,8 @@ public class GiftsFragment extends BaseFragment {
                             if (mGifts.size() > 1) {
                                 mGifts.add(1, sendedGift);
                             } else {
-                                mGifts.add(mGifts.size()-1,sendedGift);
+                                mGifts.add(sendedGift);
+                                mTitle.setText(R.string.gifts);
                             }
                             mGridAdapter.notifyDataSetChanged();
                         }
@@ -276,7 +278,6 @@ public class GiftsFragment extends BaseFragment {
             if (mGifts.size() >= GIFTS_LOAD_COUNT)
                 mGifts.add(new FeedGift(ItemType.LOADER));
         }
-
         if (mGridView != null) {
             mGridView.post(new Runnable() {
                 @Override
@@ -308,7 +309,7 @@ public class GiftsFragment extends BaseFragment {
     public void sendGift() {
         Intent intent = new Intent(getActivity().getApplicationContext(),
                 GiftsActivity.class);
-        startActivityForResult(intent, GiftsActivity.INTENT_REQUEST_GIFT);
+        getParentFragment().startActivityForResult(intent, GiftsActivity.INTENT_REQUEST_GIFT);
     }
 
     protected FeedAdapter.Updater getUpdaterCallback() {

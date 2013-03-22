@@ -621,51 +621,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             resultToNestedFragments(requestCode, resultCode, data);
-            if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
-                Bundle extras = data.getExtras();
-                final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
-                final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
-                final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
-
-                if (mUserProfile != null) {
-                    final SendGiftRequest sendGift = new SendGiftRequest(getActivity());
-                    registerRequest(sendGift);
-                    sendGift.giftId = id;
-                    sendGift.userId = mUserProfile.uid;
-                    final FeedGift sendedGift = new FeedGift();
-                    sendedGift.gift = new Gift(sendGift.giftId, Gift.PROFILE_NEW, url, 0);
-                    sendGift.callback(new DataApiHandler<SendGiftAnswer>() {
-
-                        @Override
-                        protected void success(SendGiftAnswer answer, ApiResponse response) {
-                            CacheProfile.likes = answer.likes;
-                            CacheProfile.money = answer.money;
-
-                            ArrayList<Gift> gifts = new ArrayList<Gift>();
-                            gifts.add(sendedGift.gift);
-                            gifts.addAll(mUserProfile.gifts);
-
-                            mUserProfile.gifts = gifts;
-                        }
-
-                        @Override
-                        protected SendGiftAnswer parseResponse(ApiResponse response) {
-                            return SendGiftAnswer.parse(response);
-                        }
-
-                        @Override
-                        public void fail(int codeError, final ApiResponse response) throws NullPointerException {
-                            if (response.code == ApiResponse.PAYMENT) {
-                                Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
-                                intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
-                                intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
-                                intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
-                                startActivity(intent);
-                            }
-                        }
-                    }).exec();
-                }
-            }
         }
     }
 
