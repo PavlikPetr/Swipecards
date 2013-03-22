@@ -217,6 +217,8 @@ public class BuyingFragment extends BillingFragment {
             }
         });
         offerwall.setVisibility(CacheProfile.paid ? View.GONE : View.VISIBLE);
+        root.findViewById(R.id.titleSpecialOffers).setVisibility(CacheProfile.paid ? View.GONE : View.VISIBLE);
+
     }
 
     private void goToVipSettings() {
