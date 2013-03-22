@@ -2,14 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                >
-    <include layout="@layout/bar_navigation_header"
-             android:id="@+id/loNavigationBar" />
+        >
+
+    <include
+            layout="@layout/bar_navigation_header"
+            android:id="@+id/loNavigationBar"/>
+
     <ScrollView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_main"
-                android:layout_below="@id/loNavigationBar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_main"
+            android:layout_below="@id/loNavigationBar"
             >
 
         <LinearLayout
@@ -140,6 +143,7 @@
 
                 <!-- Money -->
                 <TextView
+                        android:id="@+id/titleSpecialOffers"
                         style="@style/TitleWhiteText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -193,7 +197,6 @@
                 <include
                         layout="@layout/item_divider"
                         />
-
 
 
                 <!-- Power -->
@@ -263,5 +266,6 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
     <ImageView style="@style/HeaderShadow"/>
 </RelativeLayout>

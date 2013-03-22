@@ -367,13 +367,16 @@
     <string name="choose_cool_photo">Επιλέξτε μια καλύτερη φωτογραφία σας και την κατάσταση που αντικατοπτρίζει τη διάθεσή σας!</string>
     <string name="email_confirmed">επιβεβαίωση e-mail !</string>
     <string name="sympathy_sended">Συμπάθεια έχει σταλεί.</string>
+    <string name="general_photo_deleted">Η φωτογραφία σας δεν ικανοποιεί πλήρως τους κανόνες εφαρμογής και διεγράφει τη διοίκηση.</string>
     <string name="buying_total">Στη συνολική</string>
     <string name="buying_economy">Eξοικονομήσει</string>
     <string name="general_change">Αλλάξτε</string>
     <string name="general_correct">\'Ολα είναι σωστά</string>
+    <string name="we_dont_detect_your_city">Καθόρισε τη πόλη σας για να ξέρετε πού βρίσκεστε. Ζητήστε από εκείνους που είναι κοντά σας.</string>
     <string name="confirm_email">Παρακαλώ, επιβεβαιώστε e-mail</string>
     <string name="password_sent">Το νέο κωδικό έχει σταλεί στο E-mail σας</string>
     <string name="buy_vip_month_one">μήνα</string>
     <string name="buy_vip_month_few">%1$d μήνες για %2$.2f %3$@</string>
     <string name="buy_vip_month_other">%1$d μήνες για %2$.2f %3$@</string>
+    <string name="buy_special_offers">Ειδικές προσφορές</string>
 </resources>

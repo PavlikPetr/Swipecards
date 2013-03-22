@@ -108,6 +108,7 @@ public class AddPhotoHelper {
                 UUID uuid = UUID.randomUUID();
                 mFileName = "/" + uuid.toString() + ".jpg";
                 File outputDirectory = new File(PATH_TO_FILE);
+                //noinspection ResultOfMethodCallIgnored
                 outputDirectory.mkdirs();
                 outputFile = new File(outputDirectory, mFileName);
 
@@ -189,8 +190,10 @@ public class AddPhotoHelper {
      * @param uri фотографии
      */
     public void sendRequest(final Uri uri) {
-        if (uri == null && mHandler != null) {
-            mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
+        if (uri == null) {
+            if (mHandler != null) {
+                mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
+            }
             return;
         }
         showProgressDialog();
@@ -211,7 +214,7 @@ public class AddPhotoHelper {
             }
         });
 
-        PhotoAddRequest photoAddRequest = new PhotoAddRequest(uri, mContext);
+        final PhotoAddRequest photoAddRequest = new PhotoAddRequest(uri, mContext);
         fileNames.put(photoAddRequest.getId(), outputFile);
         photoAddRequest.callback(new DataApiHandler<Photo>() {
             @Override
@@ -247,10 +250,21 @@ public class AddPhotoHelper {
             public void always(final ApiResponse response) {
                 super.always(response);
                 hideProgressDialog();
+                //Удаляем все временные картинки
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        fileNames.get(response.id).delete();
+                        try {
+                            String id = photoAddRequest.getId();
+                            if (fileNames.get(id).delete()) {
+                                Debug.log("Delete temp photo " + id);
+                            } else {
+                                Debug.log("Error delete temp photo " + id);
+                            }
+                        } catch (Exception e) {
+                            Debug.error(e);
+                        }
+
                     }
                 }).start();
             }

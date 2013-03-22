@@ -383,4 +383,5 @@
     <string name="buy_vip_month_one">%1$d měsíc za %2$.2f %3$@</string>
     <string name="buy_vip_month_few">%1$d měsíce za %2$.2f %3$@</string>
     <string name="buy_vip_month_other">%1$d měsíců za %2$.2f %3$@</string>
+    <string name="buy_special_offers">Akční nabídky</string>
 </resources>

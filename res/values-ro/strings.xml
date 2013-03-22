@@ -382,4 +382,5 @@
     <string name="buy_vip_month_one">%1$d luni pentru %2$.2f %3$@</string>
     <string name="buy_vip_month_few">%1$d luni pana pe %2$.2f %3$@</string>
     <string name="buy_vip_month_other">%1$d luni pana pe %2$.2f %3$@</string>
+    <string name="buy_special_offers">Oferte speciale</string>
 </resources>
