@@ -30,7 +30,7 @@
                 style="@style/ListCity"/>
 
         <!-- текст -->
-        <com.topface.topface.ui.views.IllustratedTextView
+        <com.topface.IllustratedTextView.IllustratedTextView
             	
                 android:id="@+id/tvText"
                 android:layout_below="@id/tvName"
