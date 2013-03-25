@@ -35,22 +35,24 @@ public abstract class AbstractEditFragment extends BaseFragment {
     }
 
     protected void finishRequestSend() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mBackButton != null) {
-                    mBackButton.setEnabled(true);
-                }
-
-                if (mRightPrsBar != null) {
-                    mRightPrsBar.setVisibility(View.GONE);
-                    if (!hasChanges()) {
-                        mRightPrsBar.setVisibility(View.INVISIBLE);
+        if(getActivity() != null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (mBackButton != null) {
+                        mBackButton.setEnabled(true);
                     }
-                }
-                unlockUi();
-            }
-        });
+
+                    if (mRightPrsBar != null) {
+                        mRightPrsBar.setVisibility(View.GONE);
+                        if (!hasChanges()) {
+                            mRightPrsBar.setVisibility(View.INVISIBLE);
+                        }
+                    }
+                    unlockUi();
+                    }
+            });
+        }
     }
 
     protected void refreshSaveState() {
