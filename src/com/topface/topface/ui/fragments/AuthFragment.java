@@ -284,8 +284,7 @@ public class AuthFragment extends BaseFragment {
                 authorizationFailed(codeError, authRequest);
             }
 
-            @Override
-            public void cancel() {
+            public void always(ApiResponse response) {
                 showButtons();
             }
         }).exec();

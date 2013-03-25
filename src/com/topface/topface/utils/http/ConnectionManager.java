@@ -103,14 +103,18 @@ public class ConnectionManager {
         try {
             IApiResponse response;
             //Отправляем запрос, если есть SSID и Токен или если запрос не требует авторизации
-            if (!Ssid.isEmpty() && !AuthToken.getInstance().isEmpty() || !request.isNeedAuth()) {
+            if (!Ssid.isEmpty() || !request.isNeedAuth()) {
                 response = executeRequest(request);
-            } else if (AuthToken.getInstance().isEmpty()) {
-                //Если токен пустой, то сразу конструируем ошибку
-                response = request.constructApiResponse(IApiResponse.UNKNOWN_SOCIAL_USER, "AuthToken is empty");
             } else {
-                //Если SSID пустой, то сразу пишим ответ
-                response = request.constructApiResponse(IApiResponse.SESSION_NOT_FOUND, "SSID is empty");
+                //Если у нас нет авторизационного токена, то выкидываем на авторизацию
+                if (AuthToken.getInstance().isEmpty()) {
+                    //Если токен пустой, то сразу конструируем ошибку
+                    response = request.constructApiResponse(IApiResponse.UNKNOWN_SOCIAL_USER, "AuthToken is empty");
+                } else {
+                    //Если SSID пустой, то сразу пишим ответ
+                    response = request.constructApiResponse(IApiResponse.SESSION_NOT_FOUND, "SSID is empty");
+                }
+
             }
 
             //Проверяем запрос на ошибку неверной сессии
