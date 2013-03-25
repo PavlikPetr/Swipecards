@@ -117,7 +117,7 @@ public class AddPhotoHelper {
 
                 if (Utils.isIntentAvailable(mContext, intent.getAction())) {
                     if (mFragment != null) {
-                        if(mFragment instanceof ProfilePhotoFragment) {
+                        if (mFragment instanceof ProfilePhotoFragment) {
                             mFragment.getParentFragment().startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
                         } else {
                             mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
@@ -134,7 +134,7 @@ public class AddPhotoHelper {
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.profile_add_title));
         if (mFragment != null) {
-            if(mFragment instanceof ProfilePhotoFragment) {
+            if (mFragment instanceof ProfilePhotoFragment) {
                 mFragment.getParentFragment().startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
             } else {
                 mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
@@ -169,7 +169,9 @@ public class AddPhotoHelper {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA) {
                 //Если фотография сделана, то ищем ее во временном файле
-                photoUri = Uri.fromFile(outputFile);
+                if (outputFile != null) {
+                    photoUri = Uri.fromFile(outputFile);
+                }
             } else if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY) {
                 //Если она взята из галереи, то получаем URL из данных интента и преобразуем его в путь до файла
                 photoUri = data.getData();
@@ -208,8 +210,8 @@ public class AddPhotoHelper {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                if(doNeedSendProgressNotification[0]) {
-                    progressId[0] = mNotificationManager.showProgressNotification(mContext.getString(R.string.default_photo_upload), "", fakeImageView.getImageBitmap(),  new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE));
+                if (doNeedSendProgressNotification[0]) {
+                    progressId[0] = mNotificationManager.showProgressNotification(mContext.getString(R.string.default_photo_upload), "", fakeImageView.getImageBitmap(), new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE));
                 }
             }
         });

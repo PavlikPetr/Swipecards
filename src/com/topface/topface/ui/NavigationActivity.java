@@ -30,7 +30,6 @@ import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.*;
 import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
 import com.topface.topface.ui.fragments.MenuFragment.FragmentMenuListener;
-import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.utils.*;
@@ -218,7 +217,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 takePhoto(new TakePhotoDialog.TakePhotoListener() {
                     @Override
                     public void onPhotoSentSuccess(final Photo photo) {
-                        CacheProfile.photos.add(photo);
+                        if (CacheProfile.photos != null) {
+                            CacheProfile.photos.add(photo);
+                        }
                         PhotoMainRequest request = new PhotoMainRequest(getApplicationContext());
                         request.photoid = photo.getId();
                         request.callback(new ApiHandler() {
@@ -232,7 +233,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                             @Override
                             public void fail(int codeError, ApiResponse response) {
                                 if (codeError == ApiResponse.NON_EXIST_PHOTO_ERROR) {
-                                    if (CacheProfile.photos.contains(photo)) {
+                                    if (CacheProfile.photos != null && CacheProfile.photos.contains(photo)) {
                                         CacheProfile.photos.remove(photo);
                                     }
                                     Toast.makeText(NavigationActivity.this, "Ваша фотография не соответствует правилам. Попробуйте сделать другую", 2000);
@@ -666,7 +667,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 if (data != null) {
                     int user_id = data.getExtras().getInt(ChatFragment.INTENT_USER_ID);
                     mDelayedFragment = ProfileFragment.newInstance(user_id, ProfileFragment.TYPE_USER_PROFILE);
-                    return;
                 }
             } else if (requestCode == CitySearchActivity.INTENT_CITY_SEARCH_AFTER_REGISTRATION ||
                     requestCode == CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY) {

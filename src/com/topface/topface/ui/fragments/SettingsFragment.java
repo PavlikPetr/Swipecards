@@ -17,6 +17,7 @@ import android.widget.*;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
+import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.SendMailNotificationsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -348,7 +349,10 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             }
         } else {
             if (CacheProfile.notifications != null) {
-                CacheProfile.notifications.get(type).apns = isChecked;
+                Profile.TopfaceNotifications notifications = CacheProfile.notifications.get(type);
+                if (notifications != null) {
+                    notifications.apns = isChecked;
+                }
             }
             mSendTimer.cancel();
             mSendTimer.start();

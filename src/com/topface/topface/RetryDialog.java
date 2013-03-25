@@ -47,7 +47,9 @@ public class RetryDialog extends AlertDialog {
             public void onReceive(Context context, Intent intent) {
                 if (intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE, 0) != ConnectionChangeReceiver.CONNECTION_OFFLINE) {
                     mRequest.exec();
-                    cancel();
+                    if (isShowing()) {
+                        cancel();
+                    }
                 }
             }
         };

@@ -249,12 +249,12 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                 remindRequest.callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
-                        Toast.makeText(getActivity(), R.string.confirmation_successfully_sent, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(App.getContext(), R.string.confirmation_successfully_sent, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void fail(int codeError, ApiResponse response) {
-                        Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                     }
                 }).exec();
                 break;
