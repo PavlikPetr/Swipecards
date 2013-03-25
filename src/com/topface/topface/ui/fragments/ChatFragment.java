@@ -197,7 +197,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 boolean was_failed = savedInstanceState.getBoolean(WAS_FAILED);
                 ArrayList<History> list = savedInstanceState.getParcelableArrayList(ADAPTER_DATA);
                 mHistoryData = new FeedList<History>();
-                mHistoryData.addAll(list);
+                if (list != null) {
+                    for (History item : list) {
+                        if (item != null) {
+                            mHistoryData.addAll(list);
+                        }
+                    }
+                }
                 try {
                     mUser = new FeedUser(new JSONObject(savedInstanceState.getString(FRIEND_FEED_USER)));
                 } catch (Exception e) {

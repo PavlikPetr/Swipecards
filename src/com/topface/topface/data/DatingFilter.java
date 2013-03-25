@@ -150,11 +150,13 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        String cityJson = null;
         try {
-            dest.writeString(city.toJson().toString());
+            cityJson = city.toJson().toString();
         } catch (JSONException e) {
             Debug.error(e);
         }
+        dest.writeString(cityJson);
         dest.writeInt(sex);
         dest.writeInt(age_start);
         dest.writeInt(age_end);

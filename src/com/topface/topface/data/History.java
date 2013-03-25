@@ -7,7 +7,7 @@ import com.topface.topface.utils.Debug;
 import org.json.JSONObject;
 
 
-public class History extends FeedDialog implements Parcelable{
+public class History extends FeedDialog implements Parcelable {
 
     private boolean mEmptyRepeatItem = false;
     private boolean mEmptyWaitingItem = false;
@@ -44,7 +44,7 @@ public class History extends FeedDialog implements Parcelable{
     @Override
     public void setLoaderTypeFlags(ItemType type) {
         super.setLoaderTypeFlags(type);
-        if(type == ItemType.WAITING) {
+        if (type == ItemType.WAITING) {
             mEmptyWaitingItem = true;
             mEmptyRepeatItem = false;
         } else if (type == ItemType.REPEAT) {
@@ -60,10 +60,8 @@ public class History extends FeedDialog implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        if (mJsonForParse != null) {
-            dest.writeString(mJsonForParse);
-        }
-
+        //Внимание! Мы пишем данные даже если mJsonForParse = null, иначе будет ошибка парсинга при восстановлении Activity
+        dest.writeString(mJsonForParse);
     }
 
     @SuppressWarnings("rawtypes")
@@ -75,7 +73,7 @@ public class History extends FeedDialog implements Parcelable{
 
                     if (jsonResult != null) {
                         try {
-                            result =  new History(new JSONObject(jsonResult));
+                            result = new History(new JSONObject(jsonResult));
                         } catch (Exception ex) {
                             Debug.error(ex);
                         }

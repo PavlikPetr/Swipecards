@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,12 +22,14 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
+import com.topface.topface.ui.edit.EditMainFormItemsFragment;
 import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.profile.*;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -768,7 +771,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     public static class HeaderStatusFragment extends BaseFragment {
         private static final String ARG_TAG_STATUS = "status";
 
-        private TextView mStatusView;
+        private EditText mStatusView;
         private String mStatusVal;
 
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -778,7 +781,36 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
             //init views
             View root = inflater.inflate(R.layout.fragment_profile_header_status, null);
-            mStatusView = (TextView) root.findViewById(R.id.tvStatus);
+            mStatusView = (EditText) root.findViewById(R.id.tvStatus);
+            InputFilter[] filters = new InputFilter[1];
+            filters[0] = new InputFilter.LengthFilter(EditMainFormItemsFragment.MAX_STATUS_LENGTH);
+            mStatusView.setFilters(filters);
+            mStatusView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (!hasFocus) {
+                        final String oldStatus = CacheProfile.status;
+                        final String newStatus = mStatusView.getText().toString();
+                        if (!oldStatus.equals(newStatus)) {
+                            SettingsRequest request = new SettingsRequest(getActivity());
+                            request.status = newStatus;
+                            CacheProfile.status = newStatus;
+                            mStatusVal = newStatus;
+                            request.callback(new ApiHandler() {
+                                @Override
+                                public void success(ApiResponse response) {
+                                }
+
+                                @Override
+                                public void fail(int codeError, ApiResponse response) {
+                                    CacheProfile.status = oldStatus;
+                                    mStatusVal = oldStatus;
+                                }
+                            }).exec();
+                        }
+                    }
+                }
+            });
             return root;
         }
 
@@ -840,6 +872,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         @Override
         public void onPause() {
             super.onPause();
+            mStatusView.clearFocus();
         }
     }
 
