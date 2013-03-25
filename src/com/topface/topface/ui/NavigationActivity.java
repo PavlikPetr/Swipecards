@@ -15,31 +15,32 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 import com.topface.billing.BillingUtils;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.City;
-import com.topface.topface.data.Photo;
-import com.topface.topface.data.Profile;
+import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.BaseApiHandler;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.*;
 import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
 import com.topface.topface.ui.fragments.MenuFragment.FragmentMenuListener;
-import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
+import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.utils.*;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 import ru.ideast.adwired.AWView;
+import ru.ideast.adwired.events.OnNoBannerListener;
 
 import java.util.Calendar;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -91,21 +92,90 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
     }
 
-    private void requestAdwired() {
+    private void requestFullscreen() {
+        if(CacheProfile.isLoaded()) {
+            Options.Page startPage = CacheProfile.getOptions().pages.get(Options.PAGE_START);
+            if (startPage != null){
+                if (startPage.floatType.equals(Options.FLOAT_TYPE_BANNER)) {
+                    if (startPage.banner.equals(Options.BANNER_ADWIRED)) {
+                        requestAdwiredFullscreen();
+                    } else if (startPage.banner.equals(Options.BANNER_TOPFACE)){
+                        requestTopfaceFullscreen();
+                    }
+                }
+            }
+        }
+    }
 
+    private void requestAdwiredFullscreen() {
         try {
-            if (CacheProfile.isLoaded() && !CacheProfile.paid) {
-                Locale ukraineLocale = new Locale("uk", "UA", "");
-                if (Locale.getDefault().equals(ukraineLocale)) {
+            if (CacheProfile.isLoaded()) {
+//            && !CacheProfile.paid) {
+//                Locale ukraineLocale = new Locale("uk", "UA", "");
+//                if (Locale.getDefault().equals(ukraineLocale)) {
                     AWView adwiredView = (AWView) getLayoutInflater().inflate(R.layout.banner_adwired, null);
                     ((ViewGroup) findViewById(R.id.loBannerContainer)).addView(adwiredView);
                     adwiredView.setVisibility(View.VISIBLE);
+                    adwiredView.setOnNoBannerListener(new OnNoBannerListener() {
+                        @Override
+                        public void onNoBanner() {
+                            requestTopfaceFullscreen();
+                        }
+                    });
                     adwiredView.request('0');
-                }
+//                }
             }
         } catch (Exception ex) {
             Debug.error(ex);
         }
+    }
+
+    private void requestTopfaceFullscreen() {
+        BannerRequest request = new BannerRequest(getApplicationContext());
+        request.place = Options.PAGE_START;
+        request.callback(new BaseApiHandler(){
+            @Override
+            public void success(ApiResponse response) {
+                final Banner banner = Banner.parse(response);
+
+                if (banner.action.equals(Banner.ACTION_URL)) {
+                    final View fullscreenViewGroup = getLayoutInflater().inflate(R.layout.fullscreen_topface, null);
+                    final ViewGroup bannerContainer = (ViewGroup) findViewById(R.id.loBannerContainer);
+                    bannerContainer.addView(fullscreenViewGroup);
+                    final ImageViewRemote fullscreenImage = (ImageViewRemote)fullscreenViewGroup.findViewById(R.id.ivFullScreen);
+                    fullscreenImage.setRemoteSrc(banner.url);
+                    fullscreenImage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(banner.parameter));
+                            startActivity(intent);
+                        }
+                    });
+
+                    fullscreenViewGroup.findViewById(R.id.btnClose).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.fade_out);
+                            animation.setAnimationListener(new Animation.AnimationListener() {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+                                    bannerContainer.removeView(fullscreenViewGroup);
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
+                                }
+                            });
+                            fullscreenViewGroup.startAnimation(animation);
+                        }
+                    });
+                }
+            }
+        }).exec();
     }
 
     private void initFragmentSwitcher() {
@@ -135,7 +205,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         AuthorizationManager.extendAccessToken(NavigationActivity.this);
         checkVersion(CacheProfile.getOptions().max_version);
         actionsAfterRegistration();
-        requestAdwired();
+        requestFullscreen();
     }
 
     @Override
@@ -182,8 +252,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
         checkExternalLink();
 
-
         requestBalance();
+
+        requestFullscreen();
     }
 
     private void requestBalance() {
