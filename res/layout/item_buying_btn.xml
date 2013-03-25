@@ -26,28 +26,37 @@
 
     </RelativeLayout>
 
-    <TextView
-            android:id="@+id/itValue"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:paddingRight="10dp"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/itContainer"
-            android:textColor="#FFFFFF"
-            android:textSize="10sp"
-            />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/itContainer"
+        >
+        <TextView
+                android:id="@+id/itEconomy"
 
-    <TextView
-            android:id="@+id/itEconomy"
-            android:layout_below="@id/itContainer"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:textColor="#FFFFFF"
-            android:textSize="10sp"
-            />
+                android:layout_margin="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:textSize="12sp"
+                android:background="@drawable/plate_sale"
+                />
+
+        <TextView
+                android:id="@+id/itValue"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_margin="5dp"
+                android:paddingRight="10dp"
+                android:layout_alignParentRight="true"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:textSize="12sp"
+                />
+
+    </LinearLayout>
 </RelativeLayout>
