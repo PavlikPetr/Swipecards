@@ -40,7 +40,9 @@ import java.util.TimerTask;
 
 public class AuthFragment extends BaseFragment {
 
-    private TextView mWrongPasswordAlertView;
+    private RelativeLayout mWrongPasswordAlertView;
+    private TextView mWrongDataTextView;
+    private TextView mCreateAccountButton;
     private ViewFlipper mAuthViewsFlipper;
     private RetryView mRetryView;
     private Button mFBButton;
@@ -234,7 +236,17 @@ public class AuthFragment extends BaseFragment {
     private void initOtherViews(View root) {
         mProgressBar = (ProgressBar) root.findViewById(R.id.prsAuthLoading);
         mLoginSendingProgress = (ProgressBar) root.findViewById(R.id.prsLoginSending);
-        mWrongPasswordAlertView = (TextView) root.findViewById(R.id.tvRedAlert);
+        mWrongPasswordAlertView = (RelativeLayout) root.findViewById(R.id.redAlert);
+        mWrongDataTextView = (TextView) root.findViewById(R.id.redAlertTextView);
+        mCreateAccountButton = (TextView) root.findViewById(R.id.redAlertButton);
+        mCreateAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EasyTracker.getTracker().trackEvent("Registration", "StartActivity", "FromAuth", 1L);
+                Intent intent = new Intent(getActivity(), ContainerActivity.class);
+                startActivityForResult(intent, ContainerActivity.INTENT_REGISTRATION_FRAGMENT);
+            }
+        });
         mLogin = (EditText) root.findViewById(R.id.edLogin);
         mPassword = (EditText) root.findViewById(R.id.edPassword);
         root.findViewById(R.id.ivShowPassword).setOnClickListener(new View.OnClickListener() {
@@ -486,24 +498,30 @@ public class AuthFragment extends BaseFragment {
     private void redAlert(String text) {
         if (mWrongPasswordAlertView != null && mAuthViewsFlipper.getDisplayedChild() == 1) {
             if (text != null) {
-                mWrongPasswordAlertView.setText(text);
+                mWrongDataTextView.setText(text);
             }
             mWrongPasswordAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
                     R.anim.slide_down_fade_in));
             mWrongPasswordAlertView.setVisibility(View.VISIBLE);
-            mTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    if (isAdded()) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                removeRedAlert();
-                            }
-                        });
+            mWrongDataTextView.setVisibility(View.VISIBLE);
+            if (text.equals(getString(R.string.incorrect_login))) {
+               mCreateAccountButton.setVisibility(View.VISIBLE);
+            } else {
+                mCreateAccountButton.setVisibility(View.GONE);
+                mTimer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (isAdded()) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    removeRedAlert();
+                                }
+                            });
+                        }
                     }
-                }
-            }, Static.RED_ALERT_APPEARANCE_TIME);
+                }, Static.RED_ALERT_APPEARANCE_TIME);
+            }
         }
     }
 
@@ -512,6 +530,7 @@ public class AuthFragment extends BaseFragment {
         if (activity != null && mWrongPasswordAlertView != null && mWrongPasswordAlertView.getVisibility() == View.VISIBLE) {
             mWrongPasswordAlertView.setAnimation(AnimationUtils.loadAnimation(activity, android.R.anim.fade_out));
             mWrongPasswordAlertView.setVisibility(View.INVISIBLE);
+            mWrongDataTextView.setVisibility(View.GONE);
         }
     }
 
