@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 import com.google.analytics.tracking.android.EasyTracker;
@@ -38,9 +39,12 @@ public class GiftsFragment extends BaseFragment {
     public static final String GIFTS_USER_PROFILE_TAG = "giftsGridProfile";
 
     private TextView mTitle;
-
+    private View mGroupInfo;
+    private TextView mTextInfo;
+    private Button mBtnInfo;
     private GiftsAdapter mGridAdapter;
     private GridView mGridView;
+
 
     private Profile mProfile;
     private FeedList<FeedGift> mGifts = new FeedList<FeedGift>();
@@ -58,6 +62,9 @@ public class GiftsFragment extends BaseFragment {
         mGridView.setOnScrollListener(mGridAdapter);
 
         mTitle = (TextView) root.findViewById(R.id.usedTitle);
+        mGroupInfo = root.findViewById(R.id.loInfo);
+        mTextInfo = (TextView) mGroupInfo.findViewById(R.id.tvInfo);
+        mBtnInfo = (Button) mGroupInfo.findViewById(R.id.btnInfo);
 
         if (mProfile != null) {
             setProfile(mProfile);
@@ -242,6 +249,9 @@ public class GiftsFragment extends BaseFragment {
 
                 removeLoaderItem();
                 mGifts.addAll(gifts.items);
+                if (mGifts.isEmpty() && !gifts.items.isEmpty()) {
+                    mGroupInfo.setVisibility(View.GONE);
+                }
 
                 if (gifts.more) {
                     mGifts.add(new FeedGift(ItemType.LOADER));
@@ -268,15 +278,33 @@ public class GiftsFragment extends BaseFragment {
     public void setGifts(ArrayList<Gift> gifts) {
         if (mProfile == null) mTag = GIFTS_ALL_TAG;
         mGifts.clear();
+
         for (Gift gift : gifts) {
             FeedGift item = new FeedGift();
             item.gift = gift;
             mGifts.add(item);
         }
-        if (mTag != null && mTag.equals(GIFTS_USER_PROFILE_TAG)) {
-            mGifts.add(0, FeedGift.getSendedGiftItem());
-            if (mGifts.size() >= GIFTS_LOAD_COUNT)
-                mGifts.add(new FeedGift(ItemType.LOADER));
+        if (mTag != null) {
+            if (mTag.equals(GIFTS_USER_PROFILE_TAG)) {
+                mGifts.add(0, FeedGift.getSendedGiftItem());
+                if (mGifts.size() >= GIFTS_LOAD_COUNT)
+                    mGifts.add(new FeedGift(ItemType.LOADER));
+            } else {
+                if (mGifts.isEmpty()) {
+                    mGroupInfo.setVisibility(View.VISIBLE);
+                    mTextInfo.setText(R.string.you_dont_have_gifts_yet);
+                    mBtnInfo.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getActivity(), ContainerActivity.class);
+                            intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
+                            startActivity(intent);
+                        }
+                    });
+                } else {
+                    mGroupInfo.setVisibility(View.GONE);
+                }
+            }
         }
         if (mGridView != null) {
             mGridView.post(new Runnable() {
