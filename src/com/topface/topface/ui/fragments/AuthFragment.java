@@ -410,76 +410,78 @@ public class AuthFragment extends BaseFragment {
     private void authorizationFailed(int codeError, final ApiRequest request) {
         hideButtons();
         boolean needShowRetry = true;
+        if (isAdded()) {
+            switch (codeError) {
+                case IApiResponse.NETWORK_CONNECT_ERROR:
+                    mRetryView.setErrorMsg(getString(R.string.general_reconnect_social));
+                    mRetryView.setTextToButton1(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry));
+                    mRetryView.setListenerToBtn(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            mRetryView.setVisibility(View.GONE);
+                            mProgressBar.setVisibility(View.VISIBLE);
+                            resendRequest(request);
+                        }
+                    });
+                    break;
+                case IApiResponse.MAINTENANCE:
+                    mRetryView.setErrorMsg(getString(R.string.general_maintenance));
+                    mRetryView.setTextToButton1(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry));
+                    mRetryView.setListenerToBtn(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            mRetryView.setVisibility(View.GONE);
+                            mProgressBar.setVisibility(View.VISIBLE);
+                            resendRequest(request);
+                        }
+                    });
+                    break;
+                case IApiResponse.CODE_OLD_APPLICATION_VERSION:
+                    mRetryView.setErrorMsg(getString(R.string.general_version_not_supported));
+                    mRetryView.setTextToButton1(getString(R.string.popup_version_update));
+                    mRetryView.setListenerToBtn(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Utils.goToMarket(getActivity());
+                        }
+                    });
+                    break;
+                case IApiResponse.INCORRECT_LOGIN:
+                case IApiResponse.UNKNOWN_SOCIAL_USER:
+                    redAlert(R.string.incorrect_login);
+                    needShowRetry = false;
+                    break;
+                case IApiResponse.INCORRECT_PASSWORD:
+                    redAlert(R.string.incorrect_password);
+                    mRecoverPwd.setVisibility(View.VISIBLE);
+                    needShowRetry = false;
+                    break;
+                case IApiResponse.MISSING_REQUIRE_PARAMETER:
+                    redAlert(R.string.empty_fields);
+                    needShowRetry = false;
+                    break;
+                default:
 
-        switch (codeError) {
-            case IApiResponse.NETWORK_CONNECT_ERROR:
-                mRetryView.setErrorMsg(getString(R.string.general_reconnect_social));
-                mRetryView.setTextToButton1(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry));
-                mRetryView.setListenerToBtn(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        mRetryView.setVisibility(View.GONE);
-                        mProgressBar.setVisibility(View.VISIBLE);
-                        resendRequest(request);
-                    }
-                });
-                break;
-            case IApiResponse.MAINTENANCE:
-                mRetryView.setErrorMsg(getString(R.string.general_maintenance));
-                mRetryView.setTextToButton1(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry));
-                mRetryView.setListenerToBtn(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        mRetryView.setVisibility(View.GONE);
-                        mProgressBar.setVisibility(View.VISIBLE);
-                        resendRequest(request);
-                    }
-                });
-                break;
-            case IApiResponse.CODE_OLD_APPLICATION_VERSION:
-                mRetryView.setErrorMsg(getString(R.string.general_version_not_supported));
-                mRetryView.setTextToButton1(getString(R.string.popup_version_update));
-                mRetryView.setListenerToBtn(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Utils.goToMarket(getActivity());
-                    }
-                });
-                break;
-            case IApiResponse.INCORRECT_LOGIN:
-            case IApiResponse.UNKNOWN_SOCIAL_USER:
-                redAlert(R.string.incorrect_login);
-                needShowRetry = false;
-                break;
-            case IApiResponse.INCORRECT_PASSWORD:
-                redAlert(R.string.incorrect_password);
-                mRecoverPwd.setVisibility(View.VISIBLE);
-                needShowRetry = false;
-                break;
-            case IApiResponse.MISSING_REQUIRE_PARAMETER:
-                redAlert(R.string.empty_fields);
-                needShowRetry = false;
-                break;
-            default:
-                mAuthViewsFlipper.setVisibility(View.GONE);
-                mRetryView.setErrorMsg(getString(R.string.general_data_error));
-                mRetryView.setListenerToBtn(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        mRetryView.setVisibility(View.GONE);
-                        mAuthViewsFlipper.setVisibility(View.VISIBLE);
-                        mProgressBar.setVisibility(View.VISIBLE);
-                        resendRequest(request);
-                    }
-                });
-                break;
-        }
+                    mAuthViewsFlipper.setVisibility(View.GONE);
+                    mRetryView.setErrorMsg(getString(R.string.general_data_error));
+                    mRetryView.setListenerToBtn(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            mRetryView.setVisibility(View.GONE);
+                            mAuthViewsFlipper.setVisibility(View.VISIBLE);
+                            mProgressBar.setVisibility(View.VISIBLE);
+                            resendRequest(request);
+                        }
+                    });
+                    break;
+            }
 
-        if ((request != null) && needShowRetry) {
-            mRetryView.setVisibility(View.VISIBLE);
-            mProgressBar.setVisibility(View.GONE);
-        } else {
-            showButtons();
+            if ((request != null) && needShowRetry) {
+                mRetryView.setVisibility(View.VISIBLE);
+                mProgressBar.setVisibility(View.GONE);
+            } else {
+                showButtons();
+            }
         }
     }
 
