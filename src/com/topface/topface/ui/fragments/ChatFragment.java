@@ -195,24 +195,29 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     private void restoreData(Bundle savedInstanceState) {
         if (mHistoryData == null) {
             if (savedInstanceState != null) {
-                boolean was_failed = savedInstanceState.getBoolean(WAS_FAILED);
-                ArrayList<History> list = savedInstanceState.getParcelableArrayList(ADAPTER_DATA);
-                mHistoryData = new FeedList<History>();
-                if (list != null) {
-                    for (History item : list) {
-                        if (item != null) {
-                            mHistoryData.addAll(list);
+                try {
+                    boolean was_failed = savedInstanceState.getBoolean(WAS_FAILED);
+                    ArrayList<History> list = savedInstanceState.getParcelableArrayList(ADAPTER_DATA);
+                    mHistoryData = new FeedList<History>();
+                    if (list != null) {
+                        for (History item : list) {
+                            if (item != null) {
+                                mHistoryData.addAll(list);
+                            }
                         }
                     }
-                }
-                try {
                     mUser = new FeedUser(new JSONObject(savedInstanceState.getString(FRIEND_FEED_USER)));
+                    if (was_failed) {
+                        mLockScreen.setVisibility(View.VISIBLE);
+                    } else {
+                        mLockScreen.setVisibility(View.GONE);
+                    }
+                    mLoadingLocker.setVisibility(View.GONE);
                 } catch (Exception e) {
                     Debug.error(e);
+                } catch (OutOfMemoryError e) {
+                    Debug.error(e);
                 }
-                if (was_failed) mLockScreen.setVisibility(View.VISIBLE);
-                else mLockScreen.setVisibility(View.GONE);
-                mLoadingLocker.setVisibility(View.GONE);
             }
             if (mHistoryData == null) {
                 mHistoryData = new FeedList<History>();
