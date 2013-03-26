@@ -151,10 +151,14 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     public void addHeader(ListView parentView) {
         if (mHeaderView == null) {
-            mHeaderView = mInflater.inflate(R.layout.list_header_chat_no_messages_informer, null);
-            parentView.addHeaderView(mHeaderView);
-            parentView.setStackFromBottom(false);
-            mHeaderView.setVisibility(View.GONE);
+            try {
+                mHeaderView = mInflater.inflate(R.layout.list_header_chat_no_messages_informer, null);
+                parentView.addHeaderView(mHeaderView);
+                parentView.setStackFromBottom(false);
+                mHeaderView.setVisibility(View.GONE);
+            } catch (OutOfMemoryError e) {
+                Debug.error("Add header OOM", e);
+            }
         }
     }
 

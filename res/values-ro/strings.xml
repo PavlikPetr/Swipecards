@@ -383,4 +383,5 @@
     <string name="buy_vip_month_few">%1$d luni pana pe %2$.2f %3$@</string>
     <string name="buy_vip_month_other">%1$d luni pana pe %2$.2f %3$@</string>
     <string name="buy_special_offers">Oferte speciale</string>
+    <string name="user_does_not_have_gifts">Acest utilizator momentan nu are cadouri, fi primul si vei fi observat</string>
 </resources>

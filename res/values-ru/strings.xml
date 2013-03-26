@@ -504,4 +504,9 @@
 
     <string name="user_does_not_have_gifts">У этого пользователя пока нет подарков, будьте первым и вас заметят</string>
     <string name="status_is_empty">У вас не установлен статус</string>
+    <string name="you_dont_have_gifts_yet">У вас пока нет подарков</string>
+    <string name="buy_sympathies">Купить симпатии</string>
+    <string name="upload_photos">Загрузите фотографии</string>
+    <string name="chat_no_message_title">Начните общение!</string>
+    <string name="chat_no_message_text">Напишите сообщение или отправьте подарок и вам обязательно ответят</string>
 </resources>

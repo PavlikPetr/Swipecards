@@ -37,8 +37,8 @@ public class ProfileFormFragment extends BaseFragment {
 
     @Override
     public void onResume() {
-        mProfileFormListAdapter.notifyDataSetChanged();
         super.onResume();
+        mProfileFormListAdapter.notifyDataSetChanged();
     }
 
     View.OnClickListener mOnFillClickListener = new View.OnClickListener() {

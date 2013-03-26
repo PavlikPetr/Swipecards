@@ -380,4 +380,5 @@
     <string name="buy_vip_month_few">%1$d meses para %2$.2f %3$@</string>
     <string name="buy_vip_month_other">%1$d meses para %2$.2f %3$@</string>
     <string name="buy_special_offers">Ofertas Especiais</string>
+    <string name="user_does_not_have_gifts">Este usuário ainda não tem presentes, seja o primeiro e apareça nas vistas</string>
 </resources>

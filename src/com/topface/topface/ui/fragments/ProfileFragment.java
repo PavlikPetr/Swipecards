@@ -29,6 +29,7 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
+import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.EditMainFormItemsFragment;
 import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.profile.*;
@@ -771,6 +772,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     public static class HeaderStatusFragment extends BaseFragment {
         private static final String ARG_TAG_STATUS = "status";
 
+        private ImageButton mBtnEditStatus;
         private EditText mStatusView;
         private String mStatusVal;
 
@@ -781,6 +783,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
             //init views
             View root = inflater.inflate(R.layout.fragment_profile_header_status, null);
+            mBtnEditStatus = (ImageButton) root.findViewById(R.id.btnEdit);
             mStatusView = (EditText) root.findViewById(R.id.tvStatus);
             InputFilter[] filters = new InputFilter[1];
             filters[0] = new InputFilter.LengthFilter(EditMainFormItemsFragment.MAX_STATUS_LENGTH);
@@ -811,6 +814,20 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     }
                 }
             });
+
+            if (mProfileType == TYPE_MY_PROFILE) {
+                mStatusView.setHint(R.string.status_is_empty);
+                mBtnEditStatus.setVisibility(View.VISIBLE);
+                mBtnEditStatus.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity().getApplicationContext(), EditContainerActivity.class);
+                        startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_STATUS);
+                    }
+                });
+            } else {
+                mBtnEditStatus.setVisibility(View.GONE);
+            }
             return root;
         }
 
@@ -873,6 +890,14 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         public void onPause() {
             super.onPause();
             mStatusView.clearFocus();
+        }
+
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            if (mProfileType == TYPE_MY_PROFILE && requestCode == EditContainerActivity.INTENT_EDIT_STATUS) {
+                mStatusVal = CacheProfile.status;
+            }
         }
     }
 
