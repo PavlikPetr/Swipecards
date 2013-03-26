@@ -32,21 +32,23 @@ public class UserPhotoFragment extends BaseFragment {
         mUpdater = new LoadingListAdapter.Updater() {
             @Override
             public void onUpdate() {
-                Photos data = ((ProfileGridAdapter) mGridAlbum.getAdapter()).getData();
-                AlbumRequest request = new AlbumRequest(getActivity(), mUser.uid, AlbumRequest.DEFAULT_PHOTOS_LIMIT, data.get(data.size() - 2).getPosition() + 1, AlbumRequest.MODE_ALBUM);
-                request.callback(new ApiHandler() {
-                    @Override
-                    public void success(ApiResponse response) {
-                        if (mGridAlbum != null) {
-                            ((UserPhotoGridAdapter) mGridAlbum.getAdapter()).setData(Photos.parse(response.jsonResult.optJSONArray("items")), response.jsonResult.optBoolean("more"));
+                if(mGridAlbum != null) {
+                    Photos data = ((ProfileGridAdapter) mGridAlbum.getAdapter()).getData();
+                    AlbumRequest request = new AlbumRequest(getActivity(), mUser.uid, AlbumRequest.DEFAULT_PHOTOS_LIMIT, data.get(data.size() - 2).getPosition() + 1, AlbumRequest.MODE_ALBUM);
+                    request.callback(new ApiHandler() {
+                        @Override
+                        public void success(ApiResponse response) {
+                            if (mGridAlbum != null) {
+                                ((UserPhotoGridAdapter) mGridAlbum.getAdapter()).setData(Photos.parse(response.jsonResult.optJSONArray("items")), response.jsonResult.optBoolean("more"));
+                            }
                         }
-                    }
 
-                    @Override
-                    public void fail(int codeError, ApiResponse response) {
+                        @Override
+                        public void fail(int codeError, ApiResponse response) {
 
-                    }
-                }).exec();
+                        }
+                    }).exec();
+                }
             }
         };
     }
