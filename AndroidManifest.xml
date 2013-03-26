@@ -108,7 +108,7 @@
                         android:host="topface.ru"
                         android:pathPrefix="/confirm"/>
 
-                    />
+                />
             </intent-filter>
         </activity>
         <activity
@@ -169,6 +169,9 @@
         <activity
                 android:name="com.tapjoy.TapjoyVideoView"
                 android:configChanges="keyboardHidden|orientation"/>
+
+        <activity
+                android:name=".ui.PaymentwallActivity"/>
 
         <activity
                 android:name="com.sponsorpay.sdk.android.publisher.OfferWallActivity"

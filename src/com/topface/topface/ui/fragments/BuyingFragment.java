@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.topface.topface.Static;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
@@ -174,40 +176,6 @@ public class BuyingFragment extends BillingFragment {
             }
         }
 
-
-        TextView status = (TextView) root.findViewById(R.id.vip_status);
-        TextView vipBtnText = (TextView) root.findViewById(R.id.fbVipBtnText);
-
-        RelativeLayout vipBtn = (RelativeLayout) root.findViewById(R.id.fbVipButton);
-
-        if (CacheProfile.premium) {
-            status.setText(getString(R.string.vip_state_on));
-            vipBtnText.setText(R.string.vip_abilities);
-        } else {
-            status.setText(R.string.vip_state_off);
-            vipBtnText.setText(R.string.vip_advantages);
-        }
-
-        vipBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToVipSettings();
-            }
-        });
-
-        RelativeLayout vipTitle = (RelativeLayout) root.findViewById(R.id.fbVipTitle);
-        View vipDivider = root.findViewById(R.id.vipDivider);
-
-
-        if (CacheProfile.getOptions().premium.isEmpty() || CacheProfile.premium) {
-            vipTitle.setVisibility(View.GONE);
-            vipBtn.setVisibility(View.GONE);
-            vipDivider.setVisibility(View.GONE);
-        } else {
-            vipTitle.setVisibility(View.VISIBLE);
-            vipBtn.setVisibility(View.VISIBLE);
-        }
-
         // Button for offerwalls (Tapjoy and Sponsorpay)
         View offerwall = root.findViewById(R.id.btnOfferwall);
         offerwall.setOnClickListener(new View.OnClickListener() {
@@ -218,6 +186,20 @@ public class BuyingFragment extends BillingFragment {
         });
         offerwall.setVisibility(CacheProfile.paid ? View.GONE : View.VISIBLE);
         root.findViewById(R.id.titleSpecialOffers).setVisibility(CacheProfile.paid ? View.GONE : View.VISIBLE);
+
+        //Paymentwall
+        root.findViewById(R.id.btnMobilePayments).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentActivity activity = getActivity();
+                if (activity != null) {
+                    activity.startActivityForResult(
+                            PaymentwallActivity.getIntent(activity, CacheProfile.uid),
+                            PaymentwallActivity.ACTION_BUY
+                    );
+                }
+            }
+        });
 
     }
 

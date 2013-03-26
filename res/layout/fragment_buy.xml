@@ -18,7 +18,7 @@
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="wrap_content"
                 >
 
             <RelativeLayout
@@ -162,6 +162,27 @@
                         android:text="@string/get_it_for_free"
                         />
 
+                <!-- Money -->
+                <TextView
+                        android:id="@+id/titleMobilePayments"
+                        style="@style/TitleWhiteText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:text="Другие способы оплаты"
+                        android:textStyle="bold"/>
+
+                <Button
+                        android:id="@+id/btnMobilePayments"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/btn_vip_super_sale_selector"
+                        style="@style/ButtonWhiteText"
+                        android:text="Другие способы оплаты"
+                        />
+
                 <RelativeLayout
 
                         android:id="@+id/coins_title"
@@ -199,70 +220,6 @@
                         />
 
 
-                <!-- Power -->
-
-                <include
-                        android:id="@+id/vipDivider"
-                        layout="@layout/item_divider"
-                        android:layout_marginTop="10dp"
-                        />
-
-                <RelativeLayout
-                        android:id="@+id/fbVipTitle"
-                        android:layout_height="wrap_content"
-                        android:layout_width="fill_parent"
-                        android:layout_marginBottom="2dp"
-                        android:layout_marginTop="10dp"
-                        >
-
-                    <TextView
-                            android:id="@+id/vip_status"
-                            style="@style/TitleWhiteText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/vip_not_activated"
-                            android:layout_alignParentLeft="true"
-                            android:textStyle="bold"/>
-
-                    <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_rocket"
-                            android:layout_alignParentRight="true"
-                            />
-                </RelativeLayout>
-
-                <RelativeLayout
-                        android:id="@+id/fbVipButton"
-                        android:layout_width="fill_parent"
-                        android:layout_height="50dp"
-                        android:background="@drawable/btn_vip_sale_selector"
-                        android:layout_marginTop="10dp"
-                        android:padding="5dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:gravity="clip_horizontal">
-
-                    <TextView
-                            android:id="@+id/fbVipBtnText"
-                            android:layout_height="wrap_content"
-                            android:layout_width="wrap_content"
-                            style="@style/ButtonWhiteTextMini"
-                            android:layout_centerInParent="true"
-
-                            />
-                </RelativeLayout>
-
-                <TextView
-                        android:id="@+id/vipPrice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="10dp"
-                        android:text="@string/default_economy_vip"
-                        android:textColor="#FFFFFF"
-                        android:textSize="10sp"
-                        android:visibility="gone"
-                        />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
