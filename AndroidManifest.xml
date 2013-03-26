@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.topface.topface"
           android:installLocation="auto"
-          android:versionCode="59"
-          android:versionName="2.3.5">
+          android:versionCode="60"
+          android:versionName="2.3.6">
 
     <uses-sdk
             android:minSdkVersion="7"
@@ -108,7 +108,7 @@
                         android:host="topface.ru"
                         android:pathPrefix="/confirm"/>
 
-                    />
+                />
             </intent-filter>
         </activity>
         <activity
