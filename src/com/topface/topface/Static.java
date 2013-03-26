@@ -53,7 +53,7 @@ public class Static {
     public static final String PREFERENCES_NOVICE_MENU_FILL_PROFILE = "novice_menu_fill_profile";
     public static final String PREFERENCES_NOVICE_MENU_FILL_PROFILE_DATE = "novice_menu_fill_profile_date_tag";
     public static final String PREFERENCES_STOP_TIME = "preferences_stop_time";
-    public static final String PREFERENCES_FULLSCREEN_URLS_SET = "fullscreen_urls_set";
+    public static final String PREFERENCES_FULLSCREEN_URLS_SET = "fullscreen_urls_string";
 
     public static final String PREFERENCES_LAST_FULLSCREEN_TIME = "fullScreeenBanner_last_time";
 
