@@ -385,4 +385,6 @@
     <string name="you_dont_have_gifts_yet">You don\'t have gifts yet</string>
     <string name="buy_sympathies">Buy sympathies</string>
     <string name="upload_photos">Upload photos</string>
+    <string name="chat_no_message_title">Start to chat!</string>
+    <string name="chat_no_message_text">Write a message or send a gift and you will be answered</string>
 </resources>

@@ -14,9 +14,13 @@ public class Offerwalls {
     private static boolean first_or_second = true;
 
     public static void init(Context context) {
-        TapjoyConnect.requestTapjoyConnect(context, "f0563cf4-9e7c-4962-b333-098810c477d2", "AS0AE9vmrWvkyNNGPsyu");
-        TapjoyConnect.getTapjoyConnectInstance().setUserID(Integer.toString(CacheProfile.uid));
-        SponsorPay.start("11625", Integer.toString(CacheProfile.uid), "0a4c64db64ed3c1ca14a5e5d81aaa23c", context);
+        try {
+            TapjoyConnect.requestTapjoyConnect(context, "f0563cf4-9e7c-4962-b333-098810c477d2", "AS0AE9vmrWvkyNNGPsyu");
+            TapjoyConnect.getTapjoyConnectInstance().setUserID(Integer.toString(CacheProfile.uid));
+            SponsorPay.start("11625", Integer.toString(CacheProfile.uid), "0a4c64db64ed3c1ca14a5e5d81aaa23c", context);
+        } catch (Exception e) {
+            Debug.error(e);
+        }
     }
 
     public static void startOfferwall(Activity activity) {
@@ -29,11 +33,19 @@ public class Offerwalls {
     }
 
     public static void startTapjoy() {
-        TapjoyConnect.getTapjoyConnectInstance().showOffers();
+        try {
+            TapjoyConnect.getTapjoyConnectInstance().showOffers();
+        } catch (Exception e) {
+            Debug.error(e);
+        }
     }
 
     public static void startSponsorpay(Activity activity) {
-        Intent offerWallIntent = SponsorPayPublisher.getIntentForOfferWallActivity(activity.getApplicationContext(), true);
-        activity.startActivityForResult(offerWallIntent, SponsorPayPublisher.DEFAULT_OFFERWALL_REQUEST_CODE);
+        try {
+            Intent offerWallIntent = SponsorPayPublisher.getIntentForOfferWallActivity(activity.getApplicationContext(), true);
+            activity.startActivityForResult(offerWallIntent, SponsorPayPublisher.DEFAULT_OFFERWALL_REQUEST_CODE);
+        } catch (Exception e) {
+            Debug.error(e);
+        }
     }
 }
