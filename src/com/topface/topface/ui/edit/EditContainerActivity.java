@@ -62,7 +62,7 @@ public class EditContainerActivity extends BaseFragmentActivity {
                 titleId = intent.getIntExtra(INTENT_FORM_TITLE_ID, -1);
                 dataId = intent.getIntExtra(INTENT_FORM_DATA_ID, -1);
                 data = intent.getStringExtra(INTENT_FORM_DATA);
-                mFragment = new EditFormItemsFragment(titleId, dataId, data);
+                mFragment = EditFormItemsFragment.newInstance(titleId, dataId, data);
                 break;
             case INTENT_EDIT_INPUT_FORM_ITEM:
                 titleId = intent.getIntExtra(INTENT_FORM_TITLE_ID, -1);
