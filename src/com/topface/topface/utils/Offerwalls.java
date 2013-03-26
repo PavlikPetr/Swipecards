@@ -11,7 +11,7 @@ public class Offerwalls {
 
     public static final String TAPJOY = "TAPJOY";
     public static final String SPONSORPAY = "SPONSORPAY";
-    private static boolean first_or_second = false;
+    private static boolean first_or_second = true;
 
     public static void init(Context context) {
         TapjoyConnect.requestTapjoyConnect(context, "f0563cf4-9e7c-4962-b333-098810c477d2", "AS0AE9vmrWvkyNNGPsyu");
