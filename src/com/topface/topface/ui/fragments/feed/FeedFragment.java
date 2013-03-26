@@ -156,7 +156,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         }
     }
 
-    protected void init() {}
+    protected void init() {
+    }
 
     private void initBackground(View view) {
         // ListView background
@@ -247,18 +248,20 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 FeedItem item = (FeedItem) parent.getItemAtPosition(position);
-                if (!mIsUpdating && item.isRetrier()) {
-                    updateUI(new Runnable() {
-                        public void run() {
-                            getListAdapter().showLoaderItem();
+                if (item != null) {
+                    if (!mIsUpdating && item.isRetrier()) {
+                        updateUI(new Runnable() {
+                            public void run() {
+                                getListAdapter().showLoaderItem();
+                            }
+                        });
+                        updateData(false, true, false);
+                    } else {
+                        try {
+                            onFeedItemClick(item);
+                        } catch (Exception e) {
+                            Debug.error("FeedItem click error:", e);
                         }
-                    });
-                    updateData(false, true, false);
-                } else {
-                    try {
-                        onFeedItemClick(item);
-                    } catch (Exception e) {
-                        Debug.error("FeedItem click error:", e);
                     }
                 }
             }

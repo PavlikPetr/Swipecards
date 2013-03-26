@@ -280,7 +280,7 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void showNoInternetToast() {
-        Toast.makeText(getActivity(), getString(R.string.general_internet_off), Toast.LENGTH_SHORT)
+        Toast.makeText(App.getContext(), getString(R.string.general_internet_off), Toast.LENGTH_SHORT)
                 .show();
     }
 
@@ -375,7 +375,7 @@ public class AuthFragment extends BaseFragment {
                     showButtons();
                 else {
                     authorizationFailed(codeError, profileRequest);
-                    Toast.makeText(getActivity(), getString(R.string.general_data_error),
+                    Toast.makeText(App.getContext(), getString(R.string.general_data_error),
                             Toast.LENGTH_SHORT).show();
                 }
             }
@@ -400,7 +400,7 @@ public class AuthFragment extends BaseFragment {
                 else {
                     request.callback(this);
                     authorizationFailed(codeError, request);
-                    Toast.makeText(getActivity(), getString(R.string.general_data_error),
+                    Toast.makeText(App.getContext(), getString(R.string.general_data_error),
                             Toast.LENGTH_SHORT).show();
                 }
             }
@@ -506,8 +506,8 @@ public class AuthFragment extends BaseFragment {
                     R.anim.slide_down_fade_in));
             mWrongPasswordAlertView.setVisibility(View.VISIBLE);
             mWrongDataTextView.setVisibility(View.VISIBLE);
-            if (text.equals(getString(R.string.incorrect_login))) {
-               mCreateAccountButton.setVisibility(View.VISIBLE);
+            if (text != null && text.equals(getString(R.string.incorrect_login))) {
+                mCreateAccountButton.setVisibility(View.VISIBLE);
             } else {
                 mCreateAccountButton.setVisibility(View.GONE);
                 mTimer.schedule(new TimerTask() {
