@@ -87,7 +87,7 @@
     <string name="buying_you_have">Έχετε</string>
     <string name="buying_you_have_no_coins_for_gift">Σας λείπουν %d {{coins}} κέρματα για να αγοράσετε ένα δώρο</string>
     <string name="buying_default_message">Μπορείτε να στείλετε τα δώρα και το θαυμασμό για τα κέρματα</string>
-    <string name="buying_money">Αγοράζοντας κερμάτων</string>
+    <string name="buying_money">Αγορά κερμάτων</string>
     <string name="profile_header_title">Το προφίλ μου</string>
     <string name="profile_btn_chat">Να κάνουμε ένα κουβέντα</string>
     <string name="profile_add_title">Προσθέστε μια φωτογραφία</string>
@@ -236,9 +236,9 @@
     <string name="profile_services">Τα υπηρεσίες</string>
     <string name="default_balance_constant">Στο λογαριασμό σας</string>
     <string name="default_energy_coins_buy_btn_text">Να αγοράσετε τα κέρματα, να ξαναγεμίσετε της ενέργειας</string>
-    <string name="black_list_title">Η μαύρη λίστα</string>
+    <string name="black_list_title">Μαύρη λίστα</string>
     <string name="black_list_empty">Η μαύρη λίστα σας είναι άδειο</string>
-    <string name="black_list_add">Να προσθέσετε στη μαύρη λίστα</string>
+    <string name="black_list_add">Προσθέστε στη μαύρη λίστα</string>
     <string name="black_list_delete">Αφαιρέστε από τη μαύρη λίστα</string>
     <string name="vip_invisible_mode">Αόρατη Λειτουργία</string>
     <string name="buying_profile_coins">Στο λογαριασμό σας</string>
@@ -375,7 +375,7 @@
     <string name="we_dont_detect_your_city">Καθόρισε τη πόλη σας για να ξέρετε πού βρίσκεστε. Ζητήστε από εκείνους που είναι κοντά σας.</string>
     <string name="confirm_email">Παρακαλώ, επιβεβαιώστε e-mail</string>
     <string name="password_sent">Το νέο κωδικό έχει σταλεί στο E-mail σας</string>
-    <string name="buy_vip_month_one">μήνα</string>
+    <string name="buy_vip_month_one">μήνα για</string>
     <string name="buy_vip_month_few">%1$d μήνες για %2$.2f %3$@</string>
     <string name="buy_vip_month_other">%1$d μήνες για %2$.2f %3$@</string>
     <string name="buy_special_offers">Ειδικές προσφορές</string>

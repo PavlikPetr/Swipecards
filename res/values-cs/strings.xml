@@ -384,4 +384,5 @@
     <string name="buy_vip_month_few">%1$d měsíce za %2$.2f %3$@</string>
     <string name="buy_vip_month_other">%1$d měsíců za %2$.2f %3$@</string>
     <string name="buy_special_offers">Akční nabídky</string>
+    <string name="user_does_not_have_gifts">Tento uživatel zatím nemá žádné dárky, ať jste první a Vás se hned všimnou</string>
 </resources>

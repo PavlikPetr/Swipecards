@@ -378,4 +378,6 @@
     <string name="buy_vip_month_one">%1$d månad a´ %2$.2f %3$@</string>
     <string name="buy_vip_month_few">%1$d månader a´ %2$.2f %3$@</string>
     <string name="buy_vip_month_other">%1$d månader a´ %2$.2f %3$@</string>
+    <string name="buy_special_offers">Specialerbjudanden</string>
+    <string name="user_does_not_have_gifts">Denna användare har inte fått gåvor en, bli först och få särskild uppmärksamhet</string>
 </resources>

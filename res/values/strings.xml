@@ -380,6 +380,9 @@
     <string name="buy_vip_month_few">%1$d a months for %2$.2f %3$@ per month</string>
     <string name="buy_vip_month_other">%1$d months for %2$.2f %3$@ per month</string>
     <string name="buy_special_offers">Special offers</string>
-
     <string name="user_does_not_have_gifts">This user has no gifts, be the first and you will be noticed</string>
+    <string name="status_is_empty">You status is empty</string>
+    <string name="you_dont_have_gifts_yet">You don\'t have gifts yet</string>
+    <string name="buy_sympathies">Buy sympathies</string>
+    <string name="upload_photos">Upload photos</string>
 </resources>
