@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
@@ -251,7 +252,7 @@ public class TopsFragment extends BaseFragment {
             @Override
             public void fail(int codeError, ApiResponse response) {
                 onUpdateFail(false);
-                Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                Toast.makeText(App.getContext(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
             }
 
         }).exec();

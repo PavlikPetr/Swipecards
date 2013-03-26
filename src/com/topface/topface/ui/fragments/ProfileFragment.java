@@ -18,9 +18,12 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.*;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.*;
+import com.topface.topface.data.Photo;
+import com.topface.topface.data.Profile;
+import com.topface.topface.data.User;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.VipApiHandler;
@@ -450,7 +453,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         @Override
                         public void onRateCompleted() {
                             if (v != null && getActivity() != null) {
-                                Toast.makeText(getActivity(), R.string.sympathy_sended, 1500).show();
+                                Toast.makeText(App.getContext(), R.string.sympathy_sended, 1500).show();
 
                             }
                         }
@@ -459,7 +462,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         @Override
                         public void onRateFailed() {
                             if (v != null && getActivity() != null) {
-                                Toast.makeText(getActivity(), R.string.general_server_error, 1500).show();
+                                Toast.makeText(App.getContext(), R.string.general_server_error, 1500).show();
                                 v.setEnabled(true);
                                 v.setSelected(false);
                                 TextView view = (TextView) v;
@@ -483,7 +486,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         @Override
                         public void onRateCompleted() {
                             if (v != null && getActivity() != null) {
-                                Toast.makeText(getActivity(), R.string.sympathy_sended, 1500).show();
+                                Toast.makeText(App.getContext(), R.string.sympathy_sended, 1500).show();
 
                             }
                         }
@@ -492,7 +495,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         @Override
                         public void onRateFailed() {
                             if (v != null && getActivity() != null) {
-                                Toast.makeText(getActivity(), R.string.general_server_error, 1500).show();
+                                Toast.makeText(App.getContext(), R.string.general_server_error, 1500).show();
                                 v.setEnabled(true);
                                 v.setSelected(false);
                                 TextView view = (TextView) v;

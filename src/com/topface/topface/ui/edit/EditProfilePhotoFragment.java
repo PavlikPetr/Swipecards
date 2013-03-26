@@ -152,7 +152,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     @Override
                     public void fail(int codeError, ApiResponse response) {
 //                        finishOperations(handler);
-                        Toast.makeText(getActivity(), R.string.general_server_error, 1500).show();
+                        Toast.makeText(App.getContext(), R.string.general_server_error, 1500).show();
                     }
 
 
@@ -193,9 +193,9 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                                 if (CacheProfile.photos.contains(removedPhoto)) {
                                     CacheProfile.photos.remove(removedPhoto);
                                     mLastSelectedAsMainId = mSelectedAsMainId;
-                                    Toast.makeText(getActivity(), R.string.general_photo_deleted, 1500).show();
+                                    Toast.makeText(App.getContext(), R.string.general_photo_deleted, 1500).show();
                                 } else {
-                                    Toast.makeText(getActivity(), R.string.general_server_error, 1500).show();
+                                    Toast.makeText(App.getContext(), R.string.general_server_error, 1500).show();
                                 }
                             }
                         }
