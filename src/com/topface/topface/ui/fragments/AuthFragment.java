@@ -212,8 +212,7 @@ public class AuthFragment extends BaseFragment {
     }
 
     @Override
-    public void
-    onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (mAuthorizationManager != null) mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK &&
@@ -298,7 +297,6 @@ public class AuthFragment extends BaseFragment {
             }
 
             public void always(ApiResponse response) {
-                showButtons();
             }
         }).exec();
     }
@@ -355,6 +353,7 @@ public class AuthFragment extends BaseFragment {
         final ProfileRequest profileRequest = new ProfileRequest(getActivity());
         profileRequest.part = ProfileRequest.P_ALL;
         registerRequest(profileRequest);
+        hideButtons();
         profileRequest.callback(new DataApiHandler<Profile>() {
 
             @Override
@@ -385,6 +384,7 @@ public class AuthFragment extends BaseFragment {
     private void getOptions() {
         final OptionsRequest request = new OptionsRequest(getActivity());
         registerRequest(request);
+        hideButtons();
         request.callback(new ApiHandler() {
             @Override
             public void success(final ApiResponse response) {
