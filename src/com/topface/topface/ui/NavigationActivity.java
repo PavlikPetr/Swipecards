@@ -163,7 +163,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
                                 @Override
                                 public void onAnimationEnd(Animation animation) {
-                                    bannerContainer.removeView(fullscreenViewGroup);
+                                    bannerContainer.setVisibility(View.GONE);
                                 }
 
                                 @Override
