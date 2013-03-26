@@ -41,7 +41,6 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
                 android:textColor="#FFFFFF"
-                android:textStyle="bold"
                 android:textSize="12sp"
                 android:background="@drawable/plate_sale"
                 />
@@ -54,7 +53,6 @@
                 android:paddingRight="10dp"
                 android:layout_alignParentRight="true"
                 android:textColor="#FFFFFF"
-                android:textStyle="bold"
                 android:textSize="12sp"
                 />
 

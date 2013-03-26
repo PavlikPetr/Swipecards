@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.topface.billing.BillingFragment;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
@@ -244,7 +245,7 @@ public class BuyingFragment extends BillingFragment {
         for (RelativeLayout btn : purchaseButtons) {
             btn.setEnabled(false);
         }
-        Toast.makeText(getActivity(), getString(R.string.buy_play_market_not_available), Toast.LENGTH_SHORT).show();
+        Toast.makeText(App.getContext(), getString(R.string.buy_play_market_not_available), Toast.LENGTH_SHORT).show();
     }
 
     @Override

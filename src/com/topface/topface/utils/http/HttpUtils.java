@@ -136,6 +136,10 @@ public class HttpUtils {
 
     public static void sendPostData(byte[] requestData, HttpURLConnection connection) throws IOException {
         //Отправляем данные
+        if (connection == null) {
+            Debug.error("connection is null");
+            return;
+        }
         OutputStream outputStream = getOutputStream(requestData.length, connection);
         if (outputStream != null) {
             outputStream.write(requestData);

@@ -60,7 +60,13 @@ public class ProfilePhotoFragment extends BaseFragment {
         if (mPhotoLinks == null || mPhotoLinks.size() < 2) {
             return;
         }
-        int position = mPhotoLinks.get(mPhotoLinks.size() - 2).getPosition();
+
+        Photo photo = mPhotoLinks.get(mPhotoLinks.size() - 2);
+        if (photo == null) {
+            return;
+        }
+
+        int position = photo.getPosition();
         AlbumRequest request = new AlbumRequest(
                 getActivity(),
                 CacheProfile.uid,

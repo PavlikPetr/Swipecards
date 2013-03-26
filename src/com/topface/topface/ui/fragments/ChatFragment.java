@@ -18,6 +18,7 @@ import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -454,7 +455,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 EasyTracker.getTracker().trackEvent("Chat", "SendGiftClick", "", 1L);
                 break;
 //            case R.id.btnChatPlace: {
-//                // Toast.makeText(getActivity(), "Place",
+//                // Toast.makeText(App.getContext(), "Place",
 //                // Toast.LENGTH_SHORT).show();
 //                EasyTracker.getTracker().trackEvent("Chat", "SendPlaceClick", "", 1L);
 //            }
@@ -463,7 +464,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 if (Utils.isGoogleMapsAvailable()) {
                     startActivityForResult(new Intent(getActivity(), GeoMapActivity.class),
                             GeoMapActivity.INTENT_REQUEST_GEO);
-                    // Toast.makeText(getActivity(), "Map",
+                    // Toast.makeText(App.getContext(), "Map",
                     // Toast.LENGTH_SHORT).show();
                     EasyTracker.getTracker().trackEvent("Chat", "SendMapClick", "§", 1L);
                 }
@@ -630,7 +631,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                 mAdapter.showRetrySendMessage(fakeItem, coordRequest);
             }
         }).exec();
@@ -706,7 +707,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                Toast.makeText(App.getContext(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                 mAdapter.showRetrySendMessage(fakeItem, messageRequest);
             }
         }).exec();
@@ -749,7 +750,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
                     @Override
                     public void fail(int codeError, ApiResponse response) {
-                        Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                         mAdapter.showRetrySendMessage(fakeItem, coordRequest);
                     }
                 }).exec();

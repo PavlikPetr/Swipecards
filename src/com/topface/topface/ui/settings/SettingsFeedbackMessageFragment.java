@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
@@ -209,12 +210,12 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
                 @Override
                 public void success(ApiResponse response) {
-                    if(isAdded()) {
+                    if (isAdded()) {
                         mReport.body = Static.EMPTY;
                         finishRequestSend();
 
                         mEditText.setText(Static.EMPTY);
-                        Toast.makeText(getActivity(),
+                        Toast.makeText(App.getContext(),
                                 getString(R.string.settings_feedback_success_msg),
                                 Toast.LENGTH_SHORT).show();
                         getActivity().finish();
@@ -224,7 +225,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
                 @Override
                 public void fail(int codeError, ApiResponse response) {
                     finishRequestSend();
-                    Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(App.getContext(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
                 }
             }).exec();
         } else {
