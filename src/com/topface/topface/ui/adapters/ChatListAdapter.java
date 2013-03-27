@@ -86,9 +86,9 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     @Override
     public int getItemViewType(int position) {
-        History item = getItem(position);
         int superType = super.getItemViewType(position);
-        if (superType == T_OTHER) {
+        History item = getItem(position);
+        if (superType == T_OTHER && item != null) {
             if (item.isWaitingItem() || item.isRepeatItem()) return T_WAITING;
             boolean output = (item.target == FeedDialog.USER_MESSAGE);
             switch (item.type) {
@@ -521,12 +521,16 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     @SuppressWarnings("unchecked")
     public ArrayList<History> getDataCopy() {
-        //noinspection unchecked
-        ArrayList<History> dataClone = (ArrayList<History>) getData().clone();
-        if (!dataClone.isEmpty() && dataClone.get(dataClone.size() - 1).isLoaderOrRetrier()) {
-            dataClone.remove(dataClone.size() - 1);
+        ArrayList<History> dataClone = null;
+        try {
+            dataClone = (ArrayList<History>) getData().clone();
+            if (!dataClone.isEmpty() && dataClone.get(dataClone.size() - 1).isLoaderOrRetrier()) {
+                dataClone.remove(dataClone.size() - 1);
+            }
+            removeUnrealItems(dataClone);
+        } catch (OutOfMemoryError e) {
+            Debug.error(e);
         }
-        removeUnrealItems(dataClone);
         return dataClone;
     }
 

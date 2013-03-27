@@ -217,7 +217,7 @@ public class TopsFragment extends BaseFragment {
             public void fail(int codeError, ApiResponse response) {
                 FragmentActivity activity = getActivity();
                 if (activity != null) {
-                    Toast.makeText(activity, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, R.string.general_data_error, Toast.LENGTH_SHORT).show();
                     mRetryView.setVisibility(View.VISIBLE);
                     mGallery.setVisibility(View.INVISIBLE);
                     onUpdateFail(false);
@@ -252,7 +252,7 @@ public class TopsFragment extends BaseFragment {
             @Override
             public void fail(int codeError, ApiResponse response) {
                 onUpdateFail(false);
-                Toast.makeText(App.getContext(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
             }
 
         }).exec();

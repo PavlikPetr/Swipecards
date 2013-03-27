@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Gift;
 import com.topface.topface.requests.ApiResponse;
@@ -135,9 +136,11 @@ public class GiftsActivity extends BaseFragmentActivity {
 
                 @Override
                 public void fail(int codeError, ApiResponse response) {
-                    Toast.makeText(getApplicationContext(),
-                            GiftsActivity.this.getString(R.string.general_data_error),
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(
+                            App.getContext(),
+                            R.string.general_data_error,
+                            Toast.LENGTH_SHORT
+                    ).show();
                     mLoadingLocker.setVisibility(View.GONE);
                 }
             }).exec();

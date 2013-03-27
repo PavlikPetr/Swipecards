@@ -714,7 +714,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                Toast.makeText(App.getContext(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
                 mAdapter.showRetrySendMessage(fakeItem, messageRequest);
             }
         }).exec();

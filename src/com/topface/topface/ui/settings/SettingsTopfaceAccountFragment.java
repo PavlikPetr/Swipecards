@@ -69,7 +69,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             request.callback(new ApiHandler() {
                 @Override
                 public void success(ApiResponse response) {
-                    Toast.makeText(App.getContext(), getString(R.string.email_confirmed), 1500).show();
+                    Toast.makeText(App.getContext(), R.string.email_confirmed, 1500).show();
                     CacheProfile.emailConfirmed = true;
                     if (isAdded()) {
                         setViewsState();
