@@ -39,6 +39,8 @@ import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 import ru.ideast.adwired.AWView;
 import ru.ideast.adwired.events.OnNoBannerListener;
+import ru.ideast.adwired.events.OnStartListener;
+import ru.ideast.adwired.events.OnStopListener;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -66,6 +68,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private BroadcastReceiver mServerResponseReceiver;
 
     private boolean isNeedAuth = true;
+
+    private static boolean isFullScreenBannerVisible = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -120,11 +124,10 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private void requestAdwiredFullscreen() {
         try {
             if (CacheProfile.isLoaded()) {
-//            && !CacheProfile.paid) {
-//                Locale ukraineLocale = new Locale("uk", "UA", "");
-//                if (Locale.getDefault().equals(ukraineLocale)) {
                 AWView adwiredView = (AWView) getLayoutInflater().inflate(R.layout.banner_adwired, null);
-                ((ViewGroup) findViewById(R.id.loBannerContainer)).addView(adwiredView);
+                final ViewGroup bannerContainer = (ViewGroup) findViewById(R.id.loBannerContainer);
+                bannerContainer.addView(adwiredView);
+                bannerContainer.setVisibility(View.VISIBLE);
                 adwiredView.setVisibility(View.VISIBLE);
                 adwiredView.setOnNoBannerListener(new OnNoBannerListener() {
                     @Override
@@ -132,8 +135,18 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                         requestTopfaceFullscreen();
                     }
                 });
+                adwiredView.setOnStopListener(new OnStopListener() {
+                    @Override
+                    public void onStop() {hideFullscreenBanner(bannerContainer);
+                    }
+                });
+                adwiredView.setOnStartListener(new OnStartListener() {
+                    @Override
+                    public void onStart() {
+                        isFullScreenBannerVisible = true;
+                    }
+                });
                 adwiredView.request('0');
-//                }
             }
         } catch (Exception ex) {
             Debug.error(ex);
@@ -184,10 +197,12 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
                 if (banner.action.equals(Banner.ACTION_URL)) {
                     if (showFullscreenBanner(banner.parameter)) {
+                        isFullScreenBannerVisible = true;
                         addLastFullsreenShowedTime();
                         final View fullscreenViewGroup = getLayoutInflater().inflate(R.layout.fullscreen_topface, null);
                         final ViewGroup bannerContainer = (ViewGroup) findViewById(R.id.loBannerContainer);
                         bannerContainer.addView(fullscreenViewGroup);
+                        bannerContainer.setVisibility(View.VISIBLE);
                         final ImageViewRemote fullscreenImage = (ImageViewRemote) fullscreenViewGroup.findViewById(R.id.ivFullScreen);
                         fullscreenImage.setRemoteSrc(banner.url);
                         fullscreenImage.setOnClickListener(new View.OnClickListener() {
@@ -229,6 +244,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             }
         });
         bannerContainer.startAnimation(animation);
+        isFullScreenBannerVisible = false;
     }
 
     private void initFragmentSwitcher() {
@@ -529,7 +545,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     @Override
     public void onBackPressed() {
-        if (findViewById(R.id.loBannerContainer).getVisibility() != View.GONE) {
+        if (isFullScreenBannerVisible) {
             hideFullscreenBanner((ViewGroup) findViewById(R.id.loBannerContainer));
         } else if (mFragmentSwitcher != null) {
             if (mFragmentSwitcher.getAnimationState() == FragmentSwitchController.EXPAND) {
