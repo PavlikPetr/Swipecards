@@ -262,7 +262,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
                 post(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(CitySearchActivity.this, getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CitySearchActivity.this, R.string.general_data_error, Toast.LENGTH_SHORT).show();
                         mProgressBar.setVisibility(View.GONE);
                     }
                 });

@@ -133,9 +133,12 @@ public class AuthFragment extends BaseFragment {
         mSignInView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAuthViewsFlipper.setDisplayedChild(1);
-                mLogin.requestFocus();
-                Utils.showSoftKeyboard(getActivity(), mLogin);
+                FragmentActivity activity = getActivity();
+                if (activity != null) {
+                    Utils.showSoftKeyboard(activity, mLogin);
+                    mAuthViewsFlipper.setDisplayedChild(1);
+                    mLogin.requestFocus();
+                }
             }
         });
 
@@ -280,7 +283,7 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void showNoInternetToast() {
-        Toast.makeText(App.getContext(), getString(R.string.general_internet_off), Toast.LENGTH_SHORT)
+        Toast.makeText(App.getContext(), R.string.general_internet_off, Toast.LENGTH_SHORT)
                 .show();
     }
 
@@ -375,8 +378,7 @@ public class AuthFragment extends BaseFragment {
                     showButtons();
                 else {
                     authorizationFailed(codeError, profileRequest);
-                    Toast.makeText(App.getContext(), getString(R.string.general_data_error),
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
                 }
             }
         }).exec();
@@ -400,7 +402,8 @@ public class AuthFragment extends BaseFragment {
                 else {
                     request.callback(this);
                     authorizationFailed(codeError, request);
-                    Toast.makeText(App.getContext(), getString(R.string.general_data_error),
+                    Context context = App.getContext();
+                    Toast.makeText(context, context.getString(R.string.general_data_error),
                             Toast.LENGTH_SHORT).show();
                 }
             }

@@ -38,12 +38,10 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
         if (activeNetInfo != null) {
             switch (activeNetInfo.getType()) {
                 case ConnectivityManager.TYPE_MOBILE:
-                    //Toast.makeText(context, "Включена Мобильная сеть 3G/GPRS/EDGE", Toast.LENGTH_SHORT).show();
                     mConnectionType = CONNECTION_MOBILE;
                     break;
                 case ConnectivityManager.TYPE_WIFI:
                 case ConnectivityManager.TYPE_WIMAX:
-                    //Toast.makeText(context, "Включен WIFI или WIMAX", Toast.LENGTH_SHORT).show();
                     mConnectionType = CONNECTION_WIFI;
                     break;
             }
@@ -51,11 +49,10 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 
 //            reAuthIfNeed(ctx);
         } else {
-//            Toast.makeText(context, "Интернет выключен", Toast.LENGTH_SHORT).show();
             mIsConnected = false;
             mConnectionType = CONNECTION_OFFLINE;
         }
-        sendBroadCastToActiveActivity(ctx);
+        sendBroadCastToActiveActivity();
     }
 
     //TODO: Следующие два метода наверно можно объединить в один
@@ -73,7 +70,7 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
         LocalBroadcastManager.getInstance(ctx).sendBroadcast(intent);
     }
 
-    private void sendBroadCastToActiveActivity(Context context) {
+    private void sendBroadCastToActiveActivity() {
         reAuthIfNeed();
         sendToNavigation();
     }

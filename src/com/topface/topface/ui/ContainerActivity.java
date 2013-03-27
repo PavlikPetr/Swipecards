@@ -37,7 +37,7 @@ public class ContainerActivity extends BaseFragmentActivity {
         if (mCurrentFragmentId == -1) {
             Intent intent = getIntent();
             try {
-                mCurrentFragmentId = intent.getIntExtra(Static.INTENT_REQUEST_KEY,0);
+                mCurrentFragmentId = intent.getIntExtra(Static.INTENT_REQUEST_KEY, 0);
             } catch (Exception ex) {
                 Debug.error(ex);
                 finish();
@@ -48,7 +48,7 @@ public class ContainerActivity extends BaseFragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(mCurrentFragment == null) {
+        if (mCurrentFragment == null) {
             mCurrentFragment = getFragment(mCurrentFragmentId);
         }
     }
@@ -58,7 +58,7 @@ public class ContainerActivity extends BaseFragmentActivity {
         super.onPostResume();
         if (mCurrentFragment != null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.loFrame, mCurrentFragment,TAG_FRAGMENT).commit();
+                    .replace(R.id.loFrame, mCurrentFragment, TAG_FRAGMENT).commit();
         }
     }
 
@@ -75,13 +75,10 @@ public class ContainerActivity extends BaseFragmentActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
         switch (id) {
             case INTENT_BUY_VIP_FRAGMENT:
-//                ((TextView) findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.profile_vip_status));
                 fragment = VipBuyFragment.newInstance(true);
-//                Toast.makeText(App.getContext(), R.string.general_premium_access_error, Toast.LENGTH_SHORT).show();
 
                 break;
             case INTENT_BUYING_FRAGMENT:
-//                ((TextView) findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.buying_header_title));
                 Bundle extras = getIntent().getExtras();
                 if (extras.containsKey(BuyingFragment.ARG_ITEM_TYPE) && extras.containsKey(BuyingFragment.ARG_ITEM_PRICE)) {
                     fragment = BuyingFragment.newInstance(extras.getInt(BuyingFragment.ARG_ITEM_TYPE),

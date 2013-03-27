@@ -24,7 +24,6 @@ import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.TopfaceNotificationManager;
 import com.topface.topface.utils.Utils;
-import org.acra.util.ToastSender;
 
 import java.io.File;
 import java.util.HashMap;
@@ -112,7 +111,7 @@ public class AddPhotoHelper {
                 File outputDirectory = new File(PATH_TO_FILE);
                 //noinspection ResultOfMethodCallIgnored
                 if (!outputDirectory.exists()) {
-                    if(!outputDirectory.mkdirs()) {
+                    if (!outputDirectory.mkdirs()) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -128,10 +127,12 @@ public class AddPhotoHelper {
 
                 if (Utils.isIntentAvailable(mContext, intent.getAction())) {
                     if (mFragment != null) {
-                        if (mFragment instanceof ProfilePhotoFragment) {
-                            mFragment.getParentFragment().startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
-                        } else {
-                            mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
+                        if (mFragment.isAdded()) {
+                            if (mFragment instanceof ProfilePhotoFragment) {
+                                mFragment.getParentFragment().startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
+                            } else {
+                                mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
+                            }
                         }
                     } else {
                         mActivity.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
@@ -144,7 +145,7 @@ public class AddPhotoHelper {
     }
 
     public Activity getActivity() {
-        return (mFragment == null)? mActivity : mFragment.getActivity();
+        return (mFragment == null) ? mActivity : mFragment.getActivity();
     }
 
     private void startChooseFromGallery() {
