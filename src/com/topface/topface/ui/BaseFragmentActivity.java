@@ -9,7 +9,6 @@ import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.WindowManager;
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.ReAuthReceiver;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
@@ -95,12 +94,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        EasyTracker.getInstance().activityStart(this);
-    }
-
-    @Override
     protected void onPause() {
         super.onPause();
         removeAllRequests();
@@ -117,12 +110,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             }
             mRequests.clear();
         }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EasyTracker.getInstance().activityStop(this);
     }
 
     @Override
