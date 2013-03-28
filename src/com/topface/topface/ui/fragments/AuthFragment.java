@@ -31,6 +31,7 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -66,6 +67,7 @@ public class AuthFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Debug.log("AF: onCreate");
         View root = inflater.inflate(R.layout.ac_auth, null);
         initViews(root);
         //Если у нас нет токена
@@ -332,10 +334,6 @@ public class AuthFragment extends BaseFragment {
                 authorizationFailed(codeError, authRequest);
             }
 
-            @Override
-            public void cancel() {
-//                showButtons();
-            }
         });
         EasyTracker.getTracker().trackEvent("Profile", "Auth", "FromActivity" + AuthToken.SN_TOPFACE, 1L);
 
@@ -608,6 +606,7 @@ public class AuthFragment extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
+        Debug.log("AF: onPause");
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(connectionChangeListener);
     }
 
