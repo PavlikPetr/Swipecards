@@ -39,7 +39,10 @@ import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 import ru.ideast.adwired.AWView;
 import ru.ideast.adwired.events.OnNoBannerListener;
+import ru.ideast.adwired.events.OnStartListener;
+import ru.ideast.adwired.events.OnStopListener;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
@@ -52,6 +55,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
     public static final int RATE_POPUP_TIMEOUT = 86400000; // 1000 * 60 * 60 * 24 * 1 (1 сутки)
     public static final int UPDATE_INTERVAL = 10 * 60 * 1000;
+    public static final String URL_SEPARATOR = "::";
     private FragmentManager mFragmentManager;
     private MenuFragment mFragmentMenu;
     private FragmentSwitchController mFragmentSwitcher;
@@ -64,6 +68,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private BroadcastReceiver mServerResponseReceiver;
 
     private boolean isNeedAuth = true;
+
+    private static boolean isFullScreenBannerVisible = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -101,13 +107,13 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     private void requestFullscreen() {
-        if(CacheProfile.isLoaded()) {
+        if (CacheProfile.isLoaded()) {
             Options.Page startPage = CacheProfile.getOptions().pages.get(Options.PAGE_START);
-            if (startPage != null){
+            if (startPage != null) {
                 if (startPage.floatType.equals(Options.FLOAT_TYPE_BANNER)) {
                     if (startPage.banner.equals(Options.BANNER_ADWIRED)) {
                         requestAdwiredFullscreen();
-                    } else if (startPage.banner.equals(Options.BANNER_TOPFACE)){
+                    } else if (startPage.banner.equals(Options.BANNER_TOPFACE)) {
                         requestTopfaceFullscreen();
                     }
                 }
@@ -118,20 +124,29 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private void requestAdwiredFullscreen() {
         try {
             if (CacheProfile.isLoaded()) {
-//            && !CacheProfile.paid) {
-//                Locale ukraineLocale = new Locale("uk", "UA", "");
-//                if (Locale.getDefault().equals(ukraineLocale)) {
-                    AWView adwiredView = (AWView) getLayoutInflater().inflate(R.layout.banner_adwired, null);
-                    ((ViewGroup) findViewById(R.id.loBannerContainer)).addView(adwiredView);
-                    adwiredView.setVisibility(View.VISIBLE);
-                    adwiredView.setOnNoBannerListener(new OnNoBannerListener() {
-                        @Override
-                        public void onNoBanner() {
-                            requestTopfaceFullscreen();
-                        }
-                    });
-                    adwiredView.request('0');
-//                }
+                AWView adwiredView = (AWView) getLayoutInflater().inflate(R.layout.banner_adwired, null);
+                final ViewGroup bannerContainer = (ViewGroup) findViewById(R.id.loBannerContainer);
+                bannerContainer.addView(adwiredView);
+                bannerContainer.setVisibility(View.VISIBLE);
+                adwiredView.setVisibility(View.VISIBLE);
+                adwiredView.setOnNoBannerListener(new OnNoBannerListener() {
+                    @Override
+                    public void onNoBanner() {
+                        requestTopfaceFullscreen();
+                    }
+                });
+                adwiredView.setOnStopListener(new OnStopListener() {
+                    @Override
+                    public void onStop() {hideFullscreenBanner(bannerContainer);
+                    }
+                });
+                adwiredView.setOnStartListener(new OnStartListener() {
+                    @Override
+                    public void onStart() {
+                        isFullScreenBannerVisible = true;
+                    }
+                });
+                adwiredView.request('0');
             }
         } catch (Exception ex) {
             Debug.error(ex);
@@ -142,15 +157,20 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         long currentTime = System.currentTimeMillis();
         long lastCall = getPreferences().getLong(Static.PREFERENCES_LAST_FULLSCREEN_TIME, currentTime);
         boolean passByTime = !getPreferences().contains(Static.PREFERENCES_LAST_FULLSCREEN_TIME)
-                || Math.abs(currentTime-lastCall) > DateUtils.DAY_IN_MILLISECONDS;
+                || Math.abs(currentTime - lastCall) > DateUtils.DAY_IN_MILLISECONDS;
         boolean passByUrl = passFullScreenByUrl(url);
 
         return passByUrl && passByTime;
     }
 
     private boolean passFullScreenByUrl(String url) {
-        Set<String> urlSet = getPreferences().getStringSet(Static.PREFERENCES_FULLSCREEN_URLS_SET, new HashSet<String>());
-        return !urlSet.contains(url);
+        return !getFullscrenUrls().contains(url);
+    }
+
+    private Set<String> getFullscrenUrls() {
+        String urls = getPreferences().getString(Static.PREFERENCES_FULLSCREEN_URLS_SET, "");
+        String[] urlList = TextUtils.split(urls, URL_SEPARATOR);
+        return new HashSet<String>(Arrays.asList(urlList));
     }
 
     private void addLastFullsreenShowedTime() {
@@ -160,28 +180,30 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     private void addNewUrlToFullscreenSet(String url) {
-        Set<String> urlSet = getPreferences().getStringSet(Static.PREFERENCES_FULLSCREEN_URLS_SET, new HashSet<String>());
+        Set<String> urlSet = getFullscrenUrls();
         urlSet.add(url);
         SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putStringSet(Static.PREFERENCES_FULLSCREEN_URLS_SET,urlSet);
+        editor.putString(Static.PREFERENCES_FULLSCREEN_URLS_SET, TextUtils.join(URL_SEPARATOR, urlSet));
         editor.commit();
     }
 
     private void requestTopfaceFullscreen() {
         BannerRequest request = new BannerRequest(getApplicationContext());
         request.place = Options.PAGE_START;
-        request.callback(new BaseApiHandler(){
+        request.callback(new BaseApiHandler() {
             @Override
             public void success(ApiResponse response) {
                 final Banner banner = Banner.parse(response);
 
                 if (banner.action.equals(Banner.ACTION_URL)) {
                     if (showFullscreenBanner(banner.parameter)) {
+                        isFullScreenBannerVisible = true;
                         addLastFullsreenShowedTime();
                         final View fullscreenViewGroup = getLayoutInflater().inflate(R.layout.fullscreen_topface, null);
                         final ViewGroup bannerContainer = (ViewGroup) findViewById(R.id.loBannerContainer);
                         bannerContainer.addView(fullscreenViewGroup);
-                        final ImageViewRemote fullscreenImage = (ImageViewRemote)fullscreenViewGroup.findViewById(R.id.ivFullScreen);
+                        bannerContainer.setVisibility(View.VISIBLE);
+                        final ImageViewRemote fullscreenImage = (ImageViewRemote) fullscreenViewGroup.findViewById(R.id.ivFullScreen);
                         fullscreenImage.setRemoteSrc(banner.url);
                         fullscreenImage.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -222,6 +244,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             }
         });
         bannerContainer.startAnimation(animation);
+        isFullScreenBannerVisible = false;
     }
 
     private void initFragmentSwitcher() {
@@ -479,7 +502,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     @Override
     public void onBackPressed() {
-        if (findViewById(R.id.loBannerContainer).getVisibility() != View.GONE) {
+        if (isFullScreenBannerVisible) {
             hideFullscreenBanner((ViewGroup) findViewById(R.id.loBannerContainer));
         } else if (mFragmentSwitcher != null) {
             if (mFragmentSwitcher.getAnimationState() == FragmentSwitchController.EXPAND) {

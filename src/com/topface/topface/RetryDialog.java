@@ -13,6 +13,7 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.IApiRequest;
+import com.topface.topface.utils.Debug;
 
 /**
  * Диалог, показываемый при ошибке отправки запроса и предлагающий его повторить
@@ -48,7 +49,11 @@ public class RetryDialog extends AlertDialog {
                 if (intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE, 0) != ConnectionChangeReceiver.CONNECTION_OFFLINE) {
                     mRequest.exec();
                     if (isShowing()) {
-                        cancel();
+                        try {
+                            cancel();
+                        } catch (Exception e) {
+                            Debug.error(e);
+                        }
                     }
                 }
             }

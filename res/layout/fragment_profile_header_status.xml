@@ -10,22 +10,19 @@
             android:scaleType="fitXY"
             />
 
-    <EditText
+    <TextView
             android:id="@+id/tvStatus"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textColor="#FFFFFF"
-            android:hint=""
             android:textSize="14sp"
             android:layout_margin="20dp"
             android:gravity="center"
             android:layout_centerInParent="true"
-            android:inputType="textMultiLine"
             android:background="@android:color/transparent"
             android:singleLine="false"
             android:maxLines="5"
-            android:focusable="false"
-            android:focusableInTouchMode="false"/>
+            />
 
     <ImageButton
             android:id="@+id/btnEdit"

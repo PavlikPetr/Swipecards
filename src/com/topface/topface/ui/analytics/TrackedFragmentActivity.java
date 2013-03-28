@@ -10,6 +10,7 @@ public class TrackedFragmentActivity extends FragmentActivity {
     public void onStart() {
         super.onStart();
         EasyTracker.getInstance().activityStart(this);
+        TrackedActivity.setCustomMeticsAndDimensions();
         if (isTrackable()) {
             EasyTracker.getTracker().trackView(getTrackName());
         }

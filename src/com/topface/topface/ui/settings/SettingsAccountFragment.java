@@ -133,7 +133,7 @@ public class SettingsAccountFragment extends BaseFragment {
                         FragmentActivity activity = getActivity();
                         if (activity != null) {
                             lockerView.setVisibility(View.GONE);
-                            Toast.makeText(activity, R.string.general_server_error, 1500).show();
+                            Toast.makeText(activity, R.string.general_server_error, Toast.LENGTH_LONG).show();
                         }
                     }
                 }).exec();

@@ -31,6 +31,7 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -66,6 +67,7 @@ public class AuthFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Debug.log("AF: onCreate");
         View root = inflater.inflate(R.layout.ac_auth, null);
         initViews(root);
         //Если у нас нет токена
@@ -133,9 +135,12 @@ public class AuthFragment extends BaseFragment {
         mSignInView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAuthViewsFlipper.setDisplayedChild(1);
-                mLogin.requestFocus();
-                Utils.showSoftKeyboard(getActivity(), mLogin);
+                FragmentActivity activity = getActivity();
+                if (activity != null) {
+                    Utils.showSoftKeyboard(activity, mLogin);
+                    mAuthViewsFlipper.setDisplayedChild(1);
+                    mLogin.requestFocus();
+                }
             }
         });
 
@@ -212,8 +217,7 @@ public class AuthFragment extends BaseFragment {
     }
 
     @Override
-    public void
-    onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (mAuthorizationManager != null) mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK &&
@@ -280,7 +284,7 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void showNoInternetToast() {
-        Toast.makeText(App.getContext(), getString(R.string.general_internet_off), Toast.LENGTH_SHORT)
+        Toast.makeText(App.getContext(), R.string.general_internet_off, Toast.LENGTH_SHORT)
                 .show();
     }
 
@@ -298,7 +302,6 @@ public class AuthFragment extends BaseFragment {
             }
 
             public void always(ApiResponse response) {
-                showButtons();
             }
         }).exec();
     }
@@ -331,10 +334,6 @@ public class AuthFragment extends BaseFragment {
                 authorizationFailed(codeError, authRequest);
             }
 
-            @Override
-            public void cancel() {
-//                showButtons();
-            }
         });
         EasyTracker.getTracker().trackEvent("Profile", "Auth", "FromActivity" + AuthToken.SN_TOPFACE, 1L);
 
@@ -355,6 +354,7 @@ public class AuthFragment extends BaseFragment {
         final ProfileRequest profileRequest = new ProfileRequest(getActivity());
         profileRequest.part = ProfileRequest.P_ALL;
         registerRequest(profileRequest);
+        hideButtons();
         profileRequest.callback(new DataApiHandler<Profile>() {
 
             @Override
@@ -375,8 +375,7 @@ public class AuthFragment extends BaseFragment {
                     showButtons();
                 else {
                     authorizationFailed(codeError, profileRequest);
-                    Toast.makeText(App.getContext(), getString(R.string.general_data_error),
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
                 }
             }
         }).exec();
@@ -385,6 +384,7 @@ public class AuthFragment extends BaseFragment {
     private void getOptions() {
         final OptionsRequest request = new OptionsRequest(getActivity());
         registerRequest(request);
+        hideButtons();
         request.callback(new ApiHandler() {
             @Override
             public void success(final ApiResponse response) {
@@ -400,7 +400,8 @@ public class AuthFragment extends BaseFragment {
                 else {
                     request.callback(this);
                     authorizationFailed(codeError, request);
-                    Toast.makeText(App.getContext(), getString(R.string.general_data_error),
+                    Context context = App.getContext();
+                    Toast.makeText(context, context.getString(R.string.general_data_error),
                             Toast.LENGTH_SHORT).show();
                 }
             }
@@ -605,6 +606,7 @@ public class AuthFragment extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
+        Debug.log("AF: onPause");
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(connectionChangeListener);
     }
 

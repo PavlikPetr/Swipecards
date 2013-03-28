@@ -245,7 +245,7 @@ public class BuyingFragment extends BillingFragment {
         for (RelativeLayout btn : purchaseButtons) {
             btn.setEnabled(false);
         }
-        Toast.makeText(App.getContext(), getString(R.string.buy_play_market_not_available), Toast.LENGTH_SHORT).show();
+        Toast.makeText(App.getContext(), R.string.buy_play_market_not_available, Toast.LENGTH_SHORT).show();
     }
 
     @Override
