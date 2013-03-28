@@ -54,13 +54,13 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     private static final int T_COUNT = 13;
 
-    private HashMap<History, ApiRequest> mHashRepeatRequests;
-    private ArrayList<History> mWaitingItems;
-    private ArrayList<History> mUnrealItems;
-    private ArrayList<History> mShowDatesList;
+    private HashMap<History, ApiRequest> mHashRepeatRequests = new HashMap<History, ApiRequest>();
+    private ArrayList<History> mWaitingItems = new ArrayList<History>();
+    private ArrayList<History> mUnrealItems = new ArrayList<History>();
+    private ArrayList<History> mShowDatesList = new ArrayList<History>();
+    private AddressesCache mAddressesCache = new AddressesCache();
     private View.OnClickListener mOnClickListener;
     private ChatFragment.OnListViewItemLongClickListener mLongClickListener;
-    private AddressesCache mAddressesCache;
 
     private View mHeaderView;
 
@@ -68,11 +68,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     public ChatListAdapter(Context context, FeedList<History> data, Updater updateCallback) {
         super(context, data, updateCallback);
-        mAddressesCache = new AddressesCache();
-        mShowDatesList = new ArrayList<History>();
-        mUnrealItems = new ArrayList<History>();
-        mWaitingItems = new ArrayList<History>();
-        mHashRepeatRequests = new HashMap<History, ApiRequest>();
     }
 
     @Override
