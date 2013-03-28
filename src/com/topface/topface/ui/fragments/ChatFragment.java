@@ -42,8 +42,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.TimerTask;
 
-public class ChatFragment extends BaseFragment implements View.OnClickListener,
-        LocationListener {
+public class ChatFragment extends BaseFragment implements View.OnClickListener, LocationListener {
 
     private static final int LIMIT = 50;
 
@@ -58,9 +57,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
     public static final String INTENT_ITEM_ID = "item_id";
     public static final String MAKE_ITEM_READ = "com.topface.topface.feedfragment.MAKE_READ";
-
-    static {
-    }
 
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
 
@@ -103,7 +99,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        super.onCreateView(inflater, container, savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.ac_chat, null);
 
         Debug.log(this, "+onCreate");
@@ -284,8 +280,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     private void initNavigationbar(View root, int userSex, String userName, int userAge, String userCity) {
         ActionBar actionBar = getActionBar(root);
 
-        actionBar.setTitleText(userName + ", "
-                + userAge);
+        actionBar.setTitleText(userName + ", " + userAge);
         actionBar.setSubTitleText(userCity);
         actionBar.showBackButton(new View.OnClickListener() {
             @Override
@@ -461,12 +456,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                         GiftsActivity.INTENT_REQUEST_GIFT);
                 EasyTracker.getTracker().trackEvent("Chat", "SendGiftClick", "", 1L);
                 break;
-//            case R.id.btnChatPlace: {
-//                // Toast.makeText(App.getContext(), "Place",
-//                // Toast.LENGTH_SHORT).show();
-//                EasyTracker.getTracker().trackEvent("Chat", "SendPlaceClick", "", 1L);
-//            }
-//            break;
             case R.id.btnChatPlace:
                 if (Utils.isGoogleMapsAvailable()) {
                     startActivityForResult(new Intent(getActivity(), GeoMapActivity.class),
@@ -476,7 +465,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     EasyTracker.getTracker().trackEvent("Chat", "SendMapClick", "§", 1L);
                 }
                 break;
-
             case R.id.chat_message:
                 break;
             case R.id.btnNavigationProfileBar:
