@@ -23,6 +23,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.mad.ad.AdStaticView;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Banner;
@@ -43,6 +44,8 @@ import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.utils.*;
+import ru.begun.adlib.Callback;
+import ru.begun.adlib.RequestParam;
 import ru.ideast.adwired.AWView;
 import ru.ideast.adwired.events.OnNoBannerListener;
 import ru.ideast.adwired.events.OnStartListener;
@@ -51,6 +54,7 @@ import ru.wapstart.plus1.sdk.Plus1BannerAsker;
 import ru.wapstart.plus1.sdk.Plus1BannerRequest;
 import ru.wapstart.plus1.sdk.Plus1BannerView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -64,6 +68,7 @@ public class BannerBlock {
 
     public static final String ADFONIC_SLOT_ID = "9f83e583-a247-4b78-94a0-bf2beb8775fc";
     public static final int PLUS1_ID = 7227;
+    private static final String BEGUN_KEY = "pad_id:320304962|block_id:320308422";
     public static final String VIRUS_LIKES_BANNER_PARAM = "viruslikes";
 
     private LayoutInflater mInflater;
@@ -102,7 +107,7 @@ public class BannerBlock {
             String fragmentId = mFragment.getClass().toString();
             Options options = CacheProfile.getOptions();
             if (mBannersMap.containsKey(fragmentId) && options != null && options.pages != null) {
-                String bannerType = options.pages.get(mBannersMap.get(fragmentId)).banner;
+                String bannerType = Options.BANNER_ADWIRED;//options.pages.get(mBannersMap.get(fragmentId)).banner;
 
                 mBannerView = getBannerView(bannerType);
                 if (mBannerView == null) {
@@ -114,7 +119,11 @@ public class BannerBlock {
                         loadBanner();
                     }
                 } else {
-                    showBanner(null);
+                    try {
+                        showBanner(null);
+                    } catch (Exception e) {
+                        Debug.error(e);
+                    }
                 }
             }
         }
@@ -153,6 +162,8 @@ public class BannerBlock {
                 return mInflater.inflate(R.layout.banner_adwired, null);
             } else if (bannerType.equals(Options.BANNER_MADNET)) {
                 return mInflater.inflate(R.layout.banner_madnet, null);
+            } else if (bannerType.equals(Options.BANNER_BEGUN)) {
+                return mInflater.inflate(R.layout.banner_begun, null);
             } else {
                 return null;
             }
@@ -175,13 +186,17 @@ public class BannerBlock {
             public void success(ApiResponse response) {
                 final Banner banner = Banner.parse(response);
                 if (mBannerView != null) {
-                    showBanner(banner);
+                    try {
+                        showBanner(banner);
+                    } catch (Exception e) {
+                        Debug.error(e);
+                    }
                 }
             }
         }).exec();
     }
 
-    private void showBanner(final Banner banner) {
+    private void showBanner(final Banner banner) throws Exception {
         if (mBannerView instanceof AdView) {
             mBannerView.setVisibility(View.VISIBLE);
             ((AdView) mBannerView).loadAd(new AdRequest());
@@ -243,45 +258,49 @@ public class BannerBlock {
                     Debug.log("Adwired: Start");
                 }
             });
-
             ((AWView) mBannerView).setOnStopListener(new OnStopListener() {
                 @Override
                 public void onStop() {
-                    Debug.log("Adwired: Start");
+                    Debug.log("Adwired: Stop");
                 }
             });
-
             ((AWView) mBannerView).setOnNoBannerListener(new OnNoBannerListener() {
                 @Override
-                public void onNoBanner() {
-                    Debug.log("Adwired: No banner");
+                public void onNoBanner() {Debug.log("Adwired: No banner");
                 }
             });
         } else if (mBannerView instanceof AdStaticView) {
             mBannerView.setVisibility(View.VISIBLE);
             Profile profile = CacheProfile.getProfile();
             com.mad.ad.AdRequest.Builder requestBuilder = new com.mad.ad.AdRequest.Builder();
-//            requestBuilder.setEducation(com.mad.ad.AdRequest.Education.UNIVERSITY);
-//            requestBuilder.setEthnicity(com.mad.ad.AdRequest.Ethnicity.WHITE);
             requestBuilder.setGender(profile.sex == Static.BOY ?
                     com.mad.ad.AdRequest.Gender.MALE : com.mad.ad.AdRequest.Gender.FEMALE);
             requestBuilder.setGenderInterest(profile.dating.sex == Static.BOY ?
                     com.mad.ad.AdRequest.GenderInterest.MALE : com.mad.ad.AdRequest.GenderInterest.FEMALE);
-            //requestBuilder.setIncome(com.mad.ad.AdRequest.Income.FROM_15_TO_25);
-            //requestBuilder.setMaritalStatus(com.mad.ad.AdRequest.MaritalStatus.MARRIED);
-
-//            requestBuilder.setGps(location);
-//            requestBuilder.setRegion(region);
-//            requestBuilder.setCity(city);
-//            requestBuilder.setZip(zip);
-//            requestBuilder.setAreaCode(LAC);
-
-//            requestBuilder.setPrimaryCategory("cars");
-//            requestBuilder.setSecodaryCategory("sportcars");
-//            requestBuilder.addKeyword("Ferrari");
-
             com.mad.ad.AdRequest request = requestBuilder.getRequest();
             ((AdStaticView) mBannerView).showBanners(request);
+        } else if (mBannerView instanceof ru.begun.adlib.AdView) {
+            final ru.begun.adlib.AdView adView = ((ru.begun.adlib.AdView) mBannerView);
+            adView.setOnApiListener(new Callback() {
+                @Override
+                public void init() {
+                    ArrayList<RequestParam> al = new ArrayList<RequestParam>();
+                    RequestParam rp = new RequestParam();
+                    rp.name = "environmentVars";
+                    rp.value = BEGUN_KEY;
+                    al.add(rp);
+                    adView.api("initAd", al);
+                }
+
+                @Override
+                public void callback(String s, String s1) {
+                    if (s.equals("AdLoaded")) {
+                        adView.api("startAd");
+                    }
+                }
+            });
+            adView.onDebug = App.DEBUG;
+            adView.init();
         } else if (mBannerView instanceof ImageView) {
             //Это нужно, что бы сбросить размеры баннера, для правильного расчета размера в ImageLoader
             ViewGroup.LayoutParams params = mBannerView.getLayoutParams();
@@ -435,10 +454,16 @@ public class BannerBlock {
 
     public void onCreate() {
         initBanner();
-        if (mBannerView != null && mBannerView instanceof AdfonicView) mBannerView.invalidate();
-        if (mBannerView != null && mBannerView instanceof AWView) {
-            ((AWView) mBannerView).request(mAdwiredMap.get(mFragment.getClass().toString()));
+        if (mBannerView != null) {
+            if (mBannerView instanceof AdfonicView) {
+                mBannerView.invalidate();
+            } else if (mBannerView instanceof AWView) {
+                ((AWView) mBannerView).request(mAdwiredMap.get(mFragment.getClass().toString()));
+            } else if (mBannerView instanceof ru.begun.adlib.AdView) {
+                ((ru.begun.adlib.AdView)mBannerView).api("resumeAd");
+            }
         }
+
         if (mPLus1Asker != null) mPLus1Asker.onResume();
     }
 
