@@ -101,12 +101,14 @@ public class UserPhotoFragment extends BaseFragment {
     public void setUserData(User user) {
         mUser = user;
         mPhotoLinks = user.photos;
-        if (mGridAlbum.getAdapter() != null) {
-//            ((UserPhotoGridAdapter)mGridAlbum.getAdapter()).setData(mPhotoLinks);
-        } else {
-            setPhotos(mPhotoLinks);
-            mGridAlbum.setAdapter(mUserPhotoGridAdapter);
-            mGridAlbum.setOnScrollListener(mUserPhotoGridAdapter);
+        if(mGridAlbum != null) {
+            if (mGridAlbum.getAdapter() != null) {
+    //            ((UserPhotoGridAdapter)mGridAlbum.getAdapter()).setData(mPhotoLinks);
+            } else {
+                setPhotos(mPhotoLinks);
+                mGridAlbum.setAdapter(mUserPhotoGridAdapter);
+                mGridAlbum.setOnScrollListener(mUserPhotoGridAdapter);
+            }
         }
     }
 
