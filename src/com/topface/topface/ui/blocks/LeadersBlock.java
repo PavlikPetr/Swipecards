@@ -12,12 +12,10 @@ import com.topface.topface.data.Leader;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.LeadersRequest;
+import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.LeadersActivity;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.LeadersAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.ProfileFragment;
-import com.topface.topface.utils.CacheProfile;
 
 /**
  * Блок с лидерами
@@ -27,7 +25,7 @@ public class LeadersBlock {
     private final ViewGroup mLayout;
 
     public LeadersBlock(Fragment fragment, ViewGroup layout) {
-        mFragment  = fragment;
+        mFragment = fragment;
         mLayout = layout;
 
         bindButtonEvent();
@@ -55,7 +53,8 @@ public class LeadersBlock {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {}
+            public void fail(int codeError, ApiResponse response) {
+            }
 
         }).exec();
     }
@@ -90,9 +89,12 @@ public class LeadersBlock {
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             //При клике на лидера, открываем его профиль
             Leader leader = (Leader) adapterView.getItemAtPosition(i);
-            int type = (leader.id == CacheProfile.uid) ? ProfileFragment.TYPE_MY_PROFILE : ProfileFragment.TYPE_USER_PROFILE;
-            ((NavigationActivity) mFragment.getActivity()).onExtraFragment(
-                    ProfileFragment.newInstance(leader.id, type));
+            mFragment.startActivity(
+                    ContainerActivity.getProfileIntent(
+                            leader.id,
+                            mFragment.getActivity()
+                    )
+            );
 
         }
     };

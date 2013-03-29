@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,7 +23,7 @@ import com.topface.topface.utils.CountersManager;
 public class MenuFragment extends Fragment implements View.OnClickListener {
     private View mRootLayout;
 
-    private Button[] mButtons;
+    private SparseArray<Button> mButtons;
 
     private TextView mTvNotifyLikes;
     private TextView mTvNotifyMutual;
@@ -30,7 +31,6 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     private TextView mTvNotifyVisitors;
 
     private FragmentMenuListener mFragmentMenuListener;
-    private Button mDefaultMenuItem;
     BroadcastReceiver mBroadcastReceiver;
     private ImageViewRemote mMenuAvatar;
     private BroadcastReceiver mProfileUpdateReceiver;
@@ -45,7 +45,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         mProfileUpdateReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if(mMenuAvatar != null) {
+                if (mMenuAvatar != null) {
                     mMenuAvatar.setPhoto(CacheProfile.photo);
                 }
             }
@@ -74,34 +74,35 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         mRootLayout = inflater.inflate(R.layout.fragment_menu, null);
 
 
-        // Buttons
-        final Button btnProfile = (Button) mRootLayout.findViewById(R.id.btnFragmentProfile);
-        btnProfile.setOnClickListener(this);
+        //Автарка в меню
         mMenuAvatar = (ImageViewRemote) mRootLayout.findViewById(R.id.ivMenuAvatar);
         mMenuAvatar.setPhoto(CacheProfile.photo);
+        //При клике на автарку должен происходить клик на кнопку "Профиль"
         mMenuAvatar.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View v) {
-                btnProfile.performClick();
+                mButtons.get(BaseFragment.F_PROFILE).performClick();
             }
         });
 
-        mDefaultMenuItem = (Button) mRootLayout.findViewById(R.id.btnFragmentDating);
+        //Делаем список кнопок
+        mButtons = new SparseArray<Button>();
+        mButtons.put(BaseFragment.F_PROFILE, (Button) mRootLayout.findViewById(R.id.btnFragmentProfile));
+        mButtons.put(BaseFragment.F_DATING, (Button) mRootLayout.findViewById(R.id.btnFragmentDating));
+        mButtons.put(BaseFragment.F_LIKES, (Button) mRootLayout.findViewById(R.id.btnFragmentLikes));
+        mButtons.put(BaseFragment.F_MUTUAL, (Button) mRootLayout.findViewById(R.id.btnFragmentMutual));
+        mButtons.put(BaseFragment.F_DIALOGS, (Button) mRootLayout.findViewById(R.id.btnFragmentDialogs));
+        mButtons.put(BaseFragment.F_TOPS, (Button) mRootLayout.findViewById(R.id.btnFragmentTops));
+        mButtons.put(BaseFragment.F_VISITORS, (Button) mRootLayout.findViewById(R.id.btnFragmentVisitors));
+        mButtons.put(BaseFragment.F_SETTINGS, (Button) mRootLayout.findViewById(R.id.btnFragmentSettings));
 
-        mButtons = new Button[]{
-                btnProfile,
-                mDefaultMenuItem,
-                (Button) mRootLayout.findViewById(R.id.btnFragmentLikes),
-                (Button) mRootLayout.findViewById(R.id.btnFragmentMutual),
-                (Button) mRootLayout.findViewById(R.id.btnFragmentDialogs),
-                (Button) mRootLayout.findViewById(R.id.btnFragmentTops),
-                (Button) mRootLayout.findViewById(R.id.btnFragmentVisitors),
-                (Button) mRootLayout.findViewById(R.id.btnFragmentSettings)
-        };
-
-        for (Button btn : mButtons) {
-            btn.setOnClickListener(this);
+        for (int i = 0; i < mButtons.size(); i++) {
+            int key = mButtons.keyAt(i);
+            Button button = mButtons.get(key);
+            if (button != null) {
+                button.setOnClickListener(this);
+                button.setTag(key);
+            }
         }
 
         // Notifications
@@ -123,20 +124,21 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     }
 
 
-
     @Override
     public void onClick(View view) {
         unselectAllButtons();
 
         view.setSelected(true);
 
-        if (mFragmentMenuListener != null)
-            mFragmentMenuListener.onMenuClick(view.getId());
+        if (mFragmentMenuListener != null) {
+            mFragmentMenuListener.onMenuClick((Integer) view.getTag());
+        }
     }
 
     public void unselectAllButtons() {
-        for (Button btn : mButtons)
-            btn.setSelected(false);
+        for (int i = 0; i < mButtons.size(); i++) {
+            mButtons.get(mButtons.keyAt(i)).setSelected(false);
+        }
     }
 
     public void setOnMenuListener(FragmentMenuListener onFragmentMenuListener) {
@@ -182,13 +184,16 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     }
 
     public void setClickable(boolean clickable) {
-        for (Button btn : mButtons) {
-            btn.setClickable(clickable);
+        for (int i = 0; i < mButtons.size(); i++) {
+            mButtons.get(mButtons.keyAt(i)).setClickable(clickable);
         }
     }
 
-    public void selectDefaultMenu() {
-        mDefaultMenuItem.setSelected(true);
+    public void selectMenu(int fragmentId) {
+        Button selectedItem = mButtons.get(fragmentId);
+        if (selectedItem != null) {
+            selectedItem.setSelected(true);
+        }
     }
 
     public OnClickListener getProfileButtonOnClickListener() {

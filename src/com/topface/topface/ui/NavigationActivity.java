@@ -28,8 +28,11 @@ import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.BaseApiHandler;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
-import com.topface.topface.ui.fragments.*;
+import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.fragments.DatingFragment;
+import com.topface.topface.ui.fragments.FragmentSwitchController;
 import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
+import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.MenuFragment.FragmentMenuListener;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -56,6 +59,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     public static final int RATE_POPUP_TIMEOUT = 86400000; // 1000 * 60 * 60 * 24 * 1 (1 сутки)
     public static final int UPDATE_INTERVAL = 10 * 60 * 1000;
     public static final String URL_SEPARATOR = "::";
+    public static final String CURRENT_FRAGMENT_ID = "NAVIGATION_FRAGMENT";
     private FragmentManager mFragmentManager;
     private MenuFragment mFragmentMenu;
     private FragmentSwitchController mFragmentSwitcher;
@@ -89,7 +93,11 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         initFragmentSwitcher();
 
         if (CacheProfile.isLoaded()) {
-            onInit();
+            int currentFragment = savedInstanceState != null ?
+                    savedInstanceState.getInt(CURRENT_FRAGMENT_ID, BaseFragment.F_DATING) :
+                    BaseFragment.F_DATING;
+
+            onInit(currentFragment);
         } else {
             isNeedAuth = false;
         }
@@ -137,7 +145,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 });
                 adwiredView.setOnStopListener(new OnStopListener() {
                     @Override
-                    public void onStop() {hideFullscreenBanner(bannerContainer);
+                    public void onStop() {
+                        hideFullscreenBanner(bannerContainer);
                     }
                 });
                 adwiredView.setOnStartListener(new OnStartListener() {
@@ -258,19 +267,19 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     @Override
-    public void onInit() {
+    public void onInit(int currentFragment) {
         Offerwalls.init(getApplicationContext());
 
         Intent intent = getIntent();
         isNeedAuth = true;
+        //Получаем id фрагмента, если он открыт
         int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
-        if (id != -1) {
-            mFragmentSwitcher.showFragment(id);
 
-        } else {
-            mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
-            mFragmentMenu.selectDefaultMenu();
-        }
+        currentFragment = id != -1 ? id : currentFragment;
+
+        mFragmentSwitcher.showFragment(currentFragment);
+        mFragmentMenu.selectMenu(currentFragment);
+
         AuthorizationManager.extendAccessToken(NavigationActivity.this);
         checkVersion(CacheProfile.getOptions().max_version);
         actionsAfterRegistration();
@@ -313,12 +322,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
         needAnimate = true;
 
-        //TODO костыль для ChatFragment, после перехода на фрагмент - выпилить
-        if (mDelayedFragment != null) {
-            onExtraFragment(mDelayedFragment);
-            mDelayedFragment = null;
-            mChatInvoke = true;
-        }
         checkExternalLink();
 
         requestBalance();
@@ -434,8 +437,10 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         if (profilePattern.matcher(splittedPath[1]).matches() && splittedPath.length >= 3) {
 
             int profileId = Integer.parseInt(splittedPath[2]);
-            int profileType = profileId == CacheProfile.uid ? ProfileFragment.TYPE_MY_PROFILE : ProfileFragment.TYPE_USER_PROFILE;
-            onExtraFragment(ProfileFragment.newInstance(profileId, profileType));
+            //Открываем профиль
+            startActivity(
+                    ContainerActivity.getProfileIntent(profileId, this)
+            );
         } else if (confirmPattern.matcher(splittedPath[1]).matches()) {
 
             Pattern codePattern = Pattern.compile("[0-9]+-[0-f]+-[0-9]*");
@@ -551,22 +556,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             if (mFragmentSwitcher.getAnimationState() == FragmentSwitchController.EXPAND) {
                 super.onBackPressed();
             } else {
-                if (mFragmentSwitcher.isExtraFrameShown()) {
-                    //TODO костыль для ChatFragment, после перехода на фрагмент - выпилить
-                    //начало костыля--------------
-                    if (mChatInvoke) {
-                        if (mFragmentSwitcher.getCurrentExtraFragment() instanceof ProfileFragment) {
-                            ((ProfileFragment) mFragmentSwitcher.getCurrentExtraFragment()).openChat();
-                            mChatInvoke = false;
-                        }
-                        //конец костыля--------------
-                    } else {
-                        mFragmentSwitcher.closeExtraFragment();
-                    }
-                } else {
-                    mFragmentMenu.refreshNotifications();
-                    mFragmentSwitcher.openMenu();
-                }
+                mFragmentMenu.refreshNotifications();
+                mFragmentSwitcher.openMenu();
             }
         } else {
             super.onBackPressed();
@@ -590,37 +581,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     private FragmentMenuListener mOnFragmentMenuListener = new FragmentMenuListener() {
         @Override
-        public void onMenuClick(int buttonId) {
-            int fragmentId;
-            switch (buttonId) {
-                case R.id.btnFragmentProfile:
-                    fragmentId = BaseFragment.F_PROFILE;
-                    break;
-                case R.id.btnFragmentDating:
-                    fragmentId = BaseFragment.F_DATING;
-                    break;
-                case R.id.btnFragmentLikes:
-                    fragmentId = BaseFragment.F_LIKES;
-                    break;
-                case R.id.btnFragmentMutual:
-                    fragmentId = BaseFragment.F_MUTUAL;
-                    break;
-                case R.id.btnFragmentDialogs:
-                    fragmentId = BaseFragment.F_DIALOGS;
-                    break;
-                case R.id.btnFragmentTops:
-                    fragmentId = BaseFragment.F_TOPS;
-                    break;
-                case R.id.btnFragmentVisitors:
-                    fragmentId = BaseFragment.F_VISITORS;
-                    break;
-                case R.id.btnFragmentSettings:
-                    fragmentId = BaseFragment.F_SETTINGS;
-                    break;
-                default:
-                    fragmentId = BaseFragment.F_PROFILE;
-                    break;
-            }
+        public void onMenuClick(int fragmentId) {
             mFragmentSwitcher.showFragmentWithAnimation(fragmentId);
         }
     };
@@ -667,10 +628,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             }
         }
 
-        @Override
-        public void onExtraFrameOpen() {
-            mFragmentMenu.unselectAllButtons();
-        }
     };
 
 
@@ -781,35 +738,15 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     @Override
-    public void close(Fragment fragment) {
-        super.close(fragment);
-        mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
-        mFragmentMenu.selectDefaultMenu();
-    }
-
-    @Override
     public boolean isTrackable() {
         return false;
     }
-
-    public void onExtraFragment(final Fragment fragment) {
-        mFragmentSwitcher.switchExtraFragment(fragment);
-    }
-
-    //TODO костыль для ChatFragment, после перехода на фрагмент - выпилить
-    private Fragment mDelayedFragment;
-    private boolean mChatInvoke = false;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == ContainerActivity.INTENT_CHAT_FRAGMENT) {
-                if (data != null) {
-                    int user_id = data.getExtras().getInt(ChatFragment.INTENT_USER_ID);
-                    mDelayedFragment = ProfileFragment.newInstance(user_id, ProfileFragment.TYPE_USER_PROFILE);
-                }
-            } else if (requestCode == CitySearchActivity.INTENT_CITY_SEARCH_AFTER_REGISTRATION ||
+            if (requestCode == CitySearchActivity.INTENT_CITY_SEARCH_AFTER_REGISTRATION ||
                     requestCode == CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY) {
                 if (data != null) {
                     Bundle extras = data.getExtras();
@@ -836,5 +773,17 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             }
         }
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        int currentFragmentId = mFragmentSwitcher.getCurrentFragmentId();
+        outState.putInt(
+                CURRENT_FRAGMENT_ID,
+                currentFragmentId == -1 ?
+                        FragmentSwitchController.DEFAULT_FRAGMENT :
+                        currentFragmentId
+        );
     }
 }

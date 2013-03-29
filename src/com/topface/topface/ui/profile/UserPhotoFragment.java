@@ -32,7 +32,7 @@ public class UserPhotoFragment extends BaseFragment {
         mUpdater = new LoadingListAdapter.Updater() {
             @Override
             public void onUpdate() {
-                if(mGridAlbum != null) {
+                if (mGridAlbum != null) {
                     Photos data = ((ProfileGridAdapter) mGridAlbum.getAdapter()).getData();
                     AlbumRequest request = new AlbumRequest(getActivity(), mUser.uid, AlbumRequest.DEFAULT_PHOTOS_LIMIT, data.get(data.size() - 2).getPosition() + 1, AlbumRequest.MODE_ALBUM);
                     request.callback(new ApiHandler() {
@@ -101,12 +101,14 @@ public class UserPhotoFragment extends BaseFragment {
     public void setUserData(User user) {
         mUser = user;
         mPhotoLinks = user.photos;
-        if (mGridAlbum.getAdapter() != null) {
-//            ((UserPhotoGridAdapter)mGridAlbum.getAdapter()).setData(mPhotoLinks);
-        } else {
-            setPhotos(mPhotoLinks);
-            mGridAlbum.setAdapter(mUserPhotoGridAdapter);
-            mGridAlbum.setOnScrollListener(mUserPhotoGridAdapter);
+        if (mGridAlbum != null) {
+            if (mGridAlbum.getAdapter() != null) {
+                ((UserPhotoGridAdapter) mGridAlbum.getAdapter()).setData(mPhotoLinks, true);
+            } else {
+                setPhotos(mPhotoLinks);
+                mGridAlbum.setAdapter(mUserPhotoGridAdapter);
+                mGridAlbum.setOnScrollListener(mUserPhotoGridAdapter);
+            }
         }
     }
 

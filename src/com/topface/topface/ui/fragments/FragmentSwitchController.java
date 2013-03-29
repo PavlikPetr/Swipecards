@@ -33,12 +33,13 @@ public class FragmentSwitchController extends ViewGroup {
     private static final int EXPANDING_PERCENT = 30;
     private BaseFragment mCurrentFragment;
     private FrameLayout mExtraFrame;
-    private Fragment mCurrentExtraFragment;
 
     public static final int EXPAND = 1;
     public static final int EXPAND_FULL = 2;
     public static final int COLLAPSE = 3;
     public static final int COLLAPSE_FULL = 4;
+
+    public static final int DEFAULT_FRAGMENT = BaseFragment.F_DATING;
 
     /*
     *   interface FragmentSwitchListener
@@ -50,12 +51,10 @@ public class FragmentSwitchController extends ViewGroup {
 
         public void afterOpening();
 
-        public void onExtraFrameOpen();
     }
 
     public FragmentSwitchController(Context context, AttributeSet attrs) {
         super(context, attrs);
-//        mCurrentFragmentId = BaseFragment.F_PROFILE;
         Interpolator mPrixingInterpolator = new Interpolator() {
             public float getInterpolation(float t) {
                 return (t - 1) * (t - 1) * (t - 1) * (t - 1) * (t - 1) + 1.0f;
@@ -97,6 +96,7 @@ public class FragmentSwitchController extends ViewGroup {
     public void showFragment(int fragmentId) {
         if (mScroller.isFinished()) {
             if (fragmentId != mCurrentFragmentId) {
+
                 mCurrentFragmentId = fragmentId;
                 switchFragment();
             } else {
@@ -121,52 +121,14 @@ public class FragmentSwitchController extends ViewGroup {
             transaction.commit();
             mCurrentFragment = newFragment;
         }
-        closeExtraFragment();
     }
 
     private String getTagById(int id) {
         return "fragment_switch_controller_" + id;
     }
 
-    public void switchExtraFragment(Fragment fragment) {
-        if (mExtraFrame == null) {
-            mExtraFrame = (FrameLayout) this.findViewById(R.id.fragment_extra_container);
-        }
-        mExtraFrame.setVisibility(View.VISIBLE);
-
-        FragmentTransaction transaction = mFragmentManager.beginTransaction();
-        transaction.replace(R.id.fragment_extra_container, fragment);
-        if (mCurrentExtraFragment != null) {
-            transaction.remove(mCurrentExtraFragment);
-        }
-        transaction.commit();
-        mCurrentExtraFragment = fragment;
-
-        mFragmentSwitchListener.onExtraFrameOpen();
-        mCurrentFragmentId = BaseFragment.F_UNKNOWN;
-    }
-
-    public void closeExtraFragment() {
-        if (mExtraFrame != null) mExtraFrame.setVisibility(View.GONE);
-        if (mCurrentExtraFragment != null) {
-            if (mCurrentExtraFragment instanceof BaseFragment) {
-                ((BaseFragment) mCurrentExtraFragment).clearContent();
-                mFragmentManager.beginTransaction().remove(mCurrentExtraFragment).commit();
-            }
-            mCurrentExtraFragment = null;
-        }
-    }
-
-    public boolean isExtraFrameShown() {
-        return (mExtraFrame.getVisibility() == View.VISIBLE);
-    }
-
     public BaseFragment getCurrentFragment() {
         return mCurrentFragment;
-    }
-
-    public Fragment getCurrentExtraFragment() {
-        return mCurrentExtraFragment;
     }
 
     private BaseFragment getFragmentNewInstanceById(int id) {
@@ -579,5 +541,9 @@ public class FragmentSwitchController extends ViewGroup {
         return x < getContext().getResources().getDimensionPixelSize(R.dimen.bezier_threshold);
     }
 
+
+    public int getCurrentFragmentId() {
+        return mCurrentFragmentId == 0 ? BaseFragment.F_DATING : mCurrentFragmentId;
+    }
 
 }
