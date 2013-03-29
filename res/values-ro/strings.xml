@@ -384,4 +384,10 @@
     <string name="buy_vip_month_other">%1$d luni pana pe %2$.2f %3$@</string>
     <string name="buy_special_offers">Oferte speciale</string>
     <string name="user_does_not_have_gifts">Acest utilizator momentan nu are cadouri, fi primul si vei fi observat</string>
+    <string name="status_is_empty">Dmv nu aveti instalat statutul</string>
+    <string name="you_dont_have_gifts_yet">Dmv, acum nu aveti cadouri</string>
+    <string name="buy_sympathies">Cumpara simpatii</string>
+    <string name="upload_photos">Incarca poze</string>
+    <string name="chat_no_message_title">Incepe conversarea!</string>
+    <string name="chat_no_message_text">Scrie un mesaj sau trimite un cadou si neaparat vei primi raspuns</string>
 </resources>

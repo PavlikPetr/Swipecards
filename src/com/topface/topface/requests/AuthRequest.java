@@ -14,7 +14,7 @@ import java.util.UUID;
 public class AuthRequest extends ApiRequest {
     // Data
     public static final String SERVICE_NAME = "auth";
-    public static final String FALLBACK_CLIENT_VERSION = "unknown_client_version";
+    public static final String FALLBACK_CLIENT_VERSION = "2.3.7.1";
     public static final String FALLBACK_LOCALE = "en_US";
     private String sid; // id пользователя в социальной сети
     private String token; // токен авторизации в соц сети
