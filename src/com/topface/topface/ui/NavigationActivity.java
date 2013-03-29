@@ -49,8 +49,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class NavigationActivity extends BaseFragmentActivity implements View.OnClickListener {
 
@@ -322,8 +320,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
         needAnimate = true;
 
-        checkExternalLink();
-
         //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
         new ExternalLinkExecuter(listener).execute(getIntent());
 
@@ -418,52 +414,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
     }
 
-
-            Uri data = getIntent().getData();
-
-            if (checkHost(data)) {
-
-                String path = data.getPath();
-                String[] splittedPath = path.split("/");
-
-                executeLinkAction(splittedPath);
-            }
-        }
-    }
-
-    private void executeLinkAction(String[] splittedPath) {
-        Pattern profilePattern = Pattern.compile("profile");
-        Pattern confirmPattern = Pattern.compile("confirm.*");
-
-        if (profilePattern.matcher(splittedPath[1]).matches() && splittedPath.length >= 3) {
-
-            int profileId = Integer.parseInt(splittedPath[2]);
-            int profileType = profileId == CacheProfile.uid ? ProfileFragment.TYPE_MY_PROFILE : ProfileFragment.TYPE_USER_PROFILE;
-            onExtraFragment(ProfileFragment.newInstance(profileId, profileType));
-        } else if (confirmPattern.matcher(splittedPath[1]).matches()) {
-
-            Pattern codePattern = Pattern.compile("[0-9]+-[0-f]+-[0-9]*");
-            Matcher matcher = codePattern.matcher(splittedPath[1]);
-            matcher.find();
-
-            String code = matcher.group();
-            AuthToken token = AuthToken.getInstance();
-            if (!token.isEmpty() && token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
-
-                Intent intent = new Intent(this, SettingsContainerActivity.class);
-                intent.putExtra(Static.INTENT_REQUEST_KEY, SettingsContainerActivity.INTENT_ACCOUNT);
-                intent.putExtra(SettingsContainerActivity.CONFIRMATION_CODE, code);
-                startActivity(intent);
-
-            }
-        }
-        getIntent().setData(null);
-    }
-
-    private boolean checkHost(Uri data) {
-        Pattern topfacePattern = Pattern.compile(".*topface\\.ru|.*topface\\.com");
-        return data != null && topfacePattern.matcher(data.getHost()).matches();
-    }
 
     private void checkProfileUpdate() {
         long startTime = Calendar.getInstance().getTimeInMillis();
@@ -789,9 +739,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     ExternalLinkExecuter.OnExternalLinkListener listener = new ExternalLinkExecuter.OnExternalLinkListener() {
         @Override
         public void onProfileLink(int profileID) {
-            int profileType = profileID == CacheProfile.uid ? ProfileFragment.TYPE_MY_PROFILE : ProfileFragment.TYPE_USER_PROFILE;
-            onExtraFragment(ProfileFragment.newInstance(profileID, profileType));
-            getIntent().setData(null);
+            ContainerActivity.getProfileIntent(profileID, NavigationActivity.this);
         }
 
         @Override
