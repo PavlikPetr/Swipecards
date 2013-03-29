@@ -120,7 +120,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             mActionBar.showBackButton(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getActivity().onBackPressed();
+                    if(getActivity() != null) {
+                        getActivity().onBackPressed();
+                    }
                 }
             });
         } else {

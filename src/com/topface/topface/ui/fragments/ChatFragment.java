@@ -675,7 +675,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     private boolean sendMessage() {
         final History fakeItem = new History(IListLoader.ItemType.WAITING);
-        mAdapter.addSentMessage(fakeItem, mListView.getRefreshableView());
+        if(mAdapter != null && mListView != null) {
+            mAdapter.addSentMessage(fakeItem, mListView.getRefreshableView());
+        }
 
         final String text = mEditBox.getText().toString();
         if (text == null || text.length() == 0)
@@ -702,8 +704,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
-                mAdapter.showRetrySendMessage(fakeItem, messageRequest);
+                if(mAdapter != null) {
+                    Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
+                    mAdapter.showRetrySendMessage(fakeItem, messageRequest);
+                }
             }
         }).exec();
         return true;

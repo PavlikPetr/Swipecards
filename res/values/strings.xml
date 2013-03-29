@@ -388,4 +388,5 @@
     <string name="chat_no_message_title">Start to chat!</string>
     <string name="chat_no_message_text">Write a message or send a gift and you will be answered</string>
     <string name="user_baned">User banned</string>
+    <string name="general_choose_city">Choose your city</string>
 </resources>
