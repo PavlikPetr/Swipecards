@@ -7,14 +7,11 @@ import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.SettingsRequest;
-import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.EditMainFormItemsFragment;
 import com.topface.topface.utils.CacheProfile;
@@ -26,12 +23,12 @@ import com.topface.topface.utils.CacheProfile;
 * Time: 14:56
 * To change this template use File | Settings | File Templates.
 */
-public class HeaderStatusFragment extends BaseFragment {
+public class HeaderStatusFragment extends BaseFragment implements View.OnClickListener {
     private static final String ARG_TAG_STATUS = "status";
     private static final String ARG_TAG_PROFILE_TYPE = "profile_type";
 
     private ImageButton mBtnEditStatus;
-    private EditText mStatusView;
+    private TextView mStatusView;
     private String mStatusVal;
     private int mProfileType;
 
@@ -43,47 +40,15 @@ public class HeaderStatusFragment extends BaseFragment {
         //init views
         View root = inflater.inflate(R.layout.fragment_profile_header_status, null);
         mBtnEditStatus = (ImageButton) root.findViewById(R.id.btnEdit);
-        mStatusView = (EditText) root.findViewById(R.id.tvStatus);
+        mStatusView = (TextView) root.findViewById(R.id.tvStatus);
         InputFilter[] filters = new InputFilter[1];
         filters[0] = new InputFilter.LengthFilter(EditMainFormItemsFragment.MAX_STATUS_LENGTH);
-        mStatusView.setFilters(filters);
-        mStatusView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    final String oldStatus = CacheProfile.status;
-                    final String newStatus = mStatusView.getText().toString();
-                    if (!oldStatus.equals(newStatus)) {
-                        SettingsRequest request = new SettingsRequest(getActivity());
-                        request.status = newStatus;
-                        CacheProfile.status = newStatus;
-                        mStatusVal = newStatus;
-                        request.callback(new ApiHandler() {
-                            @Override
-                            public void success(ApiResponse response) {
-                            }
-
-                            @Override
-                            public void fail(int codeError, ApiResponse response) {
-                                CacheProfile.status = oldStatus;
-                                mStatusVal = oldStatus;
-                            }
-                        }).exec();
-                    }
-                }
-            }
-        });
 
         if (mProfileType == ProfileFragment.TYPE_MY_PROFILE) {
             mStatusView.setHint(R.string.status_is_empty);
+            mStatusView.setOnClickListener(this);
             mBtnEditStatus.setVisibility(View.VISIBLE);
-            mBtnEditStatus.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getActivity().getApplicationContext(), EditContainerActivity.class);
-                    startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_STATUS);
-                }
-            });
+            mBtnEditStatus.setOnClickListener(this);
         } else {
             mBtnEditStatus.setVisibility(View.GONE);
         }
@@ -160,7 +125,6 @@ public class HeaderStatusFragment extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
-        mStatusView.clearFocus();
     }
 
     @Override
@@ -169,5 +133,19 @@ public class HeaderStatusFragment extends BaseFragment {
         if (mProfileType == ProfileFragment.TYPE_MY_PROFILE && requestCode == EditContainerActivity.INTENT_EDIT_STATUS) {
             mStatusVal = CacheProfile.status;
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tvStatus:
+            case R.id.btnEdit:
+                Intent intent = new Intent(getActivity().getApplicationContext(), EditContainerActivity.class);
+                startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_STATUS);
+                break;
+            default:
+                break;
+        }
+
     }
 }

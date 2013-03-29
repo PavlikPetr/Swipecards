@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -284,7 +285,12 @@ public class ImageViewRemote extends ImageView {
 
             mRepeatCounter = 0;
             if (mHandler != null) {
-                mHandler.sendEmptyMessage(LOADING_COMPLETE);
+                Message msg = new Message();
+                msg.what = LOADING_COMPLETE;
+                msg.arg1 = loadedImage.getWidth();
+                msg.arg2 = loadedImage.getHeight();
+                mHandler.sendMessage(msg);
+
             }
         }
 

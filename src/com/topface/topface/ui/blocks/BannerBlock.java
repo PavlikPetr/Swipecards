@@ -4,9 +4,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -17,19 +18,18 @@ import android.widget.Toast;
 import com.adfonic.android.AdListener;
 import com.adfonic.android.AdfonicView;
 import com.adfonic.android.api.Request;
+import com.google.ads.Ad;
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.mad.ad.AdStaticView;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Banner;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.VirusLike;
-import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.VirusLikesRequest;
@@ -42,15 +42,20 @@ import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
+import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.*;
+import ru.begun.adlib.Callback;
+import ru.begun.adlib.RequestParam;
 import ru.ideast.adwired.AWView;
 import ru.ideast.adwired.events.OnNoBannerListener;
 import ru.ideast.adwired.events.OnStartListener;
 import ru.ideast.adwired.events.OnStopListener;
 import ru.wapstart.plus1.sdk.Plus1BannerAsker;
+import ru.wapstart.plus1.sdk.Plus1BannerDownloadListener;
 import ru.wapstart.plus1.sdk.Plus1BannerRequest;
 import ru.wapstart.plus1.sdk.Plus1BannerView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -64,6 +69,7 @@ public class BannerBlock {
 
     public static final String ADFONIC_SLOT_ID = "9f83e583-a247-4b78-94a0-bf2beb8775fc";
     public static final int PLUS1_ID = 7227;
+    private static final String BEGUN_KEY = "pad_id:320304962|block_id:320308422";
     public static final String VIRUS_LIKES_BANNER_PARAM = "viruslikes";
 
     private LayoutInflater mInflater;
@@ -111,37 +117,22 @@ public class BannerBlock {
                 mBannerLayout.addView(mBannerView);
                 if (bannerType.equals(Options.BANNER_TOPFACE)) {
                     if (isCorrectResolution() && mBannersMap.containsKey(fragmentId)) {
-                        loadBanner();
+                        loadBanner(mBannersMap.get(mFragment.getClass().toString()));
                     }
                 } else {
-                    showBanner(null);
+                    try {
+                        showBanner(null);
+                    } catch (Exception e) {
+                        Debug.error(e);
+                    }
                 }
-            }
-        }
-    }
-
-    private void removeBanner() {
-        unbindDrawables(mBannerLayout);
-        mBannerView = null;
-    }
-
-    private void unbindDrawables(View view) {
-        if (view != null) {
-            if (view.getBackground() != null) {
-                view.getBackground().setCallback(null);
-            }
-            if (view instanceof ViewGroup) {
-                for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
-                    unbindDrawables(((ViewGroup) view).getChildAt(i));
-                }
-                ((ViewGroup) view).removeAllViews();
             }
         }
     }
 
     private View getBannerView(String bannerType) {
         try {
-            if (bannerType.equals(Options.BANNER_TOPFACE)) {
+            if (bannerType.equals(Options.BANNER_TOPFACE) || bannerType.equals(Options.BANNER_GAG)) {
                 return mInflater.inflate(R.layout.banner_topface, null);
             } else if (bannerType.equals(Options.BANNER_ADMOB)) {
                 return mInflater.inflate(R.layout.banner_admob, null);
@@ -153,6 +144,8 @@ public class BannerBlock {
                 return mInflater.inflate(R.layout.banner_adwired, null);
             } else if (bannerType.equals(Options.BANNER_MADNET)) {
                 return mInflater.inflate(R.layout.banner_madnet, null);
+            } else if (bannerType.equals(Options.BANNER_BEGUN)) {
+                return mInflater.inflate(R.layout.banner_begun, null);
             } else {
                 return null;
             }
@@ -162,194 +155,277 @@ public class BannerBlock {
         }
     }
 
-    private void loadBanner() {
+    private void loadBanner(String bannerPlace) {
         BannerRequest bannerRequest = new BannerRequest(mFragment.getActivity());
-        bannerRequest.place = mBannersMap.get(mFragment.getClass().toString());
-
+        bannerRequest.place = bannerPlace;
         if (mFragment instanceof BaseFragment) {
             ((BaseFragment) mFragment).registerRequest(bannerRequest);
         }
-
         bannerRequest.callback(new BaseApiHandler() {
             @Override
             public void success(ApiResponse response) {
                 final Banner banner = Banner.parse(response);
                 if (mBannerView != null) {
-                    showBanner(banner);
+                    try {
+                        showBanner(banner);
+                    } catch (Exception e) {
+                        Debug.error(e);
+                    }
                 }
             }
         }).exec();
     }
 
-    private void showBanner(final Banner banner) {
+    private void showBanner(final Banner banner) throws Exception {
         if (mBannerView instanceof AdView) {
-            mBannerView.setVisibility(View.VISIBLE);
-            ((AdView) mBannerView).loadAd(new AdRequest());
+            showAdMob();
         } else if (mBannerView instanceof AdfonicView) {
-            Request request = new Request();
-            request.setLanguage(Locale.getDefault().getLanguage());
-            request.setSlotId(ADFONIC_SLOT_ID);
-            request.setRefreshAd(false);
-            ((AdfonicView) mBannerView).loadAd(request);
-            ((AdfonicView) mBannerView).setAdListener(new AdListener() {
-                @Override
-                public void onReceivedAd() {
-                    mBannerView.setVisibility(View.VISIBLE);
-                }
-
-                @Override
-                public void onPresentScreen() {
-                }
-
-                @Override
-                public void onLeaveApplication() {
-                }
-
-                @Override
-                public void onInvalidRequest() {
-                }
-
-                @Override
-                public void onNetworkError() {
-                }
-
-                @Override
-                public void onNoFill() {
-                }
-
-                @Override
-                public void onInternalError() {
-                }
-
-                @Override
-                public void onDismissScreen() {
-                }
-
-                @Override
-                public void onClick() {
-                }
-            });
+            showAdFonic();
         } else if (mBannerView instanceof Plus1BannerView) {
-            mBannerView.setVisibility(View.VISIBLE);
-            mPLus1Asker = new Plus1BannerAsker(new Plus1BannerRequest().setApplicationId(PLUS1_ID),
-                    ((Plus1BannerView) mBannerView).setAutorefreshEnabled(false));
-            mPLus1Asker.setRemoveBannersOnPause(true);
-            mPLus1Asker.setDisabledWebViewCorePausing(true);
+            showWapStart();
         } else if (mBannerView instanceof AWView) {
-            // request onResume
-            ((AWView) mBannerView).setOnStartListener(new OnStartListener() {
-                @Override
-                public void onStart() {
-                    Debug.log("Adwired: Start");
-                }
-            });
-
-            ((AWView) mBannerView).setOnStopListener(new OnStopListener() {
-                @Override
-                public void onStop() {
-                    Debug.log("Adwired: Start");
-                }
-            });
-
-            ((AWView) mBannerView).setOnNoBannerListener(new OnNoBannerListener() {
-                @Override
-                public void onNoBanner() {
-                    Debug.log("Adwired: No banner");
-                }
-            });
+            showAdwired();
         } else if (mBannerView instanceof AdStaticView) {
-            mBannerView.setVisibility(View.VISIBLE);
-            Profile profile = CacheProfile.getProfile();
-            com.mad.ad.AdRequest.Builder requestBuilder = new com.mad.ad.AdRequest.Builder();
-//            requestBuilder.setEducation(com.mad.ad.AdRequest.Education.UNIVERSITY);
-//            requestBuilder.setEthnicity(com.mad.ad.AdRequest.Ethnicity.WHITE);
-            requestBuilder.setGender(profile.sex == Static.BOY ?
-                    com.mad.ad.AdRequest.Gender.MALE : com.mad.ad.AdRequest.Gender.FEMALE);
-            requestBuilder.setGenderInterest(profile.dating.sex == Static.BOY ?
-                    com.mad.ad.AdRequest.GenderInterest.MALE : com.mad.ad.AdRequest.GenderInterest.FEMALE);
-            //requestBuilder.setIncome(com.mad.ad.AdRequest.Income.FROM_15_TO_25);
-            //requestBuilder.setMaritalStatus(com.mad.ad.AdRequest.MaritalStatus.MARRIED);
-
-//            requestBuilder.setGps(location);
-//            requestBuilder.setRegion(region);
-//            requestBuilder.setCity(city);
-//            requestBuilder.setZip(zip);
-//            requestBuilder.setAreaCode(LAC);
-
-//            requestBuilder.setPrimaryCategory("cars");
-//            requestBuilder.setSecodaryCategory("sportcars");
-//            requestBuilder.addKeyword("Ferrari");
-
-            com.mad.ad.AdRequest request = requestBuilder.getRequest();
-            ((AdStaticView) mBannerView).showBanners(request);
+            showMadnet();
+        } else if (mBannerView instanceof ru.begun.adlib.AdView) {
+            showBegun();
         } else if (mBannerView instanceof ImageView) {
-            //Это нужно, что бы сбросить размеры баннера, для правильного расчета размера в ImageLoader
-            ViewGroup.LayoutParams params = mBannerView.getLayoutParams();
-            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-            mBannerView.setLayoutParams(params);
-            //Убираем старый баннер
-            ((ImageView) mBannerView).setImageDrawable(null);
+            if(banner == null) {
+                requestBannerGag();
+            } else {
+                showTopface(banner);
+            }
+        }
+    }
 
-            DefaultImageLoader.getInstance().displayImage(banner.url, (ImageView) mBannerView, new SimpleImageLoadingListener() {
+    private void showBegun() {
+        final ru.begun.adlib.AdView adView = ((ru.begun.adlib.AdView) mBannerView);
+        adView.setOnApiListener(new Callback() {
+            @Override
+            public void init() {
+                ArrayList<RequestParam> al = new ArrayList<RequestParam>();
+                RequestParam rp = new RequestParam();
+                rp.name = "environmentVars";
+                rp.value = BEGUN_KEY;
+                al.add(rp);
+                adView.api("initAd", al);
+            }
 
-                @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    super.onLoadingComplete(imageUri, view, loadedImage);
+            @Override
+            public void callback(String s, String s1) {
+                if (s.equals("AdLoaded")) {
+                    adView.api("startAd");
+                } else if (s.equals("AdClickThru")) {
 
+                } else if (s.equals("AdStopped")) {
+
+                }
+            }
+        });
+        adView.onDebug = App.DEBUG;
+        adView.init();
+    }
+
+    private void showTopface(final Banner banner) {
+        //Это нужно, что бы сбросить размеры баннера, для правильного расчета размера в ImageLoader
+        ViewGroup.LayoutParams params = mBannerView.getLayoutParams();
+        params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        mBannerView.setLayoutParams(params);
+
+        //Убираем старый баннер
+        ((ImageViewRemote) mBannerView).setImageDrawable(null);
+        ((ImageViewRemote) mBannerView).setRemoteSrc(banner.url, new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                if(msg.what == ImageViewRemote.LOADING_COMPLETE) {
                     if (mBannerView != null) {
+                        float imageWidth = msg.arg1;
+                        float imageHeight = msg.arg2;
                         float deviceWidth = Device.getDisplayMetrics(mFragment.getActivity()).widthPixels;
-                        float imageWidth = loadedImage.getWidth();
                         //Если ширина экрана больше, чем у нашего баннера, то пропорционально увеличиваем высоту imageView
                         if (deviceWidth > imageWidth) {
                             ViewGroup.LayoutParams params = mBannerView.getLayoutParams();
-                            params.height = (int) ((deviceWidth / imageWidth) * (float) loadedImage.getHeight());
+                            params.height = (int) ((deviceWidth / imageWidth) * imageHeight);
                             mBannerView.setLayoutParams(params);
                             mBannerView.invalidate();
                         }
                     }
                 }
+            }
+        });
 
-                @Override
-                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                    super.onLoadingFailed(imageUri, view, failReason);
-                    Debug.log("LOAD FAILED::" + failReason.toString());
-                }
-
-            });
-            sendStat(getBannerName(banner.url), "view");
-            mBannerView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = null;
-                    if (banner.action.equals(Banner.ACTION_PAGE)) {
-                        EasyTracker.getTracker().trackEvent("Purchase", "Banner", "", 0L);
-                        intent = new Intent(mFragment.getActivity(), ContainerActivity.class);
-                        if (banner.parameter.equals("VIP")) {
-                            intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
-                        } else {
-                            intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
-                        }
-                    } else if (banner.action.equals(Banner.ACTION_URL)) {
-                        intent = new Intent(Intent.ACTION_VIEW, Uri.parse(banner.parameter));
-                    } else if (banner.action.equals(Banner.ACTION_METHOD)) {
-                        invokeBannerMethod(banner.parameter);
-                    } else if (banner.action.equals(Banner.ACTION_OFFERWALL)) {
-                        if (banner.parameter.equals(Offerwalls.TAPJOY)) {
-                            Offerwalls.startTapjoy();
-                        } else if (banner.parameter.equals(Offerwalls.SPONSORPAY)) {
-                            Offerwalls.startSponsorpay(mFragment.getActivity());
-                        } else {
-                            Offerwalls.startOfferwall(mFragment.getActivity());
-                        }
+        sendStat(getBannerName(banner.url), "view");
+        mBannerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = null;
+                if (banner.action.equals(Banner.ACTION_PAGE)) {
+                    EasyTracker.getTracker().trackEvent("Purchase", "Banner", "", 0L);
+                    intent = new Intent(mFragment.getActivity(), ContainerActivity.class);
+                    if (banner.parameter.equals("VIP")) {
+                        intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                    } else {
+                        intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
                     }
-
-                    sendStat(getBannerName(banner.url), "click");
-                    if (intent != null) {
-                        mFragment.startActivity(intent);
+                } else if (banner.action.equals(Banner.ACTION_URL)) {
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse(banner.parameter));
+                } else if (banner.action.equals(Banner.ACTION_METHOD)) {
+                    invokeBannerMethod(banner.parameter);
+                } else if (banner.action.equals(Banner.ACTION_OFFERWALL)) {
+                    if (banner.parameter.equals(Offerwalls.TAPJOY)) {
+                        Offerwalls.startTapjoy();
+                    } else if (banner.parameter.equals(Offerwalls.SPONSORPAY)) {
+                        Offerwalls.startSponsorpay(mFragment.getActivity());
+                    } else {
+                        Offerwalls.startOfferwall(mFragment.getActivity());
                     }
                 }
-            });
-        }
+
+                sendStat(getBannerName(banner.url), "click");
+                if (intent != null) {
+                    mFragment.startActivity(intent);
+                }
+            }
+        });
+    }
+
+    private void showMadnet() {
+        mBannerView.setVisibility(View.VISIBLE);
+        Profile profile = CacheProfile.getProfile();
+        com.mad.ad.AdRequest.Builder requestBuilder = new com.mad.ad.AdRequest.Builder();
+        requestBuilder.setGender(profile.sex == Static.BOY ?
+                com.mad.ad.AdRequest.Gender.MALE : com.mad.ad.AdRequest.Gender.FEMALE);
+        requestBuilder.setGenderInterest(profile.dating.sex == Static.BOY ?
+                com.mad.ad.AdRequest.GenderInterest.MALE : com.mad.ad.AdRequest.GenderInterest.FEMALE);
+        com.mad.ad.AdRequest request = requestBuilder.getRequest();
+        ((AdStaticView) mBannerView).showBanners(request);
+    }
+
+    private void showAdwired() {
+        // request onResume
+        ((AWView) mBannerView).setOnStartListener(new OnStartListener() {
+            @Override
+            public void onStart() {
+                Debug.log("Adwired: Start");
+            }
+        });
+        ((AWView) mBannerView).setOnStopListener(new OnStopListener() {
+            @Override
+            public void onStop() {
+                Debug.log("Adwired: Stop");
+            }
+        });
+        ((AWView) mBannerView).setOnNoBannerListener(new OnNoBannerListener() {
+            @Override
+            public void onNoBanner() {
+                Debug.log("Adwired: No banner");
+                requestBannerGag();
+            }
+        });
+    }
+
+    private void showWapStart() {
+        mBannerView.setVisibility(View.VISIBLE);
+        mPLus1Asker = new Plus1BannerAsker(new Plus1BannerRequest().setApplicationId(PLUS1_ID),
+                ((Plus1BannerView) mBannerView).setAutorefreshEnabled(false));
+        mPLus1Asker.setRemoveBannersOnPause(true);
+        mPLus1Asker.setDisabledWebViewCorePausing(true);
+        mPLus1Asker.setDownloadListener(new Plus1BannerDownloadListener() {
+            @Override
+            public void onBannerLoaded() {
+
+            }
+
+            @Override
+            public void onBannerLoadFailed(LoadError error) {
+                requestBannerGag();
+            }
+        });
+    }
+
+    private void showAdFonic() {
+        Request request = new Request();
+        request.setLanguage(Locale.getDefault().getLanguage());
+        request.setSlotId(ADFONIC_SLOT_ID);
+        request.setRefreshAd(false);
+        AdfonicView adfonicView = (AdfonicView) mBannerView;
+        adfonicView.loadAd(request);
+        adfonicView.setAdListener(new AdListener() {
+            @Override
+            public void onReceivedAd() {
+                mBannerView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onPresentScreen() {
+            }
+
+            @Override
+            public void onLeaveApplication() {
+            }
+
+            @Override
+            public void onInvalidRequest() {
+            }
+
+            @Override
+            public void onNetworkError() {
+            }
+
+            @Override
+            public void onNoFill() {
+                requestBannerGag();
+            }
+
+            @Override
+            public void onInternalError() {
+            }
+
+            @Override
+            public void onDismissScreen() {
+            }
+
+            @Override
+            public void onClick() {
+            }
+        });
+    }
+
+    private void showAdMob() {
+        mBannerView.setVisibility(View.VISIBLE);
+        AdView adView = (AdView) mBannerView;
+        adView.setAdListener(new com.google.ads.AdListener() {
+            @Override
+            public void onReceiveAd(Ad ad) {
+            }
+
+            @Override
+            public void onFailedToReceiveAd(Ad ad, AdRequest.ErrorCode errorCode) {
+                requestBannerGag();
+            }
+
+            @Override
+            public void onPresentScreen(Ad ad) {
+            }
+
+            @Override
+            public void onDismissScreen(Ad ad) {
+            }
+
+            @Override
+            public void onLeaveApplication(Ad ad) {
+            }
+        });
+        ((AdView) mBannerView).loadAd(new AdRequest());
+    }
+
+    // Не работает для MADNET, BEGUN: нет событий, чтобы "подвеситься"
+    private void requestBannerGag() {
+        removeBanner();
+        mBannerView = getBannerView(Options.BANNER_TOPFACE);
+        mBannerLayout.addView(mBannerView);
+        loadBanner(Options.BANNER_GAG);
     }
 
     private void invokeBannerMethod(String param) {
@@ -378,7 +454,7 @@ public class BannerBlock {
                             @Override
                             public void onComplete(Bundle values) {
                                 super.onComplete(values);
-                                loadBanner();
+                                loadBanner(mBannersMap.get(mFragment.getClass().toString()));
                             }
                         }
                 );
@@ -433,12 +509,42 @@ public class BannerBlock {
         return (name == null || name.length() < 1) ? bannerUrl : name;
     }
 
+    private void removeBanner() {
+        try {
+            unbindDrawables(mBannerLayout);
+            mBannerLayout.removeView(mBannerView);
+        } catch (Exception ex) {
+            Debug.error(ex);
+        }
+        mBannerView = null;
+    }
+
+    private void unbindDrawables(View view) {
+        if (view != null) {
+            if (view.getBackground() != null) {
+                view.getBackground().setCallback(null);
+            }
+            if (view instanceof ViewGroup) {
+                for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                    unbindDrawables(((ViewGroup) view).getChildAt(i));
+                }
+                ((ViewGroup) view).removeAllViews();
+            }
+        }
+    }
+
     public void onCreate() {
         initBanner();
-        if (mBannerView != null && mBannerView instanceof AdfonicView) mBannerView.invalidate();
-        if (mBannerView != null && mBannerView instanceof AWView) {
-            ((AWView) mBannerView).request(mAdwiredMap.get(mFragment.getClass().toString()));
+        if (mBannerView != null) {
+            if (mBannerView instanceof AdfonicView) {
+                mBannerView.invalidate();
+            } else if (mBannerView instanceof AWView) {
+                ((AWView) mBannerView).request(mAdwiredMap.get(mFragment.getClass().toString()));
+            } else if (mBannerView instanceof ru.begun.adlib.AdView) {
+                ((ru.begun.adlib.AdView)mBannerView).api("resumeAd");
+            }
         }
+
         if (mPLus1Asker != null) mPLus1Asker.onResume();
     }
 
