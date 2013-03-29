@@ -46,8 +46,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class NavigationActivity extends BaseFragmentActivity implements View.OnClickListener {
 
@@ -312,10 +310,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
         }
         needAnimate = true;
-        Intent intent = getIntent();
-        if(intent != null) {
-            mFragmentSwitcher.showFragment(intent.getIntExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_DATING));
-        }
         //TODO костыль для ChatFragment, после перехода на фрагмент - выпилить
         if (mDelayedFragment != null) {
             onExtraFragment(mDelayedFragment);

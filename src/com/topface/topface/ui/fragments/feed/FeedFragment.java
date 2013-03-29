@@ -77,14 +77,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         View view = inflater.inflate(getLayout(), null);
         mContainer = (RelativeLayout) view.findViewById(R.id.feedContainer);
         initNavigationBar(view);
-
-
         mLockView = (LockerView) view.findViewById(R.id.llvFeedLoading);
         mLockView.setVisibility(View.GONE);
-
         init();
-
-
         initBackground(view);
         initFilter(view);
         initListView(view);
@@ -383,7 +378,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
             ((NavigationActivity) activity).onExtraFragment(fragment);
         }
-
     }
 
     protected void updateData(final boolean isPushUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {

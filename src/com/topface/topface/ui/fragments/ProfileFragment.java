@@ -333,6 +333,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 mUserProfile = data;
                 if (mUserProfile == null) {
                     showRetryBtn();
+                } else if (data.banned) {
+                    showRetryBtnForBanned();
                 } else {
                     mRateController.setOnRateControllerListener(mRateControllerListener);
                     //set info into views for user
@@ -362,6 +364,15 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 showRetryBtn();
             }
         }).exec();
+    }
+
+    private void showRetryBtnForBanned() {
+        if (mRetryBtn != null && isAdded()) {
+            mLoaderView.setVisibility(View.GONE);
+            mLockScreen.setVisibility(View.VISIBLE);
+            mRetryBtn.setErrorMsg(getString(R.string.user_baned));
+            mRetryBtn.showOnlyMessage(true);
+        }
     }
 
     private void showRetryBtn() {
@@ -693,6 +704,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         void bindFragment(Fragment fragment);
 
         Profile getProfile();
+
         int getProfileType();
     }
 }
