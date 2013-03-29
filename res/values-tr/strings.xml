@@ -381,4 +381,10 @@
     <string name="buy_vip_month_other">%1$d aylık %2$.2f %3$@</string>
     <string name="buy_special_offers">Özel fırsatlar</string>
     <string name="user_does_not_have_gifts">Bu kullanıcının hediyeleri henüz yok, birinci olun ve sizi fark edecekler</string>
+    <string name="status_is_empty">Sizin ifade mesajınız boştur</string>
+    <string name="you_dont_have_gifts_yet">Henüz hediyeniz yoktur</string>
+    <string name="buy_sympathies">Sempati satın almak</string>
+    <string name="upload_photos">Fotoğraflarınızı yükleyin</string>
+    <string name="chat_no_message_title">Sohbete başlayın!</string>
+    <string name="chat_no_message_text">Mesaj yazın veya hediye gönderin ve size muhakkak cevap yazılacak</string>
 </resources>
