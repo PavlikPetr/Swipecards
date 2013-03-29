@@ -27,7 +27,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     public static final String INTENT_PREV_ENTITY = "prev_entity";
     public static final String AUTH_TAG = "AUTH";
 
-    private boolean needToUnregisterReceiver = true;
+    private boolean afterOnSavedInstanceState = false;
     protected boolean needOpenDialog = true;
 
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
@@ -66,8 +66,10 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             }
         };
 
-        needToUnregisterReceiver = true;
-        registerReceiver(mReauthReceiver, new IntentFilter(ReAuthReceiver.REAUTH_INTENT));
+        if(!afterOnSavedInstanceState) {
+            afterOnSavedInstanceState = true;
+            registerReceiver(mReauthReceiver, new IntentFilter(ReAuthReceiver.REAUTH_INTENT));
+        }
     }
 
     public void startAuth() {
@@ -92,9 +94,9 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (needToUnregisterReceiver) {
+        if (!afterOnSavedInstanceState) {
             unregisterReceiver(mReauthReceiver);
-            needToUnregisterReceiver = false;
+            afterOnSavedInstanceState = true;
         }
     }
 
@@ -102,9 +104,9 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     protected void onPause() {
         super.onPause();
         removeAllRequests();
-        if (needToUnregisterReceiver) {
+        if (!afterOnSavedInstanceState) {
             unregisterReceiver(mReauthReceiver);
-            needToUnregisterReceiver = false;
+            afterOnSavedInstanceState = true;
         }
     }
 
