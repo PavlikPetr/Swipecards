@@ -177,13 +177,15 @@ public class AuthFragment extends BaseFragment {
 
 
     private void hideSoftKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (mLogin != null) {
-            imm.hideSoftInputFromWindow(mLogin.getWindowToken(), 0);
-        }
+        if(getActivity() != null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (mLogin != null) {
+                imm.hideSoftInputFromWindow(mLogin.getWindowToken(), 0);
+            }
 
-        if (mPassword != null) {
-            imm.hideSoftInputFromWindow(mPassword.getWindowToken(), 0);
+            if (mPassword != null) {
+                imm.hideSoftInputFromWindow(mPassword.getWindowToken(), 0);
+            }
         }
     }
 

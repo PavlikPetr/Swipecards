@@ -53,11 +53,15 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
 
     @Override
     public int getCount() {
+
         return mData != null ? mData.size() : 0;
     }
 
     @Override
     public T getItem(int i) {
+        if(mData == null) {
+            return null;
+        }
         return mData.hasItem(i) ? mData.get(i) : null;
     }
 
