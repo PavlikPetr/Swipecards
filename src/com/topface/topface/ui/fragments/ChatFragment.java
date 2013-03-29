@@ -44,7 +44,7 @@ import java.util.TimerTask;
 
 public class ChatFragment extends BaseFragment implements View.OnClickListener, LocationListener {
 
-    private static final int LIMIT = 50;
+    public static final int LIMIT = 50;
 
     public static final String FRIEND_FEED_USER = "user_profile";
     public static final String ADAPTER_DATA = "adapter";
@@ -198,7 +198,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     if (list != null) {
                         for (History item : list) {
                             if (item != null) {
-                                mHistoryData.addAll(list);
+                                mHistoryData.add(item);
                             }
                         }
                     }

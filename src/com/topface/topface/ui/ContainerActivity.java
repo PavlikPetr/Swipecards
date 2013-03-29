@@ -76,7 +76,6 @@ public class ContainerActivity extends BaseFragmentActivity {
         switch (id) {
             case INTENT_BUY_VIP_FRAGMENT:
                 fragment = VipBuyFragment.newInstance(true);
-
                 break;
             case INTENT_BUYING_FRAGMENT:
                 Bundle extras = getIntent().getExtras();

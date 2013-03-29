@@ -268,7 +268,6 @@
 
     <ImageView
             android:id="@+id/headerShadow"
-            android:visibility="gone"
             style="@style/HeaderShadow"/>
 
 </RelativeLayout>
