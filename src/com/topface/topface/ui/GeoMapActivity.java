@@ -3,6 +3,7 @@ package com.topface.topface.ui;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Location;
@@ -75,7 +76,6 @@ public class GeoMapActivity extends TrackedMapActivity implements LocationListen
             Debug.error("MapActivity error!", e);
             finish();
         }
-
 
         mGeoLocationManager = new GeoLocationManager(getApplicationContext());
 
@@ -187,9 +187,15 @@ public class GeoMapActivity extends TrackedMapActivity implements LocationListen
         switch (id) {
             case DIALOG_LOCATION_PROGRESS_ID:
                 mProgressDialog = new ProgressDialog(this);
-                mProgressDialog.setCancelable(false);
+                mProgressDialog.setCancelable(true);
                 mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 mProgressDialog.setMessage(this.getText(R.string.map_location_progress));
+                mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        mGeoLocationManager.removeLocationListener(GeoMapActivity.this);
+                    }
+                });
                 return mProgressDialog;
             default:
                 return super.onCreateDialog(id);
@@ -254,8 +260,9 @@ public class GeoMapActivity extends TrackedMapActivity implements LocationListen
                 if (constraint != null) {
                     addressList = mGeoLocationManager.getSuggestionAddresses((String) constraint, 5);
                 }
-                if (addressList == null)
+                if (addressList == null) {
                     addressList = new ArrayList<Address>();
+                }
 
                 //TODO delete empty addresses
                 ArrayList<Address> emptyAddresses = new ArrayList<Address>();

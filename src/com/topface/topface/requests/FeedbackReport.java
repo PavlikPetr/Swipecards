@@ -4,7 +4,7 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class FeedbackReport extends AbstractApiRequest {
+public class FeedbackReport extends ApiRequest {
 
     public static final String service = "clientFeedback";
 
@@ -23,7 +23,7 @@ public class FeedbackReport extends AbstractApiRequest {
                 .put("subject", subject)
                 .put("message", text)
                 .put("extra", extra)
-                .put("email",email);
+                .put("email", email);
     }
 
     @Override

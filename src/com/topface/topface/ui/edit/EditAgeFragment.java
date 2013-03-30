@@ -7,11 +7,11 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.ui.views.RangeSeekBar;
+import com.topface.topface.utils.ActionBar;
 
 public class EditAgeFragment extends AbstractEditFragment {
     private int age_start;
@@ -45,19 +45,20 @@ public class EditAgeFragment extends AbstractEditFragment {
             baseSexString = getString(R.string.age_filter_man);
         }
 
-        ((TextView) getActivity().findViewById(R.id.tvNavigationTitle)).setText(R.string.filter_age);
-
-        getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
-        mBackButton = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
-        mBackButton.setVisibility(View.VISIBLE);
-        mBackButton.setText(R.string.general_edit_button);
-        mBackButton.setOnClickListener(new View.OnClickListener() {
+        ActionBar actionBar = getActionBar(view);
+        actionBar.setTitleText(getString(R.string.filter_age));
+        actionBar.showBackButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = getActivity().getIntent();
+                intent.putExtra(EditContainerActivity.INTENT_AGE_START, age_start);
+                intent.putExtra(EditContainerActivity.INTENT_AGE_END, age_end);
+                getActivity().setResult(Activity.RESULT_OK, intent);
                 getActivity().finish();
             }
         });
 
+        mRightPrsBar = actionBar.getRightProgressBar();
 
         final TextView tv = (TextView) view.findViewById(R.id.apValue);
         tv.setText(makeString(age_start, age_end));
@@ -76,20 +77,6 @@ public class EditAgeFragment extends AbstractEditFragment {
         });
         ((LinearLayout) view.findViewById(R.id.apContainer)).addView(rsb);
 
-        mSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
-        mSaveButton.setVisibility(View.VISIBLE);
-        mSaveButton.setText(R.string.general_save_button);
-        mSaveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = getActivity().getIntent();
-                intent.putExtra(EditContainerActivity.INTENT_AGE_START, age_start);
-                intent.putExtra(EditContainerActivity.INTENT_AGE_END, age_end);
-
-                getActivity().setResult(Activity.RESULT_OK, intent);
-                getActivity().finish();
-            }
-        });
 
         return view;
     }

@@ -10,10 +10,12 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.QuestionaryRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
@@ -22,6 +24,9 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 
     private static int mTitleId;
     private static int mDataId;
+    private static final String ARG_TAG_TITLE_ID = "title_id";
+    private static final String ARG_TAG_DATA_ID = "data_id";
+    private static final String ARG_TAG_DATA = "data";
     private String mData;
     private FormInfo mFormInfo;
     private static int mSeletedDataId;
@@ -30,38 +35,35 @@ public class EditFormItemsFragment extends AbstractEditFragment {
     private ListView mListView;
     private FormCheckingDataAdapter mAdapter;
 
-    public EditFormItemsFragment() {
-        super();
-    }
-
-    public EditFormItemsFragment(int titleId, int dataId, String data) {
-        mTitleId = titleId;
-        mDataId = dataId;
-        mSeletedDataId = mDataId;
-        mData = data;
-        mProfile = CacheProfile.getProfile();
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (getArguments() != null) {
+            mTitleId = getArguments().getInt(ARG_TAG_TITLE_ID);
+            mDataId = getArguments().getInt(ARG_TAG_DATA_ID);
+            mSeletedDataId = mDataId;
+            mData = getArguments().getString(ARG_TAG_DATA);
+        } else {
+            mTitleId = FormItem.NO_RESOURCE_ID;
+            mDataId = FormItem.NO_RESOURCE_ID;
+            mSeletedDataId = mDataId;
+            mData = Static.EMPTY;
+            mProfile = CacheProfile.getProfile();
+        }
+
+        mProfile = CacheProfile.getProfile();
+
         mFormInfo = new FormInfo(getActivity(), mProfile);
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_edit_with_listview, container,
                 false);
 
         // Navigation bar
-        ((TextView) getActivity().findViewById(R.id.tvNavigationTitle)).setText(R.string.edit_title);
-        TextView subTitle = (TextView) getActivity().findViewById(R.id.tvNavigationSubtitle);
-        subTitle.setVisibility(View.VISIBLE);
-
+        ActionBar actionBar = getActionBar(root);
+        actionBar.setTitleText(getString(R.string.edit_title));
         String formItemTitle = mFormInfo.getFormTitle(mTitleId);
-        subTitle.setText(formItemTitle);
+        actionBar.setSubTitleText(formItemTitle);
 
-        getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
-        mBackButton = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
-        mBackButton.setVisibility(View.VISIBLE);
-        mBackButton.setText(R.string.general_edit_button);
-        mBackButton.setOnClickListener(new OnClickListener() {
+        actionBar.showBackButton(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -69,17 +71,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
             }
         });
 
-//        mSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
-//        mSaveButton.setText(getResources().getString(R.string.navigation_save));
-//        mSaveButton.setOnClickListener(new OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                saveChanges();
-//            }
-//        });
-
-        mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
+        mRightPrsBar = actionBar.getRightProgressBar();
 
         // List
         mListView = (ListView) root.findViewById(R.id.lvList);
@@ -256,5 +248,17 @@ public class EditFormItemsFragment extends AbstractEditFragment {
     @Override
     protected void unlockUi() {
         mListView.setEnabled(true);
+    }
+
+    public static EditFormItemsFragment newInstance(int titleId, int dataId, String data) {
+        EditFormItemsFragment fragment = new EditFormItemsFragment();
+
+        Bundle args = new Bundle();
+        args.putInt(ARG_TAG_TITLE_ID, titleId);
+        args.putInt(ARG_TAG_DATA_ID, dataId);
+        args.putString(ARG_TAG_DATA, data);
+        fragment.setArguments(args);
+
+        return fragment;
     }
 }

@@ -1,7 +1,5 @@
 package com.topface.topface.utils;
 
-import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -12,26 +10,26 @@ import android.graphics.Bitmap.Config;
 import android.graphics.PorterDuff.Mode;
 import android.net.Uri;
 import android.os.Build;
-import android.text.format.DateFormat;
 import android.view.Display;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Toast;
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
-import com.topface.topface.Data;
 import com.topface.topface.R;
 import com.topface.topface.requests.AuthRequest;
-import com.topface.topface.ui.NavigationActivity;
 
 import java.util.Calendar;
 import java.util.List;
 import java.util.regex.Pattern;
 
 public class Utils {
-    public static final long WEEK = 604800L;
-    public static final long DAY = 86400L;
+    public static final long WEEK = 604800000;
+    public static final long DAY = 86400000;
 
     private static PluralResources mPluralResources;
+    private static String mClientVersion;
 
     public static int unixtime() {
         return (int) (System.currentTimeMillis() / 1000L);
@@ -62,6 +60,7 @@ public class Utils {
     public static Bitmap clipAndScaleBitmap(Bitmap rawBitmap, int dstWidth, int dstHeight) {
         if (rawBitmap == null || rawBitmap.getWidth() <= 0 || rawBitmap.getHeight() <= 0 || dstWidth <= 0 || dstHeight <= 0)
             return null;
+
         Bitmap clippedBitmap = null;
         try {
             // Исходный размер загруженного изображения
@@ -87,14 +86,15 @@ public class Utils {
             Bitmap scaledBitmap = Bitmap.createBitmap(rawBitmap, 0, 0, srcWidth, srcHeight, matrix, true);
 
             // вырезаем необходимый размер
-
             if (LAND) {
                 // у горизонтальной, вырезаем по центру
                 int offset_x = (scaledBitmap.getWidth() - dstWidth) / 2;
                 clippedBitmap = Bitmap.createBitmap(scaledBitmap, offset_x, 0, dstWidth, dstHeight, null, false);
-            } else
+            } else {
                 // у вертикальной режим с верху
                 clippedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, dstWidth, dstHeight, null, false);
+            }
+
         } catch (OutOfMemoryError e) {
             Debug.error("ClipANdScaleImage:: " + e.toString());
         }
@@ -109,8 +109,9 @@ public class Utils {
         Bitmap output = Bitmap.createBitmap(width, height, Config.ARGB_8888);
         Bitmap clippedBitmap = clipAndScaleBitmap(bitmap, width, height);
 
-        if (clippedBitmap == null)
+        if (clippedBitmap == null) {
             return null;
+        }
 
         Canvas canvas = new Canvas(output);
 
@@ -120,11 +121,9 @@ public class Utils {
         paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
         canvas.drawBitmap(clippedBitmap, 0, 0, paint);
 
-        return output;
-    }
+        clippedBitmap.recycle();
 
-    public static Bitmap getRoundedBitmap(Bitmap bitmap) {
-        return getRoundedBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight());
+        return output;
     }
 
     public static Bitmap getRoundedBitmap(Bitmap bitmap, int dstWidth, int dstHeight) {
@@ -168,8 +167,13 @@ public class Utils {
         paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
         canvas.drawBitmap(clippedBitmap, rect, rect, paint);
 
-        //noinspection UnusedAssignment
-        bitmap = null;
+        if (!bitmap.isRecycled()) {
+            bitmap.recycle();
+        } else {
+            Debug.error("Bitmap is already recycled");
+        }
+
+        clippedBitmap.recycle();
 
         return output;
     }
@@ -222,14 +226,19 @@ public class Utils {
 
         if (multWidth != width)
             scaledBitmap = Bitmap.createScaledBitmap(output, width, height, true);
-        else
+        else {
             scaledBitmap = output;
+        }
 
-        //noinspection UnusedAssignment
-        output = bitmap = null;
+        if (!bitmap.isRecycled()) {
+            bitmap.recycle();
+        } else {
+            Debug.error("Bitmap is already recycled");
+        }
 
         return scaledBitmap;
     }
+
 
     public static String formatTime(Context context, long time) {
         String text;
@@ -242,9 +251,9 @@ public class Utils {
         int currentYear = cal2.get(Calendar.YEAR);
         cal2.set(currentYear, Calendar.JANUARY, 1);
 
-        if (time > Data.midnight) {
-            text = (String) DateFormat.format("HH:mm", time);
-        } else if (time > Data.midnight - day * 5) {
+        if (time > DateUtils.midnight) {
+            text = DateUtils.mDateFormatHours.format(time);
+        } else if (time > DateUtils.midnight - day * 5) {
             text = formatDayOfWeek(context, cal.get(Calendar.DAY_OF_WEEK));
         } else if (time > cal2.getTimeInMillis()) {
             text = cal.get(Calendar.DAY_OF_MONTH) + " " + formatMonth(context, cal.get(Calendar.MONTH));
@@ -253,10 +262,6 @@ public class Utils {
         }
 
         return text;
-    }
-
-    public static String formatMinute(Context context, long minutes) {
-        return Utils.getQuantityString(R.plurals.time_minute, (int) minutes, (int) minutes);
     }
 
     public static String formatDayOfWeek(Context context, int dayOfWeek) {
@@ -330,15 +335,6 @@ public class Utils {
         return context.getString(resurseId);
     }
 
-    public static String formatHour(long hours) {
-        return Utils.getQuantityString(R.plurals.time_hour, (int) hours, (int) hours);
-    }
-
-
-    public static String formatMinute(long minutes) {
-        return Utils.getQuantityString(R.plurals.time_minute, (int) minutes, (int) minutes);
-    }
-
     public static String formatPhotoQuantity(int quantity) {
         return Utils.getQuantityString(R.plurals.photo, quantity, (int) quantity);
     }
@@ -360,7 +356,7 @@ public class Utils {
         if (context != null) {
             Toast.makeText(
                     context,
-                    context.getString(R.string.general_data_error),
+                    R.string.general_data_error,
                     Toast.LENGTH_SHORT
             ).show();
         }
@@ -386,22 +382,6 @@ public class Utils {
         List<ResolveInfo> list =
                 packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
         return list.size() > 0;
-    }
-
-    public static boolean isThereNavigationActivity(Activity activity) {
-        ActivityManager mngr = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
-        if (taskList != null) {
-            if (taskList.size() > 1) {
-                if (
-                        taskList.get(0).baseActivity.getClassName().equals(NavigationActivity.class.getName())
-                                || taskList.get(1).topActivity.getClassName().equals(NavigationActivity.class.getName())
-                        ) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     /**
@@ -452,7 +432,7 @@ public class Utils {
             type = info.metaData.getString(
                     context.getString(R.string.build_type_key)
             );
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (Exception e) {
             Debug.error("BuildType error", e);
             type = context.getString(R.string.build_default);
         }
@@ -460,15 +440,41 @@ public class Utils {
         return type;
     }
 
-    public static String getClientVersion(Context context) {
-        String version;
-        context = context != null ? context : App.getContext();
-        try {
-            version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
-        } catch (Exception e) {
-            Debug.error(e);
-            version = AuthRequest.FALLBACK_CLIENT_VERSION;
+    public static String getClientVersion() {
+        if (mClientVersion == null) {
+            try {
+                Context context = App.getContext();
+                mClientVersion = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+            } catch (Exception e) {
+                Debug.error(e);
+                mClientVersion = AuthRequest.FALLBACK_CLIENT_VERSION;
+            }
         }
-        return version;
+        return mClientVersion;
+    }
+
+    public static String getClientDeviceName() {
+        return Build.MANUFACTURER + " " + Build.MODEL + " " + Build.PRODUCT;
+
+    }
+
+    public static String getClientOsVersion() {
+        return "Android " + Build.VERSION.RELEASE + "; Build/" + Build.ID;
+    }
+
+    public static void hideSoftKeyboard(Context context, EditText... edTexts) {
+        if (context != null) {
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            for (EditText edText : edTexts) {
+                if (edText != null) {
+                    imm.hideSoftInputFromWindow(edText.getWindowToken(), 0);
+                }
+            }
+        }
+    }
+
+    public static void showSoftKeyboard(Context context, EditText editText) {
+        InputMethodManager keyboard = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        keyboard.showSoftInput(editText, 0);
     }
 }

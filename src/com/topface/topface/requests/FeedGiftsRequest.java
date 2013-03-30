@@ -4,7 +4,7 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class FeedGiftsRequest extends AbstractApiRequest {
+public class FeedGiftsRequest extends ApiRequest {
     // Data
     public static final String service = "feedGifts";
     public int limit; // максимальный размер выбираемых подарков

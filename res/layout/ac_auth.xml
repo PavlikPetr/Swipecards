@@ -1,16 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="@drawable/auth_bg"
-                android:id="@+id/authContainer">
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/authContainer"
+        android:background="@drawable/auth_bg"
+        >
 
-    <ImageView
+    <!--ImageView
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/auth_bg_spot"
-            />
+            /-->
+
+    <RelativeLayout
+            android:id="@+id/redAlert"
+            android:background="@drawable/background_alert_plate"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:visibility="gone"
+            android:padding="10dp"
+              >
+        <TextView
+                android:id="@+id/redAlertTextView"
+                android:visibility="gone"
+                style="@style/RedAlertTextView"
+                android:text="@string/error_login_password"/>
+        <TextView
+            android:id="@+id/redAlertButton"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/redAlertTextView"
+            android:background="@drawable/btn_create_acc_selector"
+            android:layout_margin="5dp"
+            android:padding="5dp"
+            android:text="@string/create_account"/>
+
+    </RelativeLayout>
+
     <ProgressBar
             android:id="@+id/prsAuthLoading"
             android:layout_width="wrap_content"
@@ -19,41 +49,16 @@
             android:visibility="gone"
             style="@android:style/Widget.ProgressBar.Small"/>
 
+    <ViewFlipper
+            android:id="@+id/vfAuthViewFlipper"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:inAnimation="@android:anim/fade_in"
+            android:outAnimation="@android:anim/fade_out">
 
-    <LinearLayout
-            android:id="@+id/ivAuthGroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="vertical">
+        <include layout="@layout/layout_main_auth"/>
 
-        <Button
-                android:id="@+id/btnAuthVK"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/auth_vk_selector"
-                android:text="@string/auth_btn_vk"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"/>
+        <include layout="@layout/layout_signin"/>
 
-        <Button
-                android:id="@+id/btnAuthFB"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:background="@drawable/auth_fb_selector"
-                android:text="@string/auth_btn_fb"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"/>
-    </LinearLayout>
-
-    <ImageView
-            android:id="@+id/ivAuthLogo"
-            android:layout_above="@id/ivAuthGroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/auth_logo"/>
-
+    </ViewFlipper>
 </RelativeLayout>

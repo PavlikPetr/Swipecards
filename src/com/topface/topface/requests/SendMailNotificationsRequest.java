@@ -4,7 +4,7 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class SendMailNotificationsRequest extends AbstractApiRequest {
+public class SendMailNotificationsRequest extends ApiRequest {
 
     private static final String SERVICE_NAME = "notifications";
 

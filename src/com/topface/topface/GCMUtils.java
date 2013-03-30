@@ -3,7 +3,6 @@ package com.topface.topface;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -13,13 +12,14 @@ import android.text.TextUtils;
 import android.widget.ListView;
 import com.google.android.gcm.GCMRegistrar;
 import com.topface.topface.data.Photo;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.RegistrationTokenRequest;
-import com.topface.topface.ui.ChatActivity;
+import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
@@ -88,7 +88,7 @@ public class GCMUtils {
      *
      * @param context контекст приложения
      */
-    public static void generateFakeNotification(Context context) {
+    /*public static void generateFakeNotification(Context context) {
         Intent intent = new Intent();
         intent.putExtra("text", "asd");
         intent.putExtra("title", "da");
@@ -102,8 +102,7 @@ public class GCMUtils {
 //            e.printStackTrace();
 //        }
         showNotification(intent, context);
-    }
-
+    }*/
     public static void showNotification(final Intent extra, Context context) {
         try {
             final String data = extra.getStringExtra("text");
@@ -116,19 +115,18 @@ public class GCMUtils {
                 String title = getTitle(context, extra.getStringExtra("title"));
                 Intent intent = getIntentByType(context, type, user);
 
-
                 if (intent != null) {
                     intent.putExtra("C2DM", true);
                     final TopfaceNotificationManager notificationManager = TopfaceNotificationManager.getInstance(context);
-                    if (!Data.isSSID()) {
+                    if (!Ssid.isLoaded()) {
                         if (type == GCM_TYPE_UPDATE || type == GCM_TYPE_NOTIFICATION) {
                             notificationManager.showNotification(
                                     title,
                                     data,
                                     null,
                                     getUnread(extra),
-                                    intent
-                            );
+                                    intent,
+                                    false);
                         }
                     } else if (user != null && !TextUtils.isEmpty(user.photoUrl)) {
                         showNotificationWithIcon(
@@ -146,8 +144,8 @@ public class GCMUtils {
                                 data,
                                 null,
                                 getUnread(extra),
-                                intent
-                        );
+                                intent,
+                                false);
                     }
                 }
             }
@@ -156,8 +154,8 @@ public class GCMUtils {
         }
     }
 
-    private static TempImageViewRemote getTempImageViewRemote(Context context) {
-        final TempImageViewRemote fakeImageView = new TempImageViewRemote(context);
+    private static TopfaceNotificationManager.TempImageViewRemote getTempImageViewRemote(Context context) {
+        final TopfaceNotificationManager.TempImageViewRemote fakeImageView = new TopfaceNotificationManager.TempImageViewRemote(context);
 
         fakeImageView.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.MATCH_PARENT));
         return fakeImageView;
@@ -202,13 +200,13 @@ public class GCMUtils {
         return title;
     }
 
-    private static void showNotificationWithIcon(final int unread, final String data, final User user, final TopfaceNotificationManager notificationManager, final TempImageViewRemote fakeImageView, final Intent newI, final String finalTitle) {
+    private static void showNotificationWithIcon(final int unread, final String data, final User user, final TopfaceNotificationManager notificationManager, final TopfaceNotificationManager.TempImageViewRemote fakeImageView, final Intent newI, final String finalTitle) {
         fakeImageView.setRemoteSrc(user.photoUrl, new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 if (user.id != lastUserId) {
-                    notificationManager.showNotification(finalTitle, data, fakeImageView.getImageBitmap(), unread, newI);
+                    notificationManager.showNotification(finalTitle, data, fakeImageView.getImageBitmap(), unread, newI, false);
                 }
             }
         });
@@ -232,13 +230,14 @@ public class GCMUtils {
                 if (showMessage) {
                     if (user.id != 0) {
                         lastNotificationType = GCM_TYPE_MESSAGE;
-                        i = new Intent(context, ChatActivity.class);
-
-                        i.putExtra(ChatActivity.INTENT_USER_ID, user.id);
-                        i.putExtra(ChatActivity.INTENT_USER_NAME, user.name);
-                        i.putExtra(ChatActivity.INTENT_USER_AVATAR, user.photoUrl);
-                        i.putExtra(ChatActivity.INTENT_USER_AGE, user.age);
-                        i.putExtra(ChatActivity.INTENT_USER_CITY, user.city);
+                        i = new Intent(context, ContainerActivity.class);
+                        i.putExtra(ChatFragment.INTENT_USER_ID, user.id);
+                        i.putExtra(ChatFragment.INTENT_USER_NAME, user.name);
+                        i.putExtra(ChatFragment.INTENT_USER_SEX, user.sex);
+                        i.putExtra(ChatFragment.INTENT_USER_AGE, user.age);
+                        i.putExtra(ChatFragment.INTENT_USER_CITY, user.city);
+                        i.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, GCM_NOTIFICATION);
+                        i.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_CHAT_FRAGMENT);
                     } else {
                         i = new Intent(context, NavigationActivity.class);
                     }
@@ -305,9 +304,11 @@ public class GCMUtils {
             @Override
             public void run() {
                 if (type == lastNotificationType) {
-                    NotificationManager notificationManager =
-                            (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationManager.cancel(TopfaceNotificationManager.id);
+                    if (context != null) {
+                        NotificationManager notificationManager =
+                                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                        notificationManager.cancel(TopfaceNotificationManager.NOTIFICATION_ID);
+                    }
                 }
             }
         }, NOTIFICATION_CANCEL_DELAY);
@@ -341,28 +342,13 @@ public class GCMUtils {
         }).start();
     }
 
-    private static class TempImageViewRemote extends ImageViewRemote {
-        private Bitmap mImageBitmap;
 
-        public TempImageViewRemote(Context context) {
-            super(context);
-        }
-
-        @Override
-        public void setImageBitmap(Bitmap bm) {
-            super.setImageBitmap(bm);
-            mImageBitmap = bm;
-        }
-
-        public Bitmap getImageBitmap() {
-            return mImageBitmap;
-        }
-    }
 
     private static class User {
         public int id;
         public String name;
         public String photoUrl;
+        public int sex;
         public int age;
         @SuppressWarnings("unused")
         public String city;
@@ -377,6 +363,7 @@ public class GCMUtils {
                 JSONObject obj = new JSONObject(json);
                 id = obj.optInt("id");
                 name = obj.optString("name");
+                sex = obj.optInt("sex", Static.BOY);
                 JSONObject photo = obj.optJSONObject("photo");
                 if (photo != null && photo.has(Photo.SIZE_128)) {
                     photoUrl = obj.optJSONObject("photo").optString(Photo.SIZE_128);

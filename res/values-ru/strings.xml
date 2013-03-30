@@ -24,8 +24,7 @@
     <string name="general_server_error">Ошибка. Попробуйте позже</string>
     <string name="general_data_error">Ошибка. Попробуйте ещё раз</string>
     <string name="general_internet_off">Пытаемся восстановить соединение с интернетом. Пожалуйста, подождите.</string>
-    <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru
-    </string>
+    <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru</string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Текст скопирован</string>
     <string name="general_spinner_title">Выберите действие</string>
@@ -305,7 +304,7 @@
     <string name="vip_black_list">Черный список</string>
     <string name="vip_profile_bg">Фоновая фотография</string>
 
-    <string name="profile_vip_status">Super Skills</string>
+    <string name="profile_vip_status">Super {{rocket}} Skills</string>
     <string name="profile_services">Услуги</string>
     <string name="default_balance_constant">На вашем счете</string>
     <string name="default_energy_coins_buy_btn_text">Купить монеты и симпатии</string>
@@ -326,7 +325,7 @@
     <string name="vip_state_on">Ваш VIP-статус активирован</string>
     <string name="vip_abilities">Ваши VIP возможности</string>
     <string name="vip_why">Почему вам так важно быть VIP</string>
-    <string name="vip_info_delight">Отправляйте восхищения бесплатно - вражайте свои чувства по максимуму!</string>
+    <string name="vip_info_delight">Отправляйте восхищения бесплатно - выражайте свои чувства по максимуму!</string>
     <string name="vip_info_guest">Узнайте, кто вами интересовался - смотрите своих гостей!</string>
     <string name="vip_info_invisible">Оставайтесь незамеченными, посещая чужие страницы, благодаря режиму
         \"невидимка\"
@@ -360,7 +359,7 @@
     <string name="profile_get_status">Опишите Ваше настроение</string>
     <string name="map_title">Карта</string>
 
-    <string name="settings_want_answer">Я хочу что бы мне ответили</string>
+    <string name="settings_want_answer">Я хочу, чтобы мне ответили</string>
     <string name="settings_feedback_email">Email для связи</string>
     <string name="settings_invalid_email">Некорректный Email</string>
 
@@ -421,4 +420,95 @@
         нельзя
     </string>
     <string name="default_price_format">Итого: %.2f USD</string>
+    <string name="dating_online_only">%s, только онлайн</string>
+    <string name="leaders_pick_condition">Вы не можете выбрать фото с рейтингом ниже %d%%: </string>
+    <string name="map_popup_address">Адрес</string>
+    <string name="black_list_info">Вы добавили собеседника в черный список. Изменить это можно в своем профиле, в настройках VIP-статуса.</string>
+    <string name="general_gift">Подарок</string>
+    <string name="user_actions_chat">Разговор</string>
+    <string name="general_place">Место</string>
+    <string name="general_soon">Скоро будет</string>
+    <string name="black_list_activation">Активируйте VIP-статус и используйте черный список</string>
+    <string name="profile_edit_age_ranges">Возраст должен быть в диапазоне от 16 до 99 лет. Пожалуйста, введите корректное число и повторите попытку.</string>
+
+    <string name="sign_in">Войти</string>
+    <string name="create_account">Создать аккаунт</string>
+    <string name="email">E-mail</string>
+    <string name="password">Пароль</string>
+    <string name="error_login_password">Неправильная пара логин/пароль</string>
+    <string name="recover_password">Восстановить пароль</string>
+    <string name="recovering_password">Восстановление пароля</string>
+    <string name="send_password">Выслать пароль</string>
+    <string name="boy">парень</string>
+    <string name="girl">девушка</string>
+    <string name="start_communication">Начать общение</string>
+    <string name="birthdate">ДР</string>
+    <string name="welcome_to_topface">Добро пожаловать в Topface!</string>
+
+    <string name="incorrect_email">Неправильно введен e-mail</string>
+    <string name="incorrect_login">Неправильно введен логин</string>
+    <string name="incorrect_password">Неправильно введен пароль</string>
+    <string name="empty_fields">Не все поля заполнены</string>
+    <string name="email_already_registered">Пользователь с таким e-mail уже существует</string>
+
+    <string name="enter_email_from_registration">Введите e-mail, который вы указывали при регистрации</string>
+    <string name="default_photo_upload">Загрузка фотографии</string>
+    <string name="default_photo_upload_error">Ошибка загрузки</string>
+    <string name="default_photo_upload_repeat">Попробуйте повторить позже</string>
+    <string name="default_photo_upload_complete">Загрузка завершена!</string>
+    <string name="general_error_try_again_later">Невозможно подключиться к Topface. Повторите попытку позже.</string>
+
+    <string name="search_city_by_name">Поиск города по названию</string>
+
+    <string name="gallery">Галерея</string>
+    <string name="no_photo_take_photo">С вами никто не может познакомится! Сделайте фото или выберите имеющееся из альбома</string>
+    <string name="photo_is_too_small">Вы отлично выглядете на этой фотографии, но для того, чтобы все пользователи оценили ваш снимок, от должен быть чуть больше: не менее %s</string>
+    <string name="photo_for_avatar">Фотография готова к отправке в профиль! Это ваша первая фотография и она будет использоваться как ваша аватарка.</string>
+
+    <string name="get_it_for_free">Получить монеты бесплатно</string>
+    <string name="vip_advantages">Преимущества VIP</string>
+
+    <string name="change_email">Сменить e-mail</string>
+    <string name="send_confirmation_email">Выслать подтверждение на e-mail</string>
+    <string name="change_password">Изменить пароль</string>
+    <string name="password_changing">Изменение пароля</string>
+    <string name="save">Сохранить</string>
+    <string name="confirmation_successfully_sent">Подтверждение выслано на указанный вами e-mail</string>
+    <string name="password_hint">пароль</string>
+    <string name="password_confirmation_hint">подтверждение пароля</string>
+    <string name="enter_new_password">Введите новый пароль</string>
+    <string name="enter_password_confirmation">Введите подтверждение пароля</string>
+    <string name="passwords_mismatched">Пароли не совпадают</string>
+    <string name="passwords_changed">Пароль изменен</string>
+
+    <string name="take_photo">Сделать фото</string>
+    <string name="take_another_photo">Другое фото</string>
+    <string name="we_detect_your_city">Мы определили ваш город:</string>
+    <string name="reselect_city">Выбрать другой город:</string>
+    <string name="choose_cool_photo">Выберите свою лучшую фотографию и статус, который отражает ваше настроение!</string>
+    <string name="email_confirmed">e-mail подтвержден!</string>
+    <string name="sympathy_sended">Симпатия отправлена</string>
+    <string name="general_photo_deleted">Ваша фотография не соответствует правилам и была удалена</string>
+
+    <string name="buying_total">Итого</string>
+    <string name="buying_economy">Экономия</string>
+    <string name="general_change">Изменить</string>
+    <string name="general_correct">Все правильно</string>
+    <string name="we_dont_detect_your_city">Чтобы найти людей поблизости нам нужно знать где вы находитесь. Пожалуйста, укажите ваш город.</string>
+    <string name="confirm_email">Пожалуйста, подтвердите e-mail.</string>
+    <string name="password_sent">Новый пароль отправлен на ваш E-mail</string>
+    <string name="buy_vip_month_one">%1$d месяц за %2$.2f %3$@</string>
+    <string name="buy_vip_month_few">%1$d месяца по %2$.2f %3$@</string>
+    <string name="buy_vip_month_other">%1$d месяцев по %2$.2f %3$@</string>
+    <string name="buy_special_offers">Специальные предложения</string>
+
+    <string name="user_does_not_have_gifts">У этого пользователя пока нет подарков, будьте первым и вас заметят</string>
+    <string name="status_is_empty">У вас не установлен статус</string>
+    <string name="you_dont_have_gifts_yet">У вас пока нет подарков</string>
+    <string name="buy_sympathies">Купить симпатии</string>
+    <string name="upload_photos">Загрузите фотографии</string>
+    <string name="chat_no_message_title">Начните общение!</string>
+    <string name="chat_no_message_text">Напишите сообщение или отправьте подарок и вам обязательно ответят</string>
+    <string name="user_baned">Пользователь забанен</string>
+    <string name="general_choose_city">Выберите город</string>
 </resources>

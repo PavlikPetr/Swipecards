@@ -55,7 +55,7 @@ public class FragmentSwitchController extends ViewGroup {
 
     public FragmentSwitchController(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mCurrentFragmentId = BaseFragment.F_PROFILE;
+//        mCurrentFragmentId = BaseFragment.F_PROFILE;
         Interpolator mPrixingInterpolator = new Interpolator() {
             public float getInterpolation(float t) {
                 return (t - 1) * (t - 1) * (t - 1) * (t - 1) * (t - 1) + 1.0f;
@@ -106,31 +106,41 @@ public class FragmentSwitchController extends ViewGroup {
     }
 
     private void switchFragment() {
-        BaseFragment fragment = getFragmentById(mCurrentFragmentId);
-        switchFragment(fragment);
-    }
+        Fragment oldFragment = mFragmentManager.findFragmentById(R.id.fragment_container);
 
-    public void switchFragment(BaseFragment fragment) {
-        if (mCurrentFragment != fragment) {
-            Fragment oldFragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+        BaseFragment newFragment = (BaseFragment) mFragmentManager.findFragmentByTag(getTagById(mCurrentFragmentId));
+        //Если не нашли в FragmentManager уже существующего инстанса, то создаем новый
+        if (newFragment == null) {
+            newFragment = getFragmentNewInstanceById(mCurrentFragmentId);
+        }
+
+        if (oldFragment == null || newFragment != oldFragment) {
             FragmentTransaction transaction = mFragmentManager.beginTransaction();
-            transaction.replace(R.id.fragment_container, fragment);
-            if (oldFragment != null) {
-                transaction.remove(oldFragment);
-            }
+
+            transaction.replace(R.id.fragment_container, newFragment, getTagById(mCurrentFragmentId));
             transaction.commit();
-            mCurrentFragment = fragment;
+            mCurrentFragment = newFragment;
         }
         closeExtraFragment();
     }
 
+    private String getTagById(int id) {
+        return "fragment_switch_controller_" + id;
+    }
+
     public void switchExtraFragment(Fragment fragment) {
-        if (mExtraFrame != null) mExtraFrame.setVisibility(View.VISIBLE);
-        mCurrentExtraFragment = fragment;
+        if (mExtraFrame == null) {
+            mExtraFrame = (FrameLayout) this.findViewById(R.id.fragment_extra_container);
+        }
+        mExtraFrame.setVisibility(View.VISIBLE);
 
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
-        transaction.replace(R.id.fragment_extra_container, mCurrentExtraFragment);
+        transaction.replace(R.id.fragment_extra_container, fragment);
+        if (mCurrentExtraFragment != null) {
+            transaction.remove(mCurrentExtraFragment);
+        }
         transaction.commit();
+        mCurrentExtraFragment = fragment;
 
         mFragmentSwitchListener.onExtraFrameOpen();
         mCurrentFragmentId = BaseFragment.F_UNKNOWN;
@@ -141,6 +151,7 @@ public class FragmentSwitchController extends ViewGroup {
         if (mCurrentExtraFragment != null) {
             if (mCurrentExtraFragment instanceof BaseFragment) {
                 ((BaseFragment) mCurrentExtraFragment).clearContent();
+                mFragmentManager.beginTransaction().remove(mCurrentExtraFragment).commit();
             }
             mCurrentExtraFragment = null;
         }
@@ -158,7 +169,7 @@ public class FragmentSwitchController extends ViewGroup {
         return mCurrentExtraFragment;
     }
 
-    private BaseFragment getFragmentById(int id) {
+    private BaseFragment getFragmentNewInstanceById(int id) {
         BaseFragment fragment;
         switch (id) {
             case BaseFragment.F_VIP_PROFILE:
@@ -220,7 +231,9 @@ public class FragmentSwitchController extends ViewGroup {
         mOpenDX = mWidth - mClosedDX;
         mFullOpenDX = mWidth - mOpenDX;
 
-        mExtraFrame = (FrameLayout) this.findViewById(R.id.fragment_extra_container);
+        if (mExtraFrame == null) {
+            mExtraFrame = (FrameLayout) this.findViewById(R.id.fragment_extra_container);
+        }
     }
 
     private void snapToScreen(int typeAnimation) {
@@ -291,8 +304,10 @@ public class FragmentSwitchController extends ViewGroup {
     }
 
     public void setScrollingCacheEnabled(boolean enabled) {
-        getChildAt(0).setDrawingCacheEnabled(enabled);
-        getChildAt(1).setDrawingCacheEnabled(enabled);
+        if(getChildCount() > 0) {
+            getChildAt(0).setDrawingCacheEnabled(enabled);
+            getChildAt(1).setDrawingCacheEnabled(enabled);
+        }
     }
 
     private void fullExpanding() {
@@ -326,6 +341,7 @@ public class FragmentSwitchController extends ViewGroup {
     private float mMaximumVelocity;
     private int mMinimumVelocity;
     private float mVelocitySlop;
+    private boolean mActionDownOnBezier = false;
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
@@ -342,14 +358,11 @@ public class FragmentSwitchController extends ViewGroup {
             mVelocityTracker = null;
         }
 
-        if (!inBezierThreshold(x) && (mAnimation == COLLAPSE || mAnimation == COLLAPSE_FULL)) {
-            return false;
-        }
-
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 mLastMotionX = x;
                 mLastMotionY = y;
+                mActionDownOnBezier = !(!inBezierThreshold(x) && (mAnimation == COLLAPSE || mAnimation == COLLAPSE_FULL));
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (mAnimation == EXPAND) {
@@ -363,6 +376,10 @@ public class FragmentSwitchController extends ViewGroup {
                 float yDiff = Math.abs(dy);
 
                 if (canScroll(getChildAt(1), false, (int) dx, (int) x, (int) y)) {
+                    return false;
+                }
+
+                if (!mActionDownOnBezier) {
                     return false;
                 }
 
@@ -410,6 +427,7 @@ public class FragmentSwitchController extends ViewGroup {
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 mLastMotionX = x;
+                mActionDownOnBezier = !(!inBezierThreshold(x) && (mAnimation == COLLAPSE || mAnimation == COLLAPSE_FULL));
                 mVelocityTracker.addMovement(event);
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -560,7 +578,7 @@ public class FragmentSwitchController extends ViewGroup {
     }
 
     protected boolean inBezierThreshold(float x) {
-        return x < mWidth / 5;
+        return x < getContext().getResources().getDimensionPixelSize(R.dimen.bezier_threshold);
     }
 
 

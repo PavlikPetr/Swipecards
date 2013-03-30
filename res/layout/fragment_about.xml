@@ -3,24 +3,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/auth_bg"
-                android:gravity="center_horizontal"
                 android:orientation="vertical">
 
-    <RelativeLayout
+    <include
+            layout="@layout/bar_navigation_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/loNavigationBar"
+            android:layout_alignParentTop="true"
+            />
+
+    <LinearLayout
             android:id="@+id/loText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/ivLogo"
             android:layout_alignRight="@+id/ivLogo"
-            android:layout_centerVertical="true"
-            android:orientation="vertical">
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
 
         <TextView
                 android:id="@+id/tvVersion"
                 style="@style/ItemtText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
                 android:gravity="center"/>
 
         <TextView
@@ -28,8 +35,6 @@
                 style="@style/ItemtText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tvVersion"
-                android:layout_centerHorizontal="true"
                 android:layout_marginTop="40dp"
                 android:gravity="center"/>
 
@@ -38,11 +43,9 @@
                 style="@style/ItemtText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tvCopyright"
-                android:layout_centerHorizontal="true"
                 android:layout_marginTop="40dp"
                 android:gravity="center"/>
-    </RelativeLayout>
+    </LinearLayout>
 
     <ImageView
             android:id="@+id/ivLogo"
@@ -50,6 +53,8 @@
             android:layout_height="wrap_content"
             android:layout_above="@id/loText"
             android:layout_marginBottom="40dp"
-            android:src="@drawable/auth_logo"/>
+            android:src="@drawable/auth_logo"
+            android:layout_centerHorizontal="true"/>
 
+    <ImageView style="@style/HeaderShadow"/>
 </RelativeLayout>

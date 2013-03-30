@@ -16,6 +16,7 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Offerwalls;
 
 public class ServicesFragment extends BaseFragment {
 
@@ -36,7 +37,18 @@ public class ServicesFragment extends BaseFragment {
                 updateViews();
             }
         };
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
     }
 
     @Override
@@ -56,6 +68,14 @@ public class ServicesFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 buyAction();
+            }
+        });
+
+        Button mOfferwallsBtn = (Button) root.findViewById(R.id.btnOfferwalls);
+        mOfferwallsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Offerwalls.startOfferwall(getActivity());
             }
         });
     }

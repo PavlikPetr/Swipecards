@@ -1,38 +1,40 @@
 package com.topface.topface.ui.settings;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.google.android.gcm.GCMRegistrar;
-import com.topface.topface.Data;
 import com.topface.topface.R;
+import com.topface.topface.Ssid;
 import com.topface.topface.Static;
-import com.topface.topface.data.SearchUser;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.LogoutRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.analytics.TrackedFragment;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
+import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-import java.util.LinkedList;
-
-public class SettingsAccountFragment extends TrackedFragment {
+public class SettingsAccountFragment extends BaseFragment {
 
     public static final int RESULT_LOGOUT = 666;
     private LockerView lockerView;
@@ -43,11 +45,8 @@ public class SettingsAccountFragment extends TrackedFragment {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_account, container, false);
 
         // Navigation bar
-        getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
-        Button btnBack = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
-        btnBack.setVisibility(View.VISIBLE);
-        btnBack.setText(R.string.settings_header_title);
-        btnBack.setOnClickListener(new OnClickListener() {
+        ActionBar actionBar = getActionBar(root);
+        actionBar.showBackButton(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -56,15 +55,17 @@ public class SettingsAccountFragment extends TrackedFragment {
         });
         lockerView = (LockerView) root.findViewById(R.id.llvLogoutLoading);
         lockerView.setVisibility(View.GONE);
-        ((TextView) getActivity().findViewById(R.id.tvNavigationTitle)).setText(R.string.settings_account);
+        actionBar.setTitleText(getString(R.string.settings_account));
 
         Drawable icon = null;
-        final AuthToken token = new AuthToken(getActivity().getApplicationContext());
+        final AuthToken token = AuthToken.getInstance();
 
         if (token.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
-            icon = getResources().getDrawable(R.drawable.fb_icon);
+            icon = getResources().getDrawable(R.drawable.fb_logo_account);
         } else if (token.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
-            icon = getResources().getDrawable(R.drawable.vk_icon);
+            icon = getResources().getDrawable(R.drawable.vk_logo_account);
+        } else if (token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+            icon = getResources().getDrawable(R.drawable.tf_logo_account);
         }
         TextView textName = (TextView) root.findViewById(R.id.tvName);
         textName.setText(Settings.getInstance().getSocialAccountName());
@@ -74,42 +75,72 @@ public class SettingsAccountFragment extends TrackedFragment {
 
             @Override
             public void onClick(View v) {
-                LogoutRequest logoutRequest = new LogoutRequest(getActivity());
-                lockerView.setVisibility(View.VISIBLE);
-                logoutRequest.callback(new ApiHandler() {
-                    @Override
-                    public void success(ApiResponse response) {
-                        GCMRegistrar.unregister(getActivity().getApplicationContext());
-                        Data.removeSSID(getActivity().getApplicationContext());
-                        token.removeToken();
-                        //noinspection unchecked
-                        new FacebookLogoutTask().execute();
-                        Settings.getInstance().resetSettings();
-                        startActivity(new Intent(getActivity().getApplicationContext(), NavigationActivity.class));
-                        getActivity().setResult(RESULT_LOGOUT);
-                        CacheProfile.clearProfile();
-                        getActivity().finish();
-                        SharedPreferences preferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-                        if (preferences != null) {
-                            preferences.edit().clear().commit();
-                        }
-                        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(Static.LOGOUT_INTENT));
-                        //Чистим список тех, кого нужно оценить
-                        Data.searchList = new LinkedList<SearchUser>();
-                        Data.searchPosition = -1;
-
-                    }
-
-                    @Override
-                    public void fail(int codeError, ApiResponse response) {
-                        lockerView.setVisibility(View.GONE);
-                    }
-                }).exec();
+                showExitPopup();
 
             }
         });
 
         return root;
+    }
+
+    private void logout(Context context, AuthToken token) {
+        GCMRegistrar.unregister(getActivity().getApplicationContext());
+        Ssid.remove();
+        token.removeToken();
+        //noinspection unchecked
+        new FacebookLogoutTask().execute();
+        Settings.getInstance().resetSettings();
+        startActivity(new Intent(getActivity().getApplicationContext(), NavigationActivity.class));
+        getActivity().setResult(RESULT_LOGOUT);
+        CacheProfile.clearProfile();
+        getActivity().finish();
+        SharedPreferences preferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        if (preferences != null) {
+            preferences.edit().clear().commit();
+        }
+        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(Static.LOGOUT_INTENT));
+        //Чистим список тех, кого нужно оценить
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                new SearchCacheManager().clearCache();
+            }
+        }).start();
+    }
+
+    private void showExitPopup() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(R.string.settings_logout_msg);
+        builder.setNegativeButton(R.string.general_no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.setPositiveButton(R.string.general_yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                LogoutRequest logoutRequest = new LogoutRequest(getActivity());
+                lockerView.setVisibility(View.VISIBLE);
+                logoutRequest.callback(new ApiHandler() {
+                    @Override
+                    public void success(ApiResponse response) {
+                        logout(getActivity(), AuthToken.getInstance());
+                    }
+
+                    @Override
+                    public void fail(int codeError, ApiResponse response) {
+                        FragmentActivity activity = getActivity();
+                        if (activity != null) {
+                            lockerView.setVisibility(View.GONE);
+                            Toast.makeText(activity, R.string.general_server_error, Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }).exec();
+
+            }
+        });
+        builder.create().show();
     }
 
     @SuppressWarnings({"rawtypes", "hiding"})

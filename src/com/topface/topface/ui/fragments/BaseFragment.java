@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,9 +9,11 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.analytics.TrackedFragment;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.NavigationBarController;
@@ -24,6 +27,8 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
 
+    private ActionBar mActionBar;
+
     private BroadcastReceiver updateCountersReceiver;
     public static final int F_UNKNOWN = -1;
     public static final int F_VIP_PROFILE = 1000;
@@ -35,6 +40,21 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public static final int F_TOPS = 1006;
     public static final int F_SETTINGS = 1007;
     public static final int F_VISITORS = 1008;
+
+
+    protected ActionBar getActionBar(View view) {
+        if(mActionBar == null) {
+            mActionBar = new ActionBar(view.findViewById(R.id.loNavigationBar));
+        }
+        return mActionBar;
+    }
+
+    protected ActionBar getActionBar(Activity activity) {
+        if(mActionBar == null) {
+            mActionBar = new ActionBar(activity.findViewById(R.id.loNavigationBar));
+        }
+        return mActionBar;
+    }
 
     protected void onUpdateStart(boolean isFlyUpdating) {
     }
@@ -53,15 +73,22 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     @Override
     public void onResume() {
-        if (mNavBarController != null) mNavBarController.refreshNotificators();
+        if (mActionBar != null) {
+            mActionBar.refreshNotificators();
+            setUpdateCountersReceiver();
+        }
         super.onResume();
-        setUpdateCountersReceiver();
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
         removeAllRequests();
+        if (updateCountersReceiver != null) {
+            LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(updateCountersReceiver);
+            updateCountersReceiver = null;
+        }
     }
 
     private void removeAllRequests() {
@@ -71,7 +98,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
             }
             mRequests.clear();
         }
-        mRequests.clear();
     }
 
     @Override
@@ -95,13 +121,13 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     private void setUpdateCountersReceiver() {
-        if (updateCountersReceiver == null) {
+        if (updateCountersReceiver == null && mNavBarController != null) {
             updateCountersReceiver = new BroadcastReceiver() {
 
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    if (mNavBarController != null) {
-                        mNavBarController.refreshNotificators();
+                    if (mActionBar != null) {
+                        mActionBar.refreshNotificators();
                     }
                 }
             };
@@ -118,6 +144,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     @Override
     public void onDestroy() {
         super.onDestroy();
+        removeAllRequests();
         View rootView = getView();
         if (rootView != null) {
             unbindDrawables(getView());
@@ -141,6 +168,12 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
             } catch (Exception e) {
                 Debug.error(e);
             }
+        }
+    }
+
+    public void activateActionBar(boolean activate) {
+        if(mActionBar != null) {
+            mActionBar.activateHomeButton(activate);
         }
     }
 

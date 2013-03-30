@@ -13,16 +13,15 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.QuestionaryRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
@@ -34,7 +33,6 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
     private String mInputData = "";
     private Profile mProfile;
     private FormInfo mFormInfo;
-    private Button mExtraSaveButton;
 
     private EditText mEditText;
 
@@ -43,6 +41,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
     }
 
     public EditFormItemInputFragment(int titleId, String data) {
+        this();
         mTitleId = titleId;
         mData = data == null ? Static.EMPTY : data;
         mProfile = CacheProfile.getProfile();
@@ -52,37 +51,21 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mFormInfo = new FormInfo(getActivity(), mProfile);
 
-        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.item_edit_form_input, null, false);
+        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_edit_input, null, false);
 
         // Navigation bar
-        ((TextView) getActivity().findViewById(R.id.tvNavigationTitle))
-                .setText(R.string.edit_title);
-        TextView subTitle = (TextView) getActivity().findViewById(R.id.tvNavigationSubtitle);
-        subTitle.setVisibility(View.VISIBLE);
-        subTitle.setText(mFormInfo.getFormTitle(mTitleId));
+        ActionBar actionBar = getActionBar(root);
+        actionBar.setTitleText(getString(R.string.edit_title));
+        actionBar.setSubTitleText(mFormInfo.getFormTitle(mTitleId));
 
-        getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
-        mBackButton = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
-        mBackButton.setVisibility(View.VISIBLE);
-        mBackButton.setText(R.string.general_edit_button);
-        mBackButton.setOnClickListener(new OnClickListener() {
+        actionBar.showBackButton(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().finish();
             }
         });
 
-        mExtraSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
-        mExtraSaveButton.setText(getResources().getString(R.string.general_save_button));
-        mExtraSaveButton.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                saveChanges(null);
-            }
-        });
-
-        mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
+        mRightPrsBar = actionBar.getRightProgressBar();
 
         // TextEdit
         ((TextView) root.findViewById(R.id.tvTitle)).setText(mFormInfo.getFormTitle(mTitleId));
@@ -182,48 +165,18 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
     @Override
     protected void refreshSaveState() {
         super.refreshSaveState();
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mExtraSaveButton != null) {
-                    if (hasChanges()) {
-                        mExtraSaveButton.setVisibility(View.VISIBLE);
-                    } else {
-                        mExtraSaveButton.setVisibility(View.INVISIBLE);
-                    }
-                }
-            }
-        });
+
     }
 
     @Override
     protected void prepareRequestSend() {
         super.prepareRequestSend();
-        getActivity().runOnUiThread(new Runnable() {
 
-            @Override
-            public void run() {
-                if (mExtraSaveButton != null) {
-                    mExtraSaveButton.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
     }
 
     @Override
     protected void finishRequestSend() {
         super.finishRequestSend();
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mRightPrsBar != null) {
-                    if (hasChanges()) {
-                        if (mExtraSaveButton != null) {
-                            mExtraSaveButton.setVisibility(View.VISIBLE);
-                        }
-                    }
-                }
-            }
-        });
+
     }
 }

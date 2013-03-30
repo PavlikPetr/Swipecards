@@ -10,8 +10,8 @@ import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import com.topface.topface.Data;
 import com.topface.topface.R;
+import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.utils.Debug;
 import org.apache.http.client.utils.URLEncodedUtils;
@@ -37,9 +37,9 @@ public class WebAuthActivity extends Activity {
     private View mProgressBar;
     private String VK_PERMISSIONS = "notify,photos,offline";
     // RegExp
-    private Pattern mRegExpToken = Pattern.compile("blank.html#(.*access_token=.+)$");
-    private Pattern mRegExpError = Pattern.compile("blank.html#(.*error=.+)$");
-    private Pattern mRegExpLogout = Pattern.compile("(.*act=logout.+)$");
+    private final Pattern mRegExpToken = Pattern.compile("blank.html#(.*access_token=.+)$");
+    private final Pattern mRegExpError = Pattern.compile("blank.html#(.*error=.+)$");
+    private final Pattern mRegExpLogout = Pattern.compile("(.*act=logout.+)$");
     // Constants
     public static final int INTENT_WEB_AUTH = 101;
 
@@ -101,7 +101,7 @@ public class WebAuthActivity extends Activity {
                 finish();
             } else {
                 Debug.log(WebAuthActivity.this, "web auth token is wrong");
-                Data.removeSSID(getApplicationContext());
+                Ssid.remove();
                 setResult(Activity.RESULT_CANCELED);
                 finish();
             }
@@ -157,7 +157,7 @@ public class WebAuthActivity extends Activity {
                 });
             } else if (mMatcherError.find() || mMatcherLogout.find()) {
                 view.stopLoading();
-                new AuthToken(getApplicationContext()).removeToken();
+                AuthToken.getInstance().removeToken();
                 mHandler.sendMessage(Message.obtain(null, AuthToken.AUTH_ERROR));
             }
         }

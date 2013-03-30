@@ -1,8 +1,6 @@
 package com.topface.topface.ui.blocks;
 
-import android.app.Activity;
 import android.support.v4.app.Fragment;
-import android.view.KeyEvent;
 import android.view.ViewGroup;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.fragments.TopsFragment;
@@ -19,18 +17,15 @@ import java.util.Map;
  * Блок для страниц, где нужно показывать баннеры или лидеров
  */
 public class FloatBlock {
-    private Map<String, String> mFloatTypeMap;
-    private Options mOptions;
-    private Activity mActivity;
+    private static Map<String, String> mFloatTypeMap;
+    private static Options mOptions;
     private Fragment mFragment;
-    private LeadersBlock mLeaders;
     private BannerBlock mBanner;
     private final ViewGroup mLayout;
 
-    public FloatBlock(Activity activity, Fragment fragment, ViewGroup layoutView) {
+    public FloatBlock(Fragment fragment, ViewGroup layoutView) {
         super();
         mOptions = CacheProfile.getOptions();
-        mActivity = activity;
         mFragment = fragment;
         mFloatTypeMap = new HashMap<String, String>();
         mLayout = layoutView;
@@ -43,16 +38,16 @@ public class FloatBlock {
         if (mFloatTypeMap.containsKey(currentFragment)) {
             String floatType = mFloatTypeMap.get(currentFragment);
             if (floatType.equals(Options.FLOAT_TYPE_BANNER)) {
-                mBanner = new BannerBlock(mActivity, mFragment, mLayout);
+                mBanner = new BannerBlock(mFragment, mLayout);
             } else if (floatType.equals(Options.FLOAT_TYPE_LEADERS)) {
-                mLeaders = new LeadersBlock(mActivity, mLayout);
+                new LeadersBlock(mFragment, mLayout);
             }
             //mLeaders = new LeadersBlock(mActivity, mLayout);
         }
         //Если переданого активити нет в карте, то не инициализируем ни один блок
     }
 
-    private void setActivityMap() {
+    public static void setActivityMap() {
         mFloatTypeMap = new HashMap<String, String>();
         if (mOptions.pages.containsKey(Options.PAGE_LIKES))
             mFloatTypeMap.put(LikesFragment.class.toString(), mOptions.pages.get(Options.PAGE_LIKES).floatType);
@@ -66,22 +61,15 @@ public class FloatBlock {
             mFloatTypeMap.put(VisitorsFragment.class.toString(), mOptions.pages.get(Options.PAGE_VISITORS).floatType);
     }
 
-    public void update() {
-        if (mLeaders != null) {
-            mLeaders.loadLeaders();
-        }
-    }
-
-    public void onResume() {
-        if (mBanner != null) mBanner.onResume();
-        update();
+    public void onCreate() {
+        if (mBanner != null) mBanner.onCreate();
     }
 
     public void onPause() {
         if (mBanner != null) mBanner.onPause();
     }
 
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return mBanner != null && mBanner.onKeyDown(keyCode, event);
+    public void onDestroy() {
+        if (mBanner != null) mBanner.onDestroy();
     }
 }

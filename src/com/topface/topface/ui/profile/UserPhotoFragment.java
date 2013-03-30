@@ -11,6 +11,10 @@ import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.User;
+import com.topface.topface.requests.AlbumRequest;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.Utils;
 
@@ -19,28 +23,55 @@ public class UserPhotoFragment extends BaseFragment {
     private UserPhotoGridAdapter mUserPhotoGridAdapter;
     private TextView mTitle;
     private Photos mPhotoLinks;
+    private LoadingListAdapter.Updater mUpdater;
+    private GridView mGridAlbum;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserPhotoGridAdapter = new UserPhotoGridAdapter(getActivity().getApplicationContext());
+        mUpdater = new LoadingListAdapter.Updater() {
+            @Override
+            public void onUpdate() {
+                if(mGridAlbum != null) {
+                    Photos data = ((ProfileGridAdapter) mGridAlbum.getAdapter()).getData();
+                    AlbumRequest request = new AlbumRequest(getActivity(), mUser.uid, AlbumRequest.DEFAULT_PHOTOS_LIMIT, data.get(data.size() - 2).getPosition() + 1, AlbumRequest.MODE_ALBUM);
+                    request.callback(new ApiHandler() {
+                        @Override
+                        public void success(ApiResponse response) {
+                            if (mGridAlbum != null) {
+                                ((UserPhotoGridAdapter) mGridAlbum.getAdapter()).setData(Photos.parse(response.jsonResult.optJSONArray("items")), response.jsonResult.optBoolean("more"));
+                            }
+                        }
+
+                        @Override
+                        public void fail(int codeError, ApiResponse response) {
+
+                        }
+                    }).exec();
+                }
+            }
+        };
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_grid, container, false);
 
-        GridView gridAlbum = (GridView) root.findViewById(R.id.fragmentGrid);
-        gridAlbum.setAdapter(mUserPhotoGridAdapter);
-        gridAlbum.setOnItemClickListener(mOnItemClickListener);
-
-        mTitle = (TextView) root.findViewById(R.id.fragmentTitle);
+        mTitle = (TextView) root.findViewById(R.id.usedTitle);
 
         if (mPhotoLinks != null) {
-            setPhotos(mPhotoLinks);
+//            setPhotos(mPhotoLinks);
         } else {
             mTitle.setText(Utils.formatPhotoQuantity(0));
         }
+
+        mGridAlbum = (GridView) root.findViewById(R.id.usedGrid);
+        mGridAlbum.setAdapter(mUserPhotoGridAdapter);
+        mGridAlbum.setOnItemClickListener(mOnItemClickListener);
+        if (mUserPhotoGridAdapter != null) {
+            mGridAlbum.setOnScrollListener(mUserPhotoGridAdapter);
+        }
+
         mTitle.setVisibility(View.VISIBLE);
         return root;
     }
@@ -61,7 +92,8 @@ public class UserPhotoFragment extends BaseFragment {
             Intent intent = new Intent(getActivity().getApplicationContext(), PhotoSwitcherActivity.class);
             intent.putExtra(PhotoSwitcherActivity.INTENT_USER_ID, mUser.uid);
             intent.putExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, position);
-            intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, mUser.photos);
+            intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS_COUNT, mUser.totalPhotos);
+            intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, ((ProfileGridAdapter) mGridAlbum.getAdapter()).getData());
             startActivity(intent);
         }
     };
@@ -69,24 +101,42 @@ public class UserPhotoFragment extends BaseFragment {
     public void setUserData(User user) {
         mUser = user;
         mPhotoLinks = user.photos;
-        setPhotos(mPhotoLinks);
+        if(mGridAlbum != null) {
+            if (mGridAlbum.getAdapter() != null) {
+    //            ((UserPhotoGridAdapter)mGridAlbum.getAdapter()).setData(mPhotoLinks);
+            } else {
+                setPhotos(mPhotoLinks);
+                mGridAlbum.setAdapter(mUserPhotoGridAdapter);
+                mGridAlbum.setOnScrollListener(mUserPhotoGridAdapter);
+            }
+        }
     }
 
     private void setPhotos(Photos photos) {
         if (photos != null) {
-            mTitle.setText(Utils.formatPhotoQuantity(photos.size()));
+            mTitle.setText(Utils.formatPhotoQuantity(mUser.totalPhotos));
         }
 
-        if (mUserPhotoGridAdapter != null) {
-            mUserPhotoGridAdapter.setUserData(photos);
+        if (mUserPhotoGridAdapter == null) {
+            mUserPhotoGridAdapter = new UserPhotoGridAdapter(getActivity().getApplicationContext(),
+                    photos,
+                    mUser.totalPhotos,
+                    mUpdater);
         }
     }
 
     @Override
     public void clearContent() {
-        if (mPhotoLinks != null) mPhotoLinks.clear();
-        mTitle.setText(Utils.formatPhotoQuantity(0));
-        mUserPhotoGridAdapter.notifyDataSetChanged();
+        if (mPhotoLinks != null) {
+            mPhotoLinks.clear();
+        }
+        if (mTitle != null) {
+            mTitle.setText(Utils.formatPhotoQuantity(0));
+        }
+        if (mUserPhotoGridAdapter != null) {
+            mUserPhotoGridAdapter.notifyDataSetChanged();
+        }
+        mGridAlbum = null;
     }
+
 }
- 

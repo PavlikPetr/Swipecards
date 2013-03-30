@@ -2,34 +2,40 @@ package com.topface.topface.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * Фотографии пользователей из нашего стораджа фотографий (не напрямую из социальной сети)
  */
-public class Photo extends AbstractData implements Parcelable {
+public class Photo extends AbstractData implements Parcelable, SerializableToJson {
 
     public static final String SIZE_ORIGINAL = "original";
     public static final String SIZE_64 = "c64x64";
     public static final String SIZE_150 = "r150x-";
     public static final String SIZE_64_ONLY = "c64x-";
     public static final String SIZE_128 = "c128x128";
+    @SuppressWarnings("UnusedDeclaration")
     public static final String SIZE_192 = "c192x192";
+    @SuppressWarnings("UnusedDeclaration")
     public static final String SIZE_256 = "c256x256";
     public static final String SIZE_960 = "r640x960";
-
-    public static final int MIN_AVAILABLE_DIFFERENCE = 20;
 
     public static final String PHOTO_KEY_SIZE_PATTERN = "(\\d+|-)x(\\d+|-)";
     public static final int MAX_SQUARE_DIFFERENCE = 2;
     public static final float MAX_DIFFERENCE = 1.5f;
     public static final int SMALL_PHOTO_SIZE = 100;
+
+    //Этот флаг нужен для того, чтобы ставить пустые фото в поиске, которые, будут подгружаться после запроса альбома
+    private boolean isFakePhoto = false;
 
     private String[] deprecatedSizes = {
             SIZE_64,
@@ -86,20 +92,43 @@ public class Photo extends AbstractData implements Parcelable {
 
     public int mLiked;
 
-    public Photo(int id, HashMap<String, String> links) {
+    public boolean canBecomeLeader;
+    public int position;
+
+    public Photo(int id, HashMap<String, String> links, int position, int liked) {
         this.mId = id;
         this.links = links;
+        this.mLiked = liked;
+        this.position = position;
     }
 
-    public Photo(JSONObject data) {
-        super(data);
+    public Photo(Photo photo) {
+        this.mId = photo.mId;
+        this.mLiked = photo.mLiked;
+        this.links = photo.links;
+        this.canBecomeLeader = photo.canBecomeLeader;
+        this.position = photo.position;
+    }
+
+    //Конструктор по умолчанию создает фэйковую фотку
+    public Photo() {
+        isFakePhoto = true;
+        links = new HashMap<String, String>();
+    }
+
+    public Photo(ApiResponse response) {
+        fillData(response.jsonResult.optJSONObject("photo"));
+    }
+
+    public boolean isFake() {
+        return isFakePhoto;
     }
 
     @Override
     protected void fillData(JSONObject photoItem) {
         super.fillData(photoItem);
 
-        if (photoItem.has("id")) {
+        if (photoItem != null && photoItem.has("id")) {
             mId = photoItem.optInt("id");
             JSONObject linksJson = photoItem.optJSONObject("links");
             if (linksJson != null) {
@@ -113,8 +142,9 @@ public class Photo extends AbstractData implements Parcelable {
                     links.put(key, linksJson.optString(key));
                 }
             }
-
+            canBecomeLeader = photoItem.optBoolean("canBecomeLeader");
             mLiked = photoItem.optInt("liked");
+            position = photoItem.optInt("position", 0);
         }
     }
 
@@ -129,6 +159,10 @@ public class Photo extends AbstractData implements Parcelable {
         return new Photo(photoItem);
     }
 
+    public Photo(JSONObject data) {
+        super(data);
+    }
+
     /**
      * Возвращает наиболее подходящий размер фотографии из уже существующих
      *
@@ -136,15 +170,17 @@ public class Photo extends AbstractData implements Parcelable {
      */
     public String getSuitableLink(String sizeString) {
         String url = null;
-        if (links.containsKey(sizeString)) {
-            url = links.get(sizeString);
-        } else {
-            Size size = getSizeFromKey(sizeString);
-            getSuitableLink(size.width, size.height);
-        }
+        if (links != null) {
+            if (links.containsKey(sizeString)) {
+                url = links.get(sizeString);
+            } else {
+                Size size = getSizeFromKey(sizeString);
+                getSuitableLink(size.width, size.height);
+            }
 
-        if (url == null && links.containsKey(SIZE_ORIGINAL)) {
-            url = links.get(SIZE_ORIGINAL);
+            if (url == null && links.containsKey(SIZE_ORIGINAL)) {
+                url = links.get(SIZE_ORIGINAL);
+            }
         }
 
         return url;
@@ -293,6 +329,10 @@ public class Photo extends AbstractData implements Parcelable {
         return mId;
     }
 
+    public int getPosition() {
+        return position;
+    }
+
     public int getRate() {
         return mLiked;
     }
@@ -306,6 +346,8 @@ public class Photo extends AbstractData implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(mId);
         dest.writeInt(links.size());
+        dest.writeInt(mLiked);
+        dest.writeInt(position);
         for (String key : links.keySet()) {
             dest.writeString(key);
             dest.writeString(links.get(key));
@@ -313,23 +355,42 @@ public class Photo extends AbstractData implements Parcelable {
 
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({"rawtypes", "UnusedDeclaration"})
     public static final Parcelable.Creator CREATOR =
             new Parcelable.Creator() {
                 public Photo createFromParcel(Parcel in) {
                     int id = in.readInt();
                     int hashSize = in.readInt();
+                    int liked = in.readInt();
+                    int pos = in.readInt();
                     HashMap<String, String> links = new HashMap<String, String>();
 
                     for (int i = 0; i < hashSize; i++) {
                         links.put(in.readString(), in.readString());
                     }
 
-                    return new Photo(id, links);
+                    return new Photo(id, links, pos, liked);
                 }
 
                 public Photo[] newArray(int size) {
                     return new Photo[size];
                 }
             };
+
+    @Override
+    public JSONObject toJson() throws JSONException {
+        JSONObject json = new JSONObject();
+        json.put("id", mId);
+        json.put("liked", mLiked);
+        json.put("position", position);
+        JSONObject jsonLinks = new JSONObject();
+        for (Map.Entry<String, String> entry : links.entrySet()) {
+            jsonLinks.put(
+                    entry.getKey(),
+                    entry.getValue()
+            );
+        }
+        json.put("links", jsonLinks);
+        return json;
+    }
 }

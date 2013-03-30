@@ -62,7 +62,7 @@ public class EditContainerActivity extends BaseFragmentActivity {
                 titleId = intent.getIntExtra(INTENT_FORM_TITLE_ID, -1);
                 dataId = intent.getIntExtra(INTENT_FORM_DATA_ID, -1);
                 data = intent.getStringExtra(INTENT_FORM_DATA);
-                mFragment = new EditFormItemsFragment(titleId, dataId, data);
+                mFragment = EditFormItemsFragment.newInstance(titleId, dataId, data);
                 break;
             case INTENT_EDIT_INPUT_FORM_ITEM:
                 titleId = intent.getIntExtra(INTENT_FORM_TITLE_ID, -1);
@@ -102,17 +102,14 @@ public class EditContainerActivity extends BaseFragmentActivity {
 
     @Override
     public void finish() {
+
         if (mFragment instanceof AbstractEditFragment) {
             AbstractEditFragment editFragment = (AbstractEditFragment) mFragment;
-            if (editFragment.mSaveButton == null) {
-                editFragment.saveChanges(mFinishHandler);
-            } else {
-                super.finish();
-            }
+            editFragment.saveChanges(mFinishHandler);
+
         } else {
             super.finish();
         }
-        overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
     }
 
     Handler mFinishHandler = new Handler() {

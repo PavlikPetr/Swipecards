@@ -8,11 +8,17 @@ import org.json.JSONException;
 import java.util.ArrayList;
 
 @SuppressWarnings("serial")
-public class Photos extends ArrayList<Photo> {
+public class Photos extends ArrayList<Photo> implements SerializableToJsonArray {
 
     public Photos(JSONArray photos) {
         this();
         addAll(parse(photos));
+    }
+
+    public Photos(Photos photos) {
+        for (Photo photo : photos) {
+            add(new Photo(photo));
+        }
     }
 
     public Photos() {
@@ -24,7 +30,7 @@ public class Photos extends ArrayList<Photo> {
         if (photoArray != null) {
             for (int i = 0; i < photoArray.length(); i++) {
                 try {
-                    photos.addFirst(new Photo(photoArray.getJSONObject(i)));
+                    photos.add(new Photo(photoArray.getJSONObject(i)));
                 } catch (JSONException e) {
                     Debug.error("Photo parse error", e);
                 }
@@ -77,5 +83,27 @@ public class Photos extends ArrayList<Photo> {
 
     public void addFirst(Photo value) {
         this.add(0, value);
+    }
+
+
+    public int getRealPhotosCount() {
+        int realPhotosCount = 0;
+        for (Photo photo : this) {
+            if (photo != null && !photo.isFake()) {
+                realPhotosCount++;
+            }
+        }
+        return realPhotosCount;
+    }
+
+    @Override
+    public JSONArray toJson() throws JSONException {
+        JSONArray jsonArray = new JSONArray();
+        for (Photo photo : this) {
+            if (!photo.isFake()) {
+                jsonArray.put(photo.toJson());
+            }
+        }
+        return jsonArray;
     }
 }

@@ -7,46 +7,46 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.util.Log;
+import android.text.TextUtils;
 import com.topface.topface.*;
 import com.topface.topface.data.Auth;
-import com.topface.topface.requests.ApiRequest;
-import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AuthRequest;
+import com.topface.topface.requests.IApiRequest;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BanActivity;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.http.Http.FlushedInputStream;
 import com.topface.topface.utils.social.AuthToken;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.LinkedList;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ConnectionManager {
 
-    // Data
+    /**
+     * Количество одновременно выполняемых запросов
+     */
+    public static final int THREAD_PULL_SIZE = 3;
+
     private static ConnectionManager mInstanse;
     private ExecutorService mWorker;
-    private LinkedList<Thread> mDelayedRequestsThreads;
-    // Constants
-    public static final String TAG = "CM";
-    public static final int WAITING_TIME = 2000;
-    public static final String BAN_RESPONSE = "ban_response";
+    private AtomicBoolean mAuthUpdateFlag;
+
+    public static final String TAG = "ConnectionManager";
+    private final HashMap<String, IApiRequest> mPendignRequests;
+    private long mFloodEndsTime = 0;
 
     private ConnectionManager() {
-        mWorker = Executors.newFixedThreadPool(3);
-        mDelayedRequestsThreads = new LinkedList<Thread>();
-        //Можно включить полный дебаг всех http заголовков и других данных Http клиента
-        //DebugLogConfig.enable();
-
+        mWorker = Executors.newFixedThreadPool(THREAD_PULL_SIZE);
+        mAuthUpdateFlag = new AtomicBoolean(false);
+        mPendignRequests = new HashMap<String, IApiRequest>();
     }
 
 
@@ -58,243 +58,339 @@ public class ConnectionManager {
     }
 
 
-    public RequestConnection sendRequest(final ApiRequest apiRequest) {
-        final RequestConnection connection = new RequestConnection();
+    /**
+     * Добавляет запрос в пулл запросов и пытается его выполнить
+     *
+     * @param apiRequest запрос к серверу
+     * @return объект содержащий сам запрос и связанное с ним http соединение
+     */
+    public boolean sendRequest(final IApiRequest apiRequest) {
+        //Если пользователь заблокирован за флуд (или точнее частые запросы к API)
+        //То прерываем обработку запроса и показываем предупреждение
+        if (checkForFlood(apiRequest)) return false;
 
-        // Не посылать запросы пока не истечет время бана за флуд
-        if (isBlockedForFlood()) {
-            Intent intent = new Intent(apiRequest.context, BanActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(BanActivity.INTENT_TYPE, BanActivity.TYPE_FLOOD);
-            apiRequest.context.startActivity(intent);
-            return null;
-        }
-
+        //Добавляем поток с запросом в пулл потоков
         mWorker.submit(new Runnable() {
             @Override
             public void run() {
-                String rawResponse;
-                AndroidHttpClient httpClient = null;
-                HttpPost httpPost = null;
-                boolean needResend = false;
-
-
-                if (apiRequest.canceled) {
-                    //Проверяем, что запрос не отменен
-                    return;
-                }
-
-                connection.setHttpClient(httpClient);
-                connection.setHttpPost(httpPost);
-
-                apiRequest.ssid = Data.SSID;
-
-                try {
-                    httpClient = AndroidHttpClient.newInstance("Android");
-                    httpPost = new HttpPost(Static.API_URL);
-                    httpClient.enableCurlLogging("Topface", Log.VERBOSE);
-                    httpPost.setHeader("Accept-Encoding", "gzip");
-                    httpPost.setHeader("Content-Type", "application/json");
-                    setRevisionHeader(httpPost);
-                    String requestString = apiRequest.toString();
-                    httpPost.setEntity(new ByteArrayEntity(requestString.getBytes("UTF8")));
-
-                    Debug.logJson(TAG, "REQUEST >>> " + Static.API_URL + " rev:" + getRevNum(), requestString);
-                    rawResponse = request(httpClient, httpPost);
-                    Debug.logJson(TAG, "RESPONSE <<<", rawResponse);
-
-                    ApiResponse apiResponse = new ApiResponse(rawResponse);
-                    //Если сессия кончилась, то переотправляем запрос авторизации, после этого обрабатываем обычным способом
-                    if (apiResponse.code == ApiResponse.SESSION_NOT_FOUND) {
-                        apiResponse = reAuth(apiRequest.context, httpClient, httpPost, apiRequest);
-                    }
-                    //Если даже после переавторизации токен не верный,
-                    //то отмечаем запрос как ошибку и ждем переавторизации пользователя
-                    if (apiResponse.code == ApiResponse.INVERIFIED_TOKEN) {
-                        sendBroadcastReauth(apiRequest.context);
-                        addDelayedRequest(apiRequest);
-                        apiResponse.code = ApiResponse.ERRORS_PROCCESED;
-                    }
-                    //Если в результате получили ответ, что забанен, прекращаем обработку, сообщаем об этом
-                    if (apiResponse.code == ApiResponse.BAN) {
-                        Intent intent = new Intent(apiRequest.context, BanActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra(BanActivity.INTENT_TYPE, BanActivity.TYPE_BAN);
-                        intent.putExtra(BanActivity.BANNING_TEXT_INTENT, apiResponse.jsonResult.get("message").toString());
-                        apiRequest.context.startActivity(intent);
-                        //В запрос отправлять ничего не будем, в finally его просто отменим
-                    } else if (apiResponse.code == ApiResponse.DETECT_FLOOD) {
-                        Intent intent = new Intent(apiRequest.context, BanActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra(BanActivity.INTENT_TYPE, BanActivity.TYPE_FLOOD);
-                        apiRequest.context.startActivity(intent);
-                    } else if (apiResponse.code == ApiResponse.MAINTENANCE && apiRequest.handler != null) {
-                        needResend = true;
-                        apiRequest.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                RetryDialog retryDialog = new RetryDialog(apiRequest.context, apiRequest);
-                                retryDialog.setMessage(apiRequest.context.getString(R.string.general_maintenance));
-                                retryDialog.setButton(Dialog.BUTTON_POSITIVE, apiRequest.context.getString(R.string.general_dialog_retry), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        apiRequest.exec();
-                                    }
-                                });
-                                retryDialog.show();
-                            }
-                        });
-
-                    } else if (apiResponse.code == ApiResponse.NULL_RESPONSE
-                            || apiResponse.code == ApiResponse.WRONG_RESPONSE
-                            //Если после переавторизации у нас все же не верный ssid, то пробуем все повторить
-                            || apiResponse.code == ApiResponse.SESSION_NOT_FOUND) {
-
-                        //Если пришел пустой ответ или пришел какой то мусор, то пробуем переотправить запрос
-                        if (apiRequest.isNeedResend() && apiRequest.handler != null) {
-                            needResend = true;
-                            apiRequest.handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    sendRequest(apiRequest);
-                                }
-                            }, WAITING_TIME);
-                            int tryCnt = apiRequest.incrementResend();
-
-                            Debug.error("Response error. Try resend #" + tryCnt);
-
-                            //Предварительно проверяем, что есть handler и запрос не отменен
-                            // (если отменен, может возникнуть ситуация, когда handler уже не сможет
-                            // обработать ответ из-за убитого контекста)
-                        } else if (!apiRequest.isCanceled()) {
-                            needResend = true;
-                            Message msg = new Message();
-                            msg.obj = apiResponse;
-                            apiRequest.handler.sendMessage(msg);
-                        }
-                    } else if (!apiRequest.isCanceled()) {
-                        Message msg = new Message();
-                        msg.obj = apiResponse;
-                        apiRequest.handler.sendMessage(msg);
-                    }
-
-                } catch (Exception e) {
-                    //Мы отлавливаем все ошибки, возникшие при запросе, не хотим что бы приложение падало из-за них
-                    Debug.error(TAG + "::REQUEST::ERROR ===\n", e);
-                    if (httpPost != null && !httpPost.isAborted()) {
-                        httpPost.abort();
-                    }
-                } finally {
-                    if (httpClient != null) {
-                        httpClient.close();
-                    }
-                    if (!needResend) {
-                        //Отмечаем запрос отмененным, что бы почистить
-                        apiRequest.setFinished();
-                    }
-                }
+                runRequest(apiRequest);
             }
         });
-        return connection;
+
+        return true;
     }
 
+    /**
+     * Отправляет переданный в параметре request запрос
+     *
+     * @param request Запрос к API
+     */
+    private void runRequest(final IApiRequest request) {
+        //Флаг, по которому мы будем определять в конце запроса, нужно ли нам затирать запрос и закрывать соедининение
+        boolean needResend = false;
 
-    private String request(AndroidHttpClient httpClient, HttpPost httpPost) {
-        String rawResponse = Static.EMPTY;
-
-        try {
-            //BasicHttpContext httpContext = new BasicHttpContext();
-            Debug.log("D_REQUEST::start");
-            HttpResponse httpResponse = httpClient.execute(httpPost/* ,
-                                                                    * httpContext */);
-            Debug.log("D_REQUEST::end");
-            HttpEntity httpEntity = httpResponse.getEntity();
-            if (httpEntity != null) {
-                InputStream is = AndroidHttpClient.getUngzippedContent(httpEntity);
-                BufferedReader r = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FlushedInputStream(is), 8192)));
-                StringBuilder sb = new StringBuilder();
-                for (String line = r.readLine(); line != null; line = r.readLine())
-                    sb.append(line);
-                rawResponse = sb.toString();
-                is.close();
-                r.close();
-            }
-        } catch (Exception e) {
-            Debug.error("ConnectionManager::Exception", e);
-            if (httpPost != null && !httpPost.isAborted()) {
-                httpPost.abort();
-            }
-        } catch (OutOfMemoryError e) {
-            Debug.error("ConnectionManager:: " + e.toString());
+        if (request == null || request.isCanceled()) {
+            Debug.log("CM:: request is canceled");
+            //Если запрос отменен, то прекращаем обработку сразу
+            return;
+        } else if (mAuthUpdateFlag.get()) {
+            //Если же запрос нового SSID в процессе, то отправляем запрос в список ожидающих авторизации
+            addToPendign(request);
+            //И тоже прекращаем обработку
+            return;
         }
 
-        return rawResponse;
-    }
-
-
-    private ApiResponse reAuth(Context context, AndroidHttpClient httpClient, HttpPost httpPost, ApiRequest request) {
-        Debug.log(this, "reAuth");
-
-        String rawResponse;
-        ApiResponse response = null;
-        HttpPost localHttpPost;
-        AuthRequest authRequest = getAuthRequest(context);
-
         try {
-            localHttpPost = new HttpPost(Static.API_URL);
-            localHttpPost.setHeader("Accept-Encoding", "gzip");
-            localHttpPost.setHeader("Content-Type", "application/json");
-            setRevisionHeader(localHttpPost);
-            localHttpPost.setEntity(new ByteArrayEntity(authRequest.toString().getBytes("UTF8")));
-
-            Debug.logJson(TAG, "REAUTH REQUEST >>> " + Static.API_URL + " rev:" + getRevNum(), authRequest.toString());
-            rawResponse = request(httpClient, localHttpPost); // REQUEST
-            Debug.logJson(TAG, "REAUTH RESPONSE <<<", rawResponse);
-
-            response = new ApiResponse(rawResponse);
-            if (response.code == ApiResponse.RESULT_OK) {
-                Auth auth = Auth.parse(response);
-                Data.saveSSID(context, auth.ssid);
-                request.ssid = auth.ssid;
-                Debug.logJson(TAG, "REAUTH REQUEST >>> " + Static.API_URL + " rev:" + getRevNum(), request.toString());
-                httpPost.setEntity(new ByteArrayEntity(request.toString().getBytes("UTF8")));
-                rawResponse = request(httpClient, httpPost);
-                Debug.logJson(TAG, "REAUTH RESPONSE <<<", rawResponse);
-                response = new ApiResponse(rawResponse);
+            IApiResponse response;
+            //Отправляем запрос, если есть SSID и Токен или если запрос не требует авторизации
+            if (!Ssid.isEmpty() || !request.isNeedAuth()) {
+                response = executeRequest(request);
             } else {
-                //Если не удалос залогиниться, сбрасываем ssid целиком и в следующий раз будем авторизовываться
-                Data.removeSSID(context);
+                //Если у нас нет авторизационного токена, то выкидываем на авторизацию
+                if (AuthToken.getInstance().isEmpty()) {
+                    //Если токен пустой, то сразу конструируем ошибку
+                    response = request.constructApiResponse(IApiResponse.UNKNOWN_SOCIAL_USER, "AuthToken is empty");
+                } else {
+                    //Если SSID пустой, то сразу пишим ответ
+                    response = request.constructApiResponse(IApiResponse.SESSION_NOT_FOUND, "SSID is empty");
+                }
+
             }
+
+            //Проверяем запрос на ошибку неверной сессии
+            if (response.isCodeEqual(IApiResponse.SESSION_NOT_FOUND)) {
+                //если сессия истекла, то переотправляем запрос авторизации в том же потоке
+                response = resendAfterAuth(request);
+
+                //Если после отпправки на авторизацию вернулся пустой запрос,
+                //значит другой поток уже отправил запрос авторизации и нам нужно завершаем обработку и ждать новый SSID
+                if (response == null) {
+                    return;
+                }
+            }
+
+            //Проверяем, нет ли в конечном запросе ошибок авторизации (т.е. не верного токена, пароля и т.п.)
+            checkAuthError(request, response);
+
+            //Обрабатываем ответ от сервера
+            needResend = processResponse(request, response);
+
         } catch (Exception e) {
-            Debug.log(TAG, "С exception:" + e.toString());
+            //Мы отлавливаем все ошибки, возникшие при запросе, не хотим что бы приложение падало из-за них
+            Debug.error(TAG + "::REQUEST::ERROR", e);
+        } finally {
+            //Проверяем, нужно ли завершать запрос и соответсвенно закрыть соединение и почистить запрос
+            if (!needResend) {
+                //Отмечаем запрос отмененным, что бы почистить
+                request.setFinished();
+            }
         }
+    }
+
+    private boolean processResponse(IApiRequest apiRequest, IApiResponse apiResponse) {
+        boolean needResend = false;
+        //Некоторые ошибки обрабатываем дополнительно, не возвращая в клиентский код
+        if (apiResponse.isCodeEqual(IApiResponse.BAN)) {
+            //Если в результате получили ответ, что забанен, прекращаем обработку, сообщаем об этом
+            showBanActivity(apiRequest, apiResponse);
+        } else if (apiResponse.isCodeEqual(IApiResponse.DETECT_FLOOD)) {
+            //Если пользователь заблокирован за флуд, показываем соответсвующий экран
+            showFloodActivity(apiRequest);
+        } else if (apiResponse.isCodeEqual(IApiResponse.MAINTENANCE)) {
+            //Если на сервере ведуться работы, то показыаем диалог повтора
+            needResend = showRetryDialog(apiRequest);
+        } else if (isNeedResend(apiResponse)) {
+            //Переотправляем запрос, если это возможно
+            needResend = resendRequest(apiRequest, apiResponse);
+        } else if (!apiRequest.isCanceled()) {
+            //Если запрос не отменен и мы обработали все ошибки, то отправляем callback
+            needResend = sendHandlerMessage(apiRequest, apiResponse);
+        }
+        return needResend;
+    }
+
+    /**
+     * Добавляет запрос в список отложенных
+     *
+     * @param apiRequest запрос к серверу
+     */
+    private void addToPendign(IApiRequest apiRequest) {
+        synchronized (mPendignRequests) {
+            Debug.log(String.format("add request %s to pending (canceled: %b)", apiRequest.getId(), apiRequest.isCanceled()));
+            mPendignRequests.put(apiRequest.getId(), apiRequest);
+        }
+    }
+
+    private boolean checkAuthError(IApiRequest request, IApiResponse response) {
+        boolean result = false;
+        //Эти ошибки могут возникать, если это запрос авторизации
+        // или когда наши регистрационные данные устарели (сменился токен, пароль и т.п)
+        if (response.isWrongAuthError()) {
+            //Если не удалос залогиниться, сбрасываем ssid и токен целиком
+            Ssid.remove();
+            AuthToken.getInstance().removeToken();
+
+            //Отправляем запрос на переавторизацию
+            sendBroadcastReauth(request.getContext());
+
+            //Изначальный же запрос отменяем, нам не нужно что бы он обрабатывался дальше
+            result = true;
+        }
+
+        return result;
+    }
+
+    private boolean sendHandlerMessage(IApiRequest apiRequest, IApiResponse apiResponse) {
+        ApiHandler handler = apiRequest.getHandler();
+        if (handler != null) {
+            Message msg = new Message();
+            msg.obj = apiResponse;
+            handler.sendMessage(msg);
+        }
+
+        return true;
+    }
+
+    /**
+     * Повторно отправляет запрос, если это возможно
+     *
+     * @param apiRequest  запрос
+     * @param apiResponse ответ сервера
+     * @return удалось ли переотправить запрос
+     */
+    private boolean resendRequest(IApiRequest apiRequest, IApiResponse apiResponse) {
+        boolean needResend = false;
+        //Пробуем переотправить запрос
+        if (apiRequest.isCanResend()) {
+            needResend = true;
+            apiRequest.resend();
+        } else if (!apiRequest.isCanceled()) {
+            //Если не удалось, то просто отправляем сообщение об ошибке
+            sendHandlerMessage(apiRequest, apiResponse);
+        }
+        return needResend;
+    }
+
+    /**
+     * Проверяет код ответа от сервера и возваращает флаг, нужно ли переотправить данный запрос
+     *
+     * @param apiResponse ответ сервера
+     * @return флаг необходимости повтора запроса
+     */
+    private boolean isNeedResend(IApiResponse apiResponse) {
+        return App.isOnline() && apiResponse.isCodeEqual(
+                //Если ответ пустой
+                IApiResponse.NULL_RESPONSE,
+                //Если с сервера пришел не корректный json
+                IApiResponse.WRONG_RESPONSE,
+                //Если после переавторизации у нас все же не верный ssid, то пробуем все повторить
+                IApiResponse.SESSION_NOT_FOUND,
+                //Если у нас ошибки подключения
+                IApiResponse.CONNECTION_ERROR
+        );
+    }
+
+    private void showBanActivity(IApiRequest apiRequest, IApiResponse apiResponse) {
+        Intent intent = new Intent(apiRequest.getContext(), BanActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(BanActivity.INTENT_TYPE, BanActivity.TYPE_BAN);
+        intent.putExtra(BanActivity.BANNING_TEXT_INTENT, apiResponse.getErrorMessage());
+        apiRequest.getContext().startActivity(intent);
+    }
+
+    private void showFloodActivity(IApiRequest apiRequest) {
+        Intent intent = new Intent(apiRequest.getContext(), BanActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(BanActivity.INTENT_TYPE, BanActivity.TYPE_FLOOD);
+        apiRequest.getContext().startActivity(intent);
+    }
+
+    private boolean showRetryDialog(final IApiRequest apiRequest) {
+        boolean needResend = false;
+        if (apiRequest.getHandler() != null) {
+            needResend = true;
+            apiRequest.getHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                    RetryDialog retryDialog = new RetryDialog(apiRequest.getContext(), apiRequest);
+                    retryDialog.setMessage(apiRequest.getContext().getString(R.string.general_maintenance));
+                    retryDialog.setButton(
+                            Dialog.BUTTON_POSITIVE,
+                            apiRequest.getContext().getString(R.string.general_dialog_retry),
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    apiRequest.exec();
+                                }
+                            }
+                    );
+                    retryDialog.show();
+                }
+            });
+        }
+
+        return needResend;
+    }
+
+    private boolean checkForFlood(IApiRequest apiRequest) {
+        // Не посылать запросы пока не истечет время бана за флуд
+        if (isBlockedForFlood()) {
+            showFloodActivity(apiRequest);
+            return true;
+        }
+        return false;
+    }
+
+    private IApiResponse executeRequest(IApiRequest apiRequest) {
+        IApiResponse response = null;
+        String rawResponse = null;
+
+        try {
+            int responseCode = apiRequest.sendRequest();
+
+            //Проверяем ответ
+            if (HttpUtils.isCorrectResponseCode(responseCode)) {
+                //Если код ответа верный, то читаем данные из потока и создаем IApiResponse
+                rawResponse = apiRequest.readRequestResult();
+                //Если ответ не пустой, то создаем объект ответа
+                if (!TextUtils.isEmpty(rawResponse)) {
+                    response = apiRequest.constructApiResponse(rawResponse);
+                }
+            } else {
+                //Если не верный, то конструируем соответсвующий ответ
+                response = apiRequest.constructApiResponse(IApiResponse.WRONG_RESPONSE, "Wrong http response code HTTP/" + responseCode);
+            }
+        } catch (UnknownHostException e) {
+            Debug.error(TAG + "::Exception", e);
+            //Это ошибка соединение, такие запросы мы будем переотправлять
+            response = apiRequest.constructApiResponse(IApiResponse.CONNECTION_ERROR, "Connection exception: " + e.toString());
+        } catch (SocketException e) {
+            Debug.error(TAG + "::Exception", e);
+            //Это ошибка подключения, такие запросы мы будем переотправлять
+            response = apiRequest.constructApiResponse(IApiResponse.CONNECTION_ERROR, "Socket exception: " + e.toString());
+        } catch (SocketTimeoutException e) {
+            Debug.error(TAG + "::Exception", e);
+            //Это ошибка подключения, такие запросы мы будем переотправлять
+            response = apiRequest.constructApiResponse(IApiResponse.CONNECTION_ERROR, "Socket exception: " + e.toString());
+        } catch (Exception e) {
+            Debug.error(TAG + "::Exception", e);
+            //Это ошибка нашего кода, не нужно автоматически переотправлять такой запрос
+            response = apiRequest.constructApiResponse(IApiResponse.ERRORS_PROCCESED, "Request exception: " + e.toString());
+        } catch (OutOfMemoryError e) {
+            Debug.error(TAG + "::" + e.toString());
+            //Если OutOfMemory, то отменяем запросы, толку от этого все равно нет
+            response = apiRequest.constructApiResponse(IApiResponse.ERRORS_PROCCESED, "Request OutOfMemory: " + e.toString());
+        } finally {
+            //Закрываем соединение
+            apiRequest.closeConnection();
+
+            if (response == null) {
+                response = apiRequest.constructApiResponse(IApiResponse.NULL_RESPONSE, "Null response");
+            }
+        }
+
+        //Если наш пришли данные от сервера, то логируем их, если нет, то логируем объект запроса
+        Debug.logJson(TAG, "RESPONSE <<< Request ID #" + apiRequest.getId(),
+                rawResponse != null ? rawResponse : response.toString()
+        );
 
         return response;
     }
 
-    private AuthRequest getAuthRequest(Context context) {
-        AuthToken token = new AuthToken(context);
-        AuthRequest authRequest = new AuthRequest(context);
-        authRequest.platform = token.getSocialNet();
-        authRequest.sid = token.getUserId();
-        authRequest.token = token.getTokenKey();
-        return authRequest;
-    }
-
-    private String getRevNum() {
-        return App.isDebugMode() ? Static.REV : "";
-    }
-
     /**
-     * Добавляет в http запрос куки с номером ревизии для тестирования беты
+     * Сперва отправляется запрос авторизации, после чего запрос отправляется вновь
      *
-     * @param httpPost запрос к которому будет добавлен заголовок
+     * @param request запрос, который будет выполнен после авторизации
+     * @return ответ сервера
      */
-    private void setRevisionHeader(HttpPost httpPost) {
-        String rev = getRevNum();
-        if (rev != null && rev.length() > 0) {
-            httpPost.setHeader("Cookie", "revnum=" + rev + ";");
+    private IApiResponse sendAuthAndExecute(IApiRequest request) {
+        Debug.log(TAG + "::Reauth");
+        IApiResponse response = null;
+        Context context = request.getContext();
+
+        //Отправляем запрос авторизации
+        IApiResponse authResponse = executeRequest(
+                new AuthRequest(AuthToken.getInstance(), context)
+        );
+
+        //Проверяем, что авторизация прошла и нет ошибки
+        if (authResponse.isCodeEqual(IApiResponse.RESULT_OK)) {
+            Auth auth = new Auth(authResponse);
+            //Сохраняем новый SSID в SharedPreferences
+            Ssid.save(auth.ssid);
+            //Снимаем блокировку
+            mAuthUpdateFlag.set(false);
+            //Заново отправляем исходный запрос с уже новым SSID
+            response = executeRequest(request);
+            //После этого выполняем все отложенные запросы
+            runPendingRequests();
+        } else if (authResponse.isWrongAuthError()) {
+            //Пробрасываем ошибку авторизации в основной запрос, может не очень красиво, зато работает
+            //Может стоит сделать отдельный, внутренний, тип ошибки
+            response = request.constructApiResponse(authResponse.getResultCode(), "Auth error: " + authResponse.getErrorMessage());
         }
+
+        return response;
     }
 
     private void sendBroadcastReauth(Context context) {
@@ -303,42 +399,59 @@ public class ConnectionManager {
         context.sendBroadcast(intent);
     }
 
-    private void addDelayedRequest(final ApiRequest apiRequest) {
-        Thread thread = new Thread() {
+    private boolean isBlockedForFlood() {
+        if (mFloodEndsTime == 0) {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+            mFloodEndsTime = preferences.getLong(BanActivity.FLOOD_ENDS_TIME, 0L);
+        }
+        long now = System.currentTimeMillis();
+        return mFloodEndsTime > now;
 
-            public synchronized void run() {
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                apiRequest.exec();
-            }
-
-        };
-        thread.start();
-
-        mDelayedRequestsThreads.add(thread);
     }
 
+    /**
+     * Заново отправляем отложенные запросы
+     */
+    private void runPendingRequests() {
+        synchronized (mPendignRequests) {
+            if (mPendignRequests.size() > 0) {
+                int size = mPendignRequests.size();
+                Debug.log(TAG + "::Run pendign requests " + size);
+                //Перебираем все запросы
+                Iterator<Map.Entry<String, IApiRequest>> iterator = mPendignRequests.entrySet().iterator();
+                while (iterator.hasNext()) {
+                    //Получаем запрос
+                    IApiRequest request = iterator.next().getValue();
 
-    public synchronized void notifyDelayedRequests() {
-        for (Thread mDelayedRequestsThread : mDelayedRequestsThreads) {
-            try {
-                mDelayedRequestsThread.notify();
-            } catch (Exception ex) {
-                Debug.log(ex.toString());
+                    //Удаляем запрос из списка
+                    iterator.remove();
+
+                    //Если запрос еще не отменен, то отправляем
+                    if (request != null && !request.isCanceled()) {
+                        sendRequest(request);
+                    } else {
+                        String requestId = (request != null) ? request.getId() : "request in null";
+                        Debug.log(TAG + "::Pendign request is canceled " + requestId);
+                    }
+                }
             }
         }
-
-        mDelayedRequestsThreads.clear();
     }
 
-    private boolean isBlockedForFlood() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-        long endTime = preferences.getLong(BanActivity.FLOOD_ENDS_TIME, 0L);
-        long now = System.currentTimeMillis();
-        return endTime > now;
+    private IApiResponse resendAfterAuth(IApiRequest request) {
+        IApiResponse resultResponse = null;
+        //Проверяем, что еще не запущен запрос авторизации
+        if (mAuthUpdateFlag.compareAndSet(false, true)) {
+            //Отправляем запрос авторизации, после чего будем перезапрашивать ответ
+            resultResponse = sendAuthAndExecute(request);
+            //Снимаем блокировку
+            mAuthUpdateFlag.set(false);
+        } else {
+            //Если же запрос нового SSID в процессе, то отправляем запрос в список ожидающих авторизации
+            addToPendign(request);
+        }
+
+        return resultResponse;
     }
+
 }

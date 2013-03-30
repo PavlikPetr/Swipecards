@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.topface.topface"
           android:installLocation="auto"
-          android:versionCode="52"
-          android:versionName="2.2.4">
+          android:versionCode="62"
+          android:versionName="2.3.8">
 
     <uses-sdk
             android:minSdkVersion="7"
@@ -25,6 +25,7 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="com.android.vending.BILLING"/>
     <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <supports-screens
             android:resizeable="true"
@@ -42,7 +43,7 @@
 
         <!-- Тип сборки. При релизе приложения не забываем его указать! -->
         <meta-data
-                android:name="@string/build_type_key"
+                android:name="com.topface.topface.build"
                 android:value="@string/build_default"/>
 
         <uses-library
@@ -52,20 +53,94 @@
         <!-- activity -->
         <activity
                 android:name=".ui.NavigationActivity"
-                android:screenOrientation="portrait">
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="stateHidden|adjustResize"
+                >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
+
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE" />
+
+
+                <data
+                        android:scheme="http"
+                        android:host="topface.com"
+                        android:pathPrefix="/profile"/>
+
+                <data
+                        android:scheme="http"
+                        android:host="topface.ru"
+                        android:pathPattern="/profile"/>
+
+                <data
+                        android:scheme="http"
+                        android:host="topface.com"
+                        android:pathPrefix="/confirm"/>
+
+                <data
+                        android:scheme="http"
+                        android:host="topface.ru"
+                        android:pathPrefix="/confirm"/>
+
+                <data
+                        android:scheme="https"
+                        android:host="topface.com"
+                        android:pathPattern="/profile"/>
+
+                <data
+                        android:scheme="https"
+                        android:host="topface.ru"
+                        android:pathPattern="/profile"/>
+
+                <data
+                        android:scheme="https"
+                        android:host="topface.com"
+                        android:pathPrefix="/confirm"/>
+
+                <data
+                        android:scheme="https"
+                        android:host="topface.ru"
+                        android:pathPrefix="/confirm"/>
+
+                />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="topface"
+                    android:host="offerwall"
+                    />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                        android:scheme="topface"
+
+                        />
             </intent-filter>
         </activity>
         <activity
                 android:name=".utils.social.WebAuthActivity"
-                android:screenOrientation="portrait"/>
+                android:screenOrientation="portrait">
+
+        </activity>
 
         <activity
                 android:name=".ui.CitySearchActivity"
-                android:screenOrientation="portrait"/>
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="stateHidden"/>
         <activity
                 android:name=".ui.GeoMapActivity"
                 android:screenOrientation="portrait"
@@ -80,13 +155,13 @@
         <activity
                 android:name=".ui.edit.EditContainerActivity"
                 android:screenOrientation="portrait"/>
-        <activity android:name=".ui.ChatActivity">
-        </activity>
         <activity android:name=".ui.GiftsActivity"/>
         <activity
                 android:name=".ui.LeadersActivity"
                 android:screenOrientation="portrait"/>
-        <activity android:name=".ui.settings.SettingsContainerActivity"/>
+        <activity
+                android:name=".ui.settings.SettingsContainerActivity"
+                android:screenOrientation="portrait"/>
         <activity android:name=".ui.BanActivity"/>
         <activity
                 android:name="com.google.ads.AdActivity"
@@ -94,7 +169,30 @@
         <activity android:name="com.adfonic.android.AdfonicActivity"/>
         <activity android:name="ru.wapstart.plus1.sdk.MraidBrowser"/>
         <activity android:name=".ui.profile.BlackListActivity"/>
-        <activity android:name=".ui.ContainerActivity"/>
+        <activity
+                android:name=".ui.ContainerActivity"
+                android:windowSoftInputMode="stateHidden|adjustResize"/>
+
+        <activity
+                android:name="com.mad.ad.ImageActivity"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+        <activity
+                android:name="com.mad.view.Browser"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+        <activity
+                android:name="com.mad.view.OrmmaActionHandler"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+
+        <activity
+                android:name="com.tapjoy.TJCOffersWebView"
+                android:configChanges="keyboardHidden|orientation"/>
+        <activity
+                android:name="com.tapjoy.TapjoyVideoView"
+                android:configChanges="keyboardHidden|orientation"/>
+
+        <activity
+                android:name="com.sponsorpay.sdk.android.publisher.OfferWallActivity"
+                android:configChanges="orientation"/>
 
         <!-- Алиас для главной активити из первой версии. На xвсякий случай, а то раньше уже были проблемы с FB -->
         <activity-alias
@@ -124,6 +222,13 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".receivers.TestNotificationsReceiver">
+            <intent-filter>
+                <action android:name="com.topface.topface.NOTIFY"/>
+            </intent-filter>
+        </receiver>
+
+
         <!-- gcm -->
         <service android:name=".GCMIntentService"/>
         <receiver
@@ -146,6 +251,22 @@
             </intent-filter>
         </receiver>
 
+        <receiver
+                android:exported="true"
+                android:name="com.sponsorpay.sdk.android.advertiser.InstallReferrerReceiver">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER"/>
+            </intent-filter>
+        </receiver>
+
+
+
+        <!-- providers -->
+        <provider
+                android:name="com.mad.provider.MadProvider"
+                android:authorities="com.topface.topface.mad.provider"
+                android:exported="false"
+                android:multiprocess="true"/>
     </application>
 
 </manifest>

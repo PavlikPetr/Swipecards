@@ -236,7 +236,6 @@
     <string name="vip_messages_bg">Pozadie správ</string>
     <string name="vip_black_list">Čierna listina</string>
     <string name="vip_profile_bg">Fotografia na pozadie</string>
-    <string name="profile_vip_status">Super Skils</string>
     <string name="profile_services">Služby</string>
     <string name="default_balance_constant">Na Vašom účte</string>
     <string name="default_energy_coins_buy_btn_text">Kúpiť mince, doplniť zásoby energie</string>
@@ -307,6 +306,9 @@
     <string name="popup_version_message">Je čas obnoviť svoju verziu!</string>
     <string name="popup_version_update">Obnoviť</string>
     <string name="popup_version_cancel">Pripomenúť neskôr</string>
-    <string name="general_version_not_supported">Vaša verzia aplikácie je stará a nepodporovaná. Prosím, obnovte aplikáciu</string>
-    <string name="leaders_select_photo_info">Vyberte najefektívnejšiu fotografiu! Fotografie z nízkym ratingom nemožno vyberať</string>
+    <string name="default_price_format">Celkovo: %.2f USD</string>
+    <string name="dating_online_only">%s, iba online</string>
+    <string name="map_popup_address">Adresa</string>
+    <string name="general_gift">Darček</string>
+    <string name="general_soon">Čoskoro</string>
 </resources>

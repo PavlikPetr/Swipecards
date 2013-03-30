@@ -8,7 +8,6 @@ import com.topface.topface.ui.fragments.BaseFragment;
 
 public abstract class AbstractEditFragment extends BaseFragment {
 
-    protected Button mSaveButton;
     protected Button mBackButton;
     protected ProgressBar mRightPrsBar;
     protected Handler mFinishHandler;
@@ -31,49 +30,33 @@ public abstract class AbstractEditFragment extends BaseFragment {
                     mRightPrsBar.setVisibility(View.VISIBLE);
                 }
 
-                if (mSaveButton != null) {
-                    mSaveButton.setVisibility(View.INVISIBLE);
-                }
             }
         });
     }
 
     protected void finishRequestSend() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mBackButton != null) {
-                    mBackButton.setEnabled(true);
-                }
-
-                if (mRightPrsBar != null) {
-                    mRightPrsBar.setVisibility(View.GONE);
-                    if (hasChanges()) {
-                        if (mSaveButton != null) {
-                            mSaveButton.setVisibility(View.VISIBLE);
-                        }
-                    } else {
-                        mRightPrsBar.setVisibility(View.INVISIBLE);
+        if(getActivity() != null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (mBackButton != null) {
+                        mBackButton.setEnabled(true);
                     }
-                }
-                unlockUi();
-            }
-        });
+
+                    if (mRightPrsBar != null) {
+                        mRightPrsBar.setVisibility(View.GONE);
+                        if (!hasChanges()) {
+                            mRightPrsBar.setVisibility(View.INVISIBLE);
+                        }
+                    }
+                    unlockUi();
+                    }
+            });
+        }
     }
 
     protected void refreshSaveState() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mSaveButton != null) {
-                    if (hasChanges()) {
-                        mSaveButton.setVisibility(View.VISIBLE);
-                    } else {
-                        mSaveButton.setVisibility(View.INVISIBLE);
-                    }
-                }
-            }
-        });
+
     }
 
     protected abstract void lockUi();

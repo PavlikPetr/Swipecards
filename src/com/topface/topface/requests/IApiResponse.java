@@ -1,0 +1,73 @@
+package com.topface.topface.requests;
+
+import org.json.JSONObject;
+
+@SuppressWarnings("UnusedDeclaration")
+public interface IApiResponse {
+    // Constants
+    public static final int CONNECTION_ERROR = -3;
+    public static final int ERRORS_PROCCESED = -2;
+    public static final int RESULT_OK = -1;
+    public static final int RESULT_DONT_SET = 0;
+    public static final int UNKNOWN_SOCIAL_USER = 1;
+    public static final int UNKNOWN_PLATFORM = 2;
+    public static final int SESSION_NOT_FOUND = 3;
+    public static final int UNSUPPORTED_CITIES_FILTER = 4;
+    public static final int MISSING_REQUIRE_PARAMETER = 5;
+    public static final int USER_NOT_FOUND = 6;
+    public static final int UNSUPPORTED_LOCALE = 7;
+    public static final int CANNOT_SENT_RATE = 8;
+    public static final int MESSAGE_TOO_SHORT = 9;
+    public static final int CANNOT_SENT_MESSAGE = 10;
+    public static final int DETECT_FLOOD = 11;
+    public static final int INCORRECT_PHOTO_URL = 12;
+    public static final int DEFAULT_ERO_PHOTO = 13;
+    public static final int PAYMENT = 14;
+    public static final int INCORRECT_VOTE = 15;
+    public static final int INVALID_TRANSACTION = 16;
+    public static final int INVALID_PRODUCT = 17;
+    public static final int INVERIFIED_RECEIPT = 18;
+    public static final int ITUNES_CONNECTION = 19;
+    public static final int UNVERIFIED_TOKEN = 20;
+    public static final int INVALID_FORMAT = 21;
+    public static final int UNVERIFIED_SIGNATURE = 22;
+    public static final int INCORRECT_VALUE = 23;
+    public static final int MAINTENANCE = 27;
+    public static final int BAN = 28;
+    public static final int NETWORK_CONNECT_ERROR = 29;
+    public static final int PREMIUM_ACCESS_ONLY = 32;
+    public static final int NON_EXIST_PHOTO_ERROR = 33;
+    public static final int INVALID_PURCHASE_TOKEN = 34;
+    public static final int CANNOT_BECOME_LEADER = 35;
+    public static final int CODE_VIRUS_LIKES_ALREADY_RECEIVED = 36;
+    public static final int CODE_OLD_APPLICATION_VERSION = 37;
+    public static final int USER_ALREADY_REGISTERED = 39;
+    public static final int INCORRECT_LOGIN = 42;
+    public static final int INCORRECT_PASSWORD = 43;
+
+    // local
+    public static final int NULL_RESPONSE = 100;
+    public static final int WRONG_RESPONSE = 101;
+
+
+    /**
+     * Проверяет, равен ли один из переданных кодов текущему коду ответа
+     *
+     * @param errorCodes возможные коды ответа сервера, на которые нужно проверить
+     */
+    public boolean isCodeEqual(Integer... errorCodes);
+
+    /**
+     * Проверяет, является ли код ошибки кодом неверной авторизации
+     */
+    boolean isWrongAuthError();
+
+    /**
+     * Возвращает текст ошибки, если он есть и null, если это не ошибка
+     */
+    public String getErrorMessage();
+
+    public JSONObject getJsonResult();
+
+    public int getResultCode();
+}

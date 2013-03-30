@@ -19,6 +19,7 @@ import com.topface.topface.R;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 
+@SuppressWarnings("UnusedDeclaration")
 public class NoviceLayout extends RelativeLayout {
 
     private Context mContext;
@@ -26,7 +27,6 @@ public class NoviceLayout extends RelativeLayout {
     private ImageView mMask;
     private ImageView mBackground;
     private TextView mBubbleText;
-    private TextView mExtraText;
 
     private OnClickListener mMaskListener;
     private OnClickListener mBackgroundListener;
@@ -53,10 +53,10 @@ public class NoviceLayout extends RelativeLayout {
         mMask = (ImageView) findViewById(R.id.ivMask);
         mBackground = (ImageView) findViewById(R.id.ivBackground);
         mBubbleText = (TextView) findViewById(R.id.ivBubble);
-        mExtraText = (TextView) findViewById(R.id.tvExtraText);
+        TextView extraText = (TextView) findViewById(R.id.tvExtraText);
         Typeface tf = Typeface.createFromAsset(mContext.getAssets(), "neucha.otf");
         if (mBubbleText != null) mBubbleText.setTypeface(tf);
-        if (mExtraText != null) mExtraText.setTypeface(tf);
+        if (extraText != null) extraText.setTypeface(tf);
 
         if (mMask != null) {
             ViewTreeObserver vto = mMask.getViewTreeObserver();
@@ -67,7 +67,7 @@ public class NoviceLayout extends RelativeLayout {
                 public void onGlobalLayout() {
                     int[] point = new int[2];
                     mMask.getLocationOnScreen(point);
-                    mBackground.setImageBitmap(getMaskedBackgroundBitmap(mMask, point));
+                    mBackground.setImageBitmap(getMaskedBackgroundBitmap(point));
                     ViewTreeObserver obs = mMask.getViewTreeObserver();
                     invalidate();
                     obs.removeGlobalOnLayoutListener(this);
@@ -87,18 +87,13 @@ public class NoviceLayout extends RelativeLayout {
         if (mBubbleText != null) mBubbleText.setText(bubbleText);
     }
 
-    public void setLayoutRes(int res, OnClickListener maskListener, OnClickListener backgroundListener) {
-        setLayoutRes(res, maskListener);
-        mBackgroundListener = backgroundListener;
-    }
-
     public void setLayoutRes(int res, OnClickListener maskListener, OnClickListener backgroundListener, String bubbleText) {
         setLayoutRes(res, maskListener);
         mBackgroundListener = backgroundListener;
         if (mBubbleText != null) mBubbleText.setText(bubbleText);
     }
 
-    private Bitmap getMaskedBackgroundBitmap(ImageView maskView, int[] point) {
+    private Bitmap getMaskedBackgroundBitmap(int[] point) {
         Bitmap output = null;
         try {
             Bitmap mask = ((BitmapDrawable) mMask.getDrawable()).getBitmap();

@@ -1,38 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_horizontal"
-    android:orientation="vertical" >
-
-    <TextView
-        android:id="@+id/tvSexTitle" 
-        style="@style/BackgroundFormTitleText"
-        android:text="@string/general_sex"
-        android:layout_marginTop="10dp"/>
-    
-    <include
-        android:id="@+id/loGirl"
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"        
-        layout="@layout/item_edit_form_check" />
+        android:layout_height="fill_parent"
+        >
 
     <include
-        android:id="@+id/loBoy"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/item_edit_form_check" />
+            layout="@layout/bar_navigation_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/loNavigationBar"/>
 
-    <include
-        android:id="@+id/loName"
-        layout="@layout/item_edit_form_input" />
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:layout_below="@id/loNavigationBar"
+            android:layout_marginTop="10dp">
 
-    <include
-        android:id="@+id/loAge"
-        layout="@layout/item_edit_form_input" />
+        <TextView
+                android:id="@+id/tvSexTitle"
+                style="@style/BackgroundFormTitleText"
+                android:text="@string/general_sex"
+                />
 
-    <include
-        android:id="@+id/loStatus"
-        layout="@layout/item_edit_form_input" />
+        <include
+                android:id="@+id/loGirl"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/item_edit_form_check"/>
 
-</LinearLayout>
+        <include
+                android:id="@+id/loBoy"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/item_edit_form_check"/>
+
+        <include
+                android:id="@+id/loName"
+                layout="@layout/item_edit_form_input"/>
+
+        <include
+                android:id="@+id/loAge"
+                layout="@layout/item_edit_form_input"/>
+
+        <include
+                android:id="@+id/loStatus"
+                layout="@layout/item_edit_form_input"/>
+
+    </LinearLayout>
+
+    <ImageView style="@style/HeaderShadow"/>
+</RelativeLayout>

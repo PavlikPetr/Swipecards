@@ -1,28 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                >
 
     <com.topface.topface.ui.views.ImageViewRemote
-            xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
             android:id="@+id/ivPhoto"
-            android:layout_width="98dp"
-            android:layout_height="105.5dp"
+            style="@style/GalleryItem"
             android:layout_centerInParent="true"
-            android:background="@drawable/user_frame_album_center"
-            android:paddingLeft="0.5dp"
-            android:paddingRight="0.5dp"
-            android:scaleType="centerInside"
-            ivr:clipMask="@drawable/user_mask_album"
-            ivr:postProcessor="mask"/>
+            android:layout_marginTop="14dp"
+            />
 
     <ImageView
             android:id="@+id/ivShadow"
-            android:layout_width="98dp"
-            android:layout_height="105.5dp"
-            android:padding="1dp"
+            android:layout_width="110dp"
+            android:layout_height="114dp"
             android:layout_centerInParent="true"
-            android:src="@drawable/edit_photo_frame_shadow"/>
+            android:scaleType="fitXY"
+            android:src="@drawable/edit_photo_frame_shadow"
+            android:paddingBottom="4dp"
+            />
 
     <Button
             android:id="@+id/btnSetAsMainSelected"
@@ -57,9 +54,9 @@
             style="@style/EditPhotoButtonsText"
             android:layout_width="wrap_content"
             android:layout_height="26dp"
-            android:layout_alignBottom="@id/ivPhoto"
+            android:layout_alignBottom="@id/ivShadow"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="6dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/edit_btn_delete_photo_selector"
             android:text="@string/edit_delete"/>
 
@@ -68,9 +65,9 @@
             style="@style/EditPhotoButtonsText"
             android:layout_width="wrap_content"
             android:layout_height="26dp"
-            android:layout_alignBottom="@id/ivPhoto"
+            android:layout_alignBottom="@id/ivShadow"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="6dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/edit_btn_set_as_main_selector"
             android:text="@string/edit_restore"
             android:visibility="invisible"/>

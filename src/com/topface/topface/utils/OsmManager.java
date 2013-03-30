@@ -4,7 +4,7 @@ import android.location.Address;
 import android.os.Handler;
 import android.os.Message;
 import com.topface.topface.Static;
-import com.topface.topface.utils.http.Http;
+import com.topface.topface.utils.http.HttpUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,7 +40,7 @@ public class OsmManager {
         StringBuilder resultSB = new StringBuilder();
 
         try {
-            JSONObject responseJSON = new JSONObject(Http.httpGetRequest(getAddressRequest(lat, lon)));
+            JSONObject responseJSON = new JSONObject(HttpUtils.httpGetRequest(getAddressRequest(lat, lon)));
             //result = responseJSON.getString(OSM_DISPLAY_NAME);
             JSONObject details = responseJSON.getJSONObject("address");
             resultSB.append(details.getString("road"));
@@ -67,8 +67,8 @@ public class OsmManager {
 //				Debug.log("OSM", val+"::"+details.getString(val));
 //			}
 
-        } catch (JSONException e) {
-            Debug.log("OSM", e.toString());
+        } catch (Exception e) {
+            Debug.error(e);
         }
         return resultSB.toString();
     }
@@ -91,7 +91,7 @@ public class OsmManager {
         String query = text.replace(" ", "%20");
 
         try {
-            JSONArray responseJSON = new JSONArray(Http.httpGetRequest(getSearchRequest(query)));
+            JSONArray responseJSON = new JSONArray(HttpUtils.httpGetRequest(getSearchRequest(query)));
             for (int i = 0; i < responseJSON.length() || i < maxNumber; i++) {
                 JSONObject item = responseJSON.getJSONObject(i);
                 String address = item.getString(OSM_DISPLAY_NAME);

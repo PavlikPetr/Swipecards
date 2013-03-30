@@ -208,6 +208,7 @@
     <string name="dashbrd_popup_cancel">Ne plus demander</string>
     <string name="dashbrd_popup_rate">Exposer la côte de popularité</string>
     <string name="dashbrd_popup_later">Demander plus tard</string>
+    <string name="buying_store_connect">J\'appelle iTunes Store</string>
     <string name="buying_store_purchase">Je fais un achat à iTunes Store</string>
     <string name="buying_tf_ack_sending">J\'envoie l\'information sur l\'achat à Topface</string>
     <string name="settings_melody">La mélodie de la notification</string>
@@ -231,7 +232,7 @@
     <string name="vip_messages_bg">Le fond des mesages</string>
     <string name="vip_black_list">Liste noire</string>
     <string name="vip_profile_bg">La photo de fond</string>
-    <string name="profile_vip_status">Super Skills</string>
+    <string name="profile_vip_status">Super {{rocket}} Skills</string>
     <string name="profile_services">Services</string>
     <string name="default_balance_constant">Sur votre compte</string>
     <string name="default_energy_coins_buy_btn_text">Acheter des pièces et des sympathies</string>
@@ -288,9 +289,28 @@
     <string name="general_buying">Achter des sympathies et des pièces</string>
     <string name="general_block">Bloquer</string>
     <string name="general_buying_disabled">L\'achat est impossible maintenant</string>
-    <string name="ban_flood_detected">Vous envoyez les demandes au serveur trop souvent. Veuillez attendre afin de continuer à utiliser l\'application.</string>
-    <string name="general_maintenance">Le serveur subit actuellement les travaux de maintenance. Votre demande ne peut pas être réalisée. Essayez de répéter plus tard.</string>
+    <string name="ban_flood_detected">Vous envoyez les demandes au serveur trop souvent. Pour continuer à utiliser l\'application il vous faut attendre.</string>
+    <string name="general_maintenance">Il y a les travaux techniques et votre demande ne peut pas être accomplie. Essayez de répéter plus tard.</string>
     <string name="virus_chat_likes_request_title">Offrir des sympathies à vos amis</string>
     <string name="virus_chat_btn">Recevoir des sympathies</string>
     <string name="virus_request_error">On n\'a pas réussi d\'énvoyer les sympathies à vos amis</string>
+    <plurals name="virus_request_likes_cnt">
+        <item quantity="other">Maintenant vous avez %d sympathies!</item>
+        <item quantity="one">Maintenant vous avez %d sympathie!</item>
+    </plurals>
+    <string name="profile_ask_sent">La demande est envoyée</string>
+    <string name="virus_error">Votre ami ne peut offrir des sympathies qu\'une seule fois sur 24 heures! Essayez demain!</string>
+    <string name="popup_version_title">Une nouvelle version de l\'application est accessible</string>
+    <string name="popup_version_message">Il est l\'heure de renouveler la version!</string>
+    <string name="popup_version_update">Renouveler</string>
+    <string name="popup_version_cancel">Rappeler plus tard</string>
+    <string name="general_version_not_supported">Votre version de l\'application n\'est plus actuelle et n\'est plus soutenue. Veuillez renouveler l\'application</string>
+    <string name="leaders_select_photo_info">Choisissez la plus belle photo! Il est impossible de choisir des photographies avec une côte de popularité basse</string>
+    <string name="default_price_format">Au total: %.2f USD</string>
+    <string name="dating_online_only">%s, seulement en ligne</string>
+    <string name="map_popup_address">Adresse</string>
+    <string name="black_list_info">Vous avez ajouté l\'interlocuteur à la liste noire. Vous pouvez le changer dans  de votre profile, dans les paramètres du statut VIP.</string>
+    <string name="general_gift">Cadeau</string>
+    <string name="black_list_activation">Activez le statut VIP et utilisez la liste noire</string>
+    <string name="profile_edit_age_ranges">L\'âge doit être entre 16 et 99 ans. Veuillez saisir le nombre correct et répétez</string>
 </resources>

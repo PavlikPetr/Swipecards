@@ -4,31 +4,23 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import com.topface.topface.R;
-import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
+import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
 
-public class UserPhotoGridAdapter extends BaseAdapter {
+public class UserPhotoGridAdapter extends ProfileGridAdapter {
     // Data
     private LayoutInflater mInflater;
-    private Photos mPhotoLinks;
 
     // class ViewHolder
     static class ViewHolder {
         ImageViewRemote photo;
     }
 
-    public UserPhotoGridAdapter(Context context) {
+    public UserPhotoGridAdapter(Context context, Photos photoLinks, int totalPhotos, LoadingListAdapter.Updater callback) {
+        super(photoLinks, totalPhotos, callback);
         mInflater = LayoutInflater.from(context);
-        mPhotoLinks = new Photos();
-    }
-
-    @Override
-    public int getCount() {
-        //noinspection ConstantConditions
-        return mPhotoLinks != null ? mPhotoLinks.size() : 0;
     }
 
     @Override
@@ -50,17 +42,7 @@ public class UserPhotoGridAdapter extends BaseAdapter {
     }
 
     @Override
-    public Photo getItem(int position) {
-        return mPhotoLinks.get(position);
-    }
-
-    @Override
     public long getItemId(int position) {
         return position;
-    }
-
-    public void setUserData(Photos photos) {
-        mPhotoLinks = photos;
-        notifyDataSetChanged();
     }
 }

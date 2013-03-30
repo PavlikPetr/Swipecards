@@ -5,21 +5,19 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.BlackListItem;
-import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BlackListDeleteRequest;
 import com.topface.topface.requests.FeedRequest;
-import com.topface.topface.requests.VipApiHandler;
+import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.adapters.BlackListAdapter;
+import com.topface.topface.utils.ActionBar;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 /**
  * Черный список. Сюда попадают заблокированые пользователи, отныне от них не приходит никакая активность
@@ -27,8 +25,7 @@ import java.util.LinkedList;
 public class BlackListFragment extends FeedFragment<BlackListItem> implements View.OnClickListener {
 
     private static final int BLACK_LIST_DELETE_BUTTON = 0;
-
-    private LinkedList<Integer> mDeleteList = new LinkedList<Integer>();
+    private ActionBar mActionBar;
 
     @Override
     protected int getLayout() {
@@ -82,33 +79,28 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
     @Override
     protected void initNavigationBar(View view) {
         // Navigation bar
-        View backButton = view.findViewById(R.id.btnNavigationBack);
-        backButton.setVisibility(View.VISIBLE);
-        backButton.setOnClickListener(new View.OnClickListener() {
+        mActionBar = getActionBar(view);
+        mActionBar.showBackButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().finish();
             }
         });
 
-        final Button editButton = (Button) view.findViewById(R.id.btnEditList);
-        editButton.setVisibility(View.VISIBLE);
-        editButton.setOnClickListener(new View.OnClickListener() {
+        mActionBar.showEditButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleEditList(editButton);
+                toggleEditList();
             }
         });
     }
 
-    private void toggleEditList(Button editButton) {
-        editButton.setText(((BlackListAdapter) getListAdapter()).isEditMode() ?
-                R.string.general_edit_button :
-                R.string.general_save_button
-        );
+    private void toggleEditList() {
+
         final BlackListAdapter adapter = ((BlackListAdapter) mListAdapter);
         //Удаляем отмеченные элементы, отправляя запрос на сервер
         deleteMarkedItems(adapter);
+        mActionBar.activateEditButton();
         //Переключаем адаптер
         adapter.toggleEditMode();
     }
@@ -129,10 +121,8 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
                         @Override
                         public void always(ApiResponse response) {
                             super.always(response);
-                            if (isAdded()) {
-                                if (mLockView != null) {
-                                    mLockView.setVisibility(View.GONE);
-                                }
+                            if (mLockView != null) {
+                                mLockView.setVisibility(View.GONE);
                             }
                         }
                     })
@@ -198,8 +188,6 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 BlackListAdapter adapter = (BlackListAdapter) getListAdapter();
                 if (adapter.isEditMode()) {
-                    //Добавляем в список пользователей для удаления
-                    FeedItem item = (FeedItem) parent.getItemAtPosition(position);
                     adapter.toggleItemDeleteMark((int) id);
                 } else {
                     baseListener.onItemClick(parent, view, position, id);

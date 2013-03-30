@@ -4,7 +4,7 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class SearchCitiesRequest extends AbstractApiRequest {
+public class SearchCitiesRequest extends ApiRequest {
     // Data
     public static final String service = "searchCities";
     public String prefix; // начальный текст наименования города в UTF-8. Минимальный размер текста - 3 символа

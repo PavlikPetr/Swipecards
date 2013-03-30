@@ -1,22 +1,27 @@
 package com.topface.topface.ui;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.TextView;
+import android.support.v4.app.FragmentManager;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.ui.fragments.BuyingFragment;
-import com.topface.topface.ui.fragments.VipBuyFragment;
+import com.topface.topface.ui.fragments.*;
+import com.topface.topface.utils.Debug;
 
 public class ContainerActivity extends BaseFragmentActivity {
 
-    public static final int INTENT_BUY_VIP_FRAGMENT = 1;
+    private int mCurrentFragmentId = -1;
+    private Fragment mCurrentFragment;
 
+    private static final String TAG_FRAGMENT = "current_fragment";
+
+    public static final int INTENT_BUY_VIP_FRAGMENT = 1;
     public static final int INTENT_BUYING_FRAGMENT = 2;
+    public static final int INTENT_CHAT_FRAGMENT = 3;
+    public static final int INTENT_REGISTRATION_FRAGMENT = 4;
+    public static final int INTENT_RECOVER_PASSWORD = 5;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -25,32 +30,54 @@ public class ContainerActivity extends BaseFragmentActivity {
 
         overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
 
-        // Title Header
-        findViewById(R.id.btnNavigationHome).setVisibility(View.INVISIBLE);
-        ImageButton backButton = ((ImageButton) findViewById(R.id.btnNavigationBack));
-        backButton.setVisibility(View.VISIBLE);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setResult(Activity.RESULT_CANCELED);
-                finish();
-            }
-        });
-
-        Intent intent = getIntent();
-        startFragment(intent.getIntExtra(Static.INTENT_REQUEST_KEY, 0));
+        initRequestKey();
     }
 
-    public void startFragment(int id) {
+    private void initRequestKey() {
+        if (mCurrentFragmentId == -1) {
+            Intent intent = getIntent();
+            try {
+                mCurrentFragmentId = intent.getIntExtra(Static.INTENT_REQUEST_KEY, 0);
+            } catch (Exception ex) {
+                Debug.error(ex);
+                finish();
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mCurrentFragment == null) {
+            mCurrentFragment = getFragment(mCurrentFragmentId);
+        }
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if (mCurrentFragment != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.loFrame, mCurrentFragment, TAG_FRAGMENT).commit();
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        FragmentManager manager = getSupportFragmentManager();
+        if (savedInstanceState != null) {
+            mCurrentFragment = manager.findFragmentByTag(TAG_FRAGMENT);
+        }
+    }
+
+    private Fragment getFragment(int id) {
         Fragment fragment = null;
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
         switch (id) {
             case INTENT_BUY_VIP_FRAGMENT:
-                ((TextView) findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.profile_vip_status));
-                fragment = VipBuyFragment.newInstance();
-//                Toast.makeText(App.getContext(), R.string.general_premium_access_error, Toast.LENGTH_SHORT).show();
+                fragment = VipBuyFragment.newInstance(true);
                 break;
             case INTENT_BUYING_FRAGMENT:
-                ((TextView) findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.buying_header_title));
                 Bundle extras = getIntent().getExtras();
                 if (extras.containsKey(BuyingFragment.ARG_ITEM_TYPE) && extras.containsKey(BuyingFragment.ARG_ITEM_PRICE)) {
                     fragment = BuyingFragment.newInstance(extras.getInt(BuyingFragment.ARG_ITEM_TYPE),
@@ -58,17 +85,41 @@ public class ContainerActivity extends BaseFragmentActivity {
                 } else {
                     fragment = BuyingFragment.newInstance();
                 }
+                break;
+            case INTENT_CHAT_FRAGMENT:
+                Intent intent = getIntent();
+
+                fragment = ChatFragment.newInstance(intent.getIntExtra(ChatFragment.INTENT_ITEM_ID, -1),
+                        intent.getIntExtra(ChatFragment.INTENT_USER_ID, -1),
+                        false,
+                        intent.getIntExtra(ChatFragment.INTENT_USER_SEX, Static.BOY),
+                        intent.getStringExtra(ChatFragment.INTENT_USER_NAME),
+                        intent.getIntExtra(ChatFragment.INTENT_USER_AGE, 0),
+                        intent.getStringExtra(ChatFragment.INTENT_USER_CITY),
+                        intent.getStringExtra(BaseFragmentActivity.INTENT_PREV_ENTITY));
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+                break;
+            case INTENT_REGISTRATION_FRAGMENT:
+                fragment = new RegistrationFragment();
+                break;
+            case INTENT_RECOVER_PASSWORD:
+                fragment = new RecoverPwdFragment();
+                break;
             default:
                 break;
         }
-        if (fragment != null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.loFrame, fragment).commit();
-        }
+        return fragment;
     }
 
     @Override
     public boolean isTrackable() {
         return false;
+    }
+
+    @Override
+    protected boolean isNeedAuth() {
+        initRequestKey();
+        return mCurrentFragmentId != INTENT_REGISTRATION_FRAGMENT &&
+                mCurrentFragmentId != INTENT_RECOVER_PASSWORD && super.isNeedAuth();
     }
 }

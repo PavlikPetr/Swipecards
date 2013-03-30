@@ -4,7 +4,7 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class FeedRequest extends AbstractApiRequest {
+public class FeedRequest extends ApiRequest {
     // Data
     public int limit;   // максимальное количество запрашиваемых диалогов. ОДЗ: 0 < limit <= 50
     public int to;  // идентификатор последнего диалога для отображения. В случае отсутствия параметра диалоги возвращаются от последнего

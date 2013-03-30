@@ -3,11 +3,10 @@ package com.topface.topface.utils;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
-import com.topface.topface.data.SearchUser;
+import com.topface.topface.data.search.Search;
+import com.topface.topface.data.search.SearchUser;
 import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
-
-import java.util.LinkedList;
 
 public class PreloadManager {
 
@@ -25,9 +24,9 @@ public class PreloadManager {
         this(0, 0);
     }
 
-    public void preloadPhoto(LinkedList<SearchUser> userList, int position) {
-        if (position < userList.size()) {
-            preloadNextPhoto(userList.get(position).photos.getFirst());
+    public void preloadPhoto(Search userList) {
+        if (!userList.isEnded()) {
+            preloadNextPhoto(userList.get(userList.getSearchPosition() + 1).photos.getFirst());
         }
     }
 
@@ -54,13 +53,15 @@ public class PreloadManager {
     private boolean preloadNextPhoto(Photo photo, ImageLoadingListener listener) {
         boolean result = false;
         if (photo != null && canLoad) {
-            int size = Math.max(height, width);
-            if (size > 0) {
-                preloadImage(photo.getSuitableLink(width, height), listener);
-            } else {
-                preloadImage(photo.getSuitableLink(Photo.SIZE_960), listener);
+            if (!photo.isFake()) {
+                int size = Math.max(height, width);
+                if (size > 0) {
+                    preloadImage(photo.getSuitableLink(width, height), listener);
+                } else {
+                    preloadImage(photo.getSuitableLink(Photo.SIZE_960), listener);
+                }
+                result = true;
             }
-            result = true;
         }
 
         return result;

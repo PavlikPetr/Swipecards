@@ -5,7 +5,7 @@
               android:paddingLeft="6dp"
               android:paddingRight="6dp"
               android:orientation="horizontal"
-              android:background="@drawable/chat_footer_send">
+              android:background="@drawable/bg_chat_footer_send">
 
     <ImageButton
             android:id="@+id/btnChatAdd"
@@ -43,6 +43,6 @@
             android:text="@string/general_send_button"
             android:textSize="12sp"
             android:textColor="#FFFFFF"
-            android:background="@drawable/map_send_selector"/>
+            android:background="@drawable/btn_chat_send_selector"/>
 
 </LinearLayout>

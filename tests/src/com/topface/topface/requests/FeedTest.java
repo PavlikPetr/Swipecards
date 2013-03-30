@@ -3,10 +3,10 @@ package com.topface.topface.requests;
 import android.content.Context;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
+import com.topface.topface.requests.handlers.ApiHandler;
 
 public abstract class FeedTest<T extends FeedItem> extends AbstractThreadTest {
     private static final int LIMIT = 10;
-    public Exception mAssertError;
 
 
     private void sendFeedRequest(final String testName) {

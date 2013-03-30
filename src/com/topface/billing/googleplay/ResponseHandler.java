@@ -12,23 +12,26 @@ import com.topface.billing.googleplay.BillingService.RestoreTransactions;
 import com.topface.billing.googleplay.Consts.PurchaseState;
 import com.topface.billing.googleplay.Consts.ResponseCode;
 import com.topface.topface.App;
+import com.topface.topface.data.Options;
 import com.topface.topface.data.Verify;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.OptionsRequest;
 import com.topface.topface.requests.VerifyRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.CacheProfile;
 
 /**
  * This class contains the methods that handle responses from Android Market.  The
  * implementation of these methods is specific to a particular application.
  * The methods in this example update the database and, if the main application
- * has registered a {@llink PurchaseObserver}, will also update the UI.  An
+ * has registered a {@link PurchaseObserver}, will also update the UI.  An
  * application might also want to forward some responses on to its own server,
  * and that could be done here (in a background thread) but this example does
  * not do that.
  * <p/>
  * You should modify and obfuscate this code before using it.
  */
+@SuppressWarnings("UnusedParameters")
 public class ResponseHandler {
     private static final String TAG = "ResponseHandler";
 
@@ -49,18 +52,9 @@ public class ResponseHandler {
     }
 
     /**
-     * Unregisters a previously registered observer.
-     *
-     * @param observer the previously registered observer.
-     */
-    public static synchronized void unregister(PurchaseObserver observer) {
-        sPurchaseObserver = null;
-    }
-
-    /**
      * Notifies the application of the availability of the MarketBillingService.
      * This method is called in response to the application calling
-     * {@link BillingService#checkBillingSupported()}.
+     * {@link BillingService#checkBillingSupported}.
      *
      * @param supported true if in-app billing is supported.
      */
@@ -93,7 +87,7 @@ public class ResponseHandler {
     /**
      * Notifies the application of purchase state changes. The application
      * can offer an item for sale to the user via
-     * {@link BillingService#requestPurchase(String)}. The BillingService
+     * {@link BillingService#requestPurchase}. The BillingService
      * calls this method after it gets the response. Another way this method
      * can be called is if the user bought something on another device running
      * this same app. Then Android Market notifies the other devices that
@@ -193,6 +187,7 @@ public class ResponseHandler {
                 if (sPurchaseObserver != null) {
                     sPurchaseObserver.postVerify(response);
                 }
+                sendOptionsRequest(context);
             }
 
             @Override
@@ -217,6 +212,21 @@ public class ResponseHandler {
                         GooglePlayV2Queue.getInstance(App.getContext()).sendQueueItems();
                     }
                 }, BillingUtils.BILLING_QUEUE_CHECK_DELAY);
+            }
+        }).exec();
+    }
+
+    private static void sendOptionsRequest(Context context) {
+        final OptionsRequest request = new OptionsRequest(context);
+        request.callback(new ApiHandler() {
+            @Override
+            public void success(final ApiResponse response) {
+                Options.parse(response);
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+
             }
         }).exec();
     }

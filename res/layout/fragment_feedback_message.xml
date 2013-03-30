@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/bg_main"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+    <include
+            layout="@layout/bar_navigation_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/loNavigationBar"
+            android:layout_alignParentTop="true"
+            />
+
+
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingTop="8dp"
+            android:layout_below="@id/loNavigationBar">
+
+        <TextView style="@style/BackgroundFormTitleText"/>
+
+        <EditText
+                android:id="@+id/edText"
+                style="@style/ItemTitleText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp"
+                android:gravity="top|left"
+                android:background="@drawable/edit_editbox_selector"
+                android:inputType="textMultiLine"
+                android:padding="10dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:minLines="1"
+                android:singleLine="false"
+                android:textSize="14sp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"/>
+
+        <include
+                android:id="@+id/loEmailSwitcher"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/item_edit_form_switch"
+                android:layout_marginTop="10dp"/>
+
+        <TextView
+                android:paddingTop="8dp"
+                android:id="@+id/tvEmailTitle"
+                style="@style/BackgroundFormTitleText"
+                android:text="@string/settings_feedback_email"
+                android:visibility="gone"/>
+
+        <EditText
+                android:id="@+id/edEmail"
+                style="@style/ItemTitleText"
+                android:layout_width="fill_parent"
+                android:layout_height="34dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp"
+                android:gravity="top|left|center_horizontal"
+                android:background="@drawable/edit_editbox_selector"
+                android:inputType="textMultiLine"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:textSize="14sp"
+                android:visibility="gone"/>
+        <Button
+                android:id="@+id/generalSendButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/ButtonGrayText"
+            android:layout_margin="10dp"
+            android:background="@drawable/btn_gray_large_selector"
+            android:text="@string/general_send_full"
+            />
+
+    </LinearLayout>
+    <com.topface.topface.ui.views.LockerView
+            android:id="@+id/fbLoadingLocker"
+            android:layout_width="fill_parent"
+            style="@style/LoadingLocker"
+            android:layout_height="fill_parent"
+            android:layout_below="@id/loNavigationBar"
+            android:visibility="gone"
+            />
+    <ImageView style="@style/HeaderShadow"/>
+</RelativeLayout>

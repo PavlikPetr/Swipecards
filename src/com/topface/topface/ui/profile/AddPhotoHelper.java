@@ -1,50 +1,43 @@
 package com.topface.topface.ui.profile;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import com.topface.topface.Data;
+import android.widget.ListView;
+import android.widget.Toast;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
-import com.topface.topface.Static;
-import com.topface.topface.data.Confirmation;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.PhotoAddRequest;
+import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.TopfaceNotificationManager;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.http.Http;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.UUID;
 
 /**
  * Хелпер для загрузки фотографий в любой активити
- * <p/>
- * Как использовать:
- * 1) Вызвать метод addPhoto или addEroPhoto, для показа диалога
- * 1а) Вы можете добавить коллбэк на окончание загрузки фото через метод setOnResultHandler
- * 2) В методе onActivityResult вашей активити вызвать метод checkActivityResult
- * (если это результат с загрузкой фото, то фотография начнет загружаться на сервер)
  */
 public class AddPhotoHelper {
 
-    public static final String PATH_TO_FILE = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp.jpg";
+    public static final String PATH_TO_FILE = Environment.getExternalStorageDirectory().getAbsolutePath() + "/topface_tmp";
+    private String mFileName = "/tmp.jpg";
+
     private Context mContext;
-    private AlertDialog mAddPhotoDialog;
     private Activity mActivity;
     private Fragment mFragment;
     private Handler mHandler;
@@ -54,12 +47,20 @@ public class AddPhotoHelper {
     public static final int ADD_PHOTO_RESULT_ERROR = 1;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA = 101;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY = 100;
+    private TopfaceNotificationManager mNotificationManager;
+    private File outputFile;
+    private static HashMap<String, File> fileNames = new HashMap<String, File>();
 
 
     public AddPhotoHelper(Fragment fragment, LockerView mLockerView) {
         this(fragment.getActivity());
         mFragment = fragment;
         this.mLockerView = mLockerView;
+    }
+
+    public AddPhotoHelper(Fragment fragment) {
+        this(fragment.getActivity());
+        mFragment = fragment;
     }
 
     public AddPhotoHelper(Activity activity) {
@@ -71,47 +72,12 @@ public class AddPhotoHelper {
         if (mLockerView != null) {
             mLockerView.setVisibility(View.VISIBLE);
         }
-//        if(lock)
-//        FragmentManager fm = ((FragmentActivity) mActivity).getSupportFragmentManager();
-//        FragmentTransaction ft = fm.beginTransaction();
-//
-//        Fragment prev = fm.findFragmentByTag(ProgressDialogFragment.PROGRESS_DIALOG_TAG);
-//        if (prev != null) {
-//            ft.remove(prev);
-//        }
-//        ft.addToBackStack(null);
-//
-//        DialogFragment newFragment = ProgressDialogFragment.newInstance();
-//        ft.add(newFragment, ProgressDialogFragment.PROGRESS_DIALOG_TAG);
-//        ft.commitAllowingStateLoss();
     }
 
     public void hideProgressDialog() {
         if (mLockerView != null) {
             mLockerView.setVisibility(View.GONE);
         }
-//        FragmentManager fm = ((FragmentActivity) mActivity).getSupportFragmentManager();
-//        FragmentTransaction ft = fm.beginTransaction();
-//
-//        Fragment prev = fm.findFragmentByTag(ProgressDialogFragment.PROGRESS_DIALOG_TAG);
-//        if (prev != null) {
-//            ft.remove(prev);
-//        }
-//        ft.commitAllowingStateLoss();
-    }
-
-    /**
-     * Добавление фотографии
-     */
-    public void addPhoto() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
-        builder.setTitle(mContext.getString(R.string.album_add_photo_title));
-        View view = LayoutInflater.from(mContext).inflate(R.layout.profile_add_photo, null);
-        view.findViewById(R.id.btnAddPhotoAlbum).setOnClickListener(mOnAddPhotoClickListener);
-        view.findViewById(R.id.btnAddPhotoCamera).setOnClickListener(mOnAddPhotoClickListener);
-        builder.setView(view);
-        mAddPhotoDialog = builder.create();
-        mAddPhotoDialog.show();
     }
 
     public OnClickListener getAddPhotoClickListener() {
@@ -122,37 +88,79 @@ public class AddPhotoHelper {
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
-                case R.id.btnAddPhotoAlbum: {
-                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.profile_add_title));
-                    if (mFragment != null) {
-                        mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
-//                        mFragment.getActivity().startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
-                    } else {
-                        mActivity.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
-                    }
-                }
-                break;
-                case R.id.btnAddPhotoCamera: {
-                    Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(PATH_TO_FILE)));
-                    intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.profile_add_title));
-
-                    if (Utils.isIntentAvailable(mContext, intent.getAction())) {
-                        if (mFragment != null) {
-                            mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
-//                            mFragment.getActivity().startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
-                        } else {
-                            mActivity.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
-                        }
-                    }
-                }
-                break;
+                case R.id.btnAddPhotoAlbum:
+                case R.id.btnTakeFormGallery:
+                    startChooseFromGallery();
+                    break;
+                case R.id.btnAddPhotoCamera:
+                case R.id.btnTakePhoto:
+                    startCamera();
+                    break;
             }
-            if (mAddPhotoDialog != null && mAddPhotoDialog.isShowing())
-                mAddPhotoDialog.cancel();
         }
     };
+
+    private void startCamera() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+
+                UUID uuid = UUID.randomUUID();
+                mFileName = "/" + uuid.toString() + ".jpg";
+                File outputDirectory = new File(PATH_TO_FILE);
+                //noinspection ResultOfMethodCallIgnored
+                if (!outputDirectory.exists()) {
+                    if (!outputDirectory.mkdirs()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(mContext, R.string.general_error, 1500).show();
+                            }
+                        });
+                        return;
+                    }
+                }
+                outputFile = new File(outputDirectory, mFileName);
+                intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(outputFile));
+                intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.profile_add_title));
+
+                if (Utils.isIntentAvailable(mContext, intent.getAction())) {
+                    if (mFragment != null) {
+                        if (mFragment.isAdded()) {
+                            if (mFragment instanceof ProfilePhotoFragment) {
+                                mFragment.getParentFragment().startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
+                            } else {
+                                mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
+                            }
+                        }
+                    } else {
+                        mActivity.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
+                    }
+                }
+
+
+            }
+        }).start();
+    }
+
+    public Activity getActivity() {
+        return (mFragment == null) ? mActivity : mFragment.getActivity();
+    }
+
+    private void startChooseFromGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.profile_add_title));
+        if (mFragment != null) {
+            if (mFragment instanceof ProfilePhotoFragment) {
+                mFragment.getParentFragment().startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
+            } else {
+                mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
+            }
+        } else {
+            mActivity.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY);
+        }
+    }
 
     /**
      * Коллбэк, вызываемый после загрузки фотографии
@@ -165,7 +173,12 @@ public class AddPhotoHelper {
         return this;
     }
 
-    public boolean checkActivityResult(int requestCode, int resultCode, Intent data) {
+    public Uri processActivityResult(int requestCode, int resultCode, Intent data) {
+        return processActivityResult(requestCode, resultCode, data, true);
+    }
+
+    public Uri processActivityResult(int requestCode, int resultCode, Intent data, boolean sendPhotoRequest) {
+        Uri photoUri = null;
         if (mFragment != null) {
             if (mFragment.getActivity() != null && !mFragment.isAdded()) {
                 Debug.log("APH::detached");
@@ -173,104 +186,109 @@ public class AddPhotoHelper {
         }
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA) {
-                if (data == null) {
-                    data = new Intent();
+                //Если фотография сделана, то ищем ее во временном файле
+                if (outputFile != null) {
+                    photoUri = Uri.fromFile(outputFile);
                 }
-                data.putExtra("isCamera", true);
-                new AsyncTaskUploader().execute(data);
-                return true;
             } else if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY) {
-                if (data == null) {
-                    data = new Intent();
-                }
-                data.putExtra("isCamera", false);
-                new AsyncTaskUploader().execute(data);
-                return true;
+                //Если она взята из галереи, то получаем URL из данных интента и преобразуем его в путь до файла
+                photoUri = data.getData();
+            }
+
+            //Отправляем запрос
+            if (sendPhotoRequest) {
+                sendRequest(photoUri);
             }
         }
-        return false;
+
+        return photoUri;
     }
 
-    class AsyncTaskUploader extends AsyncTask<Intent, Void, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            showProgressDialog();
-        }
-
-        @Override
-        protected String doInBackground(Intent... intentList) {
-            String rawResponse = null;
-            Intent intent = intentList[0];
-            try {
-
-                if (intent.getBooleanExtra("isCamera", false)) {
-                    File receivedImage = new File(PATH_TO_FILE);
-                    rawResponse = getRawResponse(receivedImage);
-                } else {
-                    rawResponse = getRawResponse(intent.getData());
-                }
-
-            } catch (Exception e) {
-                Debug.error("Photo not uploaded", e);
-            } catch (OutOfMemoryError e) {
-                Debug.error("Photo upload OOM: ", e);
-
-            }
-
-
-            return rawResponse;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            if (result != null) {
-                Confirmation c = Confirmation.parse(new ApiResponse(result));
-                if (c.completed) {
-                    Message msg = new Message();
-                    msg.what = ADD_PHOTO_RESULT_OK;
-                    try {
-                        msg.obj = new Photo((new JSONObject(result)).optJSONObject("result").optJSONObject("photo"));
-                    } catch (JSONException e) {
-                        Debug.log(e.toString());
-                    }
-                    mHandler.sendMessage(msg);
-                } else {
-                    mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
-                }
-            } else {
+    /**
+     * Отправляет запрос к API с прикрепленной фотографией
+     *
+     * @param uri фотографии
+     */
+    public void sendRequest(final Uri uri) {
+        if (uri == null) {
+            if (mHandler != null) {
                 mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
             }
-            hideProgressDialog();
+            return;
         }
-    }
+        showProgressDialog();
+        mNotificationManager = TopfaceNotificationManager.getInstance(mContext);
 
-    private String getRawResponse(Uri imageUri) throws IOException {
-        PhotoAddRequest add = new PhotoAddRequest(AddPhotoHelper.this.mContext);
-        add.ssid = Data.SSID;
+        final TopfaceNotificationManager.TempImageViewRemote fakeImageView = new TopfaceNotificationManager.TempImageViewRemote(mContext);
+        fakeImageView.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.MATCH_PARENT));
+        final boolean[] doNeedSendProgressNotification = {true};
+        final int[] progressId = new int[1];
 
-        Cursor cursor = mActivity.getContentResolver().query(imageUri, new String[]{android.provider.MediaStore.Images.ImageColumns.DATA}, null, null, null);
-        cursor.moveToFirst();
+        fakeImageView.setRemoteSrc(uri.toString(), new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                if (doNeedSendProgressNotification[0]) {
+                    progressId[0] = mNotificationManager.showProgressNotification(mContext.getString(R.string.default_photo_upload), "", fakeImageView.getImageBitmap(), new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE));
+                }
+            }
+        });
 
-        //Link to the image
-        final String file = cursor.getString(0);
-        cursor.close();
+        final PhotoAddRequest photoAddRequest = new PhotoAddRequest(uri, mContext);
+        fileNames.put(photoAddRequest.getId(), outputFile);
+        photoAddRequest.callback(new DataApiHandler<Photo>() {
+            @Override
+            protected void success(Photo photo, ApiResponse response) {
+                if (mHandler != null) {
+                    Message msg = new Message();
+                    msg.what = ADD_PHOTO_RESULT_OK;
+                    msg.obj = photo;
+                    mHandler.sendMessage(msg);
+                }
 
-//        String data = Base64.encodeFromFile(file);
-//        new Base64.OutputStream()
+                doNeedSendProgressNotification[0] = false;
+                mNotificationManager.cancelNotification(progressId[0]);
+                mNotificationManager.showNotification(mContext.getString(R.string.default_photo_upload_complete), "", fakeImageView.getImageBitmap(), 1, new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE), true);
+            }
 
-        return Http.httpDataRequest(Http.HTTP_POST_REQUEST, Static.API_URL, add.toString(), file);
-    }
+            @Override
+            protected Photo parseResponse(ApiResponse response) {
+                return new Photo(response);
+            }
 
-    private String getRawResponse(File file) throws IOException {
-        PhotoAddRequest add = new PhotoAddRequest(AddPhotoHelper.this.mContext);
-        add.ssid = Data.SSID;
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+                if (mHandler != null) {
+                    mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
+                }
+                doNeedSendProgressNotification[0] = false;
+                mNotificationManager.cancelNotification(progressId[0]);
+                mNotificationManager.showNotification(mContext.getString(R.string.default_photo_upload_error), "", fakeImageView.getImageBitmap(), 1, new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE), true);
+            }
 
+            @Override
+            public void always(final ApiResponse response) {
+                super.always(response);
+                hideProgressDialog();
+                //Удаляем все временные картинки
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            String id = photoAddRequest.getId();
+                            if (fileNames.get(id).delete()) {
+                                Debug.log("Delete temp photo " + id);
+                            } else {
+                                Debug.log("Error delete temp photo " + id);
+                            }
+                        } catch (Exception e) {
+                            Debug.error(e);
+                        }
 
-//        String data = Base64.encodeFromFile(file.getAbsolutePath());
-
-        return Http.httpDataRequest(Http.HTTP_POST_REQUEST, Static.API_URL, add.toString(), file.getAbsolutePath());
+                    }
+                }).start();
+            }
+        }).exec();
     }
 
 }

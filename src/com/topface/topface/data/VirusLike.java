@@ -103,8 +103,9 @@ public class VirusLike extends AbstractData {
             final ArrayList<Long> socialIdForRequest = getSocialIdForRequest();
             params.putString("to", TextUtils.join(",", socialIdForRequest));
             //Показываем диалог прилашения
-            AuthorizationManager.getFacebook().setAccessToken(new AuthToken(context).getTokenKey());
-            AuthorizationManager.getFacebook().dialog(context, "apprequests", params, new VirusLikeDialogListener(context) {
+            Facebook facebook = AuthorizationManager.getFacebook();
+            facebook.setAccessToken(AuthToken.getInstance().getTokenKey());
+            facebook.dialog(context, "apprequests", params, new VirusLikeDialogListener(context) {
 
                 @Override
                 public void onComplete(Bundle values) {
@@ -196,7 +197,7 @@ public class VirusLike extends AbstractData {
      * @param params  Bundle с параметрами диалога
      */
     private void setRequestDataParam(Context context, Bundle params) {
-        AuthToken token = new AuthToken(context);
+        AuthToken token = AuthToken.getInstance();
         params.putString("data", "{\"type\":\"invite\",\"page\":\"Dating\",\"ref\":\"likegift:" + token.getUserId() + "\"}");
     }
 

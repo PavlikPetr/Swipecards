@@ -1,7 +1,5 @@
 package com.topface.topface.utils;
 
-import java.io.BufferedOutputStream;
-
 @SuppressWarnings("ALL")
 public class Base64 {
 
@@ -1459,36 +1457,29 @@ public class Base64 {
     }   // end encodeFromFile
 
 
-    public static String encodeFromFileToOutputStream(String filename, BufferedOutputStream output)
+    public static void encodeFromInputToOutputStream(java.io.InputStream stream, java.io.OutputStream output)
             throws java.io.IOException {
 
-        String encodedData = null;
         Base64.InputStream bis = null;
         try {
-            // Set up some useful variables
-            java.io.File file = new java.io.File(filename);
-            byte[] buffer = new byte[8192]; // Need max() for math on small files (v2.2.1); Need +1 for a few corner cases (v2.3.5)
+            byte[] buffer = new byte[Math.min(stream.available(), 8192)];
             int length = 0;
             int numBytes = 0;
 
-            // Open a stream
+            //Create from InputStream Base64.InputStream for encoding
             bis = new Base64.InputStream(
-                    new java.io.BufferedInputStream(
-                            new java.io.FileInputStream(file)), Base64.ENCODE);
+                    new java.io.BufferedInputStream(stream),
+                    Base64.ENCODE
+            );
 
-            // Read until done
-            while ((bis.read(buffer)) >= 0) {
-                output.write(buffer);
+            //Write until done
+            while ((numBytes = bis.read(buffer)) >= 0) {
+                length += numBytes;
+                Debug.log("Write bytes: " + length);
+                output.write(buffer, 0, numBytes);
+            }
 
-            }   // end while
-
-            // Save in a variable to return
-        }   // end try
-        catch (java.io.IOException e) {
-            Debug.error("EncodeFromFile :: ", e);
-            throw e; // Catch and release to execute finally{}
-        }   // end catch: java.io.IOException
-        finally {
+        } finally {
             try {
                 if (bis != null) {
                     bis.close();
@@ -1496,9 +1487,8 @@ public class Base64 {
             } catch (Exception e) {
                 Debug.error(e);
             }
-        }   // end finally
+        }
 
-        return encodedData;
     }
 
     /**

@@ -5,7 +5,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ProfileRequest extends AbstractApiRequest {
+public class ProfileRequest extends ApiRequest {
     // Data
     public static final String PROFILE_UPDATE_ACTION = "com.topface.topface.UPDATE_PROFILE";
     public static final String SERVICE_NAME = "profile";
@@ -13,11 +13,8 @@ public class ProfileRequest extends AbstractApiRequest {
     //public String  fields;  //массив интересующих полей профиля
     // Constants
     public static final int P_ALL = 0;
-    public static final int P_FILTER = 2;
-    public static final int P_QUESTIONARY = 3;
-    public static final int P_ALBUM = 4;
-    public static final int P_INFO = 5;
-    public static final int P_DASHBOARD = 6;
+    public static final int P_EMAIL_CONFIRMED = 1;
+    public static final int P_BALANCE_COUNTERS = 2;
 
     public ProfileRequest(Context context) {
         super(context);
@@ -29,23 +26,17 @@ public class ProfileRequest extends AbstractApiRequest {
 
         JSONArray fields;
         switch (part) {
-            case P_FILTER:
-                fields = getFilter();
-                break;
-            case P_QUESTIONARY:
-                fields = getQuestionary();
-                break;
-            case P_ALBUM:
-                fields = getAlbum();
-                break;
-            case P_DASHBOARD:
-                fields = getDashboard();
-                break;
-            case P_INFO:
-                fields = getInfo();
-                break;
             case P_ALL:
                 fields = null;
+                break;
+            case P_EMAIL_CONFIRMED:
+                fields = new JSONArray();
+                fields.put("email_confirmed");
+                break;
+            case P_BALANCE_COUNTERS:
+                fields = new JSONArray();
+                fields.put("likes");
+                fields.put("money");
                 break;
             default:
                 fields = new JSONArray();
@@ -65,48 +56,6 @@ public class ProfileRequest extends AbstractApiRequest {
     @Override
     public String getServiceName() {
         return SERVICE_NAME;
-    }
-
-    private JSONArray getNotification() {
-        JSONArray array = new JSONArray();
-        array.put("money").put("likes").put("average_rate").put("unread_rates").put("unread_likes").put("unread_messages").put("unread_symphaties");
-
-        return array;
-    }
-
-    private JSONArray getFilter() {
-        JSONArray array = new JSONArray();
-        array.put("dating");
-
-        return array;
-    }
-
-    private JSONArray getQuestionary() {
-        JSONArray array = new JSONArray();
-        array.put("questionary");
-
-        return array;
-    }
-
-    private JSONArray getAlbum() {
-        JSONArray array = new JSONArray();
-        array.put("album");
-
-        return array;
-    }
-
-    private JSONArray getInfo() {
-        JSONArray array = getNotification();
-        array.put("uid").put("first_name").put("age").put("sex").put("city").put("avatars").put("status");
-
-        return array;
-    }
-
-    private JSONArray getDashboard() {
-        JSONArray array = getNotification();
-        array.put("city").put("dating").put("avatars").put("flags");
-
-        return array;
     }
 
 }

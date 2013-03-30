@@ -5,16 +5,18 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
-import com.topface.topface.Data;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.data.Top;
+import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.CitiesRequest;
 import com.topface.topface.requests.DataApiHandler;
@@ -25,14 +27,16 @@ import com.topface.topface.ui.blocks.FilterBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.views.DoubleButton;
 import com.topface.topface.ui.views.LockerView;
+import com.topface.topface.ui.views.RetryView;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.NavigationBarController;
 
 import java.util.LinkedList;
 
 public class TopsFragment extends BaseFragment {
 
+    private LinkedList<City> mCityList;
     // Data cache
     private LinkedList<Top> mTopsList = new LinkedList<Top>();
     private GridView mGallery;
@@ -45,6 +49,7 @@ public class TopsFragment extends BaseFragment {
 
     private static int GIRLS = 0;
     private static int BOYS = 1;
+    private RetryView mRetryView;
 
     private class ActionData {
         public int sex;
@@ -59,12 +64,12 @@ public class TopsFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.ac_tops, null);
 
         // Navigation bar
-        mNavBarController = new NavigationBarController((ViewGroup) view.findViewById(R.id.loNavigationBar));
-        view.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
-        ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(R.string.general_tops);
-
+//        mNavBarController = new NavigationBarController((ViewGroup) view.findViewById(R.id.loNavigationBar));
+        ActionBar actionBar = getActionBar(view);
+        actionBar.showHomeButton((View.OnClickListener) getActivity());
+        actionBar.setTitleText(getString(R.string.general_tops));
         //Инициализируем кнопку фильтров
-        new FilterBlock((ViewGroup) view, R.id.loControlsGroup, R.id.btnNavigationSettingsBar, R.id.toolsBar);
+        new FilterBlock((ViewGroup) view, R.id.loControlsGroup, actionBar, R.id.toolsBar);
 
         // Data
         mTopsList = new LinkedList<Top>();
@@ -78,8 +83,10 @@ public class TopsFragment extends BaseFragment {
         // Action
         mActionData = new ActionData();
         mActionData.sex = preferences.getInt(Static.PREFERENCES_TOPS_SEX, GIRLS);
-        mActionData.city_id = preferences.getInt(Static.PREFERENCES_TOPS_CITY_ID, CacheProfile.city_id);
-        mActionData.city_name = preferences.getString(Static.PREFERENCES_TOPS_CITY_NAME, CacheProfile.city_name);
+        if (CacheProfile.city != null) {
+            mActionData.city_id = preferences.getInt(Static.PREFERENCES_TOPS_CITY_ID, CacheProfile.city.id);
+            mActionData.city_name = preferences.getString(Static.PREFERENCES_TOPS_CITY_NAME, CacheProfile.city.name);
+        }
         mActionData.city_popup_pos = preferences.getInt(Static.PREFERENCES_TOPS_CITY_POS, -1);
 
         // Double Button
@@ -114,6 +121,20 @@ public class TopsFragment extends BaseFragment {
             }
         });
 
+        //Retry view
+        RelativeLayout cont = (RelativeLayout) view.findViewById(R.id.topContainer);
+
+        mRetryView = new RetryView(getActivity());
+        mRetryView.setErrorMsg(getString(R.string.general_error_try_again_later));
+        mRetryView.addButton(getString(R.string.general_dialog_retry), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mRetryView.setVisibility(View.GONE);
+                updateData();
+            }
+        });
+        mRetryView.setVisibility(View.GONE);
+        cont.addView(mRetryView);
         // Gallery
         mGallery = (GridView) view.findViewById(R.id.grdTopsGallary);
         mGallery.setAnimationCacheEnabled(false);
@@ -136,10 +157,16 @@ public class TopsFragment extends BaseFragment {
         mGridAdapter = new TopsAdapter(getActivity(), mTopsList);
         mGallery.setAdapter(mGridAdapter);
         mGallery.setOnScrollListener(
-                new PauseOnScrollListener(Static.PAUSE_DOWNLOAD_ON_SCROLL, Static.PAUSE_DOWNLOAD_ON_FLING)
+                new PauseOnScrollListener(
+                        DefaultImageLoader.getInstance().getImageLoader(),
+                        Static.PAUSE_DOWNLOAD_ON_SCROLL,
+                        Static.PAUSE_DOWNLOAD_ON_FLING
+                )
         );
 
-        mFloatBlock = new FloatBlock(getActivity(), this, (ViewGroup) view);
+
+        mFloatBlock = new FloatBlock(this, (ViewGroup) view);
+        mFloatBlock.onCreate();
 
         return view;
     }
@@ -155,26 +182,29 @@ public class TopsFragment extends BaseFragment {
         editor.putInt(Static.PREFERENCES_TOPS_CITY_POS, mActionData.city_popup_pos);
         editor.commit();
 
-        super.onDestroy();
+        super.onDestroyView();
     }
 
     private void updateData() {
         onUpdateStart(false);
         mGallery.setSelection(0);
 
-        TopRequest topRequest = new TopRequest(getActivity());
+        final TopRequest topRequest = new TopRequest(getActivity());
         registerRequest(topRequest);
         topRequest.sex = mActionData.sex;
         topRequest.city = mActionData.city_id;
         topRequest.callback(new DataApiHandler<LinkedList<Top>>() {
             @Override
             protected void success(LinkedList<Top> data, ApiResponse response) {
-                mTopsList.clear();
-                mTopsList.addAll(data);
-                onUpdateSuccess(false);
-                if (mGridAdapter != null) {
-                    mGridAdapter.notifyDataSetChanged();
+                if (mGallery != null) {
                     mGallery.setVisibility(View.VISIBLE);
+                    mTopsList.clear();
+                    mTopsList.addAll(data);
+                    onUpdateSuccess(false);
+                    if (mGridAdapter != null) {
+                        mGridAdapter.notifyDataSetChanged();
+                        mGallery.setVisibility(View.VISIBLE);
+                    }
                 }
             }
 
@@ -185,14 +215,19 @@ public class TopsFragment extends BaseFragment {
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                onUpdateFail(false);
+                FragmentActivity activity = getActivity();
+                if (activity != null) {
+                    Toast.makeText(activity, R.string.general_data_error, Toast.LENGTH_SHORT).show();
+                    mRetryView.setVisibility(View.VISIBLE);
+                    mGallery.setVisibility(View.INVISIBLE);
+                    onUpdateFail(false);
+                }
             }
         }).exec();
     }
 
     private void choiceCity() {
-        if (Data.cityList != null && Data.cityList.size() > 0) {
+        if (mCityList != null && mCityList.size() > 0) {
             showCitiesDialog();
             return;
         }
@@ -204,7 +239,7 @@ public class TopsFragment extends BaseFragment {
 
             @Override
             protected void success(LinkedList<City> data, ApiResponse response) {
-                Data.cityList = data;
+                mCityList = data;
                 onUpdateSuccess(false);
                 showCitiesDialog();
             }
@@ -217,7 +252,7 @@ public class TopsFragment extends BaseFragment {
             @Override
             public void fail(int codeError, ApiResponse response) {
                 onUpdateFail(false);
-                Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
             }
 
         }).exec();
@@ -226,13 +261,13 @@ public class TopsFragment extends BaseFragment {
     private void showCitiesDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.filter_select_city));
-        int arraySize = Data.cityList.size();
+        int arraySize = mCityList.size();
         String[] cities = new String[arraySize];
         for (int i = 0; i < arraySize; ++i)
-            cities[i] = Data.cityList.get(i).name;
+            cities[i] = mCityList.get(i).name;
         builder.setSingleChoiceItems(cities, mActionData.city_popup_pos, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int position) {
-                City city = Data.cityList.get(position);
+                City city = mCityList.get(position);
                 if (mActionData.city_id != city.id) {
                     mActionData.city_id = city.id;
                     mActionData.city_name = city.name;
@@ -253,6 +288,7 @@ public class TopsFragment extends BaseFragment {
 
         mGallery = null;
         mGridAdapter = null;
+        mFloatBlock.onDestroy();
     }
 
     @Override
@@ -261,7 +297,6 @@ public class TopsFragment extends BaseFragment {
         if (mTopsList.isEmpty()) {
             updateData();
         }
-        mFloatBlock.onResume();
     }
 
     @Override

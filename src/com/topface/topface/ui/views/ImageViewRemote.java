@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -12,13 +13,10 @@ import android.widget.ImageView;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
-import com.nostra13.universalimageloader.postprocessors.ImagePostProcessor;
+import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
-import com.topface.topface.imageloader.DefaultImageLoader;
-import com.topface.topface.imageloader.MaskClipPostProcessor;
-import com.topface.topface.imageloader.RoundCornersPostProcessor;
-import com.topface.topface.imageloader.RoundPostProcessor;
+import com.topface.topface.imageloader.*;
 import com.topface.topface.utils.Debug;
 
 import java.util.Timer;
@@ -30,6 +28,7 @@ public class ImageViewRemote extends ImageView {
     private static final int POST_PROCESSOR_ROUNDED = 1;
     private static final int POST_PROCESSOR_ROUND_CORNERS = 2;
     private static final int POST_PROCESSOR_MASK = 3;
+    private static final int POST_PROCESSOR_CIRCUMCIRCLE = 4;
     public static final int LOADING_COMPLETE = 0;
     private static final int LOADING_ERROR = 1;
     /**
@@ -40,7 +39,7 @@ public class ImageViewRemote extends ImageView {
      * Задержка перед следующей попыткой загрузки изображения
      */
     private static final long REPEAT_SCHEDULE = 2000;
-    private ImagePostProcessor mPostProcessor;
+    private BitmapProcessor mPostProcessor;
     private String mCurrentSrc;
     private boolean mIsAnimationEnabled;
     /**
@@ -71,6 +70,13 @@ public class ImageViewRemote extends ImageView {
         setAttributes(attrs);
     }
 
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        DefaultImageLoader.getInstance().getImageLoader().cancelDisplayTask(this);
+    }
+
     private void setAttributes(AttributeSet attrs) {
         TypedArray values = getContext().obtainStyledAttributes(attrs, R.styleable.ImageViewRemote);
 
@@ -81,11 +87,11 @@ public class ImageViewRemote extends ImageView {
                 ),
                 values.getDimension(
                         R.styleable.ImageViewRemote_cornersRadius,
-                        RoundCornersPostProcessor.DEFAULT_RADIUS
+                        RoundCornersProcessor.DEFAULT_RADIUS
                 ),
                 values.getResourceId(
                         R.styleable.ImageViewRemote_clipMask,
-                        MaskClipPostProcessor.DEFAULT_MASK
+                        MaskClipProcessor.DEFAULT_MASK
                 )
         );
 
@@ -101,13 +107,16 @@ public class ImageViewRemote extends ImageView {
 
         switch (postProcessorId) {
             case POST_PROCESSOR_ROUNDED:
-                mPostProcessor = new RoundPostProcessor();
+                mPostProcessor = new RoundProcessor();
                 break;
             case POST_PROCESSOR_ROUND_CORNERS:
-                mPostProcessor = new RoundCornersPostProcessor(cornerRadius);
+                mPostProcessor = new RoundCornersProcessor(cornerRadius);
                 break;
             case POST_PROCESSOR_MASK:
-                mPostProcessor = new MaskClipPostProcessor(maskId);
+                mPostProcessor = new MaskClipProcessor(maskId);
+                break;
+            case POST_PROCESSOR_CIRCUMCIRCLE:
+                mPostProcessor = new CircumCircleProcessor();
                 break;
             default:
                 mPostProcessor = null;
@@ -136,7 +145,8 @@ public class ImageViewRemote extends ImageView {
         }
 
 
-        if (!TextUtils.isEmpty(remoteSrc) && !TextUtils.equals(mCurrentSrc, remoteSrc)) {
+        //Если ссылка не пустая и мы не патаемся скачать уже установленный в View изображение, то начинаем загрузку
+        if (!TextUtils.isEmpty(remoteSrc)) {
             if (!remoteSrc.equals(mCurrentSrc)) {
                 mCurrentSrc = remoteSrc;
                 mIsAnimationEnabled = true;
@@ -192,7 +202,7 @@ public class ImageViewRemote extends ImageView {
         return DefaultImageLoader.getInstance();
     }
 
-    public ImagePostProcessor getPostProcessor() {
+    public BitmapProcessor getPostProcessor() {
         return mPostProcessor;
     }
 
@@ -205,15 +215,18 @@ public class ImageViewRemote extends ImageView {
     }
 
     public boolean setPhoto(Photo photo, Handler handler, View loader) {
-        boolean result;
+        boolean result = true;
         mLoader = loader;
+
         if (photo != null) {
-            int size = Math.max(getLayoutParams().height, getLayoutParams().width);
-            if (size > 0) {
-                //noinspection SuspiciousNameCombination
-                result = setRemoteSrc(photo.getSuitableLink(getLayoutParams().height, getLayoutParams().width), handler);
-            } else {
-                result = setRemoteSrc(photo.getSuitableLink(Photo.SIZE_960), handler);
+            if (!photo.isFake()) {
+                int size = Math.max(getLayoutParams().height, getLayoutParams().width);
+                if (size > 0) {
+                    //noinspection SuspiciousNameCombination
+                    result = setRemoteSrc(photo.getSuitableLink(getLayoutParams().height, getLayoutParams().width), handler);
+                } else {
+                    result = setRemoteSrc(photo.getSuitableLink(Photo.SIZE_960), handler);
+                }
             }
         } else {
             result = setRemoteSrc(null);
@@ -232,7 +245,8 @@ public class ImageViewRemote extends ImageView {
         }
 
         @Override
-        public void onLoadingFailed(FailReason failReason) {
+        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+            super.onLoadingFailed(imageUri, view, failReason);
             if (FailReason.OUT_OF_MEMORY != failReason) {
                 try {
                     if (mRepeatCounter >= MAX_REPEAT_COUNT) {
@@ -266,15 +280,23 @@ public class ImageViewRemote extends ImageView {
         }
 
         @Override
-        public void onLoadingComplete(Bitmap loadedImage) {
+        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+            super.onLoadingComplete(imageUri, view, loadedImage);
+
             mRepeatCounter = 0;
             if (mHandler != null) {
-                mHandler.sendEmptyMessage(LOADING_COMPLETE);
+                Message msg = new Message();
+                msg.what = LOADING_COMPLETE;
+                msg.arg1 = loadedImage.getWidth();
+                msg.arg2 = loadedImage.getHeight();
+                mHandler.sendMessage(msg);
+
             }
         }
 
         @Override
-        public void onLoadingCancelled() {
+        public void onLoadingCancelled(String imageUri, View view) {
+            super.onLoadingCancelled(imageUri, view);
             mRepeatCounter = 0;
             if (mHandler != null) {
                 mHandler.sendEmptyMessage(LOADING_ERROR);

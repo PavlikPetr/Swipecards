@@ -51,5 +51,12 @@
             android:layout_height="fill_parent"
             android:visibility="gone"/>
 
+    <FrameLayout
+            android:id="@+id/loBannerContainer"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            />
 </RelativeLayout>
 

@@ -40,13 +40,13 @@
             <TextView
                     android:id="@+id/ivProfilePhotoCover"
                     style="@style/ItemTitleText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="102dp"
+                    android:layout_height="102dp"
                     android:layout_centerInParent="true"
                     android:gravity="center"
                     android:text="@string/edit_profile_photo"
                     android:textSize="10sp"
-                    android:background="@drawable/edit_profile_avatar_frame"/>
+                    android:background="@drawable/edit_main_avatar_cover"/>
         </RelativeLayout>
 
         <RelativeLayout

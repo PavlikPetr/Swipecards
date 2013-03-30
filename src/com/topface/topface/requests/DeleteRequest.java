@@ -5,7 +5,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class DeleteRequest extends AbstractApiRequest {
+public class DeleteRequest extends ApiRequest {
     public int id;
 
     public DeleteRequest(Context context) {
@@ -21,7 +21,7 @@ public class DeleteRequest extends AbstractApiRequest {
 
     @Override
     public String getServiceName() {
-        return "delete";
+        return "feedDelete";
     }
 
     @Override

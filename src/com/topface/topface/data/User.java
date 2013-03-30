@@ -11,39 +11,36 @@ public class User extends Profile {
     public int last_visit;  // таймстамп последнего посещения приложения
     public String status;   // статус пользователя
     public boolean online;  // флаг наличия пользвоателя в онлайне
-    public boolean ero;     // флаг наличия эротических фотографий
     public boolean mutual;  // флаг наличия симпатии к авторизованному пользователю
     public int score;       // средний балл оценок пользователя    
-    public Photos photos;
-    public Photo photo;
-    public boolean rated;
     public int formMatches = 0;
+    public boolean banned;
 
-    public static User parse(int userId, ApiResponse response) { //нужно знать userId
-        User profile = new User();
+    public static User parse(int userId, ApiResponse response) {
+        User user = new User();
 
         try {
-            JSONObject item = response.jsonResult.getJSONObject("profiles");
-            item = item.getJSONObject("" + userId);
+            JSONObject profiles = response.jsonResult.optJSONObject("profiles");
+            String profileId = Integer.toString(userId);
 
-            parse(profile, item);
+            if (profiles != null && profiles.has(profileId)) {
+                JSONObject item = profiles.getJSONObject(profileId);
 
-            profile.platform = item.optString("platform");
-            profile.last_visit = item.optInt("last_visit");
-            profile.status = item.optString("status");
-            profile.online = item.optBoolean("online");
-            profile.ero = item.optBoolean("ero");
-            profile.mutual = item.optBoolean("mailmutual");
-            profile.score = item.optInt("score");
-            profile.photo = new Photo(item.getJSONObject("photo"));
-            profile.photos = Photos.parse(item.getJSONArray("photos"));
-
-            initPhotos(item, profile);
+                parse(user, item);
+                user.platform = item.optString("platform");
+                user.last_visit = item.optInt("last_visit");
+                user.status = item.optString("status");
+                user.online = item.optBoolean("online");
+                user.mutual = item.optBoolean("mailmutual");
+                user.score = item.optInt("score");
+                user.banned = item.optBoolean("banned");
+            }
 
         } catch (Exception e) {
             Debug.error("Wrong response parsing", e);
         }
 
-        return profile;
+        return user;
     }
+
 }

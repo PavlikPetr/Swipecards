@@ -1,43 +1,36 @@
 package com.topface.topface.ui.adapters;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+import android.widget.AbsListView;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Gift;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.GiftGalleryManager;
+import com.topface.topface.utils.Debug;
 
-public class GiftsAdapter extends LoadingListAdapter {
+public class GiftsAdapter extends LoadingListAdapter<FeedGift> implements AbsListView.OnScrollListener {
 
     public static final int T_SEND_BTN = 3;
+    public static final int T_COUNT = 4;
 
-    private LayoutInflater mInflater;
-
-    private GiftGalleryManager<FeedGift> mGalleryManager;
-
-    public GiftsAdapter(Context context, GiftGalleryManager<FeedGift> galleryManager) {
-        mInflater = LayoutInflater.from(context);
-        mGalleryManager = galleryManager;
-
-        mLoaderRetrier = mInflater.inflate(R.layout.item_grid_loader_retrier, null, false);
-        mLoaderRetrierText = (TextView) mLoaderRetrier.findViewById(R.id.tvLoaderText);
-        mLoaderRetrierProgress = (ProgressBar) mLoaderRetrier.findViewById(R.id.prsLoader);
+    public class ViewHolder {
+        ImageViewRemote giftImage;
+        TextView priceText;
+        TextView giftText;
     }
 
-    @Override
-    public int getCount() {
-        return mGalleryManager.size();
+    public GiftsAdapter(Context context, FeedList<FeedGift> data, Updater updateCallback) {
+        super(context, data, updateCallback);
     }
+
 
     @Override
     public int getViewTypeCount() {
-        return (super.getViewTypeCount() + 1);
+        return T_COUNT;
     }
 
     @Override
@@ -51,72 +44,83 @@ public class GiftsAdapter extends LoadingListAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    protected View getContentView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
 
         int type = getItemViewType(position);
+        FeedGift item = getItem(position);
 
-        if (type == T_LOADER) {
-            mLoaderRetrierProgress.setVisibility(View.VISIBLE);
-            mLoaderRetrierText.setVisibility(View.INVISIBLE);
-            return mLoaderRetrier;
-        } else if (type == T_RETRIER) {
-            mLoaderRetrierProgress.setVisibility(View.INVISIBLE);
-            mLoaderRetrierText.setVisibility(View.VISIBLE);
-            return mLoaderRetrier;
+        if (convertView == null) {
+            convertView = mInflater.inflate(R.layout.item_gift, null, false);
+
+            holder = new ViewHolder();
+            holder.giftImage = (ImageViewRemote) convertView.findViewById(R.id.giftImage);
+            holder.priceText = (TextView) convertView.findViewById(R.id.giftPrice);
+            holder.giftText = (TextView) convertView.findViewById(R.id.giftText);
+
+            convertView.setTag(holder);
         } else {
-            if (convertView == null) {
-                convertView = mInflater.inflate(R.layout.item_gift, null, false);
+            holder = (ViewHolder) convertView.getTag();
+        }
 
-                holder = new ViewHolder();
-                holder.giftImage = (ImageViewRemote) convertView.findViewById(R.id.giftImage);
-                holder.priceText = (TextView) convertView.findViewById(R.id.giftPrice);
-                holder.giftText = (TextView) convertView.findViewById(R.id.giftText);
-
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-
-            if (type == T_SEND_BTN) {
-                holder.giftImage.setImageBitmap(null);
-                holder.giftImage.setBackgroundResource(R.drawable.chat_gift_selector);
-                holder.giftText.setText(R.string.gifts_send_btn);
+        if (type == T_SEND_BTN) {
+            holder.giftImage.setImageBitmap(null);
+            holder.giftImage.setBackgroundResource(R.drawable.chat_gift_selector);
+            holder.giftText.setText(R.string.gifts_send_btn);
+            holder.giftText.setVisibility(View.VISIBLE);
+            holder.priceText.setVisibility(View.GONE);
+        } else {
+            if (item.gift.type == Gift.PROFILE || item.gift.type == Gift.PROFILE_NEW) {
+                holder.giftImage.setRemoteSrc(item.gift.link);
+                holder.giftText.setText(Static.EMPTY);
                 holder.giftText.setVisibility(View.VISIBLE);
                 holder.priceText.setVisibility(View.GONE);
             } else {
-                FeedGift item = getItem(position);
-                if (item.gift.type == Gift.PROFILE || item.gift.type == Gift.PROFILE_NEW) {
-                    mGalleryManager.getImage(position, holder.giftImage);
-                    holder.giftText.setText(Static.EMPTY);
-                    holder.giftText.setVisibility(View.VISIBLE);
-                    holder.priceText.setVisibility(View.GONE);
-                } else {
-                    mGalleryManager.getImage(position, holder.giftImage);
-                    holder.priceText.setVisibility(View.VISIBLE);
-                    holder.priceText.setText(Integer.toString(item.gift.price));
-                    holder.giftText.setVisibility(View.GONE);
-                }
+                holder.giftImage.setRemoteSrc(item.gift.link);
+                holder.priceText.setVisibility(View.VISIBLE);
+                holder.priceText.setText(Integer.toString(item.gift.price));
+                holder.giftText.setVisibility(View.GONE);
             }
         }
 
         return convertView;
     }
 
-    @Override
-    public FeedGift getItem(int position) {
-        return mGalleryManager.get(position);
+    protected int getLoaderRetrierLayout() {
+        return R.layout.item_grid_loader_retrier;
     }
 
     @Override
-    public long getItemId(int position) {
-        return position;
+    public void onScrollStateChanged(AbsListView absListView, int i) {
     }
 
-    public class ViewHolder {
-        ImageViewRemote giftImage;
-        TextView priceText;
-        TextView giftText;
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        Debug.log("SCROLL_G");
+        if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= totalItemCount - 1) {
+            FeedList<FeedGift> data = getData();
+            if (mUpdateCallback != null && !data.isEmpty() && data.getLast().isLoader()) {
+                mUpdateCallback.onUpdate();
+            }
+        }
     }
 
+    @Override
+    public ILoaderRetrierCreator<FeedGift> getLoaderRetrierCreator() {
+        return new ILoaderRetrierCreator<FeedGift>() {
+            @Override
+            public FeedGift getLoader() {
+                FeedGift result = new FeedGift();
+                result.setLoaderTypeFlags(IListLoader.ItemType.LOADER);
+                return result;
+            }
+
+            @Override
+            public FeedGift getRetrier() {
+                FeedGift result = new FeedGift();
+                result.setLoaderTypeFlags(IListLoader.ItemType.RETRY);
+                return result;
+            }
+        };
+    }
 }

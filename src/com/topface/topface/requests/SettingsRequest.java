@@ -5,7 +5,7 @@ import com.topface.topface.utils.CacheProfile;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class SettingsRequest extends AbstractApiRequest {
+public class SettingsRequest extends ApiRequest {
     // Data
     public static final String service = "settings";
     public String name; // новое имя пользователя в UTF-8

@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView.OnItemClickListener;
+import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedItem;
@@ -42,7 +43,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
             @Override
             public void onMutual(int userId, int rate, int mutualId) {
-                mRateController.onRate(userId, rate, mutualId);
+                mRateController.onRate(userId, rate, mutualId, null);
             }
         });
         return adapter;
@@ -83,7 +84,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                             public void onTap(int position) {
                                 FeedItem item = (FeedItem) mListView.getRefreshableView().getItemAtPosition(position);
                                 if (item != null) {
-                                    if (!mIsUpdating && item.isLoaderRetry()) {
+                                    if (!mIsUpdating && item.isRetrier()) {
                                         updateUI(new Runnable() {
                                             public void run() {
                                                 mListAdapter.showLoaderItem();
@@ -123,7 +124,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     @Override
     protected void decrementCounters() {
-        CountersManager.getInstance(getActivity().getApplicationContext()).decrementCounter(CountersManager.LIKES);
+        CountersManager.getInstance(App.getContext()).decrementCounter(CountersManager.LIKES);
     }
 
     @Override

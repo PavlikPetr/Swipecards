@@ -13,16 +13,18 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.billing.BillingFragment;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.profile.BlackListActivity;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
@@ -30,11 +32,10 @@ import static android.view.View.OnClickListener;
 
 public class VipBuyFragment extends BillingFragment implements OnClickListener {
 
+    public static final String ACTION_BAR_CONST = "needActionBar";
     EditSwitcher mInvisSwitcher;
 
     ProgressBar mInvisLoadBar;
-
-    public static final String BROADCAST_PURCHASE_ACTION = "com.topface.topface.PURCHASE_NOTIFICATION";
 
     private LinearLayout mBuyVipViewsContainer;
     private LinearLayout mEditPremiumContainer;
@@ -45,16 +46,23 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
         return new VipBuyFragment();
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public static VipBuyFragment newInstance(boolean needActionBar) {
+        VipBuyFragment fragment = new VipBuyFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(ACTION_BAR_CONST, needActionBar);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onPause() {
+        super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
     }
 
@@ -62,6 +70,18 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_buy_premium, null);
         initViews(view);
+        if (getArguments() != null && getArguments().getBoolean(ACTION_BAR_CONST, false)) {
+            view.findViewById(R.id.navBar).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.headerShadow).setVisibility(View.VISIBLE);
+            ActionBar actionBar = getActionBar(view);
+            actionBar.showBackButton(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getActivity().finish();
+                }
+            });
+            actionBar.setTitleText(getString(R.string.vip_buy_vip));
+        }
         return view;
     }
 
@@ -115,7 +135,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
         RelativeLayout invisLayout =
                 initEditItem(root,
                         R.id.fepInvis,
-                        R.drawable.edit_big_btn_top_selector,
+                        R.drawable.edit_big_btn_selector,
                         R.drawable.ic_vip_invisible_min,
                         getString(R.string.vip_invis),
                         new OnClickListener() {
@@ -263,7 +283,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     public void onSubscritionUnsupported() {
         //Если подписка не поддерживается, сообщаем об этом пользователю
         if (!CacheProfile.premium) {
-            Toast.makeText(getActivity(), R.string.buy_play_market_not_available, Toast.LENGTH_SHORT)
+            Toast.makeText(App.getContext(), R.string.buy_play_market_not_available, Toast.LENGTH_SHORT)
                     .show();
         }
     }
@@ -290,7 +310,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     public void onCancel() {
     }
 
-    BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             switchLayouts();

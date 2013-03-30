@@ -7,7 +7,7 @@ import org.json.JSONObject;
 /**
  * Метод проверки платежа от Amazon
  */
-public class AmazonValidateRequest extends AbstractApiRequest {
+public class AmazonValidateRequest extends ApiRequest {
 
     private String mUserId;
 

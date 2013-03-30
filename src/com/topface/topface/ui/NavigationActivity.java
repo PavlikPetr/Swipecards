@@ -5,32 +5,47 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.*;
 import android.content.pm.PackageInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Toast;
 import com.topface.billing.BillingUtils;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.requests.OptionsRequest;
-import com.topface.topface.ui.edit.EditProfileActivity;
+import com.topface.topface.data.*;
+import com.topface.topface.requests.*;
+import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.BaseApiHandler;
+import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.*;
 import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
 import com.topface.topface.ui.fragments.MenuFragment.FragmentMenuListener;
+import com.topface.topface.ui.settings.SettingsContainerActivity;
+import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.NoviceLayout;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Novice;
-import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.*;
+import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
+import ru.ideast.adwired.AWView;
+import ru.ideast.adwired.events.OnNoBannerListener;
+import ru.ideast.adwired.events.OnStartListener;
+import ru.ideast.adwired.events.OnStopListener;
 
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Set;
 
 public class NavigationActivity extends BaseFragmentActivity implements View.OnClickListener {
 
@@ -38,6 +53,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
     public static final int RATE_POPUP_TIMEOUT = 86400000; // 1000 * 60 * 60 * 24 * 1 (1 сутки)
     public static final int UPDATE_INTERVAL = 10 * 60 * 1000;
+    public static final String URL_SEPARATOR = "::";
     private FragmentManager mFragmentManager;
     private MenuFragment mFragmentMenu;
     private FragmentSwitchController mFragmentSwitcher;
@@ -45,13 +61,24 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private SharedPreferences mPreferences;
     private NoviceLayout mNoviceLayout;
     private Novice mNovice;
+    private boolean needAnimate = false;
 
     private BroadcastReceiver mServerResponseReceiver;
 
+    private boolean isNeedAuth = true;
+
+    private static boolean isFullScreenBannerVisible = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        mNeedAnimate = false;
         super.onCreate(savedInstanceState);
+
+        if (isNeedBroughtToFront(getIntent())) {
+            // При открытии активити из лаунчера перезапускаем ее
+            finish();
+            return;
+        }
         setContentView(R.layout.ac_navigation);
 
         Debug.log(this, "onCreate");
@@ -61,14 +88,161 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
         if (CacheProfile.isLoaded()) {
             onInit();
+        } else {
+            isNeedAuth = false;
         }
 
-
-        mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         setStopTime();
-        mNovice = Novice.getInstance(mPreferences);
+        mNovice = Novice.getInstance(getPreferences());
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
+    }
 
+    private SharedPreferences getPreferences() {
+        if (mPreferences == null) {
+            mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        }
+        return mPreferences;
+    }
+
+    private void requestFullscreen() {
+        if (CacheProfile.isLoaded()) {
+            Options.Page startPage = CacheProfile.getOptions().pages.get(Options.PAGE_START);
+            if (startPage != null) {
+                if (startPage.floatType.equals(Options.FLOAT_TYPE_BANNER)) {
+                    if (startPage.banner.equals(Options.BANNER_ADWIRED)) {
+                        requestAdwiredFullscreen();
+                    } else if (startPage.banner.equals(Options.BANNER_TOPFACE)) {
+                        requestTopfaceFullscreen();
+                    }
+                }
+            }
+        }
+    }
+
+    private void requestAdwiredFullscreen() {
+        try {
+            if (CacheProfile.isLoaded()) {
+                AWView adwiredView = (AWView) getLayoutInflater().inflate(R.layout.banner_adwired, null);
+                final ViewGroup bannerContainer = (ViewGroup) findViewById(R.id.loBannerContainer);
+                bannerContainer.addView(adwiredView);
+                bannerContainer.setVisibility(View.VISIBLE);
+                adwiredView.setVisibility(View.VISIBLE);
+                adwiredView.setOnNoBannerListener(new OnNoBannerListener() {
+                    @Override
+                    public void onNoBanner() {
+                        requestTopfaceFullscreen();
+                    }
+                });
+                adwiredView.setOnStopListener(new OnStopListener() {
+                    @Override
+                    public void onStop() {hideFullscreenBanner(bannerContainer);
+                    }
+                });
+                adwiredView.setOnStartListener(new OnStartListener() {
+                    @Override
+                    public void onStart() {
+                        isFullScreenBannerVisible = true;
+                    }
+                });
+                adwiredView.request('0');
+            }
+        } catch (Exception ex) {
+            Debug.error(ex);
+        }
+    }
+
+    private boolean showFullscreenBanner(String url) {
+        long currentTime = System.currentTimeMillis();
+        long lastCall = getPreferences().getLong(Static.PREFERENCES_LAST_FULLSCREEN_TIME, currentTime);
+        boolean passByTime = !getPreferences().contains(Static.PREFERENCES_LAST_FULLSCREEN_TIME)
+                || Math.abs(currentTime - lastCall) > DateUtils.DAY_IN_MILLISECONDS;
+        boolean passByUrl = passFullScreenByUrl(url);
+
+        return passByUrl && passByTime;
+    }
+
+    private boolean passFullScreenByUrl(String url) {
+        return !getFullscrenUrls().contains(url);
+    }
+
+    private Set<String> getFullscrenUrls() {
+        String urls = getPreferences().getString(Static.PREFERENCES_FULLSCREEN_URLS_SET, "");
+        String[] urlList = TextUtils.split(urls, URL_SEPARATOR);
+        return new HashSet<String>(Arrays.asList(urlList));
+    }
+
+    private void addLastFullsreenShowedTime() {
+        SharedPreferences.Editor editor = getPreferences().edit();
+        editor.putLong(Static.PREFERENCES_LAST_FULLSCREEN_TIME, System.currentTimeMillis());
+        editor.commit();
+    }
+
+    private void addNewUrlToFullscreenSet(String url) {
+        Set<String> urlSet = getFullscrenUrls();
+        urlSet.add(url);
+        SharedPreferences.Editor editor = getPreferences().edit();
+        editor.putString(Static.PREFERENCES_FULLSCREEN_URLS_SET, TextUtils.join(URL_SEPARATOR, urlSet));
+        editor.commit();
+    }
+
+    private void requestTopfaceFullscreen() {
+        BannerRequest request = new BannerRequest(getApplicationContext());
+        request.place = Options.PAGE_START;
+        request.callback(new BaseApiHandler() {
+            @Override
+            public void success(ApiResponse response) {
+                final Banner banner = Banner.parse(response);
+
+                if (banner.action.equals(Banner.ACTION_URL)) {
+                    if (showFullscreenBanner(banner.parameter)) {
+                        isFullScreenBannerVisible = true;
+                        addLastFullsreenShowedTime();
+                        final View fullscreenViewGroup = getLayoutInflater().inflate(R.layout.fullscreen_topface, null);
+                        final ViewGroup bannerContainer = (ViewGroup) findViewById(R.id.loBannerContainer);
+                        bannerContainer.addView(fullscreenViewGroup);
+                        bannerContainer.setVisibility(View.VISIBLE);
+                        final ImageViewRemote fullscreenImage = (ImageViewRemote) fullscreenViewGroup.findViewById(R.id.ivFullScreen);
+                        fullscreenImage.setRemoteSrc(banner.url);
+                        fullscreenImage.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                addNewUrlToFullscreenSet(banner.parameter);
+                                hideFullscreenBanner(bannerContainer);
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(banner.parameter));
+                                startActivity(intent);
+                            }
+                        });
+
+                        fullscreenViewGroup.findViewById(R.id.btnClose).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                hideFullscreenBanner(bannerContainer);
+                            }
+                        });
+                    }
+                }
+            }
+        }).exec();
+    }
+
+    private void hideFullscreenBanner(final ViewGroup bannerContainer) {
+        Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.fade_out);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                bannerContainer.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        bannerContainer.startAnimation(animation);
+        isFullScreenBannerVisible = false;
     }
 
     private void initFragmentSwitcher() {
@@ -83,38 +257,22 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     @Override
     public void onInit() {
+        Offerwalls.init(getApplicationContext());
+
         Intent intent = getIntent();
+        isNeedAuth = true;
         int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
         if (id != -1) {
-            mFragmentSwitcher.showFragmentWithAnimation(id);
+            mFragmentSwitcher.showFragment(id);
 
         } else {
             mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
             mFragmentMenu.selectDefaultMenu();
         }
-        AuthorizationManager.getInstance(NavigationActivity.this).extendAccessToken();
-        //Если пользователь не заполнил необходимые поля, перекидываем его на EditProfile,
-        //чтобы исправлялся.
-        if (needChangeProfile()) {
-            Intent editIntent = new Intent(this, EditProfileActivity.class);
-            editIntent.putExtra(FROM_AUTH, true);
-            startActivity(editIntent);
-            finish();
-        } else {
-            checkVersion(CacheProfile.getOptions().max_version);
-
-        }
-
-    }
-
-    private boolean needChangeProfile() {
-        return (CacheProfile.age == 0 || CacheProfile.city_id == 0 || CacheProfile.photo == null)
-                && shouldChangeProfile();
-    }
-
-    private boolean shouldChangeProfile() {
-        SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        return preferences != null && preferences.getBoolean(Static.PREFERENCES_TAG_NEED_EDIT, true);
+        AuthorizationManager.extendAccessToken(NavigationActivity.this);
+        checkVersion(CacheProfile.getOptions().max_version);
+        actionsAfterRegistration();
+        requestFullscreen();
     }
 
     @Override
@@ -124,6 +282,11 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         if (id != -1) {
             mFragmentSwitcher.showFragmentWithAnimation(id);
         }
+    }
+
+    @Override
+    protected boolean isNeedAuth() {
+        return isNeedAuth;
     }
 
     @Override
@@ -137,23 +300,121 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mServerResponseReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+
             }
         };
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mServerResponseReceiver, new IntentFilter(OptionsRequest.VERSION_INTENT));
 
-        //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
+        if (needAnimate) {
+            overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
+        }
+        needAnimate = true;
+        //TODO костыль для ChatFragment, после перехода на фрагмент - выпилить
         if (mDelayedFragment != null) {
             onExtraFragment(mDelayedFragment);
             mDelayedFragment = null;
             mChatInvoke = true;
         }
 
+        //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
+        new ExternalLinkExecuter(listener).execute(getIntent());
+
+        requestBalance();
     }
+
+    private void requestBalance() {
+        if (CacheProfile.isLoaded()) {
+            ProfileRequest request = new ProfileRequest(this);
+            request.part = ProfileRequest.P_BALANCE_COUNTERS;
+            request.callback(new DataApiHandler<Profile>() {
+
+                @Override
+                protected void success(Profile data, ApiResponse response) {
+                    CacheProfile.likes = data.likes;
+                    CacheProfile.money = data.money;
+                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                }
+
+                @Override
+                protected Profile parseResponse(ApiResponse response) {
+                    return Profile.parse(response);
+                }
+
+                @Override
+                public void fail(int codeError, ApiResponse response) {
+
+                }
+            }).exec();
+        }
+    }
+
+    private void actionsAfterRegistration() {
+        if (!AuthToken.getInstance().isEmpty()) {
+            if (CacheProfile.photo == null) {
+                takePhoto(new TakePhotoDialog.TakePhotoListener() {
+                    @Override
+                    public void onPhotoSentSuccess(final Photo photo) {
+                        if (CacheProfile.photos != null) {
+                            CacheProfile.photos.add(photo);
+                        }
+                        PhotoMainRequest request = new PhotoMainRequest(getApplicationContext());
+                        request.photoid = photo.getId();
+                        request.callback(new ApiHandler() {
+
+                            @Override
+                            public void success(ApiResponse response) {
+                                CacheProfile.photo = photo;
+                                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                            }
+
+                            @Override
+                            public void fail(int codeError, ApiResponse response) {
+                                if (codeError == ApiResponse.NON_EXIST_PHOTO_ERROR) {
+                                    if (CacheProfile.photos != null && CacheProfile.photos.contains(photo)) {
+                                        CacheProfile.photos.remove(photo);
+                                    }
+                                    Toast.makeText(NavigationActivity.this, "Ваша фотография не соответствует правилам. Попробуйте сделать другую", 2000);
+                                }
+                            }
+
+                            @Override
+                            public void always(ApiResponse response) {
+                                super.always(response);
+                            }
+                        }).exec();
+                        needOpenDialog = true;
+                    }
+
+                    @Override
+                    public void onPhotoSentFailure() {
+                        Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
+                        needOpenDialog = true;
+                    }
+
+                    @Override
+                    public void onDialogClose() {
+                        if (CacheProfile.isLoaded() && (CacheProfile.city.isEmpty() || CacheProfile.needCityConfirmation(getApplicationContext()))
+                                && !CacheProfile.wasCityAsked) {
+                            CacheProfile.wasCityAsked = true;
+                            CacheProfile.onCityConfirmed(getApplicationContext());
+                            startActivityForResult(new Intent(getApplicationContext(), CitySearchActivity.class),
+                                    CitySearchActivity.INTENT_CITY_SEARCH_AFTER_REGISTRATION);
+                        }
+                    }
+                });
+            } else if ((CacheProfile.city == null || CacheProfile.city.isEmpty()) && !CacheProfile.wasCityAsked) {
+                CacheProfile.wasCityAsked = true;
+                startActivityForResult(new Intent(getApplicationContext(), CitySearchActivity.class),
+                        CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
+            }
+        }
+    }
+
 
     private void checkProfileUpdate() {
         long startTime = Calendar.getInstance().getTimeInMillis();
-        long stopTime = mPreferences.getLong(Static.PREFERENCES_STOP_TIME, -1);
+        long stopTime = getPreferences().getLong(Static.PREFERENCES_STOP_TIME, -1);
         if (stopTime != -1) {
             if (startTime - stopTime > UPDATE_INTERVAL) {
                 App.sendProfileRequest();
@@ -165,7 +426,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         try {
             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             String curVersion = pInfo.versionName;
-            if (version != null && curVersion != null) {
+            if (!TextUtils.isEmpty(version) && TextUtils.isEmpty(curVersion)) {
                 String[] splittedVersion = version.split("\\.");
                 String[] splittedCurVersion = curVersion.split("\\.");
                 for (int i = 0; i < splittedVersion.length; i++) {
@@ -189,7 +450,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 }
             }
         } catch (Exception e) {
-            Debug.error(e);
+            Debug.error("Check Version Error: " + version, e);
+
         }
     }
 
@@ -234,12 +496,14 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     @Override
     public void onBackPressed() {
-        if (mFragmentSwitcher != null) {
+        if (isFullScreenBannerVisible) {
+            hideFullscreenBanner((ViewGroup) findViewById(R.id.loBannerContainer));
+        } else if (mFragmentSwitcher != null) {
             if (mFragmentSwitcher.getAnimationState() == FragmentSwitchController.EXPAND) {
                 super.onBackPressed();
             } else {
                 if (mFragmentSwitcher.isExtraFrameShown()) {
-                    //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
+                    //TODO костыль для ChatFragment, после перехода на фрагмент - выпилить
                     //начало костыля--------------
                     if (mChatInvoke) {
                         if (mFragmentSwitcher.getCurrentExtraFragment() instanceof ProfileFragment) {
@@ -332,10 +596,17 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         public void afterClosing() {
             mFragmentMenu.setClickable(false);
             mFragmentMenu.hide();
+            if (mFragmentSwitcher.getCurrentFragment() != null) {
+                mFragmentSwitcher.getCurrentFragment().activateActionBar(false);
+            }
+            actionsAfterRegistration();
         }
 
         @Override
         public void afterOpening() {
+            if (mFragmentSwitcher.getCurrentFragment() != null) {
+                mFragmentSwitcher.getCurrentFragment().activateActionBar(true);
+            }
             if (mNovice.isMenuCompleted()) return;
 
             if (mNovice.isShowFillProfile()) {
@@ -416,8 +687,12 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     private void setStopTime() {
-        long stopTime = Calendar.getInstance().getTimeInMillis();
-        mPreferences.edit().putLong(Static.PREFERENCES_STOP_TIME, stopTime).commit();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                getPreferences().edit().putLong(Static.PREFERENCES_STOP_TIME, System.currentTimeMillis()).commit();
+            }
+        }).start();
     }
 
     @Override
@@ -437,17 +712,22 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         } catch (Exception e) {
             Debug.error(e);
         }
+
+        //Для запроса фото при следующем создании NavigationActivity
+        if (CacheProfile.photo == null) CacheProfile.wasAvatarAsked = false;
     }
 
     private void unbindDrawables(View view) {
-        if (view.getBackground() != null) {
-            view.getBackground().setCallback(null);
-        }
-        if (view instanceof ViewGroup) {
-            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
-                unbindDrawables(((ViewGroup) view).getChildAt(i));
+        if (view != null) {
+            if (view.getBackground() != null) {
+                view.getBackground().setCallback(null);
             }
-            ((ViewGroup) view).removeAllViews();
+            if (view instanceof ViewGroup) {
+                for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                    unbindDrawables(((ViewGroup) view).getChildAt(i));
+                }
+                ((ViewGroup) view).removeAllViews();
+            }
         }
     }
 
@@ -458,7 +738,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mFragmentMenu.selectDefaultMenu();
     }
 
-
     @Override
     public boolean isTrackable() {
         return false;
@@ -468,24 +747,71 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mFragmentSwitcher.switchExtraFragment(fragment);
     }
 
-    //TODO костыль для ChatActivity, после перехода на фрагмент - выпилить
+    //TODO костыль для ChatFragment, после перехода на фрагмент - выпилить
     private Fragment mDelayedFragment;
     private boolean mChatInvoke = false;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK && requestCode == ChatActivity.INTENT_CHAT_REQUEST) {
-            if (data != null) {
-                int user_id = data.getExtras().getInt(ChatActivity.INTENT_USER_ID);
-                mDelayedFragment = ProfileFragment.newInstance(user_id, ProfileFragment.TYPE_USER_PROFILE);
-                return;
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == ContainerActivity.INTENT_CHAT_FRAGMENT) {
+                if (data != null) {
+                    int user_id = data.getExtras().getInt(ChatFragment.INTENT_USER_ID);
+                    mDelayedFragment = ProfileFragment.newInstance(user_id, ProfileFragment.TYPE_USER_PROFILE);
+                }
+            } else if (requestCode == CitySearchActivity.INTENT_CITY_SEARCH_AFTER_REGISTRATION ||
+                    requestCode == CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY) {
+                if (data != null) {
+                    Bundle extras = data.getExtras();
+                    final String city_name = extras.getString(CitySearchActivity.INTENT_CITY_NAME);
+                    final String city_full = extras.getString(CitySearchActivity.INTENT_CITY_FULL_NAME);
+                    final int city_id = extras.getInt(CitySearchActivity.INTENT_CITY_ID);
+                    SettingsRequest request = new SettingsRequest(this);
+                    request.cityid = city_id;
+                    request.callback(new ApiHandler() {
+
+                        @Override
+                        public void success(ApiResponse response) {
+                            CacheProfile.city = new City(city_id, city_name,
+                                    city_full);
+                            LocalBroadcastManager.getInstance(getApplicationContext())
+                                    .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                        }
+
+                        @Override
+                        public void fail(int codeError, ApiResponse response) {
+                        }
+                    }).exec();
+                }
             }
         }
-        super.onActivityResult(requestCode, resultCode, data);
+
     }
 
-    public void onVipRecieved() {
-        mFragmentSwitcher.showFragment(BaseFragment.F_VIP_PROFILE);
-    }
+    ExternalLinkExecuter.OnExternalLinkListener listener = new ExternalLinkExecuter.OnExternalLinkListener() {
+        @Override
+        public void onProfileLink(int profileID) {
+            int profileType = profileID == CacheProfile.uid ? ProfileFragment.TYPE_MY_PROFILE : ProfileFragment.TYPE_USER_PROFILE;
+            onExtraFragment(ProfileFragment.newInstance(profileID, profileType));
+            getIntent().setData(null);
+        }
 
+        @Override
+        public void onConfirmLink(String code) {
+            AuthToken token = AuthToken.getInstance();
+            if (!token.isEmpty() && token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+                Intent intent = new Intent(NavigationActivity.this, SettingsContainerActivity.class);
+                intent.putExtra(Static.INTENT_REQUEST_KEY, SettingsContainerActivity.INTENT_ACCOUNT);
+                intent.putExtra(SettingsContainerActivity.CONFIRMATION_CODE, code);
+                startActivity(intent);
+            }
+            getIntent().setData(null);
+        }
+
+        @Override
+        public void onOfferWall() {
+            Offerwalls.startOfferwall(NavigationActivity.this);
+        }
+    };
 }

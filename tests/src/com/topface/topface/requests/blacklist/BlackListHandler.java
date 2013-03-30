@@ -2,8 +2,8 @@ package com.topface.topface.requests.blacklist;
 
 import com.topface.topface.data.BlackListItem;
 import com.topface.topface.data.FeedListData;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.handlers.ApiHandler;
 
 abstract class BlackListHandler extends ApiHandler {
 
@@ -13,10 +13,6 @@ abstract class BlackListHandler extends ApiHandler {
     public void success(ApiResponse response) {
         final FeedListData<BlackListItem> feedList =
                 new FeedListData<BlackListItem>(response.jsonResult, BlackListItem.class);
-
-//        assertNotNull("BlackList is null", feedList);
-//        assertNotNull("BlackList items is null", feedList.items);
-//        assertTrue("BlackList is empty", feedList.items.size() > 0);
 
         try {
             onBlackListResult(feedList);

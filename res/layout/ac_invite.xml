@@ -35,7 +35,7 @@
                 android:text="@string/general_send_full"
                 android:textSize="14dip"/>
 
-        <com.topface.topface.ui.views.IllustratedTextView
+        <com.topface.IllustratedTextView.IllustratedTextView
                 android:id="@+id/inviteBonusText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

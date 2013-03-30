@@ -3,11 +3,12 @@ package com.topface.topface.data;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.LinkedList;
 
-public class City extends AbstractData {
+public class City extends AbstractData implements SerializableToJson, Cloneable {
     public final static int ALL_CITIES = 0;
 
     /**
@@ -23,11 +24,15 @@ public class City extends AbstractData {
      */
     public String full;
 
+    public City() {
+        super();
+    }
+
     public City(JSONObject city) {
         super(city);
     }
 
-    private City(int id, String name, String full) {
+    public City(int id, String name, String full) {
         this.id = id;
         this.name = name;
         this.full = full;
@@ -59,4 +64,21 @@ public class City extends AbstractData {
         return new City(id, name, full);
     }
 
+    @Override
+    public JSONObject toJson() throws JSONException {
+        return new JSONObject()
+                .put("id", id)
+                .put("name", name)
+                .put("full", full);
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        super.clone();
+        return new City(id, name, full);
+    }
+
+    public boolean isEmpty() {
+        return id == 0;
+    }
 }

@@ -16,16 +16,18 @@ import android.widget.*;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.data.City;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditProfileItem.Type;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.http.ProfileBackgrounds;
@@ -34,7 +36,6 @@ import java.util.LinkedList;
 
 public class EditProfileActivity extends BaseFragmentActivity implements OnClickListener {
 
-    private ListView mEditsListView;
     private EditsAdapter mAdapter;
     private LinkedList<EditProfileItem> mEditItems;
     private TextView mEditName;
@@ -42,10 +43,8 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
     private ImageView mEditSex;
     private Button mEditCity;
     private ImageViewRemote mProfilePhoto;
-    private TextView editProfileMsg;
 
     private boolean hasStartedFromAuthActivity;
-
 
     private BroadcastReceiver mBroadcastReceiver;
 
@@ -54,25 +53,36 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_edit_profile);
 
-        // Navigation bar
-        ((TextView) findViewById(R.id.tvNavigationTitle)).setText(R.string.edit_title);
-        findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
-        Button btnBackToProfile = (Button) findViewById(R.id.btnNavigationBackWithText);
-        btnBackToProfile.setText(R.string.general_profile);
-        btnBackToProfile.setVisibility(View.VISIBLE);
-        btnBackToProfile.setOnClickListener(this);
-
         hasStartedFromAuthActivity = getIntent().getBooleanExtra(NavigationActivity.FROM_AUTH, false);
+
+        // Navigation bar
+        ActionBar actionBar = new ActionBar(findViewById(R.id.editContainer));
+        actionBar.setTitleText(getString(R.string.edit_title));
+        actionBar.showBackButton(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(CacheProfile.city != null) {
+                    if (hasStartedFromAuthActivity && !CacheProfile.city.isEmpty()) {
+                        Intent intent = new Intent(EditProfileActivity.this, NavigationActivity.class);
+                        intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_VIP_PROFILE);
+                        SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                        preferences.edit().putBoolean(Static.PREFERENCES_TAG_NEED_EDIT, false).commit();
+                        startActivity(intent);
+                    }
+                }
+                finish();
+            }
+        });
 
         // ListView
         mEditItems = new LinkedList<EditProfileItem>();
         initEditItems();
 
-        mEditsListView = (ListView) findViewById(R.id.lvEdits);
+        ListView editsListView = (ListView) findViewById(R.id.lvEdits);
 
         // Header
         LayoutInflater inflater = getLayoutInflater();
-        ViewGroup header = (ViewGroup) inflater.inflate(R.layout.item_edit_profile_header, mEditsListView, false);
+        ViewGroup header = (ViewGroup) inflater.inflate(R.layout.item_edit_profile_header, editsListView, false);
 
         ViewGroup profileNameLayout = (ViewGroup) header.findViewById(R.id.loProfileName);
         profileNameLayout.findViewById(R.id.ivNameEditBackground).setOnClickListener(this);
@@ -87,18 +97,23 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
 
         mEditCity = (Button) header.findViewById(R.id.btnEditCity);
-        mEditCity.setText(CacheProfile.city_name);
+        if(CacheProfile.city == null) {
+            mEditCity.setText(getString(R.string.general_choose_city));
+        } else {
+            mEditCity.setText(CacheProfile.city.name);
+        }
         mEditCity.setOnClickListener(this);
 
-        mEditsListView.addHeaderView(header);
+        editsListView.addHeaderView(header);
         mAdapter = new EditsAdapter(getApplicationContext(), mEditItems);
-        mEditsListView.setAdapter(mAdapter);
+        editsListView.setAdapter(mAdapter);
 
         mProfilePhoto = (ImageViewRemote) header.findViewById(R.id.ivProfilePhoto);
         mProfilePhoto.setOnClickListener(this);
         mProfilePhoto.setPhoto(CacheProfile.photo);
+
         if (hasStartedFromAuthActivity) {
-            editProfileMsg = (TextView) findViewById(R.id.EditProfileMessage);
+            TextView editProfileMsg = (TextView) findViewById(R.id.EditProfileMessage);
             editProfileMsg.setVisibility(View.VISIBLE);
         }
 
@@ -109,7 +124,18 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
             }
         };
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
     }
 
     private void updateViews() {
@@ -120,7 +146,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         mEditSex.setImageResource(CacheProfile.sex == Static.BOY ?
                 R.drawable.ico_boy :
                 R.drawable.ico_girl);
-        mEditCity.setText(CacheProfile.city_name);
+        mEditCity.setText(CacheProfile.city.name);
         mProfilePhoto.setPhoto(CacheProfile.photo);
     }
 
@@ -169,12 +195,6 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivNameEditBackground:
@@ -182,24 +202,18 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                         EditContainerActivity.INTENT_EDIT_NAME_AGE);
                 break;
             case R.id.btnEditCity:
-                startActivityForResult(new Intent(getApplicationContext(), CitySearchActivity.class),
-                        CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
-                break;
-            case R.id.btnNavigationBackWithText:
-                if (hasStartedFromAuthActivity) {
-                    Intent intent = new Intent(this, NavigationActivity.class);
-                    intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_VIP_PROFILE);
-                    SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-                    preferences.edit().putBoolean(Static.PREFERENCES_TAG_NEED_EDIT, false).commit();
-                    startActivity(intent);
-                }
-                finish();
+                selectCity();
                 break;
             case R.id.ivProfilePhoto:
                 startActivityForResult(new Intent(getApplicationContext(), EditContainerActivity.class),
                         EditContainerActivity.INTENT_EDIT_PROFILE_PHOTO);
                 break;
         }
+    }
+
+    private void selectCity() {
+        startActivityForResult(new Intent(getApplicationContext(), CitySearchActivity.class),
+                CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
     }
 
     @Override
@@ -238,26 +252,23 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     final String city_name = extras.getString(CitySearchActivity.INTENT_CITY_NAME);
                     final String city_full = extras.getString(CitySearchActivity.INTENT_CITY_FULL_NAME);
                     final int city_id = extras.getInt(CitySearchActivity.INTENT_CITY_ID);
-
                     SettingsRequest request = new SettingsRequest(this);
                     request.cityid = city_id;
-                    sendBroadcast(new Intent().setAction("com.topface.receivers.ConnectionChangeReceiver"));
                     request.callback(new ApiHandler() {
 
                         @Override
                         public void success(ApiResponse response) {
-                            CacheProfile.city_id = city_id;
-                            CacheProfile.city_name = city_name;
-                            CacheProfile.city_full = city_full;
-                            mEditCity.setText(CacheProfile.city_name);
+                            CacheProfile.city = new City(city_id, city_name,
+                                    city_full);
+                            LocalBroadcastManager.getInstance(getApplicationContext())
+                                    .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
                         }
 
                         @Override
                         public void fail(int codeError, ApiResponse response) {
-                            Toast.makeText(EditProfileActivity.this, getString(R.string.general_data_error),
-                                    Toast.LENGTH_SHORT).show();
                         }
                     }).exec();
+                    mEditCity.setText(city_name);
                 default:
                     break;
             }
@@ -370,8 +381,10 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     holder.mTitle.setText(item.getTitle());
                 } else if (item instanceof EditForm) {
                     holder.mTitle.setText(item.getTitle());
-                    holder.mText.setVisibility(View.VISIBLE);
-                    holder.mText.setText(item.getText());
+                    if (item != null && item.getText() != null && item.getText().trim().length() > 0) {
+                        holder.mText.setVisibility(View.VISIBLE);
+                        holder.mText.setText(item.getText());
+                    }
                 }
 
                 convertView.setOnClickListener(new OnClickListener() {
@@ -404,7 +417,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
         @Override
         public String getTitle() {
-            if (CacheProfile.status.trim().length() != 0) {
+            if (CacheProfile.status.trim().length() == 0 || CacheProfile.status.equals("-")) {
                 return getString(R.string.edit_refresh_status);
             }
             return CacheProfile.status;

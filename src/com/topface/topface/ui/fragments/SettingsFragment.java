@@ -17,9 +17,10 @@ import android.widget.*;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
-import com.topface.topface.requests.ApiHandler;
+import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.SendMailNotificationsRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.settings.SettingsAccountFragment;
@@ -45,7 +46,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         public void onFinish() {
             Activity activity = getActivity();
             if (activity != null) {
-                SendMailNotificationsRequest request = mSettings.getMailNotificationRequest(activity.getApplicationContext());
+                SendMailNotificationsRequest request = mSettings.getMailNotificationRequest(activity);
                 if (request != null) {
                     request.callback(new ApiHandler() {
                         @Override
@@ -93,7 +94,8 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 
         boolean mail = false;
         boolean apns = false;
-        if (CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES) != null) {
+
+        if (CacheProfile.notifications != null && CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES) != null) {
             mail = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).mail;
             apns = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns;
         }
@@ -103,7 +105,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         frame = (ViewGroup) root.findViewById(R.id.loMutual);
         setBackground(R.drawable.edit_big_btn_middle, frame);
         setText(R.string.settings_mutual, frame);
-        if (CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY) != null) {
+        if (CacheProfile.notifications != null && CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY) != null) {
             mail = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).mail;
             apns = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns;
         } else {
@@ -116,7 +118,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         frame = (ViewGroup) root.findViewById(R.id.loChat);
         setBackground(R.drawable.edit_big_btn_middle, frame);
         setText(R.string.settings_messages, frame);
-        if (CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE) != null) {
+        if (CacheProfile.notifications != null && CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE) != null) {
             mail = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).mail;
             apns = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns;
         } else {
@@ -129,7 +131,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         frame = (ViewGroup) root.findViewById(R.id.loGuests);
         setBackground(R.drawable.edit_big_btn_bottom, frame);
         setText(R.string.settings_guests, frame);
-        if (CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR) != null) {
+        if (CacheProfile.notifications != null && CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR) != null) {
             mail = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).mail;
             apns = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).apns;
         } else {
@@ -159,17 +161,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         frame.setOnClickListener(this);
 
         // Account
-        frame = (ViewGroup) root.findViewById(R.id.loAccount);
-        setBackground(R.drawable.edit_big_btn_middle_selector, frame);
-        AuthToken authToken = new AuthToken(getActivity().getApplicationContext());
-        if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
-            setAccountNameText(R.string.settings_account, mSettings.getSocialAccountName(), R.drawable.ic_fb, frame);
-        } else if (authToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
-            setAccountNameText(R.string.settings_account, mSettings.getSocialAccountName(), R.drawable.ic_vk, frame);
-        } else {
-            setText(R.string.settings_account, frame);
-        }
-        frame.setOnClickListener(this);
+        initAccountViews(root);
 
         // Rate app
         frame = (ViewGroup) root.findViewById(R.id.loFeedback);
@@ -184,6 +176,28 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         frame.setOnClickListener(this);
 
 
+    }
+
+    private void initAccountViews(View root) {
+        ViewGroup frame;
+        frame = (ViewGroup) root.findViewById(R.id.loAccount);
+        setBackground(R.drawable.edit_big_btn_middle_selector, frame);
+        AuthToken authToken = AuthToken.getInstance();
+        String name = mSettings.getSocialAccountName();
+        if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
+            setAccountNameText(R.string.settings_account, name, R.drawable.ic_fb, frame);
+        } else if (authToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
+            setAccountNameText(R.string.settings_account, name, R.drawable.ic_vk, frame);
+        } else if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+            if (TextUtils.isEmpty(name)) {
+                name = CacheProfile.first_name;
+                mSettings.setSocialAccountName(name);
+            }
+            setAccountNameText(R.string.settings_account, name, R.drawable.ic_tf, frame);
+        } else {
+            setText(R.string.settings_account, frame);
+        }
+        frame.setOnClickListener(this);
     }
 
     private void setText(int titleId, ViewGroup frame) {
@@ -334,7 +348,12 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 }).exec();
             }
         } else {
-            CacheProfile.notifications.get(type).apns = isChecked;
+            if (CacheProfile.notifications != null) {
+                Profile.TopfaceNotifications notifications = CacheProfile.notifications.get(type);
+                if (notifications != null) {
+                    notifications.apns = isChecked;
+                }
+            }
             mSendTimer.cancel();
             mSendTimer.start();
         }

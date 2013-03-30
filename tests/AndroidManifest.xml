@@ -3,7 +3,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.topface.topface.tests"
           android:versionCode="1"
-          android:versionName="Topface Unit Test 2.0">
+          android:versionName="2.2.5">
     <!-- We add an application tag here just so that we can indicate that
          this package needs to link against the android.test library,
          which is needed when building test cases. -->

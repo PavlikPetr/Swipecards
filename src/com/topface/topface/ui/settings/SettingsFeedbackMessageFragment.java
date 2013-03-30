@@ -16,14 +16,17 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
-import com.topface.topface.Data;
+import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.Ssid;
 import com.topface.topface.Static;
-import com.topface.topface.requests.ApiHandler;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FeedbackReport;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.edit.AbstractEditFragment;
 import com.topface.topface.ui.edit.EditSwitcher;
+import com.topface.topface.ui.views.LockerView;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
@@ -45,59 +48,55 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
     private EditText mEditEmail;
 
     private Report mReport = new Report();
+    private LockerView loadingLocker;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
-        View root = inflater.inflate(R.layout.item_feedback_input, null);
+        View root = inflater.inflate(R.layout.fragment_feedback_message, null);
 
         // Navigation bar
-        getActivity().findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
-
-        mBackButton = (Button) getActivity().findViewById(R.id.btnNavigationBackWithText);
-        mBackButton.setVisibility(View.VISIBLE);
-        mBackButton.setText(R.string.settings_feedback);
-        mBackButton.setOnClickListener(new OnClickListener() {
+        ActionBar actionBar = getActionBar(root);
+        actionBar.showBackButton(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 getActivity().finish();
             }
         });
-
-        mSaveButton = (Button) getActivity().findViewById(R.id.btnNavigationRightWithText);
-        mSaveButton.setText(R.string.general_send_button);
-        mSaveButton.setOnClickListener(new OnClickListener() {
-
+        actionBar.setTitleText(getString(R.string.settings_feedback));
+        loadingLocker = (LockerView) root.findViewById(R.id.fbLoadingLocker);
+        mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
+        Button sendButton = (Button) root.findViewById(R.id.generalSendButton);
+        sendButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveChanges(null);
+                saveChanges(new Handler());
             }
         });
-
-        mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
-
         Bundle extras = getActivity().getIntent().getExtras();
         int feedbackType = extras.getInt(INTENT_FEEDBACK_TYPE, UNKNOWN);
         switch (feedbackType) {
             case ERROR_MESSAGE:
                 mReport.subject = getResources().getString(R.string.settings_error_message_internal);
+                actionBar.setSubTitleText(getString(R.string.settings_error_message));
                 break;
             case DEVELOPERS_MESSAGE:
                 mReport.subject = getResources().getString(R.string.settings_ask_developer_internal);
+                actionBar.setSubTitleText(getString(R.string.settings_ask_developer));
                 break;
             case PAYMENT_MESSAGE:
                 mReport.subject = getResources().getString(R.string.settings_payment_problems_internal);
+                actionBar.setSubTitleText(getString(R.string.settings_payment_problems));
                 break;
             case COOPERATION_MESSAGE:
                 mReport.subject = getResources().getString(R.string.settings_cooperation_internal);
+                actionBar.setSubTitleText(getString(R.string.settings_cooperation));
                 break;
             case UNKNOWN:
                 mReport.subject = getResources().getString(R.string.settings_feedback_internal);
                 break;
         }
-
-        ((TextView) getActivity().findViewById(R.id.tvNavigationTitle)).setText(mReport.subject);
 
         // EditText
         root.findViewById(R.id.tvTitle).setVisibility(View.GONE);
@@ -211,24 +210,26 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
                 @Override
                 public void success(ApiResponse response) {
-                    mReport.body = Static.EMPTY;
-                    finishRequestSend();
+                    if (isAdded()) {
+                        mReport.body = Static.EMPTY;
+                        finishRequestSend();
 
-                    mEditText.setText(Static.EMPTY);
-                    Toast.makeText(getActivity(),
-                            getString(R.string.settings_feedback_success_msg),
-                            Toast.LENGTH_SHORT).show();
-                    getActivity().finish();
+                        mEditText.setText(Static.EMPTY);
+                        Toast.makeText(App.getContext(),
+                                R.string.settings_feedback_success_msg,
+                                Toast.LENGTH_SHORT).show();
+                        getActivity().finish();
+                    }
                 }
 
                 @Override
                 public void fail(int codeError, ApiResponse response) {
                     finishRequestSend();
-                    Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
                 }
             }).exec();
         } else {
-            Toast.makeText(getActivity().getApplicationContext(), R.string.settings_invalid_email, Toast.LENGTH_LONG).show();
+            Toast.makeText(App.getContext(), R.string.settings_invalid_email, Toast.LENGTH_LONG).show();
             mEditEmail.requestFocus();
         }
     }
@@ -271,7 +272,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         String model = android.os.Build.MODEL;
 
         public String getSubject() {
-            AuthToken authToken = new AuthToken(getActivity().getApplicationContext());
+            AuthToken authToken = AuthToken.getInstance();
             return "[" + Static.PLATFORM + "]" + subject + " {" + authToken.getSocialNet() + "_id=" + authToken.getUserId() + "}";
         }
 
@@ -285,18 +286,21 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             if (emailWanted && email != null) {
                 strBuilder.append("<p>Email for answer: ").append(email).append("</p>");
             }
-            strBuilder.append("<p>Topface version: ").append(topface_version).append("/").append(topface_versionCode).append("</p>");
+            strBuilder.append("<p>Topface version: ").append(topface_version).append("/").append(topface_versionCode)
+                    .append("</p>");
             strBuilder.append("<p>Device: ").append(device).append("/").append(model).append("</p>");
             strBuilder.append("<p>Device language: ").append(Locale.getDefault().getDisplayLanguage()).append("</p>");
 
-            strBuilder.append("<p>Topface SSID: ").append(Data.SSID).append("</p>");
-            AuthToken authToken = new AuthToken(getActivity().getApplicationContext());
+            strBuilder.append("<p>Topface SSID: ").append(Ssid.get()).append("</p>");
+            AuthToken authToken = AuthToken.getInstance();
             strBuilder.append("<p>Social net: ").append(authToken.getSocialNet()).append("</p>");
             strBuilder.append("<p>Social token: ").append(authToken.getTokenKey()).append("</p>");
             strBuilder.append("<p>Social id: ").append(authToken.getUserId()).append("</p>");
 
             strBuilder.append("<p>Android version: ").append(android_CODENAME).append("/");
             strBuilder.append(android_RELEASE).append("/").append(android_SDK).append("</p>");
+
+            strBuilder.append("<p>Build type: ").append(Utils.getBuildType()).append(android_SDK).append("</p>");
 
             return strBuilder.toString();
         }
@@ -308,13 +312,17 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
     @Override
     protected void lockUi() {
-        mBackButton.setEnabled(false);
-        mEditText.setEnabled(false);
+        if (loadingLocker != null) {
+            loadingLocker.setVisibility(View.VISIBLE);
+            mEditText.setEnabled(false);
+        }
     }
 
     @Override
     protected void unlockUi() {
-        mBackButton.setEnabled(true);
-        mEditText.setEnabled(true);
+        if (loadingLocker != null) {
+            mEditText.setEnabled(true);
+            loadingLocker.setVisibility(View.GONE);
+        }
     }
 }
