@@ -238,11 +238,11 @@ public class BannerBlock {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                if(msg.what == ImageViewRemote.LOADING_COMPLETE) {
+                if(msg.what == ImageViewRemote.LOADING_COMPLETE && mFragment.isAdded()) {
                     if (mBannerView != null) {
                         float imageWidth = msg.arg1;
                         float imageHeight = msg.arg2;
-                        float deviceWidth = Device.getDisplayMetrics(mFragment.getActivity()).widthPixels;
+                        float deviceWidth = Device.getDisplayMetrics(App.getContext()).widthPixels;
                         //Если ширина экрана больше, чем у нашего баннера, то пропорционально увеличиваем высоту imageView
                         if (deviceWidth > imageWidth) {
                             ViewGroup.LayoutParams params = mBannerView.getLayoutParams();
