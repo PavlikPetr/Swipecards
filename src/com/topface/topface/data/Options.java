@@ -66,6 +66,7 @@ public class Options extends AbstractData {
      */
     public static final String TAPJOY = "TAPJOY";
     public static final String SPONSORPAY = "SPONSORPAY";
+    public static final String RANDOM = "RANDOM";
 
     /**
      * Настройки для каждого типа страниц

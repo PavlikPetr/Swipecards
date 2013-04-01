@@ -136,6 +136,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             if (item.user.banned) {
                 holder.avatar.setImageResource(item.user.sex == Static.BOY ?
                         R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
+                holder.avatar.setOnClickListener(null);
             } else {
                 holder.avatar.setPhoto(item.user.photo);
                 setListenerOnAvatar(holder.avatar, item);

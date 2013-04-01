@@ -29,8 +29,10 @@ public class Offerwalls {
             startTapjoy();
         } else if (offerwall.equals(Options.SPONSORPAY)) {
             startSponsorpay(activity);
-        } else {
+        } else if (offerwall.equals(Options.RANDOM)) {
             startRandomOfferwall(activity);
+        } else {
+            startTapjoy();
         }
     }
 
