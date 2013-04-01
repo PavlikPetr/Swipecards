@@ -30,7 +30,8 @@
             android:numColumns="auto_fit"
             android:stretchMode="columnWidth"
             android:columnWidth="105dp"
-            android:fadeScrollbars="true"/>
+            android:fadeScrollbars="true"
+            />
     <ImageView
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"

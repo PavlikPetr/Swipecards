@@ -284,6 +284,9 @@ public class GiftsFragment extends BaseFragment {
             item.gift = gift;
             mGifts.add(item);
         }
+        if (mGridAdapter != null) {
+            mGridAdapter.setData(mGifts,false);
+        }
         if (mTag != null) {
             if (mTag.equals(GIFTS_USER_PROFILE_TAG)) {
                 mGifts.add(0, FeedGift.getSendedGiftItem());
