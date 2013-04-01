@@ -274,9 +274,9 @@ public class BannerBlock {
                 } else if (banner.action.equals(Banner.ACTION_METHOD)) {
                     invokeBannerMethod(banner.parameter);
                 } else if (banner.action.equals(Banner.ACTION_OFFERWALL)) {
-                    if (banner.parameter.equals(Offerwalls.TAPJOY)) {
+                    if (banner.parameter.equals(Options.TAPJOY)) {
                         Offerwalls.startTapjoy();
-                    } else if (banner.parameter.equals(Offerwalls.SPONSORPAY)) {
+                    } else if (banner.parameter.equals(Options.SPONSORPAY)) {
                         Offerwalls.startSponsorpay(mFragment.getActivity());
                     } else {
                         Offerwalls.startOfferwall(mFragment.getActivity());

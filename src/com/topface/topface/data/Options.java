@@ -62,6 +62,12 @@ public class Options extends AbstractData {
     public static final String BANNER_GAG = "GAG";
 
     /**
+     * Идентификаторы для типов офферволлов
+     */
+    public static final String TAPJOY = "TAPJOY";
+    public static final String SPONSORPAY = "SPONSORPAY";
+
+    /**
      * Настройки для каждого типа страниц
      */
     public HashMap<String, Options.Page> pages = new HashMap<String, Options.Page>();
@@ -83,6 +89,7 @@ public class Options extends AbstractData {
 
     public int minLeadersPercent = 25; //Не уверен в этом, возможно стоит использовать другое дефолтное значение
 
+    public String offerwall;
 
     public static Options parse(ApiResponse response) {
         Options options = new Options();
@@ -102,7 +109,7 @@ public class Options extends AbstractData {
 
                 options.pages.put(pageName, new Page(pageName, floatType, bannerType));
             }
-
+            options.offerwall = response.jsonResult.optString("offerwall");
             options.max_version = response.jsonResult.optString("max_version");
 
             JSONObject purchases = response.jsonResult.optJSONObject("purchases");
