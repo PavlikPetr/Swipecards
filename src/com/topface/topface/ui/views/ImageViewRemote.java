@@ -247,7 +247,7 @@ public class ImageViewRemote extends ImageView {
         @Override
         public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
             super.onLoadingFailed(imageUri, view, failReason);
-            if (FailReason.OUT_OF_MEMORY != failReason) {
+            if (FailReason.FailType.OUT_OF_MEMORY != failReason.getType()) {
                 try {
                     if (mRepeatCounter >= MAX_REPEAT_COUNT) {
                         mRepeatCounter = 0;
