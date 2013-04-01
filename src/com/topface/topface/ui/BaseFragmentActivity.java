@@ -66,9 +66,10 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             }
         };
 
-        if(!afterOnSavedInstanceState) {
-            afterOnSavedInstanceState = true;
+        try {
             registerReceiver(mReauthReceiver, new IntentFilter(ReAuthReceiver.REAUTH_INTENT));
+        } catch (Exception ex) {
+            Debug.error(ex);
         }
     }
 
@@ -94,19 +95,16 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (!afterOnSavedInstanceState) {
-            unregisterReceiver(mReauthReceiver);
-            afterOnSavedInstanceState = true;
-        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         removeAllRequests();
-        if (!afterOnSavedInstanceState) {
+        try {
             unregisterReceiver(mReauthReceiver);
-            afterOnSavedInstanceState = true;
+        } catch (Exception ex) {
+            Debug.error(ex);
         }
     }
 
