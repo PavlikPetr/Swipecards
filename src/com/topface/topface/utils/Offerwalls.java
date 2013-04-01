@@ -6,12 +6,11 @@ import android.content.Intent;
 import com.sponsorpay.sdk.android.SponsorPay;
 import com.sponsorpay.sdk.android.publisher.SponsorPayPublisher;
 import com.tapjoy.TapjoyConnect;
+import com.topface.topface.data.Options;
+
+import java.util.Random;
 
 public class Offerwalls {
-
-    public static final String TAPJOY = "TAPJOY";
-    public static final String SPONSORPAY = "SPONSORPAY";
-    private static boolean first_or_second = true;
 
     public static void init(Context context) {
         try {
@@ -24,12 +23,26 @@ public class Offerwalls {
     }
 
     public static void startOfferwall(Activity activity) {
-        if (first_or_second) {
+        String offerwall = CacheProfile.getOptions().offerwall;
+
+        if (offerwall.equals(Options.TAPJOY)) {
+            startTapjoy();
+        } else if (offerwall.equals(Options.SPONSORPAY)) {
+            startSponsorpay(activity);
+        } else if (offerwall.equals(Options.RANDOM)) {
+            startRandomOfferwall(activity);
+        } else {
+            startTapjoy();
+        }
+    }
+
+    private static void startRandomOfferwall(Activity activity) {
+        Random random = new Random();
+        if (random.nextBoolean()) {
             startTapjoy();
         } else {
             startSponsorpay(activity);
         }
-        first_or_second = !first_or_second;
     }
 
     public static void startTapjoy() {

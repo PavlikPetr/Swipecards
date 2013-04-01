@@ -812,6 +812,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         @Override
         public void onOfferWall() {
             Offerwalls.startOfferwall(NavigationActivity.this);
+            getIntent().setData(null);
         }
     };
 }

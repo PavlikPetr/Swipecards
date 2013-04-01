@@ -47,7 +47,6 @@ public class GiftsFragment extends BaseFragment {
 
 
     private Profile mProfile;
-    private FeedList<FeedGift> mGifts = new FeedList<FeedGift>();
     private boolean mIsUpdating = false;
 
     @Override
@@ -57,7 +56,7 @@ public class GiftsFragment extends BaseFragment {
         mGridView = (GridView) root.findViewById(R.id.usedGrid);
         mGridView.setAnimationCacheEnabled(false);
         mGridView.setScrollingCacheEnabled(true);
-        mGridAdapter = new GiftsAdapter(getActivity().getApplicationContext(), mGifts, getUpdaterCallback());
+        mGridAdapter = new GiftsAdapter(getActivity().getApplicationContext(), new FeedList<FeedGift>(), getUpdaterCallback());
         mGridView.setAdapter(mGridAdapter);
         mGridView.setOnScrollListener(mGridAdapter);
 
@@ -104,12 +103,12 @@ public class GiftsFragment extends BaseFragment {
                     if (mProfile != null) {
                         mTitle.setText(R.string.gifts);
                         mTitle.setVisibility(View.VISIBLE);
-                        if (mGifts.size() == 0) {
+                        if (mGridAdapter.getData().size() == 0) {
                             onNewFeeds();
                         }
                     }
                 } else if (mTag.equals(GIFTS_USER_PROFILE_TAG)) {
-                    if (mGifts.size() > 1)
+                    if (mGridAdapter.getData().size() > 1)
                         mTitle.setText(R.string.gifts);
                     else
                         mTitle.setText(R.string.user_does_not_have_gifts);
@@ -126,7 +125,7 @@ public class GiftsFragment extends BaseFragment {
                                 }
                             }
 
-                            if (mGifts.get(position).isRetrier()) {
+                            if (mGridAdapter.getData().get(position).isRetrier()) {
                                 updateUI(new Runnable() {
                                     public void run() {
                                         updateUI(new Runnable() {
@@ -134,7 +133,7 @@ public class GiftsFragment extends BaseFragment {
                                             @Override
                                             public void run() {
                                                 removeLoaderItem();
-                                                mGifts.add(new FeedGift(ItemType.LOADER));
+                                                mGridAdapter.getData().add(new FeedGift(ItemType.LOADER));
                                                 mGridAdapter.notifyDataSetChanged();
                                             }
                                         });
@@ -181,10 +180,10 @@ public class GiftsFragment extends BaseFragment {
                         protected void success(SendGiftAnswer answer, ApiResponse response) {
                             CacheProfile.likes = answer.likes;
                             CacheProfile.money = answer.money;
-                            if (mGifts.size() > 1) {
-                                mGifts.add(1, sendedGift);
+                            if (mGridAdapter.getData().size() > 1) {
+                                mGridAdapter.add(1, sendedGift);
                             } else {
-                                mGifts.add(sendedGift);
+                                mGridAdapter.add(sendedGift);
                                 mTitle.setText(R.string.gifts);
                             }
                             mGridAdapter.notifyDataSetChanged();
@@ -218,9 +217,9 @@ public class GiftsFragment extends BaseFragment {
     }
 
     private void removeLoaderItem() {
-        if (mGifts.size() > 0) {
-            if (mGifts.getLast().isLoader() || mGifts.getLast().isRetrier()) {
-                mGifts.remove(mGifts.size() - 1);
+        if (mGridAdapter.getData().size() > 0) {
+            if (mGridAdapter.getData().getLast().isLoader() || mGridAdapter.getData().getLast().isRetrier()) {
+                mGridAdapter.getData().remove(mGridAdapter.getData().size() - 1);
             }
         }
     }
@@ -234,11 +233,11 @@ public class GiftsFragment extends BaseFragment {
         FeedGiftsRequest request = new FeedGiftsRequest(getActivity());
         request.limit = GIFTS_LOAD_COUNT;
         request.uid = userId;
-        if (!mGifts.isEmpty()) {
-            if (mGifts.getLast().isLoader() || mGifts.getLast().isRetrier()) {
-                request.from = mGifts.get(mGifts.size() - 2).gift.feedId;
+        if (!mGridAdapter.getData().isEmpty()) {
+            if (mGridAdapter.getData().getLast().isLoader() || mGridAdapter.getData().getLast().isRetrier()) {
+                request.from = mGridAdapter.getData().get(mGridAdapter.getData().size() - 2).gift.feedId;
             } else {
-                request.from = mGifts.get(mGifts.size() - 1).gift.feedId;
+                request.from = mGridAdapter.getData().get(mGridAdapter.getData().size() - 1).gift.feedId;
             }
         }
 
@@ -248,13 +247,13 @@ public class GiftsFragment extends BaseFragment {
             protected void success(FeedListData<FeedGift> gifts, ApiResponse response) {
 
                 removeLoaderItem();
-                mGifts.addAll(gifts.items);
-                if (mGifts.isEmpty() && !gifts.items.isEmpty()) {
+                mGridAdapter.getData().addAll(gifts.items);
+                if (mGridAdapter.getData().isEmpty() && !gifts.items.isEmpty()) {
                     mGroupInfo.setVisibility(View.GONE);
                 }
 
                 if (gifts.more) {
-                    mGifts.add(new FeedGift(ItemType.LOADER));
+                    mGridAdapter.getData().add(new FeedGift(ItemType.LOADER));
                 }
                 mGridAdapter.notifyDataSetChanged();
                 mIsUpdating = false;
@@ -268,7 +267,7 @@ public class GiftsFragment extends BaseFragment {
             @Override
             public void fail(int codeError, ApiResponse response) {
                 removeLoaderItem();
-                mGifts.add(new FeedGift(ItemType.RETRY));
+                mGridAdapter.getData().add(new FeedGift(ItemType.RETRY));
                 mGridAdapter.notifyDataSetChanged();
                 mIsUpdating = false;
             }
@@ -277,20 +276,21 @@ public class GiftsFragment extends BaseFragment {
 
     public void setGifts(ArrayList<Gift> gifts) {
         if (mProfile == null) mTag = GIFTS_ALL_TAG;
-        mGifts.clear();
+        mGridAdapter.getData().clear();
 
         for (Gift gift : gifts) {
             FeedGift item = new FeedGift();
             item.gift = gift;
-            mGifts.add(item);
+            mGridAdapter.getData().add(item);
         }
+
         if (mTag != null) {
             if (mTag.equals(GIFTS_USER_PROFILE_TAG)) {
-                mGifts.add(0, FeedGift.getSendedGiftItem());
-                if (mGifts.size() >= GIFTS_LOAD_COUNT)
-                    mGifts.add(new FeedGift(ItemType.LOADER));
+                mGridAdapter.getData().add(0, FeedGift.getSendedGiftItem());
+                if (mGridAdapter.getData().size() >= GIFTS_LOAD_COUNT)
+                    mGridAdapter.getData().add(new FeedGift(ItemType.LOADER));
             } else {
-                if (mGifts.isEmpty()) {
+                if (mGridAdapter.getData().isEmpty()) {
                     mGroupInfo.setVisibility(View.VISIBLE);
                     mTextInfo.setText(R.string.you_dont_have_gifts_yet);
                     mBtnInfo.setOnClickListener(new View.OnClickListener() {
@@ -306,6 +306,7 @@ public class GiftsFragment extends BaseFragment {
                 }
             }
         }
+
         if (mGridView != null) {
             mGridView.post(new Runnable() {
                 @Override
@@ -345,7 +346,7 @@ public class GiftsFragment extends BaseFragment {
             @Override
             public void onUpdate() {
                 if (!mIsUpdating) {
-                    if (!mTag.equals(GIFTS_ALL_TAG) && !mIsUpdating && mGifts.getLast().isLoader()) {
+                    if (!mTag.equals(GIFTS_ALL_TAG) && !mIsUpdating && mGridAdapter.getData().getLast().isLoader()) {
                         onNewFeeds();
                     }
                 }

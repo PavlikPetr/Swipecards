@@ -182,7 +182,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         if (getCount() > 0) {
             removeHeader(parentView);
         } else {
-            mHeaderView.setVisibility(View.VISIBLE);
+            if (mHeaderView != null) mHeaderView.setVisibility(View.VISIBLE);
         }
     }
 

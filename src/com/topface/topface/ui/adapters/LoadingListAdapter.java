@@ -117,6 +117,14 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
         return TYPE_COUNT;
     }
 
+    public void add(int i, T item) {
+        getData().add(i,item);
+    }
+
+    public void add(T item) {
+        getData().add(item);
+    }
+
     public static interface Updater {
         void onUpdate();
     }

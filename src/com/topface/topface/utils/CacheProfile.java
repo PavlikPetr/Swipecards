@@ -289,7 +289,7 @@ public class CacheProfile {
     public static void onRegistration(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(Static.PREFERENCES_TAG_NEED_CHANGE_PASSWORD, true);
+        editor.putBoolean(Static.PREFERENCES_TAG_NEED_CHANGE_PASSWORD, false);
         editor.putBoolean(Static.PREFERENCES_TAG_NEED_CITY_CONFIRM, true);
         editor.commit();
     }
