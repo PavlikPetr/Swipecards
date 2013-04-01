@@ -511,4 +511,6 @@
     <string name="chat_no_message_text">Напишите сообщение или отправьте подарок и вам обязательно ответят</string>
     <string name="user_baned">Пользователь забанен</string>
     <string name="general_choose_city">Выберите город</string>
+    <string name="general_save_and_exit">Сохранить и выйти</string>
+    <string name="general_set_password">Установите пароль перед выходом из приложения</string>
 </resources>
