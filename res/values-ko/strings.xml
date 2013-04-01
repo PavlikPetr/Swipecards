@@ -33,8 +33,8 @@
     <string name="general_girls">여성</string>
     <string name="general_city">도시</string>
     <string name="general_dating">만남</string>
-    <string name="general_likes">나를 좋아합니다.</string>
-    <string name="general_likes_me">가 당신을 좋아합니다.</string>
+    <string name="general_likes">나를 마음에 들어하는 상대</string>
+    <string name="general_likes_me">나를 마음에 들어하는 상대</string>
     <string name="general_sympathy">호감도</string>
     <string name="general_delight">감탄</string>
     <string name="general_mutual">서로간의</string>
@@ -373,4 +373,12 @@
     <string name="buy_vip_month_one">%1$d 달 이용을 %2$.2f %3$@가격에</string>
     <string name="buy_vip_month_few">%1$d 달 이용을 %2$.2f %3$@가격에</string>
     <string name="buy_vip_month_other">%1$d 달 이용을 %2$.2f %3$@가격에</string>
+    <string name="buy_special_offers">특별한 제안</string>
+    <string name="user_does_not_have_gifts">아직 해당 사용자는 받은 선물이 없습니다. 당신이 맨 처음으로 선물을 한다면 상대도 당신을 알아보게 될 것입니다.</string>
+    <string name="status_is_empty">현재 상태 설정이 되어 있지 않습니다.</string>
+    <string name="you_dont_have_gifts_yet">아직 받은 선물이 없습니다.</string>
+    <string name="buy_sympathies">호감도 구입하기</string>
+    <string name="upload_photos">사진을 업로드해주세요</string>
+    <string name="chat_no_message_title">교제를 시작해 보세요!</string>
+    <string name="chat_no_message_text">상대에게 메세지를 전송하거나 선물을 해보세요. 상대도 반드시 그에 응답할것입니다.</string>
 </resources>

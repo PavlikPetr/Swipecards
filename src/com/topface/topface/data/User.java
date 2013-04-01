@@ -14,6 +14,7 @@ public class User extends Profile {
     public boolean mutual;  // флаг наличия симпатии к авторизованному пользователю
     public int score;       // средний балл оценок пользователя    
     public int formMatches = 0;
+    public boolean banned;
 
     public static User parse(int userId, ApiResponse response) {
         User user = new User();
@@ -32,6 +33,7 @@ public class User extends Profile {
                 user.online = item.optBoolean("online");
                 user.mutual = item.optBoolean("mailmutual");
                 user.score = item.optInt("score");
+                user.banned = item.optBoolean("banned");
             }
 
         } catch (Exception e) {

@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ChangePasswordRequest;
@@ -68,11 +69,11 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
                 final String password = mEdPassword.getText().toString();
                 final String passwordConfirmation = mEdPasswordConfirmation.getText().toString();
                 if (password.trim().length() <= 0) {
-                    Toast.makeText(getActivity(), R.string.enter_new_password, Toast.LENGTH_LONG).show();
+                    Toast.makeText(App.getContext(), R.string.enter_new_password, Toast.LENGTH_LONG).show();
                 } else if (passwordConfirmation.trim().length() <= 0) {
-                    Toast.makeText(getActivity(), R.string.enter_password_confirmation, Toast.LENGTH_LONG).show();
+                    Toast.makeText(App.getContext(), R.string.enter_password_confirmation, Toast.LENGTH_LONG).show();
                 } else if (!password.equals(passwordConfirmation)) {
-                    Toast.makeText(getActivity(), R.string.passwords_mismatched, Toast.LENGTH_LONG).show();
+                    Toast.makeText(App.getContext(), R.string.passwords_mismatched, Toast.LENGTH_LONG).show();
                 } else {
                     ChangePasswordRequest request = new ChangePasswordRequest(getActivity(), mToken.getPassword(), password);
                     lock();
@@ -80,7 +81,7 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
                         @Override
                         public void success(ApiResponse response) {
                             if (response.isCompleted()) {
-                                Toast.makeText(getActivity(), R.string.passwords_changed, Toast.LENGTH_LONG).show();
+                                Toast.makeText(App.getContext(), R.string.passwords_changed, Toast.LENGTH_LONG).show();
                                 mToken.saveToken(mToken.getUserId(), mToken.getLogin(), password);
                                 CacheProfile.onPasswordChanged(getContext());
                                 mEdPassword.getText().clear();
@@ -90,7 +91,7 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
 
                         @Override
                         public void fail(int codeError, ApiResponse response) {
-                            Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                         }
 
                         @Override

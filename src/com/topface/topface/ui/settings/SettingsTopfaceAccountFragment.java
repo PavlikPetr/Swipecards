@@ -69,14 +69,16 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             request.callback(new ApiHandler() {
                 @Override
                 public void success(ApiResponse response) {
-                    Toast.makeText(getActivity(), getString(R.string.email_confirmed), 1500).show();
+                    Toast.makeText(App.getContext(), R.string.email_confirmed, 1500).show();
                     CacheProfile.emailConfirmed = true;
-                    setViewsState();
+                    if (isAdded()) {
+                        setViewsState();
+                    }
                 }
 
                 @Override
                 public void fail(int codeError, ApiResponse response) {
-                    Toast.makeText(getActivity(), R.string.general_server_error, 1500).show();
+                    Toast.makeText(App.getContext(), R.string.general_server_error, 1500).show();
                 }
 
                 @Override
@@ -117,7 +119,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -271,11 +273,11 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
                         @Override
                         public void fail(int codeError, ApiResponse response) {
-                            Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                         }
                     }).exec();
                 } else {
-                    Toast.makeText(getActivity(), R.string.incorrect_email, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(App.getContext(), R.string.incorrect_email, Toast.LENGTH_SHORT).show();
                 }
                 break;
             case ACTION_CHANGE_PASSWORD:

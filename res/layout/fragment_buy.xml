@@ -114,16 +114,17 @@
                         android:layout_height="wrap_content"
                         android:layout_width="fill_parent"
                         android:id="@+id/likes_title"
+                        android:layout_marginTop="5dp"
                         >
 
                     <TextView
-                            style="@style/TitleWhiteText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="2dp"
                             android:text="@string/buying_sympathies"
                             android:layout_alignParentLeft="true"
-                            android:textStyle="bold"/>
+                            android:textSize="16sp"
+                            />
 
                     <ImageView
                             android:layout_width="wrap_content"
@@ -144,12 +145,13 @@
                 <!-- Money -->
                 <TextView
                         android:id="@+id/titleSpecialOffers"
-                        style="@style/TitleWhiteText"
+                        android:layout_marginTop="5dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="2dp"
+                        android:textSize="16sp"
                         android:text="@string/buy_special_offers"
-                        android:textStyle="bold"/>
+                        />
 
                 <Button
                         android:id="@+id/btnOfferwall"
@@ -191,13 +193,12 @@
                         android:layout_marginTop="10dp">
 
                     <TextView
-                            style="@style/TitleWhiteText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="2dp"
                             android:text="@string/buying_money"
                             android:layout_alignParentLeft="true"
-                            android:textStyle="bold"/>
+                            android:textSize="16sp"/>
 
                     <ImageView
                             android:layout_width="wrap_content"

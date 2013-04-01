@@ -383,4 +383,11 @@
     <string name="buy_vip_month_few">%1$d meses por %2$.2f %3$@</string>
     <string name="buy_vip_month_other">%1$d meses por %2$.2f %3$@</string>
     <string name="buy_special_offers">Ofertas especiales</string>
+    <string name="user_does_not_have_gifts">Este usuario aún no tiene regalos, se el primero y llamarás la atención</string>
+    <string name="status_is_empty">No tiene ningún estado establecido</string>
+    <string name="you_dont_have_gifts_yet">De momento no tienes regalos</string>
+    <string name="buy_sympathies">Comprar simpatías</string>
+    <string name="upload_photos">Sube fotografías</string>
+    <string name="chat_no_message_title">¡Empieza a comunicarse!</string>
+    <string name="chat_no_message_text">Escribe un mensaje o manda un regalo y seguro que te contestarán</string>
 </resources>

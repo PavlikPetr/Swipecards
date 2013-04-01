@@ -60,7 +60,13 @@ public class ProfilePhotoFragment extends BaseFragment {
         if (mPhotoLinks == null || mPhotoLinks.size() < 2) {
             return;
         }
-        int position = mPhotoLinks.get(mPhotoLinks.size() - 2).getPosition();
+
+        Photo photo = mPhotoLinks.get(mPhotoLinks.size() - 2);
+        if (photo == null) {
+            return;
+        }
+
+        int position = photo.getPosition();
         AlbumRequest request = new AlbumRequest(
                 getActivity(),
                 CacheProfile.uid,
@@ -116,14 +122,9 @@ public class ProfilePhotoFragment extends BaseFragment {
         mGridAlbum.setOnItemClickListener(mOnItemClickListener);
         mGridAlbum.setOnScrollListener(mProfilePhotoGridAdapter);
 
-        TextView title = (TextView) root.findViewById(R.id.usedTitle);
+        final TextView title = (TextView) root.findViewById(R.id.usedTitle);
 
-        if (mPhotoLinks != null && CacheProfile.photos != null) {
-            title.setText(Utils.formatPhotoQuantity(CacheProfile.photos.size()));
-        } else {
-            title.setText(Utils.formatPhotoQuantity(0));
-        }
-        title.setVisibility(View.VISIBLE);
+        initTitleText(title);
 
         root.findViewById(R.id.btnAddPhotoAlbum).setOnClickListener(mAddPhotoHelper.getAddPhotoClickListener());
         root.findViewById(R.id.btnAddPhotoCamera).setOnClickListener(mAddPhotoHelper.getAddPhotoClickListener());
@@ -142,12 +143,24 @@ public class ProfilePhotoFragment extends BaseFragment {
                 Photos newPhotos = new Photos();
                 newPhotos.addAll(arrList);
                 ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).setData(newPhotos, intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_MORE, false));
+                initTitleText(title);
             }
         };
 
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mPhotosReceiver, new IntentFilter(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT));
 
         return root;
+    }
+
+    private void initTitleText(TextView title) {
+        title.setVisibility(View.VISIBLE);
+        if (mPhotoLinks != null && CacheProfile.photos != null) {
+            if (CacheProfile.photos.size() > 1) {
+                title.setText(Utils.formatPhotoQuantity(CacheProfile.photos.size()));
+                return;
+            }
+        }
+        title.setText(R.string.upload_photos);
     }
 
     @Override

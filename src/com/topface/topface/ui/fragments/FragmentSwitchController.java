@@ -304,8 +304,10 @@ public class FragmentSwitchController extends ViewGroup {
     }
 
     public void setScrollingCacheEnabled(boolean enabled) {
-        getChildAt(0).setDrawingCacheEnabled(enabled);
-        getChildAt(1).setDrawingCacheEnabled(enabled);
+        if(getChildCount() > 0) {
+            getChildAt(0).setDrawingCacheEnabled(enabled);
+            getChildAt(1).setDrawingCacheEnabled(enabled);
+        }
     }
 
     private void fullExpanding() {

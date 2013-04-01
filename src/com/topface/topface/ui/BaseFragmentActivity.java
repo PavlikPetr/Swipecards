@@ -9,7 +9,6 @@ import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.WindowManager;
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.ReAuthReceiver;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
@@ -28,7 +27,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     public static final String INTENT_PREV_ENTITY = "prev_entity";
     public static final String AUTH_TAG = "AUTH";
 
-    private boolean needToUnregisterReceiver = true;
+    private boolean afterOnSavedInstanceState = false;
     protected boolean needOpenDialog = true;
 
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
@@ -67,14 +66,21 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             }
         };
 
-        needToUnregisterReceiver = true;
-        registerReceiver(mReauthReceiver, new IntentFilter(ReAuthReceiver.REAUTH_INTENT));
+        if(!afterOnSavedInstanceState) {
+            afterOnSavedInstanceState = true;
+            registerReceiver(mReauthReceiver, new IntentFilter(ReAuthReceiver.REAUTH_INTENT));
+        }
     }
 
     public void startAuth() {
-        AuthFragment af = AuthFragment.newInstance();
-        getSupportFragmentManager().beginTransaction().add(R.id.content, af, AUTH_TAG).commit();
-        needAuth = false;
+        Fragment authFragment = getSupportFragmentManager().findFragmentByTag(AUTH_TAG);
+        if (authFragment == null || !authFragment.isAdded()) {
+            if (authFragment == null) {
+                authFragment = AuthFragment.newInstance();
+            }
+            getSupportFragmentManager().beginTransaction().add(R.id.content, authFragment, AUTH_TAG).commit();
+            needAuth = false;
+        }
     }
 
     public void close(Fragment fragment) {
@@ -88,25 +94,19 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (needToUnregisterReceiver) {
+        if (!afterOnSavedInstanceState) {
             unregisterReceiver(mReauthReceiver);
-            needToUnregisterReceiver = false;
+            afterOnSavedInstanceState = true;
         }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EasyTracker.getInstance().activityStart(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         removeAllRequests();
-        if (needToUnregisterReceiver) {
+        if (!afterOnSavedInstanceState) {
             unregisterReceiver(mReauthReceiver);
-            needToUnregisterReceiver = false;
+            afterOnSavedInstanceState = true;
         }
     }
 
@@ -117,12 +117,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             }
             mRequests.clear();
         }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EasyTracker.getInstance().activityStop(this);
     }
 
     @Override

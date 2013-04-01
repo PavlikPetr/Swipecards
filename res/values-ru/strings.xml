@@ -325,7 +325,7 @@
     <string name="vip_state_on">Ваш VIP-статус активирован</string>
     <string name="vip_abilities">Ваши VIP возможности</string>
     <string name="vip_why">Почему вам так важно быть VIP</string>
-    <string name="vip_info_delight">Отправляйте восхищения бесплатно - вражайте свои чувства по максимуму!</string>
+    <string name="vip_info_delight">Отправляйте восхищения бесплатно - выражайте свои чувства по максимуму!</string>
     <string name="vip_info_guest">Узнайте, кто вами интересовался - смотрите своих гостей!</string>
     <string name="vip_info_invisible">Оставайтесь незамеченными, посещая чужие страницы, благодаря режиму
         \"невидимка\"
@@ -359,7 +359,7 @@
     <string name="profile_get_status">Опишите Ваше настроение</string>
     <string name="map_title">Карта</string>
 
-    <string name="settings_want_answer">Я хочу что бы мне ответили</string>
+    <string name="settings_want_answer">Я хочу, чтобы мне ответили</string>
     <string name="settings_feedback_email">Email для связи</string>
     <string name="settings_invalid_email">Некорректный Email</string>
 
@@ -503,4 +503,12 @@
     <string name="buy_special_offers">Специальные предложения</string>
 
     <string name="user_does_not_have_gifts">У этого пользователя пока нет подарков, будьте первым и вас заметят</string>
+    <string name="status_is_empty">У вас не установлен статус</string>
+    <string name="you_dont_have_gifts_yet">У вас пока нет подарков</string>
+    <string name="buy_sympathies">Купить симпатии</string>
+    <string name="upload_photos">Загрузите фотографии</string>
+    <string name="chat_no_message_title">Начните общение!</string>
+    <string name="chat_no_message_text">Напишите сообщение или отправьте подарок и вам обязательно ответят</string>
+    <string name="user_baned">Пользователь забанен</string>
+    <string name="general_choose_city">Выберите город</string>
 </resources>

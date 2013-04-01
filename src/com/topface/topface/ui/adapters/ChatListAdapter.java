@@ -54,13 +54,13 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     private static final int T_COUNT = 13;
 
-    private HashMap<History, ApiRequest> mHashRepeatRequests;
-    private ArrayList<History> mWaitingItems;
-    private ArrayList<History> mUnrealItems;
-    private ArrayList<History> mShowDatesList;
+    private HashMap<History, ApiRequest> mHashRepeatRequests = new HashMap<History, ApiRequest>();
+    private ArrayList<History> mWaitingItems = new ArrayList<History>();
+    private ArrayList<History> mUnrealItems = new ArrayList<History>();
+    private ArrayList<History> mShowDatesList = new ArrayList<History>();
+    private AddressesCache mAddressesCache = new AddressesCache();
     private View.OnClickListener mOnClickListener;
     private ChatFragment.OnListViewItemLongClickListener mLongClickListener;
-    private AddressesCache mAddressesCache;
 
     private View mHeaderView;
 
@@ -68,11 +68,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     public ChatListAdapter(Context context, FeedList<History> data, Updater updateCallback) {
         super(context, data, updateCallback);
-        mAddressesCache = new AddressesCache();
-        mShowDatesList = new ArrayList<History>();
-        mUnrealItems = new ArrayList<History>();
-        mWaitingItems = new ArrayList<History>();
-        mHashRepeatRequests = new HashMap<History, ApiRequest>();
     }
 
     @Override
@@ -86,9 +81,9 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     @Override
     public int getItemViewType(int position) {
-        History item = getItem(position);
         int superType = super.getItemViewType(position);
-        if (superType == T_OTHER) {
+        History item = getItem(position);
+        if (superType == T_OTHER && item != null) {
             if (item.isWaitingItem() || item.isRepeatItem()) return T_WAITING;
             boolean output = (item.target == FeedDialog.USER_MESSAGE);
             switch (item.type) {
@@ -151,10 +146,14 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     public void addHeader(ListView parentView) {
         if (mHeaderView == null) {
-            mHeaderView = mInflater.inflate(R.layout.list_header_chat_no_messages_informer, null);
-            parentView.addHeaderView(mHeaderView);
-            parentView.setStackFromBottom(false);
-            mHeaderView.setVisibility(View.GONE);
+            try {
+                mHeaderView = mInflater.inflate(R.layout.list_header_chat_no_messages_informer, null);
+                parentView.addHeaderView(mHeaderView);
+                parentView.setStackFromBottom(false);
+                mHeaderView.setVisibility(View.GONE);
+            } catch (OutOfMemoryError e) {
+                Debug.error("Add header OOM", e);
+            }
         }
     }
 
@@ -506,10 +505,13 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     public int getLastItemId() {
         FeedList<History> data = getData();
+
         for (int i = data.size() - 1; i >= 0; i--) {
             History item = data.get(i);
-            if (!item.isLoaderOrRetrier() && item.id > 0) {
-                return item.id;
+            if(item != null) {
+                if (!item.isLoaderOrRetrier() && item.id > 0) {
+                    return item.id;
+                }
             }
         }
         return -1;
@@ -517,12 +519,16 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     @SuppressWarnings("unchecked")
     public ArrayList<History> getDataCopy() {
-        //noinspection unchecked
-        ArrayList<History> dataClone = (ArrayList<History>) getData().clone();
-        if (!dataClone.isEmpty() && dataClone.get(dataClone.size() - 1).isLoaderOrRetrier()) {
-            dataClone.remove(dataClone.size() - 1);
+        ArrayList<History> dataClone = null;
+        try {
+            dataClone = (ArrayList<History>) getData().clone();
+            if (!dataClone.isEmpty() && dataClone.get(dataClone.size() - 1).isLoaderOrRetrier()) {
+                dataClone.remove(dataClone.size() - 1);
+            }
+            removeUnrealItems(dataClone);
+        } catch (OutOfMemoryError e) {
+            Debug.error(e);
         }
-        removeUnrealItems(dataClone);
         return dataClone;
     }
 

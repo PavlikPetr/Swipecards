@@ -116,29 +116,34 @@ public class TopfaceNotificationManager {
     }
 
     private int showNotificationForOldVersions(String title, String message, Bitmap icon, Intent intent) {
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(ctx);
-        notificationBuilder.setSmallIcon(android.R.drawable.stat_sys_upload);
-        RemoteViews views = new RemoteViews(ctx.getPackageName(), R.layout.notifications_progress_layout);
-        if (icon != null) {
-            Bitmap scaledIcon = Utils.clipAndScaleBitmap(icon, (int) width, (int) height);
-            if (scaledIcon != null) {
-                views.setBitmap(R.id.notificationImage, "setImageBitmap", icon);
-            }
-        }
-
-        views.setTextViewText(R.id.nfTitle, title);
-
-        PendingIntent resultPendingIntent = PendingIntent.getActivity(ctx, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        notificationBuilder.setContentIntent(resultPendingIntent);
-        Notification not = notificationBuilder.build();
-
-        not.contentView = views;
-
         int id = ++lastId;
+        try {
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(ctx);
+            notificationBuilder.setSmallIcon(android.R.drawable.stat_sys_upload);
+            RemoteViews views = new RemoteViews(ctx.getPackageName(), R.layout.notifications_progress_layout);
+            if (icon != null) {
+                Bitmap scaledIcon = Utils.clipAndScaleBitmap(icon, (int) width, (int) height);
+                if (scaledIcon != null) {
+                    views.setBitmap(R.id.notificationImage, "setImageBitmap", icon);
+                }
+            }
 
-        NotificationManager notificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
-        //noinspection deprecation
-        notificationManager.notify(PROGRESS_ID, not);
+            views.setTextViewText(R.id.nfTitle, title);
+
+            PendingIntent resultPendingIntent = PendingIntent.getActivity(ctx, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            notificationBuilder.setContentIntent(resultPendingIntent);
+            Notification not = notificationBuilder.build();
+
+            not.contentView = views;
+
+
+
+            NotificationManager notificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
+            //noinspection deprecation
+            notificationManager.notify(PROGRESS_ID, not);
+        } catch (Exception e) {
+            Debug.error(e);
+        }
         return id;
     }
 

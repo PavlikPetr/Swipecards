@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ListView;
+import android.widget.Toast;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
@@ -109,25 +110,42 @@ public class AddPhotoHelper {
                 mFileName = "/" + uuid.toString() + ".jpg";
                 File outputDirectory = new File(PATH_TO_FILE);
                 //noinspection ResultOfMethodCallIgnored
-                outputDirectory.mkdirs();
+                if (!outputDirectory.exists()) {
+                    if (!outputDirectory.mkdirs()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(mContext, R.string.general_error, 1500).show();
+                            }
+                        });
+                        return;
+                    }
+                }
                 outputFile = new File(outputDirectory, mFileName);
-
                 intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(outputFile));
                 intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.profile_add_title));
 
                 if (Utils.isIntentAvailable(mContext, intent.getAction())) {
                     if (mFragment != null) {
-                        if (mFragment instanceof ProfilePhotoFragment) {
-                            mFragment.getParentFragment().startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
-                        } else {
-                            mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
+                        if (mFragment.isAdded()) {
+                            if (mFragment instanceof ProfilePhotoFragment) {
+                                mFragment.getParentFragment().startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
+                            } else {
+                                mFragment.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
+                            }
                         }
                     } else {
                         mActivity.startActivityForResult(intent, GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA);
                     }
                 }
+
+
             }
         }).start();
+    }
+
+    public Activity getActivity() {
+        return (mFragment == null) ? mActivity : mFragment.getActivity();
     }
 
     private void startChooseFromGallery() {

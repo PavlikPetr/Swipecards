@@ -343,4 +343,6 @@ Sa oled müksanud.</string>
     <string name="buy_vip_month_one">%1$d kuud %2$.2f %3$@ eest</string>
     <string name="buy_vip_month_few">%1$d kuud %2$.2f %3$@ eest</string>
     <string name="buy_vip_month_other">%1$d kuud %2$.2f %3$@ eest</string>
+    <string name="buy_special_offers">Eripakkumised</string>
+    <string name="buy_sympathies">Osta meeldimised</string>
 </resources>

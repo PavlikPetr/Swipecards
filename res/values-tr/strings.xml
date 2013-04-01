@@ -233,6 +233,7 @@
     <string name="vip_messages_bg">Mesajların arka planı</string>
     <string name="vip_black_list">Kara liste</string>
     <string name="vip_profile_bg">Arka plan fotoğrafı</string>
+    <string name="profile_vip_status">Super {{rocket}} Skills</string>
     <string name="profile_services">Hizmetler</string>
     <string name="default_balance_constant">Hesabınızda</string>
     <string name="default_energy_coins_buy_btn_text">Para satın almak, enerji deposu doldurmak</string>
@@ -346,6 +347,7 @@
     <string name="no_photo_take_photo">Sizinle kimse tanışamıyor! Fotoğraf çekin veya mevcut albümden seçin</string>
     <string name="photo_is_too_small">Bu fotoğrafta harika görünüyorsunuz ama bütün kullanıcıların resminize not vermesi için o, şu rakamdan biraz daha büyük olmalı: ama %s’dan daha küçük değildir.</string>
     <string name="photo_for_avatar">Fotoğraf profilinize yüklenmek için hazırdır! Bu sizin ilk fotoğrafınız ve o profil resmi olarak kullanılacaktır.</string>
+    <string name="get_it_for_free">Bedava para almak</string>
     <string name="vip_advantages">VIP avantajları</string>
     <string name="change_email">E-mail değiştirmek</string>
     <string name="send_confirmation_email">E-maile onay göndermek</string>
@@ -364,5 +366,25 @@
     <string name="we_detect_your_city">Biz şehrinizi belirledik:</string>
     <string name="reselect_city">Diğer şehir seçmek:</string>
     <string name="choose_cool_photo">En iyi fotoğrafınızı ve moralinizi gösteren durumunuzu seçin!</string>
+    <string name="email_confirmed">e-mail onaylanmıştır!</string>
+    <string name="sympathy_sended">Sempati gönderildi</string>
+    <string name="general_photo_deleted">Fotoğrafınız kurallara aykırı olduğu için kaldırıldı</string>
+    <string name="buying_total">Toplam</string>
     <string name="buying_economy">Tasarruf</string>
+    <string name="general_change">Değiştirmek</string>
+    <string name="general_correct">Her şey doğru</string>
+    <string name="we_dont_detect_your_city">Size yakın insanları bulmamız için nerede bulunduğunuzu bilmeliyiz. Lütfen, şehrinizi belirtiniz</string>
+    <string name="confirm_email">Lütfen, e-mailinizi onaylayın.</string>
+    <string name="password_sent">Yeni parola E-mailinize gönderildi</string>
+    <string name="buy_vip_month_one">%1$d aylık %2$.2f %3$@</string>
+    <string name="buy_vip_month_few">%1$d aylık %2$.2f %3$@</string>
+    <string name="buy_vip_month_other">%1$d aylık %2$.2f %3$@</string>
+    <string name="buy_special_offers">Özel fırsatlar</string>
+    <string name="user_does_not_have_gifts">Bu kullanıcının hediyeleri henüz yok, birinci olun ve sizi fark edecekler</string>
+    <string name="status_is_empty">Sizin ifade mesajınız boştur</string>
+    <string name="you_dont_have_gifts_yet">Henüz hediyeniz yoktur</string>
+    <string name="buy_sympathies">Sempati satın almak</string>
+    <string name="upload_photos">Fotoğraflarınızı yükleyin</string>
+    <string name="chat_no_message_title">Sohbete başlayın!</string>
+    <string name="chat_no_message_text">Mesaj yazın veya hediye gönderin ve size muhakkak cevap yazılacak</string>
 </resources>

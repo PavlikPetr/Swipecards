@@ -18,6 +18,7 @@ import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -41,10 +42,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.TimerTask;
 
-public class ChatFragment extends BaseFragment implements View.OnClickListener,
-        LocationListener {
+public class ChatFragment extends BaseFragment implements View.OnClickListener, LocationListener {
 
-    private static final int LIMIT = 50;
+    public static final int LIMIT = 50;
 
     public static final String FRIEND_FEED_USER = "user_profile";
     public static final String ADAPTER_DATA = "adapter";
@@ -57,9 +57,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
     public static final String INTENT_ITEM_ID = "item_id";
     public static final String MAKE_ITEM_READ = "com.topface.topface.feedfragment.MAKE_READ";
-
-    static {
-    }
 
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
 
@@ -102,7 +99,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        super.onCreateView(inflater, container, savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.ac_chat, null);
 
         Debug.log(this, "+onCreate");
@@ -194,24 +191,29 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     private void restoreData(Bundle savedInstanceState) {
         if (mHistoryData == null) {
             if (savedInstanceState != null) {
-                boolean was_failed = savedInstanceState.getBoolean(WAS_FAILED);
-                ArrayList<History> list = savedInstanceState.getParcelableArrayList(ADAPTER_DATA);
-                mHistoryData = new FeedList<History>();
-                if (list != null) {
-                    for (History item : list) {
-                        if (item != null) {
-                            mHistoryData.addAll(list);
+                try {
+                    boolean was_failed = savedInstanceState.getBoolean(WAS_FAILED);
+                    ArrayList<History> list = savedInstanceState.getParcelableArrayList(ADAPTER_DATA);
+                    mHistoryData = new FeedList<History>();
+                    if (list != null) {
+                        for (History item : list) {
+                            if (item != null) {
+                                mHistoryData.add(item);
+                            }
                         }
                     }
-                }
-                try {
                     mUser = new FeedUser(new JSONObject(savedInstanceState.getString(FRIEND_FEED_USER)));
+                    if (was_failed) {
+                        mLockScreen.setVisibility(View.VISIBLE);
+                    } else {
+                        mLockScreen.setVisibility(View.GONE);
+                    }
+                    mLoadingLocker.setVisibility(View.GONE);
                 } catch (Exception e) {
                     Debug.error(e);
+                } catch (OutOfMemoryError e) {
+                    Debug.error(e);
                 }
-                if (was_failed) mLockScreen.setVisibility(View.VISIBLE);
-                else mLockScreen.setVisibility(View.GONE);
-                mLoadingLocker.setVisibility(View.GONE);
             }
             if (mHistoryData == null) {
                 mHistoryData = new FeedList<History>();
@@ -278,8 +280,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     private void initNavigationbar(View root, int userSex, String userName, int userAge, String userCity) {
         ActionBar actionBar = getActionBar(root);
 
-        actionBar.setTitleText(userName + ", "
-                + userAge);
+        actionBar.setTitleText(userName + ", " + userAge);
         actionBar.setSubTitleText(userCity);
         actionBar.showBackButton(new View.OnClickListener() {
             @Override
@@ -409,7 +410,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 if (mRetryView != null && isAdded()) {
                     mRetryView.setErrorMsg(getString(R.string.general_data_error));
                 }
-                mLockScreen.setVisibility(View.VISIBLE);
+                if (mLockScreen != null) {
+                    mLockScreen.setVisibility(View.VISIBLE);
+                }
                 wasFailed = true;
                 mIsUpdating = false;
             }
@@ -453,22 +456,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                         GiftsActivity.INTENT_REQUEST_GIFT);
                 EasyTracker.getTracker().trackEvent("Chat", "SendGiftClick", "", 1L);
                 break;
-//            case R.id.btnChatPlace: {
-//                // Toast.makeText(getActivity(), "Place",
-//                // Toast.LENGTH_SHORT).show();
-//                EasyTracker.getTracker().trackEvent("Chat", "SendPlaceClick", "", 1L);
-//            }
-//            break;
             case R.id.btnChatPlace:
                 if (Utils.isGoogleMapsAvailable()) {
                     startActivityForResult(new Intent(getActivity(), GeoMapActivity.class),
                             GeoMapActivity.INTENT_REQUEST_GEO);
-                    // Toast.makeText(getActivity(), "Map",
+                    // Toast.makeText(App.getContext(), "Map",
                     // Toast.LENGTH_SHORT).show();
                     EasyTracker.getTracker().trackEvent("Chat", "SendMapClick", "§", 1L);
                 }
                 break;
-
             case R.id.chat_message:
                 break;
             case R.id.btnNavigationProfileBar:
@@ -630,7 +626,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                 mAdapter.showRetrySendMessage(fakeItem, coordRequest);
             }
         }).exec();
@@ -679,7 +675,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
     private boolean sendMessage() {
         final History fakeItem = new History(IListLoader.ItemType.WAITING);
-        mAdapter.addSentMessage(fakeItem, mListView.getRefreshableView());
+        if(mAdapter != null && mListView != null) {
+            mAdapter.addSentMessage(fakeItem, mListView.getRefreshableView());
+        }
 
         final String text = mEditBox.getText().toString();
         if (text == null || text.length() == 0)
@@ -706,8 +704,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                mAdapter.showRetrySendMessage(fakeItem, messageRequest);
+                if(mAdapter != null) {
+                    Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
+                    mAdapter.showRetrySendMessage(fakeItem, messageRequest);
+                }
             }
         }).exec();
         return true;
@@ -749,7 +749,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
                     @Override
                     public void fail(int codeError, ApiResponse response) {
-                        Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                         mAdapter.showRetrySendMessage(fakeItem, coordRequest);
                     }
                 }).exec();

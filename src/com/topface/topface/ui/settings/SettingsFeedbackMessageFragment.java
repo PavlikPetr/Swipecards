@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
@@ -24,6 +25,7 @@ import com.topface.topface.requests.FeedbackReport;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.edit.AbstractEditFragment;
 import com.topface.topface.ui.edit.EditSwitcher;
+import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
@@ -46,6 +48,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
     private EditText mEditEmail;
 
     private Report mReport = new Report();
+    private LockerView loadingLocker;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -62,9 +65,15 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             }
         });
         actionBar.setTitleText(getString(R.string.settings_feedback));
-
+        loadingLocker = (LockerView) root.findViewById(R.id.fbLoadingLocker);
         mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
-
+        Button sendButton = (Button) root.findViewById(R.id.generalSendButton);
+        sendButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveChanges(new Handler());
+            }
+        });
         Bundle extras = getActivity().getIntent().getExtras();
         int feedbackType = extras.getInt(INTENT_FEEDBACK_TYPE, UNKNOWN);
         switch (feedbackType) {
@@ -201,24 +210,26 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
                 @Override
                 public void success(ApiResponse response) {
-                    mReport.body = Static.EMPTY;
-                    finishRequestSend();
+                    if (isAdded()) {
+                        mReport.body = Static.EMPTY;
+                        finishRequestSend();
 
-                    mEditText.setText(Static.EMPTY);
-                    Toast.makeText(getActivity(),
-                            getString(R.string.settings_feedback_success_msg),
-                            Toast.LENGTH_SHORT).show();
-                    getActivity().finish();
+                        mEditText.setText(Static.EMPTY);
+                        Toast.makeText(App.getContext(),
+                                R.string.settings_feedback_success_msg,
+                                Toast.LENGTH_SHORT).show();
+                        getActivity().finish();
+                    }
                 }
 
                 @Override
                 public void fail(int codeError, ApiResponse response) {
                     finishRequestSend();
-                    Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
                 }
             }).exec();
         } else {
-            Toast.makeText(getActivity().getApplicationContext(), R.string.settings_invalid_email, Toast.LENGTH_LONG).show();
+            Toast.makeText(App.getContext(), R.string.settings_invalid_email, Toast.LENGTH_LONG).show();
             mEditEmail.requestFocus();
         }
     }
@@ -301,13 +312,17 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
     @Override
     protected void lockUi() {
-        mBackButton.setEnabled(false);
-        mEditText.setEnabled(false);
+        if (loadingLocker != null) {
+            loadingLocker.setVisibility(View.VISIBLE);
+            mEditText.setEnabled(false);
+        }
     }
 
     @Override
     protected void unlockUi() {
-        mBackButton.setEnabled(true);
-        mEditText.setEnabled(true);
+        if (loadingLocker != null) {
+            mEditText.setEnabled(true);
+            loadingLocker.setVisibility(View.GONE);
+        }
     }
 }

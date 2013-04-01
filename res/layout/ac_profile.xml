@@ -3,6 +3,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:background="@drawable/bg_main"
+                android:focusableInTouchMode="true"
         >
 
     <!-- header bar -->
@@ -71,14 +72,15 @@
     <include
             layout="@layout/bar_navigation_header"
             android:id="@+id/loNavigationBar"/>
+
+    <ImageView style="@style/HeaderShadow"/>
+
     <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="@drawable/chat_add_panel_bg"
+            android:background="@drawable/bg_main"
             android:visibility="gone"
             android:id="@+id/lockScreen"/>
-
-    <ImageView style="@style/HeaderShadow"/>
 
     <com.topface.topface.ui.views.LockerView
             android:id="@+id/llvProfileLoading"

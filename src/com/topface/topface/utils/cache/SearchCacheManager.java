@@ -84,6 +84,9 @@ public class SearchCacheManager extends PreferencesCacheManager {
 
     @Override
     protected boolean isCacheExpired(String cacheKey) {
+        if (CacheProfile.dating == null) {
+            return true;
+        }
         return super.isCacheExpired(cacheKey) ||
                 //Проверяем соответсвие кэша текущему фильтру поиска
                 !TextUtils.equals(getSignatureFromCache(), CacheProfile.dating.getFilterSignature());

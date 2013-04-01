@@ -12,12 +12,27 @@
 
     <TextView
             android:id="@+id/tvStatus"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textColor="#FFFFFF"
-            android:text="status"
+            android:textSize="14sp"
             android:layout_margin="20dp"
             android:gravity="center"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent"
+            android:singleLine="false"
+            android:maxLines="5"
+            />
+
+    <ImageButton
+            android:id="@+id/btnEdit"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:src="@drawable/navigation_edit_selector"
+            android:background="@android:color/transparent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:scaleType="fitXY"
+            android:visibility="gone"/>
 
 </RelativeLayout>

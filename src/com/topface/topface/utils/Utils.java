@@ -356,7 +356,7 @@ public class Utils {
         if (context != null) {
             Toast.makeText(
                     context,
-                    context.getString(R.string.general_data_error),
+                    R.string.general_data_error,
                     Toast.LENGTH_SHORT
             ).show();
         }
@@ -463,10 +463,12 @@ public class Utils {
     }
 
     public static void hideSoftKeyboard(Context context, EditText... edTexts) {
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        for (EditText edText : edTexts) {
-            if (edText != null) {
-                imm.hideSoftInputFromWindow(edText.getWindowToken(), 0);
+        if (context != null) {
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            for (EditText edText : edTexts) {
+                if (edText != null) {
+                    imm.hideSoftInputFromWindow(edText.getWindowToken(), 0);
+                }
             }
         }
     }

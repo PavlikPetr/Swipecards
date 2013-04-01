@@ -40,7 +40,11 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
     public LoadingListAdapter(Context context,FeedList<T> data, Updater updateCallback) {
         mContext = context;
         mInflater = LayoutInflater.from(context);
-        mData = data == null ? new FeedList<T>() : data;
+        mData = new FeedList<T>();
+        if (data != null) {
+            mData.addAll(data);
+            addLoaderItem(true);
+        }
         mUpdateCallback = updateCallback;
         mLoaderRetrier = getLoaderRetrier();
         mLoaderRetrierText = getLoaderRetrierText();
@@ -49,11 +53,15 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
 
     @Override
     public int getCount() {
+
         return mData != null ? mData.size() : 0;
     }
 
     @Override
     public T getItem(int i) {
+        if(mData == null) {
+            return null;
+        }
         return mData.hasItem(i) ? mData.get(i) : null;
     }
 

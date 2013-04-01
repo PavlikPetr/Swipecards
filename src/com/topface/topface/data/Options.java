@@ -36,6 +36,7 @@ public class Options extends AbstractData {
     public final static String PAGE_TOP = "TOP";
     public final static String PAGE_VISITORS = "VISITORS";
     public final static String PAGE_DIALOGS = "DIALOGS";
+    public final static String PAGE_START = "START";
 
     public final static String GENERAL_MAIL_CONST = "true";
     public final static String GENERAL_APNS_CONST = "false";
@@ -57,6 +58,8 @@ public class Options extends AbstractData {
     public final static String BANNER_WAPSTART = "WAPSTART";
     public static final String BANNER_ADWIRED = "ADWIRED";
     public final static String BANNER_MADNET = "MADNET";
+    public static final String BANNER_BEGUN = "BEGUN";
+    public static final String BANNER_GAG = "GAG";
 
     /**
      * Настройки для каждого типа страниц

@@ -36,6 +36,8 @@ public class FeedUser extends AbstractData implements SerializableToJson {
 
     public boolean premium;
 
+    public boolean banned;
+
     public FeedUser(JSONObject user) {
         super(user);
     }
@@ -49,6 +51,7 @@ public class FeedUser extends AbstractData implements SerializableToJson {
         this.photo = new Photo(user.optJSONObject("photo"));
         this.sex = user.optInt("sex");
         this.premium = user.optBoolean("premium");
+        this.banned = user.optBoolean("banned");
     }
 
     public String getNameAndAge() {

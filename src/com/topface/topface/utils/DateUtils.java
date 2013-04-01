@@ -16,6 +16,8 @@ public class DateUtils {
     private final static SimpleDateFormat mDateFormatDayOfWeek = new SimpleDateFormat("EEEE");
     public final static SimpleDateFormat mDateFormatHours = new SimpleDateFormat("HH:mm");
 
+    public static final long DAY_IN_MILLISECONDS = 24*60*60*1000;
+
     public static void syncTime() {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR, 0);

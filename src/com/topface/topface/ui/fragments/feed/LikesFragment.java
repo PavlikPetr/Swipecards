@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView.OnItemClickListener;
+import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedItem;
@@ -123,7 +124,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     @Override
     protected void decrementCounters() {
-        CountersManager.getInstance(getActivity().getApplicationContext()).decrementCounter(CountersManager.LIKES);
+        CountersManager.getInstance(App.getContext()).decrementCounter(CountersManager.LIKES);
     }
 
     @Override

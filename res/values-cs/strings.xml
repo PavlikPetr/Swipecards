@@ -290,7 +290,7 @@
     <string name="novice_energy_to_sympathies_message_girls">Když doplnite zásobu sympatií, získáte\n uvedené množství sympatií\nod dívek, kteřím se uřčitě líbite</string>
     <string name="novice_buy_sympathies">Pokud chcete zaručeně\ndostávat sympatie,\nkupte je hned teď!</string>
     <string name="general_reconnect_social">Nelze se připojit k sociálním sítím. Prosím, zkuste to znovu později.</string>
-    <string name="general_buying">Koupit sympatie a mince</string>
+    <string name="general_buying">Koupit si sympatie a mince</string>
     <string name="general_block">Blokovat</string>
     <string name="general_buying_disabled">V tuto chvíli není možné nakupovat</string>
     <string name="ban_flood_detected">Příliš často odesíláte požadavky na server. Pro další použití aplikace musíte vyčkat.</string>
@@ -384,4 +384,11 @@
     <string name="buy_vip_month_few">%1$d měsíce za %2$.2f %3$@</string>
     <string name="buy_vip_month_other">%1$d měsíců za %2$.2f %3$@</string>
     <string name="buy_special_offers">Akční nabídky</string>
+    <string name="user_does_not_have_gifts">Tento uživatel zatím nemá žádné dárky, ať jste první a Vás se hned všimnou</string>
+    <string name="status_is_empty">Nemáte nastaveny status</string>
+    <string name="you_dont_have_gifts_yet">Zatím nemáte žádné dárky</string>
+    <string name="buy_sympathies">Koupit si sympatie</string>
+    <string name="upload_photos">Nahrajte si fotky</string>
+    <string name="chat_no_message_title">Začněte konverzaci!</string>
+    <string name="chat_no_message_text">Napište zprávu nebo pošlete dárek a určitě dostanete odpověď</string>
 </resources>

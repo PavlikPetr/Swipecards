@@ -77,14 +77,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         View view = inflater.inflate(getLayout(), null);
         mContainer = (RelativeLayout) view.findViewById(R.id.feedContainer);
         initNavigationBar(view);
-
-
         mLockView = (LockerView) view.findViewById(R.id.llvFeedLoading);
         mLockView.setVisibility(View.GONE);
-
         init();
-
-
         initBackground(view);
         initFilter(view);
         initListView(view);
@@ -156,7 +151,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         }
     }
 
-    protected void init() {}
+    protected void init() {
+    }
 
     private void initBackground(View view) {
         // ListView background
@@ -247,18 +243,20 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 FeedItem item = (FeedItem) parent.getItemAtPosition(position);
-                if (!mIsUpdating && item.isRetrier()) {
-                    updateUI(new Runnable() {
-                        public void run() {
-                            getListAdapter().showLoaderItem();
+                if (item != null) {
+                    if (!mIsUpdating && item.isRetrier()) {
+                        updateUI(new Runnable() {
+                            public void run() {
+                                getListAdapter().showLoaderItem();
+                            }
+                        });
+                        updateData(false, true, false);
+                    } else {
+                        try {
+                            onFeedItemClick(item);
+                        } catch (Exception e) {
+                            Debug.error("FeedItem click error:", e);
                         }
-                    });
-                    updateData(false, true, false);
-                } else {
-                    try {
-                        onFeedItemClick(item);
-                    } catch (Exception e) {
-                        Debug.error("FeedItem click error:", e);
                     }
                 }
             }
@@ -380,7 +378,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
             ((NavigationActivity) activity).onExtraFragment(fragment);
         }
-
     }
 
     protected void updateData(final boolean isPushUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {

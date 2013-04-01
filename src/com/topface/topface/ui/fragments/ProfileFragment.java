@@ -17,9 +17,11 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.*;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.*;
+import com.topface.topface.data.Profile;
+import com.topface.topface.data.User;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
@@ -29,12 +31,10 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
 import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.profile.*;
-import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RateController;
-import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.viewpagerindicator.TabPageIndicator;
 
@@ -62,7 +62,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private UserFormFragment mUserFormFragment;
 
     private Profile mUserProfile = null;
-    private static int mProfileType;
+    public int mProfileType;
     private int mProfileId;
 
     private TextView mTitle;
@@ -120,7 +120,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             mActionBar.showBackButton(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getActivity().onBackPressed();
+                    if(getActivity() != null) {
+                        getActivity().onBackPressed();
+                    }
                 }
             });
         } else {
@@ -148,7 +150,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             mTitle.setText(R.string.profile_header_title);
             mActionBar.showEditButton(this);
         } else if (mProfileType == TYPE_USER_PROFILE) {
-
             mActionBar.showUserActionsButton(new View.OnClickListener() {
                                                  @Override
                                                  public void onClick(View view) {
@@ -332,19 +333,25 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             @Override
             protected void success(User data, ApiResponse response) {
                 mUserProfile = data;
-                mRateController.setOnRateControllerListener(mRateControllerListener);
-                //set info into views for user
-                mTitle.setText(data.getNameAndAge());
+                if (mUserProfile == null) {
+                    showRetryBtn();
+                } else if (data.banned) {
+                    showRetryBtnForBanned();
+                } else {
+                    mRateController.setOnRateControllerListener(mRateControllerListener);
+                    //set info into views for user
+                    mTitle.setText(mUserProfile.getNameAndAge());
 
-                setProfile(data);
-                if (mHeaderMainFragment != null) {
-                    mHeaderMainFragment.setOnline(data.online);
-                }
-                mLoaderView.setVisibility(View.INVISIBLE);
+                    setProfile(data);
+                    if (mHeaderMainFragment != null) {
+                        mHeaderMainFragment.setOnline(data.online);
+                    }
+                    mLoaderView.setVisibility(View.INVISIBLE);
 
-                if (mProfileType == TYPE_USER_PROFILE) {
-                    if (mUserProfile == null || mUserProfile.status == null || TextUtils.isEmpty(mUserProfile.status)) {
-                        mHeaderPagerAdapter.removeItem(HeaderStatusFragment.class.getName());
+                    if (mProfileType == TYPE_USER_PROFILE) {
+                        if (mUserProfile == null || mUserProfile.status == null || TextUtils.isEmpty(mUserProfile.status)) {
+                            mHeaderPagerAdapter.removeItem(HeaderStatusFragment.class.getName());
+                        }
                     }
                 }
             }
@@ -356,14 +363,27 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
             @Override
             public void fail(final int codeError, ApiResponse response) {
-                if (mRetryBtn != null && isAdded()) {
-                    mLoaderView.setVisibility(View.GONE);
-                    mLockScreen.setVisibility(View.VISIBLE);
-                    mRetryBtn.setErrorMsg(getString(R.string.general_profile_error));
-                    mRetryBtn.showOnlyMessage(false);
-                }
+                showRetryBtn();
             }
         }).exec();
+    }
+
+    private void showRetryBtnForBanned() {
+        if (mRetryBtn != null && isAdded()) {
+            mLoaderView.setVisibility(View.GONE);
+            mLockScreen.setVisibility(View.VISIBLE);
+            mRetryBtn.setErrorMsg(getString(R.string.user_baned));
+            mRetryBtn.showOnlyMessage(true);
+        }
+    }
+
+    private void showRetryBtn() {
+        if (mRetryBtn != null && isAdded()) {
+            mLoaderView.setVisibility(View.GONE);
+            mLockScreen.setVisibility(View.VISIBLE);
+            mRetryBtn.setErrorMsg(getString(R.string.general_profile_error));
+            mRetryBtn.showOnlyMessage(false);
+        }
     }
 
     private void restoreState() {
@@ -446,7 +466,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         @Override
                         public void onRateCompleted() {
                             if (v != null && getActivity() != null) {
-                                Toast.makeText(getActivity(), R.string.sympathy_sended, 1500).show();
+                                Toast.makeText(App.getContext(), R.string.sympathy_sended, 1500).show();
 
                             }
                         }
@@ -455,7 +475,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         @Override
                         public void onRateFailed() {
                             if (v != null && getActivity() != null) {
-                                Toast.makeText(getActivity(), R.string.general_server_error, 1500).show();
+                                Toast.makeText(App.getContext(), R.string.general_server_error, 1500).show();
                                 v.setEnabled(true);
                                 v.setSelected(false);
                                 TextView view = (TextView) v;
@@ -479,7 +499,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         @Override
                         public void onRateCompleted() {
                             if (v != null && getActivity() != null) {
-                                Toast.makeText(getActivity(), R.string.sympathy_sended, 1500).show();
+                                Toast.makeText(App.getContext(), R.string.sympathy_sended, 1500).show();
 
                             }
                         }
@@ -488,7 +508,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         @Override
                         public void onRateFailed() {
                             if (v != null && getActivity() != null) {
-                                Toast.makeText(getActivity(), R.string.general_server_error, 1500).show();
+                                Toast.makeText(App.getContext(), R.string.general_server_error, 1500).show();
                                 v.setEnabled(true);
                                 v.setSelected(false);
                                 TextView view = (TextView) v;
@@ -631,218 +651,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         }
     }
 
-    public static class HeaderMainFragment extends BaseFragment {
-        private static final String ARG_TAG_AVATAR = "avatar";
-        private static final String ARG_TAG_NAME = "name";
-        private static final String ARG_TAG_CITY = "city";
-        private static final String ARG_TAG_BACKGROUND = "background";
-
-        private ImageViewRemote mAvatarView;
-        private Photo mAvatarVal;
-        private TextView mNameView;
-        private String mNameVal;
-        private TextView mCityView;
-        private String mCityVal;
-        private ImageView mBackgroundView;
-        private int mBackgroundVal;
-        private ImageView mOnline;
-
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            super.onCreateView(inflater, container, savedInstanceState);
-
-            restoreState();
-
-            View root = inflater.inflate(R.layout.fragment_profile_header_main, null);
-            mAvatarView = (ImageViewRemote) root.findViewById(R.id.ivUserAvatar);
-            mNameView = (TextView) root.findViewById(R.id.tvName);
-            mCityView = (TextView) root.findViewById(R.id.tvCity);
-            mBackgroundView = (ImageView) root.findViewById(R.id.ivProfileBackground);
-            mOnline = (ImageView) root.findViewById(R.id.ivOnline);
-
-            return root;
-        }
-
-        public void setOnline(boolean online) {
-            mOnline.setVisibility(online ? View.VISIBLE : View.GONE);
-        }
-
-        @Override
-        public void onResume() {
-            super.onResume();
-            refreshViews();
-        }
-
-        public void setProfile(Profile profile) {
-            if (profile != null) {
-                initState(profile);
-                saveState(this, profile);
-            }
-            refreshViews();
-        }
-
-        private void refreshViews() {
-            updateUI(new Runnable() {
-                @Override
-                public void run() {
-                    mAvatarView.setPhoto(mAvatarVal);
-                    mNameView.setText(mNameVal);
-                    setCity(mCityVal);
-                    mBackgroundView.setImageResource(ProfileBackgrounds.getBackgroundResource(getActivity().getApplicationContext(), mBackgroundVal));
-                }
-            });
-        }
-
-        private void setCity(String city) {
-            mCityView.setText(city);
-            mCityView.setVisibility(
-                    TextUtils.isEmpty(city) ?
-                            View.INVISIBLE :
-                            View.VISIBLE
-            );
-        }
-
-        private void restoreState() {
-            if (getArguments() != null) {
-                mAvatarVal = getArguments().getParcelable(ARG_TAG_AVATAR);
-                mNameVal = getArguments().getString(ARG_TAG_NAME);
-                mCityVal = getArguments().getString(ARG_TAG_CITY);
-                mBackgroundVal = getArguments().getInt(ARG_TAG_BACKGROUND);
-            }
-        }
-
-        private void initState(Profile profile) {
-            if (profile != null) {
-                mAvatarVal = profile.photo;
-                mNameVal = profile.getNameAndAge();
-                if (profile.city != null) {
-                    mCityVal = profile.city.name;
-                }
-                mBackgroundVal = profile.background;
-            }
-        }
-
-        private static void saveState(Fragment fragment, Profile profile) {
-            if (!fragment.isVisible()) {
-                if (fragment.getArguments() == null && !fragment.isAdded()) {
-                    Bundle args = new Bundle();
-                    fragment.setArguments(args);
-                }
-                fragment.getArguments().putParcelable(ARG_TAG_AVATAR, profile.photo);
-                fragment.getArguments().putString(ARG_TAG_NAME, profile.getNameAndAge());
-                fragment.getArguments().putString(ARG_TAG_CITY, profile.city.name);
-                fragment.getArguments().putInt(ARG_TAG_BACKGROUND, profile.background);
-            }
-        }
-
-        public static Fragment newInstance(Profile profile) {
-            HeaderMainFragment fragment = new HeaderMainFragment();
-            if (profile == null) return fragment;
-            saveState(fragment, profile);
-            return fragment;
-        }
-
-        @Override
-        public void clearContent() {
-            mAvatarView.setPhoto(null);
-            mNameView.setText(Static.EMPTY);
-            setCity(Static.EMPTY);
-        }
-
-        @Override
-        public boolean isTrackable() {
-            return false;
-        }
-
-        @Override
-        public void onPause() {
-            super.onPause();
-        }
-    }
-
-    public static class HeaderStatusFragment extends BaseFragment {
-        private static final String ARG_TAG_STATUS = "status";
-
-        private TextView mStatusView;
-        private String mStatusVal;
-
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            super.onCreateView(inflater, container, savedInstanceState);
-
-            restoreState();
-
-            //init views
-            View root = inflater.inflate(R.layout.fragment_profile_header_status, null);
-            mStatusView = (TextView) root.findViewById(R.id.tvStatus);
-            return root;
-        }
-
-        @Override
-        public void onResume() {
-            super.onResume();
-            refreshViews();
-        }
-
-        public void setProfile(Profile profile) {
-            if (profile != null) {
-                initState(profile);
-                saveState(this, profile);
-            }
-            refreshViews();
-        }
-
-        private void refreshViews() {
-            updateUI(new Runnable() {
-                @Override
-                public void run() {
-                    mStatusView.setText(mStatusVal);
-                }
-            });
-        }
-
-        private void restoreState() {
-            if (getArguments() != null) {
-                mStatusVal = getArguments().getString(ARG_TAG_STATUS);
-            }
-        }
-
-        private void initState(Profile profile) {
-            mStatusVal = profile.status;
-        }
-
-        private static void saveState(Fragment fragment, Profile profile) {
-            if (!fragment.isVisible()) {
-                Bundle args = new Bundle();
-                if (fragment.getArguments() == null) {
-                    fragment.setArguments(args);
-                }
-                fragment.getArguments().putString(ARG_TAG_STATUS, profile.status);
-            }
-        }
-
-        public static Fragment newInstance(Profile profile) {
-            HeaderStatusFragment fragment = new HeaderStatusFragment();
-            if (profile == null) return fragment;
-            saveState(fragment, profile);
-            return fragment;
-        }
-
-        @Override
-        public void clearContent() {
-            mStatusView.setText(Static.EMPTY);
-        }
-
-        @Override
-        public void onPause() {
-            super.onPause();
-        }
-    }
-
     RateController.OnRateControllerListener mRateControllerListener = new RateController.OnRateControllerListener() {
         @Override
         public void successRate() {
@@ -885,6 +693,11 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         public Profile getProfile() {
             return mUserProfile;
         }
+
+        @Override
+        public int getProfileType() {
+            return mProfileType;
+        }
     };
 
     public interface ProfileUpdater {
@@ -893,5 +706,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         void bindFragment(Fragment fragment);
 
         Profile getProfile();
+
+        int getProfileType();
     }
 }
