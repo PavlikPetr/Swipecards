@@ -7,6 +7,8 @@ import com.sponsorpay.sdk.android.SponsorPay;
 import com.sponsorpay.sdk.android.publisher.SponsorPayPublisher;
 import com.tapjoy.TapjoyConnect;
 
+import java.util.Random;
+
 public class Offerwalls {
 
     public static final String TAPJOY = "TAPJOY";
@@ -24,12 +26,12 @@ public class Offerwalls {
     }
 
     public static void startOfferwall(Activity activity) {
-        if (first_or_second) {
+        Random random = new Random();
+        if (random.nextBoolean()) {
             startTapjoy();
         } else {
             startSponsorpay(activity);
         }
-        first_or_second = !first_or_second;
     }
 
     public static void startTapjoy() {

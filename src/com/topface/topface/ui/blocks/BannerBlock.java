@@ -165,6 +165,7 @@ public class BannerBlock {
             @Override
             public void success(ApiResponse response) {
                 final Banner banner = Banner.parse(response);
+
                 if (mBannerView != null) {
                     try {
                         showBanner(banner);

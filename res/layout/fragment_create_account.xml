@@ -71,7 +71,6 @@
                             style="@style/EditTextAuth"
                             android:background="@drawable/textlines"
                             android:inputType="textPassword"
-                            android:visibility="gone"
                             />
 
                     <EditText

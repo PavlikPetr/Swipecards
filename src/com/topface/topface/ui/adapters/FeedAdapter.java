@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -132,8 +133,13 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         }
 
         if (item != null) {
-            holder.avatar.setPhoto(item.user.photo);
-            setListenerOnAvatar(holder.avatar, item);
+            if (item.user.banned) {
+                holder.avatar.setImageResource(item.user.sex == Static.BOY ?
+                        R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
+            } else {
+                holder.avatar.setPhoto(item.user.photo);
+                setListenerOnAvatar(holder.avatar, item);
+            }
 
             holder.name.setText(item.user.getNameAndAge());
             if (item.user.city != null) {
