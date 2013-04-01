@@ -75,8 +75,8 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public void onResume() {
         if (mActionBar != null) {
             mActionBar.refreshNotificators();
-            setUpdateCountersReceiver();
         }
+        setUpdateCountersReceiver();
         super.onResume();
 
     }
@@ -121,7 +121,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     private void setUpdateCountersReceiver() {
-        if (updateCountersReceiver == null && mNavBarController != null) {
+        if (updateCountersReceiver == null) {
             updateCountersReceiver = new BroadcastReceiver() {
 
                 @Override
