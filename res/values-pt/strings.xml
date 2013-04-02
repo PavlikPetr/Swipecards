@@ -309,7 +309,7 @@
     <string name="leaders_select_photo_info">Selecione a mais efetiva foto! Não se pode selecionar fotografias de baixa classificação</string>
     <string name="default_price_format">Total: %.2f USD</string>
     <string name="dating_online_only">%s, somente online</string>
-    <string name="leaders_pick_condition">Você não pode escolher fotos com a classificação abaixo de %d%%:</string>
+    <string name="leaders_pick_condition">Você não pode selecionar a foto com uma classificação inferior a %d%%:</string>
     <string name="map_popup_address">Adreço</string>
     <string name="black_list_info">Você adicionou seu correspondente à lista negra. Cancelar isso só é possivel no seu perfil, nas definições de status-VIP</string>
     <string name="general_gift">Presente</string>
@@ -387,4 +387,6 @@
     <string name="upload_photos">Poste fotografias</string>
     <string name="chat_no_message_title">Comece a comunicar-se!</string>
     <string name="chat_no_message_text">Escreva uma mensagem ou envie um presente, sem falta vai ter resposta</string>
+    <string name="user_baned">O usuário foi expulso</string>
+    <string name="general_choose_city">Escolhe a cidade</string>
 </resources>

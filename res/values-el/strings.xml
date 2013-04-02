@@ -308,7 +308,6 @@
     <string name="leaders_select_photo_info">Επιλέξτε την πιο θεαματική φωτογραφία! Τις φωτογραφίες με χαμηλή βαθμολογία δεν μπορείτε να επιλέξετε</string>
     <string name="default_price_format">Στη συνολική: %.2f USD</string>
     <string name="dating_online_only">%s, μόνο online</string>
-    <string name="leaders_pick_condition">Δεν μπορείτε να επιλέξετε μια φωτογραφία με βαθμολογία κάτω από %d%%:</string>
     <string name="map_popup_address">Η διεύθυνση</string>
     <string name="black_list_info">Έχετε προσθέσει του συνομιλητής στη μαύρη λίστα. Μπορείτε να αλλάξετε αυτό στο προφίλ σας στις ρυθμίσεις  τη VIP-κατάσταση.</string>
     <string name="general_gift">Το δώρω</string>

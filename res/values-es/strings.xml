@@ -312,7 +312,7 @@
         elegir</string>
     <string name="default_price_format">Total: %.2f USD</string>
     <string name="dating_online_only">%s, solo online</string>
-    <string name="leaders_pick_condition">No puede elegir una foto con puntuación más baja de %d%%:</string>
+    <string name="leaders_pick_condition">No puedes seleccionar una foto con la puntuación más baja de %d%%:</string>
     <string name="map_popup_address">Dirección</string>
     <string name="black_list_info">Has agregado al usuario a la lista negra. Puedes cambiarlo en tu perfil, en la configuración de estado VIP.</string>
     <string name="general_gift">Regalo</string>
@@ -390,4 +390,6 @@
     <string name="upload_photos">Sube fotografías</string>
     <string name="chat_no_message_title">¡Empieza a comunicarse!</string>
     <string name="chat_no_message_text">Escribe un mensaje o manda un regalo y seguro que te contestarán</string>
+    <string name="user_baned">El usuario está baneado</string>
+    <string name="general_choose_city">Selecciona la ciudad</string>
 </resources>

@@ -313,7 +313,6 @@
     <string name="leaders_select_photo_info">Pasirinkite pačią efektingiausią fotografiją! Fotografijos su mažu reitingu pasirinkti negalima</string>
     <string name="default_price_format">Viso: %.2f USD</string>
     <string name="dating_online_only">%s, tiktai on-line</string>
-    <string name="leaders_pick_condition">Jūs negalite pasirinkti fotografijos su reitingu, mažesniu nei %d%%:</string>
     <string name="map_popup_address">Adresas</string>
     <string name="black_list_info">Jūs pridėjote pašnekovą į juodąjį sąrašą. Pakeisti tai galima savo profilyje, VIP statuso nustatymuose.</string>
     <string name="general_gift">Dovana</string>
