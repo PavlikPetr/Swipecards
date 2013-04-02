@@ -511,4 +511,5 @@
     <string name="chat_no_message_text">Напишите сообщение или отправьте подарок и вам обязательно ответят</string>
     <string name="user_baned">Пользователь забанен</string>
     <string name="general_choose_city">Выберите город</string>
+    <string name="user_is_deleted">Пользователь удален</string>
 </resources>

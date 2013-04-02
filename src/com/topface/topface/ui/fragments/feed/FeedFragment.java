@@ -353,17 +353,18 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     protected void onFeedItemClick(FeedItem item) {
-        //Open mailchat activity
-
-        Intent intent = new Intent(getActivity(), ContainerActivity.class);
-        intent.putExtra(ChatFragment.INTENT_USER_ID, item.user.id);
-        intent.putExtra(ChatFragment.INTENT_USER_NAME, item.user.first_name);
-        intent.putExtra(ChatFragment.INTENT_USER_SEX, item.user.sex);
-        intent.putExtra(ChatFragment.INTENT_USER_AGE, item.user.age);
-        intent.putExtra(ChatFragment.INTENT_USER_CITY, item.user.city.name);
-        intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
-        intent.putExtra(ChatFragment.INTENT_ITEM_ID, item.id);
-        getActivity().startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
+        //Open chat activity
+        if (!item.user.deleted) {
+            Intent intent = new Intent(getActivity(), ContainerActivity.class);
+            intent.putExtra(ChatFragment.INTENT_USER_ID, item.user.id);
+            intent.putExtra(ChatFragment.INTENT_USER_NAME, item.user.first_name);
+            intent.putExtra(ChatFragment.INTENT_USER_SEX, item.user.sex);
+            intent.putExtra(ChatFragment.INTENT_USER_AGE, item.user.age);
+            intent.putExtra(ChatFragment.INTENT_USER_CITY, item.user.city.name);
+            intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
+            intent.putExtra(ChatFragment.INTENT_ITEM_ID, item.id);
+            getActivity().startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
+        }
     }
 
     public void onAvatarClick(T item, View view) {

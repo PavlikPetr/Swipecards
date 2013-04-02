@@ -48,6 +48,10 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
 
     private String getDialogText(FeedDialog dialog) {
         String text;
+        if (dialog.user.deleted) {
+            text = getContext().getString(R.string.user_is_deleted);
+            return text;
+        }
         switch (dialog.type) {
             case FeedDialog.DEFAULT:
             case FeedDialog.MESSAGE:
