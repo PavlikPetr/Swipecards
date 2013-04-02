@@ -56,7 +56,7 @@ public class FeedUser extends AbstractData implements SerializableToJson {
         this.sex = user.optInt("sex");
         this.premium = user.optBoolean("premium");
         this.banned = user.optBoolean("banned");
-        this.deleted = user.optBoolean("deleted");
+        this.deleted = user.optBoolean("deleted") || this.isEmpty();
     }
 
     public String getNameAndAge() {
@@ -91,5 +91,9 @@ public class FeedUser extends AbstractData implements SerializableToJson {
         } else {
             return super.equals(o);
         }
+    }
+
+    public boolean isEmpty() {
+        return id <= 0;
     }
 }

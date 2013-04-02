@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,6 +81,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private SwapControl mSwapControl;
     private Button mAddToBlackList;
     private ImageButton mBtnChatAdd;
+    private ActionBar mActionBar;
 
     private String[] editButtonsNames;
     private boolean mReceiverRegistered = false;
@@ -278,11 +280,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void initNavigationbar(View root, int userSex, String userName, int userAge, String userCity) {
-        ActionBar actionBar = getActionBar(root);
+        mActionBar = getActionBar(root);
 
-        actionBar.setTitleText(userName + ", " + userAge);
-        actionBar.setSubTitleText(userCity);
-        actionBar.showBackButton(new View.OnClickListener() {
+        mActionBar.showBackButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().finish();
@@ -290,7 +290,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 getActivity().setResult(Activity.RESULT_CANCELED);
             }
         });
-        actionBar.showProfileButton(this, userSex);
+
+        setNavigationTitles(userSex, userName, userAge, userCity);
+    }
+
+    private void setNavigationTitles(int userSex, String userName, int userAge, String userCity) {
+        String userTitle = (TextUtils.isEmpty(userName) && userAge == 0) ? Static.EMPTY : (userName + "," + userAge);
+        mActionBar.setTitleText(userTitle);
+        mActionBar.setSubTitleText(userCity);
+        mActionBar.showProfileButton(this, userSex);
     }
 
     @Override
@@ -379,6 +387,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 wasFailed = false;
                 mAdapter.setUser(data.user);
+                setNavigationTitles(data.user.sex, data.user.first_name, data.user.age, data.user.city.name);
                 if (mAdapter != null) {
                     if (pullToRefresh) {
                         mAdapter.addFirst(data.items, data.more, mListView.getRefreshableView());
