@@ -374,6 +374,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             mLockScreen.setVisibility(View.VISIBLE);
             mRetryBtn.setErrorMsg(getString(R.string.user_baned));
             mRetryBtn.showOnlyMessage(true);
+            mActionBar.hideUserActionButton();
         }
     }
 
