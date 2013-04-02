@@ -284,7 +284,6 @@ Sa oled müksanud.</string>
     <string name="leaders_select_photo_info">Vali kõige efektsem foto välja! Madalama reitinguga fotode valimine ei ole lubatud.</string>
     <string name="default_price_format">Kokku:</string>
     <string name="dating_online_only">%s, ainult on-line\'is olevad</string>
-    <string name="leaders_pick_condition">Sa ei saa valida fotosid, mille rating on %d%% madalam:</string>
     <string name="map_popup_address">Aadress</string>
     <string name="general_gift">Kingitus</string>
     <string name="user_actions_chat">Jutt</string>

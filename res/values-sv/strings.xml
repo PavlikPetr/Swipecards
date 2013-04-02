@@ -308,7 +308,7 @@
     <string name="leaders_select_photo_info">Välj ditt bästa foto! Man får inte använda foton med låg rating</string>
     <string name="default_price_format">Totalt: %.2f USD</string>
     <string name="dating_online_only">%s, endast online</string>
-    <string name="leaders_pick_condition">Du kan inte välja foto med rating lägre än %d%%:</string>
+    <string name="leaders_pick_condition">Di kan inte vlälja foto med rating lägre än %d%%:</string>
     <string name="map_popup_address">Adress</string>
     <string name="black_list_info">Du har lagt till användaren i svartlistan. Detta kan ändras i din profil, nämligen i VIP-inställningar.</string>
     <string name="general_gift">Gåva</string>
@@ -386,4 +386,6 @@
     <string name="upload_photos">Ladda upp foton</string>
     <string name="chat_no_message_title">Börja umgås!</string>
     <string name="chat_no_message_text">Skriv ett meddelande eller skicka en gåva och du får säkert svar</string>
+    <string name="user_baned">Användaren har bannlysts</string>
+    <string name="general_choose_city">Välj stad</string>
 </resources>

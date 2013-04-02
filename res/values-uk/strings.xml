@@ -313,7 +313,6 @@
     <string name="leaders_select_photo_info">Вибрати найефектніше фото! Фотографії з низьким рейтингом вибрати не можна</string>
     <string name="default_price_format">Разом: %.2f USD</string>
     <string name="dating_online_only">%s, тільки онлайн</string>
-    <string name="leaders_pick_condition">Ви не можете вибрати фото з рейтингом нижче %d%%:</string>
     <string name="map_popup_address">Адреса</string>
     <string name="black_list_info">Ви додали співрозмовника в чорний список. Змінити це можна у своєму профілі, у налаштуваннях VIP-статусу.</string>
     <string name="general_gift">Подарунок</string>

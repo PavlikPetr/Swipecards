@@ -303,7 +303,6 @@
     <string name="leaders_select_photo_info">가장 자신이 잘 나온 사진을 선택해 주세요! 낮은 순위의 사진은 선택할 수 없습니다.</string>
     <string name="default_price_format">전체 금액은 %.2f USD 입니다.</string>
     <string name="dating_online_only">%s, 온라인 상태의 유저들만.</string>
-    <string name="leaders_pick_condition">%d%% 이하의 사진은 선택할 수 없습니다:</string>
     <string name="map_popup_address">주소</string>
     <string name="black_list_info">당신은 블랙 리스트에 이웃을 추가하였습니다. VIP상태 설정의 프로필에서 해당 사항을 변경할 수 있습니다.</string>
     <string name="general_gift">선물</string>

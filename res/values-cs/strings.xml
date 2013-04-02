@@ -391,4 +391,6 @@
     <string name="upload_photos">Nahrajte si fotky</string>
     <string name="chat_no_message_title">Začněte konverzaci!</string>
     <string name="chat_no_message_text">Napište zprávu nebo pošlete dárek a určitě dostanete odpověď</string>
+    <string name="user_baned">Uživatel je zabanován</string>
+    <string name="general_choose_city">Zvolte město</string>
 </resources>
