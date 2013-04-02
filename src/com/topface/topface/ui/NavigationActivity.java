@@ -95,6 +95,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         setStopTime();
         mNovice = Novice.getInstance(getPreferences());
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
+        Offerwalls.init(getApplicationContext());
     }
 
     private SharedPreferences getPreferences() {
@@ -257,8 +258,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     @Override
     public void onInit() {
-        Offerwalls.init(getApplicationContext());
-
         Intent intent = getIntent();
         isNeedAuth = true;
         int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);

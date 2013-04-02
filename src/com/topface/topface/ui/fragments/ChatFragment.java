@@ -385,10 +385,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID, itemId));
                     itemId = -1;
                 }
+                setNavigationTitles(data.user.sex, data.user.first_name, data.user.age, data.user.city.name);
                 wasFailed = false;
                 mAdapter.setUser(data.user);
-                setNavigationTitles(data.user.sex, data.user.first_name, data.user.age, data.user.city.name);
-                if (mAdapter != null) {
+                if (mAdapter != null && !data.items.isEmpty()) {
                     if (pullToRefresh) {
                         mAdapter.addFirst(data.items, data.more, mListView.getRefreshableView());
                         if (mListView != null) {
@@ -584,7 +584,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
-                mLoadingLocker.setVisibility(View.VISIBLE);
+                //mLoadingLocker.setVisibility(View.VISIBLE);
                 Bundle extras = data.getExtras();
                 final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
                 final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
@@ -657,7 +657,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 CacheProfile.money = data.money;
                 Debug.log(getActivity(), "likes:" + data.likes + " money:" + data.money);
                 data.history.target = FeedDialog.USER_MESSAGE;
-                mLoadingLocker.setVisibility(View.GONE);
                 if (mAdapter != null) {
                     mAdapter.replaceMessage(fakeItem, data.history, mListView.getRefreshableView());
                 }
@@ -679,10 +678,20 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 mAdapter.showRetrySendMessage(fakeItem, sendGift);
             }
+
+            @Override
+            public void always(ApiResponse response) {
+                super.always(response);
+                mLoadingLocker.setVisibility(View.GONE);
+            }
         }).exec();
     }
 
     private boolean sendMessage() {
+        if (TextUtils.isEmpty(mEditBox.getText().toString().trim())) {
+            return false;
+        }
+
         final History fakeItem = new History(IListLoader.ItemType.WAITING);
         if(mAdapter != null && mListView != null) {
             mAdapter.addSentMessage(fakeItem, mListView.getRefreshableView());
