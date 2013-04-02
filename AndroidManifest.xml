@@ -191,6 +191,9 @@
                 android:configChanges="keyboardHidden|orientation"/>
 
         <activity
+                android:name=".ui.PaymentwallActivity"/>
+
+        <activity
                 android:name="com.sponsorpay.sdk.android.publisher.OfferWallActivity"
                 android:configChanges="orientation"/>
 

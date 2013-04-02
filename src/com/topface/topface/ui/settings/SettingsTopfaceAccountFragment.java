@@ -37,6 +37,7 @@ import com.topface.topface.utils.social.AuthorizationManager;
 public class SettingsTopfaceAccountFragment extends BaseFragment implements OnClickListener {
 
     public static final int RESULT_LOGOUT = 666;
+    public static final String NEED_EXIT = "NEED_EXIT";
     private LockerView mLockerView;
     private EditText mEditText;
     private TextView mText;
@@ -181,11 +182,11 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
     private void setButtonsState() {
         if (CacheProfile.emailConfirmed) {
-            if (CacheProfile.needToChangePassword(App.getContext())) {
-                mBtnLogout.setVisibility(View.GONE);
-            } else {
-                mBtnLogout.setVisibility(View.VISIBLE);
-            }
+//            if (CacheProfile.needToChangePassword(App.getContext())) {
+//                mBtnLogout.setVisibility(View.GONE);
+//            } else {
+            mBtnLogout.setVisibility(View.VISIBLE);
+//            }
 
             setChangeBtnAction(ACTION_CHANGE_PASSWORD);
         } else {
@@ -227,7 +228,13 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         hideSoftKeyboard();
         switch (v.getId()) {
             case R.id.btnLogout:
-                showExitPopup();
+                if (CacheProfile.needToChangePassword(App.getContext())) {
+                    Intent intent = new Intent(getActivity().getApplicationContext(), SettingsContainerActivity.class);
+                    intent.putExtra(NEED_EXIT, true);
+                    startActivityForResult(intent, SettingsContainerActivity.INTENT_CHANGE_PASSWORD);
+                } else {
+                    showExitPopup();
+                }
                 break;
             case R.id.btnChange:
                 onChangeButtonClick();

@@ -36,19 +36,6 @@ public class RetryView extends LinearLayout {
         addView(initButtonContainer());
     }
 
-    public RetryView(Context context, int id) {
-        super(context);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.BELOW, id);
-        setLayoutParams(params);
-        setOrientation(VERTICAL);
-
-        setTextViewSettings();
-        addView(mErrorMsg);
-
-        addView(initButtonContainer());
-    }
-
     public void setErrorMsg(final String errorMsg) {
         mErrorMsg.post(new Runnable() {
             @Override
@@ -73,7 +60,7 @@ public class RetryView extends LinearLayout {
     }
 
     public void setListenerToBtn(OnClickListener l) {
-        if(mBtn1 != null) {
+        if (mBtn1 != null) {
             mBtn1.setOnClickListener(null);
             mBtn1.setOnClickListener(l);
         }
@@ -92,17 +79,13 @@ public class RetryView extends LinearLayout {
         return mBtn1;
     }
 
-    public IllustratedTextView getBtn2() {
-        return mBtn2;
-    }
-
     private IllustratedTextView generateButton() {
         IllustratedTextView btn = new IllustratedTextView(getContext(), null);
-        btn.setBackgroundResource(R.drawable.btn_retry_selector);
+        btn.setBackgroundResource(R.drawable.btn_gray_selector);
         LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp.setMargins(10, 5, 10, 5);
         btn.setLayoutParams(lp);
-        btn.setPadding(15, 0, 15, 0);
+        btn.setPadding(25, 25, 25, 25);
         btn.setTextColor(textColor);
         btn.setGravity(Gravity.CENTER);
         return btn;
@@ -110,11 +93,11 @@ public class RetryView extends LinearLayout {
 
     private IllustratedTextView generateBlueButton() {
         IllustratedTextView btn = new IllustratedTextView(getContext(), null);
-        btn.setBackgroundResource(R.drawable.btn_vip_super_sale_selector);
+        btn.setBackgroundResource(R.drawable.btn_blue_selector);
         LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp.setMargins(10, 5, 10, 5);
         btn.setLayoutParams(lp);
-        btn.setPadding(15, 0, 15, 0);
+        btn.setPadding(25, 25, 25, 25);
         btn.setTextAppearance(getContext(), R.style.VipItemTitleWhiteText);
         btn.setTypeface(Typeface.DEFAULT_BOLD);
         btn.setGravity(Gravity.CENTER);
