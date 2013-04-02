@@ -124,8 +124,6 @@
                         android:layout_marginTop="6dp"
                         />
 
-                x
-
                 <Button
                         android:id="@+id/btnBuyVip"
                         android:layout_height="wrap_content"
@@ -152,7 +150,6 @@
             </RelativeLayout>
         </RelativeLayout>
     </com.topface.topface.ui.views.SwapControl>
-
 
     <ImageView style="@style/HeaderShadow"/>
 
