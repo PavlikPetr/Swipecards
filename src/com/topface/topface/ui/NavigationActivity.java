@@ -568,6 +568,12 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 case R.id.btnFragmentSettings:
                     fragmentId = BaseFragment.F_SETTINGS;
                     break;
+                case R.id.btnFragmentBookmarks:
+                    fragmentId = BaseFragment.F_BOOKMARKS;
+                    break;
+                case R.id.btnFragmentFans:
+                    fragmentId = BaseFragment.F_FANS;
+                    break;
                 default:
                     fragmentId = BaseFragment.F_PROFILE;
                     break;

@@ -12,7 +12,7 @@ import com.topface.topface.utils.CountersManager;
 import org.json.JSONObject;
 
 
-public class VisitorsFragment extends FilterDisabledFragment<Visitor> {
+public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
 
     @Override
     protected Drawable getBackIcon() {

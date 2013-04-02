@@ -97,7 +97,9 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                 (Button) mRootLayout.findViewById(R.id.btnFragmentDialogs),
                 (Button) mRootLayout.findViewById(R.id.btnFragmentTops),
                 (Button) mRootLayout.findViewById(R.id.btnFragmentVisitors),
-                (Button) mRootLayout.findViewById(R.id.btnFragmentSettings)
+                (Button) mRootLayout.findViewById(R.id.btnFragmentSettings),
+                (Button) mRootLayout.findViewById(R.id.btnFragmentBookmarks),
+                (Button) mRootLayout.findViewById(R.id.btnFragmentFans)
         };
 
         for (Button btn : mButtons) {

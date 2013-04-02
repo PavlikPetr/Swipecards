@@ -41,7 +41,7 @@
             android:id="@+id/btnFragmentDating"
             android:layout_below="@id/btnProfileLayout"
             android:text="@string/general_dating"
-            android:drawableLeft="@drawable/topface_dating"
+            android:drawableLeft="@drawable/ic_dating"
             style="@style/LeftMenuButtons"/>
 
     <!-- Likes -->
@@ -77,7 +77,7 @@
             android:id="@+id/btnFragmentDialogs"
             android:layout_below="@id/btnFragmentMutual"
             android:text="@string/general_dialogs"
-            android:drawableLeft="@drawable/topface_chat"
+            android:drawableLeft="@drawable/ic_dialog"
             style="@style/LeftMenuButtons"/>
 
     <!-- UNREAD DIALOGS -->
@@ -86,10 +86,26 @@
             android:layout_alignBaseline="@+id/btnFragmentDialogs"
             style="@style/Informer"/>
 
+    <!--Bookmarks-->
+    <Button
+        android:id="@+id/btnFragmentBookmarks"
+        android:layout_below="@id/btnFragmentDialogs"
+        android:text="@string/general_bookmarks"
+        android:drawableLeft="@drawable/ic_star"
+        style="@style/LeftMenuButtons"
+        />
+    <!--Fans-->
+    <Button
+            android:id="@+id/btnFragmentFans"
+            android:layout_below="@id/btnFragmentBookmarks"
+            android:text="@string/general_fans"
+            android:drawableLeft="@drawable/ic_fans"
+            style="@style/LeftMenuButtons"
+            />
     <!-- Tops -->
     <Button
             android:id="@+id/btnFragmentTops"
-            android:layout_below="@id/btnFragmentDialogs"
+            android:layout_below="@id/btnFragmentFans"
             android:text="@string/general_tops"
             android:drawableLeft="@drawable/topface_tops"
             style="@style/LeftMenuButtons"/>
@@ -99,7 +115,7 @@
             android:id="@+id/btnFragmentVisitors"
             android:layout_below="@id/btnFragmentTops"
             android:text="@string/general_visitors"
-            android:drawableLeft="@drawable/topface_visitors"
+            android:drawableLeft="@drawable/topface_guests"
             style="@style/LeftMenuButtons"/>
 
     <TextView

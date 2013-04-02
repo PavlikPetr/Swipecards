@@ -10,7 +10,7 @@ abstract public class FeedItem extends LoaderData {
     /**
      * идентификатор события в ленте
      */
-    public int id;
+    public String id;
     /**
      * идентификатор типа сообщения диалога
      */
@@ -49,7 +49,14 @@ abstract public class FeedItem extends LoaderData {
 
     public void fillData(JSONObject item) {
         this.type = item.optInt("type");
-        this.id = item.optInt("id");
+        Object testId = item.opt("id");
+
+        if (testId instanceof Integer) {
+            id = Integer.toString((Integer) testId);
+        } else {
+            id = (String) testId;
+        }
+
         this.created = item.optLong("created") * 1000;
         this.target = item.optInt("target");
         this.unread = item.optBoolean("unread");

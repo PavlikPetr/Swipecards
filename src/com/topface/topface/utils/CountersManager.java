@@ -22,6 +22,8 @@ public class CountersManager {
     public final static String CHANGED_BY_GCM = "gcm_changed";
     public final static String METHOD_INTENT_STRING = "method";
 
+    public final static int UNKNOWN_TYPE = -1;
+
     public final static int LIKES = 0;
     public final static int SYMPATHY = 1;
     public final static int VISITORS = 2;
