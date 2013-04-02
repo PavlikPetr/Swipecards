@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +28,11 @@ import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Offerwalls;
+import com.topface.topface.utils.Utils;
 
 import java.util.LinkedList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @SuppressWarnings("UnusedDeclaration")
 public class BuyingFragment extends BillingFragment {
@@ -188,20 +192,55 @@ public class BuyingFragment extends BillingFragment {
         offerwall.setVisibility(CacheProfile.paid ? View.GONE : View.VISIBLE);
         root.findViewById(R.id.titleSpecialOffers).setVisibility(CacheProfile.paid ? View.GONE : View.VISIBLE);
 
-        //Paymentwall
-        root.findViewById(R.id.btnMobilePayments).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentActivity activity = getActivity();
-                if (activity != null) {
-                    activity.startActivityForResult(
-                            PaymentwallActivity.getIntent(activity, CacheProfile.uid),
-                            PaymentwallActivity.ACTION_BUY
-                    );
-                }
-            }
-        });
+        initPaymentwallButtons(root);
 
+    }
+
+    private void initPaymentwallButtons(View root) {
+        //Paymentwall
+        View mobilePayments = root.findViewById(R.id.mobilePayments);
+        //Показываем кнопку только на платформе Google Play v2
+        if (TextUtils.equals(Utils.getBuildType(), getString(R.string.build_google_play_v2))) {
+            mobilePayments.setVisibility(View.VISIBLE);
+            ViewGroup layout = (ViewGroup) mobilePayments.findViewById(R.id.mobilePaymentsList);
+            //Листенер просто открывае
+            View.OnClickListener mobilePaymentsListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FragmentActivity activity = getActivity();
+                    if (activity != null) {
+                        activity.startActivityForResult(
+                                PaymentwallActivity.getIntent(activity, CacheProfile.uid),
+                                PaymentwallActivity.ACTION_BUY
+                        );
+                    }
+                }
+            };
+
+            //На все кнопки навишиваем
+            for (int i = 0; i < layout.getChildCount(); i++) {
+                layout.getChildAt(i).setOnClickListener(mobilePaymentsListener);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PaymentwallActivity.ACTION_BUY) {
+            if (resultCode == PaymentwallActivity.RESULT_OK) {
+                //Когда покупка через Paymentwall завершена, показываем об этом сообщение
+                Toast.makeText(getActivity(), R.string.buy_mobile_payments_complete, Toast.LENGTH_LONG).show();
+                //И через 3 секунды обновляем профиль
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        App.sendProfileRequest();
+                    }
+                }, 3000);
+
+            }
+        }
     }
 
     private void goToVipSettings() {
@@ -237,7 +276,6 @@ public class BuyingFragment extends BillingFragment {
 
     @Override
     public void onPurchased() {
-        updateBalanceCounters();
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
     }
 

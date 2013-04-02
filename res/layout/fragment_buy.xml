@@ -159,30 +159,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
-                        android:background="@drawable/btn_vip_super_sale_selector"
+                        android:background="@drawable/btn_blue_selector"
                         style="@style/ButtonWhiteText"
                         android:text="@string/get_it_for_free"
-                        />
-
-                <!-- Money -->
-                <TextView
-                        android:id="@+id/titleMobilePayments"
-                        style="@style/TitleWhiteText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="2dp"
-                        android:text="Другие способы оплаты"
-                        android:textStyle="bold"/>
-
-                <Button
-                        android:id="@+id/btnMobilePayments"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:background="@drawable/btn_vip_super_sale_selector"
-                        style="@style/ButtonWhiteText"
-                        android:text="Другие способы оплаты"
                         />
 
                 <RelativeLayout
@@ -216,9 +195,51 @@
                         android:layout_marginBottom="10dp"
                         />
 
-                <include
-                        layout="@layout/item_divider"
-                        />
+
+                <RelativeLayout
+                        android:id="@+id/mobilePayments"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:layout_marginBottom="10dp">
+
+                    <TextView
+                            android:id="@+id/titleMobilePayments"
+                            style="@style/TitleWhiteText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="2dp"
+                            android:text="@string/buy_mobile_payments"
+                            android:textStyle="bold"/>
+
+                    <LinearLayout
+                            android:id="@+id/mobilePaymentsList"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/titleMobilePayments"
+                            android:orientation="horizontal"
+                            >
+
+                        <ImageButton
+                                android:tag="mobilePaymentButton"
+                                style="@style/MobilePaymentButton"
+                                android:src="@drawable/ic_buy_sms"
+                                />
+
+                        <ImageButton
+                                android:tag="mobilePaymentButton"
+                                style="@style/MobilePaymentButton"
+                                android:src="@drawable/ic_buy_qiwi"
+                                />
+
+                        <ImageButton
+                                android:tag="mobilePaymentButton"
+                                style="@style/MobilePaymentButton"
+                                android:src="@drawable/ic_buy_paypal"
+                                />
+                    </LinearLayout>
+
+                </RelativeLayout>
 
 
             </LinearLayout>
