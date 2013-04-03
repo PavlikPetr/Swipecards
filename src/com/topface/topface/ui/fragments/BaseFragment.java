@@ -23,7 +23,6 @@ import java.util.LinkedList;
 
 public abstract class BaseFragment extends TrackedFragment implements IRequestClient {
 
-    protected NavigationBarController mNavBarController;
 
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
 

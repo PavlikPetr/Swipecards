@@ -389,4 +389,8 @@
     <string name="chat_no_message_text">Scrivi un messaggio o invia un regalo e avrai la risposta</string>
     <string name="user_baned">L’utente è stato bannato</string>
     <string name="general_choose_city">Scegli città</string>
+    <string name="buy_mobile_payments">Altre modalità di pagamento</string>
+    <string name="buy_mobile_payments_complete">Il pagamento è stato effettuato. Attendere, prego! Il tuo ordine è in fase di elaborazione.</string>
+    <string name="general_save_and_exit">Salva ed esci</string>
+    <string name="general_set_password">Imposta la password prima di uscire</string>
 </resources>

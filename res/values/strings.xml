@@ -389,6 +389,8 @@
     <string name="chat_no_message_text">Write a message or send a gift and you will be answered</string>
     <string name="user_baned">User banned</string>
     <string name="general_choose_city">Choose your city</string>
+    <string name="buy_mobile_payments">Other payment methods</string>
+    <string name="buy_mobile_payments_complete">Payment was made. Your order is being processed, please wait</string>
     <string name="general_save_and_exit">Save and logout</string>
     <string name="general_set_password">Set your password before logout</string>
 </resources>
