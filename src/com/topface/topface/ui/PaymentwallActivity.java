@@ -11,6 +11,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 import com.topface.topface.R;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 
 import java.util.regex.Matcher;
@@ -22,7 +23,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
     public static final int ACTION_BUY = 100;
     private int mUid;
     private static final int RESULT_ERROR = 1;
-    private String mUrl = "https://wallapi.com/api/subscription/?key=3b2e96bcaa32b23b34605dfbf51c4df5&uid=[USER_ID]&widget=m2_1&success_url=http://topface.com/paymentwall-success";
+    public static final String DEFAULT_URL = "https://wallapi.com/api/subscription/?key=3b2e96bcaa32b23b34605dfbf51c4df5&uid=[USER_ID]&widget=m2_1&success_url=http://topface.com/paymentwall-success";
     private String mSuccessUrl;
     private View mProgressBar;
 
@@ -35,7 +36,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mUid = getIntent().getIntExtra(USER_ID, 0);
-        mSuccessUrl = getSuccessUrl(mUrl);
+        mSuccessUrl = getSuccessUrl(getWidgetUrl());
         if (mUid == 0 || TextUtils.isEmpty(mSuccessUrl)) {
             Toast.makeText(this, R.string.general_data_error, Toast.LENGTH_SHORT);
             finishActivity(RESULT_ERROR);
@@ -89,6 +90,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
             if (TextUtils.equals(url, mSuccessUrl)) {
                 Debug.log("PW: buy is completed " + url);
                 finishActivity(Activity.RESULT_OK);
+
             } else {
                 mProgressBar.setVisibility(View.VISIBLE);
             }
@@ -97,12 +99,20 @@ public class PaymentwallActivity extends BaseFragmentActivity {
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
+            if (TextUtils.equals(url, mSuccessUrl)) {
+                Debug.log("PW: finish buy is completed " + url);
+                finishActivity(Activity.RESULT_OK);
+            }
             mProgressBar.setVisibility(View.GONE);
         }
     }
 
     private String getWidgetUrl() {
-        return mUrl.replace("[USER_ID]", Integer.toString(mUid));
+        String url = CacheProfile.getOptions().getPaymentwallLink();
+        if (TextUtils.isEmpty(url)) {
+            url = DEFAULT_URL.replace("[USER_ID]", Integer.toString(mUid));
+        }
+        return url;
     }
 
 

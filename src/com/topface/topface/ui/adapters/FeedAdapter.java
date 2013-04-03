@@ -30,7 +30,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     private OnAvatarClickListener<T> mOnAvatarClickListener;
 
     public FeedAdapter(Context context, FeedList<T> data, Updater updateCallback) {
-        super(context,data, updateCallback);
+        super(context, data, updateCallback);
     }
 
     protected static class FeedViewHolder {
@@ -134,10 +134,12 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
         if (item != null) {
             // установка аватарки пользователя
-            if (item.user.banned || item.user.deleted) {
+            if (item.user.banned || item.user.deleted || item.user.photo == null || item.user.photo.isEmpty()) {
                 holder.avatar.setImageResource(item.user.sex == Static.BOY ?
                         R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
-                holder.avatar.setOnClickListener(null);
+                if (item.user.banned || item.user.deleted) {
+                    holder.avatar.setOnClickListener(null);
+                }
             } else {
                 holder.avatar.setPhoto(item.user.photo);
                 setListenerOnAvatar(holder.avatar, item);
