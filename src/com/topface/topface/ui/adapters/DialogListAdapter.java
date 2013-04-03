@@ -51,6 +51,9 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
         if (dialog.user.deleted) {
             text = getContext().getString(R.string.user_is_deleted);
             return text;
+        } else if (dialog.user.banned) {
+            text = getContext().getString(R.string.user_is_banned);
+            return text;
         }
         switch (dialog.type) {
             case FeedDialog.DEFAULT:

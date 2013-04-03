@@ -404,4 +404,5 @@
     <string name="general_bookmarks_add">Add to favorites</string>
     <string name="buy_resources">Refill</string>
     <string name="general_network_reconnect">Trying to reconnect to the network</string>
+    <string name="user_is_banned">User is banned</string>
 </resources>
