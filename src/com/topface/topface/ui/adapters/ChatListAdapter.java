@@ -75,7 +75,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         return super.getItem(getPosition(i));
     }
 
-    private int getPosition(int index) {
+    public int getPosition(int index) {
         return getCount() - index - 1;
     }
 
@@ -134,7 +134,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         }
 
         return convertView;
-
     }
 
     public void setUser(FeedUser user) {
@@ -658,4 +657,9 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             }
         }
     };
+
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();    //To change body of overridden methods use File | Settings | File Templates.
+    }
 }
