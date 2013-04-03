@@ -97,7 +97,7 @@ public class ContainerActivity extends BaseFragmentActivity {
                         intent.getIntExtra(ChatFragment.INTENT_USER_AGE, 0),
                         intent.getStringExtra(ChatFragment.INTENT_USER_CITY),
                         intent.getStringExtra(BaseFragmentActivity.INTENT_PREV_ENTITY));
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
                 break;
             case INTENT_REGISTRATION_FRAGMENT:
                 fragment = new RegistrationFragment();
