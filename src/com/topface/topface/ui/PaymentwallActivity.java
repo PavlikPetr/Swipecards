@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -73,7 +74,9 @@ public class PaymentwallActivity extends BaseFragmentActivity {
             super();
             webView.loadUrl(getWidgetUrl());
             webView.setBackgroundColor(0x00000000);
-            webView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                webView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
+            }
         }
 
         @Override
