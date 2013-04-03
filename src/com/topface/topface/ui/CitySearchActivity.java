@@ -216,7 +216,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
     private void initMyCity() {
         mCbMyCity = findViewById(R.id.cbMyCity);
         mMyCityTitle = (TextView) findViewById(R.id.tvMyCity);
-        if (mRequestKey == INTENT_CITY_SEARCH_FROM_FILTER_ACTIVITY || CacheProfile.city.isEmpty()) {
+        if (mRequestKey == INTENT_CITY_SEARCH_FROM_FILTER_ACTIVITY || CacheProfile.city == null || CacheProfile.city.isEmpty()) {
             mCbMyCity.setVisibility(View.GONE);
             mMyCityTitle.setVisibility(View.GONE);
         } else {
