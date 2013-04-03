@@ -522,7 +522,13 @@
     <string name="general_fans">Поклонники</string>
     <string name="general_no_fans">Нет поклонников</string>
 
-    <string name="get_free_money">%d монет бесплатно</string>
+    <plurals name="get_free_money">
+        <item quantity="one">%d монету бесплатно</item>
+        <item quantity="few">%d монеты бесплатно</item>
+        <item quantity="many">%d монет бесплатно</item>
+        <item quantity="other">%d монет бесплатно</item>
+    </plurals>
+
     <string name="settings_edit_profile">Редактировать профиль</string>
     <string name="general_bookmarks_delete">Удалить из избранных</string>
     <string name="general_bookmarks_add">Добавить в избранные</string>
