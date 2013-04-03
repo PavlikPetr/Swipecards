@@ -113,7 +113,10 @@
     <string name="edit_delete">Eliminar</string>
     <string name="edit_restore">Restablecer</string>
     <string name="album_add_photo_title">Cargar foto</string>
+    <string name="gifts_romantic">Románticos</string>
+    <string name="gifts_friends">Para amigos</string>
     <string name="gifts">Regalos</string>
+    <string name="gifts_present">Para felicitar</string>
     <string name="gifts_title">Elige regalo</string>
     <string name="gifts_send_btn">Enviar regalo</string>
     <string name="map_location_progress">Determinando la ubicación</string>

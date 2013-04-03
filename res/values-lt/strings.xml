@@ -113,7 +113,10 @@
     <string name="edit_delete">Pašalinti</string>
     <string name="edit_restore">Atstatyti</string>
     <string name="album_add_photo_title">Pridėti fotografiją</string>
+    <string name="gifts_romantic">Romantiškos</string>
+    <string name="gifts_friends">Draugiškos</string>
     <string name="gifts">Dovanos</string>
+    <string name="gifts_present">Sveikinimų</string>
     <string name="gifts_title">Pasirinkite dovaną</string>
     <string name="gifts_send_btn">Išsiųsti dovaną</string>
     <string name="map_location_progress">Nustatau buvimo vietą</string>

@@ -113,7 +113,10 @@
     <string name="edit_delete">Silmek</string>
     <string name="edit_restore">Kurtarmak</string>
     <string name="album_add_photo_title">Foto eklemek</string>
+    <string name="gifts_romantic">Romantik</string>
+    <string name="gifts_friends">Arkadaşlık</string>
     <string name="gifts">Hediyeler</string>
+    <string name="gifts_present">Tebrikler</string>
     <string name="gifts_title">Hediye seçin</string>
     <string name="gifts_send_btn">Hediye göndermek</string>
     <string name="map_location_progress">Konumu tanımlıyorum</string>
