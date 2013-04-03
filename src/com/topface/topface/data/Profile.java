@@ -481,4 +481,8 @@ public class Profile extends AbstractDataWithPhotos {
         }
     }
 
+    public boolean isEmpty() {
+        return uid <= 0;
+    }
+
 }

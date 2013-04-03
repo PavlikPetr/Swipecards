@@ -354,7 +354,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     protected void onFeedItemClick(FeedItem item) {
         //Open chat activity
-        if (!item.user.deleted) {
+        if (!item.user.isEmpty()) {
             Intent intent = new Intent(getActivity(), ContainerActivity.class);
             intent.putExtra(ChatFragment.INTENT_USER_ID, item.user.id);
             intent.putExtra(ChatFragment.INTENT_USER_NAME, item.user.first_name);
@@ -422,7 +422,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 mListView.onRefreshComplete();
                 mListView.setVisibility(View.VISIBLE);
                 mIsUpdating = false;
-                if (mNavBarController != null) mNavBarController.refreshNotificators();
+                if (mActionBar != null) {
+                    mActionBar.refreshNotificators();
+                }
             }
 
             @Override

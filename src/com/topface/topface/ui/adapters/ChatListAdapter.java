@@ -85,21 +85,25 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         History item = getItem(position);
         if (superType == T_OTHER && item != null) {
             if (item.isWaitingItem() || item.isRepeatItem()) return T_WAITING;
-            boolean output = (item.target == FeedDialog.USER_MESSAGE);
-            switch (item.type) {
-                case FeedDialog.GIFT:
-                    return output ? T_USER_GIFT : T_FRIEND_GIFT;
-                case FeedDialog.MAP:
-                    return output ? T_USER_MAP : T_FRIEND_MAP;
-                case FeedDialog.ADDRESS:
-                    return output ? T_USER_MAP : T_FRIEND_MAP;
-                case FeedDialog.LIKE_REQUEST:
-                    return output ? T_USER_REQUEST : T_FRIEND_REQUEST;
-                default:
-                    return output ? T_USER : T_FRIEND;
-            }
+            return ChatListAdapter.getItemType(item);
         } else {
             return superType;
+        }
+    }
+
+    public static int getItemType(History item) {
+        boolean output = (item.target == FeedDialog.USER_MESSAGE);
+        switch (item.type) {
+            case FeedDialog.GIFT:
+                return output ? T_USER_GIFT : T_FRIEND_GIFT;
+            case FeedDialog.MAP:
+                return output ? T_USER_MAP : T_FRIEND_MAP;
+            case FeedDialog.ADDRESS:
+                return output ? T_USER_MAP : T_FRIEND_MAP;
+            case FeedDialog.LIKE_REQUEST:
+                return output ? T_USER_REQUEST : T_FRIEND_REQUEST;
+            default:
+                return output ? T_USER : T_FRIEND;
         }
     }
 
@@ -242,6 +246,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         for (int i = 0; i < data.size(); i++) {
             if (data.get(i) == emptyItem) {
                 positionToReplace = i;
+                break;
             }
         }
         if (positionToReplace != -1) {
