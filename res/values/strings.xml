@@ -393,4 +393,5 @@
     <string name="buy_mobile_payments_complete">Payment was made. Your order is being processed, please wait</string>
     <string name="general_save_and_exit">Save and logout</string>
     <string name="general_set_password">Set your password before logout</string>
+    <string name="user_is_banned">User is banned</string>
 </resources>

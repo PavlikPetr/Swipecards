@@ -521,4 +521,5 @@
     <string name="general_bookmarks">Избранные</string>
     <string name="general_fans">Поклонники</string>
     <string name="general_no_fans">Нет поклонников</string>
+    <string name="user_is_banned">Пользователь забанен</string>
 </resources>
