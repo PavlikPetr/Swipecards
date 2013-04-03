@@ -113,10 +113,7 @@
     <string name="edit_delete">Видалити</string>
     <string name="edit_restore">Відновити</string>
     <string name="album_add_photo_title">Додати фото</string>
-    <string name="gifts_romantic">Романтичні</string>
-    <string name="gifts_friends">Дружні</string>
     <string name="gifts">Подарунки</string>
-    <string name="gifts_present">Вітальні</string>
     <string name="gifts_title">Виберіть подарунок</string>
     <string name="gifts_send_btn">Відправити подарунок</string>
     <string name="map_location_progress">Визначаю місцеположення</string>

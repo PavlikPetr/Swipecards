@@ -113,10 +113,7 @@
     <string name="edit_delete">Supprimer</string>
     <string name="edit_restore">Restaurer</string>
     <string name="album_add_photo_title">Ajouter une photo</string>
-    <string name="gifts_romantic">Romantiques</string>
-    <string name="gifts_friends">Amicaux</string>
     <string name="gifts">Cadeaux</string>
-    <string name="gifts_present">Félicitation</string>
     <string name="gifts_title">Choisissez un cadeau</string>
     <string name="gifts_send_btn">Envoyer un cadeau</string>
     <string name="map_location_progress">Je détermine l\'emplacement</string>

@@ -113,10 +113,7 @@
     <string name="edit_delete">Sterge</string>
     <string name="edit_restore">Restabileste</string>
     <string name="album_add_photo_title">Adauga poza</string>
-    <string name="gifts_romantic">Romantice</string>
-    <string name="gifts_friends">Prietenesti</string>
     <string name="gifts">Cadouri</string>
-    <string name="gifts_present">Pentru felicitare</string>
     <string name="gifts_title">Alege cadou</string>
     <string name="gifts_send_btn">Trimite cadou</string>
     <string name="map_location_progress">Identific locatia</string>

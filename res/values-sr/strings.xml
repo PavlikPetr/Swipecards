@@ -113,10 +113,7 @@
     <string name="edit_delete">Ukloniti</string>
     <string name="edit_restore">Obnoviti</string>
     <string name="album_add_photo_title">Dodati fotografiju</string>
-    <string name="gifts_romantic">Romantični</string>
-    <string name="gifts_friends">Prijateljski</string>
     <string name="gifts">Pokloni</string>
-    <string name="gifts_present">Pozdravni</string>
     <string name="gifts_title">Odaberite poklon</string>
     <string name="gifts_send_btn">Poslati poklon</string>
     <string name="map_location_progress">Određujem lokaciju</string>

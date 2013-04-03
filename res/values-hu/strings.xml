@@ -113,10 +113,7 @@
     <string name="edit_delete">Eltávolít</string>
     <string name="edit_restore">Helyreállítás</string>
     <string name="album_add_photo_title">Kép hozzáadása</string>
-    <string name="gifts_romantic">Romantikus</string>
-    <string name="gifts_friends">Barátságos</string>
     <string name="gifts">Ajándék</string>
-    <string name="gifts_present">Üdvözlet</string>
     <string name="gifts_title">Válasszon ajándékot</string>
     <string name="gifts_send_btn">Küldjön ajándékot</string>
     <string name="map_location_progress">Hely meghatározás</string>
