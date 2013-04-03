@@ -521,4 +521,11 @@
     <string name="general_bookmarks">Избранные</string>
     <string name="general_fans">Поклонники</string>
     <string name="general_no_fans">Нет поклонников</string>
+
+    <string name="get_free_money">%d монет бесплатно</string>
+    <string name="settings_edit_profile">Редактировать профиль</string>
+    <string name="general_bookmarks_delete">Удалить из избранных</string>
+    <string name="general_bookmarks_add">Добавить в избранные</string>
+    <string name="buy_resources">Пополнить запас</string>
+    <string name="general_network_reconnect">Пытаемся восстановить соединение с сетью</string>
 </resources>
