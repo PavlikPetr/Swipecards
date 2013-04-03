@@ -421,7 +421,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 mListView.onRefreshComplete();
                 mListView.setVisibility(View.VISIBLE);
                 mIsUpdating = false;
-                if (mNavBarController != null) mNavBarController.refreshNotificators();
+                if (mActionBar != null) {
+                    mActionBar.refreshNotificators();
+                }
             }
 
             @Override
