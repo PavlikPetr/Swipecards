@@ -523,7 +523,7 @@
     <string name="general_no_fans">Нет поклонников</string>
 
     <plurals name="get_free_money">
-        <item quantity="one">%d монету бесплатно</item>
+        <item quantity="one">%d монета бесплатно</item>
         <item quantity="few">%d монеты бесплатно</item>
         <item quantity="many">%d монет бесплатно</item>
         <item quantity="other">%d монет бесплатно</item>
