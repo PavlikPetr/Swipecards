@@ -1,6 +1,7 @@
 package com.topface.topface.ui.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -147,19 +148,19 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
             // установка имени
             holder.name.setText(item.user.getNameAndAge());
-            if (item.user.deleted) {
-                holder.name.setAlpha(0.5f);
+            if (item.user.deleted || item.user.banned) {
+                holder.name.setTextColor(Color.GRAY);
             } else {
-                holder.name.setAlpha(1f);
+                holder.name.setTextColor(Color.WHITE);
             }
 
             // установка городв
             if (item.user.city != null) {
                 holder.city.setText(item.user.city.name);
-                if (item.user.deleted) {
-                    holder.city.setAlpha(0.5f);
+                if (item.user.deleted || item.user.banned) {
+                    holder.city.setTextColor(Color.GRAY);
                 } else {
-                    holder.city.setAlpha(1f);
+                    holder.city.setTextColor(Color.WHITE);
                 }
             }
 
