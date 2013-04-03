@@ -396,4 +396,15 @@
     <string name="buy_mobile_payments_complete">El pago está efectuado. Tu petición está procesandose, espera por favor</string>
     <string name="general_save_and_exit">Guardar y salir</string>
     <string name="general_set_password">Establece la contraseña antes de salir de la aplicación</string>
+    <string name="user_is_deleted">El usuario está eliminado</string>
+    <string name="general_bookmarks_title">Favoritos</string>
+    <string name="general_empty_bookmarks">No hay favoritos</string>
+    <string name="general_bookmarks">Favoritos</string>
+    <string name="general_fans">Admiradores</string>
+    <string name="general_no_fans">No hay admiradores</string>
+    <string name="settings_edit_profile">Editar perfil</string>
+    <string name="general_bookmarks_delete">Eliminar de los favoritos</string>
+    <string name="general_bookmarks_add">Agregar a los favoritos</string>
+    <string name="buy_resources">Comprar recursos</string>
+    <string name="general_network_reconnect">Intentando recuperar la conexión con la red</string>
 </resources>

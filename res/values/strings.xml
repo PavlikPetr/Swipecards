@@ -393,5 +393,16 @@
     <string name="buy_mobile_payments_complete">Payment was made. Your order is being processed, please wait</string>
     <string name="general_save_and_exit">Save and logout</string>
     <string name="general_set_password">Set your password before logout</string>
+    <string name="user_is_deleted">User deleted</string>
+    <string name="general_bookmarks_title">Favorites</string>
+    <string name="general_empty_bookmarks">No favorites</string>
+    <string name="general_bookmarks">Favorites</string>
+    <string name="general_fans">Fans</string>
+    <string name="general_no_fans">No fans</string>
+    <string name="settings_edit_profile">Edit profile</string>
+    <string name="general_bookmarks_delete">Delete from favorites</string>
+    <string name="general_bookmarks_add">Add to favorites</string>
+    <string name="buy_resources">Refill</string>
+    <string name="general_network_reconnect">Trying to reconnect to the network</string>
     <string name="user_is_banned">User is banned</string>
 </resources>

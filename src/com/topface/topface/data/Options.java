@@ -77,6 +77,7 @@ public class Options extends AbstractData {
     public LinkedList<BuyButton> likes = new LinkedList<BuyButton>();
     public LinkedList<BuyButton> premium = new LinkedList<BuyButton>();
     public LinkedList<BuyButton> others = new LinkedList<BuyButton>();
+    private String paymentwall;
 
     public String max_version = "2147483647"; //Integer.MAX_VALUE);
 
@@ -140,6 +141,13 @@ public class Options extends AbstractData {
                     for (int i = 0; i < othersJSON.length(); i++) {
                         options.others.add(createBuyButtonFromJSON(othersJSON.optJSONObject(i)));
                     }
+                }
+            }
+
+            if (response.jsonResult.has("links")) {
+                JSONObject links = response.jsonResult.optJSONObject("links");
+                if (links != null && links.has("paymentwall")) {
+                    options.paymentwall = links.optString("paymentwall");
                 }
             }
 
@@ -252,6 +260,10 @@ public class Options extends AbstractData {
             this.showType = showType;
             this.type = type;
         }
+    }
+
+    public String getPaymentwallLink() {
+        return paymentwall;
     }
 
 }
