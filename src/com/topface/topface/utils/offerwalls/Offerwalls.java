@@ -1,4 +1,4 @@
-package com.topface.topface.utils.offerwalls;
+package com.topface.topface.utils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,15 +6,13 @@ import android.content.Intent;
 import com.sponsorpay.sdk.android.SponsorPay;
 import com.sponsorpay.sdk.android.publisher.SponsorPayPublisher;
 import com.tapjoy.TapjoyConnect;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.offerwalls.clickky.ClickkyActivity;
 
 public class Offerwalls {
 
     public static final String TAPJOY = "TAPJOY";
     public static final String SPONSORPAY = "SPONSORPAY";
     public static final String CLICKKY = "CLICKKY";
-    private static String nextOfferwall = "TAPJOY";
+    private static boolean first_or_second = false;
 
     public static void init(Context context) {
         TapjoyConnect.requestTapjoyConnect(context, "f0563cf4-9e7c-4962-b333-098810c477d2", "AS0AE9vmrWvkyNNGPsyu");
@@ -23,16 +21,12 @@ public class Offerwalls {
     }
 
     public static void startOfferwall(Activity activity) {
-        if (nextOfferwall.equals(TAPJOY)) {
+        if (first_or_second) {
             startTapjoy();
-            nextOfferwall = SPONSORPAY;
-        } else if (nextOfferwall.equals(SPONSORPAY)){
+        } else {
             startSponsorpay(activity);
-            nextOfferwall = CLICKKY;
-        } else if (nextOfferwall.equals(CLICKKY)){
-            startClickky(activity);
-            nextOfferwall = TAPJOY;
         }
+        first_or_second = !first_or_second;
     }
 
     public static void startTapjoy() {

@@ -10,6 +10,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.QuestionaryRequest;
@@ -23,6 +24,9 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 
     private static int mTitleId;
     private static int mDataId;
+    private static final String ARG_TAG_TITLE_ID = "title_id";
+    private static final String ARG_TAG_DATA_ID = "data_id";
+    private static final String ARG_TAG_DATA = "data";
     private String mData;
     private FormInfo mFormInfo;
     private static int mSeletedDataId;
@@ -31,21 +35,23 @@ public class EditFormItemsFragment extends AbstractEditFragment {
     private ListView mListView;
     private FormCheckingDataAdapter mAdapter;
 
-    public EditFormItemsFragment() {
-        super();
-    }
-
-    public EditFormItemsFragment(int titleId, int dataId, String data) {
-        this();
-        mTitleId = titleId;
-        mDataId = dataId;
-        mSeletedDataId = mDataId;
-        mData = data;
-        mProfile = CacheProfile.getProfile();
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (getArguments() != null) {
+            mTitleId = getArguments().getInt(ARG_TAG_TITLE_ID);
+            mDataId = getArguments().getInt(ARG_TAG_DATA_ID);
+            mSeletedDataId = mDataId;
+            mData = getArguments().getString(ARG_TAG_DATA);
+        } else {
+            mTitleId = FormItem.NO_RESOURCE_ID;
+            mDataId = FormItem.NO_RESOURCE_ID;
+            mSeletedDataId = mDataId;
+            mData = Static.EMPTY;
+            mProfile = CacheProfile.getProfile();
+        }
+
+        mProfile = CacheProfile.getProfile();
+
         mFormInfo = new FormInfo(getActivity(), mProfile);
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_edit_with_listview, container,
@@ -242,5 +248,17 @@ public class EditFormItemsFragment extends AbstractEditFragment {
     @Override
     protected void unlockUi() {
         mListView.setEnabled(true);
+    }
+
+    public static EditFormItemsFragment newInstance(int titleId, int dataId, String data) {
+        EditFormItemsFragment fragment = new EditFormItemsFragment();
+
+        Bundle args = new Bundle();
+        args.putInt(ARG_TAG_TITLE_ID, titleId);
+        args.putInt(ARG_TAG_DATA_ID, dataId);
+        args.putString(ARG_TAG_DATA, data);
+        fragment.setArguments(args);
+
+        return fragment;
     }
 }

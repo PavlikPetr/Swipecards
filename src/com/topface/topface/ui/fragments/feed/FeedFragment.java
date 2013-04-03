@@ -1,4 +1,3 @@
-
 package com.topface.topface.ui.fragments.feed;
 
 import android.app.Activity;
@@ -40,7 +39,10 @@ import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryView;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Utils;
 import org.json.JSONObject;
 
 import static android.widget.AdapterView.OnItemClickListener;
@@ -75,15 +77,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         View view = inflater.inflate(getLayout(), null);
         mContainer = (RelativeLayout) view.findViewById(R.id.feedContainer);
         initNavigationBar(view);
-
-
-
         mLockView = (LockerView) view.findViewById(R.id.llvFeedLoading);
         mLockView.setVisibility(View.GONE);
-
         init();
-
-
         initBackground(view);
         initFilter(view);
         initListView(view);
@@ -119,12 +115,13 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     protected void initFloatBlock(ViewGroup view) {
         mFloatBlock = new FloatBlock(this, view);
+        mFloatBlock.onCreate();
     }
 
     protected void initNavigationBar(View view) {
         // Navigation bar
         mActionBar = getActionBar(view);
-        mActionBar.showHomeButton((View.OnClickListener)getActivity());
+        mActionBar.showHomeButton((View.OnClickListener) getActivity());
         mActionBar.setTitleText(getString(getTitle()));
     }
 
@@ -132,9 +129,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     @Override
     public void onResume() {
         super.onResume();
-        if (mFloatBlock != null) {
-            mFloatBlock.onResume();
-        }
         if (getListAdapter().isNeedUpdate()) {
             updateData(false, true);
         }
@@ -147,13 +141,18 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (mFloatBlock != null) {
             mFloatBlock.onPause();
         }
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mFloatBlock != null) {
+            mFloatBlock.onDestroy();
+        }
     }
 
     protected void init() {
-
     }
-
 
     private void initBackground(View view) {
         // ListView background
@@ -244,18 +243,20 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 FeedItem item = (FeedItem) parent.getItemAtPosition(position);
-                if (!mIsUpdating && item.isRetrier()) {
-                    updateUI(new Runnable() {
-                        public void run() {
-                            getListAdapter().showLoaderItem();
+                if (item != null) {
+                    if (!mIsUpdating && item.isRetrier()) {
+                        updateUI(new Runnable() {
+                            public void run() {
+                                getListAdapter().showLoaderItem();
+                            }
+                        });
+                        updateData(false, true, false);
+                    } else {
+                        try {
+                            onFeedItemClick(item);
+                        } catch (Exception e) {
+                            Debug.error("FeedItem click error:", e);
                         }
-                    });
-                    updateData(false, true, false);
-                } else {
-                    try {
-                        onFeedItemClick(item);
-                    } catch (Exception e) {
-                        Debug.error("FeedItem click error:", e);
                     }
                 }
             }
@@ -330,7 +331,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             @Override
             public void always(ApiResponse response) {
                 super.always(response);
-                mLockView.setVisibility(View.GONE);
+                if (mLockView != null) {
+                    mLockView.setVisibility(View.GONE);
+                }
             }
         }).exec();
 
@@ -350,17 +353,18 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     protected void onFeedItemClick(FeedItem item) {
-        //Open mailchat activity
-
-        Intent intent = new Intent(getActivity(), ContainerActivity.class);
-        intent.putExtra(ChatFragment.INTENT_USER_ID, item.user.id);
-        intent.putExtra(ChatFragment.INTENT_USER_NAME, item.user.first_name);
-        intent.putExtra(ChatFragment.INTENT_USER_SEX, item.user.sex);
-        intent.putExtra(ChatFragment.INTENT_USER_AGE, item.user.age);
-        intent.putExtra(ChatFragment.INTENT_USER_CITY, item.user.city.name);
-        intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
-        intent.putExtra(ChatFragment.INTENT_ITEM_ID, item.id);
-        getActivity().startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
+        //Open chat activity
+        if (!item.user.isEmpty()) {
+            Intent intent = new Intent(getActivity(), ContainerActivity.class);
+            intent.putExtra(ChatFragment.INTENT_USER_ID, item.user.id);
+            intent.putExtra(ChatFragment.INTENT_USER_NAME, item.user.first_name);
+            intent.putExtra(ChatFragment.INTENT_USER_SEX, item.user.sex);
+            intent.putExtra(ChatFragment.INTENT_USER_AGE, item.user.age);
+            intent.putExtra(ChatFragment.INTENT_USER_CITY, item.user.city.name);
+            intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
+            intent.putExtra(ChatFragment.INTENT_ITEM_ID, item.id);
+            getActivity().startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
+        }
     }
 
     public void onAvatarClick(T item, View view) {
@@ -371,11 +375,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             if (getFeedService().equals(FeedRequest.FeedService.DIALOGS)) {
                 fragment = ProfileFragment.newInstance(item.user.id, ProfileFragment.TYPE_USER_PROFILE);
             } else {
-                fragment =  ProfileFragment.newInstance(item.user.id, ProfileFragment.TYPE_USER_PROFILE, item.id);
+                fragment = ProfileFragment.newInstance(item.user.id, ProfileFragment.TYPE_USER_PROFILE, item.id);
             }
             ((NavigationActivity) activity).onExtraFragment(fragment);
         }
-
     }
 
     protected void updateData(final boolean isPushUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {
@@ -419,7 +422,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 mListView.onRefreshComplete();
                 mListView.setVisibility(View.VISIBLE);
                 mIsUpdating = false;
-                if (mNavBarController != null) mNavBarController.refreshNotificators();
+                if (mActionBar != null) {
+                    mActionBar.refreshNotificators();
+                }
             }
 
             @Override

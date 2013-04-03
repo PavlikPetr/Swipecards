@@ -15,7 +15,7 @@
                 android:background="@drawable/btn_triple_left_selector"
                 android:button="@android:color/transparent"
                 android:gravity="center"
-                android:textSize="12dp"
+                android:textSize="12sp"
                 android:textScaleX="0.9"/>
 
         <RadioButton
@@ -26,7 +26,7 @@
                 android:background="@drawable/btn_triple_middle_selector"
                 android:button="@android:color/transparent"
                 android:gravity="center"
-                android:textSize="12dp"
+                android:textSize="12sp"
                 android:textScaleX="0.9"/>
 
         <RadioButton
@@ -37,7 +37,7 @@
                 android:background="@drawable/btn_triple_right_selector"
                 android:button="@android:color/transparent"
                 android:gravity="center"
-                android:textSize="12dp"
+                android:textSize="12sp"
                 android:textScaleX="0.9"/>
     </RadioGroup>
 

@@ -3,6 +3,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:background="@drawable/bg_main"
+                android:focusableInTouchMode="true"
         >
 
     <!-- header bar -->
@@ -71,10 +72,12 @@
     <include
             layout="@layout/bar_navigation_header"
             android:id="@+id/loNavigationBar"/>
+
     <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="@drawable/chat_add_panel_bg"
+            android:layout_below="@id/loNavigationBar"
+            android:background="@drawable/bg_main"
             android:visibility="gone"
             android:id="@+id/lockScreen"/>
 

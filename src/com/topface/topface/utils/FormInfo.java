@@ -20,13 +20,11 @@ public class FormInfo {
 
     public FormInfo(Context context, Profile profile) {
         mResources = context.getResources();
-        mProfile = profile;
-        mSex = profile.sex;
+        if (profile != null) {
+            mProfile = profile;
+            mSex = profile.sex;
+        }
         mContext = context;
-    }
-
-    public void setSex(int sex) {
-        mSex = sex;
     }
 
     // =============================== Common methods ===============================

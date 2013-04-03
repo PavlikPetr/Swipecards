@@ -33,8 +33,8 @@
     <string name="general_girls">여성</string>
     <string name="general_city">도시</string>
     <string name="general_dating">만남</string>
-    <string name="general_likes">나를 좋아합니다.</string>
-    <string name="general_likes_me">가 당신을 좋아합니다.</string>
+    <string name="general_likes">나를 마음에 들어하는 상대</string>
+    <string name="general_likes_me">나를 마음에 들어하는 상대</string>
     <string name="general_sympathy">호감도</string>
     <string name="general_delight">감탄</string>
     <string name="general_mutual">서로간의</string>
@@ -303,7 +303,6 @@
     <string name="leaders_select_photo_info">가장 자신이 잘 나온 사진을 선택해 주세요! 낮은 순위의 사진은 선택할 수 없습니다.</string>
     <string name="default_price_format">전체 금액은 %.2f USD 입니다.</string>
     <string name="dating_online_only">%s, 온라인 상태의 유저들만.</string>
-    <string name="leaders_pick_condition">%d%% 이하의 사진은 선택할 수 없습니다:</string>
     <string name="map_popup_address">주소</string>
     <string name="black_list_info">당신은 블랙 리스트에 이웃을 추가하였습니다. VIP상태 설정의 프로필에서 해당 사항을 변경할 수 있습니다.</string>
     <string name="general_gift">선물</string>
@@ -362,4 +361,23 @@
     <string name="choose_cool_photo">자신의 상태과 기분을 잘 나타내는 가장 잘 나온 사진을 선택하여 주세요!</string>
     <string name="email_confirmed">이메일이 확인 되었습니다!</string>
     <string name="sympathy_sended">호감도가 전송되었습니다.</string>
+    <string name="general_photo_deleted">업로딩한 사진이 톱페이스 규칙에 어긋나는 사항이 있어 삭제 되었습니다.</string>
+    <string name="buying_total">총합</string>
+    <string name="buying_economy">경제적인 방법</string>
+    <string name="general_change">변경하기</string>
+    <string name="general_correct">전체 형식이 옳바릅니다.</string>
+    <string name="we_dont_detect_your_city">더 많은 사람과 가깝게 교제를 하기 위해서 당신의 위치를 알아야 합니다. 자신의 도시를 선택해보세요.</string>
+    <string name="confirm_email">이메일을 확인해 주십시오.</string>
+    <string name="password_sent">새로운 비밀번호가 당신의 이메일로 전송되었습니다.</string>
+    <string name="buy_vip_month_one">%1$d 달 이용을 %2$.2f %3$@가격에</string>
+    <string name="buy_vip_month_few">%1$d 달 이용을 %2$.2f %3$@가격에</string>
+    <string name="buy_vip_month_other">%1$d 달 이용을 %2$.2f %3$@가격에</string>
+    <string name="buy_special_offers">특별한 제안</string>
+    <string name="user_does_not_have_gifts">아직 해당 사용자는 받은 선물이 없습니다. 당신이 맨 처음으로 선물을 한다면 상대도 당신을 알아보게 될 것입니다.</string>
+    <string name="status_is_empty">현재 상태 설정이 되어 있지 않습니다.</string>
+    <string name="you_dont_have_gifts_yet">아직 받은 선물이 없습니다.</string>
+    <string name="buy_sympathies">호감도 구입하기</string>
+    <string name="upload_photos">사진을 업로드해주세요</string>
+    <string name="chat_no_message_title">교제를 시작해 보세요!</string>
+    <string name="chat_no_message_text">상대에게 메세지를 전송하거나 선물을 해보세요. 상대도 반드시 그에 응답할것입니다.</string>
 </resources>

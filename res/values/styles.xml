@@ -318,7 +318,7 @@
         <item name="android:shadowDx">0</item>
         <item name="android:shadowDy">-1</item>
         <item name="android:textColor">#737373</item>
-        <item name="android:textSize">12dp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:textStyle">normal</item>
     </style>
 
@@ -329,7 +329,7 @@
         <item name="android:singleLine">true</item>
         <item name="android:ellipsize">end</item>
         <item name="android:textColor">#B8B8B8</item>
-        <item name="android:textSize">14dp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textStyle">normal</item>
     </style>
 
@@ -340,12 +340,12 @@
         <item name="android:singleLine">true</item>
         <item name="android:ellipsize">end</item>
         <item name="android:textColor">#FFFFFF</item>
-        <item name="android:textSize">16dp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:textStyle">normal</item>
     </style>
 
     <style name="ListAgeAndCity" parent="ListCity">
-        <item name="android:textSize">14dp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:layout_marginLeft">0dp</item>
     </style>
 
@@ -353,7 +353,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">#FFFFFF</item>
-        <item name="android:textSize">16dp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:textStyle">normal</item>
         <item name="android:ellipsize">end</item>
         <item name="android:singleLine">true</item>
@@ -424,7 +424,7 @@
         <item name="android:paddingLeft">3dp</item>
         <item name="android:paddingRight">3dp</item>
         <item name="android:textColor">#FFFFFF</item>
-        <item name="android:textSize">12dp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:visibility">gone</item>
     </style>
@@ -601,11 +601,8 @@
     <style name="RedAlertTextView" parent="RedAlertTextShadow">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@drawable/bg_wrong_login_password</item>
-        <item name="android:layout_marginTop">8dp</item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:visibility">invisible</item>
         <item name="android:layout_alignParentTop">true</item>
     </style>
 
@@ -620,5 +617,28 @@
     <style name="ChatVipTitleText" parent="ShadowButtonFont">
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="MobilePaymentButton" parent="android:Widget.ImageButton">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:background">@drawable/btn_gray_selector</item>
+    </style>
+
+    <style name="ButtonGray">
+        <item name="android:padding">10dp</item>
+        <item name="android:minHeight">35dp</item>
+        <item name="android:background">@drawable/btn_gray_selector</item>
+        <item name="android:textColor">#B8B8B8</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ButtonBlue" parent="ButtonGray">
+        <item name="android:background">@drawable/btn_blue_selector</item>
+        <item name="android:textColor">#FFFFFF</item>
     </style>
 </resources>

@@ -16,6 +16,7 @@ public class MemoryCacheTemplate<K, V> {
     }
 
 
+    @SuppressWarnings("SuspiciousMethodCalls")
     public boolean containsKey(Integer key) {
         return mCache.containsKey(key);
     }
@@ -38,7 +39,11 @@ public class MemoryCacheTemplate<K, V> {
             V value = get(key);
             if (value != null) {
                 if (value instanceof Bitmap) {
-                    ((Bitmap) value).recycle();
+                    if (!((Bitmap) value).isRecycled()) {
+                        ((Bitmap) value).recycle();
+                    } else {
+                        Debug.error("Bitmap is already recycled");
+                    }
                 }
                 mCache.put(key, null);
             }

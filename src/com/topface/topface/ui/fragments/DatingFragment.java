@@ -153,7 +153,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         initEmptySearchDialog(view, initNavigationHeader(view));
 
         //Показываем последнего пользователя
-        showUser(mUserSearchList.getCurrentUser());
+        SearchUser currentUser = mUserSearchList.getCurrentUser();
+        if (currentUser != null) {
+            showUser(currentUser);
+        } else {
+            showNextUser();
+        }
         return view;
     }
 
@@ -507,7 +512,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             if (currUser.city != null) {
                 mUserInfoCity.setText(currUser.city.name);
             }
-            mUserInfoStatus.setText(currUser.status);
+            //Устанавливаем статус пользователя. Обязательно делаем trim, иначе есть шутники, вставлюящие переносы в текст
+            mUserInfoStatus.setText(
+                    currUser.status != null ?
+                            currUser.status.trim() :
+                            ""
+            );
             mUserInfoName.setText(currUser.getNameAndAge());
 
             Resources res = App.getContext().getResources();

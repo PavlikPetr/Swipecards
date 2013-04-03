@@ -7,7 +7,6 @@
               android:gravity="center">
 
     <com.topface.topface.ui.views.ImageViewRemote
-            xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
             android:id="@+id/ivFriendAvatar"
             android:layout_marginTop="8dp"
             style="@style/FeedAvatar"
@@ -17,7 +16,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/chat_bubble_background"
-            android:gravity="left"
+            android:gravity="left|center"
             android:orientation="vertical"
             android:layout_margin="8dp">
 
@@ -25,7 +24,7 @@
                 android:id="@+id/tvFirstMessageTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Откройте, вам симпатия!"
+                android:text="@string/chat_no_message_title"
                 style="@style/ItemTitleText"
                 android:textSize="14sp"
                 />
@@ -34,7 +33,7 @@
                 android:id="@+id/tvFirstMessageText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Легкая, непринужденная беседа - лучшее начало хорошего знакомства."
+                android:text="@string/chat_no_message_text"
                 style="@style/ItemTitleText"
                 android:textSize="12sp"
                 />

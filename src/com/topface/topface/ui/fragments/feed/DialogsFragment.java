@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.feed;
 
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
@@ -40,7 +41,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
 
     @Override
     protected void decrementCounters() {
-        CountersManager.getInstance(getActivity().getApplicationContext()).decrementCounter(CountersManager.DIALOGS);
+        CountersManager.getInstance(App.getContext()).decrementCounter(CountersManager.DIALOGS);
     }
 
     @Override

@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
@@ -40,7 +40,6 @@ public class ImageViewRemote extends ImageView {
     private static final long REPEAT_SCHEDULE = 2000;
     private BitmapProcessor mPostProcessor;
     private String mCurrentSrc;
-    private boolean mIsAnimationEnabled;
     /**
      * Счетчик попыток загрузить фотографию
      */
@@ -148,9 +147,6 @@ public class ImageViewRemote extends ImageView {
         if (!TextUtils.isEmpty(remoteSrc)) {
             if (!remoteSrc.equals(mCurrentSrc)) {
                 mCurrentSrc = remoteSrc;
-                mIsAnimationEnabled = true;
-            } else {
-                mIsAnimationEnabled = false;
             }
 
             if (getDrawable() != null) {
@@ -166,7 +162,6 @@ public class ImageViewRemote extends ImageView {
             isCorrectSrc = false;
             super.setImageBitmap(null);
             mCurrentSrc = null;
-            mIsAnimationEnabled = true;
         }
 
         return isCorrectSrc;
@@ -181,11 +176,6 @@ public class ImageViewRemote extends ImageView {
         if (bm != null && mLoader != null) {
             mLoader.setVisibility(View.GONE);
         }
-        //Показываем анимацию только в том случае, если ImageView видно пользователю
-        if (bm != null && mIsAnimationEnabled) {
-            startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in));
-        }
-
     }
 
     private ImageLoadingListener getListener(final Handler handler, final String remoteSrc) {
@@ -246,7 +236,7 @@ public class ImageViewRemote extends ImageView {
         @Override
         public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
             super.onLoadingFailed(imageUri, view, failReason);
-            if (FailReason.OUT_OF_MEMORY != failReason) {
+            if (FailReason.FailType.OUT_OF_MEMORY != failReason.getType()) {
                 try {
                     if (mRepeatCounter >= MAX_REPEAT_COUNT) {
                         mRepeatCounter = 0;
@@ -284,7 +274,12 @@ public class ImageViewRemote extends ImageView {
 
             mRepeatCounter = 0;
             if (mHandler != null) {
-                mHandler.sendEmptyMessage(LOADING_COMPLETE);
+                Message msg = new Message();
+                msg.what = LOADING_COMPLETE;
+                msg.arg1 = loadedImage.getWidth();
+                msg.arg2 = loadedImage.getHeight();
+                mHandler.sendMessage(msg);
+
             }
         }
 

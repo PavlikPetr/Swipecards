@@ -45,7 +45,8 @@ public class SettingsContainerActivity extends BaseFragmentActivity {
                 }
                 break;
             case INTENT_CHANGE_PASSWORD:
-                mFragment = new SettingsChangePasswordFragment();
+                boolean needExit = intent.getBooleanExtra(SettingsTopfaceAccountFragment.NEED_EXIT, false);
+                mFragment = SettingsChangePasswordFragment.newInstance(needExit);
                 break;
             case INTENT_FEEDBACK:
                 mFragment = new SettingsFeedbackFragment();

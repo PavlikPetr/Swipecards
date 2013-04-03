@@ -90,6 +90,7 @@ public class ConnectionManager {
         boolean needResend = false;
 
         if (request == null || request.isCanceled()) {
+            Debug.log("CM:: request is canceled");
             //Если запрос отменен, то прекращаем обработку сразу
             return;
         } else if (mAuthUpdateFlag.get()) {
@@ -100,8 +101,21 @@ public class ConnectionManager {
         }
 
         try {
-            //Отправляем запрос
-            IApiResponse response = executeRequest(request);
+            IApiResponse response;
+            //Отправляем запрос, если есть SSID и Токен или если запрос не требует авторизации
+            if (!Ssid.isEmpty() || !request.isNeedAuth()) {
+                response = executeRequest(request);
+            } else {
+                //Если у нас нет авторизационного токена, то выкидываем на авторизацию
+                if (AuthToken.getInstance().isEmpty()) {
+                    //Если токен пустой, то сразу конструируем ошибку
+                    response = request.constructApiResponse(IApiResponse.UNKNOWN_SOCIAL_USER, "AuthToken is empty");
+                } else {
+                    //Если SSID пустой, то сразу пишим ответ
+                    response = request.constructApiResponse(IApiResponse.SESSION_NOT_FOUND, "SSID is empty");
+                }
+
+            }
 
             //Проверяем запрос на ошибку неверной сессии
             if (response.isCodeEqual(IApiResponse.SESSION_NOT_FOUND)) {
@@ -162,6 +176,7 @@ public class ConnectionManager {
      */
     private void addToPendign(IApiRequest apiRequest) {
         synchronized (mPendignRequests) {
+            Debug.log(String.format("add request %s to pending (canceled: %b)", apiRequest.getId(), apiRequest.isCanceled()));
             mPendignRequests.put(apiRequest.getId(), apiRequest);
         }
     }
@@ -187,7 +202,7 @@ public class ConnectionManager {
 
     private boolean sendHandlerMessage(IApiRequest apiRequest, IApiResponse apiResponse) {
         ApiHandler handler = apiRequest.getHandler();
-        if (handler != null && !apiRequest.isCanceled()) {
+        if (handler != null) {
             Message msg = new Message();
             msg.obj = apiResponse;
             handler.sendMessage(msg);
@@ -223,7 +238,7 @@ public class ConnectionManager {
      * @return флаг необходимости повтора запроса
      */
     private boolean isNeedResend(IApiResponse apiResponse) {
-        return apiResponse.isCodeEqual(
+        return App.isOnline() && apiResponse.isCodeEqual(
                 //Если ответ пустой
                 IApiResponse.NULL_RESPONSE,
                 //Если с сервера пришел не корректный json
@@ -363,7 +378,8 @@ public class ConnectionManager {
             Auth auth = new Auth(authResponse);
             //Сохраняем новый SSID в SharedPreferences
             Ssid.save(auth.ssid);
-
+            //Снимаем блокировку
+            mAuthUpdateFlag.set(false);
             //Заново отправляем исходный запрос с уже новым SSID
             response = executeRequest(request);
             //После этого выполняем все отложенные запросы

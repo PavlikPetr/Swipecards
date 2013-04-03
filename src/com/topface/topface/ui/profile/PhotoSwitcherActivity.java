@@ -53,7 +53,8 @@ public class PhotoSwitcherActivity extends Activity {
         int photosCount = intent.getIntExtra(INTENT_PHOTOS_COUNT, 0);
         int position = intent.getIntExtra(INTENT_ALBUM_POS, 0);
         mUid = intent.getIntExtra(INTENT_USER_ID, -1);
-        ArrayList<Photo> arrList = intent.getExtras().getParcelableArrayList(INTENT_PHOTOS);
+        ArrayList<Photo> arrList = getPhotos(intent);
+
         mPhotoLinks = new Photos();
         mPhotoLinks.addAll(arrList);
 
@@ -101,6 +102,17 @@ public class PhotoSwitcherActivity extends Activity {
         });
 
         setCounter(position);
+    }
+
+    private ArrayList<Photo> getPhotos(Intent intent) {
+        ArrayList<Photo> arrList = intent.getExtras().getParcelableArrayList(INTENT_PHOTOS);
+        //Удаляем пустые пукнты фотографий
+        for (int i = 0; i < arrList.size(); i++) {
+            if (arrList.get(i) == null) {
+                arrList.remove(i);
+            }
+        }
+        return arrList;
     }
 
     private void setCounter(int position) {

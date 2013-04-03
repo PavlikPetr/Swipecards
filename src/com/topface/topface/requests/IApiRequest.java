@@ -38,4 +38,6 @@ public interface IApiRequest {
     IApiResponse constructApiResponse(int code, String message);
 
     IApiResponse constructApiResponse(String response);
+
+    boolean isNeedAuth();
 }

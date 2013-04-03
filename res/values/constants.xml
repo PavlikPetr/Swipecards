@@ -42,4 +42,6 @@
 
     <dimen name="take_photo_max_width">275dp</dimen>
     <dimen name="take_photo_max_height">320dp</dimen>
+
+    <dimen name="bezier_threshold">30dp</dimen>
 </resources>

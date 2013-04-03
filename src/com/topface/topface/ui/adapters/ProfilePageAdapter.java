@@ -3,9 +3,12 @@ package com.topface.topface.ui.adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import com.topface.topface.ui.fragments.HeaderMainFragment;
+import com.topface.topface.ui.fragments.HeaderStatusFragment;
 import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.ui.profile.ProfileBlackListControlFragment;
 import com.topface.topface.utils.Debug;
+import com.viewpagerindicator.PageIndicator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +19,7 @@ public class ProfilePageAdapter extends FragmentStatePagerAdapter {
     private ArrayList<String> mFragmentsTitles = new ArrayList<String>();
     private HashMap<Integer, Fragment> mFragmentCache = new HashMap<Integer, Fragment>();
     private ProfileFragment.ProfileUpdater mProfileUpdater;
+    private PageIndicator mPageIndicator;
 
     public ProfilePageAdapter(FragmentManager fm, ArrayList<String> fragmentsClasses, ProfileFragment.ProfileUpdater profileUpdater) {
         super(fm);
@@ -73,10 +77,10 @@ public class ProfilePageAdapter extends FragmentStatePagerAdapter {
             String fragmentClassName = mFragmentsClasses.get(position);
 
             //create fragments
-            if (fragmentClassName.equals(ProfileFragment.HeaderMainFragment.class.getName())) {
-                fragment = ProfileFragment.HeaderMainFragment.newInstance(mProfileUpdater.getProfile());
-            } else if (fragmentClassName.equals(ProfileFragment.HeaderStatusFragment.class.getName())) {
-                fragment = ProfileFragment.HeaderStatusFragment.newInstance(mProfileUpdater.getProfile());
+            if (fragmentClassName.equals(HeaderMainFragment.class.getName())) {
+                fragment = HeaderMainFragment.newInstance(mProfileUpdater.getProfile());
+            } else if (fragmentClassName.equals(HeaderStatusFragment.class.getName())) {
+                fragment = HeaderStatusFragment.newInstance(mProfileUpdater.getProfile(), mProfileUpdater.getProfileType());
             } else if (fragmentClassName.equals(ProfileBlackListControlFragment.class.getName())) {
                 fragment = ProfileBlackListControlFragment.newInstance(mProfileUpdater.getProfile().uid, mProfileUpdater.getProfile().inBlackList);
             } else {
@@ -91,5 +95,24 @@ public class ProfilePageAdapter extends FragmentStatePagerAdapter {
         }
         mFragmentCache.put(position, fragment);
         return fragment;
+    }
+
+    public void removeItem(int position) {
+        mFragmentsClasses.remove(position);
+        if (position >= 0 && position < mFragmentsTitles.size())
+            mFragmentsTitles.remove(position);
+        notifyDataSetChanged();
+        if (mPageIndicator != null) mPageIndicator.notifyDataSetChanged();
+    }
+
+    public void removeItem(String className) {
+        int position = getFragmentIndexByClassName(className);
+        if (position >= 0 && position < getCount()) {
+            removeItem(position);
+        }
+    }
+
+    public void setPageIndicator(PageIndicator indicator){
+        mPageIndicator = indicator;
     }
 }

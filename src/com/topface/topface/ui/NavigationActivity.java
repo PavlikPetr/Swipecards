@@ -15,33 +15,38 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 import com.topface.billing.BillingUtils;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.City;
-import com.topface.topface.data.Photo;
-import com.topface.topface.data.Profile;
+import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.BaseApiHandler;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.*;
 import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
 import com.topface.topface.ui.fragments.MenuFragment.FragmentMenuListener;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
+import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.utils.*;
 import com.topface.topface.utils.offerwalls.Offerwalls;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 import ru.ideast.adwired.AWView;
+import ru.ideast.adwired.events.OnNoBannerListener;
+import ru.ideast.adwired.events.OnStartListener;
+import ru.ideast.adwired.events.OnStopListener;
 
+import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.HashSet;
+import java.util.Set;
 
 public class NavigationActivity extends BaseFragmentActivity implements View.OnClickListener {
 
@@ -49,6 +54,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
     public static final int RATE_POPUP_TIMEOUT = 86400000; // 1000 * 60 * 60 * 24 * 1 (1 сутки)
     public static final int UPDATE_INTERVAL = 10 * 60 * 1000;
+    public static final String URL_SEPARATOR = "::";
     private FragmentManager mFragmentManager;
     private MenuFragment mFragmentMenu;
     private FragmentSwitchController mFragmentSwitcher;
@@ -61,6 +67,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private BroadcastReceiver mServerResponseReceiver;
 
     private boolean isNeedAuth = true;
+
+    private static boolean isFullScreenBannerVisible = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,27 +93,158 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             isNeedAuth = false;
         }
 
-        mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         setStopTime();
-        mNovice = Novice.getInstance(mPreferences);
+        mNovice = Novice.getInstance(getPreferences());
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
+        Offerwalls.init(getApplicationContext());
     }
 
-    private void requestAdwired() {
+    private SharedPreferences getPreferences() {
+        if (mPreferences == null) {
+            mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        }
+        return mPreferences;
+    }
 
-        try {
-            if (CacheProfile.isLoaded() && !CacheProfile.paid) {
-                Locale ukraineLocale = new Locale("uk", "UA", "");
-                if (Locale.getDefault().equals(ukraineLocale)) {
-                    AWView adwiredView = (AWView) getLayoutInflater().inflate(R.layout.banner_adwired, null);
-                    ((ViewGroup) findViewById(R.id.loBannerContainer)).addView(adwiredView);
-                    adwiredView.setVisibility(View.VISIBLE);
-                    adwiredView.request('0');
+    private void requestFullscreen() {
+        if (CacheProfile.isLoaded()) {
+            Options.Page startPage = CacheProfile.getOptions().pages.get(Options.PAGE_START);
+            if (startPage != null) {
+                if (startPage.floatType.equals(Options.FLOAT_TYPE_BANNER)) {
+                    if (startPage.banner.equals(Options.BANNER_ADWIRED)) {
+                        requestAdwiredFullscreen();
+                    } else if (startPage.banner.equals(Options.BANNER_TOPFACE)) {
+                        requestTopfaceFullscreen();
+                    }
                 }
+            }
+        }
+    }
+
+    private void requestAdwiredFullscreen() {
+        try {
+            if (CacheProfile.isLoaded()) {
+                AWView adwiredView = (AWView) getLayoutInflater().inflate(R.layout.banner_adwired, null);
+                final ViewGroup bannerContainer = (ViewGroup) findViewById(R.id.loBannerContainer);
+                bannerContainer.addView(adwiredView);
+                bannerContainer.setVisibility(View.VISIBLE);
+                adwiredView.setVisibility(View.VISIBLE);
+                adwiredView.setOnNoBannerListener(new OnNoBannerListener() {
+                    @Override
+                    public void onNoBanner() {
+                        requestTopfaceFullscreen();
+                    }
+                });
+                adwiredView.setOnStopListener(new OnStopListener() {
+                    @Override
+                    public void onStop() {hideFullscreenBanner(bannerContainer);
+                    }
+                });
+                adwiredView.setOnStartListener(new OnStartListener() {
+                    @Override
+                    public void onStart() {
+                        isFullScreenBannerVisible = true;
+                    }
+                });
+                adwiredView.request('0');
             }
         } catch (Exception ex) {
             Debug.error(ex);
         }
+    }
+
+    private boolean showFullscreenBanner(String url) {
+        long currentTime = System.currentTimeMillis();
+        long lastCall = getPreferences().getLong(Static.PREFERENCES_LAST_FULLSCREEN_TIME, currentTime);
+        boolean passByTime = !getPreferences().contains(Static.PREFERENCES_LAST_FULLSCREEN_TIME)
+                || Math.abs(currentTime - lastCall) > DateUtils.DAY_IN_MILLISECONDS;
+        boolean passByUrl = passFullScreenByUrl(url);
+
+        return passByUrl && passByTime;
+    }
+
+    private boolean passFullScreenByUrl(String url) {
+        return !getFullscrenUrls().contains(url);
+    }
+
+    private Set<String> getFullscrenUrls() {
+        String urls = getPreferences().getString(Static.PREFERENCES_FULLSCREEN_URLS_SET, "");
+        String[] urlList = TextUtils.split(urls, URL_SEPARATOR);
+        return new HashSet<String>(Arrays.asList(urlList));
+    }
+
+    private void addLastFullsreenShowedTime() {
+        SharedPreferences.Editor editor = getPreferences().edit();
+        editor.putLong(Static.PREFERENCES_LAST_FULLSCREEN_TIME, System.currentTimeMillis());
+        editor.commit();
+    }
+
+    private void addNewUrlToFullscreenSet(String url) {
+        Set<String> urlSet = getFullscrenUrls();
+        urlSet.add(url);
+        SharedPreferences.Editor editor = getPreferences().edit();
+        editor.putString(Static.PREFERENCES_FULLSCREEN_URLS_SET, TextUtils.join(URL_SEPARATOR, urlSet));
+        editor.commit();
+    }
+
+    private void requestTopfaceFullscreen() {
+        BannerRequest request = new BannerRequest(getApplicationContext());
+        request.place = Options.PAGE_START;
+        request.callback(new BaseApiHandler() {
+            @Override
+            public void success(ApiResponse response) {
+                final Banner banner = Banner.parse(response);
+
+                if (banner.action.equals(Banner.ACTION_URL)) {
+                    if (showFullscreenBanner(banner.parameter)) {
+                        isFullScreenBannerVisible = true;
+                        addLastFullsreenShowedTime();
+                        final View fullscreenViewGroup = getLayoutInflater().inflate(R.layout.fullscreen_topface, null);
+                        final ViewGroup bannerContainer = (ViewGroup) findViewById(R.id.loBannerContainer);
+                        bannerContainer.addView(fullscreenViewGroup);
+                        bannerContainer.setVisibility(View.VISIBLE);
+                        final ImageViewRemote fullscreenImage = (ImageViewRemote) fullscreenViewGroup.findViewById(R.id.ivFullScreen);
+                        fullscreenImage.setRemoteSrc(banner.url);
+                        fullscreenImage.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                addNewUrlToFullscreenSet(banner.parameter);
+                                hideFullscreenBanner(bannerContainer);
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(banner.parameter));
+                                startActivity(intent);
+                            }
+                        });
+
+                        fullscreenViewGroup.findViewById(R.id.btnClose).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                hideFullscreenBanner(bannerContainer);
+                            }
+                        });
+                    }
+                }
+            }
+        }).exec();
+    }
+
+    private void hideFullscreenBanner(final ViewGroup bannerContainer) {
+        Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.fade_out);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                bannerContainer.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        bannerContainer.startAnimation(animation);
+        isFullScreenBannerVisible = false;
     }
 
     private void initFragmentSwitcher() {
@@ -120,8 +259,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     @Override
     public void onInit() {
-        Offerwalls.init(getApplicationContext());
-
         Intent intent = getIntent();
         isNeedAuth = true;
         int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
@@ -135,7 +272,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         AuthorizationManager.extendAccessToken(NavigationActivity.this);
         checkVersion(CacheProfile.getOptions().max_version);
         actionsAfterRegistration();
-        requestAdwired();
+        requestFullscreen();
     }
 
     @Override
@@ -173,15 +310,15 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
         }
         needAnimate = true;
-
         //TODO костыль для ChatFragment, после перехода на фрагмент - выпилить
         if (mDelayedFragment != null) {
             onExtraFragment(mDelayedFragment);
             mDelayedFragment = null;
             mChatInvoke = true;
         }
-        checkExternalLink();
 
+        //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
+        new ExternalLinkExecuter(listener).execute(getIntent());
 
         requestBalance();
     }
@@ -218,7 +355,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 takePhoto(new TakePhotoDialog.TakePhotoListener() {
                     @Override
                     public void onPhotoSentSuccess(final Photo photo) {
-                        CacheProfile.photos.add(photo);
+                        if (CacheProfile.photos != null) {
+                            CacheProfile.photos.add(photo);
+                        }
                         PhotoMainRequest request = new PhotoMainRequest(getApplicationContext());
                         request.photoid = photo.getId();
                         request.callback(new ApiHandler() {
@@ -232,7 +371,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                             @Override
                             public void fail(int codeError, ApiResponse response) {
                                 if (codeError == ApiResponse.NON_EXIST_PHOTO_ERROR) {
-                                    if (CacheProfile.photos.contains(photo)) {
+                                    if (CacheProfile.photos != null && CacheProfile.photos.contains(photo)) {
                                         CacheProfile.photos.remove(photo);
                                     }
                                     Toast.makeText(NavigationActivity.this, "Ваша фотография не соответствует правилам. Попробуйте сделать другую", 2000);
@@ -272,58 +411,10 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
     }
 
-    private void checkExternalLink() {
-        if (getIntent() != null) {
-
-            Uri data = getIntent().getData();
-
-            if (checkHost(data)) {
-
-                String path = data.getPath();
-                String[] splittedPath = path.split("/");
-
-                executeLinkAction(splittedPath);
-            }
-        }
-    }
-
-    private void executeLinkAction(String[] splittedPath) {
-        Pattern profilePattern = Pattern.compile("profile");
-        Pattern confirmPattern = Pattern.compile("confirm.*");
-
-        if (profilePattern.matcher(splittedPath[1]).matches() && splittedPath.length >= 3) {
-
-            int profileId = Integer.parseInt(splittedPath[2]);
-            int profileType = profileId == CacheProfile.uid ? ProfileFragment.TYPE_MY_PROFILE : ProfileFragment.TYPE_USER_PROFILE;
-            onExtraFragment(ProfileFragment.newInstance(profileId, profileType));
-        } else if (confirmPattern.matcher(splittedPath[1]).matches()) {
-
-            Pattern codePattern = Pattern.compile("[0-9]+-[0-f]+-[0-9]*");
-            Matcher matcher = codePattern.matcher(splittedPath[1]);
-            matcher.find();
-
-            String code = matcher.group();
-            AuthToken token = AuthToken.getInstance();
-            if (!token.isEmpty() && token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
-
-                Intent intent = new Intent(this, SettingsContainerActivity.class);
-                intent.putExtra(Static.INTENT_REQUEST_KEY, SettingsContainerActivity.INTENT_ACCOUNT);
-                intent.putExtra(SettingsContainerActivity.CONFIRMATION_CODE, code);
-                startActivity(intent);
-
-            }
-        }
-        getIntent().setData(null);
-    }
-
-    private boolean checkHost(Uri data) {
-        Pattern topfacePattern = Pattern.compile(".*topface\\.ru|.*topface\\.com");
-        return data != null && topfacePattern.matcher(data.getHost()).matches();
-    }
 
     private void checkProfileUpdate() {
         long startTime = Calendar.getInstance().getTimeInMillis();
-        long stopTime = mPreferences.getLong(Static.PREFERENCES_STOP_TIME, -1);
+        long stopTime = getPreferences().getLong(Static.PREFERENCES_STOP_TIME, -1);
         if (stopTime != -1) {
             if (startTime - stopTime > UPDATE_INTERVAL) {
                 App.sendProfileRequest();
@@ -405,7 +496,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     @Override
     public void onBackPressed() {
-        if (mFragmentSwitcher != null) {
+        if (isFullScreenBannerVisible) {
+            hideFullscreenBanner((ViewGroup) findViewById(R.id.loBannerContainer));
+        } else if (mFragmentSwitcher != null) {
             if (mFragmentSwitcher.getAnimationState() == FragmentSwitchController.EXPAND) {
                 super.onBackPressed();
             } else {
@@ -597,7 +690,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         new Thread(new Runnable() {
             @Override
             public void run() {
-                mPreferences.edit().putLong(Static.PREFERENCES_STOP_TIME, System.currentTimeMillis()).commit();
+                getPreferences().edit().putLong(Static.PREFERENCES_STOP_TIME, System.currentTimeMillis()).commit();
             }
         }).start();
     }
@@ -660,12 +753,12 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == ContainerActivity.INTENT_CHAT_FRAGMENT) {
                 if (data != null) {
                     int user_id = data.getExtras().getInt(ChatFragment.INTENT_USER_ID);
                     mDelayedFragment = ProfileFragment.newInstance(user_id, ProfileFragment.TYPE_USER_PROFILE);
-                    return;
                 }
             } else if (requestCode == CitySearchActivity.INTENT_CITY_SEARCH_AFTER_REGISTRATION ||
                     requestCode == CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY) {
@@ -693,6 +786,33 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 }
             }
         }
-        super.onActivityResult(requestCode, resultCode, data);
+
     }
+
+    ExternalLinkExecuter.OnExternalLinkListener listener = new ExternalLinkExecuter.OnExternalLinkListener() {
+        @Override
+        public void onProfileLink(int profileID) {
+            int profileType = profileID == CacheProfile.uid ? ProfileFragment.TYPE_MY_PROFILE : ProfileFragment.TYPE_USER_PROFILE;
+            onExtraFragment(ProfileFragment.newInstance(profileID, profileType));
+            getIntent().setData(null);
+        }
+
+        @Override
+        public void onConfirmLink(String code) {
+            AuthToken token = AuthToken.getInstance();
+            if (!token.isEmpty() && token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+                Intent intent = new Intent(NavigationActivity.this, SettingsContainerActivity.class);
+                intent.putExtra(Static.INTENT_REQUEST_KEY, SettingsContainerActivity.INTENT_ACCOUNT);
+                intent.putExtra(SettingsContainerActivity.CONFIRMATION_CODE, code);
+                startActivity(intent);
+            }
+            getIntent().setData(null);
+        }
+
+        @Override
+        public void onOfferWall() {
+            Offerwalls.startOfferwall(NavigationActivity.this);
+            getIntent().setData(null);
+        }
+    };
 }

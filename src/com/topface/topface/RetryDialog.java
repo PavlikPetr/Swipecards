@@ -40,22 +40,6 @@ public class RetryDialog extends AlertDialog {
         anim.setRepeatCount(Animation.INFINITE);
         anim.setDuration(3000);
         anim.setInterpolator(new LinearInterpolator());
-        anim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                Debug.log("ANIMATION:: start");
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                Debug.log("ANIMATION:: end");
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-                Debug.log("ANIMATION:: repeat");
-            }
-        });
 //        satelite.setAnimation(anim);
         satelite.startAnimation(anim);
 
@@ -64,7 +48,13 @@ public class RetryDialog extends AlertDialog {
             public void onReceive(Context context, Intent intent) {
                 if (intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE, 0) != ConnectionChangeReceiver.CONNECTION_OFFLINE) {
                     mRequest.exec();
-                    cancel();
+                    if (isShowing()) {
+                        try {
+                            cancel();
+                        } catch (Exception e) {
+                            Debug.error(e);
+                        }
+                    }
                 }
             }
         };

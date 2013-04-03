@@ -393,4 +393,8 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
         json.put("links", jsonLinks);
         return json;
     }
+
+    public boolean isEmpty() {
+        return links == null || links.isEmpty();
+    }
 }

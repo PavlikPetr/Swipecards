@@ -13,7 +13,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:src="@drawable/chat_add_selector"
-            android:background="@android:color/transparent"/>
+            android:background="@android:color/transparent"
+            android:padding="6dp"/>
 
     <EditText
             android:id="@+id/edChatBox"
@@ -26,7 +27,7 @@
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
             android:singleLine="false"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:maxLines="5"
             android:imeOptions="actionSend"
             android:capitalize="sentences"

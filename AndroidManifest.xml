@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.topface.topface"
           android:installLocation="auto"
-          android:versionCode="58"
-          android:versionName="2.3.4">
+          android:versionCode="65"
+          android:versionName="2.3.9">
 
     <uses-sdk
             android:minSdkVersion="7"
@@ -59,7 +59,6 @@
                 >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
 
             </intent-filter>
@@ -67,12 +66,13 @@
                 <action android:name="android.intent.action.VIEW"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.BROWSABLE" />
+
 
                 <data
                         android:scheme="http"
                         android:host="topface.com"
-                        android:pathPattern="/profile"/>
+                        android:pathPrefix="/profile"/>
 
                 <data
                         android:scheme="http"
@@ -108,6 +108,28 @@
                         android:scheme="https"
                         android:host="topface.ru"
                         android:pathPrefix="/confirm"/>
+
+                />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="topface"
+                    android:host="offerwall"
+                    />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                        android:scheme="topface"
+
+                        />
             </intent-filter>
         </activity>
         <activity
@@ -170,6 +192,9 @@
                 android:configChanges="keyboardHidden|orientation"/>
 
         <activity
+                android:name=".ui.PaymentwallActivity"/>
+
+        <activity
                 android:name="com.sponsorpay.sdk.android.publisher.OfferWallActivity"
                 android:configChanges="orientation"/>
 
@@ -205,6 +230,13 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".receivers.TestNotificationsReceiver">
+            <intent-filter>
+                <action android:name="com.topface.topface.NOTIFY"/>
+            </intent-filter>
+        </receiver>
+
+
         <!-- gcm -->
         <service android:name=".GCMIntentService"/>
         <receiver
@@ -234,6 +266,8 @@
                 <action android:name="com.android.vending.INSTALL_REFERRER"/>
             </intent-filter>
         </receiver>
+
+
 
         <!-- providers -->
         <provider

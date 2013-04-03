@@ -313,7 +313,7 @@
     <string name="leaders_select_photo_info">Alegeti cea mai tare poza! Poze cu rating mic nu se pot alege</string>
     <string name="default_price_format">Total: %.2f USD</string>
     <string name="dating_online_only">%s, numai online</string>
-    <string name="leaders_pick_condition">Dmv nu puteti alege poza cu rating mai mic %d%%:</string>
+    <string name="leaders_pick_condition">Dmv nu puteti alege fotografie cu rating mai jos de %d%%</string>
     <string name="map_popup_address">Adresa</string>
     <string name="black_list_info">Ati adaugat o persoana in lista neagra. De schimbat acest lucru se poate in profilul Dmv, in setarile VIP-statut.</string>
     <string name="general_gift">Cadou</string>
@@ -382,4 +382,14 @@
     <string name="buy_vip_month_one">%1$d luni pentru %2$.2f %3$@</string>
     <string name="buy_vip_month_few">%1$d luni pana pe %2$.2f %3$@</string>
     <string name="buy_vip_month_other">%1$d luni pana pe %2$.2f %3$@</string>
+    <string name="buy_special_offers">Oferte speciale</string>
+    <string name="user_does_not_have_gifts">Acest utilizator momentan nu are cadouri, fi primul si vei fi observat</string>
+    <string name="status_is_empty">Dmv nu aveti instalat statutul</string>
+    <string name="you_dont_have_gifts_yet">Dmv, acum nu aveti cadouri</string>
+    <string name="buy_sympathies">Cumpara simpatii</string>
+    <string name="upload_photos">Incarca poze</string>
+    <string name="chat_no_message_title">Incepe conversarea!</string>
+    <string name="chat_no_message_text">Scrie un mesaj sau trimite un cadou si neaparat vei primi raspuns</string>
+    <string name="user_baned">Utilizatorul a fost blocat</string>
+    <string name="general_choose_city">Alege orasul</string>
 </resources>

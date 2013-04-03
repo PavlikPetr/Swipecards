@@ -325,7 +325,7 @@
     <string name="vip_state_on">Ваш VIP-статус активирован</string>
     <string name="vip_abilities">Ваши VIP возможности</string>
     <string name="vip_why">Почему вам так важно быть VIP</string>
-    <string name="vip_info_delight">Отправляйте восхищения бесплатно - вражайте свои чувства по максимуму!</string>
+    <string name="vip_info_delight">Отправляйте восхищения бесплатно - выражайте свои чувства по максимуму!</string>
     <string name="vip_info_guest">Узнайте, кто вами интересовался - смотрите своих гостей!</string>
     <string name="vip_info_invisible">Оставайтесь незамеченными, посещая чужие страницы, благодаря режиму
         \"невидимка\"
@@ -359,7 +359,7 @@
     <string name="profile_get_status">Опишите Ваше настроение</string>
     <string name="map_title">Карта</string>
 
-    <string name="settings_want_answer">Я хочу что бы мне ответили</string>
+    <string name="settings_want_answer">Я хочу, чтобы мне ответили</string>
     <string name="settings_feedback_email">Email для связи</string>
     <string name="settings_invalid_email">Некорректный Email</string>
 
@@ -421,7 +421,7 @@
     </string>
     <string name="default_price_format">Итого: %.2f USD</string>
     <string name="dating_online_only">%s, только онлайн</string>
-    <string name="leaders_pick_condition">Вы не можете выбрать фото с рейтингом ниже %d%%: </string>
+    <string name="leaders_pick_condition">Вы не можете выбрать фото с рейтингом ниже %d%%:</string>
     <string name="map_popup_address">Адрес</string>
     <string name="black_list_info">Вы добавили собеседника в черный список. Изменить это можно в своем профиле, в настройках VIP-статуса.</string>
     <string name="general_gift">Подарок</string>
@@ -465,7 +465,7 @@
     <string name="photo_is_too_small">Вы отлично выглядете на этой фотографии, но для того, чтобы все пользователи оценили ваш снимок, от должен быть чуть больше: не менее %s</string>
     <string name="photo_for_avatar">Фотография готова к отправке в профиль! Это ваша первая фотография и она будет использоваться как ваша аватарка.</string>
 
-    <string name="get_it_for_free">Получить бесплатно</string>
+    <string name="get_it_for_free">Получить монеты бесплатно</string>
     <string name="vip_advantages">Преимущества VIP</string>
 
     <string name="change_email">Сменить e-mail</string>
@@ -500,5 +500,39 @@
     <string name="buy_vip_month_one">%1$d месяц за %2$.2f %3$@</string>
     <string name="buy_vip_month_few">%1$d месяца по %2$.2f %3$@</string>
     <string name="buy_vip_month_other">%1$d месяцев по %2$.2f %3$@</string>
+    <string name="buy_special_offers">Специальные предложения</string>
 
+    <string name="user_does_not_have_gifts">У этого пользователя пока нет подарков, будьте первым и вас заметят</string>
+    <string name="status_is_empty">У вас не установлен статус</string>
+    <string name="you_dont_have_gifts_yet">У вас пока нет подарков</string>
+    <string name="buy_sympathies">Купить симпатии</string>
+    <string name="upload_photos">Загрузите фотографии</string>
+    <string name="chat_no_message_title">Начните общение!</string>
+    <string name="chat_no_message_text">Напишите сообщение или отправьте подарок и вам обязательно ответят</string>
+    <string name="user_baned">Пользователь забанен</string>
+    <string name="general_choose_city">Выберите город</string>
+    <string name="buy_mobile_payments">Другие способы оплаты</string>
+    <string name="buy_mobile_payments_complete">Оплата произведена. Ваш заказ обрабатывается, пожалуйста подождите</string>
+    <string name="general_save_and_exit">Сохранить и выйти</string>
+    <string name="general_set_password">Установите пароль перед выходом из приложения</string>
+    <string name="user_is_deleted">Пользователь удален</string>
+    <string name="general_bookmarks_title">Избранные</string>
+    <string name="general_empty_bookmarks">Нет избранных</string>
+    <string name="general_bookmarks">Избранные</string>
+    <string name="general_fans">Поклонники</string>
+    <string name="general_no_fans">Нет поклонников</string>
+
+    <plurals name="get_free_money">
+        <item quantity="one">%d монета бесплатно</item>
+        <item quantity="few">%d монеты бесплатно</item>
+        <item quantity="many">%d монет бесплатно</item>
+        <item quantity="other">%d монет бесплатно</item>
+    </plurals>
+
+    <string name="settings_edit_profile">Редактировать профиль</string>
+    <string name="general_bookmarks_delete">Удалить из избранных</string>
+    <string name="general_bookmarks_add">Добавить в избранные</string>
+    <string name="buy_resources">Пополнить запас</string>
+    <string name="general_network_reconnect">Пытаемся восстановить соединение с сетью</string>
+    <string name="user_is_banned">Пользователь забанен</string>
 </resources>

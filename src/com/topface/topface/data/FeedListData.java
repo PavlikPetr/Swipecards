@@ -5,14 +5,10 @@ import com.topface.topface.utils.Debug;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-
 public class FeedListData<T extends FeedItem> extends AbstractData {
 
-    private static final int NO_TYPE = -1;
     public boolean more;
     public FeedList<T> items;
-    public HashMap<String, Integer> counters;
     private final Class<T> mClass;
 
     public FeedListData(JSONObject data, Class<T> itemClass) {

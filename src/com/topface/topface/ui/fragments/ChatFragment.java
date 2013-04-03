@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -41,10 +43,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.TimerTask;
 
-public class ChatFragment extends BaseFragment implements View.OnClickListener,
-        LocationListener {
+public class ChatFragment extends BaseFragment implements View.OnClickListener, LocationListener {
 
-    private static final int LIMIT = 50;
+    public static final int LIMIT = 50;
 
     public static final String FRIEND_FEED_USER = "user_profile";
     public static final String ADAPTER_DATA = "adapter";
@@ -57,9 +58,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
     public static final String INTENT_ITEM_ID = "item_id";
     public static final String MAKE_ITEM_READ = "com.topface.topface.feedfragment.MAKE_READ";
-
-    static {
-    }
 
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
 
@@ -83,6 +81,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     private SwapControl mSwapControl;
     private Button mAddToBlackList;
     private ImageButton mBtnChatAdd;
+    private ActionBar mActionBar;
 
     private String[] editButtonsNames;
     private boolean mReceiverRegistered = false;
@@ -102,7 +101,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        super.onCreateView(inflater, container, savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.ac_chat, null);
 
         Debug.log(this, "+onCreate");
@@ -194,18 +193,29 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     private void restoreData(Bundle savedInstanceState) {
         if (mHistoryData == null) {
             if (savedInstanceState != null) {
-                boolean was_failed = savedInstanceState.getBoolean(WAS_FAILED);
-                ArrayList<History> list = savedInstanceState.getParcelableArrayList(ADAPTER_DATA);
-                mHistoryData = new FeedList<History>();
-                mHistoryData.addAll(list);
                 try {
+                    boolean was_failed = savedInstanceState.getBoolean(WAS_FAILED);
+                    ArrayList<History> list = savedInstanceState.getParcelableArrayList(ADAPTER_DATA);
+                    mHistoryData = new FeedList<History>();
+                    if (list != null) {
+                        for (History item : list) {
+                            if (item != null) {
+                                mHistoryData.add(item);
+                            }
+                        }
+                    }
                     mUser = new FeedUser(new JSONObject(savedInstanceState.getString(FRIEND_FEED_USER)));
+                    if (was_failed) {
+                        mLockScreen.setVisibility(View.VISIBLE);
+                    } else {
+                        mLockScreen.setVisibility(View.GONE);
+                    }
+                    mLoadingLocker.setVisibility(View.GONE);
                 } catch (Exception e) {
                     Debug.error(e);
+                } catch (OutOfMemoryError e) {
+                    Debug.error(e);
                 }
-                if (was_failed) mLockScreen.setVisibility(View.VISIBLE);
-                else mLockScreen.setVisibility(View.GONE);
-                mLoadingLocker.setVisibility(View.GONE);
             }
             if (mHistoryData == null) {
                 mHistoryData = new FeedList<History>();
@@ -270,12 +280,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void initNavigationbar(View root, int userSex, String userName, int userAge, String userCity) {
-        ActionBar actionBar = getActionBar(root);
+        mActionBar = getActionBar(root);
 
-        actionBar.setTitleText(userName + ", "
-                + userAge);
-        actionBar.setSubTitleText(userCity);
-        actionBar.showBackButton(new View.OnClickListener() {
+        mActionBar.showBackButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().finish();
@@ -283,7 +290,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 getActivity().setResult(Activity.RESULT_CANCELED);
             }
         });
-        actionBar.showProfileButton(this, userSex);
+
+        setNavigationTitles(userSex, userName, userAge, userCity);
+    }
+
+    private void setNavigationTitles(int userSex, String userName, int userAge, String userCity) {
+        String userTitle = (TextUtils.isEmpty(userName) && userAge == 0) ? Static.EMPTY : (userName + "," + userAge);
+        mActionBar.setTitleText(userTitle);
+        mActionBar.setSubTitleText(userCity);
+        mActionBar.showProfileButton(this, userSex);
     }
 
     @Override
@@ -309,7 +324,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         dr.callback(new DataApiHandler() {
             @Override
             protected void success(Object data, ApiResponse response) {
-                mAdapter.removeItem(position);
+                mAdapter.removeItem(mAdapter.getPosition(position));
             }
 
             @Override
@@ -370,14 +385,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID, itemId));
                     itemId = -1;
                 }
+                setNavigationTitles(data.user.sex, data.user.first_name, data.user.age, data.user.city.name);
                 wasFailed = false;
                 mAdapter.setUser(data.user);
-                if (mAdapter != null) {
+                mUser = data.user;
+                if (mAdapter != null && !data.items.isEmpty()) {
                     if (pullToRefresh) {
                         mAdapter.addFirst(data.items, data.more, mListView.getRefreshableView());
-                        if (mListView != null) {
-                            mListView.onRefreshComplete();
-                        }
                     } else if (scrollRefresh) {
                         mAdapter.addAll(data.items, data.more, mListView.getRefreshableView());
                     } else {
@@ -403,9 +417,19 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 if (mRetryView != null && isAdded()) {
                     mRetryView.setErrorMsg(getString(R.string.general_data_error));
                 }
-                mLockScreen.setVisibility(View.VISIBLE);
+                if (mLockScreen != null) {
+                    mLockScreen.setVisibility(View.VISIBLE);
+                }
                 wasFailed = true;
                 mIsUpdating = false;
+            }
+
+            @Override
+            public void always(ApiResponse response) {
+                super.always(response);
+                if (pullToRefresh && mListView != null) {
+                    mListView.onRefreshComplete();
+                }
             }
         }).exec();
     }
@@ -447,22 +471,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                         GiftsActivity.INTENT_REQUEST_GIFT);
                 EasyTracker.getTracker().trackEvent("Chat", "SendGiftClick", "", 1L);
                 break;
-//            case R.id.btnChatPlace: {
-//                // Toast.makeText(getActivity(), "Place",
-//                // Toast.LENGTH_SHORT).show();
-//                EasyTracker.getTracker().trackEvent("Chat", "SendPlaceClick", "", 1L);
-//            }
-//            break;
             case R.id.btnChatPlace:
                 if (Utils.isGoogleMapsAvailable()) {
                     startActivityForResult(new Intent(getActivity(), GeoMapActivity.class),
                             GeoMapActivity.INTENT_REQUEST_GEO);
-                    // Toast.makeText(getActivity(), "Map",
+                    // Toast.makeText(App.getContext(), "Map",
                     // Toast.LENGTH_SHORT).show();
                     EasyTracker.getTracker().trackEvent("Chat", "SendMapClick", "§", 1L);
                 }
                 break;
-
             case R.id.chat_message:
                 break;
             case R.id.btnNavigationProfileBar:
@@ -505,8 +522,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             public void always(ApiResponse response) {
                 super.always(response);
                 isInBlackList = false;
-                mAddToBlackList.setText(R.string.black_list_add);
-                mAddToBlackList.setEnabled(true);
+                if (mAddToBlackList != null) {
+                    mAddToBlackList.setText(R.string.black_list_add);
+                    mAddToBlackList.setEnabled(true);
+                }
             }
         }).exec();
     }
@@ -519,8 +538,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             public void always(ApiResponse response) {
                 super.always(response);
                 isInBlackList = true;
-                mAddToBlackList.setText(R.string.black_list_delete);
-                mAddToBlackList.setEnabled(true);
+                if (mAddToBlackList != null) {
+                    mAddToBlackList.setText(R.string.black_list_delete);
+                    mAddToBlackList.setEnabled(true);
+                }
             }
         }).exec();
     }
@@ -569,7 +590,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
-                mLoadingLocker.setVisibility(View.VISIBLE);
+                //mLoadingLocker.setVisibility(View.VISIBLE);
                 Bundle extras = data.getExtras();
                 final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
                 final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
@@ -620,7 +641,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                 mAdapter.showRetrySendMessage(fakeItem, coordRequest);
             }
         }).exec();
@@ -642,7 +663,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 CacheProfile.money = data.money;
                 Debug.log(getActivity(), "likes:" + data.likes + " money:" + data.money);
                 data.history.target = FeedDialog.USER_MESSAGE;
-                mLoadingLocker.setVisibility(View.GONE);
                 if (mAdapter != null) {
                     mAdapter.replaceMessage(fakeItem, data.history, mListView.getRefreshableView());
                 }
@@ -664,12 +684,24 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 }
                 mAdapter.showRetrySendMessage(fakeItem, sendGift);
             }
+
+            @Override
+            public void always(ApiResponse response) {
+                super.always(response);
+                mLoadingLocker.setVisibility(View.GONE);
+            }
         }).exec();
     }
 
     private boolean sendMessage() {
+        if (TextUtils.isEmpty(mEditBox.getText().toString().trim())) {
+            return false;
+        }
+
         final History fakeItem = new History(IListLoader.ItemType.WAITING);
-        mAdapter.addSentMessage(fakeItem, mListView.getRefreshableView());
+        if(mAdapter != null && mListView != null) {
+            mAdapter.addSentMessage(fakeItem, mListView.getRefreshableView());
+        }
 
         final String text = mEditBox.getText().toString();
         if (text == null || text.length() == 0)
@@ -696,8 +728,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                Toast.makeText(getActivity(), getString(R.string.general_data_error), Toast.LENGTH_SHORT).show();
-                mAdapter.showRetrySendMessage(fakeItem, messageRequest);
+                if(mAdapter != null) {
+                    Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
+                    mAdapter.showRetrySendMessage(fakeItem, messageRequest);
+                }
             }
         }).exec();
         return true;
@@ -739,7 +773,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
                     @Override
                     public void fail(int codeError, ApiResponse response) {
-                        Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                         mAdapter.showRetrySendMessage(fakeItem, coordRequest);
                     }
                 }).exec();

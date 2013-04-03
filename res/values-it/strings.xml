@@ -379,4 +379,18 @@
     <string name="buy_vip_month_one">%1$d mese a %2$.2f %3$@</string>
     <string name="buy_vip_month_few">%1$d mesi a %2$.2f %3$@</string>
     <string name="buy_vip_month_other">%1$d mesi a %2$.2f %3$@</string>
+    <string name="buy_special_offers">Offerte speciali</string>
+    <string name="user_does_not_have_gifts">Questo utente non ha ancora ricevuto regali, fagliene uno e ti distinguerai</string>
+    <string name="status_is_empty">Non hai impostato il tuo stato</string>
+    <string name="you_dont_have_gifts_yet">Non hai ancora ricevuto regali</string>
+    <string name="buy_sympathies">Compra simpatie</string>
+    <string name="upload_photos">Carica le foto</string>
+    <string name="chat_no_message_title">Inizia a chattare!</string>
+    <string name="chat_no_message_text">Scrivi un messaggio o invia un regalo e avrai la risposta</string>
+    <string name="user_baned">L’utente è stato bannato</string>
+    <string name="general_choose_city">Scegli città</string>
+    <string name="buy_mobile_payments">Altre modalità di pagamento</string>
+    <string name="buy_mobile_payments_complete">Il pagamento è stato effettuato. Attendere, prego! Il tuo ordine è in fase di elaborazione.</string>
+    <string name="general_save_and_exit">Salva ed esci</string>
+    <string name="general_set_password">Imposta la password prima di uscire</string>
 </resources>

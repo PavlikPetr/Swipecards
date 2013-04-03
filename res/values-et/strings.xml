@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Topface</string>
-    <string name="app_locale">et_ES</string>
+    <string name="app_locale">et_EE</string>
     <string name="general_error">VIGA</string>
     <string name="general_warning">HOIATUS</string>
     <string name="general_ok">OK</string>
@@ -144,6 +144,7 @@ Sa oled müksanud.</string>
     <string name="settings_on">on sisse lülitatud</string>
     <string name="settings_off">on välja lülitatud</string>
     <string name="settings_notifications">Teated</string>
+    <string name="settings_notifications_summary">Teated uute sõnumite ja meeldimiste kohta</string>
     <string name="settings_select_ringtone">Valida helina toon</string>
     <string name="settings_vibration">Vibromärguanne</string>
     <string name="settings_photo_preloading">Fotode/piltide eellaadimine</string>
@@ -238,6 +239,7 @@ Sa oled müksanud.</string>
     <string name="vip_abilities">Sinu VIP võimalused</string>
     <string name="vip_why">Miks on nii oluline VIP olla</string>
     <string name="vip_info_guest">Saa teada, kes on sinu vastu huvi tundnud - vaata omad külalised ära!</string>
+    <string name="vip_info_blackList">Saa tüütudest isikutest lahti \"musta nimekirja\" abil</string>
     <string name="vip_info_title">VIP-eelised</string>
     <string name="black_list_retrieve">Taastada</string>
     <string name="buying_vip_status">VIP-staatust osta</string>
@@ -282,9 +284,9 @@ Sa oled müksanud.</string>
     <string name="leaders_select_photo_info">Vali kõige efektsem foto välja! Madalama reitinguga fotode valimine ei ole lubatud.</string>
     <string name="default_price_format">Kokku:</string>
     <string name="dating_online_only">%s, ainult on-line\'is olevad</string>
-    <string name="leaders_pick_condition">Sa ei saa valida fotosid, mille rating on %d%% madalam:</string>
     <string name="map_popup_address">Aadress</string>
     <string name="general_gift">Kingitus</string>
+    <string name="user_actions_chat">Jutt</string>
     <string name="general_place">Koht</string>
     <string name="general_soon">Varsti tuleb</string>
     <string name="black_list_activation">Aktiveeri VIP-staatust ja kasuta musta nimekirja</string>
@@ -315,6 +317,8 @@ Sa oled müksanud.</string>
     <string name="gallery">Galerii</string>
     <string name="get_it_for_free">Saada tasuta</string>
     <string name="vip_advantages">VIP\'i eeldused</string>
+    <string name="change_email">Vahetada e-posti aadress</string>
+    <string name="change_password">Muuta salasõna</string>
     <string name="password_changing">Salasõna muutmine</string>
     <string name="save">Salvestada</string>
     <string name="password_hint">salasõna</string>
@@ -323,11 +327,21 @@ Sa oled müksanud.</string>
     <string name="enter_password_confirmation">Sisesta salasõna kinnitus</string>
     <string name="passwords_mismatched">Salasõnad ei lange kokku</string>
     <string name="passwords_changed">Salasõna on ära muudetud</string>
+    <string name="take_photo">Teha foto</string>
     <string name="take_another_photo">Teine foto</string>
     <string name="we_detect_your_city">Meie oleme sinu linna kindlaks määranud/teinud:</string>
     <string name="reselect_city">Valida teine linn:</string>
+    <string name="email_confirmed">e-posti aadress on ära kinnitatud!</string>
+    <string name="sympathy_sended">Meeldimine on ära saadetud.</string>
+    <string name="general_photo_deleted">Sinu foto ei vasta reeglite nõuetele ja oli eemaldatud/kustutatud.</string>
     <string name="buying_total">Kokku</string>
     <string name="buying_economy">Sääst</string>
     <string name="general_change">Ära muuta</string>
     <string name="general_correct">Kõik on õige</string>
+    <string name="password_sent">Uus salasõna on saadetud sinu e-posti aadressile</string>
+    <string name="buy_vip_month_one">%1$d kuud %2$.2f %3$@ eest</string>
+    <string name="buy_vip_month_few">%1$d kuud %2$.2f %3$@ eest</string>
+    <string name="buy_vip_month_other">%1$d kuud %2$.2f %3$@ eest</string>
+    <string name="buy_special_offers">Eripakkumised</string>
+    <string name="buy_sympathies">Osta meeldimised</string>
 </resources>

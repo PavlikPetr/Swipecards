@@ -21,7 +21,7 @@ public class CacheProfile {
     public static int uid;             // id пользователя в топфейсе
     public static String first_name;   // имя пользователя
     public static int age;             // возраст пользователя
-    public static int sex;             // секс пользователя
+    public static int sex;             // пол пользователя
     public static int unread_likes;    // количество непрочитанных “понравилось” пользователя
     public static int unread_messages; // количество непрочитанных сообщений пользователя
     public static int unread_mutual;   // количество непрочитанных симпатий
@@ -259,11 +259,6 @@ public class CacheProfile {
         return age > 0;
     }
 
-    public static boolean shouldChangeProfile(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        return preferences != null && preferences.getBoolean(Static.PREFERENCES_TAG_NEED_EDIT, true);
-    }
-
     public static boolean wasCityAsked = false;
     public static boolean wasAvatarAsked = false;
 
@@ -294,7 +289,7 @@ public class CacheProfile {
     public static void onRegistration(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(Static.PREFERENCES_TAG_NEED_CHANGE_PASSWORD, true);
+        editor.putBoolean(Static.PREFERENCES_TAG_NEED_CHANGE_PASSWORD, false);
         editor.putBoolean(Static.PREFERENCES_TAG_NEED_CITY_CONFIRM, true);
         editor.commit();
     }

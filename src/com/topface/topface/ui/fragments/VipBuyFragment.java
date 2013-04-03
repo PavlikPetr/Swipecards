@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.billing.BillingFragment;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
@@ -69,7 +70,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_buy_premium, null);
         initViews(view);
-        if( getArguments() != null && getArguments().getBoolean(ACTION_BAR_CONST, false) ) {
+        if (getArguments() != null && getArguments().getBoolean(ACTION_BAR_CONST, false)) {
             view.findViewById(R.id.navBar).setVisibility(View.VISIBLE);
             view.findViewById(R.id.headerShadow).setVisibility(View.VISIBLE);
             ActionBar actionBar = getActionBar(view);
@@ -282,7 +283,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     public void onSubscritionUnsupported() {
         //Если подписка не поддерживается, сообщаем об этом пользователю
         if (!CacheProfile.premium) {
-            Toast.makeText(getActivity(), R.string.buy_play_market_not_available, Toast.LENGTH_SHORT)
+            Toast.makeText(App.getContext(), R.string.buy_play_market_not_available, Toast.LENGTH_SHORT)
                     .show();
         }
     }

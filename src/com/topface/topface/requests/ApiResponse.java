@@ -14,6 +14,7 @@ public class ApiResponse implements IApiResponse, SerializableToJson {
     public JSONObject jsonResult;
     public JSONObject counters;
     public String method;
+    public String id;
 
     /**
      * Конструиерует объект ответа от сервера с указаной ошибкой
@@ -80,6 +81,9 @@ public class ApiResponse implements IApiResponse, SerializableToJson {
                 }
                 if (!jsonResult.isNull("method")) {
                     method = jsonResult.optString("method");
+                }
+                if (!jsonResult.isNull("id")) {
+                    id = jsonResult.optString("id");
                 }
                 jsonResult = jsonResult.getJSONObject("result");
                 code = RESULT_OK;

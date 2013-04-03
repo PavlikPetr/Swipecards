@@ -46,14 +46,18 @@ public abstract class ApiRequest implements IApiRequest {
 
     public ApiRequest(Context context) {
         //Нельзя передавать Application Context!!!! Только контекст Activity
-        ssid = Static.EMPTY;
+        if (isNeedAuth()) {
+            ssid = Static.EMPTY;
+        }
         this.context = context;
         doNeedAlert = true;
     }
 
     public ApiRequest callback(ApiHandler handler) {
-        this.handler = handler;
-        this.handler.setContext(context);
+        if (handler != null) {
+            this.handler = handler;
+            this.handler.setContext(context);
+        }
         return this;
     }
 
@@ -64,7 +68,9 @@ public abstract class ApiRequest implements IApiRequest {
 
         if (context != null && !App.isOnline() && doNeedAlert) {
             RetryDialog retryDialog = new RetryDialog(context, this);
-            handler.fail(0, new ApiResponse(ApiResponse.ERRORS_PROCCESED, "App is offline"));
+            if (handler != null) {
+                handler.fail(0, new ApiResponse(ApiResponse.ERRORS_PROCCESED, "App is offline"));
+            }
             try {
                 retryDialog.show();
             } catch (Exception e) {
@@ -118,10 +124,11 @@ public abstract class ApiRequest implements IApiRequest {
 
     @Override
     public void cancel() {
+        setFinished();
+        canceled = true;
         if (handler != null) {
             handler.cancel();
         }
-        setFinished();
     }
 
     private void setStopTime() {
@@ -158,8 +165,6 @@ public abstract class ApiRequest implements IApiRequest {
     public void setFinished() {
         closeConnection();
         mPostData = null;
-        handler = null;
-        canceled = true;
     }
 
     @Override
@@ -182,11 +187,13 @@ public abstract class ApiRequest implements IApiRequest {
 
     @Override
     public void setSsid(String ssid) {
-        //Если SSID изменился, то сбрасываем кэш данных запроса
-        if (!TextUtils.equals(ssid, this.ssid)) {
-            mPostData = null;
+        if (isNeedAuth()) {
+            //Если SSID изменился, то сбрасываем кэш данных запроса
+            if (!TextUtils.equals(ssid, this.ssid)) {
+                mPostData = null;
+            }
+            this.ssid = ssid;
         }
-        this.ssid = ssid;
     }
 
     @Override
@@ -207,7 +214,9 @@ public abstract class ApiRequest implements IApiRequest {
         try {
             root.put("id", getId());
             root.put("service", getServiceName());
-            root.put("ssid", ssid);
+            if (isNeedAuth()) {
+                root.put("ssid", ssid);
+            }
             JSONObject data = getRequestData();
             if (data != null) {
                 root.put("data", data);
@@ -264,14 +273,19 @@ public abstract class ApiRequest implements IApiRequest {
     @Override
     final public int sendRequest() throws Exception {
         HttpURLConnection connection = getConnection();
-        //Непосредственно перед отправкой запроса устанавливаем новый SSID
-        setSsid(Ssid.get());
-        //Непосредственно пишим данные в подключение
-        if (writeData(connection)) {
-            //Возвращаем HTTP статус ответа
-            return getResponseCode(connection);
+        if (connection != null) {
+            //Непосредственно перед отправкой запроса устанавливаем новый SSID
+            setSsid(Ssid.get());
+            //Непосредственно пишим данные в подключение
+            if (writeData(connection)) {
+                //Возвращаем HTTP статус ответа
+                return getResponseCode(connection);
+            } else {
+                //Если не удалось записать данные, то пишем ошибку запроса
+                return -1;
+            }
         } else {
-            //Если не удалось записать данные, то пишем ошибку запроса
+            Debug.error("CM: getConnection() return null");
             return -1;
         }
 
@@ -314,7 +328,10 @@ public abstract class ApiRequest implements IApiRequest {
 
     @Override
     public String readRequestResult() throws IOException {
-        return HttpUtils.readStringFromConnection(getConnection());
+        HttpURLConnection connection = getConnection();
+        String result = HttpUtils.readStringFromConnection(connection);
+        closeConnection();
+        return result;
     }
 
     /**
@@ -341,5 +358,10 @@ public abstract class ApiRequest implements IApiRequest {
     @Override
     public IApiResponse constructApiResponse(int code, String message) {
         return new ApiResponse(code, message);
+    }
+
+    @Override
+    public boolean isNeedAuth() {
+        return true;
     }
 }

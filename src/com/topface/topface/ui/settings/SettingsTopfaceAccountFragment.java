@@ -37,6 +37,7 @@ import com.topface.topface.utils.social.AuthorizationManager;
 public class SettingsTopfaceAccountFragment extends BaseFragment implements OnClickListener {
 
     public static final int RESULT_LOGOUT = 666;
+    public static final String NEED_EXIT = "NEED_EXIT";
     private LockerView mLockerView;
     private EditText mEditText;
     private TextView mText;
@@ -61,7 +62,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         mLockerView = (LockerView) root.findViewById(R.id.llvLogoutLoading);
         mLockerView.setVisibility(View.GONE);
 
-        String code = ((SettingsContainerActivity)getActivity()).getConfirmationCode();
+        String code = ((SettingsContainerActivity) getActivity()).getConfirmationCode();
 
         if (code != null) {
             ConfirmRequest request = new ConfirmRequest(getActivity(), AuthToken.getInstance().getLogin(), code);
@@ -69,20 +70,24 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             request.callback(new ApiHandler() {
                 @Override
                 public void success(ApiResponse response) {
-                    Toast.makeText(getActivity(), getString(R.string.email_confirmed), 1500).show();
+                    Toast.makeText(App.getContext(), R.string.email_confirmed, 1500).show();
                     CacheProfile.emailConfirmed = true;
-                    setViewsState();
+                    if (isAdded()) {
+                        setViewsState();
+                    }
                 }
 
                 @Override
                 public void fail(int codeError, ApiResponse response) {
-                    Toast.makeText(getActivity(), R.string.general_server_error, 1500).show();
+                    Toast.makeText(App.getContext(), R.string.general_server_error, 1500).show();
                 }
 
                 @Override
                 public void always(ApiResponse response) {
                     super.always(response);
-                    mLockerView.setVisibility(View.GONE);
+                    if (mLockerView != null) {
+                        mLockerView.setVisibility(View.GONE);
+                    }
                 }
             }).exec();
         } else {
@@ -115,7 +120,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -177,11 +182,11 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
     private void setButtonsState() {
         if (CacheProfile.emailConfirmed) {
-            if (CacheProfile.needToChangePassword(App.getContext())) {
-                mBtnLogout.setVisibility(View.GONE);
-            } else {
-                mBtnLogout.setVisibility(View.VISIBLE);
-            }
+//            if (CacheProfile.needToChangePassword(App.getContext())) {
+//                mBtnLogout.setVisibility(View.GONE);
+//            } else {
+            mBtnLogout.setVisibility(View.VISIBLE);
+//            }
 
             setChangeBtnAction(ACTION_CHANGE_PASSWORD);
         } else {
@@ -223,7 +228,13 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         hideSoftKeyboard();
         switch (v.getId()) {
             case R.id.btnLogout:
-                showExitPopup();
+                if (CacheProfile.needToChangePassword(App.getContext())) {
+                    Intent intent = new Intent(getActivity().getApplicationContext(), SettingsContainerActivity.class);
+                    intent.putExtra(NEED_EXIT, true);
+                    startActivityForResult(intent, SettingsContainerActivity.INTENT_CHANGE_PASSWORD);
+                } else {
+                    showExitPopup();
+                }
                 break;
             case R.id.btnChange:
                 onChangeButtonClick();
@@ -247,12 +258,12 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                 remindRequest.callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
-                        Toast.makeText(getActivity(), R.string.confirmation_successfully_sent, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(App.getContext(), R.string.confirmation_successfully_sent, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void fail(int codeError, ApiResponse response) {
-                        Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                     }
                 }).exec();
                 break;
@@ -269,11 +280,11 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
                         @Override
                         public void fail(int codeError, ApiResponse response) {
-                            Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                         }
                     }).exec();
                 } else {
-                    Toast.makeText(getActivity(), R.string.incorrect_email, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(App.getContext(), R.string.incorrect_email, Toast.LENGTH_SHORT).show();
                 }
                 break;
             case ACTION_CHANGE_PASSWORD:
@@ -352,7 +363,9 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     }
 
     private void unlock() {
-        mLockerView.setVisibility(View.GONE);
+        if (mLockerView != null) {
+            mLockerView.setVisibility(View.GONE);
+        }
     }
 
 
