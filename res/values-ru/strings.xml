@@ -511,7 +511,6 @@
     <string name="chat_no_message_text">Напишите сообщение или отправьте подарок и вам обязательно ответят</string>
     <string name="user_baned">Пользователь забанен</string>
     <string name="general_choose_city">Выберите город</string>
-    <string name="general_bookmarks_title">Избранные</string>
     <string name="general_empty_bookmarks">Нет избранных</string>
     <string name="general_bookmarks">Избранные</string>
     <string name="general_fans">Поклонники</string>
