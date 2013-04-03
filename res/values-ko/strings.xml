@@ -113,10 +113,7 @@
     <string name="edit_delete">삭제하기</string>
     <string name="edit_restore">저장하기</string>
     <string name="album_add_photo_title">사진을 추가하세요.</string>
-    <string name="gifts_romantic">로맨틱한</string>
-    <string name="gifts_friends">친구들의</string>
     <string name="gifts">선물</string>
-    <string name="gifts_present">축하하는</string>
     <string name="gifts_title">선물을 선택하기</string>
     <string name="gifts_send_btn">선물을 보내기</string>
     <string name="map_location_progress">현재 위치를 설정합니다.</string>

@@ -183,7 +183,7 @@
     <string name="leaders_need_photo">Nejprve je nutné vybrat fotku!</string>
     <string name="leaders_select_photo">Vyberte efektní fotku:</string>
     <plurals name="leaders_price">
-        <item quantity="few">Stát se za %d mincí</item>
+        <item quantity="few">Stát se za %d mince</item>
         <item quantity="other">Stát se za %d mincí</item>
         <item quantity="one">Stát se za %d minci</item>
     </plurals>
@@ -393,4 +393,24 @@
     <string name="chat_no_message_text">Napište zprávu nebo pošlete dárek a určitě dostanete odpověď</string>
     <string name="user_baned">Uživatel je zabanován</string>
     <string name="general_choose_city">Zvolte město</string>
+    <string name="buy_mobile_payments">Jiné způsoby platby</string>
+    <string name="buy_mobile_payments_complete">Platba proběhla. Vaše objednávka se zpracovává, vyčkejte prosím</string>
+    <string name="general_save_and_exit">Uložit a odhlásit se</string>
+    <string name="general_set_password">Nastavit heslo před odhlášením z aplikace</string>
+    <string name="user_is_deleted">Uživatel je odstraněn</string>
+    <string name="general_bookmarks_title">Oblíbené</string>
+    <string name="general_empty_bookmarks">Nejsou oblíbené</string>
+    <string name="general_bookmarks">Oblíbené</string>
+    <string name="general_fans">Obdivovatelé</string>
+    <string name="general_no_fans">Nejsou obdivobatele</string>
+    <plurals name="get_free_money">
+        <item quantity="few">%d mince zdarma</item>
+        <item quantity="other">%d mincí zdarma</item>
+        <item quantity="one">%d mince zdarma</item>
+    </plurals>
+    <string name="settings_edit_profile">Upravit profil</string>
+    <string name="general_bookmarks_delete">Odstranit z oblíbených</string>
+    <string name="general_bookmarks_add">Přidat k oblíbeným</string>
+    <string name="buy_resources">Doplnit zásoby</string>
+    <string name="general_network_reconnect">Snažíme se obnovit připojení k síti</string>
 </resources>

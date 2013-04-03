@@ -113,10 +113,7 @@
     <string name="edit_delete">Κατάργηστε</string>
     <string name="edit_restore">Αποκαταστήστε</string>
     <string name="album_add_photo_title">Προσθέστε μια φωτογραφία</string>
-    <string name="gifts_romantic">Ρομαντικές</string>
-    <string name="gifts_friends">Φιλικός</string>
     <string name="gifts">Δώρα</string>
-    <string name="gifts_present">Συγχαρητήριες</string>
     <string name="gifts_title">Επιλέξτε ένα δώρο</string>
     <string name="gifts_send_btn">Στείλτε ένα δώρο</string>
     <string name="map_location_progress">Καθορίζω τοποθεσία</string>
