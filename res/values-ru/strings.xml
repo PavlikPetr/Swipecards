@@ -421,7 +421,7 @@
     </string>
     <string name="default_price_format">Итого: %.2f USD</string>
     <string name="dating_online_only">%s, только онлайн</string>
-    <string name="leaders_pick_condition">Вы не можете выбрать фото с рейтингом ниже %d%%: </string>
+    <string name="leaders_pick_condition">Вы не можете выбрать фото с рейтингом ниже %d%%:</string>
     <string name="map_popup_address">Адрес</string>
     <string name="black_list_info">Вы добавили собеседника в черный список. Изменить это можно в своем профиле, в настройках VIP-статуса.</string>
     <string name="general_gift">Подарок</string>
@@ -511,6 +511,9 @@
     <string name="chat_no_message_text">Напишите сообщение или отправьте подарок и вам обязательно ответят</string>
     <string name="user_baned">Пользователь забанен</string>
     <string name="general_choose_city">Выберите город</string>
+    <string name="buy_mobile_payments">Другие способы оплаты</string>
+    <string name="buy_mobile_payments_complete">Оплата произведена. Ваш заказ обрабатывается, пожалуйста подождите</string>
     <string name="general_save_and_exit">Сохранить и выйти</string>
     <string name="general_set_password">Установите пароль перед выходом из приложения</string>
+    <string name="user_is_deleted">Пользователь удален</string>
 </resources>

@@ -186,6 +186,7 @@ public class GiftsFragment extends BaseFragment {
                                 mGridAdapter.add(sendedGift);
                                 mTitle.setText(R.string.gifts);
                             }
+                            if (mProfile.gifts != null) mProfile.gifts.add(0,sendedGift.gift);
                             mGridAdapter.notifyDataSetChanged();
                         }
 

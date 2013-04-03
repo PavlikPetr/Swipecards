@@ -336,7 +336,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 if (mUserProfile == null) {
                     showRetryBtn();
                 } else if (data.banned) {
-                    showRetryBtnForBanned();
+                    showForBanned();
+                } else if (data.deleted) {
+                    showForDeleted();
                 } else {
                     mRateController.setOnRateControllerListener(mRateControllerListener);
                     //set info into views for user
@@ -368,12 +370,21 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         }).exec();
     }
 
-    private void showRetryBtnForBanned() {
+    private void showForBanned() {
+        showLockWithText(getString(R.string.user_baned));
+    }
+
+    private void showForDeleted() {
+        showLockWithText(getString(R.string.user_is_deleted));
+    }
+
+    private void showLockWithText(String text) {
         if (mRetryBtn != null && isAdded()) {
             mLoaderView.setVisibility(View.GONE);
             mLockScreen.setVisibility(View.VISIBLE);
-            mRetryBtn.setErrorMsg(getString(R.string.user_baned));
+            mRetryBtn.setErrorMsg(text);
             mRetryBtn.showOnlyMessage(true);
+            mActionBar.hideUserActionButton();
         }
     }
 
@@ -562,7 +573,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         if (mUserProfile != null) {
             Intent intent = new Intent(getActivity(), ContainerActivity.class);
             intent.putExtra(ChatFragment.INTENT_USER_ID, mUserProfile.uid);
-            intent.putExtra(ChatFragment.INTENT_USER_NAME, mUserProfile.first_name);
+            intent.putExtra(ChatFragment.INTENT_USER_NAME, mUserProfile.first_name == null ?
+                    mUserProfile.first_name : Static.EMPTY);
             intent.putExtra(ChatFragment.INTENT_USER_SEX, mUserProfile.sex);
             intent.putExtra(ChatFragment.INTENT_USER_AGE, mUserProfile.age);
             intent.putExtra(ChatFragment.INTENT_USER_CITY, mUserProfile.city == null ? "" : mUserProfile.city.name);

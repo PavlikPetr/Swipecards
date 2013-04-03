@@ -75,7 +75,7 @@
         <Button
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
-                android:background="@drawable/btn_vip_super_sale_selector"
+                android:background="@drawable/btn_blue_selector"
                 android:text="@string/default_energy_coins_buy_btn_text"
                 style="@style/VipItemTitleWhiteText"
                 android:textStyle="bold"
@@ -88,7 +88,7 @@
                 android:id="@+id/btnOfferwalls"
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
-                android:background="@drawable/btn_vip_sale_selector"
+                android:background="@drawable/btn_gray_selector"
                 android:text="@string/get_it_for_free"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"

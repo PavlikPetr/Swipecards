@@ -387,4 +387,6 @@
     <string name="upload_photos">Carica le foto</string>
     <string name="chat_no_message_title">Inizia a chattare!</string>
     <string name="chat_no_message_text">Scrivi un messaggio o invia un regalo e avrai la risposta</string>
+    <string name="user_baned">L’utente è stato bannato</string>
+    <string name="general_choose_city">Scegli città</string>
 </resources>

@@ -25,6 +25,7 @@ import java.util.LinkedList;
  * <p/>
  * NOTICE: В данном типе данных используем значения по умолчанию
  */
+@SuppressWarnings("UnusedDeclaration")
 public class Options extends AbstractData {
 
     /**
@@ -173,8 +174,8 @@ public class Options extends AbstractData {
             RelativeLayout container = (RelativeLayout) view.findViewById(R.id.itContainer);
             container.setBackgroundResource(
                     curBtn.showType == 0 ?
-                            R.drawable.btn_vip_sale_selector :
-                            R.drawable.btn_vip_super_sale_selector
+                            R.drawable.btn_gray_selector :
+                            R.drawable.btn_blue_selector
             );
 
             container.requestLayout();

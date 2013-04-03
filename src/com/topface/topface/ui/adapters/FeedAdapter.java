@@ -133,7 +133,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         }
 
         if (item != null) {
-            if (item.user.banned) {
+            // установка аватарки пользователя
+            if (item.user.banned || item.user.deleted) {
                 holder.avatar.setImageResource(item.user.sex == Static.BOY ?
                         R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
                 holder.avatar.setOnClickListener(null);
@@ -142,10 +143,25 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
                 setListenerOnAvatar(holder.avatar, item);
             }
 
+            // установка имени
             holder.name.setText(item.user.getNameAndAge());
+            if (item.user.deleted) {
+                holder.name.setAlpha(0.5f);
+            } else {
+                holder.name.setAlpha(1f);
+            }
+
+            // установка городв
             if (item.user.city != null) {
                 holder.city.setText(item.user.city.name);
+                if (item.user.deleted) {
+                    holder.city.setAlpha(0.5f);
+                } else {
+                    holder.city.setAlpha(1f);
+                }
             }
+
+            // установка иконки онлайн
             holder.online.setVisibility(item.user.online ? View.VISIBLE : View.INVISIBLE);
         }
 

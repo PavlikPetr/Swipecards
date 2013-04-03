@@ -145,6 +145,10 @@ public class ActionBar {
         });
     }
 
+    public void hideUserActionButton() {
+        mUserActionsControl.setVisibility(View.GONE);
+    }
+
     public void activateEditButton() {
         if(mEditButton.isSelected()) {
             mEditButton.setSelected(false);

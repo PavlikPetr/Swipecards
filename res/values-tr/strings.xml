@@ -310,7 +310,6 @@
     <string name="leaders_select_photo_info">En etkili fotoğraf seçin! Düşük reytingli fotoğraf seçilemez</string>
     <string name="default_price_format">Toplam: %.2f USD</string>
     <string name="dating_online_only">%s, sadece çevrimiçi</string>
-    <string name="leaders_pick_condition">%d%% reytinginden daha aşağı foto seçemezsiniz:</string>
     <string name="map_popup_address">Adres</string>
     <string name="black_list_info">Muhabbet ettiğiniz kişiyi kara listeye eklediniz. Bu durumu profilinizde, VIP-durumu ayarlarınızda değiştirebilirsiniz.</string>
     <string name="general_gift">Hediye</string>
