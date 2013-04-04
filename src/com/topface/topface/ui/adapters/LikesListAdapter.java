@@ -61,7 +61,7 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
 
             @Override
             public void onClick(View v) {
-                if(mMutualListener != null) {
+                if (mMutualListener != null) {
                     mMutualListener.onMutual(getItem(position).user.id, 9, like.id);
                     like.mutualed = true;
                     notifyDataSetChanged();
@@ -75,7 +75,6 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
             vf.setDisplayedChild(1);
             if (android.os.Build.VERSION.SDK_INT > 11) {
                 convertView.setActivated(true);
-
             } else {
                 if (super.getItemViewType(position) == T_VIP || super.getItemViewType(position) == T_NEW_VIP) {
                     convertView.setBackgroundResource(R.drawable.im_item_list_vip_bg);

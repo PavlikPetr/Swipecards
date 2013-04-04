@@ -65,7 +65,7 @@
                 <action android:name="android.intent.action.VIEW"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.BROWSABLE"/>
 
 
                 <data
@@ -114,17 +114,19 @@
                 <action android:name="android.intent.action.VIEW"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.BROWSABLE"/>
+
                 <data
-                    android:scheme="topface"
-                    android:host="offerwall"
-                    />
+                        android:scheme="topface"
+                        android:host="offerwall"
+                        />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.BROWSABLE"/>
+
                 <data
                         android:scheme="topface"
 
@@ -171,6 +173,7 @@
         <activity android:name=".ui.profile.BlackListActivity"/>
         <activity
                 android:name=".ui.ContainerActivity"
+                android:screenOrientation="portrait"
                 android:windowSoftInputMode="stateHidden|adjustResize"/>
 
         <activity
@@ -261,7 +264,6 @@
                 <action android:name="com.android.vending.INSTALL_REFERRER"/>
             </intent-filter>
         </receiver>
-
 
 
         <!-- providers -->
