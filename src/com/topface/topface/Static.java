@@ -35,6 +35,7 @@ public class Static {
 
     // Preferences
     public static final String PREFERENCES_SSID = "ssid";
+    public static final String PREFERENCES_TAG_GEO = "preferences_geo";
     public static final String PREFERENCES_TAG_SHARED = "preferences_general";
     public static final String PREFERENCES_TAG_PROFILE = "preferences_profile";
     public static final String PREFERENCES_TOPS_SEX = "tops_sex";

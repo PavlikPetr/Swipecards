@@ -38,6 +38,7 @@ import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.ui.views.SwapControl;
 import com.topface.topface.utils.*;
+import com.topface.topface.utils.GeoUtils.GeoLocationManager;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
