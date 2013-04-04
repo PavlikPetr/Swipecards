@@ -1,4 +1,4 @@
-package com.topface.topface.utils;
+package com.topface.topface.utils.offerwalls;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,36 +6,67 @@ import android.content.Intent;
 import com.sponsorpay.sdk.android.SponsorPay;
 import com.sponsorpay.sdk.android.publisher.SponsorPayPublisher;
 import com.tapjoy.TapjoyConnect;
+import com.topface.topface.data.Options;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.offerwalls.clickky.ClickkyActivity;
+
+import java.util.Random;
 
 public class Offerwalls {
 
-    public static final String TAPJOY = "TAPJOY";
-    public static final String SPONSORPAY = "SPONSORPAY";
-    public static final String CLICKKY = "CLICKKY";
     private static boolean first_or_second = false;
 
     public static void init(Context context) {
-        TapjoyConnect.requestTapjoyConnect(context, "f0563cf4-9e7c-4962-b333-098810c477d2", "AS0AE9vmrWvkyNNGPsyu");
-        TapjoyConnect.getTapjoyConnectInstance().setUserID(Integer.toString(CacheProfile.uid));
-        SponsorPay.start("11625", Integer.toString(CacheProfile.uid), "0a4c64db64ed3c1ca14a5e5d81aaa23c", context);
+        try {
+            TapjoyConnect.requestTapjoyConnect(context, "f0563cf4-9e7c-4962-b333-098810c477d2", "AS0AE9vmrWvkyNNGPsyu");
+            TapjoyConnect.getTapjoyConnectInstance().setUserID(Integer.toString(CacheProfile.uid));
+            SponsorPay.start("11625", Integer.toString(CacheProfile.uid), "0a4c64db64ed3c1ca14a5e5d81aaa23c", context);
+        } catch (Exception e) {
+            Debug.error(e);
+        }
     }
 
     public static void startOfferwall(Activity activity) {
-        if (first_or_second) {
+        String offerwall = CacheProfile.getOptions().offerwall;
+
+        if (offerwall.equals(Options.TAPJOY)) {
+            startTapjoy();
+        } else if (offerwall.equals(Options.SPONSORPAY)) {
+            startSponsorpay(activity);
+        } else if (offerwall.equals(Options.CLICKKY)) {
+            startClickky(activity);
+        } else if (offerwall.equals(Options.RANDOM)) {
+            startRandomOfferwall(activity);
+        } else {
+            startTapjoy();
+        }
+    }
+
+    private static void startRandomOfferwall(Activity activity) {
+        Random random = new Random();
+        if (random.nextBoolean()) {
             startTapjoy();
         } else {
             startSponsorpay(activity);
         }
-        first_or_second = !first_or_second;
     }
 
     public static void startTapjoy() {
-        TapjoyConnect.getTapjoyConnectInstance().showOffers();
+        try {
+            TapjoyConnect.getTapjoyConnectInstance().showOffers();
+        } catch (Exception e) {
+            Debug.error(e);
+        }
     }
 
     public static void startSponsorpay(Activity activity) {
-        Intent offerWallIntent = SponsorPayPublisher.getIntentForOfferWallActivity(activity.getApplicationContext(), true);
-        activity.startActivityForResult(offerWallIntent, SponsorPayPublisher.DEFAULT_OFFERWALL_REQUEST_CODE);
+        try {
+            Intent offerWallIntent = SponsorPayPublisher.getIntentForOfferWallActivity(activity.getApplicationContext(), true);
+            activity.startActivityForResult(offerWallIntent, SponsorPayPublisher.DEFAULT_OFFERWALL_REQUEST_CODE);
+        } catch (Exception e) {
+            Debug.error(e);
+        }
     }
 
     public static void startClickky(Activity activity) {

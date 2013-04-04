@@ -7,8 +7,8 @@ import android.widget.RelativeLayout;
 
 public class ClickkyActivity extends Activity{
 
-    private int SITE_ID = 123;
-    private String API_KEY = "123";
+    private final static int SITE_ID = 3382;
+    private final static String API_KEY = "dy70$d8q-x";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
