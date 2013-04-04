@@ -101,7 +101,7 @@ public class ClickkyOfferWebview extends WebView implements LocationListener
 		if ((tm.getPhoneType() != TelephonyManager.PHONE_TYPE_NONE)
 				&& (loc == null)) {
 			mCountryCodeTel = tm.getNetworkCountryIso();
-			Log.d("Telephony Manager", mCountryCodeTel);
+			Log.d("CLICKKY:Telephony Manager", mCountryCodeTel);
 			getSiteLink();
 			return;
 		}
@@ -163,12 +163,12 @@ public class ClickkyOfferWebview extends WebView implements LocationListener
 				if (addresses.size() > 0) {
 					Address add = addresses.get(0);
 					mCountryCodeGeo = add.getCountryCode();
-					Log.d("Country Name", mCountryCodeGeo);
+					Log.d("CLICKKY:Country Name", mCountryCodeGeo);
 				}
 
 			} catch (IOException e) {
 				e.printStackTrace();
-				Log.d("IOException", e.toString());
+				Log.d("CLICKKY:IOException", e.toString());
 			}
 		}
 		getSiteLink();
@@ -198,7 +198,7 @@ public class ClickkyOfferWebview extends WebView implements LocationListener
 						+"site_id="+mSiteId+""
 						+"api_key="+mApiKey+"");
 
-		Log.d("HASH", hash);
+		Log.d("CLICKKY:HASH", hash);
 
 		JSONObject result = new JSONObject();
 		result.put("event", name);
@@ -222,14 +222,14 @@ public class ClickkyOfferWebview extends WebView implements LocationListener
 		result.put("heihgt", mWebViewHeight);
 
 		if ((mCountryCodeGeo == null) && (mCountryCodeTel==null)) {
-			result.put("country", "");
-			Log.d("CountryCode", "Country not found");
+			result.put("country", "RU");
+			Log.d("CLICKKY:CountryCode", "Country not found,set RU");
 		} else if (mCountryCodeGeo != null) {
 			result.put("country", mCountryCodeGeo);
-			Log.d("CountryCode", "Geo");
+			Log.d("CLICKKY:CountryCode", "Geo");
 		} else {
 			result.put("country", mCountryCodeTel);
-			Log.d("CountryCode", "Tel");
+			Log.d("CLICKKY:CountryCode", "Tel");
 		}
 		return result;
 	}

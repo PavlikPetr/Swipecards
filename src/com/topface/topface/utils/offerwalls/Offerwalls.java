@@ -28,7 +28,7 @@ public class Offerwalls {
     }
 
     public static void startOfferwall(Activity activity) {
-        String offerwall = CacheProfile.getOptions().offerwall;
+        String offerwall = Options.CLICKKY;//CacheProfile.getOptions().offerwall;
 
         if (offerwall.equals(Options.TAPJOY)) {
             startTapjoy();
