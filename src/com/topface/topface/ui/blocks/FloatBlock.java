@@ -22,6 +22,7 @@ public class FloatBlock {
     private Fragment mFragment;
     private BannerBlock mBanner;
     private final ViewGroup mLayout;
+    private LeadersBlock mLeaders;
 
     public FloatBlock(Fragment fragment, ViewGroup layoutView) {
         super();
@@ -40,7 +41,7 @@ public class FloatBlock {
             if (floatType.equals(Options.FLOAT_TYPE_BANNER)) {
                 mBanner = new BannerBlock(mFragment, mLayout);
             } else if (floatType.equals(Options.FLOAT_TYPE_LEADERS)) {
-                new LeadersBlock(mFragment, mLayout);
+                mLeaders = new LeadersBlock(mFragment, mLayout);
             }
             //mLeaders = new LeadersBlock(mActivity, mLayout);
         }
@@ -71,5 +72,9 @@ public class FloatBlock {
 
     public void onDestroy() {
         if (mBanner != null) mBanner.onDestroy();
+    }
+
+    public void onResume() {
+        if (mLeaders != null) mLeaders.loadLeaders();
     }
 }

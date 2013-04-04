@@ -132,6 +132,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (getListAdapter().isNeedUpdate()) {
             updateData(false, true);
         }
+        mFloatBlock.onResume();
 
     }
 
