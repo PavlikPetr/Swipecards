@@ -25,8 +25,8 @@ import com.topface.topface.Static;
 import com.topface.topface.data.Geo;
 import com.topface.topface.ui.analytics.TrackedMapActivity;
 import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.GeoLocationManager;
-import com.topface.topface.utils.GeoLocationManager.LocationProviderType;
+import com.topface.topface.utils.GeoUtils.GeoLocationManager;
+import com.topface.topface.utils.GeoUtils.GeoLocationManager.LocationProviderType;
 import com.topface.topface.utils.OsmManager;
 import com.topface.topface.utils.OsmManager.OSMAddress;
 
