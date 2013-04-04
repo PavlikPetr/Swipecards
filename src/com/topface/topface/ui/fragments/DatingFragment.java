@@ -774,8 +774,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK
-                && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
+        if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
             lockControls();
             if (data != null && data.getExtras() != null) {
                 final DatingFilter filter = data.getExtras().getParcelable(FilterFragment.INTENT_DATING_FILTER);
@@ -808,8 +807,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void setHeader(View view) {
         if (CacheProfile.dating != null) {
-            String plus = CacheProfile.dating.age_end == FilterFragment.webAbsoluteMaxAge ? "+" : "";
-            int age = CacheProfile.dating.age_end == FilterFragment.webAbsoluteMaxAge ? EditAgeFragment.absoluteMax : CacheProfile.dating.age_end;
+            String plus = CacheProfile.dating.age_end == DatingFilter.webAbsoluteMaxAge ? "+" : "";
+            int age = CacheProfile.dating.age_end == DatingFilter.webAbsoluteMaxAge ? EditAgeFragment.absoluteMax : CacheProfile.dating.age_end;
             Context context = App.getContext();
             getActionBar(view).setTitleText(context.getString(
                     CacheProfile.dating.sex == Static.BOY ? R.string.dating_header_guys

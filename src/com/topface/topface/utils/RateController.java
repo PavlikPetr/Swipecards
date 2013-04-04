@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -51,6 +52,9 @@ public class RateController {
     }
 
     private void sendRate(final int userid, final int rate) {
+        if (userid == 0) {
+            return;
+        }
         RateRequest doRate = new RateRequest(mContext);
         doRate.userid = userid;
         doRate.rate = rate;
@@ -166,7 +170,7 @@ public class RateController {
             @Override
             public void onClick(View view) {
                 String comment = mCommentText.getText().toString();
-                if (comment.equals("")) {
+                if (TextUtils.isEmpty(comment.trim()) || userId ==0) {
                     return;
                 }
 
