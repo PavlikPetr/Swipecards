@@ -140,11 +140,13 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     private void onMutual(FeedItem item) {
         if(!(item.user.deleted || item.user.banned)) {
-            mRateController.onRate(item.user.id, RateController.MUTUAL_VALUE, item.id, null);
             if (item instanceof FeedLike) {
-                ((FeedLike)item).mutualed = true;
-                getListAdapter().notifyDataSetChanged();
-                Toast.makeText(getActivity(),R.string.general_mutual,Toast.LENGTH_SHORT).show();
+                if(!((FeedLike)item).mutualed) {
+                    mRateController.onRate(item.user.id, RateController.MUTUAL_VALUE, item.id, null);
+                    ((FeedLike)item).mutualed = true;
+                    getListAdapter().notifyDataSetChanged();
+                    Toast.makeText(getActivity(),R.string.general_mutual,Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }

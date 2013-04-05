@@ -309,7 +309,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         outState.putParcelableArrayList(ADAPTER_DATA, mAdapter.getDataCopy());
 
         try {
-            outState.putString(FRIEND_FEED_USER, mAdapter.getUser().toJson().toString());
+            outState.putString(FRIEND_FEED_USER, mUser.toJson().toString());
         } catch (Exception e) {
             Debug.error(e);
         }
@@ -388,20 +388,23 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 setNavigationTitles(data.user.sex, data.user.first_name, data.user.age, data.user.city.name);
                 wasFailed = false;
-                mAdapter.setUser(data.user);
                 mUser = data.user;
-                if (mAdapter != null && !data.items.isEmpty()) {
-                    if (pullToRefresh) {
-                        mAdapter.addFirst(data.items, data.more, mListView.getRefreshableView());
-                    } else if (scrollRefresh) {
-                        mAdapter.addAll(data.items, data.more, mListView.getRefreshableView());
+                if (mAdapter != null) {
+                    if (!data.items.isEmpty()) {
+                        if (pullToRefresh) {
+                            mAdapter.addFirst(data.items, data.more, mListView.getRefreshableView());
+                        } else if (scrollRefresh) {
+                            mAdapter.addAll(data.items, data.more, mListView.getRefreshableView());
+                        } else {
+                            mAdapter.setData(data.items, data.more, mListView.getRefreshableView());
+                        }
                     } else {
-                        mAdapter.setData(data.items, data.more, mListView.getRefreshableView());
+                        if (!data.more) mAdapter.forceStopLoader();
                     }
-                }
 
-                if (mLoadingLocker != null) {
-                    mLoadingLocker.setVisibility(View.GONE);
+                    if (mAdapter.getCount() <= 0) {
+                        mAdapter.setUser(mUser);
+                    }
                 }
 
                 mIsUpdating = false;
@@ -428,6 +431,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             @Override
             public void always(ApiResponse response) {
                 super.always(response);
+                if (mLoadingLocker != null) {
+                    mLoadingLocker.setVisibility(View.GONE);
+                }
                 if (pullToRefresh && mListView != null) {
                     mListView.onRefreshComplete();
                 }
@@ -578,6 +584,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         // Если адаптер пустой или пользователя нет, грузим с сервера
         if (mAdapter == null || mAdapter.getCount() == 0 || mUser == null) {
             update(false, "initial");
+        } else {
+            mAdapter.notifyDataSetChanged();
         }
 
         if (!mReceiverRegistered) {

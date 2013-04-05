@@ -68,6 +68,9 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     public ChatListAdapter(Context context, FeedList<History> data, Updater updateCallback) {
         super(context, data, updateCallback);
+        if (!data.isEmpty()) {
+            prepareDates();
+        }
     }
 
     @Override
@@ -161,12 +164,12 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     }
 
     private void removeHeader(ListView parentView) {
-        if (mHeaderView != null) {
+        if (mHeaderView != null && parentView != null) {
             parentView.removeHeaderView(mHeaderView);
             parentView.setStackFromBottom(true);
             mHeaderView = null;
         } else {
-            Debug.log("ChatListAdapter.removeHeader(): no header to remove remove header");
+            if (mHeaderView != null) mHeaderView.setVisibility(View.GONE);
         }
     }
 
@@ -182,6 +185,10 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         prepareDates();
         notifyDataSetChanged();
         parentView.setSelection(getCount() - 1);
+        updateHeaderState(parentView);
+    }
+
+    private void updateHeaderState(ListView parentView) {
         if (getCount() > 0) {
             removeHeader(parentView);
         } else {
@@ -202,6 +209,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         if (getCount() > 0) {
             removeHeader(parentView);
         }
+    }
+
+    public void forceStopLoader() {
+        removeLoaderItem();
+        notifyDataSetChanged();
     }
 
     @Override
@@ -494,6 +506,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     public void removeItem(int position) {
         getData().remove(position);
+        prepareDates();
         notifyDataSetChanged();
     }
 
@@ -660,6 +673,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     @Override
     public void notifyDataSetChanged() {
-        super.notifyDataSetChanged();    //To change body of overridden methods use File | Settings | File Templates.
+        updateHeaderState(null);
+        super.notifyDataSetChanged();
     }
 }
