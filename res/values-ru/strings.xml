@@ -295,7 +295,7 @@
     </string>
     <string name="general_close">Закрыть</string>
     <string name="vip_not_activated">Ваш VIP-статус не активирован</string>
-    <string name="vip_privileges">VIP-привелегии</string>
+    <string name="vip_privileges">VIP-привилегии</string>
     <string name="vip_text_visitors">Узнаете, кто вами интересовался - смотрите своих гостей!</string>
     <string name="vip_text_adm_unlock">Отправляйте восхищения бесплатно - выражайте свои чувства по-максимуму</string>
     <string name="vip_rest">Вы подписаны на VIP</string>
@@ -360,8 +360,8 @@
     <string name="map_title">Карта</string>
 
     <string name="settings_want_answer">Я хочу, чтобы мне ответили</string>
-    <string name="settings_feedback_email">Email для связи</string>
-    <string name="settings_invalid_email">Некорректный Email</string>
+    <string name="settings_feedback_email">E-mail для связи</string>
+    <string name="settings_invalid_email">Некорректный e-mail</string>
 
     <string name="leaders_select_cool_picture">Выберите эффектную фотографию:</string>
     <string name="chat_write_message">Написать сообщение</string>
@@ -496,7 +496,7 @@
     <string name="general_correct">Все правильно</string>
     <string name="we_dont_detect_your_city">Чтобы найти людей поблизости нам нужно знать где вы находитесь. Пожалуйста, укажите ваш город.</string>
     <string name="confirm_email">Пожалуйста, подтвердите e-mail.</string>
-    <string name="password_sent">Новый пароль отправлен на ваш E-mail</string>
+    <string name="password_sent">Новый пароль отправлен на ваш e-mail</string>
     <string name="buy_vip_month_one">%1$d месяц за %2$.2f %3$@</string>
     <string name="buy_vip_month_few">%1$d месяца по %2$.2f %3$@</string>
     <string name="buy_vip_month_other">%1$d месяцев по %2$.2f %3$@</string>
