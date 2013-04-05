@@ -159,8 +159,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
-                        android:background="@drawable/btn_blue_selector"
-                        style="@style/ButtonWhiteText"
+                        style="@style/ButtonBlue"
                         android:text="@string/get_it_for_free"
                         />
 

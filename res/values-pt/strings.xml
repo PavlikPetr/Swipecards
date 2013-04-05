@@ -19,7 +19,7 @@
     <string name="general_server_error">Erro. Tente mais tarde</string>
     <string name="general_data_error">Erro. Tente mais uma vez</string>
     <string name="general_internet_off">Tentamos reinstalar a conexão com a internet. Por favor, espere.</string>
-    <string name="general_purchasing_error">Por favor, escreva mensagem sobre erro de compra em support@topface.ru</string>
+    <string name="general_purchasing_error">Por favor, escreva uma mensagem sobre erro na compra, em support@topface.ru</string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">O texto foi copiado</string>
     <string name="general_spinner_title">Seleccione uma ação</string>

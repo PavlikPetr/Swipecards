@@ -71,32 +71,34 @@
                 android:layout_marginTop="26dp"
                 android:background="@drawable/buying_purchase_selector"
                 android:text="@string/profile_ask_form"/>
+
         <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-         >
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
             <ProgressBar
-                android:id="@+id/pgbProgress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:layout_centerHorizontal="true"
-                />
+                    android:id="@+id/pgbProgress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_centerHorizontal="true"
+                    />
         </RelativeLayout>
+
         <TextView
-            android:id="@+id/emptyFormSuccess"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:gravity="center"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="#B8B8B8"
-            android:layout_marginTop="26dp"
-            android:text="@string/profile_ask_sent"
-            android:visibility="gone"
-            />
+                android:id="@+id/emptyFormSuccess"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#B8B8B8"
+                android:layout_marginTop="26dp"
+                android:text="@string/profile_ask_sent"
+                android:visibility="gone"
+                />
 
     </LinearLayout>
 
