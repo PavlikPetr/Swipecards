@@ -50,6 +50,8 @@ public class EditAgeFragment extends AbstractEditFragment {
         actionBar.showBackButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (age_start < absoluteMin) age_start = absoluteMin;
+                if (age_end > absoluteMax) age_end = absoluteMax;
                 Intent intent = getActivity().getIntent();
                 intent.putExtra(EditContainerActivity.INTENT_AGE_START, age_start);
                 intent.putExtra(EditContainerActivity.INTENT_AGE_END, age_end);

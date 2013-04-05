@@ -22,7 +22,7 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
     private OnMutualListener mMutualListener;
 
     public interface OnMutualListener {
-        void onMutual(int userId, int rate, int mutualId);
+        void onMutual(FeedItem item);
     }
 
     public LikesListAdapter(Context context, Updater updateCallback) {
@@ -62,9 +62,7 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
             @Override
             public void onClick(View v) {
                 if (mMutualListener != null) {
-                    mMutualListener.onMutual(getItem(position).user.id, 9, like.id);
-                    like.mutualed = true;
-                    notifyDataSetChanged();
+                    mMutualListener.onMutual(like);
                 }
             }
         });
@@ -87,7 +85,7 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
                 @Override
                 public void onClick(View v) {
                     if (mMutualListener != null) {
-                        mMutualListener.onMutual(getItem(position).user.id, 9, like.id);
+                        mMutualListener.onMutual(like);
                         setSelectedForMutual(-1);
                         like.mutualed = true;
                     }

@@ -1,11 +1,13 @@
 package com.topface.topface.ui.fragments.feed;
 
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
@@ -42,8 +44,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         adapter.setOnMutualListener(new OnMutualListener() {
 
             @Override
-            public void onMutual(int userId, int rate, int mutualId) {
-                mRateController.onRate(userId, rate, mutualId, null);
+            public void onMutual(FeedItem item) {
+                LikesFragment.this.onMutual(item);
             }
         });
         return adapter;
@@ -112,7 +114,50 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         };
     }
 
-    @Override
+    protected DialogInterface.OnClickListener getLongTapActionsListener(final int position) {
+        return new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DELETE_BUTTON:
+                        mLockView.setVisibility(View.VISIBLE);
+                        onDeleteItem(position);
+                        break;
+                    case BLACK_LIST_BUTTON:
+                        onAddToBlackList(position);
+                        break;
+                    case MUTUAL_BUTTON:
+                        onMutual(position);
+                        break;
+                }
+            }
+        };
+    }
+
+    private void onMutual(int position) {
+        onMutual(getItem(position));
+    }
+
+    private void onMutual(FeedItem item) {
+        if(!(item.user.deleted || item.user.banned)) {
+            mRateController.onRate(item.user.id, RateController.MUTUAL_VALUE, item.id, null);
+            if (item instanceof FeedLike) {
+                ((FeedLike)item).mutualed = true;
+                getListAdapter().notifyDataSetChanged();
+                Toast.makeText(getActivity(),R.string.general_mutual,Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    protected String[] getLongTapActions() {
+        if (editButtonsNames == null) {
+            editButtonsNames = new String[]{getString(R.string.general_delete_title),
+                    getString(R.string.black_list_add),getString(R.string.general_mutual)};
+        }
+        return editButtonsNames;
+    }
+
+        @Override
     protected FeedListData<FeedLike> getFeedList(JSONObject response) {
         return new FeedListData<FeedLike>(response, FeedLike.class);
     }

@@ -285,9 +285,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         mActionBar.showBackButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().finish();
                 //TODO костыль для навигации
                 getActivity().setResult(Activity.RESULT_CANCELED);
+                getActivity().finish();
+
             }
         });
 
@@ -515,40 +516,64 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void removeFromBlackList() {
-        BlackListDeleteRequest deleteBlackListRequest = new BlackListDeleteRequest(mUserId, getActivity());
-        mAddToBlackList.setEnabled(false);
-        deleteBlackListRequest.callback(new VipApiHandler() {
-            @Override
-            public void always(ApiResponse response) {
-                super.always(response);
-                isInBlackList = false;
-                if (mAddToBlackList != null) {
-                    mAddToBlackList.setText(R.string.black_list_add);
-                    mAddToBlackList.setEnabled(true);
+        if (mUserId > 0) {
+            BlackListDeleteRequest deleteBlackListRequest = new BlackListDeleteRequest(mUserId, getActivity());
+            mAddToBlackList.setEnabled(false);
+            deleteBlackListRequest.callback(new VipApiHandler() {
+
+                @Override
+                public void success(ApiResponse response) {
+                    super.success(response);
+                    isInBlackList = false;
+                    if (mAddToBlackList != null) {
+                        mAddToBlackList.setText(R.string.black_list_add);
+                    }
                 }
-            }
-        }).exec();
+
+                @Override
+                public void always(ApiResponse response) {
+                    super.always(response);
+                    if (mAddToBlackList != null) {
+                        mAddToBlackList.setEnabled(true);
+                    }
+                }
+            }).exec();
+        }
     }
 
     private void addToBlackList() {
-        BlackListAddRequest blackListRequest = new BlackListAddRequest(mUserId, getActivity());
-        mAddToBlackList.setEnabled(false);
-        blackListRequest.callback(new VipApiHandler() {
-            @Override
-            public void always(ApiResponse response) {
-                super.always(response);
-                isInBlackList = true;
-                if (mAddToBlackList != null) {
-                    mAddToBlackList.setText(R.string.black_list_delete);
-                    mAddToBlackList.setEnabled(true);
+        if (mUserId > 0) {
+            BlackListAddRequest blackListRequest = new BlackListAddRequest(mUserId, getActivity());
+            mAddToBlackList.setEnabled(false);
+            blackListRequest.callback(new VipApiHandler() {
+                @Override
+                public void success(ApiResponse response) {
+                    super.success(response);
+                    isInBlackList = true;
+                    if (mAddToBlackList != null) {
+                        mAddToBlackList.setText(R.string.black_list_delete);
+                    }
                 }
-            }
-        }).exec();
+
+                @Override
+                public void always(ApiResponse response) {
+                    super.always(response);
+                    if (mAddToBlackList != null) {
+                        mAddToBlackList.setEnabled(true);
+                    }
+                }
+            }).exec();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
+        if (mUserId == 0) {
+            getActivity().setResult(Activity.RESULT_CANCELED);
+            getActivity().finish();
+        }
 
         // Если адаптер пустой или пользователя нет, грузим с сервера
         if (mAdapter == null || mAdapter.getCount() == 0 || mUser == null) {
@@ -648,6 +673,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void sendGift(int id, final int price) {
+
+        if (id <= 0) {
+            mLoadingLocker.setVisibility(View.GONE);
+            Toast.makeText(getActivity(),R.string.general_server_error,Toast.LENGTH_SHORT);
+            return;
+        }
+
         final History fakeItem = new History(IListLoader.ItemType.WAITING);
         mAdapter.addSentMessage(fakeItem, mListView.getRefreshableView());
 
@@ -704,8 +736,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
 
         final String text = mEditBox.getText().toString();
-        if (text == null || text.length() == 0)
-            return false;
+        if (text == null || TextUtils.isEmpty(text.trim()) || mUserId == 0) return false;
 
         final MessageRequest messageRequest = new MessageRequest(getActivity());
         registerRequest(messageRequest);

@@ -547,17 +547,18 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 break;
             case R.id.acBlock:
                 if (CacheProfile.premium) {
-                    BlackListAddRequest blaRequest = new BlackListAddRequest(mUserProfile.uid, getActivity());
-                    blaRequest.callback(new VipApiHandler() {
-                        @Override
-                        public void success(ApiResponse response) {
-                            super.success(response);
-                            v.setEnabled(false);
-                            TextView view = (TextView) v;
-                            view.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
-                        }
+                    if (mUserProfile.uid > 0) {
+                        BlackListAddRequest blackListAddRequest = new BlackListAddRequest(mUserProfile.uid, getActivity());
+                        blackListAddRequest.callback(new VipApiHandler() {
+                            @Override
+                            public void success(ApiResponse response) {
+                                super.success(response);
+                                v.setEnabled(false);
+                                TextView view = (TextView) v;
+                                view.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+                            }
+                        }).exec();
                     }
-                    ).exec();
                 } else {
                     Intent intent = new Intent(getActivity(), ContainerActivity.class);
                     intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
