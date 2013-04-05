@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments;
 
+import android.app.ActionBar;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -7,17 +8,24 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.gridlayout.GridLayout;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.Debug;
 
 public class MenuFragment extends Fragment implements View.OnClickListener {
     private View mRootLayout;
@@ -34,6 +42,9 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     BroadcastReceiver mBroadcastReceiver;
     private ImageViewRemote mMenuAvatar;
     private BroadcastReceiver mProfileUpdateReceiver;
+    private ServicesTextView coins;
+    private ServicesTextView likes;
+    private LinearLayout mContainer;
 
     public interface FragmentMenuListener {
         public void onMenuClick(int buttonId);
@@ -88,6 +99,20 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         });
 
         mDefaultMenuItem = (Button) mRootLayout.findViewById(R.id.btnFragmentDating);
+        //Это сделано для того, чтобы правильно ресайзнуть счетчики монет и симпатий
+        mContainer = (LinearLayout) mRootLayout.findViewById(R.id.countersLayout);
+        coins = (ServicesTextView) mRootLayout.findViewById(R.id.menuCurCoins);
+        likes = (ServicesTextView) mRootLayout.findViewById(R.id.menuCurLikes);
+        coins.setOnMeasureListener(listener);
+        likes.setOnMeasureListener(listener);
+
+        Button buyButton = (Button) mRootLayout.findViewById(R.id.menuBuyBtn);
+        buyButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(ContainerActivity.getNewIntent(ContainerActivity.INTENT_BUYING_FRAGMENT));
+            }
+        });
 
         mButtons = new Button[]{
                 btnProfile,
@@ -201,6 +226,31 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
             }
         };
     }
+
+    ServicesTextView.OnMeasureListener listener = new ServicesTextView.OnMeasureListener() {
+        @Override
+        public void onMeasure(int width, int height) {
+            if(coins.getWidth() > 0 && likes.getWidth() > 0) {
+                DisplayMetrics displaymetrics = new DisplayMetrics();
+                getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+                int newWidth = (int)(displaymetrics.widthPixels * 0.7);
+                int margin = (int)(10 * displaymetrics.density);
+                int preCountedWidth = coins.getWidth() + likes.getWidth() + mContainer.getPaddingLeft() + mContainer.getPaddingRight() + margin;
+                if (preCountedWidth >= newWidth) {
+                    newWidth = preCountedWidth;
+                    if(newWidth > displaymetrics.widthPixels) {
+                        FragmentSwitchController.EXPANDING_PERCENT = 5;
+                    } else {
+                        FragmentSwitchController.EXPANDING_PERCENT =(int)( 100 * (1 - (double)newWidth/(double)displaymetrics.widthPixels));
+                    }
+                }
+
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mContainer.getLayoutParams();
+                params.width = newWidth;
+                mContainer.setLayoutParams(params);
+            }
+        }
+    };
 }
 
 

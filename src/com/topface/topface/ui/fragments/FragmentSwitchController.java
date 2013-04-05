@@ -30,7 +30,7 @@ public class FragmentSwitchController extends ViewGroup {
     private FragmentManager mFragmentManager;
     private FragmentSwitchListener mFragmentSwitchListener;
     private boolean mAutoScrolling = false;
-    private static final int EXPANDING_PERCENT = 30;
+    public static int EXPANDING_PERCENT = 30;
     private BaseFragment mCurrentFragment;
     private FrameLayout mExtraFrame;
     private Fragment mCurrentExtraFragment;

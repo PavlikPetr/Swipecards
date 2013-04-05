@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.fragments.*;
@@ -142,5 +143,11 @@ public class ContainerActivity extends BaseFragmentActivity {
         initRequestKey();
         return mCurrentFragmentId != INTENT_REGISTRATION_FRAGMENT &&
                 mCurrentFragmentId != INTENT_RECOVER_PASSWORD && super.isNeedAuth();
+    }
+
+    public static Intent getNewIntent(int code) {
+        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
+        intent.putExtra(Static.INTENT_REQUEST_KEY, code);
+        return intent;
     }
 }
