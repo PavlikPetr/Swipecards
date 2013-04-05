@@ -27,6 +27,9 @@ public class RateController {
      * Для теста отключаем диалог восхищения
      */
     private static final boolean DIALOG_ENABLED = false;
+
+    public static final int MUTUAL_VALUE = 9;
+
     private Activity mContext;
     private Dialog mCommentDialog;
     private EditText mCommentText;
