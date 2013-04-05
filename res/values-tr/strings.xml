@@ -310,6 +310,7 @@
     <string name="leaders_select_photo_info">En etkili fotoğraf seçin! Düşük reytingli fotoğraf seçilemez</string>
     <string name="default_price_format">Toplam: %.2f USD</string>
     <string name="dating_online_only">%s, sadece çevrimiçi</string>
+    <string name="leaders_pick_condition">%d%% reytinginden daha aşağı foto seçemezsiniz:</string>
     <string name="map_popup_address">Adres</string>
     <string name="black_list_info">Muhabbet ettiğiniz kişiyi kara listeye eklediniz. Bu durumu profilinizde, VIP-durumu ayarlarınızda değiştirebilirsiniz.</string>
     <string name="general_gift">Hediye</string>
@@ -386,4 +387,27 @@
     <string name="upload_photos">Fotoğraflarınızı yükleyin</string>
     <string name="chat_no_message_title">Sohbete başlayın!</string>
     <string name="chat_no_message_text">Mesaj yazın veya hediye gönderin ve size muhakkak cevap yazılacak</string>
+    <string name="user_baned">Kullanıcı engellenmiştir</string>
+    <string name="general_choose_city">Şehir seçin</string>
+    <string name="buy_mobile_payments">Diğer ödeme yöntemleri</string>
+    <string name="buy_mobile_payments_complete">Ödeme yapılmıştır. Siparişiniz işleniyor, lütfen, bekleyin.</string>
+    <string name="general_save_and_exit">Kaydetmek ve çıkmak</string>
+    <string name="general_set_password">Uygulamadan çıkmadan önce parolayı oluşturun</string>
+    <string name="user_is_deleted">Kullanıcı kaldırılmıştır</string>
+    <string name="general_bookmarks_title">Seçilmşler</string>
+    <string name="general_empty_bookmarks">Seçilmişler yok</string>
+    <string name="general_bookmarks">Seçilmşler</string>
+    <string name="general_fans">Hayranlar</string>
+    <string name="general_no_fans">Hayranlar yok</string>
+    <plurals name="get_free_money">
+        <item quantity="zero">%d para bedava</item>
+        <item quantity="other">%d para bedava</item>
+        <item quantity="one">%d para bedava</item>
+    </plurals>
+    <string name="settings_edit_profile">Profil düzenlemek</string>
+    <string name="general_bookmarks_delete">Seçilmişlerden kaldırmak</string>
+    <string name="general_bookmarks_add">Seçilmişlere eklemek</string>
+    <string name="buy_resources">Depoyu doldurmak</string>
+    <string name="general_network_reconnect">Şebeke ile bağlanmaya çalışıyoruz</string>
+    <string name="user_is_banned">Kullanıcı engellenmiştir</string>
 </resources>

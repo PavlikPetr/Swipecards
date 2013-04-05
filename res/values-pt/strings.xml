@@ -16,7 +16,7 @@
     <string name="general_dialog_retry">Repetir</string>
     <string name="general_copy_title">Cópiar</string>
     <string name="general_back">Atrás</string>
-    <string name="general_server_error">Erro. Tenet mais tarde</string>
+    <string name="general_server_error">Erro. Tente mais tarde</string>
     <string name="general_data_error">Erro. Tente mais uma vez</string>
     <string name="general_internet_off">Tentamos reinstalar a conexão com a internet. Por favor, espere.</string>
     <string name="general_purchasing_error">Por favor, escreva mensagem sobre erro de compra em support@topface.ru</string>
@@ -27,7 +27,7 @@
     <string name="general_dbl_all">Todos</string>
     <string name="general_dbl_unread">Não lidos</string>
     <string name="general_edit_button">Editar</string>
-    <string name="general_save_button">Gravar</string>
+    <string name="general_save_button">Guardar</string>
     <string name="general_send_button">Enviar</string>
     <string name="general_boys">Rapazes</string>
     <string name="general_girls">Meninas</string>
@@ -346,7 +346,7 @@
     <string name="gallery">Galeria</string>
     <string name="no_photo_take_photo">Ninguém pode travar conhecimento consigo! Faça uma nova foto ou selecione uma das que existem no álbum</string>
     <string name="photo_is_too_small">Você está com um excelente visual nesta foto, mas para todos os usuários possam  avaliar sua foto, deve ser um pouco mais: não menos que %s</string>
-    <string name="photo_for_avatar">A fotografia</string>
+    <string name="photo_for_avatar">A foto está pronta para ser enviada ao perfil! Esta é sua primeira foto  e ela será usada como seu avatar.</string>
     <string name="get_it_for_free">Receber gratuitamente</string>
     <string name="vip_advantages">Vantagens de VIP</string>
     <string name="change_email">Trocar e-mail</string>
@@ -389,4 +389,24 @@
     <string name="chat_no_message_text">Escreva uma mensagem ou envie um presente, sem falta vai ter resposta</string>
     <string name="user_baned">O usuário foi expulso</string>
     <string name="general_choose_city">Escolhe a cidade</string>
+    <string name="buy_mobile_payments">Outros métodos de pagamento</string>
+    <string name="buy_mobile_payments_complete">O pagamento está feito. O seu pedido está processando, por favor, espere</string>
+    <string name="general_save_and_exit">Guardar e sair</string>
+    <string name="general_set_password">Defina uma senha ao sair de aplicação</string>
+    <string name="user_is_deleted">O usuário foi eliminado</string>
+    <string name="general_bookmarks_title">Escolhidos</string>
+    <string name="general_empty_bookmarks">Não há escolhidos</string>
+    <string name="general_bookmarks">Escolhidos</string>
+    <string name="general_fans">Fãs</string>
+    <string name="general_no_fans">Não há fãs</string>
+    <plurals name="get_free_money">
+        <item quantity="other">%d de moeda grátis</item>
+        <item quantity="one">%d de moeda grátis</item>
+    </plurals>
+    <string name="settings_edit_profile">Editar perfil</string>
+    <string name="general_bookmarks_delete">Eliminar dos escolhidos</string>
+    <string name="general_bookmarks_add">Adicionar aos escolhidos</string>
+    <string name="buy_resources">Completar a reserva</string>
+    <string name="general_network_reconnect">Tentamos reinstalar a conexão com a rede</string>
+    <string name="user_is_banned">O usuário foi excluido</string>
 </resources>

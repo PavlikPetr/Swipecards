@@ -402,9 +402,14 @@
     <string name="general_bookmarks">Favoritos</string>
     <string name="general_fans">Admiradores</string>
     <string name="general_no_fans">No hay admiradores</string>
+    <plurals name="get_free_money">
+        <item quantity="other">%d monedas gratis</item>
+        <item quantity="one">%d moneda gratis</item>
+    </plurals>
     <string name="settings_edit_profile">Editar perfil</string>
     <string name="general_bookmarks_delete">Eliminar de los favoritos</string>
     <string name="general_bookmarks_add">Agregar a los favoritos</string>
     <string name="buy_resources">Comprar recursos</string>
     <string name="general_network_reconnect">Intentando recuperar la conexión con la red</string>
+    <string name="user_is_banned">Usuario baneado</string>
 </resources>
