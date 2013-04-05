@@ -113,7 +113,10 @@
     <string name="edit_delete">삭제하기</string>
     <string name="edit_restore">저장하기</string>
     <string name="album_add_photo_title">사진을 추가하세요.</string>
+    <string name="gifts_romantic">로맨틱</string>
+    <string name="gifts_friends">우정</string>
     <string name="gifts">선물</string>
+    <string name="gifts_present">축하</string>
     <string name="gifts_title">선물을 선택하기</string>
     <string name="gifts_send_btn">선물을 보내기</string>
     <string name="map_location_progress">현재 위치를 설정합니다.</string>
@@ -300,6 +303,7 @@
     <string name="leaders_select_photo_info">가장 자신이 잘 나온 사진을 선택해 주세요! 낮은 순위의 사진은 선택할 수 없습니다.</string>
     <string name="default_price_format">전체 금액은 %.2f USD 입니다.</string>
     <string name="dating_online_only">%s, 온라인 상태의 유저들만.</string>
+    <string name="leaders_pick_condition">%d%% 이하의 사진은 선택할 수 없습니다.</string>
     <string name="map_popup_address">주소</string>
     <string name="black_list_info">당신은 블랙 리스트에 이웃을 추가하였습니다. VIP상태 설정의 프로필에서 해당 사항을 변경할 수 있습니다.</string>
     <string name="general_gift">선물</string>
@@ -377,4 +381,25 @@
     <string name="upload_photos">사진을 업로드해주세요</string>
     <string name="chat_no_message_title">교제를 시작해 보세요!</string>
     <string name="chat_no_message_text">상대에게 메세지를 전송하거나 선물을 해보세요. 상대도 반드시 그에 응답할것입니다.</string>
+    <string name="user_baned">해당 사용자가 이용정지 되었습니다.</string>
+    <string name="general_choose_city">도시를 선택하여 주세요</string>
+    <string name="buy_mobile_payments">다른 결제 방법</string>
+    <string name="buy_mobile_payments_complete">결제가 완료되었습니다.  결제 과정을 처리중에 있으니 잠시만 기다려 주십시오.</string>
+    <string name="general_save_and_exit">저장하고 나가기</string>
+    <string name="general_set_password">어플 종료전 비밀번호를 설정해주세요</string>
+    <string name="user_is_deleted">해당 사용자 계정이 삭제 되었습니다.</string>
+    <string name="general_bookmarks_title">북마크</string>
+    <string name="general_empty_bookmarks">북마크가 비어 있습니다.</string>
+    <string name="general_bookmarks">북마크</string>
+    <string name="general_fans">팬들</string>
+    <string name="general_no_fans">팬이 없습니다.</string>
+    <plurals name="get_free_money">
+        <item quantity="other">%d 코인은 무료입니다.</item>
+    </plurals>
+    <string name="settings_edit_profile">프로필 편집하기</string>
+    <string name="general_bookmarks_delete">북마크에서 삭제하기</string>
+    <string name="general_bookmarks_add">북마크에 추가하기</string>
+    <string name="buy_resources">충전하기</string>
+    <string name="general_network_reconnect">네트워크 연결을 재 시도중입니다.</string>
+    <string name="user_is_banned">해당 사용자가 이용정지 되었습니다.</string>
 </resources>

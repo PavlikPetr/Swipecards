@@ -312,7 +312,7 @@
     <string name="leaders_pick_condition">You cannot select a photo with a rating lower than %d%%:</string>
     <string name="map_popup_address">Address</string>
     <string name="black_list_info">You added someone to your black list. You can change this in your profile, or in your VIP-status settings.</string>
-    <string name="general_gift">gift</string>
+    <string name="general_gift">Gift</string>
     <string name="user_actions_chat">Chat</string>
     <string name="general_place">Place</string>
     <string name="general_soon">It will be soon</string>

@@ -413,4 +413,5 @@
     <string name="general_bookmarks_add">Přidat k oblíbeným</string>
     <string name="buy_resources">Doplnit zásoby</string>
     <string name="general_network_reconnect">Snažíme se obnovit připojení k síti</string>
+    <string name="user_is_banned">Uživatel je zabanován</string>
 </resources>
