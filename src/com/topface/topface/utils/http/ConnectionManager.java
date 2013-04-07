@@ -1,5 +1,6 @@
 package com.topface.topface.utils.http;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -267,16 +268,17 @@ public class ConnectionManager {
 
     private boolean showRetryDialog(final IApiRequest apiRequest) {
         boolean needResend = false;
-        if (apiRequest.getHandler() != null) {
+        final Context context = apiRequest.getContext();
+        if (apiRequest.getHandler() != null && context != null && context instanceof Activity) {
             needResend = true;
             apiRequest.getHandler().post(new Runnable() {
                 @Override
                 public void run() {
-                    RetryDialog retryDialog = new RetryDialog(apiRequest.getContext(), apiRequest);
-                    retryDialog.setMessage(apiRequest.getContext().getString(R.string.general_maintenance));
+                    RetryDialog retryDialog = new RetryDialog(context, apiRequest);
+                    retryDialog.setMessage(context.getString(R.string.general_maintenance));
                     retryDialog.setButton(
                             Dialog.BUTTON_POSITIVE,
-                            apiRequest.getContext().getString(R.string.general_dialog_retry),
+                            context.getString(R.string.general_dialog_retry),
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -284,7 +286,11 @@ public class ConnectionManager {
                                 }
                             }
                     );
-                    retryDialog.show();
+                    try {
+                        retryDialog.show();
+                    } catch (Exception e) {
+                        Debug.error(e);
+                    }
                 }
             });
         }
