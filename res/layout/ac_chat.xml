@@ -146,6 +146,8 @@
                         android:layout_centerInParent="true"
                         android:layout_marginTop="32dp"
                         android:layout_marginBottom="32dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
                         />
             </RelativeLayout>
         </RelativeLayout>
@@ -153,9 +155,16 @@
 
     <ImageView style="@style/HeaderShadow"/>
 
-    <com.topface.topface.ui.views.LockerView
-            android:id="@+id/llvChatLoading"
-            style="@style/LoadingLocker"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"/>
+    <TextView
+            android:id="@+id/tvBackgroundText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:singleLine="true"
+            style="@style/BackgroundFont"
+            android:text="@string/general_dialog_loading"
+            android:drawableLeft="@drawable/loader"
+            android:visibility="gone"/>
 </RelativeLayout>
