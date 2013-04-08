@@ -63,6 +63,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
+        setWidthToCounters();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileUpdateReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
     }
@@ -253,29 +254,29 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     ServicesTextView.OnMeasureListener listener = new ServicesTextView.OnMeasureListener() {
         @Override
         public void onMeasure(int width, int height) {
-            if(coins.getWidth() > 0 && likes.getWidth() > 0) {
-                DisplayMetrics displaymetrics = new DisplayMetrics();
-                getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-                int newWidth = (int)(displaymetrics.widthPixels * 0.7);
-                int margin = (int)(10 * displaymetrics.density);
-                int preCountedWidth = coins.getWidth() + likes.getWidth() + mContainer.getPaddingLeft() + mContainer.getPaddingRight() + margin;
-                if (preCountedWidth >= newWidth) {
-                    newWidth = preCountedWidth;
-                    if(newWidth > displaymetrics.widthPixels) {
-                        FragmentSwitchController.EXPANDING_PERCENT = 5;
-                    } else {
-                        FragmentSwitchController.EXPANDING_PERCENT =(int)( 100 * (1 - (double)newWidth/(double)displaymetrics.widthPixels));
-                    }
-                }
-
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mContainer.getLayoutParams();
-                params.width = newWidth;
-                mContainer.setLayoutParams(params);
-            }
+            setWidthToCounters();
         }
     };
+
+    private void setWidthToCounters() {
+        if(coins.getWidth() > 0 && likes.getWidth() > 0) {
+            DisplayMetrics displaymetrics = new DisplayMetrics();
+            getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+            int newWidth = (int)(displaymetrics.widthPixels * 0.7);
+            int margin = (int)(10 * displaymetrics.density);
+            int preCountedWidth = coins.getWidth() + likes.getWidth() + mContainer.getPaddingLeft() + mContainer.getPaddingRight() + margin;
+            if (preCountedWidth >= newWidth) {
+                newWidth = preCountedWidth;
+                if(newWidth > displaymetrics.widthPixels) {
+                    FragmentSwitchController.EXPANDING_PERCENT = 5;
+                } else {
+                    FragmentSwitchController.EXPANDING_PERCENT =(int)( 100 * (1 - (double)newWidth/(double)displaymetrics.widthPixels));
+                }
+            }
+
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mContainer.getLayoutParams();
+            params.width = newWidth;
+            mContainer.setLayoutParams(params);
+        }
+    }
 }
-
-
-
-

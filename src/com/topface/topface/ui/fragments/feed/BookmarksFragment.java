@@ -1,13 +1,18 @@
 package com.topface.topface.ui.fragments.feed;
 
 import android.graphics.drawable.Drawable;
+import android.view.View;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedBookmark;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Visitor;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.BookmarkDeleteRequest;
 import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.adapters.BookmarksListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
@@ -30,6 +35,28 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
     @Override
     protected int getTypeForGCM() {
         return GCMUtils.GCM_TYPE_UNKNOWN;
+    }
+
+    @Override
+    protected void onDeleteItem(final int position) {
+        if(getItem(position) != null) {
+            BookmarkDeleteRequest request = new BookmarkDeleteRequest(getActivity(), getItem(position).user.id);
+            request.callback(new SimpleApiHandler() {
+                @Override
+                public void success(ApiResponse response) {
+                    mLockView.setVisibility(View.GONE);
+                    getListAdapter().removeItem(position);
+                }
+
+                @Override
+                public void always(ApiResponse response) {
+                    super.always(response);
+                    if (mLockView != null) {
+                        mLockView.setVisibility(View.GONE);
+                    }
+                }
+            }).exec();
+        }
     }
 
     @Override
