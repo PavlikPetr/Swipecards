@@ -409,4 +409,5 @@
     <string name="buy_resources">Rifornire scorte</string>
     <string name="general_network_reconnect">Stiamo cercando di ripristinare il collegamento alla rete</string>
     <string name="user_is_banned">L’utente è stato bannato</string>
+    <string name="profile_empty_name">Non si può lasciare il campo Nome vuoto</string>
 </resources>

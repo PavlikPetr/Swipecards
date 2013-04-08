@@ -402,4 +402,5 @@
     <string name="buy_resources">충전하기</string>
     <string name="general_network_reconnect">네트워크 연결을 재 시도중입니다.</string>
     <string name="user_is_banned">해당 사용자가 이용정지 되었습니다.</string>
+    <string name="profile_empty_name">이름 항목은 반드시 작성하여야 합니다.</string>
 </resources>
