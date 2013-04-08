@@ -641,4 +641,9 @@
         <item name="android:background">@drawable/btn_blue_selector</item>
         <item name="android:textColor">#FFFFFF</item>
     </style>
+
+    <style name="ButtonSale" parent="ButtonBlue">
+        <item name="android:background">@drawable/btn_sale_selector</item>
+        <item name="android:paddingRight">56dp</item>
+    </style>
 </resources>
