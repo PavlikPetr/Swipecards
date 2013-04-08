@@ -45,7 +45,7 @@
                     android:cacheColorHint="#00000000"
                     android:clickable="true"
                     android:divider="@android:color/transparent"
-                    android:dividerHeight="0dp"
+                    android:dividerHeight="8dp"
                     android:fadeScrollbars="true"
                     android:fadingEdge="none"
                     android:stackFromBottom="true"

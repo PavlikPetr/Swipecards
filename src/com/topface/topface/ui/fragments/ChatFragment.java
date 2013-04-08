@@ -212,6 +212,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         }
                     }
                     mUser = new FeedUser(new JSONObject(savedInstanceState.getString(FRIEND_FEED_USER)));
+                    if (mUser != null && !mUser.isEmpty()) {
+                        onUserLoaded();
+                    }
+
                     if (was_failed) {
                         mLockScreen.setVisibility(View.VISIBLE);
                     } else {
@@ -270,6 +274,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         mAdapter.addHeader(mListView.getRefreshableView());
         mListView.setAdapter(mAdapter);
         mListView.setOnScrollListener(mAdapter);
+        mListView.getRefreshableView().addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.item_empty_footer,null));
     }
 
     private void initLockScreen(View root) {
@@ -299,6 +304,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
         });
 
+        mActionBar.showProfileAvatar();
+
         setNavigationTitles(userSex, userName, userAge, userCity);
     }
 
@@ -306,7 +313,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         String userTitle = (TextUtils.isEmpty(userName) && userAge == 0) ? Static.EMPTY : (userName + "," + userAge);
         mActionBar.setTitleText(userTitle);
         mActionBar.setSubTitleText(userCity);
-        mActionBar.showProfileButton(this, userSex);
     }
 
     @Override
@@ -396,6 +402,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 setNavigationTitles(data.user.sex, data.user.first_name, data.user.age, data.user.city.name);
                 wasFailed = false;
                 mUser = data.user;
+                if (mUser != null && !mUser.isEmpty()) {
+                    onUserLoaded();
+                }
                 if (mAdapter != null) {
                     if (!data.items.isEmpty()) {
                         if (pullToRefresh) {
@@ -406,7 +415,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                             mAdapter.setData(data.items, data.more, mListView.getRefreshableView());
                         }
                     } else {
-                        if (!data.more) mAdapter.forceStopLoader();
+                        if (!data.more && !pullToRefresh) mAdapter.forceStopLoader();
                     }
 
                     if (mAdapter.getCount() <= 0) {
@@ -445,6 +454,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
             }
         }).exec();
+    }
+
+    private void onUserLoaded() {
+        if (mActionBar != null) mActionBar.showProfileAvatar(mUser.photo,this);
     }
 
     private void release() {
@@ -493,7 +506,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 break;
             case R.id.btnNavigationProfileBar:
-            case R.id.left_icon:
+            case R.id.btnNavigationBarAvatar:
                 //TODO костыль для навигации
                 if (mProfileInvoke) {
                     getActivity().setResult(Activity.RESULT_CANCELED);

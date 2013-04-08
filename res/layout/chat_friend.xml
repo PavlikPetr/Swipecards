@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:padding="4dp"
                 android:background="@android:color/transparent"
                 android:id="@+id/layout"
                 android:gravity="left">
@@ -12,17 +11,14 @@
     <LinearLayout
             android:layout_below="@id/loDateDivider"
             android:id="@+id/user_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="4dp"
-            android:background="@drawable/bg_message_friend"
-            android:orientation="vertical"
+            style="@style/chat_message_layout.friend"
             android:layout_alignParentLeft="true">
 
         <!-- message -->
         <TextView
                 android:id="@+id/chat_message"
-                style="@style/chat_message.friend"/>
+                style="@style/chat_message.friend"
+                />
     </LinearLayout>
 
     <!-- date -->

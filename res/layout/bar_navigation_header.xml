@@ -170,6 +170,11 @@
             android:src="@drawable/user_profile_actions_button_selector"
             android:visibility="gone"
             />
+
+        <com.topface.topface.ui.views.ImageViewRemote
+                android:id="@+id/btnNavigationBarAvatar"
+                style="@style/NavigationBarAvatar"
+                android:visibility="gone"/>
     </RelativeLayout>
 
 </LinearLayout>
