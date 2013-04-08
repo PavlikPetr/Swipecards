@@ -11,10 +11,7 @@ import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.Scroller;
 import com.topface.topface.R;
-import com.topface.topface.ui.fragments.feed.DialogsFragment;
-import com.topface.topface.ui.fragments.feed.LikesFragment;
-import com.topface.topface.ui.fragments.feed.MutualFragment;
-import com.topface.topface.ui.fragments.feed.VisitorsFragment;
+import com.topface.topface.ui.fragments.feed.*;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -190,6 +187,12 @@ public class FragmentSwitchController extends ViewGroup {
                 break;
             case BaseFragment.F_DIALOGS:
                 fragment = new DialogsFragment();
+                break;
+            case BaseFragment.F_BOOKMARKS:
+                fragment = new BookmarksFragment();
+                break;
+            case BaseFragment.F_FANS:
+                fragment = new FansFragment();
                 break;
             case BaseFragment.F_TOPS:
                 fragment = new TopsFragment();

@@ -39,6 +39,8 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public static final int F_TOPS = 1006;
     public static final int F_SETTINGS = 1007;
     public static final int F_VISITORS = 1008;
+    public static final int F_BOOKMARKS = 1009;
+    public static final int F_FANS = 1010;
 
 
     protected ActionBar getActionBar(View view) {

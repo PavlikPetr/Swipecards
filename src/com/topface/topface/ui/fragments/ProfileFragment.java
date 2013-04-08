@@ -463,7 +463,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
         switch (v.getId()) {
             case R.id.btnEdit:
-                startActivity(new Intent(getActivity().getApplicationContext(), EditProfileActivity.class));
+                startActivity(ContainerActivity.getNewIntent(ContainerActivity.INTENT_SETTINGS_FRAGMENT));
+//                startActivity(new Intent(getActivity().getApplicationContext(), EditProfileActivity.class));
                 break;
             case R.id.acDelight:
                 if (v.isEnabled()) {

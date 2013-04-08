@@ -13,6 +13,7 @@ import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.requests.RateRequest;
 import com.topface.topface.ui.adapters.LikesListAdapter;
 import com.topface.topface.ui.adapters.LikesListAdapter.OnMutualListener;
 import com.topface.topface.utils.CountersManager;
@@ -42,8 +43,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         adapter.setOnMutualListener(new OnMutualListener() {
 
             @Override
-            public void onMutual(int userId, int rate, int mutualId) {
-                mRateController.onRate(userId, rate, mutualId, null);
+            public void onMutual(int userId, int rate, String mutualId) {
+                mRateController.onRate(userId, rate, RateRequest.DEFAULT_MUTUAL, null);
             }
         });
         return adapter;

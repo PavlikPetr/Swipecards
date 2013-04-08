@@ -575,14 +575,14 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 case R.id.btnFragmentDialogs:
                     fragmentId = BaseFragment.F_DIALOGS;
                     break;
-                case R.id.btnFragmentTops:
-                    fragmentId = BaseFragment.F_TOPS;
-                    break;
                 case R.id.btnFragmentVisitors:
                     fragmentId = BaseFragment.F_VISITORS;
                     break;
-                case R.id.btnFragmentSettings:
-                    fragmentId = BaseFragment.F_SETTINGS;
+                case R.id.btnFragmentBookmarks:
+                    fragmentId = BaseFragment.F_BOOKMARKS;
+                    break;
+                case R.id.btnFragmentFans:
+                    fragmentId = BaseFragment.F_FANS;
                     break;
                 default:
                     fragmentId = BaseFragment.F_PROFILE;
@@ -748,8 +748,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     @Override
-    public void close(Fragment fragment) {
-        super.close(fragment);
+    public void close(Fragment fragment, boolean needInit) {
+        super.close(fragment, needInit);
         mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
         mFragmentMenu.selectDefaultMenu();
     }

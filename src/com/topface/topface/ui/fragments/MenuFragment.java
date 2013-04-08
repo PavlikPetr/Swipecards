@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments;
 
-import android.app.ActionBar;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,19 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
-import com.topface.topface.ui.gridlayout.GridLayout;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Debug;
 
 public class MenuFragment extends Fragment implements View.OnClickListener {
     private View mRootLayout;
@@ -45,6 +39,9 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     private ServicesTextView coins;
     private ServicesTextView likes;
     private LinearLayout mContainer;
+    private ImageView rocket;
+    private ImageView notEnoughData;
+    private TextView mTvNotifyFans;
 
     public interface FragmentMenuListener {
         public void onMenuClick(int buttonId);
@@ -106,6 +103,11 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         coins.setOnMeasureListener(listener);
         likes.setOnMeasureListener(listener);
 
+
+        notEnoughData = (ImageView) mRootLayout.findViewById(R.id.noData);
+        rocket = (ImageView) mRootLayout.findViewById(R.id.rocket);
+
+
         Button buyButton = (Button) mRootLayout.findViewById(R.id.menuBuyBtn);
         buyButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -120,9 +122,9 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                 (Button) mRootLayout.findViewById(R.id.btnFragmentLikes),
                 (Button) mRootLayout.findViewById(R.id.btnFragmentMutual),
                 (Button) mRootLayout.findViewById(R.id.btnFragmentDialogs),
-                (Button) mRootLayout.findViewById(R.id.btnFragmentTops),
                 (Button) mRootLayout.findViewById(R.id.btnFragmentVisitors),
-                (Button) mRootLayout.findViewById(R.id.btnFragmentSettings)
+                (Button) mRootLayout.findViewById(R.id.btnFragmentBookmarks),
+                (Button) mRootLayout.findViewById(R.id.btnFragmentFans)
         };
 
         for (Button btn : mButtons) {
@@ -133,6 +135,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         mTvNotifyLikes = (TextView) mRootLayout.findViewById(R.id.tvNotifyLikes);
         mTvNotifyMutual = (TextView) mRootLayout.findViewById(R.id.tvNotifyMutual);
         mTvNotifyDialogs = (TextView) mRootLayout.findViewById(R.id.tvNotifyDialogs);
+        mTvNotifyFans = (TextView) mRootLayout.findViewById(R.id.tvNotifyFans);
         mTvNotifyVisitors = (TextView) mRootLayout.findViewById(R.id.tvNotifyVisitors);
 
         hide();
@@ -196,10 +199,30 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         } else {
             mTvNotifyVisitors.setVisibility(View.INVISIBLE);
         }
+
+        if (CacheProfile.unread_fans > 0) {
+            mTvNotifyFans.setText(" " + CacheProfile.unread_fans + " ");
+            mTvNotifyFans.setVisibility(View.VISIBLE);
+        } else {
+            mTvNotifyFans.setVisibility(View.INVISIBLE);
+        }
     }
 
     public void show() {
         mRootLayout.setVisibility(View.VISIBLE);
+        if (CacheProfile.premium) {
+            rocket.setVisibility(View.VISIBLE);
+        } else {
+            rocket.setVisibility(View.GONE);
+        }
+        if (!CacheProfile.checkIsFillData()) {
+            notEnoughData.setVisibility(View.VISIBLE);
+            rocket.setVisibility(View.GONE);
+        } else {
+            notEnoughData.setVisibility(View.GONE);
+        }
+        coins.setText(Integer.toString(CacheProfile.money));
+        likes.setText(Integer.toString(CacheProfile.likes));
     }
 
     public void hide() {

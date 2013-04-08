@@ -88,8 +88,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
             @Override
             public void onReceive(Context context, Intent intent) {
-                int itemId = intent.getIntExtra(ChatFragment.INTENT_ITEM_ID, -1);
-                if (itemId != -1) {
+                String itemId = intent.getStringExtra(ChatFragment.INTENT_ITEM_ID);
+                if (itemId != null) {
                     makeItemReadWithId(itemId);
                 } else {
                     String lastMethod = intent.getStringExtra(CountersManager.METHOD_INTENT_STRING);
@@ -638,9 +638,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         }
     }
 
-    private void makeItemReadWithId(int id) {
+    private void makeItemReadWithId(String id) {
         for (FeedItem item : getListAdapter().getData()) {
-            if (item.id == id && item.unread) {
+            if (item.id.equals(id) && item.unread) {
                 item.unread = false;
                 getListAdapter().notifyDataSetChanged();
                 decrementCounters();

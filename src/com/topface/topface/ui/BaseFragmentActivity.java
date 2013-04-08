@@ -84,9 +84,15 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         }
     }
 
-    public void close(Fragment fragment) {
+    public void close(Fragment fragment, boolean needInit) {
         getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-        onInit();
+        if(needInit) {
+            onInit();
+        }
+    }
+
+    public void startFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().add(R.id.content, fragment).addToBackStack(null).commit();
     }
 
     public void onInit() {

@@ -3,7 +3,7 @@ package com.topface.topface.ui.fragments.feed;
 import android.view.View;
 import com.topface.topface.data.FeedItem;
 
-public abstract class FilterDisabledFragment<T extends FeedItem> extends FeedFragment<T> {
+public abstract class NoFilterFeedFragment<T extends FeedItem> extends FeedFragment<T> {
 
     @Override
     protected final void initFilter(View view) {

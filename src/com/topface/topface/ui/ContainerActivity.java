@@ -24,6 +24,7 @@ public class ContainerActivity extends BaseFragmentActivity {
     public static final int INTENT_CHAT_FRAGMENT = 3;
     public static final int INTENT_REGISTRATION_FRAGMENT = 4;
     public static final int INTENT_RECOVER_PASSWORD = 5;
+    public static final int INTENT_SETTINGS_FRAGMENT = 6;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -107,6 +108,8 @@ public class ContainerActivity extends BaseFragmentActivity {
             case INTENT_RECOVER_PASSWORD:
                 fragment = new RecoverPwdFragment();
                 break;
+            case INTENT_SETTINGS_FRAGMENT:
+                fragment = new SettingsFragment();
             default:
                 break;
         }

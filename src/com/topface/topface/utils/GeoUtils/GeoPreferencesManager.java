@@ -36,7 +36,9 @@ public class GeoPreferencesManager {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                mPreferences.edit().putFloat(LATITUDE, (float) location.getLatitude()).putFloat(LONGITUDE, (float) location.getLongitude()).commit();
+                if (location != null) {
+                    mPreferences.edit().putFloat(LATITUDE, (float) location.getLatitude()).putFloat(LONGITUDE, (float) location.getLongitude()).commit();
+                }
             }
         }).start();
     }

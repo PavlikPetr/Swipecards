@@ -5,20 +5,29 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class FeedRequest extends ApiRequest {
+
+
     // Data
     public int limit;   // максимальное количество запрашиваемых диалогов. ОДЗ: 0 < limit <= 50
-    public int to;  // идентификатор последнего диалога для отображения. В случае отсутствия параметра диалоги возвращаются от последнего
-    public int from;  // идентификатор последнего диалога для запроса новых сообщений после данного идентификатора
+    public String to;  // идентификатор последнего диалога для отображения. В случае отсутствия параметра диалоги возвращаются от последнего
+    public String from;  // идентификатор последнего диалога для запроса новых сообщений после данного идентификатора
     public boolean unread;  // параметр получения только тех диалогов, в которых есть непрочитанные сообщения
+    public int type = -1; // нужен исключительно для избранных - показывает кого подгрузить - избранных или поклонников. Если не указан, подгружаются поклонники
     private FeedService mService;
     //private boolean leave; //Оставить сообщения не прочитанными
 
     public static enum FeedService {
-        DIALOGS, LIKES, MUTUAL, VISITORS, BLACK_LIST
+        DIALOGS, LIKES, MUTUAL, VISITORS, BLACK_LIST, BOOKMARKS, FANS
     }
 
     public FeedRequest(FeedService service, Context context) {
         super(context);
+        //Костыль для избранных
+        if(service == FeedService.BOOKMARKS) {
+            type = 0;
+        } else {
+            type = 1;
+        }
         mService = service;
     }
 
@@ -28,12 +37,16 @@ public class FeedRequest extends ApiRequest {
         data.put("limit", limit);
         data.put("new", unread);
         //data.put("leave", leave);
-        if (to > 0) {
+        if (to != null) {
             data.put("to", to);
         }
 
-        if (from > 0) {
+        if (from != null) {
             data.put("from", from);
+        }
+
+        if (type > -1) {
+            data.put("type", type);
         }
 
         return data;
@@ -57,6 +70,11 @@ public class FeedRequest extends ApiRequest {
                 break;
             case BLACK_LIST:
                 service = "blacklistGet";
+                break;
+            case FANS:
+            case BOOKMARKS:
+                service = "bookmarks";
+                break;
         }
         return service;
     }

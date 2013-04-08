@@ -22,7 +22,7 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
     private OnMutualListener mMutualListener;
 
     public interface OnMutualListener {
-        void onMutual(int userId, int rate, int mutualId);
+        void onMutual(int userId, int rate, String mutualId);
     }
 
     public LikesListAdapter(Context context, Updater updateCallback) {

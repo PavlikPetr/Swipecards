@@ -26,6 +26,7 @@ public class CacheProfile {
     public static int unread_messages; // количество непрочитанных сообщений пользователя
     public static int unread_mutual;   // количество непрочитанных симпатий
     public static int unread_visitors; // количество непрочитанных гостей
+    public static int unread_fans;     // количество непрочитаных поклонников
     public static City city;           // город пользователя
     public static int money;           // количество монет у пользователя
     public static int likes;           // количество симпатий пользователя
@@ -220,6 +221,10 @@ public class CacheProfile {
             }
         }
         return options;
+    }
+
+    public static boolean checkIsFillData() {
+        return city != null && !city.isEmpty() && age != 0 && first_name != null && photo != null;
     }
 
     public static void clearProfile() {
