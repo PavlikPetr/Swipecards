@@ -411,4 +411,5 @@
     <string name="buy_resources">Incarca rezerva</string>
     <string name="general_network_reconnect">Incercam sa restabilim legatura</string>
     <string name="user_is_banned">Utilizator blocat</string>
+    <string name="profile_empty_name">Numele trebuie sa fie completat</string>
 </resources>
