@@ -85,9 +85,14 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
         initFragmentSwitcher();
 
-        mNovice = Novice.getInstance(getPreferences());
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
         Offerwalls.init(getApplicationContext());
+    }
+
+    @Override
+    protected void inBackgroundThread() {
+        super.inBackgroundThread();
+        mNovice = Novice.getInstance(getPreferences());
     }
 
     private SharedPreferences getPreferences() {
@@ -556,14 +561,17 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             if (mFragmentSwitcher.getCurrentFragment() != null) {
                 mFragmentSwitcher.getCurrentFragment().activateActionBar(true);
             }
-            if (mNovice.isMenuCompleted()) return;
 
-            if (mNovice.isShowFillProfile()) {
-                mNoviceLayout.setLayoutRes(R.layout.novice_fill_profile, mFragmentMenu.getProfileButtonOnClickListener());
-                AlphaAnimation alphaAnimation = new AlphaAnimation(0.0F, 1.0F);
-                alphaAnimation.setDuration(400L);
-                mNoviceLayout.startAnimation(alphaAnimation);
-                mNovice.completeShowFillProfile();
+            if (mNovice != null) {
+                if (mNovice.isMenuCompleted()) return;
+
+                if (mNovice.isShowFillProfile()) {
+                    mNoviceLayout.setLayoutRes(R.layout.novice_fill_profile, mFragmentMenu.getProfileButtonOnClickListener());
+                    AlphaAnimation alphaAnimation = new AlphaAnimation(0.0F, 1.0F);
+                    alphaAnimation.setDuration(400L);
+                    mNoviceLayout.startAnimation(alphaAnimation);
+                    mNovice.completeShowFillProfile();
+                }
             }
         }
 

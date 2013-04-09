@@ -43,6 +43,14 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         if (mNeedAnimate) {
             overridePendingTransition(com.topface.topface.R.anim.slide_in_from_right, com.topface.topface.R.anim.slide_out_left);
         }
+
+        (new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                inBackgroundThread();
+            }
+        }).start();
     }
 
     private void checkProfileLoad() {
@@ -197,5 +205,8 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             newFragment.show(getSupportFragmentManager(), TakePhotoDialog.TAG);
             needOpenDialog = false;
         }
+    }
+
+    protected void inBackgroundThread() {
     }
 }
