@@ -304,7 +304,7 @@ public class FragmentSwitchController extends ViewGroup {
     }
 
     public void setScrollingCacheEnabled(boolean enabled) {
-        if(getChildCount() > 0) {
+        if (getChildCount() > 0) {
             getChildAt(0).setDrawingCacheEnabled(enabled);
             getChildAt(1).setDrawingCacheEnabled(enabled);
         }
@@ -482,7 +482,7 @@ public class FragmentSwitchController extends ViewGroup {
         if (Math.abs(velocity) < mVelocitySlop)
             velocity = 0;
 
-        int scrollingVelocityThreshold = 2000;
+        int scrollingVelocityThreshold = 1000;
         float scrollingDistanceThreshold = 0;
         if (velocity > 0) {
             // right - expect EXPAND

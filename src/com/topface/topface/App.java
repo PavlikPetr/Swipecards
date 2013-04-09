@@ -8,7 +8,9 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Looper;
 import android.os.StrictMode;
+import android.support.v4.content.LocalBroadcastManager;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
@@ -24,16 +26,21 @@ import com.topface.topface.utils.social.AuthToken;
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 @ReportsCrashes(formKey = "817b00ae731c4a663272b4c4e53e4b61")
 public class App extends Application {
 
     public static final String TAG = "Topface";
     public static final String CONNECTIVITY_CHANGE_ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
+    private static final long PROFILE_UPDATE_TIMEOUT = 1000 * 90;
 
     public static boolean DEBUG = false;
     private static Context mContext;
     private static Intent mConnectionIntent;
     private static ConnectionChangeReceiver mConnectionReceiver;
+    private static AtomicBoolean mProfileUpdating = new AtomicBoolean(false);
+    private static long mLastProfileUpdate;
 
     public static boolean isDebugMode() {
         boolean debug = false;
@@ -53,24 +60,21 @@ public class App extends Application {
 
     @Override
     public void onCreate() {
-//        android.os.Debug.startMethodTracing("topface_create");
-        ACRA.init(this);
-        ACRA.getErrorReporter().setReportSender(new HockeySender());
+        //android.os.Debug.startMethodTracing("topface_create");
+
         super.onCreate();
         mContext = getApplicationContext();
-
         //Включаем отладку, если это дебаг версия
         checkDebugMode();
+        //Включаем логирование ошибок
+        initAcra();
+
         //Включаем строгий режим, если это Debug версия
         checkStrictMode();
         //Для Android 2.1 и ниже отключаем Keep-Alive
         checkKeepAlive();
 
         Debug.log("App", "+onCreate");
-        Ssid.init();
-        DateUtils.syncTime();
-
-        CacheProfile.loadProfile();
 
         //Начинаем слушать подключение к интернету
         if (mConnectionIntent == null) {
@@ -78,13 +82,48 @@ public class App extends Application {
             mConnectionIntent = registerReceiver(mConnectionReceiver, new IntentFilter(CONNECTIVITY_CHANGE_ACTION));
         }
 
-        if (CacheProfile.isLoaded()) {
+        //Выполнение всего, что можно сделать асинхронно, делаем в отдельном потоке
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                onCreateAsync();
+            }
+        }).start();
+
+    }
+
+    /**
+     * Вызывается в onCreate, но выполняется в отдельном потоке
+     */
+    private void onCreateAsync() {
+        DateUtils.syncTime();
+
+        Ssid.init();
+
+        CacheProfile.loadProfile();
+
+        //Оповещаем о том, что профиль загрузился
+        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(
+                new Intent(CacheProfile.ACTION_PROFILE_LOAD)
+        );
+
+        if (!CacheProfile.isEmpty()) {
+            Looper.prepare();
             sendProfileAndOptionsRequests();
+            Looper.loop();
         }
-        //Если приходим с нотификации незалогинеными, нужно вернуться в AuthActivity
+
         if (Ssid.isLoaded() && AuthToken.getInstance().isEmpty()) {
             // GCM
             GCMUtils.init(getContext());
+        }
+
+    }
+
+    private void initAcra() {
+        if (!DEBUG) {
+            ACRA.init(this);
+            ACRA.getErrorReporter().setReportSender(new HockeySender());
         }
     }
 
@@ -116,7 +155,6 @@ public class App extends Application {
     }
 
     public static void sendProfileAndOptionsRequests() {
-
         OptionsRequest request = new OptionsRequest(App.getContext());
         request.callback(new DataApiHandler() {
             @Override
@@ -143,25 +181,34 @@ public class App extends Application {
     }
 
     public static void sendProfileRequest() {
-        ProfileRequest profileRequest = new ProfileRequest(App.getContext());
-        profileRequest.part = ProfileRequest.P_ALL;
-        profileRequest.callback(new DataApiHandler<Profile>() {
+        if (mProfileUpdating.compareAndSet(false, true)) {
+            mLastProfileUpdate = System.currentTimeMillis();
+            ProfileRequest profileRequest = new ProfileRequest(App.getContext());
+            profileRequest.part = ProfileRequest.P_ALL;
+            profileRequest.callback(new DataApiHandler<Profile>() {
 
-            @Override
-            protected void success(Profile data, ApiResponse response) {
-                CacheProfile.setProfile(data, response);
-            }
+                @Override
+                protected void success(Profile data, ApiResponse response) {
+                    CacheProfile.setProfile(data, response);
+                    LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                }
 
-            @Override
-            protected Profile parseResponse(ApiResponse response) {
-                return Profile.parse(response);
-            }
+                @Override
+                protected Profile parseResponse(ApiResponse response) {
+                    return Profile.parse(response);
+                }
 
-            @Override
-            public void fail(int codeError, ApiResponse response) {
-            }
+                @Override
+                public void fail(int codeError, ApiResponse response) {
+                }
 
-        }).exec();
+                @Override
+                public void always(ApiResponse response) {
+                    super.always(response);
+                    mProfileUpdating.set(false);
+                }
+            }).exec();
+        }
     }
 
     public static Context getContext() {
@@ -172,5 +219,11 @@ public class App extends Application {
         return mConnectionReceiver.isConnected();
     }
 
+    public static void checkProfileUpdate() {
+        if (System.currentTimeMillis() > mLastProfileUpdate + PROFILE_UPDATE_TIMEOUT) {
+            mLastProfileUpdate = System.currentTimeMillis();
+            sendProfileRequest();
+        }
+    }
 }
 

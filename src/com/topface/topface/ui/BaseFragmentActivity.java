@@ -27,30 +27,62 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     public static final String INTENT_PREV_ENTITY = "prev_entity";
     public static final String AUTH_TAG = "AUTH";
 
-    private boolean afterOnSavedInstanceState = false;
     protected boolean needOpenDialog = true;
 
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
     private BroadcastReceiver mReauthReceiver;
     protected boolean mNeedAnimate = true;
     private boolean needAuth = true;
+    private BroadcastReceiver mProfileLoadReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFormat(PixelFormat.RGBA_8888);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
-        if (isNeedAuth() && (AuthToken.getInstance().isEmpty() || !CacheProfile.isLoaded())) {
-            startAuth();
-        }
         if (mNeedAnimate) {
             overridePendingTransition(com.topface.topface.R.anim.slide_in_from_right, com.topface.topface.R.anim.slide_out_left);
+        }
+    }
+
+    private void checkProfileLoad() {
+        if (CacheProfile.isLoaded()) {
+            if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
+                onLoadProfile();
+            } else {
+                startAuth();
+            }
+
+        } else if (mProfileLoadReceiver == null) {
+            mProfileLoadReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    checkProfileLoad();
+                }
+            };
+
+            try {
+                registerReceiver(mProfileLoadReceiver, new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD));
+            } catch (Exception ex) {
+                Debug.error(ex);
+            }
+        }
+    }
+
+    protected void onLoadProfile() {
+        if (CacheProfile.isEmpty() || AuthToken.getInstance().isEmpty()) {
+            startAuth();
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        checkProfileLoad();
+        registerReauthReceiver();
+    }
+
+    private void registerReauthReceiver() {
         //Если при запросе вернулась ошибка что нет токена, кидается соответствующий интент.
         //здесь он ловится, и открывается фрагмент авторизации
         mReauthReceiver = new BroadcastReceiver() {
@@ -86,10 +118,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     public void close(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-        onInit();
-    }
-
-    public void onInit() {
     }
 
     @Override
@@ -103,6 +131,10 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         removeAllRequests();
         try {
             unregisterReceiver(mReauthReceiver);
+            if (mProfileLoadReceiver != null) {
+                unregisterReceiver(mProfileLoadReceiver);
+                mProfileLoadReceiver = null;
+            }
         } catch (Exception ex) {
             Debug.error(ex);
         }

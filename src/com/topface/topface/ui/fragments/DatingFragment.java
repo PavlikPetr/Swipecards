@@ -99,11 +99,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private int mLoadedCount;
     private ActionBar mActionBar;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserSearchList = new CachableSearch();
-        mUserSearchList.setOnEmptyListListener(mSearchListener);
         mPreloadManager = new PreloadManager();
         // Animation
         mAlphaAnimation = new AlphaAnimation(0.0F, 1.0F);
@@ -152,13 +151,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         initEmptySearchDialog(view, initNavigationHeader(view));
 
-        //Показываем последнего пользователя
-        SearchUser currentUser = mUserSearchList.getCurrentUser();
-        if (currentUser != null) {
-            showUser(currentUser);
-        } else {
-            showNextUser();
-        }
         return view;
     }
 
@@ -280,7 +272,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private void updateFilterData() {
         //Если изменился фильтр, то мы ставим новую подпись фильтра,
         //если она отличается от той, что в поиске, то поиск будет очищен
-        mUserSearchList.updateSignatureAndUpdate();
+        if (mUserSearchList != null) {
+            mUserSearchList.updateSignatureAndUpdate();
+        }
         View view = getView();
         setHeader(view);
     }
@@ -359,6 +353,26 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
+    @Override
+    protected void onLoadProfile() {
+        if (mUserSearchList == null) {
+            mUserSearchList = new CachableSearch();
+            mUserSearchList.setOnEmptyListListener(mSearchListener);
+        }
+        //Показываем последнего пользователя
+        if (mCurrentUser == null) {
+            SearchUser currentUser = mUserSearchList.getCurrentUser();
+            if (currentUser != null) {
+                showUser(currentUser);
+            } else {
+                showNextUser();
+            }
+        }
+
+        updateFilterData();
+        updateResources();
+    }
+
     private SearchRequest getSearchRequest() {
         SearchRequest searchRequest = new SearchRequest(getActivity());
         searchRequest.limit = SEARCH_LIMIT;
@@ -373,6 +387,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
+        if (!CacheProfile.isLoaded()) {
+            return;
+        }
+
         FragmentActivity activity = getActivity();
         switch (view.getId()) {
             case R.id.loDatingResources: {
@@ -507,61 +525,75 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private void fillUserInfo(SearchUser currUser) {
         // User Info
         mCurrentUser = currUser;
-        if (currUser != null) {
-            lockControls();
-            if (currUser.city != null) {
-                mUserInfoCity.setText(currUser.city.name);
-            }
-            //Устанавливаем статус пользователя. Обязательно делаем trim, иначе есть шутники, вставлюящие переносы в текст
-            mUserInfoStatus.setText(
-                    currUser.status != null ?
-                            currUser.status.trim() :
-                            ""
-            );
-            mUserInfoName.setText(currUser.getNameAndAge());
+        if (currUser == null || !isAdded()) {
+            return;
+        }
+        lockControls();
 
-            Resources res = App.getContext().getResources();
+        if (currUser.city != null) {
+            mUserInfoCity.setText(currUser.city.name);
+        }
+        //Устанавливаем статус пользователя. Обязательно делаем trim, иначе есть шутники, вставлюящие переносы в текст
+        mUserInfoStatus.setText(
+                currUser.status != null ?
+                        currUser.status.trim() :
+                        ""
+        );
+        //Имя и возраст пользователя
+        mUserInfoName.setText(currUser.getNameAndAge());
 
-            if (isAdded()) {
-                if (currUser.online) {
-                    mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(
-                            res.getDrawable(R.drawable.im_online), null, null, null);
-                } else {
-                    mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(
-                            res.getDrawable(R.drawable.im_offline), null, null, null);
-                }
+        Resources res = getResources();
 
-                if (currUser.sex == Static.BOY) {
-                    mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null, res
-                            .getDrawable(R.drawable.dating_man_selector), null, null);
-                } else if (currUser.sex == Static.GIRL) {
-                    mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null, res
-                            .getDrawable(R.drawable.dating_woman_selector), null, null);
-                }
-            }
+        setUserOnlineStatus(currUser, res);
+        setUserSex(currUser, res);
+        setLikeButtonDrawables(currUser);
+        setUserPhotos(currUser);
 
-            // buttons drawables
-            mMutualBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.mutual ? doubleMutual
-                    : singleMutual, null, null);
-            mMutualBtn.setText(currUser.mutual ? App.getContext().getString(R.string.general_mutual)
-                    : App.getContext().getString(R.string.general_sympathy));
+        mImageSwitcher.setData(currUser.photos);
+        mImageSwitcher.setCurrentItem(0, true);
+        mCurrentPhotoPrevPos = 0;
+        setCounter(mCurrentPhotoPrevPos);
+    }
 
-            mDelightBtn.setCompoundDrawablesWithIntrinsicBounds(null,
-                    currUser.mutual ? doubleDelight : singleDelight, null, null);
+    private void setUserOnlineStatus(SearchUser currUser, Resources res) {
+        if (currUser.online) {
+            mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(
+                    res.getDrawable(R.drawable.im_online), null, null, null);
+        } else {
+            mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(
+                    res.getDrawable(R.drawable.im_offline), null, null, null);
+        }
+    }
 
-            // photos
-            mLoadedCount = currUser.photos.getRealPhotosCount();
-            mNeedMore = currUser.photosCount > mLoadedCount;
-            int rest = currUser.photosCount - currUser.photos.size();
+    private void setUserSex(SearchUser currUser, Resources res) {
+        if (currUser.sex == Static.BOY) {
+            mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null, res
+                    .getDrawable(R.drawable.dating_man_selector), null, null);
+        } else if (currUser.sex == Static.GIRL) {
+            mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null, res
+                    .getDrawable(R.drawable.dating_woman_selector), null, null);
+        }
+    }
 
-            for (int i = 0; i < rest; i++) {
-                currUser.photos.add(new Photo());
-            }
+    private void setLikeButtonDrawables(SearchUser currUser) {
+        // buttons drawables
+        mMutualBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.mutual ? doubleMutual
+                : singleMutual, null, null);
+        mMutualBtn.setText(currUser.mutual ? App.getContext().getString(R.string.general_mutual)
+                : App.getContext().getString(R.string.general_sympathy));
 
-            mImageSwitcher.setData(currUser.photos);
-            mImageSwitcher.setCurrentItem(0, true);
-            mCurrentPhotoPrevPos = 0;
-            setCounter(mCurrentPhotoPrevPos);
+        mDelightBtn.setCompoundDrawablesWithIntrinsicBounds(null,
+                currUser.mutual ? doubleDelight : singleDelight, null, null);
+    }
+
+    private void setUserPhotos(SearchUser currUser) {
+        // photos
+        mLoadedCount = currUser.photos.getRealPhotosCount();
+        mNeedMore = currUser.photosCount > mLoadedCount;
+        int rest = currUser.photosCount - currUser.photos.size();
+
+        for (int i = 0; i < rest; i++) {
+            currUser.photos.add(new Photo());
         }
     }
 
