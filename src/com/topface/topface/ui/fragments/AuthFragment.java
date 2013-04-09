@@ -177,7 +177,7 @@ public class AuthFragment extends BaseFragment {
 
 
     private void hideSoftKeyboard() {
-        if(getActivity() != null) {
+        if (getActivity() != null) {
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             if (mLogin != null) {
                 imm.hideSoftInputFromWindow(mLogin.getWindowToken(), 0);
@@ -393,6 +393,7 @@ public class AuthFragment extends BaseFragment {
                 Options.parse(response);
                 Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
                 ((BaseFragmentActivity) getActivity()).close(AuthFragment.this);
+                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
             }
 
             @Override

@@ -1,7 +1,6 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.text.TextUtils;
 import com.topface.topface.App;
 import com.topface.topface.RetryDialog;
@@ -63,7 +62,6 @@ public abstract class ApiRequest implements IApiRequest {
 
     @Override
     public void exec() {
-        setStopTime();
         setEmptyHandler();
 
         if (context != null && !App.isOnline() && doNeedAlert) {
@@ -128,26 +126,6 @@ public abstract class ApiRequest implements IApiRequest {
         canceled = true;
         if (handler != null) {
             handler.cancel();
-        }
-    }
-
-    private void setStopTime() {
-        if (context != null) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    SharedPreferences preferences = context.getSharedPreferences(
-                            Static.PREFERENCES_TAG_SHARED,
-                            Context.MODE_PRIVATE
-                    );
-                    if (preferences != null) {
-                        preferences.edit().putLong(
-                                Static.PREFERENCES_STOP_TIME,
-                                System.currentTimeMillis()
-                        ).commit();
-                    }
-                }
-            }).start();
         }
     }
 
