@@ -15,7 +15,6 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.AuthFragment;
-import com.topface.topface.ui.fragments.FragmentSwitchController;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.IRequestClient;
@@ -119,7 +118,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     public void close(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-        onInit(FragmentSwitchController.DEFAULT_FRAGMENT);
     }
 
     @Override

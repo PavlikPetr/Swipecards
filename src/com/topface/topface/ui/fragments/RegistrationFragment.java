@@ -23,7 +23,10 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class RegistrationFragment extends BaseFragment implements DatePickerDialog.OnDateSetListener {
 

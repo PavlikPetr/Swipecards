@@ -88,6 +88,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mFragmentManager = getSupportFragmentManager();
 
         initFragmentSwitcher();
+        showFragment(savedInstanceState);
 
         mNovice = Novice.getInstance(getPreferences());
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
@@ -252,33 +253,27 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
         mFragmentMenu.setOnMenuListener(mOnFragmentMenuListener);
 
-        Intent intent = getIntent();
-        int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
 
-        } else {
-            mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
-            mFragmentMenu.selectDefaultMenu();
+    }
+
+    private void showFragment(int fragmentId) {
+        mFragmentSwitcher.showFragment(fragmentId);
+        mFragmentMenu.selectMenu(fragmentId);
+    }
+
+    private void showFragment(Bundle savedInstanceState) {
+        Intent intent = getIntent();
+        //Получаем id фрагмента, если он открыт
+        int currentFragment = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
+
+        if (currentFragment == -1) {
+            currentFragment = savedInstanceState != null ?
+                    savedInstanceState.getInt(CURRENT_FRAGMENT_ID, BaseFragment.F_DATING) :
+                    BaseFragment.F_DATING;
         }
 
-        int currentFragment = savedInstanceState != null ?
-                savedInstanceState.getInt(CURRENT_FRAGMENT_ID, BaseFragment.F_DATING) :
-                BaseFragment.F_DATING;
-    
-        onInit(currentFragment);
-
-    Offerwalls.init(getApplicationContext());
-
-    Intent intent = getIntent();
-    isNeedAuth = true;
-    //Получаем id фрагмента, если он открыт
-    int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
-
-    currentFragment = id != -1 ? id : currentFragment;
-
-    mFragmentSwitcher.showFragment(currentFragment);
-    mFragmentMenu.selectMenu(currentFragment);
-
-}
+        showFragment(currentFragment);
+    }
 
     @Override
     public void onLoadProfile() {
@@ -445,9 +440,15 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mServerResponseReceiver);
     }
 
+    @Override
+    public void close(Fragment fragment) {
+        super.close(fragment);
+        showFragment(FragmentSwitchController.DEFAULT_FRAGMENT);
+    }
+
     /*
-    *  обработчик кнопки открытия меню в заголовке фрагмента
-    */
+        *  обработчик кнопки открытия меню в заголовке фрагмента
+        */
     @Override
     public void onClick(View view) {
         if (view.getId() != R.id.btnNavigationHome)

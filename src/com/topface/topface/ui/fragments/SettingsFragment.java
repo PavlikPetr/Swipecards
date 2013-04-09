@@ -26,7 +26,6 @@ import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.settings.SettingsAccountFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.NavigationBarController;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.social.AuthToken;
 
