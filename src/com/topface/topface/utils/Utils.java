@@ -27,11 +27,13 @@ import java.util.regex.Pattern;
 public class Utils {
     public static final long WEEK = 604800000;
     public static final long DAY = 86400000;
+    public static final long WEEK_IN_SECONDS= 604800;
+    public static final long DAY_IN_SECONDS = 86400;
 
     private static PluralResources mPluralResources;
     private static String mClientVersion;
 
-    public static int unixtime() {
+    public static int unixtimeInSeconds() {
         return (int) (System.currentTimeMillis() / 1000L);
     }
 

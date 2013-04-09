@@ -86,7 +86,7 @@ public class HeaderStatusFragment extends BaseFragment implements View.OnClickLi
     }
 
     private void initState(Profile profile) {
-        mStatusVal = profile.status;
+        mStatusVal = profile.getStatus();
     }
 
     private static void saveState(Fragment fragment, Profile profile, int profileType) {
@@ -95,7 +95,7 @@ public class HeaderStatusFragment extends BaseFragment implements View.OnClickLi
             if (fragment.getArguments() == null) {
                 fragment.setArguments(args);
             }
-            fragment.getArguments().putString(ARG_TAG_STATUS, profile.status);
+            fragment.getArguments().putString(ARG_TAG_STATUS, profile.getStatus());
             fragment.getArguments().putInt(ARG_TAG_PROFILE_TYPE, profileType);
         }
     }
@@ -106,7 +106,7 @@ public class HeaderStatusFragment extends BaseFragment implements View.OnClickLi
             if (fragment.getArguments() == null) {
                 fragment.setArguments(args);
             }
-            fragment.getArguments().putString(ARG_TAG_STATUS, profile.status);
+            fragment.getArguments().putString(ARG_TAG_STATUS, profile.getStatus());
         }
     }
 
@@ -131,7 +131,7 @@ public class HeaderStatusFragment extends BaseFragment implements View.OnClickLi
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (mProfileType == ProfileFragment.TYPE_MY_PROFILE && requestCode == EditContainerActivity.INTENT_EDIT_STATUS) {
-            mStatusVal = CacheProfile.status;
+            mStatusVal = CacheProfile.getStatus();
         }
     }
 

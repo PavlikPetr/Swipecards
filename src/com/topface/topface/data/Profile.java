@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
@@ -20,6 +21,9 @@ import java.util.LinkedList;
 
 /* Класс профиля владельца устройства */
 public class Profile extends AbstractDataWithPhotos {
+
+    private static String[] EMPTY_STATUSES = {Static.EMPTY,"-"};
+
 
     public int uid; // id пользователя в топфейсе
     public String first_name; // имя пользователя
@@ -43,7 +47,7 @@ public class Profile extends AbstractDataWithPhotos {
     public boolean invisible;
     public boolean inBlackList;
 
-    public String status; // статус пользователя
+    protected String status; // статус пользователя
 
     public LinkedList<FormItem> forms = new LinkedList<FormItem>();
 
@@ -79,7 +83,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.uid = resp.optInt("id");
             profile.age = resp.optInt("age");
             profile.sex = resp.optInt("sex");
-            profile.status = resp.optString("status");
+            profile.status = normilizeStatus(resp.optString("status"));
             profile.first_name = resp.optString("first_name");
             profile.inBlackList = resp.optBoolean("in_blacklist");
             profile.city = new City(resp.optJSONObject("city"));
@@ -479,6 +483,27 @@ public class Profile extends AbstractDataWithPhotos {
             this.mail = mail;
             this.type = type;
         }
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = normilizeStatus(status);
+    }
+
+    public static String normilizeStatus(String status) {
+        if (status == null) {
+            return Static.EMPTY;
+        }
+        String result = status.trim();
+        for (int i=0;i<EMPTY_STATUSES.length;i++) {
+            if(EMPTY_STATUSES[i].equals(result)) {
+                return Static.EMPTY;
+            }
+        }
+        return result;
     }
 
     public boolean isEmpty() {

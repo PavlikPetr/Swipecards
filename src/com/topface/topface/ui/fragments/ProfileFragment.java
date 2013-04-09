@@ -351,7 +351,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     mLoaderView.setVisibility(View.INVISIBLE);
 
                     if (mProfileType == TYPE_USER_PROFILE) {
-                        if (mUserProfile == null || mUserProfile.status == null || TextUtils.isEmpty(mUserProfile.status)) {
+                        String status = mUserProfile.getStatus();
+                        if (mUserProfile == null || status == null || TextUtils.isEmpty(status)) {
                             mHeaderPagerAdapter.removeItem(HeaderStatusFragment.class.getName());
                         }
                     }

@@ -3,9 +3,11 @@ package com.topface.topface.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 import com.sponsorpay.sdk.android.SponsorPay;
 import com.sponsorpay.sdk.android.publisher.SponsorPayPublisher;
 import com.tapjoy.TapjoyConnect;
+import com.topface.topface.R;
 import com.topface.topface.data.Options;
 
 import java.util.Random;
@@ -14,9 +16,11 @@ public class Offerwalls {
 
     public static void init(Context context) {
         try {
-            TapjoyConnect.requestTapjoyConnect(context, "f0563cf4-9e7c-4962-b333-098810c477d2", "AS0AE9vmrWvkyNNGPsyu");
-            TapjoyConnect.getTapjoyConnectInstance().setUserID(Integer.toString(CacheProfile.uid));
-            SponsorPay.start("11625", Integer.toString(CacheProfile.uid), "0a4c64db64ed3c1ca14a5e5d81aaa23c", context);
+            if (CacheProfile.uid > 0) {
+                TapjoyConnect.requestTapjoyConnect(context, "f0563cf4-9e7c-4962-b333-098810c477d2", "AS0AE9vmrWvkyNNGPsyu");
+                TapjoyConnect.getTapjoyConnectInstance().setUserID(Integer.toString(CacheProfile.uid));
+                SponsorPay.start("11625", Integer.toString(CacheProfile.uid), "0a4c64db64ed3c1ca14a5e5d81aaa23c", context);
+            }
         } catch (Exception e) {
             Debug.error(e);
         }
@@ -24,6 +28,11 @@ public class Offerwalls {
 
     public static void startOfferwall(Activity activity) {
         String offerwall = CacheProfile.getOptions().offerwall;
+
+        if (CacheProfile.uid <= 0) {
+            Toast.makeText(activity, R.string.general_server_error,Toast.LENGTH_SHORT);
+            return;
+        }
 
         if (offerwall.equals(Options.TAPJOY)) {
             startTapjoy();

@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,18 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public static final int F_SETTINGS = 1007;
     public static final int F_VISITORS = 1008;
 
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        (new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                inBackroundThread();
+            }
+        }).start();
+    }
 
     protected ActionBar getActionBar(View view) {
         if (mActionBar == null) {
@@ -203,5 +216,8 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     protected void onLoadProfile() {
         Debug.log("onLoadProfile");
+    }
+
+    protected void inBackroundThread() {
     }
 }

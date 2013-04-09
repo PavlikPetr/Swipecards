@@ -2,6 +2,7 @@ package com.topface.topface.data.search;
 
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.Photos;
+import com.topface.topface.data.Profile;
 import com.topface.topface.data.SerializableToJson;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,7 +11,7 @@ public class SearchUser extends FeedUser implements SerializableToJson {
     /**
      * статус пользователя
      */
-    public String status;
+    protected String status;
     /**
      * идентификатор пользователя, который послал симпатию, иначе 0
      */
@@ -30,7 +31,7 @@ public class SearchUser extends FeedUser implements SerializableToJson {
     public void fillData(JSONObject user) {
         super.fillData(user);
 
-        status = user.optString("status");
+        status = Profile.normilizeStatus(user.optString("status"));
         mutual = user.optBoolean("mailmutual");
         photos = new Photos(user.optJSONArray("photos"));
         photosCount = user.optInt("photos_count", photos.size());
@@ -44,5 +45,9 @@ public class SearchUser extends FeedUser implements SerializableToJson {
         json.put("photos", photos.toJson());
         json.put("photos_count", photosCount);
         return json;
+    }
+
+    public String getStatus() {
+        return status;
     }
 }

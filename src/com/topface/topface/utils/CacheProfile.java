@@ -47,7 +47,7 @@ public class CacheProfile {
     public final static int NOTIFICATIONS_VISITOR = 4;
 
     public static LinkedList<FormItem> forms;
-    public static String status; // статус пользователя    
+    protected static String status; // статус пользователя
     public static int background_id;
     public static Photos photos;
     public static Photo photo;
@@ -111,7 +111,7 @@ public class CacheProfile {
         profile.dating = dating;
         profile.forms = forms;
         profile.photos = photos;
-        profile.status = status;
+        profile.setStatus(status);
         profile.photo = photo;
         profile.gifts = gifts;
         profile.background = background_id;
@@ -146,7 +146,7 @@ public class CacheProfile {
 
         photos = profile.photos;
         photo = profile.photo;
-        status = profile.status;
+        status = profile.getStatus();
         gifts = profile.gifts;
         background_id = profile.background;
 
@@ -156,6 +156,14 @@ public class CacheProfile {
 
         setProfileCache(response);
         setProfileUpdateTime();
+    }
+
+    public static String getStatus() {
+        return status;
+    }
+
+    public static void setStatus(String status) {
+        CacheProfile.status = Profile.normilizeStatus(status);
     }
 
     /**

@@ -111,6 +111,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     @Override
+    protected void inBackroundThread() {
+        super.inBackroundThread();
+        SharedPreferences preferences = getActivity().getSharedPreferences(
+                Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        mNovice = Novice.getInstance(preferences);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
 
@@ -185,10 +193,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void initNewbieLayout(View view) {
         // Newbie
-        SharedPreferences preferences = getActivity().getSharedPreferences(
-                Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-
-        mNovice = Novice.getInstance(preferences);
         mNoviceLayout = (NoviceLayout) view.findViewById(R.id.loNovice);
     }
 
@@ -533,12 +537,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (currUser.city != null) {
             mUserInfoCity.setText(currUser.city.name);
         }
-        //Устанавливаем статус пользователя. Обязательно делаем trim, иначе есть шутники, вставлюящие переносы в текст
-        mUserInfoStatus.setText(
-                currUser.status != null ?
-                        currUser.status.trim() :
-                        ""
-        );
+        //Устанавливаем статус пользователя.
+        mUserInfoStatus.setText(currUser.getStatus());
         //Имя и возраст пользователя
         mUserInfoName.setText(currUser.getNameAndAge());
 
@@ -622,6 +622,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void showNovice() {
+        if (mNovice == null) return;
+
         if (mNovice.isDatingCompleted())
             return;
 

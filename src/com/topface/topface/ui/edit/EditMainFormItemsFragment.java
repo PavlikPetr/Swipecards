@@ -279,7 +279,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
             case AGE:
                 return Integer.toString(CacheProfile.age);
             case STATUS:
-                return CacheProfile.status;
+                return CacheProfile.getStatus();
         }
         return Static.EMPTY;
     }
@@ -293,10 +293,10 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                 CacheProfile.age = Integer.parseInt(data);
                 break;
             case STATUS:
-                CacheProfile.status = data;
+                CacheProfile.setStatus(data);
                 for (FormItem item : CacheProfile.forms) {
                     if (item.type == FormItem.STATUS) {
-                        item.value = CacheProfile.status;
+                        item.value = CacheProfile.getStatus();
                         break;
                     }
                 }
