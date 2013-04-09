@@ -409,4 +409,5 @@
     <string name="buy_resources">Refill</string>
     <string name="general_network_reconnect">Trying to reconnect to the network</string>
     <string name="user_is_banned">User is banned</string>
+    <string name="profile_empty_name">The name field cannot be empty</string>
 </resources>

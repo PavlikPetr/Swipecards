@@ -6,6 +6,7 @@ import com.topface.topface.requests.AbstractThreadTest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BlackListAddRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 
 /**
@@ -36,7 +37,7 @@ public class BlackListAddTest extends AbstractThreadTest {
                             @Override
                             public void fail(int codeError, ApiResponse response) {
                                 if (codeError == ApiResponse.PREMIUM_ACCESS_ONLY) {
-                                    assertTrue("For add user to black list need premium", false);
+                                    assertFalse("User has premium, but does not get premium", CacheProfile.premium);
                                 } else {
                                     assertTrue("Request exec fail: " + codeError, false);
                                 }

@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:gravity="left">
 
     <include layout="@layout/chat_date_divider" android:id="@+id/loDateDivider"/>
-
-    <!-- avatar -->
-    <com.topface.topface.ui.views.ImageViewRemote
-            android:layout_below="@id/loDateDivider"
-            android:id="@+id/left_icon"
-            style="@style/ChatFriendAvatarInvisible"/>
-
 
     <com.topface.topface.ui.views.ImageViewRemote
             android:layout_below="@id/loDateDivider"
             android:id="@+id/ivChatGift"
-            android:layout_toRightOf="@id/left_icon"
-            style="@style/Gift"/>
+            style="@style/chat_gift.friend"
+            android:layout_alignParentLeft="true"/>
+
+    <!-- date -->
+    <TextView
+            android:id="@+id/chat_date"
+            style="@style/chat_date"
+            android:layout_toRightOf="@id/ivChatGift"
+            android:layout_alignBottom="@id/ivChatGift"/>
 
 </RelativeLayout>
 

@@ -412,4 +412,5 @@
     <string name="buy_resources">Comprar recursos</string>
     <string name="general_network_reconnect">Intentando recuperar la conexión con la red</string>
     <string name="user_is_banned">Usuario baneado</string>
+    <string name="profile_empty_name">El campo de nombre no puede estar vacio.</string>
 </resources>

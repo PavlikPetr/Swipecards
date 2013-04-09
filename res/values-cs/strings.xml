@@ -414,4 +414,5 @@
     <string name="buy_resources">Doplnit zásoby</string>
     <string name="general_network_reconnect">Snažíme se obnovit připojení k síti</string>
     <string name="user_is_banned">Uživatel je zabanován</string>
+    <string name="profile_empty_name">Jméno: Toto pole nemůže být prázdné</string>
 </resources>
