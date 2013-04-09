@@ -125,7 +125,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             mActionBar.showBackButton(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getActivity().onBackPressed();
+                    if(getActivity() != null) {
+                        getActivity().onBackPressed();
+                    }
                 }
             });
         } else {
@@ -339,6 +341,10 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 mUserProfile = data;
                 if (mUserProfile == null) {
                     showRetryBtn();
+                } else if (data.banned) {
+                    showForBanned();
+                } else if (data.deleted) {
+                    showForDeleted();
                 } else {
                     mRateController.setOnRateControllerListener(mRateControllerListener);
                     //set info into views for user
@@ -368,6 +374,24 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 showRetryBtn();
             }
         }).exec();
+    }
+
+    private void showForBanned() {
+        showLockWithText(getString(R.string.user_baned));
+    }
+
+    private void showForDeleted() {
+        showLockWithText(getString(R.string.user_is_deleted));
+    }
+
+    private void showLockWithText(String text) {
+        if (mRetryBtn != null && isAdded()) {
+            mLoaderView.setVisibility(View.GONE);
+            mLockScreen.setVisibility(View.VISIBLE);
+            mRetryBtn.setErrorMsg(text);
+            mRetryBtn.showOnlyMessage(true);
+            mActionBar.hideUserActionButton();
+        }
     }
 
     private void showRetryBtn() {
@@ -529,17 +553,18 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 break;
             case R.id.acBlock:
                 if (CacheProfile.premium) {
-                    BlackListAddRequest blaRequest = new BlackListAddRequest(mUserProfile.uid, getActivity());
-                    blaRequest.callback(new VipApiHandler() {
-                        @Override
-                        public void success(ApiResponse response) {
-                            super.success(response);
-                            v.setEnabled(false);
-                            TextView view = (TextView) v;
-                            view.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
-                        }
+                    if (mUserProfile.uid > 0) {
+                        BlackListAddRequest blackListAddRequest = new BlackListAddRequest(mUserProfile.uid, getActivity());
+                        blackListAddRequest.callback(new VipApiHandler() {
+                            @Override
+                            public void success(ApiResponse response) {
+                                super.success(response);
+                                v.setEnabled(false);
+                                TextView view = (TextView) v;
+                                view.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+                            }
+                        }).exec();
                     }
-                    ).exec();
                 } else {
                     Intent intent = new Intent(getActivity(), ContainerActivity.class);
                     intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
@@ -555,7 +580,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         if (mUserProfile != null) {
             Intent intent = new Intent(getActivity(), ContainerActivity.class);
             intent.putExtra(ChatFragment.INTENT_USER_ID, mUserProfile.uid);
-            intent.putExtra(ChatFragment.INTENT_USER_NAME, mUserProfile.first_name);
+            intent.putExtra(ChatFragment.INTENT_USER_NAME, mUserProfile.first_name == null ?
+                    mUserProfile.first_name : Static.EMPTY);
             intent.putExtra(ChatFragment.INTENT_USER_SEX, mUserProfile.sex);
             intent.putExtra(ChatFragment.INTENT_USER_AGE, mUserProfile.age);
             intent.putExtra(ChatFragment.INTENT_USER_CITY, mUserProfile.city == null ? "" : mUserProfile.city.name);

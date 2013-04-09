@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import com.topface.topface.R;
@@ -54,6 +55,7 @@ public class ContainerActivity extends BaseFragmentActivity {
         if (mCurrentFragment == null) {
             mCurrentFragment = getFragment(mCurrentFragmentId);
         }
+        setRotationMode();
     }
 
     @Override
@@ -75,8 +77,6 @@ public class ContainerActivity extends BaseFragmentActivity {
 
     private Fragment getFragment(int id) {
         Fragment fragment = null;
-        Intent intent;
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
         switch (id) {
             case INTENT_BUY_VIP_FRAGMENT:
                 fragment = VipBuyFragment.newInstance(true);
@@ -91,7 +91,7 @@ public class ContainerActivity extends BaseFragmentActivity {
                 }
                 break;
             case INTENT_CHAT_FRAGMENT:
-                intent = getIntent();
+                Intent intent = getIntent();
 
                 fragment = ChatFragment.newInstance(intent.getIntExtra(ChatFragment.INTENT_ITEM_ID, -1),
                         intent.getIntExtra(ChatFragment.INTENT_USER_ID, -1),
@@ -101,7 +101,7 @@ public class ContainerActivity extends BaseFragmentActivity {
                         intent.getIntExtra(ChatFragment.INTENT_USER_AGE, 0),
                         intent.getStringExtra(ChatFragment.INTENT_USER_CITY),
                         intent.getStringExtra(BaseFragmentActivity.INTENT_PREV_ENTITY));
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+
                 break;
             case INTENT_REGISTRATION_FRAGMENT:
                 fragment = new RegistrationFragment();
@@ -121,6 +121,26 @@ public class ContainerActivity extends BaseFragmentActivity {
                 break;
         }
         return fragment;
+    }
+
+    private void setRotationMode() {
+        if (mCurrentFragmentId == INTENT_CHAT_FRAGMENT) {
+            int rotationStatus = Settings.System.getInt(
+                    getContentResolver(),
+                    Settings.System.ACCELEROMETER_ROTATION,
+                    1
+            );
+
+            if (rotationStatus == 1) {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+            } else {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            }
+
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+
     }
 
     @Override

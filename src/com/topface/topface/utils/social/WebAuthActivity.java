@@ -3,6 +3,7 @@ package com.topface.topface.utils.social;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -125,6 +126,10 @@ public class WebAuthActivity extends Activity {
             super();
             mHandler = handler;
             webView.loadUrl(mUrl);
+            webView.setBackgroundColor(0x00000000);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                webView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
+            }
         }
 
 

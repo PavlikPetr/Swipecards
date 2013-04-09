@@ -25,6 +25,7 @@ import java.util.LinkedList;
  * <p/>
  * NOTICE: В данном типе данных используем значения по умолчанию
  */
+@SuppressWarnings("UnusedDeclaration")
 public class Options extends AbstractData {
 
     /**
@@ -62,6 +63,13 @@ public class Options extends AbstractData {
     public static final String BANNER_GAG = "GAG";
 
     /**
+     * Идентификаторы для типов офферволлов
+     */
+    public static final String TAPJOY = "TAPJOY";
+    public static final String SPONSORPAY = "SPONSORPAY";
+    public static final String RANDOM = "RANDOM";
+
+    /**
      * Настройки для каждого типа страниц
      */
     public HashMap<String, Options.Page> pages = new HashMap<String, Options.Page>();
@@ -69,6 +77,7 @@ public class Options extends AbstractData {
     public LinkedList<BuyButton> likes = new LinkedList<BuyButton>();
     public LinkedList<BuyButton> premium = new LinkedList<BuyButton>();
     public LinkedList<BuyButton> others = new LinkedList<BuyButton>();
+    private String paymentwall;
 
     public String max_version = "2147483647"; //Integer.MAX_VALUE);
 
@@ -83,6 +92,7 @@ public class Options extends AbstractData {
 
     public int minLeadersPercent = 25; //Не уверен в этом, возможно стоит использовать другое дефолтное значение
 
+    public String offerwall;
 
     public static Options parse(ApiResponse response) {
         Options options = new Options();
@@ -102,7 +112,7 @@ public class Options extends AbstractData {
 
                 options.pages.put(pageName, new Page(pageName, floatType, bannerType));
             }
-
+            options.offerwall = response.jsonResult.optString("offerwall");
             options.max_version = response.jsonResult.optString("max_version");
 
             JSONObject purchases = response.jsonResult.optJSONObject("purchases");
@@ -131,6 +141,13 @@ public class Options extends AbstractData {
                     for (int i = 0; i < othersJSON.length(); i++) {
                         options.others.add(createBuyButtonFromJSON(othersJSON.optJSONObject(i)));
                     }
+                }
+            }
+
+            if (response.jsonResult.has("links")) {
+                JSONObject links = response.jsonResult.optJSONObject("links");
+                if (links != null && links.has("paymentwall")) {
+                    options.paymentwall = links.optString("paymentwall");
                 }
             }
 
@@ -165,8 +182,8 @@ public class Options extends AbstractData {
             RelativeLayout container = (RelativeLayout) view.findViewById(R.id.itContainer);
             container.setBackgroundResource(
                     curBtn.showType == 0 ?
-                            R.drawable.btn_vip_sale_selector :
-                            R.drawable.btn_vip_super_sale_selector
+                            R.drawable.btn_gray_selector :
+                            R.drawable.btn_blue_selector
             );
 
             container.requestLayout();
@@ -243,6 +260,10 @@ public class Options extends AbstractData {
             this.showType = showType;
             this.type = type;
         }
+    }
+
+    public String getPaymentwallLink() {
+        return paymentwall;
     }
 
 }

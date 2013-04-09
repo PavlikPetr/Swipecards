@@ -70,7 +70,6 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         mSettings = Settings.getInstance();
 
         // Navigation bar
-        mNavBarController = new NavigationBarController((ViewGroup) view.findViewById(R.id.loNavigationBar));
         view.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
         ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(R.string.settings_header_title);
 

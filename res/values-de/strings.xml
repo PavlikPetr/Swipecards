@@ -335,17 +335,26 @@
     <string name="default_photo_upload">Foto hochladen</string>
     <string name="default_photo_upload_error">Fehler</string>
     <string name="default_photo_upload_repeat">Versuchen Sie später</string>
+    <string name="gallery">Galerie</string>
     <string name="get_it_for_free">Coins kostenlos bekommen</string>
+    <string name="vip_advantages">Vorteile von VIP</string>
     <string name="change_email">E-Mail ändern</string>
     <string name="change_password">Passwort ändern</string>
+    <string name="save">Speichern</string>
     <string name="password_hint">Passwort</string>
     <string name="enter_new_password">Geben Sie ein neues Passwort ein</string>
+    <string name="passwords_changed">Passwort ist geändert</string>
     <string name="take_photo">Foto aufnehmen</string>
     <string name="take_another_photo">Anderes Foto</string>
     <string name="reselect_city">Andere Stadt wählen:</string>
+    <string name="email_confirmed">E-Mail ist bestädigt!</string>
     <string name="sympathy_sended">Sympathie ist gesendet</string>
     <string name="buying_total">Insgesamt</string>
+    <string name="buying_economy">Einsparung</string>
     <string name="general_change">Ändern</string>
+    <string name="general_correct">Alles ist richtig</string>
     <string name="confirm_email">Bestätigen Sie Ihre E-Mail</string>
     <string name="buy_special_offers">Sonderangebote</string>
+    <string name="you_dont_have_gifts_yet">Sie haben noch keine Geschenke</string>
+    <string name="buy_sympathies">Sympathien kaufen</string>
 </resources>

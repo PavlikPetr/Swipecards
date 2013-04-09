@@ -197,9 +197,15 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
     protected void saveChanges(Handler handler) {
         InputMethodManager imm = (InputMethodManager) getActivity().getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
+        String feedbackText = mEditText.getText().toString().trim();
+
+        //Если текст сообщения пустой, то не отправляем сообщение
+        if (TextUtils.isEmpty(feedbackText)) {
+            return;
+        }
 
         if (emailConfirmed()) {
-            mReport.body = mEditText.getText().toString();
+            mReport.body = feedbackText;
             prepareRequestSend();
             FeedbackReport feedbackRequest = new FeedbackReport(getActivity().getApplicationContext());
             feedbackRequest.subject = mReport.getSubject();

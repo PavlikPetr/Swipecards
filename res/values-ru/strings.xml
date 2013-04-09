@@ -24,8 +24,7 @@
     <string name="general_server_error">Ошибка. Попробуйте позже</string>
     <string name="general_data_error">Ошибка. Попробуйте ещё раз</string>
     <string name="general_internet_off">Пытаемся восстановить соединение с интернетом. Пожалуйста, подождите.</string>
-    <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru
-    </string>
+    <string name="general_purchasing_error">Пожалуйста, напишите сообщение об ошибке покупки на support@topface.ru</string>
     <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Текст скопирован</string>
     <string name="general_spinner_title">Выберите действие</string>
@@ -145,10 +144,10 @@
     <string name="album_add_photo_title">Добавить фото</string>
 
     <!-- Gifts -->
-    <string name="gifts_romantic">Романтические</string>
-    <string name="gifts_friends">Дружеские</string>
+    <string name="gifts_romantic">Романтика</string>
+    <string name="gifts_friends">Дружба</string>
     <string name="gifts">Подарки</string>
-    <string name="gifts_present">Поздравительные</string>
+    <string name="gifts_present">Поздравления</string>
     <string name="gifts_title">Выберите подарок</string>
     <string name="gifts_send_btn">Отправить подарок</string>
 
@@ -296,7 +295,7 @@
     </string>
     <string name="general_close">Закрыть</string>
     <string name="vip_not_activated">Ваш VIP-статус не активирован</string>
-    <string name="vip_privileges">VIP-привелегии</string>
+    <string name="vip_privileges">VIP-привилегии</string>
     <string name="vip_text_visitors">Узнаете, кто вами интересовался - смотрите своих гостей!</string>
     <string name="vip_text_adm_unlock">Отправляйте восхищения бесплатно - выражайте свои чувства по-максимуму</string>
     <string name="vip_rest">Вы подписаны на VIP</string>
@@ -347,7 +346,7 @@
     <string name="profile_gifts_empty">Этому пользователю еще никто не дарил подарков</string>
     <string name="profile_mygifts_empty">Вам еще никто не дарил подарков</string>
     <string name="profile_mood">Опишите Ваше настроение</string>
-    <string name="general_reconnect">Пытаемся восстаносить соединение с Интернет.\nПожалуйста подождите.</string>
+    <string name="general_reconnect">Пытаемся восстановить соединение с Интернет.\nПожалуйста подождите.</string>
     <string name="dating_people_unnoticed">Десять человек остались без вашего внимания!</string>
     <string name="dating_continue">Продолжить оценивать</string>
     <string name="dating_better_look">Присмотритесь!\nВозможно вы упускаете свою судьбу!</string>
@@ -361,8 +360,8 @@
     <string name="map_title">Карта</string>
 
     <string name="settings_want_answer">Я хочу, чтобы мне ответили</string>
-    <string name="settings_feedback_email">Email для связи</string>
-    <string name="settings_invalid_email">Некорректный Email</string>
+    <string name="settings_feedback_email">E-mail для связи</string>
+    <string name="settings_invalid_email">Некорректный e-mail</string>
 
     <string name="leaders_select_cool_picture">Выберите эффектную фотографию:</string>
     <string name="chat_write_message">Написать сообщение</string>
@@ -424,17 +423,13 @@
     <string name="dating_online_only">%s, только онлайн</string>
     <string name="leaders_pick_condition">Вы не можете выбрать фото с рейтингом ниже %d%%:</string>
     <string name="map_popup_address">Адрес</string>
-    <string name="black_list_info">Вы добавили собеседника в черный список. Изменить это можно в своем профиле, в
-        настройках VIP-статуса.
-    </string>
+    <string name="black_list_info">Вы добавили собеседника в черный список. Изменить это можно в своем профиле, в настройках VIP-статуса.</string>
     <string name="general_gift">Подарок</string>
     <string name="user_actions_chat">Разговор</string>
     <string name="general_place">Место</string>
     <string name="general_soon">Скоро будет</string>
     <string name="black_list_activation">Активируйте VIP-статус и используйте черный список</string>
-    <string name="profile_edit_age_ranges">Возраст должен быть в диапазоне от 16 до 99 лет. Пожалуйста, введите
-        корректное число и повторите попытку.
-    </string>
+    <string name="profile_edit_age_ranges">Возраст должен быть в диапазоне от 16 до 99 лет. Пожалуйста, введите корректное число и повторите попытку.</string>
 
     <string name="sign_in">Войти</string>
     <string name="create_account">Создать аккаунт</string>
@@ -466,15 +461,9 @@
     <string name="search_city_by_name">Поиск города по названию</string>
 
     <string name="gallery">Галерея</string>
-    <string name="no_photo_take_photo">С вами никто не может познакомится! Сделайте фото или выберите имеющееся из
-        альбома
-    </string>
-    <string name="photo_is_too_small">Вы отлично выглядете на этой фотографии, но для того, чтобы все пользователи
-        оценили ваш снимок, от должен быть чуть больше: не менее %s
-    </string>
-    <string name="photo_for_avatar">Фотография готова к отправке в профиль! Это ваша первая фотография и она будет
-        использоваться как ваша аватарка.
-    </string>
+    <string name="no_photo_take_photo">С вами никто не может познакомится! Сделайте фото или выберите имеющееся из альбома</string>
+    <string name="photo_is_too_small">Вы отлично выглядете на этой фотографии, но для того, чтобы все пользователи оценили ваш снимок, от должен быть чуть больше: не менее %s</string>
+    <string name="photo_for_avatar">Фотография готова к отправке в профиль! Это ваша первая фотография и она будет использоваться как ваша аватарка.</string>
 
     <string name="get_it_for_free">Получить монеты бесплатно</string>
     <string name="vip_advantages">Преимущества VIP</string>
@@ -496,8 +485,7 @@
     <string name="take_another_photo">Другое фото</string>
     <string name="we_detect_your_city">Мы определили ваш город:</string>
     <string name="reselect_city">Выбрать другой город:</string>
-    <string name="choose_cool_photo">Выберите свою лучшую фотографию и статус, который отражает ваше настроение!
-    </string>
+    <string name="choose_cool_photo">Выберите свою лучшую фотографию и статус, который отражает ваше настроение!</string>
     <string name="email_confirmed">e-mail подтвержден!</string>
     <string name="sympathy_sended">Симпатия отправлена</string>
     <string name="general_photo_deleted">Ваша фотография не соответствует правилам и была удалена</string>
@@ -506,11 +494,9 @@
     <string name="buying_economy">Экономия</string>
     <string name="general_change">Изменить</string>
     <string name="general_correct">Все правильно</string>
-    <string name="we_dont_detect_your_city">Чтобы найти людей поблизости нам нужно знать где вы находитесь. Пожалуйста,
-        укажите ваш город.
-    </string>
+    <string name="we_dont_detect_your_city">Чтобы найти людей поблизости нам нужно знать где вы находитесь. Пожалуйста, укажите ваш город.</string>
     <string name="confirm_email">Пожалуйста, подтвердите e-mail.</string>
-    <string name="password_sent">Новый пароль отправлен на ваш E-mail</string>
+    <string name="password_sent">Новый пароль отправлен на ваш e-mail</string>
     <string name="buy_vip_month_one">%1$d месяц за %2$.2f %3$@</string>
     <string name="buy_vip_month_few">%1$d месяца по %2$.2f %3$@</string>
     <string name="buy_vip_month_other">%1$d месяцев по %2$.2f %3$@</string>
@@ -523,4 +509,31 @@
     <string name="upload_photos">Загрузите фотографии</string>
     <string name="chat_no_message_title">Начните общение!</string>
     <string name="chat_no_message_text">Напишите сообщение или отправьте подарок и вам обязательно ответят</string>
+    <string name="user_baned">Пользователь забанен</string>
+    <string name="general_choose_city">Выберите город</string>
+    <string name="buy_mobile_payments">Другие способы оплаты</string>
+    <string name="buy_mobile_payments_complete">Оплата произведена. Ваш заказ обрабатывается, пожалуйста подождите</string>
+    <string name="general_save_and_exit">Сохранить и выйти</string>
+    <string name="general_set_password">Установите пароль перед выходом из приложения</string>
+    <string name="user_is_deleted">Пользователь удален</string>
+    <string name="general_bookmarks_title">Избранные</string>
+    <string name="general_empty_bookmarks">Нет избранных</string>
+    <string name="general_bookmarks">Избранные</string>
+    <string name="general_fans">Поклонники</string>
+    <string name="general_no_fans">Нет поклонников</string>
+
+    <plurals name="get_free_money">
+        <item quantity="one">%d монета бесплатно</item>
+        <item quantity="few">%d монеты бесплатно</item>
+        <item quantity="many">%d монет бесплатно</item>
+        <item quantity="other">%d монет бесплатно</item>
+    </plurals>
+
+    <string name="settings_edit_profile">Редактировать профиль</string>
+    <string name="general_bookmarks_delete">Удалить из избранных</string>
+    <string name="general_bookmarks_add">Добавить в избранные</string>
+    <string name="buy_resources">Пополнить запас</string>
+    <string name="general_network_reconnect">Пытаемся восстановить соединение с сетью</string>
+    <string name="user_is_banned">Пользователь забанен</string>
+    <string name="profile_empty_name">Имя не может быть пустым</string>
 </resources>

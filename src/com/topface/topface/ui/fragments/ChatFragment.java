@@ -3,12 +3,16 @@ package com.topface.topface.ui.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.*;
+import android.content.res.Configuration;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +37,6 @@ import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.IListLoader;
-import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.ui.views.SwapControl;
 import com.topface.topface.utils.*;
@@ -75,11 +78,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private FeedList<History> mHistoryData;
     private FeedUser mUser;
     private EditText mEditBox;
-    private LockerView mLoadingLocker;
+    private TextView mLoadingBackgroundText;
+    private AnimationDrawable mLoadingBackgroundDrawable;
     private RetryView mRetryView;
     private SwapControl mSwapControl;
     private Button mAddToBlackList;
     private ImageButton mBtnChatAdd;
+    private ActionBar mActionBar;
 
     private String[] editButtonsNames;
     private boolean mReceiverRegistered = false;
@@ -113,7 +118,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         String userCity = getArguments().getString(INTENT_USER_CITY);
 
         // Locker
-        mLoadingLocker = (LockerView) root.findViewById(R.id.llvChatLoading);
+        mLoadingBackgroundText = (TextView) root.findViewById(R.id.tvBackgroundText);
+        Drawable drawable = mLoadingBackgroundText.getCompoundDrawables()[0];
+        if (drawable instanceof AnimationDrawable) {
+            mLoadingBackgroundDrawable = (AnimationDrawable) drawable;
+        }
 
         // Navigation bar
         initNavigationbar(root, userSex, userName, userAge, userCity);
@@ -203,12 +212,16 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         }
                     }
                     mUser = new FeedUser(new JSONObject(savedInstanceState.getString(FRIEND_FEED_USER)));
+                    if (mUser != null && !mUser.isEmpty()) {
+                        onUserLoaded();
+                    }
+
                     if (was_failed) {
                         mLockScreen.setVisibility(View.VISIBLE);
                     } else {
                         mLockScreen.setVisibility(View.GONE);
                     }
-                    mLoadingLocker.setVisibility(View.GONE);
+                    showLoadingBackground();
                 } catch (Exception e) {
                     Debug.error(e);
                 } catch (OutOfMemoryError e) {
@@ -261,6 +274,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         mAdapter.addHeader(mListView.getRefreshableView());
         mListView.setAdapter(mAdapter);
         mListView.setOnScrollListener(mAdapter);
+        mListView.getRefreshableView().addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.item_empty_footer,null));
     }
 
     private void initLockScreen(View root) {
@@ -278,19 +292,27 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void initNavigationbar(View root, int userSex, String userName, int userAge, String userCity) {
-        ActionBar actionBar = getActionBar(root);
+        mActionBar = getActionBar(root);
 
-        actionBar.setTitleText(userName + ", " + userAge);
-        actionBar.setSubTitleText(userCity);
-        actionBar.showBackButton(new View.OnClickListener() {
+        mActionBar.showBackButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().finish();
                 //TODO костыль для навигации
                 getActivity().setResult(Activity.RESULT_CANCELED);
+                getActivity().finish();
+
             }
         });
-        actionBar.showProfileButton(this, userSex);
+
+        mActionBar.showProfileAvatar();
+
+        setNavigationTitles(userSex, userName, userAge, userCity);
+    }
+
+    private void setNavigationTitles(int userSex, String userName, int userAge, String userCity) {
+        String userTitle = (TextUtils.isEmpty(userName) && userAge == 0) ? Static.EMPTY : (userName + "," + userAge);
+        mActionBar.setTitleText(userTitle);
+        mActionBar.setSubTitleText(userCity);
     }
 
     @Override
@@ -300,7 +322,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         outState.putParcelableArrayList(ADAPTER_DATA, mAdapter.getDataCopy());
 
         try {
-            outState.putString(FRIEND_FEED_USER, mAdapter.getUser().toJson().toString());
+            outState.putString(FRIEND_FEED_USER, mUser.toJson().toString());
         } catch (Exception e) {
             Debug.error(e);
         }
@@ -316,7 +338,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         dr.callback(new DataApiHandler() {
             @Override
             protected void success(Object data, ApiResponse response) {
-                mAdapter.removeItem(position);
+                mAdapter.removeItem(mAdapter.getPosition(position));
             }
 
             @Override
@@ -349,7 +371,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private void update(final boolean pullToRefresh, final boolean scrollRefresh, String type) {
         mIsUpdating = true;
         if (!pullToRefresh && !scrollRefresh) {
-            mLoadingLocker.setVisibility(View.VISIBLE);
+            hideLoadingBackground();
         }
         HistoryRequest historyRequest = new HistoryRequest(getActivity());
         registerRequest(historyRequest);
@@ -377,23 +399,28 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID, itemId));
                     itemId = -1;
                 }
+                setNavigationTitles(data.user.sex, data.user.first_name, data.user.age, data.user.city.name);
                 wasFailed = false;
-                mAdapter.setUser(data.user);
-                if (mAdapter != null) {
-                    if (pullToRefresh) {
-                        mAdapter.addFirst(data.items, data.more, mListView.getRefreshableView());
-                        if (mListView != null) {
-                            mListView.onRefreshComplete();
-                        }
-                    } else if (scrollRefresh) {
-                        mAdapter.addAll(data.items, data.more, mListView.getRefreshableView());
-                    } else {
-                        mAdapter.setData(data.items, data.more, mListView.getRefreshableView());
-                    }
+                mUser = data.user;
+                if (mUser != null && !mUser.isEmpty()) {
+                    onUserLoaded();
                 }
+                if (mAdapter != null) {
+                    if (!data.items.isEmpty()) {
+                        if (pullToRefresh) {
+                            mAdapter.addFirst(data.items, data.more, mListView.getRefreshableView());
+                        } else if (scrollRefresh) {
+                            mAdapter.addAll(data.items, data.more, mListView.getRefreshableView());
+                        } else {
+                            mAdapter.setData(data.items, data.more, mListView.getRefreshableView());
+                        }
+                    } else {
+                        if (!data.more && !pullToRefresh) mAdapter.forceStopLoader();
+                    }
 
-                if (mLoadingLocker != null) {
-                    mLoadingLocker.setVisibility(View.GONE);
+                    if (mAdapter.getCount() <= 0) {
+                        mAdapter.setUser(mUser);
+                    }
                 }
 
                 mIsUpdating = false;
@@ -406,7 +433,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                mLoadingLocker.setVisibility(View.GONE);
+                showLoadingBackground();
                 if (mRetryView != null && isAdded()) {
                     mRetryView.setErrorMsg(getString(R.string.general_data_error));
                 }
@@ -416,7 +443,21 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 wasFailed = true;
                 mIsUpdating = false;
             }
+
+            @Override
+            public void always(ApiResponse response) {
+                super.always(response);
+
+                showLoadingBackground();
+                if (pullToRefresh && mListView != null) {
+                    mListView.onRefreshComplete();
+                }
+            }
         }).exec();
+    }
+
+    private void onUserLoaded() {
+        if (mActionBar != null) mActionBar.showProfileAvatar(mUser.photo,this);
     }
 
     private void release() {
@@ -443,12 +484,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
         switch (v.getId()) {
             case R.id.btnSend:
-                sendMessage();
-                EasyTracker.getTracker().trackEvent("Chat", "SendMessage", "", 1L);
+                if (mUserId > 0) {
+                    sendMessage();
+                    EasyTracker.getTracker().trackEvent("Chat", "SendMessage", "", 1L);
+                }
                 break;
             case R.id.btnChatAdd:
                 toggleAddPanel();
-
                 EasyTracker.getTracker().trackEvent("Chat", "AdditionalClick", "", 1L);
                 break;
             case R.id.btnChatGift:
@@ -460,22 +502,20 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 if (Utils.isGoogleMapsAvailable()) {
                     startActivityForResult(new Intent(getActivity(), GeoMapActivity.class),
                             GeoMapActivity.INTENT_REQUEST_GEO);
-                    // Toast.makeText(App.getContext(), "Map",
-                    // Toast.LENGTH_SHORT).show();
                     EasyTracker.getTracker().trackEvent("Chat", "SendMapClick", "§", 1L);
                 }
                 break;
-            case R.id.chat_message:
-                break;
             case R.id.btnNavigationProfileBar:
-            case R.id.left_icon:
+            case R.id.btnNavigationBarAvatar:
                 //TODO костыль для навигации
                 if (mProfileInvoke) {
                     getActivity().setResult(Activity.RESULT_CANCELED);
                 } else {
-                    Intent intent = getActivity().getIntent();
-                    intent.putExtra(INTENT_USER_ID, mUserId);
-                    getActivity().setResult(Activity.RESULT_OK, intent);
+                    if (mUserId > 0) {
+                        Intent intent = getActivity().getIntent();
+                        intent.putExtra(INTENT_USER_ID, mUserId);
+                        getActivity().setResult(Activity.RESULT_OK, intent);
+                    }
                 }
                 getActivity().finish();
                 //TODO костыль для навигации
@@ -500,44 +540,70 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void removeFromBlackList() {
-        BlackListDeleteRequest deleteBlackListRequest = new BlackListDeleteRequest(mUserId, getActivity());
-        mAddToBlackList.setEnabled(false);
-        deleteBlackListRequest.callback(new VipApiHandler() {
-            @Override
-            public void always(ApiResponse response) {
-                super.always(response);
-                isInBlackList = false;
-                if (mAddToBlackList != null) {
-                    mAddToBlackList.setText(R.string.black_list_add);
-                    mAddToBlackList.setEnabled(true);
+        if (mUserId > 0) {
+            BlackListDeleteRequest deleteBlackListRequest = new BlackListDeleteRequest(mUserId, getActivity());
+            mAddToBlackList.setEnabled(false);
+            deleteBlackListRequest.callback(new VipApiHandler() {
+
+                @Override
+                public void success(ApiResponse response) {
+                    super.success(response);
+                    isInBlackList = false;
+                    if (mAddToBlackList != null) {
+                        mAddToBlackList.setText(R.string.black_list_add);
+                    }
                 }
-            }
-        }).exec();
+
+                @Override
+                public void always(ApiResponse response) {
+                    super.always(response);
+                    if (mAddToBlackList != null) {
+                        mAddToBlackList.setEnabled(true);
+                    }
+                }
+            }).exec();
+        }
     }
 
     private void addToBlackList() {
-        BlackListAddRequest blackListRequest = new BlackListAddRequest(mUserId, getActivity());
-        mAddToBlackList.setEnabled(false);
-        blackListRequest.callback(new VipApiHandler() {
-            @Override
-            public void always(ApiResponse response) {
-                super.always(response);
-                isInBlackList = true;
-                if (mAddToBlackList != null) {
-                    mAddToBlackList.setText(R.string.black_list_delete);
-                    mAddToBlackList.setEnabled(true);
+        if (mUserId > 0) {
+            BlackListAddRequest blackListRequest = new BlackListAddRequest(mUserId, getActivity());
+            mAddToBlackList.setEnabled(false);
+            blackListRequest.callback(new VipApiHandler() {
+                @Override
+                public void success(ApiResponse response) {
+                    super.success(response);
+                    isInBlackList = true;
+                    if (mAddToBlackList != null) {
+                        mAddToBlackList.setText(R.string.black_list_delete);
+                    }
                 }
-            }
-        }).exec();
+
+                @Override
+                public void always(ApiResponse response) {
+                    super.always(response);
+                    if (mAddToBlackList != null) {
+                        mAddToBlackList.setEnabled(true);
+                    }
+                }
+            }).exec();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
+        if (mUserId == 0) {
+            getActivity().setResult(Activity.RESULT_CANCELED);
+            getActivity().finish();
+        }
+
         // Если адаптер пустой или пользователя нет, грузим с сервера
         if (mAdapter == null || mAdapter.getCount() == 0 || mUser == null) {
             update(false, "initial");
+        } else {
+            mAdapter.notifyDataSetChanged();
         }
 
         if (!mReceiverRegistered) {
@@ -575,7 +641,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
-                mLoadingLocker.setVisibility(View.VISIBLE);
                 Bundle extras = data.getExtras();
                 final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
                 final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
@@ -591,6 +656,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void toggleAddPanel() {
+        if (!mIsAddPanelOpened) {
+            Utils.hideSoftKeyboard(getActivity(), mEditBox);
+        }
         mSwapControl.snapToScreen(mIsAddPanelOpened ? 0 : 1);
         mBtnChatAdd.setSelected(!mIsAddPanelOpened);
         mIsAddPanelOpened = !mIsAddPanelOpened;
@@ -613,7 +681,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         coordRequest.callback(new DataApiHandler<History>() {
             @Override
             protected void success(History data, ApiResponse response) {
-                data.target = FeedDialog.USER_MESSAGE;
+                data.target = FeedDialog.OUTPUT_USER_MESSAGE;
                 if (mAdapter != null) {
                     mAdapter.replaceMessage(fakeItem, data, mListView.getRefreshableView());
                 }
@@ -633,6 +701,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void sendGift(int id, final int price) {
+
+        if (id <= 0) {
+            showLoadingBackground();
+            Toast.makeText(getActivity(),R.string.general_server_error,Toast.LENGTH_SHORT);
+            return;
+        }
+
         final History fakeItem = new History(IListLoader.ItemType.WAITING);
         mAdapter.addSentMessage(fakeItem, mListView.getRefreshableView());
 
@@ -647,8 +722,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 CacheProfile.likes = data.likes;
                 CacheProfile.money = data.money;
                 Debug.log(getActivity(), "likes:" + data.likes + " money:" + data.money);
-                data.history.target = FeedDialog.USER_MESSAGE;
-                mLoadingLocker.setVisibility(View.GONE);
+                data.history.target = FeedDialog.OUTPUT_USER_MESSAGE;
                 if (mAdapter != null) {
                     mAdapter.replaceMessage(fakeItem, data.history, mListView.getRefreshableView());
                 }
@@ -670,16 +744,27 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 mAdapter.showRetrySendMessage(fakeItem, sendGift);
             }
+
+            @Override
+            public void always(ApiResponse response) {
+                super.always(response);
+                showLoadingBackground();
+            }
         }).exec();
     }
 
     private boolean sendMessage() {
+        if (TextUtils.isEmpty(mEditBox.getText().toString().trim())) {
+            return false;
+        }
+
         final History fakeItem = new History(IListLoader.ItemType.WAITING);
-        mAdapter.addSentMessage(fakeItem, mListView.getRefreshableView());
+        if(mAdapter != null && mListView != null) {
+            mAdapter.addSentMessage(fakeItem, mListView.getRefreshableView());
+        }
 
         final String text = mEditBox.getText().toString();
-        if (text == null || text.length() == 0)
-            return false;
+        if (text == null || TextUtils.isEmpty(text.trim()) || mUserId == 0) return false;
 
         final MessageRequest messageRequest = new MessageRequest(getActivity());
         registerRequest(messageRequest);
@@ -702,8 +787,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
-                mAdapter.showRetrySendMessage(fakeItem, messageRequest);
+                if(mAdapter != null) {
+                    Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
+                    mAdapter.showRetrySendMessage(fakeItem, messageRequest);
+                }
             }
         }).exec();
         return true;
@@ -841,5 +928,34 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
             }
         };
+    }
+
+    private void showLoadingBackground() {
+        if (mLoadingBackgroundText != null) {
+            mLoadingBackgroundText.setVisibility(View.GONE);
+            if(mLoadingBackgroundDrawable != null) {
+                mLoadingBackgroundDrawable.stop();
+            }
+        }
+    }
+
+    private void hideLoadingBackground() {
+        if (mLoadingBackgroundText != null) {
+            mLoadingBackgroundText.setVisibility(View.VISIBLE);
+            if(mLoadingBackgroundDrawable != null) {
+                mLoadingBackgroundDrawable.start();
+            }
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (newConfig.keyboardHidden == Configuration.KEYBOARDHIDDEN_NO) {
+
+        } else if (newConfig.keyboardHidden == Configuration.KEYBOARDHIDDEN_YES) {
+            if (mIsAddPanelOpened) toggleAddPanel();
+        }
     }
 }

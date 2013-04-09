@@ -183,7 +183,7 @@
     <string name="leaders_need_photo">Nejprve je nutné vybrat fotku!</string>
     <string name="leaders_select_photo">Vyberte efektní fotku:</string>
     <plurals name="leaders_price">
-        <item quantity="few">Stát se za %d mincí</item>
+        <item quantity="few">Stát se za %d mince</item>
         <item quantity="other">Stát se za %d mincí</item>
         <item quantity="one">Stát se za %d minci</item>
     </plurals>
@@ -290,7 +290,7 @@
     <string name="novice_energy_to_sympathies_message_girls">Když doplnite zásobu sympatií, získáte\n uvedené množství sympatií\nod dívek, kteřím se uřčitě líbite</string>
     <string name="novice_buy_sympathies">Pokud chcete zaručeně\ndostávat sympatie,\nkupte je hned teď!</string>
     <string name="general_reconnect_social">Nelze se připojit k sociálním sítím. Prosím, zkuste to znovu později.</string>
-    <string name="general_buying">Koupit sympatie a mince</string>
+    <string name="general_buying">Koupit si sympatie a mince</string>
     <string name="general_block">Blokovat</string>
     <string name="general_buying_disabled">V tuto chvíli není možné nakupovat</string>
     <string name="ban_flood_detected">Příliš často odesíláte požadavky na server. Pro další použití aplikace musíte vyčkat.</string>
@@ -385,4 +385,34 @@
     <string name="buy_vip_month_other">%1$d měsíců za %2$.2f %3$@</string>
     <string name="buy_special_offers">Akční nabídky</string>
     <string name="user_does_not_have_gifts">Tento uživatel zatím nemá žádné dárky, ať jste první a Vás se hned všimnou</string>
+    <string name="status_is_empty">Nemáte nastaveny status</string>
+    <string name="you_dont_have_gifts_yet">Zatím nemáte žádné dárky</string>
+    <string name="buy_sympathies">Koupit si sympatie</string>
+    <string name="upload_photos">Nahrajte si fotky</string>
+    <string name="chat_no_message_title">Začněte konverzaci!</string>
+    <string name="chat_no_message_text">Napište zprávu nebo pošlete dárek a určitě dostanete odpověď</string>
+    <string name="user_baned">Uživatel je zabanován</string>
+    <string name="general_choose_city">Zvolte město</string>
+    <string name="buy_mobile_payments">Jiné způsoby platby</string>
+    <string name="buy_mobile_payments_complete">Platba proběhla. Vaše objednávka se zpracovává, vyčkejte prosím</string>
+    <string name="general_save_and_exit">Uložit a odhlásit se</string>
+    <string name="general_set_password">Nastavit heslo před odhlášením z aplikace</string>
+    <string name="user_is_deleted">Uživatel je odstraněn</string>
+    <string name="general_bookmarks_title">Oblíbené</string>
+    <string name="general_empty_bookmarks">Nejsou oblíbené</string>
+    <string name="general_bookmarks">Oblíbené</string>
+    <string name="general_fans">Obdivovatelé</string>
+    <string name="general_no_fans">Nejsou obdivobatele</string>
+    <plurals name="get_free_money">
+        <item quantity="few">%d mince zdarma</item>
+        <item quantity="other">%d mincí zdarma</item>
+        <item quantity="one">%d mince zdarma</item>
+    </plurals>
+    <string name="settings_edit_profile">Upravit profil</string>
+    <string name="general_bookmarks_delete">Odstranit z oblíbených</string>
+    <string name="general_bookmarks_add">Přidat k oblíbeným</string>
+    <string name="buy_resources">Doplnit zásoby</string>
+    <string name="general_network_reconnect">Snažíme se obnovit připojení k síti</string>
+    <string name="user_is_banned">Uživatel je zabanován</string>
+    <string name="profile_empty_name">Jméno: Toto pole nemůže být prázdné</string>
 </resources>

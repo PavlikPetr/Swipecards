@@ -113,10 +113,10 @@
     <string name="edit_delete">Sterge</string>
     <string name="edit_restore">Restabileste</string>
     <string name="album_add_photo_title">Adauga poza</string>
-    <string name="gifts_romantic">Romantice</string>
-    <string name="gifts_friends">Prietenesti</string>
+    <string name="gifts_romantic">Romantica</string>
+    <string name="gifts_friends">Prietenie</string>
     <string name="gifts">Cadouri</string>
-    <string name="gifts_present">Pentru felicitare</string>
+    <string name="gifts_present">Felicitari</string>
     <string name="gifts_title">Alege cadou</string>
     <string name="gifts_send_btn">Trimite cadou</string>
     <string name="map_location_progress">Identific locatia</string>
@@ -313,7 +313,7 @@
     <string name="leaders_select_photo_info">Alegeti cea mai tare poza! Poze cu rating mic nu se pot alege</string>
     <string name="default_price_format">Total: %.2f USD</string>
     <string name="dating_online_only">%s, numai online</string>
-    <string name="leaders_pick_condition">Dmv nu puteti alege poza cu rating mai mic %d%%:</string>
+    <string name="leaders_pick_condition">Dmv nu puteti alege fotografie cu rating mai jos de %d%%</string>
     <string name="map_popup_address">Adresa</string>
     <string name="black_list_info">Ati adaugat o persoana in lista neagra. De schimbat acest lucru se poate in profilul Dmv, in setarile VIP-statut.</string>
     <string name="general_gift">Cadou</string>
@@ -384,4 +384,32 @@
     <string name="buy_vip_month_other">%1$d luni pana pe %2$.2f %3$@</string>
     <string name="buy_special_offers">Oferte speciale</string>
     <string name="user_does_not_have_gifts">Acest utilizator momentan nu are cadouri, fi primul si vei fi observat</string>
+    <string name="status_is_empty">Dmv nu aveti instalat statutul</string>
+    <string name="you_dont_have_gifts_yet">Dmv, acum nu aveti cadouri</string>
+    <string name="buy_sympathies">Cumpara simpatii</string>
+    <string name="upload_photos">Incarca poze</string>
+    <string name="chat_no_message_title">Incepe conversarea!</string>
+    <string name="chat_no_message_text">Scrie un mesaj sau trimite un cadou si neaparat vei primi raspuns</string>
+    <string name="user_baned">Utilizatorul a fost blocat</string>
+    <string name="general_choose_city">Alege orasul</string>
+    <string name="buy_mobile_payments">Alte metode de plata</string>
+    <string name="buy_mobile_payments_complete">Plata efectuata cu succes. Cererea Dmv se prelucreaza, va rugam sa asteptati</string>
+    <string name="general_save_and_exit">Salveaza si iesi</string>
+    <string name="general_set_password">Puneti o parola inainte de a iesti din aplicare</string>
+    <string name="user_is_deleted">Utilizator sters</string>
+    <string name="general_bookmarks_title">Alese</string>
+    <string name="general_empty_bookmarks">Nu sunt alese</string>
+    <string name="general_bookmarks">Alese</string>
+    <string name="general_fans">Admiratori</string>
+    <string name="general_no_fans">Nu sunt admiratori</string>
+    <plurals name="get_free_money">
+        <item quantity="one">%d monede gratis</item>
+    </plurals>
+    <string name="settings_edit_profile">Redacteaza profilul</string>
+    <string name="general_bookmarks_delete">Sterge din alese</string>
+    <string name="general_bookmarks_add">Adauga in alese</string>
+    <string name="buy_resources">Incarca rezerva</string>
+    <string name="general_network_reconnect">Incercam sa restabilim legatura</string>
+    <string name="user_is_banned">Utilizator blocat</string>
+    <string name="profile_empty_name">Numele trebuie sa fie completat</string>
 </resources>

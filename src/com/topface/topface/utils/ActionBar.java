@@ -7,6 +7,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.Photo;
+import com.topface.topface.ui.views.ImageViewRemote;
 
 public class ActionBar {
 
@@ -20,6 +22,7 @@ public class ActionBar {
     private ImageButton mProfileButton;
     private ImageButton mUserActionsControl;
     private ProgressBar mRightProgressBar;
+    private ImageViewRemote mProfileAvatar;
 
     private NavigationBarController mNavBarController;
 
@@ -39,6 +42,7 @@ public class ActionBar {
         mProfileButton = (ImageButton) actionView.findViewById(R.id.btnNavigationProfileBar);
         mUserActionsControl = (ImageButton) actionView.findViewById(R.id.btnUserProfActions);
         mRightProgressBar = (ProgressBar) actionView.findViewById(R.id.prsNavigationRight);
+        mProfileAvatar = (ImageViewRemote) actionView.findViewById(R.id.btnNavigationBarAvatar);
     }
 
     public void refreshNotificators() {
@@ -47,6 +51,17 @@ public class ActionBar {
                 mNavBarController.refreshNotificators();
             }
         }
+    }
+
+    public void showProfileAvatar() {
+        showProfileAvatar(null,null);
+    }
+
+    public void showProfileAvatar(final Photo profilePhoto, View.OnClickListener listener) {
+        hideRightBarPart();
+        mProfileAvatar.setVisibility(View.VISIBLE);
+        mProfileAvatar.setPhoto(profilePhoto);
+        mProfileAvatar.setOnClickListener(listener);
     }
 
     public void showHomeButton(final View.OnClickListener listener) {
@@ -145,6 +160,10 @@ public class ActionBar {
         });
     }
 
+    public void hideUserActionButton() {
+        mUserActionsControl.setVisibility(View.GONE);
+    }
+
     public void activateEditButton() {
         if(mEditButton.isSelected()) {
             mEditButton.setSelected(false);
@@ -171,5 +190,14 @@ public class ActionBar {
 
     public ProgressBar getRightProgressBar() {
         return mRightProgressBar;
+    }
+
+    private void hideRightBarPart() {
+        mSettingsButton.setVisibility(View.GONE);
+        mEditButton.setVisibility(View.GONE);
+        mProfileButton.setVisibility(View.GONE);
+        mUserActionsControl.setVisibility(View.GONE);
+        mRightProgressBar.setVisibility(View.GONE);
+        mProfileAvatar.setVisibility(View.GONE);
     }
 }

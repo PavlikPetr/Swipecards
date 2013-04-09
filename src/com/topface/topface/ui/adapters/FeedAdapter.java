@@ -1,11 +1,13 @@
 package com.topface.topface.ui.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -29,7 +31,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     private OnAvatarClickListener<T> mOnAvatarClickListener;
 
     public FeedAdapter(Context context, FeedList<T> data, Updater updateCallback) {
-        super(context,data, updateCallback);
+        super(context, data, updateCallback);
     }
 
     protected static class FeedViewHolder {
@@ -132,13 +134,38 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         }
 
         if (item != null) {
-            holder.avatar.setPhoto(item.user.photo);
-            setListenerOnAvatar(holder.avatar, item);
-
-            holder.name.setText(item.user.getNameAndAge());
-            if (item.user.city != null) {
-                holder.city.setText(item.user.city.name);
+            // установка аватарки пользователя
+            if (item.user.banned || item.user.deleted || item.user.photo == null || item.user.photo.isEmpty()) {
+                holder.avatar.setImageResource(item.user.sex == Static.BOY ?
+                        R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
+                if (item.user.banned || item.user.deleted) {
+                    holder.avatar.setOnClickListener(null);
+                }
+            } else {
+                holder.avatar.setPhoto(item.user.photo);
+                setListenerOnAvatar(holder.avatar, item);
             }
+
+            // установка имени
+            holder.name.setText(item.user.getNameAndAge());
+            if (item.user.deleted || item.user.banned) {
+                holder.name.setTextColor(Color.GRAY);
+            } else {
+                holder.name.setTextColor(Color.WHITE);
+            }
+
+            // установка городв
+            if (item.user.city != null) {
+                if (item.user.deleted || item.user.banned) {
+                    holder.city.setTextColor(Color.GRAY);
+                    holder.city.setText(item.user.banned ? R.string.user_is_banned : R.string.user_is_deleted);
+                } else {
+                    holder.city.setTextColor(Color.WHITE);
+                    holder.city.setText(item.user.city.name);
+                }
+            }
+
+            // установка иконки онлайн
             holder.online.setVisibility(item.user.online ? View.VISIBLE : View.INVISIBLE);
         }
 

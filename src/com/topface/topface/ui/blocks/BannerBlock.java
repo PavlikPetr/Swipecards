@@ -165,6 +165,7 @@ public class BannerBlock {
             @Override
             public void success(ApiResponse response) {
                 final Banner banner = Banner.parse(response);
+
                 if (mBannerView != null) {
                     try {
                         showBanner(banner);
@@ -238,11 +239,11 @@ public class BannerBlock {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                if(msg.what == ImageViewRemote.LOADING_COMPLETE) {
+                if(msg.what == ImageViewRemote.LOADING_COMPLETE && mFragment.isAdded()) {
                     if (mBannerView != null) {
                         float imageWidth = msg.arg1;
                         float imageHeight = msg.arg2;
-                        float deviceWidth = Device.getDisplayMetrics(mFragment.getActivity()).widthPixels;
+                        float deviceWidth = Device.getDisplayMetrics(App.getContext()).widthPixels;
                         //Если ширина экрана больше, чем у нашего баннера, то пропорционально увеличиваем высоту imageView
                         if (deviceWidth > imageWidth) {
                             ViewGroup.LayoutParams params = mBannerView.getLayoutParams();
@@ -273,9 +274,9 @@ public class BannerBlock {
                 } else if (banner.action.equals(Banner.ACTION_METHOD)) {
                     invokeBannerMethod(banner.parameter);
                 } else if (banner.action.equals(Banner.ACTION_OFFERWALL)) {
-                    if (banner.parameter.equals(Offerwalls.TAPJOY)) {
+                    if (banner.parameter.equals(Options.TAPJOY)) {
                         Offerwalls.startTapjoy();
-                    } else if (banner.parameter.equals(Offerwalls.SPONSORPAY)) {
+                    } else if (banner.parameter.equals(Options.SPONSORPAY)) {
                         Offerwalls.startSponsorpay(mFragment.getActivity());
                     } else {
                         Offerwalls.startOfferwall(mFragment.getActivity());

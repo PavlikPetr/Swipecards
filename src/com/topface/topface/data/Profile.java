@@ -58,7 +58,6 @@ public class Profile extends AbstractDataWithPhotos {
     public int background;
 
     public boolean paid;
-
     // private static final String profileFileName = "profile.out";
     // private static final long serialVersionUID = 2748391675222256671L;
 
@@ -480,6 +479,10 @@ public class Profile extends AbstractDataWithPhotos {
             this.mail = mail;
             this.type = type;
         }
+    }
+
+    public boolean isEmpty() {
+        return uid <= 0;
     }
 
 }

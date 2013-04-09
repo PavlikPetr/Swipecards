@@ -16,7 +16,6 @@
             />
 
 
-
     <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -75,17 +74,18 @@
                 android:singleLine="true"
                 android:textSize="14sp"
                 android:visibility="gone"/>
+
         <Button
                 android:id="@+id/generalSendButton"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            style="@style/ButtonGrayText"
-            android:layout_margin="10dp"
-            android:background="@drawable/btn_gray_large_selector"
-            android:text="@string/general_send_full"
-            />
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                style="@style/ButtonGray"
+                android:layout_margin="10dp"
+                android:text="@string/general_send_full"
+                />
 
     </LinearLayout>
+
     <com.topface.topface.ui.views.LockerView
             android:id="@+id/fbLoadingLocker"
             android:layout_width="fill_parent"
@@ -94,5 +94,6 @@
             android:layout_below="@id/loNavigationBar"
             android:visibility="gone"
             />
+
     <ImageView style="@style/HeaderShadow"/>
 </RelativeLayout>

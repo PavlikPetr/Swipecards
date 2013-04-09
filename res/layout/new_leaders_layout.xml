@@ -37,8 +37,7 @@
                     android:layout_centerInParent="true"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    style="@style/ButtonWhiteText"
-                    android:background="@drawable/btn_vip_super_sale_selector"
+                    style="@style/ButtonBlue"
                     />
         </RelativeLayout>
 
@@ -55,6 +54,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     >
+
                 <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -66,6 +66,7 @@
                         android:layout_alignParentTop="true"
                         android:text="@string/choose_cool_photo"
                         />
+
                 <com.topface.topface.ui.gridlayout.GridLayout
                         android:id="@+id/usedGrid"
                         android:layout_width="fill_parent"

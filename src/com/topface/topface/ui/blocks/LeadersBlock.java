@@ -29,7 +29,6 @@ public class LeadersBlock {
         mLayout = layout;
 
         bindButtonEvent();
-        loadLeaders();
 
         layout.findViewById(R.id.leadersBlock).setVisibility(View.VISIBLE);
     }

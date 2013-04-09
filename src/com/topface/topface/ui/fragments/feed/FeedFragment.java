@@ -58,8 +58,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     protected String[] editButtonsNames;
 
-    private final int DELETE_BUTTON = 0;
-    private final int BLACK_LIST_BUTTON = 1;
+    protected final int DELETE_BUTTON = 0;
+    protected final int BLACK_LIST_BUTTON = 1;
+    protected final int MUTUAL_BUTTON = 2;
 
     private FloatBlock mFloatBlock;
 
@@ -74,14 +75,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         View view = inflater.inflate(getLayout(), null);
         mContainer = (RelativeLayout) view.findViewById(R.id.feedContainer);
         initNavigationBar(view);
-
-
         mLockView = (LockerView) view.findViewById(R.id.llvFeedLoading);
         mLockView.setVisibility(View.GONE);
-
         init();
-
-
         initBackground(view);
         initFilter(view);
         initListView(view);
@@ -134,6 +130,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (getListAdapter().isNeedUpdate()) {
             updateData(false, true);
         }
+        mFloatBlock.onResume();
 
     }
 
@@ -268,12 +265,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected AdapterView.OnItemLongClickListener getOnItemLongClickListener() {
         return new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, final long id) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, final long itemPosition) {
                 if (isDeletable) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle(R.string.general_spinner_title).setItems(
                             getLongTapActions(),
-                            getLongTapActionsListener((int) id)
+                            getLongTapActionsListener((int) itemPosition)
                     );
                     builder.create().show();
                 }
@@ -283,17 +280,17 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         };
     }
 
-    protected DialogInterface.OnClickListener getLongTapActionsListener(final int id) {
+    protected DialogInterface.OnClickListener getLongTapActionsListener(final int position) {
         return new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case DELETE_BUTTON:
                         mLockView.setVisibility(View.VISIBLE);
-                        onDeleteItem(id);
+                        onDeleteItem(position);
                         break;
                     case BLACK_LIST_BUTTON:
-                        onAddToBlackList(id);
+                        onAddToBlackList(position);
                         break;
                 }
             }
@@ -307,7 +304,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         return editButtonsNames;
     }
 
-    private void onAddToBlackList(final int position) {
+    protected void onAddToBlackList(final int position) {
         new BlackListAddRequest(getItem(position).user.id, getActivity())
                 .callback(new VipApiHandler() {
                     @Override
@@ -355,17 +352,18 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     protected void onFeedItemClick(FeedItem item) {
-        //Open mailchat activity
-
-        Intent intent = new Intent(getActivity(), ContainerActivity.class);
-        intent.putExtra(ChatFragment.INTENT_USER_ID, item.user.id);
-        intent.putExtra(ChatFragment.INTENT_USER_NAME, item.user.first_name);
-        intent.putExtra(ChatFragment.INTENT_USER_SEX, item.user.sex);
-        intent.putExtra(ChatFragment.INTENT_USER_AGE, item.user.age);
-        intent.putExtra(ChatFragment.INTENT_USER_CITY, item.user.city.name);
-        intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
-        intent.putExtra(ChatFragment.INTENT_ITEM_ID, item.id);
-        getActivity().startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
+        //Open chat activity
+        if (!item.user.isEmpty()) {
+            Intent intent = new Intent(getActivity(), ContainerActivity.class);
+            intent.putExtra(ChatFragment.INTENT_USER_ID, item.user.id);
+            intent.putExtra(ChatFragment.INTENT_USER_NAME, item.user.first_name);
+            intent.putExtra(ChatFragment.INTENT_USER_SEX, item.user.sex);
+            intent.putExtra(ChatFragment.INTENT_USER_AGE, item.user.age);
+            intent.putExtra(ChatFragment.INTENT_USER_CITY, item.user.city.name);
+            intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
+            intent.putExtra(ChatFragment.INTENT_ITEM_ID, item.id);
+            getActivity().startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
+        }
     }
 
     public void onAvatarClick(T item, View view) {
@@ -409,7 +407,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     if (makeItemsRead) {
                         makeAllItemsRead();
                     }
-                    mListAdapter.addDataFirst(data);
+                    getListAdapter().addDataFirst(data);
                 } else {
                     getListAdapter().setData(data);
                 }
@@ -417,7 +415,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 mListView.onRefreshComplete();
                 mListView.setVisibility(View.VISIBLE);
                 mIsUpdating = false;
-                if (mNavBarController != null) mNavBarController.refreshNotificators();
+                if (mActionBar != null) {
+                    mActionBar.refreshNotificators();
+                }
             }
 
             @Override

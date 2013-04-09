@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Topface</string>
-    <string name="app_locale">sr_SR</string>
+    <string name="app_locale">sr_RS</string>
     <string name="general_error">GREŠKA</string>
     <string name="general_warning">UPOZORENJE</string>
     <string name="general_ok">OK</string>
@@ -113,10 +113,7 @@
     <string name="edit_delete">Ukloniti</string>
     <string name="edit_restore">Obnoviti</string>
     <string name="album_add_photo_title">Dodati fotografiju</string>
-    <string name="gifts_romantic">Romantični</string>
-    <string name="gifts_friends">Prijateljski</string>
     <string name="gifts">Pokloni</string>
-    <string name="gifts_present">Pozdravni</string>
     <string name="gifts_title">Odaberite poklon</string>
     <string name="gifts_send_btn">Poslati poklon</string>
     <string name="map_location_progress">Određujem lokaciju</string>
@@ -313,7 +310,6 @@
     <string name="leaders_select_photo_info">Odaberite najefektivniju fotografiju! Ne mogu se odabrati fotografije sa niskim rejtingom.</string>
     <string name="default_price_format">Ukupno % 2f USD</string>
     <string name="dating_online_only">%s, samo online</string>
-    <string name="leaders_pick_condition">Ne možete odabrati fotografiju čiji je rejting manji od %d%%:</string>
     <string name="map_popup_address">Adresa</string>
     <string name="black_list_info">Dodali ste sagovornika u crni spisak. To se može izmeniti u svojem profilu, u podešavaniima VIP-statusa</string>
     <string name="general_gift">Poklon</string>

@@ -4,14 +4,13 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import com.topface.topface.R;
-import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.Debug;
@@ -67,8 +66,10 @@ public class SettingsAboutFragment extends BaseFragment {
 
         // Extra
         TextView extra = (TextView) root.findViewById(R.id.tvExtra);
-        String extraText = getResources().getString(R.string.settings_extra) + " " +
-                getResources().getString(R.string.settings_topface_url);
+        extra.setMovementMethod(LinkMovementMethod.getInstance());
+        String extraText =
+                getResources().getString(R.string.settings_extra) + "\n" +
+                        getResources().getString(R.string.settings_topface_url);
         extra.setText(extraText);
 
         return root;

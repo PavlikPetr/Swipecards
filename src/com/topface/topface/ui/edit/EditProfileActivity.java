@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -61,12 +62,14 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         actionBar.showBackButton(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (hasStartedFromAuthActivity && !CacheProfile.city.isEmpty()) {
-                    Intent intent = new Intent(EditProfileActivity.this, NavigationActivity.class);
-                    intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_VIP_PROFILE);
-                    SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-                    preferences.edit().putBoolean(Static.PREFERENCES_TAG_NEED_EDIT, false).commit();
-                    startActivity(intent);
+                if(CacheProfile.city != null) {
+                    if (hasStartedFromAuthActivity && !CacheProfile.city.isEmpty()) {
+                        Intent intent = new Intent(EditProfileActivity.this, NavigationActivity.class);
+                        intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_VIP_PROFILE);
+                        SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                        preferences.edit().putBoolean(Static.PREFERENCES_TAG_NEED_EDIT, false).commit();
+                        startActivity(intent);
+                    }
                 }
                 finish();
             }
@@ -95,7 +98,11 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
 
         mEditCity = (Button) header.findViewById(R.id.btnEditCity);
-        mEditCity.setText(CacheProfile.city.name);
+        if(CacheProfile.city == null) {
+            mEditCity.setText(getString(R.string.general_choose_city));
+        } else {
+            mEditCity.setText(CacheProfile.city.name);
+        }
         mEditCity.setOnClickListener(this);
 
         editsListView.addHeaderView(header);
@@ -411,7 +418,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
         @Override
         public String getTitle() {
-            if (CacheProfile.status.trim().length() == 0 || CacheProfile.status.equals("-")) {
+            if (CacheProfile.status == null || TextUtils.isEmpty(CacheProfile.status) || CacheProfile.status.equals("-")) {
                 return getString(R.string.edit_refresh_status);
             }
             return CacheProfile.status;

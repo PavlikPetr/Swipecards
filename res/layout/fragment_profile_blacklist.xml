@@ -1,26 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:padding="20dp">
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:padding="20dp">
+
     <Button
-        android:id="@+id/fpbAddToBlackList"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:background="@drawable/btn_vip_sale_selector"
-        style="@style/ButtonGrayText"
-        android:text="@string/black_list_add"
-        android:layout_centerInParent="true"
-        />
+            android:id="@+id/fpbAddToBlackList"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:background="@drawable/btn_gray_selector"
+            style="@style/ButtonGrayText"
+            android:text="@string/black_list_add"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:layout_centerInParent="true"
+            />
+
     <Button
-        android:id="@+id/fpbDeleteFromBlackList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/btn_vip_sale_selector"
-        style="@style/ButtonGrayText"
-        android:text="@string/black_list_delete"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        />
+            android:id="@+id/fpbDeleteFromBlackList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_gray_selector"
+            style="@style/ButtonGrayText"
+            android:text="@string/black_list_delete"
+            android:layout_centerInParent="true"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:visibility="gone"
+            />
 </RelativeLayout>

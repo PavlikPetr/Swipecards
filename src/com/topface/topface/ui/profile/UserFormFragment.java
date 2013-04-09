@@ -107,6 +107,7 @@ public class UserFormFragment extends BaseFragment implements OnClickListener {
                 mUserFormListAdapter.notifyDataSetChanged();
                 break;
             case R.id.btnEmptyForm:
+                if (mUser.uid == 0) break;
                 StandardMessageSendRequest request = new StandardMessageSendRequest(getActivity(), StandardMessageSendRequest.MESSAGE_FILL_INTERESTS, mUser.uid);
                 registerRequest(request);
                 mAskToFillForm.setVisibility(View.GONE);

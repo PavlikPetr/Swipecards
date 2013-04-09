@@ -304,9 +304,11 @@ public class GCMUtils {
             @Override
             public void run() {
                 if (type == lastNotificationType) {
-                    NotificationManager notificationManager =
-                            (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationManager.cancel(TopfaceNotificationManager.NOTIFICATION_ID);
+                    if (context != null) {
+                        NotificationManager notificationManager =
+                                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                        notificationManager.cancel(TopfaceNotificationManager.NOTIFICATION_ID);
+                    }
                 }
             }
         }, NOTIFICATION_CANCEL_DELAY);

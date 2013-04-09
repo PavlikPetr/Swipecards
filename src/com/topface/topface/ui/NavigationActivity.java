@@ -23,7 +23,10 @@ import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.*;
+import com.topface.topface.data.Banner;
+import com.topface.topface.data.City;
+import com.topface.topface.data.Options;
+import com.topface.topface.data.Photo;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.BaseApiHandler;
@@ -46,7 +49,6 @@ import ru.ideast.adwired.events.OnStartListener;
 import ru.ideast.adwired.events.OnStopListener;
 
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -55,7 +57,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     public static final String RATING_POPUP = "RATING_POPUP";
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
     public static final int RATE_POPUP_TIMEOUT = 86400000; // 1000 * 60 * 60 * 24 * 1 (1 сутки)
-    public static final int UPDATE_INTERVAL = 10 * 60 * 1000;
     public static final String URL_SEPARATOR = "::";
     public static final String CURRENT_FRAGMENT_ID = "NAVIGATION_FRAGMENT";
     private FragmentManager mFragmentManager;
@@ -68,8 +69,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private boolean needAnimate = false;
 
     private BroadcastReceiver mServerResponseReceiver;
-
-    private boolean isNeedAuth = true;
 
     private static boolean isFullScreenBannerVisible = false;
 
@@ -90,19 +89,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
         initFragmentSwitcher();
 
-        if (CacheProfile.isLoaded()) {
-            int currentFragment = savedInstanceState != null ?
-                    savedInstanceState.getInt(CURRENT_FRAGMENT_ID, BaseFragment.F_DATING) :
-                    BaseFragment.F_DATING;
-
-            onInit(currentFragment);
-        } else {
-            isNeedAuth = false;
-        }
-
-        setStopTime();
         mNovice = Novice.getInstance(getPreferences());
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
+        Offerwalls.init(getApplicationContext());
     }
 
     private SharedPreferences getPreferences() {
@@ -113,7 +102,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     private void requestFullscreen() {
-        if (CacheProfile.isLoaded()) {
+        if (!CacheProfile.isEmpty()) {
             Options.Page startPage = CacheProfile.getOptions().pages.get(Options.PAGE_START);
             if (startPage != null) {
                 if (startPage.floatType.equals(Options.FLOAT_TYPE_BANNER)) {
@@ -129,7 +118,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     private void requestAdwiredFullscreen() {
         try {
-            if (CacheProfile.isLoaded()) {
+            if (!CacheProfile.isEmpty()) {
                 AWView adwiredView = (AWView) getLayoutInflater().inflate(R.layout.banner_adwired, null);
                 final ViewGroup bannerContainer = (ViewGroup) findViewById(R.id.loBannerContainer);
                 bannerContainer.addView(adwiredView);
@@ -262,26 +251,43 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
         mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
         mFragmentMenu.setOnMenuListener(mOnFragmentMenuListener);
-    }
-
-    @Override
-    public void onInit(int currentFragment) {
-        Offerwalls.init(getApplicationContext());
 
         Intent intent = getIntent();
-        isNeedAuth = true;
-        //Получаем id фрагмента, если он открыт
         int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
 
-        currentFragment = id != -1 ? id : currentFragment;
+        } else {
+            mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
+            mFragmentMenu.selectDefaultMenu();
+        }
 
-        mFragmentSwitcher.showFragment(currentFragment);
-        mFragmentMenu.selectMenu(currentFragment);
+        int currentFragment = savedInstanceState != null ?
+                savedInstanceState.getInt(CURRENT_FRAGMENT_ID, BaseFragment.F_DATING) :
+                BaseFragment.F_DATING;
+    
+        onInit(currentFragment);
 
+    Offerwalls.init(getApplicationContext());
+
+    Intent intent = getIntent();
+    isNeedAuth = true;
+    //Получаем id фрагмента, если он открыт
+    int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
+
+    currentFragment = id != -1 ? id : currentFragment;
+
+    mFragmentSwitcher.showFragment(currentFragment);
+    mFragmentMenu.selectMenu(currentFragment);
+
+}
+
+    @Override
+    public void onLoadProfile() {
+        super.onLoadProfile();
         AuthorizationManager.extendAccessToken(NavigationActivity.this);
         checkVersion(CacheProfile.getOptions().max_version);
         actionsAfterRegistration();
         requestFullscreen();
+
     }
 
     @Override
@@ -294,14 +300,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     @Override
-    protected boolean isNeedAuth() {
-        return isNeedAuth;
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
-        checkProfileUpdate();
 
         //Отправляем не обработанные запросы на покупку
         BillingUtils.sendQueueItems();
@@ -323,33 +323,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
         new ExternalLinkExecuter(listener).execute(getIntent());
 
-        requestBalance();
-    }
-
-    private void requestBalance() {
-        if (CacheProfile.isLoaded()) {
-            ProfileRequest request = new ProfileRequest(this);
-            request.part = ProfileRequest.P_BALANCE_COUNTERS;
-            request.callback(new DataApiHandler<Profile>() {
-
-                @Override
-                protected void success(Profile data, ApiResponse response) {
-                    CacheProfile.likes = data.likes;
-                    CacheProfile.money = data.money;
-                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
-                }
-
-                @Override
-                protected Profile parseResponse(ApiResponse response) {
-                    return Profile.parse(response);
-                }
-
-                @Override
-                public void fail(int codeError, ApiResponse response) {
-
-                }
-            }).exec();
-        }
+        App.checkProfileUpdate();
     }
 
     private void actionsAfterRegistration() {
@@ -397,7 +371,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
                     @Override
                     public void onDialogClose() {
-                        if (CacheProfile.isLoaded() && (CacheProfile.city.isEmpty() || CacheProfile.needCityConfirmation(getApplicationContext()))
+                        if (!CacheProfile.isEmpty() && (CacheProfile.city.isEmpty() || CacheProfile.needCityConfirmation(getApplicationContext()))
                                 && !CacheProfile.wasCityAsked) {
                             CacheProfile.wasCityAsked = true;
                             CacheProfile.onCityConfirmed(getApplicationContext());
@@ -410,17 +384,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 CacheProfile.wasCityAsked = true;
                 startActivityForResult(new Intent(getApplicationContext(), CitySearchActivity.class),
                         CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
-            }
-        }
-    }
-
-
-    private void checkProfileUpdate() {
-        long startTime = Calendar.getInstance().getTimeInMillis();
-        long stopTime = getPreferences().getLong(Static.PREFERENCES_STOP_TIME, -1);
-        if (stopTime != -1) {
-            if (startTime - stopTime > UPDATE_INTERVAL) {
-                App.sendProfileRequest();
             }
         }
     }
@@ -479,7 +442,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     protected void onPause() {
         super.onPause();
-        setStopTime();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mServerResponseReceiver);
     }
 
@@ -641,15 +603,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         });
     }
 
-    private void setStopTime() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getPreferences().edit().putLong(Static.PREFERENCES_STOP_TIME, System.currentTimeMillis()).commit();
-            }
-        }).start();
-    }
-
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         super.startActivityForResult(intent, requestCode);
@@ -757,6 +710,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         @Override
         public void onOfferWall() {
             Offerwalls.startOfferwall(NavigationActivity.this);
+            getIntent().setData(null);
         }
     };
 }

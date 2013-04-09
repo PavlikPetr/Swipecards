@@ -14,9 +14,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /* Cache Profile */
 public class CacheProfile {
+    public static final String ACTION_PROFILE_LOAD = "com.topface.topface.ACTION.PROFILE_LOAD";
+    private static AtomicBoolean mIsLoaded = new AtomicBoolean(false);
     // Data
     public static int uid;             // id пользователя в топфейсе
     public static String first_name;   // имя пользователя
@@ -185,6 +188,7 @@ public class CacheProfile {
                 }
             }
         }
+        mIsLoaded.set(true);
         return result;
     }
 
@@ -233,7 +237,11 @@ public class CacheProfile {
     }
 
     public static boolean isLoaded() {
-        return uid > 0;
+        return mIsLoaded.get();
+    }
+
+    public static boolean isEmpty() {
+        return isLoaded() && uid == 0;
     }
 
     public static void setOptions(Options newOptions, final JSONObject response) {
@@ -289,7 +297,7 @@ public class CacheProfile {
     public static void onRegistration(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(Static.PREFERENCES_TAG_NEED_CHANGE_PASSWORD, true);
+        editor.putBoolean(Static.PREFERENCES_TAG_NEED_CHANGE_PASSWORD, false);
         editor.putBoolean(Static.PREFERENCES_TAG_NEED_CITY_CONFIRM, true);
         editor.commit();
     }
