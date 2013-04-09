@@ -311,11 +311,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mHeaderPager = null;
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
     private void setProfile(Profile profile) {
         if (mHeaderMainFragment != null) mHeaderMainFragment.setProfile(profile);
         if (mHeaderStatusFragment != null) mHeaderStatusFragment.setProfile(profile);
@@ -414,18 +409,19 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         addHeaderPage(HeaderMainFragment.class.getName());
         addHeaderPage(HeaderStatusFragment.class.getName());
 
-        ViewPager headerPager = (ViewPager) root.findViewById(R.id.vpHeaderFragments);
-        headerPager.setSaveEnabled(false);
+        mHeaderPager = (ViewPager) root.findViewById(R.id.vpHeaderFragments);
+        //Мы отключаем сохранеие state у фрагментов, т.к. мы устанавливаем данные в методе getItem() адаптера,
+        //что приводит к пустым фрагментам. Поэтому мы не пытаемся сохранять и восстанавливать состояние фрагмента
+        mHeaderPager.setSaveEnabled(false);
         mHeaderPagerAdapter = new ProfilePageAdapter(getChildFragmentManager(),
                 HEADER_PAGES_CLASS_NAMES, mProfileUpdater);
-        headerPager.setAdapter(mHeaderPagerAdapter);
+        mHeaderPager.setAdapter(mHeaderPagerAdapter);
         //Tabs for header
         CirclePageIndicator circleIndicator = (CirclePageIndicator) root.findViewById(R.id.cpiHeaderTabs);
-        circleIndicator.setViewPager(headerPager);
+        circleIndicator.setViewPager(mHeaderPager);
         circleIndicator.setSnap(true);
         mHeaderPagerAdapter.setPageIndicator(circleIndicator);
 
-        mHeaderPager = headerPager;
     }
 
     private void initBodyPages(View root) {
@@ -442,17 +438,18 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             addBodyPage(ProfileBlackListControlFragment.class.getName(), getResources().getString(R.string.profile_actions));
         }
 
-        ViewPager bodyPager = (ViewPager) root.findViewById(R.id.vpFragments);
+        mBodyPager = (ViewPager) root.findViewById(R.id.vpFragments);
         mBodyPagerAdapter = new ProfilePageAdapter(getChildFragmentManager(), BODY_PAGES_CLASS_NAMES,
                 BODY_PAGES_TITLES, mProfileUpdater);
-        bodyPager.setAdapter(mBodyPagerAdapter);
+        mBodyPager.setAdapter(mBodyPagerAdapter);
+        //Мы отключаем сохранеие state у фрагментов, т.к. мы устанавливаем данные в методе getItem() адаптера,
+        //что приводит к пустым фрагментам. Поэтому мы не пытаемся сохранять и восстанавливать состояние фрагмента
+        mBodyPager.setSaveEnabled(false);
         //Tabs for Body
         mTabIndicator = (TabPageIndicator) root.findViewById(R.id.tpiTabs);
-        mTabIndicator.setViewPager(bodyPager);
+        mTabIndicator.setViewPager(mBodyPager);
 
         mBodyPagerAdapter.setPageIndicator(mTabIndicator);
-
-        mBodyPager = bodyPager;
     }
 
     private void addHeaderPage(String className) {
