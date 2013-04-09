@@ -17,13 +17,21 @@ public class Offerwalls {
     public static void init(Context context) {
         try {
             if (CacheProfile.uid > 0) {
-                TapjoyConnect.requestTapjoyConnect(context, "f0563cf4-9e7c-4962-b333-098810c477d2", "AS0AE9vmrWvkyNNGPsyu");
-                TapjoyConnect.getTapjoyConnectInstance().setUserID(Integer.toString(CacheProfile.uid));
-                SponsorPay.start("11625", Integer.toString(CacheProfile.uid), "0a4c64db64ed3c1ca14a5e5d81aaa23c", context);
+                initTapjoy(context);
+                initSponsorpay(context);
             }
         } catch (Exception e) {
             Debug.error(e);
         }
+    }
+
+    private static void initSponsorpay(Context context) {
+        SponsorPay.start("11625", Integer.toString(CacheProfile.uid), "0a4c64db64ed3c1ca14a5e5d81aaa23c", context);
+    }
+
+    private static void initTapjoy(Context context) {
+        TapjoyConnect.requestTapjoyConnect(context, "f0563cf4-9e7c-4962-b333-098810c477d2", "AS0AE9vmrWvkyNNGPsyu");
+        TapjoyConnect.getTapjoyConnectInstance().setUserID(Integer.toString(CacheProfile.uid));
     }
 
     public static void startOfferwall(Activity activity) {
@@ -35,31 +43,36 @@ public class Offerwalls {
         }
 
         if (offerwall.equals(Options.TAPJOY)) {
-            startTapjoy();
+            startTapjoy(activity);
         } else if (offerwall.equals(Options.SPONSORPAY)) {
             startSponsorpay(activity);
         } else if (offerwall.equals(Options.RANDOM)) {
             startRandomOfferwall(activity);
         } else {
-            startTapjoy();
+            startTapjoy(activity);
         }
     }
 
     private static void startRandomOfferwall(Activity activity) {
         Random random = new Random();
         if (random.nextBoolean()) {
-            startTapjoy();
+            startTapjoy(activity);
         } else {
             startSponsorpay(activity);
         }
     }
 
-    public static void startTapjoy() {
+    public static void startTapjoy(Context context) {
         try {
             TapjoyConnect.getTapjoyConnectInstance().showOffers();
         } catch (Exception e) {
             Debug.error(e);
+            if (context != null) initTapjoy(context);
         }
+    }
+
+    public static void startTapjoy() {
+        startTapjoy(null);
     }
 
     public static void startSponsorpay(Activity activity) {
@@ -68,6 +81,7 @@ public class Offerwalls {
             activity.startActivityForResult(offerWallIntent, SponsorPayPublisher.DEFAULT_OFFERWALL_REQUEST_CODE);
         } catch (Exception e) {
             Debug.error(e);
+            initSponsorpay(activity);
         }
     }
 }
