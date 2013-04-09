@@ -113,10 +113,10 @@
     <string name="edit_delete">Elimina</string>
     <string name="edit_restore">Ripristinare</string>
     <string name="album_add_photo_title">Aggiungere foto</string>
-    <string name="gifts_romantic">Romantici</string>
-    <string name="gifts_friends">Amichevoli</string>
+    <string name="gifts_romantic">Romantiškos</string>
+    <string name="gifts_friends">Draugiškos</string>
     <string name="gifts">Regali</string>
-    <string name="gifts_present">D’auguri</string>
+    <string name="gifts_present">Sveikinimų</string>
     <string name="gifts_title">Scegli regalo</string>
     <string name="gifts_send_btn">Invia regalo</string>
     <string name="map_location_progress">Cerco la posizione</string>
@@ -393,4 +393,21 @@
     <string name="buy_mobile_payments_complete">Il pagamento è stato effettuato. Attendere, prego! Il tuo ordine è in fase di elaborazione.</string>
     <string name="general_save_and_exit">Salva ed esci</string>
     <string name="general_set_password">Imposta la password prima di uscire</string>
+    <string name="user_is_deleted">L’utente è stato eliminato</string>
+    <string name="general_bookmarks_title">Preferiti</string>
+    <string name="general_empty_bookmarks">Non ci sono preferiti</string>
+    <string name="general_bookmarks">Preferiti</string>
+    <string name="general_fans">Ammiratori</string>
+    <string name="general_no_fans">Non ci sono ammiratori</string>
+    <plurals name="get_free_money">
+        <item quantity="other">%d monete gratis</item>
+        <item quantity="one">%d moneta gratis</item>
+    </plurals>
+    <string name="settings_edit_profile">Modifica profilo</string>
+    <string name="general_bookmarks_delete">Rimuovi dai preferiti</string>
+    <string name="general_bookmarks_add">Aggiungi ai preferiti</string>
+    <string name="buy_resources">Rifornire scorte</string>
+    <string name="general_network_reconnect">Stiamo cercando di ripristinare il collegamento alla rete</string>
+    <string name="user_is_banned">L’utente è stato bannato</string>
+    <string name="profile_empty_name">Non si può lasciare il campo Nome vuoto</string>
 </resources>

@@ -27,11 +27,10 @@ public class LeadersBlock {
     private final ViewGroup mLayout;
 
     public LeadersBlock(Fragment fragment, ViewGroup layout) {
-        mFragment  = fragment;
+        mFragment = fragment;
         mLayout = layout;
 
         bindButtonEvent();
-        loadLeaders();
 
         layout.findViewById(R.id.leadersBlock).setVisibility(View.VISIBLE);
     }
@@ -55,7 +54,8 @@ public class LeadersBlock {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {}
+            public void fail(int codeError, ApiResponse response) {
+            }
 
         }).exec();
     }

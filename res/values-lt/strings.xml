@@ -313,6 +313,7 @@
     <string name="leaders_select_photo_info">Pasirinkite pačią efektingiausią fotografiją! Fotografijos su mažu reitingu pasirinkti negalima</string>
     <string name="default_price_format">Viso: %.2f USD</string>
     <string name="dating_online_only">%s, tiktai on-line</string>
+    <string name="leaders_pick_condition">Jūs negalite pasirinkti fotografijos su reitingu, mažesniu nei %d%%:</string>
     <string name="map_popup_address">Adresas</string>
     <string name="black_list_info">Jūs pridėjote pašnekovą į juodąjį sąrašą. Pakeisti tai galima savo profilyje, VIP statuso nustatymuose.</string>
     <string name="general_gift">Dovana</string>
@@ -384,4 +385,34 @@
     <string name="buy_vip_month_other">%1$d mėnesių už %2$.2f %3$@</string>
     <string name="buy_special_offers">Specialūs pasiūlymai</string>
     <string name="user_does_not_have_gifts">Šis vartotojas dar neturi dovanų, būkite pirmas ir jūs pastebės</string>
+    <string name="status_is_empty">Jūsų statusas nenustatytas</string>
+    <string name="you_dont_have_gifts_yet">Pas jus kol kas nėra dovanų</string>
+    <string name="buy_sympathies">Pirkti simpatijas</string>
+    <string name="upload_photos">Įkelkite fotografijas</string>
+    <string name="chat_no_message_title">Pradėkite bendravimą!</string>
+    <string name="chat_no_message_text">Parašykite pranešimą arba išsiųskite dovaną ir jums būtinai atsakys</string>
+    <string name="user_baned">Vartotojas užbanintas</string>
+    <string name="general_choose_city">Pasirinkite miestą</string>
+    <string name="buy_mobile_payments">Kiti apmokėjimo būdai</string>
+    <string name="buy_mobile_payments_complete">Apmokėjimas atliktas. Jūsų užsakymas apdorojamas, prašome palaukti</string>
+    <string name="general_save_and_exit">Išsaugoti ir išeiti</string>
+    <string name="general_set_password">Prieš išeidami iš priedo, nustatykite slaptažodį</string>
+    <string name="user_is_deleted">Vartotojas pašalintas</string>
+    <string name="general_bookmarks_title">Išrinktieji</string>
+    <string name="general_empty_bookmarks">Nėra išrinktųjų</string>
+    <string name="general_bookmarks">Išrinktieji</string>
+    <string name="general_fans">Gerbėjai</string>
+    <string name="general_no_fans">Nėra gerbėjų</string>
+    <plurals name="get_free_money">
+        <item quantity="few">%d monetos nemokamai</item>
+        <item quantity="other">%d monetų nemokamai</item>
+        <item quantity="one">%d moneta nemokamai</item>
+    </plurals>
+    <string name="settings_edit_profile">Redaguoti profilį</string>
+    <string name="general_bookmarks_delete">Šalinti iš išrinktųjų</string>
+    <string name="general_bookmarks_add">Pridėti prie išrinktųjų</string>
+    <string name="buy_resources">Papildyti atsargas</string>
+    <string name="general_network_reconnect">Bandome atstatyti ryšį tinkle</string>
+    <string name="user_is_banned">Vartotojas užbanintas</string>
+    <string name="profile_empty_name">Vardo laukelis negali būti tuščias</string>
 </resources>

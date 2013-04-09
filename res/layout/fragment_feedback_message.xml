@@ -79,9 +79,8 @@
                 android:id="@+id/generalSendButton"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                style="@style/ButtonGrayText"
+                style="@style/ButtonGray"
                 android:layout_margin="10dp"
-                android:background="@drawable/btn_gray_selector"
                 android:text="@string/general_send_full"
                 />
 

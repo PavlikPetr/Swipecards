@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -417,7 +418,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
         @Override
         public String getTitle() {
-            if (CacheProfile.status.trim().length() == 0 || CacheProfile.status.equals("-")) {
+            if (CacheProfile.status == null || TextUtils.isEmpty(CacheProfile.status) || CacheProfile.status.equals("-")) {
                 return getString(R.string.edit_refresh_status);
             }
             return CacheProfile.status;

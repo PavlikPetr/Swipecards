@@ -131,14 +131,14 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
     }
 
     @Override
-    protected DialogInterface.OnClickListener getLongTapActionsListener(final int id) {
+    protected DialogInterface.OnClickListener getLongTapActionsListener(final int position) {
         return new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case BLACK_LIST_DELETE_BUTTON:
                         mLockView.setVisibility(View.VISIBLE);
-                        onRemoveFromBlackList(id);
+                        onRemoveFromBlackList(position);
                         break;
                 }
             }

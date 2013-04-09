@@ -40,8 +40,8 @@ public class FeedDialog extends FeedLike {
     public static final int LIKE_REQUEST = 15; // Вирус "Получи 5 лайков"
 
 
-    public static final int USER_MESSAGE = 0;
-    public static final int FRIEND_MESSAGE = 1;
+    public static final int OUTPUT_USER_MESSAGE = 0;
+    public static final int INPUT_FRIEND_MESSAGE = 1;
 
     public FeedDialog(JSONObject data) {
         super(data);

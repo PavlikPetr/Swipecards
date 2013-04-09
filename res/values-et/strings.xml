@@ -111,10 +111,7 @@ Sa oled müksanud.</string>
     <string name="edit_delete">Eemaldada</string>
     <string name="edit_restore">Taastada</string>
     <string name="album_add_photo_title">Lisada foto</string>
-    <string name="gifts_romantic">Romantilised</string>
-    <string name="gifts_friends">Sõbralikud</string>
     <string name="gifts">Kingitused</string>
-    <string name="gifts_present">Õnnitlus-</string>
     <string name="gifts_title">Vali kingitus</string>
     <string name="gifts_send_btn">Saada kingitus</string>
     <string name="map_location_progress">Määran asukoha/ Teen asukoha kindlaks</string>

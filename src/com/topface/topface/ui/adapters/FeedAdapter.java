@@ -156,11 +156,12 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
             // установка городв
             if (item.user.city != null) {
-                holder.city.setText(item.user.city.name);
                 if (item.user.deleted || item.user.banned) {
                     holder.city.setTextColor(Color.GRAY);
+                    holder.city.setText(item.user.banned ? R.string.user_is_banned : R.string.user_is_deleted);
                 } else {
                     holder.city.setTextColor(Color.WHITE);
+                    holder.city.setText(item.user.city.name);
                 }
             }
 

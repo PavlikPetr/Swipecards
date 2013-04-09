@@ -144,10 +144,10 @@
     <string name="album_add_photo_title">Добавить фото</string>
 
     <!-- Gifts -->
-    <string name="gifts_romantic">Романтические</string>
-    <string name="gifts_friends">Дружеские</string>
+    <string name="gifts_romantic">Романтика</string>
+    <string name="gifts_friends">Дружба</string>
     <string name="gifts">Подарки</string>
-    <string name="gifts_present">Поздравительные</string>
+    <string name="gifts_present">Поздравления</string>
     <string name="gifts_title">Выберите подарок</string>
     <string name="gifts_send_btn">Отправить подарок</string>
 
@@ -295,7 +295,7 @@
     </string>
     <string name="general_close">Закрыть</string>
     <string name="vip_not_activated">Ваш VIP-статус не активирован</string>
-    <string name="vip_privileges">VIP-привелегии</string>
+    <string name="vip_privileges">VIP-привилегии</string>
     <string name="vip_text_visitors">Узнаете, кто вами интересовался - смотрите своих гостей!</string>
     <string name="vip_text_adm_unlock">Отправляйте восхищения бесплатно - выражайте свои чувства по-максимуму</string>
     <string name="vip_rest">Вы подписаны на VIP</string>
@@ -346,7 +346,7 @@
     <string name="profile_gifts_empty">Этому пользователю еще никто не дарил подарков</string>
     <string name="profile_mygifts_empty">Вам еще никто не дарил подарков</string>
     <string name="profile_mood">Опишите Ваше настроение</string>
-    <string name="general_reconnect">Пытаемся восстаносить соединение с Интернет.\nПожалуйста подождите.</string>
+    <string name="general_reconnect">Пытаемся восстановить соединение с Интернет.\nПожалуйста подождите.</string>
     <string name="dating_people_unnoticed">Десять человек остались без вашего внимания!</string>
     <string name="dating_continue">Продолжить оценивать</string>
     <string name="dating_better_look">Присмотритесь!\nВозможно вы упускаете свою судьбу!</string>
@@ -360,8 +360,8 @@
     <string name="map_title">Карта</string>
 
     <string name="settings_want_answer">Я хочу, чтобы мне ответили</string>
-    <string name="settings_feedback_email">Email для связи</string>
-    <string name="settings_invalid_email">Некорректный Email</string>
+    <string name="settings_feedback_email">E-mail для связи</string>
+    <string name="settings_invalid_email">Некорректный e-mail</string>
 
     <string name="leaders_select_cool_picture">Выберите эффектную фотографию:</string>
     <string name="chat_write_message">Написать сообщение</string>
@@ -496,7 +496,7 @@
     <string name="general_correct">Все правильно</string>
     <string name="we_dont_detect_your_city">Чтобы найти людей поблизости нам нужно знать где вы находитесь. Пожалуйста, укажите ваш город.</string>
     <string name="confirm_email">Пожалуйста, подтвердите e-mail.</string>
-    <string name="password_sent">Новый пароль отправлен на ваш E-mail</string>
+    <string name="password_sent">Новый пароль отправлен на ваш e-mail</string>
     <string name="buy_vip_month_one">%1$d месяц за %2$.2f %3$@</string>
     <string name="buy_vip_month_few">%1$d месяца по %2$.2f %3$@</string>
     <string name="buy_vip_month_other">%1$d месяцев по %2$.2f %3$@</string>
@@ -535,4 +535,5 @@
     <string name="buy_resources">Пополнить запас</string>
     <string name="general_network_reconnect">Пытаемся восстановить соединение с сетью</string>
     <string name="user_is_banned">Пользователь забанен</string>
+    <string name="profile_empty_name">Имя не может быть пустым</string>
 </resources>

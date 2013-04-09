@@ -113,10 +113,10 @@
     <string name="edit_delete">Κατάργηστε</string>
     <string name="edit_restore">Αποκαταστήστε</string>
     <string name="album_add_photo_title">Προσθέστε μια φωτογραφία</string>
-    <string name="gifts_romantic">Ρομαντικές</string>
-    <string name="gifts_friends">Φιλικός</string>
+    <string name="gifts_romantic">Ρομαντισμό</string>
+    <string name="gifts_friends">Φιλία</string>
     <string name="gifts">Δώρα</string>
-    <string name="gifts_present">Συγχαρητήριες</string>
+    <string name="gifts_present">Συγχαρητήρια</string>
     <string name="gifts_title">Επιλέξτε ένα δώρο</string>
     <string name="gifts_send_btn">Στείλτε ένα δώρο</string>
     <string name="map_location_progress">Καθορίζω τοποθεσία</string>
@@ -308,6 +308,7 @@
     <string name="leaders_select_photo_info">Επιλέξτε την πιο θεαματική φωτογραφία! Τις φωτογραφίες με χαμηλή βαθμολογία δεν μπορείτε να επιλέξετε</string>
     <string name="default_price_format">Στη συνολική: %.2f USD</string>
     <string name="dating_online_only">%s, μόνο online</string>
+    <string name="leaders_pick_condition">Δεν μπορείτε να επιλέξετε μια φωτογραφία με βαθμολογία κάτω από %d%%:</string>
     <string name="map_popup_address">Η διεύθυνση</string>
     <string name="black_list_info">Έχετε προσθέσει του συνομιλητής στη μαύρη λίστα. Μπορείτε να αλλάξετε αυτό στο προφίλ σας στις ρυθμίσεις  τη VIP-κατάσταση.</string>
     <string name="general_gift">Το δώρω</string>
@@ -345,7 +346,7 @@
     <string name="no_photo_take_photo">Με εσάς, δεν μπορεί κανείς να εξοικειωθεί! Τραβήξτε μια φωτογραφία ή κατεβάστε διαθέσιμη από το άλμπουμ</string>
     <string name="photo_is_too_small">φαίνεστε πολύ καλή/καλός στη φωτογραφία σας, αλλά η φωτογραφία πρέπει να είναι λίγο πιο μεγάλη, με τουλάχιστον %s, για να μπορούν να σας  αξιολογίσουν οι χρήστες</string>
     <string name="photo_for_avatar">Η φωτογραφία είναι έτοιμη να σταλεί στο προφίλ σας! Αυτή είναι η πρώτη φωτογραφία σας και θα χρησιμοποιηθεί ως avatar.</string>
-    <string name="get_it_for_free">Αποκτήστε δώρεαν</string>
+    <string name="get_it_for_free">Αποκτήστε δώρεαν κέρματα</string>
     <string name="vip_advantages">Tα πλεονεκτήματα VIP</string>
     <string name="change_email">Αλλάξτε e-mail</string>
     <string name="send_confirmation_email">Στείλτε ένα επιβεβαίωση στο e-mail</string>
@@ -385,4 +386,26 @@
     <string name="upload_photos">Ανεβάστε τις φωτογραφίες!</string>
     <string name="chat_no_message_title">Ξεκινήστε την επικοινωνία!</string>
     <string name="chat_no_message_text">Γράψτε ένα μήνυμα ή στέιλτε ένα δώρο για να λάβετε μια απάντηση</string>
+    <string name="user_baned">Ο χρήστης έχει απαγορευτεί</string>
+    <string name="general_choose_city">Επιλέξτε τη πόλη</string>
+    <string name="buy_mobile_payments">Άλλοι τρόποι πληρωμής</string>
+    <string name="buy_mobile_payments_complete">Η πληρωμή έγινε. Η παραγγελία σας βρίσκεται υπό επεξεργασία, παρακαλώ περιμένετε</string>
+    <string name="general_save_and_exit">Αποθήκευση και έξοδος</string>
+    <string name="general_set_password">Εισάγετε τον κωδικός σας πριν βγείτε από την εφαρμογή</string>
+    <string name="user_is_deleted">Ο χρήστης έχει διαγραφεί</string>
+    <string name="general_bookmarks_title">Οι αγαπημένες</string>
+    <string name="general_empty_bookmarks">Οι αγαπημένα δεν υπάρχουν</string>
+    <string name="general_bookmarks">Οι αγαπημένες</string>
+    <string name="general_fans">Οι λάτρης</string>
+    <string name="general_no_fans">Οι λάτρης δεν υπάρχουν</string>
+    <plurals name="get_free_money">
+        <item quantity="other">%d δωρεάν κέρματα</item>
+        <item quantity="one">%d δωρεάν κέρμα</item>
+    </plurals>
+    <string name="settings_edit_profile">Επεξεργασία του προφίλ</string>
+    <string name="general_bookmarks_delete">Αφαιρέστε από τα αγαπημένες</string>
+    <string name="general_bookmarks_add">Προσθέστε στις αγαπημένες σας</string>
+    <string name="buy_resources">Ξαναγέμισμα</string>
+    <string name="general_network_reconnect">Προσπάθεια επανασύνδεσης με το δίκτυο</string>
+    <string name="user_is_banned">Ο χρήστης έχει απαγορευτεί</string>
 </resources>

@@ -51,7 +51,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     private boolean mExtraSavingPerformed = false;
 
-    public static final int webAbsoluteMaxAge = 99;
     private boolean mInitFilterOnline;
 
     @Override
@@ -262,8 +261,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     }
 
     private String buildAgeString() {
-        String plus = mFilter.age_end == webAbsoluteMaxAge ? "+" : "";
-        int age_end = mFilter.age_end == webAbsoluteMaxAge ? EditAgeFragment.absoluteMax : mFilter.age_end;
+        String plus = mFilter.age_end == DatingFilter.webAbsoluteMaxAge ? "+" : "";
+        int age_end = mFilter.age_end == DatingFilter.webAbsoluteMaxAge ? EditAgeFragment.absoluteMax : mFilter.age_end;
         return getString(R.string.filter_age_string, mFilter.age_start, age_end) + plus;
     }
 
@@ -381,13 +380,12 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 int ageEnd = extras.getInt(EditContainerActivity.INTENT_AGE_END);
                 if (ageEnd != 0 && ageStart != 0) {
                     if (ageEnd == EditAgeFragment.absoluteMax) {
-                        ageEnd = webAbsoluteMaxAge;
+                        ageEnd = DatingFilter.webAbsoluteMaxAge;
                     }
-                    mFilter.age_end = ageEnd;
-                    mFilter.age_start = ageStart;
-                    setText(buildAgeString(), mAgeFrame);
                 }
-
+                mFilter.age_end = ageEnd;
+                mFilter.age_start = ageStart;
+                setText(buildAgeString(), mAgeFrame);
             }
             refreshSaveState();
         } else {

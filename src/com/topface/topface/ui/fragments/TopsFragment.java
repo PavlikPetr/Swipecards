@@ -297,6 +297,7 @@ public class TopsFragment extends BaseFragment {
         if (mTopsList.isEmpty()) {
             updateData();
         }
+        mFloatBlock.onResume();
     }
 
     @Override

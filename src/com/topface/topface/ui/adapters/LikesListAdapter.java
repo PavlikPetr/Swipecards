@@ -22,7 +22,7 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
     private OnMutualListener mMutualListener;
 
     public interface OnMutualListener {
-        void onMutual(int userId, int rate, int mutualId);
+        void onMutual(FeedItem item);
     }
 
     public LikesListAdapter(Context context, Updater updateCallback) {
@@ -61,10 +61,8 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
 
             @Override
             public void onClick(View v) {
-                if(mMutualListener != null) {
-                    mMutualListener.onMutual(getItem(position).user.id, 9, like.id);
-                    like.mutualed = true;
-                    notifyDataSetChanged();
+                if (mMutualListener != null) {
+                    mMutualListener.onMutual(like);
                 }
             }
         });
@@ -75,7 +73,6 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
             vf.setDisplayedChild(1);
             if (android.os.Build.VERSION.SDK_INT > 11) {
                 convertView.setActivated(true);
-
             } else {
                 if (super.getItemViewType(position) == T_VIP || super.getItemViewType(position) == T_NEW_VIP) {
                     convertView.setBackgroundResource(R.drawable.im_item_list_vip_bg);
@@ -88,7 +85,7 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
                 @Override
                 public void onClick(View v) {
                     if (mMutualListener != null) {
-                        mMutualListener.onMutual(getItem(position).user.id, 9, like.id);
+                        mMutualListener.onMutual(like);
                         setSelectedForMutual(-1);
                         like.mutualed = true;
                     }
