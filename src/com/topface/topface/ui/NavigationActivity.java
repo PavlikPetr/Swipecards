@@ -86,13 +86,13 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         initFragmentSwitcher();
 
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
-        Offerwalls.init(getApplicationContext());
     }
 
     @Override
     protected void inBackgroundThread() {
         super.inBackgroundThread();
         mNovice = Novice.getInstance(getPreferences());
+        Offerwalls.init(getApplicationContext());
     }
 
     private SharedPreferences getPreferences() {
