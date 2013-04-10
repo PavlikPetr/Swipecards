@@ -42,6 +42,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     private ImageView rocket;
     private ImageView notEnoughData;
     private TextView mTvNotifyFans;
+    private Button buyButton;
 
     public interface FragmentMenuListener {
         public void onMenuClick(int buttonId);
@@ -109,7 +110,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         rocket = (ImageView) mRootLayout.findViewById(R.id.rocket);
 
 
-        Button buyButton = (Button) mRootLayout.findViewById(R.id.menuBuyBtn);
+        buyButton = (Button) mRootLayout.findViewById(R.id.menuBuyBtn);
         buyButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -211,6 +212,12 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
     public void show() {
         mRootLayout.setVisibility(View.VISIBLE);
+
+        if (CacheProfile.getOptions().saleExists) {
+            buyButton.setBackgroundResource(R.drawable.btn_sale_selector);
+        } else {
+            buyButton.setBackgroundResource(R.drawable.btn_blue_selector);
+        }
         if (CacheProfile.premium) {
             rocket.setVisibility(View.VISIBLE);
         } else {

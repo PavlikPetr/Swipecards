@@ -94,11 +94,13 @@ public class Options extends AbstractData {
     public int minLeadersPercent = 25; //Не уверен в этом, возможно стоит использовать другое дефолтное значение
 
     public String offerwall;
+    public boolean saleExists = false;
 
     public static Options parse(ApiResponse response) {
         Options options = new Options();
 
         try {
+            options.saleExists = false;
             options.price_highrate = response.jsonResult.optInt("price_highrate");
             options.price_leader = response.jsonResult.optInt("price_leader");
             options.minLeadersPercent = response.jsonResult.optInt("leader_percent");
@@ -121,26 +123,26 @@ public class Options extends AbstractData {
                 JSONArray coinsJSON = purchases.optJSONArray("coins");
                 if (coinsJSON != null) {
                     for (int i = 0; i < coinsJSON.length(); i++) {
-                        options.coins.add(createBuyButtonFromJSON(coinsJSON.optJSONObject(i)));
+                        options.coins.add(options.createBuyButtonFromJSON(coinsJSON.optJSONObject(i)));
                     }
                 }
 
                 JSONArray likesJSON = purchases.optJSONArray("likes");
                 for (int i = 0; i < likesJSON.length(); i++) {
-                    options.likes.add(createBuyButtonFromJSON(likesJSON.optJSONObject(i)));
+                    options.likes.add(options.createBuyButtonFromJSON(likesJSON.optJSONObject(i)));
                 }
 
                 JSONArray premiumJSON = purchases.optJSONArray("premium");
                 if (premiumJSON != null) {
                     for (int i = 0; i < premiumJSON.length(); i++) {
-                        options.premium.add(createBuyButtonFromJSON(premiumJSON.optJSONObject(i)));
+                        options.premium.add(options.createBuyButtonFromJSON(premiumJSON.optJSONObject(i)));
                     }
                 }
 
                 JSONArray othersJSON = purchases.optJSONArray("others");
                 if (othersJSON != null) {
                     for (int i = 0; i < othersJSON.length(); i++) {
-                        options.others.add(createBuyButtonFromJSON(othersJSON.optJSONObject(i)));
+                        options.others.add(options.createBuyButtonFromJSON(othersJSON.optJSONObject(i)));
                     }
                 }
             }
@@ -161,7 +163,11 @@ public class Options extends AbstractData {
         return options;
     }
 
-    public static BuyButton createBuyButtonFromJSON(JSONObject purchaseItem) {
+    public BuyButton createBuyButtonFromJSON(JSONObject purchaseItem) {
+        if (purchaseItem.optInt("discount") > 0) {
+            saleExists = true;
+
+        }
         return new BuyButton(
                 purchaseItem.optString("id"),
                 purchaseItem.optString("title"),

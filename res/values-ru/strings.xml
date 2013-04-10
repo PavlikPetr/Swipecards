@@ -535,4 +535,6 @@
     <string name="buy_resources">Пополнить запас</string>
     <string name="general_network_reconnect">Пытаемся восстановить соединение с сетью</string>
     <string name="user_is_banned">Пользователь забанен</string>
+
+    <string name="general_user_bookmarkadd">Пользователь добавлен в избранные</string>
 </resources>
