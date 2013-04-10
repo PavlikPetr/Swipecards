@@ -15,6 +15,7 @@ import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.requests.RateRequest;
 import com.topface.topface.ui.adapters.LikesListAdapter;
 import com.topface.topface.ui.adapters.LikesListAdapter.OnMutualListener;
 import com.topface.topface.utils.CountersManager;
@@ -142,7 +143,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         if(!(item.user.deleted || item.user.banned)) {
             if (item instanceof FeedLike) {
                 if(!((FeedLike)item).mutualed) {
-                    mRateController.onRate(item.user.id, RateController.MUTUAL_VALUE, item.id, null);
+                    mRateController.onRate(item.user.id, RateController.MUTUAL_VALUE, 0, null);
                     ((FeedLike)item).mutualed = true;
                     getListAdapter().notifyDataSetChanged();
                     Toast.makeText(getActivity(),R.string.general_mutual,Toast.LENGTH_SHORT).show();
