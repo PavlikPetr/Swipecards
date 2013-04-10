@@ -32,7 +32,7 @@ public class Offerwalls {
     }
 
     public static void startOfferwall(Activity activity) {
-        String offerwall = Options.CLICKKY;//CacheProfile.getOptions().offerwall;
+        String offerwall = CacheProfile.getOptions().offerwall;
 
         if (CacheProfile.uid <= 0) {
             Toast.makeText(activity, R.string.general_server_error,Toast.LENGTH_SHORT);
