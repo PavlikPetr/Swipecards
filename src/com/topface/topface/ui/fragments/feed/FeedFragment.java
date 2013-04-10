@@ -6,7 +6,6 @@ import android.content.*;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -28,14 +27,12 @@ import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.blocks.FilterBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.ChatFragment;
-import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryView;
@@ -370,16 +367,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     public void onAvatarClick(T item, View view) {
-        // Open profile activity
-        FragmentActivity activity = getActivity();
-        if (activity instanceof NavigationActivity) {
-            ProfileFragment fragment;
-            if (getFeedService().equals(FeedRequest.FeedService.DIALOGS)) {
-                fragment = ProfileFragment.newInstance(item.user.id, ProfileFragment.TYPE_USER_PROFILE);
-            } else {
-                fragment = ProfileFragment.newInstance(item.user.id, ProfileFragment.TYPE_USER_PROFILE, item.id);
-            }
-            ((NavigationActivity) activity).onExtraFragment(fragment);
+        if (isAdded()) {
+            startActivity(
+                    ContainerActivity.getProfileIntent(item.user.id, getActivity())
+            );
         }
     }
 

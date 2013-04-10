@@ -1,5 +1,6 @@
 package com.topface.topface.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -9,20 +10,22 @@ import android.support.v4.app.FragmentManager;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.fragments.*;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 
 public class ContainerActivity extends BaseFragmentActivity {
 
     private int mCurrentFragmentId = -1;
     private Fragment mCurrentFragment;
-
     private static final String TAG_FRAGMENT = "current_fragment";
 
     public static final int INTENT_BUY_VIP_FRAGMENT = 1;
+
     public static final int INTENT_BUYING_FRAGMENT = 2;
     public static final int INTENT_CHAT_FRAGMENT = 3;
     public static final int INTENT_REGISTRATION_FRAGMENT = 4;
     public static final int INTENT_RECOVER_PASSWORD = 5;
+    private static final int INTENT_PROFILE_FRAGMENT = 6;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -106,6 +109,14 @@ public class ContainerActivity extends BaseFragmentActivity {
             case INTENT_RECOVER_PASSWORD:
                 fragment = new RecoverPwdFragment();
                 break;
+            case INTENT_PROFILE_FRAGMENT:
+                //Открываем профиль
+                intent = getIntent();
+                fragment = ProfileFragment.newInstance(
+                        intent.getIntExtra(ProfileFragment.INTENT_UID, 0),
+                        intent.getIntExtra(ProfileFragment.INTENT_TYPE, ProfileFragment.TYPE_MY_PROFILE)
+                );
+                break;
             default:
                 break;
         }
@@ -141,6 +152,20 @@ public class ContainerActivity extends BaseFragmentActivity {
     protected boolean isNeedAuth() {
         initRequestKey();
         return mCurrentFragmentId != INTENT_REGISTRATION_FRAGMENT &&
-                mCurrentFragmentId != INTENT_RECOVER_PASSWORD && super.isNeedAuth();
+                mCurrentFragmentId != INTENT_RECOVER_PASSWORD &&
+                super.isNeedAuth();
     }
+
+    public static Intent getProfileIntent(int userId, Context context) {
+        int type = (userId == CacheProfile.uid) ?
+                ProfileFragment.TYPE_MY_PROFILE :
+                ProfileFragment.TYPE_USER_PROFILE;
+
+        Intent i = new Intent(context, ContainerActivity.class);
+        i.putExtra(ProfileFragment.INTENT_UID, userId);
+        i.putExtra(ProfileFragment.INTENT_TYPE, type);
+        i.putExtra(Static.INTENT_REQUEST_KEY, INTENT_PROFILE_FRAGMENT);
+        return i;
+    }
+
 }

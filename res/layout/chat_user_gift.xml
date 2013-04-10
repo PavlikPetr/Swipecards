@@ -3,7 +3,9 @@
                 android:layout_height="wrap_content"
                 android:gravity="right">
 
-    <include layout="@layout/chat_date_divider" android:id="@+id/loDateDivider"/>
+    <include
+            layout="@layout/chat_date_divider"
+            android:id="@+id/loDateDivider"/>
 
     <com.topface.topface.ui.views.ImageViewRemote
             android:layout_below="@id/loDateDivider"

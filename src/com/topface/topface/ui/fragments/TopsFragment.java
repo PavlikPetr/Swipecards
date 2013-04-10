@@ -21,7 +21,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.CitiesRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.TopRequest;
-import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.adapters.TopsAdapter;
 import com.topface.topface.ui.blocks.FilterBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
@@ -30,7 +30,6 @@ import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
 
 import java.util.LinkedList;
 
@@ -142,13 +141,10 @@ public class TopsFragment extends BaseFragment {
         mGallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                try {
-
-                    int type = (mTopsList.get(position).uid == CacheProfile.uid) ? ProfileFragment.TYPE_MY_PROFILE : ProfileFragment.TYPE_USER_PROFILE;
-                    ((NavigationActivity) getActivity()).onExtraFragment(
-                            ProfileFragment.newInstance(mTopsList.get(position).uid, type));
-                } catch (Exception e) {
-                    Debug.log(TopsFragment.this, "start UserProfileActivity exception:" + e.toString());
+                if (isAdded()) {
+                    startActivity(
+                            ContainerActivity.getProfileIntent(mTopsList.get(position).uid, getActivity())
+                    );
                 }
             }
         });

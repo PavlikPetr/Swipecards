@@ -7,7 +7,9 @@
                 android:id="@+id/layout"
                 android:gravity="left">
 
-    <include layout="@layout/chat_date_divider" android:id="@+id/loDateDivider"
+    <include
+            layout="@layout/chat_date_divider"
+            android:id="@+id/loDateDivider"
             android:layout_alignParentTop="true"/>
 
     <LinearLayout

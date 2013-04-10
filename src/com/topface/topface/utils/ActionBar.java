@@ -47,14 +47,14 @@ public class ActionBar {
 
     public void refreshNotificators() {
         if (mNavBarController != null) {
-            if(mNavigationHome.getVisibility() == View.VISIBLE) {
+            if (mNavigationHome.getVisibility() == View.VISIBLE) {
                 mNavBarController.refreshNotificators();
             }
         }
     }
 
     public void showProfileAvatar() {
-        showProfileAvatar(null,null);
+        showProfileAvatar(null, null);
     }
 
     public void showProfileAvatar(final Photo profilePhoto, View.OnClickListener listener) {
@@ -82,7 +82,7 @@ public class ActionBar {
         mNavigationBack.setOnClickListener(listener);
     }
 
-    public  void showEditButton(View.OnClickListener listener) {
+    public void showEditButton(View.OnClickListener listener) {
         mEditButton.setVisibility(View.VISIBLE);
         mEditButton.setOnClickListener(listener);
 
@@ -97,7 +97,7 @@ public class ActionBar {
         mSettingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(changeSelection) {
+                if (changeSelection) {
                     if (mSettingsButton.isSelected()) {
                         mSettingsButton.setSelected(false);
                     } else {
@@ -149,7 +149,7 @@ public class ActionBar {
         mUserActionsControl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mUserActionsControl.isSelected()) {
+                if (mUserActionsControl.isSelected()) {
                     mUserActionsControl.setSelected(false);
                     activeListener.onClick(view);
                 } else {
@@ -165,7 +165,7 @@ public class ActionBar {
     }
 
     public void activateEditButton() {
-        if(mEditButton.isSelected()) {
+        if (mEditButton.isSelected()) {
             mEditButton.setSelected(false);
         } else {
             mEditButton.setSelected(true);
