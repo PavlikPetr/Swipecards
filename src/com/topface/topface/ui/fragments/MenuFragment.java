@@ -43,6 +43,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     private ImageView notEnoughData;
     private TextView mTvNotifyFans;
     private Button buyButton;
+    private boolean canChangeProfileIcons = false;
 
     public interface FragmentMenuListener {
         public void onMenuClick(int buttonId);
@@ -154,6 +155,20 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         return mRootLayout;
     }
 
+    public void onLoadProfile() {
+        if (CacheProfile.premium) {
+            rocket.setVisibility(View.VISIBLE);
+        } else {
+            rocket.setVisibility(View.GONE);
+        }
+        if (!CacheProfile.checkIsFillData()) {
+            notEnoughData.setVisibility(View.VISIBLE);
+            rocket.setVisibility(View.GONE);
+        } else {
+            notEnoughData.setVisibility(View.GONE);
+        }
+        canChangeProfileIcons = true;
+    }
 
     @Override
     public void onClick(View view) {
@@ -221,12 +236,12 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         } else {
             buyButton.setBackgroundResource(R.drawable.btn_blue_selector);
         }
-        if (CacheProfile.premium) {
+        if (CacheProfile.premium && canChangeProfileIcons) {
             rocket.setVisibility(View.VISIBLE);
         } else {
             rocket.setVisibility(View.GONE);
         }
-        if (!CacheProfile.checkIsFillData()) {
+        if (!CacheProfile.checkIsFillData() && canChangeProfileIcons) {
             notEnoughData.setVisibility(View.VISIBLE);
             rocket.setVisibility(View.GONE);
         } else {

@@ -287,6 +287,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     public void onLoadProfile() {
         super.onLoadProfile();
+        mFragmentMenu.onLoadProfile();
         AuthorizationManager.extendAccessToken(NavigationActivity.this);
         PopupManager manager = new PopupManager(this);
         manager.showOldVersionPopup(CacheProfile.getOptions().max_version);
