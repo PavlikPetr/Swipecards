@@ -23,6 +23,7 @@ public class ServicesTextView extends View {
     private Bitmap mImageBitmap;
 
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private OnMeasureListener listener;
 
     public ServicesTextView(Context context) {
         super(context);
@@ -65,9 +66,10 @@ public class ServicesTextView extends View {
                 height = mImageBitmap.getHeight();
             }
         }
-
-
-        setMeasuredDimension(mBackgroundFree.getWidth() * (mMaxChars + additionalChars) + addWidth + mCharPadding, height);
+        setMeasuredDimension(mBackgroundFree.getWidth() * (mMaxChars + additionalChars) + addWidth + mCharPadding , height);
+        if(listener != null) {
+            listener.onMeasure(mBackgroundFree.getWidth() * (mMaxChars + additionalChars) + addWidth + mCharPadding, height);
+        }
     }
 
     private void initBitmaps() {
@@ -95,7 +97,7 @@ public class ServicesTextView extends View {
             mImageBitmap = BitmapFactory.decodeResource(getResources(), imageId);
 //            double imageRes = (double)mImageBitmap.getWidth()/(double)mImageBitmap.getHeight();
 //            int newWidth = (int) (imageRes * (int)(outHeight/realScaleCoeff));
-//            mImageBitmap = Bitmap.createScaledBitmap(mImageBitmap, newWidth,  (int)(outHeight/realScaleCoeff), false);
+            mImageBitmap = Bitmap.createScaledBitmap(mImageBitmap, (int) (outWidth / realScaleCoeff ),  (int)(outHeight/realScaleCoeff/1.5), false);
         }
 
     }
@@ -174,5 +176,13 @@ public class ServicesTextView extends View {
     public void setCharPadding(int charPadding) {
         final float scale = getContext().getResources().getDisplayMetrics().density;
         mCharPadding = (int) (charPadding * scale);
+    }
+
+    public void setOnMeasureListener(OnMeasureListener listener) {
+        this.listener = listener;
+    }
+
+    public interface OnMeasureListener{
+        public void onMeasure(int width, int height);
     }
 }

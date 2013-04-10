@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.fragments.*;
@@ -26,6 +27,7 @@ public class ContainerActivity extends BaseFragmentActivity {
     public static final int INTENT_REGISTRATION_FRAGMENT = 4;
     public static final int INTENT_RECOVER_PASSWORD = 5;
     private static final int INTENT_PROFILE_FRAGMENT = 6;
+    public static final int INTENT_SETTINGS_FRAGMENT = 7;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -117,6 +119,8 @@ public class ContainerActivity extends BaseFragmentActivity {
                         intent.getIntExtra(ProfileFragment.INTENT_TYPE, ProfileFragment.TYPE_MY_PROFILE)
                 );
                 break;
+            case INTENT_SETTINGS_FRAGMENT:
+                fragment = new SettingsFragment();
             default:
                 break;
         }
@@ -152,8 +156,14 @@ public class ContainerActivity extends BaseFragmentActivity {
     protected boolean isNeedAuth() {
         initRequestKey();
         return mCurrentFragmentId != INTENT_REGISTRATION_FRAGMENT &&
-                mCurrentFragmentId != INTENT_RECOVER_PASSWORD &&
-                super.isNeedAuth();
+                mCurrentFragmentId != INTENT_RECOVER_PASSWORD && super.isNeedAuth();
+    }
+
+    public static Intent getNewIntent(int code) {
+        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
+        intent.putExtra(Static.INTENT_REQUEST_KEY, code);
+        return intent;
+               
     }
 
     public static Intent getProfileIntent(int userId, Context context) {

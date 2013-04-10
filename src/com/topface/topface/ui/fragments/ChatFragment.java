@@ -40,6 +40,7 @@ import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.ui.views.SwapControl;
 import com.topface.topface.utils.*;
+import com.topface.topface.utils.GeoUtils.GeoLocationManager;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -380,13 +381,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         historyRequest.limit = LIMIT;
         if (mAdapter != null) {
             if (pullToRefresh) {
-                int id = mAdapter.getFirstItemId();
-                if (id > 0) {
+                String id = mAdapter.getFirstItemId();
+                if (id != null) {
                     historyRequest.from = id;
                 }
             } else if (scrollRefresh) {
-                int id = mAdapter.getLastItemId();
-                if (id > 0) {
+                String id = mAdapter.getLastItemId();
+                if (id != null) {
                     historyRequest.to = id;
                 }
             }

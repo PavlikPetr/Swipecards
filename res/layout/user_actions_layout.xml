@@ -8,42 +8,206 @@
               android:background="@drawable/drop_menu_backgroud"
         >
 
-        <TextView
-                android:id="@+id/acDelight"
-                style="@style/actionsFont"
-                android:text="@string/general_delight"
-                android:drawableLeft="@drawable/us_ac_delight_selector"
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/acDelight"
+
+                >
+            <ImageView
+                android:id="@+id/delIcon"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/us_ac_delight_selector"
+                android:layout_marginLeft="8dp"
 
                 />
+            <ProgressBar
+                    android:id="@+id/delPrBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    style="@android:style/Widget.ProgressBar.Small"
+                    android:visibility="invisible"
+                    android:layout_marginLeft="12dp"/>
+
+            <TextView
+                    style="@style/actionsFont"
+                    android:layout_toRightOf="@id/delPrBar"
+                    android:text="@string/general_delight"
+                    android:id="@+id/delTV"
+                    />
+        </RelativeLayout>
+
+    <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/acSympathy"
+
+            >
+        <ImageView
+                android:id="@+id/likeIcon"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/us_ac_sympathy_selector"
+                android:layout_marginLeft="8dp"
+
+                />
+        <ProgressBar
+                android:id="@+id/likePrBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                style="@android:style/Widget.ProgressBar.Small"
+                android:visibility="invisible"
+                android:layout_marginLeft="12dp"/>
 
         <TextView
-                android:id="@+id/acSympathy"
+                style="@style/actionsFont"
+                android:layout_toRightOf="@id/likePrBar"
                 android:text="@string/general_sympathy"
-                style="@style/actionsFont"
-                android:drawableLeft="@drawable/us_ac_sympathy_selector"
+                android:id="@+id/likeTV"
                 />
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/acChat"
+
+            >
+        <ImageView
+                android:id="@+id/chatIcon"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/us_ac_chat_selector"
+                android:layout_marginLeft="8dp"
+
+                />
+        <ProgressBar
+                android:id="@+id/chatPrBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                style="@android:style/Widget.ProgressBar.Small"
+                android:visibility="invisible"
+                android:layout_marginLeft="12dp"/>
 
         <TextView
-                android:id="@+id/acChat"
+                style="@style/actionsFont"
+                android:layout_toRightOf="@id/chatPrBar"
                 android:text="@string/user_actions_chat"
-                style="@style/actionsFont"
-                android:drawableLeft="@drawable/us_ac_chat_selector"
+                android:id="@+id/chatTV"
                 />
+    </RelativeLayout>
 
+    <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/acGift"
+
+            >
+        <ImageView
+                android:id="@+id/giftIcon"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/us_ac_gift_selector"
+                android:layout_marginLeft="8dp"
+
+                />
+        <ProgressBar
+                android:id="@+id/giftPrBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                style="@android:style/Widget.ProgressBar.Small"
+                android:visibility="invisible"
+                android:layout_marginLeft="12dp"/>
 
         <TextView
-                android:id="@+id/acGift"
                 style="@style/actionsFont"
-                android:drawableLeft="@drawable/us_ac_gift_selector"
+                android:layout_toRightOf="@id/giftPrBar"
                 android:text="@string/general_gift"
+                android:id="@+id/giftTV"
                 />
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/acBlock"
+
+            >
+        <ImageView
+                android:id="@+id/blockIcon"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/us_ac_block"
+                android:layout_marginLeft="8dp"
+
+                />
+        <ProgressBar
+                android:id="@+id/blockPrBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                style="@android:style/Widget.ProgressBar.Small"
+                android:visibility="invisible"
+                android:layout_marginLeft="12dp"/>
 
         <TextView
-                android:id="@+id/acBlock"
                 style="@style/actionsFont"
-                android:drawableLeft="@drawable/us_ac_block"
+                android:layout_toRightOf="@id/blockPrBar"
                 android:text="@string/general_block"
+                android:id="@+id/blockTV"
                 />
+    </RelativeLayout>
 
+    <RelativeLayout
+            android:id="@+id/acBookmark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+        <ImageView
+                android:id="@+id/favIcon"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_star"
+                android:layout_marginLeft="8dp"
 
+                />
+        <ProgressBar
+                android:id="@+id/favPrBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                style="@android:style/Widget.ProgressBar.Small"
+                android:visibility="invisible"
+                android:layout_marginLeft="12dp"/>
+
+        <TextView
+                style="@style/actionsFont"
+                android:layout_toRightOf="@id/favPrBar"
+                android:text="@string/general_bookmarks"
+                android:id="@+id/favTV"
+                />
+    </RelativeLayout>
 </LinearLayout>

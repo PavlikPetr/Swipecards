@@ -482,28 +482,28 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         notifyDataSetChanged();
     }
 
-    public int getFirstItemId() {
+    public String getFirstItemId() {
         FeedList<History> data = getData();
         for (History item : data) {
-            if (!item.isLoaderOrRetrier() && item.id > 0) {
+            if (!item.isLoaderOrRetrier() && item.id != null) {
                 return item.id;
             }
         }
-        return -1;
+        return null;
     }
 
-    public int getLastItemId() {
+    public String getLastItemId() {
         FeedList<History> data = getData();
 
         for (int i = data.size() - 1; i >= 0; i--) {
             History item = data.get(i);
             if(item != null) {
-                if (!item.isLoaderOrRetrier() && item.id > 0) {
+                if (!item.isLoaderOrRetrier() && item.id != null) {
                     return item.id;
                 }
             }
         }
-        return -1;
+        return null;
     }
 
     @SuppressWarnings("unchecked")

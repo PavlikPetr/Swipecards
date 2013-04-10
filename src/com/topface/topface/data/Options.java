@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -94,11 +95,13 @@ public class Options extends AbstractData {
     public int minLeadersPercent = 25; //Не уверен в этом, возможно стоит использовать другое дефолтное значение
 
     public String offerwall;
+    public boolean saleExists = false;
 
     public static Options parse(ApiResponse response) {
         Options options = new Options();
 
         try {
+            options.saleExists = false;
             options.price_highrate = response.jsonResult.optInt("price_highrate");
             options.price_leader = response.jsonResult.optInt("price_leader");
             options.minLeadersPercent = response.jsonResult.optInt("leader_percent");
@@ -121,26 +124,26 @@ public class Options extends AbstractData {
                 JSONArray coinsJSON = purchases.optJSONArray("coins");
                 if (coinsJSON != null) {
                     for (int i = 0; i < coinsJSON.length(); i++) {
-                        options.coins.add(createBuyButtonFromJSON(coinsJSON.optJSONObject(i)));
+                        options.coins.add(options.createBuyButtonFromJSON(coinsJSON.optJSONObject(i)));
                     }
                 }
 
                 JSONArray likesJSON = purchases.optJSONArray("likes");
                 for (int i = 0; i < likesJSON.length(); i++) {
-                    options.likes.add(createBuyButtonFromJSON(likesJSON.optJSONObject(i)));
+                    options.likes.add(options.createBuyButtonFromJSON(likesJSON.optJSONObject(i)));
                 }
 
                 JSONArray premiumJSON = purchases.optJSONArray("premium");
                 if (premiumJSON != null) {
                     for (int i = 0; i < premiumJSON.length(); i++) {
-                        options.premium.add(createBuyButtonFromJSON(premiumJSON.optJSONObject(i)));
+                        options.premium.add(options.createBuyButtonFromJSON(premiumJSON.optJSONObject(i)));
                     }
                 }
 
                 JSONArray othersJSON = purchases.optJSONArray("others");
                 if (othersJSON != null) {
                     for (int i = 0; i < othersJSON.length(); i++) {
-                        options.others.add(createBuyButtonFromJSON(othersJSON.optJSONObject(i)));
+                        options.others.add(options.createBuyButtonFromJSON(othersJSON.optJSONObject(i)));
                     }
                 }
             }
@@ -161,14 +164,19 @@ public class Options extends AbstractData {
         return options;
     }
 
-    public static BuyButton createBuyButtonFromJSON(JSONObject purchaseItem) {
+    public BuyButton createBuyButtonFromJSON(JSONObject purchaseItem) {
+        if (purchaseItem.optInt("discount") > 0) {
+            saleExists = true;
+
+        }
         return new BuyButton(
                 purchaseItem.optString("id"),
                 purchaseItem.optString("title"),
                 purchaseItem.optInt("price"),
                 purchaseItem.optString("hint"),
                 purchaseItem.optInt("showType"),
-                purchaseItem.optString("type")
+                purchaseItem.optString("type"),
+                purchaseItem.optInt("discount")
         );
     }
 
@@ -180,12 +188,23 @@ public class Options extends AbstractData {
         if (context != null && !curBtn.title.equals("")) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.item_buying_btn, root, false);
+
             RelativeLayout container = (RelativeLayout) view.findViewById(R.id.itContainer);
-            container.setBackgroundResource(
-                    curBtn.showType == 0 ?
-                            R.drawable.btn_gray_selector :
-                            R.drawable.btn_blue_selector
-            );
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) container.getLayoutParams();
+            double density = context.getResources().getDisplayMetrics().density;
+
+            int bgResource;
+            if (curBtn.discount > 0) {
+                bgResource = R.drawable.btn_sale_selector;
+                container.setPadding((int)(5 * density), (int) (5 * density), (int) (56 * density), (int) (5 * density));
+            } else {
+                bgResource = curBtn.showType == 0 ?
+                        R.drawable.btn_gray_selector :
+                        R.drawable.btn_blue_selector;
+            }
+            container.setBackgroundResource(bgResource);
+
+
 
             container.requestLayout();
 
@@ -250,16 +269,18 @@ public class Options extends AbstractData {
         private int showType;
         public String hint;
         public String type;
+        public int discount;
         public static final String COINS_NAME = "coins";
         public static final String LIKES_NAME = "likes";
 
-        public BuyButton(String id, String title, int price, String hint, int showType, String type) {
+        public BuyButton(String id, String title, int price, String hint, int showType, String type, int discount) {
             this.id = id;
             this.title = title;
             this.price = price;
             this.hint = hint;
             this.showType = showType;
             this.type = type;
+            this.discount = discount;
         }
     }
 

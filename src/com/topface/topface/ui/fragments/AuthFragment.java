@@ -392,7 +392,7 @@ public class AuthFragment extends BaseFragment {
             public void success(final ApiResponse response) {
                 Options.parse(response);
                 Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
-                ((BaseFragmentActivity) getActivity()).close(AuthFragment.this);
+                ((BaseFragmentActivity) getActivity()).close(AuthFragment.this, true);
                 LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
             }
 

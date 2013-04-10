@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.*;
 import android.content.pm.PackageInfo;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -42,6 +43,8 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.utils.*;
 import com.topface.topface.utils.offerwalls.Offerwalls;
+import com.topface.topface.utils.GeoUtils.GeoLocationManager;
+import com.topface.topface.utils.GeoUtils.GeoPreferencesManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 import ru.ideast.adwired.AWView;
@@ -288,7 +291,19 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         checkVersion(CacheProfile.getOptions().max_version);
         actionsAfterRegistration();
         requestFullscreen();
+        sendLocation();
+    }
 
+    private void sendLocation() {
+        GeoLocationManager locationManager = new GeoLocationManager(App.getContext());
+        Location curLocation = locationManager.getLastKnownLocation();
+
+        GeoPreferencesManager preferencesManager = new GeoPreferencesManager(App.getContext());
+        preferencesManager.saveLocation(curLocation);
+
+        SettingsRequest settingsRequest = new SettingsRequest(this);
+        settingsRequest.location = curLocation;
+        settingsRequest.exec();
     }
 
     @Override
@@ -447,8 +462,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     @Override
-    public void close(Fragment fragment) {
-        super.close(fragment);
+    public void close(Fragment fragment, boolean needInit) {
+        super.close(fragment, needInit);
         showFragment(FragmentSwitchController.DEFAULT_FRAGMENT);
     }
 

@@ -290,7 +290,8 @@ public class GCMUtils {
             CountersManager.getInstance(context).setAllCounters(countersJson.optInt("unread_likes"),
                     countersJson.optInt("unread_sympaties"),
                     countersJson.optInt("unread_messages"),
-                    countersJson.optInt("unread_visitors"));
+                    countersJson.optInt("unread_visitors"),
+                    countersJson.optInt("unread_fans"));
         } catch (JSONException e) {
             Debug.error(e);
         }

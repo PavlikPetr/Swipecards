@@ -536,4 +536,6 @@
     <string name="general_network_reconnect">Пытаемся восстановить соединение с сетью</string>
     <string name="user_is_banned">Пользователь забанен</string>
     <string name="profile_empty_name">Имя не может быть пустым</string>
+
+    <string name="general_user_bookmarkadd">Пользователь добавлен в избранные</string>
 </resources>
