@@ -79,7 +79,12 @@ public class Offerwalls {
     }
 
     public static void startClickky(Activity activity) {
-        Intent offerWallIntent = new Intent(activity, ClickkyActivity.class);
-        activity.startActivity(offerWallIntent);
+        try {
+            Intent offerWallIntent = new Intent(activity, ClickkyActivity.class);
+            activity.startActivity(offerWallIntent);
+        } catch (Exception e){
+            Debug.error(e);
+        }
+
     }
 }

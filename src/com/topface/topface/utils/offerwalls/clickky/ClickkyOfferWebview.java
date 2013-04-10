@@ -59,14 +59,14 @@ public class ClickkyOfferWebview extends WebView implements LocationListener
 
 
 	@SuppressLint("SetJavaScriptEnabled")
-	public ClickkyOfferWebview(Context context, int site_id, String api_key) {
+	public ClickkyOfferWebview(Context context, int site_id, String api_key, String userId) {
 		super(context);
 
 		mContext = context;
 		// for tracking
 		mSiteId = site_id;
 		mApiKey = api_key;
-		mUserId = "";
+		mUserId = userId;
 		mSubId = "";
 		debug = false;
 		responseCode=Integer.MIN_VALUE;

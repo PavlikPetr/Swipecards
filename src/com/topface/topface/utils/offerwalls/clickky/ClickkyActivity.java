@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.webkit.WebView;
 import android.widget.RelativeLayout;
+import com.topface.topface.utils.CacheProfile;
 
 public class ClickkyActivity extends Activity{
 
@@ -14,7 +15,7 @@ public class ClickkyActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //создаем объект класса OfferWebview
-        WebView mWebView = new ClickkyOfferWebview(this, SITE_ID, API_KEY);
+        WebView mWebView = new ClickkyOfferWebview(this, SITE_ID, API_KEY, Integer.toString(CacheProfile.uid));
         //создаем layout, на котором будет располагаться WebView
         RelativeLayout mRelLayout = new RelativeLayout(this);
         //задаем параметры нашему layout
