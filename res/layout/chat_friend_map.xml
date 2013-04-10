@@ -18,7 +18,7 @@
         android:layout_marginLeft="8dp">
 
         <ImageView
-            android:id="@+id/ivMapBg"
+            android:id="@+id/chat_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -29,14 +29,14 @@
             android:layout_height="wrap_content" >
 
             <TextView
-                android:id="@+id/tvChatMapAddress"
+                android:id="@+id/chat_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#000000"
                 android:textSize="10sp" />
 
             <ProgressBar
-                android:id="@+id/prgsMapAddress"
+                android:id="@+id/chat_text_progress"
                 android:layout_width="10dp"
                 android:layout_height="10dp"
                 android:layout_centerInParent="true"

@@ -305,11 +305,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     }
 
     private void setTypeDifferences(int position, ViewHolder holder, int type, final History item) {
-        History prevItem = getItem(position - 1);
         boolean output = (item.target == FeedDialog.OUTPUT_USER_MESSAGE);
         boolean showDate = mShowDatesList.contains(item);
-
-        Photo userPhoto = user != null ? user.photo : null;
 
         switch (type) {
             case T_WAITING:
@@ -337,6 +334,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 break;
             case T_FRIEND_GIFT:
             case T_USER_GIFT:
+                holder.message.setVisibility(View.GONE);
+                break;
             case T_FRIEND_MAP:
             case T_USER_MAP:
                 break;
@@ -360,49 +359,45 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     private View inflateConvertView(View convertView, ViewHolder holder, int type, History item) {
         boolean output = (item.target == FeedDialog.OUTPUT_USER_MESSAGE);
+
+        if(type == T_WAITING) {
+            convertView = mInflater.inflate(R.layout.item_chat_list_loader_retrier, null, false);
+            holder.retrier = convertView.findViewById(R.id.tvLoaderText);
+            holder.loader = convertView.findViewById(R.id.prsLoader);
+            return convertView;
+        }
+
         switch (type) {
-            case T_WAITING:
-                convertView = mInflater.inflate(R.layout.item_chat_list_loader_retrier, null, false);
-                holder.retrier = convertView.findViewById(R.id.tvLoaderText);
-                holder.loader = convertView.findViewById(R.id.prsLoader);
-                return convertView;
             case T_FRIEND:
             case T_USER:
                 convertView = mInflater.inflate(output ? R.layout.chat_user : R.layout.chat_friend, null, false);
-                holder.message = (TextView) convertView.findViewById(R.id.chat_message);
-                holder.date = (TextView) convertView.findViewById(R.id.chat_date);
                 holder.userInfo = convertView.findViewById(R.id.user_info);
                 break;
             case T_FRIEND_GIFT:
             case T_USER_GIFT:
                 convertView = mInflater.inflate(output ? R.layout.chat_user_gift : R.layout.chat_friend_gift, null, false);
-                holder.gift = (ImageViewRemote) convertView.findViewById(R.id.ivChatGift);
-                holder.date = (TextView) convertView.findViewById(R.id.chat_date);
+                holder.gift = (ImageViewRemote) convertView.findViewById(R.id.chat_image);
                 break;
             case T_FRIEND_MAP:
             case T_USER_MAP:
                 convertView = mInflater.inflate(output ? R.layout.chat_user_map : R.layout.chat_friend_map, null, false);
-                holder.message = (TextView) convertView.findViewById(R.id.tvChatMapAddress);
-                holder.mapBackground = (ImageView) convertView.findViewById(R.id.ivMapBg);
-                holder.prgsAddress = (ProgressBar) convertView.findViewById(R.id.prgsMapAddress);
-                holder.date = (TextView) convertView.findViewById(R.id.chat_date);
+                holder.mapBackground = (ImageView) convertView.findViewById(R.id.chat_image);
+                holder.prgsAddress = (ProgressBar) convertView.findViewById(R.id.chat_text_progress);
                 break;
             case T_FRIEND_REQUEST:
                 convertView = mInflater.inflate(R.layout.chat_friend_request, null, false);
-                holder.message = (TextView) convertView.findViewById(R.id.chat_message);
                 holder.date = (TextView) convertView.findViewById(R.id.chat_date);
                 holder.userInfo = convertView.findViewById(R.id.user_info);
                 holder.likeRequest = (Button) convertView.findViewById(R.id.btn_chat_like_request);
-                holder.date = (TextView) convertView.findViewById(R.id.chat_date);
                 break;
             case T_USER_REQUEST:
                 convertView = mInflater.inflate(R.layout.chat_user, null, false);
-                holder.message = (TextView) convertView.findViewById(R.id.chat_message);
-                holder.date = (TextView) convertView.findViewById(R.id.chat_date);
                 holder.userInfo = convertView.findViewById(R.id.user_info);
                 break;
         }
 
+        holder.message = (TextView) convertView.findViewById(R.id.chat_message);
+        holder.date = (TextView) convertView.findViewById(R.id.chat_date);
         holder.dateDivider = convertView.findViewById(R.id.loDateDivider);
         holder.dateDividerText = (TextView) holder.dateDivider.findViewById(R.id.tvChatDateDivider);
 
