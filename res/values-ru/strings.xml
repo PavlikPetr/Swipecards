@@ -538,4 +538,5 @@
     <string name="profile_empty_name">Имя не может быть пустым</string>
 
     <string name="general_user_bookmarkadd">Пользователь добавлен в избранные</string>
+    <string name="general_wrong_photo_upload">Ваша фотография не соответствует правилам. Попробуйте сделать другую</string>
 </resources>
