@@ -58,9 +58,8 @@ import java.util.Set;
 
 public class NavigationActivity extends BaseFragmentActivity implements View.OnClickListener {
 
-    public static final String RATING_POPUP = "RATING_POPUP";
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
-    public static final int RATE_POPUP_TIMEOUT = 86400000; // 1000 * 60 * 60 * 24 * 1 (1 сутки)
+
     public static final String URL_SEPARATOR = "::";
     public static final String CURRENT_FRAGMENT_ID = "NAVIGATION_FRAGMENT";
     private FragmentManager mFragmentManager;
@@ -288,7 +287,10 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     public void onLoadProfile() {
         super.onLoadProfile();
         AuthorizationManager.extendAccessToken(NavigationActivity.this);
-        checkVersion(CacheProfile.getOptions().max_version);
+        PopupManager manager = new PopupManager(this);
+        manager.showOldVersionPopup(CacheProfile.getOptions().max_version);
+        manager.showRatePopup();
+//        checkVersion(CacheProfile.getOptions().max_version);
         actionsAfterRegistration();
         requestFullscreen();
         sendLocation();
@@ -404,57 +406,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
     }
 
-    private void checkVersion(String version) {
-        try {
-            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            String curVersion = pInfo.versionName;
-            if (!TextUtils.isEmpty(version) && TextUtils.isEmpty(curVersion)) {
-                String[] splittedVersion = version.split("\\.");
-                String[] splittedCurVersion = curVersion.split("\\.");
-                for (int i = 0; i < splittedVersion.length; i++) {
-                    if (i < splittedCurVersion.length) {
-                        if (Long.parseLong(splittedCurVersion[i]) < Long.parseLong(splittedVersion[i])) {
-                            showOldVersionPopup();
-                            return;
-                        }
-                    }
-                }
-                if (splittedCurVersion.length < splittedVersion.length) {
-                    showOldVersionPopup();
-                } else {
-                    if (App.isOnline()) {
-                        ratingPopup();
-                    }
-                }
-            } else {
-                if (App.isOnline()) {
-                    ratingPopup();
-                }
-            }
-        } catch (Exception e) {
-            Debug.error("Check Version Error: " + version, e);
-
-        }
-    }
-
-    private void showOldVersionPopup() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Utils.goToMarket(NavigationActivity.this);
-
-            }
-        });
-        builder.setNegativeButton(R.string.popup_version_cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-            }
-        });
-        builder.setMessage(R.string.general_version_not_supported);
-        builder.create().show();
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -565,68 +516,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
 
     };
-
-
-    /**
-     * Попап с предложение оценить предложение
-     */
-    private void ratingPopup() {
-        final SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-
-        long date_start = preferences.getLong(RATING_POPUP, 1);
-        long date_now = new java.util.Date().getTime();
-
-        if (date_start == 0 || (date_now - date_start < RATE_POPUP_TIMEOUT)) {
-            return;
-        } else if (date_start == 1) {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putLong("RATING_POPUP", new java.util.Date().getTime());
-            editor.commit();
-            return;
-        }
-
-        final Dialog ratingPopup = new Dialog(this) {
-            @Override
-            public void onBackPressed() {
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putLong(RATING_POPUP, new java.util.Date().getTime());
-                editor.commit();
-                super.onBackPressed();
-            }
-        };
-        ratingPopup.setTitle(R.string.dashbrd_popup_title);
-        ratingPopup.setContentView(R.layout.popup_rating);
-        ratingPopup.show();
-
-        ratingPopup.findViewById(R.id.btnRatingPopupRate).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.goToMarket(NavigationActivity.this);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putLong(RATING_POPUP, 0);
-                editor.commit();
-                ratingPopup.cancel();
-            }
-        });
-        ratingPopup.findViewById(R.id.btnRatingPopupLate).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putLong(RATING_POPUP, new java.util.Date().getTime());
-                editor.commit();
-                ratingPopup.cancel();
-            }
-        });
-        ratingPopup.findViewById(R.id.btnRatingPopupCancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putLong(RATING_POPUP, 0);
-                editor.commit();
-                ratingPopup.cancel();
-            }
-        });
-    }
 
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
