@@ -1,4 +1,4 @@
-package com.topface.topface.utils;
+package com.topface.topface.utils.offerwalls;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,10 +9,15 @@ import com.sponsorpay.sdk.android.publisher.SponsorPayPublisher;
 import com.tapjoy.TapjoyConnect;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.offerwalls.clickky.ClickkyActivity;
 
 import java.util.Random;
 
 public class Offerwalls {
+
+    private static boolean first_or_second = false;
 
     public static void init(Context context) {
         try {
@@ -46,6 +51,8 @@ public class Offerwalls {
             startTapjoy(activity);
         } else if (offerwall.equals(Options.SPONSORPAY)) {
             startSponsorpay(activity);
+        } else if (offerwall.equals(Options.CLICKKY)) {
+            startClickky(activity);
         } else if (offerwall.equals(Options.RANDOM)) {
             startRandomOfferwall(activity);
         } else {
@@ -83,5 +90,15 @@ public class Offerwalls {
             Debug.error(e);
             initSponsorpay(activity);
         }
+    }
+
+    public static void startClickky(Activity activity) {
+        try {
+            Intent offerWallIntent = new Intent(activity, ClickkyActivity.class);
+            activity.startActivity(offerWallIntent);
+        } catch (Exception e){
+            Debug.error(e);
+        }
+
     }
 }
