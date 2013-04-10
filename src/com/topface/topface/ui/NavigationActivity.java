@@ -3,7 +3,10 @@ package com.topface.topface.ui;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.*;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.Bundle;
@@ -69,8 +72,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private Novice mNovice;
     private boolean needAnimate = false;
 
-    private BroadcastReceiver mServerResponseReceiver;
-
     private static boolean isFullScreenBannerVisible = false;
 
     @Override
@@ -89,7 +90,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mFragmentManager = getSupportFragmentManager();
 
         initFragmentSwitcher();
-        showFragment(savedInstanceState);
+        if (!AuthToken.getInstance().isEmpty()) {
+            showFragment(savedInstanceState);
+        }
 
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
     }
@@ -258,8 +261,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
         mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
         mFragmentMenu.setOnMenuListener(mOnFragmentMenuListener);
-
-
     }
 
     private void showFragment(int fragmentId) {
@@ -307,15 +308,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         //Отправляем не обработанные запросы на покупку
         BillingUtils.sendQueueItems();
 
-        mServerResponseReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-
-            }
-        };
-
-        LocalBroadcastManager.getInstance(this).registerReceiver(mServerResponseReceiver, new IntentFilter(OptionsRequest.VERSION_INTENT));
-
         if (needAnimate) {
             overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
         }
@@ -352,7 +344,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                                     if (CacheProfile.photos != null && CacheProfile.photos.contains(photo)) {
                                         CacheProfile.photos.remove(photo);
                                     }
-                                    Toast.makeText(NavigationActivity.this, "Ваша фотография не соответствует правилам. Попробуйте сделать другую", 2000);
+                                    Toast.makeText(NavigationActivity.this, App.getContext().getString(R.string.general_wrong_photo_upload), 2000);
                                 }
                             }
 
@@ -438,12 +430,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         });
         builder.setMessage(R.string.general_version_not_supported);
         builder.create().show();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mServerResponseReceiver);
     }
 
     @Override
