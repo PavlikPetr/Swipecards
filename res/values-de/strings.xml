@@ -312,6 +312,7 @@
     <string name="map_popup_address">Adresse</string>
     <string name="black_list_info">Sie haben den Nutzer in die schwarze Liste hinzugefügt. Sie können das in Ihrem Profil in Einstellungen von VIP-Status ändern.</string>
     <string name="general_gift">Geschenk</string>
+    <string name="user_actions_chat">Konversation</string>
     <string name="general_place">Platz</string>
     <string name="general_soon">Bald</string>
     <string name="black_list_activation">Aktivieren Sie VIP-Status und benutzen Sie die schwarze Liste</string>
@@ -340,9 +341,11 @@
     <string name="vip_advantages">Vorteile von VIP</string>
     <string name="change_email">E-Mail ändern</string>
     <string name="change_password">Passwort ändern</string>
+    <string name="password_changing">Passwort ändern</string>
     <string name="save">Speichern</string>
     <string name="password_hint">Passwort</string>
     <string name="enter_new_password">Geben Sie ein neues Passwort ein</string>
+    <string name="passwords_mismatched">Passwörter fallen nicht zusammen</string>
     <string name="passwords_changed">Passwort ist geändert</string>
     <string name="take_photo">Foto aufnehmen</string>
     <string name="take_another_photo">Anderes Foto</string>
@@ -354,7 +357,30 @@
     <string name="general_change">Ändern</string>
     <string name="general_correct">Alles ist richtig</string>
     <string name="confirm_email">Bestätigen Sie Ihre E-Mail</string>
+    <string name="password_sent">Ihr neues Passwort wurde an Ihre E-Mail gesendet</string>
+    <string name="buy_vip_month_one">%1$d Monat für %2$.2f %3$@</string>
+    <string name="buy_vip_month_few">%1$d Monate für %2$.2f %3$@</string>
+    <string name="buy_vip_month_other">%1$d Monate für %2$.2f %3$@</string>
     <string name="buy_special_offers">Sonderangebote</string>
     <string name="you_dont_have_gifts_yet">Sie haben noch keine Geschenke</string>
     <string name="buy_sympathies">Sympathien kaufen</string>
+    <string name="upload_photos">Laden Sie Fotos hoch</string>
+    <string name="user_baned">Nutzer wurde gebannt</string>
+    <string name="general_choose_city">Wählen Sie eine Stadt</string>
+    <string name="buy_mobile_payments">Andere Zahlungsweisen</string>
+    <string name="general_save_and_exit">Speichern und ausloggen</string>
+    <string name="user_is_deleted">Nutzer wurde gelöscht</string>
+    <string name="general_bookmarks_title">Favoriten</string>
+    <string name="general_empty_bookmarks">Keine Favoriten</string>
+    <string name="general_bookmarks">Favoriten</string>
+    <string name="general_fans">Fans</string>
+    <string name="general_no_fans">Keine Fans</string>
+    <plurals name="get_free_money">
+        <item quantity="other">%d Coins kostenlos</item>
+        <item quantity="one">%d Coin kostenlos</item>
+    </plurals>
+    <string name="settings_edit_profile">Profil ändern</string>
+    <string name="general_bookmarks_delete">Aus Favoritenliste entfernen</string>
+    <string name="general_bookmarks_add">Zu Favoriten hinzufügen</string>
+    <string name="buy_resources">Ergänzen</string>
 </resources>

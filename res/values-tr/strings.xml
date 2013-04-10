@@ -410,4 +410,5 @@
     <string name="buy_resources">Depoyu doldurmak</string>
     <string name="general_network_reconnect">Şebeke ile bağlanmaya çalışıyoruz</string>
     <string name="user_is_banned">Kullanıcı engellenmiştir</string>
+    <string name="profile_empty_name">İsim boş kalamaz</string>
 </resources>

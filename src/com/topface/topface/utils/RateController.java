@@ -173,7 +173,7 @@ public class RateController {
             @Override
             public void onClick(View view) {
                 String comment = mCommentText.getText().toString();
-                if (TextUtils.isEmpty(comment.trim()) || userId ==0) {
+                if (TextUtils.isEmpty(comment.trim()) || userId == 0) {
                     return;
                 }
 

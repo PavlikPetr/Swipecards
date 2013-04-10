@@ -62,7 +62,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         actionBar.showBackButton(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(CacheProfile.city != null) {
+                if (CacheProfile.city != null) {
                     if (hasStartedFromAuthActivity && !CacheProfile.city.isEmpty()) {
                         Intent intent = new Intent(EditProfileActivity.this, NavigationActivity.class);
                         intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_VIP_PROFILE);
@@ -98,7 +98,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
 
         mEditCity = (Button) header.findViewById(R.id.btnEditCity);
-        if(CacheProfile.city == null) {
+        if (CacheProfile.city == null) {
             mEditCity.setText(getString(R.string.general_choose_city));
         } else {
             mEditCity.setText(CacheProfile.city.name);

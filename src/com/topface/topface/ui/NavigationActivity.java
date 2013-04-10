@@ -31,8 +31,11 @@ import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.BaseApiHandler;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
-import com.topface.topface.ui.fragments.*;
+import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.fragments.DatingFragment;
+import com.topface.topface.ui.fragments.FragmentSwitchController;
 import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
+import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.MenuFragment.FragmentMenuListener;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -56,6 +59,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
     public static final int RATE_POPUP_TIMEOUT = 86400000; // 1000 * 60 * 60 * 24 * 1 (1 сутки)
     public static final String URL_SEPARATOR = "::";
+    public static final String CURRENT_FRAGMENT_ID = "NAVIGATION_FRAGMENT";
     private FragmentManager mFragmentManager;
     private MenuFragment mFragmentMenu;
     private FragmentSwitchController mFragmentSwitcher;
@@ -85,6 +89,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mFragmentManager = getSupportFragmentManager();
 
         initFragmentSwitcher();
+        showFragment(savedInstanceState);
 
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
     }
@@ -254,15 +259,26 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
         mFragmentMenu.setOnMenuListener(mOnFragmentMenuListener);
 
-        Intent intent = getIntent();
-        int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
-        if (id != -1) {
-            mFragmentSwitcher.showFragment(id);
 
-        } else {
-            mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
-            mFragmentMenu.selectDefaultMenu();
+    }
+
+    private void showFragment(int fragmentId) {
+        mFragmentSwitcher.showFragment(fragmentId);
+        mFragmentMenu.selectMenu(fragmentId);
+    }
+
+    private void showFragment(Bundle savedInstanceState) {
+        Intent intent = getIntent();
+        //Получаем id фрагмента, если он открыт
+        int currentFragment = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
+
+        if (currentFragment == -1) {
+            currentFragment = savedInstanceState != null ?
+                    savedInstanceState.getInt(CURRENT_FRAGMENT_ID, BaseFragment.F_DATING) :
+                    BaseFragment.F_DATING;
         }
+
+        showFragment(currentFragment);
     }
 
     @Override
@@ -272,6 +288,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         checkVersion(CacheProfile.getOptions().max_version);
         actionsAfterRegistration();
         requestFullscreen();
+
     }
 
     @Override
@@ -303,12 +320,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
         }
         needAnimate = true;
-        //TODO костыль для ChatFragment, после перехода на фрагмент - выпилить
-        if (mDelayedFragment != null) {
-            onExtraFragment(mDelayedFragment);
-            mDelayedFragment = null;
-            mChatInvoke = true;
-        }
 
         //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
         new ExternalLinkExecuter(listener).execute(getIntent());
@@ -435,9 +446,15 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mServerResponseReceiver);
     }
 
+    @Override
+    public void close(Fragment fragment) {
+        super.close(fragment);
+        showFragment(FragmentSwitchController.DEFAULT_FRAGMENT);
+    }
+
     /*
-    *  обработчик кнопки открытия меню в заголовке фрагмента
-    */
+        *  обработчик кнопки открытия меню в заголовке фрагмента
+        */
     @Override
     public void onClick(View view) {
         if (view.getId() != R.id.btnNavigationHome)
@@ -457,22 +474,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             if (mFragmentSwitcher.getAnimationState() == FragmentSwitchController.EXPAND) {
                 super.onBackPressed();
             } else {
-                if (mFragmentSwitcher.isExtraFrameShown()) {
-                    //TODO костыль для ChatFragment, после перехода на фрагмент - выпилить
-                    //начало костыля--------------
-                    if (mChatInvoke) {
-                        if (mFragmentSwitcher.getCurrentExtraFragment() instanceof ProfileFragment) {
-                            ((ProfileFragment) mFragmentSwitcher.getCurrentExtraFragment()).openChat();
-                            mChatInvoke = false;
-                        }
-                        //конец костыля--------------
-                    } else {
-                        mFragmentSwitcher.closeExtraFragment();
-                    }
-                } else {
-                    mFragmentMenu.refreshNotifications();
-                    mFragmentSwitcher.openMenu();
-                }
+                mFragmentMenu.refreshNotifications();
+                mFragmentSwitcher.openMenu();
             }
         } else {
             super.onBackPressed();
@@ -496,37 +499,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     private FragmentMenuListener mOnFragmentMenuListener = new FragmentMenuListener() {
         @Override
-        public void onMenuClick(int buttonId) {
-            int fragmentId;
-            switch (buttonId) {
-                case R.id.btnFragmentProfile:
-                    fragmentId = BaseFragment.F_PROFILE;
-                    break;
-                case R.id.btnFragmentDating:
-                    fragmentId = BaseFragment.F_DATING;
-                    break;
-                case R.id.btnFragmentLikes:
-                    fragmentId = BaseFragment.F_LIKES;
-                    break;
-                case R.id.btnFragmentMutual:
-                    fragmentId = BaseFragment.F_MUTUAL;
-                    break;
-                case R.id.btnFragmentDialogs:
-                    fragmentId = BaseFragment.F_DIALOGS;
-                    break;
-                case R.id.btnFragmentTops:
-                    fragmentId = BaseFragment.F_TOPS;
-                    break;
-                case R.id.btnFragmentVisitors:
-                    fragmentId = BaseFragment.F_VISITORS;
-                    break;
-                case R.id.btnFragmentSettings:
-                    fragmentId = BaseFragment.F_SETTINGS;
-                    break;
-                default:
-                    fragmentId = BaseFragment.F_PROFILE;
-                    break;
-            }
+        public void onMenuClick(int fragmentId) {
             mFragmentSwitcher.showFragmentWithAnimation(fragmentId);
         }
     };
@@ -576,10 +549,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             }
         }
 
-        @Override
-        public void onExtraFrameOpen() {
-            mFragmentMenu.unselectAllButtons();
-        }
     };
 
 
@@ -681,35 +650,15 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     @Override
-    public void close(Fragment fragment) {
-        super.close(fragment);
-        mFragmentSwitcher.showFragment(BaseFragment.F_DATING);
-        mFragmentMenu.selectDefaultMenu();
-    }
-
-    @Override
     public boolean isTrackable() {
         return false;
     }
-
-    public void onExtraFragment(final Fragment fragment) {
-        mFragmentSwitcher.switchExtraFragment(fragment);
-    }
-
-    //TODO костыль для ChatFragment, после перехода на фрагмент - выпилить
-    private Fragment mDelayedFragment;
-    private boolean mChatInvoke = false;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == ContainerActivity.INTENT_CHAT_FRAGMENT) {
-                if (data != null) {
-                    int user_id = data.getExtras().getInt(ChatFragment.INTENT_USER_ID);
-                    mDelayedFragment = ProfileFragment.newInstance(user_id, ProfileFragment.TYPE_USER_PROFILE);
-                }
-            } else if (requestCode == CitySearchActivity.INTENT_CITY_SEARCH_AFTER_REGISTRATION ||
+            if (requestCode == CitySearchActivity.INTENT_CITY_SEARCH_AFTER_REGISTRATION ||
                     requestCode == CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY) {
                 if (data != null) {
                     Bundle extras = data.getExtras();
@@ -738,12 +687,22 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        int currentFragmentId = mFragmentSwitcher.getCurrentFragmentId();
+        outState.putInt(
+                CURRENT_FRAGMENT_ID,
+                currentFragmentId == -1 ?
+                        FragmentSwitchController.DEFAULT_FRAGMENT :
+                        currentFragmentId
+        );
+    }
+
     ExternalLinkExecuter.OnExternalLinkListener listener = new ExternalLinkExecuter.OnExternalLinkListener() {
         @Override
         public void onProfileLink(int profileID) {
-            int profileType = profileID == CacheProfile.uid ? ProfileFragment.TYPE_MY_PROFILE : ProfileFragment.TYPE_USER_PROFILE;
-            onExtraFragment(ProfileFragment.newInstance(profileID, profileType));
-            getIntent().setData(null);
+            ContainerActivity.getProfileIntent(profileID, NavigationActivity.this);
         }
 
         @Override

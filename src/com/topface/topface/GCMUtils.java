@@ -343,7 +343,6 @@ public class GCMUtils {
     }
 
 
-
     private static class User {
         public int id;
         public String name;

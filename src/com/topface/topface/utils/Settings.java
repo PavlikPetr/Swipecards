@@ -188,7 +188,7 @@ public class Settings {
 
     public SendMailNotificationsRequest getMailNotificationRequest(Context context) {
         SendMailNotificationsRequest request = new SendMailNotificationsRequest(context);
-        if(CacheProfile.notifications != null) {
+        if (CacheProfile.notifications != null) {
             request.mailsympathy = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).mail;
             request.mailmutual = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).mail;
             request.mailchat = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).mail;
