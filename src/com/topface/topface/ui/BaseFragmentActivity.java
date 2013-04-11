@@ -62,7 +62,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         if (CacheProfile.isLoaded()) {
             if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
                 onLoadProfile();
-                needAuth = false;
             } else {
                 startAuth();
             }
@@ -121,12 +120,11 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     public void startAuth() {
         Fragment authFragment = getSupportFragmentManager().findFragmentByTag(AUTH_TAG);
-        if (authFragment == null || !authFragment.isAdded()) {
+        if (isNeedAuth() && (authFragment == null || !authFragment.isAdded())) {
             if (authFragment == null) {
                 authFragment = AuthFragment.newInstance();
             }
             getSupportFragmentManager().beginTransaction().add(R.id.content, authFragment, AUTH_TAG).commit();
-            needAuth = false;
         }
     }
 
