@@ -22,7 +22,7 @@ import java.util.LinkedList;
 /* Класс профиля владельца устройства */
 public class Profile extends AbstractDataWithPhotos {
 
-    private static String[] EMPTY_STATUSES = {Static.EMPTY,"-"};
+    private static String[] EMPTY_STATUSES = {Static.EMPTY, "-"};
 
 
     public int uid; // id пользователя в топфейсе
@@ -466,7 +466,7 @@ public class Profile extends AbstractDataWithPhotos {
     public String getNameAndAge() {
         String result;
         if (first_name != null && first_name.length() > 0 && age > 0) {
-            result = String.format("%s, %d", first_name, age);
+            result = first_name + ", " + age;
         } else {
             result = first_name;
         }
@@ -498,8 +498,8 @@ public class Profile extends AbstractDataWithPhotos {
             return Static.EMPTY;
         }
         String result = status.trim();
-        for (int i=0;i<EMPTY_STATUSES.length;i++) {
-            if(EMPTY_STATUSES[i].equals(result)) {
+        for (String EMPTY_STATUSE : EMPTY_STATUSES) {
+            if (EMPTY_STATUSE.equals(result)) {
                 return Static.EMPTY;
             }
         }

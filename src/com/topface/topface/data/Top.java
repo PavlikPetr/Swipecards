@@ -62,7 +62,7 @@ public class Top extends AbstractDataWithPhotos {
     public String getNameAndAge() {
         String result;
         if (!TextUtils.isEmpty(name) && age > 0) {
-            result = String.format("%s, %d", name, age);
+            result = name + ", " + age;
         } else {
             result = name;
         }

@@ -444,7 +444,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     private void showUpdateErrorMessage(int codeError) {
-        mListView.setVisibility(View.GONE);
+        mListView.setVisibility(View.INVISIBLE);
         if (updateErrorMessage != null) {
             switch (codeError) {
                 case ApiResponse.PREMIUM_ACCESS_ONLY:
@@ -619,7 +619,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     private void showUpdateErrorMessage() {
         if (updateErrorMessage != null) {
-            mListView.setVisibility(View.GONE);
+            mListView.setVisibility(View.INVISIBLE);
             updateErrorMessage.setVisibility(View.VISIBLE);
         }
     }

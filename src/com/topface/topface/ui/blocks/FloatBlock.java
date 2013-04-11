@@ -4,10 +4,7 @@ import android.support.v4.app.Fragment;
 import android.view.ViewGroup;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.fragments.TopsFragment;
-import com.topface.topface.ui.fragments.feed.DialogsFragment;
-import com.topface.topface.ui.fragments.feed.LikesFragment;
-import com.topface.topface.ui.fragments.feed.MutualFragment;
-import com.topface.topface.ui.fragments.feed.VisitorsFragment;
+import com.topface.topface.ui.fragments.feed.*;
 import com.topface.topface.utils.CacheProfile;
 
 import java.util.HashMap;
@@ -50,16 +47,27 @@ public class FloatBlock {
 
     public static void setActivityMap() {
         mFloatTypeMap = new HashMap<String, String>();
-        if (mOptions.pages.containsKey(Options.PAGE_LIKES))
+        if (mOptions.pages.containsKey(Options.PAGE_LIKES)) {
             mFloatTypeMap.put(LikesFragment.class.toString(), mOptions.pages.get(Options.PAGE_LIKES).floatType);
-        if (mOptions.pages.containsKey(Options.PAGE_MUTUAL))
+        }
+        if (mOptions.pages.containsKey(Options.PAGE_MUTUAL)) {
             mFloatTypeMap.put(MutualFragment.class.toString(), mOptions.pages.get(Options.PAGE_MUTUAL).floatType);
-        if (mOptions.pages.containsKey(Options.PAGE_TOP))
+        }
+        if (mOptions.pages.containsKey(Options.PAGE_TOP)) {
             mFloatTypeMap.put(TopsFragment.class.toString(), mOptions.pages.get(Options.PAGE_TOP).floatType);
-        if (mOptions.pages.containsKey(Options.PAGE_DIALOGS))
+        }
+        if (mOptions.pages.containsKey(Options.PAGE_DIALOGS)) {
             mFloatTypeMap.put(DialogsFragment.class.toString(), mOptions.pages.get(Options.PAGE_DIALOGS).floatType);
-        if (mOptions.pages.containsKey(Options.PAGE_VISITORS))
+        }
+        if (mOptions.pages.containsKey(Options.PAGE_VISITORS)) {
             mFloatTypeMap.put(VisitorsFragment.class.toString(), mOptions.pages.get(Options.PAGE_VISITORS).floatType);
+        }
+        if (mOptions.pages.containsKey(Options.PAGE_BOOKMARKS)) {
+            mFloatTypeMap.put(BookmarksFragment.class.toString(), mOptions.pages.get(Options.PAGE_BOOKMARKS).floatType);
+        }
+        if (mOptions.pages.containsKey(Options.PAGE_FANS)) {
+            mFloatTypeMap.put(FansFragment.class.toString(), mOptions.pages.get(Options.PAGE_FANS).floatType);
+        }
     }
 
     public void onCreate() {
