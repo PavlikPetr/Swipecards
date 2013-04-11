@@ -243,9 +243,11 @@ public abstract class ApiRequest implements IApiRequest {
     }
 
     public HttpURLConnection getConnection() throws IOException {
-        if (mURLConnection == null && !isCanceled()) {
-            mURLConnection = openConnection();
+        if (mURLConnection != null) {
+            closeConnection();
         }
+
+        mURLConnection = openConnection();
 
         return mURLConnection;
     }
@@ -312,9 +314,11 @@ public abstract class ApiRequest implements IApiRequest {
 
     @Override
     public String readRequestResult() throws IOException {
-        HttpURLConnection connection = getConnection();
-        String result = HttpUtils.readStringFromConnection(connection);
-        closeConnection();
+        String result = null;
+        if (mURLConnection != null) {
+            result = HttpUtils.readStringFromConnection(mURLConnection);
+            closeConnection();
+        }
         return result;
     }
 
