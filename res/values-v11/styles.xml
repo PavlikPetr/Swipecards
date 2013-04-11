@@ -16,6 +16,7 @@
         <item name="android:textCursorDrawable">@null</item>
 
         <item name="android:editTextStyle">@style/topfaceEditText</item>
+        <item name="android:checkboxStyle">@style/topfaceCheckbox</item>
     </style>
 
 </resources>

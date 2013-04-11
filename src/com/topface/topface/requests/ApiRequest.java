@@ -72,8 +72,6 @@ public abstract class ApiRequest implements IApiRequest {
                 Message msg = new Message();
                 msg.obj = new ApiResponse(ApiResponse.ERRORS_PROCCESED, APP_IS_OFFILINE);
                 handler.sendMessage(msg);
-//                handler.always(new ApiResponse(ApiResponse.ERRORS_PROCCESED, APP_IS_OFFILINE));
-//                handler.fail(0, new ApiResponse(ApiResponse.ERRORS_PROCCESED, APP_IS_OFFILINE));
             }
             try {
                 retryDialog.show();

@@ -37,18 +37,35 @@
                 android:padding="10dp"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
-                android:minLines="1"
+                android:minLines="5"
                 android:singleLine="false"
                 android:textSize="14sp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"/>
 
-        <include
+        <LinearLayout
+            android:id="@+id/emailContainer"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+                >
+            <CheckBox
                 android:id="@+id/loEmailSwitcher"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                layout="@layout/item_edit_form_switch"
-                android:layout_marginTop="10dp"/>
+                android:layout_margin="5dp"
+
+                />
+            <TextView
+                android:id="@+id/wantAnswerTv"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:textSize="14sp"
+                android:gravity="center_vertical"
+                android:text="@string/settings_want_answer"/>
+        </LinearLayout>
+
 
         <TextView
                 android:paddingTop="8dp"
@@ -59,28 +76,18 @@
 
         <EditText
                 android:id="@+id/edEmail"
-                style="@style/ItemTitleText"
                 android:layout_width="fill_parent"
                 android:layout_height="34dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginLeft="8dp"
                 android:gravity="top|left|center_horizontal"
-                android:background="@drawable/edit_editbox_selector"
                 android:inputType="textMultiLine"
                 android:padding="10dp"
                 android:singleLine="true"
                 android:textSize="14sp"
+                android:hint="@string/general_input_email"
                 android:visibility="gone"/>
-
-        <Button
-                android:id="@+id/generalSendButton"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                style="@style/ButtonGray"
-                android:layout_margin="10dp"
-                android:text="@string/general_send_full"
-                />
 
     </LinearLayout>
 

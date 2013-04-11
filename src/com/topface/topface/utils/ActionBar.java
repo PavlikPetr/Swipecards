@@ -25,6 +25,7 @@ public class ActionBar {
     private ImageViewRemote mProfileAvatar;
 
     private NavigationBarController mNavBarController;
+    private ImageButton mSendButton;
 
     public ActionBar(View actionView) {
         this.actionView = (ViewGroup) actionView.findViewById(R.id.loNavigationBar);
@@ -43,6 +44,7 @@ public class ActionBar {
         mUserActionsControl = (ImageButton) actionView.findViewById(R.id.btnUserProfActions);
         mRightProgressBar = (ProgressBar) actionView.findViewById(R.id.prsNavigationRight);
         mProfileAvatar = (ImageViewRemote) actionView.findViewById(R.id.btnNavigationBarAvatar);
+        mSendButton = (ImageButton) actionView.findViewById(R.id.btnNavigationSend);
     }
 
     public void refreshNotificators() {
@@ -88,6 +90,7 @@ public class ActionBar {
 
         mSettingsButton.setVisibility(View.GONE);
         mProfileButton.setVisibility(View.GONE);
+        mSendButton.setVisibility(View.GONE);
     }
 
     public void showSettingsButton(final View.OnClickListener listener, final boolean changeSelection) {
@@ -111,6 +114,17 @@ public class ActionBar {
 
         mProfileButton.setVisibility(View.GONE);
         mUserActionsControl.setVisibility(View.GONE);
+        mSendButton.setVisibility(View.GONE);
+    }
+
+    public void showSendButton(final View.OnClickListener listener) {
+        mEditButton.setVisibility(View.GONE);
+        mSettingsButton.setVisibility(View.GONE);
+        mProfileButton.setVisibility(View.GONE);
+        mUserActionsControl.setVisibility(View.GONE);
+        mSendButton.setVisibility(View.VISIBLE);
+        mSendButton.setOnClickListener(listener);
+
     }
 
     public void setTitleText(String text) {
@@ -136,7 +150,7 @@ public class ActionBar {
                 break;
         }
         mProfileButton.setOnClickListener(listener);
-
+        mSendButton.setVisibility(View.GONE);
         mUserActionsControl.setVisibility(View.GONE);
     }
 
@@ -158,6 +172,7 @@ public class ActionBar {
                 }
             }
         });
+        mSendButton.setVisibility(View.GONE);
     }
 
     public void hideUserActionButton() {
