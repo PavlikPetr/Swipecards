@@ -1,6 +1,7 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+import android.os.Message;
 import android.text.TextUtils;
 import com.topface.topface.App;
 import com.topface.topface.RetryDialog;
@@ -31,6 +32,7 @@ public abstract class ApiRequest implements IApiRequest {
      * Mime type наших запросов к серверу
      */
     public static final String CONTENT_TYPE = "application/json";
+    public static final String APP_IS_OFFILINE = "App is offiline";
 
     // Data
     private String mId;
@@ -67,7 +69,11 @@ public abstract class ApiRequest implements IApiRequest {
         if (context != null && !App.isOnline() && doNeedAlert) {
             RetryDialog retryDialog = new RetryDialog(context, this);
             if (handler != null) {
-                handler.fail(0, new ApiResponse(ApiResponse.ERRORS_PROCCESED, "App is offline"));
+                Message msg = new Message();
+                msg.obj = new ApiResponse(ApiResponse.ERRORS_PROCCESED, APP_IS_OFFILINE);
+                handler.sendMessage(msg);
+//                handler.always(new ApiResponse(ApiResponse.ERRORS_PROCCESED, APP_IS_OFFILINE));
+//                handler.fail(0, new ApiResponse(ApiResponse.ERRORS_PROCCESED, APP_IS_OFFILINE));
             }
             try {
                 retryDialog.show();

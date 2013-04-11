@@ -51,7 +51,6 @@
 
         <EditText
                 android:id="@+id/etCityInput"
-                style="@style/ItemTitleText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -59,7 +58,7 @@
                 android:paddingRight="10dp"
                 android:inputType="text"
                 android:singleLine="true"
-                android:background="@drawable/city_editbox_selector"/>
+                />
 
         <ListView
                 android:id="@+id/lvCityList"

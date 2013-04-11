@@ -438,7 +438,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 if (mRetryView != null && isAdded()) {
                     mRetryView.setErrorMsg(getString(R.string.general_data_error));
                 }
-                if (mLockScreen != null) {
+                if (mLockScreen != null && mAdapter.getData().isEmpty()) {
                     mLockScreen.setVisibility(View.VISIBLE);
                 }
                 wasFailed = true;

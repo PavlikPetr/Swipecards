@@ -50,7 +50,6 @@ public class ConnectionManager {
         mPendignRequests = new HashMap<String, IApiRequest>();
     }
 
-
     public static ConnectionManager getInstance() {
         if (mInstanse == null) {
             mInstanse = new ConnectionManager();
