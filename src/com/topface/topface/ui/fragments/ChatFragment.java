@@ -330,10 +330,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void deleteItem(final int position) {
-        DeleteRequest dr = new DeleteRequest(getActivity());
         History item = mAdapter.getItem(position);
-        if (item == null)
+        if (item != null && (item.id == null || item.isFake())) {
+            Toast.makeText(getActivity(),R.string.cant_delete_fake_item,Toast.LENGTH_LONG).show();
             return;
+        }
+        if (item == null) return;
+        DeleteRequest dr = new DeleteRequest(getActivity());
         dr.id = item.id;
         registerRequest(dr);
         dr.callback(new DataApiHandler() {
@@ -438,7 +441,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 if (mRetryView != null && isAdded()) {
                     mRetryView.setErrorMsg(getString(R.string.general_data_error));
                 }
-                if (mLockScreen != null) {
+                if (mLockScreen != null && mAdapter.getData().isEmpty()) {
                     mLockScreen.setVisibility(View.VISIBLE);
                 }
                 wasFailed = true;
