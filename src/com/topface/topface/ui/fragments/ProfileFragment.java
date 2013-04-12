@@ -16,16 +16,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.requests.*;
+import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
@@ -92,6 +90,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private TabPageIndicator mTabIndicator;
     private ActionBar mActionBar;
     private LinearLayout mUserActions;
+    private RelativeLayout bmBtn;
 
 
     @Override
@@ -119,7 +118,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mUserActions.findViewById(R.id.acDelight).setOnClickListener(this);
         mUserActions.findViewById(R.id.acChat).setOnClickListener(this);
         mUserActions.findViewById(R.id.acBlock).setOnClickListener(this);
-//
+        bmBtn = (RelativeLayout)mUserActions.findViewById(R.id.acBookmark);
+        bmBtn.setOnClickListener(this);
 //        mNavBarController = new NavigationBarController((ViewGroup) root.findViewById(R.id.loNavigationBar));
         if (mProfileType == TYPE_USER_PROFILE) {
             mActionBar.showBackButton(new View.OnClickListener() {
@@ -341,6 +341,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 } else if (data.deleted) {
                     showForDeleted();
                 } else {
+                    if (data.bookmarked) {
+                        bmBtn.setVisibility(View.GONE);
+                    }
                     mRateController.setOnRateControllerListener(mRateControllerListener);
                     //set info into views for user
                     mTitle.setText(mUserProfile.getNameAndAge());
@@ -467,14 +470,20 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
         switch (v.getId()) {
             case R.id.btnEdit:
-                startActivity(new Intent(getActivity().getApplicationContext(), EditProfileActivity.class));
+                startActivity(ContainerActivity.getNewIntent(ContainerActivity.INTENT_SETTINGS_FRAGMENT));
                 break;
             case R.id.acDelight:
                 if (v.isEnabled()) {
                     v.setSelected(true);
-                    TextView view = (TextView) v;
-                    view.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+                    TextView textView = (TextView) v.findViewById(R.id.delTV);
+                    final ProgressBar loader = (ProgressBar) v.findViewById(R.id.delPrBar);
+                    final ImageView icon = (ImageView) v.findViewById(R.id.delIcon);
 
+                    loader.setVisibility(View.VISIBLE);
+                    icon.setVisibility(View.GONE);
+
+                    textView.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+                    v.findViewById(R.id.delPrBar).setVisibility(View.VISIBLE);
                     v.setEnabled(false);
                     mRateController.onRate(mUserProfile.uid, 10, ((User) mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL, new RateController.OnRateListener() {
                         @SuppressWarnings("ConstantConditions")
@@ -482,6 +491,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         public void onRateCompleted() {
                             if (v != null && getActivity() != null) {
                                 Toast.makeText(App.getContext(), R.string.sympathy_sended, 1500).show();
+                                loader.setVisibility(View.INVISIBLE);
+                                icon.setVisibility(View.VISIBLE);
 
                             }
                         }
@@ -490,6 +501,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         @Override
                         public void onRateFailed() {
                             if (v != null && getActivity() != null) {
+                                loader.setVisibility(View.INVISIBLE);
+                                icon.setVisibility(View.VISIBLE);
                                 Toast.makeText(App.getContext(), R.string.general_server_error, 1500).show();
                                 v.setEnabled(true);
                                 v.setSelected(false);
@@ -506,8 +519,13 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             case R.id.acSympathy:
                 if (v.isEnabled()) {
                     v.setSelected(true);
-                    TextView view = (TextView) v;
-                    view.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+                    TextView textView = (TextView) v.findViewById(R.id.likeTV);
+                    final ProgressBar loader = (ProgressBar) v.findViewById(R.id.likePrBar);
+                    final ImageView icon = (ImageView) v.findViewById(R.id.likeIcon);
+
+                    loader.setVisibility(View.VISIBLE);
+                    icon.setVisibility(View.GONE);
+                    textView.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
                     v.setEnabled(false);
                     mRateController.onRate(mUserProfile.uid, 9, ((User) mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL, new RateController.OnRateListener() {
                         @SuppressWarnings("ConstantConditions")
@@ -515,7 +533,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         public void onRateCompleted() {
                             if (v != null && getActivity() != null) {
                                 Toast.makeText(App.getContext(), R.string.sympathy_sended, 1500).show();
-
+                                loader.setVisibility(View.INVISIBLE);
+                                icon.setVisibility(View.VISIBLE);
                             }
                         }
 
@@ -524,6 +543,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         public void onRateFailed() {
                             if (v != null && getActivity() != null) {
                                 Toast.makeText(App.getContext(), R.string.general_server_error, 1500).show();
+                                loader.setVisibility(View.INVISIBLE);
+                                icon.setVisibility(View.VISIBLE);
                                 v.setEnabled(true);
                                 v.setSelected(false);
                                 TextView view = (TextView) v;
@@ -552,14 +573,32 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             case R.id.acBlock:
                 if (CacheProfile.premium) {
                     if (mUserProfile.uid > 0) {
+                        final TextView textView = (TextView) v.findViewById(R.id.blockTV);
+                        final ProgressBar loader = (ProgressBar) v.findViewById(R.id.blockPrBar);
+                        final ImageView icon = (ImageView) v.findViewById(R.id.blockIcon);
+
+                        loader.setVisibility(View.VISIBLE);
+                        icon.setVisibility(View.GONE);
                         BlackListAddRequest blackListAddRequest = new BlackListAddRequest(mUserProfile.uid, getActivity());
                         blackListAddRequest.callback(new VipApiHandler() {
                             @Override
                             public void success(ApiResponse response) {
                                 super.success(response);
-                                v.setEnabled(false);
-                                TextView view = (TextView) v;
-                                view.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+                                if (v != null) {
+                                    v.setEnabled(false);
+                                    loader.setVisibility(View.INVISIBLE);
+                                    icon.setVisibility(View.VISIBLE);
+                                    textView.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+                                }
+                            }
+
+                            @Override
+                            public void fail(int codeError, ApiResponse response) {
+                                super.fail(codeError, response);
+                                if (v != null) {
+                                    loader.setVisibility(View.INVISIBLE);
+                                    icon.setVisibility(View.VISIBLE);
+                                }
                             }
                         }).exec();
                     }
@@ -568,6 +607,32 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                     startActivity(intent);
                 }
+                break;
+            case R.id.acBookmark:
+                final TextView textView = (TextView) v.findViewById(R.id.favTV);
+                final ProgressBar loader = (ProgressBar) v.findViewById(R.id.favPrBar);
+                final ImageView icon = (ImageView) v.findViewById(R.id.favIcon);
+
+                loader.setVisibility(View.VISIBLE);
+                icon.setVisibility(View.GONE);
+                BookmarkAddRequest request = new BookmarkAddRequest(getActivity(), mUserProfile.uid);
+                request.callback(new SimpleApiHandler(){
+                    @Override
+                    public void success(ApiResponse response) {
+                        super.success(response);
+                        Toast.makeText(App.getContext(), getString(R.string.general_user_bookmarkadd), 1500).show();
+                        v.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void always(ApiResponse response) {
+                        super.always(response);
+                        if (v != null) {
+                            loader.setVisibility(View.INVISIBLE);
+                            icon.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }).exec();
                 break;
             default:
                 break;

@@ -14,16 +14,33 @@
         <item name="android:typeface">sans</item>
         <!-- Цвет ссылок (для TextView свойства autoLink)  -->
         <item name="android:textColorLink">#2371B9</item>
+        <item name="android:editTextStyle">@style/topfaceEditText</item>
+        <item name="android:checkboxStyle">@style/topfaceCheckbox</item>
+    </style>
+
+    <style name="topfaceEditText">
+        <item name="android:background">@drawable/edittext_selector</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:textColor">#393939</item>
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:enabled">true</item>
+    </style>
+
+    <style name="topfaceCheckbox">
+        <item name="android:background">@drawable/checkbox_selector</item>
+
     </style>
 
     <style name="actionsFont">
         <item name="android:textSize">16sp</item>
         <item name="android:padding">10dp</item>
+        <item name="android:layout_marginLeft" >10dp</item>
         <item name="android:background">@drawable/actions_menu_delimiter</item>
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:drawablePadding">5dp</item>
     </style>
 
     <style name="ShadowItemFont">
@@ -106,7 +123,7 @@
         <item name="android:id">@+id/tvTitle</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:textSize">16sp</item>
@@ -692,5 +709,10 @@
     <style name="ButtonBlue" parent="ButtonGray">
         <item name="android:background">@drawable/btn_blue_selector</item>
         <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="ButtonSale" parent="ButtonBlue">
+        <item name="android:background">@drawable/btn_sale_selector</item>
+        <item name="android:paddingRight">56dp</item>
     </style>
 </resources>

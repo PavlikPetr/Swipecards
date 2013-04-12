@@ -14,6 +14,9 @@
         <item name="android:textColorLink">#2371B9</item>
         <!-- Не используем картинку для курсора из стандратной темы, она будет таким же цветом как и текст -->
         <item name="android:textCursorDrawable">@null</item>
+
+        <item name="android:editTextStyle">@style/topfaceEditText</item>
+        <item name="android:checkboxStyle">@style/topfaceCheckbox</item>
     </style>
 
 </resources>

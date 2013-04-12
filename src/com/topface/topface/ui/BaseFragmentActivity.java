@@ -38,11 +38,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFormat(PixelFormat.RGBA_8888);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
-        if (mNeedAnimate) {
-            overridePendingTransition(com.topface.topface.R.anim.slide_in_from_right, com.topface.topface.R.anim.slide_out_left);
-        }
+        setWindowOptions();
 
         (new Thread() {
             @Override
@@ -53,10 +49,20 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         }).start();
     }
 
+    @SuppressWarnings("deprecation")
+    private void setWindowOptions() {
+        getWindow().setFormat(PixelFormat.RGBA_8888);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
+        if (mNeedAnimate) {
+            overridePendingTransition(com.topface.topface.R.anim.slide_in_from_right, com.topface.topface.R.anim.slide_out_left);
+        }
+    }
+
     private void checkProfileLoad() {
         if (CacheProfile.isLoaded()) {
             if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
                 onLoadProfile();
+                needAuth = false;
             } else {
                 startAuth();
             }
@@ -124,7 +130,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         }
     }
 
-    public void close(Fragment fragment) {
+    public void close(Fragment fragment, boolean needInit) {
         getSupportFragmentManager().beginTransaction().remove(fragment).commit();
     }
 

@@ -21,10 +21,12 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.SendMailNotificationsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.settings.SettingsAccountFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.social.AuthToken;
@@ -69,8 +71,16 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         mSettings = Settings.getInstance();
 
         // Navigation bar
-        view.findViewById(R.id.btnNavigationHome).setOnClickListener((NavigationActivity) getActivity());
-        ((TextView) view.findViewById(R.id.tvNavigationTitle)).setText(R.string.settings_header_title);
+        ActionBar actionBar = getActionBar(view);
+        actionBar.showBackButton(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(getActivity() != null) {
+                    getActivity().finish();
+                }
+            }
+        });
+        actionBar.setTitleText(getString(R.string.settings_header_title));
 
         // Init settings views
         initViews(view);
@@ -81,6 +91,15 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     private void initViews(View root) {
         ViewGroup frame;
 
+        // Edit Profile Button
+        TextView btnEditProfile = (TextView) root.findViewById(R.id.btnProfileEdit);
+        btnEditProfile.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity().getApplicationContext(), EditProfileActivity.class));
+            }
+        });
+
         // Notifications header
         frame = (ViewGroup) root.findViewById(R.id.loNotificationsHeader);
         setText(R.string.settings_notifications_header, frame);
@@ -89,6 +108,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         frame = (ViewGroup) root.findViewById(R.id.loLikes);
         setBackground(R.drawable.edit_big_btn_top, frame);
         setText(R.string.settings_likes, frame);
+
 
         boolean mail = false;
         boolean apns = false;

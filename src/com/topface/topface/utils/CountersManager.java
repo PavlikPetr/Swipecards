@@ -11,6 +11,7 @@ public class CountersManager {
     private static int sympathyCounter;
     private static int visitorsCounter;
     private static int dialogsCounter;
+    private static int fansCounter;
 
     private Context mContext;
 
@@ -22,10 +23,13 @@ public class CountersManager {
     public final static String CHANGED_BY_GCM = "gcm_changed";
     public final static String METHOD_INTENT_STRING = "method";
 
+    public final static int UNKNOWN_TYPE = -1;
+
     public final static int LIKES = 0;
     public final static int SYMPATHY = 1;
     public final static int VISITORS = 2;
     public final static int DIALOGS = 3;
+    public final static int FANS = 4;
 
     private static String lastRequestMethod;
 
@@ -44,6 +48,7 @@ public class CountersManager {
         sympathyCounter = CacheProfile.unread_mutual;
         visitorsCounter = CacheProfile.unread_visitors;
         dialogsCounter = CacheProfile.unread_messages;
+        fansCounter = CacheProfile.unread_fans;
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -60,6 +65,9 @@ public class CountersManager {
                 break;
             case DIALOGS:
                 dialogsCounter++;
+                break;
+            case FANS:
+                fansCounter++;
                 break;
         }
         commitCounters();
@@ -87,6 +95,11 @@ public class CountersManager {
                     dialogsCounter--;
                 }
                 break;
+            case FANS:
+                if (fansCounter > 0) {
+                    fansCounter--;
+                }
+                break;
         }
         commitCounters();
     }
@@ -110,14 +123,19 @@ public class CountersManager {
                 dialogsCounter = value;
                 commitCounters();
                 break;
+            case FANS:
+                fansCounter = value;
+                commitCounters();
+                break;
         }
     }
 
-    public void setAllCounters(int likesCounter, int sympathyCounter, int dialogsCounter, int visitorsCounter) {
+    public void setAllCounters(int likesCounter, int sympathyCounter, int dialogsCounter, int visitorsCounter, int fansCounter) {
         CountersManager.likesCounter = likesCounter;
         CountersManager.sympathyCounter = sympathyCounter;
         CountersManager.dialogsCounter = dialogsCounter;
         CountersManager.visitorsCounter = visitorsCounter;
+        CountersManager.fansCounter = fansCounter;
         commitCounters();
     }
 
@@ -131,6 +149,8 @@ public class CountersManager {
                 return dialogsCounter;
             case VISITORS:
                 return visitorsCounter;
+            case FANS:
+                return fansCounter;
         }
         return -1;
     }
@@ -142,11 +162,13 @@ public class CountersManager {
     private void commitCounters() {
         //Хз как тут сделать по-другому, подумаю еще
         if (likesCounter != CacheProfile.unread_likes || dialogsCounter != CacheProfile.unread_messages ||
-                sympathyCounter != CacheProfile.unread_mutual || visitorsCounter != CacheProfile.unread_visitors) {
+                sympathyCounter != CacheProfile.unread_mutual || visitorsCounter != CacheProfile.unread_visitors ||
+                fansCounter != CacheProfile.unread_fans) {
             CacheProfile.unread_likes = likesCounter;
             CacheProfile.unread_messages = dialogsCounter;
             CacheProfile.unread_mutual = sympathyCounter;
             CacheProfile.unread_visitors = visitorsCounter;
+            CacheProfile.unread_fans = fansCounter;
             updateUICounters(); //кидаем broadcast о том, что счетчики обновились и причину их обновления
             //название метода, если это запрос, или константу, если это GCM
         } else {
@@ -155,6 +177,7 @@ public class CountersManager {
             CacheProfile.unread_messages = dialogsCounter;
             CacheProfile.unread_mutual = sympathyCounter;
             CacheProfile.unread_visitors = visitorsCounter;
+            CacheProfile.unread_fans = fansCounter;
         }
     }
 

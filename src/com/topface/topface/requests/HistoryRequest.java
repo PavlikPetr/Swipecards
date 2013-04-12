@@ -10,8 +10,8 @@ public class HistoryRequest extends ApiRequest {
     public int userid; // идентификатор пользователя для получения истории сообщений с ним текущего пользвоателя
     //public int offset; // смещение истории сообщений
     public int limit; // количество получаемых элементов истории сообщений
-    public int to; // идентификатор сообщения до которого будет осуществляться выборка истории
-    public int from; //идентификатор сообщения после которого будет осуществляться выборка истории
+    public String to; // идентификатор сообщения до которого будет осуществляться выборка истории
+    public String from; //идентификатор сообщения после которого будет осуществляться выборка истории
     public String debug;
 
     public HistoryRequest(Context context) {
@@ -21,10 +21,10 @@ public class HistoryRequest extends ApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         JSONObject data = new JSONObject().put("userid", userid).put("limit", limit);
-        if (to > 0) {
+        if (to != null) {
             data.put("to", to);
         }
-        if (from > 0) {
+        if (from != null) {
             data.put("from", from);
         }
         if (debug != null) {

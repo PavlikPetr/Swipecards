@@ -1,4 +1,4 @@
-package com.topface.topface.utils;
+package com.topface.topface.utils.GeoUtils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.google.android.maps.*;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.OsmManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -235,6 +237,12 @@ public class GeoLocationManager {
         mapOverlays.add(itemizedOverlay);
     }
 
+
+    public Location getLastKnownLocation() {
+        String locationProvider = LocationManager.NETWORK_PROVIDER;
+        Location lastKnownLocation = mLocationManager.getLastKnownLocation(locationProvider);
+        return lastKnownLocation;
+    }
     /**
      * Read MapView cache
      *

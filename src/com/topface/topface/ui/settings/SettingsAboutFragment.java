@@ -1,7 +1,7 @@
 package com.topface.topface.ui.settings;
 
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.method.LinkMovementMethod;
@@ -10,12 +10,16 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.Debug;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public class SettingsAboutFragment extends BaseFragment {
 
@@ -42,19 +46,22 @@ public class SettingsAboutFragment extends BaseFragment {
         String versionNumber;
 
         try {
-            versionNumber = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0).versionName;
-        } catch (NameNotFoundException e) {
+            PackageManager packageManager = activity.getPackageManager();
+            String packageName = activity.getPackageName();
+            versionNumber = packageManager.getPackageInfo(packageName, 0).versionName;
+
+            if (App.DEBUG) {
+                ApplicationInfo ai = packageManager.getApplicationInfo(packageName, 0);
+                ZipFile zf = new ZipFile(ai.sourceDir);
+                ZipEntry ze = zf.getEntry("classes.dex");
+                long time = ze.getTime();
+                versionNumber += "\nBuild: " + SimpleDateFormat.getInstance().format(new java.util.Date(time));
+            }
+        } catch (Exception e) {
             versionNumber = "unknown";
             Debug.error(e);
         }
 
-        try {
-            PackageInfo pInfo;
-            pInfo = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0);
-            versionNumber = pInfo.versionName;
-        } catch (NameNotFoundException e) {
-            Debug.error(e);
-        }
         version.setText(getResources().getString(R.string.settings_version) + " " + versionNumber);
 
         // Copyright

@@ -50,7 +50,6 @@ public class ConnectionManager {
         mPendignRequests = new HashMap<String, IApiRequest>();
     }
 
-
     public static ConnectionManager getInstance() {
         if (mInstanse == null) {
             mInstanse = new ConnectionManager();
@@ -247,7 +246,11 @@ public class ConnectionManager {
                 //Если после переавторизации у нас все же не верный ssid, то пробуем все повторить
                 IApiResponse.SESSION_NOT_FOUND,
                 //Если у нас ошибки подключения
-                IApiResponse.CONNECTION_ERROR
+                IApiResponse.CONNECTION_ERROR,
+                //Если проблема с подключением к социальной сети у сервера
+                IApiResponse.NETWORK_CONNECT_ERROR,
+                //Если на сервере что-то упало, то пробуем переотправить запрос
+                IApiResponse.INTERNAL_SERVER_ERROR
         );
     }
 

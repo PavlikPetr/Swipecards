@@ -3,8 +3,12 @@ package com.topface.topface.ui;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.*;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -42,6 +46,8 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.utils.*;
 import com.topface.topface.utils.offerwalls.Offerwalls;
+import com.topface.topface.utils.GeoUtils.GeoLocationManager;
+import com.topface.topface.utils.GeoUtils.GeoPreferencesManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 import ru.ideast.adwired.AWView;
@@ -55,9 +61,8 @@ import java.util.Set;
 
 public class NavigationActivity extends BaseFragmentActivity implements View.OnClickListener {
 
-    public static final String RATING_POPUP = "RATING_POPUP";
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
-    public static final int RATE_POPUP_TIMEOUT = 86400000; // 1000 * 60 * 60 * 24 * 1 (1 сутки)
+
     public static final String URL_SEPARATOR = "::";
     public static final String CURRENT_FRAGMENT_ID = "NAVIGATION_FRAGMENT";
     private FragmentManager mFragmentManager;
@@ -68,8 +73,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private NoviceLayout mNoviceLayout;
     private Novice mNovice;
     private boolean needAnimate = false;
-
-    private BroadcastReceiver mServerResponseReceiver;
 
     private static boolean isFullScreenBannerVisible = false;
 
@@ -89,7 +92,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mFragmentManager = getSupportFragmentManager();
 
         initFragmentSwitcher();
-        showFragment(savedInstanceState);
+        if (!AuthToken.getInstance().isEmpty()) {
+            showFragment(savedInstanceState);
+        }
 
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
     }
@@ -258,8 +263,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
         mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
         mFragmentMenu.setOnMenuListener(mOnFragmentMenuListener);
-
-
     }
 
     private void showFragment(int fragmentId) {
@@ -284,11 +287,26 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     public void onLoadProfile() {
         super.onLoadProfile();
+        mFragmentMenu.onLoadProfile();
         AuthorizationManager.extendAccessToken(NavigationActivity.this);
-        checkVersion(CacheProfile.getOptions().max_version);
+        PopupManager manager = new PopupManager(this);
+        manager.showOldVersionPopup(CacheProfile.getOptions().max_version);
+        manager.showRatePopup();
         actionsAfterRegistration();
         requestFullscreen();
+        sendLocation();
+    }
 
+    private void sendLocation() {
+        GeoLocationManager locationManager = new GeoLocationManager(App.getContext());
+        Location curLocation = locationManager.getLastKnownLocation();
+
+        GeoPreferencesManager preferencesManager = new GeoPreferencesManager(App.getContext());
+        preferencesManager.saveLocation(curLocation);
+
+        SettingsRequest settingsRequest = new SettingsRequest(this);
+        settingsRequest.location = curLocation;
+        settingsRequest.exec();
     }
 
     @Override
@@ -306,15 +324,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
         //Отправляем не обработанные запросы на покупку
         BillingUtils.sendQueueItems();
-
-        mServerResponseReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-
-            }
-        };
-
-        LocalBroadcastManager.getInstance(this).registerReceiver(mServerResponseReceiver, new IntentFilter(OptionsRequest.VERSION_INTENT));
 
         if (needAnimate) {
             overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
@@ -352,7 +361,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                                     if (CacheProfile.photos != null && CacheProfile.photos.contains(photo)) {
                                         CacheProfile.photos.remove(photo);
                                     }
-                                    Toast.makeText(NavigationActivity.this, "Ваша фотография не соответствует правилам. Попробуйте сделать другую", 2000);
+                                    Toast.makeText(NavigationActivity.this, App.getContext().getString(R.string.general_wrong_photo_upload), 2000);
                                 }
                             }
 
@@ -389,66 +398,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
     }
 
-    private void checkVersion(String version) {
-        try {
-            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            String curVersion = pInfo.versionName;
-            if (!TextUtils.isEmpty(version) && TextUtils.isEmpty(curVersion)) {
-                String[] splittedVersion = version.split("\\.");
-                String[] splittedCurVersion = curVersion.split("\\.");
-                for (int i = 0; i < splittedVersion.length; i++) {
-                    if (i < splittedCurVersion.length) {
-                        if (Long.parseLong(splittedCurVersion[i]) < Long.parseLong(splittedVersion[i])) {
-                            showOldVersionPopup();
-                            return;
-                        }
-                    }
-                }
-                if (splittedCurVersion.length < splittedVersion.length) {
-                    showOldVersionPopup();
-                } else {
-                    if (App.isOnline()) {
-                        ratingPopup();
-                    }
-                }
-            } else {
-                if (App.isOnline()) {
-                    ratingPopup();
-                }
-            }
-        } catch (Exception e) {
-            Debug.error("Check Version Error: " + version, e);
-
-        }
-    }
-
-    private void showOldVersionPopup() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Utils.goToMarket(NavigationActivity.this);
-
-            }
-        });
-        builder.setNegativeButton(R.string.popup_version_cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-            }
-        });
-        builder.setMessage(R.string.general_version_not_supported);
-        builder.create().show();
-    }
-
     @Override
-    protected void onPause() {
-        super.onPause();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mServerResponseReceiver);
-    }
-
-    @Override
-    public void close(Fragment fragment) {
-        super.close(fragment);
+    public void close(Fragment fragment, boolean needInit) {
+        super.close(fragment, needInit);
         showFragment(FragmentSwitchController.DEFAULT_FRAGMENT);
     }
 
@@ -550,68 +502,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
 
     };
-
-
-    /**
-     * Попап с предложение оценить предложение
-     */
-    private void ratingPopup() {
-        final SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-
-        long date_start = preferences.getLong(RATING_POPUP, 1);
-        long date_now = new java.util.Date().getTime();
-
-        if (date_start == 0 || (date_now - date_start < RATE_POPUP_TIMEOUT)) {
-            return;
-        } else if (date_start == 1) {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putLong("RATING_POPUP", new java.util.Date().getTime());
-            editor.commit();
-            return;
-        }
-
-        final Dialog ratingPopup = new Dialog(this) {
-            @Override
-            public void onBackPressed() {
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putLong(RATING_POPUP, new java.util.Date().getTime());
-                editor.commit();
-                super.onBackPressed();
-            }
-        };
-        ratingPopup.setTitle(R.string.dashbrd_popup_title);
-        ratingPopup.setContentView(R.layout.popup_rating);
-        ratingPopup.show();
-
-        ratingPopup.findViewById(R.id.btnRatingPopupRate).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.goToMarket(NavigationActivity.this);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putLong(RATING_POPUP, 0);
-                editor.commit();
-                ratingPopup.cancel();
-            }
-        });
-        ratingPopup.findViewById(R.id.btnRatingPopupLate).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putLong(RATING_POPUP, new java.util.Date().getTime());
-                editor.commit();
-                ratingPopup.cancel();
-            }
-        });
-        ratingPopup.findViewById(R.id.btnRatingPopupCancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putLong(RATING_POPUP, 0);
-                editor.commit();
-                ratingPopup.cancel();
-            }
-        });
-    }
 
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
