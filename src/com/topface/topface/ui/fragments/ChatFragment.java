@@ -331,7 +331,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private void deleteItem(final int position) {
         History item = mAdapter.getItem(position);
         if (item != null && item.id <= 0) {
-            Toast.makeText(getActivity(),R.string.cant_delete_fake_item,Toast.LENGTH_SHORT);
+            Toast.makeText(getActivity(),R.string.cant_delete_fake_item,Toast.LENGTH_SHORT).show();
             return;
         }
         if (item == null) return;
