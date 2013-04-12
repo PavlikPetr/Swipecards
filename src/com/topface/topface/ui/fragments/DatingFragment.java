@@ -252,7 +252,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
         });
         emptySearchDialog.addButton(App.getContext().getString(R.string.change_filters), settingsListener);
-        emptySearchDialog.setVisibility(View.GONE);
+        hideEmptySearchDialog();
         ((RelativeLayout) view.findViewById(R.id.ac_dating_container)).addView(emptySearchDialog);
 
         mReceiver = new BroadcastReceiver() {
@@ -286,14 +286,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private void updateData(final boolean isAddition) {
         if (!mUpdateInProcess) {
             lockControls();
-            emptySearchDialog.setVisibility(View.GONE);
+            hideEmptySearchDialog();
             if (!isAddition) {
                 onUpdateStart(isAddition);
             }
 
             mUpdateInProcess = true;
 
-            Search.log("Update start");
+            Search.log("Update start: " + (isAddition ? "addition" : "replace"));
 
             getSearchRequest().callback(new DataApiHandler<Search>() {
 
@@ -314,10 +314,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         //<code>if (!isAddition && mCurrentUser != currentUser || mCurrentUser == null)</code>
                         //Но возникает странный эффект, когда в поиске написано одно, а у юзера другое,
                         //В связи с чем, все работает так как работает
-                        if (mCurrentUser != currentUser || mCurrentUser == null) {
+                        if (currentUser != null && mCurrentUser != currentUser) {
                             showUser(currentUser);
                             unlockControls();
-                        } else if (!isAddition) {
+                        } else if (!isAddition || mUserSearchList.isEmpty()) {
                             showEmptySearchDialog();
                         }
 
@@ -325,7 +325,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         mRetryBtn.setVisibility(View.GONE);
                     } else {
                         mProgressBar.setVisibility(View.GONE);
-                        if (!isAddition) {
+                        if (!isAddition || mUserSearchList.isEmpty()) {
                             showEmptySearchDialog();
                         }
                     }
@@ -502,6 +502,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void showUser(SearchUser user) {
         if (user != null) {
+            hideEmptySearchDialog();
             fillUserInfo(user);
             unlockControls();
 
@@ -724,7 +725,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mUserInfoStatus.setVisibility(View.VISIBLE);
 
         boolean enabled = false;
-        if (!mUserSearchList.isEnded() && mCurrentUser != null) {
+        if (mCurrentUser != null) {
             enabled = !mCurrentUser.rated;
         }
         mMutualBtn.setEnabled(enabled);
@@ -805,6 +806,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
             lockControls();
+            hideEmptySearchDialog();
             if (data != null && data.getExtras() != null) {
                 final DatingFilter filter = data.getExtras().getParcelable(FilterFragment.INTENT_DATING_FILTER);
                 FilterRequest filterRequest = new FilterRequest(filter, getActivity());
@@ -832,6 +834,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    private void hideEmptySearchDialog() {
+        emptySearchDialog.setVisibility(View.GONE);
     }
 
     private void setHeader(View view) {
@@ -973,17 +979,18 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private OnSearchEventsListener mSearchListener = new OnSearchEventsListener() {
         @Override
         public void onEmptyList(Search search) {
-            showEmptySearchDialog();
+            updateData(false);
         }
 
         @Override
         public void onPreload(Search search) {
             updateData(true);
         }
+
     };
 
     private void showEmptySearchDialog() {
-        lockControls();
+        Debug.log("Search:: showEmptySearchDialog");
         mProgressBar.setVisibility(View.GONE);
         mImageSwitcher.setVisibility(View.GONE);
         emptySearchDialog.setVisibility(View.VISIBLE);

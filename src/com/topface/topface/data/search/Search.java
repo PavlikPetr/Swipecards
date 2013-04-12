@@ -118,6 +118,9 @@ public class Search extends LinkedList<SearchUser> implements SerializableToJson
 
     public void setOnEmptyListListener(OnSearchEventsListener listener) {
         mListener = listener;
+        if (mListener != null && isEmpty()) {
+            mListener.onEmptyList(this);
+        }
     }
 
     public Search(ApiResponse response) {
