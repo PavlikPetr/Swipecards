@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -80,28 +81,13 @@ public class RetryView extends LinearLayout {
     }
 
     private IllustratedTextView generateButton() {
-        IllustratedTextView btn = new IllustratedTextView(getContext(), null);
-        btn.setBackgroundResource(R.drawable.btn_gray_selector);
-        LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        lp.setMargins(10, 5, 10, 5);
-        btn.setLayoutParams(lp);
-        btn.setPadding(25, 25, 25, 25);
-        btn.setTextColor(textColor);
-        btn.setGravity(Gravity.CENTER);
+        IllustratedTextView btn = (IllustratedTextView) LayoutInflater.from(getContext()).inflate(R.layout.retry_btn, this, false);
+        btn.ICON_ALIGN = TfImageSpan.ALIGN_BASELINE;
         return btn;
     }
 
     private IllustratedTextView generateBlueButton() {
-        IllustratedTextView btn = new IllustratedTextView(getContext(), null);
-        btn.setBackgroundResource(R.drawable.btn_blue_selector);
-        LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        lp.setMargins(10, 5, 10, 5);
-        btn.setLayoutParams(lp);
-        btn.setPadding(25, 25, 25, 25);
-        btn.setTextAppearance(getContext(), R.style.VipItemTitleWhiteText);
-        btn.setTypeface(Typeface.DEFAULT_BOLD);
-        btn.setGravity(Gravity.CENTER);
-
+        IllustratedTextView btn = (IllustratedTextView) LayoutInflater.from(getContext()).inflate(R.layout.retry_btn_blue, this, false);
         return btn;
     }
 

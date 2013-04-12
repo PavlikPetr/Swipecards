@@ -28,6 +28,8 @@ import java.util.HashMap;
 
 public class EditMainFormItemsFragment extends AbstractEditFragment implements OnClickListener {
 
+    public static final int MAX_AGE = 99;
+    public static final int MIN_AGE = 16;
     private ActionBar mActionBar;
 
     public enum EditType {NAME, AGE, STATUS}
@@ -290,7 +292,9 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                 CacheProfile.first_name = data;
                 break;
             case AGE:
-                CacheProfile.age = Integer.parseInt(data);
+                if (isAgeValid(Integer.parseInt(data))) {
+                    CacheProfile.age = Integer.parseInt(data);
+                }
                 break;
             case STATUS:
                 CacheProfile.setStatus(data);
@@ -315,7 +319,9 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                         break;
                     case AGE:
                         try {
-                            request.age = Integer.parseInt(changedValue);
+                            if (isAgeValid(Integer.parseInt(changedValue))) {
+                                request.age = Integer.parseInt(changedValue);
+                            }
                         } catch (Exception e) {
                             Debug.error(e);
                         }
@@ -328,6 +334,10 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         }
         request.sex = mSex;
         return request;
+    }
+
+    private boolean isAgeValid(int age) {
+        return age <= MAX_AGE && age >= MIN_AGE;
     }
 
     @Override
