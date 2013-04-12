@@ -3,6 +3,7 @@ package com.topface.topface.utils.offerwalls;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Looper;
 import android.widget.Toast;
 import com.sponsorpay.sdk.android.SponsorPay;
 import com.sponsorpay.sdk.android.publisher.SponsorPayPublisher;
@@ -17,8 +18,6 @@ import java.util.Random;
 
 public class Offerwalls {
 
-    private static boolean first_or_second = false;
-
     public static void init(Context context) {
         try {
             if (CacheProfile.uid > 0) {
@@ -31,19 +30,31 @@ public class Offerwalls {
     }
 
     private static void initSponsorpay(Context context) {
-        SponsorPay.start("11625", Integer.toString(CacheProfile.uid), "0a4c64db64ed3c1ca14a5e5d81aaa23c", context);
+        try {
+            Looper.prepare();
+            SponsorPay.start("11625", Integer.toString(CacheProfile.uid), "0a4c64db64ed3c1ca14a5e5d81aaa23c", context);
+            Looper.loop();
+        } catch (Exception e) {
+            Debug.error(e);
+        }
     }
 
     private static void initTapjoy(Context context) {
-        TapjoyConnect.requestTapjoyConnect(context, "f0563cf4-9e7c-4962-b333-098810c477d2", "AS0AE9vmrWvkyNNGPsyu");
-        TapjoyConnect.getTapjoyConnectInstance().setUserID(Integer.toString(CacheProfile.uid));
+        try {
+            Looper.prepare();
+            TapjoyConnect.requestTapjoyConnect(context, "f0563cf4-9e7c-4962-b333-098810c477d2", "AS0AE9vmrWvkyNNGPsyu");
+            TapjoyConnect.getTapjoyConnectInstance().setUserID(Integer.toString(CacheProfile.uid));
+            Looper.loop();
+        } catch (Exception e) {
+            Debug.error(e);
+        }
     }
 
     public static void startOfferwall(Activity activity) {
         String offerwall = CacheProfile.getOptions().offerwall;
 
         if (CacheProfile.uid <= 0) {
-            Toast.makeText(activity, R.string.general_server_error,Toast.LENGTH_SHORT);
+            Toast.makeText(activity, R.string.general_server_error, Toast.LENGTH_SHORT);
             return;
         }
 
@@ -96,7 +107,7 @@ public class Offerwalls {
         try {
             Intent offerWallIntent = new Intent(activity, ClickkyActivity.class);
             activity.startActivity(offerWallIntent);
-        } catch (Exception e){
+        } catch (Exception e) {
             Debug.error(e);
         }
 

@@ -292,7 +292,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         PopupManager manager = new PopupManager(this);
         manager.showOldVersionPopup(CacheProfile.getOptions().max_version);
         manager.showRatePopup();
-//        checkVersion(CacheProfile.getOptions().max_version);
         actionsAfterRegistration();
         requestFullscreen();
         sendLocation();

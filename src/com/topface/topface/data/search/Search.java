@@ -35,6 +35,7 @@ public class Search extends LinkedList<SearchUser> implements SerializableToJson
     protected int mPosition = 0;
     private OnSearchEventsListener mListener;
     private String mSignature;
+    private boolean mNeedPreload = true;
 
     public Search() {
         super();
@@ -62,12 +63,15 @@ public class Search extends LinkedList<SearchUser> implements SerializableToJson
             setSearchPosition(position + collection.size());
         }
 
+        mNeedPreload = collection.size() >= USERS_FOR_PRELOAD_CNT;
+
         return result;
     }
 
     @Override
     public boolean addAll(Collection<? extends SearchUser> collection) {
         removeDublicates(collection);
+        mNeedPreload = collection.size() >= USERS_FOR_PRELOAD_CNT;
         return super.addAll(collection);
     }
 
@@ -150,7 +154,7 @@ public class Search extends LinkedList<SearchUser> implements SerializableToJson
     }
 
     public int getSearchPosition() {
-        if (mPosition > (this.size()-1)) {
+        if (mPosition > (this.size() - 1)) {
             mPosition = this.size();
         }
         return mPosition;
@@ -227,7 +231,7 @@ public class Search extends LinkedList<SearchUser> implements SerializableToJson
     }
 
     private boolean isNeedPreload() {
-        return mPosition > size() - USERS_FOR_PRELOAD_CNT;
+        return mNeedPreload && size() > 0 && mPosition > size() - USERS_FOR_PRELOAD_CNT;
     }
 
     /**
