@@ -316,16 +316,17 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         //В связи с чем, все работает так как работает
                         if (mCurrentUser != currentUser || mCurrentUser == null) {
                             showUser(currentUser);
+                            unlockControls();
+                        } else if (!isAddition) {
+                            showEmptySearchDialog();
                         }
 
                         //Скрываем кнопку отправки повтора
                         mRetryBtn.setVisibility(View.GONE);
-                        unlockControls();
                     } else {
                         mProgressBar.setVisibility(View.GONE);
                         if (!isAddition) {
-                            mImageSwitcher.setVisibility(View.GONE);
-                            emptySearchDialog.setVisibility(View.VISIBLE);
+                            showEmptySearchDialog();
                         }
                     }
                 }
@@ -972,7 +973,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private OnSearchEventsListener mSearchListener = new OnSearchEventsListener() {
         @Override
         public void onEmptyList(Search search) {
-            updateData(false);
+            showEmptySearchDialog();
         }
 
         @Override
@@ -980,4 +981,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             updateData(true);
         }
     };
+
+    private void showEmptySearchDialog() {
+        lockControls();
+        mProgressBar.setVisibility(View.GONE);
+        mImageSwitcher.setVisibility(View.GONE);
+        emptySearchDialog.setVisibility(View.VISIBLE);
+    }
 }
