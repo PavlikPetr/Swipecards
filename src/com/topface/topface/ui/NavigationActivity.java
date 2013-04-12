@@ -1,16 +1,13 @@
 package com.topface.topface.ui;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
@@ -45,9 +42,9 @@ import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.utils.*;
-import com.topface.topface.utils.offerwalls.Offerwalls;
 import com.topface.topface.utils.GeoUtils.GeoLocationManager;
 import com.topface.topface.utils.GeoUtils.GeoPreferencesManager;
+import com.topface.topface.utils.offerwalls.Offerwalls;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 import ru.ideast.adwired.AWView;
@@ -103,7 +100,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     protected void inBackgroundThread() {
         super.inBackgroundThread();
         mNovice = Novice.getInstance(getPreferences());
+        Looper.prepare();
         Offerwalls.init(getApplicationContext());
+        Looper.loop();
     }
 
     private SharedPreferences getPreferences() {
