@@ -158,6 +158,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 mHeaderView.setVisibility(View.GONE);
             } catch (OutOfMemoryError e) {
                 Debug.error("Add header OOM", e);
+            } catch (Exception e) {
+                Debug.error(e);
             }
         }
     }
