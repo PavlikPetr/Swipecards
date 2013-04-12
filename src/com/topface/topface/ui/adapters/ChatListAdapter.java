@@ -70,6 +70,9 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         if (!data.isEmpty()) {
             prepareDates();
         }
+        if (getData().size() > ChatFragment.LIMIT) {
+            addLoaderItem(true);
+        }
     }
 
     @Override
