@@ -43,9 +43,6 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
         mData = new FeedList<T>();
         if (data != null) {
             mData.addAll(data);
-            if (mData.size() > FeedAdapter.LIMIT) {
-                addLoaderItem(true);
-            }
         }
         mUpdateCallback = updateCallback;
         mLoaderRetrier = getLoaderRetrier();

@@ -410,4 +410,8 @@
     <string name="general_network_reconnect">Trying to reconnect to the network</string>
     <string name="user_is_banned">User is banned</string>
     <string name="profile_empty_name">The name field cannot be empty</string>
+    <string name="general_user_bookmarkadd">User added to favorites</string>
+    <string name="general_wrong_photo_upload">This photo breaks the rules. Please try to upload a different photo</string>
+    <string name="general_input_email">Enter your e-mail</string>
+    <string name="cant_delete_fake_item">This message has not been sent yet, you cannot delete it. Please try again later.</string>
 </resources>
