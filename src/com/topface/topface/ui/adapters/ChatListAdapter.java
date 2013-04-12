@@ -33,7 +33,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         TextView message;
         TextView date;
         ImageViewRemote gift;
-        ImageView mapBackground;
+        ImageViewRemote mapBackground;
         ProgressBar prgsAddress;
         Button likeRequest;
         View userInfo;
@@ -141,7 +141,12 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     public void setUser(FeedUser user) {
         this.user = user;
         if (mHeaderView != null && user != null) {
-            ((ImageViewRemote) mHeaderView.findViewById(R.id.ivFriendAvatar)).setPhoto(user.photo);
+            if (user.photo != null && !user.photo.isEmpty()) {
+                ((ImageViewRemote) mHeaderView.findViewById(R.id.ivFriendAvatar)).setPhoto(user.photo);
+            } else {
+                ((ImageViewRemote) mHeaderView.findViewById(R.id.ivFriendAvatar)).setImageResource(user.sex == Static.BOY ?
+                        R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
+            }
         }
     }
 
@@ -381,7 +386,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case T_FRIEND_MAP:
             case T_USER_MAP:
                 convertView = mInflater.inflate(output ? R.layout.chat_user_map : R.layout.chat_friend_map, null, false);
-                holder.mapBackground = (ImageView) convertView.findViewById(R.id.chat_image);
+                holder.mapBackground = (ImageViewRemote) convertView.findViewById(R.id.chat_image);
                 holder.prgsAddress = (ProgressBar) convertView.findViewById(R.id.chat_text_progress);
                 break;
             case T_FRIEND_REQUEST:
@@ -410,8 +415,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case FeedDialog.MAP:
             case FeedDialog.ADDRESS:
                 holder.message.setText(Static.EMPTY);
-                holder.mapBackground.setBackgroundResource(item.type == FeedDialog.MAP ? R.drawable.chat_item_place :
-                        R.drawable.chat_item_map);
+                holder.mapBackground.setImageResource(R.drawable.chat_item_place);
                 holder.mapBackground.setTag(item);
                 holder.mapBackground.setOnClickListener(mOnClickListener);
                 mAddressesCache.mapAddressDetection(item, holder.message, holder.prgsAddress);

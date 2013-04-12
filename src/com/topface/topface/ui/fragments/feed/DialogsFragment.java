@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import com.topface.topface.App;
@@ -96,5 +97,10 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
                         }
                     }
                 }).exec();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

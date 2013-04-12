@@ -489,9 +489,17 @@
     <style name="chat_image">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:minWidth">130dp</item>
-        <item name="android:minHeight">130dp</item>
         <item name="android:background">@drawable/bg_chat_image</item>
+    </style>
+
+    <style name="chat_image.gift">
+        <item name="android:layout_width">130dp</item>
+        <item name="android:layout_height">130dp</item>
+    </style>
+
+    <style name="chat_image.map">
+        <item name="android:layout_width">146dp</item>
+        <item name="android:layout_height">100dp</item>
     </style>
 
     <style name="chat_gift" parent="Gift">
