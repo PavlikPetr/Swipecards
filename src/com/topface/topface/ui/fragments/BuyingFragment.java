@@ -263,9 +263,12 @@ public class BuyingFragment extends BillingFragment {
 
     @Override
     public void onInAppBillingUnsupported() {
-        for (RelativeLayout btn : purchaseButtons) {
-            btn.setEnabled(false);
-        }
+        //Если платежи не поддерживаются, то скрываем все кнопки
+        getView().findViewById(R.id.likes_title).setVisibility(View.GONE);
+        getView().findViewById(R.id.coins_title).setVisibility(View.GONE);
+        getView().findViewById(R.id.fbCoins).setVisibility(View.GONE);
+        getView().findViewById(R.id.fbLikes).setVisibility(View.GONE);
+
         Toast.makeText(App.getContext(), R.string.buy_play_market_not_available, Toast.LENGTH_SHORT).show();
     }
 
