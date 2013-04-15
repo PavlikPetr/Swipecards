@@ -25,10 +25,11 @@
             android:layout_below="@id/ivUserAvatar"
             android:orientation="vertical"
             android:gravity="center">
+
         <RelativeLayout
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            >
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                >
 
             <TextView
                     android:id="@+id/tvName"
@@ -37,7 +38,10 @@
                     android:textColor="#FFFFFF"
                     android:layout_centerInParent="true"
                     android:layout_marginLeft="20dp"
+                    android:singleLine="true"
+                    android:ellipsize="end"
                     android:textSize="18sp"/>
+
             <ImageView
                     android:id="@+id/ivOnline"
                     android:layout_width="wrap_content"
@@ -56,6 +60,8 @@
                 android:layout_height="wrap_content"
                 android:drawablePadding="5dp"
                 android:textColor="#FFFFFF"
+                android:singleLine="true"
+                android:ellipsize="end"
                 android:textSize="14sp"/>
     </LinearLayout>
 
