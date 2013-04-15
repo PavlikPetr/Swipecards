@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -40,8 +39,8 @@ public class Options extends AbstractData {
     public final static String PAGE_DIALOGS = "DIALOGS";
     public final static String PAGE_START = "START";
 
-    public final static String GENERAL_MAIL_CONST = "true";
-    public final static String GENERAL_APNS_CONST = "false";
+    public final static String GENERAL_MAIL_CONST = "mail";
+    public final static String GENERAL_APNS_CONST = "apns";
     public final static String GENERAL_SEPARATOR = ":";
 
     /**
