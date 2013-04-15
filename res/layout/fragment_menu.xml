@@ -187,8 +187,10 @@
                 <Button
                         android:layout_height="wrap_content"
                         android:layout_width="fill_parent"
+                        style="@style/ButtonBlue"
                         android:background="@drawable/btn_blue_selector"
                         android:text="@string/buy_resources"
+
                         android:textStyle="bold"
                         android:layout_marginTop="8dp"
                         android:layout_marginLeft="8dp"

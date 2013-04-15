@@ -91,6 +91,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private ActionBar mActionBar;
     private LinearLayout mUserActions;
     private RelativeLayout bmBtn;
+    private TextView mBookmarkAction;
 
 
     @Override
@@ -119,8 +120,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mUserActions.findViewById(R.id.acChat).setOnClickListener(this);
         mUserActions.findViewById(R.id.acBlock).setOnClickListener(this);
         bmBtn = (RelativeLayout)mUserActions.findViewById(R.id.acBookmark);
+        mBookmarkAction = (TextView)mUserActions.findViewById(R.id.favTV);
         bmBtn.setOnClickListener(this);
-//        mNavBarController = new NavigationBarController((ViewGroup) root.findViewById(R.id.loNavigationBar));
         if (mProfileType == TYPE_USER_PROFILE) {
             mActionBar.showBackButton(new View.OnClickListener() {
                 @Override
@@ -342,7 +343,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     showForDeleted();
                 } else {
                     if (data.bookmarked) {
-                        bmBtn.setVisibility(View.GONE);
+                        mBookmarkAction.setText(App.getContext().getString(R.string.general_bookmarks_delete));
+                    } else {
+                        mBookmarkAction.setText(App.getContext().getString(R.string.general_bookmarks_add));
                     }
                     mRateController.setOnRateControllerListener(mRateControllerListener);
                     //set info into views for user
@@ -615,13 +618,25 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
                 loader.setVisibility(View.VISIBLE);
                 icon.setVisibility(View.GONE);
-                BookmarkAddRequest request = new BookmarkAddRequest(getActivity(), mUserProfile.uid);
+                ApiRequest request;
+                User profile = (User) mUserProfile;
+                if (profile.bookmarked) {
+                    request = new BookmarkDeleteRequest(getActivity(), mUserProfile.uid);
+                } else {
+                    request = new BookmarkAddRequest(getActivity(), mUserProfile.uid);
+                }
                 request.callback(new SimpleApiHandler(){
                     @Override
                     public void success(ApiResponse response) {
                         super.success(response);
-                        Toast.makeText(App.getContext(), getString(R.string.general_user_bookmarkadd), 1500).show();
-                        v.setVisibility(View.GONE);
+//                        Toast.makeText(App.getContext(), getString(R.string.general_user_bookmarkadd), 1500).show();
+                        if (mUserProfile != null) {
+                            textView.setText(App.getContext().getString(((User) mUserProfile).bookmarked? R.string.general_bookmarks_add : R.string.general_bookmarks_delete));
+                            ((User) mUserProfile).bookmarked = !((User) mUserProfile).bookmarked;
+                        }
+
+                        loader.setVisibility(View.INVISIBLE);
+                        icon.setVisibility(View.VISIBLE);
                     }
 
                     @Override
