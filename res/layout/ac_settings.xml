@@ -13,7 +13,6 @@
     </FrameLayout>
 
     <ScrollView
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_below="@id/loNavigationBar">
@@ -32,9 +31,10 @@
                 android:gravity="center_vertical"
                 android:textSize="14sp"
                 android:paddingLeft="8dp"
+                android:paddingRight="8dp"
                 android:text="@string/settings_edit_profile"
                 android:layout_margin="8dp"
-                    />
+                />
 
             <include
                     android:id="@+id/loNotificationsHeader"

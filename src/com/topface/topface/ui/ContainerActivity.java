@@ -122,6 +122,7 @@ public class ContainerActivity extends BaseFragmentActivity {
                 break;
             case INTENT_SETTINGS_FRAGMENT:
                 fragment = new SettingsFragment();
+                break;
             default:
                 break;
         }

@@ -42,8 +42,8 @@ public class Options extends AbstractData {
     public final static String PAGE_VIEWS = "VIEWS";
     public final static String PAGE_START = "START";
 
-    public final static String GENERAL_MAIL_CONST = "true";
-    public final static String GENERAL_APNS_CONST = "false";
+    public final static String GENERAL_MAIL_CONST = "mail";
+    public final static String GENERAL_APNS_CONST = "apns";
     public final static String GENERAL_SEPARATOR = ":";
 
     /**
