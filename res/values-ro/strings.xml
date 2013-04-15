@@ -411,4 +411,8 @@
     <string name="general_network_reconnect">Incercam sa restabilim legatura</string>
     <string name="user_is_banned">Utilizator blocat</string>
     <string name="profile_empty_name">Numele trebuie sa fie completat</string>
+    <string name="general_user_bookmarkadd">Utilizatorul a fost adaugat in alese</string>
+    <string name="general_wrong_photo_upload">Poza Dmv nu corespunde regulilor. Incercati alta</string>
+    <string name="general_input_email">Introduceti e-mailul Dmv</string>
+    <string name="cant_delete_fake_item">Acest mesaj inca nu a fost primit, Dmv nu puteti sal stergeti. Incercati mai tarziu.</string>
 </resources>
