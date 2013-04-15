@@ -266,7 +266,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     @Override
     public void onBackPressed() {
-        if (mFullscreenController.isFullScreenBannerVisible()) {
+        if (mFullscreenController != null && mFullscreenController.isFullScreenBannerVisible()) {
             mFullscreenController.hideFullscreenBanner((ViewGroup) findViewById(R.id.loBannerContainer));
         } else if (mFragmentSwitcher != null) {
             if (mFragmentSwitcher.getAnimationState() == FragmentSwitchController.EXPAND) {
