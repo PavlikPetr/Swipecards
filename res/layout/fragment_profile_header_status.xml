@@ -28,7 +28,7 @@
             android:id="@+id/btnEdit"
             android:layout_width="26dp"
             android:layout_height="26dp"
-            android:src="@drawable/navigation_edit_selector"
+            android:src="@drawable/edit_icon_pen_selector"
             android:background="@android:color/transparent"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"

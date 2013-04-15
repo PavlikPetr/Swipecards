@@ -37,6 +37,7 @@ import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.IListLoader;
+import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.ui.views.SwapControl;
 import com.topface.topface.utils.*;
@@ -341,7 +342,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         dr.callback(new DataApiHandler() {
             @Override
             protected void success(Object data, ApiResponse response) {
-                mAdapter.removeItem(mAdapter.getPosition(position));
+                int invertedPosition = mAdapter.getPosition(position);
+                if (mAdapter.getFirstItemId().equals(mAdapter.getData().get(invertedPosition).id)) {
+                    LocalBroadcastManager.getInstance(getActivity())
+                            .sendBroadcast(new Intent(DialogsFragment.UPDATE_DIALOGS));
+                }
+                mAdapter.removeItem(invertedPosition);
             }
 
             @Override
