@@ -9,7 +9,7 @@ import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.WindowManager;
-import com.topface.topface.ReAuthReceiver;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
@@ -112,7 +112,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         };
 
         try {
-            registerReceiver(mReauthReceiver, new IntentFilter(ReAuthReceiver.REAUTH_INTENT));
+            registerReceiver(mReauthReceiver, new IntentFilter(AuthFragment.REAUTH_INTENT));
         } catch (Exception ex) {
             Debug.error(ex);
         }
@@ -194,7 +194,9 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     }
 
     protected boolean isNeedBroughtToFront(Intent intent) {
-        return intent != null && (intent.getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0;
+        return intent != null &&
+                !intent.getBooleanExtra(GCMUtils.GCM_INTENT, false) &&
+                (intent.getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0;
     }
 
 

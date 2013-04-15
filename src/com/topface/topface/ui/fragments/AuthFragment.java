@@ -41,6 +41,7 @@ import java.util.TimerTask;
 
 public class AuthFragment extends BaseFragment {
 
+    public static final String REAUTH_INTENT = "com.topface.topface.action.AUTH";
     private RelativeLayout mWrongPasswordAlertView;
     private TextView mWrongDataTextView;
     private TextView mCreateAccountButton;
