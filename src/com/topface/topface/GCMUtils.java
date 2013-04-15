@@ -56,6 +56,7 @@ public class GCMUtils {
     private static boolean showLikes = true;
     private static boolean showSympathy = true;
     private static boolean showVisitors = true;
+    public static final String GCM_INTENT = "GCM";
 
     public static void init(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
@@ -116,7 +117,10 @@ public class GCMUtils {
                 Intent intent = getIntentByType(context, type, user);
 
                 if (intent != null) {
-                    intent.putExtra("C2DM", true);
+                    intent.putExtra(GCMUtils.GCM_INTENT, true);
+                    if (!TextUtils.equals(intent.getComponent().getClassName(), ContainerActivity.class.getName())) {
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    }
                     final TopfaceNotificationManager notificationManager = TopfaceNotificationManager.getInstance(context);
                     if (!Ssid.isLoaded()) {
                         if (type == GCM_TYPE_UPDATE || type == GCM_TYPE_NOTIFICATION) {

@@ -9,13 +9,17 @@ import android.content.SharedPreferences;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
-import com.topface.topface.*;
+import com.topface.topface.App;
+import com.topface.topface.R;
+import com.topface.topface.RetryDialog;
+import com.topface.topface.Ssid;
 import com.topface.topface.data.Auth;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.IApiRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BanActivity;
+import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -404,7 +408,7 @@ public class ConnectionManager {
 
     private void sendBroadcastReauth(Context context) {
         Intent intent = new Intent();
-        intent.setAction(ReAuthReceiver.REAUTH_INTENT);
+        intent.setAction(AuthFragment.REAUTH_INTENT);
         context.sendBroadcast(intent);
     }
 
