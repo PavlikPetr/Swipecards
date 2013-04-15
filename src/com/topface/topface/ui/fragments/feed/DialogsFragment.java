@@ -1,8 +1,15 @@
 package com.topface.topface.ui.fragments.feed;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
@@ -21,8 +28,30 @@ import org.json.JSONObject;
 
 public class DialogsFragment extends FeedFragment<FeedDialog> {
 
+    public static final String UPDATE_DIALOGS = "update_dialogs";
+    private BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateData(false, true);
+        }
+    };
+
+
     public DialogsFragment() {
         super();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
+        IntentFilter filter = new IntentFilter(UPDATE_DIALOGS);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, filter);
+        return super.onCreateView(inflater, container, saved);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateReceiver);
     }
 
     @Override

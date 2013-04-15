@@ -36,6 +36,7 @@ public class FloatBlock {
         if (mFloatTypeMap.containsKey(currentFragment)) {
             String floatType = mFloatTypeMap.get(currentFragment);
             if (floatType.equals(Options.FLOAT_TYPE_BANNER)) {
+                if (!CacheProfile.show_ad) return;
                 mBanner = new BannerBlock(mFragment, mLayout);
             } else if (floatType.equals(Options.FLOAT_TYPE_LEADERS)) {
                 mLeaders = new LeadersBlock(mFragment, mLayout);

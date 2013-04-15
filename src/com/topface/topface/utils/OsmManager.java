@@ -43,29 +43,22 @@ public class OsmManager {
             JSONObject responseJSON = new JSONObject(HttpUtils.httpGetRequest(getAddressRequest(lat, lon)));
             //result = responseJSON.getString(OSM_DISPLAY_NAME);
             JSONObject details = responseJSON.getJSONObject("address");
-            resultSB.append(details.getString("road"));
+            resultSB.append(details.optString("road"));
 
-            String str = details.getString("house_number");
+            String str = details.optString("house_number");
             if (str.length() > 0) {
                 resultSB.append(", ").append(str);
             }
 
-            str = details.getString("state");
+            str = details.optString("state");
             if (str.length() > 0) {
                 resultSB.append(", ").append(str);
             }
 
-            str = details.getString("country");
+            str = details.optString("country");
             if (str.length() > 0) {
                 resultSB.append(", ").append(str);
             }
-
-            // DEBUG
-//			Iterator iter = details.keys(); 
-//			while (iter.hasNext()) {
-//				String val = (String)iter.next();
-//				Debug.log("OSM", val+"::"+details.getString(val));
-//			}
 
         } catch (Exception e) {
             Debug.error(e);

@@ -489,11 +489,15 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     public String getFirstItemId() {
         FeedList<History> data = getData();
         for (History item : data) {
-            if (!item.isLoaderOrRetrier() && item.id != null) {
+            if (isReal(item)) {
                 return item.id;
             }
         }
         return null;
+    }
+
+    private boolean isReal(History item) {
+        return !item.isLoaderOrRetrier() && item.id != null && !item.id.equals("0");
     }
 
     public String getLastItemId() {
@@ -502,7 +506,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         for (int i = data.size() - 1; i >= 0; i--) {
             History item = data.get(i);
             if(item != null) {
-                if (!item.isLoaderOrRetrier() && item.id != null) {
+                if (isReal(item)) {
                     return item.id;
                 }
             }
