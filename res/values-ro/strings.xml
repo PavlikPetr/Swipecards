@@ -103,7 +103,6 @@
     <string name="edit_bg_photo">Poza de fon</string>
     <string name="edit_album">Album</string>
     <string name="edit_profile_photo">Schimba poza</string>
-    <string name="edit_album_photos">poze</string>
     <string name="edit_interests">interese</string>
     <string name="edit_selected">A fost aleasa</string>
     <string name="edit_name">Nume</string>
@@ -293,8 +292,8 @@
     <string name="general_buying">Cumpara simpatii si monede</string>
     <string name="general_block">Blocare</string>
     <string name="general_buying_disabled">La momentul dat cumpararea e imposibila</string>
-    <string name="ban_flood_detected">Dmv pre des trimiteti cereri la server. Pentru a utiliza in continuare aplicarea asteptati un pic.</string>
-    <string name="general_maintenance">Pe server se petrec lucari tehnice si cererea Dmv nu poate fi efectuata.</string>
+    <string name="ban_flood_detected">Dmv foarte des solicitati serverul. Pentru folosirea in continuarie a aplicatiei asteptati.</string>
+    <string name="general_maintenance">Pe server se petrec lucrari tehnice si cererea Dmv nu poate fi indeplinita. Incercati mai tarziu.</string>
     <string name="virus_chat_likes_request_title">Fa cadou simpatii la prietenii tai</string>
     <string name="virus_chat_btn">Primeste simpatii</string>
     <string name="virus_request_error">Expediere de simpatii esuata catre prietenii Dmv</string>
@@ -309,8 +308,8 @@
     <string name="popup_version_message">E timpul de actualizare a versiunii!</string>
     <string name="popup_version_update">Actualizare</string>
     <string name="popup_version_cancel">Aminteste mai tarziu</string>
-    <string name="general_version_not_supported">Versiunea aplicarii Dmv nu mai este actuala. Va rugam sa actualizati aplicarea</string>
-    <string name="leaders_select_photo_info">Alegeti cea mai tare poza! Poze cu rating mic nu se pot alege</string>
+    <string name="general_version_not_supported">Aplicarea Dmv nu mai este sustinuta. Va rugam sa actualizati aplicarea.</string>
+    <string name="leaders_select_photo_info">Alegeti cea mai tare poza!</string>
     <string name="default_price_format">Total: %.2f USD</string>
     <string name="dating_online_only">%s, numai online</string>
     <string name="leaders_pick_condition">Dmv nu puteti alege fotografie cu rating mai jos de %d%%</string>

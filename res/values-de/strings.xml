@@ -103,7 +103,6 @@
     <string name="edit_bg_photo">Hintergrund-Foto</string>
     <string name="edit_album">Album</string>
     <string name="edit_profile_photo">Foto ändern</string>
-    <string name="edit_album_photos">Fotos</string>
     <string name="edit_interests">Interessen</string>
     <string name="edit_selected">Ist ausgewählt</string>
     <string name="edit_name">Name</string>
@@ -284,8 +283,7 @@
     <string name="novice_energy_to_sympathies_title">Wir haben die Kraft durch Sympathien ersetzt</string>
     <string name="novice_energy_to_sympathies_message_boys">Falls Sie Ihre Kraft ergänzen, werden Sie\nangegebene Anzahl der Sympathien\nvon Männer erhalten, denen Sie genau gefallen</string>
     <string name="novice_energy_to_sympathies_message_girls">Falls Sie Ihre Kraft ergänzen, werden Sie\nangegebene Anzahl der Sympathien\nvon Männer erhalten, denen Sie genau gefallen</string>
-    <string name="novice_buy_sympathies">Falls Sie garantiert\nSympathien erhalten möchten,\nkaufen Sie sie gearde
- jetzt!</string>
+    <string name="novice_buy_sympathies">Falls Sie garantiert\nSympathien erhalten möchten,\nkaufen Sie sie gearde jetzt!</string>
     <string name="general_reconnect_social">Keine Internetverbindung. Versuchen Sie später.</string>
     <string name="general_buying">Sympathie und Coins kaufen</string>
     <string name="general_block">Blokieren</string>
