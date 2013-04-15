@@ -30,7 +30,6 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
-import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.profile.*;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.ActionBar;
@@ -54,6 +53,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     public static final String DEFAULT_NON_ACTIVATED = "#FFFFFF";
     public static final String INTENT_UID = "intent_profile_uid";
     public static final String INTENT_TYPE = "intent_profile_type";
+    public static final String INTENT_ITEM_ID = "intent_profile_item_id";
 
     ArrayList<String> BODY_PAGES_TITLES = new ArrayList<String>();
     ArrayList<String> BODY_PAGES_CLASS_NAMES = new ArrayList<String>();
@@ -106,9 +106,10 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mLoaderView = root.findViewById(R.id.llvProfileLoading);
         mRateController = new RateController(getActivity());
 
-        if (getArguments().getInt(ARG_FEED_ITEM_ID, -1) != -1) {
+        String itemId = getArguments().getString(ARG_FEED_ITEM_ID);
+        if (itemId != null) {
             Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ);
-            intent.putExtra(ChatFragment.INTENT_ITEM_ID, getArguments().getInt(ARG_FEED_ITEM_ID, -1));
+            intent.putExtra(ChatFragment.INTENT_ITEM_ID, itemId);
             LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
         }
 
@@ -119,8 +120,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mUserActions.findViewById(R.id.acDelight).setOnClickListener(this);
         mUserActions.findViewById(R.id.acChat).setOnClickListener(this);
         mUserActions.findViewById(R.id.acBlock).setOnClickListener(this);
-        bmBtn = (RelativeLayout)mUserActions.findViewById(R.id.acBookmark);
-        mBookmarkAction = (TextView)mUserActions.findViewById(R.id.favTV);
+        bmBtn = (RelativeLayout) mUserActions.findViewById(R.id.acBookmark);
+        mBookmarkAction = (TextView) mUserActions.findViewById(R.id.favTV);
         bmBtn.setOnClickListener(this);
         if (mProfileType == TYPE_USER_PROFILE) {
             mActionBar.showBackButton(new View.OnClickListener() {
@@ -359,7 +360,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
                     if (mProfileType == TYPE_USER_PROFILE) {
                         String status = mUserProfile.getStatus();
-                        if (mUserProfile == null || status == null || TextUtils.isEmpty(status)) {
+                        if (status == null || TextUtils.isEmpty(status)) {
                             mHeaderPagerAdapter.removeItem(HeaderStatusFragment.class.getName());
                         }
                     }
@@ -587,7 +588,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                             @Override
                             public void success(ApiResponse response) {
                                 super.success(response);
-                                if (v != null) {
+                                if (isAdded()) {
                                     v.setEnabled(false);
                                     loader.setVisibility(View.INVISIBLE);
                                     icon.setVisibility(View.VISIBLE);
@@ -598,7 +599,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                             @Override
                             public void fail(int codeError, ApiResponse response) {
                                 super.fail(codeError, response);
-                                if (v != null) {
+                                if (isAdded()) {
                                     loader.setVisibility(View.INVISIBLE);
                                     icon.setVisibility(View.VISIBLE);
                                 }
@@ -625,13 +626,13 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 } else {
                     request = new BookmarkAddRequest(getActivity(), mUserProfile.uid);
                 }
-                request.callback(new SimpleApiHandler(){
+                request.callback(new SimpleApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
                         super.success(response);
 //                        Toast.makeText(App.getContext(), getString(R.string.general_user_bookmarkadd), 1500).show();
                         if (mUserProfile != null) {
-                            textView.setText(App.getContext().getString(((User) mUserProfile).bookmarked? R.string.general_bookmarks_add : R.string.general_bookmarks_delete));
+                            textView.setText(App.getContext().getString(((User) mUserProfile).bookmarked ? R.string.general_bookmarks_add : R.string.general_bookmarks_delete));
                             ((User) mUserProfile).bookmarked = !((User) mUserProfile).bookmarked;
                         }
 
@@ -642,7 +643,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     @Override
                     public void always(ApiResponse response) {
                         super.always(response);
-                        if (v != null) {
+                        if (isAdded()) {
                             loader.setVisibility(View.INVISIBLE);
                             icon.setVisibility(View.VISIBLE);
                         }
@@ -697,13 +698,13 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     }
 
     //Этот метод добавлен для того, чтобы можно было отметить элемент ленты прочитанным
-    public static ProfileFragment newInstance(int id, int type, int itemId) {
+    public static ProfileFragment newInstance(String itemId, int id, int type) {
         ProfileFragment fragment = new ProfileFragment();
 
         Bundle args = new Bundle();
         args.putInt(ARG_TAG_PROFILE_ID, id);
         args.putInt(ARG_TAG_PROFILE_TYPE, type);
-        args.putInt(ARG_FEED_ITEM_ID, itemId);
+        args.putString(ARG_FEED_ITEM_ID, itemId);
         fragment.setArguments(args);
 
         return fragment;
