@@ -2,6 +2,7 @@ package com.topface.topface.requests.blacklist;
 
 
 import android.content.Context;
+import android.text.TextUtils;
 import com.topface.topface.data.BlackListItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.AbstractThreadTest;
@@ -14,7 +15,7 @@ import com.topface.topface.utils.Debug;
 import java.util.ArrayList;
 
 public class BlackListDeleteTest extends AbstractThreadTest {
-    private int mUserIdForDelete;
+    private String mUserIdForDelete;
 
     public void testBlackListDeleteRequestExec() throws Throwable {
         runAsyncTest(new Runnable() {
@@ -28,7 +29,7 @@ public class BlackListDeleteTest extends AbstractThreadTest {
 
                         for (BlackListItem item : list.items) {
                             //Стараемся сперва удалить тестового юзера
-                            if (item.id == BlackListAddTest.TEST_USER_ID) {
+                            if (TextUtils.equals(item.id, BlackListAddTest.TEST_USER_ID)) {
                                 mUserIdForDelete = item.id;
                             }
                         }
@@ -45,12 +46,12 @@ public class BlackListDeleteTest extends AbstractThreadTest {
         }, "testBlackListDeleteRequestExec");
     }
 
-    private void sendDeleteRequest(final int userId) throws Throwable {
+    private void sendDeleteRequest(final String userId) throws Throwable {
         runTestOnUiThread(new Runnable() {
             @Override
             public void run() {
                 ArrayList<Integer> users = new ArrayList<Integer>();
-                users.add(userId);
+                users.add(Integer.parseInt(userId));
                 new BlackListDeleteRequest(users, getInstrumentation().getContext())
                         .callback(new ApiHandler() {
                             @Override
@@ -88,7 +89,7 @@ public class BlackListDeleteTest extends AbstractThreadTest {
 
                         for (BlackListItem item : list.items) {
                             //Ищем удаленный элемент
-                            if (item.id == mUserIdForDelete) {
+                            if (item.id.equals(mUserIdForDelete)) {
                                 //Если нашли, значит произошла ошибка удаления
                                 assertTrue("BlackListDelete can't delete user " + mUserIdForDelete, false);
 

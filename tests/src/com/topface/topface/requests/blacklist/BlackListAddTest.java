@@ -1,5 +1,6 @@
 package com.topface.topface.requests.blacklist;
 
+import android.text.TextUtils;
 import com.topface.topface.data.BlackListItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.AbstractThreadTest;
@@ -14,13 +15,13 @@ import com.topface.topface.utils.Debug;
  */
 public class BlackListAddTest extends AbstractThreadTest {
 
-    public static final int TEST_USER_ID = 5267129;
+    public static final String TEST_USER_ID = "5267129";
 
     public void testBlackListAddRequestExec() throws Throwable {
         runAsyncTest(new Runnable() {
             @Override
             public void run() {
-                new BlackListAddRequest(TEST_USER_ID, getInstrumentation().getContext())
+                new BlackListAddRequest(Integer.parseInt(TEST_USER_ID), getInstrumentation().getContext())
                         .callback(new ApiHandler() {
                             @Override
                             public void success(ApiResponse response) {
@@ -59,12 +60,12 @@ public class BlackListAddTest extends AbstractThreadTest {
                         boolean userIsFound = false;
                         for (BlackListItem item : list.items) {
                             assertNotNull("BlackList item user is null", item.user);
-                            assertTrue("BlackList item id is wrong", item.id > 0);
-                            if (item.id == TEST_USER_ID) {
+                            assertTrue("BlackList item id is wrong", !TextUtils.isEmpty(item.id));
+                            if (TextUtils.equals(item.id, TEST_USER_ID)) {
                                 userIsFound = true;
                             }
                         }
-                        assertTrue(String.format("BlackList user %d is not found", TEST_USER_ID), userIsFound);
+                        assertTrue(String.format("BlackList user %s is not found", TEST_USER_ID), userIsFound);
                         stopTest("checkUserIsAdded");
                     }
 
