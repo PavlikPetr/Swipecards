@@ -31,7 +31,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     private BroadcastReceiver mProfileLoadReceiver;
 
     private BroadcastReceiver updateCountersReceiver;
-    public static final int F_UNKNOWN = -1;
     public static final int F_VIP_PROFILE = 1000;
     public static final int F_PROFILE = 1001;
     public static final int F_DATING = 1002;
@@ -48,7 +47,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        (new Thread(){
+        (new Thread() {
             @Override
             public void run() {
                 super.run();
@@ -217,7 +216,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     protected void onLoadProfile() {
-        Debug.log("onLoadProfile");
+        Debug.log(getClass().getSimpleName() + ": onLoadProfile");
     }
 
     protected void inBackroundThread() {

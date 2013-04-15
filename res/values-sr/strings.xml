@@ -103,7 +103,6 @@
     <string name="edit_bg_photo">Fotografija sa pozadinom</string>
     <string name="edit_album">Album</string>
     <string name="edit_profile_photo">Zameniti foto</string>
-    <string name="edit_album_photos">Fotografija</string>
     <string name="edit_interests">interesa</string>
     <string name="edit_selected">Odabrana</string>
     <string name="edit_name">Ime</string>
@@ -291,7 +290,7 @@
     <string name="general_block">Blokirati</string>
     <string name="general_buying_disabled">U ovom momentu kupovina nije moguća</string>
     <string name="ban_flood_detected">Veoma često šaljete upite serveru. Za dalje korišćenje priloga sačekajte.</string>
-    <string name="general_maintenance">Na serveru se obavljaju tehnički radovi i vaš zahtev se ne može ispuniti. Pokušajte ponoviti kasnije</string>
+    <string name="general_maintenance">Na serveru se obavljaju tehnički poslovi i vaš zahtev ne može da bude ispunjen. Molimo, pokušajte kasnije.</string>
     <string name="virus_chat_likes_request_title">Pokloniti simpatije vašim prijateljima</string>
     <string name="virus_chat_btn">Dobiti simpatije</string>
     <string name="virus_request_error">Nije uspeo pokušaj slanja simpatija vašim prijateljima</string>

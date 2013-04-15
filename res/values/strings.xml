@@ -103,7 +103,6 @@
     <string name="edit_bg_photo">Background image</string>
     <string name="edit_album">Album</string>
     <string name="edit_profile_photo">Change photo</string>
-    <string name="edit_album_photos">photos</string>
     <string name="edit_interests">Interests</string>
     <string name="edit_selected">Selected</string>
     <string name="edit_name">Name</string>
@@ -306,7 +305,7 @@
     <string name="popup_version_update">Update</string>
     <string name="popup_version_cancel">Remind me later</string>
     <string name="general_version_not_supported">Your version of the application is outdated and not supported. Please update the application.</string>
-    <string name="leaders_select_photo_info">Choose the most spectacular photo! You can not choose a photo with a low rating.</string>
+    <string name="leaders_select_photo_info">Select the most spectacular photo! Photos with low rating cannot be selected</string>
     <string name="default_price_format">Total: %.2f USD</string>
     <string name="dating_online_only">%s, only online</string>
     <string name="leaders_pick_condition">You cannot select a photo with a rating lower than %d%%:</string>

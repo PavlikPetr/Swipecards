@@ -103,7 +103,6 @@
     <string name="edit_bg_photo">Fotka na pozadí</string>
     <string name="edit_album">Album</string>
     <string name="edit_profile_photo">Změnit fotku</string>
-    <string name="edit_album_photos">fotek</string>
     <string name="edit_interests">zájmů</string>
     <string name="edit_selected">Zvolená</string>
     <string name="edit_name">Jméno</string>
@@ -309,8 +308,8 @@
     <string name="popup_version_message">Je na čase aktualizovat svou verzi!</string>
     <string name="popup_version_update">Aktualizovat</string>
     <string name="popup_version_cancel">Připomenout později</string>
-    <string name="general_version_not_supported">Vaše verze aplikace je zastaralá a již není podporována. Prosím, aktualizujte aplikaci</string>
-    <string name="leaders_select_photo_info">Vyberte si tu nejatraktivnější fotku! Nelze zvolit fotografii s nízkým hodnocením</string>
+    <string name="general_version_not_supported">Vaše verze aplikace je zastaralá a již není podporována. Prosím aktualizujte aplikaci</string>
+    <string name="leaders_select_photo_info">Vyberte si tu nejzajimavejší fotku! Fotografie s nízkým hodnocením vybrat nelze</string>
     <string name="default_price_format">Celkem: %.2f USD</string>
     <string name="dating_online_only">%s, pouze online</string>
     <string name="leaders_pick_condition">Nemůžete zvolit fotku s hodnocením nižším než %d%%:</string>
@@ -415,4 +414,8 @@
     <string name="general_network_reconnect">Snažíme se obnovit připojení k síti</string>
     <string name="user_is_banned">Uživatel je zabanován</string>
     <string name="profile_empty_name">Jméno: Toto pole nemůže být prázdné</string>
+    <string name="general_user_bookmarkadd">Uživatel byl přidán k oblíbeným</string>
+    <string name="general_wrong_photo_upload">Vaše fotka neodpovídá pravidlům. Zkuste sem dat jinou fotku.</string>
+    <string name="general_input_email">Zadejte Vaš e-mail</string>
+    <string name="cant_delete_fake_item">Tato zpráva doposud nebylа doručena a nemůžete ji odstranit. Zkuste to později.</string>
 </resources>

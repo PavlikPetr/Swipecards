@@ -9,10 +9,10 @@
         >
 
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/acDelight"
-
+            android:background= "@drawable/actions_menu_delimiter"
                 >
             <ImageView
                 android:id="@+id/delIcon"
@@ -43,10 +43,10 @@
         </RelativeLayout>
 
     <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/acSympathy"
-
+            android:background= "@drawable/actions_menu_delimiter"
             >
         <ImageView
                 android:id="@+id/likeIcon"
@@ -77,10 +77,10 @@
     </RelativeLayout>
 
     <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/acChat"
-
+            android:background= "@drawable/actions_menu_delimiter"
             >
         <ImageView
                 android:id="@+id/chatIcon"
@@ -111,10 +111,10 @@
     </RelativeLayout>
 
     <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/acGift"
-
+            android:background= "@drawable/actions_menu_delimiter"
             >
         <ImageView
                 android:id="@+id/giftIcon"
@@ -145,10 +145,10 @@
     </RelativeLayout>
 
     <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/acBlock"
-
+            android:background= "@drawable/actions_menu_delimiter"
             >
         <ImageView
                 android:id="@+id/blockIcon"
@@ -180,8 +180,9 @@
 
     <RelativeLayout
             android:id="@+id/acBookmark"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:background= "@drawable/actions_menu_delimiter"
             >
         <ImageView
                 android:id="@+id/favIcon"

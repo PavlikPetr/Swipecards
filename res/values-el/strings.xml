@@ -103,7 +103,6 @@
     <string name="edit_bg_photo">Φωτογραφία για το παρασκήνιο</string>
     <string name="edit_album">\'Αλμπουμ</string>
     <string name="edit_profile_photo">Αλλαγή της φωτογραφίας</string>
-    <string name="edit_album_photos">της φωτογραφίες</string>
     <string name="edit_interests">ενδιαφέροντα</string>
     <string name="edit_selected">Επιλεγμένη</string>
     <string name="edit_name">\'Ονομα</string>
@@ -282,7 +281,7 @@
     <string name="buying_sympathies">Αγορά τις συμπάθειες</string>
     <string name="novice_sympathies_bonus">Παίρνετε %1$d συμπάθειες για\nδωρεάν!  Αυτό σημαίνει ότι, εσέις\n θα αρέσετε ακριβώς για %2$d τους ανθρώπους,\nοποίοι θα εκφράζουν την συμπάθεια για σας</string>
     <string name="novice_energy_to_sympathies_title">Έχουμε ήδη αντικαταστήσει την ενέργεια για συμπάθειες</string>
-    <string name="novice_energy_to_sympathies_message_boys">Ξαναγεμίστε του απόθεμα τις συμπάθειες, και θα λάβετε \nσυγκεκριμένο ποσό τις συμπάθειες\nαπό τους άνδρες, για ποιόν αρέσετε</string>
+    <string name="novice_energy_to_sympathies_message_boys">Ξαναγεμίστε του απόθεμα τις συμπάθειες, και θα λάβετε \nσυγκεκριμένο ποσό τις συμπάθειες\nαπό τους άνδρες, για ποιον αρέσετε</string>
     <string name="novice_energy_to_sympathies_message_girls">Ξαναγεμίστε του απόθεμα τις συμπάθειες, και θα λάβετε \nσυγκεκριμένο ποσό τις συμπάθειες\nαπό τις κοπέλες, για την οποία αρέσετε</string>
     <string name="novice_buy_sympathies">Αν θέλετε να είστε εγγυημένος για\nνα λαμβάνετε συμπάθειες,\nνα τις αγοράσετε τώρα!</string>
     <string name="general_reconnect_social">Δεν είναι δυνατή η σύνδεση με κοινωνικά δίκτυα. Παρακαλώ δοκιμάστε ξανά αργότερα.</string>
@@ -408,4 +407,8 @@
     <string name="buy_resources">Ξαναγέμισμα</string>
     <string name="general_network_reconnect">Προσπάθεια επανασύνδεσης με το δίκτυο</string>
     <string name="user_is_banned">Ο χρήστης έχει απαγορευτεί</string>
+    <string name="profile_empty_name">Το πεδίο -\" \'Ονομα\" είναι υποχρεωτικό</string>
+    <string name="general_user_bookmarkadd">Ο χρήστης προστέθηκε στις αγαπημένες σας</string>
+    <string name="general_wrong_photo_upload">Η φωτογραφία σας δεν ταιριάζει πλήρως τους κανόνες εφαρμογής. Προσπαθήστε να κάνετε μια άλλη</string>
+    <string name="general_input_email">Εισάγετε το e-mail</string>
 </resources>
