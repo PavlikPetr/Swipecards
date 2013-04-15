@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -104,13 +105,14 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mActionBar = getActionBar(root);
 
         mLoaderView = root.findViewById(R.id.llvProfileLoading);
-        mRateController = new RateController(getActivity());
+        final FragmentActivity activity = getActivity();
+        mRateController = new RateController(activity);
 
         String itemId = getArguments().getString(ARG_FEED_ITEM_ID);
         if (itemId != null) {
             Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ);
             intent.putExtra(ChatFragment.INTENT_ITEM_ID, itemId);
-            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+            LocalBroadcastManager.getInstance(activity).sendBroadcast(intent);
         }
 
         restoreState();
@@ -127,13 +129,13 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             mActionBar.showBackButton(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (getActivity() != null) {
-                        getActivity().onBackPressed();
+                    if (activity != null) {
+                        activity.onBackPressed();
                     }
                 }
             });
-        } else {
-            mActionBar.showHomeButton((NavigationActivity) getActivity());
+        } else if (activity instanceof NavigationActivity) {
+            mActionBar.showHomeButton((NavigationActivity) activity);
         }
 
         mTitle = (TextView) root.findViewById(R.id.tvNavigationTitle);
@@ -143,7 +145,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         initBodyPages(root);
 
         mLockScreen = (RelativeLayout) root.findViewById(R.id.lockScreen);
-        mRetryBtn = new RetryView(getActivity().getApplicationContext());
+        mRetryBtn = new RetryView(activity.getApplicationContext());
         mRetryBtn.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -620,12 +622,13 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 loader.setVisibility(View.VISIBLE);
                 icon.setVisibility(View.GONE);
                 ApiRequest request;
-                User profile = (User) mUserProfile;
-                if (profile.bookmarked) {
+
+                if (mUserProfile instanceof User && ((User) mUserProfile).bookmarked) {
                     request = new BookmarkDeleteRequest(getActivity(), mUserProfile.uid);
                 } else {
                     request = new BookmarkAddRequest(getActivity(), mUserProfile.uid);
                 }
+
                 request.callback(new SimpleApiHandler() {
                     @Override
                     public void success(ApiResponse response) {

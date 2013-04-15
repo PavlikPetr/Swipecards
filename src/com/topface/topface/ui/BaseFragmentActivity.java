@@ -208,7 +208,11 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         if (needOpenDialog) {
             TakePhotoDialog newFragment = TakePhotoDialog.newInstance();
             newFragment.setOnTakePhotoListener(listener);
-            newFragment.show(getSupportFragmentManager(), TakePhotoDialog.TAG);
+            try {
+                newFragment.show(getSupportFragmentManager(), TakePhotoDialog.TAG);
+            } catch (Exception e) {
+                Debug.error(e);
+            }
             needOpenDialog = false;
         }
     }
