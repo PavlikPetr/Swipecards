@@ -58,10 +58,12 @@ public class Profile extends AbstractDataWithPhotos {
     public boolean email_confirmed;
 
     public int totalPhotos;
-
+    // Идентификатор заднего фона в профиле
     public int background;
-
+    // Платяший пользователь или нет
     public boolean paid;
+    // Показывать рекламу или нет
+    public boolean show_ad;
     // private static final String profileFileName = "profile.out";
     // private static final long serialVersionUID = 2748391675222256671L;
 
@@ -94,6 +96,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.background = resp.optInt("background", ProfileBackgrounds.DEFAULT_BACKGROUND_ID);
             profile.totalPhotos = resp.optInt("photos_count");
             profile.paid = resp.optBoolean("paid");
+            profile.show_ad = resp.optBoolean("show_ad",true);
 
             parseGifts(profile, resp);
             parseNotifications(profile, resp);

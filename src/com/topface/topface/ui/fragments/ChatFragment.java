@@ -510,19 +510,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 break;
             case R.id.btnNavigationProfileBar:
             case R.id.btnNavigationBarAvatar:
-                //TODO костыль для навигации
                 if (mProfileInvoke) {
-                    getActivity().setResult(Activity.RESULT_CANCELED);
+                    getActivity().finish();
                 } else {
                     if (mUserId > 0) {
-                        Intent intent = getActivity().getIntent();
-                        intent.putExtra(INTENT_USER_ID, mUserId);
-                        getActivity().setResult(Activity.RESULT_OK, intent);
+                        startActivity(ContainerActivity.getProfileIntent(mUserId, getActivity()));
                     }
                 }
-                getActivity().finish();
-                //TODO костыль для навигации
-                getActivity().setResult(Activity.RESULT_OK);
                 break;
             case R.id.btnBuyVip:
                 Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);

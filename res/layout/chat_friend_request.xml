@@ -16,11 +16,9 @@
             android:id="@+id/user_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="4dp"
             android:background="@drawable/bg_message_friend"
             android:orientation="vertical"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="8dp">
+            android:layout_alignParentLeft="true">
 
         <!-- message -->
         <TextView
