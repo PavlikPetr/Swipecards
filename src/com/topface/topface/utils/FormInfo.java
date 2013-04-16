@@ -250,32 +250,6 @@ public class FormInfo {
         return result;
     }
 
-    // =============================== Job ===============================
-//    public String getJob(int id) {
-//        switch (id) {
-//            case 2:
-//                return mResources.getString(mSex == Static.GIRL ? R.string.profile_form_job_female_2 : R.string.profile_form_job_male_2);
-//            case 3:
-//                return mResources.getString(mSex == Static.GIRL ? R.string.profile_form_job_female_3 : R.string.profile_form_job_male_3);
-//            case 4:
-//                return mResources.getString(mSex == Static.GIRL ? R.string.profile_form_job_female_4 : R.string.profile_form_job_male_4);
-//            case 5:
-//                return mResources.getString(mSex == Static.GIRL ? R.string.profile_form_job_female_5 : R.string.profile_form_job_male_5);
-//            case 6:
-//                return mResources.getString(mSex == Static.GIRL ? R.string.profile_form_job_female_6 : R.string.profile_form_job_male_6);
-//            case 7:
-//                return mResources.getString(mSex == Static.GIRL ? R.string.profile_form_job_female_7 : R.string.profile_form_job_male_7);
-//            case 8:
-//                return mResources.getString(mSex == Static.GIRL ? R.string.profile_form_job_female_8 : R.string.profile_form_job_male_8);
-//            case 9:
-//                return mResources.getString(mSex == Static.GIRL ? R.string.profile_form_job_female_9 : R.string.profile_form_job_male_9);
-//            case 10:
-//                return mResources.getString(mSex == Static.GIRL ? R.string.profile_form_job_female_10 : R.string.profile_form_job_male_10);
-//            default:
-//                return null;//mResources.getString(R.string.profile_form_empty);
-//        }
-//    }
-
     // =============================== Form Titles ===============================
     public String getFormTitle(int arrayResourceId) {
         String result = Static.EMPTY;
