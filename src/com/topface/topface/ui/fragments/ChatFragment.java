@@ -272,7 +272,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
         });
         mListView.setClickable(true);
-        mAdapter.addHeader(mListView.getRefreshableView());
+        if (mAdapter.isEmpty()) {
+            mAdapter.addHeader(mListView.getRefreshableView());
+        }
         mListView.setAdapter(mAdapter);
         mListView.setOnScrollListener(mAdapter);
         mListView.getRefreshableView().addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.item_empty_footer, null));
