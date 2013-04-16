@@ -135,7 +135,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         manager.showOldVersionPopup(CacheProfile.getOptions().max_version);
         manager.showRatePopup();
         actionsAfterRegistration();
-        requestFullscreen();
+//        mFullscreenController.requestFullscreen();
         if (CacheProfile.show_ad) {
             mFullscreenController = new FullscreenController(this);
             mFullscreenController.requestFullscreen();
