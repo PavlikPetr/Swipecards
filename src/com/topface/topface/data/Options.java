@@ -37,6 +37,9 @@ public class Options extends AbstractData {
     public final static String PAGE_TOP = "TOP";
     public final static String PAGE_VISITORS = "VISITORS";
     public final static String PAGE_DIALOGS = "DIALOGS";
+    public final static String PAGE_FANS = "FANS";
+    public final static String PAGE_BOOKMARKS = "BOOKMARKS";
+    public final static String PAGE_VIEWS = "VIEWS";
     public final static String PAGE_START = "START";
 
     public final static String GENERAL_MAIL_CONST = "mail";
@@ -195,14 +198,13 @@ public class Options extends AbstractData {
             int bgResource;
             if (curBtn.discount > 0) {
                 bgResource = R.drawable.btn_sale_selector;
-                container.setPadding((int)(5 * density), (int) (5 * density), (int) (56 * density), (int) (5 * density));
+                container.setPadding((int) (5 * density), (int) (5 * density), (int) (56 * density), (int) (5 * density));
             } else {
                 bgResource = curBtn.showType == 0 ?
                         R.drawable.btn_gray_selector :
                         R.drawable.btn_blue_selector;
             }
             container.setBackgroundResource(bgResource);
-
 
 
             container.requestLayout();

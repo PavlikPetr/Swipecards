@@ -95,7 +95,7 @@ public class ContainerActivity extends BaseFragmentActivity {
             case INTENT_CHAT_FRAGMENT:
                 Intent intent = getIntent();
 
-                fragment = ChatFragment.newInstance(intent.getIntExtra(ChatFragment.INTENT_ITEM_ID, -1),
+                fragment = ChatFragment.newInstance(intent.getStringExtra(ChatFragment.INTENT_ITEM_ID),
                         intent.getIntExtra(ChatFragment.INTENT_USER_ID, -1),
                         false,
                         intent.getIntExtra(ChatFragment.INTENT_USER_SEX, Static.BOY),
@@ -115,6 +115,7 @@ public class ContainerActivity extends BaseFragmentActivity {
                 //Открываем профиль
                 intent = getIntent();
                 fragment = ProfileFragment.newInstance(
+                        intent.getStringExtra(ProfileFragment.INTENT_ITEM_ID),
                         intent.getIntExtra(ProfileFragment.INTENT_UID, 0),
                         intent.getIntExtra(ProfileFragment.INTENT_TYPE, ProfileFragment.TYPE_MY_PROFILE)
                 );
@@ -164,10 +165,14 @@ public class ContainerActivity extends BaseFragmentActivity {
         Intent intent = new Intent(App.getContext(), ContainerActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, code);
         return intent;
-               
+
     }
 
     public static Intent getProfileIntent(int userId, Context context) {
+        return getProfileIntent(userId, null, context);
+    }
+
+    public static Intent getProfileIntent(int userId, String itemId, Context context) {
         int type = (userId == CacheProfile.uid) ?
                 ProfileFragment.TYPE_MY_PROFILE :
                 ProfileFragment.TYPE_USER_PROFILE;
@@ -175,6 +180,9 @@ public class ContainerActivity extends BaseFragmentActivity {
         Intent i = new Intent(context, ContainerActivity.class);
         i.putExtra(ProfileFragment.INTENT_UID, userId);
         i.putExtra(ProfileFragment.INTENT_TYPE, type);
+        if (itemId != null) {
+            i.putExtra(ProfileFragment.INTENT_ITEM_ID, itemId);
+        }
         i.putExtra(Static.INTENT_REQUEST_KEY, INTENT_PROFILE_FRAGMENT);
         return i;
     }

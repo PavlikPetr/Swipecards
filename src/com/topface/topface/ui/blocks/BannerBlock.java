@@ -38,10 +38,7 @@ import com.topface.topface.requests.handlers.BaseApiHandler;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.TopsFragment;
-import com.topface.topface.ui.fragments.feed.DialogsFragment;
-import com.topface.topface.ui.fragments.feed.LikesFragment;
-import com.topface.topface.ui.fragments.feed.MutualFragment;
-import com.topface.topface.ui.fragments.feed.VisitorsFragment;
+import com.topface.topface.ui.fragments.feed.*;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -99,12 +96,16 @@ public class BannerBlock {
         mBannersMap.put(DialogsFragment.class.toString(), Options.PAGE_DIALOGS);
         mBannersMap.put(TopsFragment.class.toString(), Options.PAGE_TOP);
         mBannersMap.put(VisitorsFragment.class.toString(), Options.PAGE_VISITORS);
+        mBannersMap.put(BookmarksFragment.class.toString(), Options.PAGE_BOOKMARKS);
+        mBannersMap.put(FansFragment.class.toString(), Options.PAGE_FANS);
 
         mAdwiredMap.put(LikesFragment.class.toString(), '1');
         mAdwiredMap.put(MutualFragment.class.toString(), '2');
         mAdwiredMap.put(DialogsFragment.class.toString(), '3');
         mAdwiredMap.put(TopsFragment.class.toString(), '4');
         mAdwiredMap.put(VisitorsFragment.class.toString(), '5');
+        mAdwiredMap.put(BookmarksFragment.class.toString(), '6');
+        mAdwiredMap.put(FansFragment.class.toString(), '7');
     }
 
     private void initBanner() {
@@ -195,7 +196,7 @@ public class BannerBlock {
         } else if (mBannerView instanceof ru.begun.adlib.AdView) {
             showBegun();
         } else if (mBannerView instanceof ImageView) {
-            if(banner == null) {
+            if (banner == null) {
                 requestBannerGag();
             } else {
                 showTopface(banner);
@@ -220,11 +221,11 @@ public class BannerBlock {
             public void callback(String s, String s1) {
                 if (s.equals("AdLoaded")) {
                     adView.api("startAd");
-                } else if (s.equals("AdClickThru")) {
+                }/* else if (s.equals("AdClickThru")) {
 
                 } else if (s.equals("AdStopped")) {
 
-                }
+                }*/
             }
         });
         adView.onDebug = App.DEBUG;
@@ -239,11 +240,11 @@ public class BannerBlock {
 
         //Убираем старый баннер
         ((ImageViewRemote) mBannerView).setImageDrawable(null);
-        ((ImageViewRemote) mBannerView).setRemoteSrc(banner.url, new Handler(){
+        ((ImageViewRemote) mBannerView).setRemoteSrc(banner.url, new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                if(msg.what == ImageViewRemote.LOADING_COMPLETE && mFragment.isAdded()) {
+                if (msg.what == ImageViewRemote.LOADING_COMPLETE && mFragment.isAdded()) {
                     if (mBannerView != null) {
                         float imageWidth = msg.arg1;
                         float imageHeight = msg.arg2;
@@ -546,14 +547,15 @@ public class BannerBlock {
             } else if (mBannerView instanceof AWView) {
                 ((AWView) mBannerView).request(mAdwiredMap.get(mFragment.getClass().toString()));
             } else if (mBannerView instanceof ru.begun.adlib.AdView) {
-                ((ru.begun.adlib.AdView)mBannerView).api("resumeAd");
+                ((ru.begun.adlib.AdView) mBannerView).api("resumeAd");
             }
         }
 
         if (mPLus1Asker != null) mPLus1Asker.onResume();
     }
 
-    public void onPause() {}
+    public void onPause() {
+    }
 
     public void onDestroy() {
         if (mPLus1Asker != null) mPLus1Asker.onPause();

@@ -103,7 +103,6 @@
     <string name="edit_bg_photo">Bakgrundsfoto</string>
     <string name="edit_album">Album</string>
     <string name="edit_profile_photo">Ändra foto</string>
-    <string name="edit_album_photos">foton</string>
     <string name="edit_interests">intressen</string>
     <string name="edit_selected">Valt</string>
     <string name="edit_name">Namn</string>
@@ -282,7 +281,7 @@
     <string name="buying_sympathies">Köp sympatier</string>
     <string name="novice_sympathies_bonus">Du får %1$d sympatier i\npresent! Detta innebär, att\n%2$d personer kommer att gilla dig\noch visa sin sympati för dig</string>
     <string name="novice_energy_to_sympathies_title">Vi har bytt energi mot sympatier</string>
-    <string name="novice_energy_to_sympathies_message_boys">När du fyllt på sympatier, får du\nett angivet antal sympatier\nfrån killar, som säkert gillar dig</string>
+    <string name="novice_energy_to_sympathies_message_boys">När du fyllt på sympatier, får du\nett angivet antal sympatier\nfrån killar som säkert gillar dig</string>
     <string name="novice_energy_to_sympathies_message_girls">När du fyllt på sympatier, får du\nett angivet antal sympatier\nfrån tjejer som säkert gillar dig</string>
     <string name="novice_buy_sympathies">Om du vill garanterat\nfå sympatier,\nköp dem redan nu!</string>
     <string name="general_reconnect_social">Det är omöjligt att ansluta sig till social media. Vänligen försök senare.</string>
@@ -290,7 +289,7 @@
     <string name="general_block">Blockera</string>
     <string name="general_buying_disabled">För närvarande är inköpet omöjligt</string>
     <string name="ban_flood_detected">Du skickar för många förfrågningar till servern. För att kunna använda applikationen vidare, vänta lite.</string>
-    <string name="general_maintenance">Din förfrågan kan inte hanteras på grund av tekniska arbeten på servern. Vänligen försök senare</string>
+    <string name="general_maintenance">Vi kan inte ta emot din förfrågan eftersom servern är under teknisk undersökning. Vänligen försök senare</string>
     <string name="virus_chat_likes_request_title">Skänk sympatier till vänner</string>
     <string name="virus_chat_btn">Erhålla sympatier</string>
     <string name="virus_request_error">Det gick inte att skicka fler sympatier till vänner</string>

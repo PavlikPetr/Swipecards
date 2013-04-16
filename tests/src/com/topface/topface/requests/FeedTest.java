@@ -1,6 +1,7 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+import android.text.TextUtils;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -25,7 +26,7 @@ public abstract class FeedTest<T extends FeedItem> extends AbstractThreadTest {
                 assertTrue("Feed list is empty", feedList.items.size() > 0);
                 for (T item : feedList.items) {
                     assertNotNull("Feed item user is null", item.user);
-                    assertTrue("Feed item id is wrong", item.id > 0);
+                    assertTrue("Feed item id is wrong", !TextUtils.isEmpty(item.id));
                     //assertTrue("Feed item id created date is wrong", item.created > 0);
                     runAdditionalItemAsserts(item);
                 }

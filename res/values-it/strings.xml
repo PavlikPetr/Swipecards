@@ -103,7 +103,6 @@
     <string name="edit_bg_photo">Foto di sfondo</string>
     <string name="edit_album">Album</string>
     <string name="edit_profile_photo">Cambia foto</string>
-    <string name="edit_album_photos">di foto</string>
     <string name="edit_interests">di interessi</string>
     <string name="edit_selected">Selezionata</string>
     <string name="edit_name">Nome</string>
@@ -410,4 +409,8 @@
     <string name="general_network_reconnect">Stiamo cercando di ripristinare il collegamento alla rete</string>
     <string name="user_is_banned">L’utente è stato bannato</string>
     <string name="profile_empty_name">Non si può lasciare il campo Nome vuoto</string>
+    <string name="general_user_bookmarkadd">L’utente è stato aggiunto ai Preferiti</string>
+    <string name="general_wrong_photo_upload">La tua foto non rispetta il regolamento. Prova a farne un’altra</string>
+    <string name="general_input_email">Inserisci la tua e-mail</string>
+    <string name="cant_delete_fake_item">Il messaggio non è stato ancora consegnato, non puoi eliminarlo. Riprova più tardi.</string>
 </resources>

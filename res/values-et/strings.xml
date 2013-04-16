@@ -101,7 +101,6 @@ Sa oled müksanud.</string>
     <string name="edit_bg_photo">Taustafoto, taustapilt</string>
     <string name="edit_album">Album</string>
     <string name="edit_profile_photo">vahetada foto</string>
-    <string name="edit_album_photos">fotot</string>
     <string name="edit_interests">huvisid/ huve</string>
     <string name="edit_selected">On valitud</string>
     <string name="edit_name">Nimi</string>
@@ -111,7 +110,9 @@ Sa oled müksanud.</string>
     <string name="edit_delete">Eemaldada</string>
     <string name="edit_restore">Taastada</string>
     <string name="album_add_photo_title">Lisada foto</string>
+    <string name="gifts_friends">Sõprus</string>
     <string name="gifts">Kingitused</string>
+    <string name="gifts_present">Õnnitlused</string>
     <string name="gifts_title">Vali kingitus</string>
     <string name="gifts_send_btn">Saada kingitus</string>
     <string name="map_location_progress">Määran asukoha/ Teen asukoha kindlaks</string>
@@ -341,4 +342,8 @@ Sa oled müksanud.</string>
     <string name="buy_vip_month_other">%1$d kuud %2$.2f %3$@ eest</string>
     <string name="buy_special_offers">Eripakkumised</string>
     <string name="buy_sympathies">Osta meeldimised</string>
+    <string name="buy_mobile_payments">Muud tasumise viisid</string>
+    <string name="general_bookmarks_title">Väljavalitud</string>
+    <string name="general_bookmarks">Väljavalitud</string>
+    <string name="general_fans">Kummardajad</string>
 </resources>

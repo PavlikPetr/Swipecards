@@ -49,6 +49,9 @@ public class Photos extends ArrayList<Photo> implements SerializableToJsonArray 
      * @return флаг наличия фотографии в списке
      */
     public boolean contains(Photo photo) {
+        if (photo == null) {
+            return false;
+        }
         return getByPhotoId(photo.getId()) != null;
     }
 

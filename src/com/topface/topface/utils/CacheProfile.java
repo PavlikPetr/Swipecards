@@ -37,6 +37,7 @@ public class CacheProfile {
     public static DatingFilter dating; //Фильтр поиска
 
     public static boolean paid; // признак платящего пользоателя
+    public static boolean show_ad = true; // флаг показа рекламы
 
     //Premium
     public static boolean premium;
@@ -120,6 +121,7 @@ public class CacheProfile {
         profile.totalPhotos = totalPhotos;
 
         profile.paid = paid;
+        profile.show_ad = show_ad;
         return profile;
     }
 
@@ -154,6 +156,7 @@ public class CacheProfile {
         totalPhotos = profile.totalPhotos;
 
         paid = profile.paid;
+        show_ad = profile.show_ad;
 
         setProfileCache(response);
         setProfileUpdateTime();

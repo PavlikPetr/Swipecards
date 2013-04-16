@@ -192,11 +192,11 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                                 mPhotoGridAdapter.notifyDataSetChanged();
                                 if (CacheProfile.photos.contains(removedPhoto)) {
                                     CacheProfile.photos.remove(removedPhoto);
-                                    mLastSelectedAsMainId = mSelectedAsMainId;
                                     Toast.makeText(App.getContext(), R.string.general_photo_deleted, 1500).show();
                                 } else {
                                     Toast.makeText(App.getContext(), R.string.general_server_error, 1500).show();
                                 }
+                                mLastSelectedAsMainId = mSelectedAsMainId;
                             }
                         }
                     }

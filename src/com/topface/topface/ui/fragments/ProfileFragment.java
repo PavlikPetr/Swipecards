@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -30,7 +31,6 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
-import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.profile.*;
 import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.ActionBar;
@@ -54,6 +54,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     public static final String DEFAULT_NON_ACTIVATED = "#FFFFFF";
     public static final String INTENT_UID = "intent_profile_uid";
     public static final String INTENT_TYPE = "intent_profile_type";
+    public static final String INTENT_ITEM_ID = "intent_profile_item_id";
 
     ArrayList<String> BODY_PAGES_TITLES = new ArrayList<String>();
     ArrayList<String> BODY_PAGES_CLASS_NAMES = new ArrayList<String>();
@@ -91,6 +92,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private ActionBar mActionBar;
     private LinearLayout mUserActions;
     private RelativeLayout bmBtn;
+    private TextView mBookmarkAction;
 
 
     @Override
@@ -103,12 +105,14 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mActionBar = getActionBar(root);
 
         mLoaderView = root.findViewById(R.id.llvProfileLoading);
-        mRateController = new RateController(getActivity());
+        final FragmentActivity activity = getActivity();
+        mRateController = new RateController(activity);
 
-        if (getArguments().getInt(ARG_FEED_ITEM_ID, -1) != -1) {
+        String itemId = getArguments().getString(ARG_FEED_ITEM_ID);
+        if (itemId != null) {
             Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ);
-            intent.putExtra(ChatFragment.INTENT_ITEM_ID, getArguments().getInt(ARG_FEED_ITEM_ID, -1));
-            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+            intent.putExtra(ChatFragment.INTENT_ITEM_ID, itemId);
+            LocalBroadcastManager.getInstance(activity).sendBroadcast(intent);
         }
 
         restoreState();
@@ -118,20 +122,20 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mUserActions.findViewById(R.id.acDelight).setOnClickListener(this);
         mUserActions.findViewById(R.id.acChat).setOnClickListener(this);
         mUserActions.findViewById(R.id.acBlock).setOnClickListener(this);
-        bmBtn = (RelativeLayout)mUserActions.findViewById(R.id.acBookmark);
+        bmBtn = (RelativeLayout) mUserActions.findViewById(R.id.acBookmark);
+        mBookmarkAction = (TextView) mUserActions.findViewById(R.id.favTV);
         bmBtn.setOnClickListener(this);
-//        mNavBarController = new NavigationBarController((ViewGroup) root.findViewById(R.id.loNavigationBar));
         if (mProfileType == TYPE_USER_PROFILE) {
             mActionBar.showBackButton(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (getActivity() != null) {
-                        getActivity().onBackPressed();
+                    if (activity != null) {
+                        activity.onBackPressed();
                     }
                 }
             });
-        } else {
-            mActionBar.showHomeButton((NavigationActivity) getActivity());
+        } else if (activity instanceof NavigationActivity) {
+            mActionBar.showHomeButton((NavigationActivity) activity);
         }
 
         mTitle = (TextView) root.findViewById(R.id.tvNavigationTitle);
@@ -141,7 +145,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         initBodyPages(root);
 
         mLockScreen = (RelativeLayout) root.findViewById(R.id.lockScreen);
-        mRetryBtn = new RetryView(getActivity().getApplicationContext());
+        mRetryBtn = new RetryView(activity.getApplicationContext());
         mRetryBtn.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -342,7 +346,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     showForDeleted();
                 } else {
                     if (data.bookmarked) {
-                        bmBtn.setVisibility(View.GONE);
+                        mBookmarkAction.setText(App.getContext().getString(R.string.general_bookmarks_delete));
+                    } else {
+                        mBookmarkAction.setText(App.getContext().getString(R.string.general_bookmarks_add));
                     }
                     mRateController.setOnRateControllerListener(mRateControllerListener);
                     //set info into views for user
@@ -356,7 +362,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
                     if (mProfileType == TYPE_USER_PROFILE) {
                         String status = mUserProfile.getStatus();
-                        if (mUserProfile == null || status == null || TextUtils.isEmpty(status)) {
+                        if (status == null || TextUtils.isEmpty(status)) {
                             mHeaderPagerAdapter.removeItem(HeaderStatusFragment.class.getName());
                         }
                     }
@@ -584,7 +590,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                             @Override
                             public void success(ApiResponse response) {
                                 super.success(response);
-                                if (v != null) {
+                                if (isAdded()) {
                                     v.setEnabled(false);
                                     loader.setVisibility(View.INVISIBLE);
                                     icon.setVisibility(View.VISIBLE);
@@ -595,7 +601,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                             @Override
                             public void fail(int codeError, ApiResponse response) {
                                 super.fail(codeError, response);
-                                if (v != null) {
+                                if (isAdded()) {
                                     loader.setVisibility(View.INVISIBLE);
                                     icon.setVisibility(View.VISIBLE);
                                 }
@@ -615,19 +621,32 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
                 loader.setVisibility(View.VISIBLE);
                 icon.setVisibility(View.GONE);
-                BookmarkAddRequest request = new BookmarkAddRequest(getActivity(), mUserProfile.uid);
-                request.callback(new SimpleApiHandler(){
+                ApiRequest request;
+
+                if (mUserProfile instanceof User && ((User) mUserProfile).bookmarked) {
+                    request = new BookmarkDeleteRequest(getActivity(), mUserProfile.uid);
+                } else {
+                    request = new BookmarkAddRequest(getActivity(), mUserProfile.uid);
+                }
+
+                request.callback(new SimpleApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
                         super.success(response);
-                        Toast.makeText(App.getContext(), getString(R.string.general_user_bookmarkadd), 1500).show();
-                        v.setVisibility(View.GONE);
+//                        Toast.makeText(App.getContext(), getString(R.string.general_user_bookmarkadd), 1500).show();
+                        if (mUserProfile != null) {
+                            textView.setText(App.getContext().getString(((User) mUserProfile).bookmarked ? R.string.general_bookmarks_add : R.string.general_bookmarks_delete));
+                            ((User) mUserProfile).bookmarked = !((User) mUserProfile).bookmarked;
+                        }
+
+                        loader.setVisibility(View.INVISIBLE);
+                        icon.setVisibility(View.VISIBLE);
                     }
 
                     @Override
                     public void always(ApiResponse response) {
                         super.always(response);
-                        if (v != null) {
+                        if (isAdded()) {
                             loader.setVisibility(View.INVISIBLE);
                             icon.setVisibility(View.VISIBLE);
                         }
@@ -682,13 +701,13 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     }
 
     //Этот метод добавлен для того, чтобы можно было отметить элемент ленты прочитанным
-    public static ProfileFragment newInstance(int id, int type, int itemId) {
+    public static ProfileFragment newInstance(String itemId, int id, int type) {
         ProfileFragment fragment = new ProfileFragment();
 
         Bundle args = new Bundle();
         args.putInt(ARG_TAG_PROFILE_ID, id);
         args.putInt(ARG_TAG_PROFILE_TYPE, type);
-        args.putInt(ARG_FEED_ITEM_ID, itemId);
+        args.putString(ARG_FEED_ITEM_ID, itemId);
         fragment.setArguments(args);
 
         return fragment;

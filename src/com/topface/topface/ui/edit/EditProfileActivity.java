@@ -31,6 +31,7 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormItem;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 
 import java.util.LinkedList;
@@ -466,11 +467,11 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
         @Override
         public String getTitle() {
-            int quantity = 0;
-            if (CacheProfile.photos != null) {
-                quantity = CacheProfile.photos.size();
-            }
-            return quantity + " " + getResources().getString(R.string.edit_album_photos);
+            return Utils.formatPhotoQuantity(
+                    CacheProfile.photos != null ?
+                            CacheProfile.photos.size() :
+                            0
+            );
         }
 
         @Override

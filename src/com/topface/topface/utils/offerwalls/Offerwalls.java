@@ -17,8 +17,6 @@ import java.util.Random;
 
 public class Offerwalls {
 
-    private static boolean first_or_second = false;
-
     public static void init(Context context) {
         try {
             if (CacheProfile.uid > 0) {
@@ -31,19 +29,27 @@ public class Offerwalls {
     }
 
     private static void initSponsorpay(Context context) {
-        SponsorPay.start("11625", Integer.toString(CacheProfile.uid), "0a4c64db64ed3c1ca14a5e5d81aaa23c", context);
+        try {
+            SponsorPay.start("11625", Integer.toString(CacheProfile.uid), "0a4c64db64ed3c1ca14a5e5d81aaa23c", context);
+        } catch (Exception e) {
+            Debug.error(e);
+        }
     }
 
     private static void initTapjoy(Context context) {
-        TapjoyConnect.requestTapjoyConnect(context, "f0563cf4-9e7c-4962-b333-098810c477d2", "AS0AE9vmrWvkyNNGPsyu");
-        TapjoyConnect.getTapjoyConnectInstance().setUserID(Integer.toString(CacheProfile.uid));
+        try {
+            TapjoyConnect.requestTapjoyConnect(context, "f0563cf4-9e7c-4962-b333-098810c477d2", "AS0AE9vmrWvkyNNGPsyu");
+            TapjoyConnect.getTapjoyConnectInstance().setUserID(Integer.toString(CacheProfile.uid));
+        } catch (Exception e) {
+            Debug.error(e);
+        }
     }
 
     public static void startOfferwall(Activity activity) {
         String offerwall = CacheProfile.getOptions().offerwall;
 
         if (CacheProfile.uid <= 0) {
-            Toast.makeText(activity, R.string.general_server_error,Toast.LENGTH_SHORT);
+            Toast.makeText(activity, R.string.general_server_error, Toast.LENGTH_SHORT);
             return;
         }
 
@@ -56,7 +62,7 @@ public class Offerwalls {
         } else if (offerwall.equals(Options.RANDOM)) {
             startRandomOfferwall(activity);
         } else {
-            startTapjoy(activity);
+            startSponsorpay(activity);
         }
     }
 
@@ -96,7 +102,7 @@ public class Offerwalls {
         try {
             Intent offerWallIntent = new Intent(activity, ClickkyActivity.class);
             activity.startActivity(offerWallIntent);
-        } catch (Exception e){
+        } catch (Exception e) {
             Debug.error(e);
         }
 

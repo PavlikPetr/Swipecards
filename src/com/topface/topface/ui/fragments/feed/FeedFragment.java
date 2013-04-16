@@ -7,6 +7,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -130,7 +131,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (getListAdapter().isNeedUpdate()) {
             updateData(false, true);
         }
-        mFloatBlock.onResume();
+        if (mFloatBlock != null) {
+            mFloatBlock.onResume();
+        }
 
     }
 
@@ -369,7 +372,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     public void onAvatarClick(T item, View view) {
         if (isAdded()) {
             startActivity(
-                    ContainerActivity.getProfileIntent(item.user.id, getActivity())
+                    ContainerActivity.getProfileIntent(item.user.id, item.id, getActivity())
             );
         }
     }
@@ -407,7 +410,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     if (makeItemsRead) {
                         makeAllItemsRead();
                     }
-                    getListAdapter().addDataFirst(data);
+                    if (data.items.size() > 0) {
+                        if (getListAdapter().getCount() >= FeedAdapter.LIMIT) {
+                            data.more = true;
+                        }
+                        getListAdapter().addDataFirst(data);
+                    }
                 } else {
                     getListAdapter().setData(data);
                 }
@@ -444,7 +452,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     private void showUpdateErrorMessage(int codeError) {
-        mListView.setVisibility(View.GONE);
+        mListView.setVisibility(View.INVISIBLE);
         if (updateErrorMessage != null) {
             switch (codeError) {
                 case ApiResponse.PREMIUM_ACCESS_ONLY:
@@ -619,7 +627,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     private void showUpdateErrorMessage() {
         if (updateErrorMessage != null) {
-            mListView.setVisibility(View.GONE);
+            mListView.setVisibility(View.INVISIBLE);
             updateErrorMessage.setVisibility(View.VISIBLE);
         }
     }
@@ -633,7 +641,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     private void makeItemReadWithId(String id) {
         for (FeedItem item : getListAdapter().getData()) {
-            if (item.id.equals(id) && item.unread) {
+            if (TextUtils.equals(item.id, id) && item.unread) {
                 item.unread = false;
                 getListAdapter().notifyDataSetChanged();
                 decrementCounters();

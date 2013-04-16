@@ -42,6 +42,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
     private TextView mMyCityTitle;
     private EditText mCityInputView;
     private TextView mCityInputTitle;
+    private ListView cityListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,7 +181,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
         };
 
         // ListView
-        ListView cityListView = (ListView) findViewById(R.id.lvCityList);
+        cityListView = (ListView) findViewById(R.id.lvCityList);
         cityListView.setAdapter(mListAdapter);
 
         // возврат значения и выход
@@ -271,16 +272,24 @@ public class CitySearchActivity extends BaseFragmentActivity {
     }
 
 
-    private void city(String prefix) {
+    private void city(final String prefix) {
         SearchCitiesRequest searchCitiesRequest = new SearchCitiesRequest(this);
         registerRequest(searchCitiesRequest);
+        cityListView.setVisibility(View.VISIBLE);
         searchCitiesRequest.prefix = prefix;
         searchCitiesRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
                 LinkedList<City> citiesList = City.parse(response);
-                if (citiesList.size() == 0)
+                if (citiesList.size() == 0) {
+                    cityListView.setVisibility(View.INVISIBLE);
+                    if(CitySearchActivity.this != null) {
+                        mMyCityTitle.setText(getString(R.string.filter_city_fail, prefix));
+                        mMyCityTitle.setVisibility(View.VISIBLE);
+                    }
                     return;
+                }
+                mMyCityTitle.setVisibility(View.GONE);
                 fillData(citiesList);
                 post(new Runnable() {
                     @Override

@@ -70,6 +70,9 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         if (!data.isEmpty()) {
             prepareDates();
         }
+        if (getData().size() > ChatFragment.LIMIT) {
+            addLoaderItem(true);
+        }
     }
 
     @Override
@@ -163,6 +166,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 mHeaderView.setVisibility(View.GONE);
             } catch (OutOfMemoryError e) {
                 Debug.error("Add header OOM", e);
+            } catch (Exception e) {
+                Debug.error(e);
             }
         }
     }
@@ -484,11 +489,15 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     public String getFirstItemId() {
         FeedList<History> data = getData();
         for (History item : data) {
-            if (!item.isLoaderOrRetrier() && item.id != null) {
+            if (isReal(item)) {
                 return item.id;
             }
         }
         return null;
+    }
+
+    private boolean isReal(History item) {
+        return !item.isLoaderOrRetrier() && item.id != null && !item.id.equals("0");
     }
 
     public String getLastItemId() {
@@ -497,7 +506,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         for (int i = data.size() - 1; i >= 0; i--) {
             History item = data.get(i);
             if(item != null) {
-                if (!item.isLoaderOrRetrier() && item.id != null) {
+                if (isReal(item)) {
                     return item.id;
                 }
             }

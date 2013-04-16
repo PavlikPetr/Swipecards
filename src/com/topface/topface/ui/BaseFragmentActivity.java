@@ -9,7 +9,7 @@ import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.WindowManager;
-import com.topface.topface.ReAuthReceiver;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
@@ -62,7 +62,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         if (CacheProfile.isLoaded()) {
             if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
                 onLoadProfile();
-                needAuth = false;
             } else {
                 startAuth();
             }
@@ -113,7 +112,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         };
 
         try {
-            registerReceiver(mReauthReceiver, new IntentFilter(ReAuthReceiver.REAUTH_INTENT));
+            registerReceiver(mReauthReceiver, new IntentFilter(AuthFragment.REAUTH_INTENT));
         } catch (Exception ex) {
             Debug.error(ex);
         }
@@ -121,12 +120,11 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     public void startAuth() {
         Fragment authFragment = getSupportFragmentManager().findFragmentByTag(AUTH_TAG);
-        if (authFragment == null || !authFragment.isAdded()) {
+        if (isNeedAuth() && (authFragment == null || !authFragment.isAdded())) {
             if (authFragment == null) {
                 authFragment = AuthFragment.newInstance();
             }
             getSupportFragmentManager().beginTransaction().add(R.id.content, authFragment, AUTH_TAG).commit();
-            needAuth = false;
         }
     }
 
@@ -196,7 +194,9 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     }
 
     protected boolean isNeedBroughtToFront(Intent intent) {
-        return intent != null && (intent.getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0;
+        return intent != null &&
+                !intent.getBooleanExtra(GCMUtils.GCM_INTENT, false) &&
+                (intent.getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0;
     }
 
 
@@ -208,7 +208,11 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         if (needOpenDialog) {
             TakePhotoDialog newFragment = TakePhotoDialog.newInstance();
             newFragment.setOnTakePhotoListener(listener);
-            newFragment.show(getSupportFragmentManager(), TakePhotoDialog.TAG);
+            try {
+                newFragment.show(getSupportFragmentManager(), TakePhotoDialog.TAG);
+            } catch (Exception e) {
+                Debug.error(e);
+            }
             needOpenDialog = false;
         }
     }
