@@ -293,20 +293,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         manager.showRatePopup();
         actionsAfterRegistration();
         requestFullscreen();
-        sendLocation();
     }
 
-    private void sendLocation() {
-        GeoLocationManager locationManager = new GeoLocationManager(App.getContext());
-        Location curLocation = locationManager.getLastKnownLocation();
 
-        GeoPreferencesManager preferencesManager = new GeoPreferencesManager(App.getContext());
-        preferencesManager.saveLocation(curLocation);
-
-        SettingsRequest settingsRequest = new SettingsRequest(this);
-        settingsRequest.location = curLocation;
-        settingsRequest.exec();
-    }
 
     @Override
     protected void onNewIntent(Intent intent) {

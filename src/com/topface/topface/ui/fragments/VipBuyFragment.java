@@ -225,8 +225,8 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
         request.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) throws NullPointerException {
+                CacheProfile.invisible = mInvisSwitcher.isChecked();
                 if (mInvisLoadBar != null && getActivity() != null) {
-                    CacheProfile.invisible = mInvisSwitcher.isChecked();
                     mInvisLoadBar.setVisibility(View.GONE);
                     mInvisSwitcher.setVisibility(View.VISIBLE);
                 }
