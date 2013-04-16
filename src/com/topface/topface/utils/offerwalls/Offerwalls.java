@@ -62,7 +62,7 @@ public class Offerwalls {
         } else if (offerwall.equals(Options.RANDOM)) {
             startRandomOfferwall(activity);
         } else {
-            startTapjoy(activity);
+            startSponsorpay(activity);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+import android.text.TextUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,7 +40,7 @@ public class VirusLikesRequest extends ApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         JSONObject data = new JSONObject();
-        if (!mFeedId.equals("")) {
+        if (!TextUtils.isEmpty(mFeedId)) {
             data.put(VIRUS_FEED_ITEM, mFeedId);
         } else if (mSocialids != null) {
             data.put(VIRUS_REQUEST_IDS, new JSONArray(mSocialids));

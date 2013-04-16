@@ -5,13 +5,16 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
-import android.widget.ImageView;
+import android.support.v4.app.TaskStackBuilder;
+import android.text.TextUtils;
 import android.widget.RemoteViews;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
+import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
 
 public class TopfaceNotificationManager {
@@ -69,7 +72,21 @@ public class TopfaceNotificationManager {
             id = ++lastId;
         }
 
-        PendingIntent resultPendingIntent = PendingIntent.getActivity(ctx, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent resultPendingIntent;
+
+        if (TextUtils.equals(intent.getComponent().getClassName(), ContainerActivity.class.getName())) {
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(ctx);
+            // Adds the back stack
+            stackBuilder.addParentStack(ContainerActivity.class);
+            stackBuilder.editIntentAt(0).putExtra(GCMUtils.GCM_INTENT, true);
+            // Adds the Intent to the top of the stack
+            stackBuilder.addNextIntent(intent);
+            // Gets a PendingIntent containing the entire back stack
+            resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT);
+        } else {
+            resultPendingIntent = PendingIntent.getActivity(ctx, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
+
         notificationBuilder.setContentIntent(resultPendingIntent);
 
         NotificationManager notificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -80,12 +97,11 @@ public class TopfaceNotificationManager {
 
     public int showProgressNotification(String title, String message, Bitmap icon, Intent intent) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            return showNotificationForOldVersions(title, message, icon, intent);
+            return showNotificationForOldVersions(title, icon, intent);
         } else {
             return showNotificationsForNewVersions(title, message, icon, intent);
         }
     }
-
 
 
     private int showNotificationsForNewVersions(String title, String message, Bitmap icon, Intent intent) {
@@ -101,10 +117,22 @@ public class TopfaceNotificationManager {
 
         notificationBuilder.setContentTitle(title);
         notificationBuilder.setContentText(message);
-        notificationBuilder.setProgress(0,0,true);
+        notificationBuilder.setProgress(0, 0, true);
 
 
-        PendingIntent resultPendingIntent = PendingIntent.getActivity(ctx, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent resultPendingIntent;
+
+        if (!TextUtils.equals(intent.getComponent().getClassName(), NavigationActivity.class.toString())) {
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(ctx);
+            // Adds the back stack
+            stackBuilder.addParentStack(NavigationActivity.class);
+            // Adds the Intent to the top of the stack
+            stackBuilder.addNextIntent(intent);
+            // Gets a PendingIntent containing the entire back stack
+            resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT);
+        } else {
+            resultPendingIntent = PendingIntent.getActivity(ctx, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
         notificationBuilder.setContentIntent(resultPendingIntent);
 
         int id = ++lastId;
@@ -115,7 +143,7 @@ public class TopfaceNotificationManager {
         return id;
     }
 
-    private int showNotificationForOldVersions(String title, String message, Bitmap icon, Intent intent) {
+    private int showNotificationForOldVersions(String title, Bitmap icon, Intent intent) {
         int id = ++lastId;
         try {
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(ctx);
@@ -130,12 +158,23 @@ public class TopfaceNotificationManager {
 
             views.setTextViewText(R.id.nfTitle, title);
 
-            PendingIntent resultPendingIntent = PendingIntent.getActivity(ctx, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent resultPendingIntent;
+
+            if (!TextUtils.equals(intent.getComponent().getClassName(), NavigationActivity.class.toString())) {
+                TaskStackBuilder stackBuilder = TaskStackBuilder.create(ctx);
+                // Adds the back stack
+                stackBuilder.addParentStack(NavigationActivity.class);
+                // Adds the Intent to the top of the stack
+                stackBuilder.addNextIntent(intent);
+                // Gets a PendingIntent containing the entire back stack
+                resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT);
+            } else {
+                resultPendingIntent = PendingIntent.getActivity(ctx, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            }
             notificationBuilder.setContentIntent(resultPendingIntent);
             Notification not = notificationBuilder.build();
 
             not.contentView = views;
-
 
 
             NotificationManager notificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);

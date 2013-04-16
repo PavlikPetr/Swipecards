@@ -21,7 +21,6 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.SendMailNotificationsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.settings.SettingsAccountFragment;
@@ -106,16 +105,18 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 
         // Likes
         frame = (ViewGroup) root.findViewById(R.id.loLikes);
-        setBackground(R.drawable.edit_big_btn_top, frame);
+        setBackground(R.drawable.edit_big_btn_top_selector, frame);
         setText(R.string.settings_likes, frame);
 
-
-        boolean mail = false;
-        boolean apns = false;
+        boolean mail;
+        boolean apns;
 
         if (CacheProfile.notifications != null && CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES) != null) {
             mail = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).mail;
             apns = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns;
+        } else {
+            mail = false;
+            apns = false;
         }
         initEditNotificationFrame(CacheProfile.NOTIFICATIONS_LIKES, frame, CacheProfile.hasMail, mail, apns);
 
@@ -256,6 +257,12 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         checkBox.setTag(phoneNotifierKey);
         checkBox.setChecked(phoneChecked);
         checkBox.setOnCheckedChangeListener(this);
+        checkBox.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // магия
+            }
+        });
 
         final CheckBox checkBoxEmail = (CheckBox) frame.findViewById(R.id.cbMail);
         ProgressBar prsMail = (ProgressBar) frame.findViewById(R.id.prsMail);
@@ -270,6 +277,12 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             checkBoxEmail.setVisibility(View.GONE);
             prsMail.setVisibility(View.GONE);
         }
+        checkBoxEmail.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // магия
+            }
+        });
     }
 
     private void setBackground(int resId, ViewGroup frame) {

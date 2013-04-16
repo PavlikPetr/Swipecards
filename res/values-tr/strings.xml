@@ -103,7 +103,6 @@
     <string name="edit_bg_photo">Yeni fotoğraf</string>
     <string name="edit_album">Albüm</string>
     <string name="edit_profile_photo">Foto değiştirmek</string>
-    <string name="edit_album_photos">fotoğraf</string>
     <string name="edit_interests">ilgiler</string>
     <string name="edit_selected">Seçilmiş</string>
     <string name="edit_name">Ad</string>
@@ -272,7 +271,7 @@
     <string name="edit_my_city">Şehrim</string>
     <string name="edit_my_photos">Fotoğraflarım</string>
     <string name="general_search_empty_title">Maalesef bir şey bulunamadı</string>
-    <string name="general_search_empty_text">Aramayı tekrar deneyebilirsiniz veya filtre ayarları değiştirebilirsiniz</string>
+    <string name="general_search_empty_text">Tekrar aramayı denebilirsiniz veya filtre ayarlarını değiştirebilirsiniz</string>
     <string name="profile_get_status">Moralinizi anlatın</string>
     <string name="map_title">Harita</string>
     <string name="settings_want_answer">Bana cevap vermesini istiyorum</string>
@@ -290,8 +289,8 @@
     <string name="general_buying">Sempati ve paraları satın almak</string>
     <string name="general_block">Engellemek</string>
     <string name="general_buying_disabled">Şu anda alışveriş mümkün değildir</string>
-    <string name="ban_flood_detected">Sonucuya çok sık istek gönderiyorsunuz. Ugulamayı kullanmaya devam etmek için bekleyin.</string>
-    <string name="general_maintenance">Sunucuda teknik çalışmalar yapmaktadır. Daha sonra yeniden deneyin.</string>
+    <string name="ban_flood_detected">Server\'i çok sık kullanıyorsunuz. Uygulamayı kullanmaya devam etmek için bekleyin.</string>
+    <string name="general_maintenance">Serverde teknik çalışmalar yapılmaktadır ve isteğiniz şu anda uygulanamaz. Daha sonra tekrar deneyebilirsiniz.</string>
     <string name="virus_chat_likes_request_title">Arkadaşlarınıza sempatileri hediye etmek</string>
     <string name="virus_chat_btn">Sempati kazanmak</string>
     <string name="virus_request_error">Sempatiler arkadaşlarınıza gönderilemedi</string>
@@ -306,8 +305,8 @@
     <string name="popup_version_message">Versiyonu yenilemek için tam zamanı!</string>
     <string name="popup_version_update">Yenilemek</string>
     <string name="popup_version_cancel">Daha sonra hatırlat</string>
-    <string name="general_version_not_supported">Uygulamanızın versiyonu eskimiş ve artık desteklenmiyor. Lütfen, uygulamayı güncelleyin</string>
-    <string name="leaders_select_photo_info">En etkili fotoğraf seçin! Düşük reytingli fotoğraf seçilemez</string>
+    <string name="general_version_not_supported">Uygulamanızın versiyonu eskilindi ve artık desteklenmiyor. Lütfen, uygulamayı yenileyiniz</string>
+    <string name="leaders_select_photo_info">En etkileyici foto seçiniz! Düşük reytingle fotoğrafları seçilenmez</string>
     <string name="default_price_format">Toplam: %.2f USD</string>
     <string name="dating_online_only">%s, sadece çevrimiçi</string>
     <string name="leaders_pick_condition">%d%% reytinginden daha aşağı foto seçemezsiniz:</string>

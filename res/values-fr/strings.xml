@@ -103,7 +103,6 @@
     <string name="edit_bg_photo">La photographie de couverture</string>
     <string name="edit_album">Album</string>
     <string name="edit_profile_photo">Changer la photo</string>
-    <string name="edit_album_photos">photographies</string>
     <string name="edit_interests">intérêts</string>
     <string name="edit_selected">Choisie</string>
     <string name="edit_name">Nom</string>
@@ -289,8 +288,8 @@
     <string name="general_buying">Achter des sympathies et des pièces</string>
     <string name="general_block">Bloquer</string>
     <string name="general_buying_disabled">L\'achat est impossible maintenant</string>
-    <string name="ban_flood_detected">Vous envoyez les demandes au serveur trop souvent. Pour continuer à utiliser l\'application il vous faut attendre.</string>
-    <string name="general_maintenance">Il y a les travaux techniques et votre demande ne peut pas être accomplie. Essayez de répéter plus tard.</string>
+    <string name="ban_flood_detected">Vous envoyez les demandes au serveur trop souvent. Veuillez attendre afin de continuer à utiliser l\'application.</string>
+    <string name="general_maintenance">Le serveur subit actuellement les travaux de maintenance. Votre demande ne peut pas être réalisée. Essayez de répéter plus tard.</string>
     <string name="virus_chat_likes_request_title">Offrir des sympathies à vos amis</string>
     <string name="virus_chat_btn">Recevoir des sympathies</string>
     <string name="virus_request_error">On n\'a pas réussi d\'énvoyer les sympathies à vos amis</string>

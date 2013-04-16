@@ -11,7 +11,6 @@ import android.view.View;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.ui.NavigationActivity;
 
 
 public class PopupManager {
@@ -29,12 +28,16 @@ public class PopupManager {
             PackageInfo pInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
             String curVersion = pInfo.versionName;
             if (!TextUtils.isEmpty(version) && !TextUtils.isEmpty(curVersion)) {
-                String[] splittedVersion = version.split("\\.");
-                String[] splittedCurVersion = curVersion.split("\\.");
+                String[] splittedVersion = TextUtils.split(version, "\\.");
+                String[] splittedCurVersion = TextUtils.split(curVersion, "\\.");
                 for (int i = 0; i < splittedVersion.length; i++) {
                     if (i < splittedCurVersion.length) {
-                        if (Long.parseLong(splittedCurVersion[i]) < Long.parseLong(splittedVersion[i])) {
+                        long curVersionLong = Long.parseLong(splittedCurVersion[i]);
+                        long maxVersionLong = Long.parseLong(splittedVersion[i]);
+                        if (curVersionLong < maxVersionLong) {
                             return true;
+                        } else if (curVersionLong > maxVersionLong) {
+                            return false;
                         }
                     }
                 }
@@ -69,7 +72,7 @@ public class PopupManager {
         }
     }
 
-    public void showRatePopup () {
+    public void showRatePopup() {
         if (!checkVersion(CacheProfile.getOptions().max_version) && App.isOnline()) {
             ratingPopup();
         }

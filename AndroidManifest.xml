@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.topface.topface"
           android:installLocation="auto"
-          android:versionCode="66"
-          android:versionName="2.3.9">
+          android:versionCode="69"
+          android:versionName="2.4.0">
 
     <uses-sdk
             android:minSdkVersion="7"
@@ -175,7 +175,12 @@
         <activity
                 android:name=".ui.ContainerActivity"
                 android:screenOrientation="portrait"
-                android:windowSoftInputMode="stateHidden|adjustResize"/>
+                android:parentActivityName=".ui.NavigationActivity"
+                android:windowSoftInputMode="stateHidden|adjustResize">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".ui.NavigationActivity"/>
+        </activity>
 
         <activity
                 android:name="com.mad.ad.ImageActivity"
@@ -223,13 +228,6 @@
                 <action android:name="com.android.vending.billing.IN_APP_NOTIFY"/>
                 <action android:name="com.android.vending.billing.RESPONSE_CODE"/>
                 <action android:name="com.android.vending.billing.PURCHASE_STATE_CHANGED"/>
-            </intent-filter>
-        </receiver>
-
-
-        <receiver android:name=".ReAuthReceiver">
-            <intent-filter>
-                <action android:name="com.topface.topface.action.AUTH"/>
             </intent-filter>
         </receiver>
 

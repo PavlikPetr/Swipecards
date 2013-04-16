@@ -130,7 +130,6 @@
     <string name="edit_bg_photo">Фоновая фотография</string>
     <string name="edit_album">Альбом</string>
     <string name="edit_profile_photo">Поменять фото</string>
-    <string name="edit_album_photos">фотографий</string>
     <string name="edit_interests">интересов</string>
     <string name="edit_selected">Выбрана</string>
     <string name="edit_name">Имя</string>
@@ -168,6 +167,7 @@
         <item quantity="zero">У вас нет совпадений</item>
         <item quantity="one">У вас %d совпадение</item>
         <item quantity="few">У вас %d совпадения</item>
+        <item quantity="many">У вас %d совпадений</item>
         <item quantity="other">У вас %d совпадений</item>
     </plurals>
 
@@ -240,6 +240,7 @@
         <item quantity="zero">Нет фотографий</item>
         <item quantity="one">%d фотография</item>
         <item quantity="few">%d фотографии</item>
+        <item quantity="many">%d фотографий</item>
         <item quantity="other">%d фотографий</item>
     </plurals>
 
@@ -291,8 +292,7 @@
     <string name="dating_prev_button_ext">Предыдущий</string>
     <string name="dating_skip_button_ext">Следующий</string>
     <string name="dating_search_empty_title">К сожалению, ничего не найдено</string>
-    <string name="dating_search_empty_text">Вы можете попытаться повторить поиск, либо изменить настройки фильтра.
-    </string>
+    <string name="dating_search_empty_text">Вы можете попытаться повторить поиск, либо изменить настройки фильтра.</string>
     <string name="general_close">Закрыть</string>
     <string name="vip_not_activated">Ваш VIP-статус не активирован</string>
     <string name="vip_privileges">VIP-привилегии</string>
@@ -327,9 +327,7 @@
     <string name="vip_why">Почему вам так важно быть VIP</string>
     <string name="vip_info_delight">Отправляйте восхищения бесплатно - выражайте свои чувства по максимуму!</string>
     <string name="vip_info_guest">Узнайте, кто вами интересовался - смотрите своих гостей!</string>
-    <string name="vip_info_invisible">Оставайтесь незамеченными, посещая чужие страницы, благодаря режиму
-        \"невидимка\"
-    </string>
+    <string name="vip_info_invisible">Оставайтесь незамеченными, посещая чужие страницы, благодаря режиму \"невидимка\"</string>
     <string name="vip_info_message">Получите преимущество - ваши сообщения будут выделяться на общем фоне!</string>
     <string name="vip_info_gift">Выбирайте эксклюзивные VIP-подарки, и вас обязательно запомнят!</string>
     <string name="vip_info_blackList">Избавляйтесь от надоевших персон с помощью \"черного списка\"</string>
@@ -354,8 +352,7 @@
     <string name="edit_my_city">Мой город</string>
     <string name="edit_my_photos">Мои фотографии</string>
     <string name="general_search_empty_title">К сожалению, ничего не найдено</string>
-    <string name="general_search_empty_text">Вы можете попытаться повторить поиск, либо изменить настройки фильтра
-    </string>
+    <string name="general_search_empty_text">Вы можете попытаться повторить поиск, либо изменить настройки фильтра</string>
     <string name="profile_get_status">Опишите Ваше настроение</string>
     <string name="map_title">Карта</string>
 
@@ -368,19 +365,11 @@
 
     <string name="buying_sympathies">Покупка симпатий</string>
 
-    <string name="novice_sympathies_bonus">Вы получаете %1$d симпатий в\nподарок! Это означает, что вы\nточно
-        понравитесь %2$d людям,\nкоторые выразят вам свою симпатию
-    </string>
+    <string name="novice_sympathies_bonus">Вы получаете %1$d симпатий в\nподарок! Это означает, что вы\nточно понравитесь %2$d людям,\nкоторые выразят вам свою симпатию</string>
     <string name="novice_energy_to_sympathies_title">Мы заменили энергию на симпатии</string>
-    <string name="novice_energy_to_sympathies_message_boys">Пополнив запас симпатий, вы получите\nуказанное количество
-        симпатий\nот парней, которым точно нравитесь
-    </string>
-    <string name="novice_energy_to_sympathies_message_girls">Пополнив запас симпатий, вы получите\nуказанное количество
-        симпатий\nот девушек, которым точно нравитесь
-    </string>
-    <string name="novice_buy_sympathies">Если вы хотите гарантированно\nполучать симпатии,\nприобретайте их прямо
-        сейчас!
-    </string>
+    <string name="novice_energy_to_sympathies_message_boys">Пополнив запас симпатий, вы получите\nуказанное количество симпатий\nот парней, которым точно нравитесь</string>
+    <string name="novice_energy_to_sympathies_message_girls">Пополнив запас симпатий, вы получите\nуказанное количество симпатий\nот девушек, которым точно нравитесь</string>
+    <string name="novice_buy_sympathies">Если вы хотите гарантированно\nполучать симпатии,\nприобретайте их прямо сейчас!</string>
 
     <string name="general_reconnect_social">Невозможно подключиться к соцсети. Повторите попытку позже.</string>
 
@@ -388,12 +377,8 @@
     <string name="general_block">Блокировать</string>
     <string name="general_buying_disabled">В данный момент покупка невозможна</string>
 
-    <string name="ban_flood_detected">Вы слишком часто совершаете запросы к серверу. Для дальнейшего использования
-        приложения подождите.
-    </string>
-    <string name="general_maintenance">На сервере проводятся технические работы и ваш запрос не может быть выполнен.
-        Попробуйте повторить позже.
-    </string>
+    <string name="ban_flood_detected">Вы слишком часто совершаете запросы к серверу. Для дальнейшего использования приложения подождите.</string>
+    <string name="general_maintenance">На сервере проводятся технические работы и ваш запрос не может быть выполнен. Попробуйте повторить позже.</string>
 
     <string name="virus_chat_likes_request_title">Подарить симпатии вашим друзьям</string>
     <string name="virus_chat_btn">Получить симпатии</string>
@@ -413,12 +398,8 @@
     <string name="popup_version_update">Обновить</string>
     <string name="popup_version_cancel">Напомнить позже</string>
     <string name="general_internet_off">Пытаемся восстановить соединение с интернетом. Пожалуйста, подождите.</string>
-    <string name="general_version_not_supported">Ваша версия приложения устарела и больше не поддерживается. Пожалуйста
-        обновите приложение
-    </string>
-    <string name="leaders_select_photo_info">Выберите самое эффектное фото! Фотографии с низким рейтингом выбрать
-        нельзя
-    </string>
+    <string name="general_version_not_supported">Ваша версия приложения устарела и больше не поддерживается. Пожалуйста обновите приложение</string>
+    <string name="leaders_select_photo_info">Выберите самое эффектное фото! Фотографии с низким рейтингом выбрать нельзя</string>
     <string name="default_price_format">Итого: %.2f USD</string>
     <string name="dating_online_only">%s, только онлайн</string>
     <string name="leaders_pick_condition">Вы не можете выбрать фото с рейтингом ниже %d%%:</string>
