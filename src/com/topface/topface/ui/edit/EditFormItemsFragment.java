@@ -113,8 +113,8 @@ public class EditFormItemsFragment extends AbstractEditFragment {
                         public void success(ApiResponse response) {
                             item.dataId = mSeletedDataId;
                             mFormInfo.fillFormItem(item);
-                            getActivity().setResult(Activity.RESULT_OK);
                             mDataId = mSeletedDataId;
+                            getActivity().setResult(Activity.RESULT_OK);
                             finishRequestSend();
                             handler.sendEmptyMessage(0);
                         }

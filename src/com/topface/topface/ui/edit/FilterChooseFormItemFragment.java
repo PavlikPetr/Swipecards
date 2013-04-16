@@ -9,12 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.FormInfo;
-import com.topface.topface.utils.FormItem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -75,7 +77,6 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
 
         ArrayList<String> listStr = new ArrayList<String>();
         listStr.addAll(Arrays.asList(mFormInfo.getEntriesByTitleId(mTitleId, new String[]{mData})));
-        listStr.add(getResources().getString(R.string.form_not_specified));
         String[] data = new String[listStr.size()];
         listStr.toArray(data);
 
@@ -83,7 +84,6 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
         for (int elem : mFormInfo.getIdsByTitleId(mTitleId)) {
             listInt.add(elem);
         }
-        listInt.add(FormItem.NOT_SPECIFIED_ID);
         Integer[] ids = listInt.toArray(new Integer[listInt.size()]);
 
         mListView.setAdapter(new FormCheckingDataAdapter(getActivity().getApplicationContext(),

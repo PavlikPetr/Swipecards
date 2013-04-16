@@ -383,9 +383,11 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     holder.mTitle.setText(item.getTitle());
                 } else if (item instanceof EditForm) {
                     holder.mTitle.setText(item.getTitle());
-                    if (item.getText() != null && item.getText().trim().length() > 0) {
-                        holder.mText.setVisibility(View.VISIBLE);
-                        holder.mText.setText(item.getText());
+                    if (item != null && item.getText() != null && item.getText().trim().length() > 0) {
+                        if (((EditForm)item).getId() != FormItem.NOT_SPECIFIED_ID) {
+                            holder.mText.setVisibility(View.VISIBLE);
+                            holder.mText.setText(item.getText());
+                        }
                     }
                 }
 
@@ -515,6 +517,10 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         public EditForm setFormItem(FormItem item) {
             mFormItem = item;
             return this;
+        }
+
+        public int getId() {
+            return mFormItem.dataId;
         }
 
         @Override
