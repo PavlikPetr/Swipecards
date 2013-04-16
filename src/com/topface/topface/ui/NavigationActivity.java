@@ -135,25 +135,14 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         manager.showOldVersionPopup(CacheProfile.getOptions().max_version);
         manager.showRatePopup();
         actionsAfterRegistration();
-
+        requestFullscreen();
         if (CacheProfile.show_ad) {
             mFullscreenController = new FullscreenController(this);
             mFullscreenController.requestFullscreen();
         }
-        sendLocation();
     }
 
-    private void sendLocation() {
-        GeoLocationManager locationManager = new GeoLocationManager(App.getContext());
-        Location curLocation = locationManager.getLastKnownLocation();
 
-        GeoPreferencesManager preferencesManager = new GeoPreferencesManager(App.getContext());
-        preferencesManager.saveLocation(curLocation);
-
-        SettingsRequest settingsRequest = new SettingsRequest(this);
-        settingsRequest.location = curLocation;
-        settingsRequest.exec();
-    }
 
     @Override
     protected void onNewIntent(Intent intent) {
