@@ -6,10 +6,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.FormInfo;
-import com.topface.topface.utils.FormItem;
-import com.topface.topface.utils.Novice;
+import com.topface.topface.utils.*;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,6 +53,7 @@ public class Profile extends AbstractDataWithPhotos {
     public boolean hasMail;
     public boolean email_grabbed;
     public boolean email_confirmed;
+    public int xstatus;
 
     public int totalPhotos;
     // Идентификатор заднего фона в профиле
@@ -97,6 +95,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.totalPhotos = resp.optInt("photos_count");
             profile.paid = resp.optBoolean("paid");
             profile.show_ad = resp.optBoolean("show_ad",true);
+            profile.xstatus = resp.optInt("xstatus");
 
             parseGifts(profile, resp);
             parseNotifications(profile, resp);
@@ -158,6 +157,22 @@ public class Profile extends AbstractDataWithPhotos {
 
             if (!resp.isNull("email_confirmed")) {
                 profile.email_confirmed = resp.optBoolean("email_confirmed");
+            }
+
+            // 1.2 xstatus position -1
+            formItem = new FormItem(R.array.form_main_status, profile.xstatus,
+                    FormItem.DATA, headerItem);
+            formInfo.fillFormItem(formItem);
+            if (isUserProfile) {
+                formItem.equal = profile.xstatus == CacheProfile.xstatus;
+                if (formItem.dataId > 0) {
+                    profile.forms.add(formItem);
+                    if (formItem.equal) {
+                        ((User) profile).formMatches++;
+                    }
+                }
+            } else {
+                profile.forms.add(formItem);
             }
 
             // 2 character position 0
