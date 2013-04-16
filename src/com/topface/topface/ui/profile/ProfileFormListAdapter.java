@@ -136,7 +136,7 @@ public class ProfileFormListAdapter extends BaseAdapter {
                 break;
             case T_DATA:
                 holder.mTitle.setText(item.title.toUpperCase());
-                if (item.value != null) {
+                if (item.value != null && item.dataId != FormItem.NOT_SPECIFIED_ID) {
                     holder.mState.setImageResource(R.drawable.user_cell);
                     holder.mValue.setText(item.value.toLowerCase());
                     holder.mValue.setVisibility(View.VISIBLE);
