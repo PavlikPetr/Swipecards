@@ -87,6 +87,15 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         return view;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mSendTimer != null) {
+            mSendTimer.cancel();
+            mSendTimer.onFinish();
+        }
+    }
+
     private void initViews(View root) {
         ViewGroup frame;
 
@@ -333,7 +342,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 
         String[] buttonInfo = key.split(Options.GENERAL_SEPARATOR);
         final Integer type = Integer.parseInt(buttonInfo[0]);
-        final boolean isMail = Boolean.parseBoolean(buttonInfo[1]);
+        final boolean isMail = buttonInfo[1].equals(Options.GENERAL_MAIL_CONST);
         final ProgressBar prs = hashNotifiersProgressBars.get(key);
 
         if (isMail) {
