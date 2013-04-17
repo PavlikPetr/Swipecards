@@ -257,7 +257,9 @@ public class ImageSwitcher extends ViewPager {
         try {
             return super.onInterceptTouchEvent(ev);
         } catch (IllegalArgumentException e) {
-            Debug.error(e);
+            //Мы отлавливаем эту ошибку из-за бага в support library, который кидает такие ошибки:
+            //IllegalArgumentException: pointerIndex out of range
+            //Debug.error(e);
             return false;
         }
     }
