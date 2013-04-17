@@ -67,6 +67,7 @@ public class CacheProfile {
     public static boolean emailConfirmed;
 
     public static long profileUpdateTime;
+    public static int xstatus;
 
     private static void setProfileCache(final ApiResponse response) {
         //Пишем в SharedPreferences в отдельном потоке
@@ -122,6 +123,8 @@ public class CacheProfile {
 
         profile.paid = paid;
         profile.show_ad = show_ad;
+        profile.xstatus = xstatus;
+
         return profile;
     }
 
@@ -157,6 +160,8 @@ public class CacheProfile {
 
         paid = profile.paid;
         show_ad = profile.show_ad;
+
+        xstatus = profile.xstatus;
 
         setProfileCache(response);
         setProfileUpdateTime();

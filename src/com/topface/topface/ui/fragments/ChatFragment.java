@@ -45,6 +45,7 @@ import com.topface.topface.utils.GeoUtils.GeoLocationManager;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TimerTask;
 
 public class ChatFragment extends BaseFragment implements View.OnClickListener, LocationListener {
@@ -272,7 +273,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
         });
         mListView.setClickable(true);
-        mAdapter.addHeader(mListView.getRefreshableView());
+        if (mAdapter.isEmpty()) {
+            mAdapter.addHeader(mListView.getRefreshableView());
+        }
         mListView.setAdapter(mAdapter);
         mListView.setOnScrollListener(mAdapter);
         mListView.getRefreshableView().addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.item_empty_footer, null));
@@ -408,6 +411,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID, itemId));
                     itemId = null;
                 }
+
+                removeAlreadyLoadedItems(data);
+
                 setNavigationTitles(data.user.first_name, data.user.age, data.user.city.name);
                 wasFailed = false;
                 mUser = data.user;
@@ -463,6 +469,22 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
             }
         }).exec();
+    }
+
+    private void removeAlreadyLoadedItems(HistoryListData data) {
+        if(!mAdapter.isEmpty() && !data.items.isEmpty()) {
+            FeedList<History> items = mAdapter.getData();
+            int size = items.size();
+            for (int i = size-1;i > 0 && i > size-LIMIT; i--) {
+                List<History> itemsToDelete = new ArrayList<History>();
+                for (History item : data.items) {
+                    if (item.id.equals(items.get(i).id)) {
+                        itemsToDelete.add(item);
+                    }
+                }
+                data.items.removeAll(itemsToDelete);
+            }
+        }
     }
 
     private void onUserLoaded() {
