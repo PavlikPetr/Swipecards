@@ -6,8 +6,8 @@ import java.util.Collection;
 
 @SuppressWarnings("serial")
 public class FeedList<T> extends ArrayList<T> {
-    public boolean hasItem(int id) {
-        return size() > id && id >= 0;
+    public boolean hasItem(int position) {
+        return size() > position && position >= 0;
     }
 
     public T getLast() {

@@ -257,12 +257,12 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         setLastUpdate();
     }
 
-    public boolean removeItem(int id) {
+    public boolean removeItem(int position) {
         boolean result = false;
         FeedList<T> data = getData();
-        if (data.hasItem(id)) {
+        if (data.hasItem(position)) {
             result = true;
-            data.remove(id);
+            data.remove(position);
             notifyDataSetChanged();
         }
         return result;
