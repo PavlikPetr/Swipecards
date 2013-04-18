@@ -28,3 +28,6 @@
 [submodule "libs/PhotoView"]
 	path = libs/PhotoView
 	url = git@github.com:Topface/PhotoView.git
+[submodule "libs/MoPub"]
+	path = libs/MoPub
+	url = git@github.com:mopub/mopub-client.git
