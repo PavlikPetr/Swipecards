@@ -304,11 +304,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 //TODO костыль для навигации
                 getActivity().setResult(Activity.RESULT_CANCELED);
                 getActivity().finish();
-
             }
         });
 
-        mActionBar.showProfileAvatar();
+        mActionBar.showProfileAvatar(R.drawable.feed_banned_male_avatar, null);
 
         setNavigationTitles(userName, userAge, userCity);
     }
@@ -472,10 +471,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void removeAlreadyLoadedItems(HistoryListData data) {
-        if(!mAdapter.isEmpty() && !data.items.isEmpty()) {
+        if (!mAdapter.isEmpty() && !data.items.isEmpty()) {
             FeedList<History> items = mAdapter.getData();
             int size = items.size();
-            for (int i = size-1;i > 0 && i > size-LIMIT; i--) {
+            for (int i = size - 1; i > 0 && i > size - LIMIT; i--) {
                 List<History> itemsToDelete = new ArrayList<History>();
                 for (History item : data.items) {
                     if (item.id.equals(items.get(i).id)) {
@@ -488,7 +487,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void onUserLoaded() {
-        if (mActionBar != null) mActionBar.showProfileAvatar(mUser.photo, this);
+        if (mActionBar != null) {
+            if (mUser.deleted || mUser.banned || mUser.photo == null || mUser.photo.isEmpty()) {
+                mActionBar.showProfileAvatar(mUser.sex == Static.BOY ? R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar, null);
+            } else {
+                mActionBar.showProfileAvatar(mUser.photo, this);
+            }
+        }
     }
 
     private void release() {
