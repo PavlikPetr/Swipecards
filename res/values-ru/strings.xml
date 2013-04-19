@@ -523,4 +523,6 @@
     <string name="general_input_email">Введите ваш e-mail</string>
     <string name="cant_delete_fake_item">Данное сообщение еще не досталено, вы не можете удалить его. Попробуйте позже.</string>
     <string name="vip_stop_ads">Только общение, ничего лишнего. У VIP-ползователей нет рекламы</string>
+    <string name="settings_invalid_name">Имя содержит некорректные символы</string>
+    <string name="general_fan_access_error">Для доступа к поклонникам необходимо иметь VIP статус</string>
 </resources>
