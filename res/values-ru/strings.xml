@@ -522,4 +522,10 @@
     <string name="general_wrong_photo_upload">Ваша фотография не соответствует правилам. Попробуйте сделать другую</string>
     <string name="general_input_email">Введите ваш e-mail</string>
     <string name="cant_delete_fake_item">Данное сообщение еще не досталено, вы не можете удалить его. Попробуйте позже.</string>
+    <string name="get_seven_days_vip">Получить VIP на 7 дней</string>
+    <string name="invite_friends">Пригласите 20 друзей, чтобы получить VIP-статус на 7 дней</string>
+    <string name="friend_email_hint">Введите e-mail друга</string>
+    <string name="general_add">Добавить</string>
+    <string name="general_invite_friends">Пригласите друзей</string>
+    <string name="general_rest_contacts">Вам осталось %d контактов</string>
 </resources>

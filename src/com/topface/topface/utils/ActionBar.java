@@ -2,6 +2,7 @@ package com.topface.topface.utils;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ public class ActionBar {
     private ImageButton mUserActionsControl;
     private ProgressBar mRightProgressBar;
     private ImageViewRemote mProfileAvatar;
+    private CheckBox checkBox;
 
     private NavigationBarController mNavBarController;
     private ImageButton mSendButton;
@@ -45,6 +47,7 @@ public class ActionBar {
         mRightProgressBar = (ProgressBar) actionView.findViewById(R.id.prsNavigationRight);
         mProfileAvatar = (ImageViewRemote) actionView.findViewById(R.id.btnNavigationBarAvatar);
         mSendButton = (ImageButton) actionView.findViewById(R.id.btnNavigationSend);
+        checkBox = (CheckBox) actionView.findViewById(R.id.btnNavigationCheckbox);
     }
 
     public void refreshNotificators() {
@@ -91,6 +94,7 @@ public class ActionBar {
         mSettingsButton.setVisibility(View.GONE);
         mProfileButton.setVisibility(View.GONE);
         mSendButton.setVisibility(View.GONE);
+        checkBox.setVisibility(View.GONE);
     }
 
     public void showSettingsButton(final View.OnClickListener listener, final boolean changeSelection) {
@@ -115,6 +119,7 @@ public class ActionBar {
         mProfileButton.setVisibility(View.GONE);
         mUserActionsControl.setVisibility(View.GONE);
         mSendButton.setVisibility(View.GONE);
+        checkBox.setVisibility(View.GONE);
     }
 
     public void showSendButton(final View.OnClickListener listener) {
@@ -124,7 +129,7 @@ public class ActionBar {
         mUserActionsControl.setVisibility(View.GONE);
         mSendButton.setVisibility(View.VISIBLE);
         mSendButton.setOnClickListener(listener);
-
+        checkBox.setVisibility(View.GONE);
     }
 
     public void setTitleText(String text) {
@@ -152,6 +157,7 @@ public class ActionBar {
         mProfileButton.setOnClickListener(listener);
         mSendButton.setVisibility(View.GONE);
         mUserActionsControl.setVisibility(View.GONE);
+        checkBox.setVisibility(View.GONE);
     }
 
     public void showUserActionsButton(final View.OnClickListener nonActiveListener, final View.OnClickListener activeListener) {
@@ -173,6 +179,23 @@ public class ActionBar {
             }
         });
         mSendButton.setVisibility(View.GONE);
+        checkBox.setVisibility(View.GONE);
+    }
+
+    public void showCheckBox(View.OnClickListener listener, boolean isChecked) {
+        hideRightButtons();
+        checkBox.setVisibility(View.VISIBLE);
+        checkBox.setOnClickListener(listener);
+        checkBox.setChecked(true);
+    }
+
+    private void hideRightButtons() {
+        mEditButton.setVisibility(View.GONE);
+        mSettingsButton.setVisibility(View.GONE);
+        mProfileButton.setVisibility(View.GONE);
+        mUserActionsControl.setVisibility(View.GONE);
+        mSendButton.setVisibility(View.GONE);
+        checkBox.setVisibility(View.GONE);
     }
 
     public void hideUserActionButton() {

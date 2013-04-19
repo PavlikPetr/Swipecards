@@ -28,6 +28,7 @@ public class ContainerActivity extends BaseFragmentActivity {
     public static final int INTENT_RECOVER_PASSWORD = 5;
     private static final int INTENT_PROFILE_FRAGMENT = 6;
     public static final int INTENT_SETTINGS_FRAGMENT = 7;
+    public static final int INTENT_CONTACTS_FRAGMENT = 8;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -123,9 +124,13 @@ public class ContainerActivity extends BaseFragmentActivity {
             case INTENT_SETTINGS_FRAGMENT:
                 fragment = new SettingsFragment();
                 break;
+            case INTENT_CONTACTS_FRAGMENT:
+                fragment = new ContactsFragments();
+                break;
             default:
                 break;
         }
+
         return fragment;
     }
 
