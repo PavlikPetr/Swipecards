@@ -590,11 +590,11 @@ public class BannerBlock {
     }
 
     public void onPause() {
+        if (mBannerView instanceof MoPubView) ((MoPubView)mBannerView).destroy();
     }
 
     public void onDestroy() {
         if (mPLus1Asker != null) mPLus1Asker.onPause();
-        if (mBannerView instanceof MoPubView) ((MoPubView)mBannerView).destroy();
-                removeBanner();
+        removeBanner();
     }
 }
