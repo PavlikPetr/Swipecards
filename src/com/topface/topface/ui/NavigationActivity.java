@@ -345,45 +345,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
     }
 
-    private FragmentSwitchListener mFragmentSwitchListener = new FragmentSwitchListener() {
-        @Override
-        public void beforeExpanding() {
-            mFragmentMenu.setClickable(true);
-            mFragmentMenu.show();
-            mFragmentMenu.refreshNotifications();
-        }
-
-        @Override
-        public void afterClosing() {
-            mFragmentMenu.setClickable(false);
-            mFragmentMenu.hide();
-            if (mFragmentSwitcher.getCurrentFragment() != null) {
-                mFragmentSwitcher.getCurrentFragment().activateActionBar(false);
-            }
-            actionsAfterRegistration();
-        }
-
-        @Override
-        public void afterOpening() {
-            if (mFragmentSwitcher.getCurrentFragment() != null) {
-                mFragmentSwitcher.getCurrentFragment().activateActionBar(true);
-            }
-
-            if (mNovice != null) {
-                if (mNovice.isMenuCompleted()) return;
-
-                if (mNovice.isShowFillProfile()) {
-                    mNoviceLayout.setLayoutRes(R.layout.novice_fill_profile, mFragmentMenu.getProfileButtonOnClickListener());
-                    AlphaAnimation alphaAnimation = new AlphaAnimation(0.0F, 1.0F);
-                    alphaAnimation.setDuration(400L);
-                    mNoviceLayout.startAnimation(alphaAnimation);
-                    mNovice.completeShowFillProfile();
-                }
-            }
-        }
-
-    };
-
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         super.startActivityForResult(intent, requestCode);
