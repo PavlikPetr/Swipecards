@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -45,6 +46,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     private boolean canChangeProfileIcons = false;
     private int mCurrentFragmentId;
     private BaseFragment mCurrentFragment;
+    private boolean mHardwareAcclereated;
 
     public static final int DEFAULT_FRAGMENT = BaseFragment.F_DATING;
     private OnFragmentSelectedListener mOnFragmentSelected;
@@ -146,6 +148,8 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         mTvNotifyDialogs = (TextView) rootLayout.findViewById(R.id.tvNotifyDialogs);
         mTvNotifyFans = (TextView) rootLayout.findViewById(R.id.tvNotifyFans);
         mTvNotifyVisitors = (TextView) rootLayout.findViewById(R.id.tvNotifyVisitors);
+
+        mHardwareAcclereated = Build.VERSION.SDK_INT >= 11 && rootLayout.isHardwareAccelerated();
 
         return rootLayout;
     }
@@ -291,8 +295,10 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
         if (oldFragment == null || newFragment != oldFragment) {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
-            //Меняем фрагменты анимировано
-            transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+            //Меняем фрагменты анимировано, но только на новых устройствах c HW ускорением
+            if (mHardwareAcclereated) {
+                transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+            }
             transaction.replace(R.id.fragment_container, newFragment, getTagById(mCurrentFragmentId));
             transaction.commit();
 
