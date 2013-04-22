@@ -110,6 +110,7 @@ Sa oled müksanud.</string>
     <string name="edit_delete">Eemaldada</string>
     <string name="edit_restore">Taastada</string>
     <string name="album_add_photo_title">Lisada foto</string>
+    <string name="gifts_romantic">Romantika</string>
     <string name="gifts_friends">Sõprus</string>
     <string name="gifts">Kingitused</string>
     <string name="gifts_present">Õnnitlused</string>
@@ -341,9 +342,19 @@ Sa oled müksanud.</string>
     <string name="buy_vip_month_few">%1$d kuud %2$.2f %3$@ eest</string>
     <string name="buy_vip_month_other">%1$d kuud %2$.2f %3$@ eest</string>
     <string name="buy_special_offers">Eripakkumised</string>
+    <string name="you_dont_have_gifts_yet">Sa pole siiamani kingitusi saanud</string>
     <string name="buy_sympathies">Osta meeldimised</string>
+    <string name="chat_no_message_title">Alusta suhtlemist!</string>
+    <string name="user_baned">Kasutaja on ära keelatud</string>
+    <string name="general_choose_city">Vali linn</string>
     <string name="buy_mobile_payments">Muud tasumise viisid</string>
+    <string name="general_save_and_exit">Salvestada ja väljuda</string>
+    <string name="user_is_deleted">Kasutaja on eemaldatud</string>
     <string name="general_bookmarks_title">Väljavalitud</string>
     <string name="general_bookmarks">Väljavalitud</string>
     <string name="general_fans">Kummardajad</string>
+    <string name="general_no_fans">Ei ole kummardajaid</string>
+    <string name="buy_resources">Varu ära täiendada</string>
+    <string name="user_is_banned">Kasutaja on ära keelatud</string>
+    <string name="general_input_email">Sisesta oma e-posti aadress/e-mail</string>
 </resources>

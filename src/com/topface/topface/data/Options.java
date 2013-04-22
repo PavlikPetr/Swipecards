@@ -63,6 +63,7 @@ public class Options extends AbstractData {
     public static final String BANNER_ADWIRED = "ADWIRED";
     public final static String BANNER_MADNET = "MADNET";
     public static final String BANNER_BEGUN = "BEGUN";
+    public static final String BANNER_MOPUB = "MOPUB";
     public static final String BANNER_GAG = "GAG";
 
     /**

@@ -305,11 +305,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 //TODO костыль для навигации
                 getActivity().setResult(Activity.RESULT_CANCELED);
                 getActivity().finish();
-
             }
         });
 
-        mActionBar.showProfileAvatar();
+        mActionBar.showProfileAvatar(R.drawable.feed_banned_male_avatar, null);
 
         setNavigationTitles(userName, userAge, userCity);
     }
@@ -492,7 +491,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void onUserLoaded() {
-        if (mActionBar != null) mActionBar.showProfileAvatar(mUser.photo, this);
+        if (mActionBar != null) {
+            if (mUser.deleted || mUser.banned || mUser.photo == null || mUser.photo.isEmpty()) {
+                mActionBar.showProfileAvatar(mUser.sex == Static.BOY ? R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar, null);
+            } else {
+                mActionBar.showProfileAvatar(mUser.photo, this);
+            }
+        }
     }
 
     private void release() {

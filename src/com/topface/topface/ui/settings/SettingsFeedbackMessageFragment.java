@@ -24,7 +24,6 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FeedbackReport;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.edit.AbstractEditFragment;
-import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.Debug;
@@ -262,15 +261,6 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         }
     }
 
-    private void setBackground(int resId, ViewGroup frame) {
-        ImageView background = (ImageView) frame.findViewById(R.id.ivEditBackground);
-        background.setImageResource(resId);
-    }
-
-    private void setText(int titleResId, ViewGroup frame) {
-        ((TextView) frame.findViewById(R.id.tvTitle)).setText(titleResId);
-    }
-
     class Report {
         boolean emailWanted = false;
         String email;
@@ -284,8 +274,9 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         String device = android.os.Build.DEVICE;
         String model = android.os.Build.MODEL;
 
+        private AuthToken authToken = AuthToken.getInstance();
+
         public String getSubject() {
-            AuthToken authToken = AuthToken.getInstance();
             return "[" + Static.PLATFORM + "]" + subject + " {" + authToken.getSocialNet() + "_id=" + authToken.getUserId() + "}";
         }
 
@@ -305,9 +296,13 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             strBuilder.append("<p>Device language: ").append(Locale.getDefault().getDisplayLanguage()).append("</p>");
 
             strBuilder.append("<p>Topface SSID: ").append(Ssid.get()).append("</p>");
-            AuthToken authToken = AuthToken.getInstance();
             strBuilder.append("<p>Social net: ").append(authToken.getSocialNet()).append("</p>");
-            strBuilder.append("<p>Social token: ").append(authToken.getTokenKey()).append("</p>");
+            if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+                strBuilder.append("<p>Topface login: ").append(authToken.getLogin()).append("</p>");
+            } else {
+                strBuilder.append("<p>Social token: ").append(authToken.getTokenKey()).append("</p>");
+            }
+
             strBuilder.append("<p>Social id: ").append(authToken.getUserId()).append("</p>");
 
             strBuilder.append("<p>Android version: ").append(android_CODENAME).append("/");
