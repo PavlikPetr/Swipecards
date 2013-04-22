@@ -320,14 +320,14 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     protected void onDeleteItem(final int position) {
-        DeleteRequest dr = new DeleteRequest(getActivity());
-        dr.id = getItem(position).id;
-        registerRequest(dr);
+        DeleteRequest dr = new DeleteRequest(getItem(position).id, getActivity());
         dr.callback(new SimpleApiHandler() {
             @Override
             public void success(ApiResponse response) {
-                mLockView.setVisibility(View.GONE);
-                getListAdapter().removeItem(position);
+                if (isAdded()) {
+                    mLockView.setVisibility(View.GONE);
+                    getListAdapter().removeItem(position);
+                }
             }
 
             @Override

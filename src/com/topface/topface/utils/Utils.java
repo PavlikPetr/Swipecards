@@ -10,6 +10,7 @@ import android.graphics.Bitmap.Config;
 import android.graphics.PorterDuff.Mode;
 import android.net.Uri;
 import android.os.Build;
+import android.text.TextUtils;
 import android.view.Display;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -25,13 +26,13 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class Utils {
-    public static final long WEEK = 604800000;
     public static final long DAY = 86400000;
-    public static final long WEEK_IN_SECONDS= 604800;
+    public static final long WEEK_IN_SECONDS = 604800;
     public static final long DAY_IN_SECONDS = 86400;
 
     private static PluralResources mPluralResources;
     private static String mClientVersion;
+    private static float mDensity = App.getContext().getResources().getDisplayMetrics().density;
 
     public static int unixtimeInSeconds() {
         return (int) (System.currentTimeMillis() / 1000L);
@@ -417,7 +418,19 @@ public class Utils {
     }
 
     public static void goToMarket(Context context) {
-        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(context.getString(R.string.default_market_link))));
+        context.startActivity(getMarketIntent(context));
+    }
+
+    public static Intent getMarketIntent(Context context) {
+        String link;
+        //Для амазона делаем специальную ссылку, иначе он ругается, хотя и работает
+        if (TextUtils.equals(Utils.getBuildType(), context.getString(R.string.build_amazon))) {
+            link = context.getString(R.string.amazon_market_link);
+        } else {
+            link = context.getString(R.string.default_market_link);
+        }
+
+        return new Intent(Intent.ACTION_VIEW, Uri.parse(link));
     }
 
     public static String getBuildType() {
@@ -478,5 +491,9 @@ public class Utils {
     public static void showSoftKeyboard(Context context, EditText editText) {
         InputMethodManager keyboard = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         keyboard.showSoftInput(editText, 0);
+    }
+
+    public static int getPxFromDp(int pixels) {
+        return (int) (mDensity * pixels);
     }
 }

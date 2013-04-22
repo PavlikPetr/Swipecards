@@ -56,6 +56,7 @@ public class SettingsAboutFragment extends BaseFragment {
                 ZipEntry ze = zf.getEntry("classes.dex");
                 long time = ze.getTime();
                 versionNumber += "\nBuild: " + SimpleDateFormat.getInstance().format(new java.util.Date(time));
+                zf.close();
             }
         } catch (Exception e) {
             versionNumber = "unknown";

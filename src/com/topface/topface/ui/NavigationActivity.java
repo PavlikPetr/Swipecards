@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.Toast;
+import com.slidingmenu.lib.SlidingMenu;
 import com.topface.billing.BillingUtils;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
@@ -30,10 +31,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
-import com.topface.topface.ui.fragments.FragmentSwitchController;
-import com.topface.topface.ui.fragments.FragmentSwitchController.FragmentSwitchListener;
 import com.topface.topface.ui.fragments.MenuFragment;
-import com.topface.topface.ui.fragments.MenuFragment.FragmentMenuListener;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.utils.*;
@@ -50,13 +48,13 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     public static final String CURRENT_FRAGMENT_ID = "NAVIGATION_FRAGMENT";
     private FragmentManager mFragmentManager;
     private MenuFragment mFragmentMenu;
-    private FragmentSwitchController mFragmentSwitcher;
     private FullscreenController mFullscreenController;
 
     private SharedPreferences mPreferences;
     private NoviceLayout mNoviceLayout;
     private Novice mNovice;
     private boolean needAnimate = false;
+    private SlidingMenu mSlidingMenu;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,12 +71,78 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         Debug.log(this, "onCreate");
         mFragmentManager = getSupportFragmentManager();
 
-        initFragmentSwitcher();
+        initSlidingMenu();
         if (!AuthToken.getInstance().isEmpty()) {
             showFragment(savedInstanceState);
         }
 
         mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
+    }
+
+    private void initSlidingMenu() {
+        mSlidingMenu = new SlidingMenu(this);
+        mSlidingMenu.setMode(SlidingMenu.LEFT);
+        mSlidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
+        mSlidingMenu.setMenu(R.layout.fragment_side_menu);
+        mSlidingMenu.attachToActivity(this, SlidingMenu.SLIDING_WINDOW);
+        mSlidingMenu.setBehindOffset(Utils.getPxFromDp(60));
+        mSlidingMenu.setShadowWidth(Utils.getPxFromDp(20));
+        mSlidingMenu.setShadowDrawable(R.drawable.shadow);
+        mSlidingMenu.setFadeEnabled(false);
+        mSlidingMenu.setBehindScrollScale(0f);
+        mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
+        mFragmentMenu.setOnFragmentSelected(new MenuFragment.OnFragmentSelectedListener() {
+            @Override
+            public void onFragmentSelected(int fragmentId) {
+                mSlidingMenu.showContent();
+            }
+        });
+        setSlidingMenuEvents();
+
+    }
+
+    private void setSlidingMenuEvents() {
+        mSlidingMenu.setOnClosedListener(new SlidingMenu.OnClosedListener() {
+            @Override
+            public void onClosed() {
+                mFragmentMenu.setClickable(false);
+                BaseFragment currentFragment = mFragmentMenu.getCurrentFragment();
+                if (currentFragment != null) {
+                    currentFragment.activateActionBar(false);
+                }
+                actionsAfterRegistration();
+            }
+        });
+        mSlidingMenu.setOnOpenListener(new SlidingMenu.OnOpenListener() {
+            @Override
+            public void onOpen() {
+                mFragmentMenu.setClickable(true);
+            }
+        });
+        mSlidingMenu.setOnOpenedListener(new SlidingMenu.OnOpenedListener() {
+            @Override
+            public void onOpened() {
+                BaseFragment currentFragment = mFragmentMenu.getCurrentFragment();
+                if (currentFragment != null) {
+                    currentFragment.activateActionBar(true);
+                }
+
+                if (mNovice != null) {
+                    if (mNovice.isMenuCompleted()) return;
+
+                    if (mNovice.isShowFillProfile()) {
+                        mNoviceLayout.setLayoutRes(
+                                R.layout.novice_fill_profile,
+                                mFragmentMenu.getProfileButtonOnClickListener()
+                        );
+                        AlphaAnimation alphaAnimation = new AlphaAnimation(0.0F, 1.0F);
+                        alphaAnimation.setDuration(400L);
+                        mNoviceLayout.startAnimation(alphaAnimation);
+                        mNovice.completeShowFillProfile();
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -97,18 +161,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         return mPreferences;
     }
 
-    private void initFragmentSwitcher() {
-        mFragmentSwitcher = (FragmentSwitchController) findViewById(R.id.fragment_switcher);
-        mFragmentSwitcher.setFragmentSwitchListener(mFragmentSwitchListener);
-        mFragmentSwitcher.setFragmentManager(mFragmentManager);
-
-        mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
-        mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
-        mFragmentMenu.setOnMenuListener(mOnFragmentMenuListener);
-    }
-
     private void showFragment(int fragmentId) {
-        mFragmentSwitcher.showFragment(fragmentId);
         mFragmentMenu.selectMenu(fragmentId);
     }
 
@@ -160,7 +213,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         super.onNewIntent(intent);
         int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
         if (id != -1) {
-            mFragmentSwitcher.showFragmentWithAnimation(id);
+            mFragmentMenu.showFragment(id);
         }
     }
 
@@ -177,7 +230,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         needAnimate = true;
 
         //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
-        new ExternalLinkExecuter(listener).execute(getIntent());
+        new ExternalLinkExecuter(mListener).execute(getIntent());
 
         App.checkProfileUpdate();
     }
@@ -247,7 +300,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     public void close(Fragment fragment, boolean needInit) {
         super.close(fragment, needInit);
-        showFragment(FragmentSwitchController.DEFAULT_FRAGMENT);
+        showFragment(MenuFragment.DEFAULT_FRAGMENT);
     }
 
     /*
@@ -255,12 +308,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         */
     @Override
     public void onClick(View view) {
-        if (view.getId() != R.id.btnNavigationHome)
-            return;
-        if (mFragmentSwitcher.getAnimationState() == FragmentSwitchController.EXPAND) {
-            mFragmentSwitcher.closeMenu();
-        } else {
-            mFragmentSwitcher.openMenu();
+        if (view.getId() == R.id.btnNavigationHome) {
+            mSlidingMenu.toggle();
         }
     }
 
@@ -268,12 +317,12 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     public void onBackPressed() {
         if (mFullscreenController != null && mFullscreenController.isFullScreenBannerVisible()) {
             mFullscreenController.hideFullscreenBanner((ViewGroup) findViewById(R.id.loBannerContainer));
-        } else if (mFragmentSwitcher != null) {
-            if (mFragmentSwitcher.getAnimationState() == FragmentSwitchController.EXPAND) {
+        } else if (mSlidingMenu != null) {
+            if (mSlidingMenu.isMenuShowing()) {
                 super.onBackPressed();
             } else {
                 mFragmentMenu.refreshNotifications();
-                mFragmentSwitcher.openMenu();
+                mSlidingMenu.showMenu();
             }
         } else {
             super.onBackPressed();
@@ -282,25 +331,11 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     @Override
     public boolean onCreatePanelMenu(int featureId, Menu menu) {
-        if (mFragmentSwitcher != null) {
-            if (mFragmentSwitcher.getAnimationState() != FragmentSwitchController.EXPAND) {
-                if (mFragmentMenu != null) {
-                    mFragmentMenu.refreshNotifications();
-                }
-                mFragmentSwitcher.openMenu();
-            } else {
-                mFragmentSwitcher.closeMenu();
-            }
+        if (mSlidingMenu != null) {
+            mSlidingMenu.toggle();
         }
         return false;
     }
-
-    private FragmentMenuListener mOnFragmentMenuListener = new FragmentMenuListener() {
-        @Override
-        public void onMenuClick(int fragmentId) {
-            mFragmentSwitcher.showFragmentWithAnimation(fragmentId);
-        }
-    };
 
     public void onDialogCancel() {
         Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
@@ -334,22 +369,17 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 mFragmentSwitcher.getCurrentFragment().activateActionBar(true);
             }
 
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    if (mNovice != null && mNoviceLayout != null && mFragmentMenu != null) {
-                        if (mNovice.isMenuCompleted()) return;
+            if (mNovice != null) {
+                if (mNovice.isMenuCompleted()) return;
 
-                        if (mNovice.isShowFillProfile()) {
-                            mNoviceLayout.setLayoutRes(R.layout.novice_fill_profile, mFragmentMenu.getProfileButtonOnClickListener());
-                            AlphaAnimation alphaAnimation = new AlphaAnimation(0.0F, 1.0F);
-                            alphaAnimation.setDuration(400L);
-                            mNoviceLayout.startAnimation(alphaAnimation);
-                            mNovice.completeShowFillProfile();
-                        }
-                    }
+                if (mNovice.isShowFillProfile()) {
+                    mNoviceLayout.setLayoutRes(R.layout.novice_fill_profile, mFragmentMenu.getProfileButtonOnClickListener());
+                    AlphaAnimation alphaAnimation = new AlphaAnimation(0.0F, 1.0F);
+                    alphaAnimation.setDuration(400L);
+                    mNoviceLayout.startAnimation(alphaAnimation);
+                    mNovice.completeShowFillProfile();
                 }
-            });
+            }
         }
 
     };
@@ -431,16 +461,13 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        int currentFragmentId = mFragmentSwitcher.getCurrentFragmentId();
         outState.putInt(
                 CURRENT_FRAGMENT_ID,
-                currentFragmentId == -1 ?
-                        FragmentSwitchController.DEFAULT_FRAGMENT :
-                        currentFragmentId
+                mFragmentMenu.getCurrentFragmentId()
         );
     }
 
-    ExternalLinkExecuter.OnExternalLinkListener listener = new ExternalLinkExecuter.OnExternalLinkListener() {
+    ExternalLinkExecuter.OnExternalLinkListener mListener = new ExternalLinkExecuter.OnExternalLinkListener() {
         @Override
         public void onProfileLink(int profileID) {
             ContainerActivity.getProfileIntent(profileID, NavigationActivity.this);
