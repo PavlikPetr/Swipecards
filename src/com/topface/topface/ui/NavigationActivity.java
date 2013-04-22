@@ -336,32 +336,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     @Override
     protected void onDestroy() {
-        //В некоторых редких случаях выпадает NullPointerException при destroyDrawingCache,
-        //поэтому на всякий случай оборачиваем в try
-        try {
-            super.onDestroy();
-            unbindDrawables(findViewById(R.id.NavigationLayout));
-            System.gc();
-        } catch (Exception e) {
-            Debug.error(e);
-        }
-
         //Для запроса фото при следующем создании NavigationActivity
         if (CacheProfile.photo == null) CacheProfile.wasAvatarAsked = false;
-    }
-
-    private void unbindDrawables(View view) {
-        if (view != null) {
-            if (view.getBackground() != null) {
-                view.getBackground().setCallback(null);
-            }
-            if (view instanceof ViewGroup) {
-                for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
-                    unbindDrawables(((ViewGroup) view).getChildAt(i));
-                }
-                ((ViewGroup) view).removeAllViews();
-            }
-        }
     }
 
     @Override
