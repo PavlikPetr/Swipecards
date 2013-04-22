@@ -334,17 +334,22 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 mFragmentSwitcher.getCurrentFragment().activateActionBar(true);
             }
 
-            if (mNovice != null) {
-                if (mNovice.isMenuCompleted()) return;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if (mNovice != null && mNoviceLayout != null && mFragmentMenu != null) {
+                        if (mNovice.isMenuCompleted()) return;
 
-                if (mNovice.isShowFillProfile()) {
-                    mNoviceLayout.setLayoutRes(R.layout.novice_fill_profile, mFragmentMenu.getProfileButtonOnClickListener());
-                    AlphaAnimation alphaAnimation = new AlphaAnimation(0.0F, 1.0F);
-                    alphaAnimation.setDuration(400L);
-                    mNoviceLayout.startAnimation(alphaAnimation);
-                    mNovice.completeShowFillProfile();
+                        if (mNovice.isShowFillProfile()) {
+                            mNoviceLayout.setLayoutRes(R.layout.novice_fill_profile, mFragmentMenu.getProfileButtonOnClickListener());
+                            AlphaAnimation alphaAnimation = new AlphaAnimation(0.0F, 1.0F);
+                            alphaAnimation.setDuration(400L);
+                            mNoviceLayout.startAnimation(alphaAnimation);
+                            mNovice.completeShowFillProfile();
+                        }
+                    }
                 }
-            }
+            });
         }
 
     };
