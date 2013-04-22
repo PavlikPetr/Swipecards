@@ -8,12 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
+import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.QuestionaryRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
@@ -105,7 +108,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
                     mFormInfo.fillFormItem(newItem);
 
                     prepareRequestSend();
-                    QuestionaryRequest request = mFormInfo.getFormRequest(newItem);
+                    ApiRequest request = mFormInfo.getFormRequest(newItem);
                     registerRequest(request);
                     request.callback(new ApiHandler() {
 

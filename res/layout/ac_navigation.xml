@@ -11,12 +11,6 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"/>
 
-    <com.topface.topface.ui.views.NoviceLayout
-            android:id="@+id/loNovice"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:visibility="gone"/>
-
     <FrameLayout
             android:id="@+id/loBannerContainer"
             android:layout_width="fill_parent"

@@ -19,6 +19,7 @@ public class Novice {
     private SharedPreferences mPreferences;
 
     private static Novice mInstance;
+    private boolean flagsInited = false;
 
     public static Novice getInstance(SharedPreferences preferences) {
         if (mInstance == null) {
@@ -30,6 +31,19 @@ public class Novice {
     private Novice(SharedPreferences preferences) {
         mPreferences = preferences;
     }
+
+    public void initNoviceFlags() {
+        isShowEnergyToSympathies();
+        isShowSympathy();
+        isShowBuySympathies();
+        isShowFillProfile();
+        flagsInited = true;
+    }
+
+    public boolean isFlagsInitializationProccesed() {
+        return flagsInited;
+    }
+
 
     public boolean isShowEnergyToSympathies() {
         if (showEnergyToSympathies == null) {

@@ -7,7 +7,9 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
+import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.QuestionaryRequest;
+import com.topface.topface.requests.SettingsRequest;
 
 /* понять и простить за эту хуйню */
 public class FormInfo {
@@ -152,13 +154,16 @@ public class FormInfo {
         }
     }
 
-    public QuestionaryRequest getFormRequest(int titleId, int selectedValueId, String selectedValue) {
+    public ApiRequest getFormRequest(int titleId, int selectedValueId, String selectedValue) {
+        if (titleId == R.array.form_main_status) {
+            SettingsRequest request = new SettingsRequest(mContext);
+            request.xstatus = selectedValueId;
+            return request;
+        }
+
         QuestionaryRequest result = new QuestionaryRequest(mContext);
 
         switch (titleId) {
-            case R.array.form_main_status:
-                result.statusid = selectedValueId;
-                break;
             case R.array.form_main_about_status:
                 result.status = selectedValue;
                 break;
@@ -229,7 +234,7 @@ public class FormInfo {
         return result;
     }
 
-    public QuestionaryRequest getFormRequest(FormItem item) {
+    public ApiRequest getFormRequest(FormItem item) {
         return getFormRequest(item.titleId, item.dataId, item.value);
     }
 

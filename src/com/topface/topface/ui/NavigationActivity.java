@@ -13,7 +13,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.widget.Toast;
 import com.slidingmenu.lib.SlidingMenu;
 import com.topface.billing.BillingUtils;
@@ -33,7 +32,6 @@ import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
-import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.utils.*;
 import com.topface.topface.utils.GeoUtils.GeoLocationManager;
 import com.topface.topface.utils.GeoUtils.GeoPreferencesManager;
@@ -51,7 +49,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private FullscreenController mFullscreenController;
 
     private SharedPreferences mPreferences;
-    private NoviceLayout mNoviceLayout;
     private Novice mNovice;
     private boolean needAnimate = false;
     private SlidingMenu mSlidingMenu;
@@ -75,8 +72,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         if (!AuthToken.getInstance().isEmpty()) {
             showFragment(savedInstanceState);
         }
-
-        mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
     }
 
     private void initSlidingMenu() {
@@ -127,20 +122,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                     currentFragment.activateActionBar(true);
                 }
 
-                if (mNovice != null) {
-                    if (mNovice.isMenuCompleted()) return;
-
-                    if (mNovice.isShowFillProfile()) {
-                        mNoviceLayout.setLayoutRes(
-                                R.layout.novice_fill_profile,
-                                mFragmentMenu.getProfileButtonOnClickListener()
-                        );
-                        AlphaAnimation alphaAnimation = new AlphaAnimation(0.0F, 1.0F);
-                        alphaAnimation.setDuration(400L);
-                        mNoviceLayout.startAnimation(alphaAnimation);
-                        mNovice.completeShowFillProfile();
-                    }
-                }
+                mFragmentMenu.showNovice(mNovice);
             }
         });
     }
@@ -149,6 +131,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     protected void inBackgroundThread() {
         super.inBackgroundThread();
         mNovice = Novice.getInstance(getPreferences());
+        mNovice.initNoviceFlags();
         Looper.prepare();
         Offerwalls.init(getApplicationContext());
         Looper.loop();
