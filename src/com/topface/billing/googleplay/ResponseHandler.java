@@ -5,6 +5,7 @@ package com.topface.billing.googleplay;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import com.topface.billing.BillingUtils;
 import com.topface.billing.googleplay.BillingService.RequestPurchase;
@@ -14,9 +15,7 @@ import com.topface.billing.googleplay.Consts.ResponseCode;
 import com.topface.topface.App;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Verify;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.OptionsRequest;
-import com.topface.topface.requests.VerifyRequest;
+import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.CacheProfile;
 
@@ -218,10 +217,18 @@ public class ResponseHandler {
 
     private static void sendOptionsRequest(Context context) {
         final OptionsRequest request = new OptionsRequest(context);
-        request.callback(new ApiHandler() {
+        request.callback(new DataApiHandler<Options>() {
+
             @Override
-            public void success(final ApiResponse response) {
-                Options.parse(response);
+            protected void success(Options data, ApiResponse response) {
+                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(
+                        new Intent(ProfileRequest.PROFILE_UPDATE_ACTION)
+                );
+            }
+
+            @Override
+            protected Options parseResponse(ApiResponse response) {
+                return Options.parse(response);
             }
 
             @Override

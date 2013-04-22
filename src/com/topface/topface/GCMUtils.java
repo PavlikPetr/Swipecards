@@ -3,7 +3,6 @@ package com.topface.topface;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -20,10 +19,7 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.ChatFragment;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.TopfaceNotificationManager;
+import com.topface.topface.utils.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -273,7 +269,7 @@ public class GCMUtils {
                 }
                 break;
             case GCM_TYPE_UPDATE:
-                i = new Intent(Intent.ACTION_VIEW, Uri.parse(context.getString(R.string.default_market_link)));
+                i = Utils.getMarketIntent(context);
                 break;
 
             case GCM_TYPE_NOTIFICATION:

@@ -139,11 +139,11 @@ public class WebAuthActivity extends Activity {
 
             mProgressBar.setVisibility(View.VISIBLE);
 
-            Matcher mMatcherToken = mRegExpToken.matcher(url);
-            Matcher mMatcherError = mRegExpError.matcher(url);
-            Matcher mMatcherLogout = mRegExpLogout.matcher(url);
+            Matcher matcherToken = mRegExpToken.matcher(url);
+            Matcher matcherError = mRegExpError.matcher(url);
+            Matcher matcherLogout = mRegExpLogout.matcher(url);
 
-            if (mMatcherToken.find()) {
+            if (matcherToken.find()) {
                 view.stopLoading();
                 try {
                     URLEncodedUtils.parse(new URI(url), "utf-8");
@@ -151,7 +151,7 @@ public class WebAuthActivity extends Activity {
                     Debug.log(WebAuthActivity.this, "url is wrong:" + e);
                 }
 
-                final HashMap<String, String> queryMap = parseQueryString(mMatcherToken.group(1));
+                final HashMap<String, String> queryMap = parseQueryString(matcherToken.group(1));
 
                 AuthorizationManager.getVkName(queryMap.get(ACCESS_TOKEN), queryMap.get(USER_ID), new Handler() {
                     @Override
@@ -160,7 +160,7 @@ public class WebAuthActivity extends Activity {
                         mHandler.sendMessage(Message.obtain(null, AuthToken.AUTH_COMPLETE, queryMap));
                     }
                 });
-            } else if (mMatcherError.find() || mMatcherLogout.find()) {
+            } else if (matcherError.find() || matcherLogout.find()) {
                 view.stopLoading();
                 AuthToken.getInstance().removeToken();
                 mHandler.sendMessage(Message.obtain(null, AuthToken.AUTH_ERROR));

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.view.View;
 import com.topface.topface.App;
@@ -18,6 +19,7 @@ public class PopupManager {
     public static final int RATE_POPUP_TIMEOUT = 86400000; // 1000 * 60 * 60 * 24 * 1 (1 сутки)
 
     Context mContext;
+    private boolean mRatingPopupIsShowing = false;
 
     public PopupManager(Context context) {
         mContext = context;
@@ -73,67 +75,92 @@ public class PopupManager {
     }
 
     public void showRatePopup() {
-        if (!checkVersion(CacheProfile.getOptions().max_version) && App.isOnline()) {
+        if (!checkVersion(CacheProfile.getOptions().max_version) && App.isOnline() && mRatingPopupIsShowing) {
             ratingPopup();
         }
     }
 
-    //Тупо копипаст, в коде не разбирался.
     private void ratingPopup() {
-        final SharedPreferences preferences = mContext.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final SharedPreferences preferences = mContext.getSharedPreferences(
+                        Static.PREFERENCES_TAG_SHARED,
+                        Context.MODE_PRIVATE
+                );
 
-        long date_start = preferences.getLong(RATING_POPUP, 1);
-        long date_now = new java.util.Date().getTime();
+                long date_start = preferences.getLong(RATING_POPUP, 1);
+                long date_now = new java.util.Date().getTime();
 
-        if (date_start == 0 || (date_now - date_start < RATE_POPUP_TIMEOUT)) {
-            return;
-        } else if (date_start == 1) {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putLong("RATING_POPUP", new java.util.Date().getTime());
-            editor.commit();
-            return;
-        }
+                if (date_start == 0 || (date_now - date_start < RATE_POPUP_TIMEOUT)) {
+                    return;
+                } else if (date_start == 1) {
+                    saveRatingPopupStatus(new java.util.Date().getTime());
+                    return;
+                }
 
+                Looper.prepare();
+                getDialog().show();
+                mRatingPopupIsShowing = true;
+                Looper.loop();
+            }
+        }).start();
+
+    }
+
+    private Dialog getDialog() {
         final Dialog ratingPopup = new Dialog(mContext) {
             @Override
             public void onBackPressed() {
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putLong(RATING_POPUP, new java.util.Date().getTime());
-                editor.commit();
+                saveRatingPopupStatus(new java.util.Date().getTime());
                 super.onBackPressed();
             }
         };
         ratingPopup.setTitle(R.string.dashbrd_popup_title);
         ratingPopup.setContentView(R.layout.popup_rating);
-        ratingPopup.show();
+        ratingPopup.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                mRatingPopupIsShowing = false;
+            }
+        });
 
         ratingPopup.findViewById(R.id.btnRatingPopupRate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Utils.goToMarket(mContext);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putLong(RATING_POPUP, 0);
-                editor.commit();
+                saveRatingPopupStatus(0);
                 ratingPopup.cancel();
             }
         });
         ratingPopup.findViewById(R.id.btnRatingPopupLate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putLong(RATING_POPUP, new java.util.Date().getTime());
-                editor.commit();
+                saveRatingPopupStatus(new java.util.Date().getTime());
                 ratingPopup.cancel();
             }
         });
         ratingPopup.findViewById(R.id.btnRatingPopupCancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putLong(RATING_POPUP, 0);
-                editor.commit();
+                saveRatingPopupStatus(0);
                 ratingPopup.cancel();
             }
+
         });
+        return ratingPopup;
+    }
+
+    private void saveRatingPopupStatus(final long value) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final SharedPreferences.Editor editor = mContext.getSharedPreferences(
+                        Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE
+                ).edit();
+                editor.putLong(RATING_POPUP, value);
+                editor.commit();
+            }
+        }).start();
     }
 }
