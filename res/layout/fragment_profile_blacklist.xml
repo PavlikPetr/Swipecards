@@ -10,10 +10,9 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:background="@drawable/btn_gray_selector"
-            style="@style/ButtonGrayText"
+            style="@style/ButtonGray"
+            android:layout_margin="5dp"
             android:text="@string/black_list_add"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
             android:layout_centerInParent="true"
             />
 
@@ -21,12 +20,10 @@
             android:id="@+id/fpbDeleteFromBlackList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/btn_gray_selector"
-            style="@style/ButtonGrayText"
+            android:layout_margin="5dp"
+            style="@style/ButtonGray"
             android:text="@string/black_list_delete"
             android:layout_centerInParent="true"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
             android:visibility="gone"
             />
 </RelativeLayout>
