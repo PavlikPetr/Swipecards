@@ -23,6 +23,8 @@ import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.mad.ad.AdStaticView;
+import com.mopub.mobileads.MoPubErrorCode;
+import com.mopub.mobileads.MoPubView;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -72,6 +74,7 @@ public class BannerBlock {
     public static final int PLUS1_ID = 7227;
     private static final String BEGUN_KEY = "pad_id:320304962|block_id:320308422";
     public static final String VIRUS_LIKES_BANNER_PARAM = "viruslikes";
+    private static final String MOPUB_AD_UNIT_ID = "4ec8274ea73811e295fa123138070049";
 
     private LayoutInflater mInflater;
     ViewGroup mBannerLayout;
@@ -151,6 +154,8 @@ public class BannerBlock {
                 return mInflater.inflate(R.layout.banner_madnet, null);
             } else if (bannerType.equals(Options.BANNER_BEGUN)) {
                 return mInflater.inflate(R.layout.banner_begun, null);
+            } else if (bannerType.equals(Options.BANNER_MOPUB)) {
+                return mInflater.inflate(R.layout.banner_mopub, null);
             } else {
                 return null;
             }
@@ -195,6 +200,8 @@ public class BannerBlock {
             showMadnet();
         } else if (mBannerView instanceof ru.begun.adlib.AdView) {
             showBegun();
+        } else if (mBannerView instanceof MoPubView) {
+            showMopub();
         } else if (mBannerView instanceof ImageView) {
             if (banner == null) {
                 requestBannerGag();
@@ -202,6 +209,34 @@ public class BannerBlock {
                 showTopface(banner);
             }
         }
+    }
+
+    private void showMopub() {
+        MoPubView adView = (MoPubView) mBannerView;
+        adView.setAdUnitId(MOPUB_AD_UNIT_ID);
+        adView.setBannerAdListener(new MoPubView.BannerAdListener() {
+            @Override
+            public void onBannerLoaded(MoPubView banner) {
+            }
+
+            @Override
+            public void onBannerFailed(MoPubView banner, MoPubErrorCode errorCode) {
+                requestBannerGag();
+            }
+
+            @Override
+            public void onBannerClicked(MoPubView banner) {
+            }
+
+            @Override
+            public void onBannerExpanded(MoPubView banner) {
+            }
+
+            @Override
+            public void onBannerCollapsed(MoPubView banner) {
+            }
+        });
+        adView.loadAd();
     }
 
     private void showBegun() {
@@ -555,6 +590,7 @@ public class BannerBlock {
     }
 
     public void onPause() {
+        if (mBannerView instanceof MoPubView) ((MoPubView)mBannerView).destroy();
     }
 
     public void onDestroy() {

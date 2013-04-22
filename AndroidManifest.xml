@@ -27,6 +27,7 @@
     <uses-permission android:name="com.android.vending.BILLING"/>
     <uses-permission android:name="android.permission.GET_TASKS"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <supports-screens
             android:resizeable="true"
@@ -209,6 +210,10 @@
         <activity
                 android:name="com.topface.topface.utils.offerwalls.clickky.ClickkyActivity"
                 />
+
+        <activity android:name="com.mopub.mobileads.MoPubActivity" android:configChanges="keyboardHidden|orientation"/>
+        <activity android:name="com.mopub.mobileads.MraidActivity" android:configChanges="keyboardHidden|orientation"/>
+        <activity android:name="com.mopub.mobileads.MraidBrowser" android:configChanges="keyboardHidden|orientation"/>
 
         <!-- Алиас для главной активити из первой версии. На xвсякий случай, а то раньше уже были проблемы с FB -->
         <activity-alias

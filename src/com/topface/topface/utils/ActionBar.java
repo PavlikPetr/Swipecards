@@ -44,6 +44,7 @@ public class ActionBar {
         mUserActionsControl = (ImageButton) actionView.findViewById(R.id.btnUserProfActions);
         mRightProgressBar = (ProgressBar) actionView.findViewById(R.id.prsNavigationRight);
         mProfileAvatar = (ImageViewRemote) actionView.findViewById(R.id.btnNavigationBarAvatar);
+        mProfileAvatar.setImageResource(R.drawable.feed_banned_male_avatar);
         mSendButton = (ImageButton) actionView.findViewById(R.id.btnNavigationSend);
     }
 
@@ -55,14 +56,17 @@ public class ActionBar {
         }
     }
 
-    public void showProfileAvatar() {
-        showProfileAvatar(null, null);
-    }
-
     public void showProfileAvatar(final Photo profilePhoto, View.OnClickListener listener) {
         hideRightBarPart();
         mProfileAvatar.setVisibility(View.VISIBLE);
         mProfileAvatar.setPhoto(profilePhoto);
+        mProfileAvatar.setOnClickListener(listener);
+    }
+
+    public void showProfileAvatar(final int profilePhotorResource, View.OnClickListener listener) {
+        hideRightBarPart();
+        mProfileAvatar.setVisibility(View.VISIBLE);
+        mProfileAvatar.setImageResource(profilePhotorResource);
         mProfileAvatar.setOnClickListener(listener);
     }
 

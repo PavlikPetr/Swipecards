@@ -28,7 +28,7 @@ import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 
-public class MenuFragment extends Fragment implements View.OnClickListener {
+public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
     private SparseArray<Button> mButtons;
 
@@ -55,31 +55,36 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (mMenuAvatar != null) {
-                mMenuAvatar.setPhoto(CacheProfile.photo);
-            }
-
-            //Иконки на профиле
-            if (!CacheProfile.checkIsFillData() && canChangeProfileIcons) {
-                showNotEnoughDataIcon();
-            } else if (CacheProfile.premium && canChangeProfileIcons) {
-                showRockerIcon();
-            } else {
-                mProfileInfo.setVisibility(View.GONE);
-            }
-
-            //Кнопка распродаж
-            if (CacheProfile.getOptions().saleExists) {
-                buyButton.setBackgroundResource(R.drawable.btn_sale_selector);
-            } else {
-                buyButton.setBackgroundResource(R.drawable.btn_blue_selector);
-            }
-
-            //Новые данные монет и лайков
-            mCoins.setText(Integer.toString(CacheProfile.money));
-            mLikes.setText(Integer.toString(CacheProfile.likes));
+            setMenuData();
         }
     };
+
+    private void setMenuData() {
+        if (mMenuAvatar != null) {
+            mMenuAvatar.setPhoto(CacheProfile.photo);
+        }
+
+        //Иконки на профиле
+        if (!CacheProfile.checkIsFillData() && canChangeProfileIcons) {
+            showNotEnoughDataIcon();
+        } else if (CacheProfile.premium && canChangeProfileIcons) {
+            showRockerIcon();
+        } else {
+            mProfileInfo.setVisibility(View.GONE);
+        }
+        canChangeProfileIcons = true;
+
+        //Кнопка распродаж
+        if (CacheProfile.getOptions().saleExists) {
+            buyButton.setBackgroundResource(R.drawable.btn_sale_selector);
+        } else {
+            buyButton.setBackgroundResource(R.drawable.btn_blue_selector);
+        }
+
+        //Новые данные монет и лайков
+        mCoins.setText(Integer.toString(CacheProfile.money));
+        mLikes.setText(Integer.toString(CacheProfile.likes));
+    }
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -179,15 +184,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     }
 
     public void onLoadProfile() {
-        if (!CacheProfile.checkIsFillData()) {
-            showNotEnoughDataIcon();
-        } else if (CacheProfile.premium) {
-            showRockerIcon();
-        } else {
-            mProfileInfo.setVisibility(View.GONE);
-        }
-
-        canChangeProfileIcons = true;
+        setMenuData();
     }
 
     private void showNotEnoughDataIcon() {

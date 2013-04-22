@@ -28,6 +28,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
@@ -304,11 +305,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 //TODO костыль для навигации
                 getActivity().setResult(Activity.RESULT_CANCELED);
                 getActivity().finish();
-
             }
         });
 
-        mActionBar.showProfileAvatar();
+        mActionBar.showProfileAvatar(R.drawable.feed_banned_male_avatar, null);
 
         setNavigationTitles(userName, userAge, userCity);
     }
@@ -332,35 +332,38 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     }
 
+    /**
+     * Удаляет сообщение в чате
+     *
+     * @param position сообщени в списке
+     */
     private void deleteItem(final int position) {
         History item = mAdapter.getItem(position);
         if (item != null && (item.id == null || item.isFake())) {
             Toast.makeText(getActivity(), R.string.cant_delete_fake_item, Toast.LENGTH_LONG).show();
             return;
+        } else if (item == null) {
+            return;
         }
-        if (item == null) return;
-        DeleteRequest dr = new DeleteRequest(getActivity());
-        dr.id = item.id;
-        registerRequest(dr);
-        dr.callback(new DataApiHandler() {
-            @Override
-            protected void success(Object data, ApiResponse response) {
-                int invertedPosition = mAdapter.getPosition(position);
-                if (mAdapter.getFirstItemId().equals(mAdapter.getData().get(invertedPosition).id)) {
-                    LocalBroadcastManager.getInstance(getActivity())
-                            .sendBroadcast(new Intent(DialogsFragment.UPDATE_DIALOGS));
-                }
-                mAdapter.removeItem(invertedPosition);
-            }
 
+        DeleteRequest dr = new DeleteRequest(item.id, getActivity());
+        dr.callback(new ApiHandler() {
             @Override
-            protected Object parseResponse(ApiResponse response) {
-                return null;
+            public void success(ApiResponse response) {
+                if (isAdded()) {
+                    int invertedPosition = mAdapter.getPosition(position);
+                    if (mAdapter.getFirstItemId().equals(mAdapter.getData().get(invertedPosition).id)) {
+                        LocalBroadcastManager.getInstance(getActivity())
+                                .sendBroadcast(new Intent(DialogsFragment.UPDATE_DIALOGS));
+                    }
+                    mAdapter.removeItem(invertedPosition);
+                }
             }
 
             @Override
             public void fail(int codeError, ApiResponse response) {
                 Debug.log(response.toString());
+                Utils.showErrorMessage(App.getContext());
             }
         }).exec();
     }
@@ -472,10 +475,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void removeAlreadyLoadedItems(HistoryListData data) {
-        if(!mAdapter.isEmpty() && !data.items.isEmpty()) {
+        if (!mAdapter.isEmpty() && !data.items.isEmpty()) {
             FeedList<History> items = mAdapter.getData();
             int size = items.size();
-            for (int i = size-1;i > 0 && i > size-LIMIT; i--) {
+            for (int i = size - 1; i > 0 && i > size - LIMIT; i--) {
                 List<History> itemsToDelete = new ArrayList<History>();
                 for (History item : data.items) {
                     if (item.id.equals(items.get(i).id)) {
@@ -488,7 +491,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void onUserLoaded() {
-        if (mActionBar != null) mActionBar.showProfileAvatar(mUser.photo, this);
+        if (mActionBar != null) {
+            if (mUser.deleted || mUser.banned || mUser.photo == null || mUser.photo.isEmpty()) {
+                mActionBar.showProfileAvatar(mUser.sex == Static.BOY ? R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar, null);
+            } else {
+                mActionBar.showProfileAvatar(mUser.photo, this);
+            }
+        }
     }
 
     private void release() {
