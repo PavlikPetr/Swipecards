@@ -99,6 +99,9 @@ public class Options extends AbstractData {
     public String offerwall;
     public boolean saleExists = false;
 
+    public int premium_period;
+    public int contacts_count;
+
     public static Options parse(ApiResponse response) {
         Options options = new Options();
 
@@ -149,6 +152,10 @@ public class Options extends AbstractData {
                     }
                 }
             }
+
+            JSONObject contacts_invite = response.jsonResult.optJSONObject("contacts_invite");
+            options.premium_period = contacts_invite.optInt("premium_period");
+            options.contacts_count = contacts_invite.optInt("contacts_count");
 
             if (response.jsonResult.has("links")) {
                 JSONObject links = response.jsonResult.optJSONObject("links");

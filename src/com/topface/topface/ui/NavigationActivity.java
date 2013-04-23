@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
@@ -37,8 +36,6 @@ import com.topface.topface.ui.fragments.MenuFragment.FragmentMenuListener;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.utils.*;
-import com.topface.topface.utils.GeoUtils.GeoLocationManager;
-import com.topface.topface.utils.GeoUtils.GeoPreferencesManager;
 import com.topface.topface.utils.offerwalls.Offerwalls;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -57,12 +54,13 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private NoviceLayout mNoviceLayout;
     private Novice mNovice;
     private boolean needAnimate = false;
+    private boolean isPopupVisible = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         mNeedAnimate = false;
         super.onCreate(savedInstanceState);
-        startActivity(ContainerActivity.getNewIntent(ContainerActivity.INTENT_CONTACTS_FRAGMENT));
+
         if (isNeedBroughtToFront(getIntent())) {
             // При открытии активити из лаунчера перезапускаем ее
             finish();
@@ -162,6 +160,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         if (needAnimate) {
             overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
         }
+
         needAnimate = true;
 
         //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
@@ -169,6 +168,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
         App.checkProfileUpdate();
     }
+
 
     private void actionsAfterRegistration() {
         if (!AuthToken.getInstance().isEmpty()) {
@@ -232,9 +232,10 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
     }
 
+
+
     @Override
-    public void close(Fragment fragment, boolean needInit) {
-        super.close(fragment, needInit);
+    public void onCloseFragment() {
         showFragment(FragmentSwitchController.DEFAULT_FRAGMENT);
     }
 
@@ -252,11 +253,15 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
     }
 
+    public void setPopupVisible(boolean visibility) {
+        isPopupVisible = visibility;
+    }
+
     @Override
     public void onBackPressed() {
-        if (mFullscreenController != null && mFullscreenController.isFullScreenBannerVisible()) {
+        if (mFullscreenController != null && mFullscreenController.isFullScreenBannerVisible() && !isPopupVisible) {
             mFullscreenController.hideFullscreenBanner((ViewGroup) findViewById(R.id.loBannerContainer));
-        } else if (mFragmentSwitcher != null) {
+        } else if (mFragmentSwitcher != null && !isPopupVisible) {
             if (mFragmentSwitcher.getAnimationState() == FragmentSwitchController.EXPAND) {
                 super.onBackPressed();
             } else {
@@ -265,6 +270,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             }
         } else {
             super.onBackPressed();
+            isPopupVisible = false;
         }
     }
 

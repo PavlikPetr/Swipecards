@@ -3,20 +3,25 @@ package com.topface.topface.utils;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.provider.ContactsContract;
 import android.util.StringBuilderPrinter;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class ContactsProvider {
 
     private final Context ctx;
-    private LinkedList<Contact> contacts;
+    private ArrayList<Contact> contacts;
     private GetContactsListener listener;
 
     public ContactsProvider(Context ctx) {
         this.ctx = ctx;
-        contacts = new LinkedList<Contact>();
+        contacts = new ArrayList<Contact>();
     }
 
     public void getContacts(final int limit, final int offset, GetContactsListener listener) {
@@ -31,7 +36,9 @@ public class ContactsProvider {
 
     private void getContactsAsync(int limit, int offset) {
         ContentResolver cr = getContentResolver();
-        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, "  _id LIMIT " + limit + " offset " + offset);
+
+        String limitCondition = (limit == -1)?"":" LIMIT " + limit + " offset " + offset;
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, " _id" + limitCondition );
         if (cur.getCount() > 0) {
             while (!cur.isLast()) {
                 cur.moveToNext();
@@ -46,18 +53,18 @@ public class ContactsProvider {
                 }
                 emailCur.close();
                 if (!email.equals("")) {
-                    contacts.add(new Contact(name, email));
+                    contacts.add(new Contact(name, email, true));
                 } else {
                     Cursor phoneCursor = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{String.valueOf(id)}, null);
                     if (phoneCursor.getCount() > 0) {
                         phoneCursor.moveToNext();
-                        Contact contact = new Contact(name, getContactFromCursor(phoneCursor));
+                        Contact contact = new Contact(name, getContactFromCursor(phoneCursor), false);
                         while (!phoneCursor.isLast()) {
                             phoneCursor.moveToNext();
                             int isPrimary = phoneCursor.getInt( phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.IS_SUPER_PRIMARY) );
                             if(isPrimary > 0) {
                                 String phone = getContactFromCursor(phoneCursor);
-                                contact = new Contact(name, phone);
+                                contact = new Contact(name, phone, false);
                                 break;
                             }
                         }
@@ -81,14 +88,22 @@ public class ContactsProvider {
         return  ctx.getContentResolver();
     }
 
-    public static class Contact {
+    public static class Contact implements Parcelable{
         private String name;
         private String phone;
+        private boolean email;
         private boolean isChecked = true;
 
-        public Contact(String name, String phone) {
+        public Contact(String name, String phone, boolean isMail) {
             this.name = name;
             this.phone = phone;
+            email = isMail;
+        }
+
+        private Contact(Parcel in) {
+            name = in.readString();
+            phone = in.readString();
+            email = Boolean.getBoolean(in.readString());
         }
 
         public String getName() {
@@ -99,6 +114,10 @@ public class ContactsProvider {
             return phone;
         }
 
+        public boolean isEmail() {
+            return email;
+        }
+
         public void setChecked(boolean checked) {
             isChecked = checked;
         }
@@ -106,10 +125,38 @@ public class ContactsProvider {
         public boolean isChecked() {
             return isChecked;
         }
+
+        public static final Creator<Contact> CREATOR = new Creator<Contact>() {
+            @Override
+            public Contact createFromParcel(Parcel source) {
+                return new Contact(source);
+            }
+
+            @Override
+            public Contact[] newArray(int size) {
+                return new Contact[size];
+            }
+        };
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(name);
+            dest.writeString(phone);
+            dest.writeString(Boolean.toString(email));
+        }
+
+        public JSONObject makeJSON() throws JSONException {
+            return new JSONObject().put(phone, name);
+        }
     }
 
     public interface GetContactsListener {
-        public void onContactsReceived(LinkedList<Contact> contacts);
+        public void onContactsReceived(ArrayList<Contact> contacts);
     }
 
 }
