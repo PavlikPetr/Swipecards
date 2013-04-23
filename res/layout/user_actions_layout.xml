@@ -6,6 +6,8 @@
               android:layout_height="wrap_content"
               android:id="@+id/mUserActions"
               android:background="@drawable/drop_menu_backgroud"
+              android:paddingLeft="3dp"
+              android:paddingRight="3dp"
         >
 
         <RelativeLayout
@@ -182,7 +184,6 @@
             android:id="@+id/acBookmark"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background= "@drawable/actions_menu_delimiter"
             >
         <ImageView
                 android:id="@+id/favIcon"
