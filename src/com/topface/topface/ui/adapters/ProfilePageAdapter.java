@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import com.topface.topface.ui.fragments.HeaderMainFragment;
 import com.topface.topface.ui.fragments.HeaderStatusFragment;
 import com.topface.topface.ui.fragments.ProfileFragment;
-import com.topface.topface.ui.profile.ProfileBlackListControlFragment;
 import com.topface.topface.utils.Debug;
 import com.viewpagerindicator.PageIndicator;
 
@@ -81,8 +80,6 @@ public class ProfilePageAdapter extends FragmentStatePagerAdapter {
                 fragment = HeaderMainFragment.newInstance(mProfileUpdater.getProfile());
             } else if (fragmentClassName.equals(HeaderStatusFragment.class.getName())) {
                 fragment = HeaderStatusFragment.newInstance(mProfileUpdater.getProfile(), mProfileUpdater.getProfileType());
-            } else if (fragmentClassName.equals(ProfileBlackListControlFragment.class.getName())) {
-                fragment = ProfileBlackListControlFragment.newInstance(mProfileUpdater.getProfile().uid, mProfileUpdater.getProfile().inBlackList);
             } else {
                 Class fragmentClass = Class.forName(fragmentClassName);
                 fragment = (Fragment) fragmentClass.newInstance();
