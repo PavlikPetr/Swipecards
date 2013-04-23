@@ -50,4 +50,8 @@ public class User extends Profile {
         return user;
     }
 
+    @Override
+    public boolean isEditor() {
+        return false;
+    }
 }

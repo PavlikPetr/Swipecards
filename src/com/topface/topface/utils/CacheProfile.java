@@ -68,6 +68,7 @@ public class CacheProfile {
 
     public static long profileUpdateTime;
     public static int xstatus;
+    private static boolean editor;
 
     private static void setProfileCache(final ApiResponse response) {
         //Пишем в SharedPreferences в отдельном потоке
@@ -124,6 +125,7 @@ public class CacheProfile {
         profile.paid = paid;
         profile.show_ad = show_ad;
         profile.xstatus = xstatus;
+        profile.setEditor(editor);
 
         return profile;
     }
@@ -162,6 +164,8 @@ public class CacheProfile {
         show_ad = profile.show_ad;
 
         xstatus = profile.xstatus;
+
+        editor = profile.isEditor();
 
         setProfileCache(response);
         setProfileUpdateTime();
@@ -321,5 +325,9 @@ public class CacheProfile {
         editor.putBoolean(Static.PREFERENCES_TAG_NEED_CHANGE_PASSWORD, false);
         editor.putBoolean(Static.PREFERENCES_TAG_NEED_CITY_CONFIRM, true);
         editor.commit();
+    }
+
+    public static boolean isEditor() {
+        return editor;
     }
 }

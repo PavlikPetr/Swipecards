@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="editor_refresh_profile">Обновить профиль и Options</string>
+    <string name="editor_menu_admin">Админка</string>
+</resources>

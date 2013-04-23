@@ -19,7 +19,7 @@ import java.util.LinkedList;
 /* Класс профиля владельца устройства */
 public class Profile extends AbstractDataWithPhotos {
 
-    private static String[] EMPTY_STATUSES = {Static.EMPTY, "-"};
+    private static String[] EMPTY_STATUSES = {Static.EMPTY, "-", "."};
 
 
     public int uid; // id пользователя в топфейсе
@@ -62,6 +62,10 @@ public class Profile extends AbstractDataWithPhotos {
     public boolean paid;
     // Показывать рекламу или нет
     public boolean show_ad;
+    /**
+     * Флаг того, является ли пользоветль редактором
+     */
+    private boolean mEditor;
     // private static final String profileFileName = "profile.out";
     // private static final long serialVersionUID = 2748391675222256671L;
 
@@ -96,6 +100,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.paid = resp.optBoolean("paid");
             profile.show_ad = resp.optBoolean("show_ad",true);
             profile.xstatus = resp.optInt("xstatus");
+            profile.setEditor(resp.optBoolean("editor", false));
 
             parseGifts(profile, resp);
             parseNotifications(profile, resp);
@@ -491,6 +496,10 @@ public class Profile extends AbstractDataWithPhotos {
         return result;
     }
 
+    public void setEditor(boolean editor) {
+        mEditor = editor;
+    }
+
     public static class TopfaceNotifications {
         public boolean apns;
         public boolean mail;
@@ -526,6 +535,10 @@ public class Profile extends AbstractDataWithPhotos {
 
     public boolean isEmpty() {
         return uid <= 0;
+    }
+
+    public boolean isEditor() {
+        return mEditor;
     }
 
 }
