@@ -49,19 +49,27 @@ public class InvitesPopup extends BaseFragment{
        final RelativeLayout invitesPopup = (RelativeLayout) view.findViewById(R.id.loInvitesPopup);
        TextView invitesTitle = (TextView) view.findViewById(R.id.invitesTitle);
        invitesTitle.setText(getString(R.string.get_vip_for_invites, CacheProfile.getOptions().contacts_count));
+
        if(getArguments() != null) {
            contacts = getArguments().getParcelableArrayList(CONTACTS);
        } else {
            ((BaseFragmentActivity) getActivity()).close(InvitesPopup.this, false);
        }
        invitesPopup.setVisibility(View.VISIBLE);
-       ImageView closeInvites = (ImageView) view.findViewById(R.id.closePopup);
+       final ImageView closeInvites = (ImageView) view.findViewById(R.id.closePopup);
        closeInvites.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
                if (isAdded()) {
                    ((BaseFragmentActivity)getActivity()).close(InvitesPopup.this);
                }
+           }
+       });
+
+       invitesTitle.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+                closeInvites.performClick();
            }
        });
 
@@ -91,6 +99,7 @@ public class InvitesPopup extends BaseFragment{
            public void onClick(View v) {
                if (!invitesCheckBox.isChecked()) {
                    startActivity(ContainerActivity.getIntentForContacts(contacts));
+                   ((BaseFragmentActivity)getActivity()).close(InvitesPopup.this);
                } else {
                    sendInvitesRequest();
                }
@@ -111,6 +120,7 @@ public class InvitesPopup extends BaseFragment{
                        CacheProfile.premium = true;
                        CacheProfile.canInvite = false;
                        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                       ((BaseFragmentActivity)getActivity()).close(InvitesPopup.this);
                    }
                } else {
                    Toast.makeText(getActivity(), getString(R.string.invalid_contacts), 2000).show();

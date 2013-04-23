@@ -43,6 +43,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
     private EditText mCityInputView;
     private TextView mCityInputTitle;
     private ListView cityListView;
+    private TextView mCityFail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
 
         // Progress
         mProgressBar = (ProgressBar) findViewById(R.id.prsCityLoading);
+        mCityFail = (TextView) findViewById(R.id.noCities);
 
         // ListView
         initListView();
@@ -284,12 +286,15 @@ public class CitySearchActivity extends BaseFragmentActivity {
                 if (citiesList.size() == 0) {
                     cityListView.setVisibility(View.INVISIBLE);
                     if(CitySearchActivity.this != null) {
-                        mMyCityTitle.setText(getString(R.string.filter_city_fail, prefix));
-                        mMyCityTitle.setVisibility(View.VISIBLE);
+                          mCityFail.setVisibility(View.VISIBLE);
+                          mCityFail.setText(getString(R.string.filter_city_fail, prefix));
+//                        mMyCityTitle.setText(getString(R.string.filter_city_fail, prefix));
+//                        mMyCityTitle.setVisibility(View.VISIBLE);
                     }
                     return;
                 }
-                mMyCityTitle.setVisibility(View.GONE);
+//                mMyCityTitle.setVisibility(View.GONE);
+                mCityFail.setVisibility(View.GONE);
                 fillData(citiesList);
                 post(new Runnable() {
                     @Override

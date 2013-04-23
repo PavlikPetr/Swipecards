@@ -118,6 +118,7 @@ public class ContactsFragment extends BaseFragment{
                             CacheProfile.premium = true;
                             CacheProfile.canInvite = false;
                             LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                            getActivity().finish();
                         }
                     } else {
                         Toast.makeText(getActivity(), getString(R.string.invalid_contacts), 2000).show();
