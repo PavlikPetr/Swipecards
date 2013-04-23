@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.WindowManager;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.Static;
@@ -75,7 +76,10 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             };
 
             try {
-                registerReceiver(mProfileLoadReceiver, new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD));
+                LocalBroadcastManager.getInstance(this).registerReceiver(
+                        mProfileLoadReceiver,
+                        new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD)
+                );
             } catch (Exception ex) {
                 Debug.error(ex);
             }
