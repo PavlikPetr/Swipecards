@@ -525,4 +525,35 @@
     <string name="vip_stop_ads">Только общение, ничего лишнего. У VIP-ползователей нет рекламы</string>
     <string name="settings_invalid_name">Имя содержит некорректные символы</string>
     <string name="general_fan_access_error">Для доступа к поклонникам необходимо иметь VIP статус</string>
+    <string name="get_seven_days_vip">Получить VIP на 7 дней</string>
+    <string name="invite_friends">Пригласите %d друзей, чтобы получить VIP-статус на 7 дней</string>
+    <string name="friend_email_hint">Введите e-mail друга</string>
+    <string name="general_add">Добавить</string>
+    <string name="general_invite_friends">Пригласите друзей</string>
+    <string name="general_rest_contacts">Вам осталось %d контактов</string>
+    <string name="get_vip_for_invites">Получи VIP бесплатно за %d приглашений</string>
+    <string name="inviteFriendsTitle">Пригласить всех друзей в Topface</string>
+    <string name="invalid_contacts">Некоторые из контаков были некорректны. Пожалуйста, отправьте корректные контакты
+    </string>
+
+    <plurals name="vip_status_period">
+        <item quantity="one">Вы получили VIP статус на %d день</item>
+        <item quantity="few">Вы получили VIP статус на %d дня</item>
+        <item quantity="many">Вы получили VIP статус на %d дней</item>
+        <item quantity="other">Вы получили VIP статус на %d дней</item>
+    </plurals>
+
+    <plurals name="vip_status_period_btn">
+        <item quantity="one">Получить VIP на %d день</item>
+        <item quantity="few">Получить VIP на %d дня</item>
+        <item quantity="many">Получить VIP на %d дней</item>
+        <item quantity="other">Получить VIP на %d дней</item>
+    </plurals>
+
+    <plurals name="invite_friends_plurals">
+        <item quantity="one">Пригласите %1$d друзей, чтобы получить VIP-статус на %2$d день</item>
+        <item quantity="few">Пригласите %1$d друзей, чтобы получить VIP-статус на %2$d дня</item>
+        <item quantity="many">Пригласите %1$d друзей, чтобы получить VIP-статус на %2$d дней</item>
+        <item quantity="other">Пригласите %1$d друзей, чтобы получить VIP-статус на %2$d дней</item>
+    </plurals>
 </resources>
