@@ -17,7 +17,7 @@ import com.topface.topface.Static;
 public class PopupManager {
     public static final String RATING_POPUP = "RATING_POPUP";
     public static final int RATE_POPUP_TIMEOUT = 86400000; // 1000 * 60 * 60 * 24 * 1 (1 сутки)
-    public static final int INVITE_POPUP_TIMEOUT = 1;//604800000;
+    public static final int INVITE_POPUP_TIMEOUT = 604800000;
     private static boolean CAN_SHOW_POPUP = true;
 
     Context mContext;
@@ -57,7 +57,7 @@ public class PopupManager {
     }
 
     public void showOldVersionPopup(String version) {
-        if (checkVersion(version)) {
+        if (checkVersion(version) && CAN_SHOW_POPUP) {
             CAN_SHOW_POPUP = false;
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
             builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {
@@ -84,7 +84,7 @@ public class PopupManager {
     }
 
     public void showRatePopup() {
-        if (!checkVersion(CacheProfile.getOptions().max_version) && App.isOnline() && mRatingPopupIsShowing) {
+        if (!checkVersion(CacheProfile.getOptions().max_version) && App.isOnline() && mRatingPopupIsShowing && CAN_SHOW_POPUP) {
             ratingPopup();
         }
     }

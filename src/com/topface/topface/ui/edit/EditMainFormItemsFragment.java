@@ -294,6 +294,8 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
             case AGE:
                 if (isAgeValid(Integer.parseInt(data))) {
                     CacheProfile.age = Integer.parseInt(data);
+                } else {
+                    Toast.makeText(getActivity(), R.string.profile_edit_age_ranges, 1500).show();
                 }
                 break;
             case STATUS:
@@ -321,6 +323,8 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                         try {
                             if (isAgeValid(Integer.parseInt(changedValue))) {
                                 request.age = Integer.parseInt(changedValue);
+                            } else {
+                                Toast.makeText(getActivity(), R.string.profile_edit_age_ranges, 1500).show();
                             }
                         } catch (Exception e) {
                             Debug.error(e);

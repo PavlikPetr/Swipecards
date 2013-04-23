@@ -35,6 +35,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     protected boolean mNeedAnimate = true;
     private boolean needAuth = true;
     private BroadcastReceiver mProfileLoadReceiver;
+    private boolean afterOnSaveInstanceState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +134,9 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     }
 
     public void startFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().add(R.id.content, fragment).addToBackStack(null).commit();
+        if (!afterOnSaveInstanceState) {
+            getSupportFragmentManager().beginTransaction().add(R.id.content, fragment).addToBackStack(null).commit();
+        }
     }
 
     public void close(Fragment fragment) {
@@ -154,6 +157,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        afterOnSaveInstanceState = true;
     }
 
     @Override
