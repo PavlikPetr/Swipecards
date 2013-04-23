@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import com.mopub.mobileads.MoPubInterstitial;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -34,9 +35,12 @@ public class FullscreenController {
 
     public static final String URL_SEPARATOR = "::";
     private static boolean isFullScreenBannerVisible = false;
+    private static final String MOPUB_INTERSTITIAL_ID = "00db7208a90811e281c11231392559e4";
 
     private SharedPreferences mPreferences;
     private Activity mActivity;
+
+    private MoPubInterstitial mInterstitial;
 
     public FullscreenController(Activity activity) {
         mActivity = activity;
@@ -49,13 +53,21 @@ public class FullscreenController {
                 if (startPage.floatType.equals(Options.FLOAT_TYPE_BANNER)) {
                     if (startPage.banner.equals(Options.BANNER_ADWIRED)) {
                         requestAdwiredFullscreen();
-
                     } else if (startPage.banner.equals(Options.BANNER_TOPFACE)) {
                         requestTopfaceFullscreen();
+                    } else if (startPage.banner.equals(Options.BANNER_MOPUB)) {
+                        requestMopubFullscreen();
                     }
                 }
             }
         }
+    }
+
+    private void requestMopubFullscreen() {
+        if (mInterstitial == null) {
+            mInterstitial = new MoPubInterstitial(mActivity, MOPUB_INTERSTITIAL_ID);
+        }
+        mInterstitial.load();
     }
 
     private void requestAdwiredFullscreen() {
@@ -203,5 +215,9 @@ public class FullscreenController {
             ((ViewGroup) mActivity.findViewById(R.id.NavigationLayout)).addView(fullscreenContainer);
         }
         return fullscreenContainer;
+    }
+
+    public void onDestroy() {
+        if (mInterstitial != null) mInterstitial.destroy();
     }
 }

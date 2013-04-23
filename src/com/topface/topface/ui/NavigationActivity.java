@@ -338,6 +338,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     protected void onDestroy() {
         //Для запроса фото при следующем создании NavigationActivity
         if (CacheProfile.photo == null) CacheProfile.wasAvatarAsked = false;
+        mFullscreenController.onDestroy();
+        super.onDestroy();
     }
 
     @Override
