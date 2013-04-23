@@ -445,18 +445,6 @@ public class Profile extends AbstractDataWithPhotos {
             if (!resp.isNull("photos_count")) {
                 profile.totalPhotos = resp.optInt("photos_count");
             }
-            // newbie
-            // if (!resp.isNull("flags")) {
-            // JSONArray flags = resp.getJSONArray("flags");
-            // for (int i = 0; i < flags.length(); i++) {
-            // profile.isNewbie = true;
-            // String item = flags.getString(i);
-            // if (item.equals("NOVICE_ENERGY")) {
-            // profile.isNewbie = false;
-            // break;
-            // }
-            // }
-            // }
         }
     }
 
