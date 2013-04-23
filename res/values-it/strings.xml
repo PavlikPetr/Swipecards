@@ -265,7 +265,7 @@
     <string name="profile_mood">Descrivi il tuo umore</string>
     <string name="general_reconnect">Stiamo cercando di ripristinare il collegamento internet.\nAttendere prego.</string>
     <string name="dating_people_unnoticed">Hai lasciato sfuggire alla tua vista dieci persone!</string>
-    <string name="dating_continue">Continua a valutare</string>
+    <string name="dating_continue">Continua la relazione</string>
     <string name="dating_better_look">Guarda meglio!\nPuò darsi che ti stai lasciando sfuggire il tuo destino!</string>
     <string name="edit_my_city">Mia città</string>
     <string name="edit_my_photos">Mie foto</string>
@@ -413,4 +413,6 @@
     <string name="general_wrong_photo_upload">La tua foto non rispetta il regolamento. Prova a farne un’altra</string>
     <string name="general_input_email">Inserisci la tua e-mail</string>
     <string name="cant_delete_fake_item">Il messaggio non è stato ancora consegnato, non puoi eliminarlo. Riprova più tardi.</string>
+    <string name="settings_invalid_name">Il nome contiene i simboli scorretti</string>
+    <string name="general_fan_access_error">Per accedere alla pagina degli ammiratori devi essere un utente VIP</string>
 </resources>

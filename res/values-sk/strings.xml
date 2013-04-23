@@ -269,7 +269,7 @@
     <string name="profile_mood">Opíšte Vašu náladu</string>
     <string name="general_reconnect">Snažíme sa obnoviť pripojenie na Internet.\nVydržte prosím.</string>
     <string name="dating_people_unnoticed">Desať ľudí uniklo Vašej pozornosti</string>
-    <string name="dating_continue">Pokračovať v hodnotení</string>
+    <string name="dating_continue">Pokračovať v známosti</string>
     <string name="dating_better_look">Rozkukajte sa!\n Nepremeškajte svoju šancu!</string>
     <string name="edit_my_city">Moje mesto</string>
     <string name="edit_my_photos">Moje fotografie</string>
@@ -418,4 +418,6 @@
     <string name="general_wrong_photo_upload">Vaša fotografia nespĺňa pravidlá. Skúste si urobiť inú.</string>
     <string name="general_input_email">Zadajte Váš e-mail</string>
     <string name="cant_delete_fake_item">Táto správa nie je dostupná, nemôžete ju zmazať. Skúste to neskôr</string>
+    <string name="settings_invalid_name">Meno obsahuje nesprávne symboly</string>
+    <string name="general_fan_access_error">Aby ste mali prístup k fanúšikom, musíte mať VIP status</string>
 </resources>

@@ -265,7 +265,7 @@
     <string name="profile_mood">Describe tu humor</string>
     <string name="general_reconnect">Intentamos recuperar la conexión con Internet.\nEspere, por favor.</string>
     <string name="dating_people_unnoticed">¡Diez personas quedaron sin tu atención!</string>
-    <string name="dating_continue">Continua evaluando</string>
+    <string name="dating_continue">Continuar conocerse</string>
     <string name="dating_better_look">¡Fijate bien!\n¡Posiblemente estás dejando escapar tu destino!</string>
     <string name="edit_my_city">Mi ciudad</string>
     <string name="edit_my_photos">Mis fotografías</string>
@@ -412,4 +412,6 @@
     <string name="general_wrong_photo_upload">Tu fotografía no cumple con el reglamento. Prueba hacer otra</string>
     <string name="general_input_email">Introduce tu e-mail</string>
     <string name="cant_delete_fake_item">Este mensaje aún no está entregado, por lo tanto no puedes eliminarlo. Prueba más tarde.</string>
+    <string name="settings_invalid_name">El nombre contiene simbolos incorrectos</string>
+    <string name="general_fan_access_error">Para acceder a los admiradores hace falta tener  el estado VIP</string>
 </resources>

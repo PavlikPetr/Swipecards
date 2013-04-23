@@ -23,9 +23,9 @@ public class ZoomImageViewRemote extends ImageViewRemote {
 
     private void initPhotoView() {
         mPhotoViewAttacher = new ZoomPhotoViewAttacher(this);
-        mPhotoViewAttacher.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
+        mPhotoViewAttacher.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
             @Override
-            public void onPhotoTap(View view, float x, float y) {
+            public void onViewTap(View view, float x, float y) {
                 performClick();
             }
         });
