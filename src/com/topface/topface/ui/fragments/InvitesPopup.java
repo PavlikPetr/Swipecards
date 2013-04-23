@@ -1,6 +1,8 @@
 package com.topface.topface.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,7 @@ import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.InviteContactsRequest;
+import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
@@ -103,14 +106,19 @@ public class InvitesPopup extends BaseFragment{
            public void success(ApiResponse response) {
                boolean isPremium = response.jsonResult.optBoolean("premium");
                if (isPremium) {
-                   Toast.makeText(getActivity(), "Поздравляем, Вы получили VIP статус", 1500).show();
+                   if (getActivity() != null) {
+                       Toast.makeText(getActivity(), Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period), 1500).show();
+                       CacheProfile.premium = true;
+                       CacheProfile.canInvite = false;
+                       LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                   }
                } else {
-                   Toast.makeText(getActivity(), "Некоторые из контаков были некорректны. Пожалуйста, отправьте корректные контакты", 1500).show();
+                   Toast.makeText(getActivity(), getString(R.string.invalid_contacts), 2000).show();
                }
            }
 
            @Override
-           public void fail(int codeError, ApiResponse response) {
+           public void fail (int codeError, ApiResponse response){
 
            }
        }).exec();
