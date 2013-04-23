@@ -29,6 +29,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/fbpContainer"
                     android:padding="5dp"
+                    android:layout_marginRight="5dp"
                     >
 
                 <RelativeLayout
@@ -88,7 +89,7 @@
                         android:text="@string/vip_info_guest"
                         android:layout_marginLeft="5dp"
                         style="@style/VipItemTitleWhiteText"
-                        android:textSize="14sp"
+                        android:textSize="13sp"
                         android:drawablePadding="5dp"
                         android:drawableLeft="@drawable/ic_guests"
                         />
@@ -105,7 +106,7 @@
                         android:text="@string/vip_info_invisible"
                         android:layout_marginLeft="5dp"
                         style="@style/VipItemTitleWhiteText"
-                        android:textSize="14sp"
+                        android:textSize="13sp"
                         android:drawableLeft="@drawable/ic_invisible"
                         android:drawablePadding="5dp"
                         />
@@ -122,7 +123,7 @@
                         android:text="@string/vip_stop_ads"
                         android:layout_marginLeft="5dp"
                         style="@style/VipItemTitleWhiteText"
-                        android:textSize="14sp"
+                        android:textSize="13sp"
                         android:drawablePadding="5dp"
                         android:drawableLeft="@drawable/ic_stop_ads"
                         />
@@ -139,7 +140,7 @@
                         android:text="@string/vip_info_message"
                         android:layout_marginLeft="5dp"
                         style="@style/VipItemTitleWhiteText"
-                        android:textSize="14sp"
+                        android:textSize="13sp"
                         android:drawableLeft="@drawable/ic_message"
                         android:drawablePadding="5dp"
                         />
@@ -156,7 +157,7 @@
                         android:text="@string/vip_info_blackList"
                         android:layout_marginLeft="5dp"
                         style="@style/VipItemTitleWhiteText"
-                        android:textSize="14sp"
+                        android:textSize="13sp"
                         android:drawableLeft="@drawable/ic_blacklist"
                         android:drawablePadding="5dp"
                         />
@@ -174,7 +175,7 @@
                         android:text="@string/vip_info_vip"
                         android:layout_marginLeft="5dp"
                         style="@style/VipItemTitleWhiteText"
-                        android:textSize="14sp"
+                        android:textSize="13sp"
                         android:drawableLeft="@drawable/ic_vip"
                         android:drawablePadding="5dp"
                         />
@@ -247,6 +248,7 @@
 
     <ImageView
             android:id="@+id/headerShadow"
+            android:layout_below="@id/navBar"
             style="@style/HeaderShadow"/>
 
 </RelativeLayout>

@@ -144,11 +144,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     public void setUser(FeedUser user) {
         this.user = user;
         if (mHeaderView != null && user != null) {
-            if (user.photo != null && !user.photo.isEmpty()) {
-                ((ImageViewRemote) mHeaderView.findViewById(R.id.ivFriendAvatar)).setPhoto(user.photo);
-            } else {
+            if (user.deleted || user.banned || user.photo == null || user.photo.isEmpty()) {
                 ((ImageViewRemote) mHeaderView.findViewById(R.id.ivFriendAvatar)).setImageResource(user.sex == Static.BOY ?
                         R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
+            } else {
+                ((ImageViewRemote) mHeaderView.findViewById(R.id.ivFriendAvatar)).setPhoto(user.photo);
             }
         }
     }
