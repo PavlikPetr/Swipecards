@@ -93,6 +93,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private RelativeLayout bmBtn;
     private TextView mBookmarkAction;
 
+    private int mUserActionsPanelHeight;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -136,6 +138,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         } else if (activity instanceof NavigationActivity) {
             mActionBar.showHomeButton((NavigationActivity) activity);
         }
+        mUserActions.setVisibility(View.GONE);
 
         mTitle = (TextView) root.findViewById(R.id.tvNavigationTitle);
 
@@ -162,25 +165,19 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-
-                            double density = getResources().getDisplayMetrics().density;
-                            TranslateAnimation ta = new TranslateAnimation(0, 0, 0, mUserActions.getHeight() + mActionBar.getHeight() + (int) (5 * density));
+                            initActionsPanelHeight();
+                            TranslateAnimation ta = new TranslateAnimation(0, 0, - (mUserActions.getHeight() + mUserActionsPanelHeight), 0);
                             ta.setDuration(500);
-                            ta.setFillAfter(true);
                             ta.setAnimationListener(new Animation.AnimationListener() {
                                 @Override
                                 public void onAnimationStart(Animation animation) {
                                     mActionBar.disableActionsButton(true);
+                                    mUserActions.setVisibility(View.VISIBLE);
                                 }
 
                                 @Override
                                 public void onAnimationEnd(Animation animation) {
                                     mUserActions.clearAnimation();
-                                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                                    params.setMargins(0, 5, 5, 0);
-                                    params.addRule(RelativeLayout.BELOW, R.id.loNavigationBar);
-                                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                                    mUserActions.setLayoutParams(params);
                                     mActionBar.disableActionsButton(false);
                                 }
 
@@ -194,10 +191,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     }, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            double density = getResources().getDisplayMetrics().density;
-                            TranslateAnimation ta = new TranslateAnimation(0, 0, 0, (int) (-270 * density));
+                            initActionsPanelHeight();
+                            TranslateAnimation ta = new TranslateAnimation(0, 0, 0, - (mUserActions.getHeight() + mUserActionsPanelHeight));
                             ta.setDuration(500);
-                            ta.setFillAfter(true);
                             ta.setAnimationListener(new Animation.AnimationListener() {
                                 @Override
                                 public void onAnimationStart(Animation animation) {
@@ -206,14 +202,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
                                 @Override
                                 public void onAnimationEnd(Animation animation) {
-
                                     mUserActions.clearAnimation();
-                                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                                    params.setMargins(0, 5, 5, 0);
-                                    params.addRule(RelativeLayout.ABOVE, R.id.loNavigationBar);
-                                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                                    mUserActions.setLayoutParams(params);
                                     mActionBar.disableActionsButton(false);
+                                    mUserActions.setVisibility(View.GONE);
                                 }
 
                                 @Override
@@ -239,6 +230,14 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mHeaderPager.setCurrentItem(mStartHeaderPage);
         mBodyPager.setCurrentItem(mStartBodyPage);
         return root;
+    }
+
+    private void initActionsPanelHeight() {
+        if(mUserActionsPanelHeight == 0) {
+            int actualHeight = mActionBar.getHeight();
+            double density = getResources().getDisplayMetrics().density;
+            mUserActionsPanelHeight = actualHeight == 0 ? actualHeight : (int) (270 * density);
+        }
     }
 
     @Override
@@ -541,8 +540,10 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                                 icon.setVisibility(View.VISIBLE);
                                 v.setEnabled(true);
                                 v.setSelected(false);
-                                TextView view = (TextView) v;
-                                view.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
+                                if (v instanceof TextView) {
+                                    TextView view = (TextView) v;
+                                    view.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
+                                }
                             }
                         }
                     });
