@@ -78,7 +78,6 @@ public class ImageSwitcher extends ViewPager {
     public void setOnPageChangeListener(OnPageChangeListener listener) {
         final OnPageChangeListener finalListener = listener;
         super.setOnPageChangeListener(new OnPageChangeListener() {
-            private int mLastSelected = 0;
 
             @Override
             public void onPageScrolled(int i, float v, int i1) {
@@ -173,6 +172,12 @@ public class ImageSwitcher extends ViewPager {
             View view = inflater.inflate(R.layout.item_album_gallery, null);
             view.setTag(VIEW_TAG + Integer.toString(position));
             ImageViewRemote imageView = (ImageViewRemote) view.findViewById(R.id.ivPreView);
+            imageView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnClickListener.onClick(ImageSwitcher.this);
+                }
+            });
             //Первую фотографию грузим сразу, или если фотографию уже загружена, то сразу показываем ее
             Boolean isLoadedPhoto = mLoadedPhotos.get(position, false);
             //Если это первая фото в списке или фотография уже загружена, то устанавливаем фото сразу
@@ -244,6 +249,18 @@ public class ImageSwitcher extends ViewPager {
 
         public void setIsFirstInstantiate(boolean value) {
             isFirstInstantiate = value;
+        }
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        try {
+            return super.onInterceptTouchEvent(ev);
+        } catch (IllegalArgumentException e) {
+            //Мы отлавливаем эту ошибку из-за бага в support library, который кидает такие ошибки:
+            //IllegalArgumentException: pointerIndex out of range
+            //Debug.error(e);
+            return false;
         }
     }
 }

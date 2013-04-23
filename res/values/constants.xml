@@ -29,6 +29,7 @@
 
     <string name="default_chat_update_period">30000</string>
     <string name="default_market_link">market://details?id=com.topface.topface</string>
+    <string name="amazon_market_link">amzn://apps/android?p=com.topface.topface</string>
 
     <string name="settings_error_message_internal">Сообщение об ошибке</string>
     <string name="settings_ask_developer_internal">Вопрос разработчикам</string>

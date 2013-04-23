@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent">
+
     <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        >
+            android:id="@+id/MenuLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            >
         <!-- Profile -->
         <RelativeLayout
                 android:id="@+id/btnProfileLayout"
@@ -38,21 +40,13 @@
                     style="@style/LeftMenuButtons"/>
 
             <ImageView
-                    android:id="@+id/rocket"
+                    android:id="@+id/profileInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_rocket_small"
                     android:layout_marginLeft="185dp"
                     android:layout_centerVertical="true"
-                    android:visibility="gone"
-                    />
-            <ImageView
-                    android:id="@+id/noData"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_not_enough_data"
-                    android:layout_marginLeft="185dp"
-                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:layout_alignParentRight="true"
                     android:visibility="gone"
                     />
         </RelativeLayout>
@@ -109,12 +103,12 @@
 
         <!--Bookmarks-->
         <Button
-            android:id="@+id/btnFragmentBookmarks"
-            android:layout_below="@id/btnFragmentDialogs"
-            android:text="@string/general_bookmarks"
-            android:drawableLeft="@drawable/ic_star"
-            style="@style/LeftMenuButtons"
-            />
+                android:id="@+id/btnFragmentBookmarks"
+                android:layout_below="@id/btnFragmentDialogs"
+                android:text="@string/general_bookmarks"
+                android:drawableLeft="@drawable/ic_star"
+                style="@style/LeftMenuButtons"
+                />
         <!--Fans-->
         <Button
                 android:id="@+id/btnFragmentFans"
@@ -123,6 +117,7 @@
                 android:drawableLeft="@drawable/ic_fans"
                 style="@style/LeftMenuButtons"
                 />
+
         <TextView
                 android:id="@+id/tvNotifyFans"
                 android:layout_alignBaseline="@id/btnFragmentFans"
@@ -140,65 +135,11 @@
                 android:id="@+id/tvNotifyVisitors"
                 android:layout_alignBaseline="@+id/btnFragmentVisitors"
                 style="@style/Informer"/>
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/btnFragmentVisitors"
-            android:background="@drawable/counters_background"
-        >
-            <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                                    android:id="@+id/countersLayout"
-                    android:padding="10dp"
-                    android:layout_alignParentLeft="true"
-                    >
 
-                <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        >
-
-
-                        <com.topface.topface.ui.views.ServicesTextView xmlns:stv="http://schemas.android.com/apk/res/com.topface.topface"
-                                                                       android:id="@+id/menuCurCoins"
-                                                                       stv:maxChars="5"
-                                                                       stv:charPadding="7"
-                                                                       android:layout_width="wrap_content"
-                                                                       android:layout_height="wrap_content"
-                                                                       stv:fontSize="16"
-                                                                       android:layout_alignParentLeft="true"
-                                                                       stv:image="@drawable/ic_coins"
-                                />
-                        <com.topface.topface.ui.views.ServicesTextView xmlns:stv="http://schemas.android.com/apk/res/com.topface.topface"
-                                                                       android:id="@+id/menuCurLikes"
-                                                                       stv:maxChars="5"
-                                                                       stv:charPadding="7"
-                                                                       android:layout_width="wrap_content"
-                                                                       android:layout_height="wrap_content"
-                                                                       stv:fontSize="16"
-                                                                       android:layout_alignParentRight="true"
-                                                                       stv:image="@drawable/ic_sympathy"
-                                />
-                </RelativeLayout>
-
-                <Button
-                        android:layout_height="wrap_content"
-                        android:layout_width="fill_parent"
-                        style="@style/ButtonBlue"
-                        android:background="@drawable/btn_blue_selector"
-                        android:text="@string/buy_resources"
-
-                        android:textStyle="bold"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:id="@+id/menuBuyBtn"
-                        />
-
-            </LinearLayout>
-        </RelativeLayout>
+        <include
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/btnFragmentVisitors"
+                layout="@layout/buy_widget"/>
     </RelativeLayout>
 </ScrollView>

@@ -2,9 +2,11 @@ package com.topface.topface.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
@@ -13,6 +15,7 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.requests.AlbumRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.LeaderRequest;
+import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.gridlayout.GridLayout;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -32,7 +35,6 @@ public class LeadersActivity extends BaseFragmentActivity {
 
     private Photos usePhotos;
     private Photos uselessPhotos;
-
 
 
     private LinkedList<LeadersPhoto> mLeadersPhotos = new LinkedList<LeadersPhoto>();
@@ -66,7 +68,7 @@ public class LeadersActivity extends BaseFragmentActivity {
         mLoadingLocker = (LockerView) findViewById(R.id.llvLeaderSending);
         mUselessTitle = (TextView) findViewById(R.id.unusedTitle);
         mUselessTitle.setText(String.format(getString(R.string.leaders_pick_condition), CacheProfile.getOptions().minLeadersPercent));
-        if(CacheProfile.getOptions().minLeadersPercent == 0) {
+        if (CacheProfile.getOptions().minLeadersPercent == 0) {
             mUselessTitle.setVisibility(View.GONE);
         } else {
             mUselessTitle.setVisibility(View.VISIBLE);
@@ -103,25 +105,19 @@ public class LeadersActivity extends BaseFragmentActivity {
                             .callback(new ApiHandler() {
                                 @Override
                                 public void success(ApiResponse response) {
-                                    post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            mLoadingLocker.setVisibility(View.GONE);
-                                            Toast.makeText(LeadersActivity.this, R.string.leaders_leader_now, Toast.LENGTH_SHORT).show();
-                                            finish();
-                                        }
-                                    });
+                                    mLoadingLocker.setVisibility(View.GONE);
+                                    Toast.makeText(LeadersActivity.this, R.string.leaders_leader_now, Toast.LENGTH_SHORT).show();
+                                    //Обновляем число монет
+                                    CacheProfile.money = response.jsonResult.optInt("money", CacheProfile.money);
+                                    LocalBroadcastManager.getInstance(LeadersActivity.this)
+                                            .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                                    finish();
                                 }
 
                                 @Override
                                 public void fail(int codeError, ApiResponse response) {
-                                    post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            mLoadingLocker.setVisibility(View.GONE);
-                                            Toast.makeText(LeadersActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
+                                    mLoadingLocker.setVisibility(View.GONE);
+                                    Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                                 }
                             }).exec();
 
@@ -151,7 +147,7 @@ public class LeadersActivity extends BaseFragmentActivity {
             @Override
             public void always(ApiResponse response) {
                 super.always(response);
-                if(mLoadingLocker != null) {
+                if (mLoadingLocker != null) {
                     mLoadingLocker.setVisibility(View.GONE);
                 }
             }

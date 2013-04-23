@@ -28,6 +28,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
@@ -45,6 +46,7 @@ import com.topface.topface.utils.GeoUtils.GeoLocationManager;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TimerTask;
 
 public class ChatFragment extends BaseFragment implements View.OnClickListener, LocationListener {
@@ -272,7 +274,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
         });
         mListView.setClickable(true);
-        mAdapter.addHeader(mListView.getRefreshableView());
+        if (mAdapter.isEmpty()) {
+            mAdapter.addHeader(mListView.getRefreshableView());
+        }
         mListView.setAdapter(mAdapter);
         mListView.setOnScrollListener(mAdapter);
         mListView.getRefreshableView().addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.item_empty_footer, null));
@@ -301,11 +305,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 //TODO костыль для навигации
                 getActivity().setResult(Activity.RESULT_CANCELED);
                 getActivity().finish();
-
             }
         });
 
-        mActionBar.showProfileAvatar();
+        mActionBar.showProfileAvatar(R.drawable.feed_banned_male_avatar, null);
 
         setNavigationTitles(userName, userAge, userCity);
     }
@@ -329,35 +332,38 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     }
 
+    /**
+     * Удаляет сообщение в чате
+     *
+     * @param position сообщени в списке
+     */
     private void deleteItem(final int position) {
         History item = mAdapter.getItem(position);
         if (item != null && (item.id == null || item.isFake())) {
             Toast.makeText(getActivity(), R.string.cant_delete_fake_item, Toast.LENGTH_LONG).show();
             return;
+        } else if (item == null) {
+            return;
         }
-        if (item == null) return;
-        DeleteRequest dr = new DeleteRequest(getActivity());
-        dr.id = item.id;
-        registerRequest(dr);
-        dr.callback(new DataApiHandler() {
-            @Override
-            protected void success(Object data, ApiResponse response) {
-                int invertedPosition = mAdapter.getPosition(position);
-                if (mAdapter.getFirstItemId().equals(mAdapter.getData().get(invertedPosition).id)) {
-                    LocalBroadcastManager.getInstance(getActivity())
-                            .sendBroadcast(new Intent(DialogsFragment.UPDATE_DIALOGS));
-                }
-                mAdapter.removeItem(invertedPosition);
-            }
 
+        DeleteRequest dr = new DeleteRequest(item.id, getActivity());
+        dr.callback(new ApiHandler() {
             @Override
-            protected Object parseResponse(ApiResponse response) {
-                return null;
+            public void success(ApiResponse response) {
+                if (isAdded()) {
+                    int invertedPosition = mAdapter.getPosition(position);
+                    if (mAdapter.getFirstItemId().equals(mAdapter.getData().get(invertedPosition).id)) {
+                        LocalBroadcastManager.getInstance(getActivity())
+                                .sendBroadcast(new Intent(DialogsFragment.UPDATE_DIALOGS));
+                    }
+                    mAdapter.removeItem(invertedPosition);
+                }
             }
 
             @Override
             public void fail(int codeError, ApiResponse response) {
                 Debug.log(response.toString());
+                Utils.showErrorMessage(App.getContext());
             }
         }).exec();
     }
@@ -408,6 +414,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID, itemId));
                     itemId = null;
                 }
+
+                removeAlreadyLoadedItems(data);
+
                 setNavigationTitles(data.user.first_name, data.user.age, data.user.city.name);
                 wasFailed = false;
                 mUser = data.user;
@@ -465,8 +474,30 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }).exec();
     }
 
+    private void removeAlreadyLoadedItems(HistoryListData data) {
+        if (!mAdapter.isEmpty() && !data.items.isEmpty()) {
+            FeedList<History> items = mAdapter.getData();
+            int size = items.size();
+            for (int i = size - 1; i > 0 && i > size - LIMIT; i--) {
+                List<History> itemsToDelete = new ArrayList<History>();
+                for (History item : data.items) {
+                    if (item.id.equals(items.get(i).id)) {
+                        itemsToDelete.add(item);
+                    }
+                }
+                data.items.removeAll(itemsToDelete);
+            }
+        }
+    }
+
     private void onUserLoaded() {
-        if (mActionBar != null) mActionBar.showProfileAvatar(mUser.photo, this);
+        if (mActionBar != null) {
+            if (mUser.deleted || mUser.banned || mUser.photo == null || mUser.photo.isEmpty()) {
+                mActionBar.showProfileAvatar(mUser.sex == Static.BOY ? R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar, null);
+            } else {
+                mActionBar.showProfileAvatar(mUser.photo, this);
+            }
+        }
     }
 
     private void release() {

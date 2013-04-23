@@ -4,26 +4,35 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.SparseArray;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.view.animation.AlphaAnimation;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.fragments.feed.*;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.Novice;
 
-public class MenuFragment extends Fragment implements View.OnClickListener {
-    private View mRootLayout;
+public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
     private SparseArray<Button> mButtons;
 
@@ -32,40 +41,68 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     private TextView mTvNotifyDialogs;
     private TextView mTvNotifyVisitors;
 
-    private FragmentMenuListener mFragmentMenuListener;
-    BroadcastReceiver mBroadcastReceiver;
     private ImageViewRemote mMenuAvatar;
-    private BroadcastReceiver mProfileUpdateReceiver;
-    private ServicesTextView coins;
-    private ServicesTextView likes;
-    private LinearLayout mContainer;
-    private ImageView rocket;
-    private ImageView notEnoughData;
+    private ServicesTextView mCoins;
+    private ServicesTextView mLikes;
+    private ImageView mProfileInfo;
     private TextView mTvNotifyFans;
     private Button buyButton;
     private boolean canChangeProfileIcons = false;
+    private int mCurrentFragmentId;
+    private BaseFragment mCurrentFragment;
+    private boolean mHardwareAcclereated;
 
-    public interface FragmentMenuListener {
-        public void onMenuClick(int buttonId);
+    public static final int DEFAULT_FRAGMENT = BaseFragment.F_DATING;
+    private OnFragmentSelectedListener mOnFragmentSelected;
+    private boolean mClickable = true;
+
+    private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            setMenuData();
+        }
+    };
+
+    private void setMenuData() {
+        if (mMenuAvatar != null) {
+            mMenuAvatar.setPhoto(CacheProfile.photo);
+        }
+
+        //Иконки на профиле
+        if (!CacheProfile.checkIsFillData() && canChangeProfileIcons) {
+            showNotEnoughDataIcon();
+        } else if (CacheProfile.premium && canChangeProfileIcons) {
+            showRockerIcon();
+        } else {
+            mProfileInfo.setVisibility(View.GONE);
+        }
+        canChangeProfileIcons = true;
+
+        //Кнопка распродаж
+        if (CacheProfile.getOptions().saleExists) {
+            buyButton.setBackgroundResource(R.drawable.btn_sale_selector);
+        } else {
+            buyButton.setBackgroundResource(R.drawable.btn_blue_selector);
+        }
+
+        //Новые данные монет и лайков
+        mCoins.setText(Integer.toString(CacheProfile.money));
+        mLikes.setText(Integer.toString(CacheProfile.likes));
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mProfileUpdateReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (mMenuAvatar != null) {
-                    mMenuAvatar.setPhoto(CacheProfile.photo);
-                }
-            }
-        };
-    }
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            refreshNotifications();
+            //Новые данные монет и лайков
+            mCoins.setText(Integer.toString(CacheProfile.money));
+            mLikes.setText(Integer.toString(CacheProfile.likes));
+        }
+    };
 
     @Override
     public void onResume() {
         super.onResume();
-        setWidthToCounters();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileUpdateReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
     }
@@ -79,14 +116,11 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
-        if (mRootLayout != null)
-            return mRootLayout;
 
-        mRootLayout = inflater.inflate(R.layout.fragment_menu, null);
-
+        View rootLayout = inflater.inflate(R.layout.fragment_menu, null);
 
         //Автарка в меню
-        mMenuAvatar = (ImageViewRemote) mRootLayout.findViewById(R.id.ivMenuAvatar);
+        mMenuAvatar = (ImageViewRemote) rootLayout.findViewById(R.id.ivMenuAvatar);
         mMenuAvatar.setPhoto(CacheProfile.photo);
         //При клике на автарку должен происходить клик на кнопку "Профиль"
         mMenuAvatar.setOnClickListener(new OnClickListener() {
@@ -97,37 +131,18 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         });
 
         //Делаем список кнопок
-        mButtons = new SparseArray<Button>();
-        mButtons.put(BaseFragment.F_PROFILE, (Button) mRootLayout.findViewById(R.id.btnFragmentProfile));
-        mButtons.put(BaseFragment.F_DATING, (Button) mRootLayout.findViewById(R.id.btnFragmentDating));
-        mButtons.put(BaseFragment.F_LIKES, (Button) mRootLayout.findViewById(R.id.btnFragmentLikes));
-        mButtons.put(BaseFragment.F_MUTUAL, (Button) mRootLayout.findViewById(R.id.btnFragmentMutual));
-        mButtons.put(BaseFragment.F_DIALOGS, (Button) mRootLayout.findViewById(R.id.btnFragmentDialogs));
-        mButtons.put(BaseFragment.F_FANS, (Button) mRootLayout.findViewById(R.id.btnFragmentFans));
-        mButtons.put(BaseFragment.F_VISITORS, (Button) mRootLayout.findViewById(R.id.btnFragmentVisitors));
-        mButtons.put(BaseFragment.F_BOOKMARKS, (Button) mRootLayout.findViewById(R.id.btnFragmentBookmarks));
-//        mDefaultMenuItem = (Button) mRootLayout.findViewById(R.id.btnFragmentDating);
-        //Это сделано для того, чтобы правильно ресайзнуть счетчики монет и симпатий
-        mContainer = (LinearLayout) mRootLayout.findViewById(R.id.countersLayout);
-        coins = (ServicesTextView) mRootLayout.findViewById(R.id.menuCurCoins);
-        likes = (ServicesTextView) mRootLayout.findViewById(R.id.menuCurLikes);
-        coins.setOnMeasureListener(listener);
-        likes.setOnMeasureListener(listener);
+        mButtons = getButtonsMap(rootLayout);
 
-        for (int i = 0; i < mButtons.size(); i++) {
-            int key = mButtons.keyAt(i);
-            Button button = mButtons.get(key);
-            if (button != null) {
-                button.setOnClickListener(this);
-                button.setTag(key);
-            }
-        }
+        mCoins = (ServicesTextView) rootLayout.findViewById(R.id.menuCurCoins);
+        mLikes = (ServicesTextView) rootLayout.findViewById(R.id.menuCurLikes);
 
-        notEnoughData = (ImageView) mRootLayout.findViewById(R.id.noData);
-        rocket = (ImageView) mRootLayout.findViewById(R.id.rocket);
+        mCoins.setText(Integer.toString(CacheProfile.money));
+        mLikes.setText(Integer.toString(CacheProfile.likes));
+
+        mProfileInfo = (ImageView) rootLayout.findViewById(R.id.profileInfo);
 
 
-        buyButton = (Button) mRootLayout.findViewById(R.id.menuBuyBtn);
+        buyButton = (Button) rootLayout.findViewById(R.id.menuBuyBtn);
         buyButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,47 +152,61 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
 
         // Notifications
-        mTvNotifyLikes = (TextView) mRootLayout.findViewById(R.id.tvNotifyLikes);
-        mTvNotifyMutual = (TextView) mRootLayout.findViewById(R.id.tvNotifyMutual);
-        mTvNotifyDialogs = (TextView) mRootLayout.findViewById(R.id.tvNotifyDialogs);
-        mTvNotifyFans = (TextView) mRootLayout.findViewById(R.id.tvNotifyFans);
-        mTvNotifyVisitors = (TextView) mRootLayout.findViewById(R.id.tvNotifyVisitors);
+        mTvNotifyLikes = (TextView) rootLayout.findViewById(R.id.tvNotifyLikes);
+        mTvNotifyMutual = (TextView) rootLayout.findViewById(R.id.tvNotifyMutual);
+        mTvNotifyDialogs = (TextView) rootLayout.findViewById(R.id.tvNotifyDialogs);
+        mTvNotifyFans = (TextView) rootLayout.findViewById(R.id.tvNotifyFans);
+        mTvNotifyVisitors = (TextView) rootLayout.findViewById(R.id.tvNotifyVisitors);
 
-        hide();
+        mHardwareAcclereated = Build.VERSION.SDK_INT >= 11 && rootLayout.isHardwareAccelerated();
 
-        mBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                refreshNotifications();
+        return rootLayout;
+    }
+
+    private SparseArray<Button> getButtonsMap(View rootLayout) {
+        SparseArray<Button> buttons = new SparseArray<Button>();
+        buttons.put(BaseFragment.F_PROFILE, (Button) rootLayout.findViewById(R.id.btnFragmentProfile));
+        buttons.put(BaseFragment.F_DATING, (Button) rootLayout.findViewById(R.id.btnFragmentDating));
+        buttons.put(BaseFragment.F_LIKES, (Button) rootLayout.findViewById(R.id.btnFragmentLikes));
+        buttons.put(BaseFragment.F_MUTUAL, (Button) rootLayout.findViewById(R.id.btnFragmentMutual));
+        buttons.put(BaseFragment.F_DIALOGS, (Button) rootLayout.findViewById(R.id.btnFragmentDialogs));
+        buttons.put(BaseFragment.F_FANS, (Button) rootLayout.findViewById(R.id.btnFragmentFans));
+        buttons.put(BaseFragment.F_VISITORS, (Button) rootLayout.findViewById(R.id.btnFragmentVisitors));
+        buttons.put(BaseFragment.F_BOOKMARKS, (Button) rootLayout.findViewById(R.id.btnFragmentBookmarks));
+
+        //Устанавливаем теги и листенеры на кнопки
+        for (int i = 0; i < buttons.size(); i++) {
+            int key = buttons.keyAt(i);
+            Button button = buttons.get(key);
+            if (button != null) {
+                button.setOnClickListener(this);
+                button.setTag(key);
             }
-        };
+        }
 
-        return mRootLayout;
+        return buttons;
     }
 
     public void onLoadProfile() {
-        if (CacheProfile.premium) {
-            rocket.setVisibility(View.VISIBLE);
-        } else {
-            rocket.setVisibility(View.GONE);
-        }
-        if (!CacheProfile.checkIsFillData()) {
-            notEnoughData.setVisibility(View.VISIBLE);
-            rocket.setVisibility(View.GONE);
-        } else {
-            notEnoughData.setVisibility(View.GONE);
-        }
-        canChangeProfileIcons = true;
+        setMenuData();
+    }
+
+    private void showNotEnoughDataIcon() {
+        mProfileInfo.setImageResource(R.drawable.ic_not_enough_data);
+        mProfileInfo.setVisibility(View.VISIBLE);
+    }
+
+    private void showRockerIcon() {
+        mProfileInfo.setImageResource(R.drawable.ic_rocket_small);
+        mProfileInfo.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onClick(View view) {
-        unselectAllButtons();
-
-        view.setSelected(true);
-
-        if (mFragmentMenuListener != null) {
-            mFragmentMenuListener.onMenuClick((Integer) view.getTag());
+        if (mClickable) {
+            unselectAllButtons();
+            view.setSelected(true);
+            showFragment((Integer) view.getTag());
         }
     }
 
@@ -187,91 +216,58 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void setOnMenuListener(FragmentMenuListener onFragmentMenuListener) {
-        mFragmentMenuListener = onFragmentMenuListener;
-    }
-
     public void refreshNotifications() {
         if (CacheProfile.unread_likes > 0) {
-            mTvNotifyLikes.setText(" " + CacheProfile.unread_likes + " ");
+            mTvNotifyLikes.setText(Integer.toString(CacheProfile.unread_likes));
             mTvNotifyLikes.setVisibility(View.VISIBLE);
         } else {
             mTvNotifyLikes.setVisibility(View.INVISIBLE);
         }
 
         if (CacheProfile.unread_mutual > 0) {
-            mTvNotifyMutual.setText(" " + CacheProfile.unread_mutual + " ");
+            mTvNotifyMutual.setText(Integer.toString(CacheProfile.unread_mutual));
             mTvNotifyMutual.setVisibility(View.VISIBLE);
         } else {
             mTvNotifyMutual.setVisibility(View.INVISIBLE);
         }
 
         if (CacheProfile.unread_messages > 0) {
-            mTvNotifyDialogs.setText(" " + CacheProfile.unread_messages + " ");
+            mTvNotifyDialogs.setText(Integer.toString(CacheProfile.unread_messages));
             mTvNotifyDialogs.setVisibility(View.VISIBLE);
         } else {
             mTvNotifyDialogs.setVisibility(View.INVISIBLE);
         }
 
         if (CacheProfile.unread_visitors > 0) {
-            mTvNotifyVisitors.setText(" " + CacheProfile.unread_visitors + " ");
+            mTvNotifyVisitors.setText(Integer.toString(CacheProfile.unread_visitors));
             mTvNotifyVisitors.setVisibility(View.VISIBLE);
         } else {
             mTvNotifyVisitors.setVisibility(View.INVISIBLE);
         }
 
         if (CacheProfile.unread_fans > 0) {
-            mTvNotifyFans.setText(" " + CacheProfile.unread_fans + " ");
+            mTvNotifyFans.setText(Integer.toString(CacheProfile.unread_fans));
             mTvNotifyFans.setVisibility(View.VISIBLE);
         } else {
             mTvNotifyFans.setVisibility(View.INVISIBLE);
         }
     }
 
-    public void show() {
-        mRootLayout.setVisibility(View.VISIBLE);
-
-        if (CacheProfile.getOptions().saleExists) {
-            buyButton.setBackgroundResource(R.drawable.btn_sale_selector);
-        } else {
-            buyButton.setBackgroundResource(R.drawable.btn_blue_selector);
-        }
-        if (CacheProfile.premium && canChangeProfileIcons) {
-            rocket.setVisibility(View.VISIBLE);
-        } else {
-            rocket.setVisibility(View.GONE);
-        }
-        if (!CacheProfile.checkIsFillData() && canChangeProfileIcons) {
-            notEnoughData.setVisibility(View.VISIBLE);
-            rocket.setVisibility(View.GONE);
-        } else {
-            notEnoughData.setVisibility(View.GONE);
-        }
-        coins.setText(Integer.toString(CacheProfile.money));
-        likes.setText(Integer.toString(CacheProfile.likes));
-    }
-
-    public void hide() {
-        mRootLayout.setVisibility(View.INVISIBLE);
-    }
-
     public void setClickable(boolean clickable) {
-        for (int i = 0; i < mButtons.size(); i++) {
-            mButtons.get(mButtons.keyAt(i)).setClickable(clickable);
-        }
+        mClickable = clickable;
     }
 
     public void selectMenu(int fragmentId) {
         Button selectedItem = mButtons.get(fragmentId);
         if (selectedItem != null) {
             selectedItem.setSelected(true);
+            showFragment(fragmentId);
         }
     }
 
     public OnClickListener getProfileButtonOnClickListener() {
-        final Button btnProfile = (Button) mRootLayout.findViewById(R.id.btnFragmentProfile);
+        final Button btnProfile = (Button) getView().findViewById(R.id.btnFragmentProfile);
         return new OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 btnProfile.performClick();
@@ -279,32 +275,133 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         };
     }
 
-    ServicesTextView.OnMeasureListener listener = new ServicesTextView.OnMeasureListener() {
-        @Override
-        public void onMeasure(int width, int height) {
-            setWidthToCounters();
+    public void showFragment(int fragmentId) {
+        if (fragmentId != mCurrentFragmentId) {
+            mCurrentFragmentId = fragmentId;
+            switchFragment();
+        } else if (mOnFragmentSelected != null) {
+            mOnFragmentSelected.onFragmentSelected(fragmentId);
         }
-    };
+    }
 
-    private void setWidthToCounters() {
-        if(coins.getWidth() > 0 && likes.getWidth() > 0) {
-            DisplayMetrics displaymetrics = new DisplayMetrics();
-            getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-            int newWidth = (int)(displaymetrics.widthPixels * 0.7);
-            int margin = (int)(10 * displaymetrics.density);
-            int preCountedWidth = coins.getWidth() + likes.getWidth() + mContainer.getPaddingLeft() + mContainer.getPaddingRight() + margin;
-            if (preCountedWidth >= newWidth) {
-                newWidth = preCountedWidth;
-                if(newWidth > displaymetrics.widthPixels) {
-                    FragmentSwitchController.EXPANDING_PERCENT = 5;
-                } else {
-                    FragmentSwitchController.EXPANDING_PERCENT =(int)( 100 * (1 - (double)newWidth/(double)displaymetrics.widthPixels));
-                }
+    private void switchFragment() {
+        FragmentManager fragmentManager = getFragmentManager();
+        Fragment oldFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+
+        BaseFragment newFragment = (BaseFragment) fragmentManager.findFragmentByTag(getTagById(mCurrentFragmentId));
+        //Если не нашли в FragmentManager уже существующего инстанса, то создаем новый
+        if (newFragment == null) {
+            newFragment = getFragmentNewInstanceById(mCurrentFragmentId);
+        }
+
+        if (oldFragment == null || newFragment != oldFragment) {
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            //Меняем фрагменты анимировано, но только на новых устройствах c HW ускорением
+            if (mHardwareAcclereated) {
+                transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             }
+            transaction.replace(R.id.fragment_container, newFragment, getTagById(mCurrentFragmentId));
+            transaction.commit();
 
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mContainer.getLayoutParams();
-            params.width = newWidth;
-            mContainer.setLayoutParams(params);
+            mCurrentFragment = newFragment;
         }
+
+        //Закрываем меню только после создания фрагмента
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mOnFragmentSelected.onFragmentSelected(mCurrentFragmentId);
+            }
+        }, 250);
+
+    }
+
+    private String getTagById(int id) {
+        return "fragment_switch_controller_" + id;
+    }
+
+    public BaseFragment getCurrentFragment() {
+        return mCurrentFragment;
+    }
+
+    private BaseFragment getFragmentNewInstanceById(int id) {
+        BaseFragment fragment;
+        switch (id) {
+            case BaseFragment.F_VIP_PROFILE:
+                fragment = ProfileFragment.newInstance(CacheProfile.uid, ProfileFragment.TYPE_MY_PROFILE,
+                        VipBuyFragment.class.getName());
+                break;
+            case BaseFragment.F_PROFILE:
+                fragment = ProfileFragment.newInstance(CacheProfile.uid, ProfileFragment.TYPE_MY_PROFILE);
+                break;
+            case BaseFragment.F_DATING:
+                fragment = new DatingFragment();
+                break;
+            case BaseFragment.F_LIKES:
+                fragment = new LikesFragment();
+                break;
+            case BaseFragment.F_MUTUAL:
+                fragment = new MutualFragment();
+                break;
+            case BaseFragment.F_DIALOGS:
+                fragment = new DialogsFragment();
+                break;
+            case BaseFragment.F_BOOKMARKS:
+                fragment = new BookmarksFragment();
+                break;
+            case BaseFragment.F_FANS:
+                fragment = new FansFragment();
+                break;
+            case BaseFragment.F_TOPS:
+                fragment = new TopsFragment();
+                break;
+            case BaseFragment.F_VISITORS:
+                fragment = new VisitorsFragment();
+                break;
+            case BaseFragment.F_SETTINGS:
+                fragment = new SettingsFragment();
+                break;
+            default:
+                fragment = ProfileFragment.newInstance(CacheProfile.uid, ProfileFragment.TYPE_MY_PROFILE);
+                break;
+        }
+        return fragment;
+    }
+
+    public int getCurrentFragmentId() {
+        return mCurrentFragmentId == 0 ? BaseFragment.F_DATING : mCurrentFragmentId;
+    }
+
+    public void setOnFragmentSelected(OnFragmentSelectedListener listener) {
+        mOnFragmentSelected = listener;
+    }
+
+    public static interface OnFragmentSelectedListener {
+        public void onFragmentSelected(int fragmentId);
+    }
+
+    public void showNovice(Novice novice) {
+        if (novice != null && novice.isFlagsInitializationProccesed()) {
+            if (novice.isMenuCompleted()) return;
+
+            if (novice.isShowFillProfile()) {
+                RelativeLayout rootLayout = (RelativeLayout) getView().findViewById(R.id.MenuLayout);
+                NoviceLayout noviceLayout = (NoviceLayout) getLayoutInflater().inflate(R.layout.layout_novice,null);
+                rootLayout.addView(noviceLayout);
+
+                noviceLayout.setLayoutRes(
+                        R.layout.novice_fill_profile,
+                        this.getProfileButtonOnClickListener()
+                );
+                AlphaAnimation alphaAnimation = new AlphaAnimation(0.0F, 1.0F);
+                alphaAnimation.setDuration(400L);
+                noviceLayout.startAnimation(alphaAnimation);
+                novice.completeShowFillProfile();
+            }
+        }
+    }
+
+    private LayoutInflater getLayoutInflater() {
+        return getActivity().getLayoutInflater();
     }
 }

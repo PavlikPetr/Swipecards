@@ -408,4 +408,8 @@
     <string name="general_network_reconnect">Intentando recuperar la conexión con la red</string>
     <string name="user_is_banned">Usuario baneado</string>
     <string name="profile_empty_name">El campo de nombre no puede estar vacio.</string>
+    <string name="general_user_bookmarkadd">El usuario está agregado a los favoritos</string>
+    <string name="general_wrong_photo_upload">Tu fotografía no cumple con el reglamento. Prueba hacer otra</string>
+    <string name="general_input_email">Introduce tu e-mail</string>
+    <string name="cant_delete_fake_item">Este mensaje aún no está entregado, por lo tanto no puedes eliminarlo. Prueba más tarde.</string>
 </resources>
