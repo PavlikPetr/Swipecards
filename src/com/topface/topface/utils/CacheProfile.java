@@ -131,6 +131,7 @@ public class CacheProfile {
     }
 
     public static void setProfile(Profile profile, ApiResponse response) {
+        Editor.init(profile);
         uid = profile.uid;
         first_name = profile.first_name;
         age = profile.age;

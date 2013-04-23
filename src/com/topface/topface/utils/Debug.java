@@ -18,9 +18,10 @@ public class Debug {
      * Форматировать JSON
      */
     private static final boolean FORMAT_JSON = true;
+    private static boolean sShowDebug = App.DEBUG;
 
     public static void log(Object obj, String msg) {
-        if (App.DEBUG) {
+        if (sShowDebug) {
             if (obj == null)
                 showChunkedLogInfo(App.TAG, "::" + msg);
             else if (obj instanceof String)
@@ -31,7 +32,7 @@ public class Debug {
     }
 
     public static void debug(Object obj, String msg) {
-        if (App.DEBUG) {
+        if (sShowDebug) {
             if (obj == null)
                 showChunkedLogDebug(App.TAG, "::" + msg);
             else if (obj instanceof String)
@@ -90,13 +91,13 @@ public class Debug {
     }
 
     public static void log(String msg) {
-        if (App.DEBUG) {
+        if (sShowDebug) {
             showChunkedLogInfo(App.TAG, msg);
         }
     }
 
     public static void error(String msg, Throwable e) {
-        if (App.DEBUG) {
+        if (sShowDebug) {
             StringBuilder stack = new StringBuilder("\n");
             for (StackTraceElement st : e.getStackTrace()) {
                 stack.append(st.toString()).append("\n");
@@ -109,7 +110,7 @@ public class Debug {
     }
 
     public static void error(String msg, OutOfMemoryError e) {
-        if (App.DEBUG) {
+        if (sShowDebug) {
             StringBuilder stack = new StringBuilder("\n");
             for (StackTraceElement st : e.getStackTrace()) {
                 stack.append(st.toString()).append("\n");
@@ -122,7 +123,7 @@ public class Debug {
     }
 
     public static void error(String msg) {
-        if (App.DEBUG) {
+        if (sShowDebug) {
             showChunkedLogError(App.TAG, msg);
         }
     }
@@ -132,7 +133,7 @@ public class Debug {
     }
 
     public static void logJson(String tag, String title, String json) {
-        if (App.DEBUG) {
+        if (sShowDebug) {
             if (json != null) {
                 JSONTokener tokener = new JSONTokener(json);
                 JSONObject finalResult;
@@ -151,4 +152,9 @@ public class Debug {
             }
         }
     }
+
+    public static void setDebugStatus(boolean showDebug) {
+        sShowDebug = showDebug;
+    }
+
 }

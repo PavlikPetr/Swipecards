@@ -27,6 +27,7 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.Editor;
 
 public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
@@ -186,7 +187,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
     public void onLoadProfile() {
         setMenuData();
-        if (CacheProfile.isEditor()) {
+        if (Editor.isEditor()) {
             mButtons.get(F_EDITOR).setVisibility(View.VISIBLE);
         }
     }
@@ -362,7 +363,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 fragment = new SettingsFragment();
                 break;
             case BaseFragment.F_EDITOR:
-                if (CacheProfile.isEditor()) {
+                if (Editor.isEditor()) {
                     fragment = new EditorFragment();
                     break;
                 }

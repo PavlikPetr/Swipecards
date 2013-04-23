@@ -8,7 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
@@ -47,7 +50,6 @@ public class EditFormItemsFragment extends AbstractEditFragment {
             mDataId = FormItem.NO_RESOURCE_ID;
             mSeletedDataId = mDataId;
             mData = Static.EMPTY;
-            mProfile = CacheProfile.getProfile();
         }
 
         mProfile = CacheProfile.getProfile();
