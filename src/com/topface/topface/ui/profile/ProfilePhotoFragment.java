@@ -172,6 +172,11 @@ public class ProfilePhotoFragment extends BaseFragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);

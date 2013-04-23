@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
@@ -33,8 +32,6 @@ import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.*;
-import com.topface.topface.utils.GeoUtils.GeoLocationManager;
-import com.topface.topface.utils.GeoUtils.GeoPreferencesManager;
 import com.topface.topface.utils.offerwalls.Offerwalls;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -52,6 +49,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private Novice mNovice;
     private boolean needAnimate = false;
     private SlidingMenu mSlidingMenu;
+    private boolean isPopupVisible = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -171,25 +169,13 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         manager.showOldVersionPopup(CacheProfile.getOptions().max_version);
         manager.showRatePopup();
         actionsAfterRegistration();
-
         if (CacheProfile.show_ad) {
             mFullscreenController = new FullscreenController(this);
             mFullscreenController.requestFullscreen();
         }
-        sendLocation();
     }
 
-    private void sendLocation() {
-        GeoLocationManager locationManager = new GeoLocationManager(App.getContext());
-        Location curLocation = locationManager.getLastKnownLocation();
 
-        GeoPreferencesManager preferencesManager = new GeoPreferencesManager(App.getContext());
-        preferencesManager.saveLocation(curLocation);
-
-        SettingsRequest settingsRequest = new SettingsRequest(this);
-        settingsRequest.location = curLocation;
-        settingsRequest.exec();
-    }
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -210,6 +196,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         if (needAnimate) {
             overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
         }
+
         needAnimate = true;
 
         //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
@@ -217,6 +204,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
         App.checkProfileUpdate();
     }
+
 
     private void actionsAfterRegistration() {
         if (!AuthToken.getInstance().isEmpty()) {
@@ -280,9 +268,10 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
     }
 
+
+
     @Override
-    public void close(Fragment fragment, boolean needInit) {
-        super.close(fragment, needInit);
+    public void onCloseFragment() {
         showFragment(MenuFragment.DEFAULT_FRAGMENT);
     }
 
@@ -296,11 +285,15 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
     }
 
+    public void setPopupVisible(boolean visibility) {
+        isPopupVisible = visibility;
+    }
+
     @Override
     public void onBackPressed() {
-        if (mFullscreenController != null && mFullscreenController.isFullScreenBannerVisible()) {
+        if (mFullscreenController != null && mFullscreenController.isFullScreenBannerVisible() && !isPopupVisible) {
             mFullscreenController.hideFullscreenBanner((ViewGroup) findViewById(R.id.loBannerContainer));
-        } else if (mSlidingMenu != null) {
+        } else if (mSlidingMenu != null && !isPopupVisible) {
             if (mSlidingMenu.isMenuShowing()) {
                 super.onBackPressed();
             } else {
@@ -309,6 +302,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             }
         } else {
             super.onBackPressed();
+            isPopupVisible = false;
         }
     }
 

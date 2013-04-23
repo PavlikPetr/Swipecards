@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.WindowManager;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.Static;
@@ -75,7 +76,10 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             };
 
             try {
-                registerReceiver(mProfileLoadReceiver, new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD));
+                LocalBroadcastManager.getInstance(this).registerReceiver(
+                        mProfileLoadReceiver,
+                        new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD)
+                );
             } catch (Exception ex) {
                 Debug.error(ex);
             }
@@ -128,8 +132,23 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         }
     }
 
-    public void close(Fragment fragment, boolean needInit) {
+    public void startFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().add(R.id.content, fragment).addToBackStack(null).commit();
+    }
+
+    public void close(Fragment fragment) {
+        close(fragment, false);
+    }
+
+    public void close(Fragment fragment, boolean needFireEvent) {
         getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+        if(needFireEvent) {
+            onCloseFragment();
+        }
+    }
+
+    protected void onCloseFragment() {
+
     }
 
     @Override

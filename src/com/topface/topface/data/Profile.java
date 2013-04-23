@@ -64,6 +64,7 @@ public class Profile extends AbstractDataWithPhotos {
     public boolean show_ad;
     // private static final String profileFileName = "profile.out";
     // private static final long serialVersionUID = 2748391675222256671L;
+    public boolean canInvite;
 
     public static Profile parse(ApiResponse response) {
         return parse(new Profile(), response.jsonResult);
@@ -96,6 +97,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.paid = resp.optBoolean("paid");
             profile.show_ad = resp.optBoolean("show_ad",true);
             profile.xstatus = resp.optInt("xstatus");
+            profile.canInvite = resp.optBoolean("can_invite");
 
             parseGifts(profile, resp);
             parseNotifications(profile, resp);
