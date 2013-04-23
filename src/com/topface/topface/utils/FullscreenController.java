@@ -49,6 +49,7 @@ public class FullscreenController {
                 if (startPage.floatType.equals(Options.FLOAT_TYPE_BANNER)) {
                     if (startPage.banner.equals(Options.BANNER_ADWIRED)) {
                         requestAdwiredFullscreen();
+
                     } else if (startPage.banner.equals(Options.BANNER_TOPFACE)) {
                         requestTopfaceFullscreen();
                     }
@@ -61,7 +62,7 @@ public class FullscreenController {
         try {
             if (!CacheProfile.isEmpty()) {
                 AWView adwiredView = (AWView) mActivity.getLayoutInflater().inflate(R.layout.banner_adwired, null);
-                final ViewGroup bannerContainer = (ViewGroup) mActivity.findViewById(R.id.loBannerContainer);
+                final ViewGroup bannerContainer = getFullscreenBannerContainer();
                 bannerContainer.addView(adwiredView);
                 bannerContainer.setVisibility(View.VISIBLE);
                 adwiredView.setVisibility(View.VISIBLE);
@@ -137,7 +138,7 @@ public class FullscreenController {
                         isFullScreenBannerVisible = true;
                         addLastFullsreenShowedTime();
                         final View fullscreenViewGroup = mActivity.getLayoutInflater().inflate(R.layout.fullscreen_topface, null);
-                        final ViewGroup bannerContainer = (ViewGroup) mActivity.findViewById(R.id.loBannerContainer);
+                        final ViewGroup bannerContainer = getFullscreenBannerContainer();
                         bannerContainer.addView(fullscreenViewGroup);
                         bannerContainer.setVisibility(View.VISIBLE);
                         final ImageViewRemote fullscreenImage = (ImageViewRemote) fullscreenViewGroup.findViewById(R.id.ivFullScreen);
@@ -193,5 +194,14 @@ public class FullscreenController {
 
     public boolean isFullScreenBannerVisible() {
         return isFullScreenBannerVisible;
+    }
+
+    public ViewGroup getFullscreenBannerContainer() {
+        ViewGroup fullscreenContainer = (ViewGroup) mActivity.findViewById(R.id.loBannerContainer);
+        if (fullscreenContainer == null) {
+            fullscreenContainer = (ViewGroup) mActivity.getLayoutInflater().inflate(R.layout.layout_fullscreen, null);
+            ((ViewGroup) mActivity.findViewById(R.id.NavigationLayout)).addView(fullscreenContainer);
+        }
+        return fullscreenContainer;
     }
 }

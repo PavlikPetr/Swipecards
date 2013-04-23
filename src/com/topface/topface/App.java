@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Build;
 import android.os.Looper;
 import android.os.StrictMode;
@@ -14,13 +15,12 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.OptionsRequest;
-import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.requests.*;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.GeoUtils.GeoLocationManager;
+import com.topface.topface.utils.GeoUtils.GeoPreferencesManager;
 import com.topface.topface.utils.HockeySender;
 import com.topface.topface.utils.social.AuthToken;
 import org.acra.ACRA;
@@ -110,6 +110,7 @@ public class App extends Application {
         if (!CacheProfile.isEmpty()) {
             Looper.prepare();
             sendProfileAndOptionsRequests();
+            sendLocation();
             Looper.loop();
         }
 
@@ -118,6 +119,18 @@ public class App extends Application {
             GCMUtils.init(getContext());
         }
 
+    }
+
+    private void sendLocation() {
+        GeoLocationManager locationManager = new GeoLocationManager(App.getContext());
+        Location curLocation = locationManager.getLastKnownLocation();
+
+        GeoPreferencesManager preferencesManager = new GeoPreferencesManager(App.getContext());
+        preferencesManager.saveLocation(curLocation);
+
+        SettingsRequest settingsRequest = new SettingsRequest(this);
+        settingsRequest.location = curLocation;
+        settingsRequest.exec();
     }
 
     private void initAcra() {
@@ -190,6 +203,7 @@ public class App extends Application {
                 @Override
                 protected void success(Profile data, ApiResponse response) {
                     CacheProfile.setProfile(data, response);
+
                     LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
                 }
 

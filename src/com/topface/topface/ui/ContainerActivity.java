@@ -12,10 +12,14 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.fragments.*;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.Debug;
+
+import java.util.ArrayList;
 
 public class ContainerActivity extends BaseFragmentActivity {
 
+    public static final String CONTACTS_DATA = "contacts_data";
     private int mCurrentFragmentId = -1;
     private Fragment mCurrentFragment;
     private static final String TAG_FRAGMENT = "current_fragment";
@@ -28,6 +32,7 @@ public class ContainerActivity extends BaseFragmentActivity {
     public static final int INTENT_RECOVER_PASSWORD = 5;
     private static final int INTENT_PROFILE_FRAGMENT = 6;
     public static final int INTENT_SETTINGS_FRAGMENT = 7;
+    public static final int INTENT_CONTACTS_FRAGMENT = 8;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -79,6 +84,7 @@ public class ContainerActivity extends BaseFragmentActivity {
 
     private Fragment getFragment(int id) {
         Fragment fragment = null;
+        Intent intent = getIntent();
         switch (id) {
             case INTENT_BUY_VIP_FRAGMENT:
                 fragment = VipBuyFragment.newInstance(true);
@@ -93,7 +99,7 @@ public class ContainerActivity extends BaseFragmentActivity {
                 }
                 break;
             case INTENT_CHAT_FRAGMENT:
-                Intent intent = getIntent();
+
 
                 fragment = ChatFragment.newInstance(intent.getStringExtra(ChatFragment.INTENT_ITEM_ID),
                         intent.getIntExtra(ChatFragment.INTENT_USER_ID, -1),
@@ -123,9 +129,15 @@ public class ContainerActivity extends BaseFragmentActivity {
             case INTENT_SETTINGS_FRAGMENT:
                 fragment = new SettingsFragment();
                 break;
+            case INTENT_CONTACTS_FRAGMENT:
+                intent = getIntent();
+                ArrayList<ContactsProvider.Contact> contacts = intent.getParcelableArrayListExtra(CONTACTS_DATA);
+                fragment = ContactsFragment.newInstance(contacts);
+                break;
             default:
                 break;
         }
+
         return fragment;
     }
 
@@ -165,7 +177,13 @@ public class ContainerActivity extends BaseFragmentActivity {
         Intent intent = new Intent(App.getContext(), ContainerActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, code);
         return intent;
+    }
 
+    public static Intent getIntentForContacts(ArrayList<ContactsProvider.Contact> data) {
+        Intent intent  = new Intent(App.getContext(), ContainerActivity.class);
+        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_CONTACTS_FRAGMENT);
+        intent.putExtra(CONTACTS_DATA, data);
+        return intent;
     }
 
     public static Intent getProfileIntent(int userId, Context context) {

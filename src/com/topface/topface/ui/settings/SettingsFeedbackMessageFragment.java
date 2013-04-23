@@ -288,27 +288,27 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             StringBuilder strBuilder = new StringBuilder();
 
             if (emailWanted && email != null) {
-                strBuilder.append("<p>Email for answer: ").append(email).append("</p>");
+                strBuilder.append("<p>Email for answer: ").append(email).append(";</p>\n");
             }
             strBuilder.append("<p>Topface version: ").append(topface_version).append("/").append(topface_versionCode)
-                    .append("</p>");
-            strBuilder.append("<p>Device: ").append(device).append("/").append(model).append("</p>");
-            strBuilder.append("<p>Device language: ").append(Locale.getDefault().getDisplayLanguage()).append("</p>");
+                    .append(";</p>\n");
+            strBuilder.append("<p>Device: ").append(device).append("/").append(model).append(";</p>\n");
+            strBuilder.append("<p>Device language: ").append(Locale.getDefault().getDisplayLanguage()).append(";</p>\n");
 
-            strBuilder.append("<p>Topface SSID: ").append(Ssid.get()).append("</p>");
-            strBuilder.append("<p>Social net: ").append(authToken.getSocialNet()).append("</p>");
+            strBuilder.append("<p>Topface SSID: ").append(Ssid.get()).append(";</p>\n");
+            strBuilder.append("<p>Social net: ").append(authToken.getSocialNet()).append(";</p>\n");
             if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
-                strBuilder.append("<p>Topface login: ").append(authToken.getLogin()).append("</p>");
+                strBuilder.append("<p>Topface login: ").append(authToken.getLogin()).append(";</p>\n");
             } else {
-                strBuilder.append("<p>Social token: ").append(authToken.getTokenKey()).append("</p>");
+                strBuilder.append("<p>Social token: ").append(authToken.getTokenKey()).append(";</p>\n");
             }
 
-            strBuilder.append("<p>Social id: ").append(authToken.getUserId()).append("</p>");
+            strBuilder.append("<p>Social id: ").append(authToken.getUserId()).append(";</p>\n");
 
             strBuilder.append("<p>Android version: ").append(android_CODENAME).append("/");
-            strBuilder.append(android_RELEASE).append("/").append(android_SDK).append("</p>");
+            strBuilder.append(android_RELEASE).append("/").append(android_SDK).append(";</p>\n");
 
-            strBuilder.append("<p>Build type: ").append(Utils.getBuildType()).append(android_SDK).append("</p>");
+            strBuilder.append("<p>Build type: ").append(Utils.getBuildType()).append(android_SDK).append(";</p>\n");
 
             return strBuilder.toString();
         }

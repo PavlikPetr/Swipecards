@@ -68,6 +68,7 @@ public class CacheProfile {
 
     public static long profileUpdateTime;
     public static int xstatus;
+    public static boolean canInvite;
 
     private static void setProfileCache(final ApiResponse response) {
         //Пишем в SharedPreferences в отдельном потоке
@@ -125,6 +126,8 @@ public class CacheProfile {
         profile.show_ad = show_ad;
         profile.xstatus = xstatus;
 
+        profile.canInvite = canInvite;
+
         return profile;
     }
 
@@ -162,6 +165,8 @@ public class CacheProfile {
         show_ad = profile.show_ad;
 
         xstatus = profile.xstatus;
+
+        canInvite = profile.canInvite;
 
         setProfileCache(response);
         setProfileUpdateTime();
