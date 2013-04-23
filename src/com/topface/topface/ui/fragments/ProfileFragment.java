@@ -85,7 +85,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private String mHeaderStartPageClassName;
     private int mStartBodyPage = 0;
     private int mStartHeaderPage = 0;
-    private BroadcastReceiver mUpdateBlackListState;
     private BroadcastReceiver mUpdateProfileReceiver;
 
     private TabPageIndicator mTabIndicator;
@@ -251,14 +250,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             if (mUserProfile == null) getUserProfile();
         }
 
-        mUpdateBlackListState = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (mUserProfile != null) {
-                    mUserProfile.inBlackList = intent.getBooleanExtra(ProfileBlackListControlFragment.BLACK_LIST_STATUS, false);
-                }
-            }
-        };
         mUpdateProfileReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -269,7 +260,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             }
         };
 
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateBlackListState, new IntentFilter(ProfileBlackListControlFragment.UPDATE_ACTION));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateProfileReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         setProfile(mUserProfile);
 
@@ -279,7 +269,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onPause() {
         super.onPause();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateBlackListState);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateProfileReceiver);
 
         //Вручную прокидываем событие onPause() в ViewPager, т.к. на onPause() мы отписываемся от событий
@@ -445,7 +434,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             addBodyPage(UserPhotoFragment.class.getName(), getResources().getString(R.string.profile_photo));
             addBodyPage(UserFormFragment.class.getName(), getResources().getString(R.string.profile_form));
             addBodyPage(GiftsFragment.class.getName(), getResources().getString(R.string.profile_gifts));
-            addBodyPage(ProfileBlackListControlFragment.class.getName(), getResources().getString(R.string.profile_actions));
         }
 
         mBodyPager = (ViewPager) root.findViewById(R.id.vpFragments);
