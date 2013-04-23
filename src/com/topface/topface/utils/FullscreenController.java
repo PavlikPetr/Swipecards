@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.mobileads.MoPubInterstitial;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -67,6 +68,24 @@ public class FullscreenController {
         if (mInterstitial == null) {
             mInterstitial = new MoPubInterstitial(mActivity, MOPUB_INTERSTITIAL_ID);
         }
+        mInterstitial.setInterstitialAdListener(new MoPubInterstitial.InterstitialAdListener() {
+            @Override
+            public void onInterstitialLoaded(MoPubInterstitial interstitial) {
+                if (interstitial.isReady()) interstitial.show();
+            }
+
+            @Override
+            public void onInterstitialFailed(MoPubInterstitial interstitial, MoPubErrorCode errorCode) {
+            }
+
+            @Override
+            public void onInterstitialShown(MoPubInterstitial interstitial) {
+            }
+
+            @Override
+            public void onInterstitialDismissed(MoPubInterstitial interstitial) {
+            }
+        });
         mInterstitial.load();
     }
 
