@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 
 import java.util.HashMap;
@@ -26,7 +27,12 @@ public class MaskClipProcessor implements BitmapProcessor {
 
     @Override
     public Bitmap process(Bitmap bitmap) {
-        return Utils.getRoundedCornerBitmapByMask(bitmap, mMask);
+        try {
+            bitmap = Utils.getRoundedCornerBitmapByMask(bitmap, mMask);
+        } catch (OutOfMemoryError e) {
+            Debug.error(e);
+        }
+        return bitmap;
     }
 
 }

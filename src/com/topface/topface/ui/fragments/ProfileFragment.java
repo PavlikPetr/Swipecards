@@ -553,8 +553,10 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                                 icon.setVisibility(View.VISIBLE);
                                 v.setEnabled(true);
                                 v.setSelected(false);
-                                TextView view = (TextView) v;
-                                view.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
+                                if (v instanceof TextView) {
+                                    TextView view = (TextView) v;
+                                    view.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
+                                }
                             }
                         }
                     });

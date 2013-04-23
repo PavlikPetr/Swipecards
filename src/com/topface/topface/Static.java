@@ -31,7 +31,12 @@ public class Static {
     public static final String REV = "20121019010";
     public static final String AUTH_VK_ID = "2664589";
     public static final String INTENT_REQUEST_KEY = "requestCode";
-    public static final String AUTH_FACEBOOK_ID = "161347997227885";
+    //Это id нашего забаненого приложения
+    //public static final String AUTH_FACEBOOK_ID = "161347997227885";
+    /**
+     * Это id приложения нужный для авторизации
+     */
+    public static final String AUTH_FACEBOOK_ID = "642883445728173";
 
     // Preferences
     public static final String PREFERENCES_SSID = "ssid";
