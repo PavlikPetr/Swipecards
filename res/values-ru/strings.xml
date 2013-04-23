@@ -556,4 +556,13 @@
         <item quantity="many">Пригласите %1$d друзей, чтобы получить VIP-статус на %2$d дней</item>
         <item quantity="other">Пригласите %1$d друзей, чтобы получить VIP-статус на %2$d дней</item>
     </plurals>
+
+    <plurals name="get_vip_for_invites_plurals">
+        <item quantity="one">Получи VIP бесплатно за %d приглашение</item>
+        <item quantity="few">Получи VIP бесплатно за %d приглашения</item>
+        <item quantity="many">Получи VIP бесплатно за %d приглашений</item>
+        <item quantity="other">Получи VIP бесплатно за %d приглашений</item>
+    </plurals>
+
+
 </resources>
