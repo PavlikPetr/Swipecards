@@ -265,7 +265,7 @@
     <string name="profile_mood">Describe your mood</string>
     <string name="general_reconnect">Trying to restore internet connection.\nPlease, wait</string>
     <string name="dating_people_unnoticed">You left 10 people unnoticed!</string>
-    <string name="dating_continue">Continue rating</string>
+    <string name="dating_continue">Continue dating</string>
     <string name="dating_better_look">Get a better look!\nYou might be missing your destiny!</string>
     <string name="edit_my_city">My city</string>
     <string name="edit_my_photos">My photos</string>
@@ -294,9 +294,9 @@
     <string name="virus_chat_btn">Receive likes</string>
     <string name="virus_request_error">Unable to send likes to your friends</string>
     <plurals name="virus_request_likes_cnt">
-        <item quantity="zero">Now you have %d of likes!</item>
+        <item quantity="zero">You have no likes</item>
         <item quantity="other">Now you have %d of likes!</item>
-        <item quantity="one">Now you have %d of likes!</item>
+        <item quantity="one">Now you have %d like!</item>
     </plurals>
     <string name="profile_ask_sent">Request is sent</string>
     <string name="virus_error">During the day, your friend can send likes only 1 time! Try again tomorrow!</string>
@@ -413,4 +413,28 @@
     <string name="general_wrong_photo_upload">This photo breaks the rules. Please try to upload a different photo</string>
     <string name="general_input_email">Enter your e-mail</string>
     <string name="cant_delete_fake_item">This message has not been sent yet, you cannot delete it. Please try again later.</string>
+    <string name="vip_stop_ads">Only chatting, nothing more. VIP users do not see advertisements</string>
+    <string name="settings_invalid_name">The name contains incorrect characters</string>
+    <string name="general_fan_access_error">To access your fans, you need to have VIP status</string>
+    <string name="get_seven_days_vip">Get VIP for 7 days</string>
+    <string name="invite_friends">Invite %d friends to get VIP-status for 7 days</string>
+    <string name="friend_email_hint">Enter your friend\'s e-mail</string>
+    <string name="general_add">Add</string>
+    <string name="general_invite_friends">Invite friends</string>
+    <string name="general_rest_contacts">You have %d contacts left</string>
+    <string name="get_vip_for_invites">Earn VIP for free, for %d invitations</string>
+    <string name="inviteFriendsTitle">Invite all your friends to Topface</string>
+    <string name="invalid_contacts">Some of the contacts were not correct. Please, send correct contacts</string>
+    <plurals name="vip_status_period">
+        <item quantity="other">You received VIP status for %d days</item>
+        <item quantity="one">You received VIP status for %d day</item>
+    </plurals>
+    <plurals name="vip_status_period_btn">
+        <item quantity="other">Get VIP for %d days</item>
+        <item quantity="one">Get VIP for %d day</item>
+    </plurals>
+    <plurals name="invite_friends_plurals">
+        <item quantity="other">Invite %1$d friends, to get VIP-status for %2$d days</item>
+        <item quantity="one">Invite %1$d friends, to get VIP-status for %2$d day</item>
+    </plurals>
 </resources>

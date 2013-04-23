@@ -269,7 +269,7 @@
     <string name="profile_mood">Descrieti dispozitia Dmv</string>
     <string name="general_reconnect">Incercam</string>
     <string name="dating_people_unnoticed">Zece oameni au ramas fara atentia Dmv!</string>
-    <string name="dating_continue">Continua aprecierea</string>
+    <string name="dating_continue">Continua cunostinta</string>
     <string name="dating_better_look">Aveti grija!\nPosibil pierdeti soarta Dmv!</string>
     <string name="edit_my_city">Orasul meu</string>
     <string name="edit_my_photos">Pozele mele</string>
@@ -415,4 +415,6 @@
     <string name="general_wrong_photo_upload">Poza Dmv nu corespunde regulilor. Incercati alta</string>
     <string name="general_input_email">Introduceti e-mailul Dmv</string>
     <string name="cant_delete_fake_item">Acest mesaj inca nu a fost primit, Dmv nu puteti sal stergeti. Incercati mai tarziu.</string>
+    <string name="settings_invalid_name">Numele contine simboluri incorecte</string>
+    <string name="general_fan_access_error">Pentru a avea acces la admiratori e nevoie sa ai VIP statut</string>
 </resources>
