@@ -416,13 +416,10 @@
     <string name="vip_stop_ads">Solo la conversazione, nient’altro. Gli utenti VIP non ricevono pubblicità</string>
     <string name="settings_invalid_name">Il nome contiene i simboli scorretti</string>
     <string name="general_fan_access_error">Per accedere alla pagina degli ammiratori devi essere un utente VIP</string>
-    <string name="get_seven_days_vip">Ricevere VIP per 7 giorni</string>
-    <string name="invite_friends">Per ricevere lo stato VIP per 7 giorni invita %d amici</string>
     <string name="friend_email_hint">Inserisci l’e-mail dell’amico</string>
     <string name="general_add">Aggiungi</string>
     <string name="general_invite_friends">Invita gli amici</string>
     <string name="general_rest_contacts">Ti sono rimasti %d contatti</string>
-    <string name="get_vip_for_invites">Ricevere VIP gratis per %d inviti</string>
     <string name="inviteFriendsTitle">Invita tutti gli amici su Topface</string>
     <string name="invalid_contacts">Alcuni dei contatti riportano errori. Per favore, inserisci i contatti corretti</string>
     <plurals name="vip_status_period">
