@@ -205,7 +205,7 @@ public class ContactsFragment extends BaseFragment{
                 contactsVip.setText(context.getString(R.string.general_rest_contacts, rest));
                 contactsVip.setEnabled(false);
             } else {
-                contactsVip.setText(context.getText(R.string.get_seven_days_vip));
+                contactsVip.setText(Utils.getQuantityString(R.plurals.vip_status_period_btn, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period));
                 contactsVip.setEnabled(true);
             }
         }
