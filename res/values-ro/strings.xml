@@ -332,6 +332,7 @@
     <string name="boy">baiat</string>
     <string name="girl">fata</string>
     <string name="start_communication">Incepe discutia</string>
+    <string name="birthdate">DR</string>
     <string name="welcome_to_topface">Bun venit in Topface!</string>
     <string name="incorrect_email">E-mail introdus incorect</string>
     <string name="incorrect_login">Loghin introdus incorect</string>
@@ -415,6 +416,15 @@
     <string name="general_wrong_photo_upload">Poza Dmv nu corespunde regulilor. Incercati alta</string>
     <string name="general_input_email">Introduceti e-mailul Dmv</string>
     <string name="cant_delete_fake_item">Acest mesaj inca nu a fost primit, Dmv nu puteti sal stergeti. Incercati mai tarziu.</string>
+    <string name="vip_stop_ads">Numai conversare nimic in plus. VIP utilizatorii nu au publicitate</string>
     <string name="settings_invalid_name">Numele contine simboluri incorecte</string>
     <string name="general_fan_access_error">Pentru a avea acces la admiratori e nevoie sa ai VIP statut</string>
+    <string name="get_seven_days_vip">A primi VIP pe 7 zile</string>
+    <string name="invite_friends">Invita %d prieteni, pentru a primi VIP-statut pentru 7 zile</string>
+    <string name="friend_email_hint">Introduce-ti e-mailul prietenului</string>
+    <string name="general_add">Adauga</string>
+    <string name="general_invite_friends">Invita prietenii</string>
+    <string name="general_rest_contacts">Vau mai ramas %d contacte</string>
+    <string name="get_vip_for_invites">Primeste VIP gratuit pentru%d invitatii</string>
+    <string name="invalid_contacts">Careva contacte au fost incorecte. Va rugam sa trimiteti contactele corecte</string>
 </resources>

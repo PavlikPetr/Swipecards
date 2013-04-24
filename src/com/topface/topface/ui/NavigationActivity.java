@@ -273,11 +273,21 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     public void onCloseFragment() {
         showFragment(MenuFragment.DEFAULT_FRAGMENT);
+        mSlidingMenu.setSlidingEnabled(true);
+    }
+
+    @Override
+    public boolean startAuth() {
+        boolean result = super.startAuth();
+        if (result) {
+            mSlidingMenu.setSlidingEnabled(false);
+        }
+        return result;
     }
 
     /*
-        *  обработчик кнопки открытия меню в заголовке фрагмента
-        */
+            *  обработчик кнопки открытия меню в заголовке фрагмента
+            */
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.btnNavigationHome) {
@@ -294,10 +304,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         if (mFullscreenController != null && mFullscreenController.isFullScreenBannerVisible() && !isPopupVisible) {
             mFullscreenController.hideFullscreenBanner((ViewGroup) findViewById(R.id.loBannerContainer));
         } else if (mSlidingMenu != null && !isPopupVisible) {
-            if (mSlidingMenu.isMenuShowing()) {
+            if (mSlidingMenu.isMenuShowing() || !mSlidingMenu.isSlidingEnabled()) {
                 super.onBackPressed();
             } else {
-                mFragmentMenu.refreshNotifications();
                 mSlidingMenu.showMenu();
             }
         } else {
@@ -332,7 +341,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     protected void onDestroy() {
         //Для запроса фото при следующем создании NavigationActivity
         if (CacheProfile.photo == null) CacheProfile.wasAvatarAsked = false;
-        mFullscreenController.onDestroy();
+        if (mFullscreenController != null) {
+            mFullscreenController.onDestroy();
+        }
         super.onDestroy();
     }
 

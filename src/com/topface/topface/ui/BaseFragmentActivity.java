@@ -123,14 +123,16 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         }
     }
 
-    public void startAuth() {
+    public boolean startAuth() {
         Fragment authFragment = getSupportFragmentManager().findFragmentByTag(AUTH_TAG);
         if (isNeedAuth() && (authFragment == null || !authFragment.isAdded())) {
             if (authFragment == null) {
                 authFragment = AuthFragment.newInstance();
             }
             getSupportFragmentManager().beginTransaction().add(R.id.content, authFragment, AUTH_TAG).commit();
+            return true;
         }
+        return false;
     }
 
     public void startFragment(Fragment fragment) {

@@ -418,6 +418,36 @@
     <string name="general_wrong_photo_upload">Vaše fotka neodpovídá pravidlům. Zkuste sem dat jinou fotku.</string>
     <string name="general_input_email">Zadejte Vaš e-mail</string>
     <string name="cant_delete_fake_item">Tato zpráva doposud nebylа doručena a nemůžete ji odstranit. Zkuste to později.</string>
+    <string name="vip_stop_ads">Pouze komunikace, nic navíc. Pro VIP-uživatele žádná reklama</string>
     <string name="settings_invalid_name">Jméno obsahuje chybné znaky</string>
     <string name="general_fan_access_error">Pro přístup k obdivovatelům potřebujete mít VIP status</string>
+    <string name="get_seven_days_vip">Získat VIP na 7 dnů</string>
+    <string name="invite_friends">Pro získání VIP statusu na 7 dní pozvěte %d přátel</string>
+    <string name="friend_email_hint">Zadejte e-mail přítele</string>
+    <string name="general_add">Přidat</string>
+    <string name="general_invite_friends">Pozvěte přátele</string>
+    <string name="general_rest_contacts">Zbylo Vám %d kontaktů</string>
+    <string name="get_vip_for_invites">Získej VIP zdarma za %d pozvánek</string>
+    <string name="inviteFriendsTitle">Pozvat všechny přátele na Topface</string>
+    <string name="invalid_contacts">Některé z kontaktů jsou chybné. Prosím, pošlete správné kontakty</string>
+    <plurals name="vip_status_period">
+        <item quantity="few">Získali jste VIP status na %d dni</item>
+        <item quantity="other">Získali jste VIP status na %d dní</item>
+        <item quantity="one">Získali jste VIP status na %d den</item>
+    </plurals>
+    <plurals name="vip_status_period_btn">
+        <item quantity="few">Získat VIP na %d dni</item>
+        <item quantity="other">Získat VIP na %d dní</item>
+        <item quantity="one">Získat VIP na %d den</item>
+    </plurals>
+    <plurals name="invite_friends_plurals">
+        <item quantity="few">Pro získání VIP statusu na %2$d dni pozvěte %1$d přátel</item>
+        <item quantity="other">Pro získání VIP statusu na %2$d dní pozvěte %1$d přátel</item>
+        <item quantity="one">Pro získání VIP statusu na %2$d den pozvěte %1$d přátel</item>
+    </plurals>
+    <plurals name="get_vip_for_invites_plurals">
+        <item quantity="few">Získej VIP zdarma za %d pozvánky</item>
+        <item quantity="other">Získej VIP zdarma za %d pozvánek</item>
+        <item quantity="one">Získej VIP zdarma za %d pozvánku</item>
+    </plurals>
 </resources>
