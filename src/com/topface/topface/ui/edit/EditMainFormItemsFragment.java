@@ -289,7 +289,9 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
     private void setDataByEditType(EditType type, String data) {
         switch (type) {
             case NAME:
-                CacheProfile.first_name = data;
+                if (isNameValid(data)) {
+                    CacheProfile.first_name = data;
+                }
                 break;
             case AGE:
                 if (isAgeValid(Integer.parseInt(data))) {
@@ -317,7 +319,11 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
             if (!changedValue.equals(getDataByEditType(type))) {
                 switch (type) {
                     case NAME:
-                        request.name = changedValue;
+                        if (isNameValid(changedValue)) {
+                            request.name = changedValue;
+                        } else {
+                            Toast.makeText(getActivity(), R.string.profile_empty_name, 1500).show();
+                        }
                         break;
                     case AGE:
                         try {
@@ -342,6 +348,10 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
 
     private boolean isAgeValid(int age) {
         return age <= MAX_AGE && age >= MIN_AGE;
+    }
+
+    private boolean isNameValid(String name) {
+        return !name.equals("");
     }
 
     @Override
