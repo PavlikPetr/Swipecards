@@ -419,11 +419,9 @@
     <string name="vip_stop_ads">Numai conversare nimic in plus. VIP utilizatorii nu au publicitate</string>
     <string name="settings_invalid_name">Numele contine simboluri incorecte</string>
     <string name="general_fan_access_error">Pentru a avea acces la admiratori e nevoie sa ai VIP statut</string>
-    <string name="invite_friends">Invita %d prieteni, pentru a primi VIP-statut pentru 7 zile</string>
     <string name="friend_email_hint">Introduce-ti e-mailul prietenului</string>
     <string name="general_add">Adauga</string>
     <string name="general_invite_friends">Invita prietenii</string>
     <string name="general_rest_contacts">Vau mai ramas %d contacte</string>
-    <string name="get_vip_for_invites">Primeste VIP gratuit pentru%d invitatii</string>
     <string name="invalid_contacts">Careva contacte au fost incorecte. Va rugam sa trimiteti contactele corecte</string>
 </resources>

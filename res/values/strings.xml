@@ -416,12 +416,10 @@
     <string name="vip_stop_ads">Only chatting, nothing more. VIP users do not see advertisements</string>
     <string name="settings_invalid_name">The name contains incorrect characters</string>
     <string name="general_fan_access_error">To access your fans, you need to have VIP status</string>
-    <string name="invite_friends">Invite %d friends to get VIP-status for 7 days</string>
     <string name="friend_email_hint">Enter your friend\'s e-mail</string>
     <string name="general_add">Add</string>
     <string name="general_invite_friends">Invite friends</string>
     <string name="general_rest_contacts">You have %d contacts left</string>
-    <string name="get_vip_for_invites">Earn VIP for free, for %d invitations</string>
     <string name="inviteFriendsTitle">Invite all your friends to Topface</string>
     <string name="invalid_contacts">Some of the contacts were not correct. Please, send correct contacts</string>
     <plurals name="vip_status_period">
@@ -435,5 +433,9 @@
     <plurals name="invite_friends_plurals">
         <item quantity="other">Invite %1$d friends, to get VIP-status for %2$d days</item>
         <item quantity="one">Invite %1$d friends, to get VIP-status for %2$d day</item>
+    </plurals>
+    <plurals name="get_vip_for_invites_plurals">
+        <item quantity="other">Get free VIP for %d invitations</item>
+        <item quantity="one">Get free VIP for %d invitation</item>
     </plurals>
 </resources>

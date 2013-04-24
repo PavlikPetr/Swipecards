@@ -418,6 +418,33 @@
     <string name="general_wrong_photo_upload">Vaša fotografija ne odgovara propisima. Pokušajte napraviti drugui</string>
     <string name="general_input_email">Unesite vaš e-mail</string>
     <string name="cant_delete_fake_item">Ova poruka još nije dostavljena, ne možete je ukloniti</string>
+    <string name="vip_stop_ads">Samo komunikacija, ni[ta vi[e. Kod VIP korisnika nema reklame</string>
     <string name="settings_invalid_name">Ime sadrži nekorektne simbole</string>
     <string name="general_fan_access_error">Za pristup poštovaocima neophodno je imati VIP status</string>
+    <string name="friend_email_hint">Unesite e-mail prijatelja</string>
+    <string name="general_add">Dodati</string>
+    <string name="general_invite_friends">Pozovite prijatelje</string>
+    <string name="general_rest_contacts">Ostalo vam je %d kontakata</string>
+    <string name="inviteFriendsTitle">Poyvati sve prijatelje u Topface</string>
+    <string name="invalid_contacts">Neki kontakti nisu bili korektni. Molimo vas da pošaljete korektne kontakte</string>
+    <plurals name="vip_status_period">
+        <item quantity="few">Dobili ste VIP status na %d dana</item>
+        <item quantity="other">Dobili ste VIP status na %d dana</item>
+        <item quantity="one">Dobili ste VIP status na %d dan</item>
+    </plurals>
+    <plurals name="vip_status_period_btn">
+        <item quantity="few">Dobiti Vip na %d dan</item>
+        <item quantity="other">Dobiti Vip na %d dana</item>
+        <item quantity="one">Dobiti Vip na %d dan</item>
+    </plurals>
+    <plurals name="invite_friends_plurals">
+        <item quantity="few">Pozovite %1$d prijatelja, kako bi dobili VIP status na %2$d dana</item>
+        <item quantity="other">Pozovite %1$d prijatelja, kako bi dobili VIP status na %2$d dana</item>
+        <item quantity="one">Pozovite %1$d prijatelja, kako bi dobili VIP status na %2$d dana</item>
+    </plurals>
+    <plurals name="get_vip_for_invites_plurals">
+        <item quantity="few">Dobiti VIP besplatno za %d poziva</item>
+        <item quantity="other">Dobiti VIP besplatno za %d poziva</item>
+        <item quantity="one">Dobiti VIP besplatno za %d poziva</item>
+    </plurals>
 </resources>
