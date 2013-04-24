@@ -69,6 +69,7 @@ public class ContactsFragment extends BaseFragment{
         }, true);
 
         contactsView = (ListView) root.findViewById(R.id.contactsList);
+        //Получаем список контактов из аргументов. Если он не пришел, закрываем фрагмент.
         if (getArguments() != null) {
             data = getArguments().getParcelableArrayList(CONTACTS);
         } else {
