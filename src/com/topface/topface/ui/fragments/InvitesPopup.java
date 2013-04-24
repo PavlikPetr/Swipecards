@@ -48,7 +48,7 @@ public class InvitesPopup extends BaseFragment{
        ((NavigationActivity)getActivity()).setPopupVisible(true);
        final RelativeLayout invitesPopup = (RelativeLayout) view.findViewById(R.id.loInvitesPopup);
        TextView invitesTitle = (TextView) view.findViewById(R.id.invitesTitle);
-       invitesTitle.setText(getString(R.string.get_vip_for_invites, CacheProfile.getOptions().contacts_count));
+       invitesTitle.setText(Utils.getQuantityString(R.plurals.get_vip_for_invites_plurals, CacheProfile.getOptions().contacts_count, CacheProfile.getOptions().contacts_count));
 
        if(getArguments() != null) {
            contacts = getArguments().getParcelableArrayList(CONTACTS);
