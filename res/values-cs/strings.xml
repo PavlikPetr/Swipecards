@@ -421,7 +421,6 @@
     <string name="vip_stop_ads">Pouze komunikace, nic navíc. Pro VIP-uživatele žádná reklama</string>
     <string name="settings_invalid_name">Jméno obsahuje chybné znaky</string>
     <string name="general_fan_access_error">Pro přístup k obdivovatelům potřebujete mít VIP status</string>
-    <string name="get_seven_days_vip">Získat VIP na 7 dnů</string>
     <string name="invite_friends">Pro získání VIP statusu na 7 dní pozvěte %d přátel</string>
     <string name="friend_email_hint">Zadejte e-mail přítele</string>
     <string name="general_add">Přidat</string>
