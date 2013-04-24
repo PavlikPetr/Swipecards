@@ -128,9 +128,11 @@ public class App extends Application {
         GeoPreferencesManager preferencesManager = new GeoPreferencesManager(App.getContext());
         preferencesManager.saveLocation(curLocation);
 
-        SettingsRequest settingsRequest = new SettingsRequest(this);
-        settingsRequest.location = curLocation;
-        settingsRequest.exec();
+        if (curLocation != null) {
+            SettingsRequest settingsRequest = new SettingsRequest(this);
+            settingsRequest.location = curLocation;
+            settingsRequest.exec();
+        }
     }
 
     private void initAcra() {
