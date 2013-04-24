@@ -201,6 +201,10 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         loAge.setVisibility(View.VISIBLE);
         ((TextView) loAge.findViewById(R.id.tvTitle)).setText(R.string.edit_age);
         mEdAge = (EditText) loAge.findViewById(R.id.edText);
+        int maxLength = 2;
+        InputFilter[] fArray = new InputFilter[1];
+        fArray[0] = new InputFilter.LengthFilter(maxLength);
+        mEdAge.setFilters(fArray);
         mEdAge.setText(data);
         mEdAge.setInputType(InputType.TYPE_CLASS_NUMBER);
         mEdAge.addTextChangedListener(new TextWatcher() {
