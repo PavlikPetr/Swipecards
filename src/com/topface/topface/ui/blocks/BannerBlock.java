@@ -22,6 +22,8 @@ import com.google.ads.Ad;
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.inneractive.api.ads.InneractiveAd;
+import com.inneractive.api.ads.InneractiveAdListener;
 import com.mad.ad.AdStaticView;
 import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.mobileads.MoPubView;
@@ -117,9 +119,7 @@ public class BannerBlock {
                     String bannerType = options.pages.get(mBannersMap.get(fragmentId)).banner;
 
                     mBannerView = getBannerView(bannerType);
-                    if (mBannerView == null) {
-                        return;
-                    }
+                    if (mBannerView == null) return;
                     mBannerLayout.addView(mBannerView);
                     if (bannerType.equals(Options.BANNER_TOPFACE)) {
                         if (isCorrectResolution() && mBannersMap.containsKey(fragmentId)) {
@@ -155,6 +155,8 @@ public class BannerBlock {
                 return mInflater.inflate(R.layout.banner_begun, null);
             } else if (bannerType.equals(Options.BANNER_MOPUB)) {
                 return mInflater.inflate(R.layout.banner_mopub, null);
+            } else if (bannerType.equals(Options.BANNER_INNERACTIVE)) {
+                return mInflater.inflate(R.layout.banner_inneractive, null);
             } else {
                 return null;
             }
@@ -201,6 +203,8 @@ public class BannerBlock {
             showBegun();
         } else if (mBannerView instanceof MoPubView) {
             showMopub();
+        } else if (mBannerView instanceof InneractiveAd) {
+            showInneractive();
         } else if (mBannerView instanceof ImageView) {
             if (banner == null) {
                 requestBannerGag();
@@ -208,6 +212,60 @@ public class BannerBlock {
                 showTopface(banner);
             }
         }
+    }
+
+    private void showInneractive() {
+        InneractiveAd inneractive = ((InneractiveAd)mBannerView);
+        inneractive.setAge(CacheProfile.age);
+        inneractive.setGender(CacheProfile.sex == Static.BOY ? "Male" : "Female");
+        inneractive.setInneractiveListener(new InneractiveAdListener() {
+            @Override
+            public void onIaAdReceived() {
+                Debug.log("Inneractive: onIaAdReceived()");
+            }
+
+            @Override
+            public void onIaDefaultAdReceived() {
+                Debug.log("Inneractive: onIaDefaultAdReceived()");
+            }
+
+            @Override
+            public void onIaAdFailed() {
+                Debug.log("Inneractive: onIaAdFailed()");
+                if (mFragment != null && mFragment.getActivity() != null) {
+                    mFragment.getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            requestBannerGag();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onIaAdClicked() {
+            }
+
+            @Override
+            public void onIaAdResize() {
+            }
+
+            @Override
+            public void onIaAdResizeClosed() {
+            }
+
+            @Override
+            public void onIaAdExpand() {
+            }
+
+            @Override
+            public void onIaAdExpandClosed() {
+            }
+
+            @Override
+            public void onIaDismissScreen() {
+            }
+        });
     }
 
     private void showMopub() {
@@ -594,6 +652,11 @@ public class BannerBlock {
 
     public void onDestroy() {
         if (mPLus1Asker != null) mPLus1Asker.onPause();
+        if (mBannerView != null) {
+            if (mBannerView instanceof InneractiveAd){
+                ((InneractiveAd)mBannerView).cleanUp();
+            }
+        }
         removeBanner();
     }
 }

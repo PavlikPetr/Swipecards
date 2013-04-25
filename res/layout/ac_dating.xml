@@ -29,7 +29,7 @@
             android:paddingBottom="15dp"
             android:orientation="vertical">
 
-        <include layout="@layout/feed_control"/>
+        <include layout="@layout/dating_control"/>
     </LinearLayout>
 
     <ProgressBar
