@@ -20,7 +20,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.gridlayout.GridLayout;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.LockerView;
-import com.topface.topface.ui.views.RetryView;
+import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
@@ -131,16 +131,17 @@ public class LeadersActivity extends BaseFragmentActivity {
     private void updateProfileInfo(Profile profile) {
         mLoadingLocker.setVisibility(View.VISIBLE);
         final AlbumRequest request = new AlbumRequest(this, profile.uid, AlbumRequest.DEFAULT_PHOTOS_LIMIT, AlbumRequest.MODE_LEADER);
-        final RetryView rv = new RetryView(this);
-        rv.setErrorMsg(getString(R.string.general_server_error));
-        rv.addButton(getString(R.string.general_dialog_retry), new OnClickListener() {
+
+
+        final RetryViewCreator rv = RetryViewCreator.createDefaultRetryView(this, new OnClickListener() {
             @Override
             public void onClick(View view) {
                 request.exec();
             }
         });
-        mContainer.addView(rv);
         rv.setVisibility(View.GONE);
+        mContainer.addView(rv.getView());
+
         mUselessTitle.setVisibility(View.GONE);
         request.callback(new ApiHandler() {
 

@@ -31,8 +31,11 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
-import com.topface.topface.ui.profile.*;
-import com.topface.topface.ui.views.RetryView;
+import com.topface.topface.ui.profile.ProfileFormFragment;
+import com.topface.topface.ui.profile.ProfilePhotoFragment;
+import com.topface.topface.ui.profile.UserFormFragment;
+import com.topface.topface.ui.profile.UserPhotoFragment;
+import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RateController;
@@ -74,7 +77,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private RateController mRateController;
     //    protected NavigationBarController mNavBarController;
     private RelativeLayout mLockScreen;
-    private RetryView mRetryBtn;
+    private RetryViewCreator mRetryView;
     private ViewPager mBodyPager;
     private ProfilePageAdapter mBodyPagerAdapter;
     private ViewPager mHeaderPager;
@@ -147,15 +150,14 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         initBodyPages(root);
 
         mLockScreen = (RelativeLayout) root.findViewById(R.id.lockScreen);
-        mRetryBtn = new RetryView(activity.getApplicationContext());
-        mRetryBtn.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new View.OnClickListener() {
+        mRetryView = RetryViewCreator.createDefaultRetryView(getActivity(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getUserProfile();
                 mLockScreen.setVisibility(View.GONE);
             }
         });
-        mLockScreen.addView(mRetryBtn);
+        mLockScreen.addView(mRetryView.getView());
 
         if (mProfileType == TYPE_MY_PROFILE) {
             mTitle.setText(R.string.profile_header_title);
@@ -315,7 +317,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mLoaderView.setVisibility(View.VISIBLE);
         if (mProfileId < 1) {
             mLoaderView.setVisibility(View.INVISIBLE);
-            mRetryBtn.showOnlyMessage(true);
+            mRetryView.showOnlyMessage(true);
             mLockScreen.setVisibility(View.VISIBLE);
             return;
         }
@@ -378,21 +380,21 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     }
 
     private void showLockWithText(String text) {
-        if (mRetryBtn != null && isAdded()) {
+        if (mRetryView != null && isAdded()) {
             mLoaderView.setVisibility(View.GONE);
             mLockScreen.setVisibility(View.VISIBLE);
-            mRetryBtn.setErrorMsg(text);
-            mRetryBtn.showOnlyMessage(true);
+            mRetryView.setText(text);
+            mRetryView.showOnlyMessage(true);
             mActionBar.hideUserActionButton();
         }
     }
 
     private void showRetryBtn() {
-        if (mRetryBtn != null && isAdded()) {
+        if (mRetryView != null && isAdded()) {
             mLoaderView.setVisibility(View.GONE);
             mLockScreen.setVisibility(View.VISIBLE);
-            mRetryBtn.setErrorMsg(getString(R.string.general_profile_error));
-            mRetryBtn.showOnlyMessage(false);
+            mRetryView.setText(getString(R.string.general_profile_error));
+            mRetryView.showOnlyMessage(false);
         }
     }
 

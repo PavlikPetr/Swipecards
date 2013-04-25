@@ -34,14 +34,11 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditAgeFragment;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.FilterFragment;
-import com.topface.topface.ui.views.ILocker;
+import com.topface.topface.ui.views.*;
 import com.topface.topface.ui.views.ImageSwitcher;
-import com.topface.topface.ui.views.NoviceLayout;
-import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.*;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
         RateController.OnRateControllerListener {
@@ -74,9 +71,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private RateController mRateController;
     private RelativeLayout mDatingLoveBtnLayout;
     private ViewFlipper mViewFlipper;
+    private RetryViewCreator mRetryView;
 
     private ImageButton mRetryBtn;
-    private RetryView emptySearchDialog;
     private PreloadManager mPreloadManager;
 
     private BroadcastReceiver mReceiver;
@@ -276,17 +273,17 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void initEmptySearchDialog(View view, OnClickListener settingsListener) {
-        emptySearchDialog = new RetryView(getActivity());
-        emptySearchDialog.setErrorMsg(App.getContext().getString(R.string.general_search_null_response_error));
-        emptySearchDialog.addButton(RetryView.REFRESH_TEMPLATE + App.getContext().getString(R.string.general_dialog_retry), new OnClickListener() {
+
+        String text = getString(R.string.general_search_null_response_error);
+        mRetryView = RetryViewCreator.createDefaultRetryView(getActivity(), text, new OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateData(false);
             }
-        });
-        emptySearchDialog.addButton(App.getContext().getString(R.string.change_filters), settingsListener);
+        }, getString(R.string.change_filters), settingsListener);
+
         hideEmptySearchDialog();
-        ((RelativeLayout) view.findViewById(R.id.ac_dating_container)).addView(emptySearchDialog);
+        ((RelativeLayout) view.findViewById(R.id.ac_dating_container)).addView(mRetryView.getView());
 
         mReceiver = new BroadcastReceiver() {
             @Override
@@ -876,7 +873,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void hideEmptySearchDialog() {
-        emptySearchDialog.setVisibility(View.GONE);
+        mRetryView.setVisibility(View.GONE);
     }
 
     private void setHeader(View view) {
@@ -1034,6 +1031,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         Debug.log("Search:: showEmptySearchDialog");
         mProgressBar.setVisibility(View.GONE);
         mImageSwitcher.setVisibility(View.GONE);
-        emptySearchDialog.setVisibility(View.VISIBLE);
+        mRetryView.setVisibility(View.VISIBLE);
     }
 }

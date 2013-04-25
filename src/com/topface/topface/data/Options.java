@@ -34,7 +34,6 @@ public class Options extends AbstractData {
     public final static String PAGE_LIKES = "LIKE";
     public final static String PAGE_MUTUAL = "MUTUAL";
     public final static String PAGE_MESSAGES = "MESSAGES";
-    public final static String PAGE_TOP = "TOP";
     public final static String PAGE_VISITORS = "VISITORS";
     public final static String PAGE_DIALOGS = "DIALOGS";
     public final static String PAGE_FANS = "FANS";
