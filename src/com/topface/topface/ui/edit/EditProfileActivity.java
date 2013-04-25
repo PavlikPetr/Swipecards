@@ -236,6 +236,9 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     mAdapter.notifyDataSetChanged();
                     break;
                 case EditContainerActivity.INTENT_EDIT_FORM_ITEM:
+                    mEditItems.clear();
+                    initEditItems();
+                    mAdapter.setData(mEditItems);
                     mAdapter.notifyDataSetChanged();
                     break;
                 case EditContainerActivity.INTENT_EDIT_INPUT_FORM_ITEM:
@@ -300,6 +303,10 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         @Override
         public EditProfileItem getItem(int position) {
             return mData.get(position);
+        }
+
+        public void setData(LinkedList<EditProfileItem> data) {
+            mData = data;
         }
 
         @Override
