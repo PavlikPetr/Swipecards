@@ -20,7 +20,6 @@
     <string name="general_data_error">Greška. Pokušajte još jednom</string>
     <string name="general_internet_off">Nema veze sa internetom</string>
     <string name="general_purchasing_error">Molimo vas da napišete poruku o grešci u kupovini na support@topface.ru</string>
-    <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">tekst je kopiran</string>
     <string name="general_spinner_title">Odaberite radnje</string>
     <string name="general_profile_error">Greška kod učitavanja profila</string>
@@ -138,12 +137,6 @@
     <string name="invite_is_free">Poslati poziv besplatno</string>
     <string name="invite_error">Neuspelo slanje poziva. Pokušajte još jednom</string>
     <string name="invite_completed">Poziv je poslat</string>
-    <plurals name="invite_bonus_text">
-        <item quantity="few">Spremate se poslati poziv %2$d prijateljima i za to dobijate %1$d</item>
-        <item quantity="zero">Pozovite prijatelje i dobijte za svakog po 20</item>
-        <item quantity="other">Spremate se poslati poziv %2$d prijateljima i za to dobijate %1$d</item>
-        <item quantity="one">Spremate se poslati poziv %2$d prijatelju i za to dobijate %1$d</item>
-    </plurals>
     <string name="settings_header_title">Podešavanja</string>
     <string name="settings_wifi">Samo preko Wi-Fi</string>
     <string name="settings_on">Uključena</string>

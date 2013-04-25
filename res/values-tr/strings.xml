@@ -20,7 +20,6 @@
     <string name="general_data_error">Hata. Bir daha deneyin</string>
     <string name="general_internet_off">İnternete bağlı değil</string>
     <string name="general_purchasing_error">Lütfen, alış veriş hatası hakkında support@topface.ru adresine yazın</string>
-    <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Metin kopyalandı</string>
     <string name="general_spinner_title">Adımınızı seçin</string>
     <string name="general_profile_error">Profil yükleme hatası</string>
@@ -137,11 +136,6 @@
     <string name="invite_is_free">Davet göndermek bedava</string>
     <string name="invite_error">Davetiyeler gönderilemedi. Bir daha deneyin.</string>
     <string name="invite_completed">Davetiye gönderildi</string>
-    <plurals name="invite_bonus_text">
-        <item quantity="zero">Arkadaşlarını davet et ve kişi başı 20şer … kazan.</item>
-        <item quantity="other">Siz, %2$d arkadaşlarınıza davetiye göndermeyi düşünüyorsunuz ve bunun için %1$d kazanırsınız</item>
-        <item quantity="one">Siz, %2$d arkadaşınıza davetiye göndermeyi düşünüyorsunuz ve bunun için %1$d kazanırsınız</item>
-    </plurals>
     <string name="settings_header_title">Ayarlar</string>
     <string name="settings_wifi">Sadece Wi-Fi ile</string>
     <string name="settings_on">Açık</string>

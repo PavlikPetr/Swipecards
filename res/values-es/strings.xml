@@ -20,7 +20,6 @@
     <string name="general_data_error">Error. Intenta una vez más</string>
     <string name="general_internet_off">No hay conexión a Internet</string>
     <string name="general_purchasing_error">Por favor, envía el mensaje de error de la compra a support@topface.ru</string>
-    <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Mensaje copiado</string>
     <string name="general_spinner_title">Elige la acción</string>
     <string name="general_profile_error">Error de carga del perfil</string>
@@ -137,11 +136,6 @@
     <string name="invite_is_free">Envío de la invitación es gratuito</string>
     <string name="invite_error">No podemos enviar invitaciones. Intenta una vez más</string>
     <string name="invite_completed">Invitación es enviada</string>
-    <plurals name="invite_bonus_text">
-        <item quantity="zero">Invita a amigos y recibe por cada uno 20</item>
-        <item quantity="other">Vas a enviar las invitaciones a %2$d amigos y recibir %1$d</item>
-        <item quantity="one">Vas a enviar las invitaciones a %2$d amigo y recibir %1$d</item>
-    </plurals>
     <string name="settings_header_title">Ajustes</string>
     <string name="settings_wifi">Sólo via Wi-Fi</string>
     <string name="settings_on">On</string>

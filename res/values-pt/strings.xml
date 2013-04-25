@@ -20,7 +20,6 @@
     <string name="general_data_error">Erro. Tente mais uma vez</string>
     <string name="general_internet_off">Tentamos reinstalar a conexão com a internet. Por favor, espere.</string>
     <string name="general_purchasing_error">Por favor, escreva mensagem sobre erro de compra em support@topface.ru</string>
-    <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">O texto foi copiado</string>
     <string name="general_spinner_title">Seleccione uma ação</string>
     <string name="general_profile_error">Erro no carregamento de perfil</string>
@@ -137,11 +136,6 @@
     <string name="invite_is_free">O envio de convite é gratuito</string>
     <string name="invite_error">Não foi possivel enviar os convites. Tente mais uma vez</string>
     <string name="invite_completed">O convite está enviado</string>
-    <plurals name="invite_bonus_text">
-        <item quantity="zero">Convidem amigos e ganhem 20 por cada um</item>
-        <item quantity="other">Vocês estão prestes a enviar convites %2$d para amigos e ganhar por isso %1$d</item>
-        <item quantity="one">Vocês estão prestes a enviar um convite %2$d para um amigo e ganhar por isso %1$d</item>
-    </plurals>
     <string name="settings_header_title">Definições</string>
     <string name="settings_wifi">Somente para Wi-Fi</string>
     <string name="settings_on">Ligado</string>

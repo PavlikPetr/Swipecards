@@ -20,7 +20,6 @@
     <string name="general_data_error">Klaida. Bandykite dar kartą</string>
     <string name="general_internet_off">Negalima prisijungti prie interneto</string>
     <string name="general_purchasing_error">Prašome, parašyti pranešimą apie pirkimo klaidą adresu support@topface.ru</string>
-    <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Tekstas nukopijuotas</string>
     <string name="general_spinner_title">Pasirinkite veiksmą</string>
     <string name="general_profile_error">Profilio užkrovimo klaida</string>
@@ -138,12 +137,6 @@
     <string name="invite_is_free">Kvietimo siuntimas yra nemokamas</string>
     <string name="invite_error">Nepavyko išsiųsti kvietimo. Bandykite dar kartą</string>
     <string name="invite_completed">Kvietimas išsiųstas</string>
-    <plurals name="invite_bonus_text">
-        <item quantity="few">Jūs ruošiatės išsiųsti kvietimus %2$d draugams ir gauti už tai %1$d</item>
-        <item quantity="zero">Pakvieskite draugus ir iš kiekvieno gaukite po 20</item>
-        <item quantity="other">Jūs ruošiatės išsiųsti kvietimus %2$d draugams ir gauti už tai %1$d</item>
-        <item quantity="one">Jūs ruošiatės išsiųsti kvietimą %2$d draugui ir gauti už tai %1$d</item>
-    </plurals>
     <string name="settings_header_title">Nustatymai</string>
     <string name="settings_wifi">Tiktai per Wi-Fi</string>
     <string name="settings_on">Įjungta</string>
