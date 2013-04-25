@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--suppress AndroidLintTypographyDashes, AndroidLintMissingTranslation -->
-<!-- Настройки Google Analytics, используемые через библиотеку EasyTrack -->
+<!--suppress AndroidLintTypographyDashes, AndroidLintMissingTranslation, AndroidLintUnusedResources -->
 <resources xmlns:tools="https://schemas.android.com/tools" tools:ignore="TypographyDashes">
+    <!-- Настройки Google Analytics, используемые через библиотеку EasyTrack -->
+
     <!-- The Google Analytics tracking ID to which to send your data. Dashes in the ID must be unencoded. You can disable your tracking by not providing this value. -->
     <string name="ga_trackingId">UA-36704890-1</string>
 

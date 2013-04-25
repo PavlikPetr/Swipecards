@@ -34,6 +34,10 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         super(context, data, updateCallback);
     }
 
+    public int getLimit() {
+        return LIMIT;
+    }
+
     protected static class FeedViewHolder {
         public ImageViewRemote avatar;
         public TextView name;

@@ -1,6 +1,5 @@
 package com.topface.topface.ui;
 
-import android.R;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -33,7 +32,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
     private BroadcastReceiver mReauthReceiver;
     protected boolean mNeedAnimate = true;
-    private boolean needAuth = true;
     private BroadcastReceiver mProfileLoadReceiver;
     private boolean afterOnSaveInstanceState;
 
@@ -129,7 +127,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             if (authFragment == null) {
                 authFragment = AuthFragment.newInstance();
             }
-            getSupportFragmentManager().beginTransaction().add(R.id.content, authFragment, AUTH_TAG).commit();
+            getSupportFragmentManager().beginTransaction().add(android.R.id.content, authFragment, AUTH_TAG).commit();
             return true;
         }
         return false;
@@ -137,7 +135,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     public void startFragment(Fragment fragment) {
         if (!afterOnSaveInstanceState) {
-            getSupportFragmentManager().beginTransaction().add(R.id.content, fragment).addToBackStack(null).commit();
+            getSupportFragmentManager().beginTransaction().add(android.R.id.content, fragment).addToBackStack(null).commit();
         }
     }
 
@@ -147,7 +145,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     public void close(Fragment fragment, boolean needFireEvent) {
         getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-        if(needFireEvent) {
+        if (needFireEvent) {
             onCloseFragment();
         }
     }
@@ -226,7 +224,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
 
     protected boolean isNeedAuth() {
-        return needAuth;
+        return true;
     }
 
     protected void takePhoto(TakePhotoDialog.TakePhotoListener listener) {

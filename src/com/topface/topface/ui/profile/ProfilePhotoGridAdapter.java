@@ -65,9 +65,7 @@ public class ProfilePhotoGridAdapter extends ProfileGridAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        if (type != T_ADD_BTN) {
-            holder.photo.setPhoto(getItem(position));
-        }
+        holder.photo.setPhoto(getItem(position));
 
         return convertView;
     }

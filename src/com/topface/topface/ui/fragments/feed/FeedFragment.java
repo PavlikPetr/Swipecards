@@ -393,7 +393,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (isPushUpdating && firstItem != null) {
             request.from = firstItem.id;
         }
-        request.limit = FeedAdapter.LIMIT;
+
+        final int limit = mListAdapter.getLimit();
+        request.limit = limit;
         request.unread = isShowUnreadItems();
         request.callback(new DataApiHandler<FeedListData<T>>() {
 
@@ -411,7 +413,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                         makeAllItemsRead();
                     }
                     if (data.items.size() > 0) {
-                        if (getListAdapter().getCount() >= FeedAdapter.LIMIT) {
+                        if (getListAdapter().getCount() >= limit) {
                             data.more = true;
                         }
                         getListAdapter().addDataFirst(data);

@@ -6,7 +6,7 @@ import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.SparseArray;
+import android.util.SparseBooleanArray;
 import android.view.*;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
@@ -133,7 +133,7 @@ public class ImageSwitcher extends ViewPager {
     public class ImageSwitcherAdapter extends PagerAdapter {
         private boolean isFirstInstantiate = true;
         private Photos mPhotoLinks;
-        private SparseArray<Boolean> mLoadedPhotos;
+        private SparseBooleanArray mLoadedPhotos;
 
         /**
          * Создает слушателя загрузки фотки, через замыкание передавая позицию слушаемой фотографии
@@ -241,7 +241,7 @@ public class ImageSwitcher extends ViewPager {
 
         public void setData(Photos photos) {
             mPhotoLinks = photos;
-            mLoadedPhotos = new SparseArray<Boolean>();
+            mLoadedPhotos = new SparseBooleanArray();
             mPrev = -1;
             mNext = 0;
             notifyDataSetChanged();

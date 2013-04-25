@@ -44,12 +44,12 @@
         </GridView>
 
 
-        <include layout="@layout/banner"
-                 android:layout_alignParentBottom="true"/>
+        <include layout="@layout/banner"/>
     </LinearLayout>
 
     <ImageView
             style="@style/HeaderShadow"/>
+
     <com.topface.topface.ui.views.LockerView
             android:id="@+id/llvTopsLoading"
             style="@style/LoadingLocker"
