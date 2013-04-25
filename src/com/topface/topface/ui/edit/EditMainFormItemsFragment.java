@@ -201,6 +201,10 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         loAge.setVisibility(View.VISIBLE);
         ((TextView) loAge.findViewById(R.id.tvTitle)).setText(R.string.edit_age);
         mEdAge = (EditText) loAge.findViewById(R.id.edText);
+        int maxLength = 2;
+        InputFilter[] fArray = new InputFilter[1];
+        fArray[0] = new InputFilter.LengthFilter(maxLength);
+        mEdAge.setFilters(fArray);
         mEdAge.setText(data);
         mEdAge.setInputType(InputType.TYPE_CLASS_NUMBER);
         mEdAge.addTextChangedListener(new TextWatcher() {
@@ -289,11 +293,15 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
     private void setDataByEditType(EditType type, String data) {
         switch (type) {
             case NAME:
-                CacheProfile.first_name = data;
+                if (isNameValid(data)) {
+                    CacheProfile.first_name = data;
+                }
                 break;
             case AGE:
                 if (isAgeValid(Integer.parseInt(data))) {
                     CacheProfile.age = Integer.parseInt(data);
+                } else {
+                    Toast.makeText(getActivity(), R.string.profile_edit_age_ranges, 1500).show();
                 }
                 break;
             case STATUS:
@@ -315,12 +323,18 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
             if (!changedValue.equals(getDataByEditType(type))) {
                 switch (type) {
                     case NAME:
-                        request.name = changedValue;
+                        if (isNameValid(changedValue)) {
+                            request.name = changedValue;
+                        } else {
+                            Toast.makeText(getActivity(), R.string.profile_empty_name, 1500).show();
+                        }
                         break;
                     case AGE:
                         try {
                             if (isAgeValid(Integer.parseInt(changedValue))) {
                                 request.age = Integer.parseInt(changedValue);
+                            } else {
+                                Toast.makeText(getActivity(), R.string.profile_edit_age_ranges, 1500).show();
                             }
                         } catch (Exception e) {
                             Debug.error(e);
@@ -338,6 +352,10 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
 
     private boolean isAgeValid(int age) {
         return age <= MAX_AGE && age >= MIN_AGE;
+    }
+
+    private boolean isNameValid(String name) {
+        return !name.equals("");
     }
 
     @Override

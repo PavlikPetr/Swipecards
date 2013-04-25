@@ -59,7 +59,6 @@
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
                     android:id="@+id/sendContacts"
-                    android:text="@string/get_seven_days_vip"
                     android:layout_below="@id/checkboxContainer"
                         />
             </RelativeLayout>

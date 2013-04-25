@@ -178,7 +178,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             long date_now = new java.util.Date().getTime();
 
             if (date_now - date_start >= PopupManager.INVITE_POPUP_TIMEOUT) {
-                preferences.edit().putLong(INVITE_POPUP, date_now);
+                preferences.edit().putLong(INVITE_POPUP, date_now).commit();
                 ContactsProvider provider = new ContactsProvider(getActivity());
                 provider.getContacts(-1, 0, new ContactsProvider.GetContactsListener() {
                     @Override

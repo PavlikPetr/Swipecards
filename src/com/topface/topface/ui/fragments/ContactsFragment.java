@@ -69,6 +69,7 @@ public class ContactsFragment extends BaseFragment{
         }, true);
 
         contactsView = (ListView) root.findViewById(R.id.contactsList);
+        //Получаем список контактов из аргументов. Если он не пришел, закрываем фрагмент.
         if (getArguments() != null) {
             data = getArguments().getParcelableArrayList(CONTACTS);
         } else {
@@ -118,6 +119,7 @@ public class ContactsFragment extends BaseFragment{
                             CacheProfile.premium = true;
                             CacheProfile.canInvite = false;
                             LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                            getActivity().finish();
                         }
                     } else {
                         Toast.makeText(getActivity(), getString(R.string.invalid_contacts), 2000).show();
@@ -203,7 +205,7 @@ public class ContactsFragment extends BaseFragment{
                 contactsVip.setText(context.getString(R.string.general_rest_contacts, rest));
                 contactsVip.setEnabled(false);
             } else {
-                contactsVip.setText(context.getText(R.string.get_seven_days_vip));
+                contactsVip.setText(Utils.getQuantityString(R.plurals.vip_status_period_btn, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period));
                 contactsVip.setEnabled(true);
             }
         }

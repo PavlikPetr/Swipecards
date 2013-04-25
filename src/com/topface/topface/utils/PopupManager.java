@@ -18,6 +18,7 @@ public class PopupManager {
     public static final String RATING_POPUP = "RATING_POPUP";
     public static final int RATE_POPUP_TIMEOUT = 86400000; // 1000 * 60 * 60 * 24 * 1 (1 сутки)
     public static final int INVITE_POPUP_TIMEOUT = 604800000;
+    private static boolean CAN_SHOW_POPUP = true;
 
     Context mContext;
     private boolean mRatingPopupIsShowing = false;
@@ -56,7 +57,8 @@ public class PopupManager {
     }
 
     public void showOldVersionPopup(String version) {
-        if (checkVersion(version)) {
+        if (checkVersion(version) && CAN_SHOW_POPUP) {
+            CAN_SHOW_POPUP = false;
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
             builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {
                 @Override
@@ -71,12 +73,18 @@ public class PopupManager {
                 }
             });
             builder.setMessage(R.string.general_version_not_supported);
+            builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    CAN_SHOW_POPUP = true;
+                }
+            });
             builder.create().show();
         }
     }
 
     public void showRatePopup() {
-        if (!checkVersion(CacheProfile.getOptions().max_version) && App.isOnline() && mRatingPopupIsShowing) {
+        if (!checkVersion(CacheProfile.getOptions().max_version) && App.isOnline() && mRatingPopupIsShowing && CAN_SHOW_POPUP) {
             ratingPopup();
         }
     }
@@ -110,6 +118,7 @@ public class PopupManager {
     }
 
     private Dialog getDialog() {
+        CAN_SHOW_POPUP = false;
         final Dialog ratingPopup = new Dialog(mContext) {
             @Override
             public void onBackPressed() {
@@ -123,6 +132,7 @@ public class PopupManager {
             @Override
             public void onCancel(DialogInterface dialog) {
                 mRatingPopupIsShowing = false;
+                CAN_SHOW_POPUP = true;
             }
         });
 

@@ -7,10 +7,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.GridView;
-import android.widget.TextView;
+import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -188,6 +185,9 @@ public class GiftsFragment extends BaseFragment {
                             }
                             if (mProfile.gifts != null) mProfile.gifts.add(0,sendedGift.gift);
                             mGridAdapter.notifyDataSetChanged();
+                            if (getActivity() != null) {
+                                Toast.makeText(getActivity(), R.string.chat_gift_out, 1500).show();
+                            }
                         }
 
                         @Override
