@@ -9,7 +9,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.ViewGroup;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.ProfileRequest;
-import com.topface.topface.ui.fragments.TopsFragment;
 import com.topface.topface.ui.fragments.feed.*;
 import com.topface.topface.utils.CacheProfile;
 
@@ -66,9 +65,6 @@ public class FloatBlock {
             }
             if (mOptions.pages.containsKey(Options.PAGE_MUTUAL)) {
                 mFloatTypeMap.put(MutualFragment.class.toString(), mOptions.pages.get(Options.PAGE_MUTUAL).floatType);
-            }
-            if (mOptions.pages.containsKey(Options.PAGE_TOP)) {
-                mFloatTypeMap.put(TopsFragment.class.toString(), mOptions.pages.get(Options.PAGE_TOP).floatType);
             }
             if (mOptions.pages.containsKey(Options.PAGE_DIALOGS)) {
                 mFloatTypeMap.put(DialogsFragment.class.toString(), mOptions.pages.get(Options.PAGE_DIALOGS).floatType);

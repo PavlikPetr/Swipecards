@@ -39,7 +39,6 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.BaseApiHandler;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.TopsFragment;
 import com.topface.topface.ui.fragments.feed.*;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
@@ -97,7 +96,6 @@ public class BannerBlock {
         mBannersMap.put(LikesFragment.class.toString(), Options.PAGE_LIKES);
         mBannersMap.put(MutualFragment.class.toString(), Options.PAGE_MUTUAL);
         mBannersMap.put(DialogsFragment.class.toString(), Options.PAGE_DIALOGS);
-        mBannersMap.put(TopsFragment.class.toString(), Options.PAGE_TOP);
         mBannersMap.put(VisitorsFragment.class.toString(), Options.PAGE_VISITORS);
         mBannersMap.put(BookmarksFragment.class.toString(), Options.PAGE_BOOKMARKS);
         mBannersMap.put(FansFragment.class.toString(), Options.PAGE_FANS);
@@ -105,7 +103,6 @@ public class BannerBlock {
         mAdwiredMap.put(LikesFragment.class.toString(), '1');
         mAdwiredMap.put(MutualFragment.class.toString(), '2');
         mAdwiredMap.put(DialogsFragment.class.toString(), '3');
-        mAdwiredMap.put(TopsFragment.class.toString(), '4');
         mAdwiredMap.put(VisitorsFragment.class.toString(), '5');
         mAdwiredMap.put(BookmarksFragment.class.toString(), '6');
         mAdwiredMap.put(FansFragment.class.toString(), '7');
@@ -116,22 +113,24 @@ public class BannerBlock {
             String fragmentId = mFragment.getClass().toString();
             Options options = CacheProfile.getOptions();
             if (mBannersMap.containsKey(fragmentId) && options != null && options.pages != null) {
-                String bannerType = options.pages.get(mBannersMap.get(fragmentId)).banner;
+                if (options.pages.get(mBannersMap.get(fragmentId)) != null) {
+                    String bannerType = options.pages.get(mBannersMap.get(fragmentId)).banner;
 
-                mBannerView = getBannerView(bannerType);
-                if (mBannerView == null) {
-                    return;
-                }
-                mBannerLayout.addView(mBannerView);
-                if (bannerType.equals(Options.BANNER_TOPFACE)) {
-                    if (isCorrectResolution() && mBannersMap.containsKey(fragmentId)) {
-                        loadBanner(mBannersMap.get(mFragment.getClass().toString()));
+                    mBannerView = getBannerView(bannerType);
+                    if (mBannerView == null) {
+                        return;
                     }
-                } else {
-                    try {
-                        showBanner(null);
-                    } catch (Exception e) {
-                        Debug.error(e);
+                    mBannerLayout.addView(mBannerView);
+                    if (bannerType.equals(Options.BANNER_TOPFACE)) {
+                        if (isCorrectResolution() && mBannersMap.containsKey(fragmentId)) {
+                            loadBanner(mBannersMap.get(mFragment.getClass().toString()));
+                        }
+                    } else {
+                        try {
+                            showBanner(null);
+                        } catch (Exception e) {
+                            Debug.error(e);
+                        }
                     }
                 }
             }

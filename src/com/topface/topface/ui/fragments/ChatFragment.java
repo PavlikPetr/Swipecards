@@ -39,7 +39,7 @@ import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
-import com.topface.topface.ui.views.RetryView;
+import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.SwapControl;
 import com.topface.topface.utils.*;
 import com.topface.topface.utils.GeoUtils.GeoLocationManager;
@@ -84,7 +84,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private EditText mEditBox;
     private TextView mLoadingBackgroundText;
     private AnimationDrawable mLoadingBackgroundDrawable;
-    private RetryView mRetryView;
+    private RetryViewCreator mRetryView;
     private SwapControl mSwapControl;
     private Button mAddToBlackList;
     private ImageButton mBtnChatAdd;
@@ -284,8 +284,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     private void initLockScreen(View root) {
         mLockScreen = (RelativeLayout) root.findViewById(R.id.llvLockScreen);
-        mRetryView = new RetryView(getActivity().getApplicationContext());
-        mRetryView.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new View.OnClickListener() {
+
+        mRetryView = RetryViewCreator.createDefaultRetryView(getActivity(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 update(false, "retry");
@@ -293,7 +293,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
         });
 
-        mLockScreen.addView(mRetryView);
+        mLockScreen.addView(mRetryView.getView());
     }
 
     private void initNavigationbar(View root, String userName, int userAge, String userCity) {
@@ -452,9 +452,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             @Override
             public void fail(int codeError, ApiResponse response) {
                 showLoadingBackground();
-                if (mRetryView != null && isAdded()) {
-                    mRetryView.setErrorMsg(getString(R.string.general_data_error));
-                }
                 if (mLockScreen != null && mAdapter.getData().isEmpty()) {
                     mLockScreen.setVisibility(View.VISIBLE);
                 }

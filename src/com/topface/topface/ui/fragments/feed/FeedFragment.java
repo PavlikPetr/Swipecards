@@ -36,7 +36,7 @@ import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.LockerView;
-import com.topface.topface.ui.views.RetryView;
+import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
@@ -51,7 +51,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     private TextView mBackgroundText;
     protected DoubleBigButton mDoubleButton;
     protected boolean mIsUpdating;
-    private RetryView updateErrorMessage;
+    private RetryViewCreator mRetryView;
+    private RetryViewCreator mVipRetryView;
     private RelativeLayout mContainer;
     protected LockerView mLockView;
 
@@ -73,15 +74,14 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
-        View view = inflater.inflate(getLayout(), null);
-        mContainer = (RelativeLayout) view.findViewById(R.id.feedContainer);
-        initNavigationBar(view);
-        mLockView = (LockerView) view.findViewById(R.id.llvFeedLoading);
+        View root = inflater.inflate(getLayout(), null);
+        mContainer = (RelativeLayout) root.findViewById(R.id.feedContainer);
+        initNavigationBar(root);
+        mLockView = (LockerView) root.findViewById(R.id.llvFeedLoading);
         mLockView.setVisibility(View.GONE);
         init();
-        initBackground(view);
-        initFilter(view);
-        initListView(view);
+
+        initViews(root);
 
         readItemReceiver = new BroadcastReceiver() {
 
@@ -98,17 +98,19 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 }
             }
         };
-
-
         IntentFilter filter = new IntentFilter(ChatFragment.MAKE_ITEM_READ);
         filter.addAction(CountersManager.UPDATE_COUNTERS);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(readItemReceiver, filter);
-
-        initFloatBlock((ViewGroup) view);
-        createUpdateErrorMessage();
-
         GCMUtils.cancelNotification(getActivity(), getTypeForGCM());
-        return view;
+        return root;
+    }
+
+    private void initViews(View root) {
+        initBackground(root);
+        initFilter(root);
+        initListView(root);
+        initFloatBlock((ViewGroup) root);
+        initRetryViews();
     }
 
 
@@ -455,31 +457,19 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     private void showUpdateErrorMessage(int codeError) {
         mListView.setVisibility(View.INVISIBLE);
-        if (updateErrorMessage != null) {
-            switch (codeError) {
-                case ApiResponse.PREMIUM_ACCESS_ONLY:
-                    updateErrorMessage.showOnlyMessage(false);
-                    updateErrorMessage.addBlueButton(getString(R.string.buying_vip_status), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
-                            startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
-                        }
-                    });
-                    if (FeedFragment.this instanceof VisitorsFragment) {
-                        updateErrorMessage.setErrorMsg(getString(R.string.buying_vip_info));
-                    } else {
-                        updateErrorMessage.setErrorMsg(getString(R.string.general_premium_access_error));
-                    }
-                    updateErrorMessage.setVisibility(View.VISIBLE);
-                    break;
+        switch (codeError) {
+            case ApiResponse.PREMIUM_ACCESS_ONLY:
+                if (FeedFragment.this instanceof VisitorsFragment) {
+                    mVipRetryView.setText(getString(R.string.buying_vip_info));
+                } else {
+                    mVipRetryView.setText(getString(R.string.general_premium_access_error));
+                }
+                mVipRetryView.getView().setVisibility(View.VISIBLE);
+                break;
 
-                default:
-                    updateErrorMessage.showOnlyMessage(false);
-                    updateErrorMessage.setErrorMsg(getString(R.string.general_data_error));
-                    updateErrorMessage.setVisibility(View.VISIBLE);
-                    break;
-            }
+            default:
+                mRetryView.setVisibility(View.VISIBLE);
+                break;
         }
     }
 
@@ -535,7 +525,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected void onUpdateSuccess(boolean isPushUpdating) {
         if (!isPushUpdating) {
             mListView.setVisibility(View.VISIBLE);
-            updateErrorMessage.setVisibility(View.GONE);
+            mRetryView.setVisibility(View.GONE);
+            mVipRetryView.setVisibility(View.GONE);
             if (getListAdapter().isEmpty()) {
                 mBackgroundText.setText(getEmptyFeedText());
             } else {
@@ -570,7 +561,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (!isPushUpdating) {
             mListView.setVisibility(View.VISIBLE);
             mBackgroundText.setText("");
-            showUpdateErrorMessage();
             Drawable drawable = mBackgroundText.getCompoundDrawables()[0];
             if (drawable != null && drawable instanceof AnimationDrawable) {
                 ((AnimationDrawable) drawable).stop();
@@ -612,31 +602,43 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     }
 
-    private void createUpdateErrorMessage() {
-        if (updateErrorMessage == null) {
-            updateErrorMessage = new RetryView(getActivity().getApplicationContext());
-            updateErrorMessage.setErrorMsg(getString(R.string.general_data_error));
-            updateErrorMessage.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new View.OnClickListener() {
+    private void initRetryViews() {
+        if (mRetryView == null) {
+            mRetryView = RetryViewCreator.createDefaultRetryView(getActivity(), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    retryButtonClick();
+                    retryButtonClick(mRetryView.getView());
                 }
             });
-            mContainer.addView(updateErrorMessage);
-            updateErrorMessage.setVisibility(View.GONE);
+            mRetryView.setVisibility(View.GONE);
+            mContainer.addView(mRetryView.getView());
+        }
+
+        if (mVipRetryView == null) {
+            mVipRetryView = RetryViewCreator.createBlueButtonRetryView(getActivity(), Static.EMPTY,
+                    getString(R.string.buying_vip_status), new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
+                    startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                }
+            }
+            );
+            mVipRetryView.setVisibility(View.GONE);
+            mContainer.addView(mVipRetryView.getView());
         }
     }
 
-    private void showUpdateErrorMessage() {
-        if (updateErrorMessage != null) {
+    private void showUpdateErrorMessage(RetryViewCreator view) {
+        if (view != null) {
             mListView.setVisibility(View.INVISIBLE);
-            updateErrorMessage.setVisibility(View.VISIBLE);
+            view.setVisibility(View.VISIBLE);
         }
     }
 
-    private void retryButtonClick() {
-        if (updateErrorMessage != null) {
-            updateErrorMessage.setVisibility(View.GONE);
+    private void retryButtonClick(View view) {
+        if (view != null) {
+            view.setVisibility(View.GONE);
             updateData(false, true);
         }
     }
