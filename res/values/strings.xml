@@ -184,8 +184,7 @@
         <item quantity="other">%d photos</item>
         <item quantity="one">%d photo</item>
     </plurals>
-    <string name="novice_sympathy">Send messages only to those\nwho really attract you.\nThat might be a good start!
-    </string>
+    <string name="novice_sympathy">Send messages only to those\nwho really attract you.\nThat might be a good start!</string>
     <string name="novice_fill_profile">Add your best photos,\nto get more likes</string>
     <string name="general_edit_profile_message">Please, fill in all the obligatory fields in you profile</string>
     <string name="general_premium_access_error">To do this you have to be a VIP</string>
@@ -197,9 +196,7 @@
     <string name="filter_city_fail">Couldn\'t find cities beginning with «%s»</string>
     <string name="age_filter_man">You are interested in guys</string>
     <string name="age_filter_girl">You are interested in girls</string>
-    <string name="dashbrd_popup_rating">Did you like our application? Raise our rating! The higher rating the more
-        people you will meet in Topface
-    </string>
+    <string name="dashbrd_popup_rating">Did you like our application? Raise our rating! The higher rating the more people you will meet in Topface</string>
     <string name="dashbrd_popup_title">Rate me</string>
     <string name="dashbrd_popup_cancel">Don\'t ask me again</string>
     <string name="dashbrd_popup_rate">Yes, I would rate</string>
@@ -245,8 +242,7 @@
     <string name="vip_why">Why you need to be a VIP</string>
     <string name="vip_info_delight">Send admirations for free - maximum expression of feelings!</string>
     <string name="vip_info_guest">Find out who was interested in you - look through your guests!</string>
-    <string name="vip_info_invisible">Stay unnoticed looking through other people\'s profiles by \"invisible\" mode
-    </string>
+    <string name="vip_info_invisible">Stay unnoticed looking through other people\'s profiles by \"invisible\" mode</string>
     <string name="vip_info_message">Receive odds - your messages will be notable against a general background!</string>
     <string name="vip_info_gift">Choose exclusive VIP gifts, and you will be remembered for sure!</string>
     <string name="vip_info_blackList">Get rid of annoying individuals with the help of \"black list\"</string>
@@ -277,27 +273,17 @@
     <string name="leaders_select_cool_picture">Choose your best photo:</string>
     <string name="chat_write_message">Write a message</string>
     <string name="buying_sympathies">Purchase likes</string>
-    <string name="novice_sympathies_bonus">You are getting %1$d for likes as a gift! It means, that you will impress
-        %2$d people and they\'ll tell you they like you.
-    </string>
+    <string name="novice_sympathies_bonus">You are getting %1$d for likes as a gift! It means, that you will impress %2$d people and they\'ll tell you they like you.</string>
     <string name="novice_energy_to_sympathies_title">We changed energy for likes.</string>
-    <string name="novice_energy_to_sympathies_message_boys">Having refilled your supply of likes, you\'ll get\nthe
-        specified number of likes from\nguys, who are really attracted to you.
-    </string>
-    <string name="novice_energy_to_sympathies_message_girls">Having refilled your supply of likes, you\'ll get\nthe
-        specified number of likes from\ngirls, who are really attracted to you.
-    </string>
+    <string name="novice_energy_to_sympathies_message_boys">Having refilled your supply of likes, you\'ll get\nthe specified number of likes from\nguys, who are really attracted to you.</string>
+    <string name="novice_energy_to_sympathies_message_girls">Having refilled your supply of likes, you\'ll get\nthe specified number of likes from\ngirls, who are really attracted to you.</string>
     <string name="novice_buy_sympathies">If you want to be sure, that\nyou\'ll get likes,\nbuy them right now!</string>
     <string name="general_reconnect_social">Cannot connect to the social network. Please, try again later</string>
     <string name="general_buying">Buy coins and likes</string>
     <string name="general_block">Block</string>
     <string name="general_buying_disabled">The purchase is impossible at the moment</string>
-    <string name="ban_flood_detected">You are making requests to the server too often. For future use, please, wait for
-        the applications.
-    </string>
-    <string name="general_maintenance">The server is down for technical maintenance and your request can not be
-        completed. Please try again later.
-    </string>
+    <string name="ban_flood_detected">You are making requests to the server too often. For future use, please, wait for the applications.</string>
+    <string name="general_maintenance">The server is down for technical maintenance and your request can not be completed. Please try again later.</string>
     <string name="virus_chat_likes_request_title">Give likes to your friends as a gift</string>
     <string name="virus_chat_btn">Receive likes</string>
     <string name="virus_request_error">Unable to send likes to your friends</string>
@@ -312,27 +298,19 @@
     <string name="popup_version_message">Time to update your version!</string>
     <string name="popup_version_update">Update</string>
     <string name="popup_version_cancel">Remind me later</string>
-    <string name="general_version_not_supported">Your version of the application is outdated and not supported. Please
-        update the application.
-    </string>
-    <string name="leaders_select_photo_info">Select the most spectacular photo! Photos with low rating cannot be
-        selected
-    </string>
+    <string name="general_version_not_supported">Your version of the application is outdated and not supported. Please update the application.</string>
+    <string name="leaders_select_photo_info">Choose the most spectacular photo! You can not choose a photo with a low rating.</string>
     <string name="default_price_format">Total: %.2f USD</string>
     <string name="dating_online_only">%s, only online</string>
     <string name="leaders_pick_condition">You cannot select a photo with a rating lower than %d%%:</string>
     <string name="map_popup_address">Address</string>
-    <string name="black_list_info">You added someone to your black list. You can change this in your profile, or in your
-        VIP-status settings.
-    </string>
+    <string name="black_list_info">You added someone to your black list. You can change this in your profile, or in your VIP-status settings.</string>
     <string name="general_gift">Gift</string>
     <string name="user_actions_chat">Chat</string>
     <string name="general_place">Place</string>
     <string name="general_soon">It will be soon</string>
     <string name="black_list_activation">Activate your VIP-status and use your black list</string>
-    <string name="profile_edit_age_ranges">Age should be from 16 to 99 years. Please enter the correct age and try
-        again.
-    </string>
+    <string name="profile_edit_age_ranges">Age should be from 16 to 99 years. Please enter the correct age and try again.</string>
     <string name="sign_in">Sign in</string>
     <string name="create_account">Create an account</string>
     <string name="email">E-mail</string>
@@ -359,15 +337,9 @@
     <string name="general_error_try_again_later">Unable to connect to Topface. Please try again later.</string>
     <string name="search_city_by_name">Search city by name</string>
     <string name="gallery">Gallery</string>
-    <string name="no_photo_take_photo">No one will be able to meet you! Take a photo or select a photo from an existing
-        album
-    </string>
-    <string name="photo_is_too_small">You look great in this photo, but for all users to appreciate your photo, it
-        should be a little bigger than: at least%s
-    </string>
-    <string name="photo_for_avatar">Photos are ready to be sent to my profile! This is your first photo and it will be
-        used as your profile photo.
-    </string>
+    <string name="no_photo_take_photo">No one will be able to meet you! Take a photo or select a photo from an existing album</string>
+    <string name="photo_is_too_small">You look great in this photo, but for all users to appreciate your photo, it should be a little bigger than: at least%s</string>
+    <string name="photo_for_avatar">Photos are ready to be sent to my profile! This is your first photo and it will be used as your profile photo.</string>
     <string name="get_it_for_free">Get coins for free</string>
     <string name="vip_advantages">VIP advantages</string>
     <string name="change_email">Change e-mail</string>
@@ -394,9 +366,7 @@
     <string name="buying_economy">Economy</string>
     <string name="general_change">Change</string>
     <string name="general_correct">Correct</string>
-    <string name="we_dont_detect_your_city">To find people nearby, we need to know where you are. Please provide your
-        city.
-    </string>
+    <string name="we_dont_detect_your_city">To find people nearby, we need to know where you are. Please provide your city.</string>
     <string name="confirm_email">Please, confirm the e-mail</string>
     <string name="password_sent">The new password was sent to your E-mail</string>
     <string name="buy_vip_month_one">%1$d month for %2$.2f %3$@</string>
@@ -434,12 +404,9 @@
     <string name="user_is_banned">User is banned</string>
     <string name="profile_empty_name">The name field cannot be empty</string>
     <string name="general_user_bookmarkadd">User added to favorites</string>
-    <string name="general_wrong_photo_upload">This photo breaks the rules. Please try to upload a different photo
-    </string>
+    <string name="general_wrong_photo_upload">This photo breaks the rules. Please try to upload a different photo</string>
     <string name="general_input_email">Enter your e-mail</string>
-    <string name="cant_delete_fake_item">This message has not been sent yet, you cannot delete it. Please try again
-        later.
-    </string>
+    <string name="cant_delete_fake_item">This message has not been sent yet, you cannot delete it. Please try again later.</string>
     <string name="vip_stop_ads">Only chatting, nothing more. VIP users do not see advertisements</string>
     <string name="settings_invalid_name">The name contains incorrect characters</string>
     <string name="general_fan_access_error">To access your fans, you need to have VIP status</string>

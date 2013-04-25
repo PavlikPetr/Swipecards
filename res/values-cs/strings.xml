@@ -301,8 +301,8 @@
     <string name="popup_version_message">Je na čase aktualizovat svou verzi!</string>
     <string name="popup_version_update">Aktualizovat</string>
     <string name="popup_version_cancel">Připomenout později</string>
-    <string name="general_version_not_supported">Vaše verze aplikace je zastaralá a již není podporována. Prosím aktualizujte aplikaci</string>
-    <string name="leaders_select_photo_info">Vyberte si tu nejzajimavejší fotku! Fotografie s nízkým hodnocením vybrat nelze</string>
+    <string name="general_version_not_supported">Vaše verze aplikace je zastaralá a již není podporována. Prosím, aktualizujte aplikaci</string>
+    <string name="leaders_select_photo_info">Vyberte si tu nejatraktivnější fotku! Nelze zvolit fotografii s nízkým hodnocením</string>
     <string name="default_price_format">Celkem: %.2f USD</string>
     <string name="dating_online_only">%s, pouze online</string>
     <string name="leaders_pick_condition">Nemůžete zvolit fotku s hodnocením nižším než %d%%:</string>

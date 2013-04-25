@@ -184,8 +184,7 @@
         <item quantity="other">%d zdjęć</item>
         <item quantity="one">%d zdjęcie</item>
     </plurals>
-    <string name="novice_sympathy">Wysyłaj sympatie tym, kto Ci\nrzeczywiście się podoba,\naby zacząć miłą znajomość
-    </string>
+    <string name="novice_sympathy">Wysyłaj sympatie tym, kto Ci\nrzeczywiście się podoba,\naby zacząć miłą znajomość</string>
     <string name="novice_fill_profile">Dodaj swoje najlepsze zdjęcia,\naby zdobywać więcej sympatii.</string>
     <string name="general_edit_profile_message">Prosimy o uzupełnienie wszystkich pól ankiety</string>
     <string name="general_premium_access_error">Dla tej opcji potrzebny jest Premium</string>
@@ -197,9 +196,7 @@
     <string name="filter_city_fail">Nie znaleziono żadnego miasta, nazwa którego zaczyna się na «%s»</string>
     <string name="age_filter_man">Interesują Cię mężczyźni</string>
     <string name="age_filter_girl">Interesują Cię kobiety</string>
-    <string name="dashbrd_popup_rating">Lubisz naszą aplikację? Podwyższ nam ranking! Im wyżej ranking, tym więcej
-        interesujących ludzi spotkasz w Topface
-    </string>
+    <string name="dashbrd_popup_rating">Lubisz naszą aplikację? Podwyższ nam ranking! Im wyżej ranking, tym więcej interesujących ludzi spotkasz w Topface</string>
     <string name="dashbrd_popup_title">Ranking</string>
     <string name="dashbrd_popup_cancel">Nie pytać więcej</string>
     <string name="dashbrd_popup_rate">Wystawić ranking</string>
@@ -213,8 +210,7 @@
     <string name="dating_prev_button_ext">Poprzedni</string>
     <string name="dating_skip_button_ext">Następny</string>
     <string name="dating_search_empty_title">Niestety niczego nie znaleziono</string>
-    <string name="dating_search_empty_text">Możesz spróbować powtórzyć wyszukiwanie lub zmienić ustawienia filtra.
-    </string>
+    <string name="dating_search_empty_text">Możesz spróbować powtórzyć wyszukiwanie lub zmienić ustawienia filtra.</string>
     <string name="default_balance_constant">Na Twoim koncie</string>
     <string name="default_energy_coins_buy_btn_text">Kup monety i sympatie</string>
     <string name="black_list_title">Czarna lista</string>
@@ -232,9 +228,7 @@
     <string name="chat_write_message">Napisz wiadomość</string>
     <string name="buying_sympathies">Zakup sympatie</string>
     <string name="dating_online_only">%s, tylko online</string>
-    <string name="black_list_info">Rozmówca został dodany do czarnej listy. Możesz to zmienić w swoim profilu w
-        ustawieniach VIP-statusu.
-    </string>
+    <string name="black_list_info">Rozmówca został dodany do czarnej listy. Możesz to zmienić w swoim profilu w ustawieniach VIP-statusu.</string>
     <string name="black_list_activation">Aktywuj VIP-status i używaj czarnej listy</string>
     <string name="create_account">Utwórz account</string>
     <string name="email">E-mail</string>

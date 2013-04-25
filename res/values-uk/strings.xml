@@ -300,7 +300,7 @@
     <string name="popup_version_message">Час оновити свою версію!</string>
     <string name="popup_version_update">Оновити</string>
     <string name="popup_version_cancel">Нагадати пізніше</string>
-    <string name="general_version_not_supported">Ваша версія додатку застаріла та більше не підтримується. Будь ласка поновіть додаток</string>
+    <string name="general_version_not_supported">Ваша версія додатку застаріла і більше не підтримується. Будь ласка, поновіть додаток</string>
     <string name="leaders_select_photo_info">Вибрати найефектніше фото! Фотографії з низьким рейтингом вибрати не можна</string>
     <string name="default_price_format">Разом: %.2f USD</string>
     <string name="dating_online_only">%s, тільки онлайн</string>

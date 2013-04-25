@@ -19,9 +19,7 @@
     <string name="general_server_error">Eroare. Incercati mai tarziu</string>
     <string name="general_data_error">Eroare. Mai incearca o data</string>
     <string name="general_internet_off">Conectare la Internet inaccesibila</string>
-    <string name="general_purchasing_error">Va rugam, sa trimiti mesaj despre eroarea cumparaturii la
-        support@topface.ru
-    </string>
+    <string name="general_purchasing_error">Va rugam, sa trimiti mesaj despre eroarea cumparaturii la support@topface.ru</string>
     <string name="general_msg_copied">Textul a fost copiat</string>
     <string name="general_spinner_title">Alegeti actiunea</string>
     <string name="general_profile_error">Eroare la incarcarea profilului</string>
@@ -50,7 +48,7 @@
     <string name="auth_retry">Mai incercati o data</string>
     <string name="auth_vk_name">VKontacte</string>
     <string name="dating_header_girls">Fete de la %1$d pana la %2$d</string>
-    <string name="dating_header_guys">Baieti de la %1$d pana la %2$d</string>
+    <string name="dating_header_guys">Baieti de la  %1$d pana la %2$d</string>
     <string name="dating_switch_button">Inca…</string>
     <string name="dating_skip_button">Urmatoarea</string>
     <string name="dating_prev_button">Precedent</string>
@@ -189,12 +187,9 @@
         <item quantity="other">%d poze</item>
         <item quantity="one">%d poza</item>
     </plurals>
-    <string name="novice_sympathy">Trimiteti simpatii la cei \n care va sunt dragi cu adevarat, \n pentru a incepe o
-        cunostinta placuta
-    </string>
+    <string name="novice_sympathy">Trimiteti simpatii la cei \n care va sunt dragi cu adevarat, \n pentru a incepe o cunostinta placuta</string>
     <string name="novice_fill_profile">Adauga pozele tale cele mai tari, \n pentru a primi mai multe simpatii.</string>
-    <string name="general_edit_profile_message">Fiti amabili, sa indepliniti campurile necesare a chestionarului
-    </string>
+    <string name="general_edit_profile_message">Fiti amabili, sa indepliniti campurile necesare a chestionarului</string>
     <string name="general_premium_access_error">Pentru aceasta functie aveti nevoie de Premium</string>
     <string name="general_search_null_response_error">Cautare esuata. Incercati sa faceti schimbari in filtru</string>
     <string name="change_filters">Schimba filtru</string>
@@ -204,9 +199,7 @@
     <string name="filter_city_fail">Nu a fost gasit nici unorasi care sa se inceapa cu «%s»</string>
     <string name="age_filter_man">Dmv va sunt interesati baietii</string>
     <string name="age_filter_girl">Dmv va sunt interesante fetele</string>
-    <string name="dashbrd_popup_rating">Va placut aplicatia noastra? Marestene ratingul! Cat mai mare e ratingul, cu
-        atat mai multi oameni interesanti vei intalni in Topface
-    </string>
+    <string name="dashbrd_popup_rating">Va placut aplicatia noastra? Marestene ratingul! Cat mai mare e ratingul, cu atat mai multi oameni interesanti vei intalni in Topface</string>
     <string name="dashbrd_popup_title">Rating</string>
     <string name="dashbrd_popup_cancel">Nu intreba mai mult</string>
     <string name="dashbrd_popup_rate">Instaleaza ratingul</string>
@@ -224,8 +217,7 @@
     <string name="dating_prev_button_ext">Anterior</string>
     <string name="dating_skip_button_ext">Urmatorul</string>
     <string name="dating_search_empty_title">Cu parere de rau cautare fara rezultat</string>
-    <string name="dating_search_empty_text">Puteti incerca cautarea inca odata, sau sa schimbati setarile filtrului.
-    </string>
+    <string name="dating_search_empty_text">Puteti incerca cautarea inca odata, sau sa schimbati setarile filtrului.</string>
     <string name="general_close">Inchide</string>
     <string name="vip_not_activated">Statutul VIP nu este activ</string>
     <string name="vip_privileges">VIP - privilegii</string>
@@ -284,29 +276,17 @@
     <string name="leaders_select_cool_picture">Alegeti poza cea mai tare:</string>
     <string name="chat_write_message">Scrie mesaj</string>
     <string name="buying_sympathies">Cumpararea simpatiilor</string>
-    <string name="novice_sympathies_bonus">Dmv primiti %1$d simpatii \ncadou! Aceasta inseamna, ca Dmv\nprecis placeti
-        %2$d la oameni,\ncare va exprima simpatia lor
-    </string>
+    <string name="novice_sympathies_bonus">Dmv primiti %1$d simpatii \ncadou! Aceasta inseamna, ca Dmv\nprecis placeti %2$d la oameni,\ncare va exprima simpatia lor</string>
     <string name="novice_energy_to_sympathies_title">Noi am schimbat energia pe simpatie</string>
-    <string name="novice_energy_to_sympathies_message_boys">Incarcand rezerva de simpatii, veti primi\n numarul indicat
-        de simpatii\nde la baieti, la care le placi precis
-    </string>
-    <string name="novice_energy_to_sympathies_message_girls">Incarcand rezerva de simpatii, veti primi\n numarul indicat
-        de simpatii\nde la fete, la care le placi precis
-    </string>
+    <string name="novice_energy_to_sympathies_message_boys">Incarcand rezerva de simpatii, veti primi\n numarul indicat de simpatii\nde la baieti, la care le placi precis</string>
+    <string name="novice_energy_to_sympathies_message_girls">Incarcand rezerva de simpatii, veti primi\n numarul indicat de simpatii\nde la fete, la care le placi precis</string>
     <string name="novice_buy_sympathies">Daca dorinti garantat\nsa primiti simpatii, \nprocurati acum!</string>
-    <string name="general_reconnect_social">Imposibila conectare la reteaua de socializare. Repetati Incercarea mai
-        tarziu.
-    </string>
+    <string name="general_reconnect_social">Imposibila conectare la reteaua de socializare. Repetati Incercarea mai tarziu.</string>
     <string name="general_buying">Cumpara simpatii si monede</string>
     <string name="general_block">Blocare</string>
     <string name="general_buying_disabled">La momentul dat cumpararea e imposibila</string>
-    <string name="ban_flood_detected">Dmv foarte des solicitati serverul. Pentru folosirea in continuarie a aplicatiei
-        asteptati.
-    </string>
-    <string name="general_maintenance">Pe server se petrec lucrari tehnice si cererea Dmv nu poate fi indeplinita.
-        Incercati mai tarziu.
-    </string>
+    <string name="ban_flood_detected">Dmv pre des trimiteti cereri la server. Pentru a utiliza in continuare aplicarea asteptati un pic.</string>
+    <string name="general_maintenance">Pe server se petrec lucari tehnice si cererea Dmv nu poate fi efectuata.</string>
     <string name="virus_chat_likes_request_title">Fa cadou simpatii la prietenii tai</string>
     <string name="virus_chat_btn">Primeste simpatii</string>
     <string name="virus_request_error">Expediere de simpatii esuata catre prietenii Dmv</string>
@@ -316,32 +296,24 @@
         <item quantity="one">Acum aveti %d simpatii!</item>
     </plurals>
     <string name="profile_ask_sent">Cererea a fost trimisa</string>
-    <string name="virus_error">In 24 de ore prietenul Dmv poate face cadou o simpatie numai o singura data! Incercati
-        maine!
-    </string>
+    <string name="virus_error">In 24 de ore prietenul Dmv poate face cadou o simpatie numai o singura data! Incercati maine!</string>
     <string name="popup_version_title">Este accesibila o noua versiune a aplicatiei</string>
     <string name="popup_version_message">E timpul de actualizare a versiunii!</string>
     <string name="popup_version_update">Actualizare</string>
     <string name="popup_version_cancel">Aminteste mai tarziu</string>
-    <string name="general_version_not_supported">Aplicarea Dmv nu mai este sustinuta. Va rugam sa actualizati
-        aplicarea.
-    </string>
-    <string name="leaders_select_photo_info">Alegeti cea mai tare poza!</string>
+    <string name="general_version_not_supported">Versiunea aplicarii Dmv nu mai este actuala. Va rugam sa actualizati aplicarea</string>
+    <string name="leaders_select_photo_info">Alegeti cea mai tare poza! Poze cu rating mic nu se pot alege</string>
     <string name="default_price_format">Total: %.2f USD</string>
     <string name="dating_online_only">%s, numai online</string>
     <string name="leaders_pick_condition">Dmv nu puteti alege fotografie cu rating mai jos de %d%%</string>
     <string name="map_popup_address">Adresa</string>
-    <string name="black_list_info">Ati adaugat o persoana in lista neagra. De schimbat acest lucru se poate in profilul
-        Dmv, in setarile VIP-statut.
-    </string>
+    <string name="black_list_info">Ati adaugat o persoana in lista neagra. De schimbat acest lucru se poate in profilul Dmv, in setarile VIP-statut.</string>
     <string name="general_gift">Cadou</string>
     <string name="user_actions_chat">Discutie</string>
     <string name="general_place">Loc</string>
     <string name="general_soon">In curand se</string>
     <string name="black_list_activation">Activati VIP-statut si utilizati lista neagra</string>
-    <string name="profile_edit_age_ranges">Varsta trebuie sa fie in limitile de la 16 pana la 99 de ani. Va rugam, sa
-        introduce-ti corect varsta si sa incercati din nou.
-    </string>
+    <string name="profile_edit_age_ranges">Varsta trebuie sa fie in limitile de la 16 pana la 99 de ani. Va rugam, sa introduce-ti corect varsta si sa incercati din nou.</string>
     <string name="sign_in">Intrare</string>
     <string name="create_account">Creaza acaunt</string>
     <string name="email">E-mail</string>
@@ -368,14 +340,9 @@
     <string name="general_error_try_again_later">Conectare Topface imposibila. Incarcati mai tarziu</string>
     <string name="search_city_by_name">Cautare orasi dupa denumire</string>
     <string name="gallery">Galerie</string>
-    <string name="no_photo_take_photo">Cu Dmv nimeni nu poate face cunostinta! Faceti o poza sau alegeti din album
-    </string>
-    <string name="photo_is_too_small">Aratati foarte bine pe aceasta poza, dar pentru ca utilizatorii sa poata sa o
-        aprecieze e nevoie sa fie un pic mai mare: nu mai putin de %s
-    </string>
-    <string name="photo_for_avatar">Poza este gata pentru trimitere in profil! Este prima poza a Dmv si va fi folosita
-        in calitate de avatar.
-    </string>
+    <string name="no_photo_take_photo">Cu Dmv nimeni nu poate face cunostinta! Faceti o poza sau alegeti din album</string>
+    <string name="photo_is_too_small">Aratati foarte bine pe aceasta poza, dar pentru ca utilizatorii sa poata sa o aprecieze e nevoie sa fie un pic mai mare: nu mai putin de %s</string>
+    <string name="photo_for_avatar">Poza este gata pentru trimitere in profil! Este prima poza a Dmv si va fi folosita in calitate de avatar.</string>
     <string name="get_it_for_free">Primeste gratis</string>
     <string name="vip_advantages">Avantaje VIP</string>
     <string name="change_email">Schimba e-mailul</string>
@@ -402,17 +369,14 @@
     <string name="buying_economy">Economie</string>
     <string name="general_change">Schimba</string>
     <string name="general_correct">Totul este corect</string>
-    <string name="we_dont_detect_your_city">Pentru a gasi oameni in aproprierea Dmv, e nevoie ca noi sa stim unde va
-        aflati. Va rugam sa indicati orasul Dmv.
-    </string>
+    <string name="we_dont_detect_your_city">Pentru a gasi oameni in aproprierea Dmv, e nevoie ca noi sa stim unde va aflati. Va rugam sa indicati orasul Dmv.</string>
     <string name="confirm_email">Va rugam sa confirmati e-mailul.</string>
     <string name="password_sent">Parola noua a fost trimisa la e-mailul Dmv</string>
     <string name="buy_vip_month_one">%1$d luni pentru %2$.2f %3$@</string>
     <string name="buy_vip_month_few">%1$d luni pana pe %2$.2f %3$@</string>
     <string name="buy_vip_month_other">%1$d luni pana pe %2$.2f %3$@</string>
     <string name="buy_special_offers">Oferte speciale</string>
-    <string name="user_does_not_have_gifts">Acest utilizator momentan nu are cadouri, fi primul si vei fi observat
-    </string>
+    <string name="user_does_not_have_gifts">Acest utilizator momentan nu are cadouri, fi primul si vei fi observat</string>
     <string name="status_is_empty">Dmv nu aveti instalat statutul</string>
     <string name="you_dont_have_gifts_yet">Dmv, acum nu aveti cadouri</string>
     <string name="buy_sympathies">Cumpara simpatii</string>
@@ -422,9 +386,7 @@
     <string name="user_baned">Utilizatorul a fost blocat</string>
     <string name="general_choose_city">Alege orasul</string>
     <string name="buy_mobile_payments">Alte metode de plata</string>
-    <string name="buy_mobile_payments_complete">Plata efectuata cu succes. Cererea Dmv se prelucreaza, va rugam sa
-        asteptati
-    </string>
+    <string name="buy_mobile_payments_complete">Plata efectuata cu succes. Cererea Dmv se prelucreaza, va rugam sa asteptati</string>
     <string name="general_save_and_exit">Salveaza si iesi</string>
     <string name="general_set_password">Puneti o parola inainte de a iesti din aplicare</string>
     <string name="user_is_deleted">Utilizator sters</string>
@@ -446,9 +408,7 @@
     <string name="general_user_bookmarkadd">Utilizatorul a fost adaugat in alese</string>
     <string name="general_wrong_photo_upload">Poza Dmv nu corespunde regulilor. Incercati alta</string>
     <string name="general_input_email">Introduceti e-mailul Dmv</string>
-    <string name="cant_delete_fake_item">Acest mesaj inca nu a fost primit, Dmv nu puteti sal stergeti. Incercati mai
-        tarziu.
-    </string>
+    <string name="cant_delete_fake_item">Acest mesaj inca nu a fost primit, Dmv nu puteti sal stergeti. Incercati mai tarziu.</string>
     <string name="vip_stop_ads">Numai conversare nimic in plus. VIP utilizatorii nu au publicitate</string>
     <string name="settings_invalid_name">Numele contine simboluri incorecte</string>
     <string name="general_fan_access_error">Pentru a avea acces la admiratori e nevoie sa ai VIP statut</string>

@@ -282,8 +282,10 @@
     <string name="general_buying">Comprar simpatías y monedas</string>
     <string name="general_block">Bloquear</string>
     <string name="general_buying_disabled">Ahora mismo la compra es imposible</string>
-    <string name="ban_flood_detected">Haces solicitudes al servidor demasiado a menudo. Para seguir usando la aplicación espera un poco.</string>
-    <string name="general_maintenance">Se ejecutan trabajos técnicos en el servidor y tu solicitud no puede ser efectuada. Prueba de nuevo más tarde.</string>
+    <string name="ban_flood_detected">Haces peticiones al servidor demasiado a menudo. Para seguir usando la aplicación
+        espera un poco.</string>
+    <string name="general_maintenance">Trabajos técnicos en marcha en el servidor y su petición no puede ser cumplida.
+        Prueba de nuevo más tarde.</string>
     <string name="virus_chat_likes_request_title">Regalar simpatías a tus amigos</string>
     <string name="virus_chat_btn">Recibir simpatías</string>
     <string name="virus_request_error">Fallo en envio de simpatías a tus amigos</string>
@@ -297,8 +299,10 @@
     <string name="popup_version_message">¡Es hora de actualizar tu versión!</string>
     <string name="popup_version_update">Actualizar</string>
     <string name="popup_version_cancel">Recordar más tarde</string>
-    <string name="general_version_not_supported">Tu versión de la aplicación es obsoleta y ya no se soporta. Por favor actualiza la aplicación</string>
-    <string name="leaders_select_photo_info">¡Elige la foto más impresionante! Las fotografías con una puntuación baja no pueden ser elegidas</string>
+    <string name="general_version_not_supported">Tu versión de la aplicación es absoleta y no se soporta más. Por favor
+        actualiza la aplicación</string>
+    <string name="leaders_select_photo_info">¡Elige la foto más impresionante! Fotografías con un puntuación baja no se puede
+        elegir</string>
     <string name="default_price_format">Total: %.2f USD</string>
     <string name="dating_online_only">%s, solo online</string>
     <string name="leaders_pick_condition">No puedes seleccionar una foto con la puntuación más baja de %d%%:</string>

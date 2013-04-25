@@ -276,11 +276,11 @@
     <string name="leaders_select_cool_picture">Vyberte efektnú fotografiu:</string>
     <string name="chat_write_message">Napísať správu</string>
     <string name="buying_sympathies">Nákup sympatií</string>
-    <string name="novice_sympathies_bonus">Získavate %1$d sympatií ako \n darček! Znamená to, že sa \n určite budete páčiť %2$d ľuďom, \n kotrí Vám vyjadria svoju sympatiu</string>
+    <string name="novice_sympathies_bonus">Získavate %1$d sympatií ako \n darček! Znamená to, že sa \nurčite budete páčiť %2$d ľuďom, \n kotrí Vám vyjadria svoju sympatiu</string>
     <string name="novice_energy_to_sympathies_title">Vymenili sme energiu za sympatie</string>
     <string name="novice_energy_to_sympathies_message_boys">Keď doplníte zásobu sympatií, získate \nuvedené množstvo sympatií \nod chlapov, ktorým sa určite páčite</string>
     <string name="novice_energy_to_sympathies_message_girls">Keď doplníte zásobu sympatií, získate \nuvedené množstvo sympatií \nod dievčat, ktorým sa určite páčite</string>
-    <string name="novice_buy_sympathies">Ak chcete zaručene \ndostávať sympatie, \nkúpte ich hneď teraz!</string>
+    <string name="novice_buy_sympathies">Ak chcete zaručene \ndostávať sympatie,  \nkúpte ich hneď teraz!</string>
     <string name="general_reconnect_social">Pripojenie k sieti nie je možné. Pokus skúste zopakovať neskôr.</string>
     <string name="general_buying">Kúpiť sympatie a mince</string>
     <string name="general_block">Blokovať</string>
@@ -301,8 +301,8 @@
     <string name="popup_version_message">Je čas obnoviť svoju verziu!</string>
     <string name="popup_version_update">Obnoviť</string>
     <string name="popup_version_cancel">Pripomenúť neskôr</string>
-    <string name="general_version_not_supported">Vaša verzia aplikácie je stará a nepodporovaná. Prosím, obnovte aplikáciu</string>
-    <string name="leaders_select_photo_info">Vyberte najefektívnejšiu fotografiu! Fotografie z nízkym ratingom nemožno vyberať</string>
+    <string name="general_version_not_supported">Vaša verzia aplikácie je stará a viac nie je podporovaná. Prosím obnovte si verziu aplikácie</string>
+    <string name="leaders_select_photo_info">Vyberte najefektívnejšiu fotografiu! Fotografie, ktoré majú nízke hodnotenie sa nedajú vybrať.</string>
     <string name="default_price_format">Celkovo: %.2f USD</string>
     <string name="dating_online_only">%s, iba online</string>
     <string name="leaders_pick_condition">Nemôžete si vybrať fotografiu s hodnotením nižším ako %d%%:</string>
