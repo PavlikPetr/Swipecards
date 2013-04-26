@@ -48,12 +48,6 @@ public class SwapControl extends ViewGroup {
         }
     }
 
-    @Override
-    protected void onScrollChanged(int l, int t, int oldl, int oldt) {
-        super.onScrollChanged(l, t, oldl, oldt);
-
-    }
-
     public void snapToScreen(int screenPosition) {
         int h = getChildAt(1).getHeight();
         if (screenPosition == 1)
