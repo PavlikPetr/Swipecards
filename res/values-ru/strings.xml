@@ -310,9 +310,6 @@
     <string name="vip_invisible_mode">Режим невидимки</string>
     <string name="buying_profile_coins">На вашем счете</string>
 
-    <string name="black_list_title">Черный список</string>
-    <string name="black_list_empty">Ваш черный список пуст</string>
-
     <string name="vip_buy_vip">Покупка VIP</string>
     <string name="vip_state_off">Ваш VIP-статус не активирован</string>
     <string name="vip_state_on">Ваш VIP-статус активирован</string>

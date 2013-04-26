@@ -88,14 +88,16 @@ public class Utils {
             // сжатие изображения
             Bitmap scaledBitmap = Bitmap.createBitmap(rawBitmap, 0, 0, srcWidth, srcHeight, matrix, true);
 
-            // вырезаем необходимый размер
-            if (LAND) {
-                // у горизонтальной, вырезаем по центру
-                int offset_x = (scaledBitmap.getWidth() - dstWidth) / 2;
-                clippedBitmap = Bitmap.createBitmap(scaledBitmap, offset_x, 0, dstWidth, dstHeight, null, false);
-            } else {
-                // у вертикальной режим с верху
-                clippedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, dstWidth, dstHeight, null, false);
+            if (scaledBitmap != null) {
+                // вырезаем необходимый размер
+                if (LAND) {
+                    // у горизонтальной, вырезаем по центру
+                    int offset_x = (scaledBitmap.getWidth() - dstWidth) / 2;
+                    clippedBitmap = Bitmap.createBitmap(scaledBitmap, offset_x, 0, dstWidth, dstHeight, null, false);
+                } else {
+                    // у вертикальной режим с верху
+                    clippedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, dstWidth, dstHeight, null, false);
+                }
             }
 
         } catch (OutOfMemoryError e) {
