@@ -5,6 +5,7 @@
 
     <ImageView
             android:id="@+id/ivEditBackground"
+            android:tag="ivEditBackground"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
@@ -14,7 +15,7 @@
             android:duplicateParentState="true"/>
 
     <TextView
-            android:id="@+id/tvTitle"
+            android:tag="tvTitle"
             style="@style/ItemTitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,6 +33,7 @@
 
     <CheckBox
             android:id="@+id/cbSwitch"
+            android:tag="cbSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -42,7 +44,7 @@
             android:clickable="false"/>
 
     <TextView
-            android:id="@+id/tvSwitchOn"
+            android:tag="tvSwitchOn"
             android:textColor="#FFFFFF"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,7 +55,7 @@
             android:textSize="12sp"/>
 
     <TextView
-            android:id="@+id/tvSwitchOff"
+            android:tag="tvSwitchOff"
             android:textColor="#2F2F2F"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

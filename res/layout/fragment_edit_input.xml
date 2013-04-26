@@ -15,7 +15,9 @@
                   android:layout_marginTop="10dp"
             >
 
-        <TextView style="@style/BackgroundFormTitleText"/>
+        <TextView
+                android:id="@+id/tvTitle"
+                style="@style/BackgroundFormTitleText"/>
 
         <EditText
                 android:id="@+id/edText"

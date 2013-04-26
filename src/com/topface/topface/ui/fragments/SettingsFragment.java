@@ -229,12 +229,12 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     }
 
     private void setText(int titleId, ViewGroup frame) {
-        ((TextView) frame.findViewById(R.id.tvTitle)).setText(titleId);
+        ((TextView) frame.findViewWithTag("tvTitle")).setText(titleId);
     }
 
     private void setAccountNameText(int titleId, String text, int iconRes, ViewGroup frame) {
-        ((TextView) frame.findViewById(R.id.tvTitle)).setText(titleId);
-        final TextView textView = (TextView) frame.findViewById(R.id.tvText);
+        ((TextView) frame.findViewWithTag("tvTitle")).setText(titleId);
+        final TextView textView = (TextView) frame.findViewWithTag("tvText");
         textView.setVisibility(View.VISIBLE);
         if (TextUtils.isEmpty(text)) {
             mSettings.getSocialAccountNameAsync(new Handler() {
@@ -259,8 +259,8 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     }
 
     private void initEditNotificationFrame(int key, ViewGroup frame, boolean hasMail, boolean mailChecked, boolean phoneChecked) {
-        CheckBox checkBox = (CheckBox) frame.findViewById(R.id.cbPhone);
-        ProgressBar prsPhone = (ProgressBar) frame.findViewById(R.id.prsPhone);
+        CheckBox checkBox = (CheckBox) frame.findViewWithTag("cbPhone");
+        ProgressBar prsPhone = (ProgressBar) frame.findViewWithTag("prsPhone");
         String phoneNotifierKey = Options.generateKey(key, false);
         hashNotifiersProgressBars.put(phoneNotifierKey, prsPhone);
         checkBox.setTag(phoneNotifierKey);
@@ -273,8 +273,8 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             }
         });
 
-        final CheckBox checkBoxEmail = (CheckBox) frame.findViewById(R.id.cbMail);
-        ProgressBar prsMail = (ProgressBar) frame.findViewById(R.id.prsMail);
+        final CheckBox checkBoxEmail = (CheckBox) frame.findViewWithTag("cbMail");
+        ProgressBar prsMail = (ProgressBar) frame.findViewWithTag("prsMail");
         String mailNotifierKey = Options.generateKey(key, true);
         hashNotifiersProgressBars.put(mailNotifierKey, prsMail);
         if (hasMail) {
@@ -295,7 +295,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     }
 
     private void setBackground(int resId, ViewGroup frame) {
-        ImageView background = (ImageView) frame.findViewById(R.id.ivEditBackground);
+        ImageView background = (ImageView) frame.findViewWithTag("ivEditBackground");
         background.setImageResource(resId);
     }
 

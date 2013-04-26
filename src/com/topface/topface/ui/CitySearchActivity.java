@@ -145,8 +145,8 @@ public class CitySearchActivity extends BaseFragmentActivity {
                     holder = new ViewHolder();
 
                     convertView = mInflater.inflate(R.layout.item_edit_form_check, null, false);
-                    holder.mTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-                    holder.mBackground = (ImageView) convertView.findViewById(R.id.ivEditBackground);
+                    holder.mTitle = (TextView) convertView.findViewWithTag("tvTitle");
+                    holder.mBackground = (ImageView) convertView.findViewWithTag("ivEditBackground");
 
                     convertView.setTag(holder);
                 } else {
@@ -229,8 +229,8 @@ public class CitySearchActivity extends BaseFragmentActivity {
             }
             ((ImageView) mCbMyCity.findViewById(R.id.ivEditBackground)).setImageDrawable(getResources().getDrawable(
                     R.drawable.edit_big_btn_selector));
-            ((TextView) mCbMyCity.findViewById(R.id.tvTitle)).setText(CacheProfile.city.name);
-            mCbMyCity.findViewById(R.id.ivCheck).setVisibility(View.VISIBLE);
+            ((TextView) mCbMyCity.findViewWithTag("tvTitle")).setText(CacheProfile.city.name);
+            mCbMyCity.findViewWithTag("ivCheck").setVisibility(View.VISIBLE);
         }
     }
 

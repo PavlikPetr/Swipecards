@@ -102,7 +102,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mLoGirls = (ViewGroup) root.findViewById(R.id.loGirl);
         setBackground(R.drawable.edit_big_btn_top_selector, mLoGirls);
         setText(R.string.general_girls, mLoGirls);
-        mCheckGirl = (ImageView) mLoGirls.findViewById(R.id.ivCheck);
+        mCheckGirl = (ImageView) mLoGirls.findViewWithTag("ivCheck");
         if (mFilter.sex == Static.GIRL) {
             mCheckGirl.setVisibility(View.VISIBLE);
         }
@@ -112,7 +112,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mLoBoys = (ViewGroup) root.findViewById(R.id.loBoy);
         setBackground(R.drawable.edit_big_btn_bottom_selector, mLoBoys);
         setText(R.string.general_boys, mLoBoys);
-        mCheckBoy = (ImageView) mLoBoys.findViewById(R.id.ivCheck);
+        mCheckBoy = (ImageView) mLoBoys.findViewWithTag("ivCheck");
         if (mFilter.sex == Static.BOY) {
             mCheckBoy.setVisibility(View.VISIBLE);
         }
@@ -148,7 +148,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
         // Extra Header
         ViewGroup frame = (ViewGroup) root.findViewById(R.id.loExtraHeader);
-        ((TextView) frame.findViewById(R.id.tvTitle)).setText(R.string.filter_extra_parameters);
+        ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.filter_extra_parameters);
 
         // Dating Status
         mXStatusFrame = (ViewGroup) root.findViewById(R.id.loDatingStatus);
@@ -218,24 +218,24 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     }
 
     private void setBackground(int resId, ViewGroup frame) {
-        ImageView background = (ImageView) frame.findViewById(R.id.ivEditBackground);
+        ImageView background = (ImageView) frame.findViewWithTag("ivEditBackground");
         background.setImageResource(resId);
     }
 
     private void setText(int titleId, String text, ViewGroup frame) {
-        ((TextView) frame.findViewById(R.id.tvTitle)).setText(mFormInfo.getFormTitle(titleId));
-        TextView textView = (TextView) frame.findViewById(R.id.tvText);
+        ((TextView) frame.findViewWithTag("tvTitle")).setText(mFormInfo.getFormTitle(titleId));
+        TextView textView = (TextView) frame.findViewWithTag("tvText");
         textView.setText(text);
         textView.setVisibility(View.VISIBLE);
         hashTextViewByTitleId.put(titleId, textView);
     }
 
     private void setText(String title, ViewGroup frame) {
-        ((TextView) frame.findViewById(R.id.tvTitle)).setText(title);
+        ((TextView) frame.findViewWithTag("tvTitle")).setText(title);
     }
 
     private void setText(int titleResId, ViewGroup frame) {
-        ((TextView) frame.findViewById(R.id.tvTitle)).setText(titleResId);
+        ((TextView) frame.findViewWithTag("tvTitle")).setText(titleResId);
     }
 
     private void startEditFilterFormItem(View v, int targetId) {

@@ -5,6 +5,7 @@
 
     <ImageView
             android:id="@+id/ivEditBackground"
+            android:tag="ivEditBackground"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -14,7 +15,7 @@
             android:scaleType="fitXY"/>
 
     <TextView
-            android:id="@+id/tvTitle"
+            android:tag="tvTitle"
             style="@style/ItemTitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,7 +30,7 @@
             android:textSize="14sp"/>
 
     <ImageView
-            android:id="@+id/ivCheck"
+            android:tag="ivCheck"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignRight="@id/ivEditBackground"

@@ -69,9 +69,8 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
         // List
         mListView = (ListView) root.findViewById(R.id.lvList);
 
-        ViewGroup header = (ViewGroup) inflater.inflate(R.layout.item_edit_profile_form_header,
-                mListView, false);
-        ((TextView) header.findViewById(R.id.tvTitle)).setText(formItemTitle);
+        ViewGroup header = (ViewGroup) inflater.inflate(R.layout.item_edit_profile_form_header, mListView, false);
+        ((TextView) header.findViewWithTag("tvTitle")).setText(formItemTitle);
         mListView.addHeaderView(header);
 
 
@@ -137,9 +136,9 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
                 holder = new ViewHolder();
 
                 convertView = mInflater.inflate(R.layout.item_edit_form_check, null, false);
-                holder.mTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-                holder.mBackground = (ImageView) convertView.findViewById(R.id.ivEditBackground);
-                holder.mCheck = (ImageView) convertView.findViewById(R.id.ivCheck);
+                holder.mTitle = (TextView) convertView.findViewWithTag("tvTitle");
+                holder.mBackground = (ImageView) convertView.findViewWithTag("ivEditBackground");
+                holder.mCheck = (ImageView) convertView.findViewWithTag("ivCheck");
 
                 convertView.setTag(holder);
             } else {

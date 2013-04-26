@@ -9,7 +9,7 @@
     <TextView style="@style/BackgroundFormTitleText"/>
 
     <EditText
-            android:id="@+id/edText"
+            android:tag="edText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"

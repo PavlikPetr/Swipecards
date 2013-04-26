@@ -145,7 +145,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
                             }
                         });
         mInvisSwitcher = new EditSwitcher(invisLayout);
-        mInvisLoadBar = (ProgressBar) invisLayout.findViewById(R.id.vsiLoadBar);
+        mInvisLoadBar = (ProgressBar) invisLayout.findViewWithTag("vsiLoadBar");
         mInvisSwitcher.setChecked(CacheProfile.invisible);
 
 //  Здесь работа с переключателем отображения VIP бэкграунда в элементах ленты,
@@ -202,7 +202,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     private RelativeLayout initLayouts(View root, int ID, int bgId, int bgLeftId, String text) {
         RelativeLayout layout = (RelativeLayout) root.findViewById(ID);
 
-        TextView layoutText = (TextView) layout.findViewById(R.id.tvTitle);
+        TextView layoutText = (TextView) layout.findViewWithTag("tvTitle");
         layoutText.setText(text);
         layout.setBackgroundResource(bgId);
         layoutText.setCompoundDrawablesWithIntrinsicBounds(bgLeftId, 0, 0, 0);

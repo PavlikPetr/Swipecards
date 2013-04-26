@@ -3,10 +3,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
 
-
-
         <TextView
-          android:id="@+id/tvTitle"
+          android:tag="tvTitle"
           style="@style/ItemTitleText"
           android:layout_alignParentLeft="true"
           android:gravity="center_vertical"
@@ -20,7 +18,7 @@
           android:textSize="14sp"/>
 
     <ImageView
-            android:id="@+id/ivArrow"
+            android:tag="ivArrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

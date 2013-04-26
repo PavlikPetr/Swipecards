@@ -81,11 +81,9 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
 
         mSex = CacheProfile.sex;
         mLoGirl = root.findViewById(R.id.loGirl);
-        ((ImageView) mLoGirl.findViewById(R.id.ivEditBackground))
-                .setImageResource(R.drawable.edit_big_btn_top_selector);
-        ((TextView) mLoGirl.findViewById(R.id.tvTitle))
-                .setText(R.string.general_girl);
-        mCheckGirl = (ImageView) mLoGirl.findViewById(R.id.ivCheck);
+        ((ImageView) mLoGirl.findViewWithTag("ivEditBackground")).setImageResource(R.drawable.edit_big_btn_top_selector);
+        ((TextView)  mLoGirl.findViewWithTag("tvTitle")).setText(R.string.general_girl);
+        mCheckGirl = (ImageView) mLoGirl.findViewWithTag("ivCheck");
         if (mSex == Static.GIRL) {
             mCheckGirl.setVisibility(View.VISIBLE);
         }
@@ -93,11 +91,9 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         mLoGirl.setVisibility(View.GONE);
 
         mLoBoy = root.findViewById(R.id.loBoy);
-        ((ImageView) mLoBoy.findViewById(R.id.ivEditBackground))
-                .setImageResource(R.drawable.edit_big_btn_bottom_selector);
-        ((TextView) mLoBoy.findViewById(R.id.tvTitle))
-                .setText(R.string.general_boy);
-        mCheckBoy = (ImageView) mLoBoy.findViewById(R.id.ivCheck);
+        ((ImageView) mLoBoy.findViewWithTag("ivEditBackground")).setImageResource(R.drawable.edit_big_btn_bottom_selector);
+        ((TextView) mLoBoy.findViewWithTag("tvTitle")).setText(R.string.general_boy);
+        mCheckBoy = (ImageView) mLoBoy.findViewWithTag("ivCheck");
         if (mSex == Static.BOY) {
             mCheckBoy.setVisibility(View.VISIBLE);
         }
@@ -124,7 +120,6 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                         setStatus(loStatus, type, data);
                         break;
                 }
-
                 hashChangedData.put(type, data);
             }
         }
@@ -136,8 +131,8 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         mLoBoy.setVisibility(View.VISIBLE);
         mLoGirl.setVisibility(View.VISIBLE);
         loName.setVisibility(View.VISIBLE);
-        ((TextView) loName.findViewById(R.id.tvTitle)).setText(R.string.edit_name);
-        mEdName = (EditText) loName.findViewById(R.id.edText);
+        ((TextView) loName.findViewWithTag("tvTitle")).setText(R.string.edit_name);
+        mEdName = (EditText) loName.findViewWithTag("edText");
         mEdName.setText(data);
         mEdName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         mEdName.addTextChangedListener(new TextWatcher() {
@@ -165,8 +160,8 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
 
     private void setStatus(ViewGroup loStatus, final EditType type, String data) {
         loStatus.setVisibility(View.VISIBLE);
-        ((TextView) loStatus.findViewById(R.id.tvTitle)).setText(R.string.edit_status);
-        mEdStatus = (EditText) loStatus.findViewById(R.id.edText);
+        ((TextView) loStatus.findViewWithTag("tvTitle")).setText(R.string.edit_status);
+        mEdStatus = (EditText) loStatus.findViewWithTag("edText");
         InputFilter[] filters = new InputFilter[1];
         filters[0] = new InputFilter.LengthFilter(MAX_STATUS_LENGTH);
         mEdStatus.setFilters(filters);
@@ -177,7 +172,6 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
@@ -199,8 +193,8 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
 
     private void setAge(ViewGroup loAge, final EditType type, String data) {
         loAge.setVisibility(View.VISIBLE);
-        ((TextView) loAge.findViewById(R.id.tvTitle)).setText(R.string.edit_age);
-        mEdAge = (EditText) loAge.findViewById(R.id.edText);
+        ((TextView) loAge.findViewWithTag("tvTitle")).setText(R.string.edit_age);
+        mEdAge = (EditText) loAge.findViewWithTag("edText");
         int maxLength = 2;
         InputFilter[] fArray = new InputFilter[1];
         fArray[0] = new InputFilter.LengthFilter(maxLength);
@@ -248,7 +242,6 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
 
         if (hasChanges()) {
             SettingsRequest request = getSettigsRequest();
-
             prepareRequestSend();
             registerRequest(request);
             request.callback(new ApiHandler() {

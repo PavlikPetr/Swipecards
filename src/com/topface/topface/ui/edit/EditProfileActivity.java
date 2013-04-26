@@ -332,9 +332,9 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
                 convertView = mInflater.inflate(item.getLayoutResId(), null, false);
 
-                holder.mTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-                holder.mText = (TextView) convertView.findViewById(R.id.tvText);
-                holder.mBackground = (ImageView) convertView.findViewById(R.id.ivEditBackground);
+                holder.mTitle = (TextView) convertView.findViewWithTag("tvTitle");
+                holder.mText = (TextView) convertView.findViewWithTag("tvText");
+                holder.mBackground = (ImageView) convertView.findViewWithTag("ivEditBackground");
 
                 convertView.setTag(holder);
             } else {
