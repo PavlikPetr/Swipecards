@@ -219,6 +219,8 @@
         <activity android:name="com.mopub.mobileads.MraidBrowser"  android:configChanges="keyboardHidden|orientation"/>
         <activity android:name="com.mopub.mobileads.MoPubActivity" android:configChanges="keyboardHidden|orientation"/>
 
+        <activity android:name="com.inneractive.api.ads.InneractiveFullScreenView" android:configChanges="orientation|screenSize"/>
+
         <!-- Алиас для главной активити из первой версии. На всякий случай, а то раньше уже были проблемы с FB -->
         <activity-alias
                 android:name=".ui.MainActivity"
