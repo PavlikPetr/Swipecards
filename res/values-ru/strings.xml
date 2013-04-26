@@ -551,7 +551,7 @@
     <string name="vip_stop_ads">Только общение, ничего лишнего. У VIP-пользователей нет рекламы</string>
     <string name="settings_invalid_name">Имя содержит некорректные символы</string>
     <string name="general_fan_access_error">Для доступа к поклонникам необходимо иметь VIP статус</string>
-    <string name="friend_email_hint">Введите e-mail друга</string>
+    <string name="friend_email_hint">Введите e-mail или телефон друга</string>
     <string name="general_add">Добавить</string>
     <string name="general_invite_friends">Пригласите друзей</string>
     <string name="general_rest_contacts">Вам осталось %d контактов</string>
@@ -587,5 +587,6 @@
         <item quantity="other">Получи VIP бесплатно за %d приглашений</item>
     </plurals>
 
+    <string name="filter_hint">Введите имя</string>
 
 </resources>
