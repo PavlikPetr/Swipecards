@@ -20,7 +20,6 @@
     <string name="general_data_error">Chyba. Skúste ešte raz</string>
     <string name="general_internet_off">Nie je pripojenie k internetu</string>
     <string name="general_purchasing_error">Prosím, napíšte správu o chybnom nákupe na support@topface.ru</string>
-    <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Text je skopírovaný</string>
     <string name="general_spinner_title">Vyberte činnosť</string>
     <string name="general_profile_error">Chyba pri načítaní profilu</string>
@@ -138,12 +137,6 @@
     <string name="invite_is_free">Odoslanie pozvánky je bezplatné</string>
     <string name="invite_error">Nepodarilo sa odoslať pozvánku. Skúste to ešte raz</string>
     <string name="invite_completed">Pozvánka je poslaná</string>
-    <plurals name="invite_bonus_text">
-        <item quantity="few">Chystáte sa poslať pozvánku%2$d priateľom a získate za to %1$d</item>
-        <item quantity="zero">Pozvite priateľov a získajte za každého 20</item>
-        <item quantity="other">Chystáte sa poslať pozvánku%2$d priateľom a získate za to %1$d</item>
-        <item quantity="one">Chystáte sa poslať pozvánku%2$d priateľovi a získate za to %1$d</item>
-    </plurals>
     <string name="settings_header_title">Nastavenia</string>
     <string name="settings_wifi">Iba cez WiFi</string>
     <string name="settings_on">Zapnutá</string>
@@ -283,11 +276,11 @@
     <string name="leaders_select_cool_picture">Vyberte efektnú fotografiu:</string>
     <string name="chat_write_message">Napísať správu</string>
     <string name="buying_sympathies">Nákup sympatií</string>
-    <string name="novice_sympathies_bonus">Získavate %1$d sympatií ako \n darček! Znamená to, že sa \n určite budete páčiť %2$d ľuďom, \n kotrí Vám vyjadria svoju sympatiu</string>
+    <string name="novice_sympathies_bonus">Získavate %1$d sympatií ako \n darček! Znamená to, že sa \nurčite budete páčiť %2$d ľuďom, \n kotrí Vám vyjadria svoju sympatiu</string>
     <string name="novice_energy_to_sympathies_title">Vymenili sme energiu za sympatie</string>
     <string name="novice_energy_to_sympathies_message_boys">Keď doplníte zásobu sympatií, získate \nuvedené množstvo sympatií \nod chlapov, ktorým sa určite páčite</string>
     <string name="novice_energy_to_sympathies_message_girls">Keď doplníte zásobu sympatií, získate \nuvedené množstvo sympatií \nod dievčat, ktorým sa určite páčite</string>
-    <string name="novice_buy_sympathies">Ak chcete zaručene \ndostávať sympatie, \nkúpte ich hneď teraz!</string>
+    <string name="novice_buy_sympathies">Ak chcete zaručene \ndostávať sympatie,  \nkúpte ich hneď teraz!</string>
     <string name="general_reconnect_social">Pripojenie k sieti nie je možné. Pokus skúste zopakovať neskôr.</string>
     <string name="general_buying">Kúpiť sympatie a mince</string>
     <string name="general_block">Blokovať</string>
@@ -308,8 +301,8 @@
     <string name="popup_version_message">Je čas obnoviť svoju verziu!</string>
     <string name="popup_version_update">Obnoviť</string>
     <string name="popup_version_cancel">Pripomenúť neskôr</string>
-    <string name="general_version_not_supported">Vaša verzia aplikácie je stará a nepodporovaná. Prosím, obnovte aplikáciu</string>
-    <string name="leaders_select_photo_info">Vyberte najefektívnejšiu fotografiu! Fotografie z nízkym ratingom nemožno vyberať</string>
+    <string name="general_version_not_supported">Vaša verzia aplikácie je stará a viac nie je podporovaná. Prosím obnovte si verziu aplikácie</string>
+    <string name="leaders_select_photo_info">Vyberte najefektívnejšiu fotografiu! Fotografie, ktoré majú nízke hodnotenie sa nedajú vybrať.</string>
     <string name="default_price_format">Celkovo: %.2f USD</string>
     <string name="dating_online_only">%s, iba online</string>
     <string name="leaders_pick_condition">Nemôžete si vybrať fotografiu s hodnotením nižším ako %d%%:</string>
@@ -418,6 +411,33 @@
     <string name="general_wrong_photo_upload">Vaša fotografia nespĺňa pravidlá. Skúste si urobiť inú.</string>
     <string name="general_input_email">Zadajte Váš e-mail</string>
     <string name="cant_delete_fake_item">Táto správa nie je dostupná, nemôžete ju zmazať. Skúste to neskôr</string>
+    <string name="vip_stop_ads">Iba chat, nič navyše. VIP užívatelia nemajú reklamu</string>
     <string name="settings_invalid_name">Meno obsahuje nesprávne symboly</string>
     <string name="general_fan_access_error">Aby ste mali prístup k fanúšikom, musíte mať VIP status</string>
+    <string name="friend_email_hint">Zadajde e-mail priateľa</string>
+    <string name="general_add">Pridať</string>
+    <string name="general_invite_friends">Pozvite priateľov</string>
+    <string name="general_rest_contacts">Zostalo Vám %d kontaktov</string>
+    <string name="inviteFriendsTitle">Pozvať všetkých priateľov na Topface</string>
+    <string name="invalid_contacts">Niektoré z kontaktov boli nesprávne. Prosím, pošlite správne kontakty</string>
+    <plurals name="vip_status_period">
+        <item quantity="few">Získali ste VIP status na %d dni</item>
+        <item quantity="other">Získali ste VIP status na %d dní</item>
+        <item quantity="one">Získali ste VIP status na %d deň</item>
+    </plurals>
+    <plurals name="vip_status_period_btn">
+        <item quantity="few">Získať VIP na %d dni</item>
+        <item quantity="other">Získať VIP na %d dní</item>
+        <item quantity="one">Získať VIP na %d deň</item>
+    </plurals>
+    <plurals name="invite_friends_plurals">
+        <item quantity="few">Pozvite %1$d priateľov, aby ste získali VIP status na  %2$d dni</item>
+        <item quantity="other">Pozvite %1$d priateľov, aby ste získali VIP status na  %2$d dní</item>
+        <item quantity="one">Pozvite %1$d priateľov, aby ste získali VIP status na  %2$d deň</item>
+    </plurals>
+    <plurals name="get_vip_for_invites_plurals">
+        <item quantity="few">Získaj VIP zadarmo za %d pozvania</item>
+        <item quantity="other">Získaj VIP zadarmo za %d pozvaní</item>
+        <item quantity="one">Získaj VIP zadarmo za %d pozvanie</item>
+    </plurals>
 </resources>

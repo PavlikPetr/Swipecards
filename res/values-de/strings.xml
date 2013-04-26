@@ -20,7 +20,6 @@
     <string name="general_data_error">Fehler! Versuchen Sie noch einmal</string>
     <string name="general_internet_off">Keine Internetverbindung. Bitte, warten Sie</string>
     <string name="general_purchasing_error">Bitte senden Sie die Fehlermeldung beim Kauf an support@topface.ru</string>
-    <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Text ist kopiert</string>
     <string name="general_spinner_title">Wählen Sie die Aktion</string>
     <string name="general_profile_error">Fehler bei der Ladung des Profils</string>
@@ -137,11 +136,6 @@
     <string name="invite_is_free">Es ist kostenlos, Einladung zu senden</string>
     <string name="invite_error">Es klappt nicht, Einladungen zu senden. Versuchen Sie nochmal</string>
     <string name="invite_completed">Einladung ist gesendet</string>
-    <plurals name="invite_bonus_text">
-        <item quantity="zero">Laden Sie Ihre Freunde und bekommen Sie für jeden 20</item>
-        <item quantity="other">Sie wollen Einladungen %2$d Freunden senden und Sie erhalten dafür %1$d</item>
-        <item quantity="one">Sie wollen eine Einladung %2$d Freund senden und Sie erhalten dafür %1$d</item>
-    </plurals>
     <string name="settings_header_title">Einstellungen</string>
     <string name="settings_wifi">Nur per Wi-Fi</string>
     <string name="settings_on">Eingeschaltet</string>
@@ -282,7 +276,8 @@
     <string name="novice_energy_to_sympathies_title">Wir haben die Kraft durch Sympathien ersetzt</string>
     <string name="novice_energy_to_sympathies_message_boys">Falls Sie Ihre Kraft ergänzen, werden Sie\nangegebene Anzahl der Sympathien\nvon Männer erhalten, denen Sie genau gefallen</string>
     <string name="novice_energy_to_sympathies_message_girls">Falls Sie Ihre Kraft ergänzen, werden Sie\nangegebene Anzahl der Sympathien\nvon Männer erhalten, denen Sie genau gefallen</string>
-    <string name="novice_buy_sympathies">Falls Sie garantiert\nSympathien erhalten möchten,\nkaufen Sie sie gearde jetzt!</string>
+    <string name="novice_buy_sympathies">Falls Sie garantiert\nSympathien erhalten möchten,\nkaufen Sie sie gearde
+ jetzt!</string>
     <string name="general_reconnect_social">Keine Internetverbindung. Versuchen Sie später.</string>
     <string name="general_buying">Sympathie und Coins kaufen</string>
     <string name="general_block">Blokieren</string>

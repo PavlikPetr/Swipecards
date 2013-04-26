@@ -20,7 +20,6 @@
     <string name="general_data_error">Chyba. Zkuste to ještě jednou</string>
     <string name="general_internet_off">Není připojení k internetu</string>
     <string name="general_purchasing_error">Prosím napište zprávu o chybném nákupu na support@topface.ru</string>
-    <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Text byl zkopírován</string>
     <string name="general_spinner_title">Zvolte akci</string>
     <string name="general_profile_error">Chyba při načítání profilu</string>
@@ -138,12 +137,6 @@
     <string name="invite_is_free">Odeslání pozvánky je zdarma</string>
     <string name="invite_error">Nepodařilo se odeslat pozvánku. Zkuste to ještě jednou</string>
     <string name="invite_completed">Pozvánka odeslána</string>
-    <plurals name="invite_bonus_text">
-        <item quantity="few">Chystáte se poslat pozvánku %2$d přítelům a získáte za to %1$d</item>
-        <item quantity="zero">Pozvěte přátele a získejte za každého 20</item>
-        <item quantity="other">Chystáte se poslat pozvánku %2$d přítelům a získáte za to %1$d</item>
-        <item quantity="one">Chystáte se poslat pozvánku %2$d příteli a získáte za to %1$d</item>
-    </plurals>
     <string name="settings_header_title">Nastavení</string>
     <string name="settings_wifi">Pouze přes Wi-Fi</string>
     <string name="settings_on">Zapnutá</string>
@@ -308,8 +301,8 @@
     <string name="popup_version_message">Je na čase aktualizovat svou verzi!</string>
     <string name="popup_version_update">Aktualizovat</string>
     <string name="popup_version_cancel">Připomenout později</string>
-    <string name="general_version_not_supported">Vaše verze aplikace je zastaralá a již není podporována. Prosím aktualizujte aplikaci</string>
-    <string name="leaders_select_photo_info">Vyberte si tu nejzajimavejší fotku! Fotografie s nízkým hodnocením vybrat nelze</string>
+    <string name="general_version_not_supported">Vaše verze aplikace je zastaralá a již není podporována. Prosím, aktualizujte aplikaci</string>
+    <string name="leaders_select_photo_info">Vyberte si tu nejatraktivnější fotku! Nelze zvolit fotografii s nízkým hodnocením</string>
     <string name="default_price_format">Celkem: %.2f USD</string>
     <string name="dating_online_only">%s, pouze online</string>
     <string name="leaders_pick_condition">Nemůžete zvolit fotku s hodnocením nižším než %d%%:</string>

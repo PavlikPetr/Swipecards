@@ -20,7 +20,6 @@
     <string name="general_data_error">Erro. Tente mais uma vez</string>
     <string name="general_internet_off">Tentamos reinstalar a conexão com a internet. Por favor, espere.</string>
     <string name="general_purchasing_error">Por favor, escreva mensagem sobre erro de compra em support@topface.ru</string>
-    <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">O texto foi copiado</string>
     <string name="general_spinner_title">Seleccione uma ação</string>
     <string name="general_profile_error">Erro no carregamento de perfil</string>
@@ -137,11 +136,6 @@
     <string name="invite_is_free">O envio de convite é gratuito</string>
     <string name="invite_error">Não foi possivel enviar os convites. Tente mais uma vez</string>
     <string name="invite_completed">O convite está enviado</string>
-    <plurals name="invite_bonus_text">
-        <item quantity="zero">Convidem amigos e ganhem 20 por cada um</item>
-        <item quantity="other">Vocês estão prestes a enviar convites %2$d para amigos e ganhar por isso %1$d</item>
-        <item quantity="one">Vocês estão prestes a enviar um convite %2$d para um amigo e ganhar por isso %1$d</item>
-    </plurals>
     <string name="settings_header_title">Definições</string>
     <string name="settings_wifi">Somente para Wi-Fi</string>
     <string name="settings_on">Ligado</string>
@@ -289,7 +283,7 @@
     <string name="general_buying">Comprar simpatias e moedas</string>
     <string name="general_block">Bloquear</string>
     <string name="general_buying_disabled">Neste preciso momento é impossível a compra</string>
-    <string name="ban_flood_detected">Você faz pedidos com muita frequência ao servidor. Aguardará para posterior utilização de aplicação.</string>
+    <string name="ban_flood_detected">Você faz pedidos com muita frequência ao servidor. Espere para utilização posterior de aplicação.</string>
     <string name="general_maintenance">No servidor está a decorrer o trabalho técnico e o seu pedido não pode ser executado. Tente repetir mais tarde.</string>
     <string name="virus_chat_likes_request_title">Dar presente de simpatias para seus amigos</string>
     <string name="virus_chat_btn">Receber simpatias</string>
@@ -304,8 +298,8 @@
     <string name="popup_version_message">É tempo de renovar sua versão!</string>
     <string name="popup_version_update">Renovar</string>
     <string name="popup_version_cancel">Lembrar mais tarde</string>
-    <string name="general_version_not_supported">A sua versão de aplicação é antiga e não se suporta mais. Por favor, renove aplicação</string>
-    <string name="leaders_select_photo_info">Seleccione a foto mais efectiva! Não se deve seleccionar fotografias de baixa classificação</string>
+    <string name="general_version_not_supported">A versão da sua aplicação é antiga e não se aguenta mais. Por favor, renove aplicação</string>
+    <string name="leaders_select_photo_info">Selecione a mais efetiva foto! Não se pode selecionar fotografias de baixa classificação</string>
     <string name="default_price_format">Total: %.2f USD</string>
     <string name="dating_online_only">%s, somente online</string>
     <string name="leaders_pick_condition">Você não pode selecionar a foto com uma classificação inferior a %d%%:</string>

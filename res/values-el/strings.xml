@@ -20,7 +20,6 @@
     <string name="general_data_error">Σφάλμα. Προσπαθήστε ξανά</string>
     <string name="general_internet_off">Δεν υπάρχει σύνδεση με το Internet. Παρακαλώ να περιμένετε.</string>
     <string name="general_purchasing_error">Παρακαλώ, γράψετε ένα μήνυμα σφάλματος για την αγορά support@topface.ru</string>
-    <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Αντιγραφεί</string>
     <string name="general_spinner_title">Επιλέξτε μια δράση</string>
     <string name="general_profile_error">Λάθους τη φόρτωση του προφίλ</string>
@@ -137,11 +136,6 @@
     <string name="invite_is_free">Αποστολή δωρεάν</string>
     <string name="invite_error">Απέτυχε η αποστολή προσκλήσεων. Δοκιμάστε ξανά</string>
     <string name="invite_completed">Πρόσκληση έχει σταλεί.</string>
-    <plurals name="invite_bonus_text">
-        <item quantity="zero">Προσκαλέστε τους φίλους σας και να παρέτε για καθένα από τις 20</item>
-        <item quantity="other">Θα πάμε για να στείλετε προσκλήσεις %2$d στους φίλους και να παρέτε γι \'αυτό %1$d</item>
-        <item quantity="one">Θα πάμε για να στείλετε μια πρόσκληση για %2$d στους φίλους και να παρέτε γι \'αυτό %1$d</item>
-    </plurals>
     <string name="settings_header_title">Ρυθμίσεις</string>
     <string name="settings_wifi">Μόνο σε Wi-Fi</string>
     <string name="settings_on">Περιλαμβάνεται</string>
@@ -280,7 +274,7 @@
     <string name="buying_sympathies">Αγορά τις συμπάθειες</string>
     <string name="novice_sympathies_bonus">Παίρνετε %1$d συμπάθειες για\nδωρεάν!  Αυτό σημαίνει ότι, εσέις\n θα αρέσετε ακριβώς για %2$d τους ανθρώπους,\nοποίοι θα εκφράζουν την συμπάθεια για σας</string>
     <string name="novice_energy_to_sympathies_title">Έχουμε ήδη αντικαταστήσει την ενέργεια για συμπάθειες</string>
-    <string name="novice_energy_to_sympathies_message_boys">Ξαναγεμίστε του απόθεμα τις συμπάθειες, και θα λάβετε \nσυγκεκριμένο ποσό τις συμπάθειες\nαπό τους άνδρες, για ποιον αρέσετε</string>
+    <string name="novice_energy_to_sympathies_message_boys">Ξαναγεμίστε του απόθεμα τις συμπάθειες, και θα λάβετε \nσυγκεκριμένο ποσό τις συμπάθειες\nαπό τους άνδρες, για ποιόν αρέσετε</string>
     <string name="novice_energy_to_sympathies_message_girls">Ξαναγεμίστε του απόθεμα τις συμπάθειες, και θα λάβετε \nσυγκεκριμένο ποσό τις συμπάθειες\nαπό τις κοπέλες, για την οποία αρέσετε</string>
     <string name="novice_buy_sympathies">Αν θέλετε να είστε εγγυημένος για\nνα λαμβάνετε συμπάθειες,\nνα τις αγοράσετε τώρα!</string>
     <string name="general_reconnect_social">Δεν είναι δυνατή η σύνδεση με κοινωνικά δίκτυα. Παρακαλώ δοκιμάστε ξανά αργότερα.</string>
@@ -314,7 +308,7 @@
     <string name="general_place">Τόπος</string>
     <string name="general_soon">Σύντομα θα είναι</string>
     <string name="black_list_activation">Ενεργοποιήστε το VIP-κατάσταση, και χρησιμοποιήστε μια μαύρη λίστα</string>
-    <string name="profile_edit_age_ranges">Ηλικία θα πρέπει να είναι μεταξύ 16 - 99 ετών. Παρακαλώ εισάγετε έναν έγκυρο αριθμό και προσπαθήστε ξανά.</string>
+    <string name="profile_edit_age_ranges">Ηλικία θα πρέπει να είναι μεταξύ 16 – 99 ετών. Παρακαλώ εισάγετε έναν έγκυρο αριθμό και προσπαθήστε ξανά.</string>
     <string name="sign_in">Είσοδος</string>
     <string name="create_account">Δημιουργία λογαριασμού</string>
     <string name="email">E-mail</string>
