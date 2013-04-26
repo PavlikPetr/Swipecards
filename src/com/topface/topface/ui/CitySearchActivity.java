@@ -41,7 +41,6 @@ public class CitySearchActivity extends BaseFragmentActivity {
     private View mCbMyCity;
     private TextView mMyCityTitle;
     private EditText mCityInputView;
-    private TextView mCityInputTitle;
     private ListView cityListView;
     private TextView mCityFail;
 
@@ -82,13 +81,13 @@ public class CitySearchActivity extends BaseFragmentActivity {
     }
 
     private void initEditText() {
-        mCityInputTitle = (TextView) findViewById(R.id.tvCityInputTitle);
+        TextView cityInputTitle = (TextView) findViewById(R.id.tvCityInputTitle);
         if (mRequestKey == INTENT_CITY_SEARCH_AFTER_REGISTRATION) {
-            mCityInputTitle.setText(R.string.reselect_city);
+            cityInputTitle.setText(R.string.reselect_city);
         } else {
-            mCityInputTitle.setText(R.string.search_city_by_name);
+            cityInputTitle.setText(R.string.search_city_by_name);
         }
-        mCityInputTitle.setOnTouchListener(new View.OnTouchListener() {
+        cityInputTitle.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (mCityInputView != null) mCityInputView.clearFocus();
@@ -285,9 +284,9 @@ public class CitySearchActivity extends BaseFragmentActivity {
                 LinkedList<City> citiesList = City.parse(response);
                 if (citiesList.size() == 0) {
                     cityListView.setVisibility(View.INVISIBLE);
-                    if(CitySearchActivity.this != null) {
-                          mCityFail.setVisibility(View.VISIBLE);
-                          mCityFail.setText(getString(R.string.filter_city_fail, prefix));
+                    if (mCityFail != null) {
+                        mCityFail.setVisibility(View.VISIBLE);
+                        mCityFail.setText(getString(R.string.filter_city_fail, prefix));
 //                        mMyCityTitle.setText(getString(R.string.filter_city_fail, prefix));
 //                        mMyCityTitle.setVisibility(View.VISIBLE);
                     }

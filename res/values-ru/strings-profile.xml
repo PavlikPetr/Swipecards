@@ -88,7 +88,7 @@
     <string name="profile_form_marriage_male_4">Да</string>
     <string name="profile_form_marriage_male_5">Да и навсегда</string>
     <string name="profile_form_marriage_male_6">А кому это мешает?</string>
-    <string name="profile_form_marriage_male_7">Никогда</string>	    
+    <string name="profile_form_marriage_male_7">Никогда</string>
 
     <string name="profile_form_marriage_female_0">Еще нет</string>
     <string name="profile_form_marriage_female_1">Уже нет</string>
@@ -97,7 +97,7 @@
     <string name="profile_form_marriage_female_4">Да</string>
     <string name="profile_form_marriage_female_5">Да и навсегда</string>
     <string name="profile_form_marriage_female_6">А кому это мешает?</string>
-    <string name="profile_form_marriage_female_7">Никогда</string>    
+    <string name="profile_form_marriage_female_7">Никогда</string>
 
     <string name="profile_form_finances_male_0">Очень высокий доход</string>
     <string name="profile_form_finances_male_1">Могу поделиться</string>

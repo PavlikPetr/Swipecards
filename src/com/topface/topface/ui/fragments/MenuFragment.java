@@ -353,9 +353,6 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             case BaseFragment.F_FANS:
                 fragment = new FansFragment();
                 break;
-            case BaseFragment.F_TOPS:
-                fragment = new TopsFragment();
-                break;
             case BaseFragment.F_VISITORS:
                 fragment = new VisitorsFragment();
                 break;

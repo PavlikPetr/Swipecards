@@ -44,26 +44,28 @@
                 android:focusableInTouchMode="true"/>
 
         <LinearLayout
-            android:id="@+id/emailContainer"
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-                >
-            <CheckBox
-                android:id="@+id/loEmailSwitcher"
-                android:layout_width="wrap_content"
+                android:id="@+id/emailContainer"
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_margin="8dp"
+                >
 
-                />
+            <CheckBox
+                    android:id="@+id/loEmailSwitcher"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+
+                    />
+
             <TextView
-                android:id="@+id/wantAnswerTv"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:textSize="14sp"
-                android:gravity="center_vertical"
-                android:text="@string/settings_want_answer"/>
+                    android:id="@+id/wantAnswerTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:textSize="14sp"
+                    android:gravity="center_vertical"
+                    android:text="@string/settings_want_answer"/>
         </LinearLayout>
 
 
@@ -82,7 +84,7 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginLeft="8dp"
                 android:gravity="top|left|center_horizontal"
-                android:inputType="textMultiLine"
+                android:inputType="textEmailAddress"
                 android:padding="10dp"
                 android:singleLine="true"
                 android:textSize="14sp"

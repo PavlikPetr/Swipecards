@@ -38,6 +38,11 @@ public class ProfileFormListAdapter extends BaseAdapter {
 
     public ProfileFormListAdapter(Context context) {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        refillData();
+    }
+
+    public void refillData() {
+        mProfileForms.clear();
         if (CacheProfile.forms != null) {
             mProfileForms.addAll(CacheProfile.forms);
         }

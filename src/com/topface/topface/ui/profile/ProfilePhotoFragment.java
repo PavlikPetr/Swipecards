@@ -113,6 +113,8 @@ public class ProfilePhotoFragment extends BaseFragment {
                     getActivity().finish();
                 }
             });
+        } else {
+
         }
 
         mViewFlipper = (ViewFlipper) root.findViewById(R.id.vfFlipper);

@@ -38,6 +38,7 @@ public class ProfileFormFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        mProfileFormListAdapter.refillData();
         mProfileFormListAdapter.notifyDataSetChanged();
     }
 

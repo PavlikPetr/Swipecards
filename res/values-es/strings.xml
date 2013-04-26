@@ -412,6 +412,29 @@
     <string name="general_wrong_photo_upload">Tu fotografía no cumple con el reglamento. Prueba hacer otra</string>
     <string name="general_input_email">Introduce tu e-mail</string>
     <string name="cant_delete_fake_item">Este mensaje aún no está entregado, por lo tanto no puedes eliminarlo. Prueba más tarde.</string>
+    <string name="vip_stop_ads">Solo la comunicación y nada más. Los VIP usuarios no tienen que visualizar propaganda</string>
     <string name="settings_invalid_name">El nombre contiene simbolos incorrectos</string>
     <string name="general_fan_access_error">Para acceder a los admiradores hace falta tener  el estado VIP</string>
+    <string name="friend_email_hint">Introduce el e-mail de tu amigo</string>
+    <string name="general_add">Agregar</string>
+    <string name="general_invite_friends">Invita a tus amigos</string>
+    <string name="general_rest_contacts">Te quedan %d contactos</string>
+    <string name="inviteFriendsTitle">Invitar a todos los amigos a Topface</string>
+    <string name="invalid_contacts">Algunos de los contactos fueron incorrectos. Por favor, envía contactos correctos</string>
+    <plurals name="vip_status_period">
+        <item quantity="other">Has recibido el estado VIP para %d días</item>
+        <item quantity="one">Has recibido el estado VIP para %d día</item>
+    </plurals>
+    <plurals name="vip_status_period_btn">
+        <item quantity="other">Recibir el estado VIP para %d días</item>
+        <item quantity="one">Recibir el estado VIP para %d día</item>
+    </plurals>
+    <plurals name="invite_friends_plurals">
+        <item quantity="other">Invita %1$d amigos, para recibir el estado VIP para %2$d días</item>
+        <item quantity="one">Invita %1$d amigos, para recibir el estado VIP para %2$d día</item>
+    </plurals>
+    <plurals name="get_vip_for_invites_plurals">
+        <item quantity="other">Recibe VIP gratis por %d invitaciones</item>
+        <item quantity="one">Recibe VIP gratis por %d invitación</item>
+    </plurals>
 </resources>

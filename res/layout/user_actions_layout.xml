@@ -33,7 +33,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     style="@android:style/Widget.ProgressBar.Small"
-                    android:visibility="gone"
+                    android:visibility="invisible"
                     android:layout_marginLeft="12dp"/>
 
             <TextView
@@ -67,7 +67,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 style="@android:style/Widget.ProgressBar.Small"
-                android:visibility="gone"
+                android:visibility="invisible"
                 android:layout_marginLeft="12dp"/>
 
         <TextView
@@ -101,7 +101,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 style="@android:style/Widget.ProgressBar.Small"
-                android:visibility="gone"
+                android:visibility="invisible"
                 android:layout_marginLeft="12dp"/>
 
         <TextView
@@ -135,7 +135,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 style="@android:style/Widget.ProgressBar.Small"
-                android:visibility="gone"
+                android:visibility="invisible"
                 android:layout_marginLeft="12dp"/>
 
         <TextView
@@ -169,7 +169,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 style="@android:style/Widget.ProgressBar.Small"
-                android:visibility="gone"
+                android:visibility="invisible"
                 android:layout_marginLeft="12dp"/>
 
         <TextView
@@ -202,7 +202,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 style="@android:style/Widget.ProgressBar.Small"
-                android:visibility="gone"
+                android:visibility="invisible"
                 android:layout_marginLeft="12dp"/>
 
         <TextView
