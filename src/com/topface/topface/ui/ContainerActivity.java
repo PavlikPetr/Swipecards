@@ -3,6 +3,7 @@ package com.topface.topface.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
@@ -99,8 +100,6 @@ public class ContainerActivity extends BaseFragmentActivity {
                 }
                 break;
             case INTENT_CHAT_FRAGMENT:
-
-
                 fragment = ChatFragment.newInstance(intent.getStringExtra(ChatFragment.INTENT_ITEM_ID),
                         intent.getIntExtra(ChatFragment.INTENT_USER_ID, -1),
                         false,
@@ -109,7 +108,6 @@ public class ContainerActivity extends BaseFragmentActivity {
                         intent.getIntExtra(ChatFragment.INTENT_USER_AGE, 0),
                         intent.getStringExtra(ChatFragment.INTENT_USER_CITY),
                         intent.getStringExtra(BaseFragmentActivity.INTENT_PREV_ENTITY));
-
                 break;
             case INTENT_REGISTRATION_FRAGMENT:
                 fragment = new RegistrationFragment();
@@ -204,5 +202,4 @@ public class ContainerActivity extends BaseFragmentActivity {
         i.putExtra(Static.INTENT_REQUEST_KEY, INTENT_PROFILE_FRAGMENT);
         return i;
     }
-
 }

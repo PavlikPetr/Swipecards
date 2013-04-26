@@ -3,7 +3,6 @@ package com.topface.topface.ui.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.*;
-import android.content.res.Configuration;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -111,6 +110,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.ac_chat, null);
 
+
         Debug.log(this, "+onCreate");
         // arguments
         itemId = getArguments().getString(INTENT_ITEM_ID);
@@ -159,6 +159,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     private void initAddPanel(View root) {
         mSwapControl = ((SwapControl) root.findViewById(R.id.swapFormView));
+        mSwapControl.setOnSizeChangedListener(new SwapControl.OnSizeChangedListener() {
+            @Override
+            public void onSizeChanged(int w, int h, int oldw, int oldh) {
+                if (oldh > h) {
+                    // keyboard opened
+                    toggleAddPanel(false);
+                }
+            }
+        });
 
         // Add Button
         mBtnChatAdd = (ImageButton) root.findViewById(R.id.btnChatAdd);
@@ -683,16 +692,21 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
         }
 
-        toggleAddPanel();
+        toggleAddPanel(false);
     }
 
     private void toggleAddPanel() {
-        if (!mIsAddPanelOpened) {
+        toggleAddPanel(!mIsAddPanelOpened);
+    }
+
+    private void toggleAddPanel(boolean open) {
+        if (mIsAddPanelOpened == open) return;
+        if (open) {
             Utils.hideSoftKeyboard(getActivity(), mEditBox);
         }
-        mSwapControl.snapToScreen(mIsAddPanelOpened ? 0 : 1);
-        mBtnChatAdd.setSelected(!mIsAddPanelOpened);
-        mIsAddPanelOpened = !mIsAddPanelOpened;
+        mSwapControl.snapToScreen(!open ? 0 : 1);
+        mBtnChatAdd.setSelected(open);
+        mIsAddPanelOpened = open;
     }
 
     private void sendCoordinates(Geo geo) {
@@ -976,15 +990,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             if (mLoadingBackgroundDrawable != null) {
                 mLoadingBackgroundDrawable.start();
             }
-        }
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        if (newConfig.keyboardHidden == Configuration.KEYBOARDHIDDEN_YES) {
-            if (mIsAddPanelOpened) toggleAddPanel();
         }
     }
 }

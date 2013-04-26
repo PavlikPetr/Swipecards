@@ -167,7 +167,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         try {
             unregisterReceiver(mReauthReceiver);
             if (mProfileLoadReceiver != null) {
-                unregisterReceiver(mProfileLoadReceiver);
+                LocalBroadcastManager.getInstance(this).unregisterReceiver(mProfileLoadReceiver);
                 mProfileLoadReceiver = null;
             }
         } catch (Exception ex) {

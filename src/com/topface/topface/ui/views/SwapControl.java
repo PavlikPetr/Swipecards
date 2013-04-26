@@ -10,7 +10,7 @@ public class SwapControl extends ViewGroup {
     // Data
     private int mScrollY;
     private Scroller mScroller;
-
+    private OnSizeChangedListener mSizeChangedListener;
 
     public SwapControl(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -48,6 +48,11 @@ public class SwapControl extends ViewGroup {
         }
     }
 
+    @Override
+    protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+        super.onScrollChanged(l, t, oldl, oldt);
+
+    }
 
     public void snapToScreen(int screenPosition) {
         int h = getChildAt(1).getHeight();
@@ -59,5 +64,17 @@ public class SwapControl extends ViewGroup {
         invalidate();
     }
 
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        mSizeChangedListener.onSizeChanged(w, h, oldw, oldh);
+    }
 
+    public void setOnSizeChangedListener(OnSizeChangedListener listener) {
+        mSizeChangedListener = listener;
+    }
+
+    public static interface OnSizeChangedListener {
+        public void onSizeChanged(int w, int h, int oldw, int oldh);
+    }
 }
