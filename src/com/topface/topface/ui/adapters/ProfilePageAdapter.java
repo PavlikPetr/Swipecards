@@ -3,6 +3,7 @@ package com.topface.topface.ui.adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.util.SparseArrayCompat;
 import com.topface.topface.ui.fragments.HeaderMainFragment;
 import com.topface.topface.ui.fragments.HeaderStatusFragment;
 import com.topface.topface.ui.fragments.ProfileFragment;
@@ -10,13 +11,12 @@ import com.topface.topface.utils.Debug;
 import com.viewpagerindicator.PageIndicator;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ProfilePageAdapter extends FragmentStatePagerAdapter {
 
     private ArrayList<String> mFragmentsClasses = new ArrayList<String>();
     private ArrayList<String> mFragmentsTitles = new ArrayList<String>();
-    private HashMap<Integer, Fragment> mFragmentCache = new HashMap<Integer, Fragment>();
+    private SparseArrayCompat<Fragment> mFragmentCache = new SparseArrayCompat<Fragment>();
     private ProfileFragment.ProfileUpdater mProfileUpdater;
     private PageIndicator mPageIndicator;
 
@@ -33,7 +33,7 @@ public class ProfilePageAdapter extends FragmentStatePagerAdapter {
         mProfileUpdater = profileUpdater;
     }
 
-    public HashMap<Integer, Fragment> getFragmentCache() {
+    public SparseArrayCompat<Fragment> getFragmentCache() {
         return  mFragmentCache;
     }
 
@@ -68,13 +68,10 @@ public class ProfilePageAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Fragment fragment = null;
-        if (mFragmentCache.containsKey(position)) {
-            return mFragmentCache.get(position);
-        }
+        Fragment fragment = mFragmentCache.get(position);
+        if (fragment != null) return fragment;
         try {
             String fragmentClassName = mFragmentsClasses.get(position);
-
             //create fragments
             if (fragmentClassName.equals(HeaderMainFragment.class.getName())) {
                 fragment = HeaderMainFragment.newInstance(mProfileUpdater.getProfile());
@@ -84,7 +81,6 @@ public class ProfilePageAdapter extends FragmentStatePagerAdapter {
                 Class fragmentClass = Class.forName(fragmentClassName);
                 fragment = (Fragment) fragmentClass.newInstance();
             }
-
             mProfileUpdater.bindFragment(fragment);
             mProfileUpdater.update();
         } catch (Exception ex) {

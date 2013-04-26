@@ -1,6 +1,7 @@
 package com.topface.topface.data;
 
 import android.content.Context;
+import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -13,7 +14,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 
 /* Класс профиля владельца устройства */
@@ -49,7 +49,7 @@ public class Profile extends AbstractDataWithPhotos {
     public LinkedList<FormItem> forms = new LinkedList<FormItem>();
 
     public ArrayList<Gift> gifts = new ArrayList<Gift>();
-    public HashMap<Integer, TopfaceNotifications> notifications = new HashMap<Integer, TopfaceNotifications>();
+    public SparseArrayCompat<TopfaceNotifications> notifications = new SparseArrayCompat<TopfaceNotifications>();
     public boolean hasMail;
     public boolean email_grabbed;
     public boolean email_confirmed;

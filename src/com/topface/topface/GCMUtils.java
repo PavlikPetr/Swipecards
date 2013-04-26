@@ -184,7 +184,7 @@ public class GCMUtils {
 
     private static void loadNotificationSettings() {
         if (CacheProfile.notifications != null) {
-            if (!CacheProfile.notifications.isEmpty()) {
+            if (CacheProfile.notifications.size() > 0) {
                 showMessage = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns;
                 showLikes = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns;
                 showSympathy = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns;

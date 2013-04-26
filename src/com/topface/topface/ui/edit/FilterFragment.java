@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.util.SparseArrayCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,8 +22,6 @@ import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
-
-import java.util.HashMap;
 
 public class FilterFragment extends AbstractEditFragment implements OnClickListener {
 
@@ -44,7 +43,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     private ViewGroup mCharacterFrame;
     private ViewGroup mAlcoholFrame;
     private ViewGroup mShowOffFrame;
-    private HashMap<Integer, TextView> hashTextViewByTitleId = new HashMap<Integer, TextView>();
+    private SparseArrayCompat<TextView> hashTextViewByTitleId = new SparseArrayCompat<TextView>();
 
     private EditSwitcher mSwitchOnline;
     private EditSwitcher mSwitchBeautifull;
@@ -367,7 +366,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                         break;
                 }
 
-                hashTextViewByTitleId.get(titleId).setText(mFormInfo.getEntry(titleId, selectedId));
+                TextView item = hashTextViewByTitleId.get(titleId);
+                if (item != null) item.setText(mFormInfo.getEntry(titleId, selectedId));
             } else if (requestCode == CitySearchActivity.INTENT_CITY_SEARCH_FROM_FILTER_ACTIVITY) {
                 int city_id = extras.getInt(CitySearchActivity.INTENT_CITY_ID);
                 String city_name = extras.getString(CitySearchActivity.INTENT_CITY_NAME);

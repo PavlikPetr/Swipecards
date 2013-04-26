@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.util.SparseArrayCompat;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -43,7 +44,6 @@ import com.viewpagerindicator.CirclePageIndicator;
 import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ProfileFragment extends BaseFragment implements View.OnClickListener {
     public final static int TYPE_MY_PROFILE = 1;
@@ -75,7 +75,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private TextView mTitle;
     private View mLoaderView;
     private RateController mRateController;
-    //    protected NavigationBarController mNavBarController;
     private RelativeLayout mLockScreen;
     private RetryViewCreator mRetryView;
     private ViewPager mBodyPager;
@@ -272,9 +271,15 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateProfileReceiver);
 
+        int key;
+        Fragment fragment;
+        SparseArrayCompat<Fragment> fragments;
         //Вручную прокидываем событие onPause() в ViewPager, т.к. на onPause() мы отписываемся от событий
         if (mBodyPagerAdapter != null) {
-            for (Fragment fragment : mBodyPagerAdapter.getFragmentCache().values()) {
+            fragments = mBodyPagerAdapter.getFragmentCache();
+            for(int i = 0; i < fragments.size(); i++) {
+                key = fragments.keyAt(i);
+                fragment = fragments.get(key);
                 if (fragment != null) {
                     fragment.onPause();
                 }
@@ -282,7 +287,10 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         }
 
         if (mHeaderPagerAdapter != null) {
-            for (Fragment fragment : mHeaderPagerAdapter.getFragmentCache().values()) {
+            fragments = mHeaderPagerAdapter.getFragmentCache();
+            for(int i = 0; i < fragments.size(); i++) {
+                key = fragments.keyAt(i);
+                fragment = fragments.get(key);
                 if (fragment != null) {
                     fragment.onPause();
                 }
@@ -742,8 +750,12 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     }
 
     public void resultToNestedFragments(int requestCode, int resultCode, Intent data) {
-        HashMap<Integer, Fragment> mBodyFragments = mBodyPagerAdapter.getFragmentCache();
-        for (Fragment fragment : mBodyFragments.values()) {
+        int key;
+        Fragment fragment;
+        SparseArrayCompat<Fragment> mBodyFragments = mBodyPagerAdapter.getFragmentCache();
+        for(int i = 0; i < mBodyFragments.size(); i++) {
+            key = mBodyFragments.keyAt(i);
+            fragment = mBodyFragments.get(key);
             fragment.onActivityResult(requestCode, resultCode, data);
         }
     }
