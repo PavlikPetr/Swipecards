@@ -5,18 +5,13 @@ import android.view.View;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedBookmark;
-import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
-import com.topface.topface.data.Visitor;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BookmarkDeleteRequest;
 import com.topface.topface.requests.FeedRequest;
-import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.adapters.BookmarksListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
-import com.topface.topface.ui.adapters.LoadingListAdapter;
-import com.topface.topface.ui.adapters.VisitorsListAdapter;
 import com.topface.topface.utils.CountersManager;
 import org.json.JSONObject;
 
@@ -77,6 +72,15 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
     @Override
     protected FeedRequest.FeedService getFeedService() {
         return FeedRequest.FeedService.BOOKMARKS;
+    }
+
+    @Override
+    protected void initEmptyFeedView(View inflated) {
+    }
+
+    @Override
+    protected int getEmptyFeedLayout() {
+        return R.layout.layout_empty_bookmarks;
     }
 
     @Override

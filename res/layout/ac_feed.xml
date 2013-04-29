@@ -27,7 +27,6 @@
                 android:layout_height="fill_parent"
                 android:id="@+id/feedContainer">
 
-
             <TextView
                     android:id="@+id/tvBackgroundText"
                     android:minWidth="150dp"
@@ -61,17 +60,23 @@
 
                 <include layout="@layout/banner"/>
             </LinearLayout>
+
             <com.topface.topface.ui.views.LockerView
                     android:id="@+id/llvFeedLoading"
                     style="@style/LoadingLocker"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"/>
+
+            <ViewStub
+                    android:id="@+id/stubForEmptyFeed"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    />
         </RelativeLayout>
 
 
     </LinearLayout>
 
     <ImageView style="@style/HeaderShadow"/>
-
 
 </RelativeLayout>

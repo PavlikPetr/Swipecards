@@ -19,8 +19,10 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DialogDeleteRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.adapters.DialogListAdapter;
 import com.topface.topface.ui.adapters.FeedList;
+import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
@@ -92,6 +94,32 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     @Override
     protected FeedRequest.FeedService getFeedService() {
         return FeedRequest.FeedService.DIALOGS;
+    }
+
+    @Override
+    protected void initEmptyFeedView(View inflated) {
+        inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
+                startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+            }
+        });
+
+        inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction(MenuFragment.SELECT_MENU_ITEM);
+                intent.putExtra(MenuFragment.SELECTED_FRAGMENT_ID, F_DATING);
+                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+            }
+        });
+    }
+
+    @Override
+    protected int getEmptyFeedLayout() {
+        return R.layout.layout_empty_dialogs;
     }
 
     @Override

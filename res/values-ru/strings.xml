@@ -588,5 +588,11 @@
     </plurals>
 
     <string name="filter_hint">Введите имя</string>
+    <string name="buy_status_and_watch_your_fans">Купите VIP-статус и узнайте, кто добавил вас в избранное</string>
+    <string name="add_bookmarks_to_be_connected">Добавляйте новых знакомых в этот раздел, и вы не потеряете с ними связь</string>
+    <string name="nobody_chat_with_you_sympathies_will_help">Вам еще никто не писал. Симпатии помогут в поиске собеседника</string>
+    <string name="rate_and_have_mutual_or_buy_and_chat">Ставьте симпатии понравившимся вам людям и получайте взаимные. Или купите симпатии и начинайте общение с теми, кому вы нравитесь!</string>
+    <string name="start_rate">Начать оценивать</string>
+    <string name="with_vip_find_your_visitors">С VIP-статусом вы узнаете, кто заходил к вам на страницу</string>
 
 </resources>
