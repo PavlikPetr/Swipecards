@@ -7,6 +7,7 @@
     <include
             layout="@layout/bar_navigation_header"
             android:id="@+id/loNavigationBar"
+
             />
 
     <ViewFlipper

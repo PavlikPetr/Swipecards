@@ -558,6 +558,7 @@
     <string name="inviteFriendsTitle">Пригласить всех друзей в Topface</string>
     <string name="invalid_contacts">Некоторые из контаков были некорректны. Пожалуйста, отправьте корректные контакты
     </string>
+    <string name="general_choose_action">Выберите действие</string>
 
     <plurals name="vip_status_period">
         <item quantity="one">Вы получили VIP статус на %d день</item>

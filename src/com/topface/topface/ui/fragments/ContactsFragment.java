@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.InviteContactsRequest;
@@ -17,6 +18,7 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ContactsProvider;
@@ -32,6 +34,7 @@ public class ContactsFragment extends BaseFragment{
     private Button addButton;
     private Button contactsVip;
     private ArrayList<ContactsProvider.Contact> data;
+    private LockerView locker;
 
     public static ContactsFragment newInstance(ArrayList<ContactsProvider.Contact> contacts) {
         Bundle args = new Bundle();
@@ -45,6 +48,8 @@ public class ContactsFragment extends BaseFragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.contacts_layout, container, false);
+
+        locker = (LockerView) root.findViewById(R.id.clLocker);
 
         ActionBar mActionBar = getActionBar(root);
         mActionBar.showBackButton(new View.OnClickListener() {
@@ -107,14 +112,18 @@ public class ContactsFragment extends BaseFragment{
 
     private void sendInvitesRequest() {
         if (contactsView.getAdapter() != null) {
-            ArrayList<ContactsProvider.Contact> contacts = ((ContactsListAdapter)contactsView.getAdapter()).getOnlyChecked();
+            locker.setVisibility(View.VISIBLE);
+            final ArrayList<ContactsProvider.Contact> contacts = ((ContactsListAdapter)contactsView.getAdapter()).getOnlyChecked();
             InviteContactsRequest request = new InviteContactsRequest(getActivity(),contacts);
             request.callback(new ApiHandler() {
                 @Override
                 public void success(ApiResponse response) {
                     boolean isPremium = response.jsonResult.optBoolean("premium");
                     if (isPremium) {
+                        EasyTracker.getTracker().trackEvent("InvitesPopup", "SuccessWithChecked", "premiumTrue", (long)contacts.size());
+                        EasyTracker.getTracker().trackEvent("InvitesPopup", "PremiumReceived", "", (long)CacheProfile.getOptions().premium_period);
                         if (getActivity() != null) {
+
                             Toast.makeText(getActivity(), Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period), 1500).show();
                             CacheProfile.premium = true;
                             CacheProfile.canInvite = false;
@@ -122,6 +131,7 @@ public class ContactsFragment extends BaseFragment{
                             getActivity().finish();
                         }
                     } else {
+                        EasyTracker.getTracker().trackEvent("InvitesPopup", "SuccessWithChecked", "premiumFalse", (long)contacts.size());
                         Toast.makeText(getActivity(), getString(R.string.invalid_contacts), 2000).show();
                         if(contactsVip != null) {
                             contactsVip.setEnabled(true);
@@ -131,8 +141,17 @@ public class ContactsFragment extends BaseFragment{
 
                 @Override
                 public void fail(int codeError, ApiResponse response) {
+                    EasyTracker.getTracker().trackEvent("InvitesPopup", "RequestFail", "", (long) codeError);
                     if(contactsVip != null) {
                         contactsVip.setEnabled(true);
+                    }
+                }
+
+                @Override
+                public void always(ApiResponse response) {
+                    super.always(response);
+                    if (isAdded()) {
+                        locker.setVisibility(View.GONE);
                     }
                 }
             }).exec();

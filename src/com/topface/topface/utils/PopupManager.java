@@ -17,7 +17,6 @@ import com.topface.topface.Static;
 public class PopupManager {
     public static final String RATING_POPUP = "RATING_POPUP";
     public static final int RATE_POPUP_TIMEOUT = 86400000; // 1000 * 60 * 60 * 24 * 1 (1 сутки)
-    public static final int INVITE_POPUP_TIMEOUT = 604800000;
     private static boolean CAN_SHOW_POPUP = true;
 
     Context mContext;
