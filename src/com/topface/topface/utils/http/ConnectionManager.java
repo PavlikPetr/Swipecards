@@ -23,6 +23,7 @@ import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
 
+import javax.net.ssl.SSLException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
@@ -345,6 +346,10 @@ public class ConnectionManager {
             Debug.error(TAG + "::Exception", e);
             //Это ошибка подключения, такие запросы мы будем переотправлять
             response = apiRequest.constructApiResponse(IApiResponse.CONNECTION_ERROR, "Socket exception: " + e.toString());
+        } catch (SSLException e) {
+            Debug.error(TAG + "::Exception", e);
+            //Это ошибка соединение, такие запросы мы будем переотправлять
+            response = apiRequest.constructApiResponse(IApiResponse.CONNECTION_ERROR, "Connection exception: " + e.toString());
         } catch (Exception e) {
             Debug.error(TAG + "::Exception", e);
             //Это ошибка нашего кода, не нужно автоматически переотправлять такой запрос
