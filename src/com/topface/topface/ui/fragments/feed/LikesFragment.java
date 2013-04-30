@@ -3,7 +3,6 @@ package com.topface.topface.ui.fragments.feed;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,9 +17,9 @@ import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.LikesListAdapter;
 import com.topface.topface.ui.adapters.LikesListAdapter.OnMutualListener;
-import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.RateController;
@@ -201,10 +200,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setAction(MenuFragment.SELECT_MENU_ITEM);
-                intent.putExtra(MenuFragment.SELECTED_FRAGMENT_ID, F_DATING);
-                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+                NavigationActivity.selectFragment(F_DATING);
             }
         });
     }

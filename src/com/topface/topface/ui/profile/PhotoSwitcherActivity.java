@@ -9,25 +9,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
-import com.topface.topface.requests.AlbumRequest;
-import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.views.ImageSwitcher;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.PreloadManager;
 
 import java.util.ArrayList;
 
-public class PhotoSwitcherActivity extends Activity {
+public class PhotoSwitcherActivity extends BaseFragmentActivity {
 
     public static final String INTENT_MORE = "more";
     private TextView mCounter;
-    private ViewGroup mHeaderBar;
+    private ViewGroup mPhotoAlbumControl;
     private Photos mPhotoLinks;
     private PreloadManager mPreloadManager;
+    private Photos mDeletedPhotos = new Photos();
 
     public static final String DEFAULT_UPDATE_PHOTOS_INTENT = "com.topface.topface.updatePhotos";
 
@@ -42,6 +47,9 @@ public class PhotoSwitcherActivity extends Activity {
     private int mUid;
     private int mLoadedCount;
     public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 3;
+    private int mCurrentPosition = 0;
+    private TextView mSetAvatarButton;
+    private ImageButton mDeleteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,42 +74,130 @@ public class PhotoSwitcherActivity extends Activity {
             return;
         }
 
-        //Header
-        mHeaderBar = (ViewGroup) findViewById(R.id.loHeaderBar);
-        mHeaderBar.setVisibility(View.INVISIBLE);
-
         // Title Header
-        mCounter = ((TextView) findViewById(R.id.tvHeaderTitle));
+        mCounter = ((TextView) findViewById(R.id.tvPhotoCounter));
 
         // Gallery
         mImageSwitcher = ((ImageSwitcher) findViewById(R.id.galleryAlbum));
         mImageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
         mImageSwitcher.setOnClickListener(mOnClickListener);
 
-//        mPhotoLinks = isOwner ? CacheProfile.photos : Data.photos;
-
         mLoadedCount = mPhotoLinks.getRealPhotosCount();
         mNeedMore = photosCount > mLoadedCount;
         int rest = photosCount - mPhotoLinks.size();
-
         for (int i = 0; i < rest; i++) {
             mPhotoLinks.add(new Photo());
         }
-
         mImageSwitcher.setData(mPhotoLinks);
         mImageSwitcher.setCurrentItem(position, false);
 
-        ImageButton backButton = ((ImageButton) findViewById(R.id.btnNavigationBack));
-        backButton.setVisibility(View.VISIBLE);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setResult(Activity.RESULT_CANCELED);
-                finish();
-            }
-        });
-
+        initControls();
         setCounter(position);
+        refreshButtonsState();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        deletePhotoRequest();
+    }
+
+    private void initControls() {
+        // Control layout
+        mPhotoAlbumControl = (ViewGroup) findViewById(R.id.loPhotoAlbumControl);
+        if (mUid == CacheProfile.uid) {
+            mPhotoAlbumControl.setVisibility(View.GONE);
+            // - close button
+            mPhotoAlbumControl.findViewById(R.id.btnClose).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setResult(Activity.RESULT_CANCELED);
+                    finish();
+                }
+            });
+            // - set avatar button
+            mSetAvatarButton = (TextView) mPhotoAlbumControl.findViewById(R.id.btnSetAvatar);
+            mSetAvatarButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final Photo currentPhoto = mPhotoLinks.get(mCurrentPosition);
+                    if (currentPhoto.getId() != CacheProfile.photo.getId()) {
+                        if (!mDeletedPhotos.contains(currentPhoto)) {
+                            setAsMainRequest(currentPhoto);
+                        }
+                    }
+                }
+            });
+            // - delete button
+            mDeleteButton = (ImageButton) mPhotoAlbumControl.findViewById(R.id.btnDelete);
+            mDeleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final Photo currentPhoto = mPhotoLinks.get(mCurrentPosition);
+                    if (currentPhoto != null) {
+                        if (mDeletedPhotos.contains(currentPhoto)) {
+                            mDeletedPhotos.remove(currentPhoto);
+                        } else {
+                            mDeletedPhotos.add(currentPhoto);
+                        }
+                        refreshButtonsState();
+                    }
+                }
+            });
+            if (mPhotoLinks.size() <= 1) mDeleteButton.setVisibility(View.GONE);
+        } else {
+            mPhotoAlbumControl.findViewById(R.id.loBottomPanel).setVisibility(View.GONE);
+        }
+    }
+
+    private void deletePhotoRequest() {
+        if (mDeletedPhotos.isEmpty()) return;
+
+        PhotoDeleteRequest request = new PhotoDeleteRequest(this);
+        request.photos = mDeletedPhotos.getIdsArray();
+        request.callback(new ApiHandler() {
+            @Override
+            public void success(ApiResponse response) {
+                for (Photo currentPhoto : mDeletedPhotos) {
+                    CacheProfile.photos.removeById(currentPhoto.getId());
+                }
+                LocalBroadcastManager.getInstance(PhotoSwitcherActivity.this).sendBroadcast(new Intent(DEFAULT_UPDATE_PHOTOS_INTENT)
+                        .putExtra(INTENT_PHOTOS, CacheProfile.photos)
+                        .putExtra(INTENT_MORE, CacheProfile.photos.size() < CacheProfile.totalPhotos));
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+                Toast.makeText(PhotoSwitcherActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT).show();
+            }
+        }).exec();
+    }
+
+    private void setAsMainRequest(final Photo currentPhoto) {
+        PhotoMainRequest request = new PhotoMainRequest(this);
+        request.photoid = currentPhoto.getId();
+        registerRequest(request);
+        request.callback(new ApiHandler() {
+            @Override
+            public void success(ApiResponse response) {
+                CacheProfile.photo = currentPhoto;
+                sendProfileUpdateBroadcast();
+                refreshButtonsState();
+                Toast.makeText(PhotoSwitcherActivity.this, R.string.avatar_set_successfully, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+                Toast.makeText(PhotoSwitcherActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT)
+                        .show();
+            }
+        }).exec();
+    }
+
+    private static void sendProfileUpdateBroadcast() {
+        Intent intent = new Intent();
+        intent.setAction(ProfileRequest.PROFILE_UPDATE_ACTION);
+        LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
     }
 
     private ArrayList<Photo> getPhotos(Intent intent) {
@@ -117,14 +213,15 @@ public class PhotoSwitcherActivity extends Activity {
 
     private void setCounter(int position) {
         if (mPhotoLinks != null) {
-            mCounter.setText((position + 1) + "/" + mPhotoLinks.size());
+            mCurrentPosition = position;
+            mCounter.setText((mCurrentPosition + 1) + "/" + mPhotoLinks.size());
         }
     }
 
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            mHeaderBar.setVisibility(mHeaderBar.getVisibility() == View.INVISIBLE ? View.VISIBLE : View.INVISIBLE);
+            mPhotoAlbumControl.setVisibility(mPhotoAlbumControl.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
         }
     };
 
@@ -134,25 +231,21 @@ public class PhotoSwitcherActivity extends Activity {
         public void onPageSelected(int position) {
             mPreloadManager.preloadPhoto(mPhotoLinks, position + 1);
             setCounter(position);
-
+            refreshButtonsState();
             if (position + DEFAULT_PRELOAD_ALBUM_RANGE == mLoadedCount) {
                 final Photos data = ((ImageSwitcher.ImageSwitcherAdapter) mImageSwitcher.getAdapter()).getData();
-
                 if (mNeedMore) {
-
                     mImageSwitcher.getAdapter().notifyDataSetChanged();
                     if (mCanSendAlbumReq) {
                         mCanSendAlbumReq = false;
                         sendAlbumRequest(data);
                     }
-
                 }
             }
         }
 
         @Override
         public void onPageScrolled(int arg0, float arg1, int arg2) {
-
         }
 
         @Override
@@ -160,8 +253,33 @@ public class PhotoSwitcherActivity extends Activity {
         }
     };
 
-    private void sendAlbumRequest(final Photos data) {
+    private void refreshButtonsState() {
+        if (mUid == CacheProfile.uid && mSetAvatarButton != null) {
+            final Photo currentPhoto = mPhotoLinks.get(mCurrentPosition);
+            if (mDeletedPhotos.contains(currentPhoto)) {
+                mDeleteButton.setVisibility(View.VISIBLE);
+                mDeleteButton.setImageResource(R.drawable.ico_restore_photo_selector);
+                mSetAvatarButton.setText(R.string.edit_restore);
+                mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+            } else {
+                if(CacheProfile.photo.getId() == currentPhoto.getId()) {
+                    mDeleteButton.setVisibility(View.GONE);
+                } else {
+                    mDeleteButton.setVisibility(View.VISIBLE);
+                    mDeleteButton.setImageResource(R.drawable.ico_delete_selector);
+                }
+                if (currentPhoto.getId() == CacheProfile.photo.getId()) {
+                    mSetAvatarButton.setText(R.string.your_avatar);
+                    mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ico_selected_selector, 0, 0, 0);
+                } else {
+                    mSetAvatarButton.setText(R.string.on_avatar);
+                    mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(CacheProfile.sex == Static.BOY ? R.drawable.ico_avatar_man_selector : R.drawable.ico_avatar_woman_selector, 0, 0, 0);
+                }
+            }
+        }
+    }
 
+    private void sendAlbumRequest(final Photos data) {
         int position = data.get(mLoadedCount - 2).getPosition() + 1;
         AlbumRequest request = new AlbumRequest(this, mUid, AlbumRequest.DEFAULT_PHOTOS_LIMIT, position, AlbumRequest.MODE_SEARCH);
         request.callback(new ApiHandler() {

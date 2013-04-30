@@ -595,6 +595,9 @@
     <string name="rate_and_have_mutual_or_buy_and_chat">Ставьте симпатии понравившимся вам людям и получайте взаимные. Или купите симпатии и начинайте общение с теми, кому вы нравитесь!</string>
     <string name="start_rate">Начать оценивать</string>
     <string name="with_vip_find_your_visitors">С VIP-статусом вы узнаете, кто заходил к вам на страницу</string>
+    <string name="on_avatar">На аватарку</string>
+    <string name="your_avatar">Ваша аватарка</string>
+    <string name="avatar_set_successfully">Аватарка успешно установлена</string>
     <string name="incorrect_photo">Некорректное фото. Попробуйте загрузить другое</string>
     <string name="incorrect_photo_format">Некорректный формат фото. Попробуйте загрузить jpg или png</string>
     <string name="incorrect_photo_size">Недопустимый размер фотографии</string>

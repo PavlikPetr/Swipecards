@@ -11,6 +11,6 @@
             android:layout_height="fill_parent"/>
 
     <!-- header bar -->
-    <include layout="@layout/bar_btn_header"/>
+    <include layout="@layout/control_photo_album"/>
 
 </RelativeLayout>

@@ -2,8 +2,6 @@ package com.topface.topface.ui.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
@@ -18,7 +16,6 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.InviteContactsRequest;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.ActionBar;
@@ -27,7 +24,6 @@ import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class ContactsFragment extends BaseFragment{
     public static final String CONTACTS = "contacts";
@@ -305,8 +301,6 @@ public class ContactsFragment extends BaseFragment{
 
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                // TODO Auto-generated method stub
-
                 FilterResults Result = new FilterResults();
                 // if constraint is empty return the original names
                 if(constraint.length() == 0 ){
@@ -333,7 +327,6 @@ public class ContactsFragment extends BaseFragment{
 
             @Override
             protected void publishResults(CharSequence constraint,FilterResults results) {
-                // TODO Auto-generated method stub
                 filteredContacts = (ArrayList<ContactsProvider.Contact>) results.values;
                 notifyDataSetChanged();
             }
