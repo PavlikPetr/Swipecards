@@ -181,6 +181,15 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
     }
 
     @Override
+    protected void initEmptyFeedView(View inflated) {
+    }
+
+    @Override
+    protected int getEmptyFeedLayout() {
+        return R.layout.layout_empty_blacklist;
+    }
+
+    @Override
     protected AdapterView.OnItemClickListener getOnItemClickListener() {
         final AdapterView.OnItemClickListener baseListener = super.getOnItemClickListener();
         return new AdapterView.OnItemClickListener() {

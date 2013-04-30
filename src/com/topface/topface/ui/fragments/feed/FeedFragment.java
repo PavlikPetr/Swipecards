@@ -8,11 +8,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
+import android.view.*;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
 import android.widget.*;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -37,10 +34,7 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryViewCreator;
-import com.topface.topface.utils.ActionBar;
-import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.*;
 import org.json.JSONObject;
 
 import static android.widget.AdapterView.OnItemClickListener;
@@ -52,7 +46,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected DoubleBigButton mDoubleButton;
     protected boolean mIsUpdating;
     private RetryViewCreator mRetryView;
-    private RetryViewCreator mVipRetryView;
     private RelativeLayout mContainer;
     protected LockerView mLockView;
 
@@ -70,6 +63,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     private Drawable mLoader0;
     private AnimationDrawable mLoader;
     private ActionBar mActionBar;
+    private ViewStub mEmptyScreenStub;
+    private View mInflatedViewForEmptyFeed;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -111,8 +106,22 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         initListView(root);
         initFloatBlock((ViewGroup) root);
         initRetryViews();
+        initViewStubForEmptyFeed(root);
     }
 
+    protected void initViewStubForEmptyFeed(View root){
+        mEmptyScreenStub = (ViewStub) root.findViewById(R.id.stubForEmptyFeed);
+        try {
+            mEmptyScreenStub.setLayoutResource(getEmptyFeedLayout());
+        } catch (Exception ex) {
+            Debug.log(ex.toString());
+        }
+
+    }
+
+    protected ViewStub getEmptyFeedViewStub() {
+        return mEmptyScreenStub;
+    }
 
     protected void initFloatBlock(ViewGroup view) {
         mFloatBlock = new FloatBlock(this, view);
@@ -459,16 +468,11 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         mListView.setVisibility(View.INVISIBLE);
         switch (codeError) {
             case ApiResponse.PREMIUM_ACCESS_ONLY:
-                if (FeedFragment.this instanceof VisitorsFragment) {
-                    mVipRetryView.setText(getString(R.string.buying_vip_info));
-                } else {
-                    mVipRetryView.setText(getString(R.string.general_premium_access_error));
-                }
-                mVipRetryView.getView().setVisibility(View.VISIBLE);
+                onEmptyFeed();
                 break;
-
             default:
                 mRetryView.setVisibility(View.VISIBLE);
+                onFilledFeed();
                 break;
         }
     }
@@ -526,12 +530,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (!isPushUpdating) {
             mListView.setVisibility(View.VISIBLE);
             mRetryView.setVisibility(View.GONE);
-            mVipRetryView.setVisibility(View.GONE);
-            if (getListAdapter().isEmpty()) {
-                mBackgroundText.setText(getEmptyFeedText());
-            } else {
-                mBackgroundText.setVisibility(View.INVISIBLE);
-            }
 
             if (mBackgroundText.getCompoundDrawables()[0] != null) {
                 Drawable drawable = mBackgroundText.getCompoundDrawables()[0];
@@ -546,9 +544,37 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     mBackgroundText.getCompoundDrawables()[3]);
             setFilterSwitcherState(true);
         }
+
+        if (getListAdapter().isEmpty() && !CacheProfile.premium) {
+            onEmptyFeed();
+        } else {
+            onFilledFeed();
+        }
     }
 
-    abstract protected int getEmptyFeedText();
+    protected void onFilledFeed() {
+        if (mBackgroundText != null) mBackgroundText.setVisibility(View.GONE);
+        ViewStub stub = getEmptyFeedViewStub();
+        if (stub != null) stub.setVisibility(View.GONE);
+    }
+
+    private View mInflated;
+
+    protected void onEmptyFeed() {
+        ViewStub stub = getEmptyFeedViewStub();
+        if(mInflated == null && stub != null) {
+            mInflated = stub.inflate();
+            initEmptyFeedView(mInflated);
+        }
+        if (mInflated != null) mInflated.setVisibility(View.VISIBLE);
+        if (mBackgroundText != null) mBackgroundText.setVisibility(View.GONE);
+    }
+
+    protected abstract void initEmptyFeedView(View inflated);
+
+    protected abstract int getEmptyFeedLayout();
+
+    protected abstract int getEmptyFeedText();
 
     protected void makeAllItemsRead() {
         for (FeedItem item : getListAdapter().getData()) {
@@ -576,6 +602,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     @Override
     protected void onUpdateStart(boolean isPushUpdating) {
+        onFilledFeed();
         if (!isPushUpdating) {
             mListView.setVisibility(View.INVISIBLE);
             mBackgroundText.setVisibility(View.VISIBLE);
@@ -612,20 +639,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             });
             mRetryView.setVisibility(View.GONE);
             mContainer.addView(mRetryView.getView());
-        }
-
-        if (mVipRetryView == null) {
-            mVipRetryView = RetryViewCreator.createBlueButtonRetryView(getActivity(), Static.EMPTY,
-                    getString(R.string.buying_vip_status), new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
-                    startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
-                }
-            }
-            );
-            mVipRetryView.setVisibility(View.GONE);
-            mContainer.addView(mVipRetryView.getView());
         }
     }
 
