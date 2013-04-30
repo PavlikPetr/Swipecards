@@ -118,7 +118,6 @@ public class ImageSwitcher extends ViewPager {
 
     }
 
-
     private View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -275,5 +274,9 @@ public class ImageSwitcher extends ViewPager {
         } catch (IllegalStateException e) {
             return false;
         }
+    }
+
+    public void notifyDataSetChanged() {
+        mImageSwitcherAdapter.notifyDataSetChanged();
     }
 }
