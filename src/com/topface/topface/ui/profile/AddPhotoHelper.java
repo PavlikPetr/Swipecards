@@ -261,6 +261,7 @@ public class AddPhotoHelper {
                 if (mHandler != null) {
                     mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
                 }
+                showErrorMessage(codeError);
                 doNeedSendProgressNotification[0] = false;
                 mNotificationManager.cancelNotification(progressId[0]);
                 mNotificationManager.showNotification(mContext.getString(R.string.default_photo_upload_error), "", fakeImageView.getImageBitmap(), 1, new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE), true);
@@ -289,6 +290,20 @@ public class AddPhotoHelper {
                 }).start();
             }
         }).exec();
+    }
+
+    private void showErrorMessage(int codeError) {
+        switch (codeError) {
+            case ApiResponse.INCORRECT_PHOTO_DATA:
+                Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo), 2000).show();
+                break;
+            case ApiResponse.INCORRECT_PHOTO_FORMAT:
+                Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo_format), 2000).show();
+                break;
+            case ApiResponse.INCORRECT_PHOTO_SIZES:
+                Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo_size), 2000).show();
+                break;
+        }
     }
 
 }

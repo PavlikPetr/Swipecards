@@ -142,7 +142,7 @@ public class InvitesPopup extends BaseFragment{
 
            @Override
            public void fail (int codeError, ApiResponse response){
-               EasyTracker.getTracker().trackEvent("InvitesPopup", "RequestFail", "", (long) codeError);
+               EasyTracker.getTracker().trackEvent("InvitesPopup", "RequestFail", Integer.toString(codeError), 0L);
            }
 
            @Override
