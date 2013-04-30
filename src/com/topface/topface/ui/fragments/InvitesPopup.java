@@ -86,7 +86,10 @@ public class InvitesPopup extends BaseFragment{
        if (contacts.size() < CacheProfile.getOptions().contacts_count) {
            invitesCheckBox.setChecked(false);
            invitesCheckBox.setVisibility(View.GONE);
+       } else {
+           invitesCheckBox.setVisibility(View.VISIBLE);
        }
+
 //       final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.checkProgresBar);
 
        invitesText.setOnClickListener(new View.OnClickListener() {
