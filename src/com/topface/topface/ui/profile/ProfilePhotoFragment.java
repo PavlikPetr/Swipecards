@@ -79,7 +79,7 @@ public class ProfilePhotoFragment extends BaseFragment {
             @Override
             public void success(ApiResponse response) {
                 if (mGridAlbum != null) {
-                    ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).setData(Photos.parse(response.jsonResult.optJSONArray("items")), response.jsonResult.optBoolean("more"));
+                    ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).addData(Photos.parse(response.jsonResult.optJSONArray("items")), response.jsonResult.optBoolean("more"));
                 }
             }
 
