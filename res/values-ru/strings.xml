@@ -555,7 +555,7 @@
     <string name="general_add">Добавить</string>
     <string name="general_invite_friends">Пригласите друзей</string>
     <string name="general_rest_contacts">Вам осталось %d контактов</string>
-    <string name="inviteFriendsTitle">Пригласить всех друзей в Topface</string>
+    <string name="inviteFriendsTitle">Пригласить всех друзей из телефонной книги в Topface</string>
     <string name="invalid_contacts">Некоторые из контаков были некорректны. Пожалуйста, отправьте корректные контакты
     </string>
     <string name="general_choose_action">Выберите действие</string>
