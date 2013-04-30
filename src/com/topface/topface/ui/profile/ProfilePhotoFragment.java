@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.StringBuilderPrinter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -154,9 +153,16 @@ public class ProfilePhotoFragment extends BaseFragment {
             @Override
             public void onReceive(Context context, Intent intent) {
                 ArrayList<Photo> arrList = intent.getParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS);
+                boolean clear = intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_CLEAR, false);
                 Photos newPhotos = new Photos();
                 newPhotos.addAll(arrList);
-                ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).setData(newPhotos, intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_MORE, false));
+                if (clear) {
+                    // TODO перенести в адаптер логику
+                    newPhotos.addFirst(null);
+                    ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).setData(newPhotos, intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_MORE, false));
+                } else {
+                    ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).addData(newPhotos, intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_MORE, false));
+                }
                 initTitleText(title);
             }
         };
@@ -177,7 +183,7 @@ public class ProfilePhotoFragment extends BaseFragment {
                     case 0:
                         PhotoMainRequest request = new PhotoMainRequest(getActivity());
                         request.photoid = photo.getId();
-                        request.callback(new SimpleApiHandler(){
+                        request.callback(new SimpleApiHandler() {
                             @Override
                             public void success(ApiResponse response) {
                                 super.success(response);
@@ -195,16 +201,17 @@ public class ProfilePhotoFragment extends BaseFragment {
                     case 1:
                         PhotoDeleteRequest deleteRequest = new PhotoDeleteRequest(getActivity());
                         deleteRequest.photos = new int[]{photo.getId()};
-                        deleteRequest.callback(new SimpleApiHandler(){
+                        deleteRequest.callback(new SimpleApiHandler() {
                             @Override
                             public void success(ApiResponse response) {
                                 super.success(response);
                                 CacheProfile.photos.remove(photo);
                                 Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
                                 Photos newPhotos = new Photos();
-                                newPhotos.add(new Photo());
+                                // TODO перенести в адаптер логику
+                                newPhotos.add(null);
                                 for (int i = 1; i <= CacheProfile.photos.size(); i++) {
-                                    newPhotos.add(i, CacheProfile.photos.get(i-1));
+                                    newPhotos.add(i, CacheProfile.photos.get(i - 1));
                                 }
                                 intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, newPhotos);
                                 LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
