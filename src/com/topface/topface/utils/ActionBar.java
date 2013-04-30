@@ -31,11 +31,13 @@ public class ActionBar {
 
     public ActionBar(View actionView) {
         this.actionView = (ViewGroup) actionView.findViewById(R.id.loNavigationBar);
+        actionView.setVisibility(View.VISIBLE);
         mNavBarController = new NavigationBarController(this.actionView);
         initViews();
     }
 
     private void initViews() {
+
         mNavigationBack = (ImageButton) actionView.findViewById(R.id.btnNavigationBack);
         mNavigationHome = (ImageButton) actionView.findViewById(R.id.btnNavigationHome);
         mTitle = (TextView) actionView.findViewById(R.id.tvNavigationTitle);

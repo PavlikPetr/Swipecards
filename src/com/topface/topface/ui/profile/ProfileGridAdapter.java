@@ -49,6 +49,10 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
             mPhotoLinks.remove(mPhotoLinks.size() - 1);
         }
 
+        if (mPhotoLinks.size() > photoLinks.size()) {
+            mPhotoLinks.clear();
+        }
+
         for (Photo photo : photoLinks) {
             mPhotoLinks.add(photo);
         }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+    <TextView
+            android:id="@+id/tvText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/buy_status_and_watch_your_fans"
+            style="@style/ItemTitleText"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
+
+    <Button
+            android:id="@+id/btnBuyVip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/buying_vip_status"
+            style="@style/ButtonGray"
+            android:layout_below="@id/tvText"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="17dp"
+            android:singleLine="true"/>
+
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/fans"
+            android:layout_above="@id/tvText"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="18dp"/>
+
+</RelativeLayout>

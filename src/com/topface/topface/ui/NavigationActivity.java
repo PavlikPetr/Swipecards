@@ -142,7 +142,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         return mPreferences;
     }
 
-    private void showFragment(int fragmentId) {
+    public void showFragment(int fragmentId) {
         mFragmentMenu.selectMenu(fragmentId);
     }
 

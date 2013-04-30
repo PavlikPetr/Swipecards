@@ -35,6 +35,8 @@ import com.topface.topface.utils.Editor;
 
 public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
+    public static final String SELECT_MENU_ITEM = "com.topface.topface.action.menu.selectitem";
+    public static final  String SELECTED_FRAGMENT_ID = "com.topface.topface.action.menu.item";
     private SparseArray<Button> mButtons;
 
     private TextView mTvNotifyLikes;
@@ -51,7 +53,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
     private boolean canChangeProfileIcons = false;
     private int mCurrentFragmentId;
     private BaseFragment mCurrentFragment;
-    private boolean mHardwareAcclereated;
+    private boolean mHardwareAccelerated;
 
     public static final int DEFAULT_FRAGMENT = BaseFragment.F_DATING;
     private OnFragmentSelectedListener mOnFragmentSelected;
@@ -61,6 +63,15 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         @Override
         public void onReceive(Context context, Intent intent) {
             setMenuData();
+        }
+    };
+
+    private BroadcastReceiver mSelectMenuReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int fragmentId = intent.getExtras().getInt(SELECTED_FRAGMENT_ID);
+            selectMenu(fragmentId);
         }
     };
 
@@ -107,6 +118,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         refreshNotifications();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileUpdateReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mSelectMenuReceiver, new IntentFilter(SELECT_MENU_ITEM));
     }
 
     @Override
@@ -114,6 +126,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileUpdateReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mCountersReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mSelectMenuReceiver);
     }
 
     @Override
@@ -143,7 +156,6 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
         mProfileInfo = (ImageView) rootLayout.findViewById(R.id.profileInfo);
 
-
         buyButton = (Button) rootLayout.findViewById(R.id.menuBuyBtn);
         buyButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -152,7 +164,6 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             }
         });
 
-
         // Notifications
         mTvNotifyLikes = (TextView) rootLayout.findViewById(R.id.tvNotifyLikes);
         mTvNotifyMutual = (TextView) rootLayout.findViewById(R.id.tvNotifyMutual);
@@ -160,7 +171,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         mTvNotifyFans = (TextView) rootLayout.findViewById(R.id.tvNotifyFans);
         mTvNotifyVisitors = (TextView) rootLayout.findViewById(R.id.tvNotifyVisitors);
 
-        mHardwareAcclereated = Build.VERSION.SDK_INT >= 11 && rootLayout.isHardwareAccelerated();
+        mHardwareAccelerated = Build.VERSION.SDK_INT >= 11 && rootLayout.isHardwareAccelerated();
 
         return rootLayout;
     }
@@ -266,6 +277,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
     public void selectMenu(int fragmentId) {
         Button selectedItem = mButtons.get(fragmentId);
         if (selectedItem != null) {
+            unselectAllButtons();
             selectedItem.setSelected(true);
             showFragment(fragmentId);
         }
@@ -303,7 +315,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         if (oldFragment == null || newFragment != oldFragment) {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             //Меняем фрагменты анимировано, но только на новых устройствах c HW ускорением
-            if (mHardwareAcclereated) {
+            if (mHardwareAccelerated) {
                 transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             }
             transaction.replace(R.id.fragment_container, newFragment, getTagById(mCurrentFragmentId));
