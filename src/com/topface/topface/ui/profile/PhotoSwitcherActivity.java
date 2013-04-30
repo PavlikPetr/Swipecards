@@ -28,6 +28,7 @@ import java.util.ArrayList;
 public class PhotoSwitcherActivity extends BaseFragmentActivity {
 
     public static final String INTENT_MORE = "more";
+    public static final String INTENT_CLEAR = "clear";
     private TextView mCounter;
     private ViewGroup mPhotoAlbumControl;
     private Photos mPhotoLinks;
@@ -105,16 +106,16 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     private void initControls() {
         // Control layout
         mPhotoAlbumControl = (ViewGroup) findViewById(R.id.loPhotoAlbumControl);
+        // - close button
+        mPhotoAlbumControl.findViewById(R.id.btnClose).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(Activity.RESULT_CANCELED);
+                finish();
+            }
+        });
         if (mUid == CacheProfile.uid) {
             mPhotoAlbumControl.setVisibility(View.GONE);
-            // - close button
-            mPhotoAlbumControl.findViewById(R.id.btnClose).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setResult(Activity.RESULT_CANCELED);
-                    finish();
-                }
-            });
             // - set avatar button
             mSetAvatarButton = (TextView) mPhotoAlbumControl.findViewById(R.id.btnSetAvatar);
             mSetAvatarButton.setOnClickListener(new View.OnClickListener() {
@@ -163,7 +164,9 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 }
                 LocalBroadcastManager.getInstance(PhotoSwitcherActivity.this).sendBroadcast(new Intent(DEFAULT_UPDATE_PHOTOS_INTENT)
                         .putExtra(INTENT_PHOTOS, CacheProfile.photos)
-                        .putExtra(INTENT_MORE, CacheProfile.photos.size() < CacheProfile.totalPhotos));
+                        .putExtra(INTENT_MORE, CacheProfile.photos.size() < CacheProfile.totalPhotos-mDeletedPhotos.size())
+                        .putExtra(INTENT_CLEAR, true));
+                mDeletedPhotos.clear();
             }
 
             @Override
