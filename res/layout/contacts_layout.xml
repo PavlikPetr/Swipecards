@@ -92,4 +92,13 @@
             android:text="@string/general_dialog_loading"
             android:drawableLeft="@drawable/loader"
             android:visibility="gone"/>
+    <com.topface.topface.ui.views.LockerView
+        android:id="@+id/clLocker"
+        android:visibility="gone"
+        android:layout_below="@id/loNavigationBar"
+        style="@style/LoadingLocker"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+    />
+
 </RelativeLayout>

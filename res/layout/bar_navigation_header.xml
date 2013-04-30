@@ -4,7 +4,8 @@
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
               android:background="@drawable/im_bar_header"
-              android:baselineAligned="false">
+              android:baselineAligned="false"
+              android:visibility="gone">
 
     <RelativeLayout
             android:layout_width="0dp"
@@ -12,7 +13,7 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="0.25"
             android:gravity="left|center_vertical"
-            android:visibility="visible">
+            >
 
         <ImageButton
                 android:id="@+id/btnNavigationHome"
@@ -22,7 +23,7 @@
                 android:paddingLeft="8dp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/navigation_home_selector"
-                android:visibility="visible"/>
+                />
 
         <TextView
                 android:id="@+id/tvNotificationDialogs"

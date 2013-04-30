@@ -1,13 +1,12 @@
 package com.topface.topface.ui.profile;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.app.AlertDialog;
+import android.content.*;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.StringBuilderPrinter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,12 +16,13 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
-import com.topface.topface.requests.AlbumRequest;
-import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
@@ -37,6 +37,7 @@ public class ProfilePhotoFragment extends BaseFragment {
     private ViewFlipper mViewFlipper;
     private GridView mGridAlbum;
     private BroadcastReceiver mPhotosReceiver;
+    private LockerView mLoadingLocker;
 
     public ProfilePhotoFragment() {
         super();
@@ -78,7 +79,7 @@ public class ProfilePhotoFragment extends BaseFragment {
             @Override
             public void success(ApiResponse response) {
                 if (mGridAlbum != null) {
-                    ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).setData(Photos.parse(response.jsonResult.optJSONArray("items")), response.jsonResult.optBoolean("more"));
+                    ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).addData(Photos.parse(response.jsonResult.optJSONArray("items")), response.jsonResult.optBoolean("more"));
                 }
             }
 
@@ -113,7 +114,11 @@ public class ProfilePhotoFragment extends BaseFragment {
                     getActivity().finish();
                 }
             });
+        } else {
+
         }
+
+        mLoadingLocker = (LockerView) root.findViewById(R.id.fppLocker);
 
         mViewFlipper = (ViewFlipper) root.findViewById(R.id.vfFlipper);
 
@@ -121,6 +126,15 @@ public class ProfilePhotoFragment extends BaseFragment {
         mGridAlbum.setAdapter(mProfilePhotoGridAdapter);
         mGridAlbum.setOnItemClickListener(mOnItemClickListener);
         mGridAlbum.setOnScrollListener(mProfilePhotoGridAdapter);
+        mGridAlbum.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                if (needDialog(mProfilePhotoGridAdapter.getItem(position))) {
+                    startPhotoDialog(mProfilePhotoGridAdapter.getItem(position));
+                }
+                return true;
+            }
+        });
 
         final TextView title = (TextView) root.findViewById(R.id.usedTitle);
 
@@ -150,6 +164,67 @@ public class ProfilePhotoFragment extends BaseFragment {
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mPhotosReceiver, new IntentFilter(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT));
 
         return root;
+    }
+
+    public void startPhotoDialog(final Photo photo) {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Выберите действие").setItems(new String[]{getString(R.string.edit_set_as_main), getString(R.string.edit_delete)}, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mLoadingLocker.setVisibility(View.VISIBLE);
+                switch (which) {
+                    case 0:
+                        PhotoMainRequest request = new PhotoMainRequest(getActivity());
+                        request.photoid = photo.getId();
+                        request.callback(new SimpleApiHandler(){
+                            @Override
+                            public void success(ApiResponse response) {
+                                super.success(response);
+                                CacheProfile.photo = photo;
+                                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                            }
+
+                            @Override
+                            public void always(ApiResponse response) {
+                                super.always(response);
+                                mLoadingLocker.setVisibility(View.GONE);
+                            }
+                        }).exec();
+                        break;
+                    case 1:
+                        PhotoDeleteRequest deleteRequest = new PhotoDeleteRequest(getActivity());
+                        deleteRequest.photos = new int[]{photo.getId()};
+                        deleteRequest.callback(new SimpleApiHandler(){
+                            @Override
+                            public void success(ApiResponse response) {
+                                super.success(response);
+                                CacheProfile.photos.remove(photo);
+                                Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
+                                Photos newPhotos = new Photos();
+                                newPhotos.add(new Photo());
+                                for (int i = 1; i <= CacheProfile.photos.size(); i++) {
+                                    newPhotos.add(i, CacheProfile.photos.get(i-1));
+                                }
+                                intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, newPhotos);
+                                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
+                            }
+
+                            @Override
+                            public void always(ApiResponse response) {
+                                super.always(response);
+                                mLoadingLocker.setVisibility(View.GONE);
+                            }
+                        }).exec();
+                        break;
+                }
+            }
+        });
+        builder.create().show();
+    }
+
+    private boolean needDialog(Photo photo) {
+        return CacheProfile.photo.getId() != photo.getId();
     }
 
     private void initTitleText(TextView title) {

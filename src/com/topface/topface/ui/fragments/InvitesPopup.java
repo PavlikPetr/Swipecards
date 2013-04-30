@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.InviteContactsRequest;
@@ -16,6 +17,7 @@ import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ContactsProvider;
@@ -28,6 +30,7 @@ public class InvitesPopup extends BaseFragment{
 
     public static final String CONTACTS = "contacts";
     private ArrayList<ContactsProvider.Contact> contacts;
+    private LockerView locker;
 
     public static InvitesPopup newInstance(ArrayList<ContactsProvider.Contact> data) {
         Bundle args = new Bundle();
@@ -60,6 +63,7 @@ public class InvitesPopup extends BaseFragment{
        closeInvites.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
+               EasyTracker.getTracker().trackEvent("InvitesPopup", "ClosePopup", "", 0L);
                if (isAdded()) {
                    ((BaseFragmentActivity)getActivity()).close(InvitesPopup.this);
                }
@@ -82,7 +86,10 @@ public class InvitesPopup extends BaseFragment{
        if (contacts.size() < CacheProfile.getOptions().contacts_count) {
            invitesCheckBox.setChecked(false);
            invitesCheckBox.setVisibility(View.GONE);
+       } else {
+           invitesCheckBox.setVisibility(View.VISIBLE);
        }
+
 //       final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.checkProgresBar);
 
        invitesText.setOnClickListener(new View.OnClickListener() {
@@ -92,15 +99,19 @@ public class InvitesPopup extends BaseFragment{
            }
        });
 
+       locker = (LockerView) view.findViewById(R.id.ipLocker);
+
        final Button sendContacts = (Button) invitesPopup.findViewById(R.id.sendContacts);
        sendContacts.setText(Utils.getQuantityString(R.plurals.vip_status_period_btn, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period));
        sendContacts.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
                if (!invitesCheckBox.isChecked()) {
+                   EasyTracker.getTracker().trackEvent("InvitesPopup", "SendContactsBtnClick", "", 0L);
                    startActivity(ContainerActivity.getIntentForContacts(contacts));
                    ((BaseFragmentActivity)getActivity()).close(InvitesPopup.this);
                } else {
+                   EasyTracker.getTracker().trackEvent("InvitesPopup", "SendContactsBtnClick", "", 1L);
                    sendInvitesRequest();
                }
            }
@@ -110,12 +121,16 @@ public class InvitesPopup extends BaseFragment{
 
    private void sendInvitesRequest() {
        InviteContactsRequest request = new InviteContactsRequest(getActivity(), contacts);
+       locker.setVisibility(View.VISIBLE);
        request.callback(new ApiHandler() {
            @Override
            public void success(ApiResponse response) {
                boolean isPremium = response.jsonResult.optBoolean("premium");
                if (isPremium) {
+                   EasyTracker.getTracker().trackEvent("InvitesPopup", "SuccessWithNotChecked", "premiumTrue", (long)contacts.size());
+                   EasyTracker.getTracker().trackEvent("InvitesPopup", "PremiumReceived", "", (long)CacheProfile.getOptions().premium_period);
                    if (getActivity() != null) {
+
                        Toast.makeText(getActivity(), Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period), 1500).show();
                        CacheProfile.premium = true;
                        CacheProfile.canInvite = false;
@@ -123,13 +138,22 @@ public class InvitesPopup extends BaseFragment{
                        ((BaseFragmentActivity)getActivity()).close(InvitesPopup.this);
                    }
                } else {
+                   EasyTracker.getTracker().trackEvent("InvitesPopup", "SuccessWithNotChecked", "premiumFalse", (long)contacts.size());
                    Toast.makeText(getActivity(), getString(R.string.invalid_contacts), 2000).show();
                }
            }
 
            @Override
            public void fail (int codeError, ApiResponse response){
+               EasyTracker.getTracker().trackEvent("InvitesPopup", "RequestFail", Integer.toString(codeError), 0L);
+           }
 
+           @Override
+           public void always(ApiResponse response) {
+               super.always(response);
+               if(isAdded()) {
+                   locker.setVisibility(View.GONE);
+               }
            }
        }).exec();
    }

@@ -82,8 +82,6 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         //Иконки на профиле
         if (!CacheProfile.checkIsFillData() && canChangeProfileIcons) {
             showNotEnoughDataIcon();
-        } else if (CacheProfile.premium && canChangeProfileIcons) {
-            showRockerIcon();
         } else {
             mProfileInfo.setVisibility(View.GONE);
         }
@@ -208,10 +206,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         mProfileInfo.setVisibility(View.VISIBLE);
     }
 
-    private void showRockerIcon() {
-        mProfileInfo.setImageResource(R.drawable.ic_rocket_small);
-        mProfileInfo.setVisibility(View.VISIBLE);
-    }
+
 
     @Override
     public void onClick(View view) {

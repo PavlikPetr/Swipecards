@@ -57,6 +57,10 @@ public interface IApiResponse {
     public static final int CANNOT_CHANGE_LOGIN = 41;
     public static final int INCORRECT_LOGIN = 42;
     public static final int INCORRECT_PASSWORD = 43;
+    public static final int PHOTO_UPLOAD_ERROR = 46;
+    public static final int INCORRECT_PHOTO_DATA = 47;
+    public static final int INCORRECT_PHOTO_SIZES = 48;
+    public static final int INCORRECT_PHOTO_FORMAT = 49;
 
     // local
     public static final int NULL_RESPONSE = 100;

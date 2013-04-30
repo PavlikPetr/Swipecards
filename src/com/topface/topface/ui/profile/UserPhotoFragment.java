@@ -39,7 +39,7 @@ public class UserPhotoFragment extends BaseFragment {
                         @Override
                         public void success(ApiResponse response) {
                             if (mGridAlbum != null) {
-                                ((UserPhotoGridAdapter) mGridAlbum.getAdapter()).setData(Photos.parse(response.jsonResult.optJSONArray("items")), response.jsonResult.optBoolean("more"));
+                                ((UserPhotoGridAdapter) mGridAlbum.getAdapter()).addData(Photos.parse(response.jsonResult.optJSONArray("items")), response.jsonResult.optBoolean("more"));
                             }
                         }
 

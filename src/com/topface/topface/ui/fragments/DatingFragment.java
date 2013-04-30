@@ -172,13 +172,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void checkInvitePopup() {
         FragmentActivity activity = getActivity();
-        if (CacheProfile.canInvite && activity != null) {
+//        if (CacheProfile.canInvite && activity != null) {
             final SharedPreferences preferences = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
 
             long date_start = preferences.getLong(INVITE_POPUP, 1);
             long date_now = new java.util.Date().getTime();
 
-            if (date_now - date_start >= PopupManager.INVITE_POPUP_TIMEOUT) {
+//            if (date_now - date_start >= CacheProfile.getOptions().popup_timeout) {
                 preferences.edit().putLong(INVITE_POPUP, date_now).commit();
                 ContactsProvider provider = new ContactsProvider(activity);
                 provider.getContacts(-1, 0, new ContactsProvider.GetContactsListener() {
@@ -190,8 +190,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         }
                     }
                 });
-            }
-        }
+//            }
+//        }
     }
 
     private void initMutualDrawables() {
@@ -720,7 +720,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     public void showInvitePopup(ArrayList<ContactsProvider.Contact> data) {
-
+        EasyTracker.getTracker().trackEvent("InvitesPopup", "Show", "", 0L);
         InvitesPopup popup = InvitesPopup.newInstance(data);
         ((BaseFragmentActivity) getActivity()).startFragment(popup);
     }

@@ -102,6 +102,7 @@ public class Options extends AbstractData {
 
     public int premium_period;
     public int contacts_count;
+    public long popup_timeout;
 
     public static Options parse(ApiResponse response) {
         Options options = new Options();
@@ -157,6 +158,7 @@ public class Options extends AbstractData {
             JSONObject contacts_invite = response.jsonResult.optJSONObject("contacts_invite");
             options.premium_period = contacts_invite.optInt("premium_period");
             options.contacts_count = contacts_invite.optInt("contacts_count");
+            options.popup_timeout = contacts_invite.optInt("show_popup_timeout") * 60 * 60 * 1000;
 
             if (response.jsonResult.has("links")) {
                 JSONObject links = response.jsonResult.optJSONObject("links");
