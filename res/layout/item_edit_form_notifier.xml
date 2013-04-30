@@ -5,6 +5,7 @@
 
     <ImageView
             android:id="@+id/ivEditBackground"
+            android:tag="ivEditBackground"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
@@ -13,7 +14,7 @@
             android:layout_centerHorizontal="true"/>
 
     <TextView
-            android:id="@+id/tvTitle"
+            android:tag="tvTitle"
             style="@style/ItemTitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -40,7 +41,7 @@
                 android:layout_marginRight="5dp">
 
             <CheckBox
-                    android:id="@+id/cbPhone"
+                    android:tag="cbPhone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/settings_phone_selector"
@@ -49,7 +50,7 @@
                     />
 
             <ProgressBar
-                    android:id="@+id/prsPhone"
+                    android:tag="prsPhone"
                     style="@android:style/Widget.ProgressBar.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -64,7 +65,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp">
             <CheckBox
-                    android:id="@+id/cbMail"
+                    android:tag="cbMail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/settings_mail_selector"
@@ -72,7 +73,7 @@
                     android:layout_centerInParent="true"
                     />
             <ProgressBar
-                    android:id="@+id/prsMail"
+                    android:tag="prsMail"
                     style="@android:style/Widget.ProgressBar.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

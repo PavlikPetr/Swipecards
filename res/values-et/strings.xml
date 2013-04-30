@@ -20,7 +20,6 @@
     <string name="general_data_error">Tekkis viga. Proovi veel koord.</string>
     <string name="general_internet_off">Internetiühendus puudub.</string>
     <string name="general_purchasing_error">Palun, kirjuta sõnum ostuveast aadressil support@topface.ru</string>
-    <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Tekst on kopeeritud.</string>
     <string name="general_spinner_title">Vali toiming</string>
     <string name="general_profile_error">Konto laadimise viga</string>
@@ -73,7 +72,7 @@ Sa oled müksanud.</string>
     <string name="chat_dialog_gps">GPS on välja lülitatud! Kas lülitada sisse?</string>
     <string name="chat_toast_fail_location">Ei ole võimalik asukohta kindlaks teha/määrata</string>
     <string name="filter_filter">Filter</string>
-    <string name="filter_age_string">alates %1$d kuni %1$d</string>
+    <string name="filter_age_string">alates %1$d kuni %2$d</string>
     <string name="filter_only_online">Ainult/vaid on-line\'is olevad</string>
     <string name="filter_only_beautiful">Ainult/vaid ilusad</string>
     <string name="filter_extra_parameters">Lisaparameetrid</string>
@@ -135,9 +134,6 @@ Sa oled müksanud.</string>
     <string name="invite_is_free">Kutse saatmine on tasuta.</string>
     <string name="invite_error">Kutsete saatmine ei ole õnnestunud. Proovi veel üks kord.</string>
     <string name="invite_completed">Kutse on ära saadetud</string>
-    <plurals name="invite_bonus_text">
-        <item quantity="zero">Kutsu sõbrad ja saa 20 igaühe eest</item>
-    </plurals>
     <string name="settings_header_title">Seaded</string>
     <string name="settings_wifi">Ainult Wi-Fi</string>
     <string name="settings_on">on sisse lülitatud</string>
@@ -250,7 +246,6 @@ Sa oled müksanud.</string>
     <string name="profile_mygifts_empty">Sulle pole veel keegi kingitusi kinkinud.</string>
     <string name="profile_mood">Kirjelda oma tuju</string>
     <string name="dating_people_unnoticed">Kümme inimest on ilma sinu tähelepanuta jäänud!</string>
-    <string name="dating_continue">Hindamist jätkata</string>
     <string name="dating_better_look">Vaata tähelepanelikumalt! Võib-olla jääd sa oma saatusest ilma!</string>
     <string name="edit_my_city">Minu linn</string>
     <string name="edit_my_photos">Minu fotod</string>

@@ -1,6 +1,5 @@
 package com.topface.topface.ui;
 
-import android.R;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +7,7 @@ import android.content.IntentFilter;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.WindowManager;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.Static;
@@ -32,8 +32,8 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
     private BroadcastReceiver mReauthReceiver;
     protected boolean mNeedAnimate = true;
-    private boolean needAuth = true;
     private BroadcastReceiver mProfileLoadReceiver;
+    private boolean afterOnSaveInstanceState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +75,10 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             };
 
             try {
-                registerReceiver(mProfileLoadReceiver, new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD));
+                LocalBroadcastManager.getInstance(this).registerReceiver(
+                        mProfileLoadReceiver,
+                        new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD)
+                );
             } catch (Exception ex) {
                 Debug.error(ex);
             }
@@ -118,23 +121,43 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         }
     }
 
-    public void startAuth() {
+    public boolean startAuth() {
         Fragment authFragment = getSupportFragmentManager().findFragmentByTag(AUTH_TAG);
         if (isNeedAuth() && (authFragment == null || !authFragment.isAdded())) {
             if (authFragment == null) {
                 authFragment = AuthFragment.newInstance();
             }
-            getSupportFragmentManager().beginTransaction().add(R.id.content, authFragment, AUTH_TAG).commit();
+            getSupportFragmentManager().beginTransaction().add(android.R.id.content, authFragment, AUTH_TAG).commit();
+            return true;
+        }
+        return false;
+    }
+
+    public void startFragment(Fragment fragment) {
+        if (!afterOnSaveInstanceState) {
+            getSupportFragmentManager().beginTransaction().add(android.R.id.content, fragment).addToBackStack(null).commit();
         }
     }
 
-    public void close(Fragment fragment, boolean needInit) {
+    public void close(Fragment fragment) {
+        close(fragment, false);
+    }
+
+    public void close(Fragment fragment, boolean needFireEvent) {
         getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+        if (needFireEvent) {
+            onCloseFragment();
+        }
+    }
+
+    protected void onCloseFragment() {
+
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        afterOnSaveInstanceState = true;
     }
 
     @Override
@@ -144,7 +167,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         try {
             unregisterReceiver(mReauthReceiver);
             if (mProfileLoadReceiver != null) {
-                unregisterReceiver(mProfileLoadReceiver);
+                LocalBroadcastManager.getInstance(this).unregisterReceiver(mProfileLoadReceiver);
                 mProfileLoadReceiver = null;
             }
         } catch (Exception ex) {
@@ -201,7 +224,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
 
     protected boolean isNeedAuth() {
-        return needAuth;
+        return true;
     }
 
     protected void takePhoto(TakePhotoDialog.TakePhotoListener listener) {

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.util.SparseArrayCompat;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -31,8 +32,11 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
-import com.topface.topface.ui.profile.*;
-import com.topface.topface.ui.views.RetryView;
+import com.topface.topface.ui.profile.ProfileFormFragment;
+import com.topface.topface.ui.profile.ProfilePhotoFragment;
+import com.topface.topface.ui.profile.UserFormFragment;
+import com.topface.topface.ui.profile.UserPhotoFragment;
+import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RateController;
@@ -40,7 +44,6 @@ import com.viewpagerindicator.CirclePageIndicator;
 import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ProfileFragment extends BaseFragment implements View.OnClickListener {
     public final static int TYPE_MY_PROFILE = 1;
@@ -72,9 +75,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private TextView mTitle;
     private View mLoaderView;
     private RateController mRateController;
-    //    protected NavigationBarController mNavBarController;
     private RelativeLayout mLockScreen;
-    private RetryView mRetryBtn;
+    private RetryViewCreator mRetryView;
     private ViewPager mBodyPager;
     private ProfilePageAdapter mBodyPagerAdapter;
     private ViewPager mHeaderPager;
@@ -85,7 +87,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private String mHeaderStartPageClassName;
     private int mStartBodyPage = 0;
     private int mStartHeaderPage = 0;
-    private BroadcastReceiver mUpdateBlackListState;
     private BroadcastReceiver mUpdateProfileReceiver;
 
     private TabPageIndicator mTabIndicator;
@@ -93,6 +94,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private LinearLayout mUserActions;
     private RelativeLayout bmBtn;
     private TextView mBookmarkAction;
+
+    private int mUserActionsPanelHeight;
 
 
     @Override
@@ -137,6 +140,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         } else if (activity instanceof NavigationActivity) {
             mActionBar.showHomeButton((NavigationActivity) activity);
         }
+        mUserActions.setVisibility(View.GONE);
 
         mTitle = (TextView) root.findViewById(R.id.tvNavigationTitle);
 
@@ -145,15 +149,14 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         initBodyPages(root);
 
         mLockScreen = (RelativeLayout) root.findViewById(R.id.lockScreen);
-        mRetryBtn = new RetryView(activity.getApplicationContext());
-        mRetryBtn.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new View.OnClickListener() {
+        mRetryView = RetryViewCreator.createDefaultRetryView(getActivity(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getUserProfile();
                 mLockScreen.setVisibility(View.GONE);
             }
         });
-        mLockScreen.addView(mRetryBtn);
+        mLockScreen.addView(mRetryView.getView());
 
         if (mProfileType == TYPE_MY_PROFILE) {
             mTitle.setText(R.string.profile_header_title);
@@ -163,25 +166,19 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-
-                            double density = getResources().getDisplayMetrics().density;
-                            TranslateAnimation ta = new TranslateAnimation(0, 0, 0, mUserActions.getHeight() + mActionBar.getHeight() + (int) (5 * density));
+                            initActionsPanelHeight();
+                            TranslateAnimation ta = new TranslateAnimation(0, 0, - (mUserActions.getHeight() + mUserActionsPanelHeight), 0);
                             ta.setDuration(500);
-                            ta.setFillAfter(true);
                             ta.setAnimationListener(new Animation.AnimationListener() {
                                 @Override
                                 public void onAnimationStart(Animation animation) {
                                     mActionBar.disableActionsButton(true);
+                                    mUserActions.setVisibility(View.VISIBLE);
                                 }
 
                                 @Override
                                 public void onAnimationEnd(Animation animation) {
                                     mUserActions.clearAnimation();
-                                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                                    params.setMargins(0, 5, 5, 0);
-                                    params.addRule(RelativeLayout.BELOW, R.id.loNavigationBar);
-                                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                                    mUserActions.setLayoutParams(params);
                                     mActionBar.disableActionsButton(false);
                                 }
 
@@ -195,10 +192,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     }, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            double density = getResources().getDisplayMetrics().density;
-                            TranslateAnimation ta = new TranslateAnimation(0, 0, 0, (int) (-270 * density));
+                            initActionsPanelHeight();
+                            TranslateAnimation ta = new TranslateAnimation(0, 0, 0, - (mUserActions.getHeight() + mUserActionsPanelHeight));
                             ta.setDuration(500);
-                            ta.setFillAfter(true);
                             ta.setAnimationListener(new Animation.AnimationListener() {
                                 @Override
                                 public void onAnimationStart(Animation animation) {
@@ -207,14 +203,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
                                 @Override
                                 public void onAnimationEnd(Animation animation) {
-
                                     mUserActions.clearAnimation();
-                                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                                    params.setMargins(0, 5, 5, 0);
-                                    params.addRule(RelativeLayout.ABOVE, R.id.loNavigationBar);
-                                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                                    mUserActions.setLayoutParams(params);
                                     mActionBar.disableActionsButton(false);
+                                    mUserActions.setVisibility(View.GONE);
                                 }
 
                                 @Override
@@ -242,6 +233,14 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         return root;
     }
 
+    private void initActionsPanelHeight() {
+        if(mUserActionsPanelHeight == 0) {
+            int actualHeight = mActionBar.getHeight();
+            double density = getResources().getDisplayMetrics().density;
+            mUserActionsPanelHeight = actualHeight == 0 ? actualHeight : (int) (270 * density);
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -251,14 +250,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             if (mUserProfile == null) getUserProfile();
         }
 
-        mUpdateBlackListState = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (mUserProfile != null) {
-                    mUserProfile.inBlackList = intent.getBooleanExtra(ProfileBlackListControlFragment.BLACK_LIST_STATUS, false);
-                }
-            }
-        };
         mUpdateProfileReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -269,7 +260,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             }
         };
 
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateBlackListState, new IntentFilter(ProfileBlackListControlFragment.UPDATE_ACTION));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateProfileReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         setProfile(mUserProfile);
 
@@ -279,12 +269,17 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onPause() {
         super.onPause();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateBlackListState);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateProfileReceiver);
 
+        int key;
+        Fragment fragment;
+        SparseArrayCompat<Fragment> fragments;
         //Вручную прокидываем событие onPause() в ViewPager, т.к. на onPause() мы отписываемся от событий
         if (mBodyPagerAdapter != null) {
-            for (Fragment fragment : mBodyPagerAdapter.getFragmentCache().values()) {
+            fragments = mBodyPagerAdapter.getFragmentCache();
+            for(int i = 0; i < fragments.size(); i++) {
+                key = fragments.keyAt(i);
+                fragment = fragments.get(key);
                 if (fragment != null) {
                     fragment.onPause();
                 }
@@ -292,7 +287,10 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         }
 
         if (mHeaderPagerAdapter != null) {
-            for (Fragment fragment : mHeaderPagerAdapter.getFragmentCache().values()) {
+            fragments = mHeaderPagerAdapter.getFragmentCache();
+            for(int i = 0; i < fragments.size(); i++) {
+                key = fragments.keyAt(i);
+                fragment = fragments.get(key);
                 if (fragment != null) {
                     fragment.onPause();
                 }
@@ -327,7 +325,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mLoaderView.setVisibility(View.VISIBLE);
         if (mProfileId < 1) {
             mLoaderView.setVisibility(View.INVISIBLE);
-            mRetryBtn.showOnlyMessage(true);
+            mRetryView.showOnlyMessage(true);
             mLockScreen.setVisibility(View.VISIBLE);
             return;
         }
@@ -390,21 +388,21 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     }
 
     private void showLockWithText(String text) {
-        if (mRetryBtn != null && isAdded()) {
+        if (mRetryView != null && isAdded()) {
             mLoaderView.setVisibility(View.GONE);
             mLockScreen.setVisibility(View.VISIBLE);
-            mRetryBtn.setErrorMsg(text);
-            mRetryBtn.showOnlyMessage(true);
+            mRetryView.setText(text);
+            mRetryView.showOnlyMessage(true);
             mActionBar.hideUserActionButton();
         }
     }
 
     private void showRetryBtn() {
-        if (mRetryBtn != null && isAdded()) {
+        if (mRetryView != null && isAdded()) {
             mLoaderView.setVisibility(View.GONE);
             mLockScreen.setVisibility(View.VISIBLE);
-            mRetryBtn.setErrorMsg(getString(R.string.general_profile_error));
-            mRetryBtn.showOnlyMessage(false);
+            mRetryView.setText(getString(R.string.general_profile_error));
+            mRetryView.showOnlyMessage(false);
         }
     }
 
@@ -445,7 +443,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             addBodyPage(UserPhotoFragment.class.getName(), getResources().getString(R.string.profile_photo));
             addBodyPage(UserFormFragment.class.getName(), getResources().getString(R.string.profile_form));
             addBodyPage(GiftsFragment.class.getName(), getResources().getString(R.string.profile_gifts));
-            addBodyPage(ProfileBlackListControlFragment.class.getName(), getResources().getString(R.string.profile_actions));
         }
 
         mBodyPager = (ViewPager) root.findViewById(R.id.vpFragments);
@@ -553,8 +550,10 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                                 icon.setVisibility(View.VISIBLE);
                                 v.setEnabled(true);
                                 v.setSelected(false);
-                                TextView view = (TextView) v;
-                                view.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
+                                if (v instanceof TextView) {
+                                    TextView view = (TextView) v;
+                                    view.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
+                                }
                             }
                         }
                     });
@@ -751,8 +750,12 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     }
 
     public void resultToNestedFragments(int requestCode, int resultCode, Intent data) {
-        HashMap<Integer, Fragment> mBodyFragments = mBodyPagerAdapter.getFragmentCache();
-        for (Fragment fragment : mBodyFragments.values()) {
+        int key;
+        Fragment fragment;
+        SparseArrayCompat<Fragment> mBodyFragments = mBodyPagerAdapter.getFragmentCache();
+        for(int i = 0; i < mBodyFragments.size(); i++) {
+            key = mBodyFragments.keyAt(i);
+            fragment = mBodyFragments.get(key);
             fragment.onActivityResult(requestCode, resultCode, data);
         }
     }

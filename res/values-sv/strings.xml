@@ -20,7 +20,6 @@
     <string name="general_data_error">Det har uppstått ett fel. Vänligen försök igen</string>
     <string name="general_internet_off">Anslutning till Internet saknas</string>
     <string name="general_purchasing_error">Vänligen meddela inköpsfelet till support@topface.ru</string>
-    <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Texten kopierad</string>
     <string name="general_spinner_title">Välj handling</string>
     <string name="general_profile_error">Det har uppstått ett fell vid profiluppladning</string>
@@ -137,11 +136,6 @@
     <string name="invite_is_free">Att skicka inbjudan är gratis</string>
     <string name="invite_error">Det gick inte att skicka inbjudan. Försök igen senare</string>
     <string name="invite_completed">Inbjudan avsänd</string>
-    <plurals name="invite_bonus_text">
-        <item quantity="zero">Bjud vänner och erhåll för var och en 20</item>
-        <item quantity="other">Du inbjuder %2$d vänner och därför förtjänar du %1$d</item>
-        <item quantity="one">Du inbjuder %2$d vänner och därför förtjänar du %1$d</item>
-    </plurals>
     <string name="settings_header_title">Inställningar</string>
     <string name="settings_wifi">Endast via Wi-Fi</string>
     <string name="settings_on">Aktiverat</string>
@@ -265,7 +259,7 @@
     <string name="profile_mood">Beskriv ditt humör</string>
     <string name="general_reconnect">Vänligen vänta. Vi försöker återställa Internetanslutningen.</string>
     <string name="dating_people_unnoticed">Du har ignorerat tio personer!</string>
-    <string name="dating_continue">Fortsätt ranka</string>
+    <string name="dating_continue">Fortsätt umgås</string>
     <string name="dating_better_look">Titta närmanre!\nDu kanske missar ditt öde!</string>
     <string name="edit_my_city">Min stad</string>
     <string name="edit_my_photos">Mina foton</string>
@@ -281,7 +275,7 @@
     <string name="buying_sympathies">Köp sympatier</string>
     <string name="novice_sympathies_bonus">Du får %1$d sympatier i\npresent! Detta innebär, att\n%2$d personer kommer att gilla dig\noch visa sin sympati för dig</string>
     <string name="novice_energy_to_sympathies_title">Vi har bytt energi mot sympatier</string>
-    <string name="novice_energy_to_sympathies_message_boys">När du fyllt på sympatier, får du\nett angivet antal sympatier\nfrån killar som säkert gillar dig</string>
+    <string name="novice_energy_to_sympathies_message_boys">När du fyllt på sympatier, får du\nett angivet antal sympatier\nfrån killar, som säkert gillar dig</string>
     <string name="novice_energy_to_sympathies_message_girls">När du fyllt på sympatier, får du\nett angivet antal sympatier\nfrån tjejer som säkert gillar dig</string>
     <string name="novice_buy_sympathies">Om du vill garanterat\nfå sympatier,\nköp dem redan nu!</string>
     <string name="general_reconnect_social">Det är omöjligt att ansluta sig till social media. Vänligen försök senare.</string>
@@ -289,7 +283,7 @@
     <string name="general_block">Blockera</string>
     <string name="general_buying_disabled">För närvarande är inköpet omöjligt</string>
     <string name="ban_flood_detected">Du skickar för många förfrågningar till servern. För att kunna använda applikationen vidare, vänta lite.</string>
-    <string name="general_maintenance">Vi kan inte ta emot din förfrågan eftersom servern är under teknisk undersökning. Vänligen försök senare</string>
+    <string name="general_maintenance">Din förfrågan kan inte hanteras på grund av tekniska arbeten på servern. Vänligen försök senare</string>
     <string name="virus_chat_likes_request_title">Skänk sympatier till vänner</string>
     <string name="virus_chat_btn">Erhålla sympatier</string>
     <string name="virus_request_error">Det gick inte att skicka fler sympatier till vänner</string>
@@ -387,4 +381,14 @@
     <string name="chat_no_message_text">Skriv ett meddelande eller skicka en gåva och du får säkert svar</string>
     <string name="user_baned">Användaren har bannlysts</string>
     <string name="general_choose_city">Välj stad</string>
+    <string name="buy_mobile_payments">Andra betalningssätt</string>
+    <string name="general_save_and_exit">Spara och logga ut</string>
+    <string name="general_bookmarks_title">Favoriter</string>
+    <string name="general_empty_bookmarks">Inga favoriter</string>
+    <string name="general_bookmarks">Favoriter</string>
+    <string name="general_fans">Beundrare</string>
+    <string name="general_no_fans">Inga beundrare</string>
+    <string name="general_bookmarks_delete">Radera från favoriter</string>
+    <string name="general_bookmarks_add">Lägg till favoriter</string>
+    <string name="general_input_email">Ange din e-postadress</string>
 </resources>

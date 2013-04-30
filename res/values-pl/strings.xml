@@ -20,7 +20,6 @@
     <string name="general_data_error">Błąd. Spróbuj ponownie</string>
     <string name="general_internet_off">Nie połączenia z Internetem</string>
     <string name="general_purchasing_error">Prosimy napisać wiadomość o błędzie kupowania na support@topface.ru</string>
-    <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Tekst został skopiowany</string>
     <string name="general_spinner_title">Wybierz działanie</string>
     <string name="general_profile_error">Błąd przy ładowaniu profilu</string>
@@ -135,12 +134,6 @@
     <string name="invite_is_free">Wysyłka zaproszenia jest darmowa</string>
     <string name="invite_error">Nie udało się wysłać zaproszenia. Spróbuj ponownie</string>
     <string name="invite_completed">Zaproszenie zostało wysłane</string>
-    <plurals name="invite_bonus_text">
-        <item quantity="few">Chcesz wysłać zaproszenia %2$d znajomym i dostaniesz za to %1$d</item>
-        <item quantity="zero">Zaproś znajomych a dostaniesz za każdego po 20</item>
-        <item quantity="other">Chcesz wysłać zaproszenia %2$d znajomym i dostaniesz za to %1$d</item>
-        <item quantity="one">Chcesz wysłać zaproszenie %2$d znajomemu i dostaniesz za to %1$d</item>
-    </plurals>
     <string name="settings_header_title">Ustawienia</string>
     <string name="settings_wifi">Tylko przez Wi-Fi</string>
     <string name="settings_on">Włączona</string>
@@ -230,7 +223,6 @@
     <string name="buy_subscription_not_available">Subskrypcje są niedostępne</string>
     <string name="default_economy_vip">VIP od 10 USD miesięcznie</string>
     <string name="dating_people_unnoticed">Dziesięć osób zostało bez Twojej uwagi</string>
-    <string name="dating_continue">Kontynuuj ocenianie</string>
     <string name="edit_my_city">Moje miasto</string>
     <string name="edit_my_photos">Moje zdjęcia</string>
     <string name="chat_write_message">Napisz wiadomość</string>

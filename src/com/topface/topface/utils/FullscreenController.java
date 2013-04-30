@@ -10,6 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import com.inneractive.api.ads.InneractiveAd;
+import com.inneractive.api.ads.InneractiveAdListener;
+import com.mopub.mobileads.MoPubErrorCode;
+import com.mopub.mobileads.MoPubInterstitial;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -34,16 +38,19 @@ public class FullscreenController {
 
     public static final String URL_SEPARATOR = "::";
     private static boolean isFullScreenBannerVisible = false;
+    private static final String MOPUB_INTERSTITIAL_ID = "00db7208a90811e281c11231392559e4";
 
     private SharedPreferences mPreferences;
     private Activity mActivity;
+
+    private MoPubInterstitial mInterstitial;
 
     public FullscreenController(Activity activity) {
         mActivity = activity;
     }
 
     public void requestFullscreen() {
-        if (!CacheProfile.isEmpty()) {
+        if (!CacheProfile.isEmpty() && isTimePassed()) {
             Options.Page startPage = CacheProfile.getOptions().pages.get(Options.PAGE_START);
             if (startPage != null) {
                 if (startPage.floatType.equals(Options.FLOAT_TYPE_BANNER)) {
@@ -51,17 +58,105 @@ public class FullscreenController {
                         requestAdwiredFullscreen();
                     } else if (startPage.banner.equals(Options.BANNER_TOPFACE)) {
                         requestTopfaceFullscreen();
+                    } else if (startPage.banner.equals(Options.BANNER_MOPUB)) {
+                        requestMopubFullscreen();
+                    } else if (startPage.banner.equals(Options.BANNER_INNERACTIVE)) {
+                        requestInneractiveFullscreen();
                     }
                 }
             }
         }
     }
 
+    private void requestInneractiveFullscreen() {
+        final InneractiveAd iaBanner = new InneractiveAd(mActivity, "Topface_TopfaceAndroid_Android", InneractiveAd.IaAdType.Interstitial, 60);
+        ViewGroup container = getFullscreenBannerContainer();
+        iaBanner.setInneractiveListener(new InneractiveAdListener() {
+            @Override
+            public void onIaAdReceived() {
+                addLastFullscreenShowedTime();
+                Debug.log("Inneractive: onIaAdReceived()");
+            }
+
+            @Override
+            public void onIaDefaultAdReceived() {
+                addLastFullscreenShowedTime();
+                Debug.log("Inneractive: onIaDefaultAdReceived()");
+            }
+
+            @Override
+            public void onIaAdFailed() {
+                Debug.log("Inneractive: onIaAdFailed()");
+                requestTopfaceFullscreen();
+            }
+
+            @Override
+            public void onIaAdClicked() {
+                Debug.log("Inneractive: onIaAdClicked()");
+            }
+
+            @Override
+            public void onIaAdResize() {
+                Debug.log("Inneractive: onIaAdResize()");
+            }
+
+            @Override
+            public void onIaAdResizeClosed() {
+                Debug.log("Inneractive: onIaAdResizeClosed()");
+            }
+
+            @Override
+            public void onIaAdExpand() {
+                Debug.log("Inneractive: onIaAdExpand()");
+            }
+
+            @Override
+            public void onIaAdExpandClosed() {
+                Debug.log("Inneractive: onIaAdExpandClosed()");
+            }
+
+            @Override
+            public void onIaDismissScreen() {
+                Debug.log("Inneractive: onIaDismissScreen()");
+            }
+        });
+        container.addView(iaBanner);
+    }
+
+    private void requestMopubFullscreen() {
+        if (mInterstitial == null) {
+            mInterstitial = new MoPubInterstitial(mActivity, MOPUB_INTERSTITIAL_ID);
+        }
+        mInterstitial.setInterstitialAdListener(new MoPubInterstitial.InterstitialAdListener() {
+            @Override
+            public void onInterstitialLoaded(MoPubInterstitial interstitial) {
+                if (interstitial.isReady()) {
+                    interstitial.show();
+                    addLastFullscreenShowedTime();
+                }
+            }
+
+            @Override
+            public void onInterstitialFailed(MoPubInterstitial interstitial, MoPubErrorCode errorCode) {
+                requestTopfaceFullscreen();
+            }
+
+            @Override
+            public void onInterstitialShown(MoPubInterstitial interstitial) {
+            }
+
+            @Override
+            public void onInterstitialDismissed(MoPubInterstitial interstitial) {
+            }
+        });
+        mInterstitial.load();
+    }
+
     private void requestAdwiredFullscreen() {
         try {
             if (!CacheProfile.isEmpty()) {
                 AWView adwiredView = (AWView) mActivity.getLayoutInflater().inflate(R.layout.banner_adwired, null);
-                final ViewGroup bannerContainer = (ViewGroup) mActivity.findViewById(R.id.loBannerContainer);
+                final ViewGroup bannerContainer = getFullscreenBannerContainer();
                 bannerContainer.addView(adwiredView);
                 bannerContainer.setVisibility(View.VISIBLE);
                 adwiredView.setVisibility(View.VISIBLE);
@@ -81,6 +176,7 @@ public class FullscreenController {
                     @Override
                     public void onStart() {
                         isFullScreenBannerVisible = true;
+                        addLastFullscreenShowedTime();
                     }
                 });
                 adwiredView.request('0');
@@ -91,33 +187,37 @@ public class FullscreenController {
     }
 
     private boolean showFullscreenBanner(String url) {
-        long currentTime = System.currentTimeMillis();
-        long lastCall = getPreferences().getLong(Static.PREFERENCES_LAST_FULLSCREEN_TIME, currentTime);
-        boolean passByTime = !getPreferences().contains(Static.PREFERENCES_LAST_FULLSCREEN_TIME)
-                || Math.abs(currentTime - lastCall) > DateUtils.DAY_IN_MILLISECONDS;
+        boolean passByTime = isTimePassed();
         boolean passByUrl = passFullScreenByUrl(url);
 
         return passByUrl && passByTime;
     }
 
-    private boolean passFullScreenByUrl(String url) {
-        return !getFullscrenUrls().contains(url);
+    private boolean isTimePassed() {
+        long currentTime = System.currentTimeMillis();
+        long lastCall = getPreferences().getLong(Static.PREFERENCES_LAST_FULLSCREEN_TIME, currentTime);
+        return !getPreferences().contains(Static.PREFERENCES_LAST_FULLSCREEN_TIME)
+                || Math.abs(currentTime - lastCall) > DateUtils.DAY_IN_MILLISECONDS;
     }
 
-    private Set<String> getFullscrenUrls() {
+    private boolean passFullScreenByUrl(String url) {
+        return !getFullscreenUrls().contains(url);
+    }
+
+    private Set<String> getFullscreenUrls() {
         String urls = getPreferences().getString(Static.PREFERENCES_FULLSCREEN_URLS_SET, "");
         String[] urlList = TextUtils.split(urls, URL_SEPARATOR);
         return new HashSet<String>(Arrays.asList(urlList));
     }
 
-    private void addLastFullsreenShowedTime() {
+    private void addLastFullscreenShowedTime() {
         SharedPreferences.Editor editor = getPreferences().edit();
         editor.putLong(Static.PREFERENCES_LAST_FULLSCREEN_TIME, System.currentTimeMillis());
         editor.commit();
     }
 
     private void addNewUrlToFullscreenSet(String url) {
-        Set<String> urlSet = getFullscrenUrls();
+        Set<String> urlSet = getFullscreenUrls();
         urlSet.add(url);
         SharedPreferences.Editor editor = getPreferences().edit();
         editor.putString(Static.PREFERENCES_FULLSCREEN_URLS_SET, TextUtils.join(URL_SEPARATOR, urlSet));
@@ -135,9 +235,9 @@ public class FullscreenController {
                 if (banner.action.equals(Banner.ACTION_URL)) {
                     if (showFullscreenBanner(banner.parameter)) {
                         isFullScreenBannerVisible = true;
-                        addLastFullsreenShowedTime();
+                        addLastFullscreenShowedTime();
                         final View fullscreenViewGroup = mActivity.getLayoutInflater().inflate(R.layout.fullscreen_topface, null);
-                        final ViewGroup bannerContainer = (ViewGroup) mActivity.findViewById(R.id.loBannerContainer);
+                        final ViewGroup bannerContainer = getFullscreenBannerContainer();
                         bannerContainer.addView(fullscreenViewGroup);
                         bannerContainer.setVisibility(View.VISIBLE);
                         final ImageViewRemote fullscreenImage = (ImageViewRemote) fullscreenViewGroup.findViewById(R.id.ivFullScreen);
@@ -193,5 +293,18 @@ public class FullscreenController {
 
     public boolean isFullScreenBannerVisible() {
         return isFullScreenBannerVisible;
+    }
+
+    public ViewGroup getFullscreenBannerContainer() {
+        ViewGroup fullscreenContainer = (ViewGroup) mActivity.findViewById(R.id.loBannerContainer);
+        if (fullscreenContainer == null) {
+            fullscreenContainer = (ViewGroup) mActivity.getLayoutInflater().inflate(R.layout.layout_fullscreen, null);
+            ((ViewGroup) mActivity.findViewById(R.id.NavigationLayout)).addView(fullscreenContainer);
+        }
+        return fullscreenContainer;
+    }
+
+    public void onDestroy() {
+        if (mInterstitial != null) mInterstitial.destroy();
     }
 }

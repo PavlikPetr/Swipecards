@@ -1,6 +1,7 @@
 package com.topface.topface.data;
 
 import android.content.Context;
+import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -13,7 +14,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 
 /* Класс профиля владельца устройства */
@@ -49,7 +49,7 @@ public class Profile extends AbstractDataWithPhotos {
     public LinkedList<FormItem> forms = new LinkedList<FormItem>();
 
     public ArrayList<Gift> gifts = new ArrayList<Gift>();
-    public HashMap<Integer, TopfaceNotifications> notifications = new HashMap<Integer, TopfaceNotifications>();
+    public SparseArrayCompat<TopfaceNotifications> notifications = new SparseArrayCompat<TopfaceNotifications>();
     public boolean hasMail;
     public boolean email_grabbed;
     public boolean email_confirmed;
@@ -68,6 +68,7 @@ public class Profile extends AbstractDataWithPhotos {
     private boolean mEditor;
     // private static final String profileFileName = "profile.out";
     // private static final long serialVersionUID = 2748391675222256671L;
+    public boolean canInvite;
 
     public static Profile parse(ApiResponse response) {
         return parse(new Profile(), response.jsonResult);
@@ -100,6 +101,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.paid = resp.optBoolean("paid");
             profile.show_ad = resp.optBoolean("show_ad",true);
             profile.xstatus = resp.optInt("xstatus");
+            profile.canInvite = resp.optBoolean("can_invite");
             profile.setEditor(resp.optBoolean("editor", false));
 
             parseGifts(profile, resp);

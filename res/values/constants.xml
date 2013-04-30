@@ -8,26 +8,12 @@
     <string name="build_google_play_v3">google-play-v3</string>
     <string name="build_amazon">amazon</string>
 
-    <!-- Filter pref name -->
-    <string name="s_dating_select_city">dating_select_city</string>
-    <string name="s_dating_city">dating_city</string>
-
-
     <!-- settings -->
-    <string name="settings_preloading_wifi">wifi</string>
-    <string name="settings_preloading_on">on</string>
-    <string name="settings_preloading_off">off</string>
-    <string name="settings_preloading_type_user">user</string>
-    <string name="settings_preloading_type_photo">photo</string>
-    <string name="settings_preloading_type_all">all</string>
     <string name="settings_help_url">http://topface.com/faq-mobile?from=android</string>
     <string name="settings_topface_url">http://topface.com</string>
-    <string name="settings_topface_host">topface.com</string>
-    <string name="settings_topface_profile">profile</string>
 
     <string name="default_resource_value">0</string>
 
-    <string name="default_chat_update_period">30000</string>
     <string name="default_market_link">market://details?id=com.topface.topface</string>
     <string name="amazon_market_link">amzn://apps/android?p=com.topface.topface</string>
 
@@ -40,9 +26,9 @@
     <string name="photo_is_set_tag">photo_is_set_tag</string>
 
     <string name="default_percent_equation">%d%%</string>
+    <string name="default_ban_time">10:00</string>
 
     <dimen name="take_photo_max_width">275dp</dimen>
     <dimen name="take_photo_max_height">320dp</dimen>
 
-    <dimen name="bezier_threshold">30dp</dimen>
 </resources>

@@ -3,6 +3,7 @@ package com.topface.topface.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v4.util.SparseArrayCompat;
 import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.data.*;
@@ -12,7 +13,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -60,7 +60,8 @@ public class CacheProfile {
     public static final String OPTIONS_CACHE_KEY = "options_cache";
 
     public static ArrayList<Gift> gifts = new ArrayList<Gift>();
-    public static HashMap<Integer, Profile.TopfaceNotifications> notifications;
+    public static SparseArrayCompat<Profile.TopfaceNotifications> notifications;
+
 
     public static boolean hasMail;
     public static boolean emailGrabbed;
@@ -69,6 +70,7 @@ public class CacheProfile {
     public static long profileUpdateTime;
     public static int xstatus;
     private static boolean editor;
+    public static boolean canInvite;
 
     private static void setProfileCache(final ApiResponse response) {
         //Пишем в SharedPreferences в отдельном потоке
@@ -127,6 +129,8 @@ public class CacheProfile {
         profile.xstatus = xstatus;
         profile.setEditor(editor);
 
+        profile.canInvite = canInvite;
+
         return profile;
     }
 
@@ -165,6 +169,8 @@ public class CacheProfile {
         show_ad = profile.show_ad;
 
         xstatus = profile.xstatus;
+
+        canInvite = profile.canInvite;
 
         editor = profile.isEditor();
 

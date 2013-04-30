@@ -34,17 +34,18 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditAgeFragment;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.FilterFragment;
-import com.topface.topface.ui.views.ILocker;
+import com.topface.topface.ui.views.*;
 import com.topface.topface.ui.views.ImageSwitcher;
-import com.topface.topface.ui.views.NoviceLayout;
-import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.*;
+
+import java.util.ArrayList;
 
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
         RateController.OnRateControllerListener {
 
     public static final int SEARCH_LIMIT = 30;
     public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 2;
+    public static final String INVITE_POPUP = "INVITE_POPUP";
     private int mCurrentPhotoPrevPos;
     private TextView mResourcesLikes;
     private TextView mResourcesMoney;
@@ -70,9 +71,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private RateController mRateController;
     private RelativeLayout mDatingLoveBtnLayout;
     private ViewFlipper mViewFlipper;
+    private RetryViewCreator mRetryView;
 
     private ImageButton mRetryBtn;
-    private RetryView emptySearchDialog;
     private PreloadManager mPreloadManager;
 
     private BroadcastReceiver mReceiver;
@@ -154,6 +155,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         initControlButtons(view);
         initDatingAlbum(view);
         initNewbieLayout(view);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                checkInvitePopup();
+            }
+        }).start();
+
 
         mDatingLovePrice = (TextView) view.findViewById(R.id.tvDatingLovePrice);
 
@@ -162,6 +170,29 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         return view;
     }
 
+    private void checkInvitePopup() {
+        FragmentActivity activity = getActivity();
+        if (CacheProfile.canInvite && activity != null) {
+            final SharedPreferences preferences = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+
+            long date_start = preferences.getLong(INVITE_POPUP, 1);
+            long date_now = new java.util.Date().getTime();
+
+            if (date_now - date_start >= PopupManager.INVITE_POPUP_TIMEOUT) {
+                preferences.edit().putLong(INVITE_POPUP, date_now).commit();
+                ContactsProvider provider = new ContactsProvider(activity);
+                provider.getContacts(-1, 0, new ContactsProvider.GetContactsListener() {
+                    @Override
+                    public void onContactsReceived(ArrayList<ContactsProvider.Contact> contacts) {
+
+                        if (isAdded()) {
+                            showInvitePopup(contacts);
+                        }
+                    }
+                });
+            }
+        }
+    }
 
     private void initMutualDrawables() {
         if (isAdded()) {
@@ -243,17 +274,17 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void initEmptySearchDialog(View view, OnClickListener settingsListener) {
-        emptySearchDialog = new RetryView(getActivity());
-        emptySearchDialog.setErrorMsg(App.getContext().getString(R.string.general_search_null_response_error));
-        emptySearchDialog.addButton(RetryView.REFRESH_TEMPLATE + App.getContext().getString(R.string.general_dialog_retry), new OnClickListener() {
+
+        String text = getString(R.string.general_search_null_response_error);
+        mRetryView = RetryViewCreator.createDefaultRetryView(getActivity(), text, new OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateData(false);
             }
-        });
-        emptySearchDialog.addButton(App.getContext().getString(R.string.change_filters), settingsListener);
+        }, getString(R.string.change_filters), settingsListener);
+
         hideEmptySearchDialog();
-        ((RelativeLayout) view.findViewById(R.id.ac_dating_container)).addView(emptySearchDialog);
+        ((RelativeLayout) view.findViewById(R.id.ac_dating_container)).addView(mRetryView.getView());
 
         mReceiver = new BroadcastReceiver() {
             @Override
@@ -688,6 +719,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
+    public void showInvitePopup(ArrayList<ContactsProvider.Contact> data) {
+
+        InvitesPopup popup = InvitesPopup.newInstance(data);
+        ((BaseFragmentActivity) getActivity()).startFragment(popup);
+    }
+
     public void setCounter(int position) {
         if (mCurrentUser != null) {
             mCounter.setText((position + 1) + "/" + mCurrentUser.photos.size());
@@ -837,7 +874,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void hideEmptySearchDialog() {
-        emptySearchDialog.setVisibility(View.GONE);
+        mRetryView.setVisibility(View.GONE);
     }
 
     private void setHeader(View view) {
@@ -939,6 +976,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     };
 
     private void sendAlbumRequest(final Photos data) {
+        if ((mLoadedCount - 1) >= data.size()) {
+            return;
+        }
         int position = data.get(mLoadedCount - 1).getPosition() + 1;
         if (mUserSearchList != null && mUserSearchList.getCurrentUser() != null) {
             AlbumRequest request = new AlbumRequest(getActivity(), mUserSearchList.getCurrentUser().id, PHOTOS_LIMIT, position, AlbumRequest.MODE_SEARCH);
@@ -951,8 +991,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         mNeedMore = response.jsonResult.optBoolean("more");
                         int i = 0;
                         for (Photo photo : newPhotos) {
-                            data.set(mLoadedCount + i, photo);
-                            i++;
+                            if (mLoadedCount + i < data.size()) {
+                                data.set(mLoadedCount + i, photo);
+                                i++;
+                            }
                         }
                         mLoadedCount += newPhotos.size();
 
@@ -993,6 +1035,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         Debug.log("Search:: showEmptySearchDialog");
         mProgressBar.setVisibility(View.GONE);
         mImageSwitcher.setVisibility(View.GONE);
-        emptySearchDialog.setVisibility(View.VISIBLE);
+        mRetryView.setVisibility(View.VISIBLE);
     }
 }

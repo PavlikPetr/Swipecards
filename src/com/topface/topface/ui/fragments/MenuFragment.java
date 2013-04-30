@@ -16,17 +16,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.fragments.feed.*;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.Editor;
 
 public class MenuFragment extends BaseFragment implements View.OnClickListener {
@@ -87,7 +91,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         mLikes.setText(Integer.toString(CacheProfile.likes));
     }
 
-    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             refreshNotifications();
@@ -100,15 +104,16 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
+        refreshNotifications();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileUpdateReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
     }
 
     @Override
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileUpdateReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mCountersReceiver);
     }
 
     @Override
@@ -353,9 +358,6 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             case BaseFragment.F_FANS:
                 fragment = new FansFragment();
                 break;
-            case BaseFragment.F_TOPS:
-                fragment = new TopsFragment();
-                break;
             case BaseFragment.F_VISITORS:
                 fragment = new VisitorsFragment();
                 break;
@@ -386,4 +388,28 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         public void onFragmentSelected(int fragmentId);
     }
 
+    public void showNovice(Novice novice) {
+        if (novice != null && novice.isFlagsInitializationProccesed()) {
+            if (novice.isMenuCompleted()) return;
+
+            if (novice.isShowFillProfile()) {
+                RelativeLayout rootLayout = (RelativeLayout) getView().findViewById(R.id.MenuLayout);
+                NoviceLayout noviceLayout = (NoviceLayout) getLayoutInflater().inflate(R.layout.layout_novice,null);
+                rootLayout.addView(noviceLayout);
+
+                noviceLayout.setLayoutRes(
+                        R.layout.novice_fill_profile,
+                        this.getProfileButtonOnClickListener()
+                );
+                AlphaAnimation alphaAnimation = new AlphaAnimation(0.0F, 1.0F);
+                alphaAnimation.setDuration(400L);
+                noviceLayout.startAnimation(alphaAnimation);
+                novice.completeShowFillProfile();
+            }
+        }
+    }
+
+    private LayoutInflater getLayoutInflater() {
+        return getActivity().getLayoutInflater();
+    }
 }

@@ -20,7 +20,6 @@
     <string name="general_data_error">Error. Please try again.</string>
     <string name="general_internet_off">No Internet connection. Please try again.</string>
     <string name="general_purchasing_error">Please, report about this purchase error to support@topface.ru</string>
-    <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Message copied</string>
     <string name="general_spinner_title">Choose action</string>
     <string name="general_profile_error">Error loading profile</string>
@@ -137,11 +136,6 @@
     <string name="invite_is_free">The invitation is free!</string>
     <string name="invite_error">Can\'t send the invitations. Please, try again.</string>
     <string name="invite_completed">Invitation sent</string>
-    <plurals name="invite_bonus_text">
-        <item quantity="zero">Invite your friends and for every confirmed friend you will get 20</item>
-        <item quantity="other">You are going to send invitation to %2$d friends and you will get for this %1$d</item>
-        <item quantity="one">You are going to send invitation to %2$d friend and you will get for this %1$d</item>
-    </plurals>
     <string name="settings_header_title">Settings</string>
     <string name="settings_wifi">Wi-Fi only</string>
     <string name="settings_on">On</string>
@@ -265,7 +259,7 @@
     <string name="profile_mood">Describe your mood</string>
     <string name="general_reconnect">Trying to restore internet connection.\nPlease, wait</string>
     <string name="dating_people_unnoticed">You left 10 people unnoticed!</string>
-    <string name="dating_continue">Continue rating</string>
+    <string name="dating_continue">Continue dating</string>
     <string name="dating_better_look">Get a better look!\nYou might be missing your destiny!</string>
     <string name="edit_my_city">My city</string>
     <string name="edit_my_photos">My photos</string>
@@ -294,9 +288,9 @@
     <string name="virus_chat_btn">Receive likes</string>
     <string name="virus_request_error">Unable to send likes to your friends</string>
     <plurals name="virus_request_likes_cnt">
-        <item quantity="zero">Now you have %d of likes!</item>
+        <item quantity="zero">You have no likes</item>
         <item quantity="other">Now you have %d of likes!</item>
-        <item quantity="one">Now you have %d of likes!</item>
+        <item quantity="one">Now you have %d like!</item>
     </plurals>
     <string name="profile_ask_sent">Request is sent</string>
     <string name="virus_error">During the day, your friend can send likes only 1 time! Try again tomorrow!</string>
@@ -305,7 +299,7 @@
     <string name="popup_version_update">Update</string>
     <string name="popup_version_cancel">Remind me later</string>
     <string name="general_version_not_supported">Your version of the application is outdated and not supported. Please update the application.</string>
-    <string name="leaders_select_photo_info">Select the most spectacular photo! Photos with low rating cannot be selected</string>
+    <string name="leaders_select_photo_info">Choose the most spectacular photo! You can not choose a photo with a low rating.</string>
     <string name="default_price_format">Total: %.2f USD</string>
     <string name="dating_online_only">%s, only online</string>
     <string name="leaders_pick_condition">You cannot select a photo with a rating lower than %d%%:</string>
@@ -349,7 +343,7 @@
     <string name="get_it_for_free">Get coins for free</string>
     <string name="vip_advantages">VIP advantages</string>
     <string name="change_email">Change e-mail</string>
-    <string name="send_confirmation_email">Confirmation e-mail was sent</string>
+    <string name="send_confirmation_email">Send confirmation email</string>
     <string name="change_password">Change password</string>
     <string name="password_changing">Changing password</string>
     <string name="save">Save</string>
@@ -413,4 +407,29 @@
     <string name="general_wrong_photo_upload">This photo breaks the rules. Please try to upload a different photo</string>
     <string name="general_input_email">Enter your e-mail</string>
     <string name="cant_delete_fake_item">This message has not been sent yet, you cannot delete it. Please try again later.</string>
+    <string name="vip_stop_ads">Only chatting, nothing more. VIP users do not see advertisements</string>
+    <string name="settings_invalid_name">The name contains incorrect characters</string>
+    <string name="general_fan_access_error">To access your fans, you need to have VIP status</string>
+    <string name="friend_email_hint">Enter your friend\'s e-mail</string>
+    <string name="general_add">Add</string>
+    <string name="general_invite_friends">Invite friends</string>
+    <string name="general_rest_contacts">You have %d contacts left</string>
+    <string name="inviteFriendsTitle">Invite all your friends to Topface</string>
+    <string name="invalid_contacts">Some of the contacts were not correct. Please, send correct contacts</string>
+    <plurals name="vip_status_period">
+        <item quantity="other">You received VIP status for %d days</item>
+        <item quantity="one">You received VIP status for %d day</item>
+    </plurals>
+    <plurals name="vip_status_period_btn">
+        <item quantity="other">Get VIP for %d days</item>
+        <item quantity="one">Get VIP for %d day</item>
+    </plurals>
+    <plurals name="invite_friends_plurals">
+        <item quantity="other">Invite %1$d friends, to get VIP-status for %2$d days</item>
+        <item quantity="one">Invite %1$d friends, to get VIP-status for %2$d day</item>
+    </plurals>
+    <plurals name="get_vip_for_invites_plurals">
+        <item quantity="other">Get free VIP for %d invitations</item>
+        <item quantity="one">Get free VIP for %d invitation</item>
+    </plurals>
 </resources>

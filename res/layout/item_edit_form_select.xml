@@ -4,7 +4,8 @@
                 android:layout_height="wrap_content">
 
     <ImageView
-            android:id="@+id/ivEditBackground"
+            android:id="@id/ivEditBackground"
+            android:tag="ivEditBackground"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
@@ -23,7 +24,7 @@
             android:gravity="left">
 
         <TextView
-                android:id="@+id/tvTitle"
+                android:tag="tvTitle"
                 style="@style/ItemTitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -35,7 +36,7 @@
                 android:textSize="14sp"/>
 
         <TextView
-                android:id="@+id/tvText"
+                android:tag="tvText"
                 style="@style/ItemtText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -49,7 +50,7 @@
     </LinearLayout>
 
     <ImageView
-            android:id="@+id/ivArrow"
+            android:tag="ivArrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignRight="@id/ivEditBackground"

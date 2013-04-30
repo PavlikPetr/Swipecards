@@ -2,7 +2,6 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 import android.location.Location;
-import com.google.android.maps.GeoPoint;
 import com.topface.topface.utils.CacheProfile;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,7 +19,8 @@ public class SettingsRequest extends ApiRequest {
     public int cityid = -1; // идентификатор города пользователя
     public String status; // статус
     public int background = -1;
-    public boolean invisible;
+    public Boolean invisible;
+    public int xstatus = -1; //цель знакомства
 
     public SettingsRequest(Context context) {
         super(context);
@@ -53,10 +53,12 @@ public class SettingsRequest extends ApiRequest {
         if (background != -1) {
             data.put("background", background);
         }
-        if (invisible != CacheProfile.invisible) {
+        if (invisible != null) {
             data.put("invisible", invisible);
         }
-
+        if (xstatus != -1) {
+            data.put("xstatus", xstatus);
+        }
 
         return data;
     }

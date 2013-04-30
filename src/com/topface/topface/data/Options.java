@@ -34,7 +34,6 @@ public class Options extends AbstractData {
     public final static String PAGE_LIKES = "LIKE";
     public final static String PAGE_MUTUAL = "MUTUAL";
     public final static String PAGE_MESSAGES = "MESSAGES";
-    public final static String PAGE_TOP = "TOP";
     public final static String PAGE_VISITORS = "VISITORS";
     public final static String PAGE_DIALOGS = "DIALOGS";
     public final static String PAGE_FANS = "FANS";
@@ -64,6 +63,7 @@ public class Options extends AbstractData {
     public final static String BANNER_MADNET = "MADNET";
     public static final String BANNER_BEGUN = "BEGUN";
     public static final String BANNER_MOPUB = "MOPUB";
+    public static final String BANNER_INNERACTIVE = "INNERACTIVE";
     public static final String BANNER_GAG = "GAG";
 
     /**
@@ -99,6 +99,9 @@ public class Options extends AbstractData {
 
     public String offerwall;
     public boolean saleExists = false;
+
+    public int premium_period;
+    public int contacts_count;
 
     public static Options parse(ApiResponse response) {
         Options options = new Options();
@@ -150,6 +153,10 @@ public class Options extends AbstractData {
                     }
                 }
             }
+
+            JSONObject contacts_invite = response.jsonResult.optJSONObject("contacts_invite");
+            options.premium_period = contacts_invite.optInt("premium_period");
+            options.contacts_count = contacts_invite.optInt("contacts_count");
 
             if (response.jsonResult.has("links")) {
                 JSONObject links = response.jsonResult.optJSONObject("links");

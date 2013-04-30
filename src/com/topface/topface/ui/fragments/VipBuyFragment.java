@@ -71,7 +71,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
         View view = inflater.inflate(R.layout.fragment_buy_premium, null);
         initViews(view);
         if (getArguments() != null && getArguments().getBoolean(ACTION_BAR_CONST, false)) {
-            view.findViewById(R.id.navBar).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.loNavigationBar).setVisibility(View.VISIBLE);
             view.findViewById(R.id.headerShadow).setVisibility(View.VISIBLE);
             ActionBar actionBar = getActionBar(view);
             actionBar.showBackButton(new OnClickListener() {
@@ -145,7 +145,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
                             }
                         });
         mInvisSwitcher = new EditSwitcher(invisLayout);
-        mInvisLoadBar = (ProgressBar) invisLayout.findViewById(R.id.vsiLoadBar);
+        mInvisLoadBar = (ProgressBar) invisLayout.findViewWithTag("vsiLoadBar");
         mInvisSwitcher.setChecked(CacheProfile.invisible);
 
 //  Здесь работа с переключателем отображения VIP бэкграунда в элементах ленты,
@@ -202,7 +202,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     private RelativeLayout initLayouts(View root, int ID, int bgId, int bgLeftId, String text) {
         RelativeLayout layout = (RelativeLayout) root.findViewById(ID);
 
-        TextView layoutText = (TextView) layout.findViewById(R.id.tvTitle);
+        TextView layoutText = (TextView) layout.findViewWithTag("tvTitle");
         layoutText.setText(text);
         layout.setBackgroundResource(bgId);
         layoutText.setCompoundDrawablesWithIntrinsicBounds(bgLeftId, 0, 0, 0);
@@ -225,8 +225,8 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
         request.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) throws NullPointerException {
+                CacheProfile.invisible = mInvisSwitcher.isChecked();
                 if (mInvisLoadBar != null && getActivity() != null) {
-                    CacheProfile.invisible = mInvisSwitcher.isChecked();
                     mInvisLoadBar.setVisibility(View.GONE);
                     mInvisSwitcher.setVisibility(View.VISIBLE);
                 }

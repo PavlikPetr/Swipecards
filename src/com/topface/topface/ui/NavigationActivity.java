@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
@@ -13,7 +12,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.widget.Toast;
 import com.slidingmenu.lib.SlidingMenu;
 import com.topface.billing.BillingUtils;
@@ -33,10 +31,7 @@ import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
-import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.utils.*;
-import com.topface.topface.utils.GeoUtils.GeoLocationManager;
-import com.topface.topface.utils.GeoUtils.GeoPreferencesManager;
 import com.topface.topface.utils.offerwalls.Offerwalls;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -51,10 +46,10 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private FullscreenController mFullscreenController;
 
     private SharedPreferences mPreferences;
-    private NoviceLayout mNoviceLayout;
     private Novice mNovice;
     private boolean needAnimate = false;
     private SlidingMenu mSlidingMenu;
+    private boolean isPopupVisible = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,8 +70,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         if (!AuthToken.getInstance().isEmpty()) {
             showFragment(savedInstanceState);
         }
-
-        mNoviceLayout = (NoviceLayout) findViewById(R.id.loNovice);
     }
 
     private void initSlidingMenu() {
@@ -127,20 +120,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                     currentFragment.activateActionBar(true);
                 }
 
-                if (mNovice != null) {
-                    if (mNovice.isMenuCompleted()) return;
-
-                    if (mNovice.isShowFillProfile()) {
-                        mNoviceLayout.setLayoutRes(
-                                R.layout.novice_fill_profile,
-                                mFragmentMenu.getProfileButtonOnClickListener()
-                        );
-                        AlphaAnimation alphaAnimation = new AlphaAnimation(0.0F, 1.0F);
-                        alphaAnimation.setDuration(400L);
-                        mNoviceLayout.startAnimation(alphaAnimation);
-                        mNovice.completeShowFillProfile();
-                    }
-                }
+                mFragmentMenu.showNovice(mNovice);
             }
         });
     }
@@ -149,6 +129,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     protected void inBackgroundThread() {
         super.inBackgroundThread();
         mNovice = Novice.getInstance(getPreferences());
+        mNovice.initNoviceFlags();
         Looper.prepare();
         Offerwalls.init(getApplicationContext());
         Looper.loop();
@@ -188,25 +169,13 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         manager.showOldVersionPopup(CacheProfile.getOptions().max_version);
         manager.showRatePopup();
         actionsAfterRegistration();
-
         if (CacheProfile.show_ad) {
             mFullscreenController = new FullscreenController(this);
             mFullscreenController.requestFullscreen();
         }
-        sendLocation();
     }
 
-    private void sendLocation() {
-        GeoLocationManager locationManager = new GeoLocationManager(App.getContext());
-        Location curLocation = locationManager.getLastKnownLocation();
 
-        GeoPreferencesManager preferencesManager = new GeoPreferencesManager(App.getContext());
-        preferencesManager.saveLocation(curLocation);
-
-        SettingsRequest settingsRequest = new SettingsRequest(this);
-        settingsRequest.location = curLocation;
-        settingsRequest.exec();
-    }
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -227,6 +196,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         if (needAnimate) {
             overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_right);
         }
+
         needAnimate = true;
 
         //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
@@ -234,6 +204,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
         App.checkProfileUpdate();
     }
+
 
     private void actionsAfterRegistration() {
         if (!AuthToken.getInstance().isEmpty()) {
@@ -297,15 +268,26 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
     }
 
+
+
     @Override
-    public void close(Fragment fragment, boolean needInit) {
-        super.close(fragment, needInit);
+    public void onCloseFragment() {
         showFragment(MenuFragment.DEFAULT_FRAGMENT);
+        mSlidingMenu.setSlidingEnabled(true);
+    }
+
+    @Override
+    public boolean startAuth() {
+        boolean result = super.startAuth();
+        if (result) {
+            mSlidingMenu.setSlidingEnabled(false);
+        }
+        return result;
     }
 
     /*
-        *  обработчик кнопки открытия меню в заголовке фрагмента
-        */
+            *  обработчик кнопки открытия меню в заголовке фрагмента
+            */
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.btnNavigationHome) {
@@ -313,19 +295,23 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
     }
 
+    public void setPopupVisible(boolean visibility) {
+        isPopupVisible = visibility;
+    }
+
     @Override
     public void onBackPressed() {
-        if (mFullscreenController != null && mFullscreenController.isFullScreenBannerVisible()) {
+        if (mFullscreenController != null && mFullscreenController.isFullScreenBannerVisible() && !isPopupVisible) {
             mFullscreenController.hideFullscreenBanner((ViewGroup) findViewById(R.id.loBannerContainer));
-        } else if (mSlidingMenu != null) {
-            if (mSlidingMenu.isMenuShowing()) {
+        } else if (mSlidingMenu != null && !isPopupVisible) {
+            if (mSlidingMenu.isMenuShowing() || !mSlidingMenu.isSlidingEnabled()) {
                 super.onBackPressed();
             } else {
-                mFragmentMenu.refreshNotifications();
                 mSlidingMenu.showMenu();
             }
         } else {
             super.onBackPressed();
+            isPopupVisible = false;
         }
     }
 
@@ -355,6 +341,10 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     protected void onDestroy() {
         //Для запроса фото при следующем создании NavigationActivity
         if (CacheProfile.photo == null) CacheProfile.wasAvatarAsked = false;
+        if (mFullscreenController != null) {
+            mFullscreenController.onDestroy();
+        }
+        super.onDestroy();
     }
 
     @Override

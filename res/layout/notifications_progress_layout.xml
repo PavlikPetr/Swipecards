@@ -5,31 +5,34 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:id="@+id/notification">
+
     <ImageView
-        android:id="@+id/notificationImage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentLeft="true"
-        />
+            android:id="@+id/notificationImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            />
+
     <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             >
+
         <TextView
                 android:id="@+id/nfTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignRight="@id/notificationImage"
-                android:text="notification"
                 />
-        <ProgressBar android:layout_width="fill_parent"
-                     android:layout_height="wrap_content"
-                     android:id="@+id/nfProgress"
-                     style="@android:style/Widget.ProgressBar.Horizontal"
-                     android:layout_below="@id/nfTitle"
-                     android:layout_alignRight="@id/notificationImage"
-                     android:indeterminate="true"/>
+
+        <ProgressBar
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/nfProgress"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_below="@id/nfTitle"
+                android:layout_alignRight="@id/notificationImage"
+                android:indeterminate="true"/>
 
     </RelativeLayout>
 </LinearLayout>

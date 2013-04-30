@@ -20,7 +20,6 @@
     <string name="general_data_error">Fehler! Versuchen Sie noch einmal</string>
     <string name="general_internet_off">Keine Internetverbindung. Bitte, warten Sie</string>
     <string name="general_purchasing_error">Bitte senden Sie die Fehlermeldung beim Kauf an support@topface.ru</string>
-    <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Text ist kopiert</string>
     <string name="general_spinner_title">Wählen Sie die Aktion</string>
     <string name="general_profile_error">Fehler bei der Ladung des Profils</string>
@@ -137,11 +136,6 @@
     <string name="invite_is_free">Es ist kostenlos, Einladung zu senden</string>
     <string name="invite_error">Es klappt nicht, Einladungen zu senden. Versuchen Sie nochmal</string>
     <string name="invite_completed">Einladung ist gesendet</string>
-    <plurals name="invite_bonus_text">
-        <item quantity="zero">Laden Sie Ihre Freunde und bekommen Sie für jeden 20</item>
-        <item quantity="other">Sie wollen Einladungen %2$d Freunden senden und Sie erhalten dafür %1$d</item>
-        <item quantity="one">Sie wollen eine Einladung %2$d Freund senden und Sie erhalten dafür %1$d</item>
-    </plurals>
     <string name="settings_header_title">Einstellungen</string>
     <string name="settings_wifi">Nur per Wi-Fi</string>
     <string name="settings_on">Eingeschaltet</string>
@@ -265,7 +259,6 @@
     <string name="profile_mood">Beschreiben Sie Ihre Laune</string>
     <string name="general_reconnect">Wir versuchen Internetverbindung zu wiederherstellen.\nBitte, warten.</string>
     <string name="dating_people_unnoticed">Sie lassen 10 Leute ohne Ihre Aufmerksamkeit!</string>
-    <string name="dating_continue">Weiter einschätzen</string>
     <string name="dating_better_look">Sehen Sie sich genau an!\nVielleicht verpassen Sie Ihr Schicksal!</string>
     <string name="edit_my_city">Meine Stadt</string>
     <string name="edit_my_photos">Meine Fotos</string>
@@ -283,7 +276,8 @@
     <string name="novice_energy_to_sympathies_title">Wir haben die Kraft durch Sympathien ersetzt</string>
     <string name="novice_energy_to_sympathies_message_boys">Falls Sie Ihre Kraft ergänzen, werden Sie\nangegebene Anzahl der Sympathien\nvon Männer erhalten, denen Sie genau gefallen</string>
     <string name="novice_energy_to_sympathies_message_girls">Falls Sie Ihre Kraft ergänzen, werden Sie\nangegebene Anzahl der Sympathien\nvon Männer erhalten, denen Sie genau gefallen</string>
-    <string name="novice_buy_sympathies">Falls Sie garantiert\nSympathien erhalten möchten,\nkaufen Sie sie gearde jetzt!</string>
+    <string name="novice_buy_sympathies">Falls Sie garantiert\nSympathien erhalten möchten,\nkaufen Sie sie gearde
+ jetzt!</string>
     <string name="general_reconnect_social">Keine Internetverbindung. Versuchen Sie später.</string>
     <string name="general_buying">Sympathie und Coins kaufen</string>
     <string name="general_block">Blokieren</string>
@@ -321,6 +315,7 @@
     <string name="password">Passwort</string>
     <string name="recover_password">Passwort wiederherstellen</string>
     <string name="recovering_password">Passwort wiederherstellen</string>
+    <string name="send_password">Das Passwort senden</string>
     <string name="boy">Mann</string>
     <string name="girl">Frau</string>
     <string name="start_communication">Kommunikation anfangen</string>
@@ -342,11 +337,13 @@
     <string name="password_changing">Passwort ändern</string>
     <string name="save">Speichern</string>
     <string name="password_hint">Passwort</string>
+    <string name="password_confirmation_hint">Passwort bestätigen</string>
     <string name="enter_new_password">Geben Sie ein neues Passwort ein</string>
     <string name="passwords_mismatched">Passwörter fallen nicht zusammen</string>
     <string name="passwords_changed">Passwort ist geändert</string>
     <string name="take_photo">Foto aufnehmen</string>
     <string name="take_another_photo">Anderes Foto</string>
+    <string name="we_detect_your_city">Wir haben Ihre Stadt festgestellt:</string>
     <string name="reselect_city">Andere Stadt wählen:</string>
     <string name="email_confirmed">E-Mail ist bestädigt!</string>
     <string name="sympathy_sended">Sympathie ist gesendet</string>
@@ -363,6 +360,7 @@
     <string name="you_dont_have_gifts_yet">Sie haben noch keine Geschenke</string>
     <string name="buy_sympathies">Sympathien kaufen</string>
     <string name="upload_photos">Laden Sie Fotos hoch</string>
+    <string name="chat_no_message_title">Fangen Sie die Kommunikation an!</string>
     <string name="user_baned">Nutzer wurde gebannt</string>
     <string name="general_choose_city">Wählen Sie eine Stadt</string>
     <string name="buy_mobile_payments">Andere Zahlungsweisen</string>
@@ -381,4 +379,7 @@
     <string name="general_bookmarks_delete">Aus Favoritenliste entfernen</string>
     <string name="general_bookmarks_add">Zu Favoriten hinzufügen</string>
     <string name="buy_resources">Ergänzen</string>
+    <string name="user_is_banned">Der Nutzer ist gebannt</string>
+    <string name="general_user_bookmarkadd">Der Nutzer ist zu Favoriten hinzugefügt</string>
+    <string name="general_input_email">Geben Sie Ihre E-Mail-Adresse ein</string>
 </resources>

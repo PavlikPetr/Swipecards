@@ -20,7 +20,6 @@
     <string name="general_data_error">Hata. Bir daha deneyin</string>
     <string name="general_internet_off">İnternete bağlı değil</string>
     <string name="general_purchasing_error">Lütfen, alış veriş hatası hakkında support@topface.ru adresine yazın</string>
-    <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Metin kopyalandı</string>
     <string name="general_spinner_title">Adımınızı seçin</string>
     <string name="general_profile_error">Profil yükleme hatası</string>
@@ -137,11 +136,6 @@
     <string name="invite_is_free">Davet göndermek bedava</string>
     <string name="invite_error">Davetiyeler gönderilemedi. Bir daha deneyin.</string>
     <string name="invite_completed">Davetiye gönderildi</string>
-    <plurals name="invite_bonus_text">
-        <item quantity="zero">Arkadaşlarını davet et ve kişi başı 20şer … kazan.</item>
-        <item quantity="other">Siz, %2$d arkadaşlarınıza davetiye göndermeyi düşünüyorsunuz ve bunun için %1$d kazanırsınız</item>
-        <item quantity="one">Siz, %2$d arkadaşınıza davetiye göndermeyi düşünüyorsunuz ve bunun için %1$d kazanırsınız</item>
-    </plurals>
     <string name="settings_header_title">Ayarlar</string>
     <string name="settings_wifi">Sadece Wi-Fi ile</string>
     <string name="settings_on">Açık</string>
@@ -266,12 +260,12 @@
     <string name="profile_mood">Moralinizi anlatın</string>
     <string name="general_reconnect">İnternetle bağlantıyı sağlamayı çalışıyoruz.\nLütfen bekleyin.</string>
     <string name="dating_people_unnoticed">On kişi dikkatinizden kaçırdınız!</string>
-    <string name="dating_continue">Not vermeye devam etmek</string>
+    <string name="dating_continue">Tanışmaya devam etmek</string>
     <string name="dating_better_look">Dikkatle bakın!\n Belki kaderinizi kaçırıyorsunuz!</string>
     <string name="edit_my_city">Şehrim</string>
     <string name="edit_my_photos">Fotoğraflarım</string>
     <string name="general_search_empty_title">Maalesef bir şey bulunamadı</string>
-    <string name="general_search_empty_text">Tekrar aramayı denebilirsiniz veya filtre ayarlarını değiştirebilirsiniz</string>
+    <string name="general_search_empty_text">Aramayı tekrar deneyebilirsiniz veya filtre ayarları değiştirebilirsiniz</string>
     <string name="profile_get_status">Moralinizi anlatın</string>
     <string name="map_title">Harita</string>
     <string name="settings_want_answer">Bana cevap vermesini istiyorum</string>
@@ -289,8 +283,8 @@
     <string name="general_buying">Sempati ve paraları satın almak</string>
     <string name="general_block">Engellemek</string>
     <string name="general_buying_disabled">Şu anda alışveriş mümkün değildir</string>
-    <string name="ban_flood_detected">Server\'i çok sık kullanıyorsunuz. Uygulamayı kullanmaya devam etmek için bekleyin.</string>
-    <string name="general_maintenance">Serverde teknik çalışmalar yapılmaktadır ve isteğiniz şu anda uygulanamaz. Daha sonra tekrar deneyebilirsiniz.</string>
+    <string name="ban_flood_detected">Sonucuya çok sık istek gönderiyorsunuz. Ugulamayı kullanmaya devam etmek için bekleyin.</string>
+    <string name="general_maintenance">Sunucuda teknik çalışmalar yapmaktadır. Daha sonra yeniden deneyin.</string>
     <string name="virus_chat_likes_request_title">Arkadaşlarınıza sempatileri hediye etmek</string>
     <string name="virus_chat_btn">Sempati kazanmak</string>
     <string name="virus_request_error">Sempatiler arkadaşlarınıza gönderilemedi</string>
@@ -305,8 +299,8 @@
     <string name="popup_version_message">Versiyonu yenilemek için tam zamanı!</string>
     <string name="popup_version_update">Yenilemek</string>
     <string name="popup_version_cancel">Daha sonra hatırlat</string>
-    <string name="general_version_not_supported">Uygulamanızın versiyonu eskilindi ve artık desteklenmiyor. Lütfen, uygulamayı yenileyiniz</string>
-    <string name="leaders_select_photo_info">En etkileyici foto seçiniz! Düşük reytingle fotoğrafları seçilenmez</string>
+    <string name="general_version_not_supported">Uygulamanızın versiyonu eskimiş ve artık desteklenmiyor. Lütfen, uygulamayı güncelleyin</string>
+    <string name="leaders_select_photo_info">En etkili fotoğraf seçin! Düşük reytingli fotoğraf seçilemez</string>
     <string name="default_price_format">Toplam: %.2f USD</string>
     <string name="dating_online_only">%s, sadece çevrimiçi</string>
     <string name="leaders_pick_condition">%d%% reytinginden daha aşağı foto seçemezsiniz:</string>
@@ -410,4 +404,10 @@
     <string name="general_network_reconnect">Şebeke ile bağlanmaya çalışıyoruz</string>
     <string name="user_is_banned">Kullanıcı engellenmiştir</string>
     <string name="profile_empty_name">İsim boş kalamaz</string>
+    <string name="general_user_bookmarkadd">Kullanıcı seçilmişlere eklendi</string>
+    <string name="general_wrong_photo_upload">Fotoğrafınız kurallara uymuyor. Diğerini çekmeyi deneyin</string>
+    <string name="general_input_email">E-mailinize girin</string>
+    <string name="cant_delete_fake_item">Bu mesaj ulaşmamış, onu silemezsiniz. Daha sonra tekrar deneyin.</string>
+    <string name="settings_invalid_name">İsim uygunsuz karakterlerle mevcuttur</string>
+    <string name="general_fan_access_error">Hayranlara erişmek için VIP duruma sahip olmalısınız.</string>
 </resources>

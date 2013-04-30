@@ -41,8 +41,8 @@ public class CitySearchActivity extends BaseFragmentActivity {
     private View mCbMyCity;
     private TextView mMyCityTitle;
     private EditText mCityInputView;
-    private TextView mCityInputTitle;
     private ListView cityListView;
+    private TextView mCityFail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +69,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
 
         // Progress
         mProgressBar = (ProgressBar) findViewById(R.id.prsCityLoading);
+        mCityFail = (TextView) findViewById(R.id.noCities);
 
         // ListView
         initListView();
@@ -80,13 +81,13 @@ public class CitySearchActivity extends BaseFragmentActivity {
     }
 
     private void initEditText() {
-        mCityInputTitle = (TextView) findViewById(R.id.tvCityInputTitle);
+        TextView cityInputTitle = (TextView) findViewById(R.id.tvCityInputTitle);
         if (mRequestKey == INTENT_CITY_SEARCH_AFTER_REGISTRATION) {
-            mCityInputTitle.setText(R.string.reselect_city);
+            cityInputTitle.setText(R.string.reselect_city);
         } else {
-            mCityInputTitle.setText(R.string.search_city_by_name);
+            cityInputTitle.setText(R.string.search_city_by_name);
         }
-        mCityInputTitle.setOnTouchListener(new View.OnTouchListener() {
+        cityInputTitle.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (mCityInputView != null) mCityInputView.clearFocus();
@@ -144,8 +145,8 @@ public class CitySearchActivity extends BaseFragmentActivity {
                     holder = new ViewHolder();
 
                     convertView = mInflater.inflate(R.layout.item_edit_form_check, null, false);
-                    holder.mTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-                    holder.mBackground = (ImageView) convertView.findViewById(R.id.ivEditBackground);
+                    holder.mTitle = (TextView) convertView.findViewWithTag("tvTitle");
+                    holder.mBackground = (ImageView) convertView.findViewWithTag("ivEditBackground");
 
                     convertView.setTag(holder);
                 } else {
@@ -228,8 +229,8 @@ public class CitySearchActivity extends BaseFragmentActivity {
             }
             ((ImageView) mCbMyCity.findViewById(R.id.ivEditBackground)).setImageDrawable(getResources().getDrawable(
                     R.drawable.edit_big_btn_selector));
-            ((TextView) mCbMyCity.findViewById(R.id.tvTitle)).setText(CacheProfile.city.name);
-            mCbMyCity.findViewById(R.id.ivCheck).setVisibility(View.VISIBLE);
+            ((TextView) mCbMyCity.findViewWithTag("tvTitle")).setText(CacheProfile.city.name);
+            mCbMyCity.findViewWithTag("ivCheck").setVisibility(View.VISIBLE);
         }
     }
 
@@ -283,13 +284,16 @@ public class CitySearchActivity extends BaseFragmentActivity {
                 LinkedList<City> citiesList = City.parse(response);
                 if (citiesList.size() == 0) {
                     cityListView.setVisibility(View.INVISIBLE);
-                    if(CitySearchActivity.this != null) {
-                        mMyCityTitle.setText(getString(R.string.filter_city_fail, prefix));
-                        mMyCityTitle.setVisibility(View.VISIBLE);
+                    if (mCityFail != null) {
+                        mCityFail.setVisibility(View.VISIBLE);
+                        mCityFail.setText(getString(R.string.filter_city_fail, prefix));
+//                        mMyCityTitle.setText(getString(R.string.filter_city_fail, prefix));
+//                        mMyCityTitle.setVisibility(View.VISIBLE);
                     }
                     return;
                 }
-                mMyCityTitle.setVisibility(View.GONE);
+//                mMyCityTitle.setVisibility(View.GONE);
+                mCityFail.setVisibility(View.GONE);
                 fillData(citiesList);
                 post(new Runnable() {
                     @Override

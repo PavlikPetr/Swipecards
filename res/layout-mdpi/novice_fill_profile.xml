@@ -1,54 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/loParent"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" 
-    android:orientation="vertical">
+                android:id="@+id/loParent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/ivBackground"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:scaleType="fitXY" />
+            android:id="@+id/ivBackground"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scaleType="fitXY"/>
 
-    <LinearLayout 
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical">
-        
-	    <ImageView
-	        android:id="@+id/ivMask"
-	        android:layout_width="212dp"
-	        android:layout_height="64dp"
-	        android:layout_alignParentTop="true"
-	        android:layout_alignParentLeft="true"        
-	        android:src="@drawable/tip_profile_mask" 
-	        android:layout_marginTop="-36dp"/>
-	
-	    <ImageView
-	        android:id="@+id/ivArrow"
-	        android:layout_width="165dp"
-	        android:layout_height="340dp"
-	        android:layout_below="@id/ivMask"
-	        android:src="@drawable/tip_profile_arrow"
-	        android:layout_marginLeft="40dp" 
-	        android:layout_marginTop="-10dp"/>
-	
-	    <com.topface.topface.ui.views.AutoResizeTextView
-	        android:id="@+id/ivBubble"
-	        android:layout_width="271dp"
-	        android:layout_height="132.5dp"	        
-	        android:layout_gravity="center_horizontal"        
-	        android:background="@drawable/tip_profile_bubble"
-	        android:gravity="center"
-	        android:lines="2"
-	        android:text="@string/novice_fill_profile"
-	        android:textColor="#000000"
-	        android:textSize="18sp" 
-	        android:layout_marginTop="-40dp"
-	        android:paddingLeft="15dp"
-	        android:paddingRight="15dp"
-	        android:paddingBottom="10dp"/>
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+        <ImageView
+                android:id="@+id/ivMask"
+                android:layout_width="212dp"
+                android:layout_height="64dp"
+                android:src="@drawable/tip_profile_mask"
+                android:layout_marginTop="-36dp"/>
+
+        <ImageView
+                android:id="@+id/ivArrow"
+                android:layout_width="165dp"
+                android:layout_height="340dp"
+                android:src="@drawable/tip_profile_arrow"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="-10dp"/>
+
+        <com.topface.topface.ui.views.AutoResizeTextView
+                android:id="@+id/ivBubble"
+                android:layout_width="271dp"
+                android:layout_height="132.5dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/tip_profile_bubble"
+                android:gravity="center"
+                android:lines="2"
+                android:text="@string/novice_fill_profile"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:layout_marginTop="-40dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="10dp"/>
     </LinearLayout>
 
 </RelativeLayout>

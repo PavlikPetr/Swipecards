@@ -3,7 +3,6 @@ package com.topface.topface.ui.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
 import com.topface.topface.ui.edit.EditContainerActivity;
-import com.topface.topface.ui.edit.EditMainFormItemsFragment;
 import com.topface.topface.utils.CacheProfile;
 
 /**
@@ -41,8 +39,6 @@ public class HeaderStatusFragment extends BaseFragment implements View.OnClickLi
         View root = inflater.inflate(R.layout.fragment_profile_header_status, null);
         mBtnEditStatus = (ImageButton) root.findViewById(R.id.btnEdit);
         mStatusView = (TextView) root.findViewById(R.id.tvStatus);
-        InputFilter[] filters = new InputFilter[1];
-        filters[0] = new InputFilter.LengthFilter(EditMainFormItemsFragment.MAX_STATUS_LENGTH);
 
         if (mProfileType == ProfileFragment.TYPE_MY_PROFILE) {
             mStatusView.setHint(R.string.status_is_empty);

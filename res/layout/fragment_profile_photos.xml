@@ -4,24 +4,16 @@
                 android:layout_height="fill_parent"
         >
 
-    <FrameLayout
-            android:id="@+id/navBar"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            >
-
-        <include
-                layout="@layout/bar_navigation_header"
-                android:id="@+id/loNavigationBar"
-                />
-    </FrameLayout>
+    <include
+            layout="@layout/bar_navigation_header"
+            android:id="@+id/loNavigationBar"
+            />
 
     <ViewFlipper
             android:id="@+id/vfFlipper"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_below="@id/navBar"
+            android:layout_below="@id/loNavigationBar"
             android:inAnimation="@android:anim/fade_in">
 
         <RelativeLayout
@@ -106,7 +98,7 @@
 
     <ImageView
             android:id="@+id/headerShadow"
-            android:layout_below="@id/navBar"
+            android:layout_below="@id/loNavigationBar"
             style="@style/HeaderShadow"
             android:visibility="gone"/>
 

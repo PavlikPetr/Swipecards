@@ -10,16 +10,15 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.text.method.TransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
-import com.topface.IllustratedTextView.IllustratedTextView;
 import com.topface.topface.*;
 import com.topface.topface.data.Auth;
 import com.topface.topface.data.Options;
@@ -29,7 +28,7 @@ import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
-import com.topface.topface.ui.views.RetryView;
+import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
@@ -46,7 +45,6 @@ public class AuthFragment extends BaseFragment {
     private TextView mWrongDataTextView;
     private TextView mCreateAccountButton;
     private ViewFlipper mAuthViewsFlipper;
-    private RetryView mRetryView;
     private Button mFBButton;
     private Button mVKButton;
     private Button mTFButton;
@@ -61,6 +59,7 @@ public class AuthFragment extends BaseFragment {
     private BroadcastReceiver connectionChangeListener;
     private TextView mBackButton;
     private Timer mTimer = new Timer();
+    private RetryViewCreator mRetryView;
 
     public static AuthFragment newInstance() {
         return new AuthFragment();
@@ -161,7 +160,7 @@ public class AuthFragment extends BaseFragment {
             public void onClick(View v) {
                 btnTFClick();
                 removeRedAlert();
-                hideSoftKeyboard();
+                Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
             }
         });
 
@@ -171,49 +170,29 @@ public class AuthFragment extends BaseFragment {
             public void onClick(View v) {
                 mAuthViewsFlipper.setDisplayedChild(0);
                 removeRedAlert();
-                hideSoftKeyboard();
+                Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
             }
         });
     }
 
-
-    private void hideSoftKeyboard() {
-        if (getActivity() != null) {
-            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (mLogin != null) {
-                imm.hideSoftInputFromWindow(mLogin.getWindowToken(), 0);
-            }
-
-            if (mPassword != null) {
-                imm.hideSoftInputFromWindow(mPassword.getWindowToken(), 0);
-            }
-        }
-    }
-
     private void initRetryView(View root) {
-        mRetryView = new RetryView(getActivity());
-        mRetryView.setErrorMsg(getString(R.string.general_data_error));
-        mRetryView.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new View.OnClickListener() {
+        mRetryView = RetryViewCreator.createDefaultRetryView(getActivity(), new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 // инициализация обработчика происходит в методе authorizationFailed()
             }
         });
         mRetryView.setVisibility(View.GONE);
 
-        RelativeLayout authContainer = (RelativeLayout) root.findViewById(R.id.authContainer);
+        RelativeLayout rootLayout = (RelativeLayout) root.findViewById(R.id.authContainer);
+        rootLayout.addView(mRetryView.getView());
 
-        authContainer.addView(mRetryView);
         connectionChangeListener = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 int mConnectionType = intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE, -1);
-
                 if (mConnectionType != ConnectionChangeReceiver.CONNECTION_OFFLINE) {
-                    IllustratedTextView btn = mRetryView.getBtn1();
-                    if (btn != null) {
-                        btn.performClick();
-                    }
+                    if (mRetryView != null) mRetryView.performClick();
                 }
             }
         };
@@ -415,41 +394,37 @@ public class AuthFragment extends BaseFragment {
     private void authorizationFailed(int codeError, final ApiRequest request) {
         hideButtons();
         boolean needShowRetry = true;
+        StringBuilder strBuilder = new StringBuilder();
+        strBuilder.append(RetryViewCreator.REFRESH_TEMPLATE).append(getString(R.string.general_dialog_retry));
         if (isAdded()) {
             switch (codeError) {
                 case IApiResponse.NETWORK_CONNECT_ERROR:
-                    mRetryView.setErrorMsg(getString(R.string.general_reconnect_social));
-                    mRetryView.setTextToButton1(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry));
-                    mRetryView.setListenerToBtn(new View.OnClickListener() {
+                    fillRetryView(getString(R.string.general_reconnect_social), new View.OnClickListener() {
                         @Override
-                        public void onClick(View view) {
+                        public void onClick(View v) {
                             mRetryView.setVisibility(View.GONE);
                             mProgressBar.setVisibility(View.VISIBLE);
                             resendRequest(request);
                         }
-                    });
+                    }, strBuilder.toString());
                     break;
                 case IApiResponse.MAINTENANCE:
-                    mRetryView.setErrorMsg(getString(R.string.general_maintenance));
-                    mRetryView.setTextToButton1(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry));
-                    mRetryView.setListenerToBtn(new View.OnClickListener() {
+                    fillRetryView(getString(R.string.general_maintenance), new View.OnClickListener() {
                         @Override
-                        public void onClick(View view) {
+                        public void onClick(View v) {
                             mRetryView.setVisibility(View.GONE);
                             mProgressBar.setVisibility(View.VISIBLE);
                             resendRequest(request);
                         }
-                    });
+                    }, strBuilder.toString());
                     break;
                 case IApiResponse.CODE_OLD_APPLICATION_VERSION:
-                    mRetryView.setErrorMsg(getString(R.string.general_version_not_supported));
-                    mRetryView.setTextToButton1(getString(R.string.popup_version_update));
-                    mRetryView.setListenerToBtn(new View.OnClickListener() {
+                    fillRetryView(getString(R.string.general_version_not_supported), new View.OnClickListener() {
                         @Override
-                        public void onClick(View view) {
+                        public void onClick(View v) {
                             Utils.goToMarket(getActivity());
                         }
-                    });
+                    }, getString(R.string.popup_version_update));
                     break;
                 case IApiResponse.INCORRECT_LOGIN:
                 case IApiResponse.UNKNOWN_SOCIAL_USER:
@@ -466,18 +441,16 @@ public class AuthFragment extends BaseFragment {
                     needShowRetry = false;
                     break;
                 default:
-
                     mAuthViewsFlipper.setVisibility(View.GONE);
-                    mRetryView.setErrorMsg(getString(R.string.general_data_error));
-                    mRetryView.setListenerToBtn(new View.OnClickListener() {
+                    fillRetryView(getString(R.string.general_data_error), new View.OnClickListener() {
                         @Override
-                        public void onClick(View view) {
+                        public void onClick(View v) {
                             mRetryView.setVisibility(View.GONE);
                             mAuthViewsFlipper.setVisibility(View.VISIBLE);
                             mProgressBar.setVisibility(View.VISIBLE);
                             resendRequest(request);
                         }
-                    });
+                    }, strBuilder.toString());
                     break;
             }
 
@@ -488,6 +461,12 @@ public class AuthFragment extends BaseFragment {
                 showButtons();
             }
         }
+    }
+
+    private void fillRetryView(String text, View.OnClickListener listener, String btnText) {
+        mRetryView.setText(text);
+        mRetryView.setButtonText(btnText);
+        mRetryView.setListener(listener);
     }
 
     private void resendRequest(ApiRequest request) {
@@ -594,6 +573,12 @@ public class AuthFragment extends BaseFragment {
             hideButtons();
             String login = mLogin.getText().toString();
             String password = mPassword.getText().toString();
+            if (TextUtils.isEmpty(login.trim()) || TextUtils.isEmpty(password.trim())) {
+                redAlert(R.string.empty_fields);
+                return;
+            } else if (!Utils.isValidEmail(login)) {
+                redAlert(R.string.incorrect_login);
+            }
             AuthRequest authRequest = generateTopfaceAuthRequest(login, password);
             authRequest.exec();
         }
@@ -617,8 +602,4 @@ public class AuthFragment extends BaseFragment {
     interface ProfileIdReceiver {
         void onProfileIdReceived(int id);
     }
-
-
 }
-
-

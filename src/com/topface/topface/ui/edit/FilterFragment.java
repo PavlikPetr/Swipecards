@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.util.SparseArrayCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,8 +22,6 @@ import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
-
-import java.util.HashMap;
 
 public class FilterFragment extends AbstractEditFragment implements OnClickListener {
 
@@ -44,7 +43,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     private ViewGroup mCharacterFrame;
     private ViewGroup mAlcoholFrame;
     private ViewGroup mShowOffFrame;
-    private HashMap<Integer, TextView> hashTextViewByTitleId = new HashMap<Integer, TextView>();
+    private SparseArrayCompat<TextView> hashTextViewByTitleId = new SparseArrayCompat<TextView>();
 
     private EditSwitcher mSwitchOnline;
     private EditSwitcher mSwitchBeautifull;
@@ -103,7 +102,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mLoGirls = (ViewGroup) root.findViewById(R.id.loGirl);
         setBackground(R.drawable.edit_big_btn_top_selector, mLoGirls);
         setText(R.string.general_girls, mLoGirls);
-        mCheckGirl = (ImageView) mLoGirls.findViewById(R.id.ivCheck);
+        mCheckGirl = (ImageView) mLoGirls.findViewWithTag("ivCheck");
         if (mFilter.sex == Static.GIRL) {
             mCheckGirl.setVisibility(View.VISIBLE);
         }
@@ -113,7 +112,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mLoBoys = (ViewGroup) root.findViewById(R.id.loBoy);
         setBackground(R.drawable.edit_big_btn_bottom_selector, mLoBoys);
         setText(R.string.general_boys, mLoBoys);
-        mCheckBoy = (ImageView) mLoBoys.findViewById(R.id.ivCheck);
+        mCheckBoy = (ImageView) mLoBoys.findViewWithTag("ivCheck");
         if (mFilter.sex == Static.BOY) {
             mCheckBoy.setVisibility(View.VISIBLE);
         }
@@ -149,7 +148,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
         // Extra Header
         ViewGroup frame = (ViewGroup) root.findViewById(R.id.loExtraHeader);
-        ((TextView) frame.findViewById(R.id.tvTitle)).setText(R.string.filter_extra_parameters);
+        ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.filter_extra_parameters);
 
         // Dating Status
         mXStatusFrame = (ViewGroup) root.findViewById(R.id.loDatingStatus);
@@ -219,24 +218,24 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     }
 
     private void setBackground(int resId, ViewGroup frame) {
-        ImageView background = (ImageView) frame.findViewById(R.id.ivEditBackground);
+        ImageView background = (ImageView) frame.findViewWithTag("ivEditBackground");
         background.setImageResource(resId);
     }
 
     private void setText(int titleId, String text, ViewGroup frame) {
-        ((TextView) frame.findViewById(R.id.tvTitle)).setText(mFormInfo.getFormTitle(titleId));
-        TextView textView = (TextView) frame.findViewById(R.id.tvText);
+        ((TextView) frame.findViewWithTag("tvTitle")).setText(mFormInfo.getFormTitle(titleId));
+        TextView textView = (TextView) frame.findViewWithTag("tvText");
         textView.setText(text);
         textView.setVisibility(View.VISIBLE);
         hashTextViewByTitleId.put(titleId, textView);
     }
 
     private void setText(String title, ViewGroup frame) {
-        ((TextView) frame.findViewById(R.id.tvTitle)).setText(title);
+        ((TextView) frame.findViewWithTag("tvTitle")).setText(title);
     }
 
     private void setText(int titleResId, ViewGroup frame) {
-        ((TextView) frame.findViewById(R.id.tvTitle)).setText(titleResId);
+        ((TextView) frame.findViewWithTag("tvTitle")).setText(titleResId);
     }
 
     private void startEditFilterFormItem(View v, int targetId) {
@@ -367,7 +366,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                         break;
                 }
 
-                hashTextViewByTitleId.get(titleId).setText(mFormInfo.getEntry(titleId, selectedId));
+                TextView item = hashTextViewByTitleId.get(titleId);
+                if (item != null) item.setText(mFormInfo.getEntry(titleId, selectedId));
             } else if (requestCode == CitySearchActivity.INTENT_CITY_SEARCH_FROM_FILTER_ACTIVITY) {
                 int city_id = extras.getInt(CitySearchActivity.INTENT_CITY_ID);
                 String city_name = extras.getString(CitySearchActivity.INTENT_CITY_NAME);
