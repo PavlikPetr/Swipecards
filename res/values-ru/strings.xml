@@ -598,5 +598,6 @@
     <string name="incorrect_photo">Некорректное фото. Попробуйте загрузить другое</string>
     <string name="incorrect_photo_format">Некорректный формат фото. Попробуйте загрузить jpg или png</string>
     <string name="incorrect_photo_size">Недопустимый размер фотографии</string>
+    <string name="input_contact_name">Введите имя контакта</string>
 
 </resources>

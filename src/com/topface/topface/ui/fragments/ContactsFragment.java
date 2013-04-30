@@ -86,7 +86,7 @@ public class ContactsFragment extends BaseFragment{
         addButton = (Button) root.findViewById(R.id.addButton);
         final EditText emailView = (EditText) root.findViewById(R.id.addInput);
         if (data.size() > CacheProfile.getOptions().contacts_count) {
-            emailView.setHint("Введите имя контакта");
+            emailView.setHint(getString(R.string.input_contact_name));
             addButton.setVisibility(View.GONE);
             emailView.addTextChangedListener(new TextWatcher() {
                 @Override
