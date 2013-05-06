@@ -100,6 +100,13 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
         // EditText
         root.findViewById(R.id.tvTitle).setVisibility(View.GONE);
+
+        TextView incorrectLocaleTv = (TextView) root.findViewById(R.id.tvLocale);
+        String language = Locale.getDefault().getLanguage();
+        if(language.equals("en") || language.equals("ru")) {
+            incorrectLocaleTv.setVisibility(View.GONE);
+        }
+
         mEditText = (EditText) root.findViewById(R.id.edText);
         mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         mEditText.addTextChangedListener(new TextWatcher() {

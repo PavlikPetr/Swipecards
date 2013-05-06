@@ -32,6 +32,14 @@
                     android:id="@+id/tvTitle"
                     style="@style/BackgroundFormTitleText"/>
 
+            <TextView android:id="@+id/tvLocale"
+                      android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:text="@string/incorrect_locale"
+                      android:padding="8dp"
+                      android:textSize="14sp"
+                      />
+
             <EditText
                     android:id="@+id/edText"
                     android:layout_width="fill_parent"
