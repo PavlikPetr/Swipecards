@@ -15,85 +15,98 @@
             android:layout_alignParentTop="true"
             />
 
-
-    <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:paddingTop="8dp"
-            android:layout_below="@id/loNavigationBar">
-
-        <TextView
-                android:id="@+id/tvTitle"
-                style="@style/BackgroundFormTitleText"/>
-
-        <EditText
-                android:id="@+id/edText"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:layout_marginLeft="8dp"
-                android:gravity="top|left"
-                android:inputType="textMultiLine"
-                android:padding="10dp"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
-                android:minLines="5"
-                android:singleLine="false"
-                android:textSize="14sp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"/>
-
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/loNavigationBar"
+        >
         <LinearLayout
-                android:id="@+id/emailContainer"
-                android:orientation="horizontal"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingTop="8dp"
                 >
 
-            <CheckBox
-                    android:id="@+id/loEmailSwitcher"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+            <TextView
+                    android:id="@+id/tvTitle"
+                    style="@style/BackgroundFormTitleText"/>
 
-                    />
+            <TextView android:id="@+id/tvLocale"
+                      android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:text="@string/incorrect_locale"
+                      android:padding="8dp"
+                      android:textSize="14sp"
+                      />
+
+            <EditText
+                    android:id="@+id/edText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:gravity="top|left"
+                    android:inputType="textMultiLine"
+                    android:padding="10dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:minLines="5"
+                    android:singleLine="false"
+                    android:textSize="14sp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"/>
+
+            <LinearLayout
+                    android:id="@+id/emailContainer"
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    >
+
+                <CheckBox
+                        android:id="@+id/loEmailSwitcher"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+
+                        />
+
+                <TextView
+                        android:id="@+id/wantAnswerTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:textSize="14sp"
+                        android:gravity="center_vertical"
+                        android:text="@string/settings_want_answer"/>
+            </LinearLayout>
+
 
             <TextView
-                    android:id="@+id/wantAnswerTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
+                    android:paddingTop="8dp"
+                    android:id="@+id/tvEmailTitle"
+                    style="@style/BackgroundFormTitleText"
+                    android:text="@string/settings_feedback_email"
+                    android:visibility="gone"/>
+
+            <EditText
+                    android:id="@+id/edEmail"
+                    android:layout_width="fill_parent"
+                    android:layout_height="34dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:gravity="top|left|center_horizontal"
+                    android:inputType="textEmailAddress"
+                    android:padding="10dp"
+                    android:singleLine="true"
                     android:textSize="14sp"
-                    android:gravity="center_vertical"
-                    android:text="@string/settings_want_answer"/>
+                    android:hint="@string/general_input_email"
+                    android:visibility="gone"/>
+
         </LinearLayout>
-
-
-        <TextView
-                android:paddingTop="8dp"
-                android:id="@+id/tvEmailTitle"
-                style="@style/BackgroundFormTitleText"
-                android:text="@string/settings_feedback_email"
-                android:visibility="gone"/>
-
-        <EditText
-                android:id="@+id/edEmail"
-                android:layout_width="fill_parent"
-                android:layout_height="34dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginLeft="8dp"
-                android:gravity="top|left|center_horizontal"
-                android:inputType="textEmailAddress"
-                android:padding="10dp"
-                android:singleLine="true"
-                android:textSize="14sp"
-                android:hint="@string/general_input_email"
-                android:visibility="gone"/>
-
-    </LinearLayout>
+    </ScrollView>
 
     <com.topface.topface.ui.views.LockerView
             android:id="@+id/fbLoadingLocker"

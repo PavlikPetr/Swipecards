@@ -2,10 +2,10 @@ package com.topface.topface.ui.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +16,6 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.InviteContactsRequest;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.ActionBar;
@@ -25,7 +24,6 @@ import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class ContactsFragment extends BaseFragment{
     public static final String CONTACTS = "contacts";
@@ -81,8 +79,28 @@ public class ContactsFragment extends BaseFragment{
             ((BaseFragmentActivity)getActivity()).close(this, false);
         }
 
-        final EditText emailView = (EditText) root.findViewById(R.id.addInput);
         addButton = (Button) root.findViewById(R.id.addButton);
+        final EditText emailView = (EditText) root.findViewById(R.id.addInput);
+        if (data.size() > CacheProfile.getOptions().contacts_count) {
+            emailView.setHint(getString(R.string.input_contact_name));
+            addButton.setVisibility(View.GONE);
+            emailView.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    ((ContactsListAdapter)contactsView.getAdapter()).getFilter().filter(s);
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+        }
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,7 +114,12 @@ public class ContactsFragment extends BaseFragment{
         });
 
         contactsVip = (Button) root.findViewById(R.id.contactsVip);
-        contactsVip.setText(Utils.getQuantityString(R.plurals.vip_status_period_btn, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period));
+        if (data.size() < CacheProfile.getOptions().contacts_count) {
+            contactsVip.setText(getString(R.string.general_rest_contacts, CacheProfile.getOptions().contacts_count - data.size()));
+            contactsVip.setEnabled(false);
+        } else {
+            contactsVip.setText(Utils.getQuantityString(R.plurals.vip_status_period_btn, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period));
+        }
         contactsVip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,7 +164,7 @@ public class ContactsFragment extends BaseFragment{
 
                 @Override
                 public void fail(int codeError, ApiResponse response) {
-                    EasyTracker.getTracker().trackEvent("InvitesPopup", "RequestFail", "", (long) codeError);
+                    EasyTracker.getTracker().trackEvent("InvitesPopup", "RequestFail", Integer.toString(codeError), 0L);
                     if(contactsVip != null) {
                         contactsVip.setEnabled(true);
                     }
@@ -158,22 +181,25 @@ public class ContactsFragment extends BaseFragment{
         }
     }
 
-    class ContactsListAdapter extends BaseAdapter {
+    class ContactsListAdapter extends BaseAdapter implements Filterable {
 
         private ArrayList<ContactsProvider.Contact> data;
         private Context context;
         private boolean wasChanges = false;
         private int checkedCount;
+        private ContactsFilter filter = new ContactsFilter();
+        private ArrayList<ContactsProvider.Contact> filteredContacts = new ArrayList<ContactsProvider.Contact>();
 
         public ContactsListAdapter(Context context, ArrayList<ContactsProvider.Contact> data) {
             this.data = data;
+            filteredContacts = data;
             this.context = context;
             checkedCount = data.size();
         }
 
         @Override
         public int getCount() {
-            return data.size();
+            return filteredContacts.size();
         }
 
         public void addFirst(ContactsProvider.Contact contact) {
@@ -198,7 +224,7 @@ public class ContactsFragment extends BaseFragment{
 
             TextView text = (TextView) convertView.findViewById(R.id.contactName);
 
-            final ContactsProvider.Contact contact = data.get(data.size() - position - 1);
+            final ContactsProvider.Contact contact = filteredContacts.get(filteredContacts.size() - position - 1);
 
             text.setText(contact.getName());
 
@@ -266,6 +292,46 @@ public class ContactsFragment extends BaseFragment{
             return checked;
         }
 
+        @Override
+        public Filter getFilter() {
+            return filter;
+        }
+
+        public class ContactsFilter extends Filter{
+
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                FilterResults Result = new FilterResults();
+                // if constraint is empty return the original names
+                if(constraint.length() == 0 ){
+                    Result.values = data;
+                    Result.count = data.size();
+                    return Result;
+                }
+
+                ArrayList<ContactsProvider.Contact> Filtered_Names = new ArrayList<ContactsProvider.Contact>();
+                String filterString = constraint.toString().toLowerCase();
+                String filterableString;
+
+                for(int i = 0; i<data.size(); i++){
+                    filterableString = data.get(i).getName();
+                    if(filterableString.toLowerCase().contains(filterString)){
+                        Filtered_Names.add(data.get(i));
+                    }
+                }
+                Result.values = Filtered_Names;
+                Result.count = Filtered_Names.size();
+
+                return Result;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint,FilterResults results) {
+                filteredContacts = (ArrayList<ContactsProvider.Contact>) results.values;
+                notifyDataSetChanged();
+            }
+
+        }
     }
 
 

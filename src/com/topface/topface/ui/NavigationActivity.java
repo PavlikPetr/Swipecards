@@ -55,7 +55,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     public void onCreate(Bundle savedInstanceState) {
         mNeedAnimate = false;
         super.onCreate(savedInstanceState);
-
         if (isNeedBroughtToFront(getIntent())) {
             // При открытии активити из лаунчера перезапускаем ее
             finish();
@@ -418,4 +417,11 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             getIntent().setData(null);
         }
     };
+
+    public static void selectFragment(int fragmentId) {
+        Intent intent = new Intent();
+        intent.setAction(MenuFragment.SELECT_MENU_ITEM);
+        intent.putExtra(MenuFragment.SELECTED_FRAGMENT_ID, fragmentId);
+        LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
+    }
 }
