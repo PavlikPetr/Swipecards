@@ -418,7 +418,6 @@
     <string name="general_invite_friends">Invita a tus amigos</string>
     <string name="general_rest_contacts">Te quedan %d contactos</string>
     <string name="invite_friends_title">Invitar a todos los amigos a Topface</string>
-    <string name="invalid_contacts">Algunos de los contactos fueron incorrectos. Por favor, envía contactos correctos</string>
     <plurals name="vip_status_period">
         <item quantity="other">Has recibido el estado VIP para %d días</item>
         <item quantity="one">Has recibido el estado VIP para %d día</item>
@@ -435,4 +434,5 @@
         <item quantity="other">Recibe VIP gratis por %d invitaciones</item>
         <item quantity="one">Recibe VIP gratis por %d invitación</item>
     </plurals>
+    <string name="filter_hint">Introduce nombre</string>
 </resources>

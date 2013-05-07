@@ -407,6 +407,28 @@
     <string name="general_wrong_photo_upload">A sua foto não corresponde às regras. Experimente fazer a outra</string>
     <string name="general_input_email">Introduz</string>
     <string name="cant_delete_fake_item">Esta mensagem ainda não foi entregue, você não a pode eliminar. Experimente mais tarde.</string>
+    <string name="vip_stop_ads">Apenas comunicação, nada mais. VIP-usuários não tem publicidade</string>
     <string name="settings_invalid_name">O nome contem simbolos  incorretos</string>
     <string name="general_fan_access_error">Para ter acesso aos fãs, é preciso obter status VIP</string>
+    <string name="friend_email_hint">Introduza e-mail ou telefone do amigo</string>
+    <string name="general_add">Adicionar</string>
+    <string name="general_invite_friends">Convide amigos</string>
+    <string name="general_rest_contacts">Você sobrou com apenas %d de contactos</string>
+    <plurals name="vip_status_period">
+        <item quantity="other">Você recebeu status-VIP em %d de um dia</item>
+        <item quantity="one">Você recebeu status-VIP em %d de um dia</item>
+    </plurals>
+    <plurals name="vip_status_period_btn">
+        <item quantity="other">Receber VIP em %d de um dia</item>
+        <item quantity="one">Receber VIP em %d de um dia</item>
+    </plurals>
+    <plurals name="invite_friends_plurals">
+        <item quantity="other">Convide %1$d de amigos para ganhar status-VIP em %2$d dias</item>
+        <item quantity="one">Convide %1$d de amigos para ganhar status-VIP em %2$d dias</item>
+    </plurals>
+    <plurals name="get_vip_for_invites_plurals">
+        <item quantity="other">Receba VIP grátis por %d de convite</item>
+        <item quantity="one">Receba VIP grátis por %d de convite</item>
+    </plurals>
+    <string name="filter_hint">Introduza o nome</string>
 </resources>

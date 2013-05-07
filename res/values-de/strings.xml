@@ -382,4 +382,7 @@
     <string name="user_is_banned">Der Nutzer ist gebannt</string>
     <string name="general_user_bookmarkadd">Der Nutzer ist zu Favoriten hinzugefügt</string>
     <string name="general_input_email">Geben Sie Ihre E-Mail-Adresse ein</string>
+    <string name="friend_email_hint">Geben Sie E-Mail oder Handynummer eines Freundes ein</string>
+    <string name="general_add">Hinzufügen</string>
+    <string name="filter_hint">Geben Sie Ihre Name ein</string>
 </resources>

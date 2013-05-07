@@ -262,6 +262,7 @@
     <string name="profile_mood">Опишіть Ваш настрій</string>
     <string name="general_reconnect">Намагаємося восстаносіть з\'єднання з Інтернет. Будь ласка почекайте.</string>
     <string name="dating_people_unnoticed">Десять людей залишилися без вашої уваги!</string>
+    <string name="dating_continue">Продовжити знайомство</string>
     <string name="dating_better_look">Придивіться!\nМожливо ви втрачаєте свою долю!</string>
     <string name="edit_my_city">Моє місто</string>
     <string name="edit_my_photos">Мої фотографії</string>
@@ -304,6 +305,7 @@
     <string name="leaders_select_photo_info">Вибрати найефектніше фото! Фотографії з низьким рейтингом вибрати не можна</string>
     <string name="default_price_format">Разом: %.2f USD</string>
     <string name="dating_online_only">%s, тільки онлайн</string>
+    <string name="leaders_pick_condition">Ви не можете вибрати фото з рейтингом нижче %d%%:</string>
     <string name="map_popup_address">Адреса</string>
     <string name="black_list_info">Ви додали співрозмовника в чорний список. Змінити це можна у своєму профілі, у налаштуваннях VIP-статусу.</string>
     <string name="general_gift">Подарунок</string>
@@ -323,6 +325,7 @@
     <string name="boy">хлопець</string>
     <string name="girl">дівчина</string>
     <string name="start_communication">Почати спілкування</string>
+    <string name="birthdate">ДР</string>
     <string name="welcome_to_topface">Ласкаво просимо до Topface!</string>
     <string name="incorrect_email">Неправильно введений e-mail</string>
     <string name="incorrect_login">Неправильно введений логін</string>
@@ -380,4 +383,61 @@
     <string name="upload_photos">Завантажте фотографії</string>
     <string name="chat_no_message_title">Почніть спілкування!</string>
     <string name="chat_no_message_text">Напишіть повідомлення або відправте подарунок і вам обов\'язково відповідять</string>
+    <string name="user_baned">Користувач забанений</string>
+    <string name="general_choose_city">Оберіть місто</string>
+    <string name="buy_mobile_payments">Інші способи оплати</string>
+    <string name="buy_mobile_payments_complete">Оплата зроблена. Ваше замовлення обробляється, будь ласка зачекайте</string>
+    <string name="general_save_and_exit">Зберегти і вийти</string>
+    <string name="general_set_password">Встановіть пароль перед виходом з програми</string>
+    <string name="user_is_deleted">Користувач видалений</string>
+    <string name="general_bookmarks_title">Обрані</string>
+    <string name="general_empty_bookmarks">Немає обраних</string>
+    <string name="general_bookmarks">Обрані</string>
+    <string name="general_fans">Шанувальники</string>
+    <string name="general_no_fans">Немає шанувальників</string>
+    <plurals name="get_free_money">
+        <item quantity="few">%d монети безкоштовно</item>
+        <item quantity="other">%d монет безкоштовно</item>
+        <item quantity="one">%d монета безкоштовно</item>
+    </plurals>
+    <string name="settings_edit_profile">Редагувати профіль</string>
+    <string name="general_bookmarks_delete">Видалити з обраних</string>
+    <string name="general_bookmarks_add">Додати в обрані</string>
+    <string name="buy_resources">Поповнити запас</string>
+    <string name="general_network_reconnect">Намагаємося відновити з\'єднання з мережею</string>
+    <string name="user_is_banned">Користувач забанений</string>
+    <string name="profile_empty_name">Ім\'я не може бути порожнім</string>
+    <string name="general_user_bookmarkadd">Користувач доданий в обрані</string>
+    <string name="general_wrong_photo_upload">Ваша фотографія не відповідає правилам. Спробуйте зробити іншу</string>
+    <string name="general_input_email">Введіть ваш e-mail</string>
+    <string name="cant_delete_fake_item">Це повідомлення ще доставлено, ви не можете видалити його. Спробуйте
+        пізніше.</string>
+    <string name="vip_stop_ads">Тільки спілкування, нічого зайвого. У VIP-користувачів немає реклами</string>
+    <string name="settings_invalid_name">Ім\'я містить некоректні символи</string>
+    <string name="general_fan_access_error">Для доступу до шанувальників необхідно мати VIP статус</string>
+    <string name="friend_email_hint">Введіть e-mail або телефон друга</string>
+    <string name="general_add">Додати</string>
+    <string name="general_invite_friends">Запросіть друзів</string>
+    <string name="general_rest_contacts">Вам залишилося %d контактів</string>
+    <plurals name="vip_status_period">
+        <item quantity="few">Ви отримали VIP статус на %d дня</item>
+        <item quantity="other">Ви отримали VIP статус на %d днів</item>
+        <item quantity="one">Ви отримали VIP статус на %d день</item>
+    </plurals>
+    <plurals name="vip_status_period_btn">
+        <item quantity="few">Отримати VIP на %d дня</item>
+        <item quantity="other">Отримати VIP на %d днів</item>
+        <item quantity="one">Отримати VIP на %d день</item>
+    </plurals>
+    <plurals name="invite_friends_plurals">
+        <item quantity="few">Запросіть %1$d друзів, щоб отримати VIP-статус на %2$d дня</item>
+        <item quantity="other">Запросіть %1$d друзів, щоб отримати VIP-статус на %2$d днів</item>
+        <item quantity="one">Запросіть %1$d друзів, щоб отримати VIP-статус на %2$d день</item>
+    </plurals>
+    <plurals name="get_vip_for_invites_plurals">
+        <item quantity="few">Отримай VIP безкоштовно за %d запрошення</item>
+        <item quantity="other">Отримай VIP безкоштовно за %d запрошень</item>
+        <item quantity="one">Отримай VIP безкоштовно за %d запрошення</item>
+    </plurals>
+    <string name="filter_hint">Введіть ім\'я</string>
 </resources>

@@ -262,6 +262,7 @@
     <string name="profile_mood">Aprašykite savo nuotaiką</string>
     <string name="general_reconnect">Bandome atstatyti interneto ryšį.\nPrašome palaukti.</string>
     <string name="dating_people_unnoticed">Be jūsų dėmesio liko dešimt žmonių!</string>
+    <string name="dating_continue">Pratęsti pažintį</string>
     <string name="dating_better_look">Įsižiūrėkite!\nGalbūt jūs praleidžiate savo likimą!</string>
     <string name="edit_my_city">Mano miestas</string>
     <string name="edit_my_photos">Mano fotografijos</string>
@@ -406,4 +407,36 @@
     <string name="general_network_reconnect">Bandome atstatyti ryšį tinkle</string>
     <string name="user_is_banned">Vartotojas užbanintas</string>
     <string name="profile_empty_name">Vardo laukelis negali būti tuščias</string>
+    <string name="general_user_bookmarkadd">Vartotojas įtrauktas į išrinktuosius</string>
+    <string name="general_wrong_photo_upload">Jūsų fotografija neatitinka reikalavimų. Pamėginkite kitą</string>
+    <string name="general_input_email">Įveskite savo el.pašto adresą</string>
+    <string name="cant_delete_fake_item">Šis pranešimas dar neatsiųstas, jūs negalite jo ištrinti. Pamėginkite vėliau.</string>
+    <string name="vip_stop_ads">Tik bendravimas, jokių trukdžių. VIP-vartotojams nėra reklamos</string>
+    <string name="settings_invalid_name">Pavadinime yra netinkamų simbolių</string>
+    <string name="general_fan_access_error">Kad pasiekti gerbėjus, būtina turėti VIP statusą</string>
+    <string name="friend_email_hint">Įveskite draugo el. pašto adresą</string>
+    <string name="general_add">Pridėti</string>
+    <string name="general_invite_friends">Pasikvieskite draugų</string>
+    <string name="general_rest_contacts">Jums liko %d kontaktų</string>
+    <plurals name="vip_status_period">
+        <item quantity="few">Jūs gavote VIP-statusą %d dienoms</item>
+        <item quantity="other">Jūs gavote VIP-statusą %d dienų</item>
+        <item quantity="one">Jūs gavote VIP-statusą %d dienai</item>
+    </plurals>
+    <plurals name="vip_status_period_btn">
+        <item quantity="few">Gauti VIP %d dienoms</item>
+        <item quantity="other">Gauti VIP %d dienų</item>
+        <item quantity="one">Gauti VIP %d dienai</item>
+    </plurals>
+    <plurals name="invite_friends_plurals">
+        <item quantity="few">Pakvieskite %1$d draugų, kad gautumėte VIP-statusą %2$d dienoms</item>
+        <item quantity="other">Pakvieskite %1$d draugų, kad gautumėte VIP-statusą %2$d dienų</item>
+        <item quantity="one">Pakvieskite %1$d draugų, kad gautumėte VIP-statusą %2$d dienai</item>
+    </plurals>
+    <plurals name="get_vip_for_invites_plurals">
+        <item quantity="few">Gauk VIP nemokamai už %d pakvietimus</item>
+        <item quantity="other">Gauk VIP nemokamai už %d pakvietimų</item>
+        <item quantity="one">Gauk VIP nemokamai už %d pakvietimą</item>
+    </plurals>
+    <string name="filter_hint">Įveskite vardą</string>
 </resources>
