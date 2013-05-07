@@ -414,7 +414,7 @@
     <string name="general_add">Aggiungi</string>
     <string name="general_invite_friends">Invita gli amici</string>
     <string name="general_rest_contacts">Ti sono rimasti %d contatti</string>
-    <string name="inviteFriendsTitle">Invita tutti gli amici su Topface</string>
+    <string name="invite_friends_title">Invita tutti gli amici su Topface</string>
     <string name="invalid_contacts">Alcuni dei contatti riportano errori. Per favore, inserisci i contatti corretti</string>
     <plurals name="vip_status_period">
         <item quantity="other">Hai ricevuto lo stato VIP per %d giorni</item>

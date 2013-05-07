@@ -408,7 +408,7 @@
     <string name="general_add">추가하기</string>
     <string name="general_invite_friends">친구들을 초대해 주세요.</string>
     <string name="general_rest_contacts">%d 연락처만 남았습니다.</string>
-    <string name="inviteFriendsTitle">Topface에 모든 친구들을 초대해 보세요.</string>
+    <string name="invite_friends_title">Topface에 모든 친구들을 초대해 보세요.</string>
     <string name="invalid_contacts">몇몇의 연락처가 옳지 않은 형식입니다. 옳바른 연락처를 입력하십시오.</string>
     <plurals name="vip_status_period">
         <item quantity="other">%d일간 이용할 수 있는 VIP 상태를 받으셨습니다.</item>

@@ -51,7 +51,7 @@
                                 android:layout_height="wrap_content"
                                 android:textColor="#FFFFFF"
                                 android:textSize="14sp"
-                                android:text="@string/inviteFriendsTitle"
+                                android:text="@string/invite_friends_title"
                                 android:layout_toRightOf="@id/sendAllContacts"/>
                     </RelativeLayout>
                 <Button
