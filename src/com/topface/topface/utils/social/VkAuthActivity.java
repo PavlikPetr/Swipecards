@@ -11,9 +11,9 @@ import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
-import com.topface.topface.Static;
 import com.topface.topface.utils.Debug;
 import org.apache.http.client.utils.URLEncodedUtils;
 
@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class WebAuthActivity extends Activity {
+public class VkAuthActivity extends Activity {
 
     public final static String ACCESS_TOKEN = "access_token";
     public final static String USER_ID = "user_id";
@@ -84,7 +84,7 @@ public class WebAuthActivity extends Activity {
                 HashMap<String, String> queryMap = (HashMap<String, String>) msg.obj;
                 if (queryMap == null) {
                     setResult(Activity.RESULT_CANCELED);
-                    WebAuthActivity.this.finish();
+                    VkAuthActivity.this.finish();
                     return;
                 }
 
@@ -93,7 +93,7 @@ public class WebAuthActivity extends Activity {
                 String expires_in = queryMap.get(EXPIRES_IN);
                 String user_name = queryMap.get(USER_NAME);
 
-                Intent intent = WebAuthActivity.this.getIntent();
+                Intent intent = VkAuthActivity.this.getIntent();
                 intent.putExtra(ACCESS_TOKEN, token_key);
                 intent.putExtra(USER_ID, user_id);
                 intent.putExtra(EXPIRES_IN, expires_in);
@@ -101,7 +101,7 @@ public class WebAuthActivity extends Activity {
                 setResult(Activity.RESULT_OK, intent);
                 finish();
             } else {
-                Debug.log(WebAuthActivity.this, "web auth token is wrong");
+                Debug.log(VkAuthActivity.this, "web auth token is wrong");
                 Ssid.remove();
                 setResult(Activity.RESULT_CANCELED);
                 finish();
@@ -119,7 +119,7 @@ public class WebAuthActivity extends Activity {
     public class VkAuthClient extends WebViewClient {
         // Data
         private Handler mHandler;
-        private String mUrl = VK_OAUTH_URL + "?client_id=" + Static.AUTH_VK_ID + "&scope=" + VK_PERMISSIONS + "&redirect_uri=" + VK_OUATH_REDIRECT + "&display=touch&response_type=token";
+        private String mUrl = VK_OAUTH_URL + "?client_id=" + App.getConfig().getAuthVkApi() + "&scope=" + VK_PERMISSIONS + "&redirect_uri=" + VK_OUATH_REDIRECT + "&display=touch&response_type=token";
 
 
         public VkAuthClient(WebView webView, Handler handler) {
@@ -148,7 +148,7 @@ public class WebAuthActivity extends Activity {
                 try {
                     URLEncodedUtils.parse(new URI(url), "utf-8");
                 } catch (URISyntaxException e) {
-                    Debug.log(WebAuthActivity.this, "url is wrong:" + e);
+                    Debug.log(VkAuthActivity.this, "url is wrong:" + e);
                 }
 
                 final HashMap<String, String> queryMap = parseQueryString(matcherToken.group(1));

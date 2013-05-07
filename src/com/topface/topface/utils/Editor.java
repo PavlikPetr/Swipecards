@@ -1,36 +1,51 @@
 package com.topface.topface.utils;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import com.topface.topface.App;
-import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
 
 public class Editor {
 
-    private static final String EDITOR_PREFERENCES = "editor_preferences";
-    private static boolean sEditor;
+    //Тип режима редактора
+    //Режим редактора включен, в зависимости от того, является ли пользователь редактором на проде
+    public static final int MODE_USER_FIELD = 0;
+    //Режим редактора включен всегда, вне зависимостей типа пользователя
+    public static final int MODE_EDITOR = 1;
+    //Режим редактора выключен всегда
+    public static final int MODE_NOT_EDITOR = 2;
+
+    /**
+     * Текущий режим для редакторов
+     */
+    private static boolean mUserFieldEditor;
+    private static int mEditorMode = MODE_USER_FIELD;
+
+    /**
+     * Устанавливает текущий режим редактора, получая данные из конфига приложения
+     *
+     * @param config настройки приложения
+     */
+    public static void setConfig(AppConfig config) {
+        if (config != null) {
+            mEditorMode = config.getEditorMode();
+            //Нужно обновить данные для дебага
+            Debug.setDebugMode(config.getDebugMode());
+        }
+    }
 
     public static void init(Profile profile) {
-        sEditor = profile.isEditor();
-        if (sEditor) {
-            Debug.setDebugStatus(sEditor);
-            initSettings();
-        }
-   }
-
-    private static void initSettings() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                SharedPreferences preferences = App.getContext()
-                        .getSharedPreferences(EDITOR_PREFERENCES, Context.MODE_PRIVATE);
-                preferences.getString("api_url", Static.API_URL);
-            }
-        }).start();
+        mUserFieldEditor = profile.isEditor();
+        Debug.setDebugMode(App.getConfig().getDebugMode());
     }
 
     public static boolean isEditor() {
-        return sEditor;
+        switch (mEditorMode) {
+            case MODE_EDITOR:
+                return true;
+            case MODE_USER_FIELD:
+                return mUserFieldEditor;
+            case MODE_NOT_EDITOR:
+            default:
+                return false;
+        }
     }
 }
