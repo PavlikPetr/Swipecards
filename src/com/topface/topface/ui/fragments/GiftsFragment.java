@@ -277,21 +277,22 @@ public class GiftsFragment extends BaseFragment {
 
     public void setGifts(ArrayList<Gift> gifts) {
         if (mProfile == null) mTag = GIFTS_ALL_TAG;
-        mGridAdapter.getData().clear();
+        FeedList<FeedGift> data = mGridAdapter.getData();
+        data.clear();
 
         for (Gift gift : gifts) {
             FeedGift item = new FeedGift();
             item.gift = gift;
-            mGridAdapter.getData().add(item);
+            data.add(item);
         }
 
         if (mTag != null) {
             if (mTag.equals(GIFTS_USER_PROFILE_TAG)) {
-                mGridAdapter.getData().add(0, FeedGift.getSendedGiftItem());
-                if (mGridAdapter.getData().size() >= GIFTS_LOAD_COUNT)
-                    mGridAdapter.getData().add(new FeedGift(ItemType.LOADER));
+                data.add(0, FeedGift.getSendedGiftItem());
+                if (data.size() >= GIFTS_LOAD_COUNT)
+                    data.add(new FeedGift(ItemType.LOADER));
             } else {
-                if (mGridAdapter.getData().isEmpty()) {
+                if (data.isEmpty()) {
                     mGroupInfo.setVisibility(View.VISIBLE);
                     mTextInfo.setText(R.string.you_dont_have_gifts_yet);
                     mBtnInfo.setOnClickListener(new View.OnClickListener() {
@@ -346,10 +347,8 @@ public class GiftsFragment extends BaseFragment {
         return new FeedAdapter.Updater() {
             @Override
             public void onUpdate() {
-                if (!mIsUpdating) {
-                    if (!mTag.equals(GIFTS_ALL_TAG) && !mIsUpdating && mGridAdapter.getData().getLast().isLoader()) {
-                        onNewFeeds();
-                    }
+                if (!mIsUpdating && !mTag.equals(GIFTS_ALL_TAG) && mGridAdapter.getData().getLast().isLoader()) {
+                    onNewFeeds();
                 }
             }
         };
