@@ -65,11 +65,6 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
 
 
     @Override
-    protected int getEmptyFeedText() {
-        return R.string.mutual_background_text;
-    }
-
-    @Override
     protected void decrementCounters() {
         CountersManager.getInstance(getActivity().getApplicationContext()).decrementCounter(CountersManager.SYMPATHY);
     }

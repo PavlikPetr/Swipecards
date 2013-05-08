@@ -62,11 +62,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
-    protected int getEmptyFeedText() {
-        return R.string.chat_background_text;
-    }
-
-    @Override
     protected void makeAllItemsRead() {
 
     }

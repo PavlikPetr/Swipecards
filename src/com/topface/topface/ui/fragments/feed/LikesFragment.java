@@ -168,11 +168,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
-    protected int getEmptyFeedText() {
-        return R.string.likes_background_text;
-    }
-
-    @Override
     protected void decrementCounters() {
         CountersManager.getInstance(App.getContext()).decrementCounter(CountersManager.LIKES);
     }

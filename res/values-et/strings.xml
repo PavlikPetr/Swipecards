@@ -373,6 +373,8 @@ Sa oled müksanud.</string>
     <string name="friend_email_hint">Sisesta sõbra e-posti aadress või telefoninumber</string>
     <string name="general_add">Lisada</string>
     <string name="general_invite_friends">Kutsu/kutsuge sõpru</string>
+    <string name="invite_friends_title">Kutsuda kõik sõbrad telefoniraamatust Topface\'i</string>
+    <string name="general_choose_action">Vali tegevus välja</string>
     <plurals name="vip_status_period">
         <item quantity="other">Sa oled/te olete VIP staatuse %d päevaks saanud</item>
         <item quantity="one">Teie olete VIP staatuse %d päevaks saanud</item>
@@ -386,4 +388,8 @@ Sa oled müksanud.</string>
         <item quantity="one">Saa VIP tasuta %d kutse eest</item>
     </plurals>
     <string name="filter_hint">Sisesta/sisestage nimi</string>
+    <string name="buy_status_and_watch_your_fans">Osta VIP-staatus ja saa teada, kes on sind \"Välja valitute\" hulka lisanud</string>
+    <string name="start_rate">Alustada hindamist</string>
+    <string name="incorrect_photo_size">Foto lubamatu suurus</string>
+    <string name="input_contact_name">Sisesta kontakti nimi</string>
 </resources>

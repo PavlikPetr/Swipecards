@@ -25,11 +25,6 @@ public class FansFragment extends BookmarksFragment{
     }
 
     @Override
-    protected int getEmptyFeedText() {
-        return R.string.general_no_fans;
-    }
-
-    @Override
     protected void initEmptyFeedView(View inflated) {
         inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
             @Override

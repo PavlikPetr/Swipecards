@@ -83,8 +83,4 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
         return R.layout.layout_empty_bookmarks;
     }
 
-    @Override
-    protected int getEmptyFeedText() {
-        return R.string.general_empty_bookmarks;
-    }
 }
