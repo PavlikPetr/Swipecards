@@ -101,6 +101,8 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         // EditText
         root.findViewById(R.id.tvTitle).setVisibility(View.GONE);
 
+        //Если  текущий язык приложения не русский или английский, то нужно показывать сообщение
+        //о том, что лучше писать нам по русски или английски, поэтому проверяем тут локаль
         TextView incorrectLocaleTv = (TextView) root.findViewById(R.id.tvLocale);
         String language = Locale.getDefault().getLanguage();
         if(language.equals("en") || language.equals("ru")) {

@@ -200,6 +200,7 @@ Sa oled müksanud.</string>
     <string name="buying_store_connect">Ühendan iTunes Store\'iga</string>
     <string name="buying_store_purchase">Sooritan ostu iTunes Store\'is</string>
     <string name="buying_tf_ack_sending">Saadan info Topface\'ist ostu kohta</string>
+    <string name="settings_melody">Teatamisviis/Teatamise meloodia</string>
     <string name="edit_refresh_status">Uuendada staatus</string>
     <string name="ban_title">Õnnitleme/Palju õnne! Sind keelati ära!</string>
     <string name="general_ready">Valmis/ On valmis</string>
@@ -246,6 +247,7 @@ Sa oled müksanud.</string>
     <string name="profile_mygifts_empty">Sulle pole veel keegi kingitusi kinkinud.</string>
     <string name="profile_mood">Kirjelda oma tuju</string>
     <string name="dating_people_unnoticed">Kümme inimest on ilma sinu tähelepanuta jäänud!</string>
+    <string name="dating_continue">Tutvumisega jätkata</string>
     <string name="dating_better_look">Vaata tähelepanelikumalt! Võib-olla jääd sa oma saatusest ilma!</string>
     <string name="edit_my_city">Minu linn</string>
     <string name="edit_my_photos">Minu fotod</string>
@@ -253,6 +255,7 @@ Sa oled müksanud.</string>
     <string name="profile_get_status">Kirjelda oma tuju</string>
     <string name="map_title">Kaart</string>
     <string name="settings_want_answer">Ma tahaks/sooviks, et mulle vastaksid</string>
+    <string name="settings_feedback_email">Kontakt e-posti aadress</string>
     <string name="settings_invalid_email">Vale e-posti aadress</string>
     <string name="leaders_select_cool_picture">Vali efektse foto</string>
     <string name="chat_write_message">Sõnumi kirjutada</string>
@@ -332,24 +335,61 @@ Sa oled müksanud.</string>
     <string name="buying_economy">Sääst</string>
     <string name="general_change">Ära muuta</string>
     <string name="general_correct">Kõik on õige</string>
+    <string name="confirm_email">Palun, kinnita/kinnitage e-posti aadress</string>
     <string name="password_sent">Uus salasõna on saadetud sinu e-posti aadressile</string>
     <string name="buy_vip_month_one">%1$d kuud %2$.2f %3$@ eest</string>
     <string name="buy_vip_month_few">%1$d kuud %2$.2f %3$@ eest</string>
     <string name="buy_vip_month_other">%1$d kuud %2$.2f %3$@ eest</string>
     <string name="buy_special_offers">Eripakkumised</string>
+    <string name="status_is_empty">Sinu/teie staatus ei ole kindlaks määratud</string>
     <string name="you_dont_have_gifts_yet">Sa pole siiamani kingitusi saanud</string>
     <string name="buy_sympathies">Osta meeldimised</string>
+    <string name="upload_photos">Laadi/laadige foto(si)d üles/ülesse</string>
     <string name="chat_no_message_title">Alusta suhtlemist!</string>
     <string name="user_baned">Kasutaja on ära keelatud</string>
     <string name="general_choose_city">Vali linn</string>
     <string name="buy_mobile_payments">Muud tasumise viisid</string>
+    <string name="buy_mobile_payments_complete">Makse on teostatud. Sinu/teie tellimus töödeldatakse, palun oodake</string>
     <string name="general_save_and_exit">Salvestada ja väljuda</string>
     <string name="user_is_deleted">Kasutaja on eemaldatud</string>
     <string name="general_bookmarks_title">Väljavalitud</string>
+    <string name="general_empty_bookmarks">Väljavalitud puuduvad/Väljavalituid ei ole/pole</string>
     <string name="general_bookmarks">Väljavalitud</string>
     <string name="general_fans">Kummardajad</string>
     <string name="general_no_fans">Ei ole kummardajaid</string>
+    <plurals name="get_free_money">
+        <item quantity="other">%d münti tasuta</item>
+        <item quantity="one">%d münt/münti tasuta</item>
+    </plurals>
+    <string name="settings_edit_profile">Profiili toimetada</string>
+    <string name="general_bookmarks_delete">Väljavalitutest/Väljavalitute hulgast eemaldada/kustutada</string>
+    <string name="general_bookmarks_add">Lisada/lisama \"Väljavalitute\" hulka</string>
     <string name="buy_resources">Varu ära täiendada</string>
     <string name="user_is_banned">Kasutaja on ära keelatud</string>
+    <string name="profile_empty_name">Väli \"Nimi\" ei tohi tühi olema</string>
+    <string name="general_user_bookmarkadd">Kasutaja on \"Väljavalitute\" hulka lisatud.</string>
     <string name="general_input_email">Sisesta oma e-posti aadress/e-mail</string>
+    <string name="vip_stop_ads">Ainult suhtlemine, mitte midagi muud.VIP-kasutajatel reklaam puudub.</string>
+    <string name="friend_email_hint">Sisesta sõbra e-posti aadress või telefoninumber</string>
+    <string name="general_add">Lisada</string>
+    <string name="general_invite_friends">Kutsu/kutsuge sõpru</string>
+    <string name="invite_friends_title">Kutsuda kõik sõbrad telefoniraamatust Topface\'i</string>
+    <string name="general_choose_action">Vali tegevus välja</string>
+    <plurals name="vip_status_period">
+        <item quantity="other">Sa oled/te olete VIP staatuse %d päevaks saanud</item>
+        <item quantity="one">Teie olete VIP staatuse %d päevaks saanud</item>
+    </plurals>
+    <plurals name="vip_status_period_btn">
+        <item quantity="other">Saada VIP %d päevaks</item>
+        <item quantity="one">Saada VIP %d päevaks</item>
+    </plurals>
+    <plurals name="get_vip_for_invites_plurals">
+        <item quantity="other">Saa VIP tasuta %d kutse eest</item>
+        <item quantity="one">Saa VIP tasuta %d kutse eest</item>
+    </plurals>
+    <string name="filter_hint">Sisesta/sisestage nimi</string>
+    <string name="buy_status_and_watch_your_fans">Osta VIP-staatus ja saa teada, kes on sind \"Välja valitute\" hulka lisanud</string>
+    <string name="start_rate">Alustada hindamist</string>
+    <string name="incorrect_photo_size">Foto lubamatu suurus</string>
+    <string name="input_contact_name">Sisesta kontakti nimi</string>
 </resources>

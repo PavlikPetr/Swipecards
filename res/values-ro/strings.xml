@@ -416,5 +416,9 @@
     <string name="general_add">Adauga</string>
     <string name="general_invite_friends">Invita prietenii</string>
     <string name="general_rest_contacts">Vau mai ramas %d contacte</string>
-    <string name="invalid_contacts">Careva contacte au fost incorecte. Va rugam sa trimiteti contactele corecte</string>
+    <plurals name="vip_status_period_btn">
+        <item quantity="few">Primeste VIP pe %d zile</item>
+        <item quantity="other">Primeste VIP pe %d zile</item>
+    </plurals>
+    <string name="filter_hint">Introduceti numele</string>
 </resources>

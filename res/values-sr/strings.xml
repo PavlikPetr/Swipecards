@@ -418,8 +418,7 @@
     <string name="general_add">Dodati</string>
     <string name="general_invite_friends">Pozovite prijatelje</string>
     <string name="general_rest_contacts">Ostalo vam je %d kontakata</string>
-    <string name="inviteFriendsTitle">Poyvati sve prijatelje u Topface</string>
-    <string name="invalid_contacts">Neki kontakti nisu bili korektni. Molimo vas da pošaljete korektne kontakte</string>
+    <string name="invite_friends_title">Poyvati sve prijatelje u Topface</string>
     <plurals name="vip_status_period">
         <item quantity="few">Dobili ste VIP status na %d dana</item>
         <item quantity="other">Dobili ste VIP status na %d dana</item>
@@ -440,4 +439,5 @@
         <item quantity="other">Dobiti VIP besplatno za %d poziva</item>
         <item quantity="one">Dobiti VIP besplatno za %d poziva</item>
     </plurals>
+    <string name="filter_hint">Unesite ime</string>
 </resources>

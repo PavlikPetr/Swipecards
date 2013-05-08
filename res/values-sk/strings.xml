@@ -418,8 +418,7 @@
     <string name="general_add">Pridať</string>
     <string name="general_invite_friends">Pozvite priateľov</string>
     <string name="general_rest_contacts">Zostalo Vám %d kontaktov</string>
-    <string name="inviteFriendsTitle">Pozvať všetkých priateľov na Topface</string>
-    <string name="invalid_contacts">Niektoré z kontaktov boli nesprávne. Prosím, pošlite správne kontakty</string>
+    <string name="invite_friends_title">Pozvať všetkých priateľov na Topface</string>
     <plurals name="vip_status_period">
         <item quantity="few">Získali ste VIP status na %d dni</item>
         <item quantity="other">Získali ste VIP status na %d dní</item>
@@ -440,4 +439,5 @@
         <item quantity="other">Získaj VIP zadarmo za %d pozvaní</item>
         <item quantity="one">Získaj VIP zadarmo za %d pozvanie</item>
     </plurals>
+    <string name="filter_hint">Zadajte meno</string>
 </resources>

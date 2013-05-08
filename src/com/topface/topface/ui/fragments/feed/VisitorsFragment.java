@@ -60,11 +60,6 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     }
 
     @Override
-    protected int getEmptyFeedText() {
-        return R.string.visitors_background_text;
-    }
-
-    @Override
     protected void decrementCounters() {
         CountersManager.getInstance(getActivity().getApplicationContext()).decrementCounter(CountersManager.VISITORS);
     }

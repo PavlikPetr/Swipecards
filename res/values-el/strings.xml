@@ -259,6 +259,7 @@
     <string name="profile_mood">Περιγράψτε τη διάθεσή σας</string>
     <string name="general_reconnect">Προσπαθούμε να δημιουργήσουμε μια σύνδεση στο Internet.\nΠαρακαλώ, να περιμένετε.</string>
     <string name="dating_people_unnoticed">Δέκα ανθρώπους έμειναν χωρίς την προσοχή σας!</string>
+    <string name="dating_continue">Συνεχίστε γνωριμία</string>
     <string name="dating_better_look">Ρίξτε μια προσεκτική ματιά!   Ίσως χάσετε το πεπρωμένο σας!</string>
     <string name="edit_my_city">Η πόλη μου</string>
     <string name="edit_my_photos">Οι φωτογραφίες μου</string>
@@ -404,4 +405,28 @@
     <string name="general_user_bookmarkadd">Ο χρήστης προστέθηκε στις αγαπημένες σας</string>
     <string name="general_wrong_photo_upload">Η φωτογραφία σας δεν ταιριάζει πλήρως τους κανόνες εφαρμογής. Προσπαθήστε να κάνετε μια άλλη</string>
     <string name="general_input_email">Εισάγετε το e-mail</string>
+    <string name="cant_delete_fake_item">Αυτό το μήνυμα ακόμα δεν έχει παραδοθεί, δεν μπορείτε να το διαγράψετε. Παρακαλώ δοκιμάστε ξανά αργότερα.</string>
+    <string name="vip_stop_ads">Μόνο επικοινωνία, τίποτα περισσότερο. Οι VIP χρήστες δεν έχουν τη διαφήμιση</string>
+    <string name="settings_invalid_name">Το όνομα περιέχει μη έγκυρους χαρακτήρες</string>
+    <string name="general_fan_access_error">Για να αποκτήσετε πρόσβαση για τους λάτρεις, θα πρέπει να είστε VIP</string>
+    <string name="friend_email_hint">Εισάγετε το e-mail του φίλου σας</string>
+    <string name="general_add">Προσθήκη</string>
+    <string name="general_invite_friends">Προσκαλέστε τους φίλους σας</string>
+    <string name="general_rest_contacts">Υπάρχουν μόνο %d επαφών</string>
+    <plurals name="vip_status_period">
+        <item quantity="other">Πήρατε κατάσταση VIP για %d μέρες</item>
+        <item quantity="one">Πήρατε κατάσταση VIP για %d μέρα</item>
+    </plurals>
+    <plurals name="vip_status_period_btn">
+        <item quantity="other">Λάβετε κατάσταση VIP για %d μέρες</item>
+        <item quantity="one">Λάβετε κατάσταση VIP για %d μέρα</item>
+    </plurals>
+    <plurals name="invite_friends_plurals">
+        <item quantity="other">Καλέστε %1$d φίλους για να πάρετε την κατάσταση VIP για %2$d μέρες</item>
+        <item quantity="one">Καλέστε %1$d φίλους για να πάρετε την κατάσταση VIP για %2$d μέρα</item>
+    </plurals>
+    <plurals name="get_vip_for_invites_plurals">
+        <item quantity="other">Λάβετε VIP κατάσταση δωρεάν για %d προσκλήσεις</item>
+        <item quantity="one">Λάβετε VIP κατάσταση δωρεάν για %d προσκλήσεις</item>
+    </plurals>
 </resources>

@@ -64,7 +64,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     private AnimationDrawable mLoader;
     private ActionBar mActionBar;
     private ViewStub mEmptyScreenStub;
-    private View mInflatedViewForEmptyFeed;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -574,8 +573,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     protected abstract int getEmptyFeedLayout();
 
-    protected abstract int getEmptyFeedText();
-
     protected void makeAllItemsRead() {
         for (FeedItem item : getListAdapter().getData()) {
             item.unread = false;
@@ -639,13 +636,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             });
             mRetryView.setVisibility(View.GONE);
             mContainer.addView(mRetryView.getView());
-        }
-    }
-
-    private void showUpdateErrorMessage(RetryViewCreator view) {
-        if (view != null) {
-            mListView.setVisibility(View.INVISIBLE);
-            view.setVisibility(View.VISIBLE);
         }
     }
 

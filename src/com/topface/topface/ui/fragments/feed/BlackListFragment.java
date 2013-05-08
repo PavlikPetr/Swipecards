@@ -68,11 +68,6 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
     }
 
     @Override
-    protected int getEmptyFeedText() {
-        return R.string.black_list_empty;
-    }
-
-    @Override
     public void onClick(View view) {
     }
 
