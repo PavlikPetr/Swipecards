@@ -209,10 +209,10 @@ public class ProfilePhotoFragment extends BaseFragment {
                                 Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
                                 Photos newPhotos = new Photos();
                                 // TODO перенести в адаптер логику
-                                newPhotos.add(null);
-                                for (int i = 1; i <= CacheProfile.photos.size(); i++) {
-                                    newPhotos.add(i, CacheProfile.photos.get(i - 1));
+                                for (int i = 0; i < CacheProfile.photos.size(); i++) {
+                                    newPhotos.add(i, CacheProfile.photos.get(i));
                                 }
+                                intent.putExtra(PhotoSwitcherActivity.INTENT_CLEAR, true);
                                 intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, newPhotos);
                                 LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
                             }
