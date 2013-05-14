@@ -367,10 +367,8 @@ public class GiftsFragment extends BaseFragment {
         return new FeedAdapter.Updater() {
             @Override
             public void onUpdate() {
-                if (!mIsUpdating) {
-                    if (!mTag.equals(GIFTS_ALL_TAG) && !mIsUpdating && mGridAdapter.getData().getLast().isLoader()) {
-                        onNewFeeds();
-                    }
+                if (!mIsUpdating && !mTag.equals(GIFTS_ALL_TAG) && mGridAdapter.getData().getLast().isLoader()) {
+                    onNewFeeds();
                 }
             }
         };

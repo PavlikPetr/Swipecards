@@ -113,8 +113,6 @@ public class ProfilePhotoFragment extends BaseFragment {
                     getActivity().finish();
                 }
             });
-        } else {
-
         }
 
         mLoadingLocker = (LockerView) root.findViewById(R.id.fppLocker);
@@ -125,7 +123,8 @@ public class ProfilePhotoFragment extends BaseFragment {
         mGridAlbum.setAdapter(mProfilePhotoGridAdapter);
         mGridAlbum.setOnItemClickListener(mOnItemClickListener);
         mGridAlbum.setOnScrollListener(mProfilePhotoGridAdapter);
-        mGridAlbum.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        //Баги с этим функцонилом, поэтому отключаем его см #15846
+        /*mGridAlbum.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 if (needDialog(mProfilePhotoGridAdapter.getItem(position))) {
@@ -133,7 +132,7 @@ public class ProfilePhotoFragment extends BaseFragment {
                 }
                 return true;
             }
-        });
+        });*/
 
         final TextView title = (TextView) root.findViewById(R.id.usedTitle);
 
