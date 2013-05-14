@@ -392,6 +392,9 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void authorizationFailed(int codeError, final ApiRequest request) {
+        if (!isAdded()) {
+            return;
+        }
         hideButtons();
         boolean needShowRetry = true;
         StringBuilder strBuilder = new StringBuilder();
