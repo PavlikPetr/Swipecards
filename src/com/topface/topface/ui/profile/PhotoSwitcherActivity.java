@@ -127,7 +127,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 @Override
                 public void onClick(View v) {
                     final Photo currentPhoto = mPhotoLinks.get(mCurrentPosition);
-                    if (currentPhoto.getId() != CacheProfile.photo.getId()) {
+                    if (currentPhoto != null && currentPhoto.getId() != CacheProfile.photo.getId()) {
                         if (!mDeletedPhotos.contains(currentPhoto)) {
                             setAsMainRequest(currentPhoto);
                         }
@@ -169,7 +169,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 }
                 LocalBroadcastManager.getInstance(PhotoSwitcherActivity.this).sendBroadcast(new Intent(DEFAULT_UPDATE_PHOTOS_INTENT)
                         .putExtra(INTENT_PHOTOS, CacheProfile.photos)
-                        .putExtra(INTENT_MORE, CacheProfile.photos.size() < CacheProfile.totalPhotos-mDeletedPhotos.size())
+                        .putExtra(INTENT_MORE, CacheProfile.photos.size() < CacheProfile.totalPhotos - mDeletedPhotos.size())
                         .putExtra(INTENT_CLEAR, true));
                 mDeletedPhotos.clear();
             }
@@ -268,7 +268,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 mDeleteButton.setVisibility(View.VISIBLE);
                 mDeleteButton.setImageResource(R.drawable.ico_restore_photo_selector);
                 mSetAvatarButton.setText(R.string.edit_restore);
-                mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+                mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             } else {
                 if (CacheProfile.photo != null && CacheProfile.photo.getId() == currentPhoto.getId()) {
                     mDeleteButton.setVisibility(View.GONE);

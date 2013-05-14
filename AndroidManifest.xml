@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.topface.topface"
           android:installLocation="auto"
-          android:versionCode="74"
+          android:versionCode="75"
 
           android:versionName="2.5.3">
 
@@ -30,13 +30,21 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
-    <uses-feature android:name="android.hardware.location.gps" android:required="false" />
-    <uses-feature android:name="android.hardware.location.network" android:required="false" />
+
+    <uses-feature
+            android:name="android.hardware.location.gps"
+            android:required="false"/>
+    <uses-feature
+            android:name="android.hardware.location.network"
+            android:required="false"/>
 
     <!-- Разрешения для Fortumo -->
-    <uses-feature android:name="android.hardware.telephony" android:required="false" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-feature
+            android:name="android.hardware.telephony"
+            android:required="false"/>
+
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.SEND_SMS"/>
 
     <supports-screens
             android:resizeable="true"
@@ -220,12 +228,22 @@
                 android:name="com.topface.topface.utils.offerwalls.clickky.ClickkyActivity"
                 />
 
-        <activity android:name="com.mopub.mobileads.MoPubActivity" android:configChanges="keyboardHidden|orientation"/>
-        <activity android:name="com.mopub.mobileads.MraidActivity" android:configChanges="keyboardHidden|orientation"/>
-        <activity android:name="com.mopub.mobileads.MraidBrowser"  android:configChanges="keyboardHidden|orientation"/>
-        <activity android:name="com.mopub.mobileads.MoPubActivity" android:configChanges="keyboardHidden|orientation"/>
+        <activity
+                android:name="com.mopub.mobileads.MoPubActivity"
+                android:configChanges="keyboardHidden|orientation"/>
+        <activity
+                android:name="com.mopub.mobileads.MraidActivity"
+                android:configChanges="keyboardHidden|orientation"/>
+        <activity
+                android:name="com.mopub.mobileads.MraidBrowser"
+                android:configChanges="keyboardHidden|orientation"/>
+        <activity
+                android:name="com.mopub.mobileads.MoPubActivity"
+                android:configChanges="keyboardHidden|orientation"/>
 
-        <activity android:name="com.inneractive.api.ads.InneractiveFullScreenView" android:configChanges="orientation|screenSize"/>
+        <activity
+                android:name="com.inneractive.api.ads.InneractiveFullScreenView"
+                android:configChanges="orientation|screenSize"/>
 
         <!-- Алиас для главной активити из первой версии. На всякий случай, а то раньше уже были проблемы с FB -->
         <activity-alias

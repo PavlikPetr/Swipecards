@@ -102,8 +102,12 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private OnGiftReceivedListener giftsReceivedListener = new OnGiftReceivedListener() {
         @Override
         public void onReceived() {
-            giftsIcon.setVisibility(View.VISIBLE);
-            giftsLoader.setVisibility(View.INVISIBLE);
+            if (giftsIcon != null) {
+                giftsIcon.setVisibility(View.VISIBLE);
+            }
+            if (giftsLoader != null) {
+                giftsLoader.setVisibility(View.INVISIBLE);
+            }
         }
     };
 
@@ -177,7 +181,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         @Override
                         public void onClick(View view) {
                             initActionsPanelHeight();
-                            TranslateAnimation ta = new TranslateAnimation(0, 0, - (mUserActions.getHeight() + mUserActionsPanelHeight), 0);
+                            TranslateAnimation ta = new TranslateAnimation(0, 0, -(mUserActions.getHeight() + mUserActionsPanelHeight), 0);
                             ta.setDuration(500);
                             ta.setAnimationListener(new Animation.AnimationListener() {
                                 @Override
@@ -203,7 +207,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         @Override
                         public void onClick(View view) {
                             initActionsPanelHeight();
-                            TranslateAnimation ta = new TranslateAnimation(0, 0, 0, - (mUserActions.getHeight() + mUserActionsPanelHeight));
+                            TranslateAnimation ta = new TranslateAnimation(0, 0, 0, -(mUserActions.getHeight() + mUserActionsPanelHeight));
                             ta.setDuration(500);
                             ta.setAnimationListener(new Animation.AnimationListener() {
                                 @Override
@@ -244,7 +248,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     }
 
     private void initActionsPanelHeight() {
-        if(mUserActionsPanelHeight == 0) {
+        if (mUserActionsPanelHeight == 0) {
             int actualHeight = mActionBar.getHeight();
             double density = getResources().getDisplayMetrics().density;
             mUserActionsPanelHeight = actualHeight == 0 ? actualHeight : (int) (270 * density);
@@ -287,7 +291,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         //Вручную прокидываем событие onPause() в ViewPager, т.к. на onPause() мы отписываемся от событий
         if (mBodyPagerAdapter != null) {
             fragments = mBodyPagerAdapter.getFragmentCache();
-            for(int i = 0; i < fragments.size(); i++) {
+            for (int i = 0; i < fragments.size(); i++) {
                 key = fragments.keyAt(i);
                 fragment = fragments.get(key);
                 if (fragment != null) {
@@ -298,7 +302,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
         if (mHeaderPagerAdapter != null) {
             fragments = mHeaderPagerAdapter.getFragmentCache();
-            for(int i = 0; i < fragments.size(); i++) {
+            for (int i = 0; i < fragments.size(); i++) {
                 key = fragments.keyAt(i);
                 fragment = fragments.get(key);
                 if (fragment != null) {
@@ -765,7 +769,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 }
             }
             resultToNestedFragments(requestCode, resultCode, data);
-        } else if(resultCode == Activity.RESULT_CANCELED) {
+        } else if (resultCode == Activity.RESULT_CANCELED) {
             giftsReceivedListener.onReceived();
         }
     }
@@ -836,7 +840,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         int key;
         Fragment fragment;
         SparseArrayCompat<Fragment> mBodyFragments = mBodyPagerAdapter.getFragmentCache();
-        for(int i = 0; i < mBodyFragments.size(); i++) {
+        for (int i = 0; i < mBodyFragments.size(); i++) {
             key = mBodyFragments.keyAt(i);
             fragment = mBodyFragments.get(key);
             fragment.onActivityResult(requestCode, resultCode, data);
