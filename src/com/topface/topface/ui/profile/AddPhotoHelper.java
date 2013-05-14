@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
+import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
@@ -34,7 +35,7 @@ import java.util.UUID;
  */
 public class AddPhotoHelper {
 
-    public static final String PATH_TO_FILE = Environment.getExternalStorageDirectory().getAbsolutePath() + "/topface_tmp";
+    public static String PATH_TO_FILE;
     private String mFileName = "/tmp.jpg";
 
     private Context mContext;
@@ -66,6 +67,7 @@ public class AddPhotoHelper {
     public AddPhotoHelper(Activity activity) {
         mActivity = activity;
         mContext = activity.getApplicationContext();
+        PATH_TO_FILE = StorageUtils.getCacheDirectory(mContext).getPath() + "/topface_profile/";
     }
 
     public void showProgressDialog() {

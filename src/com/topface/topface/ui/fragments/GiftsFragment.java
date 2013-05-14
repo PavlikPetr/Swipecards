@@ -289,7 +289,9 @@ public class GiftsFragment extends BaseFragment {
 
     public void setGifts(ArrayList<Gift> gifts) {
         if (mProfile == null) mTag = GIFTS_ALL_TAG;
-        mGridAdapter.getData().clear();
+        if (mGridAdapter.getData() != null) {
+            mGridAdapter.getData().clear();
+        }
 
         for (Gift gift : gifts) {
             FeedGift item = new FeedGift();

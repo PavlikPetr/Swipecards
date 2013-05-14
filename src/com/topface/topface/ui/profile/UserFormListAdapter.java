@@ -115,7 +115,7 @@ public class UserFormListAdapter extends BaseAdapter {
         switch (type) {
             case T_HEADER:
                 holder.mHeader.setText(item.title);
-                holder.mState.setImageResource(R.drawable.user_header);
+                holder.mState.setImageResource(getHeaderPicture(item));
                 break;
             case T_DATA:
                 holder.mTitle.setText(item.title.toUpperCase());
@@ -202,6 +202,22 @@ public class UserFormListAdapter extends BaseAdapter {
             if (userForms.get(i).header == header) return true;
         }
         return false;
+    }
+
+    private int getHeaderPicture(FormItem item) {
+        switch (item.titleId) {
+            case R.string.form_main:
+                return R.drawable.user_main;
+            case R.string.form_habits:
+                return R.drawable.user_habits;
+            case R.string.form_physique:
+                return R.drawable.user_physical;
+            case R.string.form_social:
+                return R.drawable.user_social;
+            case R.string.form_detail:
+                return R.drawable.user_details;
+        }
+        return 0;
     }
 
 }
