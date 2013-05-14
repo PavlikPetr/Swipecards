@@ -189,7 +189,7 @@ public class ProfileFormListAdapter extends BaseAdapter {
             case R.string.form_social:
                 return R.drawable.user_social;
             case R.string.form_detail:
-                return R.drawable.user_main;
+                return R.drawable.user_details;
         }
         return 0;
     }
