@@ -419,6 +419,8 @@
     <string name="general_invite_friends">Pozvěte přátele</string>
     <string name="general_rest_contacts">Zbylo Vám %d kontaktů</string>
     <string name="invite_friends_title">Pozvat všechny přátele na Topface</string>
+    <string name="invalid_contacts">Některé z kontaktů byly chybné. Prosím, zadejte správné kontakty</string>
+    <string name="general_choose_action">Zvolte akci</string>
     <plurals name="vip_status_period">
         <item quantity="few">Získali jste VIP status na %d dni</item>
         <item quantity="other">Získali jste VIP status na %d dní</item>
@@ -440,4 +442,18 @@
         <item quantity="one">Získej VIP zdarma za %d pozvánku</item>
     </plurals>
     <string name="filter_hint">Zadejte jméno</string>
+    <string name="buy_status_and_watch_your_fans">Kupte si VIP-status a zjistěte kdo si Vás přidal mezí oblíbené</string>
+    <string name="add_bookmarks_to_be_connected">Přidávejte sem nové známé a budete s nimi pořád v kontaktu</string>
+    <string name="nobody_chat_with_you_sympathies_will_help">Nikdo Vám doposud nenapsal. Sympatie pomohou najít někoho, s kým můžete popovídat</string>
+    <string name="rate_and_have_mutual_or_buy_and_chat">Vyjadřujte své sympatie lidem, které se Vám líbí a získávejte  vzájemné. Nebo si kupte sympatie a začněte komunikovat s lidmi, kterým se líbíte!</string>
+    <string name="start_rate">Začít hodnocení</string>
+    <string name="with_vip_find_your_visitors">Díky VIP-statusu zjistíte kdo prohlížel vaši stránku</string>
+    <string name="on_avatar">Na profilový obrázek</string>
+    <string name="your_avatar">Váš profilový obrázek</string>
+    <string name="avatar_set_successfully">Profilový obrázek je úspěšně nastaven</string>
+    <string name="incorrect_photo">Uvedená fotografie je chybná. Zkuste nahrát  jinou.</string>
+    <string name="incorrect_photo_format">Uvedená fotografie má chybný formát. Zkuste nahrát   jpg nebo png</string>
+    <string name="incorrect_photo_size">Nesprávná velikost fotky</string>
+    <string name="input_contact_name">Zadejte jméno kontaktu</string>
+    <string name="incorrect_locale">Pokud byste chtěli, abychom mohli přečíst Vaši recenzi, napište ji v ruštině nebo angličtině</string>
 </resources>

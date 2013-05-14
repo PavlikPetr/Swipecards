@@ -416,9 +416,26 @@
     <string name="general_add">Adauga</string>
     <string name="general_invite_friends">Invita prietenii</string>
     <string name="general_rest_contacts">Vau mai ramas %d contacte</string>
+    <string name="invite_friends_title">Invita toti prietenii din agenda telefonica in Topface</string>
+    <string name="invalid_contacts">Careva din contacte sunt incorecte. Va rugam, sa trimiteti date corecte</string>
+    <string name="general_choose_action">Alege actiunea</string>
     <plurals name="vip_status_period_btn">
         <item quantity="few">Primeste VIP pe %d zile</item>
         <item quantity="other">Primeste VIP pe %d zile</item>
     </plurals>
     <string name="filter_hint">Introduceti numele</string>
+    <string name="buy_status_and_watch_your_fans">Cumpara VIP - statut si afla, cine te-a adaugat in alese</string>
+    <string name="add_bookmarks_to_be_connected">Adaugati prieteni noi in aceasta despartitura, si nu veti pierde cu ei legatura</string>
+    <string name="nobody_chat_with_you_sympathies_will_help">Mimeni nu va scris nimic. Simpatiile va vor fi de folos in cautarea prietenilor</string>
+    <string name="rate_and_have_mutual_or_buy_and_chat">Trimiteti simpatii la persoanele care vau placut si primiti simpatii reciproc. Sau cumparati simpatii si incepeti discutia cu cei, la care placeti!</string>
+    <string name="start_rate">Incepe aprecierea</string>
+    <string name="with_vip_find_your_visitors">Cu VIP - statut, vei afla cine ti-a vizitat pagina</string>
+    <string name="on_avatar">Pe avatar</string>
+    <string name="your_avatar">Avatarul Dmv</string>
+    <string name="avatar_set_successfully">Avatar instalat cu succes</string>
+    <string name="incorrect_photo">Poza incorecta. Incercati sa incarcati alta poza</string>
+    <string name="incorrect_photo_format">Formatul pozei incorecte. Incercati sa incarcati jpg sau png</string>
+    <string name="incorrect_photo_size">Marimea pozei inaccesibile</string>
+    <string name="input_contact_name">Intraduceti numele contactului</string>
+    <string name="incorrect_locale">Daca doriti ca noi sa citim mesajul Dmv, scrietine in limba romana sau engleza</string>
 </resources>

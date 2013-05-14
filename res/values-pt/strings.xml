@@ -414,6 +414,9 @@
     <string name="general_add">Adicionar</string>
     <string name="general_invite_friends">Convide amigos</string>
     <string name="general_rest_contacts">Você sobrou com apenas %d de contactos</string>
+    <string name="invite_friends_title">Convidar todos os amigos da lista telefónica em Topface</string>
+    <string name="invalid_contacts">Alguns dos contactos foram incorretos. Por favor, envie contactos corretos</string>
+    <string name="general_choose_action">Selecione uma ação</string>
     <plurals name="vip_status_period">
         <item quantity="other">Você recebeu status-VIP em %d de um dia</item>
         <item quantity="one">Você recebeu status-VIP em %d de um dia</item>
@@ -431,4 +434,18 @@
         <item quantity="one">Receba VIP grátis por %d de convite</item>
     </plurals>
     <string name="filter_hint">Introduza o nome</string>
+    <string name="buy_status_and_watch_your_fans">Compre status-VIP e saiba quem lhe adicionou aos favoritos</string>
+    <string name="add_bookmarks_to_be_connected">Adicione novos conhecidos nessa repartição e você não vai mais perder contacto com eles</string>
+    <string name="nobody_chat_with_you_sympathies_will_help">Ninguém ainda não lhe escreveu. As simpatias vão lhe ajudar na pesquisa de correspondente</string>
+    <string name="rate_and_have_mutual_or_buy_and_chat">Coloque simpatias as pessoas de quem você gosta e receba as mutuas. Ou compre simpatias e comece a se comunicar com pessoas que gostam de si!</string>
+    <string name="start_rate">Começar avaliar</string>
+    <string name="with_vip_find_your_visitors">Com o status-VIP, você descobre quem entrou na sua página</string>
+    <string name="on_avatar">Em avatar</string>
+    <string name="your_avatar">O seu avatar</string>
+    <string name="avatar_set_successfully">O Avatar foi instalado com êxito</string>
+    <string name="incorrect_photo">Uma foto incorreta. Experimente postar uma outra</string>
+    <string name="incorrect_photo_format">Formato incorreto de fotos. Experimente postar jpg ou png</string>
+    <string name="incorrect_photo_size">Tamanho inadmissível de fotos</string>
+    <string name="input_contact_name">Introduza o nome de cantacto</string>
+    <string name="incorrect_locale">Se você gostaria que nós fossemos capazes de ler a sua opinião, então escreva-a em russo ou em inglês</string>
 </resources>

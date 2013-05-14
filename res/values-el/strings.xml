@@ -413,6 +413,7 @@
     <string name="general_add">Προσθήκη</string>
     <string name="general_invite_friends">Προσκαλέστε τους φίλους σας</string>
     <string name="general_rest_contacts">Υπάρχουν μόνο %d επαφών</string>
+    <string name="general_choose_action">Επιλέξτε τη δράση</string>
     <plurals name="vip_status_period">
         <item quantity="other">Πήρατε κατάσταση VIP για %d μέρες</item>
         <item quantity="one">Πήρατε κατάσταση VIP για %d μέρα</item>
@@ -429,4 +430,9 @@
         <item quantity="other">Λάβετε VIP κατάσταση δωρεάν για %d προσκλήσεις</item>
         <item quantity="one">Λάβετε VIP κατάσταση δωρεάν για %d προσκλήσεις</item>
     </plurals>
+    <string name="filter_hint">Εισάγετε το όνομα</string>
+    <string name="buy_status_and_watch_your_fans">Αγοράστε την κατάστασή VIP και ανακαλύψτε, ποιος σας έχει προσθέσει  στις αγαπημένες του?</string>
+    <string name="avatar_set_successfully">Το Άβαταρ σας φορτώθηκε με επιτυχία!</string>
+    <string name="incorrect_photo">Εσφαλμένη φωτογραφία. Φορτώστε μια άλλη!</string>
+    <string name="incorrect_photo_format">Μη έγκυρη μορφή φωτογραφίων (ανεβάσετε τις φωτογραφίες σε μορφή jpg ή png.</string>
 </resources>

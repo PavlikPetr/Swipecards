@@ -39,7 +39,7 @@
     <string name="general_mutual">Reciprocamente</string>
     <string name="general_dialogs">Dialoghi</string>
     <string name="general_tops">Top</string>
-    <string name="general_visitors">Ospiti</string>
+    <string name="general_visitors">Visite</string>
     <string name="general_profile">Profilo</string>
     <string name="general_settings">Impostazioni</string>
     <string name="general_chat">Chat</string>
@@ -54,7 +54,7 @@
     <string name="dating_prev_button">Precedente</string>
     <string name="dating_chat_button">Chattare</string>
     <string name="likes_background_text">Non hai simpatie</string>
-    <string name="visitors_background_text">Non ci sono gli ospiti</string>
+    <string name="visitors_background_text">Non ci sono le visite</string>
     <string name="mutual_background_text">Non ci sono simpatie</string>
     <string name="chat_background_text">Non ci sono i messaggi in entrata</string>
     <string name="chat_comment">Scrivi messaggio</string>
@@ -98,7 +98,7 @@
     <string name="profile_actions">Azioni</string>
     <string name="profile_empty_form">L’utente non ha riempito il questionario</string>
     <string name="profile_ask_form">Chiedere di riempire il questionario</string>
-    <string name="edit_title">Redazione</string>
+    <string name="edit_title">Modifica</string>
     <string name="edit_bg_photo">Foto di sfondo</string>
     <string name="edit_album">Album</string>
     <string name="edit_profile_photo">Cambia foto</string>
@@ -151,7 +151,7 @@
     <string name="settings_likes">Simpatie</string>
     <string name="settings_mutual">Simpatie reciproche</string>
     <string name="settings_messages">Messaggi</string>
-    <string name="settings_guests">Ospiti</string>
+    <string name="settings_guests">Visite</string>
     <string name="settings_help">Aiuto</string>
     <string name="settings_account">Profilo</string>
     <string name="settings_feedback">Lasciare un giudizio</string>
@@ -218,7 +218,7 @@
     <string name="general_close">Chiudi</string>
     <string name="vip_not_activated">Il tuo stato VIP non è attivo</string>
     <string name="vip_privileges">Privilegi di essere VIP</string>
-    <string name="vip_text_visitors">Scopri chi si era interessato di te, guarda i tuoi ospiti!</string>
+    <string name="vip_text_visitors">Scopri chi si è interessato di te, guarda i tuoi visitatori!</string>
     <string name="vip_text_adm_unlock">Invia le ammirazioni gratis, esprimi i sentimenti al massimo</string>
     <string name="vip_rest">Non hai abbonamento VIP</string>
     <string name="vip_invis">Stato di invisibilità</string>
@@ -241,7 +241,7 @@
     <string name="vip_abilities">Le tue possibilità VIP</string>
     <string name="vip_why">Perché è così importante essere VIP</string>
     <string name="vip_info_delight">Invia le ammirazioni gratis, esprimi i sentimenti al massimo!</string>
-    <string name="vip_info_guest">Scopri chi si era interessato di te, guarda i tuoi ospiti!</string>
+    <string name="vip_info_guest">Scopri chi si è interessato di te, guarda i tuoi visitatori!</string>
     <string name="vip_info_invisible">Rimani invisibile visitando le pagine degli altri grazie allo stato di \”invisibilità\”</string>
     <string name="vip_info_message">Sfrutta il privilegio di inviare i messaggi  che si distinguono sullo sfondo di tutti gli altri!</string>
     <string name="vip_info_gift">Scegli regali-VIP esclusivi e di sicura sarai notato!</string>
@@ -250,7 +250,7 @@
     <string name="vip_info_title">Privilegi di essere VIP</string>
     <string name="black_list_retrieve">Ripristina</string>
     <string name="buying_vip_status">Compra lo stato VIP</string>
-    <string name="buying_vip_info">Bisogna avere lo stato VIP per vedere gli ospiti</string>
+    <string name="buying_vip_info">Bisogna avere lo stato VIP per vedere i visitatori</string>
     <string name="buy_play_market_not_available">Play Market non è disponibile</string>
     <string name="buy_subscription_not_available">Abbonamenti non sono disponibili</string>
     <string name="default_economy_vip">Vip a partire da 10 USD al mese</string>
@@ -415,6 +415,8 @@
     <string name="general_invite_friends">Invita gli amici</string>
     <string name="general_rest_contacts">Ti sono rimasti %d contatti</string>
     <string name="invite_friends_title">Invita tutti gli amici su Topface</string>
+    <string name="invalid_contacts">Alcuni dei contatti riportano errori. Per favore, inserisci i contatti corretti</string>
+    <string name="general_choose_action">Scegli l’azione</string>
     <plurals name="vip_status_period">
         <item quantity="other">Hai ricevuto lo stato VIP per %d giorni</item>
         <item quantity="one">Hai ricevuto lo stato VIP per %d giorno</item>
@@ -432,4 +434,18 @@
         <item quantity="one">Ricevere VIP gratis per %d invito</item>
     </plurals>
     <string name="filter_hint">Inserisci il nome</string>
+    <string name="buy_status_and_watch_your_fans">Compra lo stato VIP e scopri chi ti ha aggiunto nei preferiti</string>
+    <string name="add_bookmarks_to_be_connected">Aggiungi i tuoi nuovi amici qui e sarai sempre in contatto con loro</string>
+    <string name="nobody_chat_with_you_sympathies_will_help">Non ti ha ancora scritto nessuno. Le simpatie aiutano nella ricerca di un interlocutore</string>
+    <string name="rate_and_have_mutual_or_buy_and_chat">Regala le simpatie alle persone che ti sono piaciute e ricevile in risposta. Oppure compra le simpatie e inizia a parlare con le persone alle quali piaci!</string>
+    <string name="start_rate">Inizia a valutare</string>
+    <string name="with_vip_find_your_visitors">Lo stato VIP ti permette di scoprire chi ha visitato la tua pagina</string>
+    <string name="on_avatar">Sull’avatar</string>
+    <string name="your_avatar">Il tuo avatar</string>
+    <string name="avatar_set_successfully">L’avatar è stato caricato con successo</string>
+    <string name="incorrect_photo">Foto scorretta. Prova a caricarne un’altra</string>
+    <string name="incorrect_photo_format">Il formato della foto è scorretto. Prova a caricarne una con l’espansione .jpg o .png</string>
+    <string name="incorrect_photo_size">La dimensione della foto è inammissibile</string>
+    <string name="input_contact_name">Inserisci il nome del contatto</string>
+    <string name="incorrect_locale">Se vuoi che il tuo commento venga letto scrivilo in russo o in inglese</string>
 </resources>

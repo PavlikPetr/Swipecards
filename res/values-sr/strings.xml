@@ -419,6 +419,8 @@
     <string name="general_invite_friends">Pozovite prijatelje</string>
     <string name="general_rest_contacts">Ostalo vam je %d kontakata</string>
     <string name="invite_friends_title">Poyvati sve prijatelje u Topface</string>
+    <string name="invalid_contacts">Neki kontakti nisu bili korektni. Molimo vas da pošaljete korektne kontakte</string>
+    <string name="general_choose_action">Odaberite akciju</string>
     <plurals name="vip_status_period">
         <item quantity="few">Dobili ste VIP status na %d dana</item>
         <item quantity="other">Dobili ste VIP status na %d dana</item>
@@ -440,4 +442,18 @@
         <item quantity="one">Dobiti VIP besplatno za %d poziva</item>
     </plurals>
     <string name="filter_hint">Unesite ime</string>
+    <string name="buy_status_and_watch_your_fans">Kupite VIP-status i saznajte ko vas je dodao u odabrane</string>
+    <string name="add_bookmarks_to_be_connected">Dodajte nove poznanike u ovaj razdeo i nećete izgubiti vezu sa njima.</string>
+    <string name="nobody_chat_with_you_sympathies_will_help">Još niko vam nije pisao. Simpatije će pomoći u traženju sagovornika</string>
+    <string name="rate_and_have_mutual_or_buy_and_chat">Postavite simpatije ljudi koji vam se dopadaju i dobijaćete uzajamne simpatije. Ili kupite simpatije i počnite komunikaciju sa onima koji vam se dopadaju!</string>
+    <string name="start_rate">Početi sa ocenjivanjem</string>
+    <string name="with_vip_find_your_visitors">Sa VIP-statusom saznaćete ko je dolazio na vašu stranicu</string>
+    <string name="on_avatar">Na avatar</string>
+    <string name="your_avatar">Vaš avatar</string>
+    <string name="avatar_set_successfully">Avatar je uspeđno instaliran</string>
+    <string name="incorrect_photo">Nekorektna fotografija. Pokušajte da postavite drugu</string>
+    <string name="incorrect_photo_format">Nekorektan format fotografije. Pokušajte da postavite u jpg ili u png</string>
+    <string name="incorrect_photo_size">Nedozvoljena veličina fotografije</string>
+    <string name="input_contact_name">Unesite ime kontakta</string>
+    <string name="incorrect_locale">Ako želite da mi možemo pročitati Vaš odgovor, pišite ga na ruskom ili engleskom jeziku</string>
 </resources>

@@ -418,6 +418,8 @@
     <string name="general_invite_friends">Invita a tus amigos</string>
     <string name="general_rest_contacts">Te quedan %d contactos</string>
     <string name="invite_friends_title">Invitar a todos los amigos a Topface</string>
+    <string name="invalid_contacts">Algunos de los contactos fueron incorrectos. Por favor, envía contactos correctos</string>
+    <string name="general_choose_action">Elige acción</string>
     <plurals name="vip_status_period">
         <item quantity="other">Has recibido el estado VIP para %d días</item>
         <item quantity="one">Has recibido el estado VIP para %d día</item>
@@ -435,4 +437,18 @@
         <item quantity="one">Recibe VIP gratis por %d invitación</item>
     </plurals>
     <string name="filter_hint">Introduce nombre</string>
+    <string name="buy_status_and_watch_your_fans">Copra el estado VIP y descubre quién te ha agregado a los favoritos</string>
+    <string name="add_bookmarks_to_be_connected">Agrega nuevos conocidos a esta sección y no perderás conexión con ellos</string>
+    <string name="nobody_chat_with_you_sympathies_will_help">Aún nadie le ha escrito. Simpatías ayudarán en la busqueda de con quién hablar</string>
+    <string name="rate_and_have_mutual_or_buy_and_chat">Pon simpatías a la gente que te ha gustado y recibe mútuas. ¡O compra simpatías y empieza la comunicación con aquellos a los que gustas!</string>
+    <string name="start_rate">Empezar a evaluar</string>
+    <string name="with_vip_find_your_visitors">Con el estado VIP sabrás quién ha entrado en tu página</string>
+    <string name="on_avatar">En avatar</string>
+    <string name="your_avatar">Tu avatar</string>
+    <string name="avatar_set_successfully">Avatar establecido con éxito</string>
+    <string name="incorrect_photo">Foto incorrecta. Prueba subir otra</string>
+    <string name="incorrect_photo_format">Formato de foto incorrecto. Prueba subir jpg o png</string>
+    <string name="incorrect_photo_size">Tamaño de fotografía no permitido</string>
+    <string name="input_contact_name">Introduce el nombre del contacto</string>
+    <string name="incorrect_locale">Si quieres que nosotros podamos leer su comentario, escríbelo en ruso o en inglés</string>
 </resources>
