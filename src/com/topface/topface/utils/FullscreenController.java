@@ -87,7 +87,14 @@ public class FullscreenController {
             @Override
             public void onIaAdFailed() {
                 Debug.log("Inneractive: onIaAdFailed()");
-                requestTopfaceFullscreen();
+                if (mActivity != null) {
+                    mActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            requestTopfaceFullscreen();
+                        }
+                    });
+                }
             }
 
             @Override

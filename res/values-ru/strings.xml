@@ -545,7 +545,7 @@
     <string name="general_wrong_photo_upload">Ваша фотография не соответствует правилам. Попробуйте сделать другую
     </string>
     <string name="general_input_email">Введите ваш e-mail</string>
-    <string name="cant_delete_fake_item">Данное сообщение еще не досталено, вы не можете удалить его. Попробуйте
+    <string name="cant_delete_fake_item">Данное сообщение еще не доставлено, вы не можете удалить его. Попробуйте
         позже.
     </string>
     <string name="vip_stop_ads">Только общение, ничего лишнего. У VIP-пользователей нет рекламы</string>

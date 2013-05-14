@@ -7,7 +7,6 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
 import com.topface.topface.ui.views.ImageViewRemote;
 
@@ -142,28 +141,14 @@ public class ActionBar {
         mTitle.setText(text);
     }
 
+
+    public void setOnlineIcon(boolean online) {
+        mTitle.setCompoundDrawablesWithIntrinsicBounds(online ? R.drawable.ico_online : 0, 0, 0, 0);
+    }
+
     public void setSubTitleText(String text) {
         mSubTitle.setVisibility(View.VISIBLE);
         mSubTitle.setText(text);
-    }
-
-    public void showProfileButton(View.OnClickListener listener, int userSex) {
-        mEditButton.setVisibility(View.GONE);
-        mSettingsButton.setVisibility(View.GONE);
-
-        mProfileButton.setVisibility(View.VISIBLE);
-        switch (userSex) {
-            case Static.BOY:
-                mProfileButton.setImageResource(R.drawable.navigation_male_profile_selector);
-                break;
-            case Static.GIRL:
-                mProfileButton.setImageResource(R.drawable.navigation_female_profile_selector);
-                break;
-        }
-        mProfileButton.setOnClickListener(listener);
-        mSendButton.setVisibility(View.GONE);
-        mUserActionsControl.setVisibility(View.GONE);
-        checkBox.setVisibility(View.GONE);
     }
 
     public void showUserActionsButton(final View.OnClickListener nonActiveListener, final View.OnClickListener activeListener) {
@@ -188,7 +173,7 @@ public class ActionBar {
         checkBox.setVisibility(View.GONE);
     }
 
-    public void showCheckBox(View.OnClickListener listener, boolean isChecked) {
+    public void showCheckBox(View.OnClickListener listener) {
         hideRightButtons();
         checkBox.setVisibility(View.VISIBLE);
         checkBox.setOnClickListener(listener);

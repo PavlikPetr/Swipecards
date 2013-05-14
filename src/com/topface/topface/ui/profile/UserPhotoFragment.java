@@ -59,9 +59,7 @@ public class UserPhotoFragment extends BaseFragment {
 
         mTitle = (TextView) root.findViewById(R.id.usedTitle);
 
-        if (mPhotoLinks != null) {
-//            setPhotos(mPhotoLinks);
-        } else {
+        if (mPhotoLinks == null) {
             mTitle.setText(Utils.formatPhotoQuantity(0));
         }
 
@@ -101,14 +99,10 @@ public class UserPhotoFragment extends BaseFragment {
     public void setUserData(User user) {
         mUser = user;
         mPhotoLinks = user.photos;
-        if(mGridAlbum != null) {
-            if (mGridAlbum.getAdapter() != null) {
-    //            ((UserPhotoGridAdapter)mGridAlbum.getAdapter()).setData(mPhotoLinks);
-            } else {
-                setPhotos(mPhotoLinks);
-                mGridAlbum.setAdapter(mUserPhotoGridAdapter);
-                mGridAlbum.setOnScrollListener(mUserPhotoGridAdapter);
-            }
+        if(mGridAlbum != null && mGridAlbum.getAdapter() == null) {
+            setPhotos(mPhotoLinks);
+            mGridAlbum.setAdapter(mUserPhotoGridAdapter);
+            mGridAlbum.setOnScrollListener(mUserPhotoGridAdapter);
         }
     }
 

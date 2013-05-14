@@ -92,8 +92,13 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         mImageSwitcher.setData(mPhotoLinks);
         mImageSwitcher.setCurrentItem(position, false);
 
-        initControls();
         setCounter(position);
+    }
+
+    @Override
+    protected void onLoadProfile() {
+        super.onLoadProfile();
+        initControls();
         refreshButtonsState();
     }
 
@@ -265,13 +270,13 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 mSetAvatarButton.setText(R.string.edit_restore);
                 mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
             } else {
-                if(CacheProfile.photo.getId() == currentPhoto.getId()) {
+                if (CacheProfile.photo != null && CacheProfile.photo.getId() == currentPhoto.getId()) {
                     mDeleteButton.setVisibility(View.GONE);
                 } else {
                     mDeleteButton.setVisibility(View.VISIBLE);
                     mDeleteButton.setImageResource(R.drawable.ico_delete_selector);
                 }
-                if (currentPhoto.getId() == CacheProfile.photo.getId()) {
+                if (CacheProfile.photo != null && currentPhoto.getId() == CacheProfile.photo.getId()) {
                     mSetAvatarButton.setText(R.string.your_avatar);
                     mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ico_selected_selector, 0, 0, 0);
                 } else {

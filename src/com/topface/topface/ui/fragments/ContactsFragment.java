@@ -28,7 +28,6 @@ import java.util.ArrayList;
 public class ContactsFragment extends BaseFragment{
     public static final String CONTACTS = "contacts";
     ListView contactsView;
-    private static final int NEED_INVITE = 20;
     private Button addButton;
     private Button contactsVip;
     private ArrayList<ContactsProvider.Contact> data;
@@ -69,7 +68,7 @@ public class ContactsFragment extends BaseFragment{
                 ((ContactsListAdapter)contactsView.getAdapter()).setAllDataChecked(checkBox.isChecked());
                 ((ContactsListAdapter)contactsView.getAdapter()).changeButtonState();
             }
-        }, true);
+        });
 
         contactsView = (ListView) root.findViewById(R.id.contactsList);
         //Получаем список контактов из аргументов. Если он не пришел, закрываем фрагмент.
@@ -313,10 +312,10 @@ public class ContactsFragment extends BaseFragment{
                 String filterString = constraint.toString().toLowerCase();
                 String filterableString;
 
-                for(int i = 0; i<data.size(); i++){
-                    filterableString = data.get(i).getName();
-                    if(filterableString.toLowerCase().contains(filterString)){
-                        Filtered_Names.add(data.get(i));
+                for (ContactsProvider.Contact aData : data) {
+                    filterableString = aData.getName();
+                    if (filterableString.toLowerCase().contains(filterString)) {
+                        Filtered_Names.add(aData);
                     }
                 }
                 Result.values = Filtered_Names;
@@ -325,6 +324,7 @@ public class ContactsFragment extends BaseFragment{
                 return Result;
             }
 
+            @SuppressWarnings("unchecked")
             @Override
             protected void publishResults(CharSequence constraint,FilterResults results) {
                 filteredContacts = (ArrayList<ContactsProvider.Contact>) results.values;

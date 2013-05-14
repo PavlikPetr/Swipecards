@@ -427,6 +427,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 removeAlreadyLoadedItems(data);
 
                 setNavigationTitles(data.user.first_name, data.user.age, data.user.city.name);
+                mActionBar.setOnlineIcon(data.user.online);
                 wasFailed = false;
                 mUser = data.user;
                 if (!mUser.isEmpty()) {
