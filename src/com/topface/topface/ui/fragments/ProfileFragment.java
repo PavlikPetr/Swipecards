@@ -22,8 +22,7 @@ import android.widget.*;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.Profile;
-import com.topface.topface.data.User;
+import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.requests.handlers.VipApiHandler;
@@ -40,6 +39,7 @@ import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RateController;
+import com.topface.topface.utils.Utils;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.viewpagerindicator.TabPageIndicator;
 
@@ -96,6 +96,16 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private TextView mBookmarkAction;
 
     private int mUserActionsPanelHeight;
+    private ProgressBar giftsLoader;
+    private ImageView giftsIcon;
+
+    private OnGiftReceivedListener giftsReceivedListener = new OnGiftReceivedListener() {
+        @Override
+        public void onReceived() {
+            giftsIcon.setVisibility(View.VISIBLE);
+            giftsLoader.setVisibility(View.INVISIBLE);
+        }
+    };
 
 
     @Override
@@ -564,8 +574,12 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 }
                 break;
             case R.id.acGift:
+                giftsLoader = (ProgressBar) v.findViewById(R.id.giftPrBar);
+                giftsIcon = (ImageView) v.findViewById(R.id.giftIcon);
+                giftsLoader.setVisibility(View.VISIBLE);
+                giftsIcon.setVisibility(View.INVISIBLE);
                 if (mGiftFragment != null && mGiftFragment.getActivity() != null) {
-                    mGiftFragment.sendGift();
+                    mGiftFragment.sendGift(giftsReceivedListener);
                 } else {
                     Intent intent = new Intent(getActivity().getApplicationContext(),
                             GiftsActivity.class);
@@ -745,7 +759,76 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
+                if (mGiftFragment == null) {
+                    sendGift(data);
+                }
+            }
             resultToNestedFragments(requestCode, resultCode, data);
+        } else if(resultCode == Activity.RESULT_CANCELED) {
+            giftsReceivedListener.onReceived();
+        }
+    }
+
+    private void sendGift(Intent data) {
+        Bundle extras = data.getExtras();
+        final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
+        final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
+        final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
+
+        if (mUserProfile != null) {
+            final SendGiftRequest sendGift = new SendGiftRequest(getActivity());
+            registerRequest(sendGift);
+            sendGift.giftId = id;
+            sendGift.userId = mUserProfile.uid;
+            final FeedGift sendedGift = new FeedGift();
+            sendedGift.gift = new Gift(
+                    sendGift.giftId,
+                    Gift.PROFILE_NEW,
+                    url,
+                    0
+            );
+            sendGift.callback(new DataApiHandler<SendGiftAnswer>() {
+
+                @Override
+                protected void success(SendGiftAnswer data, ApiResponse response) {
+                    CacheProfile.likes = data.likes;
+                    CacheProfile.money = data.money;
+                    if (mGiftFragment != null) {
+                        mGiftFragment.addGift(sendedGift);
+                    } else {
+                        mUserProfile.gifts.add(sendedGift.gift);
+                    }
+                    Toast.makeText(getContext(), R.string.chat_gift_out, 1500).show();
+                }
+
+                @Override
+                protected SendGiftAnswer parseResponse(ApiResponse response) {
+                    return SendGiftAnswer.parse(response);
+                }
+
+                @Override
+                public void fail(int codeError, ApiResponse response) {
+                    Utils.showErrorMessage(getContext());
+                    if (response.code == ApiResponse.PAYMENT) {
+                        FragmentActivity activity = getActivity();
+                        if (activity != null) {
+                            Intent intent = new Intent(activity.getApplicationContext(),
+                                    ContainerActivity.class);
+                            intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
+                            intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
+                            intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
+                            startActivity(intent);
+                        }
+                    }
+                }
+
+                @Override
+                public void always(ApiResponse response) {
+                    super.always(response);
+                    giftsReceivedListener.onReceived();
+                }
+            }).exec();
         }
     }
 
@@ -818,5 +901,10 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
         int getProfileType();
     }
+
+    public interface OnGiftReceivedListener {
+        public void onReceived();
+    }
+
 
 }

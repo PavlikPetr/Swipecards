@@ -41,6 +41,7 @@ public class GiftsFragment extends BaseFragment {
     private Button mBtnInfo;
     private GiftsAdapter mGridAdapter;
     private GridView mGridView;
+    private ProfileFragment.OnGiftReceivedListener listener;
 
 
     private Profile mProfile;
@@ -69,6 +70,7 @@ public class GiftsFragment extends BaseFragment {
 
         return root;
     }
+
 
     private void initViews() {
         updateUI(new Runnable() {
@@ -125,15 +127,9 @@ public class GiftsFragment extends BaseFragment {
                             if (mGridAdapter.getData().get(position).isRetrier()) {
                                 updateUI(new Runnable() {
                                     public void run() {
-                                        updateUI(new Runnable() {
-
-                                            @Override
-                                            public void run() {
-                                                removeLoaderItem();
-                                                mGridAdapter.getData().add(new FeedGift(ItemType.LOADER));
-                                                mGridAdapter.notifyDataSetChanged();
-                                            }
-                                        });
+                                        removeLoaderItem();
+                                        mGridAdapter.getData().add(new FeedGift(ItemType.LOADER));
+                                        mGridAdapter.notifyDataSetChanged();
                                         onNewFeeds();
                                     }
                                 });
@@ -154,67 +150,83 @@ public class GiftsFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
-                Bundle extras = data.getExtras();
-                final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
-                final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
-                final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
-
-                if (mProfile != null) {
-                    final SendGiftRequest sendGift = new SendGiftRequest(getActivity());
-                    registerRequest(sendGift);
-                    sendGift.giftId = id;
-                    sendGift.userId = mProfile.uid;
-                    final FeedGift sendedGift = new FeedGift();
-                    sendedGift.gift = new Gift(
-                            sendGift.giftId,
-                            Gift.PROFILE_NEW,
-                            url,
-                            0
-                    );
-                    sendGift.callback(new DataApiHandler<SendGiftAnswer>() {
-
-                        @Override
-                        protected void success(SendGiftAnswer answer, ApiResponse response) {
-                            CacheProfile.likes = answer.likes;
-                            CacheProfile.money = answer.money;
-                            if (mGridAdapter.getData().size() > 1) {
-                                mGridAdapter.add(1, sendedGift);
-                            } else {
-                                mGridAdapter.add(sendedGift);
-                                mTitle.setText(R.string.gifts);
-                            }
-                            if (mProfile.gifts != null) mProfile.gifts.add(0,sendedGift.gift);
-                            mGridAdapter.notifyDataSetChanged();
-                            if (getActivity() != null) {
-                                Toast.makeText(getActivity(), R.string.chat_gift_out, 1500).show();
-                            }
-                        }
-
-                        @Override
-                        protected SendGiftAnswer parseResponse(ApiResponse response) {
-                            return SendGiftAnswer.parse(response);
-                        }
-
-                        @Override
-                        public void fail(int codeError, final ApiResponse response) {
-                            if (response.code == ApiResponse.PAYMENT) {
-                                FragmentActivity activity = getActivity();
-                                if (activity != null) {
-                                    Intent intent = new Intent(activity.getApplicationContext(),
-                                            ContainerActivity.class);
-                                    intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
-                                    intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
-                                    intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
-                                    startActivity(intent);
-                                }
-                            }
-                        }
-                    }).exec();
-                }
+                sendGift(data);
             }
         }
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void sendGift(Intent data) {
+        Bundle extras = data.getExtras();
+        final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
+        final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
+        final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
+
+        if (mProfile != null) {
+            final SendGiftRequest sendGift = new SendGiftRequest(getActivity());
+            registerRequest(sendGift);
+            sendGift.giftId = id;
+            sendGift.userId = mProfile.uid;
+            final FeedGift sendedGift = new FeedGift();
+            sendedGift.gift = new Gift(
+                    sendGift.giftId,
+                    Gift.PROFILE_NEW,
+                    url,
+                    0
+            );
+            sendGift.callback(new DataApiHandler<SendGiftAnswer>() {
+
+                @Override
+                protected void success(SendGiftAnswer answer, ApiResponse response) {
+                    CacheProfile.likes = answer.likes;
+                    CacheProfile.money = answer.money;
+                    addGift(sendedGift);
+                }
+
+                @Override
+                protected SendGiftAnswer parseResponse(ApiResponse response) {
+                    return SendGiftAnswer.parse(response);
+                }
+
+                @Override
+                public void fail(int codeError, final ApiResponse response) {
+                    if (response.code == ApiResponse.PAYMENT) {
+                        FragmentActivity activity = getActivity();
+                        if (activity != null) {
+                            Intent intent = new Intent(activity.getApplicationContext(),
+                                    ContainerActivity.class);
+                            intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
+                            intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
+                            intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
+                            startActivity(intent);
+                        }
+                    }
+                }
+
+                @Override
+                public void always(ApiResponse response) {
+                    super.always(response);
+                    if (listener != null) {
+                        listener.onReceived();
+                    }
+                }
+            }).exec();
+        }
+    }
+
+    public void addGift(FeedGift sendedGift) {
+        if (mGridAdapter.getData().size() > 1) {
+            mGridAdapter.add(1, sendedGift);
+        } else {
+            mGridAdapter.add(sendedGift);
+            mTitle.setText(R.string.gifts);
+        }
+        if (mProfile.gifts != null) mProfile.gifts.add(0,sendedGift.gift);
+        mGridAdapter.notifyDataSetChanged();
+        if (getActivity() != null) {
+            Toast.makeText(getActivity(), R.string.chat_gift_out, 1500).show();
+        }
     }
 
     private void removeLoaderItem() {
@@ -334,6 +346,11 @@ public class GiftsFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    public void sendGift(ProfileFragment.OnGiftReceivedListener listener) {
+        this.listener = listener;
+        sendGift();
     }
 
     public void sendGift() {
