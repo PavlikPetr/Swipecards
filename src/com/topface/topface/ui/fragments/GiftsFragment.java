@@ -289,49 +289,51 @@ public class GiftsFragment extends BaseFragment {
 
     public void setGifts(ArrayList<Gift> gifts) {
         if (mProfile == null) mTag = GIFTS_ALL_TAG;
-        if (mGridAdapter.getData() != null) {
-            mGridAdapter.getData().clear();
-        }
+        if (isAdded()) {
+            if (mGridAdapter.getData() != null) {
+                mGridAdapter.getData().clear();
+            }
 
-        for (Gift gift : gifts) {
-            FeedGift item = new FeedGift();
-            item.gift = gift;
-            mGridAdapter.getData().add(item);
-        }
+            for (Gift gift : gifts) {
+                FeedGift item = new FeedGift();
+                item.gift = gift;
+                mGridAdapter.getData().add(item);
+            }
 
-        if (mTag != null) {
-            if (mTag.equals(GIFTS_USER_PROFILE_TAG)) {
-                mGridAdapter.getData().add(0, FeedGift.getSendedGiftItem());
-                if (mGridAdapter.getData().size() >= GIFTS_LOAD_COUNT)
-                    mGridAdapter.getData().add(new FeedGift(ItemType.LOADER));
-            } else {
-                if (mGridAdapter.getData().isEmpty()) {
-                    mGroupInfo.setVisibility(View.VISIBLE);
-                    mTextInfo.setText(R.string.you_dont_have_gifts_yet);
-                    mBtnInfo.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(getActivity(), ContainerActivity.class);
-                            intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
-                            startActivity(intent);
-                        }
-                    });
+            if (mTag != null) {
+                if (mTag.equals(GIFTS_USER_PROFILE_TAG)) {
+                    mGridAdapter.getData().add(0, FeedGift.getSendedGiftItem());
+                    if (mGridAdapter.getData().size() >= GIFTS_LOAD_COUNT)
+                        mGridAdapter.getData().add(new FeedGift(ItemType.LOADER));
                 } else {
-                    mGroupInfo.setVisibility(View.GONE);
+                    if (mGridAdapter.getData().isEmpty()) {
+                        mGroupInfo.setVisibility(View.VISIBLE);
+                        mTextInfo.setText(R.string.you_dont_have_gifts_yet);
+                        mBtnInfo.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(getActivity(), ContainerActivity.class);
+                                intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
+                                startActivity(intent);
+                            }
+                        });
+                    } else {
+                        mGroupInfo.setVisibility(View.GONE);
+                    }
                 }
             }
-        }
 
-        if (mGridView != null) {
-            mGridView.post(new Runnable() {
-                @Override
-                public void run() {
-                    mGridAdapter.notifyDataSetChanged();
-                }
-            });
-        }
+            if (mGridView != null) {
+                mGridView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mGridAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
 
-        initViews();
+            initViews();
+        }
     }
 
     public void setProfile(Profile profile) {
