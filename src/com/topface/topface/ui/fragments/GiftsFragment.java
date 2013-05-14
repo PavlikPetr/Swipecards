@@ -246,11 +246,12 @@ public class GiftsFragment extends BaseFragment {
         FeedGiftsRequest request = new FeedGiftsRequest(getActivity());
         request.limit = GIFTS_LOAD_COUNT;
         request.uid = userId;
-        if (!mGridAdapter.getData().isEmpty()) {
-            if (mGridAdapter.getData().getLast().isLoader() || mGridAdapter.getData().getLast().isRetrier()) {
-                request.from = mGridAdapter.getData().get(mGridAdapter.getData().size() - 2).gift.feedId;
+        final FeedList<FeedGift> data = mGridAdapter.getData();
+        if (!data.isEmpty()) {
+            if (data.getLast().isLoader() || data.getLast().isRetrier()) {
+                request.from = data.get(data.size() - 2).gift.feedId;
             } else {
-                request.from = mGridAdapter.getData().get(mGridAdapter.getData().size() - 1).gift.feedId;
+                request.from = data.get(data.size() - 1).gift.feedId;
             }
         }
 
@@ -260,13 +261,13 @@ public class GiftsFragment extends BaseFragment {
             protected void success(FeedListData<FeedGift> gifts, ApiResponse response) {
 
                 removeLoaderItem();
-                mGridAdapter.getData().addAll(gifts.items);
-                if (mGridAdapter.getData().isEmpty() && !gifts.items.isEmpty()) {
+                data.addAll(gifts.items);
+                if (data.isEmpty() && !gifts.items.isEmpty()) {
                     mGroupInfo.setVisibility(View.GONE);
                 }
 
                 if (gifts.more) {
-                    mGridAdapter.getData().add(new FeedGift(ItemType.LOADER));
+                    data.add(new FeedGift(ItemType.LOADER));
                 }
                 mGridAdapter.notifyDataSetChanged();
                 mIsUpdating = false;
@@ -280,7 +281,7 @@ public class GiftsFragment extends BaseFragment {
             @Override
             public void fail(int codeError, ApiResponse response) {
                 removeLoaderItem();
-                mGridAdapter.getData().add(new FeedGift(ItemType.RETRY));
+                data.add(new FeedGift(ItemType.RETRY));
                 mGridAdapter.notifyDataSetChanged();
                 mIsUpdating = false;
             }

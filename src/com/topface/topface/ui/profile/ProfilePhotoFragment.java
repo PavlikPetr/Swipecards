@@ -123,8 +123,7 @@ public class ProfilePhotoFragment extends BaseFragment {
         mGridAlbum.setAdapter(mProfilePhotoGridAdapter);
         mGridAlbum.setOnItemClickListener(mOnItemClickListener);
         mGridAlbum.setOnScrollListener(mProfilePhotoGridAdapter);
-        //Баги с этим функцонилом, поэтому отключаем его см #15846
-        /*mGridAlbum.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        mGridAlbum.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 if (needDialog(mProfilePhotoGridAdapter.getItem(position))) {
@@ -132,7 +131,7 @@ public class ProfilePhotoFragment extends BaseFragment {
                 }
                 return true;
             }
-        });*/
+        });
 
         final TextView title = (TextView) root.findViewById(R.id.usedTitle);
 
@@ -174,7 +173,7 @@ public class ProfilePhotoFragment extends BaseFragment {
     public void startPhotoDialog(final Photo photo) {
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Выберите действие").setItems(new String[]{getString(R.string.edit_set_as_main), getString(R.string.edit_delete)}, new DialogInterface.OnClickListener() {
+        builder.setItems(new String[]{getString(R.string.edit_set_as_main), getString(R.string.edit_delete)}, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 mLoadingLocker.setVisibility(View.VISIBLE);
