@@ -342,7 +342,7 @@ public class AuthFragment extends BaseFragment {
             @Override
             protected void success(Profile data, ApiResponse response) {
                 CacheProfile.setProfile(data, response);
-                if (idReceiver != null) idReceiver.onProfileIdReceived(CacheProfile.getProfile().uid);
+                if (idReceiver != null) idReceiver.onProfileIdReceived(CacheProfile.uid);
                 getOptions();
             }
 

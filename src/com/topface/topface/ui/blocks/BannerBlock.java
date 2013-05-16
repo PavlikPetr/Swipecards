@@ -32,7 +32,6 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Banner;
 import com.topface.topface.data.Options;
-import com.topface.topface.data.Profile;
 import com.topface.topface.data.VirusLike;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
@@ -390,11 +389,10 @@ public class BannerBlock {
 
     private void showMadnet() {
         mBannerView.setVisibility(View.VISIBLE);
-        Profile profile = CacheProfile.getProfile();
         com.mad.ad.AdRequest.Builder requestBuilder = new com.mad.ad.AdRequest.Builder();
-        requestBuilder.setGender(profile.sex == Static.BOY ?
+        requestBuilder.setGender(CacheProfile.sex == Static.BOY ?
                 com.mad.ad.AdRequest.Gender.MALE : com.mad.ad.AdRequest.Gender.FEMALE);
-        requestBuilder.setGenderInterest(profile.dating.sex == Static.BOY ?
+        requestBuilder.setGenderInterest(CacheProfile.dating.sex == Static.BOY ?
                 com.mad.ad.AdRequest.GenderInterest.MALE : com.mad.ad.AdRequest.GenderInterest.FEMALE);
         com.mad.ad.AdRequest request = requestBuilder.getRequest();
         ((AdStaticView) mBannerView).showBanners(request);

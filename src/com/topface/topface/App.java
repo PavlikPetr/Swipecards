@@ -16,12 +16,9 @@ import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.*;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.DateUtils;
-import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.*;
 import com.topface.topface.utils.GeoUtils.GeoLocationManager;
 import com.topface.topface.utils.GeoUtils.GeoPreferencesManager;
-import com.topface.topface.utils.HockeySender;
 import com.topface.topface.utils.social.AuthToken;
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
@@ -41,6 +38,7 @@ public class App extends Application {
     private static ConnectionChangeReceiver mConnectionReceiver;
     private static AtomicBoolean mProfileUpdating = new AtomicBoolean(false);
     private static long mLastProfileUpdate;
+    private static AppConfig mBaseConfig;
 
     public static boolean isDebugMode() {
         boolean debug = false;
@@ -69,12 +67,16 @@ public class App extends Application {
         //Включаем логирование ошибок
         initAcra();
 
+        //Базовые настройки приложения, инитим их один раз при старте приложения
+        mBaseConfig = new AppConfig(this);
+        Editor.setConfig(mBaseConfig);
+
         //Включаем строгий режим, если это Debug версия
         checkStrictMode();
         //Для Android 2.1 и ниже отключаем Keep-Alive
         checkKeepAlive();
 
-        Debug.log("App", "+onCreate");
+        Debug.log("App", "+onCreate\n" + mBaseConfig.toString());
 
         //Начинаем слушать подключение к интернету
         if (mConnectionIntent == null) {
@@ -91,6 +93,7 @@ public class App extends Application {
         }).start();
 
     }
+
 
     /**
      * Вызывается в onCreate, но выполняется в отдельном потоке
@@ -240,6 +243,10 @@ public class App extends Application {
             mLastProfileUpdate = System.currentTimeMillis();
             sendProfileRequest();
         }
+    }
+
+    public static AppConfig getConfig() {
+        return mBaseConfig;
     }
 }
 

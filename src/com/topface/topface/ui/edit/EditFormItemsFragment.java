@@ -50,7 +50,6 @@ public class EditFormItemsFragment extends AbstractEditFragment {
             mDataId = FormItem.NO_RESOURCE_ID;
             mSeletedDataId = mDataId;
             mData = Static.EMPTY;
-            mProfile = CacheProfile.getProfile();
         }
 
         mProfile = CacheProfile.getProfile();

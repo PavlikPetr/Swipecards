@@ -19,7 +19,7 @@ import java.util.LinkedList;
 /* Класс профиля владельца устройства */
 public class Profile extends AbstractDataWithPhotos {
 
-    private static String[] EMPTY_STATUSES = {Static.EMPTY, "-"};
+    private static String[] EMPTY_STATUSES = {Static.EMPTY, "-", "."};
 
 
     public int uid; // id пользователя в топфейсе
@@ -62,6 +62,10 @@ public class Profile extends AbstractDataWithPhotos {
     public boolean paid;
     // Показывать рекламу или нет
     public boolean show_ad;
+    /**
+     * Флаг того, является ли пользоветль редактором
+     */
+    private boolean mEditor;
     // private static final String profileFileName = "profile.out";
     // private static final long serialVersionUID = 2748391675222256671L;
     public boolean canInvite;
@@ -98,6 +102,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.show_ad = resp.optBoolean("show_ad",true);
             profile.xstatus = resp.optInt("xstatus");
             profile.canInvite = resp.optBoolean("can_invite");
+            profile.setEditor(resp.optBoolean("editor", false));
 
             parseGifts(profile, resp);
             parseNotifications(profile, resp);
@@ -442,18 +447,6 @@ public class Profile extends AbstractDataWithPhotos {
             if (!resp.isNull("photos_count")) {
                 profile.totalPhotos = resp.optInt("photos_count");
             }
-            // newbie
-            // if (!resp.isNull("flags")) {
-            // JSONArray flags = resp.getJSONArray("flags");
-            // for (int i = 0; i < flags.length(); i++) {
-            // profile.isNewbie = true;
-            // String item = flags.getString(i);
-            // if (item.equals("NOVICE_ENERGY")) {
-            // profile.isNewbie = false;
-            // break;
-            // }
-            // }
-            // }
         }
     }
 
@@ -493,6 +486,10 @@ public class Profile extends AbstractDataWithPhotos {
         return result;
     }
 
+    public void setEditor(boolean editor) {
+        mEditor = editor;
+    }
+
     public static class TopfaceNotifications {
         public boolean apns;
         public boolean mail;
@@ -528,6 +525,10 @@ public class Profile extends AbstractDataWithPhotos {
 
     public boolean isEmpty() {
         return uid <= 0;
+    }
+
+    public boolean isEditor() {
+        return mEditor;
     }
 
 }

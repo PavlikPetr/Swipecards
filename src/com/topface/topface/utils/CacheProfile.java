@@ -69,6 +69,7 @@ public class CacheProfile {
 
     public static long profileUpdateTime;
     public static int xstatus;
+    private static boolean editor;
     public static boolean canInvite;
 
     private static void setProfileCache(final ApiResponse response) {
@@ -126,6 +127,7 @@ public class CacheProfile {
         profile.paid = paid;
         profile.show_ad = show_ad;
         profile.xstatus = xstatus;
+        profile.setEditor(editor);
 
         profile.canInvite = canInvite;
 
@@ -133,6 +135,7 @@ public class CacheProfile {
     }
 
     public static void setProfile(Profile profile, ApiResponse response) {
+        Editor.init(profile);
         uid = profile.uid;
         first_name = profile.first_name;
         age = profile.age;
@@ -168,6 +171,8 @@ public class CacheProfile {
         xstatus = profile.xstatus;
 
         canInvite = profile.canInvite;
+
+        editor = profile.isEditor();
 
         setProfileCache(response);
         setProfileUpdateTime();
@@ -327,5 +332,9 @@ public class CacheProfile {
         editor.putBoolean(Static.PREFERENCES_TAG_NEED_CHANGE_PASSWORD, false);
         editor.putBoolean(Static.PREFERENCES_TAG_NEED_CITY_CONFIRM, true);
         editor.commit();
+    }
+
+    public static boolean isEditor() {
+        return editor;
     }
 }
