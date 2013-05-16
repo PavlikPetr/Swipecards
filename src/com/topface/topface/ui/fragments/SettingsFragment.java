@@ -271,7 +271,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             public void onClick(View v) {
                 // магия
             }
-        });
+        }); //Что за магия?Оо
 
         final CheckBox checkBoxEmail = (CheckBox) frame.findViewWithTag("cbMail");
         ProgressBar prsMail = (ProgressBar) frame.findViewWithTag("prsMail");

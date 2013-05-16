@@ -53,6 +53,7 @@ public class GCMUtils {
     private static boolean showSympathy = true;
     private static boolean showVisitors = true;
     public static final String GCM_INTENT = "GCM";
+    public static boolean GCM_SUPPORTED = true;
 
     public static void init(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
@@ -75,6 +76,7 @@ public class GCMUtils {
                 }
 
             } catch (Exception ex) {
+                GCM_SUPPORTED = false;
                 Debug.error("GCM not supported", ex);
             }
         }
