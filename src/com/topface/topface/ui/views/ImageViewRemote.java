@@ -38,6 +38,7 @@ public class ImageViewRemote extends ImageView {
      * Задержка перед следующей попыткой загрузки изображения
      */
     private static final long REPEAT_SCHEDULE = 2000;
+    public static final int PHOTO_ERROR_RESOURCE = R.drawable.im_photo_error;
     private BitmapProcessor mPostProcessor;
     private String mCurrentSrc;
     /**
@@ -246,7 +247,7 @@ public class ImageViewRemote extends ImageView {
                         if (mLoader != null) {
                             mLoader.setVisibility(View.GONE);
                         }
-                        setImageResource(R.drawable.im_photo_error);
+                        setImageResource(PHOTO_ERROR_RESOURCE);
                     } else {
                         mRepeatCounter++;
                         mRepeatTimer = new Timer();

@@ -46,6 +46,7 @@ public class ZoomImageViewRemote extends ImageViewRemote {
         super.setImageBitmap(bm);
         //Если установлено новое изображение, то нужно проинформировать об этом PhotoView
         mPhotoViewAttacher.update();
+        mPhotoViewAttacher.setZoomable(true);
     }
 
     @Override
@@ -89,4 +90,19 @@ public class ZoomImageViewRemote extends ImageViewRemote {
         }
     }
 
+    @Override
+    public void setImageResource(int resId) {
+        super.setImageResource(resId);
+        /*
+         * В PhotoView наблюдается толи баг, то ли фича, из-за которой при попытке поставить ресурс с картинкой ошибки,
+         * то он не расположен по центру, а в левом верхнем углу.
+         * Дабы это побороть устаналвиваем зум (1 к 1) и после апдейта все отображается как нужно
+         * В добавок отключаем зум
+         */
+        boolean isPhotoError = resId == PHOTO_ERROR_RESOURCE;
+        mPhotoViewAttacher.setZoomable(!isPhotoError);
+        if (isPhotoError) {
+            mPhotoViewAttacher.zoomTo(1, 0, 0);
+        }
+    }
 }
