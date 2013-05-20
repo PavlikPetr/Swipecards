@@ -604,5 +604,20 @@
     <string name="incorrect_locale">Если Вы хотите, чтобы мы смогли прочитать Ваш отзыв, пишите его на русском или на
         английском языке
     </string>
+    <string name="complain_photo_header">Некорректная фотография</string>
+    <string name="complain_msg_header">Некорректное сообщение</string>
+    <string name="complain_info_header">Некорректная информация</string>
+    <string name="complain_type_porn">Порно (видны гениталии)</string>
+    <string name="complain_type_ero">Эротика на главном фото</string>
+    <string name="complain_type_picture">Картинка</string>
+    <string name="complain_type_fake_user">Известный человек</string>
+    <string name="complain_type_spam_msg">Коммерческое предложение, спам, реклама, ссылки на сайты, телефоны</string>
+    <string name="complain_type_spam_profile">Поля «статус», «о себе» содержат коммерческое предложение</string>
+    <string name="complain_type_swearing_profile">Поля «статус», «о себе» содержат хамство, мат, ссылки на соц. сети
+    </string>
+    <string name="complain_type_fake_data">Имя, пол, возраст и фотография человека не совпадают</string>
+    <string name="complain_description">Расскажите о причине жалобы подробней</string>
+    <string name="general_complain_sended">Ваша жалоба отправлена, большое спасибо за помощь</string>
+    <string name="general_complain">Жалоба</string>
 
 </resources>

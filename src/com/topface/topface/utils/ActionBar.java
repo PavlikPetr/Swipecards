@@ -205,6 +205,10 @@ public class ActionBar {
         mUserActionsControl.setEnabled(!disabled);
     }
 
+    public void setSendButtonEnabled(boolean enabled) {
+        mSendButton.setEnabled(enabled);
+    }
+
     public void hide() {
         actionView.setVisibility(View.GONE);
     }

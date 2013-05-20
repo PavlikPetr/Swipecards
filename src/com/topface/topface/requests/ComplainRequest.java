@@ -8,7 +8,7 @@ public class ComplainRequest extends ApiRequest {
 
     public static final String SERVICE_NAME = "complain";
     public enum ClassNames {WALL_MSG, PHOTO, PRIVATE_MSG, USER, LEADER};
-    public enum TypesNames {SEARING, ERO, FAKE_USER, FAKE_DATA, FAKE_PHOTO, PORN, SPAM};
+    public enum TypesNames {SWEARING, ERO, FAKE_USER, FAKE_DATA, FAKE_PHOTO, PORN, SPAM};
 
     private int userId;
     private int complainClass;

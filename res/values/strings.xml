@@ -448,4 +448,5 @@
     <string name="incorrect_photo_size">Invalid photo size</string>
     <string name="input_contact_name">Enter the name of the contact</string>
     <string name="incorrect_locale">If you would like for us to read your review, write it in Russian or in English</string>
+    <string name="complain_type_swearing_msg">Хамство, угрозы, мат</string>
 </resources>

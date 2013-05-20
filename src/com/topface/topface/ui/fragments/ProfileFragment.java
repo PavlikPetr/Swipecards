@@ -139,6 +139,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mUserActions.findViewById(R.id.acDelight).setOnClickListener(this);
         mUserActions.findViewById(R.id.acChat).setOnClickListener(this);
         mUserActions.findViewById(R.id.acBlock).setOnClickListener(this);
+        mUserActions.findViewById(R.id.acComplain).setOnClickListener(this);
+
         bmBtn = (RelativeLayout) mUserActions.findViewById(R.id.acBookmark);
         mBookmarkAction = (TextView) mUserActions.findViewById(R.id.favTV);
         bmBtn.setOnClickListener(this);
@@ -670,6 +672,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     }
                 }).exec();
                 break;
+            case R.id.acComplain:
+                startActivity(ContainerActivity.getComplainIntent(mProfileId));
+                break;
             default:
                 break;
         }
@@ -764,8 +769,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
-                if (mGiftFragment == null) {
+                if (mGiftFragment == null || !mGiftFragment.isAdded()) {
                     sendGift(data);
+                    return;
                 }
             }
             resultToNestedFragments(requestCode, resultCode, data);
