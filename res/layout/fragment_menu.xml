@@ -140,6 +140,17 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/btnFragmentVisitors"
+                android:id="@+id/countersLayout"
                 layout="@layout/buy_widget"/>
+
+        <!-- Admin -->
+        <Button
+                android:id="@+id/btnEditor"
+                android:layout_below="@id/countersLayout"
+                android:visibility="gone"
+                android:text="@string/editor_menu_admin"
+                android:drawableLeft="@drawable/topface_settings"
+                style="@style/LeftMenuButtons"/>
+
     </RelativeLayout>
 </ScrollView>

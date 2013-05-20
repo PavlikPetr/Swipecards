@@ -9,18 +9,37 @@ import org.json.JSONTokener;
 @SuppressWarnings({"PointlessBooleanExpression", "ConstantConditions"})
 public class Debug {
 
+    /**
+     * Отладка включена только в debug режиме
+     */
+    public static final int MODE_DEBUG = 0;
+    /**
+     * Отладка включена для редакторов
+     */
+    public static final int MODE_EDITOR = 1;
+    /**
+     * Отладка включена всегда
+     */
+    public static final int MODE_ALWAYS = 2;
+    /**
+     * Отла
+     */
+    private static final int MODE_DISABLE = 3;
+
     public static final int MAX_LOG_MESSAGE_LENGTH = 3500;
     /**
      * Резать длинные сообщения в логах на несколько
      */
     public static final boolean CHUNK_LONG_LOGS = true;
+
     /**
      * Форматировать JSON
      */
     private static final boolean FORMAT_JSON = true;
+    private static boolean mShowDebug = App.DEBUG;
 
     public static void log(Object obj, String msg) {
-        if (App.DEBUG) {
+        if (mShowDebug) {
             if (obj == null)
                 showChunkedLogInfo(App.TAG, "::" + msg);
             else if (obj instanceof String)
@@ -31,7 +50,7 @@ public class Debug {
     }
 
     public static void debug(Object obj, String msg) {
-        if (App.DEBUG) {
+        if (mShowDebug) {
             if (obj == null)
                 showChunkedLogDebug(App.TAG, "::" + msg);
             else if (obj instanceof String)
@@ -90,13 +109,13 @@ public class Debug {
     }
 
     public static void log(String msg) {
-        if (App.DEBUG) {
+        if (mShowDebug) {
             showChunkedLogInfo(App.TAG, msg);
         }
     }
 
     public static void error(String msg, Throwable e) {
-        if (App.DEBUG) {
+        if (mShowDebug) {
             StringBuilder stack = new StringBuilder("\n");
             for (StackTraceElement st : e.getStackTrace()) {
                 stack.append(st.toString()).append("\n");
@@ -109,7 +128,7 @@ public class Debug {
     }
 
     public static void error(String msg, OutOfMemoryError e) {
-        if (App.DEBUG) {
+        if (mShowDebug) {
             StringBuilder stack = new StringBuilder("\n");
             for (StackTraceElement st : e.getStackTrace()) {
                 stack.append(st.toString()).append("\n");
@@ -122,7 +141,7 @@ public class Debug {
     }
 
     public static void error(String msg) {
-        if (App.DEBUG) {
+        if (mShowDebug) {
             showChunkedLogError(App.TAG, msg);
         }
     }
@@ -132,7 +151,7 @@ public class Debug {
     }
 
     public static void logJson(String tag, String title, String json) {
-        if (App.DEBUG) {
+        if (mShowDebug) {
             if (json != null) {
                 JSONTokener tokener = new JSONTokener(json);
                 JSONObject finalResult;
@@ -151,4 +170,28 @@ public class Debug {
             }
         }
     }
+
+    /**
+     * В зависимости от режима дебага вклчает отладку
+     *
+     * @param mode режим отладки (только при дебаге, включен всегда или для редакторов и при отладке)
+     */
+    public static void setDebugMode(int mode) {
+        switch (mode) {
+            case MODE_EDITOR:
+                mShowDebug = App.DEBUG || Editor.isEditor();
+                break;
+            case MODE_ALWAYS:
+                mShowDebug = true;
+                break;
+            case MODE_DISABLE:
+                mShowDebug = false;
+                break;
+            case MODE_DEBUG:
+            default:
+                mShowDebug = App.DEBUG;
+                break;
+        }
+    }
+
 }

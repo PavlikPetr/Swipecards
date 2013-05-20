@@ -3,7 +3,6 @@ package com.topface.topface.requests;
 import android.content.Context;
 import android.net.Uri;
 import com.google.analytics.tracking.android.EasyTracker;
-import com.topface.topface.Static;
 import com.topface.topface.utils.Base64;
 import com.topface.topface.utils.BitmapUtils;
 import com.topface.topface.utils.Debug;
@@ -65,7 +64,7 @@ public class PhotoAddRequest extends ApiRequest {
 
             Debug.logJson(
                     ConnectionManager.TAG,
-                    "REQUEST >>> " + Static.API_URL + " rev:" + getRevNum(),
+                    "REQUEST >>> " + mApiUrl + " rev:" + getRevNum(),
                     headers
             );
             return true;
@@ -124,12 +123,7 @@ public class PhotoAddRequest extends ApiRequest {
     }
 
     @Override
-    public HttpURLConnection openConnection() throws IOException {
-        //Если открываем новое подключение, то старое закрываем
-        closeConnection();
-
-        mURLConnection = HttpUtils.openPostConnection(getApiUrl(), PHOTO_ADD_CONTENT_TYPE);
-        return mURLConnection;
+    protected String getContentType() {
+        return PHOTO_ADD_CONTENT_TYPE;
     }
-
 }

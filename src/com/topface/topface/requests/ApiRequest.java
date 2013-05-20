@@ -9,6 +9,7 @@ import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.HttpUtils;
 import org.json.JSONException;
@@ -44,6 +45,7 @@ public abstract class ApiRequest implements IApiRequest {
     private boolean doNeedAlert;
     private int mResendCnt = 0;
     private String mPostData;
+    protected String mApiUrl;
 
     public ApiRequest(Context context) {
         //Нельзя передавать Application Context!!!! Только контекст Activity
@@ -223,14 +225,18 @@ public abstract class ApiRequest implements IApiRequest {
         handler.response(new ApiResponse(errorCode, errorMessage));
     }
 
-    public HttpURLConnection openConnection() throws IOException {
+    protected HttpURLConnection openConnection() throws IOException {
         //Если открываем новое подключение, то старое закрываем
         closeConnection();
 
-        mURLConnection = HttpUtils.openPostConnection(getApiUrl(), CONTENT_TYPE);
+        mURLConnection = HttpUtils.openPostConnection(mApiUrl, getContentType());
         setRevisionHeader(mURLConnection);
 
         return mURLConnection;
+    }
+
+    protected String getContentType() {
+        return CONTENT_TYPE;
     }
 
     public void closeConnection() {
@@ -251,11 +257,12 @@ public abstract class ApiRequest implements IApiRequest {
     }
 
     protected String getApiUrl() {
-        return Static.API_URL;
+        return App.getConfig().getApiUrl();
     }
 
     @Override
     final public int sendRequest() throws Exception {
+        mApiUrl = getApiUrl();
         HttpURLConnection connection = getConnection();
         if (connection != null) {
             //Непосредственно перед отправкой запроса устанавливаем новый SSID
@@ -284,7 +291,7 @@ public abstract class ApiRequest implements IApiRequest {
         if (requestData.length > 0 && !isCanceled()) {
             Debug.logJson(
                     ConnectionManager.TAG,
-                    "REQUEST >>> " + Static.API_URL + " rev:" + getRevNum(),
+                    "REQUEST >>> " + mApiUrl + " rev:" + getRevNum(),
                     requestJson
             );
 
@@ -326,14 +333,16 @@ public abstract class ApiRequest implements IApiRequest {
      * @param connection соединение к которому будет добавлен заголовок
      */
     protected void setRevisionHeader(HttpURLConnection connection) {
-        String rev = getRevNum();
-        if (rev != null && rev.length() > 0) {
-            connection.setRequestProperty("Cookie", "revnum=" + rev + ";");
+        if (App.DEBUG || Editor.isEditor()) {
+            String rev = getRevNum();
+            if (rev != null && rev.length() > 0) {
+                connection.setRequestProperty("Cookie", "revnum=" + rev + ";");
+            }
         }
     }
 
     protected static String getRevNum() {
-        return App.DEBUG ? Static.REV : "";
+        return App.getConfig().getApiRevision();
     }
 
     @Override

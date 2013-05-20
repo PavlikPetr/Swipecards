@@ -11,6 +11,7 @@ import android.graphics.PorterDuff.Mode;
 import android.net.Uri;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.SparseArray;
 import android.view.Display;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -20,7 +21,9 @@ import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.AuthRequest;
+import com.topface.topface.utils.social.AuthToken;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -497,5 +500,27 @@ public class Utils {
 
     public static int getPxFromDp(int pixels) {
         return (int) (mDensity * pixels);
+    }
+
+    public static String getSocialNetworkLink(String socialNetwork, String socialId) {
+        String socialNetworkLink = "";
+        if (TextUtils.equals(socialNetwork, AuthToken.SN_VKONTAKTE)) {
+            socialNetworkLink = "https://vk.com/id" + socialId;
+        } else if (TextUtils.equals(socialNetwork, AuthToken.SN_FACEBOOK)) {
+            socialNetworkLink = "https://www.facebook.com/" + socialId;
+        } else if (TextUtils.equals(socialNetwork, AuthToken.SN_TOPFACE)) {
+            socialNetworkLink = "http://topface.com/profile/" + socialId + "/";
+        }
+        return socialNetworkLink;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static ArrayList sparsArrayToArrayList(SparseArray array) {
+        ArrayList list = new ArrayList();
+        for (int i = 0; i < array.size(); i++) {
+            int key = array.keyAt(i);
+            list.add(key, array.get(key));
+        }
+        return list;
     }
 }

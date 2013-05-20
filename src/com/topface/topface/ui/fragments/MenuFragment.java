@@ -31,6 +31,7 @@ import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Novice;
+import com.topface.topface.utils.Editor;
 
 public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
@@ -183,6 +184,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         buttons.put(BaseFragment.F_FANS, (Button) rootLayout.findViewById(R.id.btnFragmentFans));
         buttons.put(BaseFragment.F_VISITORS, (Button) rootLayout.findViewById(R.id.btnFragmentVisitors));
         buttons.put(BaseFragment.F_BOOKMARKS, (Button) rootLayout.findViewById(R.id.btnFragmentBookmarks));
+        buttons.put(BaseFragment.F_EDITOR, (Button) rootLayout.findViewById(R.id.btnEditor));
 
         //Устанавливаем теги и листенеры на кнопки
         for (int i = 0; i < buttons.size(); i++) {
@@ -199,6 +201,9 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
     public void onLoadProfile() {
         setMenuData();
+        if (Editor.isEditor()) {
+            mButtons.get(F_EDITOR).setVisibility(View.VISIBLE);
+        }
     }
 
     private void showNotEnoughDataIcon() {
@@ -366,6 +371,11 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             case BaseFragment.F_SETTINGS:
                 fragment = new SettingsFragment();
                 break;
+            case BaseFragment.F_EDITOR:
+                if (Editor.isEditor()) {
+                    fragment = new EditorFragment();
+                    break;
+                }
             default:
                 fragment = ProfileFragment.newInstance(CacheProfile.uid, ProfileFragment.TYPE_MY_PROFILE);
                 break;
