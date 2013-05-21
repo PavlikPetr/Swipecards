@@ -619,5 +619,6 @@
     <string name="complain_description">Расскажите о причине жалобы подробней</string>
     <string name="general_complain_sended">Ваша жалоба отправлена, большое спасибо за помощь</string>
     <string name="general_complain">Жалоба</string>
+    <string name="confirm_email_for_dating"></string>
 
 </resources>

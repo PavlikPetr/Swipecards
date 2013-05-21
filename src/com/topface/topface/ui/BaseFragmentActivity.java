@@ -13,6 +13,7 @@ import com.topface.topface.GCMUtils;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
+import com.topface.topface.ui.dialogs.ConfirmEmailDialog;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
@@ -237,6 +238,15 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
                 Debug.error(e);
             }
             needOpenDialog = false;
+        }
+    }
+
+    protected void showConfirmEmailDialog() {
+        ConfirmEmailDialog newFragment = ConfirmEmailDialog.newInstance();
+        try {
+            newFragment.show(getSupportFragmentManager(), ConfirmEmailDialog.TAG);
+        } catch (Exception e) {
+            Debug.error(e);
         }
     }
 
