@@ -631,7 +631,7 @@
     <string name="general_bookmarks_add_short">в избранные</string>
     <string name="black_list_add_short">в черный список</string>
     <string name="general_complaint">Пожаловаться</string>
-    <string name="general_ензу_complain">Тема жалобы</string>
+    <string name="general_type_complain">Тема жалобы</string>
     
     <string name="confirm_email_for_dating">Мы против спама. Подтвердите свой почтовый адрес, чтобы знакомится в Topface!</string>
     <string name="confirm">Подтвердить</string>
