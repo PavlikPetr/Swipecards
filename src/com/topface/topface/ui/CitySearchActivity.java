@@ -16,6 +16,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.CitiesRequest;
 import com.topface.topface.requests.SearchCitiesRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
@@ -202,11 +203,9 @@ public class CitySearchActivity extends BaseFragmentActivity {
     }
 
     private void initHeader() {
-        ((TextView) findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.general_city));
-        findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
-        View btnBack = findViewById(R.id.btnNavigationBack);
-        btnBack.setVisibility(View.VISIBLE);
-        btnBack.setOnClickListener(new OnClickListener() {
+        ActionBar actionBar = new ActionBar(findViewById(R.id.rootContainer));
+        actionBar.setTitleText(getString(R.string.general_city));
+        actionBar.showBackButton(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Utils.hideSoftKeyboard(CitySearchActivity.this, mCityInputView);

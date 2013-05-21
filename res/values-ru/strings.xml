@@ -620,7 +620,7 @@
     <string name="general_complain_sended">Ваша жалоба отправлена, большое спасибо за помощь</string>
     <string name="general_complain">Жалоба</string>
     <string name="general_msg">Сообщение</string>
-    
+
     <plurals name="vip_add_more_friends">
         <item quantity="one">Пригласите еще %d друга</item>
         <item quantity="few">Пригласите еще %d друга</item>
@@ -631,5 +631,9 @@
     <string name="general_bookmarks_add_short">в избранные</string>
     <string name="black_list_add_short">в черный список</string>
     <string name="general_complaint">Пожаловаться</string>
+    <string name="general_ензу_complain">Тема жалобы</string>
     
+    <string name="confirm_email_for_dating">Мы против спама. Подтвердите свой почтовый адрес, чтобы знакомится в Topface!</string>
+    <string name="confirm">Подтвердить</string>
+
 </resources>
