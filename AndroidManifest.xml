@@ -247,6 +247,13 @@
                 android:name="com.inneractive.api.ads.InneractiveFullScreenView"
                 android:configChanges="orientation|screenSize"/>
 
+        <meta-data android:name="com.mobclix.APPLICATION_ID"
+                   android:value="18FE3F53-02A6-4585-9518-B2896A13FD6C"/>
+        <activity
+                android:name="com.mobclix.android.sdk.MobclixBrowserActivity"
+                android:theme="@android:style/Theme.Translucent.NoTitleBar"
+                android:hardwareAccelerated="true" />
+
         <!-- Алиас для главной активити из первой версии. На всякий случай, а то раньше уже были проблемы с FB -->
         <activity-alias
                 android:name=".ui.MainActivity"
