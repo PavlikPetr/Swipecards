@@ -8,7 +8,9 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -23,6 +25,8 @@ public class ConfirmEmailDialog extends DialogFragment implements View.OnClickLi
 
     public static final String TAG = "Topface_ConfirmEmailDialog_Tag";
     private EditText mEditEmailText;
+    private Button mConfirmButton;
+    private ProgressBar mProgressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -33,7 +37,9 @@ public class ConfirmEmailDialog extends DialogFragment implements View.OnClickLi
         getDialog().setCanceledOnTouchOutside(false);
 
         root.findViewById(R.id.btnClose).setOnClickListener(this);
-        root.findViewById(R.id.btnSend).setOnClickListener(this);
+        mConfirmButton = (Button) root.findViewById(R.id.btnSend);
+        mConfirmButton.setOnClickListener(this);
+        mProgressBar = (ProgressBar) root.findViewById(R.id.prsLoading);
 
         mEditEmailText = (EditText) root.findViewById(R.id.edEmail);
         AuthToken token = AuthToken.getInstance();
@@ -82,7 +88,7 @@ public class ConfirmEmailDialog extends DialogFragment implements View.OnClickLi
 
     private void changeEmailAndSendConfirmation(final String email) {
         ChangeLoginRequest changeLoginRequest = new ChangeLoginRequest(getActivity(), email);
-
+        onRequestStart();
         changeLoginRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
@@ -94,6 +100,7 @@ public class ConfirmEmailDialog extends DialogFragment implements View.OnClickLi
 
             @Override
             public void fail(int codeError, ApiResponse response) {
+                onRequestEnd();
                 Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
             }
         }).exec();
@@ -101,6 +108,7 @@ public class ConfirmEmailDialog extends DialogFragment implements View.OnClickLi
 
     private void resendEmailForConfirmation() {
         RemindRequest request = new RemindRequest(getActivity());
+        onRequestStart();
         request.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
@@ -110,9 +118,10 @@ public class ConfirmEmailDialog extends DialogFragment implements View.OnClickLi
 
             @Override
             public void fail(int codeError, ApiResponse response) {
+                onRequestEnd();
                 Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
             }
-        });
+        }).exec();
     }
 
     private void closeDialog() {
@@ -124,5 +133,15 @@ public class ConfirmEmailDialog extends DialogFragment implements View.OnClickLi
         ConfirmEmailDialog dialog = new ConfirmEmailDialog();
         dialog.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.Theme_Topface);
         return dialog;
+    }
+
+    private void onRequestStart() {
+        mConfirmButton.setVisibility(View.INVISIBLE);
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void onRequestEnd() {
+        mConfirmButton.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.GONE);
     }
 }
