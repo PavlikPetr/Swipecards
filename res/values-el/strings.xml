@@ -413,6 +413,8 @@
     <string name="general_add">Προσθήκη</string>
     <string name="general_invite_friends">Προσκαλέστε τους φίλους σας</string>
     <string name="general_rest_contacts">Υπάρχουν μόνο %d επαφών</string>
+    <string name="invite_friends_title">Προσκαλέστε όλους τους φίλους σας από την τηλεφωνικό κατάλογο στο Topface</string>
+    <string name="invalid_contacts">Μερικές από τις επαφές ήταν λανθασμένες. Παρακαλώ, στείλτε τις σωστές επαφές</string>
     <string name="general_choose_action">Επιλέξτε τη δράση</string>
     <plurals name="vip_status_period">
         <item quantity="other">Πήρατε κατάσταση VIP για %d μέρες</item>
@@ -435,4 +437,6 @@
     <string name="avatar_set_successfully">Το Άβαταρ σας φορτώθηκε με επιτυχία!</string>
     <string name="incorrect_photo">Εσφαλμένη φωτογραφία. Φορτώστε μια άλλη!</string>
     <string name="incorrect_photo_format">Μη έγκυρη μορφή φωτογραφίων (ανεβάσετε τις φωτογραφίες σε μορφή jpg ή png.</string>
+    <string name="incorrect_photo_size">Το μέγεθος της φωτογραφίας δεν είναι σωστή</string>
+    <string name="input_contact_name">Πληκτρολογήστε το όνομα της επαφής</string>
 </resources>

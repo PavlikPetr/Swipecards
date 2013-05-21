@@ -409,6 +409,8 @@
     <string name="general_invite_friends">친구들을 초대해 주세요.</string>
     <string name="general_rest_contacts">%d 연락처만 남았습니다.</string>
     <string name="invite_friends_title">Topface에 모든 친구들을 초대해 보세요.</string>
+    <string name="invalid_contacts">몇몇의 연락처가 옳지 않습니다. 옳바른 연락처로 기입바랍니다.</string>
+    <string name="general_choose_action">다음 행동을 선택하여 주세요.</string>
     <plurals name="vip_status_period">
         <item quantity="other">%d일간 이용할 수 있는 VIP 상태를 받으셨습니다.</item>
     </plurals>
@@ -422,4 +424,17 @@
         <item quantity="other">%d 초대하여 VIP를 무료로 받아 보세요</item>
     </plurals>
     <string name="filter_hint">이름을 입력하십시오.</string>
+    <string name="buy_status_and_watch_your_fans">VIP 상태를 구입하여 누가 당신의 팬인지 알아보세요.</string>
+    <string name="add_bookmarks_to_be_connected">새롭게 만난 사람들을 이곳에 추가하여 지속적인 관계를 유지하여 보세요.</string>
+    <string name="nobody_chat_with_you_sympathies_will_help">아직 당신에게 보내온 메세지가 없습니다. 호감도가 아마도 대화 상대를 찾아줄 수 있을것 같군요.</string>
+    <string name="rate_and_have_mutual_or_buy_and_chat">당신의 마음에 들어하는 상대에게 호감도를 보내고 상대방에게도 받아보세요. 또는 호감도를 구입하여 당신의 마음에 들어하는 상대와 대화를 할 수 있습니다.</string>
+    <string name="start_rate">평가 시작하기</string>
+    <string name="with_vip_find_your_visitors">VIP 상태를 이용하면 누가 당신의 페이지에 왔었는지 알 수 있습니다.</string>
+    <string name="on_avatar">아바타로</string>
+    <string name="your_avatar">당신의 아바타.</string>
+    <string name="avatar_set_successfully">아바타가 성공적으로 설치되었습니다.</string>
+    <string name="incorrect_photo">해당 사진이 옳지 않습니다. 다른 사진을 선택하여 주십시오.</string>
+    <string name="incorrect_photo_format">사진의 형식이 옳지 않습니다. jpg 또는 png 파일을 로딩하여 주십시오.</string>
+    <string name="incorrect_photo_size">사진의 용량이 너무 큽니다.</string>
+    <string name="input_contact_name">연락처 이름을 입력하여 주십시오.</string>
 </resources>
