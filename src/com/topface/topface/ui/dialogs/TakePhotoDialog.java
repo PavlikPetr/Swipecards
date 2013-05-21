@@ -42,9 +42,7 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.dialog_take_photo, container, false);
-        ColorDrawable color = new ColorDrawable(Color.BLACK);
-        color.setAlpha(175);
-        getDialog().getWindow().setBackgroundDrawable(color);
+        setTransparentBackground();
         getDialog().setCanceledOnTouchOutside(false);
         getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -78,6 +76,12 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
         root.findViewById(R.id.btnClose).setOnClickListener(this);
 
         return root;
+    }
+
+    private void setTransparentBackground() {
+        ColorDrawable color = new ColorDrawable(Color.BLACK);
+        color.setAlpha(175);
+        getDialog().getWindow().setBackgroundDrawable(color);
     }
 
     @Override
