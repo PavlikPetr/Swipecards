@@ -15,6 +15,7 @@ import com.topface.topface.requests.LeadersRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.LeadersActivity;
 import com.topface.topface.ui.adapters.LeadersAdapter;
+import com.topface.topface.ui.dialogs.LeadersDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 
 /**
@@ -88,14 +89,20 @@ public class LeadersBlock {
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             //При клике на лидера, открываем его профиль
             Leader leader = (Leader) adapterView.getItemAtPosition(i);
-            mFragment.startActivity(
-                    ContainerActivity.getProfileIntent(
-                            leader.id,
-                            mFragment.getActivity()
-                    )
-            );
+            LeadersDialog dialog = LeadersDialog.newInstance(leader);
+            dialog.show(mFragment.getFragmentManager(), "Leaders_Dialog");
+//            mFragment.startActivity(
+//                    ContainerActivity.getProfileIntent(
+//                            leader.id,
+//                            mFragment.getActivity()
+//                    )
+//            );
 
         }
     };
+
+    private void showPopup() {
+
+    }
 
 }
