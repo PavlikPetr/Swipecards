@@ -19,10 +19,7 @@ import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.utils.ActionBar;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.FormItem;
+import com.topface.topface.utils.*;
 
 import java.util.HashMap;
 
@@ -251,7 +248,15 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                     for (EditType type : hashChangedData.keySet()) {
                         setDataByEditType(type, hashChangedData.get(type));
                     }
-                    CacheProfile.sex = mSex;
+
+                    if (CacheProfile.sex != mSex) {
+                        CacheProfile.sex = mSex;
+                        FormInfo formInfo = new FormInfo(getContext(), CacheProfile.getProfile());
+                        for (FormItem item : CacheProfile.forms) {
+                            formInfo.fillFormItem(item);
+                        }
+                    }
+
                     getActivity().setResult(Activity.RESULT_OK);
                     finishRequestSend();
                     if (handler == null) getActivity().finish();
