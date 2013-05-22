@@ -228,6 +228,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     mEditSex.setImageResource(CacheProfile.sex == Static.BOY ?
                             R.drawable.ico_boy :
                             R.drawable.ico_girl);
+                    mAdapter.notifyDataSetChanged();
                     break;
                 case EditContainerActivity.INTENT_EDIT_STATUS:
                     mAdapter.notifyDataSetChanged();
