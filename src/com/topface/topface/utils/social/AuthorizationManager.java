@@ -211,6 +211,8 @@ public class AuthorizationManager {
             getFbName(authToken.getUserId(), handler);
         } else if (authToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
             getVkName(authToken.getTokenKey(), authToken.getUserId(), handler);
+        } else if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+            handler.sendMessage(Message.obtain(null, SUCCESS_GET_NAME, authToken.getLogin()));
         }
     }
 

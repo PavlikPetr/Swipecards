@@ -6,7 +6,7 @@
     <string name="general_warning">ΠΡΟΕΙΔΟΠΟΙΗΣΗ</string>
     <string name="general_ok">OK</string>
     <string name="general_yes">Ναί</string>
-    <string name="general_no">όχι</string>
+    <string name="general_no">\'Οχι</string>
     <string name="general_cancel">Ακύρωση</string>
     <string name="general_delete_title">Κατάργηση</string>
     <string name="general_dialog_loading">Κατεβάστε</string>
@@ -413,6 +413,8 @@
     <string name="general_add">Προσθήκη</string>
     <string name="general_invite_friends">Προσκαλέστε τους φίλους σας</string>
     <string name="general_rest_contacts">Υπάρχουν μόνο %d επαφών</string>
+    <string name="invite_friends_title">Προσκαλέστε όλους τους φίλους σας από την τηλεφωνικό κατάλογο στο Topface</string>
+    <string name="invalid_contacts">Μερικές από τις επαφές ήταν λανθασμένες. Παρακαλώ, στείλτε τις σωστές επαφές</string>
     <string name="general_choose_action">Επιλέξτε τη δράση</string>
     <plurals name="vip_status_period">
         <item quantity="other">Πήρατε κατάσταση VIP για %d μέρες</item>
@@ -435,4 +437,25 @@
     <string name="avatar_set_successfully">Το Άβαταρ σας φορτώθηκε με επιτυχία!</string>
     <string name="incorrect_photo">Εσφαλμένη φωτογραφία. Φορτώστε μια άλλη!</string>
     <string name="incorrect_photo_format">Μη έγκυρη μορφή φωτογραφίων (ανεβάσετε τις φωτογραφίες σε μορφή jpg ή png.</string>
+    <string name="incorrect_photo_size">Το μέγεθος της φωτογραφίας δεν είναι σωστή</string>
+    <string name="input_contact_name">Πληκτρολογήστε το όνομα της επαφής</string>
+    <string name="complain_photo_header">Εσφαλμένη φωτογραφία</string>
+    <string name="complain_msg_header">Εσφαλμένο μήνυμα</string>
+    <string name="complain_info_header">Εσφαλμένες πληροφορίες</string>
+    <string name="complain_type_porn">Πορνό (ορατή γεννητικά όργανα)</string>
+    <string name="complain_type_ero">Ερωτική κύρια φωτογραφία</string>
+    <string name="complain_type_picture">Εικόνα</string>
+    <string name="complain_type_fake_user">Ψεύτικη φωτογραφία ή εικόνα</string>
+    <string name="complain_type_spam_msg">Εμπορική προσφορά: spam, διαφήμιση των αγαθών και υπηρεσιών, συνδέσμους προς ιστοσελίδες, τους αριθμούς τηλεφώνου</string>
+    <string name="complain_type_spam_profile">Tα πεδία \"κατάσταση\", \"σχετικά με τον εαυτό σας\" περιέχουν eμπορική προσφορά</string>
+    <string name="complain_type_swearing_profile">Τα πεδία \"κατάσταση\", \"σχετικά με τον εαυτό σας\" περιέχουν αγένεια ή hyperlinks</string>
+    <string name="complain_type_fake_data">Όνομα, το φύλο, η ηλικία, και η φωτογραφία δεν ταιριάζουν</string>
+    <string name="general_complain_sended">Σας ευχαριστούμε, το παράπονό σας θα εξεταστεί στο προσεχές μέλλον</string>
+    <string name="general_complain">Η αναφορά</string>
+    <string name="general_msg">Μήνυμα</string>
+    <string name="general_bookmarks_add_short">στις αγαπημένες σας</string>
+    <string name="black_list_add_short">στη μαύρη λίστα</string>
+    <string name="general_complaint">Καταγγελία</string>
+    <string name="confirm_email_for_dating">Εμείς δεν θέλουμε το spam.Επιβεβαιώστε το email  για να εξοικείωσετε στο Topface!</string>
+    <string name="confirm">Επιβεβαιώστε</string>
 </resources>

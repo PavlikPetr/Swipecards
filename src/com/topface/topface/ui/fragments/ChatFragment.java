@@ -66,6 +66,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
 
+    private static final int COMPLAIN_BUTTON = 2;
     private static final int DELETE_BUTTON = 1;
     private static final int COPY_BUTTON = 0;
 
@@ -98,6 +99,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     // Managers
     private GeoLocationManager mGeoManager = null;
     private RelativeLayout mLockScreen;
+    private String[] editButtonsSelfNames;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -130,8 +132,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         // Navigation bar
         initNavigationbar(root, userName, userAge, userCity);
 
-        editButtonsNames = new String[]{getString(R.string.general_copy_title), getString(R.string.general_delete_title)};
-
+        editButtonsNames = new String[]{getString(R.string.general_copy_title), getString(R.string.general_delete_title), getString(R.string.general_complain)};
+        editButtonsSelfNames = new String[]{getString(R.string.general_copy_title), getString(R.string.general_delete_title)};
         // Swap Control
         initAddPanel(root);
 
@@ -255,9 +257,16 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             @Override
             public void onLongClick(final int position, final View v) {
 
+                History item = mAdapter.getItem(position);
+                String[] buttons;
+                if(item.target == 0) {
+                    buttons = editButtonsSelfNames;
+                } else {
+                    buttons = editButtonsNames;
+                }
                 new AlertDialog.Builder(getActivity())
                         .setTitle(R.string.general_spinner_title)
-                        .setItems(editButtonsNames, new DialogInterface.OnClickListener() {
+                        .setItems(buttons, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 switch (which) {
@@ -268,6 +277,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                                     case COPY_BUTTON:
                                         mAdapter.copyText(((TextView) v).getText().toString());
                                         EasyTracker.getTracker().trackEvent("Chat", "CopyItemText", "", 1L);
+                                        break;
+                                    case COMPLAIN_BUTTON:
+                                        startActivity(ContainerActivity.getComplainIntent(mUserId, mAdapter.getItem(position).id));
+                                        EasyTracker.getTracker().trackEvent("Chat", "ComplainItemText", "", 1L);
                                         break;
                                 }
                             }
@@ -427,7 +440,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 removeAlreadyLoadedItems(data);
 
                 setNavigationTitles(data.user.first_name, data.user.age, data.user.city.name);
-                mActionBar.setOnlineIcon(data.user.online);
+                if (data.user.deleted || data.user.banned) {
+                    mActionBar.setOnlineIcon(false);
+                } else {
+                    mActionBar.setOnlineIcon(data.user.online);
+                }
                 wasFailed = false;
                 mUser = data.user;
                 if (!mUser.isEmpty()) {

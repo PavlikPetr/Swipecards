@@ -106,6 +106,13 @@
         <item name="android:shadowRadius">1</item>
     </style>
 
+    <style name="ShadowBlackTop">
+        <item name="android:shadowColor">#000000</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">-1</item>
+        <item name="android:shadowRadius">1</item>
+    </style>
+
 
     <style name="BackgroundText" parent='ShadowUserText'>
         <item name="android:textColor">#2F2F2F</item>
@@ -697,7 +704,7 @@
         <item name="android:background">@drawable/btn_gray_selector</item>
     </style>
 
-    <style name="ButtonGray">
+    <style name="ButtonGray" parent="ShadowBlackTop">
         <item name="android:paddingLeft">15dp</item>
         <item name="android:paddingRight">15dp</item>
         <item name="android:paddingTop">10dp</item>

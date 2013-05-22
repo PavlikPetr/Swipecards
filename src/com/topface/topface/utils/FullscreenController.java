@@ -12,6 +12,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import com.inneractive.api.ads.InneractiveAd;
 import com.inneractive.api.ads.InneractiveAdListener;
+import com.mobclix.android.sdk.MobclixFullScreenAdView;
+import com.mobclix.android.sdk.MobclixFullScreenAdViewListener;
 import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.mobileads.MoPubInterstitial;
 import com.topface.topface.App;
@@ -62,10 +64,45 @@ public class FullscreenController {
                         requestMopubFullscreen();
                     } else if (startPage.banner.equals(Options.BANNER_INNERACTIVE)) {
                         requestInneractiveFullscreen();
+                    } else if (startPage.banner.equals(Options.BANNER_MOBCLIX)) {
+                        requestMobclixFullscreen();
                     }
                 }
             }
         }
+    }
+
+    private void requestMobclixFullscreen() {
+        MobclixFullScreenAdView adview = new MobclixFullScreenAdView(mActivity);
+        adview.requestAndDisplayAd();
+        adview.addMobclixAdViewListener(new MobclixFullScreenAdViewListener() {
+            @Override
+            public void onFinishLoad(MobclixFullScreenAdView mobclixFullScreenAdView) {
+            }
+
+            @Override
+            public void onFailedLoad(MobclixFullScreenAdView mobclixFullScreenAdView, int i) {
+                requestFallbackFullscreen();
+            }
+
+            @Override
+            public void onPresentAd(MobclixFullScreenAdView mobclixFullScreenAdView) {
+            }
+
+            @Override
+            public void onDismissAd(MobclixFullScreenAdView mobclixFullScreenAdView) {
+            }
+
+            @Override
+            public String keywords() {
+                return null;
+            }
+
+            @Override
+            public String query() {
+                return null;
+            }
+        });
     }
 
     private void requestInneractiveFullscreen() {
@@ -87,14 +124,7 @@ public class FullscreenController {
             @Override
             public void onIaAdFailed() {
                 Debug.log("Inneractive: onIaAdFailed()");
-                if (mActivity != null) {
-                    mActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            requestTopfaceFullscreen();
-                        }
-                    });
-                }
+                requestFallbackFullscreen();
             }
 
             @Override
@@ -128,6 +158,17 @@ public class FullscreenController {
             }
         });
         container.addView(iaBanner);
+    }
+
+    private void requestFallbackFullscreen() {
+        if (mActivity != null) {
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    requestTopfaceFullscreen();
+                }
+            });
+        }
     }
 
     private void requestMopubFullscreen() {

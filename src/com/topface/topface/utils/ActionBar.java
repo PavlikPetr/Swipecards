@@ -30,7 +30,7 @@ public class ActionBar {
 
     public ActionBar(View actionView) {
         this.actionView = (ViewGroup) actionView.findViewById(R.id.loNavigationBar);
-        actionView.setVisibility(View.VISIBLE);
+        this.actionView.setVisibility(View.VISIBLE);
         mNavBarController = new NavigationBarController(this.actionView);
         initViews();
     }
@@ -203,6 +203,10 @@ public class ActionBar {
 
     public void disableActionsButton(boolean disabled) {
         mUserActionsControl.setEnabled(!disabled);
+    }
+
+    public void setSendButtonEnabled(boolean enabled) {
+        mSendButton.setEnabled(enabled);
     }
 
     public void hide() {

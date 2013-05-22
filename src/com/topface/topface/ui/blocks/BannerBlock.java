@@ -25,6 +25,10 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.inneractive.api.ads.InneractiveAd;
 import com.inneractive.api.ads.InneractiveAdListener;
 import com.mad.ad.AdStaticView;
+import com.mobclix.android.sdk.MobclixAdView;
+import com.mobclix.android.sdk.MobclixAdViewListener;
+import com.mobclix.android.sdk.MobclixMMABannerXLAdView;
+import com.mobclix.android.sdk.MobclixSimpleAdViewListener;
 import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.mobileads.MoPubView;
 import com.topface.topface.App;
@@ -156,6 +160,8 @@ public class BannerBlock {
                 return mInflater.inflate(R.layout.banner_mopub, null);
             } else if (bannerType.equals(Options.BANNER_INNERACTIVE)) {
                 return mInflater.inflate(R.layout.banner_inneractive, null);
+            } else if (bannerType.equals(Options.BANNER_MOBCLIX)) {
+                return mInflater.inflate(R.layout.banner_mobclix, null);
             } else {
                 return null;
             }
@@ -204,6 +210,8 @@ public class BannerBlock {
             showMopub();
         } else if (mBannerView instanceof InneractiveAd) {
             showInneractive();
+        } else if (mBannerView instanceof MobclixMMABannerXLAdView) {
+            showMobclix();
         } else if (mBannerView instanceof ImageView) {
             if (banner == null) {
                 requestBannerGag();
@@ -211,6 +219,47 @@ public class BannerBlock {
                 showTopface(banner);
             }
         }
+    }
+
+    private void showMobclix() {
+        ((MobclixMMABannerXLAdView) mBannerView).addMobclixAdViewListener(new MobclixAdViewListener() {
+            @Override
+            public void onSuccessfulLoad(MobclixAdView mobclixAdView) {
+            }
+
+            @Override
+            public void onFailedLoad(MobclixAdView adView, int errorCode) {
+                adView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        requestBannerGag();
+                    }
+                });
+            }
+
+            @Override
+            public void onAdClick(MobclixAdView mobclixAdView) {
+            }
+
+            @Override
+            public boolean onOpenAllocationLoad(MobclixAdView mobclixAdView, int i) {
+                return false;
+            }
+
+            @Override
+            public void onCustomAdTouchThrough(MobclixAdView mobclixAdView, String s) {
+            }
+
+            @Override
+            public String keywords() {
+                return null;
+            }
+
+            @Override
+            public String query() {
+                return null;
+            }
+        });
     }
 
     private void showInneractive() {
@@ -646,6 +695,7 @@ public class BannerBlock {
 
     public void onPause() {
         if (mBannerView instanceof MoPubView) ((MoPubView)mBannerView).destroy();
+        if (mBannerView instanceof MobclixMMABannerXLAdView) ((MobclixMMABannerXLAdView) mBannerView).pause();
     }
 
     public void onDestroy() {

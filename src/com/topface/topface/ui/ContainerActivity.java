@@ -21,6 +21,8 @@ import java.util.ArrayList;
 public class ContainerActivity extends BaseFragmentActivity {
 
     public static final String CONTACTS_DATA = "contacts_data";
+    public static final String INTENT_USERID = "INTENT_USERID";
+    public static final String FEED_ID = "FEED_ID";
     private int mCurrentFragmentId = -1;
     private Fragment mCurrentFragment;
     private static final String TAG_FRAGMENT = "current_fragment";
@@ -34,6 +36,7 @@ public class ContainerActivity extends BaseFragmentActivity {
     private static final int INTENT_PROFILE_FRAGMENT = 6;
     public static final int INTENT_SETTINGS_FRAGMENT = 7;
     public static final int INTENT_CONTACTS_FRAGMENT = 8;
+    public static final int INTENT_COMPLAIN_FRAGMENT = 9;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -132,6 +135,16 @@ public class ContainerActivity extends BaseFragmentActivity {
                 ArrayList<ContactsProvider.Contact> contacts = intent.getParcelableArrayListExtra(CONTACTS_DATA);
                 fragment = ContactsFragment.newInstance(contacts);
                 break;
+            case INTENT_COMPLAIN_FRAGMENT:
+                intent = getIntent();
+                int userId = intent.getIntExtra(INTENT_USERID, 0);
+                String feedId = intent.getStringExtra(FEED_ID);
+                if (feedId != null) {
+                    fragment = ComplainsFragment.newInstance(userId, feedId);
+                } else {
+                    fragment = ComplainsFragment.newInstance(userId);
+                }
+                break;
             default:
                 break;
         }
@@ -201,5 +214,18 @@ public class ContainerActivity extends BaseFragmentActivity {
         }
         i.putExtra(Static.INTENT_REQUEST_KEY, INTENT_PROFILE_FRAGMENT);
         return i;
+    }
+
+    public static Intent getComplainIntent(int userId) {
+        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
+        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_COMPLAIN_FRAGMENT);
+        intent.putExtra(INTENT_USERID, userId);
+        return intent;
+    }
+
+    public static Intent getComplainIntent(int userId, String feedId) {
+        Intent intent = getComplainIntent(userId);
+        intent.putExtra(FEED_ID, feedId);
+        return intent;
     }
 }

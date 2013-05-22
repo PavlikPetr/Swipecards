@@ -28,6 +28,7 @@ import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.fragments.ComplainsFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
