@@ -636,4 +636,6 @@
     <string name="confirm_email_for_dating">Мы против спама. Подтвердите свой почтовый адрес, чтобы знакомится в Topface!</string>
     <string name="confirm">Подтвердить</string>
 
+    <string name="complain_type_swearing_msg">Хамство, угрозы, мат</string>
+
 </resources>
