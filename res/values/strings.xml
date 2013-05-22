@@ -471,6 +471,8 @@
     <string name="general_bookmarks_add_short">in favorites</string>
     <string name="black_list_add_short">in black list</string>
     <string name="general_complaint">Complaint</string>
+    <string name="general_type_complain">Subject of complaints</string>
     <string name="confirm_email_for_dating">We are against spam. Confirm your e-mail address, so you can get together with Topface!</string>
     <string name="confirm">Confirm</string>
+    <string name="complain_type_swearing_msg">Rudeness,threats, curse words</string>
 </resources>

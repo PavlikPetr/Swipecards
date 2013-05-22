@@ -479,6 +479,8 @@
     <string name="general_bookmarks_add_short">k oblíbeným</string>
     <string name="black_list_add_short">na černou listinu</string>
     <string name="general_complaint">Stěžovat se</string>
+    <string name="general_type_complain">Téma stížnosti</string>
     <string name="confirm_email_for_dating">Jsme proti spamu. Potvrďte svou emailovou adresu pro seznámení na Topface!</string>
     <string name="confirm">Potvrdit</string>
+    <string name="complain_type_swearing_msg">Neslušnost, vyhrožování, sprostá slova</string>
 </resources>
