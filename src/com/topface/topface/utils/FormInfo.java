@@ -11,6 +11,9 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.QuestionaryRequest;
 import com.topface.topface.requests.SettingsRequest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /* понять и простить за эту хуйню */
 public class FormInfo {
 
@@ -30,6 +33,33 @@ public class FormInfo {
     }
 
     // =============================== Common methods ===============================
+    public void fillFormItem(List<FormItem> items) {
+        FormItem breastItem = null;
+        FormItem physiqueHeaderItem = null;
+        int physiqueIndex = -1;
+        for (int i=0;i<items.size();i++) {
+            FormItem item = items.get(i);
+            if (item.titleId == R.array.form_physique_breast) {
+                breastItem = item;
+            } else {
+                if (item.titleId == R.string.form_physique) {
+                    physiqueHeaderItem = item;
+                    physiqueIndex = i;
+                }
+                fillFormItem(item);
+            }
+        }
+
+        if (mSex == Static.BOY) {
+            if (breastItem != null) items.remove(breastItem);
+        } else if (mSex == Static.GIRL) {
+            breastItem  = new FormItem(R.array.form_physique_breast, 0,
+                            FormItem.DATA, physiqueHeaderItem);
+            fillFormItem(breastItem);
+            items.add(physiqueIndex+1, breastItem);
+        }
+    }
+
     public void fillFormItem(FormItem formItem) {
         String title = formItem.title;
         String data = formItem.value;

@@ -2,6 +2,7 @@ package com.topface.topface.ui.edit;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -27,6 +28,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
 
     public static final int MAX_AGE = 99;
     public static final int MIN_AGE = 16;
+    public static final String INTENT_SEX_CHANGED = "SEX_CHANGED";
     private ActionBar mActionBar;
 
     public enum EditType {NAME, AGE, STATUS}
@@ -248,16 +250,16 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                     for (EditType type : hashChangedData.keySet()) {
                         setDataByEditType(type, hashChangedData.get(type));
                     }
-
+                    Intent intent = null;
                     if (CacheProfile.sex != mSex) {
                         CacheProfile.sex = mSex;
                         FormInfo formInfo = new FormInfo(getContext(), CacheProfile.getProfile());
-                        for (FormItem item : CacheProfile.forms) {
-                            formInfo.fillFormItem(item);
-                        }
+                        formInfo.fillFormItem(CacheProfile.forms);
+                        intent = new Intent();
+                        intent.putExtra(INTENT_SEX_CHANGED,true);
                     }
-
-                    getActivity().setResult(Activity.RESULT_OK);
+                    if (intent != null) getActivity().setResult(Activity.RESULT_OK,intent);
+                    else getActivity().setResult(Activity.RESULT_OK);
                     finishRequestSend();
                     if (handler == null) getActivity().finish();
                     else handler.sendEmptyMessage(0);
