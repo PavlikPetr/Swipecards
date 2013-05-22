@@ -20,11 +20,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/buying_vip_status"
-            style="@style/ButtonBlue"
+            style="@style/ButtonGray"
             android:layout_below="@id/tvText"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="17dp"
-            android:minWidth="210dp"/>
+            android:singleLine="true"/>
 
     <ImageView
             android:layout_width="wrap_content"

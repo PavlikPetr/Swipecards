@@ -419,6 +419,8 @@
     <string name="general_invite_friends">Pozvite priateľov</string>
     <string name="general_rest_contacts">Zostalo Vám %d kontaktov</string>
     <string name="invite_friends_title">Pozvať všetkých priateľov na Topface</string>
+    <string name="invalid_contacts">Niektoré z kontaktov neboli správne. Prosím, pošlite nám správne kontakty</string>
+    <string name="general_choose_action">Vyberte činnosť</string>
     <plurals name="vip_status_period">
         <item quantity="few">Získali ste VIP status na %d dni</item>
         <item quantity="other">Získali ste VIP status na %d dní</item>
@@ -440,4 +442,43 @@
         <item quantity="one">Získaj VIP zadarmo za %d pozvanie</item>
     </plurals>
     <string name="filter_hint">Zadajte meno</string>
+    <string name="buy_status_and_watch_your_fans">Kúpte si VIP status a zistite, kto si vás pridal do obľúbených</string>
+    <string name="add_bookmarks_to_be_connected">Pridajte si nových známych do tejto časti a nestratíte s nimi kontakt.</string>
+    <string name="nobody_chat_with_you_sympathies_will_help">Ešte Vám nikto nepísal. Sympatie Vám pomôžu vo vyhľadávaní partnera na chat</string>
+    <string name="rate_and_have_mutual_or_buy_and_chat">Dajte sympatie tým ľuďom, ktorí sa Vám páčia a získajte vzájomné. Alebo si kúpte sympatie a začnite komunikovať s tými, komu sa páčite!</string>
+    <string name="start_rate">Začať hodnotiť</string>
+    <string name="with_vip_find_your_visitors">S VIP statusom sa dozviete, kto bol na Vašej stránke</string>
+    <string name="on_avatar">Na profilovku</string>
+    <string name="your_avatar">Vaša profilovka</string>
+    <string name="avatar_set_successfully">Profilový obrázok je nastavený</string>
+    <string name="incorrect_photo">Zlá fotografia. Skúste nahrať druhú.</string>
+    <string name="incorrect_photo_format">Zlý formát fotografie. Skúste nahrať fotografiu vo formáte jpg alebo png</string>
+    <string name="incorrect_photo_size">Nepovolená veľkosť fotografie</string>
+    <string name="input_contact_name">Zadajte meno kontaktu</string>
+    <string name="incorrect_locale">Ak by ste chceli, aby sme boli schopní čítať recenzie, napíšte ich v ruštine alebo angličtine.</string>
+    <string name="complain_photo_header">Nevyhovujúca fotografia</string>
+    <string name="complain_msg_header">Nesprávna správa</string>
+    <string name="complain_info_header">Nesprávna informácia</string>
+    <string name="complain_type_porn">Porno (vidno genitálie)</string>
+    <string name="complain_type_ero">Obrázok obsahuje erotické motívy</string>
+    <string name="complain_type_picture">Obrázok</string>
+    <string name="complain_type_fake_user">Známy človek</string>
+    <string name="complain_type_spam_msg">Obchodná ponuka, spam, reklama, odkazy na stránky, telefóny</string>
+    <string name="complain_type_spam_profile">Polia Status, O sebe obsahujú obchodnú ponuku</string>
+    <string name="complain_type_swearing_profile">Polia Status, O sebe obsahujú hrubosť, nadávky, odkazy na sociálne siete</string>
+    <string name="complain_type_fake_data">Meno, pohlavie, vek a fotografia človeka sa nezhodujú</string>
+    <string name="complain_description">Povedzte nám viac podrobností o príčine sťažnosti</string>
+    <string name="general_complain_sended">Vaša sťažnosť je odoslaná, ďakujeme veľmi pekne za pomoc</string>
+    <string name="general_complain">Žaloba</string>
+    <string name="general_msg">Správa</string>
+    <plurals name="vip_add_more_friends">
+        <item quantity="few">Pozvite ešte %d priateľov</item>
+        <item quantity="other">Pozvite ešte %d priateľov</item>
+        <item quantity="one">Pozvite ešte %d priateľa</item>
+    </plurals>
+    <string name="general_bookmarks_add_short">do obľúbených</string>
+    <string name="black_list_add_short">na čiernu listinu</string>
+    <string name="general_complaint">Sťažovať sa</string>
+    <string name="confirm_email_for_dating">Sme proti spamu. Potvrďte svoju e-mailovú adresu, aby ste sa mohli zoznámiť v Topface!</string>
+    <string name="confirm">Potvrdiť</string>
 </resources>

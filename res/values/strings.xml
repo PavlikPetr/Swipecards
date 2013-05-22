@@ -448,6 +448,34 @@
     <string name="incorrect_photo_size">Invalid photo size</string>
     <string name="input_contact_name">Enter the name of the contact</string>
     <string name="incorrect_locale">If you would like for us to read your review, write it in Russian or in English</string>
-    <string name="complain_type_swearing_msg"></string>
+    <string name="complain_photo_header">Incorrect photo</string>
+    <string name="complain_msg_header">Incorrect message</string>
+    <string name="complain_info_header">Incorrect information</string>
+    <string name="complain_type_porn">Porno (Private parts are visible)</string>
+    <string name="complain_type_ero">Erotic main photo</string>
+    <string name="complain_type_picture">Photo</string>
+    <string name="complain_type_fake_user">Fake user</string>
+    <string name="complain_type_spam_msg">Commercial invitation, spam, advertisement, links on the site, telephone numbers</string>
+    <string name="complain_type_spam_profile">The fields \"status\", \"about yourself\" contains a commercial offer</string>
+    <string name="complain_type_swearing_profile">The fields \"status\", \"about yourself\" contains rudeness, curse words, likes to social networks</string>
+    <string name="complain_type_fake_data">The name, sex, age, and photo of this person are not correct</string>
+    <string name="complain_description">Tell us about the cause of the complaint</string>
+    <string name="general_complain_sended">Your complaint has been submitted, thank you very much for your help</string>
+    <string name="general_complain">complaint</string>
+    <string name="general_msg">Message</string>
+    <plurals name="vip_add_more_friends">
+        <item quantity="zero">0</item>
+        <item quantity="other">Invite %d more friends</item>
+        <item quantity="one">Invite %d more friends</item>
+    </plurals>
+    <string name="general_bookmarks_add_short">in favorites</string>
+    <string name="black_list_add_short">in black list</string>
+    <string name="general_complaint">Complaint</string>
+    <string name="general_type_complain">Subject of complaints</string>
+    <string name="confirm_email_for_dating">We are against spam. Confirm your e-mail address, so you can get together with Topface!</string>
     <string name="confirm">Confirm</string>
+    <string name="complain_type_swearing_msg">Rudeness,threats, curse words</string>
+    <string name="general_bookmarks_is_deleted">User deleted from favorites</string>
+    <string name="general_blacklist_is_deleted">User deleted from black list</string>
+    <string name="invite_friends_title_short">Invite all your friends to Topface</string>
 </resources>

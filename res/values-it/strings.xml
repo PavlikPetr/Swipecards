@@ -448,4 +448,28 @@
     <string name="incorrect_photo_size">La dimensione della foto è inammissibile</string>
     <string name="input_contact_name">Inserisci il nome del contatto</string>
     <string name="incorrect_locale">Se vuoi che il tuo commento venga letto scrivilo in russo o in inglese</string>
+    <string name="complain_photo_header">Foto scorretta</string>
+    <string name="complain_msg_header">Messaggio scorretto</string>
+    <string name="complain_info_header">Informazione scorretta</string>
+    <string name="complain_type_porn">Porno (si vedono i genitali)</string>
+    <string name="complain_type_ero">Erotica sulla foto principale</string>
+    <string name="complain_type_picture">Disegno</string>
+    <string name="complain_type_fake_user">Persona famosa</string>
+    <string name="complain_type_spam_msg">Proposta commerciale, spam, pubblicità, link, numeri telefonici</string>
+    <string name="complain_type_spam_profile">Campi “stato”, “di me” contengono una proposta commerciale</string>
+    <string name="complain_type_swearing_profile">Campi “stato”, “di me” contengono cafonata, parolacce, link ai social network</string>
+    <string name="complain_type_fake_data">Nome, sesso, età e foto della persona non corrispondono tra di loro</string>
+    <string name="complain_description">Descrivi il motivo del reclamo</string>
+    <string name="general_complain_sended">Il tuo reclamo è stato inviato, grazie per il tuo aiuto</string>
+    <string name="general_complain">Reclamo</string>
+    <string name="general_msg">Massaggio</string>
+    <plurals name="vip_add_more_friends">
+        <item quantity="other">Invita ancora %d amici</item>
+        <item quantity="one">Invita ancora %d amico</item>
+    </plurals>
+    <string name="general_bookmarks_add_short">nei preferiti</string>
+    <string name="black_list_add_short">nella black list</string>
+    <string name="general_complaint">Fare un reclamo</string>
+    <string name="confirm_email_for_dating">Siamo contrari allo spam. Conferma il tuo e-mail per chattare su Topface!</string>
+    <string name="confirm">Confermare</string>
 </resources>
