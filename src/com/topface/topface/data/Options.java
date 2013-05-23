@@ -31,6 +31,7 @@ public class Options extends AbstractData {
     /**
      * Идентификаторы страниц
      */
+    public static final String PAGE_UNKNOWK = "UNKNOWN_PAGE";
     public final static String PAGE_LIKES = "LIKE";
     public final static String PAGE_MUTUAL = "MUTUAL";
     public final static String PAGE_MESSAGES = "MESSAGES";
@@ -118,7 +119,7 @@ public class Options extends AbstractData {
             for (int i = 0; i < pages.length(); i++) {
                 JSONObject page = pages.getJSONObject(i);
 
-                String pageName = page.optString("name");
+                String pageName = getPageName(page);
                 String floatType = page.optString("float");
                 String bannerType = page.optString("banner");
 
@@ -175,6 +176,31 @@ public class Options extends AbstractData {
 
         CacheProfile.setOptions(options, response.jsonResult);
         return options;
+    }
+
+    private static String getPageName(JSONObject page) {
+        String name = page.optString("name");
+        if (PAGE_LIKES.equals(name)) {
+            return PAGE_LIKES;
+        } else if (PAGE_MUTUAL.equals(name)) {
+            return PAGE_MUTUAL;
+        } else if (PAGE_MESSAGES.equals(name)) {
+            return PAGE_MESSAGES;
+        } else if (PAGE_VISITORS.equals(name)) {
+            return PAGE_VISITORS;
+        } else if (PAGE_DIALOGS.equals(name)) {
+            return PAGE_DIALOGS;
+        } else if (PAGE_FANS.equals(name)) {
+            return PAGE_FANS;
+        } else if (PAGE_BOOKMARKS.equals(name)) {
+            return PAGE_BOOKMARKS;
+        } else if (PAGE_VIEWS.equals(name)) {
+            return PAGE_VIEWS;
+        } else if (PAGE_START.equals(name)) {
+            return PAGE_START;
+        } else {
+            return PAGE_UNKNOWK;
+        }
     }
 
     public BuyButton createBuyButtonFromJSON(JSONObject purchaseItem) {

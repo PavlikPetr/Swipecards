@@ -3,7 +3,6 @@ package com.topface.topface.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
@@ -23,6 +22,7 @@ public class ContainerActivity extends BaseFragmentActivity {
     public static final String CONTACTS_DATA = "contacts_data";
     public static final String INTENT_USERID = "INTENT_USERID";
     public static final String FEED_ID = "FEED_ID";
+
     private int mCurrentFragmentId = -1;
     private Fragment mCurrentFragment;
     private static final String TAG_FRAGMENT = "current_fragment";
@@ -37,6 +37,9 @@ public class ContainerActivity extends BaseFragmentActivity {
     public static final int INTENT_SETTINGS_FRAGMENT = 7;
     public static final int INTENT_CONTACTS_FRAGMENT = 8;
     public static final int INTENT_COMPLAIN_FRAGMENT = 9;
+
+    // Id для админки начиная со 101
+    public static final int INTENT_EDITOR_BANNERS = 101;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -144,6 +147,9 @@ public class ContainerActivity extends BaseFragmentActivity {
                 } else {
                     fragment = ComplainsFragment.newInstance(userId);
                 }
+                break;
+            case INTENT_EDITOR_BANNERS:
+                fragment = new EditorBannersFragment();
                 break;
             default:
                 break;

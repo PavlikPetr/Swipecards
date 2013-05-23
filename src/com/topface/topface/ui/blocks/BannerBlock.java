@@ -28,7 +28,6 @@ import com.mad.ad.AdStaticView;
 import com.mobclix.android.sdk.MobclixAdView;
 import com.mobclix.android.sdk.MobclixAdViewListener;
 import com.mobclix.android.sdk.MobclixMMABannerXLAdView;
-import com.mobclix.android.sdk.MobclixSimpleAdViewListener;
 import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.mobileads.MoPubView;
 import com.topface.topface.App;
@@ -85,7 +84,7 @@ public class BannerBlock {
     private Fragment mFragment;
     private View mBannerView;
     private Plus1BannerAsker mPLus1Asker;
-    private Map<String, String> mBannersMap = new HashMap<String, String>();
+    private static Map<String, Options.Page> mBannersMap;
 
     private Map<String, Character> mAdwiredMap = new HashMap<String, Character>();
 
@@ -98,13 +97,7 @@ public class BannerBlock {
     }
 
     private void setBannersMap() {
-        mBannersMap.put(LikesFragment.class.toString(), Options.PAGE_LIKES);
-        mBannersMap.put(MutualFragment.class.toString(), Options.PAGE_MUTUAL);
-        mBannersMap.put(DialogsFragment.class.toString(), Options.PAGE_DIALOGS);
-        mBannersMap.put(VisitorsFragment.class.toString(), Options.PAGE_VISITORS);
-        mBannersMap.put(BookmarksFragment.class.toString(), Options.PAGE_BOOKMARKS);
-        mBannersMap.put(FansFragment.class.toString(), Options.PAGE_FANS);
-
+        mBannersMap = FloatBlock.getActivityMap();
         mAdwiredMap.put(LikesFragment.class.toString(), '1');
         mAdwiredMap.put(MutualFragment.class.toString(), '2');
         mAdwiredMap.put(DialogsFragment.class.toString(), '3');
@@ -118,15 +111,15 @@ public class BannerBlock {
             String fragmentId = mFragment.getClass().toString();
             Options options = CacheProfile.getOptions();
             if (mBannersMap.containsKey(fragmentId) && options != null && options.pages != null) {
-                if (options.pages.get(mBannersMap.get(fragmentId)) != null) {
-                    String bannerType = options.pages.get(mBannersMap.get(fragmentId)).banner;
+                if (mBannersMap.get(fragmentId) != null) {
+                    String bannerType = mBannersMap.get(fragmentId).banner;
 
                     mBannerView = getBannerView(bannerType);
                     if (mBannerView == null) return;
                     mBannerLayout.addView(mBannerView);
                     if (bannerType.equals(Options.BANNER_TOPFACE)) {
                         if (isCorrectResolution() && mBannersMap.containsKey(fragmentId)) {
-                            loadBanner(mBannersMap.get(mFragment.getClass().toString()));
+                            loadBanner(mBannersMap.get(fragmentId).name);
                         }
                     } else {
                         try {
@@ -263,7 +256,7 @@ public class BannerBlock {
     }
 
     private void showInneractive() {
-        InneractiveAd inneractive = ((InneractiveAd)mBannerView);
+        InneractiveAd inneractive = ((InneractiveAd) mBannerView);
         inneractive.setAge(CacheProfile.age);
         inneractive.setGender(CacheProfile.sex == Static.BOY ? "Male" : "Female");
         inneractive.setInneractiveListener(new InneractiveAdListener() {
@@ -599,7 +592,7 @@ public class BannerBlock {
                             @Override
                             public void onComplete(Bundle values) {
                                 super.onComplete(values);
-                                loadBanner(mBannersMap.get(mFragment.getClass().toString()));
+                                loadBanner(mBannersMap.get(mFragment.getClass().toString()).name);
                             }
                         }
                 );
@@ -694,15 +687,15 @@ public class BannerBlock {
     }
 
     public void onPause() {
-        if (mBannerView instanceof MoPubView) ((MoPubView)mBannerView).destroy();
+        if (mBannerView instanceof MoPubView) ((MoPubView) mBannerView).destroy();
         if (mBannerView instanceof MobclixMMABannerXLAdView) ((MobclixMMABannerXLAdView) mBannerView).pause();
     }
 
     public void onDestroy() {
         if (mPLus1Asker != null) mPLus1Asker.onPause();
         if (mBannerView != null) {
-            if (mBannerView instanceof InneractiveAd){
-                ((InneractiveAd)mBannerView).cleanUp();
+            if (mBannerView instanceof InneractiveAd) {
+                ((InneractiveAd) mBannerView).cleanUp();
             }
         }
         removeBanner();

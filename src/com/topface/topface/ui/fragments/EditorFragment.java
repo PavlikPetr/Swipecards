@@ -12,6 +12,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
+import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.utils.*;
 import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.social.AuthToken;
@@ -48,6 +49,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         View rootLayout = inflater.inflate(R.layout.fragment_editor, null);
         rootLayout.findViewById(R.id.EditorRefreshProfile).setOnClickListener(this);
         rootLayout.findViewById(R.id.EditorClearSearchCache).setOnClickListener(this);
+        rootLayout.findViewById(R.id.EditorConfigureBanners).setOnClickListener(this);
         rootLayout.findViewById(R.id.EditorResetSettings).setOnClickListener(this);
         rootLayout.findViewById(R.id.EditorSaveSettings).setOnClickListener(this);
         initNavigationBar(rootLayout);
@@ -207,6 +209,9 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
             case R.id.EditorClearSearchCache:
                 new SearchCacheManager().clearCache();
                 showCompleteMessage();
+                break;
+            case R.id.EditorConfigureBanners:
+                getActivity().startActivity(ContainerActivity.getNewIntent(ContainerActivity.INTENT_EDITOR_BANNERS));
                 break;
             case R.id.EditorResetSettings:
                 mConfigInited = false;
