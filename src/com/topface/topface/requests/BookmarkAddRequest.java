@@ -4,7 +4,7 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class BookmarkAddRequest extends ApiRequest {
+public class BookmarkAddRequest extends ConfirmedApiRequest {
     private int uid;
     public static final String SERVICE_NAME = "bookmarkadd";
 

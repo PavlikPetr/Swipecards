@@ -9,9 +9,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.OptionsRequest;
-import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.requests.*;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import org.json.JSONObject;
@@ -39,6 +37,8 @@ abstract public class ApiHandler extends Handler {
                     showToast(R.string.general_premium_access_error);
 
                     fail(response.code, response);
+                } else if (response.isCodeEqual(IApiResponse.UNCONFIRMED_LOGIN)) {
+                    ConfirmedApiRequest.showConfirmDialog(mContext);
                 } else if (response.code != ApiResponse.RESULT_OK) {
                     fail(response.code, response);
                 } else {

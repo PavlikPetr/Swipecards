@@ -2,9 +2,6 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">en_US</string>
-    <string name="general_error">ERROR</string>
-    <string name="general_warning">WARNING</string>
-    <string name="general_ok">OK</string>
     <string name="general_yes">Yes</string>
     <string name="general_no">No</string>
     <string name="general_cancel">Cancel</string>
@@ -475,4 +472,6 @@
     <string name="confirm_email_for_dating">We are against spam. Confirm your e-mail address, so you can get together with Topface!</string>
     <string name="confirm">Confirm</string>
     <string name="complain_type_swearing_msg">Rudeness,threats, curse words</string>
+    <string name="general_bookmarks_is_deleted">User deleted from favorites</string>
+    <string name="general_blacklist_is_deleted">User deleted from black list</string>
 </resources>

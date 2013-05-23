@@ -2,9 +2,6 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">fr_FR</string>
-    <string name="general_error">ERREUR</string>
-    <string name="general_warning">PRÉVENTION</string>
-    <string name="general_ok">OK</string>
     <string name="general_yes">Oui</string>
     <string name="general_no">Non</string>
     <string name="general_cancel">Annuler</string>

@@ -2,9 +2,6 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">el_GR</string>
-    <string name="general_error">ΣΦΆΛΜΑ</string>
-    <string name="general_warning">ΠΡΟΕΙΔΟΠΟΙΗΣΗ</string>
-    <string name="general_ok">OK</string>
     <string name="general_yes">Ναί</string>
     <string name="general_no">\'Οχι</string>
     <string name="general_cancel">Ακύρωση</string>

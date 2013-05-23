@@ -2,9 +2,6 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">pl_PL</string>
-    <string name="general_error">BŁĄD</string>
-    <string name="general_warning">UPRZEDZENIE</string>
-    <string name="general_ok">OK</string>
     <string name="general_yes">Tak</string>
     <string name="general_no">Nie</string>
     <string name="general_cancel">Cofnij</string>

@@ -7,9 +7,6 @@
 
     <!-- General -->
 
-    <string name="general_error">ОШИБКА</string>
-    <string name="general_warning">ПРЕДУПРЕЖДЕНИЕ</string>
-    <string name="general_ok">OK</string>
     <string name="general_yes">Да</string>
     <string name="general_no">Нет</string>
     <string name="general_cancel">Отмена</string>

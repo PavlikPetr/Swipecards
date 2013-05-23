@@ -2,9 +2,6 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">ro_RO</string>
-    <string name="general_error">EROARE</string>
-    <string name="general_warning">PREINTAMPINARE</string>
-    <string name="general_ok">OK</string>
     <string name="general_yes">Da</string>
     <string name="general_no">Nu</string>
     <string name="general_cancel">Anulare</string>

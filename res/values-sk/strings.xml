@@ -2,9 +2,6 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">sk_SK</string>
-    <string name="general_error">CHYBA</string>
-    <string name="general_warning">UPOZORNENIE</string>
-    <string name="general_ok">OK</string>
     <string name="general_yes">Áno</string>
     <string name="general_no">Nie</string>
     <string name="general_cancel">Zrušiť</string>

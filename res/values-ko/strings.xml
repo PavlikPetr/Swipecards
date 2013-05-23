@@ -2,9 +2,6 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">ko_KR</string>
-    <string name="general_error">에러</string>
-    <string name="general_warning">경고</string>
-    <string name="general_ok">ok</string>
     <string name="general_yes">예</string>
     <string name="general_no">아니오.</string>
     <string name="general_cancel">취소</string>
