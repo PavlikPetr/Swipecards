@@ -625,8 +625,8 @@
         <item quantity="other">Пригласите еще %d друзей</item>
     </plurals>
     
-    <string name="general_bookmarks_add_short">в избранные</string>
-    <string name="black_list_add_short">в черный список</string>
+    <string name="general_bookmarks_add_short">В избранные</string>
+    <string name="black_list_add_short">В черный список</string>
     <string name="general_complaint">Пожаловаться</string>
     <string name="general_type_complain">Тема жалобы</string>
     
@@ -636,5 +636,6 @@
     <string name="complain_type_swearing_msg">Хамство, угрозы, мат</string>
     <string name="general_bookmarks_is_deleted">Пользователь удален из избранных</string>
     <string name="general_blacklist_is_deleted">Пользователь удален из черного списка</string>
+    <string name="invite_friends_title_short">Пригласить всех друзей в Topface</string>
 
 </resources>
