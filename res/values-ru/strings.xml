@@ -452,7 +452,7 @@
     <string name="search_city_by_name">Поиск города по названию</string>
 
     <string name="gallery">Галерея</string>
-    <string name="no_photo_take_photo">С вами никто не может познакомится! Сделайте фото или выберите имеющееся из
+    <string name="no_photo_take_photo">С вами никто не может познакомиться! Сделайте фото или выберите имеющееся из
         альбома
     </string>
     <string name="photo_is_too_small">Вы отлично выглядете на этой фотографии, но для того, чтобы все пользователи
@@ -630,7 +630,7 @@
     <string name="general_complaint">Пожаловаться</string>
     <string name="general_type_complain">Тема жалобы</string>
     
-    <string name="confirm_email_for_dating">Мы против спама. Подтвердите свой почтовый адрес, чтобы знакомится в Topface!</string>
+    <string name="confirm_email_for_dating">Мы против спама. Подтвердите свой почтовый адрес, чтобы знакомиться в Topface!</string>
     <string name="confirm">Подтвердить</string>
 
     <string name="complain_type_swearing_msg">Хамство, угрозы, мат</string>
