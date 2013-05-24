@@ -1,16 +1,17 @@
-package com.topface.NotificationSender;
+package com.topface.testapp.fragments;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import com.topface.testapp.R;
 import org.json.JSONObject;
 
-public class MainActivity extends Activity {
-    /**
-     * Called when the activity is first created.
-     */
+
+public class NotificationSendFragment extends Fragment {
 
     public static final int GCM_TYPE_MESSAGE = 0;
     public static final int GCM_TYPE_SYMPATHY = 1;
@@ -18,14 +19,14 @@ public class MainActivity extends Activity {
     public static final int GCM_TYPE_GUESTS = 3;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        initViews();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View root = inflater.inflate(R.layout.notification_test, container, false);
+        initViews(root);
+        return root;
     }
 
-    public void initViews() {
-        Button likes = (Button) findViewById(R.id.simpathy);
+    public void initViews(View root) {
+        Button likes = (Button) root.findViewById(R.id.simpathy);
         likes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -33,7 +34,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        Button messages = (Button) findViewById(R.id.message);
+        Button messages = (Button) root.findViewById(R.id.message);
         messages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,7 +42,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        Button sympathy = (Button) findViewById(R.id.mutual);
+        Button sympathy = (Button) root.findViewById(R.id.mutual);
         sympathy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,7 +50,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        Button visitors = (Button) findViewById(R.id.visitors);
+        Button visitors = (Button) root.findViewById(R.id.visitors);
         visitors.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,7 +83,7 @@ public class MainActivity extends Activity {
         try {
             intent.putExtra("counters", new JSONObject().put("unread_likes",0).put("unread_sympaties",0).put("unread_messages",0).put("unread_visitors",0).toString());
             intent.putExtra("user", new JSONObject().put("id", "43945394").put("photo", new JSONObject().put("c128x128", "http://ii.cdn.tf/u42917754/r450x-/sq119c.jpg")).put("name", "Ilya").put("age", "21").toString());
-            sendBroadcast(intent);
+            getActivity().sendBroadcast(intent);
         } catch (Exception e) {
             e.printStackTrace();
         }

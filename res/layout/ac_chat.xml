@@ -6,19 +6,13 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true">
 
-    <include
-            layout="@layout/bar_navigation_header"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/loNavigationBar"
-            android:layout_alignParentTop="true"
-            />
+
 
     <com.topface.topface.ui.views.SwapControl
             android:id="@+id/swapFormView"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_below="@id/loNavigationBar">
+            android:layout_below="@+id/loNavigationBar">
 
         <LinearLayout
                 android:layout_width="fill_parent"
@@ -167,4 +161,18 @@
             android:text="@string/general_dialog_loading"
             android:drawableLeft="@drawable/loader"
             android:visibility="gone"/>
+    <include
+            android:id="@+id/mChatActions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/loNavigationBar"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            layout="@layout/user_actions_layout"
+            />
+    <include
+            layout="@layout/bar_navigation_header"
+            android:id="@id/loNavigationBar"
+            />
 </RelativeLayout>

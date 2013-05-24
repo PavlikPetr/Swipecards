@@ -8,10 +8,9 @@
               android:visibility="gone">
 
     <RelativeLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_gravity="center_vertical"
-            android:layout_weight="0.25"
             android:gravity="left|center_vertical"
             >
 
@@ -19,7 +18,6 @@
                 android:id="@+id/btnNavigationHome"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:paddingRight="30dp"
                 android:paddingLeft="8dp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/navigation_home_selector"
@@ -39,7 +37,7 @@
                 android:paddingLeft="4dp"
                 android:paddingRight="11dp"
                 android:paddingTop="1dp"
-                android:visibility="invisible"/>
+                android:visibility="gone"/>
 
         <TextView
                 android:id="@+id/tvNotificationLikes"
@@ -55,7 +53,7 @@
                 android:paddingLeft="4dp"
                 android:paddingRight="11dp"
                 android:paddingTop="0dp"
-                android:visibility="invisible"/>
+                android:visibility="gone"/>
 
         <TextView
                 android:id="@+id/tvNotificationMutual"
@@ -64,14 +62,13 @@
                 android:layout_height="wrap_content"
                 android:layout_alignRight="@id/btnNavigationHome"
                 android:layout_alignTop="@id/btnNavigationHome"
-                android:layout_marginRight="24dp"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/topface_notification_likes"
                 android:gravity="center_horizontal"
                 android:paddingLeft="4dp"
                 android:paddingRight="11dp"
                 android:paddingTop="0dp"
-                android:visibility="invisible"/>
+                android:visibility="gone"/>
 
         <ImageButton
                 android:id="@+id/btnNavigationBack"
@@ -86,7 +83,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="0.5"
-            android:gravity="center"
+            android:gravity="left"
+            android:layout_marginLeft="5dp"
             android:orientation="vertical"
             android:visibility="visible">
 

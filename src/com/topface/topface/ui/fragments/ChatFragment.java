@@ -16,6 +16,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
@@ -38,6 +40,8 @@ import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
+import com.topface.topface.ui.gridlayout.*;
+import com.topface.topface.ui.gridlayout.GridLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.SwapControl;
 import com.topface.topface.utils.*;
@@ -100,6 +104,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private GeoLocationManager mGeoManager = null;
     private RelativeLayout mLockScreen;
     private String[] editButtonsSelfNames;
+    private LinearLayout chatActions;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -122,6 +127,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         int userAge = getArguments().getInt(INTENT_USER_AGE, 0);
         String userCity = getArguments().getString(INTENT_USER_CITY);
 
+        chatActions = (LinearLayout) root.findViewById(R.id.mChatActions);
+        chatActions.setVisibility(View.GONE);
+        ArrayList<UserActions.ActionItem> actions = new ArrayList<UserActions.ActionItem>();
+        actions.add(new UserActions.ActionItem(R.id.acProfile, this));
+        actions.add(new UserActions.ActionItem(R.id.acBlock, this));
+        actions.add(new UserActions.ActionItem(R.id.acComplain, this));
+        actions.add(new UserActions.ActionItem(R.id.acBookmark, this));
+
+        new UserActions(chatActions, actions);
         // Locker
         mLoadingBackgroundText = (TextView) root.findViewById(R.id.tvBackgroundText);
         Drawable drawable = mLoadingBackgroundText.getCompoundDrawables()[0];
@@ -515,7 +529,59 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             if (mUser.deleted || mUser.banned || mUser.photo == null || mUser.photo.isEmpty()) {
                 mActionBar.showProfileAvatar(mUser.sex == Static.BOY ? R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar, null);
             } else {
-                mActionBar.showProfileAvatar(mUser.photo, this);
+                mActionBar.showUserActionsButton(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                TranslateAnimation ta = new TranslateAnimation(0, 0, -chatActions.getHeight(), 0);
+                                ta.setDuration(500);
+                                ta.setAnimationListener(new Animation.AnimationListener() {
+                                    @Override
+                                    public void onAnimationStart(Animation animation) {
+                                        mActionBar.disableActionsButton(true);
+                                        chatActions.setVisibility(View.VISIBLE);
+                                    }
+
+                                    @Override
+                                    public void onAnimationEnd(Animation animation) {
+                                        chatActions.clearAnimation();
+                                        mActionBar.disableActionsButton(false);
+                                    }
+
+                                    @Override
+                                    public void onAnimationRepeat(Animation animation) {
+
+                                    }
+                                });
+                                chatActions.startAnimation(ta);
+                            }
+                        }, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+//                                initActionsPanelHeight();
+                                TranslateAnimation ta = new TranslateAnimation(0, 0, 0, -chatActions.getHeight());
+                                ta.setDuration(500);
+                                ta.setAnimationListener(new Animation.AnimationListener() {
+                                    @Override
+                                    public void onAnimationStart(Animation animation) {
+                                        mActionBar.disableActionsButton(true);
+                                    }
+
+                                    @Override
+                                    public void onAnimationEnd(Animation animation) {
+                                        chatActions.clearAnimation();
+                                        mActionBar.disableActionsButton(false);
+                                        chatActions.setVisibility(View.GONE);
+                                    }
+
+                                    @Override
+                                    public void onAnimationRepeat(Animation animation) {
+                                    }
+                                });
+                                chatActions.startAnimation(ta);
+                            }
+                        }
+                        ,mUser.photo);
             }
         }
     }

@@ -151,12 +151,32 @@ public class ActionBar {
         mSubTitle.setText(text);
     }
 
+    public void showUserActionsButton(final View.OnClickListener nonActiveListener, final View.OnClickListener activeListener, final Photo profilePhotoResource) {
+        hideRightBarPart();
+        mProfileAvatar.setVisibility(View.VISIBLE);
+        mProfileAvatar.setPhoto(profilePhotoResource);
+        mProfileAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mProfileButton.isSelected()) {
+                    mProfileButton.setSelected(false);
+                    activeListener.onClick(view);
+                } else {
+                    mProfileButton.setSelected(true);
+                    nonActiveListener.onClick(view);
+                }
+            }
+        });
+        mSendButton.setVisibility(View.GONE);
+        checkBox.setVisibility(View.GONE);
+    }
+
     public void showUserActionsButton(final View.OnClickListener nonActiveListener, final View.OnClickListener activeListener) {
         mEditButton.setVisibility(View.GONE);
         mSettingsButton.setVisibility(View.GONE);
         mProfileButton.setVisibility(View.GONE);
-
         mUserActionsControl.setVisibility(View.VISIBLE);
+
         mUserActionsControl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -172,6 +192,7 @@ public class ActionBar {
         mSendButton.setVisibility(View.GONE);
         checkBox.setVisibility(View.GONE);
     }
+
 
     public void showCheckBox(View.OnClickListener listener) {
         hideRightButtons();
@@ -202,7 +223,11 @@ public class ActionBar {
     }
 
     public void disableActionsButton(boolean disabled) {
-        mUserActionsControl.setEnabled(!disabled);
+        if (mUserActionsControl.getVisibility() == View.VISIBLE) {
+            mUserActionsControl.setEnabled(!disabled);
+        } else if (mProfileAvatar.getVisibility() == View.VISIBLE) {
+            mProfileAvatar.setEnabled(!disabled);
+        }
     }
 
     public void setSendButtonEnabled(boolean enabled) {

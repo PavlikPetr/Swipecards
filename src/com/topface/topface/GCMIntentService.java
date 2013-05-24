@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Looper;
 import com.google.android.gcm.GCMBaseIntentService;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.Settings;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,6 +40,7 @@ public class GCMIntentService extends GCMBaseIntentService {
                 broadcastReceiver.putExtra("id", getUserId(user));
                 context.sendBroadcast(broadcastReceiver);
             }
+
         }
     }
 
