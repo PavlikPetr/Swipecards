@@ -259,8 +259,12 @@ public class CacheProfile {
     }
 
     public static void clearProfile() {
-        options = null;
+        clearOptions();
         setProfile(new Profile(), null);
+    }
+
+    public static void clearOptions() {
+        options = null;
     }
 
     private static void setProfileUpdateTime() {

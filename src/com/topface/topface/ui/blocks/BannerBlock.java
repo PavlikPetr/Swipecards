@@ -84,7 +84,6 @@ public class BannerBlock {
     private Fragment mFragment;
     private View mBannerView;
     private Plus1BannerAsker mPLus1Asker;
-    private static Map<String, Options.Page> mBannersMap;
 
     private Map<String, Character> mAdwiredMap = new HashMap<String, Character>();
 
@@ -97,7 +96,6 @@ public class BannerBlock {
     }
 
     private void setBannersMap() {
-        mBannersMap = FloatBlock.getActivityMap();
         mAdwiredMap.put(LikesFragment.class.toString(), '1');
         mAdwiredMap.put(MutualFragment.class.toString(), '2');
         mAdwiredMap.put(DialogsFragment.class.toString(), '3');
@@ -107,19 +105,20 @@ public class BannerBlock {
     }
 
     private void initBanner() {
-        if (mFragment != null && mBannersMap != null) {
+        Map<String, Options.Page> bannersMap = FloatBlock.getActivityMap();
+        if (mFragment != null && bannersMap != null) {
             String fragmentId = mFragment.getClass().toString();
             Options options = CacheProfile.getOptions();
-            if (mBannersMap.containsKey(fragmentId) && options != null && options.pages != null) {
-                if (mBannersMap.get(fragmentId) != null) {
-                    String bannerType = mBannersMap.get(fragmentId).banner;
+            if (bannersMap.containsKey(fragmentId) && options != null && options.pages != null) {
+                if (bannersMap.get(fragmentId) != null) {
+                    String bannerType = bannersMap.get(fragmentId).banner;
 
                     mBannerView = getBannerView(bannerType);
                     if (mBannerView == null) return;
                     mBannerLayout.addView(mBannerView);
                     if (bannerType.equals(Options.BANNER_TOPFACE)) {
-                        if (isCorrectResolution() && mBannersMap.containsKey(fragmentId)) {
-                            loadBanner(mBannersMap.get(fragmentId).name);
+                        if (isCorrectResolution() && bannersMap.containsKey(fragmentId)) {
+                            loadBanner(bannersMap.get(fragmentId).name);
                         }
                     } else {
                         try {
@@ -592,7 +591,7 @@ public class BannerBlock {
                             @Override
                             public void onComplete(Bundle values) {
                                 super.onComplete(values);
-                                loadBanner(mBannersMap.get(mFragment.getClass().toString()).name);
+                                loadBanner(FloatBlock.getActivityMap().get(mFragment.getClass().toString()).name);
                             }
                         }
                 );

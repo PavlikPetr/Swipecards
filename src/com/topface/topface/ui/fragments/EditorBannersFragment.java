@@ -8,27 +8,67 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Editor;
 
-public class EditorBannersFragment extends BaseFragment{
+public class EditorBannersFragment extends BaseFragment implements View.OnClickListener {
+
+    private ViewGroup mConfigContainer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_editor_banners, null);
-
         initHeader(root);
-
-        ViewGroup configContainer = (ViewGroup) root.findViewById(R.id.loBannersConfigurationsContainer);
-        for (Options.Page page : FloatBlock.getActivityMap().values()) {
-            PageConfigurator configurator = new PageConfigurator(getActivity());
-            configurator.setPage(page);
-            configContainer.addView(configurator);
-        }
-
+        mConfigContainer = (ViewGroup) root.findViewById(R.id.loBannersConfigurationsContainer);
+        initConfigContainer();
+        root.findViewById(R.id.btnSaveSettings).setOnClickListener(this);
+        root.findViewById(R.id.btnResetSettings).setOnClickListener(this);
+        initOnStartLoadingControls(root);
         return root;
+    }
+
+    private void initOnStartLoadingControls(View root) {
+        final CheckBox checkBoxOnStart = ((CheckBox)root.findViewById(R.id.cbOnStart));
+        checkBoxOnStart.setChecked(App.getConfig().getBannerConfig().needLoadOnStart());
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                App.getConfig().getBannerConfig().setLoadOnStart(checkBoxOnStart.isChecked());
+            }
+        };
+        checkBoxOnStart.setOnClickListener(listener);
+    }
+
+    private void initConfigContainer() {
+        if (mConfigContainer != null) {
+            for (String pageName : CacheProfile.getOptions().pages.keySet()) {
+                Options.Page page = CacheProfile.getOptions().pages.get(pageName);
+                if (page != null) {
+                    PageConfigurator configurator = new PageConfigurator(getActivity());
+                    configurator.setPage(page);
+                    mConfigContainer.addView(configurator);
+                }
+            }
+        }
+    }
+
+    private void clearConfigContainer() {
+        if (mConfigContainer != null) {
+            mConfigContainer.removeAllViews();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!Editor.isEditor()) {
+            getActivity().finish();
+        }
     }
 
     private void initHeader(View root) {
@@ -40,6 +80,28 @@ public class EditorBannersFragment extends BaseFragment{
                 getActivity().finish();
             }
         });
+    }
+
+    private void showCompleteMessage() {
+        Toast.makeText(getActivity(), getActivity().getString(R.string.editor_fragment_complete), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnSaveSettings:
+                App.getConfig().getBannerConfig().saveBannersSettings();
+                showCompleteMessage();
+                break;
+            case R.id.btnResetSettings:
+                App.getConfig().getBannerConfig().resetBannersSettings();
+                clearConfigContainer();
+                initConfigContainer();
+                showCompleteMessage();
+                break;
+            default:
+                break;
+        }
     }
 
     private class PageConfigurator extends LinearLayout {
@@ -62,7 +124,7 @@ public class EditorBannersFragment extends BaseFragment{
         }
 
         public PageConfigurator(Context context, AttributeSet attrs) {
-            super(context,attrs);
+            super(context, attrs);
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View root = inflater.inflate(R.layout.editor_banner_configurator, this, true);
             initTitleText(root);
@@ -70,7 +132,7 @@ public class EditorBannersFragment extends BaseFragment{
             initFloatTypeSpinner(root);
             initBannerTypeSpinner(root);
 
-            if (android.os.Build.VERSION.SDK_INT >= 16){
+            if (android.os.Build.VERSION.SDK_INT >= 16) {
                 setLayoutTransition(new LayoutTransition());
                 LayoutTransition transition = getLayoutTransition();
                 transition.enableTransitionType(LayoutTransition.CHANGING);
@@ -94,7 +156,7 @@ public class EditorBannersFragment extends BaseFragment{
         private void initSpinnersContainer(View root) {
             mSpinnersContainer = (ViewGroup) root.findViewById(R.id.loSpinners);
             mSpinnersContainer.setLayoutParams(mCompressedParams);
-            if (android.os.Build.VERSION.SDK_INT >= 16){
+            if (android.os.Build.VERSION.SDK_INT >= 16) {
                 mSpinnersContainer.setLayoutTransition(new LayoutTransition());
                 LayoutTransition transition = mSpinnersContainer.getLayoutTransition();
                 transition.enableTransitionType(LayoutTransition.CHANGING);
@@ -106,26 +168,14 @@ public class EditorBannersFragment extends BaseFragment{
             ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(
                     getActivity(),
                     android.R.layout.simple_spinner_item,
-                    new String[]{
-                            Options.BANNER_TOPFACE,
-                            Options.BANNER_ADFONIC,
-                            Options.BANNER_ADMOB,
-                            Options.BANNER_WAPSTART,
-                            Options.BANNER_ADWIRED,
-                            Options.BANNER_MADNET,
-                            Options.BANNER_BEGUN,
-                            Options.BANNER_MOPUB,
-                            Options.BANNER_INNERACTIVE,
-                            Options.BANNER_MOBCLIX,
-                            Options.BANNER_GAG,
-                    }
+                    Options.BANNERS
             );
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             mBannerTypeSpinner.setAdapter(adapter);
             mBannerTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    //TODO select float Type for page
+                    getPage().banner = Options.BANNERS[position];
                 }
 
                 @Override
@@ -139,18 +189,15 @@ public class EditorBannersFragment extends BaseFragment{
             ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(
                     getActivity(),
                     android.R.layout.simple_spinner_item,
-                    new String[]{
-                            Options.FLOAT_TYPE_BANNER,
-                            Options.FLOAT_TYPE_LEADERS,
-                            Options.FLOAT_TYPE_NONE
-                    }
+                    Options.FLOAT_TYPES
             );
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             mFloatTypeSpinner.setAdapter(adapter);
             mFloatTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    //TODO select float Type for page
+                    getPage().floatType = Options.FLOAT_TYPES[position];
+                    mBannerTypeSpinner.setVisibility(Options.FLOAT_TYPES[position].equals(Options.FLOAT_TYPE_BANNER) ? View.VISIBLE : View.GONE);
                 }
 
                 @Override
@@ -159,10 +206,30 @@ public class EditorBannersFragment extends BaseFragment{
             });
         }
 
+        private Options.Page getPage() {
+            return mPage;
+        }
+
         public void setPage(Options.Page page) {
             mPage = page;
             mTitleText.setText(page.name);
             mPage = page;
+            for (int i = 0; i < Options.FLOAT_TYPES.length; i++) {
+                if (Options.FLOAT_TYPES[i].equals(mPage.floatType)) {
+                    mFloatTypeSpinner.setSelection(i);
+                    mBannerTypeSpinner.setVisibility(Options.FLOAT_TYPES[i].equals(Options.FLOAT_TYPE_BANNER) ? View.VISIBLE : View.GONE);
+                }
+            }
+            if (mPage.name.equals(Options.PAGE_GAG) || mPage.name.equals(Options.PAGE_START)) {
+                mFloatTypeSpinner.setVisibility(View.GONE);
+            }
+
+            for (int i = 0; i < Options.BANNERS.length; i++) {
+                if (Options.BANNERS[i].equals(mPage.banner)) {
+                    mBannerTypeSpinner.setSelection(i);
+                }
+            }
+
         }
     }
 }

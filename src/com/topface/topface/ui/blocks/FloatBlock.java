@@ -27,7 +27,7 @@ public class FloatBlock {
     private BroadcastReceiver mOptionsUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            mBannersMap = null;
+            resetActivityMap();
             getActivityMap();
         }
     };
@@ -42,15 +42,14 @@ public class FloatBlock {
 
     private void initBlock() {
         String currentFragment = mFragment.getClass().toString();
-        if (mBannersMap.containsKey(currentFragment)) {
-            String floatType = mBannersMap.get(currentFragment).floatType;
+        if (getActivityMap().containsKey(currentFragment)) {
+            String floatType = getActivityMap().get(currentFragment).floatType;
             if (floatType.equals(Options.FLOAT_TYPE_BANNER)) {
                 if (!CacheProfile.show_ad) return;
                 mBanner = new BannerBlock(mFragment, mLayout);
             } else if (floatType.equals(Options.FLOAT_TYPE_LEADERS)) {
                 mLeaders = new LeadersBlock(mFragment, mLayout);
             }
-            //mLeaders = new LeadersBlock(mActivity, mLayout);
         }
         //Если переданого активити нет в карте, то не инициализируем ни один блок
     }
@@ -101,5 +100,9 @@ public class FloatBlock {
                 new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION)
         );
         if (mLeaders != null) mLeaders.loadLeaders();
+    }
+
+    public static void resetActivityMap() {
+        mBannersMap = null;
     }
 }
