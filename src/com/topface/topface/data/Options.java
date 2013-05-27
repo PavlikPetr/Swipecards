@@ -100,14 +100,6 @@ public class Options extends AbstractData {
             BANNER_GAG
     };
 
-    public final static String[] FULLSCREENS = new String[]{
-            BANNER_TOPFACE,
-            BANNER_ADWIRED,
-            BANNER_MOPUB,
-            BANNER_INNERACTIVE,
-            BANNER_MOBCLIX,
-    };
-
     /**
      * Идентификаторы для типов офферволлов
      */
