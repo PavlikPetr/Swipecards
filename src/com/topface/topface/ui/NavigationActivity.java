@@ -28,7 +28,6 @@ import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.ComplainsFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
@@ -130,9 +129,13 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         super.inBackgroundThread();
         mNovice = Novice.getInstance(getPreferences());
         mNovice.initNoviceFlags();
-        Looper.prepare();
-        Offerwalls.init(getApplicationContext());
-        Looper.loop();
+        try {
+            Looper.prepare();
+            Offerwalls.init(getApplicationContext());
+            Looper.loop();
+        } catch (Exception e) {
+            Debug.error(e);
+        }
     }
 
     private SharedPreferences getPreferences() {

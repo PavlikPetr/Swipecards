@@ -2,9 +2,6 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">uk_UA</string>
-    <string name="general_error">ПОМИЛКА</string>
-    <string name="general_warning">ПОПЕРЕДЖЕННЯ</string>
-    <string name="general_ok">OK</string>
     <string name="general_yes">Так</string>
     <string name="general_no">Ні</string>
     <string name="general_cancel">Відміна</string>

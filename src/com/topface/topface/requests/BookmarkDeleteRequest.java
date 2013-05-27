@@ -4,17 +4,10 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created with IntelliJ IDEA.
- * User: ilya
- * Date: 08.04.13
- * Time: 17:44
- * To change this template use File | Settings | File Templates.
- */
 public class BookmarkDeleteRequest extends ApiRequest {
     public static String SERVICE_NAME = "bookmarkdelete";
 
-    int uid;
+    private final int uid;
 
     public BookmarkDeleteRequest(Context context, int uid) {
         super(context);

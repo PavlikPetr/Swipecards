@@ -151,6 +151,7 @@ public class Options extends AbstractData {
     public int premium_period;
     public int contacts_count;
     public long popup_timeout;
+    public boolean block_unconfirmed;
 
     public static Options parse(ApiResponse response) {
         Options options = new Options();
@@ -173,6 +174,7 @@ public class Options extends AbstractData {
             }
             options.offerwall = response.jsonResult.optString("offerwall");
             options.max_version = response.jsonResult.optString("max_version");
+            options.block_unconfirmed = response.jsonResult.optBoolean("block_unconfirmed");
 
             JSONObject purchases = response.jsonResult.optJSONObject("purchases");
             if (purchases != null) {

@@ -2,9 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.topface.topface"
           android:installLocation="auto"
-          android:versionCode="75"
+          android:versionCode="77"
 
-          android:versionName="2.5.3">
+          android:versionName="2.5.4">
 
     <uses-sdk
             android:minSdkVersion="7"

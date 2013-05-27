@@ -2,9 +2,6 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">lt_LT</string>
-    <string name="general_error">KLAIDA</string>
-    <string name="general_warning">ĮSPĖJIMAS</string>
-    <string name="general_ok">OK</string>
     <string name="general_yes">Taip</string>
     <string name="general_no">Ne</string>
     <string name="general_cancel">Atšaukti</string>

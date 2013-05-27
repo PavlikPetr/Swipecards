@@ -525,8 +525,10 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                                 Toast.makeText(App.getContext(), R.string.general_server_error, 1500).show();
                                 v.setEnabled(true);
                                 v.setSelected(false);
-                                TextView view = (TextView) v;
-                                view.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
+                                if (v instanceof TextView) {
+                                    TextView view = (TextView) v;
+                                    view.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
+                                }
                             }
                         }
                     });
