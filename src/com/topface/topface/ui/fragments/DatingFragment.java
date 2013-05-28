@@ -663,13 +663,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mNoviceLayout.startAnimation(mAlphaAnimation);
             mNovice.completeShowEnergyToSympathies();
         } else if (mNovice.isShowSympathy()) {
-            mNoviceLayout.setLayoutRes(R.layout.novice_sympathy, new OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    mMutualBtn.performClick();
-                }
-            });
+            mNoviceLayout.setLayoutRes(R.layout.novice_sympathy, null);
             mNoviceLayout.startAnimation(mAlphaAnimation);
             mNovice.completeShowSympathy();
         } else if (mNovice.isShowSympathiesBonus()) {
