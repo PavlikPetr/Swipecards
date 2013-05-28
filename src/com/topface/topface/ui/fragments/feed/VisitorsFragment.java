@@ -48,8 +48,10 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     protected void initEmptyFeedView(View inflated) {
         View btnBuyVip = inflated.findViewById(R.id.btnBuyVip);
         if (CacheProfile.premium) {
+            inflated.findViewById(R.id.tvText).setVisibility(View.GONE);
             btnBuyVip.setVisibility(View.GONE);
         } else {
+            inflated.findViewById(R.id.tvText).setVisibility(View.VISIBLE);
             btnBuyVip.setVisibility(View.VISIBLE);
             btnBuyVip.setOnClickListener(new View.OnClickListener() {
                 @Override
