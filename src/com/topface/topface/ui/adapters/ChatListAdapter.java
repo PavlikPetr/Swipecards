@@ -34,7 +34,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         TextView date;
         ImageViewRemote gift;
         ImageViewRemote mapBackground;
-        ProgressBar prgsAddress;
+        ProgressBar prgsLoader;
         Button likeRequest;
         View userInfo;
         View loader;
@@ -392,13 +392,15 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case T_USER_MAP:
                 convertView = mInflater.inflate(output ? R.layout.chat_user_map : R.layout.chat_friend_map, null, false);
                 holder.mapBackground = (ImageViewRemote) convertView.findViewById(R.id.chat_image);
-                holder.prgsAddress = (ProgressBar) convertView.findViewById(R.id.chat_text_progress);
+                holder.prgsLoader = (ProgressBar) convertView.findViewById(R.id.chat_text_progress);
                 break;
             case T_FRIEND_REQUEST:
                 convertView = mInflater.inflate(R.layout.chat_friend_request, null, false);
                 holder.date = (TextView) convertView.findViewById(R.id.chat_date);
                 holder.userInfo = convertView.findViewById(R.id.user_info);
                 holder.likeRequest = (Button) convertView.findViewById(R.id.btn_chat_like_request);
+                holder.prgsLoader = (ProgressBar) convertView.findViewById(R.id.prsLoader);
+                holder.likeRequest.setTag(R.id.prsLoader,holder.prgsLoader);
                 break;
             case T_USER_REQUEST:
                 convertView = mInflater.inflate(R.layout.chat_user, null, false);
@@ -423,7 +425,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 holder.mapBackground.setImageResource(R.drawable.chat_item_place);
                 holder.mapBackground.setTag(item);
                 holder.mapBackground.setOnClickListener(mOnClickListener);
-                mAddressesCache.mapAddressDetection(item, holder.message, holder.prgsAddress);
+                mAddressesCache.mapAddressDetection(item, holder.message, holder.prgsLoader);
                 break;
             case FeedDialog.GIFT:
                 holder.gift.setRemoteSrc(item.link);
@@ -590,12 +592,15 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     private View.OnClickListener mLikeRequestListener = new View.OnClickListener() {
         @Override
-        public void onClick(View v) {
+        public void onClick(final View v) {
             final int position = (Integer) v.getTag();
+            final ProgressBar prsLoader = (ProgressBar)v.getTag(R.id.prsLoader);
             final History item = getItem(position);
             if (item != null) {
                 EasyTracker.getTracker().trackEvent("VirusLike", "Click", "Chat", 0L);
 
+                prsLoader.setVisibility(View.VISIBLE);
+                v.setVisibility(View.INVISIBLE);
                 new VirusLikesRequest(item.id, mContext).callback(new DataApiHandler<VirusLike>() {
 
                     @Override
@@ -645,6 +650,13 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                     public void fail(int codeError, ApiResponse response) {
                         EasyTracker.getTracker().trackEvent("VirusLike", "Fail", "Chat", 0L);
                         Utils.showErrorMessage(getContext());
+                    }
+
+                    @Override
+                    public void always(ApiResponse response) {
+                        super.always(response);
+                        prsLoader.setVisibility(View.GONE);
+                        v.setVisibility(View.VISIBLE);
                     }
                 }).exec();
             }

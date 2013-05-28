@@ -122,6 +122,11 @@ public class ImageViewRemote extends ImageView {
         }
     }
 
+    public void setResourceSrc(int resource) {
+        DefaultImageLoader.getInstance().getImageLoader().cancelDisplayTask(this);
+        setImageResource(resource);
+    }
+
     public boolean setRemoteSrc(String remoteSrc, Handler handler) {
         return setRemoteSrc(remoteSrc, handler, false);
     }

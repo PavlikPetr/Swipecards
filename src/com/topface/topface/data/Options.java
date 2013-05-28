@@ -31,6 +31,7 @@ public class Options extends AbstractData {
     /**
      * Идентификаторы страниц
      */
+    public static final String PAGE_UNKNOWK = "UNKNOWN_PAGE";
     public final static String PAGE_LIKES = "LIKE";
     public final static String PAGE_MUTUAL = "MUTUAL";
     public final static String PAGE_MESSAGES = "MESSAGES";
@@ -40,6 +41,20 @@ public class Options extends AbstractData {
     public final static String PAGE_BOOKMARKS = "BOOKMARKS";
     public final static String PAGE_VIEWS = "VIEWS";
     public final static String PAGE_START = "START";
+    public final static String PAGE_GAG = "GAG";
+    public final static String[] PAGES = new String[]{
+            PAGE_UNKNOWK,
+            PAGE_LIKES,
+            PAGE_MUTUAL,
+            PAGE_MESSAGES,
+            PAGE_VISITORS,
+            PAGE_DIALOGS,
+            PAGE_FANS,
+            PAGE_BOOKMARKS,
+            PAGE_VIEWS,
+            PAGE_START,
+            PAGE_GAG
+    };
 
     public final static String GENERAL_MAIL_CONST = "mail";
     public final static String GENERAL_APNS_CONST = "apns";
@@ -51,6 +66,11 @@ public class Options extends AbstractData {
     public final static String FLOAT_TYPE_BANNER = "BANNER";
     public final static String FLOAT_TYPE_LEADERS = "LEADERS";
     public final static String FLOAT_TYPE_NONE = "NONE";
+    public final static String[] FLOAT_TYPES = new String[]{
+            FLOAT_TYPE_BANNER,
+            FLOAT_TYPE_LEADERS,
+            FLOAT_TYPE_NONE
+    };
 
     /**
      * Идентификаторы типов баннеров
@@ -64,8 +84,21 @@ public class Options extends AbstractData {
     public static final String BANNER_BEGUN = "BEGUN";
     public static final String BANNER_MOPUB = "MOPUB";
     public static final String BANNER_INNERACTIVE = "INNERACTIVE";
-    public static final String BANNER_MOBCLIX = "MOBLIX";
+    public static final String BANNER_MOBCLIX = "MOBCLIX";
     public static final String BANNER_GAG = "GAG";
+    public final static String[] BANNERS = new String[]{
+            BANNER_TOPFACE,
+            BANNER_ADFONIC,
+            BANNER_ADMOB,
+            BANNER_WAPSTART,
+            BANNER_ADWIRED,
+            BANNER_MADNET,
+            BANNER_BEGUN,
+            BANNER_MOPUB,
+            BANNER_INNERACTIVE,
+            BANNER_MOBCLIX,
+            BANNER_GAG
+    };
 
     /**
      * Идентификаторы для типов офферволлов
@@ -74,6 +107,12 @@ public class Options extends AbstractData {
     public static final String SPONSORPAY = "SPONSORPAY";
     public static final String CLICKKY = "CLICKKY";
     public static final String RANDOM = "RANDOM";
+    public final static String[] OFFERWALLS = new String[]{
+            TAPJOY,
+            SPONSORPAY,
+            CLICKKY,
+            RANDOM
+    };
 
     /**
      * Настройки для каждого типа страниц
@@ -104,6 +143,7 @@ public class Options extends AbstractData {
     public int premium_period;
     public int contacts_count;
     public long popup_timeout;
+    public boolean block_unconfirmed;
 
     public static Options parse(ApiResponse response) {
         Options options = new Options();
@@ -118,7 +158,7 @@ public class Options extends AbstractData {
             for (int i = 0; i < pages.length(); i++) {
                 JSONObject page = pages.getJSONObject(i);
 
-                String pageName = page.optString("name");
+                String pageName = getPageName(page);
                 String floatType = page.optString("float");
                 String bannerType = page.optString("banner");
 
@@ -126,6 +166,7 @@ public class Options extends AbstractData {
             }
             options.offerwall = response.jsonResult.optString("offerwall");
             options.max_version = response.jsonResult.optString("max_version");
+            options.block_unconfirmed = response.jsonResult.optBoolean("block_unconfirmed");
 
             JSONObject purchases = response.jsonResult.optJSONObject("purchases");
             if (purchases != null) {
@@ -175,6 +216,33 @@ public class Options extends AbstractData {
 
         CacheProfile.setOptions(options, response.jsonResult);
         return options;
+    }
+
+    private static String getPageName(JSONObject page) {
+        String name = page.optString("name");
+        if (PAGE_LIKES.equals(name)) {
+            return PAGE_LIKES;
+        } else if (PAGE_MUTUAL.equals(name)) {
+            return PAGE_MUTUAL;
+        } else if (PAGE_MESSAGES.equals(name)) {
+            return PAGE_MESSAGES;
+        } else if (PAGE_VISITORS.equals(name)) {
+            return PAGE_VISITORS;
+        } else if (PAGE_DIALOGS.equals(name)) {
+            return PAGE_DIALOGS;
+        } else if (PAGE_FANS.equals(name)) {
+            return PAGE_FANS;
+        } else if (PAGE_BOOKMARKS.equals(name)) {
+            return PAGE_BOOKMARKS;
+        } else if (PAGE_VIEWS.equals(name)) {
+            return PAGE_VIEWS;
+        } else if (PAGE_START.equals(name)) {
+            return PAGE_START;
+        } else if (PAGE_GAG.equals(name)) {
+            return PAGE_GAG;
+        } else {
+            return PAGE_UNKNOWK + "(" + name + ")";
+        }
     }
 
     public BuyButton createBuyButtonFromJSON(JSONObject purchaseItem) {
@@ -267,10 +335,30 @@ public class Options extends AbstractData {
         public String floatType;
         public String banner;
 
+        private static final String SEPARATOR = ";";
+
         public Page(String name, String floatType, String banner) {
             this.name = name;
             this.floatType = floatType;
             this.banner = banner;
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder strBuilder = new StringBuilder();
+            strBuilder.append(name).append(SEPARATOR)
+                    .append(floatType).append(SEPARATOR)
+                    .append(banner);
+            return strBuilder.toString();
+        }
+
+        public static Page parseFromString(String str) {
+            String[] params = str.split(SEPARATOR);
+            if (params.length == 3) {
+                return new Page(params[0],params[1],params[2]);
+            } else {
+                return null;
+            }
         }
     }
 

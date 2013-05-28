@@ -7,9 +7,6 @@
 
     <!-- General -->
 
-    <string name="general_error">ОШИБКА</string>
-    <string name="general_warning">ПРЕДУПРЕЖДЕНИЕ</string>
-    <string name="general_ok">OK</string>
     <string name="general_yes">Да</string>
     <string name="general_no">Нет</string>
     <string name="general_cancel">Отмена</string>
@@ -455,7 +452,7 @@
     <string name="search_city_by_name">Поиск города по названию</string>
 
     <string name="gallery">Галерея</string>
-    <string name="no_photo_take_photo">С вами никто не может познакомится! Сделайте фото или выберите имеющееся из
+    <string name="no_photo_take_photo">С вами никто не может познакомиться! Сделайте фото или выберите имеющееся из
         альбома
     </string>
     <string name="photo_is_too_small">Вы отлично выглядете на этой фотографии, но для того, чтобы все пользователи
@@ -621,5 +618,25 @@
     <string name="general_complain">Жалоба</string>
     <string name="general_msg">Сообщение</string>
     <string name="general_no_notifications">К сожалению, уведомления, на вашем устройстве, не доступны</string>
+
+    <plurals name="vip_add_more_friends">
+        <item quantity="one">Пригласите еще %d друга</item>
+        <item quantity="few">Пригласите еще %d друга</item>
+        <item quantity="many">Пригласите еще %d друзей</item>
+        <item quantity="other">Пригласите еще %d друзей</item>
+    </plurals>
+    
+    <string name="general_bookmarks_add_short">В избранные</string>
+    <string name="black_list_add_short">В черный список</string>
+    <string name="general_complaint">Пожаловаться</string>
+    <string name="general_type_complain">Тема жалобы</string>
+    
+    <string name="confirm_email_for_dating">Мы против спама. Подтвердите свой почтовый адрес, чтобы знакомиться в Topface!</string>
+    <string name="confirm">Подтвердить</string>
+
+    <string name="complain_type_swearing_msg">Хамство, угрозы, мат</string>
+    <string name="general_bookmarks_is_deleted">Пользователь удален из избранных</string>
+    <string name="general_blacklist_is_deleted">Пользователь удален из черного списка</string>
+    <string name="invite_friends_title_short">Пригласить всех друзей в Topface</string>
 
 </resources>

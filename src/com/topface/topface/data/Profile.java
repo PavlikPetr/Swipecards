@@ -213,6 +213,18 @@ public class Profile extends AbstractDataWithPhotos {
             formInfo.fillFormItem(headerItem);
             profile.forms.add(headerItem);
 
+            // 11 breast position 7
+            if (profile.sex == Static.GIRL) {
+                formItem = new FormItem(R.array.form_physique_breast, form.optInt("breast_id"),
+                        FormItem.DATA, headerItem);
+                formInfo.fillFormItem(formItem);
+                if (isUserProfile) {
+                    compareFormItemData(formItem, profile, false);
+                } else {
+                    profile.forms.add(formItem);
+                }
+            }
+
             // 6 fitness position 2
             formItem = new FormItem(R.array.form_physique_fitness, form.optInt("fitness_id"),
                     FormItem.DATA, headerItem);

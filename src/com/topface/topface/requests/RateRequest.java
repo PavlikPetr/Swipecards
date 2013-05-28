@@ -4,7 +4,7 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class RateRequest extends ApiRequest {
+public class RateRequest extends ConfirmedApiRequest {
 
     public static final int DEFAULT_MUTUAL = 1;
     public static final int DEFAULT_NO_MUTUAL = 0;
@@ -30,10 +30,5 @@ public class RateRequest extends ApiRequest {
     @Override
     public String getServiceName() {
         return service;
-    }
-
-    @Override
-    public void exec() {
-        super.exec();
     }
 }

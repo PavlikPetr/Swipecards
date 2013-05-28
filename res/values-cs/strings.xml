@@ -2,9 +2,6 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">cs_CZ</string>
-    <string name="general_error">CHYBA</string>
-    <string name="general_warning">UPOZORNĚNÍ</string>
-    <string name="general_ok">OK</string>
     <string name="general_yes">Ano</string>
     <string name="general_no">Ne</string>
     <string name="general_cancel">Zrušit</string>
@@ -370,7 +367,7 @@
     <string name="general_change">Změnit</string>
     <string name="general_correct">Všechno je správně</string>
     <string name="we_dont_detect_your_city">Pokud chcete najít v blízkém okolí, potřebujeme vědět, kde se nacházíte. Uveďte prosím své město.</string>
-    <string name="confirm_email">Prosím, podtvrďte e-mail</string>
+    <string name="confirm_email">Prosím, potvrďte e-mail</string>
     <string name="password_sent">Nové heslo bylo odesláno na Vaš E-mail</string>
     <string name="buy_vip_month_one">%1$d měsíc za %2$.2f %3$@</string>
     <string name="buy_vip_month_few">%1$d měsíce za %2$.2f %3$@</string>
@@ -456,4 +453,31 @@
     <string name="incorrect_photo_size">Nesprávná velikost fotky</string>
     <string name="input_contact_name">Zadejte jméno kontaktu</string>
     <string name="incorrect_locale">Pokud byste chtěli, abychom mohli přečíst Vaši recenzi, napište ji v ruštině nebo angličtině</string>
+    <string name="complain_photo_header">Nekorektní fotka</string>
+    <string name="complain_msg_header">Nekorektní zpráva</string>
+    <string name="complain_info_header">Nekorektní informace</string>
+    <string name="complain_type_porn">Porno (je vidět genitálie)</string>
+    <string name="complain_type_ero">Erotika na úvodní fotce</string>
+    <string name="complain_type_picture">Obrázek</string>
+    <string name="complain_type_fake_user">Známá osobnost</string>
+    <string name="complain_type_spam_msg">Obchodní nabídka, spam, reklama, odkazy na webové stránky, telefony</string>
+    <string name="complain_type_spam_profile">Pole \"status\" a \"o mě\" obsahují obchodní nabídku</string>
+    <string name="complain_type_swearing_profile">Pole \"status\" a \"o mě\" obsahují hulvátství, sprostá slova, odkazy na soc. sítě</string>
+    <string name="complain_type_fake_data">Jméno, pohlaví, věk a fotka člověka nesedí</string>
+    <string name="complain_description">Vysvětlete podrobně důvody své stížnosti</string>
+    <string name="general_complain_sended">Vaše stížnost je odeslána, moc děkujeme za pomoc</string>
+    <string name="general_complain">Stížnost</string>
+    <string name="general_msg">Zpráva</string>
+    <plurals name="vip_add_more_friends">
+        <item quantity="few">Pozvěte ještě %d přítele</item>
+        <item quantity="other">Pozvěte ještě %d přátel</item>
+        <item quantity="one">Pozvěte ještě %d přítele</item>
+    </plurals>
+    <string name="general_bookmarks_add_short">k oblíbeným</string>
+    <string name="black_list_add_short">na černou listinu</string>
+    <string name="general_complaint">Stěžovat se</string>
+    <string name="general_type_complain">Téma stížnosti</string>
+    <string name="confirm_email_for_dating">Jsme proti spamu. Potvrďte svou emailovou adresu pro seznámení na Topface!</string>
+    <string name="confirm">Potvrdit</string>
+    <string name="complain_type_swearing_msg">Neslušnost, vyhrožování, sprostá slova</string>
 </resources>

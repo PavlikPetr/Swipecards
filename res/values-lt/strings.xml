@@ -2,9 +2,6 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">lt_LT</string>
-    <string name="general_error">KLAIDA</string>
-    <string name="general_warning">ĮSPĖJIMAS</string>
-    <string name="general_ok">OK</string>
     <string name="general_yes">Taip</string>
     <string name="general_no">Ne</string>
     <string name="general_cancel">Atšaukti</string>
@@ -455,4 +452,29 @@
     <string name="incorrect_photo_size">Neleistinas fotografijos dydis</string>
     <string name="input_contact_name">Įveskite kontakto vardą</string>
     <string name="incorrect_locale">Jei Jūs norite, kad mes galėtume perskaityti Jūsų atsiliepimą, rašykite jį rusų arba anglų kalba</string>
+    <string name="complain_photo_header">Netinkama fotografija</string>
+    <string name="complain_msg_header">Netinkamas pranešimas</string>
+    <string name="complain_info_header">Netinkama informacija</string>
+    <string name="complain_type_porn">Porno (genitalijų vaizdai)</string>
+    <string name="complain_type_ero">Erotika pagrindinėje fotografijoje</string>
+    <string name="complain_type_picture">Paveiksliukas</string>
+    <string name="complain_type_fake_user">Žinomas žmogus</string>
+    <string name="complain_type_spam_msg">Komerciniai pasiūlymai, brukalas, reklama, nuorodos į svetaines, telefonai</string>
+    <string name="complain_type_spam_profile">Laukeliuose \"statusas\", \"spie save\" yra komercinis pasiūlymas</string>
+    <string name="complain_type_swearing_profile">Laukeliuose \"statusas\", \"spie save\" yra chamiškumo, keiksmažodžių, nuorodų į soc. tinklalapius</string>
+    <string name="complain_type_fake_data">Vardas, lytis, amžius ir žmogaus fotografija nesutampa</string>
+    <string name="complain_description">Papasakokite plačiau apie skundo priežastį</string>
+    <string name="general_complain_sended">Jūsų skundas išsiųstas, labai dėkojame už pagalbą</string>
+    <string name="general_complain">Skundas</string>
+    <string name="general_msg">Pranešimas</string>
+    <plurals name="vip_add_more_friends">
+        <item quantity="few">Pakvieskite dar %d draugus</item>
+        <item quantity="other">Pakvieskite dar %d draugų</item>
+        <item quantity="one">Pakvieskite dar %d draugą</item>
+    </plurals>
+    <string name="general_bookmarks_add_short">į išrinktuosius</string>
+    <string name="black_list_add_short">į juodąjį sąrašą</string>
+    <string name="general_complaint">Pasiskųsti</string>
+    <string name="confirm_email_for_dating">Mes esame prieš brukalą. Patvirtinkite savo el. pašto adresą, kad pažindintis Topface!</string>
+    <string name="confirm">Patvirtinti</string>
 </resources>

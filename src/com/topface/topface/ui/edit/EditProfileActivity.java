@@ -153,6 +153,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
     }
 
     private void initEditItems() {
+        if (!mEditItems.isEmpty()) mEditItems.clear();
         mEditItems.add((new EditStatus()).setType(Type.TOP));
         mEditItems.add((new EditBackPhoto()).setType(Type.MIDDLE));
         mEditItems.add((new EditPhotos()).setType(Type.BOTTOM));
@@ -228,6 +229,12 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     mEditSex.setImageResource(CacheProfile.sex == Static.BOY ?
                             R.drawable.ico_boy :
                             R.drawable.ico_girl);
+                    if (data != null && data.getExtras() != null) {
+                        if (data.getExtras().getBoolean(EditMainFormItemsFragment.INTENT_SEX_CHANGED)) {
+                            initEditItems();
+                        }
+                    }
+                    mAdapter.notifyDataSetChanged();
                     break;
                 case EditContainerActivity.INTENT_EDIT_STATUS:
                     mAdapter.notifyDataSetChanged();

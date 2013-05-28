@@ -28,6 +28,12 @@ public class AppConfig {
     private static final String DATA_APP_CONFIG_VERSION = "data_app_config_version";
     private static final String DATA_API_VERSION = "data_api_version";
 
+    private BannersConfig mBannerConfig;
+
+    public BannersConfig getBannerConfig() {
+        return mBannerConfig;
+    }
+
     public String getApiRevision() {
         return mFields.getStringField(DATA_API_REVISION);
     }
@@ -98,6 +104,7 @@ public class AppConfig {
 
     public AppConfig(Context context) {
         mContext = context;
+        mBannerConfig = new BannersConfig(mContext);
         initData();
     }
 

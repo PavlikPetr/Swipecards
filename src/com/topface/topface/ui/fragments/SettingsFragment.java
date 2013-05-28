@@ -232,10 +232,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         } else if (authToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
             setAccountNameText(R.string.settings_account, name, R.drawable.ic_vk, frame);
         } else if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
-            if (TextUtils.isEmpty(name)) {
-                name = CacheProfile.first_name;
-                mSettings.setSocialAccountName(name);
-            }
+            name = authToken.getLogin();
             setAccountNameText(R.string.settings_account, name, R.drawable.ic_tf, frame);
         } else {
             setText(R.string.settings_account, frame);

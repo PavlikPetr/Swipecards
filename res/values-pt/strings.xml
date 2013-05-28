@@ -2,9 +2,6 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">pt_PT</string>
-    <string name="general_error">ERRO</string>
-    <string name="general_warning">AVISO</string>
-    <string name="general_ok">OK</string>
     <string name="general_yes">Sim</string>
     <string name="general_no">Não</string>
     <string name="general_cancel">Cancelamento</string>
@@ -448,4 +445,24 @@
     <string name="incorrect_photo_size">Tamanho inadmissível de fotos</string>
     <string name="input_contact_name">Introduza o nome de cantacto</string>
     <string name="incorrect_locale">Se você gostaria que nós fossemos capazes de ler a sua opinião, então escreva-a em russo ou em inglês</string>
+    <string name="complain_photo_header">Fotografia incorreta</string>
+    <string name="complain_msg_header">Mensagem incorreta</string>
+    <string name="complain_info_header">Informação incorreta</string>
+    <string name="complain_type_porn">Porno (genitálias visíveis)</string>
+    <string name="complain_type_ero">Conteúdo erótico na foto principal</string>
+    <string name="complain_type_picture">Imagem</string>
+    <string name="complain_type_fake_user">Uma pessoa de renome</string>
+    <string name="complain_type_spam_msg">Oferta comercial, spam, publicidade, anotações na site, telefones</string>
+    <string name="complain_type_spam_profile">Campo «status», sobre si» contem oferta comercial</string>
+    <string name="complain_type_swearing_profile">Campo «status», «sobre si» contem grosseria, esteira, anotações na rede social</string>
+    <string name="complain_type_fake_data">Nome, sexo, idade e foto da pessoa não se coincidem</string>
+    <string name="complain_description">Conte-nos mais detalhes sobre a causa da queixa</string>
+    <string name="general_complain_sended">A sua queixa foi enviada, muito obrigado pela ajuda</string>
+    <string name="general_complain">Queixa</string>
+    <string name="general_msg">Mensagem</string>
+    <string name="general_bookmarks_add_short">aos favoritos</string>
+    <string name="black_list_add_short">na lista negra</string>
+    <string name="general_complaint">Queixar-se</string>
+    <string name="confirm_email_for_dating">Nós somos contra o spam. Confirme o seu endereço de email para se travar conhecimentos em Topface!</string>
+    <string name="confirm">Confirmar</string>
 </resources>

@@ -2,9 +2,6 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">sv_SE</string>
-    <string name="general_error">FEL</string>
-    <string name="general_warning">VARNING</string>
-    <string name="general_ok">OK</string>
     <string name="general_yes">Ja</string>
     <string name="general_no">Nej</string>
     <string name="general_cancel">Avbryt</string>
@@ -413,6 +410,9 @@
     <string name="general_add">Lägg till</string>
     <string name="general_invite_friends">Bjud in vänner</string>
     <string name="general_rest_contacts">Du har %d kontakter kvar</string>
+    <string name="invite_friends_title">Bjud alla vänner från telefonboken till Topface.</string>
+    <string name="invalid_contacts">Vissa kontakter är inkoreekta. Vänligen skicka korrekta kontakter.</string>
+    <string name="general_choose_action">Välj handling</string>
     <plurals name="vip_status_period">
         <item quantity="other">Du har fått VIP-status för %d dagar</item>
         <item quantity="one">Du har fått VIP-status för %d dag</item>
@@ -430,4 +430,25 @@
         <item quantity="one">Erhåll VIP gratis för %d inbjudan</item>
     </plurals>
     <string name="filter_hint">Ange namn</string>
+    <string name="buy_status_and_watch_your_fans">Köp VIP-status för att ta reda på vem som lagt dig till favoriter</string>
+    <string name="add_bookmarks_to_be_connected">Lägg till nya bekanta hit för att inte förlora dem</string>
+    <string name="nobody_chat_with_you_sympathies_will_help">Ingen har skrivit till dig än. Sympatier kan hjälpa att hitta en samtalspartner</string>
+    <string name="rate_and_have_mutual_or_buy_and_chat">Skicka sympatier till dem du gillar och få sympatier tillbaks. Eller köp sympatier och börja umgås med dem som gillar dig!</string>
+    <string name="start_rate">Börja ranka</string>
+    <string name="with_vip_find_your_visitors">Med VIP-status kan du ta reda på vem som besökt din sida</string>
+    <string name="on_avatar">Till profilbilden.</string>
+    <string name="your_avatar">Din profilbild</string>
+    <string name="avatar_set_successfully">Profilbilden har framgångsrikt laddats</string>
+    <string name="incorrect_photo">Felaktigt foto. Vänligen ladda upp ett annat.</string>
+    <string name="incorrect_photo_format">Felaktig fotoformat. Vänligen och försök att ladda upp jpg eller png.</string>
+    <string name="incorrect_photo_size">Fotostorlek ej tillåten</string>
+    <string name="input_contact_name">Ange kontaktnamn</string>
+    <string name="incorrect_locale">Om du vill att alla skall läsa ditt utlåtande, skriv på ryska eller engelska</string>
+    <string name="complain_photo_header">Inkorrekt foto</string>
+    <string name="complain_msg_header">Inkorrekt meddelande</string>
+    <string name="complain_info_header">Inkorrekt information</string>
+    <string name="complain_type_ero">Erotik på profilbilden</string>
+    <string name="complain_type_fake_user">Kändis</string>
+    <string name="complain_description">Berätta mer om anledningen till ditt klagomål</string>
+    <string name="black_list_add_short">till svartlistan</string>
 </resources>

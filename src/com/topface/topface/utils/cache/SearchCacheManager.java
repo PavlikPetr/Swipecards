@@ -11,7 +11,7 @@ import org.json.JSONObject;
  */
 public class SearchCacheManager extends PreferencesCacheManager {
     private static final String CACHE_KEY = "Search";
-    private static final int LIFE_TIME = 86400; //6 часов: 6 * 60 * 60
+    private static final int LIFE_TIME = 7200; //2 часа: 2 * 60 * 60
     private static final String CACHE_KEY_SEARCH_POSITION_POSTFIX = "_search_position";
     private static final String CACHE_KEY_SEARCH_SIGNATURE_POSTFIX = "_search_signature";
 
