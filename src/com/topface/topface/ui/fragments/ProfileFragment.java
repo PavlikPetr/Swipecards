@@ -371,7 +371,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     }
                     mRateController.setOnRateControllerListener(mRateControllerListener);
                     //set info into views for user
-                    mTitle.setText(mUserProfile.getNameAndAge());
+                    mTitle.setText(R.string.general_profile);
 
                     setProfile(data);
                     if (mHeaderMainFragment != null) {
