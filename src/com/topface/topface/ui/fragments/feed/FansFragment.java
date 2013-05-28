@@ -6,6 +6,7 @@ import android.view.View;
 import com.topface.topface.R;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.utils.CacheProfile;
 
 
 public class FansFragment extends BookmarksFragment{
@@ -26,13 +27,21 @@ public class FansFragment extends BookmarksFragment{
 
     @Override
     protected void initEmptyFeedView(View inflated) {
-        inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
-                startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
-            }
-        });
+        View btnBuyVip = inflated.findViewById(R.id.btnBuyVip);
+        if (CacheProfile.premium) {
+            btnBuyVip.setVisibility(View.GONE);
+        } else {
+            btnBuyVip.setVisibility(View.VISIBLE);
+            btnBuyVip.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
+                    startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                }
+            });
+        }
+
+
     }
 
     @Override
