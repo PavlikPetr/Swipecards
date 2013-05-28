@@ -40,7 +40,11 @@ public class GCMIntentService extends GCMBaseIntentService {
                 broadcastReceiver.putExtra("id", getUserId(user));
                 context.sendBroadcast(broadcastReceiver);
             }
-
+            if (Editor.isEditor()) {
+                Intent test = new Intent("com.topface.testapp.GCMTest");
+                test.putExtras(intent.getExtras());
+                App.getContext().sendBroadcast(test);
+            }
         }
     }
 

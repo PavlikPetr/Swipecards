@@ -72,6 +72,8 @@ public class CacheProfile {
     private static boolean editor;
     public static boolean canInvite;
 
+    public static boolean isGcmSupported;
+
     private static void setProfileCache(final ApiResponse response) {
         //Пишем в SharedPreferences в отдельном потоке
         new Thread(new Runnable() {
@@ -131,6 +133,7 @@ public class CacheProfile {
 
         profile.canInvite = canInvite;
 
+
         return profile;
     }
 
@@ -173,6 +176,8 @@ public class CacheProfile {
         canInvite = profile.canInvite;
 
         editor = profile.isEditor();
+
+//        isGcmSupported = profile
 
         setProfileCache(response);
         setProfileUpdateTime();

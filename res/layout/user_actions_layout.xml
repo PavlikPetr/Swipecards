@@ -23,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/us_ac_delight_selector"
+                android:src="@drawable/ico_drop_menu_profile_w_normal"
                 android:layout_marginLeft="8dp"
 
                 />

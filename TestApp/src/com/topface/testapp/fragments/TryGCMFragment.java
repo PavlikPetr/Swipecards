@@ -79,7 +79,8 @@ public class TryGCMFragment extends Fragment{
             try {
                 startActivity(Intent.createChooser(i, "Send mail..."));
             } catch (android.content.ActivityNotFoundException ex) {
-                Toast.makeText(getActivity(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity()
+                        , "There are no email clients installed.", Toast.LENGTH_SHORT).show();
             }
         }
     }

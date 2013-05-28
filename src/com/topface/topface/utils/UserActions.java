@@ -21,6 +21,10 @@ public class UserActions {
         }
     }
 
+    private void initListeners() {
+
+    }
+
     public static class ActionItem {
         public int id;
         public View.OnClickListener listener;

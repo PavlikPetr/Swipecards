@@ -62,6 +62,7 @@ public class Profile extends AbstractDataWithPhotos {
     public boolean paid;
     // Показывать рекламу или нет
     public boolean show_ad;
+    public boolean isGcmSupported;
     /**
      * Флаг того, является ли пользоветль редактором
      */

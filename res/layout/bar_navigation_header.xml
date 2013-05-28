@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignRight="@id/btnNavigationHome"
                 android:layout_alignTop="@id/btnNavigationHome"
-                android:layout_marginRight="24dp"
+
                 android:layout_marginTop="5dp"
                 android:background="@drawable/topface_notification_dialogs"
                 android:gravity="center_horizontal"
@@ -46,7 +46,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignRight="@id/btnNavigationHome"
                 android:layout_alignTop="@id/btnNavigationHome"
-                android:layout_marginRight="24dp"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/topface_notification_likes"
                 android:gravity="center_horizontal"

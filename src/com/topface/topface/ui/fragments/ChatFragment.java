@@ -3,6 +3,7 @@ package com.topface.topface.ui.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.*;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -30,6 +31,7 @@ import com.topface.topface.Static;
 import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
@@ -67,6 +69,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
     public static final String INTENT_ITEM_ID = "item_id";
     public static final String MAKE_ITEM_READ = "com.topface.topface.feedfragment.MAKE_READ";
+
+    public static final String DEFAULT_ACTIVATED_COLOR = "#AAAAAA";
 
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
 
@@ -128,7 +132,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         String userCity = getArguments().getString(INTENT_USER_CITY);
 
         chatActions = (LinearLayout) root.findViewById(R.id.mChatActions);
-        chatActions.setVisibility(View.GONE);
+        chatActions.setVisibility(View.INVISIBLE);
         ArrayList<UserActions.ActionItem> actions = new ArrayList<UserActions.ActionItem>();
         actions.add(new UserActions.ActionItem(R.id.acProfile, this));
         actions.add(new UserActions.ActionItem(R.id.acBlock, this));
@@ -596,7 +600,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(final View v) {
         if (v instanceof ImageView) {
             if (v.getTag() instanceof History) {
                 History history = (History) v.getTag();
@@ -651,6 +655,90 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 } else {
                     addToBlackList();
                 }
+                break;
+            case R.id.acProfile:
+                Intent profileIntent = ContainerActivity.getProfileIntent(mUserId, getActivity());
+                startActivity(profileIntent);
+                break;
+            case R.id.acBlock:
+                if (CacheProfile.premium) {
+                    if (mUserId > 0) {
+                        final TextView textView = (TextView) v.findViewById(R.id.blockTV);
+                        final ProgressBar loader = (ProgressBar) v.findViewById(R.id.blockPrBar);
+                        final ImageView icon = (ImageView) v.findViewById(R.id.blockIcon);
+
+                        loader.setVisibility(View.VISIBLE);
+                        icon.setVisibility(View.GONE);
+                        BlackListAddRequest blackListAddRequest = new BlackListAddRequest(mUserId, getActivity());
+                        blackListAddRequest.callback(new VipApiHandler() {
+                            @Override
+                            public void success(ApiResponse response) {
+                                super.success(response);
+                                if (isAdded()) {
+                                    v.setEnabled(false);
+                                    loader.setVisibility(View.INVISIBLE);
+                                    icon.setVisibility(View.VISIBLE);
+                                    textView.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+                                }
+                            }
+
+                            @Override
+                            public void fail(int codeError, ApiResponse response) {
+                                super.fail(codeError, response);
+                                if (isAdded()) {
+                                    loader.setVisibility(View.INVISIBLE);
+                                    icon.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        }).exec();
+                    }
+                } else {
+                    Intent buyingIntent = new Intent(getActivity(), ContainerActivity.class);
+                    buyingIntent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                    startActivity(buyingIntent);
+                }
+                break;
+            case R.id.acBookmark:
+                final TextView textView = (TextView) v.findViewById(R.id.favTV);
+                final ProgressBar loader = (ProgressBar) v.findViewById(R.id.favPrBar);
+                final ImageView icon = (ImageView) v.findViewById(R.id.favIcon);
+
+                loader.setVisibility(View.VISIBLE);
+                icon.setVisibility(View.GONE);
+                ApiRequest request;
+
+                if (mUser.bookmarked) {
+                    request = new BookmarkDeleteRequest(getActivity(), mUserId);
+                } else {
+                    request = new BookmarkAddRequest(getActivity(), mUserId);
+                }
+
+                request.callback(new SimpleApiHandler() {
+                    @Override
+                    public void success(ApiResponse response) {
+                        super.success(response);
+//                        Toast.makeText(App.getContext(), getString(R.string.general_user_bookmarkadd), 1500).show();
+                        if (mUser != null) {
+                            textView.setText(App.getContext().getString( mUser.bookmarked ? R.string.general_bookmarks_add : R.string.general_bookmarks_delete));
+                            mUser.bookmarked = !mUser.bookmarked;
+                        }
+
+                        loader.setVisibility(View.INVISIBLE);
+                        icon.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void always(ApiResponse response) {
+                        super.always(response);
+                        if (isAdded()) {
+                            loader.setVisibility(View.INVISIBLE);
+                            icon.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }).exec();
+                break;
+            case R.id.acComplain:
+                startActivity(ContainerActivity.getComplainIntent(mUserId));
                 break;
             default: {
 
