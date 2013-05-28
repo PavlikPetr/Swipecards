@@ -638,5 +638,6 @@
     <string name="general_bookmarks_is_deleted">Пользователь удален из избранных</string>
     <string name="general_blacklist_is_deleted">Пользователь удален из черного списка</string>
     <string name="invite_friends_title_short">Пригласить всех друзей в Topface</string>
+    <string name="general_exit">Выйти</string>
 
 </resources>
