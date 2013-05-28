@@ -46,7 +46,7 @@ public class BannersConfig {
         SharedPreferences preferences = getPreferences();
         SharedPreferences.Editor editor = preferences.edit();
         Options options = CacheProfile.getOptions();
-        for (String pageName : Options.PAGES) {
+        for (String pageName : options.pages.keySet()) {
             editor.putString(pageName, options.pages.get(pageName).toString());
         }
         editor.commit();
@@ -58,7 +58,9 @@ public class BannersConfig {
         options.pages = new HashMap<String, Options.Page>();
         for (String pageName : Options.PAGES) {
             String str = preferences.getString(pageName, Static.EMPTY);
-            options.pages.put(pageName,Options.Page.parseFromString(str));
+            if (!str.isEmpty()) {
+                options.pages.put(pageName,Options.Page.parseFromString(str));
+            }
         }
     }
 
