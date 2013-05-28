@@ -36,10 +36,7 @@ import com.topface.topface.ui.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.profile.UserFormFragment;
 import com.topface.topface.ui.profile.UserPhotoFragment;
 import com.topface.topface.ui.views.RetryViewCreator;
-import com.topface.topface.utils.ActionBar;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.RateController;
-import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.*;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.viewpagerindicator.TabPageIndicator;
 
@@ -133,13 +130,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         }
 
         restoreState();
-        mUserActions = (LinearLayout) root.findViewById(R.id.mUserActions);
-        mUserActions.findViewById(R.id.acGift).setOnClickListener(this);
-        mUserActions.findViewById(R.id.acSympathy).setOnClickListener(this);
-        mUserActions.findViewById(R.id.acDelight).setOnClickListener(this);
-        mUserActions.findViewById(R.id.acChat).setOnClickListener(this);
-        mUserActions.findViewById(R.id.acBlock).setOnClickListener(this);
-        mUserActions.findViewById(R.id.acComplain).setOnClickListener(this);
+        initUserActions(root);
 
         bmBtn = (RelativeLayout) mUserActions.findViewById(R.id.acBookmark);
         mBookmarkAction = (TextView) mUserActions.findViewById(R.id.favTV);
@@ -249,11 +240,25 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         return root;
     }
 
+    private void initUserActions(View root) {
+        mUserActions = (LinearLayout) root.findViewById(R.id.mUserActions);
+
+        ArrayList<UserActions.ActionItem> actions = new ArrayList<UserActions.ActionItem>();
+        actions.add(new UserActions.ActionItem(R.id.acGift, this));
+        actions.add(new UserActions.ActionItem(R.id.acSympathy, this));
+        actions.add(new UserActions.ActionItem(R.id.acDelight, this));
+        actions.add(new UserActions.ActionItem(R.id.acChat, this));
+        actions.add(new UserActions.ActionItem(R.id.acBlock, this));
+        actions.add(new UserActions.ActionItem(R.id.acComplain, this));
+
+        new UserActions(mUserActions, actions);
+    }
+
     private void initActionsPanelHeight() {
         if (mUserActionsPanelHeight == 0) {
             int actualHeight = mActionBar.getHeight();
             double density = getResources().getDisplayMetrics().density;
-            mUserActionsPanelHeight = actualHeight == 0 ? actualHeight : (int) (270 * density);
+            mUserActionsPanelHeight = actualHeight == 0 ? actualHeight : (int) (270 * density);   // 270 это видимо высота в пикселях
         }
     }
 
@@ -525,8 +530,10 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                                 Toast.makeText(App.getContext(), R.string.general_server_error, 1500).show();
                                 v.setEnabled(true);
                                 v.setSelected(false);
-                                TextView view = (TextView) v;
-                                view.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
+                                if (v instanceof TextView) {
+                                    TextView view = (TextView) v;
+                                    view.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
+                                }
                             }
                         }
                     });

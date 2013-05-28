@@ -25,10 +25,24 @@
                 android:id="@+id/chat_message"
                 style="@style/chat_message"/>
 
-        <Button
-                android:id="@+id/btn_chat_like_request"
-                android:text="@string/virus_chat_btn"
-                style="@style/LikeRequestButton"/>
+        <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                >
+
+            <Button
+                    android:id="@+id/btn_chat_like_request"
+                    android:text="@string/virus_chat_btn"
+                    style="@style/LikeRequestButton"/>
+
+            <ProgressBar
+                    android:id="@+id/prsLoader"
+                    style="@android:style/Widget.ProgressBar.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone"/>
+        </RelativeLayout>
     </LinearLayout>
 
     <!-- date -->

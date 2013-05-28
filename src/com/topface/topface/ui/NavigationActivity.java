@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
@@ -28,7 +29,6 @@ import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.ComplainsFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
@@ -65,6 +65,17 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
         Debug.log(this, "onCreate");
         mFragmentManager = getSupportFragmentManager();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+                String isGcmSupported = preferences.getString(GCMUtils.IS_GCM_SUPPORTED, null);
+                if (isGcmSupported != null) {
+                    GCMUtils.GCM_SUPPORTED = Boolean.getBoolean(isGcmSupported);
+                }
+            }
+        }).start();
 
         initSlidingMenu();
         if (!AuthToken.getInstance().isEmpty()) {
@@ -130,9 +141,13 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         super.inBackgroundThread();
         mNovice = Novice.getInstance(getPreferences());
         mNovice.initNoviceFlags();
-        Looper.prepare();
-        Offerwalls.init(getApplicationContext());
-        Looper.loop();
+        try {
+            Looper.prepare();
+            Offerwalls.init(getApplicationContext());
+            Looper.loop();
+        } catch (Exception e) {
+            Debug.error(e);
+        }
     }
 
     private SharedPreferences getPreferences() {

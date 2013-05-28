@@ -544,7 +544,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             setFilterSwitcherState(true);
         }
 
-        if (getListAdapter().isEmpty() && !CacheProfile.premium) {
+        if (getListAdapter().isEmpty()) {
             onEmptyFeed();
         } else {
             onFilledFeed();

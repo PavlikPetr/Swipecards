@@ -4,7 +4,7 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class StandardMessageSendRequest extends ApiRequest {
+public class StandardMessageSendRequest extends ConfirmedApiRequest {
     public static final int MESSAGE_FILL_INTERESTS = 14;
 
 
