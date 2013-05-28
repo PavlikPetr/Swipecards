@@ -617,6 +617,7 @@
     <string name="general_complain_sended">Ваша жалоба отправлена, большое спасибо за помощь</string>
     <string name="general_complain">Жалоба</string>
     <string name="general_msg">Сообщение</string>
+    <string name="general_no_notifications">К сожалению, уведомления, на вашем устройстве, не доступны</string>
 
     <plurals name="vip_add_more_friends">
         <item quantity="one">Пригласите еще %d друга</item>

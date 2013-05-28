@@ -3,6 +3,7 @@ package com.topface.topface.ui.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.*;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -16,6 +17,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
@@ -28,6 +31,7 @@ import com.topface.topface.Static;
 import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
@@ -38,6 +42,8 @@ import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
+import com.topface.topface.ui.gridlayout.*;
+import com.topface.topface.ui.gridlayout.GridLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.SwapControl;
 import com.topface.topface.utils.*;
@@ -63,6 +69,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public static final String INTENT_PROFILE_INVOKE = "profile_invoke";
     public static final String INTENT_ITEM_ID = "item_id";
     public static final String MAKE_ITEM_READ = "com.topface.topface.feedfragment.MAKE_READ";
+
+    public static final String DEFAULT_ACTIVATED_COLOR = "#AAAAAA";
 
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
 
@@ -100,6 +108,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private GeoLocationManager mGeoManager = null;
     private RelativeLayout mLockScreen;
     private String[] editButtonsSelfNames;
+    private LinearLayout chatActions;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -122,6 +131,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         int userAge = getArguments().getInt(INTENT_USER_AGE, 0);
         String userCity = getArguments().getString(INTENT_USER_CITY);
 
+        chatActions = (LinearLayout) root.findViewById(R.id.mChatActions);
+        chatActions.setVisibility(View.INVISIBLE);
+        ArrayList<UserActions.ActionItem> actions = new ArrayList<UserActions.ActionItem>();
+        actions.add(new UserActions.ActionItem(R.id.acProfile, this));
+        actions.add(new UserActions.ActionItem(R.id.acBlock, this));
+        actions.add(new UserActions.ActionItem(R.id.acComplain, this));
+        actions.add(new UserActions.ActionItem(R.id.acBookmark, this));
+
+        new UserActions(chatActions, actions);
         // Locker
         mLoadingBackgroundText = (TextView) root.findViewById(R.id.tvBackgroundText);
         Drawable drawable = mLoadingBackgroundText.getCompoundDrawables()[0];
@@ -519,7 +537,59 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             if (mUser.deleted || mUser.banned || mUser.photo == null || mUser.photo.isEmpty()) {
                 mActionBar.showProfileAvatar(mUser.sex == Static.BOY ? R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar, null);
             } else {
-                mActionBar.showProfileAvatar(mUser.photo, this);
+                mActionBar.showUserActionsButton(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                TranslateAnimation ta = new TranslateAnimation(0, 0, -chatActions.getHeight(), 0);
+                                ta.setDuration(500);
+                                ta.setAnimationListener(new Animation.AnimationListener() {
+                                    @Override
+                                    public void onAnimationStart(Animation animation) {
+                                        mActionBar.disableActionsButton(true);
+                                        chatActions.setVisibility(View.VISIBLE);
+                                    }
+
+                                    @Override
+                                    public void onAnimationEnd(Animation animation) {
+                                        chatActions.clearAnimation();
+                                        mActionBar.disableActionsButton(false);
+                                    }
+
+                                    @Override
+                                    public void onAnimationRepeat(Animation animation) {
+
+                                    }
+                                });
+                                chatActions.startAnimation(ta);
+                            }
+                        }, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+//                                initActionsPanelHeight();
+                                TranslateAnimation ta = new TranslateAnimation(0, 0, 0, -chatActions.getHeight());
+                                ta.setDuration(500);
+                                ta.setAnimationListener(new Animation.AnimationListener() {
+                                    @Override
+                                    public void onAnimationStart(Animation animation) {
+                                        mActionBar.disableActionsButton(true);
+                                    }
+
+                                    @Override
+                                    public void onAnimationEnd(Animation animation) {
+                                        chatActions.clearAnimation();
+                                        mActionBar.disableActionsButton(false);
+                                        chatActions.setVisibility(View.GONE);
+                                    }
+
+                                    @Override
+                                    public void onAnimationRepeat(Animation animation) {
+                                    }
+                                });
+                                chatActions.startAnimation(ta);
+                            }
+                        }
+                        ,mUser.photo);
             }
         }
     }
@@ -534,7 +604,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(final View v) {
         if (v instanceof ImageView) {
             if (v.getTag() instanceof History) {
                 History history = (History) v.getTag();
@@ -589,6 +659,90 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 } else {
                     addToBlackList();
                 }
+                break;
+            case R.id.acProfile:
+                Intent profileIntent = ContainerActivity.getProfileIntent(mUserId, getActivity());
+                startActivity(profileIntent);
+                break;
+            case R.id.acBlock:
+                if (CacheProfile.premium) {
+                    if (mUserId > 0) {
+                        final TextView textView = (TextView) v.findViewById(R.id.blockTV);
+                        final ProgressBar loader = (ProgressBar) v.findViewById(R.id.blockPrBar);
+                        final ImageView icon = (ImageView) v.findViewById(R.id.blockIcon);
+
+                        loader.setVisibility(View.VISIBLE);
+                        icon.setVisibility(View.GONE);
+                        BlackListAddRequest blackListAddRequest = new BlackListAddRequest(mUserId, getActivity());
+                        blackListAddRequest.callback(new VipApiHandler() {
+                            @Override
+                            public void success(ApiResponse response) {
+                                super.success(response);
+                                if (isAdded()) {
+                                    v.setEnabled(false);
+                                    loader.setVisibility(View.INVISIBLE);
+                                    icon.setVisibility(View.VISIBLE);
+                                    textView.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+                                }
+                            }
+
+                            @Override
+                            public void fail(int codeError, ApiResponse response) {
+                                super.fail(codeError, response);
+                                if (isAdded()) {
+                                    loader.setVisibility(View.INVISIBLE);
+                                    icon.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        }).exec();
+                    }
+                } else {
+                    Intent buyingIntent = new Intent(getActivity(), ContainerActivity.class);
+                    buyingIntent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                    startActivity(buyingIntent);
+                }
+                break;
+            case R.id.acBookmark:
+                final TextView textView = (TextView) v.findViewById(R.id.favTV);
+                final ProgressBar loader = (ProgressBar) v.findViewById(R.id.favPrBar);
+                final ImageView icon = (ImageView) v.findViewById(R.id.favIcon);
+
+                loader.setVisibility(View.VISIBLE);
+                icon.setVisibility(View.GONE);
+                ApiRequest request;
+
+                if (mUser.bookmarked) {
+                    request = new BookmarkDeleteRequest(getActivity(), mUserId);
+                } else {
+                    request = new BookmarkAddRequest(getActivity(), mUserId);
+                }
+
+                request.callback(new SimpleApiHandler() {
+                    @Override
+                    public void success(ApiResponse response) {
+                        super.success(response);
+//                        Toast.makeText(App.getContext(), getString(R.string.general_user_bookmarkadd), 1500).show();
+                        if (mUser != null) {
+                            textView.setText(App.getContext().getString( mUser.bookmarked ? R.string.general_bookmarks_add : R.string.general_bookmarks_delete));
+                            mUser.bookmarked = !mUser.bookmarked;
+                        }
+
+                        loader.setVisibility(View.INVISIBLE);
+                        icon.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void always(ApiResponse response) {
+                        super.always(response);
+                        if (isAdded()) {
+                            loader.setVisibility(View.INVISIBLE);
+                            icon.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }).exec();
+                break;
+            case R.id.acComplain:
+                startActivity(ContainerActivity.getComplainIntent(mUserId));
                 break;
             default: {
 
