@@ -421,9 +421,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         if (requestCode == Settings.REQUEST_CODE_RINGTONE && resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 Uri uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
-                if (uri != null) {
-                    mSettings.setSetting(Settings.SETTINGS_C2DM_RINGTONE, uri.toString());
-                }
+                mSettings.setSetting(Settings.SETTINGS_C2DM_RINGTONE, uri == null? Settings.SILENT: uri.toString());
             }
         } else if (resultCode == SettingsAccountFragment.RESULT_LOGOUT &&
                 requestCode == SettingsContainerActivity.INTENT_ACCOUNT) {

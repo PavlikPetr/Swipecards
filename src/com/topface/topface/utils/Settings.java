@@ -14,6 +14,7 @@ import com.topface.topface.utils.social.AuthorizationManager;
  * Вспомогательный класс для работы с настройками приложения
  */
 public class Settings {
+    public static final String SILENT = "silent";
     private static Settings mInstance;
     public static final String SETTINGS_C2DM_RINGTONE = "settings_c2dm_ringtone";
     public static final String SETTINGS_C2DM_VIBRATION = "settings_c2dm_vibration";
@@ -79,6 +80,9 @@ public class Settings {
     }
 
     public Uri getRingtone() {
+        if (mSettings.getString(SETTINGS_C2DM_RINGTONE, DEFAULT_SOUND).equals(SILENT)) {
+            return null;
+        }
         return Uri.parse(mSettings.getString(SETTINGS_C2DM_RINGTONE, DEFAULT_SOUND));
     }
 
