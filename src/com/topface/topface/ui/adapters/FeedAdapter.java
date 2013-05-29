@@ -144,6 +144,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
                         R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
                 if (item.user.banned || item.user.deleted) {
                     holder.avatar.setOnClickListener(null);
+                } else {
+                    setListenerOnAvatar(holder.avatar, item);
                 }
             } else {
                 holder.avatar.setPhoto(item.user.photo);
