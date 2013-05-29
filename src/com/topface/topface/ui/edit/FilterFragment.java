@@ -42,6 +42,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     private ViewGroup mMarriageFrame;
     private ViewGroup mCharacterFrame;
     private ViewGroup mAlcoholFrame;
+    private ViewGroup mFinanceFrame;
     private ViewGroup mShowOffFrame;
     private SparseArrayCompat<TextView> hashTextViewByTitleId = new SparseArrayCompat<TextView>();
 
@@ -182,6 +183,14 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mAlcoholFrame.setTag(R.array.form_habits_alcohol);
         mAlcoholFrame.setOnClickListener(this);
 
+        // Finance
+        mFinanceFrame = (ViewGroup) root.findViewById(R.id.loFinance);
+        setBackground(R.drawable.edit_big_btn_middle_selector, mFinanceFrame);
+        setText(R.array.form_social_finances,
+                mFormInfo.getEntry(R.array.form_social_finances, mFilter.finances), mFinanceFrame);
+        mFinanceFrame.setTag(R.array.form_social_finances);
+        mFinanceFrame.setOnClickListener(this);
+
         // ShowOff
         mShowOffFrame = (ViewGroup) root.findViewById(R.id.loShowOff);
         setBackground(R.drawable.edit_big_btn_bottom_selector, mShowOffFrame);
@@ -205,12 +214,14 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
             setText(R.array.form_physique_breast,
                     mFormInfo.getEntry(R.array.form_physique_breast, mFilter.breast), mShowOffFrame);
             mShowOffFrame.setTag(R.array.form_physique_breast);
+            mFinanceFrame.setVisibility(View.VISIBLE);
         } else {
             mCheckBoy.setVisibility(View.VISIBLE);
             mCheckGirl.setVisibility(View.INVISIBLE);
             setText(R.array.form_social_finances,
                     mFormInfo.getEntry(R.array.form_social_finances, mFilter.finances), mShowOffFrame);
             mShowOffFrame.setTag(R.array.form_social_finances);
+            mFinanceFrame.setVisibility(View.GONE);
         }
 
         mTargetUser.sex = sex;
@@ -328,6 +339,9 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 break;
             case R.id.loAlcohol:
                 startEditFilterFormItem(v, mFilter.alcohol);
+                break;
+            case R.id.loFinance:
+                startEditFilterFormItem(v, mFilter.finances);
                 break;
             case R.id.loShowOff:
                 startEditFilterFormItem(v, mFilter.getShowOff());

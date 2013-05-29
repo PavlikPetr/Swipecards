@@ -144,6 +144,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
                         R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
                 if (item.user.banned || item.user.deleted) {
                     holder.avatar.setOnClickListener(null);
+                } else {
+                    setListenerOnAvatar(holder.avatar, item);
                 }
             } else {
                 holder.avatar.setPhoto(item.user.photo);
@@ -162,11 +164,10 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             if (item.user.city != null) {
                 if (item.user.deleted || item.user.banned) {
                     holder.city.setTextColor(Color.GRAY);
-                    holder.city.setText(item.user.banned ? R.string.user_is_banned : R.string.user_is_deleted);
                 } else {
                     holder.city.setTextColor(Color.WHITE);
-                    holder.city.setText(item.user.city.name);
                 }
+                holder.city.setText(item.user.city.name);
             }
 
             // установка иконки онлайн

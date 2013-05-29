@@ -92,6 +92,7 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
             default:
                 //По умолчанию все равно показываем текст
                 text = (dialog.target == FeedDialog.OUTPUT_USER_MESSAGE) ? "{{outbox}} " + dialog.text : dialog.text;
+                break;
         }
         return text;
     }

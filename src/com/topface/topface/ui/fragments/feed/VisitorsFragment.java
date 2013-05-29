@@ -11,6 +11,7 @@ import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.VisitorsListAdapter;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import org.json.JSONObject;
 
@@ -45,13 +46,21 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
 
     @Override
     protected void initEmptyFeedView(View inflated) {
-        inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
-                startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
-            }
-        });
+        View btnBuyVip = inflated.findViewById(R.id.btnBuyVip);
+        if (CacheProfile.premium) {
+            inflated.findViewById(R.id.tvText).setVisibility(View.GONE);
+            btnBuyVip.setVisibility(View.GONE);
+        } else {
+            inflated.findViewById(R.id.tvText).setVisibility(View.VISIBLE);
+            btnBuyVip.setVisibility(View.VISIBLE);
+            btnBuyVip.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
+                    startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                }
+            });
+        }
     }
 
     @Override

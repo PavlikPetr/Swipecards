@@ -92,11 +92,18 @@
                     layout="@layout/item_edit_form_select"/>
 
             <include
+                    android:id="@+id/loFinance"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    layout="@layout/item_edit_form_select"/>
+
+            <include
                     android:id="@+id/loShowOff"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     layout="@layout/item_edit_form_select"/>
+
         </LinearLayout>
 
     </ScrollView>

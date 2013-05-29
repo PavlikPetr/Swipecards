@@ -78,6 +78,7 @@ public class FullscreenController {
         adview.addMobclixAdViewListener(new MobclixFullScreenAdViewListener() {
             @Override
             public void onFinishLoad(MobclixFullScreenAdView mobclixFullScreenAdView) {
+                addLastFullscreenShowedTime();
             }
 
             @Override

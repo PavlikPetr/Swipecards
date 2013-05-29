@@ -23,10 +23,12 @@ import com.topface.topface.utils.http.ProfileBackgrounds.BackgroundItem;
 import com.topface.topface.utils.http.ProfileBackgrounds.ResourceBackgroundItem;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class EditBackgroundFragment extends AbstractEditFragment {
 
     private int mSelectedId;
+    private int mSelectedIndex;
     private ListView mBackgroundImagesListView;
     private BackgroundImagesAdapter mAdapter;
 
@@ -60,9 +62,22 @@ public class EditBackgroundFragment extends AbstractEditFragment {
         return root;
     }
 
-    private LinkedList<BackgroundItem> getBackgroundImagesList() {
-        return ProfileBackgrounds.getBackgroundItems(getActivity().getApplicationContext(),
+    private List<BackgroundItem> getBackgroundImagesList() {
+        List<BackgroundItem> result = ProfileBackgrounds.getBackgroundItems(getActivity().getApplicationContext(),
                 CacheProfile.background_id);
+        for (int i=0;i<result.size();i++) {
+            if (result.get(i) instanceof ResourceBackgroundItem) {
+                ResourceBackgroundItem item = (ResourceBackgroundItem) result.get(i);
+                if (item instanceof ResourceBackgroundItem) {
+                    if (mSelectedId == item.getId()) {
+                        mSelectedIndex = i;
+                    }
+                }
+            }
+
+
+        }
+        return result;
     }
 
     private void setSelectedBackground(BackgroundItem item) {
@@ -109,11 +124,10 @@ public class EditBackgroundFragment extends AbstractEditFragment {
 
     class BackgroundImagesAdapter extends BaseAdapter {
 
-        private LinkedList<BackgroundItem> mData;
+        private List<BackgroundItem> mData;
         private LayoutInflater mInflater;
-        private int mSelectedIndex;
 
-        public BackgroundImagesAdapter(Context context, LinkedList<BackgroundItem> data) {
+        public BackgroundImagesAdapter(Context context, List<BackgroundItem> data) {
             mData = data;
             mInflater = LayoutInflater.from(context);
         }
@@ -156,10 +170,9 @@ public class EditBackgroundFragment extends AbstractEditFragment {
             params.width = holder.mFrameImageView.getDrawable().getIntrinsicWidth() - 2;
             holder.mImageView.setImageBitmap(getItem(position).getBitmap());
 
-            if (item.isSelected()) {
+            if (mSelectedIndex == position) {
                 holder.mSelected.setVisibility(View.VISIBLE);
                 convertView.setOnClickListener(null);
-                mSelectedIndex = position;
             } else {
                 holder.mSelected.setVisibility(View.GONE);
                 convertView.setOnClickListener(new OnClickListener() {
@@ -168,18 +181,14 @@ public class EditBackgroundFragment extends AbstractEditFragment {
                     public void onClick(View v) {
                         if (item.isForVip()) {
                             if (CacheProfile.premium) {
-                                mData.get(mSelectedIndex).setSelected(false);
-                                item.setSelected(true);
-                                setSelectedBackground(item);
+                                select(item,position);
                                 notifyDataSetChanged();
                             } else {
                                 Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
                                 startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                             }
                         } else {
-                            mData.get(mSelectedIndex).setSelected(false);
-                            item.setSelected(true);
-                            setSelectedBackground(item);
+                            select(item, position);
                             notifyDataSetChanged();
                         }
                     }
@@ -188,6 +197,11 @@ public class EditBackgroundFragment extends AbstractEditFragment {
 
             convertView.setEnabled(mBackgroundImagesListView.isEnabled());
             return convertView;
+        }
+
+        private void select(BackgroundItem item,int position) {
+            mSelectedIndex = position;
+            setSelectedBackground(item);
         }
 
         class ViewHolder {
