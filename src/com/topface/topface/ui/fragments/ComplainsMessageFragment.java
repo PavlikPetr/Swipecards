@@ -66,9 +66,7 @@ public class ComplainsMessageFragment extends BaseFragment{
         actionBar.showBackButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(
-                        Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(description.getWindowToken(), 0);
+                Utils.hideSoftKeyboard(getActivity(), description);
                 ((BaseFragmentActivity) getActivity()).close(ComplainsMessageFragment.this);
             }
         });
@@ -89,6 +87,7 @@ public class ComplainsMessageFragment extends BaseFragment{
         actionBar.showSendButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Utils.hideSoftKeyboard(getActivity(), description);
                 sendComplainRequest();
             }
         });
