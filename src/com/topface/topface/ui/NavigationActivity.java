@@ -51,6 +51,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private boolean needAnimate = false;
     private SlidingMenu mSlidingMenu;
     private boolean isPopupVisible = false;
+    private boolean menuEnabled;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,7 +63,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             return;
         }
         setContentView(R.layout.ac_navigation);
-
+        setMenuEnabled(true);
         Debug.log(this, "onCreate");
         mFragmentManager = getSupportFragmentManager();
 
@@ -330,9 +331,13 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
     }
 
+    public void setMenuEnabled(boolean enabled) {
+        menuEnabled = enabled;
+    }
+
     @Override
     public boolean onCreatePanelMenu(int featureId, Menu menu) {
-        if (mSlidingMenu != null) {
+        if (mSlidingMenu != null && menuEnabled) {
             mSlidingMenu.toggle();
         }
         return false;

@@ -28,6 +28,7 @@ import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -68,6 +69,7 @@ public class AuthFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Debug.log("AF: onCreate");
+        ((NavigationActivity)getActivity()).setMenuEnabled(false);
         View root = inflater.inflate(R.layout.ac_auth, null);
         initViews(root);
         //Если у нас нет токена
@@ -159,7 +161,7 @@ public class AuthFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 btnTFClick();
-                removeRedAlert();
+//                removeRedAlert();
                 Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
             }
         });
@@ -518,7 +520,7 @@ public class AuthFragment extends BaseFragment {
         FragmentActivity activity = getActivity();
         if (activity != null && mWrongPasswordAlertView != null && mWrongPasswordAlertView.getVisibility() == View.VISIBLE) {
             mWrongPasswordAlertView.setAnimation(AnimationUtils.loadAnimation(activity, android.R.anim.fade_out));
-            mWrongPasswordAlertView.setVisibility(View.INVISIBLE);
+            mWrongPasswordAlertView.setVisibility(View.GONE);
             mWrongDataTextView.setVisibility(View.GONE);
         }
     }
@@ -578,9 +580,12 @@ public class AuthFragment extends BaseFragment {
             String password = mPassword.getText().toString();
             if (TextUtils.isEmpty(login.trim()) || TextUtils.isEmpty(password.trim())) {
                 redAlert(R.string.empty_fields);
+                showButtons();
                 return;
             } else if (!Utils.isValidEmail(login)) {
                 redAlert(R.string.incorrect_login);
+                showButtons();
+                return;
             }
             AuthRequest authRequest = generateTopfaceAuthRequest(login, password);
             authRequest.exec();

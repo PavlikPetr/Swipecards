@@ -814,7 +814,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     if (mGiftFragment != null) {
                         mGiftFragment.addGift(sendedGift);
                     } else {
-                        mUserProfile.gifts.add(sendedGift.gift);
+                        mUserProfile.gifts.add(0, sendedGift.gift);
                     }
                     Toast.makeText(getContext(), R.string.chat_gift_out, 1500).show();
                 }
