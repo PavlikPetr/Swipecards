@@ -448,4 +448,33 @@
     <string name="incorrect_photo_size">Tamaño de fotografía no permitido</string>
     <string name="input_contact_name">Introduce el nombre del contacto</string>
     <string name="incorrect_locale">Si quieres que nosotros podamos leer su comentario, escríbelo en ruso o en inglés</string>
+    <string name="complain_photo_header">Fotografía incorrecta</string>
+    <string name="complain_msg_header">Mensaje incorrecto</string>
+    <string name="complain_info_header">Información incorrecta</string>
+    <string name="complain_type_porn">Porno (se ven partes íntimas)</string>
+    <string name="complain_type_ero">Erótica en la foto principal</string>
+    <string name="complain_type_picture">Dibujo</string>
+    <string name="complain_type_fake_user">Persona famosa</string>
+    <string name="complain_type_spam_msg">Oferta comercial, spam, propaganda, enlaces de páginas, teléfonos</string>
+    <string name="complain_type_spam_profile">Campos \"estado\", \"sobre mi\", contienen oferta comercial</string>
+    <string name="complain_type_swearing_profile">Campos \"estado\", \"sobre mi\", contienen insultos o enlaces a redes sociales</string>
+    <string name="complain_type_fake_data">Nombre, sexo, edad y fotografía de la persona no coinciden</string>
+    <string name="complain_description">Cuenta sobre la razón de la denuncia detalladamente</string>
+    <string name="general_complain_sended">Tu denuncia fue enviada, muchas gracias por colaborar</string>
+    <string name="general_complain">Denuncia</string>
+    <string name="general_msg">Mensaje</string>
+    <plurals name="vip_add_more_friends">
+        <item quantity="other">Invita %d amigos más</item>
+        <item quantity="one">Invita %d amigo más</item>
+    </plurals>
+    <string name="general_bookmarks_add_short">A los favoritos</string>
+    <string name="black_list_add_short">A la lista negra</string>
+    <string name="general_complaint">Denunciar</string>
+    <string name="general_type_complain">Tus denuncias</string>
+    <string name="confirm_email_for_dating">Luchamos contra spam. ¡Confirma tu dirección de correo para poder conocer la gente en Topface!</string>
+    <string name="confirm">Confirmar</string>
+    <string name="complain_type_swearing_msg">Insultos, amenazas</string>
+    <string name="general_bookmarks_is_deleted">Usuario eliminado de los favoritos</string>
+    <string name="general_blacklist_is_deleted">Usuario eliminado de la lista negra</string>
+    <string name="invite_friends_title_short">Invitar a todos los amigos a Topface</string>
 </resources>

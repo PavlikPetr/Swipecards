@@ -434,4 +434,5 @@
     <string name="incorrect_photo_format">사진의 형식이 옳지 않습니다. jpg 또는 png 파일을 로딩하여 주십시오.</string>
     <string name="incorrect_photo_size">사진의 용량이 너무 큽니다.</string>
     <string name="input_contact_name">연락처 이름을 입력하여 주십시오.</string>
+    <string name="black_list_add_short">블랙 리스트로</string>
 </resources>

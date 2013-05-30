@@ -415,7 +415,7 @@
     <string name="general_add">Přidat</string>
     <string name="general_invite_friends">Pozvěte přátele</string>
     <string name="general_rest_contacts">Zbylo Vám %d kontaktů</string>
-    <string name="invite_friends_title">Pozvat všechny přátele na Topface</string>
+    <string name="invite_friends_title">Pozvat všechny přátele z telefonního seznamu na Topface</string>
     <string name="invalid_contacts">Některé z kontaktů byly chybné. Prosím, zadejte správné kontakty</string>
     <string name="general_choose_action">Zvolte akci</string>
     <plurals name="vip_status_period">
@@ -473,11 +473,14 @@
         <item quantity="other">Pozvěte ještě %d přátel</item>
         <item quantity="one">Pozvěte ještě %d přítele</item>
     </plurals>
-    <string name="general_bookmarks_add_short">k oblíbeným</string>
-    <string name="black_list_add_short">na černou listinu</string>
+    <string name="general_bookmarks_add_short">Přidat k oblíbeným</string>
+    <string name="black_list_add_short">Na černou listinu</string>
     <string name="general_complaint">Stěžovat se</string>
     <string name="general_type_complain">Téma stížnosti</string>
     <string name="confirm_email_for_dating">Jsme proti spamu. Potvrďte svou emailovou adresu pro seznámení na Topface!</string>
     <string name="confirm">Potvrdit</string>
     <string name="complain_type_swearing_msg">Neslušnost, vyhrožování, sprostá slova</string>
+    <string name="general_bookmarks_is_deleted">Uživatel byl odstraněn z oblíbených</string>
+    <string name="general_blacklist_is_deleted">Uživatel byl odstraněn z černé listiny</string>
+    <string name="invite_friends_title_short">Pozvat všechny přátele na Topface</string>
 </resources>

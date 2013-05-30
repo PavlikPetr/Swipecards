@@ -445,6 +445,7 @@
     <string name="rate_and_have_mutual_or_buy_and_chat">Išreikškite simpatijas jums patikusiems žmonėms ir gaukite abipuses. Arba pirkite simpatijas ir pradėkite bendravimą su tais, kam jūs patinkate!</string>
     <string name="start_rate">Pradėti įvertinti</string>
     <string name="with_vip_find_your_visitors">Su VIP-statusu jūs sužinosite, kas buvo užsukęs į jūsų puslapį</string>
+    <string name="on_avatar">Paveiksliukui</string>
     <string name="your_avatar">Jūsų avataras</string>
     <string name="avatar_set_successfully">Avataras sėkmingai nustatytas</string>
     <string name="incorrect_photo">Netinkama foto. Pamėginkite įkelti kitą</string>
@@ -472,9 +473,14 @@
         <item quantity="other">Pakvieskite dar %d draugų</item>
         <item quantity="one">Pakvieskite dar %d draugą</item>
     </plurals>
-    <string name="general_bookmarks_add_short">į išrinktuosius</string>
-    <string name="black_list_add_short">į juodąjį sąrašą</string>
+    <string name="general_bookmarks_add_short">Į išrinktuosius</string>
+    <string name="black_list_add_short">Į juodąjį sąrašą</string>
     <string name="general_complaint">Pasiskųsti</string>
+    <string name="general_type_complain">Skundo tema</string>
     <string name="confirm_email_for_dating">Mes esame prieš brukalą. Patvirtinkite savo el. pašto adresą, kad pažindintis Topface!</string>
     <string name="confirm">Patvirtinti</string>
+    <string name="complain_type_swearing_msg">Chamiškumas, grąsinimai, keiksmažodžiai</string>
+    <string name="general_bookmarks_is_deleted">Vartotojas pašalintas iš išrinktųjų</string>
+    <string name="general_blacklist_is_deleted">Vartotojas pašalintas iš juodojo sąrašo</string>
+    <string name="invite_friends_title_short">Pakviesti visus draugus į Topface</string>
 </resources>
