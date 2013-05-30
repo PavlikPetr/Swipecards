@@ -102,7 +102,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             }
         });
         setSlidingMenuEvents();
-
     }
 
     private void setSlidingMenuEvents() {
@@ -204,7 +203,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     protected void onResume() {
         super.onResume();
-
+        if (mSlidingMenu!= null) mSlidingMenu.setMenu(R.layout.fragment_side_menu);
         //Отправляем не обработанные запросы на покупку
         BillingUtils.sendQueueItems();
 

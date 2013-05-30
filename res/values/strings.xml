@@ -475,4 +475,6 @@
     <string name="general_bookmarks_is_deleted">User deleted from favorites</string>
     <string name="general_blacklist_is_deleted">User deleted from black list</string>
     <string name="invite_friends_wtitle_short">Invite all your friends to Topface</string>
+    <string name="settings_select_language">Select language</string>
+    <string name="restart_to_change_locale">Application will be restarted to change language</string>
 </resources>

@@ -1,6 +1,8 @@
 package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -15,6 +17,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
@@ -22,16 +25,16 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.SendMailNotificationsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.settings.SettingsAccountFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
-import com.topface.topface.utils.ActionBar;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Settings;
+import com.topface.topface.utils.*;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 public class SettingsFragment extends BaseFragment implements OnClickListener, OnCheckedChangeListener {
 
@@ -212,6 +215,12 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         setText(R.string.settings_feedback, frame);
         frame.setOnClickListener(this);
 
+        // Language app
+        frame = (ViewGroup) root.findViewById(R.id.loLanguage);
+        setBackground(R.drawable.edit_big_btn_middle_selector, frame);
+        setText(R.string.settings_select_language, frame);
+        frame.setOnClickListener(this);
+
         // About
         frame = (ViewGroup) root.findViewById(R.id.loAbout);
         setBackground(R.drawable.edit_big_btn_bottom_selector, frame);
@@ -348,9 +357,67 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, mSettings.getRingtone());
                 startActivityForResult(intent, Settings.REQUEST_CODE_RINGTONE);
                 break;
+            case R.id.loLanguage:
+                startLanguageSelection();
+                break;
             default:
                 break;
         }
+    }
+
+    private void startLanguageSelection() {
+        //TODO init selected locale
+        final String[] locales = getResources().getStringArray(R.array.application_locales);
+        final String[] languages = new String[locales.length];
+        int selectedLocaleIndex = 0;
+        Locale appLocale = new Locale(App.getConfig().getLocaleConfig().getApplicationLocale());
+        for (int i=0;i<locales.length;i++) {
+            Locale locale = new Locale(locales[i]);
+            languages[i] = locale.getDisplayName(locale);
+            if(locale.equals(appLocale)) {
+                selectedLocaleIndex = i;
+            }
+        }
+        new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.settings_select_language)
+                .setSingleChoiceItems(languages, selectedLocaleIndex, null)
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogLocales, int which) {
+                        dialogLocales.dismiss();
+                    }
+                })
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialogLocales, int whichButton) {
+                        new AlertDialog.Builder(getActivity())
+                                .setTitle(R.string.settings_select_language)
+                                .setMessage(R.string.restart_to_change_locale)
+                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogConfirm, int which) {
+                                        String selectedLocale = locales[((AlertDialog) dialogLocales).getListView().getCheckedItemPosition()];
+                                        changeLocale(selectedLocale);
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogConfirm, int which) {
+                                        dialogLocales.dismiss();
+                                    }
+                                }).show();
+                    }
+                }).show();
+    }
+
+    private void changeLocale(String selectedLocale) {
+        LocaleConfig.updateConfiguration(getActivity().getBaseContext());
+        //save application locale to preferences
+        App.getConfig().getLocaleConfig().setApplicationLocale(selectedLocale);
+        //restart -> open NavigationActivity
+        Intent intent = new Intent(getActivity(),NavigationActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        getActivity().finish();
     }
 
     @Override

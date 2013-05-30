@@ -638,5 +638,7 @@
     <string name="general_bookmarks_is_deleted">Пользователь удален из избранных</string>
     <string name="general_blacklist_is_deleted">Пользователь удален из черного списка</string>
     <string name="invite_friends_title_short">Пригласить всех друзей в Topface</string>
+    <string name="settings_select_language">Выбор языка</string>
+    <string name="restart_to_change_locale">Для смены языка приложение будет перезапущено</string>
 
 </resources>
