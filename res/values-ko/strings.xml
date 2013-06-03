@@ -2,6 +2,9 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">ko_KR</string>
+    <string name="general_error">에러</string>
+    <string name="general_warning">경고</string>
+    <string name="general_ok">ok</string>
     <string name="general_yes">예</string>
     <string name="general_no">아니오.</string>
     <string name="general_cancel">취소</string>
@@ -434,5 +437,14 @@
     <string name="incorrect_photo_format">사진의 형식이 옳지 않습니다. jpg 또는 png 파일을 로딩하여 주십시오.</string>
     <string name="incorrect_photo_size">사진의 용량이 너무 큽니다.</string>
     <string name="input_contact_name">연락처 이름을 입력하여 주십시오.</string>
+    <string name="complain_photo_header">옳지 않은 형식의 사진</string>
+    <string name="complain_msg_header">옳지 않은 형식의 메세지</string>
+    <string name="complain_info_header">옳지 않은 형식의 정보</string>
+    <string name="complain_type_ero">메인 사진의 선정성</string>
+    <string name="complain_type_picture">그림</string>
+    <string name="complain_type_fake_user">유명인</string>
+    <string name="complain_type_fake_data">이름, 성별, 나이 및 사진이 일치하지 않습니다.</string>
+    <string name="complain_description">불만의 원인에 대해 상세히 이야기 해주세요.</string>
     <string name="black_list_add_short">블랙 리스트로</string>
+    <string name="confirm">확인하기</string>
 </resources>

@@ -2,6 +2,9 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">sv_SE</string>
+    <string name="general_error">FEL</string>
+    <string name="general_warning">VARNING</string>
+    <string name="general_ok">OK</string>
     <string name="general_yes">Ja</string>
     <string name="general_no">Nej</string>
     <string name="general_cancel">Avbryt</string>

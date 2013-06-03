@@ -2,6 +2,9 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">tr_TR</string>
+    <string name="general_error">HATA</string>
+    <string name="general_warning">UYARI</string>
+    <string name="general_ok">Tamam</string>
     <string name="general_yes">Evet</string>
     <string name="general_no">Hayır</string>
     <string name="general_cancel">İptal</string>

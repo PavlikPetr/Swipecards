@@ -2,6 +2,9 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">es_ES</string>
+    <string name="general_error">ERROR</string>
+    <string name="general_warning">ADVERTENCIA</string>
+    <string name="general_ok">OK</string>
     <string name="general_yes">Sí</string>
     <string name="general_no">No</string>
     <string name="general_cancel">Cancelar</string>
@@ -463,6 +466,7 @@
     <string name="general_complain_sended">Tu denuncia fue enviada, muchas gracias por colaborar</string>
     <string name="general_complain">Denuncia</string>
     <string name="general_msg">Mensaje</string>
+    <string name="general_no_notifications">Lamentablemente, los avisos no están disponibles en tu dispositivo</string>
     <plurals name="vip_add_more_friends">
         <item quantity="other">Invita %d amigos más</item>
         <item quantity="one">Invita %d amigo más</item>
@@ -477,4 +481,6 @@
     <string name="general_bookmarks_is_deleted">Usuario eliminado de los favoritos</string>
     <string name="general_blacklist_is_deleted">Usuario eliminado de la lista negra</string>
     <string name="invite_friends_title_short">Invitar a todos los amigos a Topface</string>
+    <string name="general_exit">Salir</string>
+    <string name="likes_can_help_you">Las simpatías te ayudarán a conocer gente</string>
 </resources>

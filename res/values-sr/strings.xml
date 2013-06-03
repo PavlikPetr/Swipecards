@@ -2,6 +2,9 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">sr_RS</string>
+    <string name="general_error">GREŠKA</string>
+    <string name="general_warning">UPOZORENJE</string>
+    <string name="general_ok">OK</string>
     <string name="general_yes">Da</string>
     <string name="general_no">Ne</string>
     <string name="general_cancel">Odustati</string>

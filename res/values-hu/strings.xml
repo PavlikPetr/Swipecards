@@ -2,6 +2,9 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">hu_HU</string>
+    <string name="general_error">HIBA</string>
+    <string name="general_warning">FIGYELMEZTETÉS</string>
+    <string name="general_ok">OK</string>
     <string name="general_yes">Igen</string>
     <string name="general_no">Nem</string>
     <string name="general_cancel">Mégse</string>
