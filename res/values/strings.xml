@@ -463,6 +463,7 @@
     <string name="general_complain_sended">Your complaint has been submitted, thank you very much for your help</string>
     <string name="general_complain">Complaint</string>
     <string name="general_msg">Message</string>
+    <string name="general_no_notifications">Unfortunately, the notification on your device is not available</string>
     <plurals name="vip_add_more_friends">
         <item quantity="zero">0</item>
         <item quantity="other">Invite %d more friends</item>
@@ -479,4 +480,5 @@
     <string name="general_blacklist_is_deleted">User deleted from blacklist</string>
     <string name="invite_friends_title_short">Invite all your friends to Topface</string>
     <string name="general_exit">Exit</string>
+    <string name="likes_can_help_you">Likes help you meet people</string>
 </resources>
