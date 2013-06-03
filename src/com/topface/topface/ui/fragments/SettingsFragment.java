@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,9 +23,12 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
+import com.topface.topface.Ssid;
+import com.topface.topface.data.Auth;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.SendMailNotificationsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.NavigationActivity;
@@ -396,7 +402,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                                     @Override
                                     public void onClick(DialogInterface dialogConfirm, int which) {
                                         String selectedLocale = locales[((AlertDialog) dialogLocales).getListView().getCheckedItemPosition()];
-                                        changeLocale(selectedLocale);
+                                        LocaleConfig.changeLocale(getActivity(), selectedLocale,MenuFragment.F_PROFILE);
                                     }
                                 })
                                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -407,17 +413,6 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                                 }).show();
                     }
                 }).show();
-    }
-
-    private void changeLocale(String selectedLocale) {
-        LocaleConfig.updateConfiguration(getActivity().getBaseContext());
-        //save application locale to preferences
-        App.getConfig().getLocaleConfig().setApplicationLocale(selectedLocale);
-        //restart -> open NavigationActivity
-        Intent intent = new Intent(getActivity(),NavigationActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        getActivity().finish();
     }
 
     @Override

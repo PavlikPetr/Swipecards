@@ -189,8 +189,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
     }
 
-
-
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -203,7 +201,13 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     protected void onResume() {
         super.onResume();
-        if (mSlidingMenu!= null) mSlidingMenu.setMenu(R.layout.fragment_side_menu);
+
+        //restart -> open NavigationActivity
+        if (App.getConfig().getLocaleConfig().fetchToSystemLocale()) {
+            LocaleConfig.changeLocale(this, App.getConfig().getLocaleConfig().getApplicationLocale(), mFragmentMenu.getCurrentFragmentId());
+            return;
+        }
+
         //Отправляем не обработанные запросы на покупку
         BillingUtils.sendQueueItems();
 
@@ -281,7 +285,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             }
         }
     }
-
 
 
     @Override
