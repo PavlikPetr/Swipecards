@@ -462,6 +462,7 @@
     <string name="general_complain_sended">Ditt klagomål har avsänts, tack för hjälpen</string>
     <string name="general_complain">Klagomål</string>
     <string name="general_msg">Meddelande</string>
+    <string name="general_no_notifications">Det är tyvärr omöjligt att erhålla notifikationer på din mobila enhet</string>
     <plurals name="vip_add_more_friends">
         <item quantity="other">Bjud ytterligare %d vänner</item>
         <item quantity="one">Bjud ytterligare %d vän</item>
@@ -476,4 +477,6 @@
     <string name="general_bookmarks_is_deleted">Användaren har raderats från favoriter</string>
     <string name="general_blacklist_is_deleted">Användaren har raderats från svartlistan.</string>
     <string name="invite_friends_title_short">Bjud in samtliga vänner till Topface</string>
+    <string name="general_exit">Logga ut</string>
+    <string name="likes_can_help_you">Sympatier kan träffas</string>
 </resources>

@@ -7,11 +7,11 @@
 
     <!-- General -->
 
-    <!-- Эти кривые строки используются только в iOS -->
+    <!-- строки iOS -->
     <string name="general_error">ОШИБКА</string>
     <string name="general_warning">ПРЕДУПРЕЖДЕНИЕ</string>
     <string name="general_ok">OK</string>
-    <!--/ конец кривых строк -->
+    <!--/ строки iOS -->
 
     <string name="general_yes">Да</string>
     <string name="general_no">Нет</string>
