@@ -646,5 +646,6 @@
     <string name="invite_friends_title_short">Пригласить всех друзей в Topface</string>
     <string name="general_exit">Выйти</string>
     <string name="likes_can_help_you">Симпатии помогут познакомиться</string>
+    <string name="general_get_dating">Знакомиться</string>
 
 </resources>
