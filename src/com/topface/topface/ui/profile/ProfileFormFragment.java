@@ -1,14 +1,20 @@
 package com.topface.topface.ui.profile;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import com.topface.topface.R;
+import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormItem;
 
 public class ProfileFormFragment extends BaseFragment {
@@ -35,11 +41,28 @@ public class ProfileFormFragment extends BaseFragment {
         return root;
     }
 
+    private BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(mProfileFormListAdapter != null) {
+                mProfileFormListAdapter.refillData();
+                mProfileFormListAdapter.notifyDataSetChanged();
+            }
+        }
+    };
+
     @Override
     public void onResume() {
         super.onResume();
         mProfileFormListAdapter.refillData();
         mProfileFormListAdapter.notifyDataSetChanged();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver,new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateReceiver);
     }
 
     View.OnClickListener mOnFillClickListener = new View.OnClickListener() {

@@ -481,4 +481,9 @@
     <string name="invite_friends_title_short">Invite all your friends to Topface</string>
     <string name="general_exit">Exit</string>
     <string name="likes_can_help_you">Likes help you meet people</string>
+    <string name="general_blacklist_is_deleted">User deleted from black list</string>
+    <string name="invite_friends_wtitle_short">Invite all your friends to Topface</string>
+    <string name="settings_select_language">Select language</string>
+    <string name="restart_to_change_locale">Application will be restarted to change language</string>
+    <string name="locale_changing">Changing the language</string>
 </resources>

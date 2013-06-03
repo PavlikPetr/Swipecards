@@ -94,7 +94,6 @@ public class App extends Application {
 
     }
 
-
     /**
      * Вызывается в onCreate, но выполняется в отдельном потоке
      */
