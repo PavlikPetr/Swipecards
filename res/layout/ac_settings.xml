@@ -107,6 +107,12 @@
                     layout="@layout/item_edit_form_select"/>
 
             <include
+                    android:id="@+id/loLanguage"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    layout="@layout/item_edit_form_select"/>
+
+            <include
                     android:id="@+id/loAbout"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"

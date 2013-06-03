@@ -162,7 +162,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
         }).start();
 
-
         mDatingLovePrice = (TextView) view.findViewById(R.id.tvDatingLovePrice);
 
         initEmptySearchDialog(view, initNavigationHeader(view));

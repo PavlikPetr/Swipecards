@@ -42,7 +42,7 @@ public class GCMUtils {
     public static final int GCM_TYPE_UPDATE = 5;
     public static final int GCM_TYPE_NOTIFICATION = 6;
 
-    public static final String NEXT_INTENT = "next";
+    public static final String NEXT_INTENT = "com.topface.topface_next";
 
     public static final int NOTIFICATION_CANCEL_DELAY = 2000;
     public static final String IS_GCM_SUPPORTED = "IS_GCM_SUPPORTED";
