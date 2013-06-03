@@ -110,7 +110,7 @@
     <string name="edit_set_as_main">Set as main</string>
     <string name="edit_delete">Delete</string>
     <string name="edit_restore">Restore</string>
-    <string name="album_add_photo_title">Add photoc</string>
+    <string name="album_add_photo_title">Add photo</string>
     <string name="gifts_romantic">Romantic</string>
     <string name="gifts_friends">Friendly</string>
     <string name="gifts">Gifts</string>
@@ -478,4 +478,5 @@
     <string name="general_bookmarks_is_deleted">User deleted from favorites</string>
     <string name="general_blacklist_is_deleted">User deleted from blacklist</string>
     <string name="invite_friends_title_short">Invite all your friends to Topface</string>
+    <string name="general_exit">Exit</string>
 </resources>
