@@ -309,8 +309,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mUserSearchList != null) {
             mUserSearchList.updateSignatureAndUpdate();
         }
-        View view = getView();
-        setHeader(view);
+        setHeader(getView());
     }
 
     private void updateData(final boolean isAddition) {
@@ -875,10 +874,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             String plus = CacheProfile.dating.age_end == DatingFilter.webAbsoluteMaxAge ? "+" : "";
             int age = CacheProfile.dating.age_end == DatingFilter.webAbsoluteMaxAge ? EditAgeFragment.absoluteMax : CacheProfile.dating.age_end;
             Context context = App.getContext();
-            getActionBar(view).setTitleText(context.getString(
-                    CacheProfile.dating.sex == Static.BOY ? R.string.dating_header_guys
-                            : R.string.dating_header_girls, CacheProfile.dating.age_start,
-                    age) + plus);
+            String headerText = context.getString(
+                    CacheProfile.dating.sex == Static.BOY ? R.string.dating_header_guys : R.string.dating_header_girls,
+                    CacheProfile.dating.age_start, age);
+            getActionBar(view).setTitleText(headerText + plus);
 
             getActionBar(view).setSubTitleText(getSubtitle(context));
         }

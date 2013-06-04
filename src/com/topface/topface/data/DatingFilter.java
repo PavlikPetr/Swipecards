@@ -137,10 +137,6 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
         return filter;
     }
 
-    public int getShowOff() {
-        return sex == Static.GIRL ? breast : finances;
-    }
-
     /**
      * @return строка-идентификатор фильтра поиска. Применяется для кеширования
      */

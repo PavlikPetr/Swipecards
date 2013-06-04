@@ -198,6 +198,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 mFormInfo.getEntry(R.array.form_physique_breast, mFilter.breast), mBreastFrame);
         mBreastFrame.setTag(R.array.form_physique_breast);
         mBreastFrame.setOnClickListener(this);
+
+        switchSex(mFilter.sex);
     }
 
     private void switchSex(int sex) {
