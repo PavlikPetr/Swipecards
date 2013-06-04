@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
@@ -20,10 +21,7 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.LikesListAdapter;
 import com.topface.topface.ui.adapters.LikesListAdapter.OnMutualListener;
-import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.RateController;
-import com.topface.topface.utils.SwipeGestureListener;
+import com.topface.topface.utils.*;
 import org.json.JSONObject;
 
 public class LikesFragment extends FeedFragment<FeedLike> {
@@ -184,20 +182,24 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     @Override
     protected void initEmptyFeedView(View inflated) {
-        inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
-                startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
-            }
-        });
-
-        inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavigationActivity.selectFragment(F_DATING);
-            }
-        });
+        if (CacheProfile.premium) {
+            ((ViewFlipper)inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(0);
+            inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    NavigationActivity.selectFragment(F_DATING);
+                }
+            });
+        } else {
+            ((ViewFlipper)inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(1);
+            inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
+                    startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                }
+            });
+        }
     }
 
     @Override
