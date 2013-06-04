@@ -844,18 +844,22 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
                     @Override
                     public void success(ApiResponse response) {
-                        try {
-                            CacheProfile.dating = filter.clone();
-                        } catch (CloneNotSupportedException e) {
-                            Debug.error(e);
+                        if (response.isCompleted()) {
+                            try {
+                                CacheProfile.dating = filter.clone();
+                            } catch (CloneNotSupportedException e) {
+                                Debug.error(e);
+                            }
+                            updateFilterData();
+                            updateData(false);
+                        } else {
+                            fail(response.getResultCode(),response);
                         }
-
-                        updateFilterData();
-                        updateData(false);
                     }
 
                     @Override
                     public void fail(int codeError, ApiResponse response) {
+                        Toast.makeText(getActivity(),R.string.general_server_error,Toast.LENGTH_LONG).show();
                         unlockControls();
                     }
                 }).exec();
