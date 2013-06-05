@@ -845,11 +845,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     @Override
                     public void success(ApiResponse response) {
                         if (response.isCompleted()) {
-                            try {
-                                CacheProfile.dating = filter.clone();
-                            } catch (CloneNotSupportedException e) {
-                                Debug.error(e);
-                            }
+                            CacheProfile.dating = new DatingFilter(response.getJsonResult().optJSONObject("dating"));
                             updateFilterData();
                             updateData(false);
                         } else {
