@@ -20,6 +20,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import com.sponsorpay.sdk.android.utils.StringUtils;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
@@ -372,18 +373,18 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     }
 
     private void startLanguageSelection() {
-        //TODO init selected locale
         final String[] locales = getResources().getStringArray(R.array.application_locales);
         final String[] languages = new String[locales.length];
         int selectedLocaleIndex = 0;
         Locale appLocale = new Locale(App.getConfig().getLocaleConfig().getApplicationLocale());
         for (int i=0;i<locales.length;i++) {
             Locale locale = new Locale(locales[i]);
-            languages[i] = locale.getDisplayName(locale);
+            languages[i] = Utils.capitalize(locale.getDisplayName(locale));
             if(locale.equals(appLocale)) {
                 selectedLocaleIndex = i;
             }
         }
+        final int selectedLocaleIndexFinal = selectedLocaleIndex;
         new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.settings_select_language)
                 .setSingleChoiceItems(languages, selectedLocaleIndex, null)
@@ -395,13 +396,17 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 })
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialogLocales, int whichButton) {
+                        final int selectedPosition = ((AlertDialog) dialogLocales).getListView().getCheckedItemPosition();
+                        if (selectedLocaleIndexFinal == selectedPosition) {
+                            dialogLocales.dismiss();
+                        }
                         new AlertDialog.Builder(getActivity())
                                 .setTitle(R.string.settings_select_language)
                                 .setMessage(R.string.restart_to_change_locale)
                                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogConfirm, int which) {
-                                        String selectedLocale = locales[((AlertDialog) dialogLocales).getListView().getCheckedItemPosition()];
+                                        String selectedLocale = locales[selectedPosition];
                                         LocaleConfig.changeLocale(getActivity(), selectedLocale,MenuFragment.F_PROFILE);
                                     }
                                 })

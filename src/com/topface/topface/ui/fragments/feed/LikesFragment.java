@@ -24,6 +24,7 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.LikesListAdapter;
 import com.topface.topface.ui.adapters.LikesListAdapter.OnMutualListener;
+import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.*;
 import org.json.JSONObject;
 
@@ -143,13 +144,13 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     private void onMutual(FeedItem item) {
-        if(!(item.user.deleted || item.user.banned)) {
+        if (!(item.user.deleted || item.user.banned)) {
             if (item instanceof FeedLike) {
-                if(!((FeedLike)item).mutualed) {
+                if (!((FeedLike) item).mutualed) {
                     mRateController.onRate(item.user.id, RateController.MUTUAL_VALUE, 0, null);
-                    ((FeedLike)item).mutualed = true;
+                    ((FeedLike) item).mutualed = true;
                     getListAdapter().notifyDataSetChanged();
-                    Toast.makeText(getActivity(),R.string.general_mutual,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.general_mutual, Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -158,12 +159,12 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     protected String[] getLongTapActions() {
         if (editButtonsNames == null) {
             editButtonsNames = new String[]{getString(R.string.general_delete_title),
-                    getString(R.string.black_list_add),getString(R.string.general_mutual)};
+                    getString(R.string.black_list_add), getString(R.string.general_mutual)};
         }
         return editButtonsNames;
     }
 
-        @Override
+    @Override
     protected FeedListData<FeedLike> getFeedList(JSONObject response) {
         return new FeedListData<FeedLike>(response, FeedLike.class);
     }
@@ -186,7 +187,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected void initEmptyFeedView(View inflated) {
         if (CacheProfile.premium) {
-            ((ViewFlipper)inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(0);
+            ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(0);
             inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -195,9 +196,9 @@ public class LikesFragment extends FeedFragment<FeedLike> {
             });
         } else {
             if (CacheProfile.unread_likes > 0) {
-                ((ViewFlipper)inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(1);
+                ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(1);
                 String title = Utils.getQuantityString(R.plurals.you_was_liked, CacheProfile.unread_likes, CacheProfile.unread_likes);
-                ((TextView)inflated.findViewById(R.id.tvTitle)).setText(title);
+                ((TextView) inflated.findViewById(R.id.tvTitle)).setText(title);
                 inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -211,11 +212,14 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                         NavigationActivity.selectFragment(F_DATING);
                     }
                 });
-                ((ImageView)inflated.findViewById(R.id.ivOne)).setImageResource(CacheProfile.sex == Static.BOY ? R.drawable.likes_male_one : R.drawable.likes_female_one );
-                ((ImageView)inflated.findViewById(R.id.ivTwo)).setImageResource(R.drawable.likes_male_two);
-                ((ImageView)inflated.findViewById(R.id.ivThree)).setImageResource(R.drawable.likes_male_three);
+                ((ImageViewRemote) inflated.findViewById(R.id.ivOne))
+                        .setResourceSrc(CacheProfile.sex == Static.BOY ? R.drawable.likes_male_one : R.drawable.likes_female_one);
+                ((ImageViewRemote) inflated.findViewById(R.id.ivTwo))
+                        .setResourceSrc(CacheProfile.sex == Static.BOY ? R.drawable.likes_male_two : R.drawable.likes_female_two);
+                ((ImageViewRemote) inflated.findViewById(R.id.ivThree))
+                        .setResourceSrc(CacheProfile.sex == Static.BOY ? R.drawable.likes_male_three : R.drawable.likes_female_three);
             } else {
-                ((ViewFlipper)inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(0);
+                ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(0);
                 inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

@@ -416,6 +416,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
             @Override
             protected void success(FeedListData<T> data, ApiResponse response) {
+                fail(ApiResponse.PREMIUM_ACCESS_ONLY,response);
+                if (true) return;
+
                 if (isHistoryLoad) {
                     getListAdapter().addData(data);
                 } else if (isPushUpdating) {

@@ -55,7 +55,8 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center_horizontal|top"
+            android:paddingTop="24dp">
 
         <TextView
                 android:id="@+id/tvTitle"
@@ -66,13 +67,12 @@
                 />
 
         <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:maxWidth="300dp"
                 android:orientation="horizontal">
 
-            <ImageView
+            <com.topface.topface.ui.views.ImageViewRemote
                     android:id="@+id/ivOne"
                     android:layout_width="wrap_content"
                     android:layout_weight="1"
@@ -80,7 +80,7 @@
                     src="@drawable/likes_male_one"
                     />
 
-            <ImageView
+            <com.topface.topface.ui.views.ImageViewRemote
                     android:id="@+id/ivTwo"
                     android:layout_width="wrap_content"
                     android:layout_weight="1"
@@ -88,7 +88,7 @@
                     src="@drawable/likes_male_two"
                     />
 
-            <ImageView
+            <com.topface.topface.ui.views.ImageViewRemote
                     android:id="@+id/ivThree"
                     android:layout_width="wrap_content"
                     android:layout_weight="1"
