@@ -653,6 +653,7 @@
 
     <plurals name="you_was_liked">
         <item quantity="one">Вы понравились %d человеку</item>
+        <item quantity="many">Вы понравилось %d человеку</item>
         <item quantity="other">Вы понравилось %d людям</item>
     </plurals>
     <string name="to_see_likes_by_vip">Чтобы прямо сейчас узнать,кому вы понравились, активируйте VIP-аккаунт</string>
