@@ -651,4 +651,13 @@
     <string name="restart_to_change_locale">Для смены языка приложение будет перезапущено</string>
     <string name="locale_changing">Смена языка</string>
 
+    <plurals name="you_was_liked">
+        <item quantity="one">Вы понравились %d человеку</item>
+        <item quantity="other">Вы понравилось %d людям</item>
+    </plurals>
+    <string name="to_see_likes_by_vip">Чтобы прямо сейчас узнать,кому вы понравились, активируйте VIP-аккаунт</string>
+    <string name="or">или</string>
+    <string name="watch_likes_on_dating">просматривайте симпатии на экране знакомств, они могут быть в начале списка</string>
+    <string name="make_acquaintance">Познакомиться</string>
+
 </resources>

@@ -137,24 +137,6 @@ public class Profile extends AbstractDataWithPhotos {
             formInfo.fillFormItem(headerItem);
             profile.forms.add(headerItem);
 
-            // personal status
-            String status = profile.status;
-            if (status != null) {
-                if (isUserProfile && status.trim().length() == 0) {
-                    status = null;
-                }
-            }
-            formItem = new FormItem(R.array.form_main_personal_status, status,
-                    isUserProfile ? FormItem.DATA : FormItem.STATUS, headerItem);
-            formInfo.fillFormItem(formItem);
-            if (isUserProfile) {
-                if (status != null)
-                    profile.forms.add(formItem);
-            } else {
-                profile.forms.add(formItem);
-            }
-
-
             if (!resp.isNull("email")) {
                 profile.hasMail = resp.optBoolean("email");
             }

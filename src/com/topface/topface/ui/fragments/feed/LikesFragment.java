@@ -8,11 +8,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.FeedListData;
@@ -191,14 +194,35 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                 }
             });
         } else {
-            ((ViewFlipper)inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(1);
-            inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
-                    startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
-                }
-            });
+            if (CacheProfile.unread_likes > 0) {
+                ((ViewFlipper)inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(1);
+                String title = Utils.getQuantityString(R.plurals.you_was_liked, CacheProfile.unread_likes, CacheProfile.unread_likes);
+                ((TextView)inflated.findViewById(R.id.tvTitle)).setText(title);
+                inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
+                        startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                    }
+                });
+                inflated.findViewById(R.id.btnRate).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        NavigationActivity.selectFragment(F_DATING);
+                    }
+                });
+                ((ImageView)inflated.findViewById(R.id.ivOne)).setImageResource(CacheProfile.sex == Static.BOY ? R.drawable.likes_male_one : R.drawable.likes_female_one );
+                ((ImageView)inflated.findViewById(R.id.ivTwo)).setImageResource(R.drawable.likes_male_two);
+                ((ImageView)inflated.findViewById(R.id.ivThree)).setImageResource(R.drawable.likes_male_three);
+            } else {
+                ((ViewFlipper)inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(0);
+                inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        NavigationActivity.selectFragment(F_DATING);
+                    }
+                });
+            }
         }
     }
 
