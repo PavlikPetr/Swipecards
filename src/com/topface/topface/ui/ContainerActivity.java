@@ -234,4 +234,11 @@ public class ContainerActivity extends BaseFragmentActivity {
         intent.putExtra(FEED_ID, feedId);
         return intent;
     }
+
+    public static Intent getBuyingIntent() {
+        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
+        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUYING_FRAGMENT);
+        return intent;
+
+    }
 }
