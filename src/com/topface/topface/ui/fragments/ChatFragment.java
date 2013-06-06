@@ -42,8 +42,6 @@ import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
-import com.topface.topface.ui.gridlayout.*;
-import com.topface.topface.ui.gridlayout.GridLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.SwapControl;
 import com.topface.topface.utils.*;
@@ -354,7 +352,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void setNavigationTitles(String userName, int userAge, String userCity) {
-        String userTitle = (TextUtils.isEmpty(userName) && userAge == 0) ? Static.EMPTY : (userName + "," + userAge);
+        String userTitle = (TextUtils.isEmpty(userName) && userAge == 0) ? Static.EMPTY : (userName + ", " + userAge);
         mActionBar.setTitleText(userTitle);
         mActionBar.setSubTitleText(userCity);
     }
