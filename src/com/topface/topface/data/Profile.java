@@ -510,12 +510,12 @@ public class Profile extends AbstractDataWithPhotos {
             return Static.EMPTY;
         }
         String result = status.trim();
-        for (String EMPTY_STATUSE : EMPTY_STATUSES) {
-            if (EMPTY_STATUSE.equals(result)) {
+        for (String EMPTY_STATUS : EMPTY_STATUSES) {
+            if (EMPTY_STATUS.equals(result)) {
                 return Static.EMPTY;
             }
         }
-        return result;
+        return result.replaceAll("\n"," ");
     }
 
     public boolean isEmpty() {

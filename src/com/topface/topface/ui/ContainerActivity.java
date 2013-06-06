@@ -94,7 +94,7 @@ public class ContainerActivity extends BaseFragmentActivity {
         Intent intent = getIntent();
         switch (id) {
             case INTENT_BUY_VIP_FRAGMENT:
-                fragment = VipBuyFragment.newInstance(true);
+                fragment = VipBuyFragment.newInstance(true,intent.getStringExtra(VipBuyFragment.ARG_TAG_EXRA_TEXT));
                 break;
             case INTENT_BUYING_FRAGMENT:
                 Bundle extras = getIntent().getExtras();
@@ -127,7 +127,9 @@ public class ContainerActivity extends BaseFragmentActivity {
                 fragment = ProfileFragment.newInstance(
                         intent.getStringExtra(ProfileFragment.INTENT_ITEM_ID),
                         intent.getIntExtra(ProfileFragment.INTENT_UID, 0),
-                        intent.getIntExtra(ProfileFragment.INTENT_TYPE, ProfileFragment.TYPE_MY_PROFILE)
+                        intent.getIntExtra(ProfileFragment.INTENT_TYPE, ProfileFragment.TYPE_MY_PROFILE),
+                        intent.getStringExtra(ProfileFragment.INTENT_CALLING_FRAGMENT)
+
                 );
                 break;
             case INTENT_SETTINGS_FRAGMENT:
@@ -204,10 +206,17 @@ public class ContainerActivity extends BaseFragmentActivity {
     }
 
     public static Intent getProfileIntent(int userId, Context context) {
-        return getProfileIntent(userId, null, context);
+        return getProfileIntent(userId, null, Static.EMPTY, context);
     }
 
-    public static Intent getProfileIntent(int userId, String itemId, Context context) {
+    public static Intent getProfileIntent(int userId, String itemId,  Context context) {
+        return getProfileIntent(userId,itemId,null,context);
+    }
+    public static Intent getProfileIntent(int userId, Class callingClass, Context context) {
+        return getProfileIntent(userId, null, callingClass.getName(), context);
+    }
+
+    public static Intent getProfileIntent(int userId, String itemId, String className, Context context) {
         int type = (userId == CacheProfile.uid) ?
                 ProfileFragment.TYPE_MY_PROFILE :
                 ProfileFragment.TYPE_USER_PROFILE;
@@ -215,6 +224,9 @@ public class ContainerActivity extends BaseFragmentActivity {
         Intent i = new Intent(context, ContainerActivity.class);
         i.putExtra(ProfileFragment.INTENT_UID, userId);
         i.putExtra(ProfileFragment.INTENT_TYPE, type);
+        if (className != null) {
+            i.putExtra(ProfileFragment.INTENT_CALLING_FRAGMENT,className);
+        }
         if (itemId != null) {
             i.putExtra(ProfileFragment.INTENT_ITEM_ID, itemId);
         }
@@ -233,5 +245,18 @@ public class ContainerActivity extends BaseFragmentActivity {
         Intent intent = getComplainIntent(userId);
         intent.putExtra(FEED_ID, feedId);
         return intent;
+    }
+
+    public static Intent getVipBuyIntent(String extraText) {
+        Intent intent = new Intent(App.getContext(),ContainerActivity.class);
+        intent.putExtra(VipBuyFragment.ARG_TAG_EXRA_TEXT, extraText);
+        return intent;
+    }
+
+    public static Intent getBuyingIntent() {
+        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
+        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUYING_FRAGMENT);
+        return intent;
+
     }
 }

@@ -144,6 +144,7 @@ public class Options extends AbstractData {
     public int contacts_count;
     public long popup_timeout;
     public boolean block_unconfirmed;
+    public boolean block_chat_not_mutual;
 
     public static Options parse(ApiResponse response) {
         Options options = new Options();
@@ -167,6 +168,7 @@ public class Options extends AbstractData {
             options.offerwall = response.jsonResult.optString("offerwall");
             options.max_version = response.jsonResult.optString("max_version");
             options.block_unconfirmed = response.jsonResult.optBoolean("block_unconfirmed");
+            options.block_chat_not_mutual = response.jsonResult.optBoolean("block_chat_not_mutual");
 
             JSONObject purchases = response.jsonResult.optJSONObject("purchases");
             if (purchases != null) {

@@ -109,7 +109,7 @@ public class ComplainsMessageFragment extends BaseFragment{
             public void success(ApiResponse response) {
                 if (getActivity() != null) {
                     Toast.makeText(getActivity(), R.string.general_complain_sended, 1500).show();
-                    ((BaseFragmentActivity)getActivity()).close(ComplainsMessageFragment.this);
+                    getActivity().finish();
                 }
             }
 
