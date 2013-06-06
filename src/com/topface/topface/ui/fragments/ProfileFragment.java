@@ -610,7 +610,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     if (mCallingClass != null && mUserProfile != null && (mUserProfile instanceof User)) {
                         if (mCallingClass.equals(DatingFragment.class.getName()) || mCallingClass.equals(LeadersDialog.class.getName())) {
                             if (!((User) mUserProfile).mutual) {
-                                Intent intent = ContainerActivity.getVipBuyIntent("tmp");
+                                Intent intent = ContainerActivity.getVipBuyIntent(getString(R.string.chat_block_not_mutual));
                                 startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                                 break;
                             }

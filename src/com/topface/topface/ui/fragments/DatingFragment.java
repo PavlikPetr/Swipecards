@@ -525,7 +525,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mCurrentUser.mutual) {
             openChat(getActivity());
         } else {
-            Intent intent = ContainerActivity.getVipBuyIntent("tmp");
+            Intent intent = ContainerActivity.getVipBuyIntent(getString(R.string.chat_block_not_mutual));
             startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
         }
     }
