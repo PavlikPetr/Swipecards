@@ -424,12 +424,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (!CacheProfile.isLoaded()) {
             return;
         }
-
-        FragmentActivity activity = getActivity();
         switch (view.getId()) {
             case R.id.loDatingResources: {
                 EasyTracker.getTracker().trackEvent("Dating", "BuyClick", "", 1L);
-                Intent intent = new Intent(activity, ContainerActivity.class);
+                Intent intent = new Intent(getActivity(), ContainerActivity.class);
                 intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
                 startActivity(intent);
             }
@@ -491,24 +489,18 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
             break;
             case R.id.btnDatingProfile: {
-                if (mCurrentUser != null && activity != null) {
-                    activity.startActivity(ContainerActivity.getProfileIntent(mCurrentUser.id, DatingFragment.class.getName(), activity));
+                if (mCurrentUser != null && getActivity() != null) {
+                    getActivity().startActivity(ContainerActivity.getProfileIntent(mCurrentUser.id, DatingFragment.class, getActivity()));
                     EasyTracker.getTracker().trackEvent("Dating", "Additional", "Profile", 1L);
                 }
             }
             break;
             case R.id.btnDatingChat: {
-                Intent intent = new Intent(activity, ContainerActivity.class);
-
-                intent.putExtra(ChatFragment.INTENT_USER_ID, mCurrentUser.id);
-                intent.putExtra(ChatFragment.INTENT_USER_NAME, mCurrentUser.first_name);
-                intent.putExtra(ChatFragment.INTENT_USER_SEX, mCurrentUser.sex);
-                intent.putExtra(ChatFragment.INTENT_USER_AGE, mCurrentUser.age);
-                intent.putExtra(ChatFragment.INTENT_USER_CITY, mCurrentUser.city.name);
-                intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, getClass().getSimpleName());
-                activity.startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
-
-                EasyTracker.getTracker().trackEvent("Dating", "Additional", "Chat", 1L);
+                if (CacheProfile.premium || !CacheProfile.getOptions().block_chat_not_mutual) {
+                    openChat(getActivity());
+                } else {
+                    chatBlockLogic();
+                }
             }
             break;
             case R.id.btnDatingSwitchNext: {
@@ -527,6 +519,27 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             default:
         }
+    }
+
+    private void chatBlockLogic() {
+        if (mCurrentUser.mutual) {
+            openChat(getActivity());
+        } else {
+            Intent intent = ContainerActivity.getVipBuyIntent("tmp");
+            startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+        }
+    }
+
+    private void openChat(FragmentActivity activity) {
+        Intent intent = new Intent(activity, ContainerActivity.class);
+        intent.putExtra(ChatFragment.INTENT_USER_ID, mCurrentUser.id);
+        intent.putExtra(ChatFragment.INTENT_USER_NAME, mCurrentUser.first_name);
+        intent.putExtra(ChatFragment.INTENT_USER_SEX, mCurrentUser.sex);
+        intent.putExtra(ChatFragment.INTENT_USER_AGE, mCurrentUser.age);
+        intent.putExtra(ChatFragment.INTENT_USER_CITY, mCurrentUser.city.name);
+        intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, getClass().getSimpleName());
+        activity.startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
+        EasyTracker.getTracker().trackEvent("Dating", "Additional", "Chat", 1L);
     }
 
     private void showUser(SearchUser user) {

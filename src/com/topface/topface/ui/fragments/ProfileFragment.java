@@ -31,6 +31,7 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
+import com.topface.topface.ui.dialogs.LeadersDialog;
 import com.topface.topface.ui.profile.ProfileFormFragment;
 import com.topface.topface.ui.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.profile.UserFormFragment;
@@ -49,7 +50,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private static final String ARG_TAG_PROFILE_ID = "profile_id";
     private static final String ARG_TAG_INIT_BODY_PAGE = "profile_start_body_class";
     private static final String ARG_TAG_INIT_HEADER_PAGE = "profile_start_header_class";
-    private static final String ARG_TAG_CALLING_FRAGMENT = "intent_profile_calling_fragment";
+    private static final String ARG_TAG_CALLING_CLASS = "intent_profile_calling_fragment";
     public static final String ARG_FEED_ITEM_ID = "item_id";
     public static final String DEFAULT_ACTIVATED_COLOR = "#AAAAAA";
     public static final String DEFAULT_NON_ACTIVATED = "#FFFFFF";
@@ -70,6 +71,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private Profile mUserProfile = null;
     public int mProfileType;
     private int mProfileId;
+    private String mCallingClass;
 
     private TextView mTitle;
     private View mLoaderView;
@@ -109,7 +111,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             }
         }
     };
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -434,6 +435,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mProfileType = getArguments().getInt(ARG_TAG_PROFILE_TYPE);
         mBodyStartPageClassName = getArguments().getString(ARG_TAG_INIT_BODY_PAGE);
         mHeaderStartPageClassName = getArguments().getString(ARG_TAG_INIT_HEADER_PAGE);
+        mCallingClass = getArguments().getString(ARG_TAG_CALLING_CLASS);
     }
 
     private void initHeaderPages(View root) {
@@ -602,7 +604,20 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 }
                 break;
             case R.id.acChat:
-                openChat();
+                if (CacheProfile.premium || !CacheProfile.getOptions().block_chat_not_mutual) {
+                    openChat();
+                } else {
+                    if (mCallingClass != null && mUserProfile != null && (mUserProfile instanceof User)) {
+                        if (mCallingClass.equals(DatingFragment.class.getName()) || mCallingClass.equals(LeadersDialog.class.getName())) {
+                            if (!((User) mUserProfile).mutual) {
+                                Intent intent = ContainerActivity.getVipBuyIntent("tmp");
+                                startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                                break;
+                            }
+                        }
+                    }
+                    openChat();
+                }
                 break;
             case R.id.acBlock:
                 if (CacheProfile.premium) {
@@ -744,14 +759,14 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         return fragment;
     }
 
-    public static ProfileFragment newInstance(String itemId, int id, int type,String fragmentName) {
+    public static ProfileFragment newInstance(String itemId, int id, int type, String className) {
         ProfileFragment fragment = new ProfileFragment();
 
         Bundle args = new Bundle();
         args.putInt(ARG_TAG_PROFILE_ID, id);
         args.putInt(ARG_TAG_PROFILE_TYPE, type);
         args.putString(ARG_FEED_ITEM_ID, itemId);
-        args.putString(ARG_TAG_CALLING_FRAGMENT, fragmentName);
+        args.putString(ARG_TAG_CALLING_CLASS, className);
         fragment.setArguments(args);
 
         return fragment;

@@ -33,6 +33,7 @@ import static android.view.View.OnClickListener;
 public class VipBuyFragment extends BillingFragment implements OnClickListener {
 
     public static final String ACTION_BAR_CONST = "needActionBar";
+    public static final String ARG_TAG_EXRA_TEXT = "extra_text";
     EditSwitcher mInvisSwitcher;
 
     ProgressBar mInvisLoadBar;
@@ -43,13 +44,22 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     // В этот метод потом можно будет передать аргументы,
     // чтобы потом установить их с помощью setArguments();
     public static VipBuyFragment newInstance() {
-        return new VipBuyFragment();
+        VipBuyFragment fragment = new VipBuyFragment();
+        return fragment;
     }
 
     public static VipBuyFragment newInstance(boolean needActionBar) {
+        return newInstance(needActionBar,null);
+    }
+
+
+    public static VipBuyFragment newInstance(boolean needActionBar, String text) {
         VipBuyFragment fragment = new VipBuyFragment();
         Bundle args = new Bundle();
         args.putBoolean(ACTION_BAR_CONST, needActionBar);
+        if (text != null) {
+            args.putString(ARG_TAG_EXRA_TEXT, text);
+        }
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,6 +80,11 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_buy_premium, null);
         initViews(view);
+        initActionBar(view);
+        return view;
+    }
+
+    private void initActionBar(View view) {
         if (getArguments() != null && getArguments().getBoolean(ACTION_BAR_CONST, false)) {
             view.findViewById(R.id.loNavigationBar).setVisibility(View.VISIBLE);
             view.findViewById(R.id.headerShadow).setVisibility(View.VISIBLE);
@@ -82,13 +97,23 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
             });
             actionBar.setTitleText(getString(R.string.vip_buy_vip));
         }
-        return view;
     }
 
     private void initViews(View root) {
+        initExtraText(root);
         initBuyVipViews(root);
         initEditVipViews(root);
         switchLayouts();
+    }
+
+    private void initExtraText(View root) {
+        TextView textView = (TextView)root.findViewById(R.id.tvExtraText);
+        String text = null;
+        if (getArguments() != null) {
+            text = getArguments().getString(ARG_TAG_EXRA_TEXT);
+            textView.setText(text);
+        }
+        textView.setVisibility(text == null ? View.GONE : View.VISIBLE);
     }
 
     private void switchLayouts() {
