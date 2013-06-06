@@ -515,7 +515,7 @@ public class Profile extends AbstractDataWithPhotos {
                 return Static.EMPTY;
             }
         }
-        return result;
+        return result.replaceAll("\n"," ");
     }
 
     public boolean isEmpty() {
