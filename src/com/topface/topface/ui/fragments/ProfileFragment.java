@@ -49,12 +49,14 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private static final String ARG_TAG_PROFILE_ID = "profile_id";
     private static final String ARG_TAG_INIT_BODY_PAGE = "profile_start_body_class";
     private static final String ARG_TAG_INIT_HEADER_PAGE = "profile_start_header_class";
+    private static final String ARG_TAG_CALLING_FRAGMENT = "intent_profile_calling_fragment";
     public static final String ARG_FEED_ITEM_ID = "item_id";
     public static final String DEFAULT_ACTIVATED_COLOR = "#AAAAAA";
     public static final String DEFAULT_NON_ACTIVATED = "#FFFFFF";
     public static final String INTENT_UID = "intent_profile_uid";
     public static final String INTENT_TYPE = "intent_profile_type";
     public static final String INTENT_ITEM_ID = "intent_profile_item_id";
+    public static final String INTENT_CALLING_FRAGMENT = "intent_profile_calling_fragment";
 
     ArrayList<String> BODY_PAGES_TITLES = new ArrayList<String>();
     ArrayList<String> BODY_PAGES_CLASS_NAMES = new ArrayList<String>();
@@ -737,6 +739,19 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         args.putInt(ARG_TAG_PROFILE_ID, id);
         args.putInt(ARG_TAG_PROFILE_TYPE, type);
         args.putString(ARG_FEED_ITEM_ID, itemId);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
+    public static ProfileFragment newInstance(String itemId, int id, int type,String fragmentName) {
+        ProfileFragment fragment = new ProfileFragment();
+
+        Bundle args = new Bundle();
+        args.putInt(ARG_TAG_PROFILE_ID, id);
+        args.putInt(ARG_TAG_PROFILE_TYPE, type);
+        args.putString(ARG_FEED_ITEM_ID, itemId);
+        args.putString(ARG_TAG_CALLING_FRAGMENT, fragmentName);
         fragment.setArguments(args);
 
         return fragment;

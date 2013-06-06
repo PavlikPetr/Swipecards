@@ -127,7 +127,9 @@ public class ContainerActivity extends BaseFragmentActivity {
                 fragment = ProfileFragment.newInstance(
                         intent.getStringExtra(ProfileFragment.INTENT_ITEM_ID),
                         intent.getIntExtra(ProfileFragment.INTENT_UID, 0),
-                        intent.getIntExtra(ProfileFragment.INTENT_TYPE, ProfileFragment.TYPE_MY_PROFILE)
+                        intent.getIntExtra(ProfileFragment.INTENT_TYPE, ProfileFragment.TYPE_MY_PROFILE),
+                        intent.getStringExtra(ProfileFragment.INTENT_CALLING_FRAGMENT)
+
                 );
                 break;
             case INTENT_SETTINGS_FRAGMENT:
@@ -204,10 +206,14 @@ public class ContainerActivity extends BaseFragmentActivity {
     }
 
     public static Intent getProfileIntent(int userId, Context context) {
-        return getProfileIntent(userId, null, context);
+        return getProfileIntent(userId, null, Static.EMPTY, context);
     }
 
-    public static Intent getProfileIntent(int userId, String itemId, Context context) {
+    public static Intent getProfileIntent(int userId, String fragment, Context context) {
+        return getProfileIntent(userId, null, fragment, context);
+    }
+
+    public static Intent getProfileIntent(int userId, String itemId, String fragment, Context context) {
         int type = (userId == CacheProfile.uid) ?
                 ProfileFragment.TYPE_MY_PROFILE :
                 ProfileFragment.TYPE_USER_PROFILE;
@@ -215,6 +221,7 @@ public class ContainerActivity extends BaseFragmentActivity {
         Intent i = new Intent(context, ContainerActivity.class);
         i.putExtra(ProfileFragment.INTENT_UID, userId);
         i.putExtra(ProfileFragment.INTENT_TYPE, type);
+        i.putExtra(ProfileFragment.INTENT_CALLING_FRAGMENT,fragment);
         if (itemId != null) {
             i.putExtra(ProfileFragment.INTENT_ITEM_ID, itemId);
         }
