@@ -8,10 +8,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.FeedListData;
@@ -20,10 +24,8 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.LikesListAdapter;
 import com.topface.topface.ui.adapters.LikesListAdapter.OnMutualListener;
-import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.RateController;
-import com.topface.topface.utils.SwipeGestureListener;
+import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.*;
 import org.json.JSONObject;
 
 public class LikesFragment extends FeedFragment<FeedLike> {
@@ -142,13 +144,13 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     private void onMutual(FeedItem item) {
-        if(!(item.user.deleted || item.user.banned)) {
+        if (!(item.user.deleted || item.user.banned)) {
             if (item instanceof FeedLike) {
-                if(!((FeedLike)item).mutualed) {
+                if (!((FeedLike) item).mutualed) {
                     mRateController.onRate(item.user.id, RateController.MUTUAL_VALUE, 0, null);
-                    ((FeedLike)item).mutualed = true;
+                    ((FeedLike) item).mutualed = true;
                     getListAdapter().notifyDataSetChanged();
-                    Toast.makeText(getActivity(),R.string.general_mutual,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.general_mutual, Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -157,12 +159,12 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     protected String[] getLongTapActions() {
         if (editButtonsNames == null) {
             editButtonsNames = new String[]{getString(R.string.general_delete_title),
-                    getString(R.string.black_list_add),getString(R.string.general_mutual)};
+                    getString(R.string.black_list_add), getString(R.string.general_mutual)};
         }
         return editButtonsNames;
     }
 
-        @Override
+    @Override
     protected FeedListData<FeedLike> getFeedList(JSONObject response) {
         return new FeedListData<FeedLike>(response, FeedLike.class);
     }
@@ -184,20 +186,48 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     @Override
     protected void initEmptyFeedView(View inflated) {
-        inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
-                startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+        if (CacheProfile.premium) {
+            ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(0);
+            inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    NavigationActivity.selectFragment(F_DATING);
+                }
+            });
+        } else {
+            if (CacheProfile.unread_likes > 0) {
+                ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(1);
+                String title = Utils.getQuantityString(R.plurals.you_was_liked, CacheProfile.unread_likes, CacheProfile.unread_likes);
+                ((TextView) inflated.findViewById(R.id.tvTitle)).setText(title);
+                inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
+                        startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                    }
+                });
+                inflated.findViewById(R.id.btnRate).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        NavigationActivity.selectFragment(F_DATING);
+                    }
+                });
+                ((ImageViewRemote) inflated.findViewById(R.id.ivOne))
+                        .setResourceSrc(CacheProfile.sex == Static.BOY ? R.drawable.likes_male_one : R.drawable.likes_female_one);
+                ((ImageViewRemote) inflated.findViewById(R.id.ivTwo))
+                        .setResourceSrc(CacheProfile.sex == Static.BOY ? R.drawable.likes_male_two : R.drawable.likes_female_two);
+                ((ImageViewRemote) inflated.findViewById(R.id.ivThree))
+                        .setResourceSrc(CacheProfile.sex == Static.BOY ? R.drawable.likes_male_three : R.drawable.likes_female_three);
+            } else {
+                ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(0);
+                inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        NavigationActivity.selectFragment(F_DATING);
+                    }
+                });
             }
-        });
-
-        inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavigationActivity.selectFragment(F_DATING);
-            }
-        });
+        }
     }
 
     @Override

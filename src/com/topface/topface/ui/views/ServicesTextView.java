@@ -91,14 +91,16 @@ public class ServicesTextView extends View {
         mBackgroundFull = BitmapFactory.decodeResource(getResources(), R.drawable.ic_cell_counter_full, options);
 
 
-        mBackgroundFree = Bitmap.createScaledBitmap(mBackgroundFree, (int) (outWidth / realScaleCoeff), (int) (outHeight / realScaleCoeff), false);
-        mBackgroundFull = Bitmap.createScaledBitmap(mBackgroundFull, (int) (outWidth / realScaleCoeff), (int) (outHeight / realScaleCoeff), false);
+        int dstWidth = (int) (outWidth / realScaleCoeff);
+        int dstHeight = (int) (outHeight / realScaleCoeff);
+        if (dstWidth > 0 && dstHeight > 0) {
+            mBackgroundFree = Bitmap.createScaledBitmap(mBackgroundFree, dstWidth, dstHeight, false);
+            mBackgroundFull = Bitmap.createScaledBitmap(mBackgroundFull, (int) (outWidth / realScaleCoeff), (int) (outHeight / realScaleCoeff), false);
 
-        if (imageId != 0) {
-            mImageBitmap = BitmapFactory.decodeResource(getResources(), imageId);
-//            double imageRes = (double)mImageBitmap.getWidth()/(double)mImageBitmap.getHeight();
-//            int newWidth = (int) (imageRes * (int)(outHeight/realScaleCoeff));
-            mImageBitmap = Bitmap.createScaledBitmap(mImageBitmap, (int) (outWidth / realScaleCoeff), (int) (outHeight / realScaleCoeff / 1.5), false);
+            if (imageId != 0) {
+                mImageBitmap = BitmapFactory.decodeResource(getResources(), imageId);
+                mImageBitmap = Bitmap.createScaledBitmap(mImageBitmap, dstWidth, (int) (dstHeight / 1.5), false);
+            }
         }
 
     }

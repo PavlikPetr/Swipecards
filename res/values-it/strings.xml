@@ -2,6 +2,9 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">it_IT</string>
+    <string name="general_error">ERRORE</string>
+    <string name="general_warning">AVVERTIMENTO</string>
+    <string name="general_ok">OK</string>
     <string name="general_yes">Sì</string>
     <string name="general_no">No</string>
     <string name="general_cancel">Annulla</string>
@@ -411,7 +414,7 @@
     <string name="general_add">Aggiungi</string>
     <string name="general_invite_friends">Invita gli amici</string>
     <string name="general_rest_contacts">Ti sono rimasti %d contatti</string>
-    <string name="invite_friends_title">Invita tutti gli amici su Topface</string>
+    <string name="invite_friends_title">Invita tutti gli amici su Topface dalla rubrica del cellulare</string>
     <string name="invalid_contacts">Alcuni dei contatti riportano errori. Per favore, inserisci i contatti corretti</string>
     <string name="general_choose_action">Scegli l’azione</string>
     <plurals name="vip_status_period">
@@ -454,7 +457,7 @@
     <string name="complain_type_fake_user">Persona famosa</string>
     <string name="complain_type_spam_msg">Proposta commerciale, spam, pubblicità, link, numeri telefonici</string>
     <string name="complain_type_spam_profile">Campi “stato”, “di me” contengono una proposta commerciale</string>
-    <string name="complain_type_swearing_profile">Campi “stato”, “di me” contengono cafonata, parolacce, link ai social network</string>
+    <string name="complain_type_swearing_profile">Campi “stato”, “di me” contengono cafonate, parolacce, link ai social network</string>
     <string name="complain_type_fake_data">Nome, sesso, età e foto della persona non corrispondono tra di loro</string>
     <string name="complain_description">Descrivi il motivo del reclamo</string>
     <string name="general_complain_sended">Il tuo reclamo è stato inviato, grazie per il tuo aiuto</string>
@@ -464,9 +467,14 @@
         <item quantity="other">Invita ancora %d amici</item>
         <item quantity="one">Invita ancora %d amico</item>
     </plurals>
-    <string name="general_bookmarks_add_short">nei preferiti</string>
-    <string name="black_list_add_short">nella black list</string>
+    <string name="general_bookmarks_add_short">Nei preferiti</string>
+    <string name="black_list_add_short">Nella black list</string>
     <string name="general_complaint">Fare un reclamo</string>
+    <string name="general_type_complain">Oggetto del reclamo</string>
     <string name="confirm_email_for_dating">Siamo contrari allo spam. Conferma il tuo e-mail per chattare su Topface!</string>
     <string name="confirm">Confermare</string>
+    <string name="complain_type_swearing_msg">Cafonate, minacce, parolacce</string>
+    <string name="general_bookmarks_is_deleted">L’utente è stato rimosso dai preferiti</string>
+    <string name="general_blacklist_is_deleted">L’utente è stato rimosso dalla black list</string>
+    <string name="invite_friends_title_short">Invita tutti gli amici su Topface</string>
 </resources>

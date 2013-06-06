@@ -154,8 +154,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
     private void initEditItems() {
         if (!mEditItems.isEmpty()) mEditItems.clear();
-        mEditItems.add((new EditStatus()).setType(Type.TOP));
-        mEditItems.add((new EditBackPhoto()).setType(Type.MIDDLE));
+        mEditItems.add((new EditBackPhoto()).setType(Type.TOP));
         mEditItems.add((new EditPhotos()).setType(Type.BOTTOM));
 
         // edit form items

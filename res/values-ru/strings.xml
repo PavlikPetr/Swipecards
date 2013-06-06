@@ -7,6 +7,12 @@
 
     <!-- General -->
 
+    <!-- строки iOS -->
+    <string name="general_error">ОШИБКА</string>
+    <string name="general_warning">ПРЕДУПРЕЖДЕНИЕ</string>
+    <string name="general_ok">OK</string>
+    <!--/ строки iOS -->
+
     <string name="general_yes">Да</string>
     <string name="general_no">Нет</string>
     <string name="general_cancel">Отмена</string>
@@ -243,7 +249,7 @@
     </string>
 
     <string name="general_edit_profile_message">Пожалуйста, заполните необходимые поля анкеты</string>
-    <string name="general_premium_access_error">Для данной функции необходим VIP статус</string>
+    <string name="general_premium_access_error">Для данной функции необходим VIP-статус</string>
 
     <string name="general_search_null_response_error">Ничего не найдено. Попробуйте изменить фильтры</string>
     <string name="change_filters">Изменить фильтры</string>
@@ -639,5 +645,20 @@
     <string name="general_blacklist_is_deleted">Пользователь удален из черного списка</string>
     <string name="invite_friends_title_short">Пригласить всех друзей в Topface</string>
     <string name="general_exit">Выйти</string>
+    <string name="likes_can_help_you">Симпатии помогут познакомиться</string>
+    <string name="general_get_dating">Знакомиться</string>
+    <string name="settings_select_language">Выбор языка приложения</string>
+    <string name="restart_to_change_locale">Для смены языка приложение будет перезапущено</string>
+    <string name="locale_changing">Смена языка</string>
+
+    <plurals name="you_was_liked">
+        <item quantity="one">Вы понравились %d человеку</item>
+        <item quantity="many">Вы понравилось %d человеку</item>
+        <item quantity="other">Вы понравилось %d людям</item>
+    </plurals>
+    <string name="to_see_likes_by_vip">Чтобы прямо сейчас узнать,кому вы понравились, активируйте VIP-аккаунт</string>
+    <string name="or">или</string>
+    <string name="watch_likes_on_dating">просматривайте симпатии на экране знакомств, они могут быть в начале списка</string>
+    <string name="make_acquaintance">Познакомиться</string>
 
 </resources>

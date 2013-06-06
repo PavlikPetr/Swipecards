@@ -699,4 +699,8 @@ public class BannerBlock {
         }
         removeBanner();
     }
+
+    public void onResume() {
+        if (mBannerView instanceof MobclixMMABannerXLAdView) ((MobclixMMABannerXLAdView) mBannerView).resume();
+    }
 }

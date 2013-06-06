@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import com.topface.topface.Static;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * Класс для хранения в SharedPreferences тех настроек, которые обязательны для работы приложения,
@@ -29,9 +30,14 @@ public class AppConfig {
     private static final String DATA_API_VERSION = "data_api_version";
 
     private BannersConfig mBannerConfig;
+    private LocaleConfig mLocaleConfig;
 
     public BannersConfig getBannerConfig() {
         return mBannerConfig;
+    }
+
+    public LocaleConfig getLocaleConfig() {
+        return mLocaleConfig;
     }
 
     public String getApiRevision() {
@@ -105,6 +111,7 @@ public class AppConfig {
     public AppConfig(Context context) {
         mContext = context;
         mBannerConfig = new BannersConfig(mContext);
+        mLocaleConfig = new LocaleConfig(mContext);
         initData();
     }
 

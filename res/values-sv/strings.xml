@@ -2,6 +2,9 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">sv_SE</string>
+    <string name="general_error">FEL</string>
+    <string name="general_warning">VARNING</string>
+    <string name="general_ok">OK</string>
     <string name="general_yes">Ja</string>
     <string name="general_no">Nej</string>
     <string name="general_cancel">Avbryt</string>
@@ -447,8 +450,33 @@
     <string name="complain_photo_header">Inkorrekt foto</string>
     <string name="complain_msg_header">Inkorrekt meddelande</string>
     <string name="complain_info_header">Inkorrekt information</string>
+    <string name="complain_type_porn">Porr (könsorgan synliga)</string>
     <string name="complain_type_ero">Erotik på profilbilden</string>
+    <string name="complain_type_picture">Ej personlig bild</string>
     <string name="complain_type_fake_user">Kändis</string>
+    <string name="complain_type_spam_msg">Offert, spam, reklam, länkar, telefonnummer</string>
+    <string name="complain_type_spam_profile">Fälten \"Status\", \"Om mig\" innehåller reklam</string>
+    <string name="complain_type_swearing_profile">Fälten \"Status\", \"Om mig\" innehåller grovheter, svordomar, länkar till social media</string>
+    <string name="complain_type_fake_data">Personens namn, kön, ålder eller foto överensstämmer inte.</string>
     <string name="complain_description">Berätta mer om anledningen till ditt klagomål</string>
-    <string name="black_list_add_short">till svartlistan</string>
+    <string name="general_complain_sended">Ditt klagomål har avsänts, tack för hjälpen</string>
+    <string name="general_complain">Klagomål</string>
+    <string name="general_msg">Meddelande</string>
+    <string name="general_no_notifications">Det är tyvärr omöjligt att erhålla notifikationer på din mobila enhet</string>
+    <plurals name="vip_add_more_friends">
+        <item quantity="other">Bjud ytterligare %d vänner</item>
+        <item quantity="one">Bjud ytterligare %d vän</item>
+    </plurals>
+    <string name="general_bookmarks_add_short">Till favoriter</string>
+    <string name="black_list_add_short">Till svartlista</string>
+    <string name="general_complaint">Klaga</string>
+    <string name="general_type_complain">Klagomålets rubrik</string>
+    <string name="confirm_email_for_dating">VI är emot spam. Bekräfta din epost-adress för att dejta på Topface!</string>
+    <string name="confirm">Bekräfta</string>
+    <string name="complain_type_swearing_msg">Grovheter, hot, svordomar</string>
+    <string name="general_bookmarks_is_deleted">Användaren har raderats från favoriter</string>
+    <string name="general_blacklist_is_deleted">Användaren har raderats från svartlistan.</string>
+    <string name="invite_friends_title_short">Bjud in samtliga vänner till Topface</string>
+    <string name="general_exit">Logga ut</string>
+    <string name="likes_can_help_you">Sympatier kan träffas</string>
 </resources>

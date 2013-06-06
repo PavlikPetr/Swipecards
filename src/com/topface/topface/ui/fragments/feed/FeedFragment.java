@@ -455,7 +455,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     }
                     onUpdateFail(isPushUpdating || isHistoryLoad);
                     mListView.onRefreshComplete();
-//                    mListView.setVisibility(View.VISIBLE);
                     mIsUpdating = false;
                 }
             }

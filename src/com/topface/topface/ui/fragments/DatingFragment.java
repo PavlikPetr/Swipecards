@@ -162,7 +162,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
         }).start();
 
-
         mDatingLovePrice = (TextView) view.findViewById(R.id.tvDatingLovePrice);
 
         initEmptySearchDialog(view, initNavigationHeader(view));
@@ -310,8 +309,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mUserSearchList != null) {
             mUserSearchList.updateSignatureAndUpdate();
         }
-        View view = getView();
-        setHeader(view);
+        setHeader(getView());
     }
 
     private void updateData(final boolean isAddition) {
@@ -846,18 +844,18 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
                     @Override
                     public void success(ApiResponse response) {
-                        try {
-                            CacheProfile.dating = filter.clone();
-                        } catch (CloneNotSupportedException e) {
-                            Debug.error(e);
+                        if (response.isCompleted()) {
+                            CacheProfile.dating = new DatingFilter(response.getJsonResult().optJSONObject("dating"));
+                            updateFilterData();
+                            updateData(false);
+                        } else {
+                            fail(response.getResultCode(),response);
                         }
-
-                        updateFilterData();
-                        updateData(false);
                     }
 
                     @Override
                     public void fail(int codeError, ApiResponse response) {
+                        Toast.makeText(getActivity(),R.string.general_server_error,Toast.LENGTH_LONG).show();
                         unlockControls();
                     }
                 }).exec();
@@ -876,10 +874,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             String plus = CacheProfile.dating.age_end == DatingFilter.webAbsoluteMaxAge ? "+" : "";
             int age = CacheProfile.dating.age_end == DatingFilter.webAbsoluteMaxAge ? EditAgeFragment.absoluteMax : CacheProfile.dating.age_end;
             Context context = App.getContext();
-            getActionBar(view).setTitleText(context.getString(
-                    CacheProfile.dating.sex == Static.BOY ? R.string.dating_header_guys
-                            : R.string.dating_header_girls, CacheProfile.dating.age_start,
-                    age) + plus);
+            String headerText = context.getString(
+                    CacheProfile.dating.sex == Static.BOY ? R.string.dating_header_guys : R.string.dating_header_girls,
+                    CacheProfile.dating.age_start, age);
+            getActionBar(view).setTitleText(headerText + plus);
 
             getActionBar(view).setSubTitleText(getSubtitle(context));
         }

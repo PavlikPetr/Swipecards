@@ -2,6 +2,9 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">uk_UA</string>
+    <string name="general_error">ПОМИЛКА</string>
+    <string name="general_warning">ПОПЕРЕДЖЕННЯ</string>
+    <string name="general_ok">OK</string>
     <string name="general_yes">Так</string>
     <string name="general_no">Ні</string>
     <string name="general_cancel">Відміна</string>
@@ -416,6 +419,9 @@
     <string name="general_add">Додати</string>
     <string name="general_invite_friends">Запросіть друзів</string>
     <string name="general_rest_contacts">Вам залишилося %d контактів</string>
+    <string name="invite_friends_title">Запросити всіх друзів з телефонної книги в Topface</string>
+    <string name="invalid_contacts">Деякі з контактів були некоректними. Будь ласка, відправте коректні контакти</string>
+    <string name="general_choose_action">Оберіть дію</string>
     <plurals name="vip_status_period">
         <item quantity="few">Ви отримали VIP статус на %d дня</item>
         <item quantity="other">Ви отримали VIP статус на %d днів</item>
@@ -437,4 +443,48 @@
         <item quantity="one">Отримай VIP безкоштовно за %d запрошення</item>
     </plurals>
     <string name="filter_hint">Введіть ім\'я</string>
+    <string name="buy_status_and_watch_your_fans">Купуйте VIP-статус і дізнайтеся, хто додав вас в обране</string>
+    <string name="add_bookmarks_to_be_connected">Додавайте нових знайомих в цей розділ, і ви не втратите з ними зв\'язок</string>
+    <string name="nobody_chat_with_you_sympathies_will_help">Вам ще ніхто не писав. Симпатії допоможуть у пошуку співрозмовника</string>
+    <string name="rate_and_have_mutual_or_buy_and_chat">Ставте симпатії вподобаним вам людям та отримуйте взаємні. Або купіть симпатії і починайте спілкування з тими, кому ви подобаєтеся!</string>
+    <string name="start_rate">Почати оцінювати</string>
+    <string name="with_vip_find_your_visitors">З VIP-статусом ви дізнаєтеся, хто заходив до вас на сторінку</string>
+    <string name="on_avatar">На аватарку</string>
+    <string name="your_avatar">Ваша аватарка</string>
+    <string name="avatar_set_successfully">Аватарка успішно встановлена</string>
+    <string name="incorrect_photo">Некоректне фото. Спробуйте завантажити інше</string>
+    <string name="incorrect_photo_format">Некоректний формат фото. Спробуйте завантажити jpg або png</string>
+    <string name="incorrect_photo_size">Неприпустимий розмір фотографії</string>
+    <string name="input_contact_name">Введіть ім\'я контакту</string>
+    <string name="incorrect_locale">Якщо Ви хочете, щоб ми змогли прочитати Ваш відгук, пишіть його російською або англійською мовою</string>
+    <string name="complain_photo_header">Некоректна фотографія</string>
+    <string name="complain_msg_header">Некоректне повідомлення</string>
+    <string name="complain_info_header">Некоректна інформація</string>
+    <string name="complain_type_porn">Порно (видно геніталії)</string>
+    <string name="complain_type_ero">Еротика на головному фото</string>
+    <string name="complain_type_picture">Картинка</string>
+    <string name="complain_type_fake_user">Відома людина</string>
+    <string name="complain_type_spam_msg">Комерційна пропозиція, спам, реклама, посилання на сайти, телефони</string>
+    <string name="complain_type_spam_profile">Поля «статус», «про себе» містять комерційну пропозицію</string>
+    <string name="complain_type_swearing_profile">Поля «статус», «про себе» містять хамство, мат, посилання на соц. мережі</string>
+    <string name="complain_type_fake_data">Ім\'я, стать, вік і фотографія людини не збігаються</string>
+    <string name="complain_description">Розкажіть про причину скарги з подробицями</string>
+    <string name="general_complain_sended">Ваша скарга відправлена, велике спасибі за допомогу</string>
+    <string name="general_complain">Скарга</string>
+    <string name="general_msg">Повідомлення</string>
+    <plurals name="vip_add_more_friends">
+        <item quantity="few">Запросіть ще %d друга</item>
+        <item quantity="other">Запросіть ще %d друзів</item>
+        <item quantity="one">Запросіть ще %d друга</item>
+    </plurals>
+    <string name="general_bookmarks_add_short">В обрані</string>
+    <string name="black_list_add_short">У чорний список</string>
+    <string name="general_complaint">Поскаржитися</string>
+    <string name="general_type_complain">Тема скарги</string>
+    <string name="confirm_email_for_dating">Ми проти спаму. Підтвердіть свою поштову адресу, щоб знайомиться в Topface!</string>
+    <string name="confirm">Підтвердити</string>
+    <string name="complain_type_swearing_msg">Хамство, загрози, мат</string>
+    <string name="general_bookmarks_is_deleted">Користувач вилучений з обраних</string>
+    <string name="general_blacklist_is_deleted">Користувач вилучений з чорного списку</string>
+    <string name="invite_friends_title_short">Запросити всіх друзів в Topface</string>
 </resources>

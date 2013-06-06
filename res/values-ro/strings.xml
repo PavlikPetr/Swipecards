@@ -2,6 +2,9 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">ro_RO</string>
+    <string name="general_error">EROARE</string>
+    <string name="general_warning">PREINTAMPINARE</string>
+    <string name="general_ok">OK</string>
     <string name="general_yes">Da</string>
     <string name="general_no">Nu</string>
     <string name="general_cancel">Anulare</string>
@@ -435,4 +438,28 @@
     <string name="incorrect_photo_size">Marimea pozei inaccesibile</string>
     <string name="input_contact_name">Intraduceti numele contactului</string>
     <string name="incorrect_locale">Daca doriti ca noi sa citim mesajul Dmv, scrietine in limba romana sau engleza</string>
+    <string name="complain_photo_header">Fotografie incorecta</string>
+    <string name="complain_msg_header">Mesaj incorect</string>
+    <string name="complain_info_header">Informatie incorecta</string>
+    <string name="complain_type_porn">Porno (se vad genitaliile)</string>
+    <string name="complain_type_ero">Erotica pe poza principala</string>
+    <string name="complain_type_picture">Imagine</string>
+    <string name="complain_type_fake_user">Persoana cunoscuta</string>
+    <string name="complain_type_spam_msg">Oferta comerciala, spam, publicitate, lincuri la siteuri, telefoane</string>
+    <string name="complain_type_spam_profile">Campurile \"statut\", \"despre sine\" contin oferta comerciala</string>
+    <string name="complain_type_swearing_profile">Campurile \"statut\". \"despre sine\" contin neamabilitati, injuraturi, lincuri la retelele de socializare</string>
+    <string name="complain_type_fake_data">Nume, sex, varsta si fotografia persoanei nu coincid</string>
+    <string name="complain_description">Povestiti despre cauzele plangerii mai detailat</string>
+    <string name="general_complain_sended">Plangerea Dmv a fost trimisa, va multumim pentru ajutor</string>
+    <string name="general_complain">Plangere</string>
+    <string name="general_msg">Mesaj</string>
+    <string name="general_bookmarks_add_short">In alese</string>
+    <string name="black_list_add_short">In lista neagra</string>
+    <string name="general_complaint">A se plange</string>
+    <string name="general_type_complain">Tema plangerii</string>
+    <string name="confirm_email_for_dating">Noi suntem contra la spam. Va rugam sa confirmati adresa electronica a Dmv, pentru a face cunostinta in Topface!</string>
+    <string name="confirm">Confirma</string>
+    <string name="complain_type_swearing_msg">Amenintari, injuraturi, purtare urata</string>
+    <string name="general_bookmarks_is_deleted">Utilizatorul a fost sters din alese</string>
+    <string name="general_blacklist_is_deleted">Utilizatorul a fost sters din lista neagra</string>
 </resources>

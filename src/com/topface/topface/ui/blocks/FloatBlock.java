@@ -100,6 +100,7 @@ public class FloatBlock {
                 new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION)
         );
         if (mLeaders != null) mLeaders.loadLeaders();
+        if (mBanner != null) mBanner.onResume();
     }
 
     public static void resetActivityMap() {

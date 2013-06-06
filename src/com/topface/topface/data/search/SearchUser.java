@@ -13,7 +13,7 @@ public class SearchUser extends FeedUser implements SerializableToJson {
      */
     protected String status;
     /**
-     * идентификатор пользователя, который послал симпатию, иначе 0
+     * флаг возможности отправки взаимной симпатии
      */
     public boolean mutual;
 
@@ -32,7 +32,7 @@ public class SearchUser extends FeedUser implements SerializableToJson {
         super.fillData(user);
 
         status = Profile.normilizeStatus(user.optString("status"));
-        mutual = user.optBoolean("mailmutual");
+        mutual = user.optBoolean("mutual");
         photos = new Photos(user.optJSONArray("photos"));
         photosCount = user.optInt("photos_count", photos.size());
     }
@@ -41,7 +41,7 @@ public class SearchUser extends FeedUser implements SerializableToJson {
     public JSONObject toJson() throws JSONException {
         JSONObject json = super.toJson();
         json.put("status", status);
-        json.put("mailmutual", mutual);
+        json.put("mutual", mutual);
         json.put("photos", photos.toJson());
         json.put("photos_count", photosCount);
         return json;

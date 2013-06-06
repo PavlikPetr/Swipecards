@@ -2,6 +2,9 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">pt_PT</string>
+    <string name="general_error">ERRO</string>
+    <string name="general_warning">AVISO</string>
+    <string name="general_ok">OK</string>
     <string name="general_yes">Sim</string>
     <string name="general_no">Não</string>
     <string name="general_cancel">Cancelamento</string>
@@ -460,9 +463,14 @@
     <string name="general_complain_sended">A sua queixa foi enviada, muito obrigado pela ajuda</string>
     <string name="general_complain">Queixa</string>
     <string name="general_msg">Mensagem</string>
-    <string name="general_bookmarks_add_short">aos favoritos</string>
-    <string name="black_list_add_short">na lista negra</string>
+    <string name="general_bookmarks_add_short">Aos favoritos</string>
+    <string name="black_list_add_short">Na lista negra</string>
     <string name="general_complaint">Queixar-se</string>
+    <string name="general_type_complain">Assunto de queixa</string>
     <string name="confirm_email_for_dating">Nós somos contra o spam. Confirme o seu endereço de email para se travar conhecimentos em Topface!</string>
     <string name="confirm">Confirmar</string>
+    <string name="complain_type_swearing_msg">Grosseria, ameaças, obscenidade</string>
+    <string name="general_bookmarks_is_deleted">O usuário foi removido dos favoritos</string>
+    <string name="general_blacklist_is_deleted">O usuário foi removido da lista negra</string>
+    <string name="invite_friends_title_short">Convidar todos os amigos à Topface</string>
 </resources>

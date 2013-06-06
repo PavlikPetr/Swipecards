@@ -33,7 +33,7 @@ public class User extends Profile {
                 user.last_visit = item.optInt("last_visit");
                 user.status = item.optString("status");
                 user.online = item.optBoolean("online");
-                user.mutual = item.optBoolean("mailmutual");
+                user.mutual = item.optBoolean("mutual");
                 user.score = item.optInt("score");
                 user.banned = item.optBoolean("banned");
                 user.deleted = item.optBoolean("deleted") || user.isEmpty();

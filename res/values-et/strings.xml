@@ -2,6 +2,9 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">et_EE</string>
+    <string name="general_error">VIGA</string>
+    <string name="general_warning">HOIATUS</string>
+    <string name="general_ok">OK</string>
     <string name="general_yes">Jah</string>
     <string name="general_no">Ei</string>
     <string name="general_cancel">Tühistamine</string>
@@ -387,6 +390,22 @@ Sa oled müksanud.</string>
     <string name="filter_hint">Sisesta/sisestage nimi</string>
     <string name="buy_status_and_watch_your_fans">Osta VIP-staatus ja saa teada, kes on sind \"Välja valitute\" hulka lisanud</string>
     <string name="start_rate">Alustada hindamist</string>
+    <string name="with_vip_find_your_visitors">VIP-staatusega saad sa teada kes on sinu lehekülge külastanud</string>
     <string name="incorrect_photo_size">Foto lubamatu suurus</string>
     <string name="input_contact_name">Sisesta kontakti nimi</string>
+    <string name="complain_photo_header">Ebakorrektne foto</string>
+    <string name="complain_msg_header">Ebakorrektne sõnum</string>
+    <string name="complain_info_header">Ebakorrektne info</string>
+    <string name="complain_type_ero">Erootika peafotol</string>
+    <string name="complain_type_picture">Pilt</string>
+    <string name="complain_type_fake_user">Tuntud inimene</string>
+    <string name="complain_type_fake_data">Inimese nimi, sugu, vanus ja foto lange kokku</string>
+    <string name="general_complain">Kaebus</string>
+    <string name="general_msg">Sõnum</string>
+    <string name="general_bookmarks_add_short">Väljavalitute hulka</string>
+    <string name="black_list_add_short">Musta nimekirja</string>
+    <string name="general_complaint">Edasi kaevata</string>
+    <string name="general_type_complain">Kaebuse teema</string>
+    <string name="confirm">Ära kinnitada</string>
+    <string name="invite_friends_title_short">Kutsuda kõik sõbrad Topface\'i</string>
 </resources>
