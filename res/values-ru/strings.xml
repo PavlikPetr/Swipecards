@@ -660,5 +660,6 @@
     <string name="or">или</string>
     <string name="watch_likes_on_dating">просматривайте симпатии на экране знакомств, они могут быть в начале списка</string>
     <string name="make_acquaintance">Познакомиться</string>
+    <string name="settings_delete_account">Удалить аккаунт</string>
 
 </resources>

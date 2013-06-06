@@ -34,7 +34,7 @@ import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-public class SettingsAccountFragment extends BaseFragment {
+public class SettingsAccountFragment extends BaseFragment implements OnClickListener{
 
     public static final int RESULT_LOGOUT = 666;
     private LockerView lockerView;
@@ -71,14 +71,8 @@ public class SettingsAccountFragment extends BaseFragment {
         textName.setText(Settings.getInstance().getSocialAccountName());
         textName.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
 
-        root.findViewById(R.id.btnLogout).setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                showExitPopup();
-
-            }
-        });
+        root.findViewById(R.id.btnLogout).setOnClickListener(this);
+        root.findViewById(R.id.btnDeleteAccount).setOnClickListener(this);
 
         return root;
     }
@@ -143,13 +137,28 @@ public class SettingsAccountFragment extends BaseFragment {
         builder.create().show();
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnDeleteAccount:
+                deleteAccount();
+                break;
+            case R.id.btnLogout:
+                showExitPopup();
+                break;
+        }
+    }
+
+    private void deleteAccount() {
+        //TODO account deletion
+    }
+
     @SuppressWarnings({"rawtypes", "hiding"})
     class FacebookLogoutTask extends AsyncTask {
         @Override
         protected java.lang.Object doInBackground(java.lang.Object... params) {
             try {
                 AuthorizationManager.getFacebook().logout(getActivity().getApplicationContext());
-
             } catch (Exception e) {
                 Debug.error(e);
             }

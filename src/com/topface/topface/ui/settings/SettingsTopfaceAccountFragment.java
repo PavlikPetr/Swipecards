@@ -43,13 +43,13 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     private TextView mText;
     private Button mBtnChange;
     private Button mBtnLogout;
+    private Button mBtnDelete;
     private final AuthToken mToken = AuthToken.getInstance();
 
     private static final int ACTION_RESEND_CONFIRM = 0;
     private static final int ACTION_CHANGE_EMAIL = 1;
     private static final int ACTION_CHANGE_PASSWORD = 2;
     private int mChangeButtonAction = ACTION_CHANGE_PASSWORD;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -95,10 +95,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         }
 
         initTextViews(root);
-
-
         initButtons(root);
-
         return root;
     }
 
@@ -178,6 +175,8 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         mBtnChange.setOnClickListener(this);
         mBtnLogout = (Button) root.findViewById(R.id.btnLogout);
         mBtnLogout.setOnClickListener(this);
+        mBtnDelete = (Button) root.findViewById(R.id.btnDeleteAccount);
+        mBtnDelete.setOnClickListener(this);
     }
 
     private void setButtonsState() {
@@ -239,9 +238,17 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             case R.id.btnChange:
                 onChangeButtonClick();
                 break;
+            case R.id.btnDeleteAccount:
+                deleteAccount();
+                break;
             default:
                 break;
         }
+    }
+
+    private void deleteAccount() {
+        //TODO account deletion
+
     }
 
     private void hideSoftKeyboard() {
