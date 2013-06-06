@@ -110,7 +110,7 @@ public class Utils {
         return clippedBitmap;
     }
 
-    public static Bitmap getRoundedCornerBitmapByMask(Bitmap bitmap, Bitmap mask) {
+    public static Bitmap getRoundedCornerBitmapByMask(Bitmap bitmap, Bitmap mask, Bitmap border) {
         int width = mask.getWidth();
         int height = mask.getHeight();
 
@@ -125,10 +125,14 @@ public class Utils {
 
         Paint paint = new Paint();
         canvas.drawARGB(0, 0, 0, 0);
+//
         canvas.drawBitmap(mask, 0, 0, paint);
         paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
         canvas.drawBitmap(clippedBitmap, 0, 0, paint);
-
+        if (border != null) {
+            paint.setXfermode(null);
+            canvas.drawBitmap(border, 0, 0, paint);
+        }
         clippedBitmap.recycle();
 
         return output;
