@@ -252,4 +252,11 @@ public class ContainerActivity extends BaseFragmentActivity {
         intent.putExtra(VipBuyFragment.ARG_TAG_EXRA_TEXT, extraText);
         return intent;
     }
+
+    public static Intent getBuyingIntent() {
+        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
+        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUYING_FRAGMENT);
+        return intent;
+
+    }
 }

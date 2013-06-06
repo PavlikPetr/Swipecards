@@ -191,7 +191,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
             inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    NavigationActivity.selectFragment(F_DATING);
+                    startActivity(ContainerActivity.getBuyingIntent());
                 }
             });
         } else {
@@ -223,7 +223,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                 inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        NavigationActivity.selectFragment(F_DATING);
+                        startActivity(ContainerActivity.getBuyingIntent());
                     }
                 });
             }

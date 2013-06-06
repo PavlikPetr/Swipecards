@@ -368,6 +368,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                     case NAME:
                         if (isNameValid(changedValue)) {
                             request.name = changedValue;
+                            nameIncorrect = false;
                         } else {
                             nameIncorrect = true;
                         }
@@ -379,6 +380,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                             }
                             if (isAgeValid(Integer.parseInt(changedValue))) {
                                 request.age = Integer.parseInt(changedValue);
+                                ageIncorrect = false;
                             } else {
                                 ageIncorrect = true;
                             }

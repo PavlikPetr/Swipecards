@@ -462,4 +462,13 @@
     <string name="complain_type_swearing_msg">Amenintari, injuraturi, purtare urata</string>
     <string name="general_bookmarks_is_deleted">Utilizatorul a fost sters din alese</string>
     <string name="general_blacklist_is_deleted">Utilizatorul a fost sters din lista neagra</string>
+    <string name="invite_friends_title_short">Invita toti prietenii in Topface</string>
+    <string name="likes_can_help_you">Simpatiile va vor ajuta sa faceti cunostinta</string>
+    <string name="general_get_dating">A face cunostinta</string>
+    <string name="restart_to_change_locale">Pentru a schimba limba aplicarea va fi restartata</string>
+    <string name="locale_changing">Schimba limba</string>
+    <string name="to_see_likes_by_vip">Pentru a afla acum, cui ati placut, activati VIP - acaunt</string>
+    <string name="or">sau</string>
+    <string name="watch_likes_on_dating">vizionati simpatiile pe ecranul de cunostinte, ele pot fi la inceput de lista</string>
+    <string name="make_acquaintance">Fa cunostinta</string>
 </resources>
