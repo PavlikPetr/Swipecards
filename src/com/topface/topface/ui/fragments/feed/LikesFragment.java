@@ -212,11 +212,11 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                     }
                 });
                 ((ImageViewRemote) inflated.findViewById(R.id.ivOne))
-                        .setResourceSrc(CacheProfile.sex == Static.BOY ? R.drawable.likes_male_one : R.drawable.likes_female_one);
+                        .setResourceSrc(CacheProfile.dating.sex == Static.GIRL ? R.drawable.likes_male_one : R.drawable.likes_female_one);
                 ((ImageViewRemote) inflated.findViewById(R.id.ivTwo))
-                        .setResourceSrc(CacheProfile.sex == Static.BOY ? R.drawable.likes_male_two : R.drawable.likes_female_two);
+                        .setResourceSrc(CacheProfile.dating.sex == Static.GIRL ? R.drawable.likes_male_two : R.drawable.likes_female_two);
                 ((ImageViewRemote) inflated.findViewById(R.id.ivThree))
-                        .setResourceSrc(CacheProfile.sex == Static.BOY ? R.drawable.likes_male_three : R.drawable.likes_female_three);
+                        .setResourceSrc(CacheProfile.dating.sex == Static.GIRL ? R.drawable.likes_male_three : R.drawable.likes_female_three);
             } else {
                 ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(0);
                 inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
