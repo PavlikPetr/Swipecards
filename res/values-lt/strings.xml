@@ -489,6 +489,10 @@
     <string name="general_get_dating">Pažindintis</string>
     <string name="restart_to_change_locale">Kad pasikeistų kalba, programa bus perkrauta</string>
     <string name="locale_changing">Kalbos pakeitimas</string>
+    <plurals name="you_was_liked">
+        <item quantity="other">Jūs patikote %d žmonėms</item>
+        <item quantity="one">Jūs patikote %d чžmogui</item>
+    </plurals>
     <string name="to_see_likes_by_vip">Suaktyvinkite VIP-paskyrą, kad tuojau pat sužinotumėte, kam jūs patikote!</string>
     <string name="or">arba</string>
     <string name="watch_likes_on_dating">Peržiūrinėkite simpatijas pažinčių ekrane, jos gali būti sąrašo pradžioje</string>
