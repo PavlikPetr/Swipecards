@@ -316,7 +316,7 @@
     <string name="vip_buy_vip">Покупка VIP</string>
     <string name="vip_state_off">Ваш VIP-статус не активирован</string>
     <string name="vip_state_on">Ваш VIP-статус активирован</string>
-    <string name="vip_abilities">Ваши VIP возможности</string>
+    <string name="vip_abilities">Ваши VIP-возможности</string>
     <string name="vip_why">Почему вам так важно быть VIP</string>
     <string name="vip_info_delight">Отправляйте восхищения бесплатно - выражайте свои чувства по максимуму!</string>
     <string name="vip_info_guest">Узнайте, кто вами интересовался - смотрите своих гостей!</string>
@@ -329,8 +329,8 @@
     <string name="vip_info_vip">Выделяйтесь с помощью своего VIP-статуса в поиске и своем профиле!</string>
     <string name="vip_info_title">VIP-привилегии</string>
     <string name="black_list_retrieve">Восстановить</string>
-    <string name="buying_vip_status">Купить VIP статус</string>
-    <string name="buying_vip_info">Для доступа к гостям необходимо иметь VIP статус</string>
+    <string name="buying_vip_status">Купить VIP-статус</string>
+    <string name="buying_vip_info">Для доступа к гостям необходимо иметь VIP-статус</string>
 
     <string name="buy_play_market_not_available">Play Market не доступен</string>
     <string name="buy_subscription_not_available">Подписки не доступны</string>
@@ -553,7 +553,7 @@
     </string>
     <string name="vip_stop_ads">Только общение, ничего лишнего. У VIP-пользователей нет рекламы</string>
     <string name="settings_invalid_name">Имя содержит некорректные символы</string>
-    <string name="general_fan_access_error">Для доступа к поклонникам необходимо иметь VIP статус</string>
+    <string name="general_fan_access_error">Для доступа к поклонникам необходимо иметь VIP-статус</string>
     <string name="friend_email_hint">Введите e-mail или телефон друга</string>
     <string name="general_add">Добавить</string>
     <string name="general_invite_friends">Пригласите друзей</string>
@@ -563,10 +563,10 @@
     <string name="general_choose_action">Выберите действие</string>
 
     <plurals name="vip_status_period">
-        <item quantity="one">Вы получили VIP статус на %d день</item>
-        <item quantity="few">Вы получили VIP статус на %d дня</item>
-        <item quantity="many">Вы получили VIP статус на %d дней</item>
-        <item quantity="other">Вы получили VIP статус на %d дней</item>
+        <item quantity="one">Вы получили VIP-статус на %d день</item>
+        <item quantity="few">Вы получили VIP-статус на %d дня</item>
+        <item quantity="many">Вы получили VIP-статус на %d дней</item>
+        <item quantity="other">Вы получили VIP-статус на %d дней</item>
     </plurals>
 
     <plurals name="vip_status_period_btn">
@@ -653,10 +653,11 @@
 
     <plurals name="you_was_liked">
         <item quantity="one">Вы понравились %d человеку</item>
-        <item quantity="many">Вы понравилось %d человеку</item>
-        <item quantity="other">Вы понравилось %d людям</item>
+        <item quantity="many">Вы понравились %d людям</item>
+        <item quantity="few">Вы понравились %d людям</item>
+        <item quantity="other">Вы понравились %d людям</item>
     </plurals>
-    <string name="to_see_likes_by_vip">Чтобы прямо сейчас узнать,кому вы понравились, активируйте VIP-аккаунт</string>
+    <string name="to_see_likes_by_vip">Чтобы прямо сейчас узнать, кому вы понравились, активируйте VIP-аккаунт</string>
     <string name="or">или</string>
     <string name="watch_likes_on_dating">просматривайте симпатии на экране знакомств, они могут быть в начале списка</string>
     <string name="make_acquaintance">Познакомиться</string>

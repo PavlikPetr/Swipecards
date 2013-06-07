@@ -8,7 +8,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -235,4 +234,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         return R.layout.layout_empty_likes;
     }
 
+    @Override
+    protected boolean isForPremium() {
+        return true;
+    }
 }

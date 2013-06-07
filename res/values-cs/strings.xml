@@ -493,6 +493,7 @@
     <string name="restart_to_change_locale">Ke změně jazyka bude aplikace restartována</string>
     <string name="locale_changing">Změna jazyka</string>
     <plurals name="you_was_liked">
+        <item quantity="few">Líbíte se %d lidem</item>
         <item quantity="other">Líbíte se %d lidem</item>
         <item quantity="one">Líbíte se %d člověku</item>
     </plurals>

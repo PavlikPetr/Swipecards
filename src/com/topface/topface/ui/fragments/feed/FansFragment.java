@@ -50,4 +50,9 @@ public class FansFragment extends BookmarksFragment{
     protected int getEmptyFeedLayout() {
         return R.layout.layout_empty_fans;
     }
+
+    @Override
+    protected boolean isForPremium() {
+        return true;
+    }
 }
