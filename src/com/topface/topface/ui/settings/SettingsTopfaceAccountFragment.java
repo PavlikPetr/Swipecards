@@ -36,7 +36,6 @@ import com.topface.topface.utils.social.AuthorizationManager;
 
 public class SettingsTopfaceAccountFragment extends BaseFragment implements OnClickListener {
 
-    public static final int RESULT_LOGOUT = 666;
     public static final String NEED_EXIT = "NEED_EXIT";
     private LockerView mLockerView;
     private EditText mEditText;
@@ -307,28 +306,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         logoutRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
-                GCMRegistrar.unregister(getActivity().getApplicationContext());
-                Ssid.remove();
-                token.removeToken();
-                //noinspection unchecked
-                new FacebookLogoutTask().execute();
-                Settings.getInstance().resetSettings();
-                startActivity(new Intent(getActivity().getApplicationContext(), NavigationActivity.class));
-                getActivity().setResult(RESULT_LOGOUT);
-                CacheProfile.clearProfile();
-                getActivity().finish();
-                SharedPreferences preferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-                if (preferences != null) {
-                    preferences.edit().clear().commit();
-                }
-                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(Static.LOGOUT_INTENT));
-                //Чистим список тех, кого нужно оценить
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        new SearchCacheManager().clearCache();
-                    }
-                }).start();
+                AuthorizationManager.logout(getActivity());
             }
 
             @Override
@@ -356,24 +334,9 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         builder.create().show();
     }
 
-    @SuppressWarnings({"rawtypes", "hiding"})
-    class FacebookLogoutTask extends AsyncTask {
-        @Override
-        protected Object doInBackground(Object... params) {
-            try {
-                AuthorizationManager.getFacebook().logout(getActivity().getApplicationContext());
-            } catch (Exception e) {
-                Debug.error(e);
-            }
-            return null;
-        }
-    }
-
     private void unlock() {
         if (mLockerView != null) {
             mLockerView.setVisibility(View.GONE);
         }
     }
-
-
 }
