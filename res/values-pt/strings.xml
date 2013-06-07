@@ -463,6 +463,7 @@
     <string name="general_complain_sended">A sua queixa foi enviada, muito obrigado pela ajuda</string>
     <string name="general_complain">Queixa</string>
     <string name="general_msg">Mensagem</string>
+    <string name="general_no_notifications">Infelizmente, as notificações no seu dispositivo não estão disponíveis</string>
     <string name="general_bookmarks_add_short">Aos favoritos</string>
     <string name="black_list_add_short">Na lista negra</string>
     <string name="general_complaint">Queixar-se</string>
@@ -473,4 +474,6 @@
     <string name="general_bookmarks_is_deleted">O usuário foi removido dos favoritos</string>
     <string name="general_blacklist_is_deleted">O usuário foi removido da lista negra</string>
     <string name="invite_friends_title_short">Convidar todos os amigos à Topface</string>
+    <string name="general_exit">Sair</string>
+    <string name="likes_can_help_you">Simpatias ajudarão travar conhecimentos</string>
 </resources>

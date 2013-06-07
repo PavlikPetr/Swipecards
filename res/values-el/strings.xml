@@ -434,6 +434,9 @@
     </plurals>
     <string name="filter_hint">Εισάγετε το όνομα</string>
     <string name="buy_status_and_watch_your_fans">Αγοράστε την κατάστασή VIP και ανακαλύψτε, ποιος σας έχει προσθέσει  στις αγαπημένες του?</string>
+    <string name="add_bookmarks_to_be_connected">Προσθέστε νέους ανθρώπους σε αυτό το τμήμα, και ποτέ δεν θα χάσετε την επαφή μαζί τους</string>
+    <string name="nobody_chat_with_you_sympathies_will_help">Κανείς δεν σας έγραψε ακόμα. Οι συμπάθειες σας βοηθούν να βρείτε κάποιον για επικοινωνία</string>
+    <string name="rate_and_have_mutual_or_buy_and_chat">Βάλτε συμπάθειες σε εκείνους που σας αρέσουν και πάρτε αμοιβαίες συμπάθειες. \'Η αγοράστε συμπάθειες  και αρχίστε την επικοινωνία με ανθρώπους που σας αρέσουν!</string>
     <string name="start_rate">Ξεκινήστε την αξιολόγηση</string>
     <string name="with_vip_find_your_visitors">Με την VIP-κατάσταση θα ξέρετε ποιος ήρθαν στη σελίδα σας</string>
     <string name="on_avatar">Στον Άβαταρ</string>
@@ -466,11 +469,12 @@
     <string name="general_bookmarks_add_short">Στις αγαπημένες σας</string>
     <string name="black_list_add_short">Στη μαύρη λίστα</string>
     <string name="general_complaint">Καταγγελία</string>
-    <string name="general_type_complain">Το θέμα της καταγγελίας</string>
+    <string name="general_type_complain">Θέμα καταγγελιών</string>
     <string name="confirm_email_for_dating">Είμαστε αντίθετοι με την τοποθέτηση  spam.Επιβεβαιώστε το email  για να εξοικείωσετε στο Topface!</string>
     <string name="confirm">Επιβεβαιώστε</string>
     <string name="complain_type_swearing_msg">Ευγένειας, απειλές, ύβρεις</string>
     <string name="general_bookmarks_is_deleted">Ο χρήστης διαγράφεται από τα αγαπημένες</string>
     <string name="general_blacklist_is_deleted">Ο χρήστης διαγράφεται από τη μαύρη λίστα</string>
     <string name="invite_friends_title_short">Προσκαλέστε όλους τους φίλους σας στο Topface!</string>
+    <string name="general_exit">Έξοδος</string>
 </resources>
