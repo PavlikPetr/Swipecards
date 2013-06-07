@@ -14,12 +14,14 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.Leader;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -93,8 +95,7 @@ public class LeadersDialog extends DialogFragment {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                startActivity(ContainerActivity.getProfileIntent(user.id, getActivity()));
+                startActivity(ContainerActivity.getProfileIntent(user.id, LeadersDialog.class, getActivity()));
             }
         });
 
@@ -102,15 +103,21 @@ public class LeadersDialog extends DialogFragment {
         message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ContainerActivity.class);
-                intent.putExtra(ChatFragment.INTENT_USER_ID, user.id);
-                intent.putExtra(ChatFragment.INTENT_USER_NAME,user.first_name);
-                intent.putExtra(ChatFragment.INTENT_USER_SEX, user.sex);
-                intent.putExtra(ChatFragment.INTENT_USER_AGE, user.age);
-                intent.putExtra(ChatFragment.INTENT_USER_CITY, user.city.name);
-                intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
-                getActivity().startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
+                openChat();
             }
         });
+        message.setVisibility((CacheProfile.premium || !CacheProfile.getOptions().block_chat_not_mutual) ? View.VISIBLE : View.GONE);
+    }
+
+    private void openChat() {
+        Intent intent = new Intent(getActivity(), ContainerActivity.class);
+        intent.putExtra(ChatFragment.INTENT_USER_ID, user.id);
+        intent.putExtra(ChatFragment.INTENT_USER_NAME,user.first_name);
+        intent.putExtra(ChatFragment.INTENT_USER_SEX, user.sex);
+        intent.putExtra(ChatFragment.INTENT_USER_AGE, user.age);
+        intent.putExtra(ChatFragment.INTENT_USER_CITY, user.city.name);
+        intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
+        getActivity().startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
+        EasyTracker.getTracker().trackEvent("Leaders", "Dialog", "Chat", 1L);
     }
 }

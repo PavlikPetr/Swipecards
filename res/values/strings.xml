@@ -482,9 +482,16 @@
     <string name="general_exit">Exit</string>
     <string name="likes_can_help_you">Likes help you meet people</string>
     <string name="general_get_dating">Meet</string>
-    <string name="general_blacklist_is_deleted">User deleted from black list</string>
-    <string name="invite_friends_wtitle_short">Invite all your friends to Topface</string>
-    <string name="settings_select_language">Select language</string>
+    <string name="settings_select_language">Select application language</string>
     <string name="restart_to_change_locale">Application will be restarted to change language</string>
     <string name="locale_changing">Changing the language</string>
+    <plurals name="you_was_liked">
+        <item quantity="other">%d people liked you</item>
+        <item quantity="one">%d person liked you1</item>
+    </plurals>
+    <string name="to_see_likes_by_vip">To find out right now who likes you, activate a VIP- account</string>
+    <string name="or">or</string>
+    <string name="watch_likes_on_dating">Browse likes on the dating screen, they may be at the top of the list</string>
+    <string name="make_acquaintance">Get acquainted</string>
+    <string name="chat_block_not_mutual">You can only start chatting with a user if he sent you a like or you have VIP- status</string>
 </resources>

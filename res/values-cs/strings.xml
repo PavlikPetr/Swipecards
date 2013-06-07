@@ -486,4 +486,17 @@
     <string name="general_bookmarks_is_deleted">Uživatel byl odstraněn z oblíbených</string>
     <string name="general_blacklist_is_deleted">Uživatel byl odstraněn z černé listiny</string>
     <string name="invite_friends_title_short">Pozvat všechny přátele na Topface</string>
+    <string name="general_exit">Odejít</string>
+    <string name="likes_can_help_you">Sympatie pomáhají se seznámit</string>
+    <string name="general_get_dating">Seznámit se</string>
+    <string name="settings_select_language">Výběr jazyka aplikace</string>
+    <string name="restart_to_change_locale">Ke změně jazyka bude aplikace restartována</string>
+    <string name="locale_changing">Změna jazyka</string>
+    <plurals name="you_was_liked">
+        <item quantity="other">Líbíte se %d lidem</item>
+        <item quantity="one">Líbíte se %d člověku</item>
+    </plurals>
+    <string name="to_see_likes_by_vip">Abyste ihned zjistili, komu se líbíte, aktivujte VIP-účet</string>
+    <string name="or">nebo</string>
+    <string name="make_acquaintance">Seznámit se</string>
 </resources>

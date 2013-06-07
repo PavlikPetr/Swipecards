@@ -3,6 +3,7 @@
     <string name="time_now">Právě teď</string>
     <plurals name="time_hour">
         <item quantity="few">před %d hodinami</item>
+        <item quantity="zero">méně, než před hodinou</item>
         <item quantity="other">před %d hodinami</item>
         <item quantity="one">před %d hodinou</item>
     </plurals>
