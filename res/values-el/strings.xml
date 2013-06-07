@@ -477,4 +477,5 @@
     <string name="general_blacklist_is_deleted">Ο χρήστης διαγράφεται από τη μαύρη λίστα</string>
     <string name="invite_friends_title_short">Προσκαλέστε όλους τους φίλους σας στο Topface!</string>
     <string name="general_exit">Έξοδος</string>
+    <string name="general_get_dating">Εξοικειωθείτε</string>
 </resources>

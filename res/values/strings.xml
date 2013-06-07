@@ -486,8 +486,8 @@
     <string name="restart_to_change_locale">Application will be restarted to change language</string>
     <string name="locale_changing">Changing the language</string>
     <plurals name="you_was_liked">
-        <item quantity="other">%d people liked you</item>
-        <item quantity="one">%d person liked you</item>
+        <item quantity="other">% people liked you</item>
+        <item quantity="one">% person liked you</item>
     </plurals>
     <string name="to_see_likes_by_vip">To find out right now who likes you, activate a VIP- account</string>
     <string name="or">or</string>
