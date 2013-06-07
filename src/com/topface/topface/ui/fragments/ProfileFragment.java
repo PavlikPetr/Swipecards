@@ -253,7 +253,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         actions.add(new UserActions.ActionItem(R.id.acChat, this));
         actions.add(new UserActions.ActionItem(R.id.acBlock, this));
         actions.add(new UserActions.ActionItem(R.id.acComplain, this));
-
+        actions.add(new UserActions.ActionItem(R.id.acBookmark, this));
         new UserActions(mUserActions, actions);
     }
 
