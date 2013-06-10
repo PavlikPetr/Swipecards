@@ -82,4 +82,9 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     protected int getTypeForCounters() {
         return CountersManager.VISITORS;
     }
+
+    @Override
+    protected boolean isForPremium() {
+        return true;
+    }
 }

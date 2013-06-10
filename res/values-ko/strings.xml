@@ -437,14 +437,36 @@
     <string name="incorrect_photo_format">사진의 형식이 옳지 않습니다. jpg 또는 png 파일을 로딩하여 주십시오.</string>
     <string name="incorrect_photo_size">사진의 용량이 너무 큽니다.</string>
     <string name="input_contact_name">연락처 이름을 입력하여 주십시오.</string>
+    <string name="incorrect_locale">당신의 불만 사항을 저희 톱페이스 팀에서 읽어볼 수 있게 러시아어 또는 영어로 작성 바랍니다.</string>
     <string name="complain_photo_header">옳지 않은 형식의 사진</string>
     <string name="complain_msg_header">옳지 않은 형식의 메세지</string>
     <string name="complain_info_header">옳지 않은 형식의 정보</string>
+    <string name="complain_type_porn">포르노(선정성)</string>
     <string name="complain_type_ero">메인 사진의 선정성</string>
     <string name="complain_type_picture">그림</string>
     <string name="complain_type_fake_user">유명인</string>
+    <string name="complain_type_spam_msg">상업적 광고, 스팸, 광고, 타 사이트로 연결하는 링크, 전화</string>
+    <string name="complain_type_spam_profile">\"상태\" \"자신에 관해\" 항목에 상업적인 내용이 있습니다.</string>
+    <string name="complain_type_swearing_profile">\"상태\" 및 \"자신에 대한\" 항목에서 비방,욕설, 위협적인 내용이 포함되어 있습니다.</string>
     <string name="complain_type_fake_data">이름, 성별, 나이 및 사진이 일치하지 않습니다.</string>
     <string name="complain_description">불만의 원인에 대해 상세히 이야기 해주세요.</string>
+    <string name="general_complain_sended">당신의 불만 사항이 접수 되었습니다. 도움을 주셔서 대단히 감사합니다.</string>
+    <string name="general_complain">불만</string>
+    <string name="general_msg">메세지</string>
+    <string name="general_no_notifications">유감스럽게도  통지서 받기 설정을 이용 불가능으로 해놓으셨습니다.</string>
+    <plurals name="vip_add_more_friends">
+        <item quantity="other">아직  %d의 친구들을 초대하여 보세요.</item>
+    </plurals>
+    <string name="general_bookmarks_add_short">북마크로</string>
     <string name="black_list_add_short">블랙 리스트로</string>
+    <string name="general_complaint">불만 토로하기</string>
+    <string name="general_type_complain">불만 주제</string>
+    <string name="confirm_email_for_dating">톱페이스에서는 스팸을 금지하고 있습니다. Topface를 계속 사용하기 위해서 자신의 이메일을 확인 해주십시오.</string>
     <string name="confirm">확인하기</string>
+    <string name="complain_type_swearing_msg">비방, 욕설, 위협</string>
+    <string name="general_bookmarks_is_deleted">사용자가 북마크에서 제거 되었습니다.</string>
+    <string name="general_blacklist_is_deleted">사용자가 블랙리스트에서 제거 되었습니다.</string>
+    <string name="invite_friends_title_short">전체 친구를 Topface로 초대하기</string>
+    <string name="general_exit">나가기</string>
+    <string name="likes_can_help_you">호감도는 당신이 타인과 만날 수 있게 도와 줍니다.</string>
 </resources>

@@ -33,8 +33,10 @@ abstract public class ApiHandler extends Handler {
                 } else if (response.code == ApiResponse.PREMIUM_ACCESS_ONLY) {
                     Debug.error(App.getContext().getString(R.string.general_premium_access_error));
 
-                    //Сообщение о необходимости Премиум-статуса
-                    showToast(R.string.general_premium_access_error);
+                    if (isShowPremiumError()) {
+                        //Сообщение о необходимости Премиум-статуса
+                        showToast(R.string.general_premium_access_error);
+                    }
 
                     fail(response.code, response);
                 } else if (response.isCodeEqual(IApiResponse.UNCONFIRMED_LOGIN)) {
@@ -123,5 +125,9 @@ abstract public class ApiHandler extends Handler {
 
     protected Context getContext() {
         return mContext;
+    }
+
+    protected boolean isShowPremiumError() {
+        return true;
     }
 }

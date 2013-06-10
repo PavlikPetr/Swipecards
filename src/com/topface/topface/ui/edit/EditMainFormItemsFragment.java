@@ -403,7 +403,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
     }
 
     private boolean isNameValid(String name) {
-        return !name.equals("");
+        return !name.trim().equals("");
     }
 
     @Override

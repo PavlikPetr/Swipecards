@@ -34,7 +34,10 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryViewCreator;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Utils;
 import org.json.JSONObject;
 
 import static android.widget.AdapterView.OnItemClickListener;
@@ -459,7 +462,15 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 }
             }
 
+            @Override
+            protected boolean isShowPremiumError() {
+                return !isForPremium();
+            }
         }).exec();
+    }
+
+    protected boolean isForPremium() {
+        return false;
     }
 
     private void showUpdateErrorMessage(int codeError) {
