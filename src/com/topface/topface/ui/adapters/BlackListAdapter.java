@@ -1,12 +1,9 @@
 package com.topface.topface.ui.adapters;
 
 import android.content.Context;
-import android.util.SparseArray;
+import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import com.topface.topface.R;
@@ -19,11 +16,9 @@ public class BlackListAdapter extends FeedAdapter<BlackListItem> {
     public static final int LIMIT = 100;
 
     public static final int ITEM_LAYOUT = R.layout.item_feed_black_list;
-    public static final int ANIMATION_DURATION = 250;
     public static final float TO_X_DELTA = 80f;
     private boolean mEditMode;
-    private boolean mFirstRun = true;
-    private SparseArray<Boolean> mItemsForDelete = new SparseArray<Boolean>();
+    private SparseBooleanArray mItemsForDelete = new SparseBooleanArray();
 
     public BlackListAdapter(Context context, Updater updateCallback) {
         super(context, updateCallback);
@@ -50,7 +45,6 @@ public class BlackListAdapter extends FeedAdapter<BlackListItem> {
     }
 
     public void toggleEditMode() {
-        mFirstRun = false;
 
         mEditMode = !mEditMode;
         notifyDataSetChanged();
@@ -64,8 +58,6 @@ public class BlackListAdapter extends FeedAdapter<BlackListItem> {
     protected View getContentView(int position, View convertView, ViewGroup viewGroup) {
         convertView = super.getContentView(position, convertView, viewGroup);
         final FeedViewHolder holder = (FeedViewHolder) convertView.getTag();
-
-        final BlackListItem like = getItem(position);
 
         if (mItemsForDelete.get(position, false)) {
             holder.deleteIndicator.setImageResource(R.drawable.ic_delete_cross_pressed);
@@ -82,23 +74,7 @@ public class BlackListAdapter extends FeedAdapter<BlackListItem> {
 
         holder.dataLayout.setLayoutParams(params);
 
-        //Показываем анимацию только при переключении, а не при изначальной загрузке
-        if (!mFirstRun) {
-            //setAnimation(holder);
-        }
-
         return convertView;
-    }
-
-    private void setAnimation(final FeedViewHolder holder) {
-        Animation animation = isEditMode() ?
-                new TranslateAnimation(0f, TO_X_DELTA, 0f, 0f) :
-                new TranslateAnimation(TO_X_DELTA, 0f, 0, 0f);
-        animation.setInterpolator(new AccelerateInterpolator());
-        animation.setFillAfter(true);
-        animation.setDuration(ANIMATION_DURATION);
-
-        holder.dataLayout.setAnimation(animation);
     }
 
     @Override
@@ -115,7 +91,7 @@ public class BlackListAdapter extends FeedAdapter<BlackListItem> {
         if (data.hasItem(id) && !mItemsForDelete.get(id, false)) {
             mItemsForDelete.put(id, true);
         } else {
-            mItemsForDelete.remove(id);
+            mItemsForDelete.delete(id);
         }
         notifyDataSetChanged();
     }
@@ -131,7 +107,6 @@ public class BlackListAdapter extends FeedAdapter<BlackListItem> {
     public void removeDeleted() {
         FeedList<BlackListItem> data = getData();
         for (int i = 0; i < mItemsForDelete.size(); i++) {
-            boolean result = false;
             if (data.hasItem(mItemsForDelete.keyAt(i))) {
                 data.remove(mItemsForDelete.keyAt(i));
             }
@@ -157,5 +132,10 @@ public class BlackListAdapter extends FeedAdapter<BlackListItem> {
                 return result;
             }
         };
+    }
+
+    @Override
+    public int getLimit() {
+        return LIMIT;
     }
 }

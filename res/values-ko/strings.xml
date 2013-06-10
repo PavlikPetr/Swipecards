@@ -20,7 +20,6 @@
     <string name="general_data_error">에러입니다. 다시 한번 시도해주세요.</string>
     <string name="general_internet_off">인터넷에 연결되지 않았습니다.</string>
     <string name="general_purchasing_error">구입 에러 발생시 support@topface.ru 로 연락바랍니다.</string>
-    <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">텍스트가 복사되었습니다.</string>
     <string name="general_spinner_title">다음 행동을 선택하세요.</string>
     <string name="general_profile_error">프로필 로딩 에러입니다.</string>
@@ -103,7 +102,6 @@
     <string name="edit_bg_photo">배경 사진</string>
     <string name="edit_album">앨범</string>
     <string name="edit_profile_photo">사진 변경하기</string>
-    <string name="edit_album_photos">사진</string>
     <string name="edit_interests">취미, 관심거리</string>
     <string name="edit_selected">선택되었습니다.</string>
     <string name="edit_name">이름</string>
@@ -113,10 +111,10 @@
     <string name="edit_delete">삭제하기</string>
     <string name="edit_restore">저장하기</string>
     <string name="album_add_photo_title">사진을 추가하세요.</string>
-    <string name="gifts_romantic">로맨틱한</string>
-    <string name="gifts_friends">친구들의</string>
+    <string name="gifts_romantic">로맨틱</string>
+    <string name="gifts_friends">우정</string>
     <string name="gifts">선물</string>
-    <string name="gifts_present">축하하는</string>
+    <string name="gifts_present">축하</string>
     <string name="gifts_title">선물을 선택하기</string>
     <string name="gifts_send_btn">선물을 보내기</string>
     <string name="map_location_progress">현재 위치를 설정합니다.</string>
@@ -137,10 +135,6 @@
     <string name="invite_is_free">초대장 전송은 무료입니다.</string>
     <string name="invite_error">메세지 전송에 실패하였습니다. 한번 더 시도해 보세요.</string>
     <string name="invite_completed">메세지를 전송하였습니다.</string>
-    <plurals name="invite_bonus_text">
-        <item quantity="zero">친구를 초대할때마다 한명당 20을 받습니다.</item>
-        <item quantity="other">%2$d 의 친구들에게 초대장을 보내면  %1$d 을 받게 됩니다.</item>
-    </plurals>
     <string name="settings_header_title">설정</string>
     <string name="settings_wifi">Wi-Fi만 연결</string>
     <string name="settings_on">셋팅 켜기</string>
@@ -262,7 +256,7 @@
     <string name="profile_mood">당신의 기분에 대해서 적어주세요.</string>
     <string name="general_reconnect">인터넷에 재연결을 시도하고 있습니다. n\ 잠시만 기다려 주십시오.</string>
     <string name="dating_people_unnoticed">아직 10명의 사람들에게 관심을 끌지 못했습니다.</string>
-    <string name="dating_continue">계속 평가하기</string>
+    <string name="dating_continue">교제 계속 진행하기</string>
     <string name="dating_better_look">주의 깊게 보세요!\n 당신의 운명의 상대를 놓쳤을 수도 있습니다!</string>
     <string name="edit_my_city">내 도시</string>
     <string name="edit_my_photos">내 사진</string>
@@ -303,7 +297,7 @@
     <string name="leaders_select_photo_info">가장 자신이 잘 나온 사진을 선택해 주세요! 낮은 순위의 사진은 선택할 수 없습니다.</string>
     <string name="default_price_format">전체 금액은 %.2f USD 입니다.</string>
     <string name="dating_online_only">%s, 온라인 상태의 유저들만.</string>
-    <string name="leaders_pick_condition">%d%% 이하의 사진은 선택할 수 없습니다:</string>
+    <string name="leaders_pick_condition">%d%% 이하의 사진은 선택할 수 없습니다.</string>
     <string name="map_popup_address">주소</string>
     <string name="black_list_info">당신은 블랙 리스트에 이웃을 추가하였습니다. VIP상태 설정의 프로필에서 해당 사항을 변경할 수 있습니다.</string>
     <string name="general_gift">선물</string>
@@ -381,4 +375,98 @@
     <string name="upload_photos">사진을 업로드해주세요</string>
     <string name="chat_no_message_title">교제를 시작해 보세요!</string>
     <string name="chat_no_message_text">상대에게 메세지를 전송하거나 선물을 해보세요. 상대도 반드시 그에 응답할것입니다.</string>
+    <string name="user_baned">해당 사용자가 이용정지 되었습니다.</string>
+    <string name="general_choose_city">도시를 선택하여 주세요</string>
+    <string name="buy_mobile_payments">다른 결제 방법</string>
+    <string name="buy_mobile_payments_complete">결제가 완료되었습니다.  결제 과정을 처리중에 있으니 잠시만 기다려 주십시오.</string>
+    <string name="general_save_and_exit">저장하고 나가기</string>
+    <string name="general_set_password">어플 종료전 비밀번호를 설정해주세요</string>
+    <string name="user_is_deleted">해당 사용자 계정이 삭제 되었습니다.</string>
+    <string name="general_bookmarks_title">북마크</string>
+    <string name="general_empty_bookmarks">북마크가 비어 있습니다.</string>
+    <string name="general_bookmarks">북마크</string>
+    <string name="general_fans">팬들</string>
+    <string name="general_no_fans">팬이 없습니다.</string>
+    <plurals name="get_free_money">
+        <item quantity="other">%d 코인은 무료입니다.</item>
+    </plurals>
+    <string name="settings_edit_profile">프로필 편집하기</string>
+    <string name="general_bookmarks_delete">북마크에서 삭제하기</string>
+    <string name="general_bookmarks_add">북마크에 추가하기</string>
+    <string name="buy_resources">충전하기</string>
+    <string name="general_network_reconnect">네트워크 연결을 재 시도중입니다.</string>
+    <string name="user_is_banned">해당 사용자가 이용정지 되었습니다.</string>
+    <string name="profile_empty_name">이름 항목은 반드시 작성하여야 합니다.</string>
+    <string name="general_user_bookmarkadd">사용자가 북마크에 추가 되었습니다.</string>
+    <string name="general_wrong_photo_upload">해당 사진이 톱페이스 규칙에 위배 됩니다. 다른 사진으로 시도해 주십시오.</string>
+    <string name="general_input_email">이메일을 입력하십시오</string>
+    <string name="cant_delete_fake_item">해당 메세지가 아직 전송되지 않았으므로 삭제할 수 없습니다. 나중에 다시 시도해 주십시오.</string>
+    <string name="vip_stop_ads">전체적인 부분에 필요 없는 항목은 없습니다. Vip 사용자는 광고 배너가 없습니다.</string>
+    <string name="settings_invalid_name">이름 항목에 기호가 옳지 않은 기호가 포함되어 있습니다.</string>
+    <string name="general_fan_access_error">자신의 팬을 이용하기 위해서 VIP 상태에 필수적으로 가입되어 있어야 합니다.</string>
+    <string name="friend_email_hint">다른 e-mail 입력하기</string>
+    <string name="general_add">추가하기</string>
+    <string name="general_invite_friends">친구들을 초대해 주세요.</string>
+    <string name="general_rest_contacts">%d 연락처만 남았습니다.</string>
+    <string name="invite_friends_title">Topface에 모든 친구들을 초대해 보세요.</string>
+    <string name="invalid_contacts">몇몇의 연락처가 옳지 않습니다. 옳바른 연락처로 기입바랍니다.</string>
+    <string name="general_choose_action">다음 행동을 선택하여 주세요.</string>
+    <plurals name="vip_status_period">
+        <item quantity="other">%d일간 이용할 수 있는 VIP 상태를 받으셨습니다.</item>
+    </plurals>
+    <plurals name="vip_status_period_btn">
+        <item quantity="other">%d일간 이용할 수 있는 VIP 상태를 받기</item>
+    </plurals>
+    <plurals name="invite_friends_plurals">
+        <item quantity="other">VIP 등급을%2$d일간 이용하기 위해 %1$d 친구를 초대하여 보세요.</item>
+    </plurals>
+    <plurals name="get_vip_for_invites_plurals">
+        <item quantity="other">%d 초대하여 VIP를 무료로 받아 보세요</item>
+    </plurals>
+    <string name="filter_hint">이름을 입력하십시오.</string>
+    <string name="buy_status_and_watch_your_fans">VIP 상태를 구입하여 누가 당신의 팬인지 알아보세요.</string>
+    <string name="add_bookmarks_to_be_connected">새롭게 만난 사람들을 이곳에 추가하여 지속적인 관계를 유지하여 보세요.</string>
+    <string name="nobody_chat_with_you_sympathies_will_help">아직 당신에게 보내온 메세지가 없습니다. 호감도가 아마도 대화 상대를 찾아줄 수 있을것 같군요.</string>
+    <string name="rate_and_have_mutual_or_buy_and_chat">당신의 마음에 들어하는 상대에게 호감도를 보내고 상대방에게도 받아보세요. 또는 호감도를 구입하여 당신의 마음에 들어하는 상대와 대화를 할 수 있습니다.</string>
+    <string name="start_rate">평가 시작하기</string>
+    <string name="with_vip_find_your_visitors">VIP 상태를 이용하면 누가 당신의 페이지에 왔었는지 알 수 있습니다.</string>
+    <string name="on_avatar">아바타로</string>
+    <string name="your_avatar">당신의 아바타.</string>
+    <string name="avatar_set_successfully">아바타가 성공적으로 설치되었습니다.</string>
+    <string name="incorrect_photo">해당 사진이 옳지 않습니다. 다른 사진을 선택하여 주십시오.</string>
+    <string name="incorrect_photo_format">사진의 형식이 옳지 않습니다. jpg 또는 png 파일을 로딩하여 주십시오.</string>
+    <string name="incorrect_photo_size">사진의 용량이 너무 큽니다.</string>
+    <string name="input_contact_name">연락처 이름을 입력하여 주십시오.</string>
+    <string name="incorrect_locale">당신의 불만 사항을 저희 톱페이스 팀에서 읽어볼 수 있게 러시아어 또는 영어로 작성 바랍니다.</string>
+    <string name="complain_photo_header">옳지 않은 형식의 사진</string>
+    <string name="complain_msg_header">옳지 않은 형식의 메세지</string>
+    <string name="complain_info_header">옳지 않은 형식의 정보</string>
+    <string name="complain_type_porn">포르노(선정성)</string>
+    <string name="complain_type_ero">메인 사진의 선정성</string>
+    <string name="complain_type_picture">그림</string>
+    <string name="complain_type_fake_user">유명인</string>
+    <string name="complain_type_spam_msg">상업적 광고, 스팸, 광고, 타 사이트로 연결하는 링크, 전화</string>
+    <string name="complain_type_spam_profile">\"상태\" \"자신에 관해\" 항목에 상업적인 내용이 있습니다.</string>
+    <string name="complain_type_swearing_profile">\"상태\" 및 \"자신에 대한\" 항목에서 비방,욕설, 위협적인 내용이 포함되어 있습니다.</string>
+    <string name="complain_type_fake_data">이름, 성별, 나이 및 사진이 일치하지 않습니다.</string>
+    <string name="complain_description">불만의 원인에 대해 상세히 이야기 해주세요.</string>
+    <string name="general_complain_sended">당신의 불만 사항이 접수 되었습니다. 도움을 주셔서 대단히 감사합니다.</string>
+    <string name="general_complain">불만</string>
+    <string name="general_msg">메세지</string>
+    <string name="general_no_notifications">유감스럽게도  통지서 받기 설정을 이용 불가능으로 해놓으셨습니다.</string>
+    <plurals name="vip_add_more_friends">
+        <item quantity="other">아직  %d의 친구들을 초대하여 보세요.</item>
+    </plurals>
+    <string name="general_bookmarks_add_short">북마크로</string>
+    <string name="black_list_add_short">블랙 리스트로</string>
+    <string name="general_complaint">불만 토로하기</string>
+    <string name="general_type_complain">불만 주제</string>
+    <string name="confirm_email_for_dating">톱페이스에서는 스팸을 금지하고 있습니다. Topface를 계속 사용하기 위해서 자신의 이메일을 확인 해주십시오.</string>
+    <string name="confirm">확인하기</string>
+    <string name="complain_type_swearing_msg">비방, 욕설, 위협</string>
+    <string name="general_bookmarks_is_deleted">사용자가 북마크에서 제거 되었습니다.</string>
+    <string name="general_blacklist_is_deleted">사용자가 블랙리스트에서 제거 되었습니다.</string>
+    <string name="invite_friends_title_short">전체 친구를 Topface로 초대하기</string>
+    <string name="general_exit">나가기</string>
+    <string name="likes_can_help_you">호감도는 당신이 타인과 만날 수 있게 도와 줍니다.</string>
 </resources>

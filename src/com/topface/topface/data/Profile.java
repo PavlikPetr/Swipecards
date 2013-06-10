@@ -1,25 +1,26 @@
 package com.topface.topface.data;
 
 import android.content.Context;
+import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.FormInfo;
-import com.topface.topface.utils.FormItem;
-import com.topface.topface.utils.Novice;
+import com.topface.topface.utils.*;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 
 /* Класс профиля владельца устройства */
 public class Profile extends AbstractDataWithPhotos {
+
+    private static String[] EMPTY_STATUSES = {Static.EMPTY, "-", "."};
+
 
     public int uid; // id пользователя в топфейсе
     public String first_name; // имя пользователя
@@ -43,23 +44,32 @@ public class Profile extends AbstractDataWithPhotos {
     public boolean invisible;
     public boolean inBlackList;
 
-    public String status; // статус пользователя
+    protected String status; // статус пользователя
 
     public LinkedList<FormItem> forms = new LinkedList<FormItem>();
 
     public ArrayList<Gift> gifts = new ArrayList<Gift>();
-    public HashMap<Integer, TopfaceNotifications> notifications = new HashMap<Integer, TopfaceNotifications>();
+    public SparseArrayCompat<TopfaceNotifications> notifications = new SparseArrayCompat<TopfaceNotifications>();
     public boolean hasMail;
     public boolean email_grabbed;
     public boolean email_confirmed;
+    public int xstatus;
 
     public int totalPhotos;
-
+    // Идентификатор заднего фона в профиле
     public int background;
-
+    // Платяший пользователь или нет
     public boolean paid;
+    // Показывать рекламу или нет
+    public boolean show_ad;
+    public boolean isGcmSupported;
+    /**
+     * Флаг того, является ли пользоветль редактором
+     */
+    private boolean mEditor;
     // private static final String profileFileName = "profile.out";
     // private static final long serialVersionUID = 2748391675222256671L;
+    public boolean canInvite;
 
     public static Profile parse(ApiResponse response) {
         return parse(new Profile(), response.jsonResult);
@@ -79,7 +89,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.uid = resp.optInt("id");
             profile.age = resp.optInt("age");
             profile.sex = resp.optInt("sex");
-            profile.status = resp.optString("status");
+            profile.status = normilizeStatus(resp.optString("status"));
             profile.first_name = resp.optString("first_name");
             profile.inBlackList = resp.optBoolean("in_blacklist");
             profile.city = new City(resp.optJSONObject("city"));
@@ -90,6 +100,10 @@ public class Profile extends AbstractDataWithPhotos {
             profile.background = resp.optInt("background", ProfileBackgrounds.DEFAULT_BACKGROUND_ID);
             profile.totalPhotos = resp.optInt("photos_count");
             profile.paid = resp.optBoolean("paid");
+            profile.show_ad = resp.optBoolean("show_ad",true);
+            profile.xstatus = resp.optInt("xstatus");
+            profile.canInvite = resp.optBoolean("can_invite");
+            profile.setEditor(resp.optBoolean("editor", false));
 
             parseGifts(profile, resp);
             parseNotifications(profile, resp);
@@ -123,24 +137,6 @@ public class Profile extends AbstractDataWithPhotos {
             formInfo.fillFormItem(headerItem);
             profile.forms.add(headerItem);
 
-            // personal status
-            String status = profile.status;
-            if (status != null) {
-                if (isUserProfile && status.trim().length() == 0) {
-                    status = null;
-                }
-            }
-            formItem = new FormItem(R.array.form_main_personal_status, status,
-                    isUserProfile ? FormItem.DATA : FormItem.STATUS, headerItem);
-            formInfo.fillFormItem(formItem);
-            if (isUserProfile) {
-                if (status != null)
-                    profile.forms.add(formItem);
-            } else {
-                profile.forms.add(formItem);
-            }
-
-
             if (!resp.isNull("email")) {
                 profile.hasMail = resp.optBoolean("email");
             }
@@ -151,6 +147,22 @@ public class Profile extends AbstractDataWithPhotos {
 
             if (!resp.isNull("email_confirmed")) {
                 profile.email_confirmed = resp.optBoolean("email_confirmed");
+            }
+
+            // 1.2 xstatus position -1
+            formItem = new FormItem(R.array.form_main_status, profile.xstatus,
+                    FormItem.DATA, headerItem);
+            formInfo.fillFormItem(formItem);
+            if (isUserProfile) {
+                formItem.equal = profile.xstatus == CacheProfile.xstatus;
+                if (formItem.dataId > 0) {
+                    profile.forms.add(formItem);
+                    if (formItem.equal) {
+                        ((User) profile).formMatches++;
+                    }
+                }
+            } else {
+                profile.forms.add(formItem);
             }
 
             // 2 character position 0
@@ -182,6 +194,18 @@ public class Profile extends AbstractDataWithPhotos {
             headerItem = new FormItem(R.string.form_physique, FormItem.HEADER);
             formInfo.fillFormItem(headerItem);
             profile.forms.add(headerItem);
+
+            // 11 breast position 7
+            if (profile.sex == Static.GIRL) {
+                formItem = new FormItem(R.array.form_physique_breast, form.optInt("breast_id"),
+                        FormItem.DATA, headerItem);
+                formInfo.fillFormItem(formItem);
+                if (isUserProfile) {
+                    compareFormItemData(formItem, profile, false);
+                } else {
+                    profile.forms.add(formItem);
+                }
+            }
 
             // 6 fitness position 2
             formItem = new FormItem(R.array.form_physique_fitness, form.optInt("fitness_id"),
@@ -418,18 +442,6 @@ public class Profile extends AbstractDataWithPhotos {
             if (!resp.isNull("photos_count")) {
                 profile.totalPhotos = resp.optInt("photos_count");
             }
-            // newbie
-            // if (!resp.isNull("flags")) {
-            // JSONArray flags = resp.getJSONArray("flags");
-            // for (int i = 0; i < flags.length(); i++) {
-            // profile.isNewbie = true;
-            // String item = flags.getString(i);
-            // if (item.equals("NOVICE_ENERGY")) {
-            // profile.isNewbie = false;
-            // break;
-            // }
-            // }
-            // }
         }
     }
 
@@ -462,11 +474,15 @@ public class Profile extends AbstractDataWithPhotos {
     public String getNameAndAge() {
         String result;
         if (first_name != null && first_name.length() > 0 && age > 0) {
-            result = String.format("%s, %d", first_name, age);
+            result = first_name + ", " + age;
         } else {
             result = first_name;
         }
         return result;
+    }
+
+    public void setEditor(boolean editor) {
+        mEditor = editor;
     }
 
     public static class TopfaceNotifications {
@@ -479,6 +495,35 @@ public class Profile extends AbstractDataWithPhotos {
             this.mail = mail;
             this.type = type;
         }
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = normilizeStatus(status);
+    }
+
+    public static String normilizeStatus(String status) {
+        if (status == null) {
+            return Static.EMPTY;
+        }
+        String result = status.trim();
+        for (String EMPTY_STATUS : EMPTY_STATUSES) {
+            if (EMPTY_STATUS.equals(result)) {
+                return Static.EMPTY;
+            }
+        }
+        return result.replaceAll("\n"," ");
+    }
+
+    public boolean isEmpty() {
+        return uid <= 0;
+    }
+
+    public boolean isEditor() {
+        return mEditor;
     }
 
 }

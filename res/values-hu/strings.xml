@@ -20,7 +20,6 @@
     <string name="general_data_error">Hiba. Próbálja meg újra</string>
     <string name="general_internet_off">Nincs internet kapcsolat</string>
     <string name="general_purchasing_error">Kérjük, írjon üzenetet a vásárlási hibáról support@topface.ru email-re</string>
-    <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">A szöveg másolva</string>
     <string name="general_spinner_title">Válaszon egy műveletet</string>
     <string name="general_profile_error">Profil feltöltés hiba</string>
@@ -103,7 +102,6 @@
     <string name="edit_bg_photo">Háttérkép</string>
     <string name="edit_album">Album</string>
     <string name="edit_profile_photo">Fotó módosítása</string>
-    <string name="edit_album_photos">Fotók</string>
     <string name="edit_interests">érdeklődések</string>
     <string name="edit_selected">Kijelölt</string>
     <string name="edit_name">Név</string>
@@ -113,10 +111,7 @@
     <string name="edit_delete">Eltávolít</string>
     <string name="edit_restore">Helyreállítás</string>
     <string name="album_add_photo_title">Kép hozzáadása</string>
-    <string name="gifts_romantic">Romantikus</string>
-    <string name="gifts_friends">Barátságos</string>
     <string name="gifts">Ajándék</string>
-    <string name="gifts_present">Üdvözlet</string>
     <string name="gifts_title">Válasszon ajándékot</string>
     <string name="gifts_send_btn">Küldjön ajándékot</string>
     <string name="map_location_progress">Hely meghatározás</string>
@@ -138,11 +133,6 @@
     <string name="invite_is_free">Meghívó küldése ingyenes</string>
     <string name="invite_error">Nem sikerült elküldeni a meghívókat. Próbáld újra</string>
     <string name="invite_completed">Meghívó elküldve</string>
-    <plurals name="invite_bonus_text">
-        <item quantity="zero">Hívd meg barátaidat, és kapj egyenként 20</item>
-        <item quantity="other">Meghívót fogsz küldeni %2$d barátodnak és kapsz érte %1$d</item>
-        <item quantity="one">Meghívót fogsz küldeni %2$d barátodnak és kapsz érte %1$d</item>
-    </plurals>
     <string name="settings_header_title">Beállítások</string>
     <string name="settings_wifi">Csak Wi-Fi-vel</string>
     <string name="settings_on">Bekapcsolt</string>
@@ -266,7 +256,6 @@
     <string name="profile_mood">Jellemezed a kedved</string>
     <string name="general_reconnect">Az internet kapcsolatot próbáljuk helyreállítani.\n Kérjük, várj.</string>
     <string name="dating_people_unnoticed">10 ember maradt a figyelmed nélkül!</string>
-    <string name="dating_continue">Értékelés folytatása</string>
     <string name="dating_better_look">Óvatosabban!\nTalán elszalasztod a sorsodat!</string>
     <string name="edit_my_city">Városom</string>
     <string name="edit_my_photos">Fényképeim</string>

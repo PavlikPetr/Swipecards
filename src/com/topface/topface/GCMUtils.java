@@ -3,11 +3,12 @@ package com.topface.topface;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.widget.ListView;
 import com.google.android.gcm.GCMRegistrar;
@@ -20,10 +21,7 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.ChatFragment;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.TopfaceNotificationManager;
+import com.topface.topface.utils.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,9 +42,10 @@ public class GCMUtils {
     public static final int GCM_TYPE_UPDATE = 5;
     public static final int GCM_TYPE_NOTIFICATION = 6;
 
-    public static final String NEXT_INTENT = "next";
+    public static final String NEXT_INTENT = "com.topface.topface_next";
 
     public static final int NOTIFICATION_CANCEL_DELAY = 2000;
+    public static final String IS_GCM_SUPPORTED = "IS_GCM_SUPPORTED";
 
     public static int lastNotificationType = GCM_TYPE_DIALOGS;
 
@@ -56,6 +55,8 @@ public class GCMUtils {
     private static boolean showLikes = true;
     private static boolean showSympathy = true;
     private static boolean showVisitors = true;
+    public static final String GCM_INTENT = "GCM";
+    public static boolean GCM_SUPPORTED = true;
 
     public static void init(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
@@ -78,6 +79,16 @@ public class GCMUtils {
                 }
 
             } catch (Exception ex) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit();
+                        editor.putString(IS_GCM_SUPPORTED, Boolean.toString(false));
+                        editor.commit();
+                    }
+                }).start();
+
+                GCM_SUPPORTED = false;
                 Debug.error("GCM not supported", ex);
             }
         }
@@ -116,7 +127,10 @@ public class GCMUtils {
                 Intent intent = getIntentByType(context, type, user);
 
                 if (intent != null) {
-                    intent.putExtra("C2DM", true);
+                    intent.putExtra(GCMUtils.GCM_INTENT, true);
+                    if (!TextUtils.equals(intent.getComponent().getClassName(), ContainerActivity.class.getName())) {
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    }
                     final TopfaceNotificationManager notificationManager = TopfaceNotificationManager.getInstance(context);
                     if (!Ssid.isLoaded()) {
                         if (type == GCM_TYPE_UPDATE || type == GCM_TYPE_NOTIFICATION) {
@@ -184,7 +198,7 @@ public class GCMUtils {
 
     private static void loadNotificationSettings() {
         if (CacheProfile.notifications != null) {
-            if (!CacheProfile.notifications.isEmpty()) {
+            if (CacheProfile.notifications.size() > 0) {
                 showMessage = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns;
                 showLikes = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns;
                 showSympathy = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns;
@@ -269,7 +283,7 @@ public class GCMUtils {
                 }
                 break;
             case GCM_TYPE_UPDATE:
-                i = new Intent(Intent.ACTION_VIEW, Uri.parse(context.getString(R.string.default_market_link)));
+                i = Utils.getMarketIntent(context);
                 break;
 
             case GCM_TYPE_NOTIFICATION:
@@ -290,7 +304,8 @@ public class GCMUtils {
             CountersManager.getInstance(context).setAllCounters(countersJson.optInt("unread_likes"),
                     countersJson.optInt("unread_sympaties"),
                     countersJson.optInt("unread_messages"),
-                    countersJson.optInt("unread_visitors"));
+                    countersJson.optInt("unread_visitors"),
+                    countersJson.optInt("unread_fans"));
         } catch (JSONException e) {
             Debug.error(e);
         }
@@ -341,7 +356,6 @@ public class GCMUtils {
             }
         }).start();
     }
-
 
 
     private static class User {

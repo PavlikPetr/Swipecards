@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Topface</string>
-    <string name="app_locale">ru_RU</string>
+    <string name="app_locale">pt_PT</string>
     <string name="general_error">ERRO</string>
     <string name="general_warning">AVISO</string>
     <string name="general_ok">OK</string>
@@ -16,18 +16,17 @@
     <string name="general_dialog_retry">Repetir</string>
     <string name="general_copy_title">Cópiar</string>
     <string name="general_back">Atrás</string>
-    <string name="general_server_error">Erro. Tenet mais tarde</string>
+    <string name="general_server_error">Erro. Tente mais tarde</string>
     <string name="general_data_error">Erro. Tente mais uma vez</string>
     <string name="general_internet_off">Tentamos reinstalar a conexão com a internet. Por favor, espere.</string>
     <string name="general_purchasing_error">Por favor, escreva mensagem sobre erro de compra em support@topface.ru</string>
-    <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">O texto foi copiado</string>
     <string name="general_spinner_title">Seleccione uma ação</string>
     <string name="general_profile_error">Erro no carregamento de perfil</string>
     <string name="general_dbl_all">Todos</string>
     <string name="general_dbl_unread">Não lidos</string>
     <string name="general_edit_button">Editar</string>
-    <string name="general_save_button">Gravar</string>
+    <string name="general_save_button">Guardar</string>
     <string name="general_send_button">Enviar</string>
     <string name="general_boys">Rapazes</string>
     <string name="general_girls">Meninas</string>
@@ -103,7 +102,6 @@
     <string name="edit_bg_photo">Fotografia de fundo</string>
     <string name="edit_album">Album</string>
     <string name="edit_profile_photo">Mudar a foto</string>
-    <string name="edit_album_photos">fotografias</string>
     <string name="edit_interests">interesses</string>
     <string name="edit_selected">Selecionada</string>
     <string name="edit_name">NOME</string>
@@ -138,11 +136,6 @@
     <string name="invite_is_free">O envio de convite é gratuito</string>
     <string name="invite_error">Não foi possivel enviar os convites. Tente mais uma vez</string>
     <string name="invite_completed">O convite está enviado</string>
-    <plurals name="invite_bonus_text">
-        <item quantity="zero">Convidem amigos e ganhem 20 por cada um</item>
-        <item quantity="other">Vocês estão prestes a enviar convites %2$d para amigos e ganhar por isso %1$d</item>
-        <item quantity="one">Vocês estão prestes a enviar um convite %2$d para um amigo e ganhar por isso %1$d</item>
-    </plurals>
     <string name="settings_header_title">Definições</string>
     <string name="settings_wifi">Somente para Wi-Fi</string>
     <string name="settings_on">Ligado</string>
@@ -174,7 +167,7 @@
     <string name="settings_payment_problems">Problemas com o pagamento</string>
     <string name="settings_cooperation">Colaboração</string>
     <string name="settings_feedback_success_msg">Obrigado, a mensagem foi enviada com sucesso</string>
-    <string name="settings_switch_on">incluir</string>
+    <string name="settings_switch_on">fechar</string>
     <string name="settings_switch_off">cortar</string>
     <string name="leaders_go_date">Eu quero ficar aqui!</string>
     <string name="leaders_leader_now">Agora todos lhe vêm!</string>
@@ -267,7 +260,7 @@
     <string name="profile_mood">Descreva o seu humor</string>
     <string name="general_reconnect">Tentamos reinstalar a conexão com a Internet.\Por favor, espere.</string>
     <string name="dating_people_unnoticed">Dez pessoas ficaram sem sua atenção!</string>
-    <string name="dating_continue">Continuar avaliar</string>
+    <string name="dating_continue">Continuar conhecimento</string>
     <string name="dating_better_look">Olhe para si!\nTalvés você perde o seu destino!</string>
     <string name="edit_my_city">Minha cidade</string>
     <string name="edit_my_photos">Minhas fotografias</string>
@@ -309,7 +302,7 @@
     <string name="leaders_select_photo_info">Selecione a mais efetiva foto! Não se pode selecionar fotografias de baixa classificação</string>
     <string name="default_price_format">Total: %.2f USD</string>
     <string name="dating_online_only">%s, somente online</string>
-    <string name="leaders_pick_condition">Você não pode escolher fotos com a classificação abaixo de %d%%:</string>
+    <string name="leaders_pick_condition">Você não pode selecionar a foto com uma classificação inferior a %d%%:</string>
     <string name="map_popup_address">Adreço</string>
     <string name="black_list_info">Você adicionou seu correspondente à lista negra. Cancelar isso só é possivel no seu perfil, nas definições de status-VIP</string>
     <string name="general_gift">Presente</string>
@@ -346,7 +339,7 @@
     <string name="gallery">Galeria</string>
     <string name="no_photo_take_photo">Ninguém pode travar conhecimento consigo! Faça uma nova foto ou selecione uma das que existem no álbum</string>
     <string name="photo_is_too_small">Você está com um excelente visual nesta foto, mas para todos os usuários possam  avaliar sua foto, deve ser um pouco mais: não menos que %s</string>
-    <string name="photo_for_avatar">A fotografia</string>
+    <string name="photo_for_avatar">A foto está pronta para ser enviada ao perfil! Esta é sua primeira foto  e ela será usada como seu avatar.</string>
     <string name="get_it_for_free">Receber gratuitamente</string>
     <string name="vip_advantages">Vantagens de VIP</string>
     <string name="change_email">Trocar e-mail</string>
@@ -387,4 +380,101 @@
     <string name="upload_photos">Poste fotografias</string>
     <string name="chat_no_message_title">Comece a comunicar-se!</string>
     <string name="chat_no_message_text">Escreva uma mensagem ou envie um presente, sem falta vai ter resposta</string>
+    <string name="user_baned">O usuário foi expulso</string>
+    <string name="general_choose_city">Escolhe a cidade</string>
+    <string name="buy_mobile_payments">Outros métodos de pagamento</string>
+    <string name="buy_mobile_payments_complete">O pagamento está feito. O seu pedido está processando, por favor, espere</string>
+    <string name="general_save_and_exit">Guardar e sair</string>
+    <string name="general_set_password">Defina uma senha ao sair de aplicação</string>
+    <string name="user_is_deleted">O usuário foi eliminado</string>
+    <string name="general_bookmarks_title">Escolhidos</string>
+    <string name="general_empty_bookmarks">Não há escolhidos</string>
+    <string name="general_bookmarks">Escolhidos</string>
+    <string name="general_fans">Fãs</string>
+    <string name="general_no_fans">Não há fãs</string>
+    <plurals name="get_free_money">
+        <item quantity="other">%d de moeda grátis</item>
+        <item quantity="one">%d de moeda grátis</item>
+    </plurals>
+    <string name="settings_edit_profile">Editar perfil</string>
+    <string name="general_bookmarks_delete">Eliminar dos escolhidos</string>
+    <string name="general_bookmarks_add">Adicionar aos escolhidos</string>
+    <string name="buy_resources">Completar a reserva</string>
+    <string name="general_network_reconnect">Tentamos reinstalar a conexão com a rede</string>
+    <string name="user_is_banned">O usuário foi excluido</string>
+    <string name="profile_empty_name">O nome não pode ser vazio</string>
+    <string name="general_user_bookmarkadd">O usuário foi adicionado aos favoritos</string>
+    <string name="general_wrong_photo_upload">A sua foto não corresponde às regras. Experimente fazer a outra</string>
+    <string name="general_input_email">Introduz</string>
+    <string name="cant_delete_fake_item">Esta mensagem ainda não foi entregue, você não a pode eliminar. Experimente mais tarde.</string>
+    <string name="vip_stop_ads">Apenas comunicação, nada mais. VIP-usuários não tem publicidade</string>
+    <string name="settings_invalid_name">O nome contem simbolos  incorretos</string>
+    <string name="general_fan_access_error">Para ter acesso aos fãs, é preciso obter status VIP</string>
+    <string name="friend_email_hint">Introduza e-mail ou telefone do amigo</string>
+    <string name="general_add">Adicionar</string>
+    <string name="general_invite_friends">Convide amigos</string>
+    <string name="general_rest_contacts">Você sobrou com apenas %d de contactos</string>
+    <string name="invite_friends_title">Convidar todos os amigos da lista telefónica em Topface</string>
+    <string name="invalid_contacts">Alguns dos contactos foram incorretos. Por favor, envie contactos corretos</string>
+    <string name="general_choose_action">Selecione uma ação</string>
+    <plurals name="vip_status_period">
+        <item quantity="other">Você recebeu status-VIP em %d de um dia</item>
+        <item quantity="one">Você recebeu status-VIP em %d de um dia</item>
+    </plurals>
+    <plurals name="vip_status_period_btn">
+        <item quantity="other">Receber VIP em %d de um dia</item>
+        <item quantity="one">Receber VIP em %d de um dia</item>
+    </plurals>
+    <plurals name="invite_friends_plurals">
+        <item quantity="other">Convide %1$d de amigos para ganhar status-VIP em %2$d dias</item>
+        <item quantity="one">Convide %1$d de amigos para ganhar status-VIP em %2$d dias</item>
+    </plurals>
+    <plurals name="get_vip_for_invites_plurals">
+        <item quantity="other">Receba VIP grátis por %d de convite</item>
+        <item quantity="one">Receba VIP grátis por %d de convite</item>
+    </plurals>
+    <string name="filter_hint">Introduza o nome</string>
+    <string name="buy_status_and_watch_your_fans">Compre status-VIP e saiba quem lhe adicionou aos favoritos</string>
+    <string name="add_bookmarks_to_be_connected">Adicione novos conhecidos nessa repartição e você não vai mais perder contacto com eles</string>
+    <string name="nobody_chat_with_you_sympathies_will_help">Ninguém ainda não lhe escreveu. As simpatias vão lhe ajudar na pesquisa de correspondente</string>
+    <string name="rate_and_have_mutual_or_buy_and_chat">Coloque simpatias as pessoas de quem você gosta e receba as mutuas. Ou compre simpatias e comece a se comunicar com pessoas que gostam de si!</string>
+    <string name="start_rate">Começar avaliar</string>
+    <string name="with_vip_find_your_visitors">Com o status-VIP, você descobre quem entrou na sua página</string>
+    <string name="on_avatar">Em avatar</string>
+    <string name="your_avatar">O seu avatar</string>
+    <string name="avatar_set_successfully">O Avatar foi instalado com êxito</string>
+    <string name="incorrect_photo">Uma foto incorreta. Experimente postar uma outra</string>
+    <string name="incorrect_photo_format">Formato incorreto de fotos. Experimente postar jpg ou png</string>
+    <string name="incorrect_photo_size">Tamanho inadmissível de fotos</string>
+    <string name="input_contact_name">Introduza o nome de cantacto</string>
+    <string name="incorrect_locale">Se você gostaria que nós fossemos capazes de ler a sua opinião, então escreva-a em russo ou em inglês</string>
+    <string name="complain_photo_header">Fotografia incorreta</string>
+    <string name="complain_msg_header">Mensagem incorreta</string>
+    <string name="complain_info_header">Informação incorreta</string>
+    <string name="complain_type_porn">Porno (genitálias visíveis)</string>
+    <string name="complain_type_ero">Conteúdo erótico na foto principal</string>
+    <string name="complain_type_picture">Imagem</string>
+    <string name="complain_type_fake_user">Uma pessoa de renome</string>
+    <string name="complain_type_spam_msg">Oferta comercial, spam, publicidade, anotações na site, telefones</string>
+    <string name="complain_type_spam_profile">Campo «status», sobre si» contem oferta comercial</string>
+    <string name="complain_type_swearing_profile">Campo «status», «sobre si» contem grosseria, esteira, anotações na rede social</string>
+    <string name="complain_type_fake_data">Nome, sexo, idade e foto da pessoa não se coincidem</string>
+    <string name="complain_description">Conte-nos mais detalhes sobre a causa da queixa</string>
+    <string name="general_complain_sended">A sua queixa foi enviada, muito obrigado pela ajuda</string>
+    <string name="general_complain">Queixa</string>
+    <string name="general_msg">Mensagem</string>
+    <string name="general_no_notifications">Infelizmente, as notificações no seu dispositivo não estão disponíveis</string>
+    <string name="general_bookmarks_add_short">Aos favoritos</string>
+    <string name="black_list_add_short">Na lista negra</string>
+    <string name="general_complaint">Queixar-se</string>
+    <string name="general_type_complain">Assunto de queixa</string>
+    <string name="confirm_email_for_dating">Nós somos contra o spam. Confirme o seu endereço de email para se travar conhecimentos em Topface!</string>
+    <string name="confirm">Confirmar</string>
+    <string name="complain_type_swearing_msg">Grosseria, ameaças, obscenidade</string>
+    <string name="general_bookmarks_is_deleted">O usuário foi removido dos favoritos</string>
+    <string name="general_blacklist_is_deleted">O usuário foi removido da lista negra</string>
+    <string name="invite_friends_title_short">Convidar todos os amigos à Topface</string>
+    <string name="general_exit">Sair</string>
+    <string name="likes_can_help_you">Simpatias ajudarão travar conhecimentos</string>
+    <string name="general_get_dating">Travar conhecimento</string>
 </resources>

@@ -49,6 +49,9 @@ public class Photos extends ArrayList<Photo> implements SerializableToJsonArray 
      * @return флаг наличия фотографии в списке
      */
     public boolean contains(Photo photo) {
+        if (photo == null) {
+            return false;
+        }
         return getByPhotoId(photo.getId()) != null;
     }
 
@@ -96,6 +99,16 @@ public class Photos extends ArrayList<Photo> implements SerializableToJsonArray 
         return realPhotosCount;
     }
 
+    public boolean removeById(int photoId) {
+        for (Photo photo : this) {
+            if(photo.getId() == photoId) {
+                this.remove(photo);
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public JSONArray toJson() throws JSONException {
         JSONArray jsonArray = new JSONArray();
@@ -105,5 +118,13 @@ public class Photos extends ArrayList<Photo> implements SerializableToJsonArray 
             }
         }
         return jsonArray;
+    }
+
+    public int[] getIdsArray() {
+        int[] result = new int[this.size()];
+        for (int i=0;i<result.length;i++) {
+            result[i] = this.get(i).getId();
+        }
+        return result;
     }
 }

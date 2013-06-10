@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.util.SparseArrayCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,8 +22,6 @@ import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
-
-import java.util.HashMap;
 
 public class FilterFragment extends AbstractEditFragment implements OnClickListener {
 
@@ -43,15 +42,15 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     private ViewGroup mMarriageFrame;
     private ViewGroup mCharacterFrame;
     private ViewGroup mAlcoholFrame;
-    private ViewGroup mShowOffFrame;
-    private HashMap<Integer, TextView> hashTextViewByTitleId = new HashMap<Integer, TextView>();
+    private ViewGroup mFinanceFrame;
+    private ViewGroup mBreastFrame;
+    private SparseArrayCompat<TextView> hashTextViewByTitleId = new SparseArrayCompat<TextView>();
 
     private EditSwitcher mSwitchOnline;
     private EditSwitcher mSwitchBeautifull;
 
     private boolean mExtraSavingPerformed = false;
 
-    public static final int webAbsoluteMaxAge = 99;
     private boolean mInitFilterOnline;
 
     @Override
@@ -104,7 +103,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mLoGirls = (ViewGroup) root.findViewById(R.id.loGirl);
         setBackground(R.drawable.edit_big_btn_top_selector, mLoGirls);
         setText(R.string.general_girls, mLoGirls);
-        mCheckGirl = (ImageView) mLoGirls.findViewById(R.id.ivCheck);
+        mCheckGirl = (ImageView) mLoGirls.findViewWithTag("ivCheck");
         if (mFilter.sex == Static.GIRL) {
             mCheckGirl.setVisibility(View.VISIBLE);
         }
@@ -114,7 +113,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mLoBoys = (ViewGroup) root.findViewById(R.id.loBoy);
         setBackground(R.drawable.edit_big_btn_bottom_selector, mLoBoys);
         setText(R.string.general_boys, mLoBoys);
-        mCheckBoy = (ImageView) mLoBoys.findViewById(R.id.ivCheck);
+        mCheckBoy = (ImageView) mLoBoys.findViewWithTag("ivCheck");
         if (mFilter.sex == Static.BOY) {
             mCheckBoy.setVisibility(View.VISIBLE);
         }
@@ -150,7 +149,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
         // Extra Header
         ViewGroup frame = (ViewGroup) root.findViewById(R.id.loExtraHeader);
-        ((TextView) frame.findViewById(R.id.tvTitle)).setText(R.string.filter_extra_parameters);
+        ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.filter_extra_parameters);
 
         // Dating Status
         mXStatusFrame = (ViewGroup) root.findViewById(R.id.loDatingStatus);
@@ -184,35 +183,36 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mAlcoholFrame.setTag(R.array.form_habits_alcohol);
         mAlcoholFrame.setOnClickListener(this);
 
-        // ShowOff
-        mShowOffFrame = (ViewGroup) root.findViewById(R.id.loShowOff);
-        setBackground(R.drawable.edit_big_btn_bottom_selector, mShowOffFrame);
-        if (mFilter.sex == Static.GIRL) {
-            setText(R.array.form_physique_breast,
-                    mFormInfo.getEntry(R.array.form_physique_breast, mFilter.breast), mShowOffFrame);
-            mShowOffFrame.setTag(R.array.form_physique_breast);
-        } else {
-            setText(R.array.form_social_finances,
-                    mFormInfo.getEntry(R.array.form_social_finances, mFilter.finances), mShowOffFrame);
-            mShowOffFrame.setTag(R.array.form_social_finances);
-        }
-        mShowOffFrame.setOnClickListener(this);
+        // Finance
+        mFinanceFrame = (ViewGroup) root.findViewById(R.id.loFinance);
+        setBackground(R.drawable.edit_big_btn_middle_selector, mFinanceFrame);
+        setText(R.array.form_social_finances,
+                mFormInfo.getEntry(R.array.form_social_finances, mFilter.finances), mFinanceFrame);
+        mFinanceFrame.setTag(R.array.form_social_finances);
+        mFinanceFrame.setOnClickListener(this);
 
+        // ShowOff
+        mBreastFrame = (ViewGroup) root.findViewById(R.id.loShowOff);
+        setBackground(R.drawable.edit_big_btn_bottom_selector, mBreastFrame);
+        setText(R.array.form_physique_breast,
+                mFormInfo.getEntry(R.array.form_physique_breast, mFilter.breast), mBreastFrame);
+        mBreastFrame.setTag(R.array.form_physique_breast);
+        mBreastFrame.setOnClickListener(this);
+
+        switchSex(mFilter.sex);
     }
 
     private void switchSex(int sex) {
         if (sex == Static.GIRL) {
             mCheckGirl.setVisibility(View.VISIBLE);
             mCheckBoy.setVisibility(View.INVISIBLE);
-            setText(R.array.form_physique_breast,
-                    mFormInfo.getEntry(R.array.form_physique_breast, mFilter.breast), mShowOffFrame);
-            mShowOffFrame.setTag(R.array.form_physique_breast);
+            mBreastFrame.setVisibility(View.VISIBLE);
+            setBackground(R.drawable.edit_big_btn_middle_selector,mFinanceFrame);
         } else {
             mCheckBoy.setVisibility(View.VISIBLE);
             mCheckGirl.setVisibility(View.INVISIBLE);
-            setText(R.array.form_social_finances,
-                    mFormInfo.getEntry(R.array.form_social_finances, mFilter.finances), mShowOffFrame);
-            mShowOffFrame.setTag(R.array.form_social_finances);
+            mBreastFrame.setVisibility(View.GONE);
+            setBackground(R.drawable.edit_big_btn_bottom_selector,mFinanceFrame);
         }
 
         mTargetUser.sex = sex;
@@ -220,24 +220,24 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     }
 
     private void setBackground(int resId, ViewGroup frame) {
-        ImageView background = (ImageView) frame.findViewById(R.id.ivEditBackground);
+        ImageView background = (ImageView) frame.findViewWithTag("ivEditBackground");
         background.setImageResource(resId);
     }
 
     private void setText(int titleId, String text, ViewGroup frame) {
-        ((TextView) frame.findViewById(R.id.tvTitle)).setText(mFormInfo.getFormTitle(titleId));
-        TextView textView = (TextView) frame.findViewById(R.id.tvText);
+        ((TextView) frame.findViewWithTag("tvTitle")).setText(mFormInfo.getFormTitle(titleId));
+        TextView textView = (TextView) frame.findViewWithTag("tvText");
         textView.setText(text);
         textView.setVisibility(View.VISIBLE);
         hashTextViewByTitleId.put(titleId, textView);
     }
 
     private void setText(String title, ViewGroup frame) {
-        ((TextView) frame.findViewById(R.id.tvTitle)).setText(title);
+        ((TextView) frame.findViewWithTag("tvTitle")).setText(title);
     }
 
     private void setText(int titleResId, ViewGroup frame) {
-        ((TextView) frame.findViewById(R.id.tvTitle)).setText(titleResId);
+        ((TextView) frame.findViewWithTag("tvTitle")).setText(titleResId);
     }
 
     private void startEditFilterFormItem(View v, int targetId) {
@@ -262,8 +262,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     }
 
     private String buildAgeString() {
-        String plus = mFilter.age_end == webAbsoluteMaxAge ? "+" : "";
-        int age_end = mFilter.age_end == webAbsoluteMaxAge ? EditAgeFragment.absoluteMax : mFilter.age_end;
+        String plus = mFilter.age_end == DatingFilter.webAbsoluteMaxAge ? "+" : "";
+        int age_end = mFilter.age_end == DatingFilter.webAbsoluteMaxAge ? EditAgeFragment.absoluteMax : mFilter.age_end;
         return getString(R.string.filter_age_string, mFilter.age_start, age_end) + plus;
     }
 
@@ -331,8 +331,11 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
             case R.id.loAlcohol:
                 startEditFilterFormItem(v, mFilter.alcohol);
                 break;
+            case R.id.loFinance:
+                startEditFilterFormItem(v, mFilter.finances);
+                break;
             case R.id.loShowOff:
-                startEditFilterFormItem(v, mFilter.getShowOff());
+                startEditFilterFormItem(v, mFilter.breast);
                 break;
         }
         refreshSaveState();
@@ -368,7 +371,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                         break;
                 }
 
-                hashTextViewByTitleId.get(titleId).setText(mFormInfo.getEntry(titleId, selectedId));
+                TextView item = hashTextViewByTitleId.get(titleId);
+                if (item != null) item.setText(mFormInfo.getEntry(titleId, selectedId));
             } else if (requestCode == CitySearchActivity.INTENT_CITY_SEARCH_FROM_FILTER_ACTIVITY) {
                 int city_id = extras.getInt(CitySearchActivity.INTENT_CITY_ID);
                 String city_name = extras.getString(CitySearchActivity.INTENT_CITY_NAME);
@@ -381,13 +385,12 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 int ageEnd = extras.getInt(EditContainerActivity.INTENT_AGE_END);
                 if (ageEnd != 0 && ageStart != 0) {
                     if (ageEnd == EditAgeFragment.absoluteMax) {
-                        ageEnd = webAbsoluteMaxAge;
+                        ageEnd = DatingFilter.webAbsoluteMaxAge;
                     }
-                    mFilter.age_end = ageEnd;
-                    mFilter.age_start = ageStart;
-                    setText(buildAgeString(), mAgeFrame);
                 }
-
+                mFilter.age_end = ageEnd;
+                mFilter.age_start = ageStart;
+                setText(buildAgeString(), mAgeFrame);
             }
             refreshSaveState();
         } else {
@@ -408,7 +411,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mMarriageFrame.setEnabled(false);
         mCharacterFrame.setEnabled(false);
         mAlcoholFrame.setEnabled(false);
-        mShowOffFrame.setEnabled(false);
+        mBreastFrame.setEnabled(false);
     }
 
     @Override
@@ -424,7 +427,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mMarriageFrame.setEnabled(true);
         mCharacterFrame.setEnabled(true);
         mAlcoholFrame.setEnabled(true);
-        mShowOffFrame.setEnabled(true);
+        mBreastFrame.setEnabled(true);
     }
 
     @Override

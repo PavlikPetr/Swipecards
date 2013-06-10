@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.topface.topface.R;
@@ -71,7 +70,7 @@ public class SettingsFeedbackFragment extends BaseFragment implements OnClickLis
     }
 
     private void setText(int titleId, ViewGroup frame) {
-        ((TextView) frame.findViewById(R.id.tvTitle)).setText(titleId);
+        ((TextView) frame.findViewWithTag("tvTitle")).setText(titleId);
     }
 
     @Override

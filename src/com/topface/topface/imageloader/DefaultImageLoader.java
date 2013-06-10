@@ -19,7 +19,6 @@ public class DefaultImageLoader {
     private static ImageLoader mImageLoader;
     private static DefaultImageLoader mInstance;
     public static final int DISC_CACHE_SIZE = 10 * 1024 * 1024;
-    public static final int MEMORY_CACHE_SIZE = 1536 * 1024; //1.5 Мб
     private final Context mContext;
     private DisplayImageOptions mOptimizedConfig;
 
@@ -35,7 +34,6 @@ public class DefaultImageLoader {
             builder.enableLogging();
         }
         builder.discCacheSize(DISC_CACHE_SIZE);
-        builder.memoryCacheSize(MEMORY_CACHE_SIZE);
         builder.defaultDisplayImageOptions(getDisplayImageConfig().build());
         return builder;
     }
@@ -61,7 +59,6 @@ public class DefaultImageLoader {
         DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder();
         builder.cacheInMemory();
         builder.cacheOnDisc();
-        builder.imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2);
         builder.resetViewBeforeLoading();
         builder.showImageForEmptyUri(R.drawable.im_photo_error);
         return builder;
@@ -106,7 +103,7 @@ public class DefaultImageLoader {
         } catch (Exception e) {
             Debug.error("ImageLoader displayImage error", e);
             if (listener != null) {
-                listener.onLoadingFailed(uri, imageView, FailReason.UNKNOWN);
+                listener.onLoadingFailed(uri, imageView, new FailReason(FailReason.FailType.UNKNOWN, e));
             }
         }
     }

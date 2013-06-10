@@ -33,10 +33,16 @@ public class FeedUser extends AbstractData implements SerializableToJson {
      * Объект основного фото пользователя
      */
     public Photo photo;
-
+    /**
+     * флаг премиум
+     */
     public boolean premium;
 
     public boolean banned;
+
+    public boolean deleted;
+
+    public boolean bookmarked;
 
     public FeedUser(JSONObject user) {
         super(user);
@@ -52,6 +58,8 @@ public class FeedUser extends AbstractData implements SerializableToJson {
         this.sex = user.optInt("sex");
         this.premium = user.optBoolean("premium");
         this.banned = user.optBoolean("banned");
+        this.deleted = user.optBoolean("deleted") || this.isEmpty();
+        this.bookmarked = user.optBoolean("bookmarked");
     }
 
     public String getNameAndAge() {
@@ -75,7 +83,7 @@ public class FeedUser extends AbstractData implements SerializableToJson {
         json.put("city", city.toJson());
         json.put("photo", photo.toJson());
         json.put("premium", premium);
-
+        json.put("bookmarked", bookmarked);
         return json;
     }
 
@@ -86,5 +94,9 @@ public class FeedUser extends AbstractData implements SerializableToJson {
         } else {
             return super.equals(o);
         }
+    }
+
+    public boolean isEmpty() {
+        return id <= 0;
     }
 }

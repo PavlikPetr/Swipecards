@@ -60,6 +60,7 @@
     <string name="profile_form_fitness_male_2">Kõhnavõitu</string>
     <string name="profile_form_fitness_male_3">Tavaline</string>
     <string name="profile_form_fitness_male_4">Hästi toidetud</string>
+    <string name="profile_form_fitness_male_5">Mul on terve rida teisi eeliseid</string>
     <string name="profile_form_fitness_female_0">Sportlik</string>
     <string name="profile_form_fitness_female_1">Sale</string>
     <string name="profile_form_fitness_female_2">Kõhnavõitu</string>
@@ -142,12 +143,14 @@
     <string name="profile_form_residence_male_3">koos sõpradega</string>
     <string name="profile_form_residence_male_4">Üksi üürikorteris</string>
     <string name="profile_form_residence_male_5">Üksi oma korteris</string>
+    <string name="profile_form_residence_male_6">Kus iganes</string>
     <string name="profile_form_residence_female_0">koos vanematega</string>
     <string name="profile_form_residence_female_1">koos abikaasaga</string>
     <string name="profile_form_residence_female_2">koos armsamaga</string>
     <string name="profile_form_residence_female_3">sõpradega</string>
     <string name="profile_form_residence_female_4">üksi üürikorteris</string>
     <string name="profile_form_residence_female_5">üksi oma korteris</string>
+    <string name="profile_form_residence_female_6">Kus iganes</string>
     <string name="profile_form_car_male_0">Jah</string>
     <string name="profile_form_car_male_1">Ei</string>
     <string name="profile_form_car_female_0">Jah</string>

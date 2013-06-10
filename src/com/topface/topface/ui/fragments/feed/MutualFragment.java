@@ -1,11 +1,15 @@
 package com.topface.topface.ui.fragments.feed;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.view.View;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedMutual;
 import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.MutualListAdapter;
 import com.topface.topface.utils.CountersManager;
 import org.json.JSONObject;
@@ -36,11 +40,22 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
         return FeedRequest.FeedService.MUTUAL;
     }
 
+    @Override
+    protected void initEmptyFeedView(View inflated) {
+
+        inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(ContainerActivity.getBuyingIntent());
+            }
+        });
+    }
 
     @Override
-    protected int getEmptyFeedText() {
-        return R.string.mutual_background_text;
+    protected int getEmptyFeedLayout() {
+        return R.layout.layout_empty_mutual;
     }
+
 
     @Override
     protected void decrementCounters() {

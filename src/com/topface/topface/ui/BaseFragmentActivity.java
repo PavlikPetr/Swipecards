@@ -1,6 +1,5 @@
 package com.topface.topface.ui;
 
-import android.R;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,15 +7,18 @@ import android.content.IntentFilter;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.WindowManager;
-import com.topface.topface.ReAuthReceiver;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
+import com.topface.topface.ui.dialogs.ConfirmEmailDialog;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.http.IRequestClient;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -27,30 +29,79 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     public static final String INTENT_PREV_ENTITY = "prev_entity";
     public static final String AUTH_TAG = "AUTH";
 
-    private boolean afterOnSavedInstanceState = false;
     protected boolean needOpenDialog = true;
 
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
     private BroadcastReceiver mReauthReceiver;
     protected boolean mNeedAnimate = true;
-    private boolean needAuth = true;
+    private BroadcastReceiver mProfileLoadReceiver;
+    private boolean afterOnSaveInstanceState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LocaleConfig.updateConfiguration(getBaseContext());
+        setWindowOptions();
+
+        (new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                inBackgroundThread();
+            }
+        }).start();
+    }
+
+    @SuppressWarnings("deprecation")
+    private void setWindowOptions() {
         getWindow().setFormat(PixelFormat.RGBA_8888);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
-        if (isNeedAuth() && (AuthToken.getInstance().isEmpty() || !CacheProfile.isLoaded())) {
-            startAuth();
-        }
         if (mNeedAnimate) {
             overridePendingTransition(com.topface.topface.R.anim.slide_in_from_right, com.topface.topface.R.anim.slide_out_left);
+        }
+    }
+
+    private void checkProfileLoad() {
+        if (CacheProfile.isLoaded()) {
+            if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
+                onLoadProfile();
+            } else {
+                startAuth();
+            }
+
+        } else if (mProfileLoadReceiver == null) {
+            mProfileLoadReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    checkProfileLoad();
+                }
+            };
+
+            try {
+                LocalBroadcastManager.getInstance(this).registerReceiver(
+                        mProfileLoadReceiver,
+                        new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD)
+                );
+            } catch (Exception ex) {
+                Debug.error(ex);
+            }
+        }
+    }
+
+    protected void onLoadProfile() {
+        if (CacheProfile.isEmpty() || AuthToken.getInstance().isEmpty()) {
+            startAuth();
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        checkProfileLoad();
+        registerReauthReceiver();
+    }
+
+    private void registerReauthReceiver() {
         //Если при запросе вернулась ошибка что нет токена, кидается соответствующий интент.
         //здесь он ловится, и открывается фрагмент авторизации
         mReauthReceiver = new BroadcastReceiver() {
@@ -66,47 +117,64 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             }
         };
 
-        if(!afterOnSavedInstanceState) {
-            afterOnSavedInstanceState = true;
-            registerReceiver(mReauthReceiver, new IntentFilter(ReAuthReceiver.REAUTH_INTENT));
+        try {
+            registerReceiver(mReauthReceiver, new IntentFilter(AuthFragment.REAUTH_INTENT));
+        } catch (Exception ex) {
+            Debug.error(ex);
         }
     }
 
-    public void startAuth() {
+    public boolean startAuth() {
         Fragment authFragment = getSupportFragmentManager().findFragmentByTag(AUTH_TAG);
-        if (authFragment == null || !authFragment.isAdded()) {
+        if (isNeedAuth() && (authFragment == null || !authFragment.isAdded())) {
             if (authFragment == null) {
                 authFragment = AuthFragment.newInstance();
             }
-            getSupportFragmentManager().beginTransaction().add(R.id.content, authFragment, AUTH_TAG).commit();
-            needAuth = false;
+            getSupportFragmentManager().beginTransaction().add(android.R.id.content, authFragment, AUTH_TAG).commit();
+            return true;
+        }
+        return false;
+    }
+
+    public void startFragment(Fragment fragment) {
+        if (!afterOnSaveInstanceState) {
+            getSupportFragmentManager().beginTransaction().add(android.R.id.content, fragment).addToBackStack(null).commit();
         }
     }
 
     public void close(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-        onInit();
+        close(fragment, false);
     }
 
-    public void onInit() {
+    public void close(Fragment fragment, boolean needFireEvent) {
+        getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+        if (needFireEvent) {
+            onCloseFragment();
+        }
+    }
+
+    protected void onCloseFragment() {
+
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (!afterOnSavedInstanceState) {
-            unregisterReceiver(mReauthReceiver);
-            afterOnSavedInstanceState = true;
-        }
+        afterOnSaveInstanceState = true;
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         removeAllRequests();
-        if (!afterOnSavedInstanceState) {
+        try {
             unregisterReceiver(mReauthReceiver);
-            afterOnSavedInstanceState = true;
+            if (mProfileLoadReceiver != null) {
+                LocalBroadcastManager.getInstance(this).unregisterReceiver(mProfileLoadReceiver);
+                mProfileLoadReceiver = null;
+            }
+        } catch (Exception ex) {
+            Debug.error(ex);
         }
     }
 
@@ -152,20 +220,38 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     }
 
     protected boolean isNeedBroughtToFront(Intent intent) {
-        return intent != null && (intent.getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0;
+        return intent != null &&
+                !intent.getBooleanExtra(GCMUtils.GCM_INTENT, false) &&
+                (intent.getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0;
     }
 
 
     protected boolean isNeedAuth() {
-        return needAuth;
+        return true;
     }
 
     protected void takePhoto(TakePhotoDialog.TakePhotoListener listener) {
         if (needOpenDialog) {
             TakePhotoDialog newFragment = TakePhotoDialog.newInstance();
             newFragment.setOnTakePhotoListener(listener);
-            newFragment.show(getSupportFragmentManager(), TakePhotoDialog.TAG);
+            try {
+                newFragment.show(getSupportFragmentManager(), TakePhotoDialog.TAG);
+            } catch (Exception e) {
+                Debug.error(e);
+            }
             needOpenDialog = false;
         }
+    }
+
+    protected void showConfirmEmailDialog() {
+        ConfirmEmailDialog newFragment = ConfirmEmailDialog.newInstance();
+        try {
+            newFragment.show(getSupportFragmentManager(), ConfirmEmailDialog.TAG);
+        } catch (Exception e) {
+            Debug.error(e);
+        }
+    }
+
+    protected void inBackgroundThread() {
     }
 }

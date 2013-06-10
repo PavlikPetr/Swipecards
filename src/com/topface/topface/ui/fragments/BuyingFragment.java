@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +23,16 @@ import com.topface.topface.Static;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Offerwalls;
+import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.offerwalls.Offerwalls;
 
 import java.util.LinkedList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @SuppressWarnings("UnusedDeclaration")
 public class BuyingFragment extends BillingFragment {
@@ -175,40 +181,6 @@ public class BuyingFragment extends BillingFragment {
             }
         }
 
-
-        TextView status = (TextView) root.findViewById(R.id.vip_status);
-        TextView vipBtnText = (TextView) root.findViewById(R.id.fbVipBtnText);
-
-        RelativeLayout vipBtn = (RelativeLayout) root.findViewById(R.id.fbVipButton);
-
-        if (CacheProfile.premium) {
-            status.setText(getString(R.string.vip_state_on));
-            vipBtnText.setText(R.string.vip_abilities);
-        } else {
-            status.setText(R.string.vip_state_off);
-            vipBtnText.setText(R.string.vip_advantages);
-        }
-
-        vipBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToVipSettings();
-            }
-        });
-
-        RelativeLayout vipTitle = (RelativeLayout) root.findViewById(R.id.fbVipTitle);
-        View vipDivider = root.findViewById(R.id.vipDivider);
-
-
-        if (CacheProfile.getOptions().premium.isEmpty() || CacheProfile.premium) {
-            vipTitle.setVisibility(View.GONE);
-            vipBtn.setVisibility(View.GONE);
-            vipDivider.setVisibility(View.GONE);
-        } else {
-            vipTitle.setVisibility(View.VISIBLE);
-            vipBtn.setVisibility(View.VISIBLE);
-        }
-
         // Button for offerwalls (Tapjoy and Sponsorpay)
         View offerwall = root.findViewById(R.id.btnOfferwall);
         offerwall.setOnClickListener(new View.OnClickListener() {
@@ -220,6 +192,55 @@ public class BuyingFragment extends BillingFragment {
         offerwall.setVisibility(CacheProfile.paid ? View.GONE : View.VISIBLE);
         root.findViewById(R.id.titleSpecialOffers).setVisibility(CacheProfile.paid ? View.GONE : View.VISIBLE);
 
+        initPaymentwallButtons(root);
+
+    }
+
+    private void initPaymentwallButtons(View root) {
+        //Paymentwall
+        View mobilePayments = root.findViewById(R.id.mobilePayments);
+        //Показываем кнопку только на платформе Google Play v2
+        if (TextUtils.equals(Utils.getBuildType(), getString(R.string.build_google_play_v2))) {
+            mobilePayments.setVisibility(View.VISIBLE);
+            ViewGroup layout = (ViewGroup) mobilePayments.findViewById(R.id.mobilePaymentsList);
+            //Листенер просто открывае
+            View.OnClickListener mobilePaymentsListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FragmentActivity activity = getActivity();
+                    if (activity != null) {
+                        activity.startActivityForResult(
+                                PaymentwallActivity.getIntent(activity, CacheProfile.uid),
+                                PaymentwallActivity.ACTION_BUY
+                        );
+                    }
+                }
+            };
+
+            //На все кнопки навишиваем
+            for (int i = 0; i < layout.getChildCount(); i++) {
+                layout.getChildAt(i).setOnClickListener(mobilePaymentsListener);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PaymentwallActivity.ACTION_BUY) {
+            if (resultCode == PaymentwallActivity.RESULT_OK) {
+                //Когда покупка через Paymentwall завершена, показываем об этом сообщение
+                Toast.makeText(getActivity(), R.string.buy_mobile_payments_complete, Toast.LENGTH_LONG).show();
+                //И через 3 секунды обновляем профиль
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        App.sendProfileRequest();
+                    }
+                }, 3000);
+
+            }
+        }
     }
 
     private void goToVipSettings() {
@@ -242,9 +263,12 @@ public class BuyingFragment extends BillingFragment {
 
     @Override
     public void onInAppBillingUnsupported() {
-        for (RelativeLayout btn : purchaseButtons) {
-            btn.setEnabled(false);
-        }
+        //Если платежи не поддерживаются, то скрываем все кнопки
+        getView().findViewById(R.id.likes_title).setVisibility(View.GONE);
+        getView().findViewById(R.id.coins_title).setVisibility(View.GONE);
+        getView().findViewById(R.id.fbCoins).setVisibility(View.GONE);
+        getView().findViewById(R.id.fbLikes).setVisibility(View.GONE);
+
         Toast.makeText(App.getContext(), R.string.buy_play_market_not_available, Toast.LENGTH_SHORT).show();
     }
 
@@ -255,7 +279,6 @@ public class BuyingFragment extends BillingFragment {
 
     @Override
     public void onPurchased() {
-        updateBalanceCounters();
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
     }
 

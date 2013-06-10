@@ -1,0 +1,193 @@
+package com.topface.topface.utils.social;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.view.View;
+import android.webkit.CookieManager;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import com.topface.topface.App;
+import com.topface.topface.R;
+import com.topface.topface.Ssid;
+import com.topface.topface.utils.Debug;
+import org.apache.http.client.utils.URLEncodedUtils;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class VkAuthActivity extends Activity {
+
+    public final static String ACCESS_TOKEN = "access_token";
+    public final static String USER_ID = "user_id";
+    public final static String EXPIRES_IN = "expires_in";
+    public final static String USER_NAME = "user_name";
+    public static final String VK_OUATH_DOMAIN = "https://oauth.vk.com";
+    public static final String VK_OUATH_REDIRECT = VK_OUATH_DOMAIN + "/blank.html";
+    public static final String VK_OAUTH_URL = VK_OUATH_DOMAIN + "/authorize";
+
+    // Data
+    private WebView mWebView;
+    private View mProgressBar;
+    private String VK_PERMISSIONS = "notify,photos,offline";
+    // RegExp
+    private final Pattern mRegExpToken = Pattern.compile("blank.html#(.*access_token=.+)$");
+    private final Pattern mRegExpError = Pattern.compile("blank.html#(.*error=.+)$");
+    private final Pattern mRegExpLogout = Pattern.compile("(.*act=logout.+)$");
+    // Constants
+    public static final int INTENT_WEB_AUTH = 101;
+
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Debug.log(this, "+onCreate");
+        setContentView(R.layout.ac_web_auth);
+
+        // Progress
+        mProgressBar = findViewById(R.id.prsWebLoading);
+
+        // WebView
+        mWebView = (WebView) findViewById(R.id.wvWebFrame);
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.setVerticalScrollbarOverlay(true);
+        mWebView.setVerticalFadingEdgeEnabled(true);
+        mWebView.setWebViewClient(new VkAuthClient(mWebView, new WebHandler()));
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        mWebView.destroy();
+        mWebView = null;
+        mProgressBar = null;
+        CookieManager.getInstance().removeAllCookie();
+        Debug.log(this, "-onDestroy");
+        super.onDestroy();
+    }
+
+
+    // class WebHandler
+
+
+    private class WebHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == AuthToken.AUTH_COMPLETE) {
+                @SuppressWarnings("unchecked")
+                HashMap<String, String> queryMap = (HashMap<String, String>) msg.obj;
+                if (queryMap == null) {
+                    setResult(Activity.RESULT_CANCELED);
+                    VkAuthActivity.this.finish();
+                    return;
+                }
+
+                String token_key = queryMap.get(ACCESS_TOKEN);
+                String user_id = queryMap.get(USER_ID);
+                String expires_in = queryMap.get(EXPIRES_IN);
+                String user_name = queryMap.get(USER_NAME);
+
+                Intent intent = VkAuthActivity.this.getIntent();
+                intent.putExtra(ACCESS_TOKEN, token_key);
+                intent.putExtra(USER_ID, user_id);
+                intent.putExtra(EXPIRES_IN, expires_in);
+                intent.putExtra(USER_NAME, user_name);
+                setResult(Activity.RESULT_OK, intent);
+                finish();
+            } else {
+                Debug.log(VkAuthActivity.this, "web auth token is wrong");
+                Ssid.remove();
+                setResult(Activity.RESULT_CANCELED);
+                finish();
+            }
+            if (mProgressBar != null) {
+                mProgressBar.setVisibility(View.GONE);
+            }
+        }
+    }
+
+
+    // VkAuthClient
+
+
+    public class VkAuthClient extends WebViewClient {
+        // Data
+        private Handler mHandler;
+        private String mUrl = VK_OAUTH_URL + "?client_id=" + App.getConfig().getAuthVkApi() + "&scope=" + VK_PERMISSIONS + "&redirect_uri=" + VK_OUATH_REDIRECT + "&display=touch&response_type=token";
+
+
+        public VkAuthClient(WebView webView, Handler handler) {
+            super();
+            mHandler = handler;
+            webView.loadUrl(mUrl);
+            webView.setBackgroundColor(0x00000000);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                webView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
+            }
+        }
+
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+
+            mProgressBar.setVisibility(View.VISIBLE);
+
+            Matcher matcherToken = mRegExpToken.matcher(url);
+            Matcher matcherError = mRegExpError.matcher(url);
+            Matcher matcherLogout = mRegExpLogout.matcher(url);
+
+            if (matcherToken.find()) {
+                view.stopLoading();
+                try {
+                    URLEncodedUtils.parse(new URI(url), "utf-8");
+                } catch (URISyntaxException e) {
+                    Debug.log(VkAuthActivity.this, "url is wrong:" + e);
+                }
+
+                final HashMap<String, String> queryMap = parseQueryString(matcherToken.group(1));
+
+                AuthorizationManager.getVkName(queryMap.get(ACCESS_TOKEN), queryMap.get(USER_ID), new Handler() {
+                    @Override
+                    public void handleMessage(Message msg) {
+                        queryMap.put(USER_NAME, (String) msg.obj);
+                        mHandler.sendMessage(Message.obtain(null, AuthToken.AUTH_COMPLETE, queryMap));
+                    }
+                });
+            } else if (matcherError.find() || matcherLogout.find()) {
+                view.stopLoading();
+                AuthToken.getInstance().removeToken();
+                mHandler.sendMessage(Message.obtain(null, AuthToken.AUTH_ERROR));
+            }
+        }
+
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+            mProgressBar.setVisibility(View.GONE);
+        }
+
+
+        public HashMap<String, String> parseQueryString(String query) {
+            String[] params = query.split("&");
+            HashMap<String, String> map = new HashMap<String, String>();
+            for (String param : params) {
+                String name = param.split("=")[0];
+                String value = param.split("=")[1];
+                map.put(name, value);
+            }
+            return map;
+        }
+
+
+    }
+
+
+}

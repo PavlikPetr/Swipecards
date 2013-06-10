@@ -10,7 +10,7 @@
             android:layout_centerInParent="true"
             style="@android:style/Widget.ProgressBar.Small"/>
 
-    <com.topface.topface.ui.views.ImageViewRemote
+    <com.topface.topface.ui.views.ZoomImageViewRemote
             android:id="@+id/ivPreView"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"

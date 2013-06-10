@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Topface</string>
-    <string name="app_locale">uk_UK</string>
+    <string name="app_locale">uk_UA</string>
     <string name="general_error">ПОМИЛКА</string>
     <string name="general_warning">ПОПЕРЕДЖЕННЯ</string>
     <string name="general_ok">OK</string>
@@ -20,7 +20,6 @@
     <string name="general_data_error">Помилка. Спробуйте ще раз</string>
     <string name="general_internet_off">Немає підключення до інтернету</string>
     <string name="general_purchasing_error">Будь ласка, напишіть повідомлення про помилку покупки на support@topface.ru</string>
-    <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Текст скопійований</string>
     <string name="general_spinner_title">Вибрати дію</string>
     <string name="general_profile_error">Помилка завантаження профілю</string>
@@ -103,7 +102,6 @@
     <string name="edit_bg_photo">Фонова фотографія</string>
     <string name="edit_album">Альбом</string>
     <string name="edit_profile_photo">Змінити фото</string>
-    <string name="edit_album_photos">фотографій</string>
     <string name="edit_interests">інтересів</string>
     <string name="edit_selected">Обрана</string>
     <string name="edit_name">Ім\'я</string>
@@ -139,12 +137,6 @@
     <string name="invite_is_free">Надсилання запрошення безкоштовне</string>
     <string name="invite_error">Не вдалося відправити запрошення. Спробуйте ще раз</string>
     <string name="invite_completed">Запрошення відправлено</string>
-    <plurals name="invite_bonus_text">
-        <item quantity="few">Ви збираєтеся відправити запрошення %2$d друзям та отримайте за це %1$d</item>
-        <item quantity="zero">Запросите друзів і отримаєте за кожного по 20</item>
-        <item quantity="other">Ви збираєтеся відправити запрошення %2$d друзям та отримайте за це %1$d</item>
-        <item quantity="one">Ви збираєтеся надіслати запрошення %2$d другові та отримаєте за це %1$d</item>
-    </plurals>
     <string name="settings_header_title">Налаштування</string>
     <string name="settings_wifi">Тільки по Wi-Fi</string>
     <string name="settings_on">Включена</string>
@@ -270,7 +262,7 @@
     <string name="profile_mood">Опишіть Ваш настрій</string>
     <string name="general_reconnect">Намагаємося восстаносіть з\'єднання з Інтернет. Будь ласка почекайте.</string>
     <string name="dating_people_unnoticed">Десять людей залишилися без вашої уваги!</string>
-    <string name="dating_continue">Продовжити оцінювати</string>
+    <string name="dating_continue">Продовжити знайомство</string>
     <string name="dating_better_look">Придивіться!\nМожливо ви втрачаєте свою долю!</string>
     <string name="edit_my_city">Моє місто</string>
     <string name="edit_my_photos">Мої фотографії</string>
@@ -333,6 +325,7 @@
     <string name="boy">хлопець</string>
     <string name="girl">дівчина</string>
     <string name="start_communication">Почати спілкування</string>
+    <string name="birthdate">ДР</string>
     <string name="welcome_to_topface">Ласкаво просимо до Topface!</string>
     <string name="incorrect_email">Неправильно введений e-mail</string>
     <string name="incorrect_login">Неправильно введений логін</string>
@@ -390,4 +383,108 @@
     <string name="upload_photos">Завантажте фотографії</string>
     <string name="chat_no_message_title">Почніть спілкування!</string>
     <string name="chat_no_message_text">Напишіть повідомлення або відправте подарунок і вам обов\'язково відповідять</string>
+    <string name="user_baned">Користувач забанений</string>
+    <string name="general_choose_city">Оберіть місто</string>
+    <string name="buy_mobile_payments">Інші способи оплати</string>
+    <string name="buy_mobile_payments_complete">Оплата зроблена. Ваше замовлення обробляється, будь ласка зачекайте</string>
+    <string name="general_save_and_exit">Зберегти і вийти</string>
+    <string name="general_set_password">Встановіть пароль перед виходом з програми</string>
+    <string name="user_is_deleted">Користувач видалений</string>
+    <string name="general_bookmarks_title">Обрані</string>
+    <string name="general_empty_bookmarks">Немає обраних</string>
+    <string name="general_bookmarks">Обрані</string>
+    <string name="general_fans">Шанувальники</string>
+    <string name="general_no_fans">Немає шанувальників</string>
+    <plurals name="get_free_money">
+        <item quantity="few">%d монети безкоштовно</item>
+        <item quantity="other">%d монет безкоштовно</item>
+        <item quantity="one">%d монета безкоштовно</item>
+    </plurals>
+    <string name="settings_edit_profile">Редагувати профіль</string>
+    <string name="general_bookmarks_delete">Видалити з обраних</string>
+    <string name="general_bookmarks_add">Додати в обрані</string>
+    <string name="buy_resources">Поповнити запас</string>
+    <string name="general_network_reconnect">Намагаємося відновити з\'єднання з мережею</string>
+    <string name="user_is_banned">Користувач забанений</string>
+    <string name="profile_empty_name">Ім\'я не може бути порожнім</string>
+    <string name="general_user_bookmarkadd">Користувач доданий в обрані</string>
+    <string name="general_wrong_photo_upload">Ваша фотографія не відповідає правилам. Спробуйте зробити іншу</string>
+    <string name="general_input_email">Введіть ваш e-mail</string>
+    <string name="cant_delete_fake_item">Це повідомлення ще доставлено, ви не можете видалити його. Спробуйте
+        пізніше.</string>
+    <string name="vip_stop_ads">Тільки спілкування, нічого зайвого. У VIP-користувачів немає реклами</string>
+    <string name="settings_invalid_name">Ім\'я містить некоректні символи</string>
+    <string name="general_fan_access_error">Для доступу до шанувальників необхідно мати VIP статус</string>
+    <string name="friend_email_hint">Введіть e-mail або телефон друга</string>
+    <string name="general_add">Додати</string>
+    <string name="general_invite_friends">Запросіть друзів</string>
+    <string name="general_rest_contacts">Вам залишилося %d контактів</string>
+    <string name="invite_friends_title">Запросити всіх друзів з телефонної книги в Topface</string>
+    <string name="invalid_contacts">Деякі з контактів були некоректними. Будь ласка, відправте коректні контакти</string>
+    <string name="general_choose_action">Оберіть дію</string>
+    <plurals name="vip_status_period">
+        <item quantity="few">Ви отримали VIP статус на %d дня</item>
+        <item quantity="other">Ви отримали VIP статус на %d днів</item>
+        <item quantity="one">Ви отримали VIP статус на %d день</item>
+    </plurals>
+    <plurals name="vip_status_period_btn">
+        <item quantity="few">Отримати VIP на %d дня</item>
+        <item quantity="other">Отримати VIP на %d днів</item>
+        <item quantity="one">Отримати VIP на %d день</item>
+    </plurals>
+    <plurals name="invite_friends_plurals">
+        <item quantity="few">Запросіть %1$d друзів, щоб отримати VIP-статус на %2$d дня</item>
+        <item quantity="other">Запросіть %1$d друзів, щоб отримати VIP-статус на %2$d днів</item>
+        <item quantity="one">Запросіть %1$d друзів, щоб отримати VIP-статус на %2$d день</item>
+    </plurals>
+    <plurals name="get_vip_for_invites_plurals">
+        <item quantity="few">Отримай VIP безкоштовно за %d запрошення</item>
+        <item quantity="other">Отримай VIP безкоштовно за %d запрошень</item>
+        <item quantity="one">Отримай VIP безкоштовно за %d запрошення</item>
+    </plurals>
+    <string name="filter_hint">Введіть ім\'я</string>
+    <string name="buy_status_and_watch_your_fans">Купуйте VIP-статус і дізнайтеся, хто додав вас в обране</string>
+    <string name="add_bookmarks_to_be_connected">Додавайте нових знайомих в цей розділ, і ви не втратите з ними зв\'язок</string>
+    <string name="nobody_chat_with_you_sympathies_will_help">Вам ще ніхто не писав. Симпатії допоможуть у пошуку співрозмовника</string>
+    <string name="rate_and_have_mutual_or_buy_and_chat">Ставте симпатії вподобаним вам людям та отримуйте взаємні. Або купіть симпатії і починайте спілкування з тими, кому ви подобаєтеся!</string>
+    <string name="start_rate">Почати оцінювати</string>
+    <string name="with_vip_find_your_visitors">З VIP-статусом ви дізнаєтеся, хто заходив до вас на сторінку</string>
+    <string name="on_avatar">На аватарку</string>
+    <string name="your_avatar">Ваша аватарка</string>
+    <string name="avatar_set_successfully">Аватарка успішно встановлена</string>
+    <string name="incorrect_photo">Некоректне фото. Спробуйте завантажити інше</string>
+    <string name="incorrect_photo_format">Некоректний формат фото. Спробуйте завантажити jpg або png</string>
+    <string name="incorrect_photo_size">Неприпустимий розмір фотографії</string>
+    <string name="input_contact_name">Введіть ім\'я контакту</string>
+    <string name="incorrect_locale">Якщо Ви хочете, щоб ми змогли прочитати Ваш відгук, пишіть його російською або англійською мовою</string>
+    <string name="complain_photo_header">Некоректна фотографія</string>
+    <string name="complain_msg_header">Некоректне повідомлення</string>
+    <string name="complain_info_header">Некоректна інформація</string>
+    <string name="complain_type_porn">Порно (видно геніталії)</string>
+    <string name="complain_type_ero">Еротика на головному фото</string>
+    <string name="complain_type_picture">Картинка</string>
+    <string name="complain_type_fake_user">Відома людина</string>
+    <string name="complain_type_spam_msg">Комерційна пропозиція, спам, реклама, посилання на сайти, телефони</string>
+    <string name="complain_type_spam_profile">Поля «статус», «про себе» містять комерційну пропозицію</string>
+    <string name="complain_type_swearing_profile">Поля «статус», «про себе» містять хамство, мат, посилання на соц. мережі</string>
+    <string name="complain_type_fake_data">Ім\'я, стать, вік і фотографія людини не збігаються</string>
+    <string name="complain_description">Розкажіть про причину скарги з подробицями</string>
+    <string name="general_complain_sended">Ваша скарга відправлена, велике спасибі за допомогу</string>
+    <string name="general_complain">Скарга</string>
+    <string name="general_msg">Повідомлення</string>
+    <plurals name="vip_add_more_friends">
+        <item quantity="few">Запросіть ще %d друга</item>
+        <item quantity="other">Запросіть ще %d друзів</item>
+        <item quantity="one">Запросіть ще %d друга</item>
+    </plurals>
+    <string name="general_bookmarks_add_short">В обрані</string>
+    <string name="black_list_add_short">У чорний список</string>
+    <string name="general_complaint">Поскаржитися</string>
+    <string name="general_type_complain">Тема скарги</string>
+    <string name="confirm_email_for_dating">Ми проти спаму. Підтвердіть свою поштову адресу, щоб знайомиться в Topface!</string>
+    <string name="confirm">Підтвердити</string>
+    <string name="complain_type_swearing_msg">Хамство, загрози, мат</string>
+    <string name="general_bookmarks_is_deleted">Користувач вилучений з обраних</string>
+    <string name="general_blacklist_is_deleted">Користувач вилучений з чорного списку</string>
+    <string name="invite_friends_title_short">Запросити всіх друзів в Topface</string>
 </resources>

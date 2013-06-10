@@ -16,6 +16,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.CitiesRequest;
 import com.topface.topface.requests.SearchCitiesRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
@@ -41,7 +42,8 @@ public class CitySearchActivity extends BaseFragmentActivity {
     private View mCbMyCity;
     private TextView mMyCityTitle;
     private EditText mCityInputView;
-    private TextView mCityInputTitle;
+    private ListView cityListView;
+    private TextView mCityFail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +70,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
 
         // Progress
         mProgressBar = (ProgressBar) findViewById(R.id.prsCityLoading);
+        mCityFail = (TextView) findViewById(R.id.noCities);
 
         // ListView
         initListView();
@@ -79,13 +82,13 @@ public class CitySearchActivity extends BaseFragmentActivity {
     }
 
     private void initEditText() {
-        mCityInputTitle = (TextView) findViewById(R.id.tvCityInputTitle);
+        TextView cityInputTitle = (TextView) findViewById(R.id.tvCityInputTitle);
         if (mRequestKey == INTENT_CITY_SEARCH_AFTER_REGISTRATION) {
-            mCityInputTitle.setText(R.string.reselect_city);
+            cityInputTitle.setText(R.string.reselect_city);
         } else {
-            mCityInputTitle.setText(R.string.search_city_by_name);
+            cityInputTitle.setText(R.string.search_city_by_name);
         }
-        mCityInputTitle.setOnTouchListener(new View.OnTouchListener() {
+        cityInputTitle.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (mCityInputView != null) mCityInputView.clearFocus();
@@ -143,8 +146,8 @@ public class CitySearchActivity extends BaseFragmentActivity {
                     holder = new ViewHolder();
 
                     convertView = mInflater.inflate(R.layout.item_edit_form_check, null, false);
-                    holder.mTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-                    holder.mBackground = (ImageView) convertView.findViewById(R.id.ivEditBackground);
+                    holder.mTitle = (TextView) convertView.findViewWithTag("tvTitle");
+                    holder.mBackground = (ImageView) convertView.findViewWithTag("ivEditBackground");
 
                     convertView.setTag(holder);
                 } else {
@@ -180,7 +183,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
         };
 
         // ListView
-        ListView cityListView = (ListView) findViewById(R.id.lvCityList);
+        cityListView = (ListView) findViewById(R.id.lvCityList);
         cityListView.setAdapter(mListAdapter);
 
         // возврат значения и выход
@@ -200,11 +203,9 @@ public class CitySearchActivity extends BaseFragmentActivity {
     }
 
     private void initHeader() {
-        ((TextView) findViewById(R.id.tvNavigationTitle)).setText(getString(R.string.general_city));
-        findViewById(R.id.btnNavigationHome).setVisibility(View.GONE);
-        View btnBack = findViewById(R.id.btnNavigationBack);
-        btnBack.setVisibility(View.VISIBLE);
-        btnBack.setOnClickListener(new OnClickListener() {
+        ActionBar actionBar = new ActionBar(findViewById(R.id.rootContainer));
+        actionBar.setTitleText(getString(R.string.general_city));
+        actionBar.showBackButton(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Utils.hideSoftKeyboard(CitySearchActivity.this, mCityInputView);
@@ -216,7 +217,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
     private void initMyCity() {
         mCbMyCity = findViewById(R.id.cbMyCity);
         mMyCityTitle = (TextView) findViewById(R.id.tvMyCity);
-        if (mRequestKey == INTENT_CITY_SEARCH_FROM_FILTER_ACTIVITY || CacheProfile.city.isEmpty()) {
+        if (mRequestKey == INTENT_CITY_SEARCH_FROM_FILTER_ACTIVITY || CacheProfile.city == null || CacheProfile.city.isEmpty()) {
             mCbMyCity.setVisibility(View.GONE);
             mMyCityTitle.setVisibility(View.GONE);
         } else {
@@ -227,8 +228,8 @@ public class CitySearchActivity extends BaseFragmentActivity {
             }
             ((ImageView) mCbMyCity.findViewById(R.id.ivEditBackground)).setImageDrawable(getResources().getDrawable(
                     R.drawable.edit_big_btn_selector));
-            ((TextView) mCbMyCity.findViewById(R.id.tvTitle)).setText(CacheProfile.city.name);
-            mCbMyCity.findViewById(R.id.ivCheck).setVisibility(View.VISIBLE);
+            ((TextView) mCbMyCity.findViewWithTag("tvTitle")).setText(CacheProfile.city.name);
+            mCbMyCity.findViewWithTag("ivCheck").setVisibility(View.VISIBLE);
         }
     }
 
@@ -271,16 +272,27 @@ public class CitySearchActivity extends BaseFragmentActivity {
     }
 
 
-    private void city(String prefix) {
+    private void city(final String prefix) {
         SearchCitiesRequest searchCitiesRequest = new SearchCitiesRequest(this);
         registerRequest(searchCitiesRequest);
+        cityListView.setVisibility(View.VISIBLE);
         searchCitiesRequest.prefix = prefix;
         searchCitiesRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
                 LinkedList<City> citiesList = City.parse(response);
-                if (citiesList.size() == 0)
+                if (citiesList.size() == 0) {
+                    cityListView.setVisibility(View.INVISIBLE);
+                    if (mCityFail != null) {
+                        mCityFail.setVisibility(View.VISIBLE);
+                        mCityFail.setText(getString(R.string.filter_city_fail, prefix));
+//                        mMyCityTitle.setText(getString(R.string.filter_city_fail, prefix));
+//                        mMyCityTitle.setVisibility(View.VISIBLE);
+                    }
                     return;
+                }
+//                mMyCityTitle.setVisibility(View.GONE);
+                mCityFail.setVisibility(View.GONE);
                 fillData(citiesList);
                 post(new Runnable() {
                     @Override

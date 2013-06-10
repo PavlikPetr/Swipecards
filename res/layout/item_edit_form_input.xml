@@ -9,14 +9,12 @@
     <TextView style="@style/BackgroundFormTitleText"/>
 
     <EditText
-            android:id="@+id/edText"
-            style="@style/ItemTitleText"
+            android:tag="edText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
             android:layout_marginLeft="8dp"
             android:gravity="top|left"
-            android:background="@drawable/edit_editbox_selector"
             android:inputType="textMultiLine"
             android:padding="10dp"
             android:paddingLeft="4dp"

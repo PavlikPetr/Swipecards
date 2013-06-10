@@ -20,7 +20,6 @@
     <string name="general_data_error">Fehler! Versuchen Sie noch einmal</string>
     <string name="general_internet_off">Keine Internetverbindung. Bitte, warten Sie</string>
     <string name="general_purchasing_error">Bitte senden Sie die Fehlermeldung beim Kauf an support@topface.ru</string>
-    <string name="general_vk_album_name">Topface http://vk.com/app2257829</string>
     <string name="general_msg_copied">Text ist kopiert</string>
     <string name="general_spinner_title">Wählen Sie die Aktion</string>
     <string name="general_profile_error">Fehler bei der Ladung des Profils</string>
@@ -103,7 +102,6 @@
     <string name="edit_bg_photo">Hintergrund-Foto</string>
     <string name="edit_album">Album</string>
     <string name="edit_profile_photo">Foto ändern</string>
-    <string name="edit_album_photos">Fotos</string>
     <string name="edit_interests">Interessen</string>
     <string name="edit_selected">Ist ausgewählt</string>
     <string name="edit_name">Name</string>
@@ -138,11 +136,6 @@
     <string name="invite_is_free">Es ist kostenlos, Einladung zu senden</string>
     <string name="invite_error">Es klappt nicht, Einladungen zu senden. Versuchen Sie nochmal</string>
     <string name="invite_completed">Einladung ist gesendet</string>
-    <plurals name="invite_bonus_text">
-        <item quantity="zero">Laden Sie Ihre Freunde und bekommen Sie für jeden 20</item>
-        <item quantity="other">Sie wollen Einladungen %2$d Freunden senden und Sie erhalten dafür %1$d</item>
-        <item quantity="one">Sie wollen eine Einladung %2$d Freund senden und Sie erhalten dafür %1$d</item>
-    </plurals>
     <string name="settings_header_title">Einstellungen</string>
     <string name="settings_wifi">Nur per Wi-Fi</string>
     <string name="settings_on">Eingeschaltet</string>
@@ -266,7 +259,6 @@
     <string name="profile_mood">Beschreiben Sie Ihre Laune</string>
     <string name="general_reconnect">Wir versuchen Internetverbindung zu wiederherstellen.\nBitte, warten.</string>
     <string name="dating_people_unnoticed">Sie lassen 10 Leute ohne Ihre Aufmerksamkeit!</string>
-    <string name="dating_continue">Weiter einschätzen</string>
     <string name="dating_better_look">Sehen Sie sich genau an!\nVielleicht verpassen Sie Ihr Schicksal!</string>
     <string name="edit_my_city">Meine Stadt</string>
     <string name="edit_my_photos">Meine Fotos</string>
@@ -312,6 +304,7 @@
     <string name="map_popup_address">Adresse</string>
     <string name="black_list_info">Sie haben den Nutzer in die schwarze Liste hinzugefügt. Sie können das in Ihrem Profil in Einstellungen von VIP-Status ändern.</string>
     <string name="general_gift">Geschenk</string>
+    <string name="user_actions_chat">Konversation</string>
     <string name="general_place">Platz</string>
     <string name="general_soon">Bald</string>
     <string name="black_list_activation">Aktivieren Sie VIP-Status und benutzen Sie die schwarze Liste</string>
@@ -322,6 +315,7 @@
     <string name="password">Passwort</string>
     <string name="recover_password">Passwort wiederherstellen</string>
     <string name="recovering_password">Passwort wiederherstellen</string>
+    <string name="send_password">Das Passwort senden</string>
     <string name="boy">Mann</string>
     <string name="girl">Frau</string>
     <string name="start_communication">Kommunikation anfangen</string>
@@ -340,12 +334,16 @@
     <string name="vip_advantages">Vorteile von VIP</string>
     <string name="change_email">E-Mail ändern</string>
     <string name="change_password">Passwort ändern</string>
+    <string name="password_changing">Passwort ändern</string>
     <string name="save">Speichern</string>
     <string name="password_hint">Passwort</string>
+    <string name="password_confirmation_hint">Passwort bestätigen</string>
     <string name="enter_new_password">Geben Sie ein neues Passwort ein</string>
+    <string name="passwords_mismatched">Passwörter fallen nicht zusammen</string>
     <string name="passwords_changed">Passwort ist geändert</string>
     <string name="take_photo">Foto aufnehmen</string>
     <string name="take_another_photo">Anderes Foto</string>
+    <string name="we_detect_your_city">Wir haben Ihre Stadt festgestellt:</string>
     <string name="reselect_city">Andere Stadt wählen:</string>
     <string name="email_confirmed">E-Mail ist bestädigt!</string>
     <string name="sympathy_sended">Sympathie ist gesendet</string>
@@ -354,7 +352,42 @@
     <string name="general_change">Ändern</string>
     <string name="general_correct">Alles ist richtig</string>
     <string name="confirm_email">Bestätigen Sie Ihre E-Mail</string>
+    <string name="password_sent">Ihr neues Passwort wurde an Ihre E-Mail gesendet</string>
+    <string name="buy_vip_month_one">%1$d Monat für %2$.2f %3$@</string>
+    <string name="buy_vip_month_few">%1$d Monate für %2$.2f %3$@</string>
+    <string name="buy_vip_month_other">%1$d Monate für %2$.2f %3$@</string>
     <string name="buy_special_offers">Sonderangebote</string>
     <string name="you_dont_have_gifts_yet">Sie haben noch keine Geschenke</string>
     <string name="buy_sympathies">Sympathien kaufen</string>
+    <string name="upload_photos">Laden Sie Fotos hoch</string>
+    <string name="chat_no_message_title">Fangen Sie die Kommunikation an!</string>
+    <string name="user_baned">Nutzer wurde gebannt</string>
+    <string name="general_choose_city">Wählen Sie eine Stadt</string>
+    <string name="buy_mobile_payments">Andere Zahlungsweisen</string>
+    <string name="general_save_and_exit">Speichern und ausloggen</string>
+    <string name="user_is_deleted">Nutzer wurde gelöscht</string>
+    <string name="general_bookmarks_title">Favoriten</string>
+    <string name="general_empty_bookmarks">Keine Favoriten</string>
+    <string name="general_bookmarks">Favoriten</string>
+    <string name="general_fans">Fans</string>
+    <string name="general_no_fans">Keine Fans</string>
+    <plurals name="get_free_money">
+        <item quantity="other">%d Coins kostenlos</item>
+        <item quantity="one">%d Coin kostenlos</item>
+    </plurals>
+    <string name="settings_edit_profile">Profil ändern</string>
+    <string name="general_bookmarks_delete">Aus Favoritenliste entfernen</string>
+    <string name="general_bookmarks_add">Zu Favoriten hinzufügen</string>
+    <string name="buy_resources">Ergänzen</string>
+    <string name="user_is_banned">Der Nutzer ist gebannt</string>
+    <string name="general_user_bookmarkadd">Der Nutzer ist zu Favoriten hinzugefügt</string>
+    <string name="general_input_email">Geben Sie Ihre E-Mail-Adresse ein</string>
+    <string name="friend_email_hint">Geben Sie E-Mail oder Handynummer eines Freundes ein</string>
+    <string name="general_add">Hinzufügen</string>
+    <string name="filter_hint">Geben Sie Ihre Name ein</string>
+    <string name="complain_type_picture">Bild</string>
+    <string name="general_msg">Nachricht</string>
+    <string name="black_list_add_short">In die schwarze Liste</string>
+    <string name="confirm">Bestätigen</string>
+    <string name="general_exit">Ausloggen</string>
 </resources>

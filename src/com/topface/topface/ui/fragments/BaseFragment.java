@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,24 +14,20 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.analytics.TrackedFragment;
-import com.topface.topface.utils.ActionBar;
-import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.NavigationBarController;
+import com.topface.topface.utils.*;
 import com.topface.topface.utils.http.IRequestClient;
 
 import java.util.LinkedList;
 
 public abstract class BaseFragment extends TrackedFragment implements IRequestClient {
 
-    protected NavigationBarController mNavBarController;
 
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
 
     private ActionBar mActionBar;
+    private BroadcastReceiver mProfileLoadReceiver;
 
     private BroadcastReceiver updateCountersReceiver;
-    public static final int F_UNKNOWN = -1;
     public static final int F_VIP_PROFILE = 1000;
     public static final int F_PROFILE = 1001;
     public static final int F_DATING = 1002;
@@ -40,17 +37,32 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public static final int F_TOPS = 1006;
     public static final int F_SETTINGS = 1007;
     public static final int F_VISITORS = 1008;
+    public static final int F_BOOKMARKS = 1009;
+    public static final int F_FANS = 1010;
+    public static final int F_EDITOR = 9999;
 
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        (new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                inBackroundThread();
+            }
+        }).start();
+    }
 
     protected ActionBar getActionBar(View view) {
-        if(mActionBar == null) {
+        if (mActionBar == null) {
             mActionBar = new ActionBar(view.findViewById(R.id.loNavigationBar));
         }
         return mActionBar;
     }
 
     protected ActionBar getActionBar(Activity activity) {
-        if(mActionBar == null) {
+        if (mActionBar == null) {
             mActionBar = new ActionBar(activity.findViewById(R.id.loNavigationBar));
         }
         return mActionBar;
@@ -75,9 +87,10 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public void onResume() {
         if (mActionBar != null) {
             mActionBar.refreshNotificators();
-            setUpdateCountersReceiver();
         }
+        setUpdateCountersReceiver();
         super.onResume();
+        checkProfileLoad();
 
     }
 
@@ -88,6 +101,10 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         if (updateCountersReceiver != null) {
             LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(updateCountersReceiver);
             updateCountersReceiver = null;
+        }
+        if (mProfileLoadReceiver != null) {
+            LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileLoadReceiver);
+            mProfileLoadReceiver = null;
         }
     }
 
@@ -121,7 +138,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     private void setUpdateCountersReceiver() {
-        if (updateCountersReceiver == null && mNavBarController != null) {
+        if (updateCountersReceiver == null) {
             updateCountersReceiver = new BroadcastReceiver() {
 
                 @Override
@@ -172,10 +189,34 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     public void activateActionBar(boolean activate) {
-        if(mActionBar != null) {
+        if (mActionBar != null) {
             mActionBar.activateHomeButton(activate);
         }
     }
 
-    public void clearContent(){ }
+    public void clearContent() {
+    }
+
+    private void checkProfileLoad() {
+        if (CacheProfile.isLoaded()) {
+            onLoadProfile();
+        } else if (mProfileLoadReceiver == null) {
+            mProfileLoadReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    checkProfileLoad();
+                }
+            };
+
+            LocalBroadcastManager.getInstance(getActivity())
+                    .registerReceiver(mProfileLoadReceiver, new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD));
+        }
+    }
+
+    protected void onLoadProfile() {
+        Debug.log(getClass().getSimpleName() + ": onLoadProfile");
+    }
+
+    protected void inBackroundThread() {
+    }
 }

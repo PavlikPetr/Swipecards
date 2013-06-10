@@ -16,12 +16,15 @@
 [submodule "libs/acra"]
 	path = libs/acra
 	url = git@github.com:Topface/acra.git
-[submodule "libs/ActionBarSherlock"]
-	path = libs/ActionBarSherlock
-	url = git@github.com:Topface/ActionBarSherlock.git
-[submodule "libs/ViewPagerIndicator"]
-	path = libs/ViewPagerIndicator
-	url = git@github.com:Topface/Android-ViewPagerIndicator.git
 [submodule "libs/Android-ViewPagerIndicator"]
 	path = libs/Android-ViewPagerIndicator
 	url = git@github.com:Topface/Android-ViewPagerIndicator.git
+[submodule "libs/PhotoView"]
+	path = libs/PhotoView
+	url = git@github.com:Topface/PhotoView.git
+[submodule "libs/MoPub"]
+	path = libs/MoPub
+	url = git@github.com:Topface/mopub-client.git
+[submodule "libs/SlidingMenu"]
+	path = libs/SlidingMenu
+	url = git@github.com:Topface/SlidingMenu.git

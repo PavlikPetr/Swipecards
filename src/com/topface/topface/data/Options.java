@@ -25,21 +25,39 @@ import java.util.LinkedList;
  * <p/>
  * NOTICE: В данном типе данных используем значения по умолчанию
  */
+@SuppressWarnings("UnusedDeclaration")
 public class Options extends AbstractData {
 
     /**
      * Идентификаторы страниц
      */
+    public static final String PAGE_UNKNOWK = "UNKNOWN_PAGE";
     public final static String PAGE_LIKES = "LIKE";
     public final static String PAGE_MUTUAL = "MUTUAL";
     public final static String PAGE_MESSAGES = "MESSAGES";
-    public final static String PAGE_TOP = "TOP";
     public final static String PAGE_VISITORS = "VISITORS";
     public final static String PAGE_DIALOGS = "DIALOGS";
+    public final static String PAGE_FANS = "FANS";
+    public final static String PAGE_BOOKMARKS = "BOOKMARKS";
+    public final static String PAGE_VIEWS = "VIEWS";
     public final static String PAGE_START = "START";
+    public final static String PAGE_GAG = "GAG";
+    public final static String[] PAGES = new String[]{
+            PAGE_UNKNOWK,
+            PAGE_LIKES,
+            PAGE_MUTUAL,
+            PAGE_MESSAGES,
+            PAGE_VISITORS,
+            PAGE_DIALOGS,
+            PAGE_FANS,
+            PAGE_BOOKMARKS,
+            PAGE_VIEWS,
+            PAGE_START,
+            PAGE_GAG
+    };
 
-    public final static String GENERAL_MAIL_CONST = "true";
-    public final static String GENERAL_APNS_CONST = "false";
+    public final static String GENERAL_MAIL_CONST = "mail";
+    public final static String GENERAL_APNS_CONST = "apns";
     public final static String GENERAL_SEPARATOR = ":";
 
     /**
@@ -48,6 +66,11 @@ public class Options extends AbstractData {
     public final static String FLOAT_TYPE_BANNER = "BANNER";
     public final static String FLOAT_TYPE_LEADERS = "LEADERS";
     public final static String FLOAT_TYPE_NONE = "NONE";
+    public final static String[] FLOAT_TYPES = new String[]{
+            FLOAT_TYPE_BANNER,
+            FLOAT_TYPE_LEADERS,
+            FLOAT_TYPE_NONE
+    };
 
     /**
      * Идентификаторы типов баннеров
@@ -59,7 +82,37 @@ public class Options extends AbstractData {
     public static final String BANNER_ADWIRED = "ADWIRED";
     public final static String BANNER_MADNET = "MADNET";
     public static final String BANNER_BEGUN = "BEGUN";
+    public static final String BANNER_MOPUB = "MOPUB";
+    public static final String BANNER_INNERACTIVE = "INNERACTIVE";
+    public static final String BANNER_MOBCLIX = "MOBCLIX";
     public static final String BANNER_GAG = "GAG";
+    public final static String[] BANNERS = new String[]{
+            BANNER_TOPFACE,
+            BANNER_ADFONIC,
+            BANNER_ADMOB,
+            BANNER_WAPSTART,
+            BANNER_ADWIRED,
+            BANNER_MADNET,
+            BANNER_BEGUN,
+            BANNER_MOPUB,
+            BANNER_INNERACTIVE,
+            BANNER_MOBCLIX,
+            BANNER_GAG
+    };
+
+    /**
+     * Идентификаторы для типов офферволлов
+     */
+    public static final String TAPJOY = "TAPJOY";
+    public static final String SPONSORPAY = "SPONSORPAY";
+    public static final String CLICKKY = "CLICKKY";
+    public static final String RANDOM = "RANDOM";
+    public final static String[] OFFERWALLS = new String[]{
+            TAPJOY,
+            SPONSORPAY,
+            CLICKKY,
+            RANDOM
+    };
 
     /**
      * Настройки для каждого типа страниц
@@ -69,6 +122,7 @@ public class Options extends AbstractData {
     public LinkedList<BuyButton> likes = new LinkedList<BuyButton>();
     public LinkedList<BuyButton> premium = new LinkedList<BuyButton>();
     public LinkedList<BuyButton> others = new LinkedList<BuyButton>();
+    private String paymentwall;
 
     public String max_version = "2147483647"; //Integer.MAX_VALUE);
 
@@ -83,11 +137,20 @@ public class Options extends AbstractData {
 
     public int minLeadersPercent = 25; //Не уверен в этом, возможно стоит использовать другое дефолтное значение
 
+    public String offerwall;
+    public boolean saleExists = false;
+
+    public int premium_period;
+    public int contacts_count;
+    public long popup_timeout;
+    public boolean block_unconfirmed;
+    public boolean block_chat_not_mutual;
 
     public static Options parse(ApiResponse response) {
         Options options = new Options();
 
         try {
+            options.saleExists = false;
             options.price_highrate = response.jsonResult.optInt("price_highrate");
             options.price_leader = response.jsonResult.optInt("price_leader");
             options.minLeadersPercent = response.jsonResult.optInt("leader_percent");
@@ -96,41 +159,55 @@ public class Options extends AbstractData {
             for (int i = 0; i < pages.length(); i++) {
                 JSONObject page = pages.getJSONObject(i);
 
-                String pageName = page.optString("name");
+                String pageName = getPageName(page);
                 String floatType = page.optString("float");
                 String bannerType = page.optString("banner");
 
                 options.pages.put(pageName, new Page(pageName, floatType, bannerType));
             }
-
+            options.offerwall = response.jsonResult.optString("offerwall");
             options.max_version = response.jsonResult.optString("max_version");
+            options.block_unconfirmed = response.jsonResult.optBoolean("block_unconfirmed");
+            options.block_chat_not_mutual = response.jsonResult.optBoolean("block_chat_not_mutual");
 
             JSONObject purchases = response.jsonResult.optJSONObject("purchases");
             if (purchases != null) {
                 JSONArray coinsJSON = purchases.optJSONArray("coins");
                 if (coinsJSON != null) {
                     for (int i = 0; i < coinsJSON.length(); i++) {
-                        options.coins.add(createBuyButtonFromJSON(coinsJSON.optJSONObject(i)));
+                        options.coins.add(options.createBuyButtonFromJSON(coinsJSON.optJSONObject(i)));
                     }
                 }
 
                 JSONArray likesJSON = purchases.optJSONArray("likes");
                 for (int i = 0; i < likesJSON.length(); i++) {
-                    options.likes.add(createBuyButtonFromJSON(likesJSON.optJSONObject(i)));
+                    options.likes.add(options.createBuyButtonFromJSON(likesJSON.optJSONObject(i)));
                 }
 
                 JSONArray premiumJSON = purchases.optJSONArray("premium");
                 if (premiumJSON != null) {
                     for (int i = 0; i < premiumJSON.length(); i++) {
-                        options.premium.add(createBuyButtonFromJSON(premiumJSON.optJSONObject(i)));
+                        options.premium.add(options.createBuyButtonFromJSON(premiumJSON.optJSONObject(i)));
                     }
                 }
 
                 JSONArray othersJSON = purchases.optJSONArray("others");
                 if (othersJSON != null) {
                     for (int i = 0; i < othersJSON.length(); i++) {
-                        options.others.add(createBuyButtonFromJSON(othersJSON.optJSONObject(i)));
+                        options.others.add(options.createBuyButtonFromJSON(othersJSON.optJSONObject(i)));
                     }
+                }
+            }
+
+            JSONObject contacts_invite = response.jsonResult.optJSONObject("contacts_invite");
+            options.premium_period = contacts_invite.optInt("premium_period");
+            options.contacts_count = contacts_invite.optInt("contacts_count");
+            options.popup_timeout = contacts_invite.optInt("show_popup_timeout") * 60 * 60 * 1000;
+
+            if (response.jsonResult.has("links")) {
+                JSONObject links = response.jsonResult.optJSONObject("links");
+                if (links != null && links.has("paymentwall")) {
+                    options.paymentwall = links.optString("paymentwall");
                 }
             }
 
@@ -143,14 +220,46 @@ public class Options extends AbstractData {
         return options;
     }
 
-    public static BuyButton createBuyButtonFromJSON(JSONObject purchaseItem) {
+    private static String getPageName(JSONObject page) {
+        String name = page.optString("name");
+        if (PAGE_LIKES.equals(name)) {
+            return PAGE_LIKES;
+        } else if (PAGE_MUTUAL.equals(name)) {
+            return PAGE_MUTUAL;
+        } else if (PAGE_MESSAGES.equals(name)) {
+            return PAGE_MESSAGES;
+        } else if (PAGE_VISITORS.equals(name)) {
+            return PAGE_VISITORS;
+        } else if (PAGE_DIALOGS.equals(name)) {
+            return PAGE_DIALOGS;
+        } else if (PAGE_FANS.equals(name)) {
+            return PAGE_FANS;
+        } else if (PAGE_BOOKMARKS.equals(name)) {
+            return PAGE_BOOKMARKS;
+        } else if (PAGE_VIEWS.equals(name)) {
+            return PAGE_VIEWS;
+        } else if (PAGE_START.equals(name)) {
+            return PAGE_START;
+        } else if (PAGE_GAG.equals(name)) {
+            return PAGE_GAG;
+        } else {
+            return PAGE_UNKNOWK + "(" + name + ")";
+        }
+    }
+
+    public BuyButton createBuyButtonFromJSON(JSONObject purchaseItem) {
+        if (purchaseItem.optInt("discount") > 0) {
+            saleExists = true;
+
+        }
         return new BuyButton(
                 purchaseItem.optString("id"),
                 purchaseItem.optString("title"),
                 purchaseItem.optInt("price"),
                 purchaseItem.optString("hint"),
                 purchaseItem.optInt("showType"),
-                purchaseItem.optString("type")
+                purchaseItem.optString("type"),
+                purchaseItem.optInt("discount")
         );
     }
 
@@ -162,12 +271,22 @@ public class Options extends AbstractData {
         if (context != null && !curBtn.title.equals("")) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.item_buying_btn, root, false);
+
             RelativeLayout container = (RelativeLayout) view.findViewById(R.id.itContainer);
-            container.setBackgroundResource(
-                    curBtn.showType == 0 ?
-                            R.drawable.btn_vip_sale_selector :
-                            R.drawable.btn_vip_super_sale_selector
-            );
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) container.getLayoutParams();
+            double density = context.getResources().getDisplayMetrics().density;
+
+            int bgResource;
+            if (curBtn.discount > 0) {
+                bgResource = R.drawable.btn_sale_selector;
+                container.setPadding((int) (5 * density), (int) (5 * density), (int) (56 * density), (int) (5 * density));
+            } else {
+                bgResource = curBtn.showType == 0 ?
+                        R.drawable.btn_gray_selector :
+                        R.drawable.btn_blue_selector;
+            }
+            container.setBackgroundResource(bgResource);
+
 
             container.requestLayout();
 
@@ -218,10 +337,30 @@ public class Options extends AbstractData {
         public String floatType;
         public String banner;
 
+        private static final String SEPARATOR = ";";
+
         public Page(String name, String floatType, String banner) {
             this.name = name;
             this.floatType = floatType;
             this.banner = banner;
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder strBuilder = new StringBuilder();
+            strBuilder.append(name).append(SEPARATOR)
+                    .append(floatType).append(SEPARATOR)
+                    .append(banner);
+            return strBuilder.toString();
+        }
+
+        public static Page parseFromString(String str) {
+            String[] params = str.split(SEPARATOR);
+            if (params.length == 3) {
+                return new Page(params[0],params[1],params[2]);
+            } else {
+                return null;
+            }
         }
     }
 
@@ -232,17 +371,23 @@ public class Options extends AbstractData {
         private int showType;
         public String hint;
         public String type;
+        public int discount;
         public static final String COINS_NAME = "coins";
         public static final String LIKES_NAME = "likes";
 
-        public BuyButton(String id, String title, int price, String hint, int showType, String type) {
+        public BuyButton(String id, String title, int price, String hint, int showType, String type, int discount) {
             this.id = id;
             this.title = title;
             this.price = price;
             this.hint = hint;
             this.showType = showType;
             this.type = type;
+            this.discount = discount;
         }
+    }
+
+    public String getPaymentwallLink() {
+        return paymentwall;
     }
 
 }

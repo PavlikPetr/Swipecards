@@ -77,7 +77,6 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_profile_photos, container, false);
-        root.findViewById(R.id.navBar).setVisibility(View.VISIBLE);
         root.findViewById(R.id.headerShadow).setVisibility(View.VISIBLE);
         // Navigation bar
         ActionBar actionBar = getActionBar(root);
@@ -192,11 +191,11 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                                 mPhotoGridAdapter.notifyDataSetChanged();
                                 if (CacheProfile.photos.contains(removedPhoto)) {
                                     CacheProfile.photos.remove(removedPhoto);
-                                    mLastSelectedAsMainId = mSelectedAsMainId;
                                     Toast.makeText(App.getContext(), R.string.general_photo_deleted, 1500).show();
                                 } else {
                                     Toast.makeText(App.getContext(), R.string.general_server_error, 1500).show();
                                 }
+                                mLastSelectedAsMainId = mSelectedAsMainId;
                             }
                         }
                     }

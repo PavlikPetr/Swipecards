@@ -1,6 +1,7 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+import android.location.Location;
 import com.topface.topface.utils.CacheProfile;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,12 +15,12 @@ public class SettingsRequest extends ApiRequest {
     // минимального или болше максимального значение
     // кропятся по ОДЗ
     public int sex = -1; // новый пол пользователя
-    //public double lat = ; // долгота местонахождения пользователя
-    //public double lng = ; // широта местонахождения пользователя
+    public Location location; //координаты пользователя
     public int cityid = -1; // идентификатор города пользователя
     public String status; // статус
     public int background = -1;
-    public boolean invisible;
+    public Boolean invisible;
+    public int xstatus = -1; //цель знакомства
 
     public SettingsRequest(Context context) {
         super(context);
@@ -40,6 +41,10 @@ public class SettingsRequest extends ApiRequest {
         if (sex != -1) {
             data.put("sex", sex);
         }
+        if (location != null) {
+            data.put("lat", location.getLatitude());
+            data.put("lng", location.getLongitude());
+        }
         //if (lat != -1) data.put("lat", lat);
         //if (lng != -1) data.put("lng", lng);
         if (cityid != -1) {
@@ -48,9 +53,13 @@ public class SettingsRequest extends ApiRequest {
         if (background != -1) {
             data.put("background", background);
         }
-        if (invisible != CacheProfile.invisible) {
+        if (invisible != null) {
             data.put("invisible", invisible);
         }
+        if (xstatus != -1) {
+            data.put("xstatus", xstatus);
+        }
+
         return data;
     }
 

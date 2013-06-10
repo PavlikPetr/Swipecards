@@ -4,25 +4,24 @@
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
               android:background="@drawable/im_bar_header"
-              android:baselineAligned="false">
+              android:baselineAligned="false"
+              android:visibility="gone">
 
     <RelativeLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_gravity="center_vertical"
-            android:layout_weight="0.25"
             android:gravity="left|center_vertical"
-            android:visibility="visible">
+            >
 
         <ImageButton
                 android:id="@+id/btnNavigationHome"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:paddingRight="30dp"
                 android:paddingLeft="8dp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/navigation_home_selector"
-                android:visibility="visible"/>
+                />
 
         <TextView
                 android:id="@+id/tvNotificationDialogs"
@@ -31,14 +30,14 @@
                 android:layout_height="wrap_content"
                 android:layout_alignRight="@id/btnNavigationHome"
                 android:layout_alignTop="@id/btnNavigationHome"
-                android:layout_marginRight="24dp"
+
                 android:layout_marginTop="5dp"
                 android:background="@drawable/topface_notification_dialogs"
                 android:gravity="center_horizontal"
                 android:paddingLeft="4dp"
                 android:paddingRight="11dp"
                 android:paddingTop="1dp"
-                android:visibility="invisible"/>
+                android:visibility="gone"/>
 
         <TextView
                 android:id="@+id/tvNotificationLikes"
@@ -47,14 +46,13 @@
                 android:layout_height="wrap_content"
                 android:layout_alignRight="@id/btnNavigationHome"
                 android:layout_alignTop="@id/btnNavigationHome"
-                android:layout_marginRight="24dp"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/topface_notification_likes"
                 android:gravity="center_horizontal"
                 android:paddingLeft="4dp"
                 android:paddingRight="11dp"
                 android:paddingTop="0dp"
-                android:visibility="invisible"/>
+                android:visibility="gone"/>
 
         <TextView
                 android:id="@+id/tvNotificationMutual"
@@ -63,14 +61,13 @@
                 android:layout_height="wrap_content"
                 android:layout_alignRight="@id/btnNavigationHome"
                 android:layout_alignTop="@id/btnNavigationHome"
-                android:layout_marginRight="24dp"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/topface_notification_likes"
                 android:gravity="center_horizontal"
                 android:paddingLeft="4dp"
                 android:paddingRight="11dp"
                 android:paddingTop="0dp"
-                android:visibility="invisible"/>
+                android:visibility="gone"/>
 
         <ImageButton
                 android:id="@+id/btnNavigationBack"
@@ -85,24 +82,26 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="0.5"
-            android:gravity="center"
+            android:gravity="left"
+            android:layout_marginLeft="5dp"
             android:orientation="vertical"
             android:visibility="visible">
 
         <TextView
                 android:id="@+id/tvNavigationTitle"
                 style="@style/NavigationHeader"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:gravity="center_horizontal"
+                android:drawablePadding="7dp"
                 android:singleLine="true"
                 android:textSize="16sp"/>
 
         <TextView
                 android:id="@+id/tvNavigationSubtitle"
                 style="@style/NavigationHeader"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:maxWidth="165dp"
@@ -161,15 +160,39 @@
                 android:background="@android:color/transparent"
                 android:src="@drawable/navigation_male_profile_selector"
                 android:visibility="gone"/>
-        <ImageButton
-            android:id="@+id/btnUserProfActions"
+
+        <CheckBox
+            android:id="@+id/btnNavigationCheckbox"
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_marginRight="5dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/navbar_checkbox"
+            android:visibility="gone"/>
+
+
+        <ImageButton
+            android:id="@+id/btnNavigationSend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:background="@android:color/transparent"
-            android:src="@drawable/user_profile_actions_button_selector"
-            android:visibility="gone"
-            />
+            android:src="@drawable/btn_send_feedback"
+            android:visibility="gone"/>
+
+        <ImageButton
+                android:id="@+id/btnUserProfActions"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_marginRight="5dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/user_profile_actions_button_selector"
+                android:visibility="gone"
+                />
+
+        <com.topface.topface.ui.views.ImageViewRemote
+                android:id="@+id/btnNavigationBarAvatar"
+                style="@style/NavigationBarAvatar"
+                android:visibility="gone"/>
     </RelativeLayout>
 
 </LinearLayout>

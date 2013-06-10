@@ -1,6 +1,7 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+import android.text.TextUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,7 +9,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class VirusLikesRequest extends ApiRequest {
+public class VirusLikesRequest extends ConfirmedApiRequest {
     public static final String SERVICE_NAME = "virusLikes";
     /**
      * идентификатор сообщения из ленты для получения лайков. Если параметр указан, данное сообщение будет удалено
@@ -19,14 +20,14 @@ public class VirusLikesRequest extends ApiRequest {
      */
     private static final String VIRUS_REQUEST_IDS = "socialids";
 
-    private int mFeedId;
+    private String mFeedId;
     private ArrayList<Long> mSocialids;
 
     public VirusLikesRequest(Context context) {
-        this(0, context);
+        this("", context);
     }
 
-    public VirusLikesRequest(int feedId, Context context) {
+    public VirusLikesRequest(String feedId, Context context) {
         super(context);
         mFeedId = feedId;
     }
@@ -39,7 +40,7 @@ public class VirusLikesRequest extends ApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         JSONObject data = new JSONObject();
-        if (mFeedId > 0) {
+        if (!TextUtils.isEmpty(mFeedId)) {
             data.put(VIRUS_FEED_ITEM, mFeedId);
         } else if (mSocialids != null) {
             data.put(VIRUS_REQUEST_IDS, new JSONArray(mSocialids));

@@ -68,11 +68,6 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
     }
 
     @Override
-    protected int getEmptyFeedText() {
-        return R.string.black_list_empty;
-    }
-
-    @Override
     public void onClick(View view) {
     }
 
@@ -131,14 +126,14 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
     }
 
     @Override
-    protected DialogInterface.OnClickListener getLongTapActionsListener(final int id) {
+    protected DialogInterface.OnClickListener getLongTapActionsListener(final int position) {
         return new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case BLACK_LIST_DELETE_BUTTON:
                         mLockView.setVisibility(View.VISIBLE);
-                        onRemoveFromBlackList(id);
+                        onRemoveFromBlackList(position);
                         break;
                 }
             }
@@ -178,6 +173,15 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
 
     @Override
     protected void initDoubleButton(View view) {
+    }
+
+    @Override
+    protected void initEmptyFeedView(View inflated) {
+    }
+
+    @Override
+    protected int getEmptyFeedLayout() {
+        return R.layout.layout_empty_blacklist;
     }
 
     @Override

@@ -3,16 +3,22 @@ package com.topface.topface.ui.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.*;
+import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
@@ -24,6 +30,8 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
+import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
@@ -33,13 +41,15 @@ import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.IListLoader;
-import com.topface.topface.ui.views.LockerView;
-import com.topface.topface.ui.views.RetryView;
+import com.topface.topface.ui.fragments.feed.DialogsFragment;
+import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.SwapControl;
 import com.topface.topface.utils.*;
+import com.topface.topface.utils.GeoUtils.GeoLocationManager;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TimerTask;
 
 public class ChatFragment extends BaseFragment implements View.OnClickListener, LocationListener {
@@ -58,8 +68,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public static final String INTENT_ITEM_ID = "item_id";
     public static final String MAKE_ITEM_READ = "com.topface.topface.feedfragment.MAKE_READ";
 
+    public static final String DEFAULT_ACTIVATED_COLOR = "#AAAAAA";
+
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
 
+    private static final int COMPLAIN_BUTTON = 2;
     private static final int DELETE_BUTTON = 1;
     private static final int COPY_BUTTON = 0;
 
@@ -75,21 +88,25 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private FeedList<History> mHistoryData;
     private FeedUser mUser;
     private EditText mEditBox;
-    private LockerView mLoadingLocker;
-    private RetryView mRetryView;
+    private TextView mLoadingBackgroundText;
+    private AnimationDrawable mLoadingBackgroundDrawable;
+    private RetryViewCreator mRetryView;
     private SwapControl mSwapControl;
     private Button mAddToBlackList;
     private ImageButton mBtnChatAdd;
+    private ActionBar mActionBar;
 
     private String[] editButtonsNames;
     private boolean mReceiverRegistered = false;
-    private int itemId;
+    private String itemId;
     private boolean wasFailed = false;
     private boolean isInBlackList = false;
 
     // Managers
     private GeoLocationManager mGeoManager = null;
     private RelativeLayout mLockScreen;
+    private String[] editButtonsSelfNames;
+    private LinearLayout chatActions;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,24 +119,37 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.ac_chat, null);
 
+
         Debug.log(this, "+onCreate");
         // arguments
-        itemId = getArguments().getInt(INTENT_ITEM_ID, -1);
+        itemId = getArguments().getString(INTENT_ITEM_ID);
         mUserId = getArguments().getInt(INTENT_USER_ID, -1);
         mProfileInvoke = getArguments().getBoolean(INTENT_PROFILE_INVOKE, false);
-        int userSex = getArguments().getInt(INTENT_USER_SEX, Static.BOY);
         String userName = getArguments().getString(INTENT_USER_NAME);
         int userAge = getArguments().getInt(INTENT_USER_AGE, 0);
         String userCity = getArguments().getString(INTENT_USER_CITY);
 
+        chatActions = (LinearLayout) root.findViewById(R.id.mChatActions);
+        chatActions.setVisibility(View.INVISIBLE);
+        ArrayList<UserActions.ActionItem> actions = new ArrayList<UserActions.ActionItem>();
+        actions.add(new UserActions.ActionItem(R.id.acProfile, this));
+        actions.add(new UserActions.ActionItem(R.id.acBlock, this));
+        actions.add(new UserActions.ActionItem(R.id.acComplain, this));
+        actions.add(new UserActions.ActionItem(R.id.acBookmark, this));
+
+        new UserActions(chatActions, actions);
         // Locker
-        mLoadingLocker = (LockerView) root.findViewById(R.id.llvChatLoading);
+        mLoadingBackgroundText = (TextView) root.findViewById(R.id.tvBackgroundText);
+        Drawable drawable = mLoadingBackgroundText.getCompoundDrawables()[0];
+        if (drawable instanceof AnimationDrawable) {
+            mLoadingBackgroundDrawable = (AnimationDrawable) drawable;
+        }
 
         // Navigation bar
-        initNavigationbar(root, userSex, userName, userAge, userCity);
+        initNavigationbar(root, userName, userAge, userCity);
 
-        editButtonsNames = new String[]{getString(R.string.general_copy_title), getString(R.string.general_delete_title)};
-
+        editButtonsNames = new String[]{getString(R.string.general_copy_title), getString(R.string.general_delete_title), getString(R.string.general_complain)};
+        editButtonsSelfNames = new String[]{getString(R.string.general_copy_title), getString(R.string.general_delete_title)};
         // Swap Control
         initAddPanel(root);
 
@@ -147,6 +177,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     private void initAddPanel(View root) {
         mSwapControl = ((SwapControl) root.findViewById(R.id.swapFormView));
+        mSwapControl.setOnSizeChangedListener(new SwapControl.OnSizeChangedListener() {
+            @Override
+            public void onSizeChanged(int w, int h, int oldw, int oldh) {
+                if (oldh > h) {
+                    // keyboard opened
+                    toggleAddPanel(false);
+                }
+            }
+        });
 
         // Add Button
         mBtnChatAdd = (ImageButton) root.findViewById(R.id.btnChatAdd);
@@ -203,12 +242,16 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         }
                     }
                     mUser = new FeedUser(new JSONObject(savedInstanceState.getString(FRIEND_FEED_USER)));
+                    if (!mUser.isEmpty()) {
+                        onUserLoaded();
+                    }
+
                     if (was_failed) {
                         mLockScreen.setVisibility(View.VISIBLE);
                     } else {
                         mLockScreen.setVisibility(View.GONE);
                     }
-                    mLoadingLocker.setVisibility(View.GONE);
+                    showLoadingBackground();
                 } catch (Exception e) {
                     Debug.error(e);
                 } catch (OutOfMemoryError e) {
@@ -230,9 +273,16 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             @Override
             public void onLongClick(final int position, final View v) {
 
+                History item = mAdapter.getItem(position);
+                String[] buttons;
+                if(item.target == 0) {
+                    buttons = editButtonsSelfNames;
+                } else {
+                    buttons = editButtonsNames;
+                }
                 new AlertDialog.Builder(getActivity())
                         .setTitle(R.string.general_spinner_title)
-                        .setItems(editButtonsNames, new DialogInterface.OnClickListener() {
+                        .setItems(buttons, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 switch (which) {
@@ -243,6 +293,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                                     case COPY_BUTTON:
                                         mAdapter.copyText(((TextView) v).getText().toString());
                                         EasyTracker.getTracker().trackEvent("Chat", "CopyItemText", "", 1L);
+                                        break;
+                                    case COMPLAIN_BUTTON:
+                                        startActivity(ContainerActivity.getComplainIntent(mUserId, mAdapter.getItem(position).id));
+                                        EasyTracker.getTracker().trackEvent("Chat", "ComplainItemText", "", 1L);
                                         break;
                                 }
                             }
@@ -258,15 +312,18 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
         });
         mListView.setClickable(true);
-        mAdapter.addHeader(mListView.getRefreshableView());
+        if (mAdapter.isEmpty()) {
+            mAdapter.addHeader(mListView.getRefreshableView());
+        }
         mListView.setAdapter(mAdapter);
         mListView.setOnScrollListener(mAdapter);
+        mListView.getRefreshableView().addFooterView(LayoutInflater.from(getActivity()).inflate(R.layout.item_empty_footer, null));
     }
 
     private void initLockScreen(View root) {
         mLockScreen = (RelativeLayout) root.findViewById(R.id.llvLockScreen);
-        mRetryView = new RetryView(getActivity().getApplicationContext());
-        mRetryView.addButton(RetryView.REFRESH_TEMPLATE + getString(R.string.general_dialog_retry), new View.OnClickListener() {
+
+        mRetryView = RetryViewCreator.createDefaultRetryView(getActivity(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 update(false, "retry");
@@ -274,23 +331,30 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
         });
 
-        mLockScreen.addView(mRetryView);
+        mLockScreen.addView(mRetryView.getView());
     }
 
-    private void initNavigationbar(View root, int userSex, String userName, int userAge, String userCity) {
-        ActionBar actionBar = getActionBar(root);
+    private void initNavigationbar(View root, String userName, int userAge, String userCity) {
+        mActionBar = getActionBar(root);
 
-        actionBar.setTitleText(userName + ", " + userAge);
-        actionBar.setSubTitleText(userCity);
-        actionBar.showBackButton(new View.OnClickListener() {
+        mActionBar.showBackButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().finish();
                 //TODO костыль для навигации
                 getActivity().setResult(Activity.RESULT_CANCELED);
+                getActivity().finish();
             }
         });
-        actionBar.showProfileButton(this, userSex);
+
+        mActionBar.showProfileAvatar(R.drawable.feed_banned_male_avatar, null);
+
+        setNavigationTitles(userName, userAge, userCity);
+    }
+
+    private void setNavigationTitles(String userName, int userAge, String userCity) {
+        String userTitle = (TextUtils.isEmpty(userName) && userAge == 0) ? Static.EMPTY : (userName + ", " + userAge);
+        mActionBar.setTitleText(userTitle);
+        mActionBar.setSubTitleText(userCity);
     }
 
     @Override
@@ -300,33 +364,44 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         outState.putParcelableArrayList(ADAPTER_DATA, mAdapter.getDataCopy());
 
         try {
-            outState.putString(FRIEND_FEED_USER, mAdapter.getUser().toJson().toString());
+            outState.putString(FRIEND_FEED_USER, mUser.toJson().toString());
         } catch (Exception e) {
             Debug.error(e);
         }
     }
 
+    /**
+     * Удаляет сообщение в чате
+     *
+     * @param position сообщени в списке
+     */
     private void deleteItem(final int position) {
-        DeleteRequest dr = new DeleteRequest(getActivity());
         History item = mAdapter.getItem(position);
-        if (item == null)
+        if (item != null && (item.id == null || item.isFake())) {
+            Toast.makeText(getActivity(), R.string.cant_delete_fake_item, Toast.LENGTH_LONG).show();
             return;
-        dr.id = item.id;
-        registerRequest(dr);
-        dr.callback(new DataApiHandler() {
-            @Override
-            protected void success(Object data, ApiResponse response) {
-                mAdapter.removeItem(position);
-            }
+        } else if (item == null) {
+            return;
+        }
 
+        DeleteRequest dr = new DeleteRequest(item.id, getActivity());
+        dr.callback(new ApiHandler() {
             @Override
-            protected Object parseResponse(ApiResponse response) {
-                return null;
+            public void success(ApiResponse response) {
+                if (isAdded()) {
+                    int invertedPosition = mAdapter.getPosition(position);
+                    if (mAdapter.getFirstItemId().equals(mAdapter.getData().get(invertedPosition).id)) {
+                        LocalBroadcastManager.getInstance(getActivity())
+                                .sendBroadcast(new Intent(DialogsFragment.UPDATE_DIALOGS));
+                    }
+                    mAdapter.removeItem(invertedPosition);
+                }
             }
 
             @Override
             public void fail(int codeError, ApiResponse response) {
                 Debug.log(response.toString());
+                Utils.showErrorMessage(App.getContext());
             }
         }).exec();
     }
@@ -349,7 +424,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private void update(final boolean pullToRefresh, final boolean scrollRefresh, String type) {
         mIsUpdating = true;
         if (!pullToRefresh && !scrollRefresh) {
-            mLoadingLocker.setVisibility(View.VISIBLE);
+            hideLoadingBackground();
         }
         HistoryRequest historyRequest = new HistoryRequest(getActivity());
         registerRequest(historyRequest);
@@ -358,13 +433,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         historyRequest.limit = LIMIT;
         if (mAdapter != null) {
             if (pullToRefresh) {
-                int id = mAdapter.getFirstItemId();
-                if (id > 0) {
+                String id = mAdapter.getFirstItemId();
+                if (id != null) {
                     historyRequest.from = id;
                 }
             } else if (scrollRefresh) {
-                int id = mAdapter.getLastItemId();
-                if (id > 0) {
+                String id = mAdapter.getLastItemId();
+                if (id != null) {
                     historyRequest.to = id;
                 }
             }
@@ -373,27 +448,40 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         historyRequest.callback(new DataApiHandler<HistoryListData>() {
             @Override
             protected void success(HistoryListData data, ApiResponse response) {
-                if (itemId != -1) {
+                if (itemId != null) {
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID, itemId));
-                    itemId = -1;
-                }
-                wasFailed = false;
-                mAdapter.setUser(data.user);
-                if (mAdapter != null) {
-                    if (pullToRefresh) {
-                        mAdapter.addFirst(data.items, data.more, mListView.getRefreshableView());
-                        if (mListView != null) {
-                            mListView.onRefreshComplete();
-                        }
-                    } else if (scrollRefresh) {
-                        mAdapter.addAll(data.items, data.more, mListView.getRefreshableView());
-                    } else {
-                        mAdapter.setData(data.items, data.more, mListView.getRefreshableView());
-                    }
+                    itemId = null;
                 }
 
-                if (mLoadingLocker != null) {
-                    mLoadingLocker.setVisibility(View.GONE);
+                removeAlreadyLoadedItems(data);
+
+                setNavigationTitles(data.user.first_name, data.user.age, data.user.city.name);
+                if (data.user.deleted || data.user.banned) {
+                    mActionBar.setOnlineIcon(false);
+                } else {
+                    mActionBar.setOnlineIcon(data.user.online);
+                }
+                wasFailed = false;
+                mUser = data.user;
+                if (!mUser.isEmpty()) {
+                    onUserLoaded();
+                }
+                if (mAdapter != null) {
+                    if (!data.items.isEmpty()) {
+                        if (pullToRefresh) {
+                            mAdapter.addFirst(data.items, data.more, mListView.getRefreshableView());
+                        } else if (scrollRefresh) {
+                            mAdapter.addAll(data.items, data.more, mListView.getRefreshableView());
+                        } else {
+                            mAdapter.setData(data.items, data.more, mListView.getRefreshableView());
+                        }
+                    } else {
+                        if (!data.more && !pullToRefresh) mAdapter.forceStopLoader();
+                    }
+
+                    if (mAdapter.getCount() <= 0) {
+                        mAdapter.setUser(mUser);
+                    }
                 }
 
                 mIsUpdating = false;
@@ -406,17 +494,102 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                mLoadingLocker.setVisibility(View.GONE);
-                if (mRetryView != null && isAdded()) {
-                    mRetryView.setErrorMsg(getString(R.string.general_data_error));
-                }
-                if (mLockScreen != null) {
+                showLoadingBackground();
+                if (mLockScreen != null && mAdapter.getData().isEmpty()) {
                     mLockScreen.setVisibility(View.VISIBLE);
                 }
                 wasFailed = true;
                 mIsUpdating = false;
             }
+
+            @Override
+            public void always(ApiResponse response) {
+                super.always(response);
+
+                showLoadingBackground();
+                if (pullToRefresh && mListView != null) {
+                    mListView.onRefreshComplete();
+                }
+            }
         }).exec();
+    }
+
+    private void removeAlreadyLoadedItems(HistoryListData data) {
+        if (!mAdapter.isEmpty() && !data.items.isEmpty()) {
+            FeedList<History> items = mAdapter.getData();
+            int size = items.size();
+            for (int i = size - 1; i > 0 && i > size - LIMIT; i--) {
+                List<History> itemsToDelete = new ArrayList<History>();
+                for (History item : data.items) {
+                    if (item.id.equals(items.get(i).id)) {
+                        itemsToDelete.add(item);
+                    }
+                }
+                data.items.removeAll(itemsToDelete);
+            }
+        }
+    }
+
+    private void onUserLoaded() {
+        if (mActionBar != null) {
+            if (mUser.deleted || mUser.banned || mUser.photo == null || mUser.photo.isEmpty()) {
+                mActionBar.showProfileAvatar(mUser.sex == Static.BOY ? R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar, null);
+            } else {
+                mActionBar.showUserActionsButton(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                TranslateAnimation ta = new TranslateAnimation(0, 0, -chatActions.getHeight(), 0);
+                                ta.setDuration(500);
+                                ta.setAnimationListener(new Animation.AnimationListener() {
+                                    @Override
+                                    public void onAnimationStart(Animation animation) {
+                                        mActionBar.disableActionsButton(true);
+                                        chatActions.setVisibility(View.VISIBLE);
+                                    }
+
+                                    @Override
+                                    public void onAnimationEnd(Animation animation) {
+                                        chatActions.clearAnimation();
+                                        mActionBar.disableActionsButton(false);
+                                    }
+
+                                    @Override
+                                    public void onAnimationRepeat(Animation animation) {
+
+                                    }
+                                });
+                                chatActions.startAnimation(ta);
+                            }
+                        }, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+//                                initActionsPanelHeight();
+                                TranslateAnimation ta = new TranslateAnimation(0, 0, 0, -chatActions.getHeight());
+                                ta.setDuration(500);
+                                ta.setAnimationListener(new Animation.AnimationListener() {
+                                    @Override
+                                    public void onAnimationStart(Animation animation) {
+                                        mActionBar.disableActionsButton(true);
+                                    }
+
+                                    @Override
+                                    public void onAnimationEnd(Animation animation) {
+                                        chatActions.clearAnimation();
+                                        mActionBar.disableActionsButton(false);
+                                        chatActions.setVisibility(View.GONE);
+                                    }
+
+                                    @Override
+                                    public void onAnimationRepeat(Animation animation) {
+                                    }
+                                });
+                                chatActions.startAnimation(ta);
+                            }
+                        }
+                        ,mUser.photo);
+            }
+        }
     }
 
     private void release() {
@@ -429,7 +602,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(final View v) {
         if (v instanceof ImageView) {
             if (v.getTag() instanceof History) {
                 History history = (History) v.getTag();
@@ -443,12 +616,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
         switch (v.getId()) {
             case R.id.btnSend:
-                sendMessage();
-                EasyTracker.getTracker().trackEvent("Chat", "SendMessage", "", 1L);
+                if (mUserId > 0) {
+                    sendMessage();
+                    EasyTracker.getTracker().trackEvent("Chat", "SendMessage", "", 1L);
+                }
                 break;
             case R.id.btnChatAdd:
                 toggleAddPanel();
-
                 EasyTracker.getTracker().trackEvent("Chat", "AdditionalClick", "", 1L);
                 break;
             case R.id.btnChatGift:
@@ -460,26 +634,18 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 if (Utils.isGoogleMapsAvailable()) {
                     startActivityForResult(new Intent(getActivity(), GeoMapActivity.class),
                             GeoMapActivity.INTENT_REQUEST_GEO);
-                    // Toast.makeText(App.getContext(), "Map",
-                    // Toast.LENGTH_SHORT).show();
                     EasyTracker.getTracker().trackEvent("Chat", "SendMapClick", "§", 1L);
                 }
                 break;
-            case R.id.chat_message:
-                break;
             case R.id.btnNavigationProfileBar:
-            case R.id.left_icon:
-                //TODO костыль для навигации
+            case R.id.btnNavigationBarAvatar:
                 if (mProfileInvoke) {
-                    getActivity().setResult(Activity.RESULT_CANCELED);
+                    getActivity().finish();
                 } else {
-                    Intent intent = getActivity().getIntent();
-                    intent.putExtra(INTENT_USER_ID, mUserId);
-                    getActivity().setResult(Activity.RESULT_OK, intent);
+                    if (mUserId > 0) {
+                        startActivity(ContainerActivity.getProfileIntent(mUserId, getActivity()));
+                    }
                 }
-                getActivity().finish();
-                //TODO костыль для навигации
-                getActivity().setResult(Activity.RESULT_OK);
                 break;
             case R.id.btnBuyVip:
                 Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
@@ -492,6 +658,90 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     addToBlackList();
                 }
                 break;
+            case R.id.acProfile:
+                Intent profileIntent = ContainerActivity.getProfileIntent(mUserId, getActivity());
+                startActivity(profileIntent);
+                break;
+            case R.id.acBlock:
+                if (CacheProfile.premium) {
+                    if (mUserId > 0) {
+                        final TextView textView = (TextView) v.findViewById(R.id.blockTV);
+                        final ProgressBar loader = (ProgressBar) v.findViewById(R.id.blockPrBar);
+                        final ImageView icon = (ImageView) v.findViewById(R.id.blockIcon);
+
+                        loader.setVisibility(View.VISIBLE);
+                        icon.setVisibility(View.GONE);
+                        BlackListAddRequest blackListAddRequest = new BlackListAddRequest(mUserId, getActivity());
+                        blackListAddRequest.callback(new VipApiHandler() {
+                            @Override
+                            public void success(ApiResponse response) {
+                                super.success(response);
+                                if (isAdded()) {
+                                    v.setEnabled(false);
+                                    loader.setVisibility(View.INVISIBLE);
+                                    icon.setVisibility(View.VISIBLE);
+                                    textView.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+                                }
+                            }
+
+                            @Override
+                            public void fail(int codeError, ApiResponse response) {
+                                super.fail(codeError, response);
+                                if (isAdded()) {
+                                    loader.setVisibility(View.INVISIBLE);
+                                    icon.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        }).exec();
+                    }
+                } else {
+                    Intent buyingIntent = new Intent(getActivity(), ContainerActivity.class);
+                    buyingIntent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                    startActivity(buyingIntent);
+                }
+                break;
+            case R.id.acBookmark:
+                final TextView textView = (TextView) v.findViewById(R.id.favTV);
+                final ProgressBar loader = (ProgressBar) v.findViewById(R.id.favPrBar);
+                final ImageView icon = (ImageView) v.findViewById(R.id.favIcon);
+
+                loader.setVisibility(View.VISIBLE);
+                icon.setVisibility(View.GONE);
+                ApiRequest request;
+
+                if (mUser.bookmarked) {
+                    request = new BookmarkDeleteRequest(getActivity(), mUserId);
+                } else {
+                    request = new BookmarkAddRequest(getActivity(), mUserId);
+                }
+
+                request.callback(new SimpleApiHandler() {
+                    @Override
+                    public void success(ApiResponse response) {
+                        super.success(response);
+//                        Toast.makeText(App.getContext(), getString(R.string.general_user_bookmarkadd), 1500).show();
+                        if (mUser != null) {
+                            textView.setText(App.getContext().getString( mUser.bookmarked ? R.string.general_bookmarks_add : R.string.general_bookmarks_delete));
+                            mUser.bookmarked = !mUser.bookmarked;
+                        }
+
+                        loader.setVisibility(View.INVISIBLE);
+                        icon.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void always(ApiResponse response) {
+                        super.always(response);
+                        if (isAdded()) {
+                            loader.setVisibility(View.INVISIBLE);
+                            icon.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }).exec();
+                break;
+            case R.id.acComplain:
+                startActivity(ContainerActivity.getComplainIntent(mUserId));
+                break;
             default: {
 
             }
@@ -500,44 +750,70 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void removeFromBlackList() {
-        BlackListDeleteRequest deleteBlackListRequest = new BlackListDeleteRequest(mUserId, getActivity());
-        mAddToBlackList.setEnabled(false);
-        deleteBlackListRequest.callback(new VipApiHandler() {
-            @Override
-            public void always(ApiResponse response) {
-                super.always(response);
-                isInBlackList = false;
-                if (mAddToBlackList != null) {
-                    mAddToBlackList.setText(R.string.black_list_add);
-                    mAddToBlackList.setEnabled(true);
+        if (mUserId > 0) {
+            BlackListDeleteRequest deleteBlackListRequest = new BlackListDeleteRequest(mUserId, getActivity());
+            mAddToBlackList.setEnabled(false);
+            deleteBlackListRequest.callback(new VipApiHandler() {
+
+                @Override
+                public void success(ApiResponse response) {
+                    super.success(response);
+                    isInBlackList = false;
+                    if (mAddToBlackList != null) {
+                        mAddToBlackList.setText(R.string.black_list_add);
+                    }
                 }
-            }
-        }).exec();
+
+                @Override
+                public void always(ApiResponse response) {
+                    super.always(response);
+                    if (mAddToBlackList != null) {
+                        mAddToBlackList.setEnabled(true);
+                    }
+                }
+            }).exec();
+        }
     }
 
     private void addToBlackList() {
-        BlackListAddRequest blackListRequest = new BlackListAddRequest(mUserId, getActivity());
-        mAddToBlackList.setEnabled(false);
-        blackListRequest.callback(new VipApiHandler() {
-            @Override
-            public void always(ApiResponse response) {
-                super.always(response);
-                isInBlackList = true;
-                if (mAddToBlackList != null) {
-                    mAddToBlackList.setText(R.string.black_list_delete);
-                    mAddToBlackList.setEnabled(true);
+        if (mUserId > 0) {
+            BlackListAddRequest blackListRequest = new BlackListAddRequest(mUserId, getActivity());
+            mAddToBlackList.setEnabled(false);
+            blackListRequest.callback(new VipApiHandler() {
+                @Override
+                public void success(ApiResponse response) {
+                    super.success(response);
+                    isInBlackList = true;
+                    if (mAddToBlackList != null) {
+                        mAddToBlackList.setText(R.string.black_list_delete);
+                    }
                 }
-            }
-        }).exec();
+
+                @Override
+                public void always(ApiResponse response) {
+                    super.always(response);
+                    if (mAddToBlackList != null) {
+                        mAddToBlackList.setEnabled(true);
+                    }
+                }
+            }).exec();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
+        if (mUserId == 0) {
+            getActivity().setResult(Activity.RESULT_CANCELED);
+            getActivity().finish();
+        }
+
         // Если адаптер пустой или пользователя нет, грузим с сервера
         if (mAdapter == null || mAdapter.getCount() == 0 || mUser == null) {
             update(false, "initial");
+        } else {
+            mAdapter.notifyDataSetChanged();
         }
 
         if (!mReceiverRegistered) {
@@ -575,7 +851,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
-                mLoadingLocker.setVisibility(View.VISIBLE);
                 Bundle extras = data.getExtras();
                 final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
                 final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
@@ -587,13 +862,21 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
         }
 
-        toggleAddPanel();
+        toggleAddPanel(false);
     }
 
     private void toggleAddPanel() {
-        mSwapControl.snapToScreen(mIsAddPanelOpened ? 0 : 1);
-        mBtnChatAdd.setSelected(!mIsAddPanelOpened);
-        mIsAddPanelOpened = !mIsAddPanelOpened;
+        toggleAddPanel(!mIsAddPanelOpened);
+    }
+
+    private void toggleAddPanel(boolean open) {
+        if (mIsAddPanelOpened == open) return;
+        if (open) {
+            Utils.hideSoftKeyboard(getActivity(), mEditBox);
+        }
+        mSwapControl.snapToScreen(!open ? 0 : 1);
+        mBtnChatAdd.setSelected(open);
+        mIsAddPanelOpened = open;
     }
 
     private void sendCoordinates(Geo geo) {
@@ -613,7 +896,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         coordRequest.callback(new DataApiHandler<History>() {
             @Override
             protected void success(History data, ApiResponse response) {
-                data.target = FeedDialog.USER_MESSAGE;
+                data.target = FeedDialog.OUTPUT_USER_MESSAGE;
                 if (mAdapter != null) {
                     mAdapter.replaceMessage(fakeItem, data, mListView.getRefreshableView());
                 }
@@ -633,6 +916,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void sendGift(int id, final int price) {
+
+        if (id <= 0) {
+            showLoadingBackground();
+            Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_SHORT);
+            return;
+        }
+
         final History fakeItem = new History(IListLoader.ItemType.WAITING);
         mAdapter.addSentMessage(fakeItem, mListView.getRefreshableView());
 
@@ -647,8 +937,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 CacheProfile.likes = data.likes;
                 CacheProfile.money = data.money;
                 Debug.log(getActivity(), "likes:" + data.likes + " money:" + data.money);
-                data.history.target = FeedDialog.USER_MESSAGE;
-                mLoadingLocker.setVisibility(View.GONE);
+                data.history.target = FeedDialog.OUTPUT_USER_MESSAGE;
                 if (mAdapter != null) {
                     mAdapter.replaceMessage(fakeItem, data.history, mListView.getRefreshableView());
                 }
@@ -670,18 +959,27 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 mAdapter.showRetrySendMessage(fakeItem, sendGift);
             }
+
+            @Override
+            public void always(ApiResponse response) {
+                super.always(response);
+                showLoadingBackground();
+            }
         }).exec();
     }
 
     private boolean sendMessage() {
+        if (TextUtils.isEmpty(mEditBox.getText().toString().trim())) {
+            return false;
+        }
+
         final History fakeItem = new History(IListLoader.ItemType.WAITING);
-        if(mAdapter != null && mListView != null) {
+        if (mAdapter != null && mListView != null) {
             mAdapter.addSentMessage(fakeItem, mListView.getRefreshableView());
         }
 
         final String text = mEditBox.getText().toString();
-        if (text == null || text.length() == 0)
-            return false;
+        if (text == null || TextUtils.isEmpty(text.trim()) || mUserId == 0) return false;
 
         final MessageRequest messageRequest = new MessageRequest(getActivity());
         registerRequest(messageRequest);
@@ -704,7 +1002,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                if(mAdapter != null) {
+                if (mAdapter != null) {
                     Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
                     mAdapter.showRetrySendMessage(fakeItem, messageRequest);
                 }
@@ -817,13 +1115,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     };
 
-    public static ChatFragment newInstance(int itemId, int userId, boolean profileInvoke,
+    public static ChatFragment newInstance(String itemId, int userId, boolean profileInvoke,
                                            int userSex, String userName, int userAge,
                                            String userCity, String prevEntity) {
         ChatFragment fragment = new ChatFragment();
 
         Bundle args = new Bundle();
-        args.putInt(INTENT_ITEM_ID, itemId);
+        args.putString(INTENT_ITEM_ID, itemId);
         args.putInt(INTENT_USER_ID, userId);
         args.putBoolean(INTENT_PROFILE_INVOKE, profileInvoke);
         args.putInt(INTENT_USER_SEX, userSex);
@@ -845,5 +1143,23 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
             }
         };
+    }
+
+    private void showLoadingBackground() {
+        if (mLoadingBackgroundText != null) {
+            mLoadingBackgroundText.setVisibility(View.GONE);
+            if (mLoadingBackgroundDrawable != null) {
+                mLoadingBackgroundDrawable.stop();
+            }
+        }
+    }
+
+    private void hideLoadingBackground() {
+        if (mLoadingBackgroundText != null) {
+            mLoadingBackgroundText.setVisibility(View.VISIBLE);
+            if (mLoadingBackgroundDrawable != null) {
+                mLoadingBackgroundDrawable.start();
+            }
+        }
     }
 }

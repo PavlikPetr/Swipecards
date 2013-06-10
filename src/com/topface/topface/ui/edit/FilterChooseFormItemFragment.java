@@ -9,12 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.FormInfo;
-import com.topface.topface.utils.FormItem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -67,15 +69,13 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
         // List
         mListView = (ListView) root.findViewById(R.id.lvList);
 
-        ViewGroup header = (ViewGroup) inflater.inflate(R.layout.item_edit_profile_form_header,
-                mListView, false);
-        ((TextView) header.findViewById(R.id.tvTitle)).setText(formItemTitle);
+        ViewGroup header = (ViewGroup) inflater.inflate(R.layout.item_edit_profile_form_header, mListView, false);
+        ((TextView) header.findViewWithTag("tvTitle")).setText(formItemTitle);
         mListView.addHeaderView(header);
 
 
         ArrayList<String> listStr = new ArrayList<String>();
         listStr.addAll(Arrays.asList(mFormInfo.getEntriesByTitleId(mTitleId, new String[]{mData})));
-        listStr.add(getResources().getString(R.string.form_not_specified));
         String[] data = new String[listStr.size()];
         listStr.toArray(data);
 
@@ -83,7 +83,6 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
         for (int elem : mFormInfo.getIdsByTitleId(mTitleId)) {
             listInt.add(elem);
         }
-        listInt.add(FormItem.NOT_SPECIFIED_ID);
         Integer[] ids = listInt.toArray(new Integer[listInt.size()]);
 
         mListView.setAdapter(new FormCheckingDataAdapter(getActivity().getApplicationContext(),
@@ -137,9 +136,9 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
                 holder = new ViewHolder();
 
                 convertView = mInflater.inflate(R.layout.item_edit_form_check, null, false);
-                holder.mTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-                holder.mBackground = (ImageView) convertView.findViewById(R.id.ivEditBackground);
-                holder.mCheck = (ImageView) convertView.findViewById(R.id.ivCheck);
+                holder.mTitle = (TextView) convertView.findViewWithTag("tvTitle");
+                holder.mBackground = (ImageView) convertView.findViewWithTag("ivEditBackground");
+                holder.mCheck = (ImageView) convertView.findViewWithTag("ivCheck");
 
                 convertView.setTag(holder);
             } else {

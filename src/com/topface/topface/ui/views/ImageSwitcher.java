@@ -6,7 +6,7 @@ import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.SparseArray;
+import android.util.SparseBooleanArray;
 import android.view.*;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
@@ -78,7 +78,6 @@ public class ImageSwitcher extends ViewPager {
     public void setOnPageChangeListener(OnPageChangeListener listener) {
         final OnPageChangeListener finalListener = listener;
         super.setOnPageChangeListener(new OnPageChangeListener() {
-            private int mLastSelected = 0;
 
             @Override
             public void onPageScrolled(int i, float v, int i1) {
@@ -119,7 +118,6 @@ public class ImageSwitcher extends ViewPager {
 
     }
 
-
     private View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -134,7 +132,7 @@ public class ImageSwitcher extends ViewPager {
     public class ImageSwitcherAdapter extends PagerAdapter {
         private boolean isFirstInstantiate = true;
         private Photos mPhotoLinks;
-        private SparseArray<Boolean> mLoadedPhotos;
+        private SparseBooleanArray mLoadedPhotos;
 
         /**
          * Создает слушателя загрузки фотки, через замыкание передавая позицию слушаемой фотографии
@@ -173,6 +171,12 @@ public class ImageSwitcher extends ViewPager {
             View view = inflater.inflate(R.layout.item_album_gallery, null);
             view.setTag(VIEW_TAG + Integer.toString(position));
             ImageViewRemote imageView = (ImageViewRemote) view.findViewById(R.id.ivPreView);
+            imageView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnClickListener.onClick(ImageSwitcher.this);
+                }
+            });
             //Первую фотографию грузим сразу, или если фотографию уже загружена, то сразу показываем ее
             Boolean isLoadedPhoto = mLoadedPhotos.get(position, false);
             //Если это первая фото в списке или фотография уже загружена, то устанавливаем фото сразу
@@ -236,7 +240,7 @@ public class ImageSwitcher extends ViewPager {
 
         public void setData(Photos photos) {
             mPhotoLinks = photos;
-            mLoadedPhotos = new SparseArray<Boolean>();
+            mLoadedPhotos = new SparseBooleanArray();
             mPrev = -1;
             mNext = 0;
             notifyDataSetChanged();
@@ -245,5 +249,34 @@ public class ImageSwitcher extends ViewPager {
         public void setIsFirstInstantiate(boolean value) {
             isFirstInstantiate = value;
         }
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        try {
+            return super.onInterceptTouchEvent(ev);
+        } catch (IllegalArgumentException e) {
+            //Мы отлавливаем эту ошибку из-за бага в support library, который кидает такие ошибки:
+            //IllegalArgumentException: pointerIndex out of range
+            //Debug.error(e);
+            return false;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        try {
+            return super.onTouchEvent(ev);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return false;
+        } catch (IllegalStateException e) {
+            return false;
+        }
+    }
+
+    public void notifyDataSetChanged() {
+        mImageSwitcherAdapter.notifyDataSetChanged();
     }
 }

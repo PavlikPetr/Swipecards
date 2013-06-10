@@ -43,7 +43,6 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
         mData = new FeedList<T>();
         if (data != null) {
             mData.addAll(data);
-            addLoaderItem(true);
         }
         mUpdateCallback = updateCallback;
         mLoaderRetrier = getLoaderRetrier();
@@ -115,6 +114,14 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
     @Override
     public int getViewTypeCount() {
         return TYPE_COUNT;
+    }
+
+    public void add(int i, T item) {
+        getData().add(i,item);
+    }
+
+    public void add(T item) {
+        getData().add(item);
     }
 
     public static interface Updater {

@@ -34,17 +34,18 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditAgeFragment;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.FilterFragment;
-import com.topface.topface.ui.views.ILocker;
+import com.topface.topface.ui.views.*;
 import com.topface.topface.ui.views.ImageSwitcher;
-import com.topface.topface.ui.views.NoviceLayout;
-import com.topface.topface.ui.views.RetryView;
 import com.topface.topface.utils.*;
+
+import java.util.ArrayList;
 
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
         RateController.OnRateControllerListener {
 
     public static final int SEARCH_LIMIT = 30;
     public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 2;
+    public static final String INVITE_POPUP = "INVITE_POPUP";
     private int mCurrentPhotoPrevPos;
     private TextView mResourcesLikes;
     private TextView mResourcesMoney;
@@ -70,9 +71,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private RateController mRateController;
     private RelativeLayout mDatingLoveBtnLayout;
     private ViewFlipper mViewFlipper;
+    private RetryViewCreator mRetryView;
 
     private ImageButton mRetryBtn;
-    private RetryView emptySearchDialog;
     private PreloadManager mPreloadManager;
 
     private BroadcastReceiver mReceiver;
@@ -99,16 +100,23 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private int mLoadedCount;
     private ActionBar mActionBar;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserSearchList = new CachableSearch();
-        mUserSearchList.setOnEmptyListListener(mSearchListener);
         mPreloadManager = new PreloadManager();
         // Animation
         mAlphaAnimation = new AlphaAnimation(0.0F, 1.0F);
         mAlphaAnimation.setDuration(400L);
         initMutualDrawables();
+    }
+
+    @Override
+    protected void inBackroundThread() {
+        super.inBackroundThread();
+        SharedPreferences preferences = getActivity().getSharedPreferences(
+                Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        mNovice = Novice.getInstance(preferences);
     }
 
     @Override
@@ -147,21 +155,43 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         initControlButtons(view);
         initDatingAlbum(view);
         initNewbieLayout(view);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                checkInvitePopup();
+            }
+        }).start();
 
         mDatingLovePrice = (TextView) view.findViewById(R.id.tvDatingLovePrice);
 
         initEmptySearchDialog(view, initNavigationHeader(view));
 
-        //Показываем последнего пользователя
-        SearchUser currentUser = mUserSearchList.getCurrentUser();
-        if (currentUser != null) {
-            showUser(currentUser);
-        } else {
-            showNextUser();
-        }
         return view;
     }
 
+    private void checkInvitePopup() {
+        FragmentActivity activity = getActivity();
+        if (CacheProfile.canInvite && activity != null) {
+            final SharedPreferences preferences = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+
+            long date_start = preferences.getLong(INVITE_POPUP, 1);
+            long date_now = new java.util.Date().getTime();
+
+            if (date_now - date_start >= CacheProfile.getOptions().popup_timeout) {
+                preferences.edit().putLong(INVITE_POPUP, date_now).commit();
+                ContactsProvider provider = new ContactsProvider(activity);
+                provider.getContacts(-1, 0, new ContactsProvider.GetContactsListener() {
+                    @Override
+                    public void onContactsReceived(ArrayList<ContactsProvider.Contact> contacts) {
+
+                        if (isAdded()) {
+                            showInvitePopup(contacts);
+                        }
+                    }
+                });
+            }
+        }
+    }
 
     private void initMutualDrawables() {
         if (isAdded()) {
@@ -193,10 +223,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void initNewbieLayout(View view) {
         // Newbie
-        SharedPreferences preferences = getActivity().getSharedPreferences(
-                Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-
-        mNovice = Novice.getInstance(preferences);
         mNoviceLayout = (NoviceLayout) view.findViewById(R.id.loNovice);
     }
 
@@ -247,17 +273,17 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void initEmptySearchDialog(View view, OnClickListener settingsListener) {
-        emptySearchDialog = new RetryView(getActivity());
-        emptySearchDialog.setErrorMsg(App.getContext().getString(R.string.general_search_null_response_error));
-        emptySearchDialog.addButton(RetryView.REFRESH_TEMPLATE + App.getContext().getString(R.string.general_dialog_retry), new OnClickListener() {
+
+        String text = getString(R.string.general_search_null_response_error);
+        mRetryView = RetryViewCreator.createDefaultRetryView(getActivity(), text, new OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateData(false);
             }
-        });
-        emptySearchDialog.addButton(App.getContext().getString(R.string.change_filters), settingsListener);
-        emptySearchDialog.setVisibility(View.GONE);
-        ((RelativeLayout) view.findViewById(R.id.ac_dating_container)).addView(emptySearchDialog);
+        }, getString(R.string.change_filters), settingsListener);
+
+        hideEmptySearchDialog();
+        ((RelativeLayout) view.findViewById(R.id.ac_dating_container)).addView(mRetryView.getView());
 
         mReceiver = new BroadcastReceiver() {
             @Override
@@ -280,22 +306,23 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private void updateFilterData() {
         //Если изменился фильтр, то мы ставим новую подпись фильтра,
         //если она отличается от той, что в поиске, то поиск будет очищен
-        mUserSearchList.updateSignatureAndUpdate();
-        View view = getView();
-        setHeader(view);
+        if (mUserSearchList != null) {
+            mUserSearchList.updateSignatureAndUpdate();
+        }
+        setHeader(getView());
     }
 
     private void updateData(final boolean isAddition) {
         if (!mUpdateInProcess) {
             lockControls();
-            emptySearchDialog.setVisibility(View.GONE);
+            hideEmptySearchDialog();
             if (!isAddition) {
                 onUpdateStart(isAddition);
             }
 
             mUpdateInProcess = true;
 
-            Search.log("Update start");
+            Search.log("Update start: " + (isAddition ? "addition" : "replace"));
 
             getSearchRequest().callback(new DataApiHandler<Search>() {
 
@@ -316,18 +343,19 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         //<code>if (!isAddition && mCurrentUser != currentUser || mCurrentUser == null)</code>
                         //Но возникает странный эффект, когда в поиске написано одно, а у юзера другое,
                         //В связи с чем, все работает так как работает
-                        if (mCurrentUser != currentUser || mCurrentUser == null) {
+                        if (currentUser != null && mCurrentUser != currentUser) {
                             showUser(currentUser);
+                            unlockControls();
+                        } else if (!isAddition || mUserSearchList.isEmpty()) {
+                            showEmptySearchDialog();
                         }
 
                         //Скрываем кнопку отправки повтора
                         mRetryBtn.setVisibility(View.GONE);
-                        unlockControls();
                     } else {
                         mProgressBar.setVisibility(View.GONE);
-                        if (!isAddition) {
-                            mImageSwitcher.setVisibility(View.GONE);
-                            emptySearchDialog.setVisibility(View.VISIBLE);
+                        if (!isAddition || mUserSearchList.isEmpty()) {
+                            showEmptySearchDialog();
                         }
                     }
                 }
@@ -359,6 +387,26 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
+    @Override
+    protected void onLoadProfile() {
+        if (mUserSearchList == null) {
+            mUserSearchList = new CachableSearch();
+            mUserSearchList.setOnEmptyListListener(mSearchListener);
+        }
+        //Показываем последнего пользователя
+        if (mCurrentUser == null) {
+            SearchUser currentUser = mUserSearchList.getCurrentUser();
+            if (currentUser != null) {
+                showUser(currentUser);
+            } else {
+                showNextUser();
+            }
+        }
+
+        updateFilterData();
+        updateResources();
+    }
+
     private SearchRequest getSearchRequest() {
         SearchRequest searchRequest = new SearchRequest(getActivity());
         searchRequest.limit = SEARCH_LIMIT;
@@ -373,11 +421,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
-        FragmentActivity activity = getActivity();
+        if (!CacheProfile.isLoaded()) {
+            return;
+        }
         switch (view.getId()) {
             case R.id.loDatingResources: {
                 EasyTracker.getTracker().trackEvent("Dating", "BuyClick", "", 1L);
-                Intent intent = new Intent(activity, ContainerActivity.class);
+                Intent intent = new Intent(getActivity(), ContainerActivity.class);
                 intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
                 startActivity(intent);
             }
@@ -439,30 +489,18 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
             break;
             case R.id.btnDatingProfile: {
-                if (mCurrentUser != null && activity != null) {
-                    ((NavigationActivity) activity).onExtraFragment(
-                            ProfileFragment.newInstance(
-                                    mCurrentUser.id,
-                                    ProfileFragment.TYPE_USER_PROFILE
-                            )
-                    );
-
+                if (mCurrentUser != null && getActivity() != null) {
+                    getActivity().startActivity(ContainerActivity.getProfileIntent(mCurrentUser.id, DatingFragment.class, getActivity()));
                     EasyTracker.getTracker().trackEvent("Dating", "Additional", "Profile", 1L);
                 }
             }
             break;
             case R.id.btnDatingChat: {
-                Intent intent = new Intent(activity, ContainerActivity.class);
-
-                intent.putExtra(ChatFragment.INTENT_USER_ID, mCurrentUser.id);
-                intent.putExtra(ChatFragment.INTENT_USER_NAME, mCurrentUser.first_name);
-                intent.putExtra(ChatFragment.INTENT_USER_SEX, mCurrentUser.sex);
-                intent.putExtra(ChatFragment.INTENT_USER_AGE, mCurrentUser.age);
-                intent.putExtra(ChatFragment.INTENT_USER_CITY, mCurrentUser.city.name);
-                intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
-                activity.startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
-
-                EasyTracker.getTracker().trackEvent("Dating", "Additional", "Chat", 1L);
+                if (CacheProfile.premium || !CacheProfile.getOptions().block_chat_not_mutual) {
+                    openChat(getActivity());
+                } else {
+                    chatBlockLogic();
+                }
             }
             break;
             case R.id.btnDatingSwitchNext: {
@@ -483,8 +521,30 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
+    private void chatBlockLogic() {
+        if (mCurrentUser.mutual) {
+            openChat(getActivity());
+        } else {
+            Intent intent = ContainerActivity.getVipBuyIntent(getString(R.string.chat_block_not_mutual));
+            startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+        }
+    }
+
+    private void openChat(FragmentActivity activity) {
+        Intent intent = new Intent(activity, ContainerActivity.class);
+        intent.putExtra(ChatFragment.INTENT_USER_ID, mCurrentUser.id);
+        intent.putExtra(ChatFragment.INTENT_USER_NAME, mCurrentUser.first_name);
+        intent.putExtra(ChatFragment.INTENT_USER_SEX, mCurrentUser.sex);
+        intent.putExtra(ChatFragment.INTENT_USER_AGE, mCurrentUser.age);
+        intent.putExtra(ChatFragment.INTENT_USER_CITY, mCurrentUser.city.name);
+        intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, getClass().getSimpleName());
+        activity.startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
+        EasyTracker.getTracker().trackEvent("Dating", "Additional", "Chat", 1L);
+    }
+
     private void showUser(SearchUser user) {
         if (user != null) {
+            hideEmptySearchDialog();
             fillUserInfo(user);
             unlockControls();
 
@@ -507,61 +567,71 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private void fillUserInfo(SearchUser currUser) {
         // User Info
         mCurrentUser = currUser;
-        if (currUser != null) {
-            lockControls();
-            if (currUser.city != null) {
-                mUserInfoCity.setText(currUser.city.name);
-            }
-            //Устанавливаем статус пользователя. Обязательно делаем trim, иначе есть шутники, вставлюящие переносы в текст
-            mUserInfoStatus.setText(
-                    currUser.status != null ?
-                            currUser.status.trim() :
-                            ""
-            );
-            mUserInfoName.setText(currUser.getNameAndAge());
+        if (currUser == null || !isAdded()) {
+            return;
+        }
+        lockControls();
 
-            Resources res = App.getContext().getResources();
+        if (currUser.city != null) {
+            mUserInfoCity.setText(currUser.city.name);
+        }
+        //Устанавливаем статус пользователя.
+        mUserInfoStatus.setText(currUser.getStatus());
+        //Имя и возраст пользователя
+        mUserInfoName.setText(currUser.getNameAndAge());
 
-            if (isAdded()) {
-                if (currUser.online) {
-                    mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(
-                            res.getDrawable(R.drawable.im_online), null, null, null);
-                } else {
-                    mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(
-                            res.getDrawable(R.drawable.im_offline), null, null, null);
-                }
+        Resources res = getResources();
 
-                if (currUser.sex == Static.BOY) {
-                    mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null, res
-                            .getDrawable(R.drawable.dating_man_selector), null, null);
-                } else if (currUser.sex == Static.GIRL) {
-                    mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null, res
-                            .getDrawable(R.drawable.dating_woman_selector), null, null);
-                }
-            }
+        setUserOnlineStatus(currUser, res);
+        setUserSex(currUser, res);
+        setLikeButtonDrawables(currUser);
+        setUserPhotos(currUser);
 
-            // buttons drawables
-            mMutualBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.mutual ? doubleMutual
-                    : singleMutual, null, null);
-            mMutualBtn.setText(currUser.mutual ? App.getContext().getString(R.string.general_mutual)
-                    : App.getContext().getString(R.string.general_sympathy));
+        mImageSwitcher.setData(currUser.photos);
+        mImageSwitcher.setCurrentItem(0, true);
+        mCurrentPhotoPrevPos = 0;
+        setCounter(mCurrentPhotoPrevPos);
+    }
 
-            mDelightBtn.setCompoundDrawablesWithIntrinsicBounds(null,
-                    currUser.mutual ? doubleDelight : singleDelight, null, null);
+    private void setUserOnlineStatus(SearchUser currUser, Resources res) {
+        if (currUser.online) {
+            mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(
+                    res.getDrawable(R.drawable.im_online), null, null, null);
+        } else {
+            mUserInfoName.setCompoundDrawablesWithIntrinsicBounds(
+                    res.getDrawable(R.drawable.im_offline), null, null, null);
+        }
+    }
 
-            // photos
-            mLoadedCount = currUser.photos.getRealPhotosCount();
-            mNeedMore = currUser.photosCount > mLoadedCount;
-            int rest = currUser.photosCount - currUser.photos.size();
+    private void setUserSex(SearchUser currUser, Resources res) {
+        if (currUser.sex == Static.BOY) {
+            mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null, res
+                    .getDrawable(R.drawable.dating_man_selector), null, null);
+        } else if (currUser.sex == Static.GIRL) {
+            mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null, res
+                    .getDrawable(R.drawable.dating_woman_selector), null, null);
+        }
+    }
 
-            for (int i = 0; i < rest; i++) {
-                currUser.photos.add(new Photo());
-            }
+    private void setLikeButtonDrawables(SearchUser currUser) {
+        // buttons drawables
+        mMutualBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.mutual ? doubleMutual
+                : singleMutual, null, null);
+        mMutualBtn.setText(currUser.mutual ? App.getContext().getString(R.string.general_mutual)
+                : App.getContext().getString(R.string.general_sympathy));
 
-            mImageSwitcher.setData(currUser.photos);
-            mImageSwitcher.setCurrentItem(0, true);
-            mCurrentPhotoPrevPos = 0;
-            setCounter(mCurrentPhotoPrevPos);
+        mDelightBtn.setCompoundDrawablesWithIntrinsicBounds(null,
+                currUser.mutual ? doubleDelight : singleDelight, null, null);
+    }
+
+    private void setUserPhotos(SearchUser currUser) {
+        // photos
+        mLoadedCount = currUser.photos.getRealPhotosCount();
+        mNeedMore = currUser.photosCount > mLoadedCount;
+        int rest = currUser.photosCount - currUser.photos.size();
+
+        for (int i = 0; i < rest; i++) {
+            currUser.photos.add(new Photo());
         }
     }
 
@@ -590,6 +660,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void showNovice() {
+        if (mNovice == null) return;
+
         if (mNovice.isDatingCompleted())
             return;
 
@@ -602,13 +674,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mNoviceLayout.startAnimation(mAlphaAnimation);
             mNovice.completeShowEnergyToSympathies();
         } else if (mNovice.isShowSympathy()) {
-            mNoviceLayout.setLayoutRes(R.layout.novice_sympathy, new OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    mMutualBtn.performClick();
-                }
-            });
+            mNoviceLayout.setLayoutRes(R.layout.novice_sympathy, null);
             mNoviceLayout.startAnimation(mAlphaAnimation);
             mNovice.completeShowSympathy();
         } else if (mNovice.isShowSympathiesBonus()) {
@@ -658,6 +724,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
+    public void showInvitePopup(ArrayList<ContactsProvider.Contact> data) {
+        EasyTracker.getTracker().trackEvent("InvitesPopup", "Show", "", 0L);
+        InvitesPopup popup = InvitesPopup.newInstance(data);
+        ((BaseFragmentActivity) getActivity()).startFragment(popup);
+    }
+
     public void setCounter(int position) {
         if (mCurrentUser != null) {
             mCounter.setText((position + 1) + "/" + mCurrentUser.photos.size());
@@ -695,7 +767,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mUserInfoStatus.setVisibility(View.VISIBLE);
 
         boolean enabled = false;
-        if (!mUserSearchList.isEnded() && mCurrentUser != null) {
+        if (mCurrentUser != null) {
             enabled = !mCurrentUser.rated;
         }
         mMutualBtn.setEnabled(enabled);
@@ -774,9 +846,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK
-                && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
+        if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
             lockControls();
+            hideEmptySearchDialog();
             if (data != null && data.getExtras() != null) {
                 final DatingFilter filter = data.getExtras().getParcelable(FilterFragment.INTENT_DATING_FILTER);
                 FilterRequest filterRequest = new FilterRequest(filter, getActivity());
@@ -785,18 +857,18 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
                     @Override
                     public void success(ApiResponse response) {
-                        try {
-                            CacheProfile.dating = filter.clone();
-                        } catch (CloneNotSupportedException e) {
-                            Debug.error(e);
+                        if (response.isCompleted()) {
+                            CacheProfile.dating = new DatingFilter(response.getJsonResult().optJSONObject("dating"));
+                            updateFilterData();
+                            updateData(false);
+                        } else {
+                            fail(response.getResultCode(),response);
                         }
-
-                        updateFilterData();
-                        updateData(false);
                     }
 
                     @Override
                     public void fail(int codeError, ApiResponse response) {
+                        Toast.makeText(getActivity(),R.string.general_server_error,Toast.LENGTH_LONG).show();
                         unlockControls();
                     }
                 }).exec();
@@ -806,15 +878,19 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
+    private void hideEmptySearchDialog() {
+        mRetryView.setVisibility(View.GONE);
+    }
+
     private void setHeader(View view) {
         if (CacheProfile.dating != null) {
-            String plus = CacheProfile.dating.age_end == FilterFragment.webAbsoluteMaxAge ? "+" : "";
-            int age = CacheProfile.dating.age_end == FilterFragment.webAbsoluteMaxAge ? EditAgeFragment.absoluteMax : CacheProfile.dating.age_end;
+            String plus = CacheProfile.dating.age_end == DatingFilter.webAbsoluteMaxAge ? "+" : "";
+            int age = CacheProfile.dating.age_end == DatingFilter.webAbsoluteMaxAge ? EditAgeFragment.absoluteMax : CacheProfile.dating.age_end;
             Context context = App.getContext();
-            getActionBar(view).setTitleText(context.getString(
-                    CacheProfile.dating.sex == Static.BOY ? R.string.dating_header_guys
-                            : R.string.dating_header_girls, CacheProfile.dating.age_start,
-                    age) + plus);
+            String headerText = context.getString(
+                    CacheProfile.dating.sex == Static.BOY ? R.string.dating_header_guys : R.string.dating_header_girls,
+                    CacheProfile.dating.age_start, age);
+            getActionBar(view).setTitleText(headerText + plus);
 
             getActionBar(view).setSubTitleText(getSubtitle(context));
         }
@@ -905,6 +981,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     };
 
     private void sendAlbumRequest(final Photos data) {
+        if ((mLoadedCount - 1) >= data.size()) {
+            return;
+        }
         int position = data.get(mLoadedCount - 1).getPosition() + 1;
         if (mUserSearchList != null && mUserSearchList.getCurrentUser() != null) {
             AlbumRequest request = new AlbumRequest(getActivity(), mUserSearchList.getCurrentUser().id, PHOTOS_LIMIT, position, AlbumRequest.MODE_SEARCH);
@@ -917,8 +996,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         mNeedMore = response.jsonResult.optBoolean("more");
                         int i = 0;
                         for (Photo photo : newPhotos) {
-                            data.set(mLoadedCount + i, photo);
-                            i++;
+                            if (mLoadedCount + i < data.size()) {
+                                data.set(mLoadedCount + i, photo);
+                                i++;
+                            }
                         }
                         mLoadedCount += newPhotos.size();
 
@@ -952,5 +1033,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         public void onPreload(Search search) {
             updateData(true);
         }
+
     };
+
+    private void showEmptySearchDialog() {
+        Debug.log("Search:: showEmptySearchDialog");
+        mProgressBar.setVisibility(View.GONE);
+        mImageSwitcher.setVisibility(View.GONE);
+        mRetryView.setVisibility(View.VISIBLE);
+    }
 }

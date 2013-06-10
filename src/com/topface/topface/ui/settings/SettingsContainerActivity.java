@@ -5,9 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.ConfirmRequest;
-import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -45,7 +42,8 @@ public class SettingsContainerActivity extends BaseFragmentActivity {
                 }
                 break;
             case INTENT_CHANGE_PASSWORD:
-                mFragment = new SettingsChangePasswordFragment();
+                boolean needExit = intent.getBooleanExtra(SettingsTopfaceAccountFragment.NEED_EXIT, false);
+                mFragment = SettingsChangePasswordFragment.newInstance(needExit);
                 break;
             case INTENT_FEEDBACK:
                 mFragment = new SettingsFeedbackFragment();

@@ -9,9 +9,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.OptionsRequest;
-import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.requests.*;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import org.json.JSONObject;
@@ -35,10 +33,14 @@ abstract public class ApiHandler extends Handler {
                 } else if (response.code == ApiResponse.PREMIUM_ACCESS_ONLY) {
                     Debug.error(App.getContext().getString(R.string.general_premium_access_error));
 
-                    //Сообщение о необходимости Премиум-статуса
-                    showToast(R.string.general_premium_access_error);
+                    if (isShowPremiumError()) {
+                        //Сообщение о необходимости Премиум-статуса
+                        showToast(R.string.general_premium_access_error);
+                    }
 
                     fail(response.code, response);
+                } else if (response.isCodeEqual(IApiResponse.UNCONFIRMED_LOGIN)) {
+                    ConfirmedApiRequest.showConfirmDialog(mContext);
                 } else if (response.code != ApiResponse.RESULT_OK) {
                     fail(response.code, response);
                 } else {
@@ -95,7 +97,9 @@ abstract public class ApiHandler extends Handler {
                                 counters.optInt("unread_likes"),
                                 counters.optInt("unread_symphaties"),
                                 counters.optInt("unread_messages"),
-                                counters.optInt("unread_visitors")
+                                counters.optInt("unread_visitors"),
+                                counters.optInt("unread_fans")
+
                         );
             }
         } catch (Exception e) {
@@ -121,5 +125,9 @@ abstract public class ApiHandler extends Handler {
 
     protected Context getContext() {
         return mContext;
+    }
+
+    protected boolean isShowPremiumError() {
+        return true;
     }
 }

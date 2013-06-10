@@ -13,7 +13,7 @@ public class AuthRequestTest extends AbstractThreadTest {
     /**
      * Тестируем только API v1
      */
-    private static final int API_VERSION = 3;
+    private static final int API_VERSION = 6;
 
     public void testAuthRequest() throws Throwable {
         runAsyncTest(new Runnable() {

@@ -15,6 +15,10 @@ import org.json.JSONObject;
 public class DatingFilter extends AbstractData implements Cloneable, Parcelable {
 
     public static final String DATING_ONLINE_FIELD = "dating_online";
+
+    public static final int webAbsoluteMaxAge = 99;
+    public static final int webAbsoluteMinAge = 16;
+
     public City city;
     public int sex;
     public int age_start;
@@ -32,8 +36,8 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
     public DatingFilter() {
         super();
         city = new City();
-        age_start = 16;
-        age_end = 99;
+        age_start = webAbsoluteMinAge;
+        age_end = webAbsoluteMaxAge;
     }
 
     public DatingFilter(JSONObject data) {
@@ -68,6 +72,7 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
         sex = data.optInt("sex");
         age_start = data.optInt("age_start");
         age_end = data.optInt("age_end");
+        trimToMinMaxAge();
         alcohol = data.optInt("alcohol");
         beautiful = data.optBoolean("beautiful");
         xstatus = data.optInt("xstatus");
@@ -75,6 +80,16 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
         finances = data.optInt("finances");
         marriage = data.optInt("marriage");
         character = data.optInt("character");
+    }
+
+    private void trimToMinMaxAge() {
+        if (age_start < webAbsoluteMinAge) {
+            age_start = webAbsoluteMinAge;
+        }
+
+        if (age_end > webAbsoluteMaxAge) {
+            age_end = webAbsoluteMaxAge;
+        }
     }
 
     @Override
@@ -91,7 +106,7 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
             else if (filter.marriage != marriage) return false;
             else if (filter.character != character) return false;
             else if (filter.alcohol != alcohol) return false;
-            else if (filter.breast != breast) return false;
+            else if (filter.breast != breast && filter.sex == Static.GIRL) return false;
             else if (filter.finances != finances) return false;
 
             return true;
@@ -109,6 +124,7 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
         filter.sex = sex;
         filter.age_start = age_start;
         filter.age_end = age_end;
+        filter.trimToMinMaxAge();
         filter.city = (City) city.clone();
         filter.beautiful = beautiful;
         filter.xstatus = xstatus;
@@ -119,10 +135,6 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
         filter.finances = finances;
 
         return filter;
-    }
-
-    public int getShowOff() {
-        return sex == Static.GIRL ? breast : finances;
     }
 
     /**
@@ -185,6 +197,7 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
                     result.sex = in.readInt();
                     result.age_start = in.readInt();
                     result.age_end = in.readInt();
+                    result.trimToMinMaxAge();
                     result.alcohol = in.readInt();
                     result.beautiful = in.readInt() == 1;
                     result.xstatus = in.readInt();

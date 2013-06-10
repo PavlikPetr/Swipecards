@@ -21,20 +21,23 @@ public class TfImageSpan extends ImageSpan{
 
     @Override
     public void draw(Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, Paint paint) {
-//        super.draw(canvas, text, start, end, x, top, y, bottom, paint);
-        Drawable b = getCachedDrawable();
-
-        canvas.save();
-
-        int transY = bottom - b.getBounds().bottom;
+//
         if (mVerticalAlignment == ALIGN_CENTER) {
-            transY -= paint.getFontMetricsInt().descent;
-            transY += 5;
-        }
+            Drawable b = getCachedDrawable();
 
-        canvas.translate(x, transY);
-        b.draw(canvas);
-        canvas.restore();
+            canvas.save();
+
+            int transY = bottom - b.getBounds().bottom;
+
+                transY -= paint.getFontMetricsInt().descent;
+                transY += 5;
+
+            canvas.translate(x, transY);
+            b.draw(canvas);
+            canvas.restore();
+        } else {
+            super.draw(canvas, text, start, end, x, top, y, bottom, paint);
+        }
     }
 
     private Drawable getCachedDrawable() {

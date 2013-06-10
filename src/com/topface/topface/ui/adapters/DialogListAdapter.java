@@ -48,6 +48,13 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
 
     private String getDialogText(FeedDialog dialog) {
         String text;
+        if (dialog.user.deleted) {
+            text = getContext().getString(R.string.user_is_deleted);
+            return text;
+        } else if (dialog.user.banned) {
+            text = getContext().getString(R.string.user_is_banned);
+            return text;
+        }
         switch (dialog.type) {
             case FeedDialog.DEFAULT:
             case FeedDialog.MESSAGE:
@@ -57,15 +64,15 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
             case FeedDialog.RATE:
             case FeedDialog.PROMOTION:
             case FeedDialog.PHOTO:
-                text = (dialog.target == FeedDialog.USER_MESSAGE) ? "{{outbox}} " + dialog.text : dialog.text;
+                text = (dialog.target == FeedDialog.OUTPUT_USER_MESSAGE) ? "{{outbox}} " + dialog.text : dialog.text;
                 break;
             case FeedDialog.LIKE:
-                text = (dialog.target == FeedDialog.FRIEND_MESSAGE) ?
+                text = (dialog.target == FeedDialog.INPUT_FRIEND_MESSAGE) ?
                         getContext().getString(R.string.chat_like_in) :
                         "{{outbox}} " + getContext().getString(R.string.chat_like_out);
                 break;
             case FeedDialog.SYMPHATHY:
-                text = (dialog.target == FeedDialog.FRIEND_MESSAGE) ?
+                text = (dialog.target == FeedDialog.INPUT_FRIEND_MESSAGE) ?
                         getContext().getString(R.string.chat_mutual_in) :
                         "{{outbox}} " + getContext().getString(R.string.chat_mutual_out);
 
@@ -78,13 +85,14 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
                 break;
             case FeedDialog.GIFT:
                 text = "{{gift}} ";
-                text += (dialog.target == FeedDialog.FRIEND_MESSAGE) ?
+                text += (dialog.target == FeedDialog.INPUT_FRIEND_MESSAGE) ?
                         getContext().getString(R.string.chat_gift_in) :
                         getContext().getString(R.string.chat_gift_out);
                 break;
             default:
                 //По умолчанию все равно показываем текст
-                text = (dialog.target == FeedDialog.USER_MESSAGE) ? "{{outbox}} " + dialog.text : dialog.text;
+                text = (dialog.target == FeedDialog.OUTPUT_USER_MESSAGE) ? "{{outbox}} " + dialog.text : dialog.text;
+                break;
         }
         return text;
     }

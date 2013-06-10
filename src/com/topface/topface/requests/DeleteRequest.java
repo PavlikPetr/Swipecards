@@ -6,16 +6,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class DeleteRequest extends ApiRequest {
-    public int id;
+    private String mId;
 
-    public DeleteRequest(Context context) {
+    public DeleteRequest(String id, Context context) {
         super(context);
+        mId = id;
     }
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
         JSONObject data = new JSONObject();
-        data.put("item", Integer.toString(id));
+        data.put("item", mId);
         return data;
     }
 

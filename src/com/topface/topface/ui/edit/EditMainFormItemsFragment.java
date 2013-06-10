@@ -1,7 +1,10 @@
 package com.topface.topface.ui.edit;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -12,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.topface.topface.R;
@@ -19,16 +23,18 @@ import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.utils.ActionBar;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.FormItem;
+import com.topface.topface.utils.*;
 
 import java.util.HashMap;
 
 public class EditMainFormItemsFragment extends AbstractEditFragment implements OnClickListener {
 
+    public static final int MAX_AGE = 99;
+    public static final int MIN_AGE = 16;
+    public static final String INTENT_SEX_CHANGED = "SEX_CHANGED";
     private ActionBar mActionBar;
+    private boolean ageIncorrect = false;
+    private boolean nameIncorrect;
 
     public enum EditType {NAME, AGE, STATUS}
 
@@ -46,6 +52,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
 
     private ImageView mCheckGirl;
     private ImageView mCheckBoy;
+
 
     public EditMainFormItemsFragment() {
         super();
@@ -79,11 +86,9 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
 
         mSex = CacheProfile.sex;
         mLoGirl = root.findViewById(R.id.loGirl);
-        ((ImageView) mLoGirl.findViewById(R.id.ivEditBackground))
-                .setImageResource(R.drawable.edit_big_btn_top_selector);
-        ((TextView) mLoGirl.findViewById(R.id.tvTitle))
-                .setText(R.string.general_girl);
-        mCheckGirl = (ImageView) mLoGirl.findViewById(R.id.ivCheck);
+        ((ImageView) mLoGirl.findViewWithTag("ivEditBackground")).setImageResource(R.drawable.edit_big_btn_top_selector);
+        ((TextView)  mLoGirl.findViewWithTag("tvTitle")).setText(R.string.general_girl);
+        mCheckGirl = (ImageView) mLoGirl.findViewWithTag("ivCheck");
         if (mSex == Static.GIRL) {
             mCheckGirl.setVisibility(View.VISIBLE);
         }
@@ -91,11 +96,9 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         mLoGirl.setVisibility(View.GONE);
 
         mLoBoy = root.findViewById(R.id.loBoy);
-        ((ImageView) mLoBoy.findViewById(R.id.ivEditBackground))
-                .setImageResource(R.drawable.edit_big_btn_bottom_selector);
-        ((TextView) mLoBoy.findViewById(R.id.tvTitle))
-                .setText(R.string.general_boy);
-        mCheckBoy = (ImageView) mLoBoy.findViewById(R.id.ivCheck);
+        ((ImageView) mLoBoy.findViewWithTag("ivEditBackground")).setImageResource(R.drawable.edit_big_btn_bottom_selector);
+        ((TextView) mLoBoy.findViewWithTag("tvTitle")).setText(R.string.general_boy);
+        mCheckBoy = (ImageView) mLoBoy.findViewWithTag("ivCheck");
         if (mSex == Static.BOY) {
             mCheckBoy.setVisibility(View.VISIBLE);
         }
@@ -122,7 +125,6 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                         setStatus(loStatus, type, data);
                         break;
                 }
-
                 hashChangedData.put(type, data);
             }
         }
@@ -134,8 +136,8 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         mLoBoy.setVisibility(View.VISIBLE);
         mLoGirl.setVisibility(View.VISIBLE);
         loName.setVisibility(View.VISIBLE);
-        ((TextView) loName.findViewById(R.id.tvTitle)).setText(R.string.edit_name);
-        mEdName = (EditText) loName.findViewById(R.id.edText);
+        ((TextView) loName.findViewWithTag("tvTitle")).setText(R.string.edit_name);
+        mEdName = (EditText) loName.findViewWithTag("edText");
         mEdName.setText(data);
         mEdName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         mEdName.addTextChangedListener(new TextWatcher() {
@@ -163,8 +165,8 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
 
     private void setStatus(ViewGroup loStatus, final EditType type, String data) {
         loStatus.setVisibility(View.VISIBLE);
-        ((TextView) loStatus.findViewById(R.id.tvTitle)).setText(R.string.edit_status);
-        mEdStatus = (EditText) loStatus.findViewById(R.id.edText);
+        ((TextView) loStatus.findViewWithTag("tvTitle")).setText(R.string.edit_status);
+        mEdStatus = (EditText) loStatus.findViewWithTag("edText");
         InputFilter[] filters = new InputFilter[1];
         filters[0] = new InputFilter.LengthFilter(MAX_STATUS_LENGTH);
         mEdStatus.setFilters(filters);
@@ -175,7 +177,6 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
@@ -197,8 +198,12 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
 
     private void setAge(ViewGroup loAge, final EditType type, String data) {
         loAge.setVisibility(View.VISIBLE);
-        ((TextView) loAge.findViewById(R.id.tvTitle)).setText(R.string.edit_age);
-        mEdAge = (EditText) loAge.findViewById(R.id.edText);
+        ((TextView) loAge.findViewWithTag("tvTitle")).setText(R.string.edit_age);
+        mEdAge = (EditText) loAge.findViewWithTag("edText");
+        int maxLength = 2;
+        InputFilter[] fArray = new InputFilter[1];
+        fArray[0] = new InputFilter.LengthFilter(maxLength);
+        mEdAge.setFilters(fArray);
         mEdAge.setText(data);
         mEdAge.setInputType(InputType.TYPE_CLASS_NUMBER);
         mEdAge.addTextChangedListener(new TextWatcher() {
@@ -242,30 +247,43 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
 
         if (hasChanges()) {
             SettingsRequest request = getSettigsRequest();
+            if (ageIncorrect) {
+                showAlertDialog(getString(R.string.profile_edit_age_ranges));
+            } else if(nameIncorrect){
+                showAlertDialog(getString(R.string.profile_empty_name));
+            } else {
+                prepareRequestSend();
+                registerRequest(request);
+                request.callback(new ApiHandler() {
 
-            prepareRequestSend();
-            registerRequest(request);
-            request.callback(new ApiHandler() {
-
-                @Override
-                public void success(ApiResponse response) {
-                    for (EditType type : hashChangedData.keySet()) {
-                        setDataByEditType(type, hashChangedData.get(type));
+                    @Override
+                    public void success(ApiResponse response) {
+                        for (EditType type : hashChangedData.keySet()) {
+                            setDataByEditType(type, hashChangedData.get(type));
+                        }
+                        Intent intent = null;
+                        if (CacheProfile.sex != mSex) {
+                            CacheProfile.sex = mSex;
+                            FormInfo formInfo = new FormInfo(getContext(), CacheProfile.getProfile());
+                            formInfo.fillFormItem(CacheProfile.forms);
+                            intent = new Intent();
+                            intent.putExtra(INTENT_SEX_CHANGED,true);
+                        }
+                        if (intent != null) getActivity().setResult(Activity.RESULT_OK,intent);
+                        else getActivity().setResult(Activity.RESULT_OK);
+                        finishRequestSend();
+                        if (handler == null) getActivity().finish();
+                        else handler.sendEmptyMessage(0);
                     }
-                    CacheProfile.sex = mSex;
-                    getActivity().setResult(Activity.RESULT_OK);
-                    finishRequestSend();
-                    if (handler == null) getActivity().finish();
-                    else handler.sendEmptyMessage(0);
-                }
 
-                @Override
-                public void fail(int codeError, ApiResponse response) {
-                    getActivity().setResult(Activity.RESULT_CANCELED);
-                    finishRequestSend();
-                    if (handler != null) handler.sendEmptyMessage(0);
-                }
-            }).exec();
+                    @Override
+                    public void fail(int codeError, ApiResponse response) {
+                        getActivity().setResult(Activity.RESULT_CANCELED);
+                        finishRequestSend();
+                        if (handler != null) handler.sendEmptyMessage(0);
+                    }
+                }).exec();
+            }
         } else {
             if (handler == null) getActivity().finish();
             else handler.sendEmptyMessage(0);
@@ -279,7 +297,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
             case AGE:
                 return Integer.toString(CacheProfile.age);
             case STATUS:
-                return CacheProfile.status;
+                return CacheProfile.getStatus();
         }
         return Static.EMPTY;
     }
@@ -287,21 +305,58 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
     private void setDataByEditType(EditType type, String data) {
         switch (type) {
             case NAME:
-                CacheProfile.first_name = data;
+                if (isNameValid(data)) {
+                    CacheProfile.first_name = data;
+                } else {
+                    nameIncorrect = true;
+                }
                 break;
             case AGE:
-                CacheProfile.age = Integer.parseInt(data);
+                if (isAgeValid(Integer.parseInt(data))) {
+                    CacheProfile.age = Integer.parseInt(data);
+                } else {
+                    ageIncorrect = true;
+                }
                 break;
             case STATUS:
-                CacheProfile.status = data;
+                CacheProfile.setStatus(data);
                 for (FormItem item : CacheProfile.forms) {
                     if (item.type == FormItem.STATUS) {
-                        item.value = CacheProfile.status;
+                        item.value = CacheProfile.getStatus();
                         break;
                     }
                 }
                 break;
         }
+    }
+
+    private void showAlertDialog(String msg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(getString(R.string.settings_error_message));
+        builder.setMessage(msg);
+        builder.setNegativeButton(R.string.general_exit, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                hashChangedData.clear();
+                getActivity().finish();
+            }
+        });
+        builder.setPositiveButton(R.string.general_change, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                if (ageIncorrect) {
+                    if(mEdAge.requestFocus()) {
+                        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                    }
+                } else if (nameIncorrect) {
+                    if(mEdName.requestFocus()) {
+                        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                    }
+                }
+            }
+        });
+        builder.create().show();
     }
 
     private SettingsRequest getSettigsRequest() {
@@ -311,11 +366,24 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
             if (!changedValue.equals(getDataByEditType(type))) {
                 switch (type) {
                     case NAME:
-                        request.name = changedValue;
+                        if (isNameValid(changedValue)) {
+                            request.name = changedValue;
+                            nameIncorrect = false;
+                        } else {
+                            nameIncorrect = true;
+                        }
                         break;
                     case AGE:
                         try {
-                            request.age = Integer.parseInt(changedValue);
+                            if (changedValue.equals("")) {
+                                changedValue = "0";
+                            }
+                            if (isAgeValid(Integer.parseInt(changedValue))) {
+                                request.age = Integer.parseInt(changedValue);
+                                ageIncorrect = false;
+                            } else {
+                                ageIncorrect = true;
+                            }
                         } catch (Exception e) {
                             Debug.error(e);
                         }
@@ -328,6 +396,14 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         }
         request.sex = mSex;
         return request;
+    }
+
+    private boolean isAgeValid(int age) {
+        return age <= MAX_AGE && age >= MIN_AGE;
+    }
+
+    private boolean isNameValid(String name) {
+        return !name.trim().equals("");
     }
 
     @Override

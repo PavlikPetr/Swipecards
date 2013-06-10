@@ -29,8 +29,9 @@
             android:gravity="center"
             android:numColumns="auto_fit"
             android:stretchMode="columnWidth"
-            android:columnWidth="105dp"
+            android:columnWidth="110dp"
             android:fadeScrollbars="true"/>
+
     <ImageView
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
@@ -60,9 +61,10 @@
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
                 android:text="@string/buy_sympathies"
-                android:background="@drawable/btn_vip_super_sale_selector"
+                android:background="@drawable/btn_blue_selector"
                 style="@style/VipItemTitleWhiteText"
                 android:textStyle="bold"
+                android:padding="10dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 />

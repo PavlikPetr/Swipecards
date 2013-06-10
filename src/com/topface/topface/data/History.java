@@ -86,4 +86,15 @@ public class History extends FeedDialog implements Parcelable {
                     return new History[size];
                 }
             };
+
+    public boolean isFake() {
+        try {
+            int numId = Integer.parseInt(id);
+            if (numId <= 0) return true;
+        } catch (Exception ex) {
+            Debug.error(ex);
+        }
+
+        return false;
+    }
 }

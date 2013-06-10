@@ -6,10 +6,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import com.topface.topface.App;
-import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.Options;
-import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.SendMailNotificationsRequest;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -17,9 +14,8 @@ import com.topface.topface.utils.social.AuthorizationManager;
  * Вспомогательный класс для работы с настройками приложения
  */
 public class Settings {
+    public static final String SILENT = "silent";
     private static Settings mInstance;
-    public static final String SETTINGS_PRELOADING = "settings_preloading";
-    //public static final String SETTINGS_PRELOADING_TYPE = "settings_preloading_type";
     public static final String SETTINGS_C2DM_RINGTONE = "settings_c2dm_ringtone";
     public static final String SETTINGS_C2DM_VIBRATION = "settings_c2dm_vibration";
     public static final String SETTINGS_C2DM = "settings_c2dm";
@@ -32,10 +28,8 @@ public class Settings {
 
     private SharedPreferences mSettings;
     private SharedPreferences.Editor mEditor;
-    private Context mContext;
 
     private Settings() {
-        mContext = App.getContext();
         mSettings = PreferenceManager.getDefaultSharedPreferences(App.getContext());
         mEditor = mSettings.edit();
     }
@@ -68,10 +62,6 @@ public class Settings {
         mEditor.commit();
     }
 
-    public boolean getSetting(String key) {
-        return mSettings.getBoolean(key, true);
-    }
-
     public String getSocialAccountName() {
         return mSettings.getString(SETTINGS_SOCIAL_ACCOUNT_NAME, Static.EMPTY);
     }
@@ -89,17 +79,10 @@ public class Settings {
         }).start();
     }
 
-    public String getPreloading() {
-        return mSettings.getString(SETTINGS_PRELOADING, mContext.getString(R.string.settings_preloading_wifi));
-    }
-
-    public String getPreloadingType() {
-        //Пока предзагрузка пользователей не поддерживается
-        //return mSettings.getString(SETTINGS_PRELOADING_TYPE, mContext.getString(R.string.settings_preloading_type_user));
-        return mContext.getString(R.string.settings_preloading_type_photo);
-    }
-
     public Uri getRingtone() {
+        if (mSettings.getString(SETTINGS_C2DM_RINGTONE, DEFAULT_SOUND).equals(SILENT)) {
+            return null;
+        }
         return Uri.parse(mSettings.getString(SETTINGS_C2DM_RINGTONE, DEFAULT_SOUND));
     }
 
@@ -111,55 +94,12 @@ public class Settings {
         return mSettings.getBoolean(SETTINGS_C2DM, true);
     }
 
-    /*public boolean isPreloadingDisabled() {
-        return getPreloading().equals(mContext.getString(R.string.settings_preloading_off));
-    }*/
-
-    /**
-     * Нужно ли в данный момент запускать предзагрузку следующей фотографии альбома
-     *
-     * @return начинать ли предзагрузку
-     */
-    public boolean isPreloadPhoto() {
-        return isPreloadingEnabled(mContext.getString(R.string.settings_preloading_type_photo));
-    }
-
-    /**
-     * Нужно ли в данный момент запускать предзагрузку фотографии следующего пользователя
-     *
-     * @return начинать ли предзагрузку
-     */
-    public boolean isPreloadUser() {
-        return isPreloadingEnabled(mContext.getString(R.string.settings_preloading_type_user));
-    }
-
-    private boolean isPreloadingEnabled(String type) {
-        String preloadingValue = getPreloading();
-        String preloadingType = getPreloadingType();
-        //Проверяем тип предзагрузки
-        if (preloadingType.equals(mContext.getString(R.string.settings_preloading_type_all)) ||
-                preloadingType.equals(type)) {
-
-            //Если верный, то смотрим, включена ли она
-            if (preloadingValue.equals(mContext.getString(R.string.settings_preloading_on))) {
-                return true;
-            } else if (preloadingValue.equals(mContext.getString(R.string.settings_preloading_wifi))) {
-                //Если включена только по wifi, то проверяем состояние соединения
-                return !ConnectionChangeReceiver.isMobileConnection();
-            }
-
-        }
-
-        return false;
-    }
-
     public void resetSettings() {
         setSocialAccountName(Static.EMPTY);
         setSocialAccountEmail(Static.EMPTY);
     }
 
     public SendMailNotificationsRequest getMailNotificationRequest(int key, boolean isMail, boolean value, Context context) {
-        Options options = CacheProfile.getOptions();
         SendMailNotificationsRequest request = getMailNotificationRequest(context);
 
         switch (key) {
@@ -188,16 +128,24 @@ public class Settings {
 
     public SendMailNotificationsRequest getMailNotificationRequest(Context context) {
         SendMailNotificationsRequest request = new SendMailNotificationsRequest(context);
-        if(CacheProfile.notifications != null) {
-            request.mailsympathy = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).mail;
-            request.mailmutual = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).mail;
-            request.mailchat = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).mail;
-            request.mailguests = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).mail;
+        if (CacheProfile.notifications != null) {
+            try {
+                request.mailsympathy = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).mail;
+                request.mailmutual = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).mail;
+                request.mailchat = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).mail;
+                request.mailguests = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).mail;
+            } catch (Exception e) {
+                Debug.error(e);
+            }
 
-            request.apnssympathy = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns;
-            request.apnsmutual = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns;
-            request.apnschat = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns;
-            request.apnsguests = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).apns;
+            try {
+                request.apnssympathy = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns;
+                request.apnsmutual = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns;
+                request.apnschat = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns;
+                request.apnsguests = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).apns;
+            } catch (Exception e) {
+                Debug.error(e);
+            }
         }
         return request;
     }

@@ -19,7 +19,7 @@ import java.util.ArrayList;
  */
 public class IllustratedTextView extends TextView {
 
-    public static final int ICON_ALIGN = TfImageSpan.ALIGN_CENTER;
+    public int ICON_ALIGN = TfImageSpan.ALIGN_CENTER;
     private boolean mIsTextChanged = false;
 
     public IllustratedTextView(Context context, AttributeSet attrs, int defStyle) {

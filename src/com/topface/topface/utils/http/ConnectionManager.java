@@ -1,5 +1,6 @@
 package com.topface.topface.utils.http;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,16 +9,21 @@ import android.content.SharedPreferences;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
-import com.topface.topface.*;
+import com.topface.topface.App;
+import com.topface.topface.R;
+import com.topface.topface.RetryDialog;
+import com.topface.topface.Ssid;
 import com.topface.topface.data.Auth;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.IApiRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BanActivity;
+import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
 
+import javax.net.ssl.SSLException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
@@ -48,7 +54,6 @@ public class ConnectionManager {
         mAuthUpdateFlag = new AtomicBoolean(false);
         mPendignRequests = new HashMap<String, IApiRequest>();
     }
-
 
     public static ConnectionManager getInstance() {
         if (mInstanse == null) {
@@ -246,7 +251,11 @@ public class ConnectionManager {
                 //Если после переавторизации у нас все же не верный ssid, то пробуем все повторить
                 IApiResponse.SESSION_NOT_FOUND,
                 //Если у нас ошибки подключения
-                IApiResponse.CONNECTION_ERROR
+                IApiResponse.CONNECTION_ERROR,
+                //Если проблема с подключением к социальной сети у сервера
+                IApiResponse.NETWORK_CONNECT_ERROR,
+                //Если на сервере что-то упало, то пробуем переотправить запрос
+                IApiResponse.INTERNAL_SERVER_ERROR
         );
     }
 
@@ -267,16 +276,17 @@ public class ConnectionManager {
 
     private boolean showRetryDialog(final IApiRequest apiRequest) {
         boolean needResend = false;
-        if (apiRequest.getHandler() != null) {
+        final Context context = apiRequest.getContext();
+        if (apiRequest.getHandler() != null && context != null && context instanceof Activity) {
             needResend = true;
             apiRequest.getHandler().post(new Runnable() {
                 @Override
                 public void run() {
-                    RetryDialog retryDialog = new RetryDialog(apiRequest.getContext(), apiRequest);
-                    retryDialog.setMessage(apiRequest.getContext().getString(R.string.general_maintenance));
+                    RetryDialog retryDialog = new RetryDialog(context, apiRequest);
+                    retryDialog.setMessage(context.getString(R.string.general_maintenance));
                     retryDialog.setButton(
                             Dialog.BUTTON_POSITIVE,
-                            apiRequest.getContext().getString(R.string.general_dialog_retry),
+                            context.getString(R.string.general_dialog_retry),
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -284,7 +294,11 @@ public class ConnectionManager {
                                 }
                             }
                     );
-                    retryDialog.show();
+                    try {
+                        retryDialog.show();
+                    } catch (Exception e) {
+                        Debug.error(e);
+                    }
                 }
             });
         }
@@ -332,6 +346,10 @@ public class ConnectionManager {
             Debug.error(TAG + "::Exception", e);
             //Это ошибка подключения, такие запросы мы будем переотправлять
             response = apiRequest.constructApiResponse(IApiResponse.CONNECTION_ERROR, "Socket exception: " + e.toString());
+        } catch (SSLException e) {
+            Debug.error(TAG + "::Exception", e);
+            //Это ошибка соединение, такие запросы мы будем переотправлять
+            response = apiRequest.constructApiResponse(IApiResponse.CONNECTION_ERROR, "Connection exception: " + e.toString());
         } catch (Exception e) {
             Debug.error(TAG + "::Exception", e);
             //Это ошибка нашего кода, не нужно автоматически переотправлять такой запрос
@@ -395,7 +413,7 @@ public class ConnectionManager {
 
     private void sendBroadcastReauth(Context context) {
         Intent intent = new Intent();
-        intent.setAction(ReAuthReceiver.REAUTH_INTENT);
+        intent.setAction(AuthFragment.REAUTH_INTENT);
         context.sendBroadcast(intent);
     }
 

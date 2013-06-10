@@ -1,7 +1,7 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.os.Message;
 import android.text.TextUtils;
 import com.topface.topface.App;
 import com.topface.topface.RetryDialog;
@@ -9,6 +9,7 @@ import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.HttpUtils;
 import org.json.JSONException;
@@ -32,6 +33,7 @@ public abstract class ApiRequest implements IApiRequest {
      * Mime type наших запросов к серверу
      */
     public static final String CONTENT_TYPE = "application/json";
+    public static final String APP_IS_OFFILINE = "App is offiline";
 
     // Data
     private String mId;
@@ -43,6 +45,7 @@ public abstract class ApiRequest implements IApiRequest {
     private boolean doNeedAlert;
     private int mResendCnt = 0;
     private String mPostData;
+    protected String mApiUrl;
 
     public ApiRequest(Context context) {
         //Нельзя передавать Application Context!!!! Только контекст Activity
@@ -63,13 +66,14 @@ public abstract class ApiRequest implements IApiRequest {
 
     @Override
     public void exec() {
-        setStopTime();
         setEmptyHandler();
 
         if (context != null && !App.isOnline() && doNeedAlert) {
             RetryDialog retryDialog = new RetryDialog(context, this);
             if (handler != null) {
-                handler.fail(0, new ApiResponse(ApiResponse.ERRORS_PROCCESED, "App is offline"));
+                Message msg = new Message();
+                msg.obj = new ApiResponse(ApiResponse.ERRORS_PROCCESED, APP_IS_OFFILINE);
+                handler.sendMessage(msg);
             }
             try {
                 retryDialog.show();
@@ -128,26 +132,6 @@ public abstract class ApiRequest implements IApiRequest {
         canceled = true;
         if (handler != null) {
             handler.cancel();
-        }
-    }
-
-    private void setStopTime() {
-        if (context != null) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    SharedPreferences preferences = context.getSharedPreferences(
-                            Static.PREFERENCES_TAG_SHARED,
-                            Context.MODE_PRIVATE
-                    );
-                    if (preferences != null) {
-                        preferences.edit().putLong(
-                                Static.PREFERENCES_STOP_TIME,
-                                System.currentTimeMillis()
-                        ).commit();
-                    }
-                }
-            }).start();
         }
     }
 
@@ -241,14 +225,18 @@ public abstract class ApiRequest implements IApiRequest {
         handler.response(new ApiResponse(errorCode, errorMessage));
     }
 
-    public HttpURLConnection openConnection() throws IOException {
+    protected HttpURLConnection openConnection() throws IOException {
         //Если открываем новое подключение, то старое закрываем
         closeConnection();
 
-        mURLConnection = HttpUtils.openPostConnection(getApiUrl(), CONTENT_TYPE);
+        mURLConnection = HttpUtils.openPostConnection(mApiUrl, getContentType());
         setRevisionHeader(mURLConnection);
 
         return mURLConnection;
+    }
+
+    protected String getContentType() {
+        return CONTENT_TYPE;
     }
 
     public void closeConnection() {
@@ -259,19 +247,22 @@ public abstract class ApiRequest implements IApiRequest {
     }
 
     public HttpURLConnection getConnection() throws IOException {
-        if (mURLConnection == null && !isCanceled()) {
-            mURLConnection = openConnection();
+        if (mURLConnection != null) {
+            closeConnection();
         }
+
+        mURLConnection = openConnection();
 
         return mURLConnection;
     }
 
     protected String getApiUrl() {
-        return Static.API_URL;
+        return App.getConfig().getApiUrl();
     }
 
     @Override
     final public int sendRequest() throws Exception {
+        mApiUrl = getApiUrl();
         HttpURLConnection connection = getConnection();
         if (connection != null) {
             //Непосредственно перед отправкой запроса устанавливаем новый SSID
@@ -300,7 +291,7 @@ public abstract class ApiRequest implements IApiRequest {
         if (requestData.length > 0 && !isCanceled()) {
             Debug.logJson(
                     ConnectionManager.TAG,
-                    "REQUEST >>> " + Static.API_URL + " rev:" + getRevNum(),
+                    "REQUEST >>> " + mApiUrl + " rev:" + getRevNum(),
                     requestJson
             );
 
@@ -328,9 +319,11 @@ public abstract class ApiRequest implements IApiRequest {
 
     @Override
     public String readRequestResult() throws IOException {
-        HttpURLConnection connection = getConnection();
-        String result = HttpUtils.readStringFromConnection(connection);
-        closeConnection();
+        String result = null;
+        if (mURLConnection != null) {
+            result = HttpUtils.readStringFromConnection(mURLConnection);
+            closeConnection();
+        }
         return result;
     }
 
@@ -340,14 +333,16 @@ public abstract class ApiRequest implements IApiRequest {
      * @param connection соединение к которому будет добавлен заголовок
      */
     protected void setRevisionHeader(HttpURLConnection connection) {
-        String rev = getRevNum();
-        if (rev != null && rev.length() > 0) {
-            connection.setRequestProperty("Cookie", "revnum=" + rev + ";");
+        if (App.DEBUG || Editor.isEditor()) {
+            String rev = getRevNum();
+            if (rev != null && rev.length() > 0) {
+                connection.setRequestProperty("Cookie", "revnum=" + rev + ";");
+            }
         }
     }
 
     protected static String getRevNum() {
-        return App.DEBUG ? Static.REV : "";
+        return App.getConfig().getApiRevision();
     }
 
     @Override

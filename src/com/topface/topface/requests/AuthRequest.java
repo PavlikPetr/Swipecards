@@ -131,4 +131,8 @@ public class AuthRequest extends ApiRequest {
     public boolean isNeedAuth() {
         return false;
     }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
+    }
 }

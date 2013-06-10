@@ -8,12 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
+import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.QuestionaryRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
@@ -47,7 +50,6 @@ public class EditFormItemsFragment extends AbstractEditFragment {
             mDataId = FormItem.NO_RESOURCE_ID;
             mSeletedDataId = mDataId;
             mData = Static.EMPTY;
-            mProfile = CacheProfile.getProfile();
         }
 
         mProfile = CacheProfile.getProfile();
@@ -78,7 +80,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 
         ViewGroup header = (ViewGroup) inflater.inflate(R.layout.item_edit_profile_form_header,
                 mListView, false);
-        ((TextView) header.findViewById(R.id.tvTitle)).setText(formItemTitle);
+        ((TextView) header.findViewWithTag("tvTitle")).setText(formItemTitle);
         mListView.addHeaderView(header);
 
         mAdapter = new FormCheckingDataAdapter(getActivity().getApplicationContext(),
@@ -105,7 +107,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
                     mFormInfo.fillFormItem(newItem);
 
                     prepareRequestSend();
-                    QuestionaryRequest request = mFormInfo.getFormRequest(newItem);
+                    ApiRequest request = mFormInfo.getFormRequest(newItem);
                     registerRequest(request);
                     request.callback(new ApiHandler() {
 
@@ -113,8 +115,8 @@ public class EditFormItemsFragment extends AbstractEditFragment {
                         public void success(ApiResponse response) {
                             item.dataId = mSeletedDataId;
                             mFormInfo.fillFormItem(item);
-                            getActivity().setResult(Activity.RESULT_OK);
                             mDataId = mSeletedDataId;
+                            getActivity().setResult(Activity.RESULT_OK);
                             finishRequestSend();
                             handler.sendEmptyMessage(0);
                         }
@@ -189,9 +191,9 @@ public class EditFormItemsFragment extends AbstractEditFragment {
                 holder = new ViewHolder();
 
                 convertView = mInflater.inflate(R.layout.item_edit_form_check, null, false);
-                holder.mTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-                holder.mBackground = (ImageView) convertView.findViewById(R.id.ivEditBackground);
-                holder.mCheck = (ImageView) convertView.findViewById(R.id.ivCheck);
+                holder.mTitle = (TextView) convertView.findViewWithTag("tvTitle");
+                holder.mBackground = (ImageView) convertView.findViewWithTag("ivEditBackground");
+                holder.mCheck = (ImageView) convertView.findViewWithTag("ivCheck");
 
 
                 convertView.setTag(holder);

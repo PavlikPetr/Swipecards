@@ -103,10 +103,6 @@ public class ProfileBackgrounds {
     public static interface BackgroundItem {
         public Bitmap getBitmap();
 
-        public boolean isSelected();
-
-        public BackgroundItem setSelected(boolean selected);
-
         public boolean isForVip();
     }
 

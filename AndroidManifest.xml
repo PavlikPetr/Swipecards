@@ -2,8 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.topface.topface"
           android:installLocation="auto"
-          android:versionCode="62"
-          android:versionName="2.3.8">
+
+          android:versionCode="78"
+          android:versionName="2.6.0">
 
     <uses-sdk
             android:minSdkVersion="7"
@@ -17,6 +18,7 @@
     <uses-permission android:name="com.topface.topface.permission.C2D_MESSAGE"/>
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
@@ -26,6 +28,25 @@
     <uses-permission android:name="com.android.vending.BILLING"/>
     <uses-permission android:name="android.permission.GET_TASKS"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-feature android:name="android.hardware.location.gps" android:required="false" />
+    <uses-feature android:name="android.hardware.location.network" android:required="false" />
+
+    <uses-feature
+            android:name="android.hardware.location.gps"
+            android:required="false"/>
+    <uses-feature
+            android:name="android.hardware.location.network"
+            android:required="false"/>
+
+    <!-- Разрешения для Fortumo -->
+    <uses-feature
+            android:name="android.hardware.telephony"
+            android:required="false"/>
+
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.SEND_SMS"/>
 
     <supports-screens
             android:resizeable="true"
@@ -55,6 +76,7 @@
                 android:name=".ui.NavigationActivity"
                 android:screenOrientation="portrait"
                 android:windowSoftInputMode="stateHidden|adjustResize"
+                android:configChanges="locale"
                 >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -65,7 +87,7 @@
                 <action android:name="android.intent.action.VIEW"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.BROWSABLE"/>
 
 
                 <data
@@ -114,17 +136,19 @@
                 <action android:name="android.intent.action.VIEW"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.BROWSABLE"/>
+
                 <data
-                    android:scheme="topface"
-                    android:host="offerwall"
-                    />
+                        android:scheme="topface"
+                        android:host="offerwall"
+                        />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.BROWSABLE"/>
+
                 <data
                         android:scheme="topface"
 
@@ -132,7 +156,7 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".utils.social.WebAuthActivity"
+                android:name=".utils.social.VkAuthActivity"
                 android:screenOrientation="portrait">
 
         </activity>
@@ -171,7 +195,13 @@
         <activity android:name=".ui.profile.BlackListActivity"/>
         <activity
                 android:name=".ui.ContainerActivity"
-                android:windowSoftInputMode="stateHidden|adjustResize"/>
+                android:screenOrientation="portrait"
+                android:parentActivityName=".ui.NavigationActivity"
+                android:windowSoftInputMode="stateHidden|adjustResize">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".ui.NavigationActivity"/>
+        </activity>
 
         <activity
                 android:name="com.mad.ad.ImageActivity"
@@ -191,10 +221,41 @@
                 android:configChanges="keyboardHidden|orientation"/>
 
         <activity
+                android:name=".ui.PaymentwallActivity"/>
+
+        <activity
                 android:name="com.sponsorpay.sdk.android.publisher.OfferWallActivity"
                 android:configChanges="orientation"/>
 
-        <!-- Алиас для главной активити из первой версии. На xвсякий случай, а то раньше уже были проблемы с FB -->
+        <activity
+                android:name="com.topface.topface.utils.offerwalls.clickky.ClickkyActivity"
+                />
+
+        <activity
+                android:name="com.mopub.mobileads.MoPubActivity"
+                android:configChanges="keyboardHidden|orientation"/>
+        <activity
+                android:name="com.mopub.mobileads.MraidActivity"
+                android:configChanges="keyboardHidden|orientation"/>
+        <activity
+                android:name="com.mopub.mobileads.MraidBrowser"
+                android:configChanges="keyboardHidden|orientation"/>
+        <activity
+                android:name="com.mopub.mobileads.MoPubActivity"
+                android:configChanges="keyboardHidden|orientation"/>
+
+        <activity
+                android:name="com.inneractive.api.ads.InneractiveFullScreenView"
+                android:configChanges="orientation|screenSize"/>
+
+        <meta-data android:name="com.mobclix.APPLICATION_ID"
+                   android:value="18FE3F53-02A6-4585-9518-B2896A13FD6C"/>
+        <activity
+                android:name="com.mobclix.android.sdk.MobclixBrowserActivity"
+                android:theme="@android:style/Theme.Translucent.NoTitleBar"
+                android:hardwareAccelerated="true" />
+
+        <!-- Алиас для главной активити из первой версии. На всякий случай, а то раньше уже были проблемы с FB -->
         <activity-alias
                 android:name=".ui.MainActivity"
                 android:targetActivity=".ui.NavigationActivity"/>
@@ -212,13 +273,6 @@
                 <action android:name="com.android.vending.billing.IN_APP_NOTIFY"/>
                 <action android:name="com.android.vending.billing.RESPONSE_CODE"/>
                 <action android:name="com.android.vending.billing.PURCHASE_STATE_CHANGED"/>
-            </intent-filter>
-        </receiver>
-
-
-        <receiver android:name=".ReAuthReceiver">
-            <intent-filter>
-                <action android:name="com.topface.topface.action.AUTH"/>
             </intent-filter>
         </receiver>
 
@@ -258,7 +312,6 @@
                 <action android:name="com.android.vending.INSTALL_REFERRER"/>
             </intent-filter>
         </receiver>
-
 
 
         <!-- providers -->

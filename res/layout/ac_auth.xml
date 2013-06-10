@@ -25,7 +25,6 @@
               >
         <TextView
                 android:id="@+id/redAlertTextView"
-                android:visibility="gone"
                 style="@style/RedAlertTextView"
                 android:text="@string/error_login_password"/>
         <TextView

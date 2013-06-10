@@ -31,6 +31,7 @@ public class ProfileFormListAdapter extends BaseAdapter {
     private static class ViewHolder {
         public ImageView mState;
         public TextView mTitle;
+
         public TextView mHeader;
         public TextView mValue;
         public Button mFill;
@@ -38,6 +39,11 @@ public class ProfileFormListAdapter extends BaseAdapter {
 
     public ProfileFormListAdapter(Context context) {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        refillData();
+    }
+
+    public void refillData() {
+        mProfileForms.clear();
         if (CacheProfile.forms != null) {
             mProfileForms.addAll(CacheProfile.forms);
         }
@@ -131,12 +137,13 @@ public class ProfileFormListAdapter extends BaseAdapter {
 
         switch (type) {
             case T_HEADER:
+
                 holder.mHeader.setText(item.title);
-                holder.mState.setImageResource(R.drawable.user_header);
+                holder.mState.setImageResource(getHeaderPicture(item));
                 break;
             case T_DATA:
                 holder.mTitle.setText(item.title.toUpperCase());
-                if (item.value != null) {
+                if (item.value != null && item.dataId != FormItem.NOT_SPECIFIED_ID) {
                     holder.mState.setImageResource(R.drawable.user_cell);
                     holder.mValue.setText(item.value.toLowerCase());
                     holder.mValue.setVisibility(View.VISIBLE);
@@ -169,6 +176,22 @@ public class ProfileFormListAdapter extends BaseAdapter {
             convertView.requestLayout();
         }
         return convertView;
+    }
+
+    private int getHeaderPicture(FormItem item) {
+        switch (item.titleId) {
+            case R.string.form_main:
+                return R.drawable.user_main;
+            case R.string.form_habits:
+                return R.drawable.user_habits;
+            case R.string.form_physique:
+                return R.drawable.user_physical;
+            case R.string.form_social:
+                return R.drawable.user_social;
+            case R.string.form_detail:
+                return R.drawable.user_details;
+        }
+        return 0;
     }
 
     public void setOnFillListener(View.OnClickListener onFillListener) {

@@ -6,7 +6,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 
 public class DialogsTest extends FeedTest<FeedDialog> {
 
-    private int mIdForDelete = 0;
+    private String mIdForDelete;
 
     public void testFeedDialogsRequestExec() {
         runFeedTest("testFeedDialogsRequestExec");
@@ -15,7 +15,7 @@ public class DialogsTest extends FeedTest<FeedDialog> {
     @Override
     protected void runAdditionalItemAsserts(FeedDialog item) {
         assertTrue("Wrong dialog item type", item.type != FeedDialog.DEFAULT);
-        if (mIdForDelete == 0) {
+        if (mIdForDelete != null) {
             //Этот id будем в дальнейшем удалять
             mIdForDelete = item.id;
         }

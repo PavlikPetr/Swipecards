@@ -7,9 +7,10 @@
         <item quantity="one">%d valanda atgal</item>
     </plurals>
     <plurals name="time_minute">
+        <item quantity="few">%d minutes atgal</item>
         <item quantity="zero">%d minutę atgal</item>
         <item quantity="other">%d minučių atgal</item>
-        <item quantity="one">%d minučių atgal</item>
+        <item quantity="one">%d minutę atgal</item>
     </plurals>
     <plurals name="time_month">
         <item quantity="few">%d mėnesiai</item>

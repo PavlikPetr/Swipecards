@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
@@ -12,6 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
+import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
@@ -34,7 +34,7 @@ import java.util.UUID;
  */
 public class AddPhotoHelper {
 
-    public static final String PATH_TO_FILE = Environment.getExternalStorageDirectory().getAbsolutePath() + "/topface_tmp";
+    public static String PATH_TO_FILE;
     private String mFileName = "/tmp.jpg";
 
     private Context mContext;
@@ -66,6 +66,7 @@ public class AddPhotoHelper {
     public AddPhotoHelper(Activity activity) {
         mActivity = activity;
         mContext = activity.getApplicationContext();
+        PATH_TO_FILE = StorageUtils.getCacheDirectory(mContext).getPath() + "/topface_profile/";
     }
 
     public void showProgressDialog() {
@@ -115,7 +116,7 @@ public class AddPhotoHelper {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(mContext, R.string.general_error, 1500).show();
+                                Toast.makeText(mContext, R.string.general_data_error, 1500).show();
                             }
                         });
                         return;
@@ -261,6 +262,7 @@ public class AddPhotoHelper {
                 if (mHandler != null) {
                     mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
                 }
+                showErrorMessage(codeError);
                 doNeedSendProgressNotification[0] = false;
                 mNotificationManager.cancelNotification(progressId[0]);
                 mNotificationManager.showNotification(mContext.getString(R.string.default_photo_upload_error), "", fakeImageView.getImageBitmap(), 1, new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE), true);
@@ -289,6 +291,20 @@ public class AddPhotoHelper {
                 }).start();
             }
         }).exec();
+    }
+
+    private void showErrorMessage(int codeError) {
+        switch (codeError) {
+            case ApiResponse.INCORRECT_PHOTO_DATA:
+                Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo), 2000).show();
+                break;
+            case ApiResponse.INCORRECT_PHOTO_FORMAT:
+                Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo_format), 2000).show();
+                break;
+            case ApiResponse.INCORRECT_PHOTO_SIZES:
+                Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo_size), 2000).show();
+                break;
+        }
     }
 
 }

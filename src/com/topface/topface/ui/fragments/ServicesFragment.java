@@ -16,7 +16,7 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Offerwalls;
+import com.topface.topface.utils.offerwalls.Offerwalls;
 
 public class ServicesFragment extends BaseFragment {
 

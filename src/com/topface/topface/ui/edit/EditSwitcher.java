@@ -4,7 +4,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import com.topface.topface.R;
 
 public class EditSwitcher {
     private CheckBox mCheckbox;
@@ -14,9 +13,9 @@ public class EditSwitcher {
 
     public EditSwitcher(ViewGroup root) {
         mRoot = root;
-        mCheckbox = (CheckBox) root.findViewById(R.id.cbSwitch);
-        mTextOn = (TextView) root.findViewById(R.id.tvSwitchOn);
-        mTextOff = (TextView) root.findViewById(R.id.tvSwitchOff);
+        mCheckbox = (CheckBox) root.findViewWithTag("cbSwitch");
+        mTextOn = (TextView) root.findViewWithTag("tvSwitchOn");
+        mTextOff = (TextView) root.findViewWithTag("tvSwitchOff");
     }
 
     public void setChecked(boolean checked) {

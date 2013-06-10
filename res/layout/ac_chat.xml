@@ -6,19 +6,13 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true">
 
-    <include
-            layout="@layout/bar_navigation_header"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/loNavigationBar"
-            android:layout_alignParentTop="true"
-            />
+
 
     <com.topface.topface.ui.views.SwapControl
             android:id="@+id/swapFormView"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_below="@id/loNavigationBar">
+            android:layout_below="@+id/loNavigationBar">
 
         <LinearLayout
                 android:layout_width="fill_parent"
@@ -45,7 +39,7 @@
                     android:cacheColorHint="#00000000"
                     android:clickable="true"
                     android:divider="@android:color/transparent"
-                    android:dividerHeight="0dp"
+                    android:dividerHeight="8dp"
                     android:fadeScrollbars="true"
                     android:fadingEdge="none"
                     android:stackFromBottom="true"
@@ -68,6 +62,7 @@
                 android:layout_height="fill_parent"
 
                 >
+
             <LinearLayout
                     android:id="@+id/loAddButtons"
                     android:layout_width="fill_parent"
@@ -113,6 +108,7 @@
                     android:paddingRight="10dp"
                     android:orientation="vertical"
                     >
+
                 <TextView
                         android:id="@+id/tvBuyVipTitle"
                         android:layout_height="wrap_content"
@@ -126,9 +122,8 @@
                         android:id="@+id/btnBuyVip"
                         android:layout_height="wrap_content"
                         android:layout_width="fill_parent"
-                        android:background="@drawable/btn_vip_super_sale_selector"
+                        android:background="@drawable/btn_blue_selector"
                         android:text="@string/buying_vip_status"
-                        style="@style/VipItemTitleWhiteText"
                         android:textStyle="bold"
                         android:layout_centerInParent="true"
                         android:layout_marginTop="64dp"
@@ -139,23 +134,45 @@
                         android:id="@+id/btnAddToBlackList"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
-                        android:background="@drawable/btn_vip_sale_selector"
+                        android:background="@drawable/btn_gray_selector"
                         style="@style/ButtonGrayText"
                         android:text="@string/black_list_add"
                         android:layout_centerInParent="true"
                         android:layout_marginTop="32dp"
                         android:layout_marginBottom="32dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
                         />
             </RelativeLayout>
         </RelativeLayout>
     </com.topface.topface.ui.views.SwapControl>
 
-
     <ImageView style="@style/HeaderShadow"/>
 
-    <com.topface.topface.ui.views.LockerView
-            android:id="@+id/llvChatLoading"
-            style="@style/LoadingLocker"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"/>
+    <TextView
+            android:id="@+id/tvBackgroundText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:singleLine="true"
+            style="@style/BackgroundFont"
+            android:text="@string/general_dialog_loading"
+            android:drawableLeft="@drawable/loader"
+            android:visibility="gone"/>
+    <include
+            android:id="@+id/mChatActions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/loNavigationBar"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            layout="@layout/user_actions_layout"
+            />
+    <include
+            layout="@layout/bar_navigation_header"
+            android:id="@id/loNavigationBar"
+            />
 </RelativeLayout>

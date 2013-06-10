@@ -4,7 +4,7 @@
                 android:layout_height="wrap_content">
 
     <TextView
-            android:id="@+id/tvTitle"
+            android:tag="tvTitle"
             style="@style/ItemTitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -22,6 +22,7 @@
     <!-- Switch -->
 
     <CheckBox
+            android:tag="cbSwitch"
             android:id="@+id/cbSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,7 +35,7 @@
             android:clickable="false"/>
 
     <ProgressBar
-            android:id="@+id/vsiLoadBar"
+            android:tag="vsiLoadBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -45,7 +46,7 @@
             />
 
     <TextView
-            android:id="@+id/tvSwitchOn"
+            android:tag="tvSwitchOn"
             android:textColor="#FFFFFF"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -56,7 +57,7 @@
             android:textSize="12sp"/>
 
     <TextView
-            android:id="@+id/tvSwitchOff"
+            android:tag="tvSwitchOff"
             android:textColor="#2F2F2F"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/rootContainer"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:background="@drawable/bg_main">
@@ -51,7 +52,6 @@
 
         <EditText
                 android:id="@+id/etCityInput"
-                style="@style/ItemTitleText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -59,7 +59,15 @@
                 android:paddingRight="10dp"
                 android:inputType="text"
                 android:singleLine="true"
-                android:background="@drawable/city_editbox_selector"/>
+                />
+        <TextView android:id="@+id/noCities"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="center"
+                  android:text="@string/filter_city_fail"
+                  android:visibility="gone"
+                  android:layout_margin="5dp"
+                />
 
         <ListView
                 android:id="@+id/lvCityList"
@@ -70,6 +78,7 @@
                 android:fadeScrollbars="true"
                 android:fadingEdge="none"
                 android:listSelector="@android:color/transparent"/>
+
 
         <ProgressBar
                 android:id="@+id/prsCityLoading"

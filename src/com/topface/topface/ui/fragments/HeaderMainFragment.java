@@ -36,7 +36,6 @@ public class HeaderMainFragment extends BaseFragment {
     private String mCityVal;
     private ImageView mBackgroundView;
     private int mBackgroundVal;
-    private ImageView mOnline;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,13 +53,16 @@ public class HeaderMainFragment extends BaseFragment {
         mNameView = (TextView) root.findViewById(R.id.tvName);
         mCityView = (TextView) root.findViewById(R.id.tvCity);
         mBackgroundView = (ImageView) root.findViewById(R.id.ivProfileBackground);
-        mOnline = (ImageView) root.findViewById(R.id.ivOnline);
 
         return root;
     }
 
     public void setOnline(boolean online) {
-        mOnline.setVisibility(online ? View.VISIBLE : View.GONE);
+        // установка иконки онлайн
+        mNameView.setCompoundDrawablesWithIntrinsicBounds(
+                online ? R.drawable.ico_online : 0,
+                0, 0, 0
+        );
     }
 
     @Override
@@ -142,6 +144,7 @@ public class HeaderMainFragment extends BaseFragment {
     public void clearContent() {
         mAvatarView.setPhoto(null);
         mNameView.setText(Static.EMPTY);
+        mNameView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         setCity(Static.EMPTY);
     }
 

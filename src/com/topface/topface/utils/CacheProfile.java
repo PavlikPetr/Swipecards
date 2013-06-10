@@ -3,6 +3,7 @@ package com.topface.topface.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v4.util.SparseArrayCompat;
 import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.data.*;
@@ -12,11 +13,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /* Cache Profile */
 public class CacheProfile {
+    public static final String ACTION_PROFILE_LOAD = "com.topface.topface.ACTION.PROFILE_LOAD";
+    private static AtomicBoolean mIsLoaded = new AtomicBoolean(false);
     // Data
     public static int uid;             // id пользователя в топфейсе
     public static String first_name;   // имя пользователя
@@ -26,6 +29,7 @@ public class CacheProfile {
     public static int unread_messages; // количество непрочитанных сообщений пользователя
     public static int unread_mutual;   // количество непрочитанных симпатий
     public static int unread_visitors; // количество непрочитанных гостей
+    public static int unread_fans;     // количество непрочитаных поклонников
     public static City city;           // город пользователя
     public static int money;           // количество монет у пользователя
     public static int likes;           // количество симпатий пользователя
@@ -33,6 +37,7 @@ public class CacheProfile {
     public static DatingFilter dating; //Фильтр поиска
 
     public static boolean paid; // признак платящего пользоателя
+    public static boolean show_ad = true; // флаг показа рекламы
 
     //Premium
     public static boolean premium;
@@ -44,7 +49,7 @@ public class CacheProfile {
     public final static int NOTIFICATIONS_VISITOR = 4;
 
     public static LinkedList<FormItem> forms;
-    public static String status; // статус пользователя    
+    protected static String status; // статус пользователя
     public static int background_id;
     public static Photos photos;
     public static Photo photo;
@@ -55,13 +60,19 @@ public class CacheProfile {
     public static final String OPTIONS_CACHE_KEY = "options_cache";
 
     public static ArrayList<Gift> gifts = new ArrayList<Gift>();
-    public static HashMap<Integer, Profile.TopfaceNotifications> notifications;
+    public static SparseArrayCompat<Profile.TopfaceNotifications> notifications;
+
 
     public static boolean hasMail;
     public static boolean emailGrabbed;
     public static boolean emailConfirmed;
 
     public static long profileUpdateTime;
+    public static int xstatus;
+    private static boolean editor;
+    public static boolean canInvite;
+
+    public static boolean isGcmSupported;
 
     private static void setProfileCache(final ApiResponse response) {
         //Пишем в SharedPreferences в отдельном потоке
@@ -108,7 +119,7 @@ public class CacheProfile {
         profile.dating = dating;
         profile.forms = forms;
         profile.photos = photos;
-        profile.status = status;
+        profile.setStatus(status);
         profile.photo = photo;
         profile.gifts = gifts;
         profile.background = background_id;
@@ -116,10 +127,18 @@ public class CacheProfile {
         profile.totalPhotos = totalPhotos;
 
         profile.paid = paid;
+        profile.show_ad = show_ad;
+        profile.xstatus = xstatus;
+        profile.setEditor(editor);
+
+        profile.canInvite = canInvite;
+
+
         return profile;
     }
 
     public static void setProfile(Profile profile, ApiResponse response) {
+        Editor.init(profile);
         uid = profile.uid;
         first_name = profile.first_name;
         age = profile.age;
@@ -143,16 +162,33 @@ public class CacheProfile {
 
         photos = profile.photos;
         photo = profile.photo;
-        status = profile.status;
+        status = profile.getStatus();
         gifts = profile.gifts;
         background_id = profile.background;
 
         totalPhotos = profile.totalPhotos;
 
         paid = profile.paid;
+        show_ad = profile.show_ad;
+
+        xstatus = profile.xstatus;
+
+        canInvite = profile.canInvite;
+
+        editor = profile.isEditor();
+
+//        isGcmSupported = profile
 
         setProfileCache(response);
         setProfileUpdateTime();
+    }
+
+    public static String getStatus() {
+        return status;
+    }
+
+    public static void setStatus(String status) {
+        CacheProfile.status = Profile.normilizeStatus(status);
     }
 
     /**
@@ -185,6 +221,7 @@ public class CacheProfile {
                 }
             }
         }
+        mIsLoaded.set(true);
         return result;
     }
 
@@ -222,9 +259,17 @@ public class CacheProfile {
         return options;
     }
 
+    public static boolean checkIsFillData() {
+        return city != null && !city.isEmpty() && age != 0 && first_name != null && photo != null;
+    }
+
     public static void clearProfile() {
-        options = null;
+        clearOptions();
         setProfile(new Profile(), null);
+    }
+
+    public static void clearOptions() {
+        options = null;
     }
 
     private static void setProfileUpdateTime() {
@@ -233,7 +278,11 @@ public class CacheProfile {
     }
 
     public static boolean isLoaded() {
-        return uid > 0;
+        return mIsLoaded.get();
+    }
+
+    public static boolean isEmpty() {
+        return isLoaded() && uid == 0;
     }
 
     public static void setOptions(Options newOptions, final JSONObject response) {
@@ -289,8 +338,12 @@ public class CacheProfile {
     public static void onRegistration(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(Static.PREFERENCES_TAG_NEED_CHANGE_PASSWORD, true);
+        editor.putBoolean(Static.PREFERENCES_TAG_NEED_CHANGE_PASSWORD, false);
         editor.putBoolean(Static.PREFERENCES_TAG_NEED_CITY_CONFIRM, true);
         editor.commit();
+    }
+
+    public static boolean isEditor() {
+        return editor;
     }
 }

@@ -10,6 +10,8 @@ import android.graphics.Bitmap.Config;
 import android.graphics.PorterDuff.Mode;
 import android.net.Uri;
 import android.os.Build;
+import android.text.TextUtils;
+import android.util.SparseArray;
 import android.view.Display;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -19,19 +21,23 @@ import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.AuthRequest;
+import com.topface.topface.utils.social.AuthToken;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.regex.Pattern;
 
 public class Utils {
-    public static final long WEEK = 604800000;
     public static final long DAY = 86400000;
+    public static final long WEEK_IN_SECONDS = 604800;
+    public static final long DAY_IN_SECONDS = 86400;
 
     private static PluralResources mPluralResources;
     private static String mClientVersion;
+    private static float mDensity = App.getContext().getResources().getDisplayMetrics().density;
 
-    public static int unixtime() {
+    public static int unixtimeInSeconds() {
         return (int) (System.currentTimeMillis() / 1000L);
     }
 
@@ -85,14 +91,16 @@ public class Utils {
             // сжатие изображения
             Bitmap scaledBitmap = Bitmap.createBitmap(rawBitmap, 0, 0, srcWidth, srcHeight, matrix, true);
 
-            // вырезаем необходимый размер
-            if (LAND) {
-                // у горизонтальной, вырезаем по центру
-                int offset_x = (scaledBitmap.getWidth() - dstWidth) / 2;
-                clippedBitmap = Bitmap.createBitmap(scaledBitmap, offset_x, 0, dstWidth, dstHeight, null, false);
-            } else {
-                // у вертикальной режим с верху
-                clippedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, dstWidth, dstHeight, null, false);
+            if (scaledBitmap != null) {
+                // вырезаем необходимый размер
+                if (LAND) {
+                    // у горизонтальной, вырезаем по центру
+                    int offset_x = (scaledBitmap.getWidth() - dstWidth) / 2;
+                    clippedBitmap = Bitmap.createBitmap(scaledBitmap, offset_x, 0, dstWidth, dstHeight, null, false);
+                } else {
+                    // у вертикальной режим с верху
+                    clippedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, dstWidth, dstHeight, null, false);
+                }
             }
 
         } catch (OutOfMemoryError e) {
@@ -415,7 +423,19 @@ public class Utils {
     }
 
     public static void goToMarket(Context context) {
-        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(context.getString(R.string.default_market_link))));
+        context.startActivity(getMarketIntent(context));
+    }
+
+    public static Intent getMarketIntent(Context context) {
+        String link;
+        //Для амазона делаем специальную ссылку, иначе он ругается, хотя и работает
+        if (TextUtils.equals(Utils.getBuildType(), context.getString(R.string.build_amazon))) {
+            link = context.getString(R.string.amazon_market_link);
+        } else {
+            link = context.getString(R.string.default_market_link);
+        }
+
+        return new Intent(Intent.ACTION_VIEW, Uri.parse(link));
     }
 
     public static String getBuildType() {
@@ -476,5 +496,35 @@ public class Utils {
     public static void showSoftKeyboard(Context context, EditText editText) {
         InputMethodManager keyboard = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         keyboard.showSoftInput(editText, 0);
+    }
+
+    public static int getPxFromDp(int pixels) {
+        return (int) (mDensity * pixels);
+    }
+
+    public static String getSocialNetworkLink(String socialNetwork, String socialId) {
+        String socialNetworkLink = "";
+        if (TextUtils.equals(socialNetwork, AuthToken.SN_VKONTAKTE)) {
+            socialNetworkLink = "https://vk.com/id" + socialId;
+        } else if (TextUtils.equals(socialNetwork, AuthToken.SN_FACEBOOK)) {
+            socialNetworkLink = "https://www.facebook.com/" + socialId;
+        } else if (TextUtils.equals(socialNetwork, AuthToken.SN_TOPFACE)) {
+            socialNetworkLink = "http://topface.com/profile/" + socialId + "/";
+        }
+        return socialNetworkLink;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static ArrayList sparsArrayToArrayList(SparseArray array) {
+        ArrayList list = new ArrayList();
+        for (int i = 0; i < array.size(); i++) {
+            int key = array.keyAt(i);
+            list.add(key, array.get(key));
+        }
+        return list;
+    }
+
+    public static String capitalize(String line) {
+        return Character.toUpperCase(line.charAt(0)) + line.substring(1);
     }
 }

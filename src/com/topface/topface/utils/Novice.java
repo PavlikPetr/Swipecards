@@ -19,6 +19,7 @@ public class Novice {
     private SharedPreferences mPreferences;
 
     private static Novice mInstance;
+    private boolean flagsInited = false;
 
     public static Novice getInstance(SharedPreferences preferences) {
         if (mInstance == null) {
@@ -30,6 +31,19 @@ public class Novice {
     private Novice(SharedPreferences preferences) {
         mPreferences = preferences;
     }
+
+    public void initNoviceFlags() {
+        isShowEnergyToSympathies();
+        isShowSympathy();
+        isShowBuySympathies();
+        isShowFillProfile();
+        flagsInited = true;
+    }
+
+    public boolean isFlagsInitializationProccesed() {
+        return flagsInited;
+    }
+
 
     public boolean isShowEnergyToSympathies() {
         if (showEnergyToSympathies == null) {
@@ -87,11 +101,11 @@ public class Novice {
         boolean result = mPreferences.getBoolean(Static.PREFERENCES_NOVICE_DATING_BUY_SYMPATHY, true);
         if (result) return true;
 
-        long todayTime = Utils.unixtime();
+        long todayTime = Utils.unixtimeInSeconds();
         long lastTime = mPreferences.getLong(Static.PREFERENCES_NOVICE_DATING_BUY_SYMPATHY_DATE, 0);
 
         if (lastTime > 0) {
-            return (todayTime - lastTime) >= Utils.WEEK;
+            return (todayTime - lastTime) >= Utils.WEEK_IN_SECONDS;
         } else {
             SharedPreferences.Editor editor = mPreferences.edit();
             editor.putLong(Static.PREFERENCES_NOVICE_DATING_BUY_SYMPATHY_DATE, todayTime);
@@ -103,11 +117,11 @@ public class Novice {
     private boolean getShowProfile() {
         boolean result = mPreferences.getBoolean(Static.PREFERENCES_NOVICE_MENU_FILL_PROFILE, true);
         if (!result) return false;
-        long todayTime = Utils.unixtime();
+        long todayTime = Utils.unixtimeInSeconds();
         long lastTime = mPreferences.getLong(Static.PREFERENCES_NOVICE_MENU_FILL_PROFILE_DATE, 0);
 
         if (lastTime > 0) {
-            return (todayTime - lastTime) >= Utils.DAY;
+            return (todayTime - lastTime) >= Utils.DAY_IN_SECONDS;
         } else {
             SharedPreferences.Editor editor = mPreferences.edit();
             editor.putLong(Static.PREFERENCES_NOVICE_MENU_FILL_PROFILE_DATE, todayTime);
@@ -126,7 +140,7 @@ public class Novice {
     public void completeShowBuySympathies() {
         showBuySympathies = false;
         SharedPreferences.Editor editor = mPreferences.edit();
-        editor.putLong(Static.PREFERENCES_NOVICE_DATING_BUY_SYMPATHY_DATE, Utils.unixtime());
+        editor.putLong(Static.PREFERENCES_NOVICE_DATING_BUY_SYMPATHY_DATE, Utils.unixtimeInSeconds());
         editor.putBoolean(Static.PREFERENCES_NOVICE_DATING_BUY_SYMPATHY, false);
         editor.commit();
     }

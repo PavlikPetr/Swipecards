@@ -24,7 +24,6 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FeedbackReport;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.edit.AbstractEditFragment;
-import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.Debug;
@@ -49,6 +48,8 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
     private Report mReport = new Report();
     private LockerView loadingLocker;
+    private TextView wantAnswerTv;
+    private LinearLayout emailContainer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -67,8 +68,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         actionBar.setTitleText(getString(R.string.settings_feedback));
         loadingLocker = (LockerView) root.findViewById(R.id.fbLoadingLocker);
         mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
-        Button sendButton = (Button) root.findViewById(R.id.generalSendButton);
-        sendButton.setOnClickListener(new OnClickListener() {
+        actionBar.showSendButton(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveChanges(new Handler());
@@ -100,6 +100,15 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
         // EditText
         root.findViewById(R.id.tvTitle).setVisibility(View.GONE);
+
+        //Если  текущий язык приложения не русский или английский, то нужно показывать сообщение
+        //о том, что лучше писать нам по русски или английски, поэтому проверяем тут локаль
+        TextView incorrectLocaleTv = (TextView) root.findViewById(R.id.tvLocale);
+        String language = Locale.getDefault().getLanguage();
+        if(language.equals("en") || language.equals("ru")) {
+            incorrectLocaleTv.setVisibility(View.GONE);
+        }
+
         mEditText = (EditText) root.findViewById(R.id.edText);
         mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         mEditText.addTextChangedListener(new TextWatcher() {
@@ -145,15 +154,14 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
     private void initEmailViews(View root, int feedbackType) {
         final TextView emailTitle = (TextView) root.findViewById(R.id.tvEmailTitle);
         mEditEmail = (EditText) root.findViewById(R.id.edEmail);
-        ViewGroup emailSwitchLayout = (ViewGroup) root.findViewById(R.id.loEmailSwitcher);
+        final CheckBox emailSwitchLayout = (CheckBox) root.findViewById(R.id.loEmailSwitcher);
         mEditEmail.setInputType(InputType.TYPE_CLASS_TEXT);
         mEditEmail.setText(Settings.getInstance().getSocialAccountEmail());
-        setBackground(R.drawable.edit_big_btn_selector, emailSwitchLayout);
-        setText(R.string.settings_want_answer, emailSwitchLayout);
-        final EditSwitcher switchEmail = new EditSwitcher(emailSwitchLayout);
+        emailContainer = (LinearLayout) root.findViewById(R.id.emailContainer);
+        wantAnswerTv = (TextView) root.findViewById(R.id.wantAnswerTv);
         switch (feedbackType) {
             case DEVELOPERS_MESSAGE:
-                switchEmail.setChecked(true);
+                emailSwitchLayout.setChecked(true);
                 mReport.emailWanted = true;
                 mEditEmail.setVisibility(View.VISIBLE);
                 emailTitle.setVisibility(View.VISIBLE);
@@ -161,21 +169,21 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             case PAYMENT_MESSAGE:
                 mReport.emailWanted = true;
                 mEditEmail.setVisibility(View.VISIBLE);
-                emailTitle.setVisibility(View.VISIBLE);
-                emailSwitchLayout.setVisibility(View.GONE);
+//                emailTitle.setVisibility(View.VISIBLE);
+                emailContainer.setVisibility(View.GONE);
                 break;
             case ERROR_MESSAGE:
             case COOPERATION_MESSAGE:
             case UNKNOWN:
-                switchEmail.setChecked(false);
+                emailSwitchLayout.setChecked(false);
                 break;
         }
 
         emailSwitchLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                switchEmail.doSwitch();
-                if (switchEmail.isChecked()) {
+//                emailSwitchLayout.doSwitch();
+                if (emailSwitchLayout.isChecked()) {
                     mReport.emailWanted = true;
                     mEditEmail.setVisibility(View.VISIBLE);
                     emailTitle.setVisibility(View.VISIBLE);
@@ -184,6 +192,13 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
                     mEditEmail.setVisibility(View.GONE);
                     emailTitle.setVisibility(View.GONE);
                 }
+            }
+        });
+
+        wantAnswerTv.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                emailSwitchLayout.performClick();
             }
         });
     }
@@ -197,9 +212,15 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
     protected void saveChanges(Handler handler) {
         InputMethodManager imm = (InputMethodManager) getActivity().getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
+        String feedbackText = mEditText.getText().toString().trim();
+
+        //Если текст сообщения пустой, то не отправляем сообщение
+        if (TextUtils.isEmpty(feedbackText)) {
+            return;
+        }
 
         if (emailConfirmed()) {
-            mReport.body = mEditText.getText().toString();
+            mReport.body = feedbackText;
             prepareRequestSend();
             FeedbackReport feedbackRequest = new FeedbackReport(getActivity().getApplicationContext());
             feedbackRequest.subject = mReport.getSubject();
@@ -249,15 +270,6 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         }
     }
 
-    private void setBackground(int resId, ViewGroup frame) {
-        ImageView background = (ImageView) frame.findViewById(R.id.ivEditBackground);
-        background.setImageResource(resId);
-    }
-
-    private void setText(int titleResId, ViewGroup frame) {
-        ((TextView) frame.findViewById(R.id.tvTitle)).setText(titleResId);
-    }
-
     class Report {
         boolean emailWanted = false;
         String email;
@@ -271,8 +283,9 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         String device = android.os.Build.DEVICE;
         String model = android.os.Build.MODEL;
 
+        private AuthToken authToken = AuthToken.getInstance();
+
         public String getSubject() {
-            AuthToken authToken = AuthToken.getInstance();
             return "[" + Static.PLATFORM + "]" + subject + " {" + authToken.getSocialNet() + "_id=" + authToken.getUserId() + "}";
         }
 
@@ -284,23 +297,27 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             StringBuilder strBuilder = new StringBuilder();
 
             if (emailWanted && email != null) {
-                strBuilder.append("<p>Email for answer: ").append(email).append("</p>");
+                strBuilder.append("<p>Email for answer: ").append(email).append(";</p>\n");
             }
             strBuilder.append("<p>Topface version: ").append(topface_version).append("/").append(topface_versionCode)
-                    .append("</p>");
-            strBuilder.append("<p>Device: ").append(device).append("/").append(model).append("</p>");
-            strBuilder.append("<p>Device language: ").append(Locale.getDefault().getDisplayLanguage()).append("</p>");
+                    .append(";</p>\n");
+            strBuilder.append("<p>Device: ").append(device).append("/").append(model).append(";</p>\n");
+            strBuilder.append("<p>Device language: ").append(Locale.getDefault().getDisplayLanguage()).append(";</p>\n");
 
-            strBuilder.append("<p>Topface SSID: ").append(Ssid.get()).append("</p>");
-            AuthToken authToken = AuthToken.getInstance();
-            strBuilder.append("<p>Social net: ").append(authToken.getSocialNet()).append("</p>");
-            strBuilder.append("<p>Social token: ").append(authToken.getTokenKey()).append("</p>");
-            strBuilder.append("<p>Social id: ").append(authToken.getUserId()).append("</p>");
+            strBuilder.append("<p>Topface SSID: ").append(Ssid.get()).append(";</p>\n");
+            strBuilder.append("<p>Social net: ").append(authToken.getSocialNet()).append(";</p>\n");
+            if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+                strBuilder.append("<p>Topface login: ").append(authToken.getLogin()).append(";</p>\n");
+            } else {
+                strBuilder.append("<p>Social token: ").append(authToken.getTokenKey()).append(";</p>\n");
+            }
+
+            strBuilder.append("<p>Social id: ").append(authToken.getUserId()).append(";</p>\n");
 
             strBuilder.append("<p>Android version: ").append(android_CODENAME).append("/");
-            strBuilder.append(android_RELEASE).append("/").append(android_SDK).append("</p>");
+            strBuilder.append(android_RELEASE).append("/").append(android_SDK).append(";</p>\n");
 
-            strBuilder.append("<p>Build type: ").append(Utils.getBuildType()).append(android_SDK).append("</p>");
+            strBuilder.append("<p>Build type: ").append(Utils.getBuildType()).append(android_SDK).append(";</p>\n");
 
             return strBuilder.toString();
         }

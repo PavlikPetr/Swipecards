@@ -1,22 +1,26 @@
 package com.topface.topface.ui.fragments.feed;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.view.View;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Visitor;
 import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.VisitorsListAdapter;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import org.json.JSONObject;
 
 
-public class VisitorsFragment extends FilterDisabledFragment<Visitor> {
+public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
 
     @Override
     protected Drawable getBackIcon() {
-        return getResources().getDrawable(R.drawable.visitors_back_icon);
+        return getResources().getDrawable(R.drawable.visitors);
     }
 
     @Override
@@ -41,8 +45,27 @@ public class VisitorsFragment extends FilterDisabledFragment<Visitor> {
     }
 
     @Override
-    protected int getEmptyFeedText() {
-        return R.string.visitors_background_text;
+    protected void initEmptyFeedView(View inflated) {
+        View btnBuyVip = inflated.findViewById(R.id.btnBuyVip);
+        if (CacheProfile.premium) {
+            inflated.findViewById(R.id.tvText).setVisibility(View.GONE);
+            btnBuyVip.setVisibility(View.GONE);
+        } else {
+            inflated.findViewById(R.id.tvText).setVisibility(View.VISIBLE);
+            btnBuyVip.setVisibility(View.VISIBLE);
+            btnBuyVip.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
+                    startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                }
+            });
+        }
+    }
+
+    @Override
+    protected int getEmptyFeedLayout() {
+        return R.layout.layout_empty_visitors;
     }
 
     @Override
@@ -58,5 +81,10 @@ public class VisitorsFragment extends FilterDisabledFragment<Visitor> {
     @Override
     protected int getTypeForCounters() {
         return CountersManager.VISITORS;
+    }
+
+    @Override
+    protected boolean isForPremium() {
+        return true;
     }
 }

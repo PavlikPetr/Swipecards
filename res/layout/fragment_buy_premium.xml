@@ -3,18 +3,17 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
         >
-    <FrameLayout android:id="@+id/navBar"
-                 android:layout_width="fill_parent"
-                 android:layout_height="wrap_content"
-                 android:visibility="gone">
-        <include layout="@layout/bar_navigation_header"
-                 android:id="@+id/loNavigationBar"/>
-    </FrameLayout>
+
+    <include
+            layout="@layout/bar_navigation_header"
+            android:visibility="gone"
+            android:id="@+id/loNavigationBar"/>
+
     <ScrollView
-                android:layout_height="fill_parent"
-                android:layout_width="fill_parent"
-                android:background="@drawable/bg_main"
-                android:layout_below="@id/navBar"
+            android:layout_height="fill_parent"
+            android:layout_width="fill_parent"
+            android:background="@drawable/bg_main"
+            android:layout_below="@id/loNavigationBar"
             >
 
         <LinearLayout
@@ -23,12 +22,29 @@
                 android:layout_height="wrap_content"
                 >
 
+            <TextView
+                    android:id="@+id/tvExtraText"
+                    style="@style/ItemTitleText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/buying_info"
+                    android:gravity="center"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:textSize="12sp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:singleLine="false"/>
+
             <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/fbpContainer"
                     android:padding="5dp"
+                    android:layout_marginRight="5dp"
                     >
 
                 <RelativeLayout
@@ -82,123 +98,102 @@
                         android:layout_marginTop="10dp"
                         />
 
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/vip_info_guest"
+                        android:layout_marginLeft="5dp"
+                        style="@style/VipItemTitleWhiteText"
+                        android:textSize="13sp"
+                        android:drawablePadding="5dp"
+                        android:drawableLeft="@drawable/ic_guests"
+                        />
+
+                <ImageView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/delimiter_rocket"
+                        />
+
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/vip_info_invisible"
+                        android:layout_marginLeft="5dp"
+                        style="@style/VipItemTitleWhiteText"
+                        android:textSize="13sp"
+                        android:drawableLeft="@drawable/ic_invisible"
+                        android:drawablePadding="5dp"
+                        />
+
+                <ImageView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/delimiter_rocket"
+                        />
+
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/vip_stop_ads"
+                        android:layout_marginLeft="5dp"
+                        style="@style/VipItemTitleWhiteText"
+                        android:textSize="13sp"
+                        android:drawablePadding="5dp"
+                        android:drawableLeft="@drawable/ic_stop_ads"
+                        />
+
+                <ImageView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/delimiter_rocket"
+                        />
+
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/vip_info_message"
+                        android:layout_marginLeft="5dp"
+                        style="@style/VipItemTitleWhiteText"
+                        android:textSize="13sp"
+                        android:drawableLeft="@drawable/ic_message"
+                        android:drawablePadding="5dp"
+                        />
+
+                <ImageView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/delimiter_rocket"
+                        />
+
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/vip_info_blackList"
+                        android:layout_marginLeft="5dp"
+                        style="@style/VipItemTitleWhiteText"
+                        android:textSize="13sp"
+                        android:drawableLeft="@drawable/ic_blacklist"
+                        android:drawablePadding="5dp"
+                        />
+
+                <ImageView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/delimiter_rocket"
+                        />
 
 
                 <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/vip_info_delight"
+                        android:text="@string/vip_info_vip"
                         android:layout_marginLeft="5dp"
                         style="@style/VipItemTitleWhiteText"
-                        android:drawableLeft="@drawable/ic_delight"
-                        android:drawablePadding= "5dp"
-                        android:textSize="14sp"
+                        android:textSize="13sp"
+                        android:drawableLeft="@drawable/ic_vip"
+                        android:drawablePadding="5dp"
                         />
-
-
-                <ImageView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/delimiter_rocket"
-                        />
-
-                    <TextView
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/vip_info_guest"
-                            android:layout_marginLeft="5dp"
-                            style="@style/VipItemTitleWhiteText"
-                            android:textSize="14sp"
-                            android:drawablePadding="5dp"
-                            android:drawableLeft="@drawable/ic_guests"
-                            />
-
-                <ImageView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/delimiter_rocket"
-                        />
-
-                    <TextView
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/vip_info_invisible"
-                            android:layout_marginLeft="5dp"
-                            style="@style/VipItemTitleWhiteText"
-                            android:textSize="14sp"
-                            android:drawableLeft="@drawable/ic_invisible"
-                            android:drawablePadding="5dp"
-                            />
-
-                <ImageView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/delimiter_rocket"
-                        />
-
-                    <TextView
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/vip_info_message"
-                            android:layout_marginLeft="5dp"
-                            style="@style/VipItemTitleWhiteText"
-                            android:textSize="14sp"
-                            android:drawableLeft="@drawable/ic_message"
-                            android:drawablePadding="5dp"
-                            />
-
-                <ImageView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/delimiter_rocket"
-                        />
-
-                    <TextView
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/vip_info_gift"
-                            android:layout_marginLeft="5dp"
-                            style="@style/VipItemTitleWhiteText"
-                            android:textSize="14sp"
-                            android:drawableLeft="@drawable/ic_gift"
-                            android:drawablePadding="5dp"
-                            />
-
-                <ImageView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/delimiter_rocket"
-                        />
-
-                    <TextView
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/vip_info_blackList"
-                            android:layout_marginLeft="5dp"
-                            style="@style/VipItemTitleWhiteText"
-                            android:textSize="14sp"
-                            android:drawableLeft="@drawable/ic_blacklist"
-                            android:drawablePadding="5dp"
-                            />
-
-                <ImageView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/delimiter_rocket"
-                        />
-
-
-
-                    <TextView
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/vip_info_vip"
-                            android:layout_marginLeft="5dp"
-                            style="@style/VipItemTitleWhiteText"
-                            android:textSize="14sp"
-                            android:drawableLeft="@drawable/ic_vip"
-                            android:drawablePadding="5dp"
-                            />
 
             </LinearLayout>
 
@@ -268,6 +263,8 @@
 
     <ImageView
             android:id="@+id/headerShadow"
-            style="@style/HeaderShadow"/>
+            android:layout_below="@id/loNavigationBar"
+            style="@style/HeaderShadow"
+            android:visibility="gone"/>
 
 </RelativeLayout>

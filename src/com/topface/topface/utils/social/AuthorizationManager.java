@@ -11,7 +11,7 @@ import com.facebook.topface.DialogError;
 import com.facebook.topface.Facebook;
 import com.facebook.topface.Facebook.DialogListener;
 import com.facebook.topface.FacebookError;
-import com.topface.topface.Static;
+import com.topface.topface.App;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.http.HttpUtils;
@@ -59,7 +59,7 @@ public class AuthorizationManager {
     }
 
     public static Facebook getFacebook() {
-        return new Facebook(Static.AUTH_FACEBOOK_ID);
+        return new Facebook(App.getConfig().getAuthFbApi());
     }
 
     public static void extendAccessToken(Activity parentActivity) {
@@ -82,12 +82,12 @@ public class AuthorizationManager {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == WebAuthActivity.INTENT_WEB_AUTH) {
+            if (requestCode == VkAuthActivity.INTENT_WEB_AUTH) {
                 if (data != null) {
-                    String token_key = data.getExtras().getString(WebAuthActivity.ACCESS_TOKEN);
-                    String user_id = data.getExtras().getString(WebAuthActivity.USER_ID);
-                    String expires_in = data.getExtras().getString(WebAuthActivity.EXPIRES_IN);
-                    String user_name = data.getExtras().getString(WebAuthActivity.USER_NAME);
+                    String token_key = data.getExtras().getString(VkAuthActivity.ACCESS_TOKEN);
+                    String user_id = data.getExtras().getString(VkAuthActivity.USER_ID);
+                    String expires_in = data.getExtras().getString(VkAuthActivity.EXPIRES_IN);
+                    String user_name = data.getExtras().getString(VkAuthActivity.USER_NAME);
                     Settings.getInstance().setSocialAccountName(user_name);
 
                     AuthToken authToken = AuthToken.getInstance();
@@ -102,8 +102,8 @@ public class AuthorizationManager {
 
     // vkontakte methods
     public void vkontakteAuth() {
-        Intent intent = new Intent(mParentActivity.getApplicationContext(), WebAuthActivity.class);
-        mParentActivity.startActivityForResult(intent, WebAuthActivity.INTENT_WEB_AUTH);
+        Intent intent = new Intent(mParentActivity.getApplicationContext(), VkAuthActivity.class);
+        mParentActivity.startActivityForResult(intent, VkAuthActivity.INTENT_WEB_AUTH);
     }
 
     // mFacebook methods
@@ -211,6 +211,8 @@ public class AuthorizationManager {
             getFbName(authToken.getUserId(), handler);
         } else if (authToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
             getVkName(authToken.getTokenKey(), authToken.getUserId(), handler);
+        } else if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+            handler.sendMessage(Message.obtain(null, SUCCESS_GET_NAME, authToken.getLogin()));
         }
     }
 
@@ -245,7 +247,7 @@ public class AuthorizationManager {
     }
 
     public static void getFbName(final String user_id, final Handler handler) {
-        new AsyncFacebookRunner(new Facebook(Static.AUTH_FACEBOOK_ID)).request("/" + user_id, new RequestListener() {
+        new AsyncFacebookRunner(new Facebook(App.getConfig().getAuthFbApi())).request("/" + user_id, new RequestListener() {
 
             @Override
             public void onComplete(String response, Object state) {

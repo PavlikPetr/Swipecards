@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,6 +31,7 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormItem;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 
 import java.util.LinkedList;
@@ -61,7 +63,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         actionBar.showBackButton(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(CacheProfile.city != null) {
+                if (CacheProfile.city != null) {
                     if (hasStartedFromAuthActivity && !CacheProfile.city.isEmpty()) {
                         Intent intent = new Intent(EditProfileActivity.this, NavigationActivity.class);
                         intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_VIP_PROFILE);
@@ -97,7 +99,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
 
         mEditCity = (Button) header.findViewById(R.id.btnEditCity);
-        if(CacheProfile.city == null) {
+        if (CacheProfile.city == null) {
             mEditCity.setText(getString(R.string.general_choose_city));
         } else {
             mEditCity.setText(CacheProfile.city.name);
@@ -151,8 +153,8 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
     }
 
     private void initEditItems() {
-        mEditItems.add((new EditStatus()).setType(Type.TOP));
-        mEditItems.add((new EditBackPhoto()).setType(Type.MIDDLE));
+        if (!mEditItems.isEmpty()) mEditItems.clear();
+        mEditItems.add((new EditBackPhoto()).setType(Type.TOP));
         mEditItems.add((new EditPhotos()).setType(Type.BOTTOM));
 
         // edit form items
@@ -226,6 +228,12 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     mEditSex.setImageResource(CacheProfile.sex == Static.BOY ?
                             R.drawable.ico_boy :
                             R.drawable.ico_girl);
+                    if (data != null && data.getExtras() != null) {
+                        if (data.getExtras().getBoolean(EditMainFormItemsFragment.INTENT_SEX_CHANGED)) {
+                            initEditItems();
+                        }
+                    }
+                    mAdapter.notifyDataSetChanged();
                     break;
                 case EditContainerActivity.INTENT_EDIT_STATUS:
                     mAdapter.notifyDataSetChanged();
@@ -234,6 +242,9 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     mAdapter.notifyDataSetChanged();
                     break;
                 case EditContainerActivity.INTENT_EDIT_FORM_ITEM:
+                    mEditItems.clear();
+                    initEditItems();
+                    mAdapter.setData(mEditItems);
                     mAdapter.notifyDataSetChanged();
                     break;
                 case EditContainerActivity.INTENT_EDIT_INPUT_FORM_ITEM:
@@ -300,6 +311,10 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
             return mData.get(position);
         }
 
+        public void setData(LinkedList<EditProfileItem> data) {
+            mData = data;
+        }
+
         @Override
         public long getItemId(int position) {
             return position;
@@ -330,9 +345,9 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
                 convertView = mInflater.inflate(item.getLayoutResId(), null, false);
 
-                holder.mTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-                holder.mText = (TextView) convertView.findViewById(R.id.tvText);
-                holder.mBackground = (ImageView) convertView.findViewById(R.id.ivEditBackground);
+                holder.mTitle = (TextView) convertView.findViewWithTag("tvTitle");
+                holder.mText = (TextView) convertView.findViewWithTag("tvText");
+                holder.mBackground = (ImageView) convertView.findViewWithTag("ivEditBackground");
 
                 convertView.setTag(holder);
             } else {
@@ -382,8 +397,10 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                 } else if (item instanceof EditForm) {
                     holder.mTitle.setText(item.getTitle());
                     if (item != null && item.getText() != null && item.getText().trim().length() > 0) {
-                        holder.mText.setVisibility(View.VISIBLE);
-                        holder.mText.setText(item.getText());
+                        if (((EditForm)item).getId() != FormItem.NOT_SPECIFIED_ID) {
+                            holder.mText.setVisibility(View.VISIBLE);
+                            holder.mText.setText(item.getText());
+                        }
                     }
                 }
 
@@ -417,10 +434,11 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
         @Override
         public String getTitle() {
-            if (CacheProfile.status.trim().length() == 0 || CacheProfile.status.equals("-")) {
+            String status = CacheProfile.getStatus();
+            if (status == null || TextUtils.isEmpty(status) || status.equals("-")) {
                 return getString(R.string.edit_refresh_status);
             }
-            return CacheProfile.status;
+            return status;
         }
 
         @Override
@@ -462,11 +480,11 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
         @Override
         public String getTitle() {
-            int quantity = 0;
-            if (CacheProfile.photos != null) {
-                quantity = CacheProfile.photos.size();
-            }
-            return quantity + " " + getResources().getString(R.string.edit_album_photos);
+            return Utils.formatPhotoQuantity(
+                    CacheProfile.photos != null ?
+                            CacheProfile.photos.size() :
+                            0
+            );
         }
 
         @Override
@@ -512,6 +530,10 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         public EditForm setFormItem(FormItem item) {
             mFormItem = item;
             return this;
+        }
+
+        public int getId() {
+            return mFormItem.dataId;
         }
 
         @Override
