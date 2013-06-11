@@ -300,7 +300,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         }
     }
 
-    private void logout(final AuthToken token) {
+    private void logout() {
         LogoutRequest logoutRequest = new LogoutRequest(getActivity());
         mLockerView.setVisibility(View.VISIBLE);
         logoutRequest.callback(new ApiHandler() {
@@ -328,7 +328,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         builder.setPositiveButton(R.string.general_yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                logout(mToken);
+                logout();
             }
         });
         builder.create().show();

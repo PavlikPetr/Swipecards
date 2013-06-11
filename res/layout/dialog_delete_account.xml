@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+    <LinearLayout
+            android:id="@+id/loDialog"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_dialog"
+            android:layout_centerInParent="true"
+            android:padding="12dp"
+            android:orientation="vertical"
+            android:layout_margin="40dp"
+            android:gravity="center">
+
+        <com.topface.topface.ui.views.ImageViewRemote
+                xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
+                ivr:postProcessor="mask"
+                ivr:clipMask="@drawable/frame_menu_mask"
+                android:background="@drawable/frame_menu_selector"
+                android:id="@+id/ivAvatar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_horizontal"
+                />
+
+        <TextView
+                android:id="@+id/tvProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                style="@style/TitleWhiteText"
+                android:layout_marginTop="16dp"
+                />
+
+        <TextView
+                android:id="@+id/tvAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                style="@style/TitleWhiteText"
+                android:layout_marginTop="16dp"
+                android:drawablePadding="4dp"
+                />
+
+        <TextView
+                android:id="@+id/tvWarningText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                style="@style/TitleWhiteText"
+                android:layout_marginTop="24dp"
+                />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp">
+
+            <Button
+                    android:id="@+id/btnCancel"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    style="@style/ButtonBlue"
+                    android:text="@android:string/cancel"
+                    android:layout_marginRight="4dp"
+                    />
+
+            <Button
+                    android:id="@+id/btnOk"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/delete"
+                    style="@style/ButtonGray"
+                    android:layout_marginLeft="4dp"
+                    />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageButton
+            android:id="@+id/btnClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@id/loDialog"
+            android:layout_alignTop="@id/loDialog"
+            android:background="@drawable/btn_dialog_close_selector"
+            android:layout_marginTop="-16dp"
+            android:layout_marginRight="-16dp"/>
+</RelativeLayout>

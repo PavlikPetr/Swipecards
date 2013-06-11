@@ -15,9 +15,11 @@ import com.topface.topface.R;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -105,7 +107,7 @@ public class SettingsAccountFragment extends BaseFragment implements OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnDeleteAccount:
-                deleteAccount();
+                deleteAccountDialog();
                 break;
             case R.id.btnLogout:
                 showExitPopup();
@@ -113,7 +115,12 @@ public class SettingsAccountFragment extends BaseFragment implements OnClickList
         }
     }
 
-    private void deleteAccount() {
-        //TODO account deletion
+    private void deleteAccountDialog() {
+            DeleteAccountDialog newFragment = DeleteAccountDialog.newInstance();
+            try {
+                newFragment.show(getActivity().getSupportFragmentManager(), DeleteAccountDialog.TAG);
+            } catch (Exception e) {
+                Debug.error(e);
+            }
     }
 }
