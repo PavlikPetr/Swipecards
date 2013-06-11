@@ -399,6 +399,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                         final int selectedPosition = ((AlertDialog) dialogLocales).getListView().getCheckedItemPosition();
                         if (selectedLocaleIndexFinal == selectedPosition) {
                             dialogLocales.dismiss();
+                            return;
                         }
                         new AlertDialog.Builder(getActivity())
                                 .setTitle(R.string.settings_select_language)
