@@ -1,10 +1,8 @@
 package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.app.AlertDialog;
+import android.content.*;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -29,6 +27,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -273,6 +272,11 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void auth(final AuthRequest authRequest) {
+        if (DeleteAccountDialog.hasDeltedAccountToken(authRequest.getAuthToken())) {
+            restoreAccount(authRequest);
+            return;
+        }
+
         authRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
@@ -290,11 +294,29 @@ public class AuthFragment extends BaseFragment {
         }).exec();
     }
 
+    private void restoreAccount(final AuthRequest authRequest) {
+        new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.restore_of_account)
+                .setMessage(R.string.delete_account_will_be_restored_are_you_sure)
+                .setPositiveButton(R.string.restore, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        DeleteAccountDialog.removeDeletedAccountToken(authRequest.getAuthToken());
+                        auth(authRequest);
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).show();
+    }
+
     private AuthRequest generateAuthRequest(AuthToken token) {
         AuthRequest authRequest = new AuthRequest(token, getActivity());
         registerRequest(authRequest);
         EasyTracker.getTracker().trackEvent("Profile", "Auth", "FromActivity" + token.getSocialNet(), 1L);
-
         return authRequest;
     }
 
