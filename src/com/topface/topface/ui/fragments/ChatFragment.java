@@ -453,7 +453,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     itemId = null;
                 }
 
-                removeAlreadyLoadedItems(data);
+                // delete duplicates
+                if (pullToRefresh) {
+                    removeOutdatedItems(data);
+                } else if (scrollRefresh) {
+                    removeAlreadyLoadedItems(data);
+                }
 
                 setNavigationTitles(data.user.first_name, data.user.age, data.user.city.name);
                 if (data.user.deleted || data.user.banned) {
@@ -514,11 +519,25 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }).exec();
     }
 
+    private void removeOutdatedItems(HistoryListData data) {
+        if (!mAdapter.isEmpty() && !data.items.isEmpty()) {
+            ArrayList<History> itemsToDelete = new ArrayList<History>();
+            for (History item : mAdapter.getData()) {
+                for (History newItem : data.items) {
+                    if (newItem.id.equals(item.id)) {
+                        itemsToDelete.add(item);
+                    }
+                }
+            }
+            mAdapter.getData().removeAll(itemsToDelete);
+        }
+    }
+
     private void removeAlreadyLoadedItems(HistoryListData data) {
         if (!mAdapter.isEmpty() && !data.items.isEmpty()) {
             FeedList<History> items = mAdapter.getData();
             int size = items.size();
-            for (int i = size - 1; i > 0 && i > size - LIMIT; i--) {
+            for (int i = 0; i < size; i++) {
                 List<History> itemsToDelete = new ArrayList<History>();
                 for (History item : data.items) {
                     if (item.id.equals(items.get(i).id)) {
