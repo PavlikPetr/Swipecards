@@ -275,6 +275,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             mWaitingItems.remove(emptyItem);
             mUnrealItems.add(unrealItem);
         }
+
+        prepareDates();
         notifyDataSetChanged();
         parentView.setSelection(getCount() - 1);
     }
