@@ -97,6 +97,13 @@ public class AuthToken {
     }
 
     public String getTokenKey() {
+        if (getSocialNet().equals(AuthToken.SN_FACEBOOK)){
+            return mTokenKey;
+        } else if (getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
+            return mTokenKey;
+        } else if (getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+            return mLogin;
+        }
         return mTokenKey;
     }
 

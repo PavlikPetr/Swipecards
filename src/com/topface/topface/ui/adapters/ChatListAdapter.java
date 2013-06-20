@@ -23,6 +23,7 @@ import com.topface.topface.utils.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class ChatListAdapter extends LoadingListAdapter<History> implements AbsListView.OnScrollListener {
@@ -275,6 +276,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             mWaitingItems.remove(emptyItem);
             mUnrealItems.add(unrealItem);
         }
+
+        prepareDates();
         notifyDataSetChanged();
         parentView.setSelection(getCount() - 1);
     }
@@ -484,6 +487,12 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     public void removeItem(int position) {
         getData().remove(position);
+        prepareDates();
+        notifyDataSetChanged();
+    }
+
+    public void removeItems(List<History> items) {
+        getData().removeAll(items);
         prepareDates();
         notifyDataSetChanged();
     }

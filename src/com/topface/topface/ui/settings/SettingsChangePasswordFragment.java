@@ -124,7 +124,7 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
                                 mEdPassword.getText().clear();
                                 mEdPasswordConfirmation.getText().clear();
                                 if (mNeedExit) {
-                                    logout(AuthToken.getInstance());
+                                    logout();
                                 }
                             }
                         }
@@ -149,32 +149,13 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
         }
     }
 
-    private void logout(final AuthToken token) {
+    private void logout() {
         LogoutRequest logoutRequest = new LogoutRequest(getActivity());
         lock();
         logoutRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
-                GCMRegistrar.unregister(getActivity().getApplicationContext());
-                Ssid.remove();
-                token.removeToken();
-                Settings.getInstance().resetSettings();
-                startActivity(new Intent(getActivity().getApplicationContext(), NavigationActivity.class));
-                getActivity().setResult(SettingsTopfaceAccountFragment.RESULT_LOGOUT);
-                CacheProfile.clearProfile();
-                getActivity().finish();
-                SharedPreferences preferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-                if (preferences != null) {
-                    preferences.edit().clear().commit();
-                }
-                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(Static.LOGOUT_INTENT));
-                //Чистим список тех, кого нужно оценить
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        new SearchCacheManager().clearCache();
-                    }
-                }).start();
+                AuthorizationManager.logout(getActivity());
             }
 
             @Override
@@ -184,19 +165,6 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
 
 
         }).exec();
-    }
-
-    @SuppressWarnings({"rawtypes", "hiding"})
-    class FacebookLogoutTask extends AsyncTask {
-        @Override
-        protected Object doInBackground(Object... params) {
-            try {
-                AuthorizationManager.getFacebook().logout(getActivity().getApplicationContext());
-            } catch (Exception e) {
-                Debug.error(e);
-            }
-            return null;
-        }
     }
 
     private void hideSoftKeyboard() {

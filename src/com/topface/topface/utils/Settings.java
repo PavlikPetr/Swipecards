@@ -4,10 +4,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
+import android.widget.TextView;
 import com.topface.topface.App;
+import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.SendMailNotificationsRequest;
+import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
 /**
@@ -64,6 +69,44 @@ public class Settings {
 
     public String getSocialAccountName() {
         return mSettings.getString(SETTINGS_SOCIAL_ACCOUNT_NAME, Static.EMPTY);
+    }
+
+    public void getSocialAccountName(final TextView textView) {
+        AuthToken authToken = AuthToken.getInstance();
+        if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+            textView.setText(authToken.getLogin());
+        } else {
+            String name = getSocialAccountName();
+            if (TextUtils.isEmpty(name)) {
+                getSocialAccountNameAsync(new Handler(){
+                    @Override
+                    public void handleMessage(Message msg) {
+                        final String socialName = (String) msg.obj;
+                        textView.post(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                textView.setText(socialName);
+                            }
+                        });
+                        setSocialAccountName(socialName);
+                    }
+                });
+            } else {
+                textView.setText(name);
+            }
+        }
+    }
+
+    public void getSocialAccountIcon(final TextView textView) {
+        AuthToken authToken = AuthToken.getInstance();
+        if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
+            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_fb, 0, 0, 0);
+        } else if (authToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
+            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_vk, 0, 0, 0);
+        } else if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_tf, 0, 0, 0);
+        }
     }
 
     public String getSocialAccountEmail() {

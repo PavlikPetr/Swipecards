@@ -68,7 +68,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                         Intent intent = new Intent(EditProfileActivity.this, NavigationActivity.class);
                         intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_VIP_PROFILE);
                         SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-                        preferences.edit().putBoolean(Static.PREFERENCES_TAG_NEED_EDIT, false).commit();
+                        preferences.edit().putBoolean(Static.PREFERENCES_NEED_EDIT, false).commit();
                         startActivity(intent);
                     }
                 }

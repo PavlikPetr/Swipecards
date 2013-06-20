@@ -429,6 +429,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                         if (getListAdapter().getCount() >= limit) {
                             data.more = true;
                         }
+
                         getListAdapter().addDataFirst(data);
                     }
                 } else {
