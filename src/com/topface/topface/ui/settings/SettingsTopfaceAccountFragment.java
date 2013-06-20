@@ -27,6 +27,7 @@ import com.topface.topface.Static;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.*;
@@ -246,8 +247,12 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     }
 
     private void deleteAccount() {
-        //TODO account deletion
-
+        DeleteAccountDialog newFragment = DeleteAccountDialog.newInstance();
+        try {
+            newFragment.show(getActivity().getSupportFragmentManager(), DeleteAccountDialog.TAG);
+        } catch (Exception e) {
+            Debug.error(e);
+        }
     }
 
     private void hideSoftKeyboard() {
