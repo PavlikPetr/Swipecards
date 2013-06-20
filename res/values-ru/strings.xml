@@ -661,6 +661,22 @@
     <string name="or">или</string>
     <string name="watch_likes_on_dating">просматривайте симпатии на экране знакомств, они могут быть в начале списка</string>
     <string name="make_acquaintance">Познакомиться</string>
+    <string name="settings_delete_account">Удалить аккаунт</string>
     <string name="chat_block_not_mutual">Начать общение с пользователем можно, если он отправил вам симпатию или у вас есть VIP-статус</string>
+    <string name="delete_account_are_you_sure">Вы точно уверены?</string>
+    <string name="delete">Удалить</string>
+    <string name="delete_account_warning">TODO Warning you are trying to delete account</string>
+    <string name="delete_account_error">К сожалению, удалить ваш аккаунт не удалось. Вы можете повторить еще раз.</string>
+    <string name="delete_account_will_be_restored_are_you_sure">Вы пытаетесь войти в удаленный вами аккаунт. При входе аккаунт будет восстановлен. Вы уверены?</string>
+    <string name="restore_of_account">Восстановление аккаунта</string>
+    <string name="restore">Восстановить</string>
+
+    <string-array name="delete_account_reasons">
+        <item>Семейные обстоятельства</item>
+        <item>Меня не оценивают</item>
+        <item>Мне часто хамят и оскорбляют</item>
+        <item>Слишком много рекламы</item>
+        <item>Другая причина</item>
+    </string-array>
 
 </resources>

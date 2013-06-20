@@ -48,6 +48,20 @@
 
     </LinearLayout>
 
+    <Button
+            android:id="@+id/btnDeleteAccount"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/buying_purchase_selector"
+            android:text="@string/settings_delete_account"
+            style="@style/ItemtText"
+            android:textSize="16sp"
+            android:layout_alignParentBottom="true"
+            />
+
     <ImageView style="@style/HeaderShadow"/>
 
     <com.topface.topface.ui.views.LockerView

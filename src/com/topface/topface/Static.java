@@ -39,11 +39,10 @@ public class Static {
     public static final String PREFERENCES_SSID = "ssid";
     public static final String PREFERENCES_TAG_GEO = "preferences_geo";
     public static final String PREFERENCES_TAG_SHARED = "preferences_general";
-    public static final String PREFERENCES_TAG_PROFILE = "preferences_profile";
-    public static final String PREFERENCES_TAG_NEED_EDIT = "need_edit";
-    public static final String PREFERENCES_TAG_NEED_CHANGE_PASSWORD = "need_change_password";
-    public static final String PREFERENCES_TAG_NEED_CITY_CONFIRM = "city_need_confirm";
 
+    public static final String PREFERENCES_NEED_EDIT = "need_edit";
+    public static final String PREFERENCES_NEED_CHANGE_PASSWORD = "need_change_password";
+    public static final String PREFERENCES_NEED_CITY_CONFIRM = "city_need_confirm";
     public static final String PREFERENCES_NOVICE_DATING_ENERGY = "novice_dating_energy";
     public static final String PREFERENCES_NOVICE_DATING_ENERGY_TO_SYMPATHIES = "novice_dating_energy_to_sympathies";
     public static final String PREFERENCES_NOVICE_DATING_BUY_SYMPATHY = "novice_dating_buy_sympathy";
@@ -55,6 +54,11 @@ public class Static {
     public static final String PREFERENCES_FULLSCREEN_URLS_SET = "fullscreen_urls_string";
 
     public static final String PREFERENCES_LAST_FULLSCREEN_TIME = "fullScreeenBanner_last_time";
+
+    public static final String PREFERENCES_TAG_PROFILE = "preferences_profile";
+    public static final String PREFERENCES_DELETED_ACCOUNTS_FB_IDS = "fb_tokens";
+    public static final String PREFERENCES_DELETED_ACCOUNTS_VK_IDS = "vk_tokens";
+    public static final String PREFERENCES_DELETED_ACCOUNTS_TF_IDS = "tf_tokens";
 
     public static final String LOGOUT_INTENT = "com.topface.topface.intent.LOGOUT";
     public static final boolean PAUSE_DOWNLOAD_ON_SCROLL = false;

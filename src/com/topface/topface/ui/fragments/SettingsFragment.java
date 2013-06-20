@@ -39,6 +39,7 @@ import com.topface.topface.ui.settings.SettingsAccountFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.*;
 import com.topface.topface.utils.social.AuthToken;
+import com.topface.topface.utils.social.AuthorizationManager;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -241,49 +242,18 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         ViewGroup frame;
         frame = (ViewGroup) root.findViewById(R.id.loAccount);
         setBackground(R.drawable.edit_big_btn_middle_selector, frame);
-        AuthToken authToken = AuthToken.getInstance();
-        String name = mSettings.getSocialAccountName();
-        if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
-            setAccountNameText(R.string.settings_account, name, R.drawable.ic_fb, frame);
-        } else if (authToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
-            setAccountNameText(R.string.settings_account, name, R.drawable.ic_vk, frame);
-        } else if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
-            name = authToken.getLogin();
-            setAccountNameText(R.string.settings_account, name, R.drawable.ic_tf, frame);
-        } else {
-            setText(R.string.settings_account, frame);
-        }
+
+        ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.settings_account);
+        TextView socialNameText = (TextView) frame.findViewWithTag("tvText");
+        mSettings.getSocialAccountName(socialNameText);
+        mSettings.getSocialAccountIcon(socialNameText);
+        socialNameText.setVisibility(View.VISIBLE);
+
         frame.setOnClickListener(this);
     }
 
     private void setText(int titleId, ViewGroup frame) {
         ((TextView) frame.findViewWithTag("tvTitle")).setText(titleId);
-    }
-
-    private void setAccountNameText(int titleId, String text, int iconRes, ViewGroup frame) {
-        ((TextView) frame.findViewWithTag("tvTitle")).setText(titleId);
-        final TextView textView = (TextView) frame.findViewWithTag("tvText");
-        textView.setVisibility(View.VISIBLE);
-        if (TextUtils.isEmpty(text)) {
-            mSettings.getSocialAccountNameAsync(new Handler() {
-                @Override
-                public void handleMessage(Message msg) {
-                    final String name = (String) msg.obj;
-                    textView.post(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            textView.setText(name);
-                        }
-                    });
-                    mSettings.setSocialAccountName(name);
-                }
-            });
-        } else {
-            textView.setText(text);
-        }
-
-        textView.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(iconRes), null, null, null);
     }
 
     private void initEditNotificationFrame(int key, ViewGroup frame, boolean hasMail, boolean mailChecked, boolean phoneChecked) {
@@ -491,7 +461,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 Uri uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
                 mSettings.setSetting(Settings.SETTINGS_C2DM_RINGTONE, uri == null? Settings.SILENT: uri.toString());
             }
-        } else if (resultCode == SettingsAccountFragment.RESULT_LOGOUT &&
+        } else if (resultCode == AuthorizationManager.RESULT_LOGOUT &&
                 requestCode == SettingsContainerActivity.INTENT_ACCOUNT) {
             getActivity().finish();
         }

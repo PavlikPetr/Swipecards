@@ -1,19 +1,29 @@
 package com.topface.topface.utils.social;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import com.facebook.topface.AsyncFacebookRunner;
 import com.facebook.topface.AsyncFacebookRunner.RequestListener;
 import com.facebook.topface.DialogError;
 import com.facebook.topface.Facebook;
 import com.facebook.topface.Facebook.DialogListener;
 import com.facebook.topface.FacebookError;
+import com.google.android.gcm.GCMRegistrar;
 import com.topface.topface.App;
+import com.topface.topface.Ssid;
+import com.topface.topface.Static;
+import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
+import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.http.HttpUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,6 +51,8 @@ public class AuthorizationManager {
     public final static int TOKEN_RECEIVED = 1;
     public final static int DIALOG_COMPLETED = 2;
     public final static int AUTHORIZATION_CANCELLED = 3;
+
+    public static final int RESULT_LOGOUT = 666;
 
     // Constants
     private String[] FB_PERMISSIONS = {"user_photos", "publish_stream", "email", "publish_actions", "offline_access"};
@@ -287,4 +299,43 @@ public class AuthorizationManager {
         });
     }
 
+
+    public static void logout(Activity activity) {
+        GCMRegistrar.unregister(activity.getApplicationContext());
+        Ssid.remove();
+        AuthToken.getInstance().removeToken();
+        //noinspection unchecked
+        new FacebookLogoutTask().execute();
+        Settings.getInstance().resetSettings();
+        activity.startActivity(new Intent(activity.getApplicationContext(), NavigationActivity.class));
+        activity.setResult(RESULT_LOGOUT);
+        CacheProfile.clearProfile();
+        activity.finish();
+        SharedPreferences preferences = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        if (preferences != null) {
+            preferences.edit().clear().commit();
+        }
+        LocalBroadcastManager.getInstance(activity).sendBroadcast(new Intent(Static.LOGOUT_INTENT));
+        //Чистим список тех, кого нужно оценить
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                new SearchCacheManager().clearCache();
+            }
+        }).start();
+    }
+
+    @SuppressWarnings({"rawtypes", "hiding"})
+    static class FacebookLogoutTask extends AsyncTask {
+        @Override
+        protected java.lang.Object doInBackground(java.lang.Object... params) {
+            try {
+                AuthorizationManager.getFacebook().logout(App.getContext());
+            } catch (Exception e) {
+                Debug.error(e);
+            }
+            return null;
+        }
+
+    }
 }
