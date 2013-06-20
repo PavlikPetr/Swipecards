@@ -15,6 +15,7 @@ public class ProfileRequest extends ApiRequest {
     public static final int P_ALL = 0;
     public static final int P_EMAIL_CONFIRMED = 1;
     public static final int P_BALANCE_COUNTERS = 2;
+    public static final int P_NECESSARY_DATA = 3;
 
     public ProfileRequest(Context context) {
         super(context);
@@ -37,6 +38,18 @@ public class ProfileRequest extends ApiRequest {
                 fields = new JSONArray();
                 fields.put("likes");
                 fields.put("money");
+                break;
+            case P_NECESSARY_DATA:
+                fields = new JSONArray();
+                fields.put("likes");
+                fields.put("money");
+                fields.put("can_become_leader");
+                fields.put("gifts");
+                fields.put("invisible");
+                fields.put("premium");
+                fields.put("show_ad");
+                fields.put("photo");
+                fields.put("photos");
                 break;
             default:
                 fields = new JSONArray();
