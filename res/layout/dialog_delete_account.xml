@@ -15,14 +15,15 @@
             android:layout_margin="40dp"
             android:gravity="center">
 
+
         <com.topface.topface.ui.views.ImageViewRemote
                 xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
                 ivr:postProcessor="mask"
-                ivr:clipMask="@drawable/frame_menu_mask"
-                android:background="@drawable/frame_menu_selector"
+                ivr:clipMask="@drawable/feed_photo_mask"
+                android:background="@drawable/feed_photo_selector"
                 android:id="@+id/ivAvatar"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="73dp"
+                android:layout_height="73dp"
                 android:layout_gravity="center_horizontal"
                 />
 
@@ -37,17 +38,6 @@
                 />
 
         <TextView
-                android:id="@+id/tvAccount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center_horizontal"
-                style="@style/TitleWhiteText"
-                android:layout_marginTop="16dp"
-                android:drawablePadding="4dp"
-                />
-
-        <TextView
                 android:id="@+id/tvWarningText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -55,26 +45,6 @@
                 android:gravity="center_horizontal"
                 style="@style/TitleWhiteText"
                 android:layout_marginTop="24dp"
-                />
-
-        <Spinner
-                android:id="@+id/spReason"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                />
-
-        <EditText
-                android:id="@+id/edReasonMessage"
-                style="@style/ItemWhiteText"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:gravity="left|center_vertical"
-                android:background="@drawable/city_editbox_selector"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:inputType="text"
                 />
 
         <LinearLayout

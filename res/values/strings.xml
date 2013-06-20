@@ -496,11 +496,4 @@
     <string name="chat_block_not_mutual">You can only start chatting with a user if he sent you a like or you have VIP- status</string>
     <string name="restore">Restore</string>
 
-    <string-array name="delete_account_reasons">
-        <item>Personal/family circumstances</item>
-        <item>I am underappreciated</item>
-        <item>Other users are insulting me</item>
-        <item>Too many ads and commercials</item>
-        <item>Other reason</item>
-    </string-array>
 </resources>
