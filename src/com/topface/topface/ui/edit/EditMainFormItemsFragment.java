@@ -306,7 +306,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
         switch (type) {
             case NAME:
                 if (isNameValid(data)) {
-                    CacheProfile.first_name = data;
+                    CacheProfile.first_name = data.trim();
                 } else {
                     nameIncorrect = true;
                 }
