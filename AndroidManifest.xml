@@ -255,6 +255,10 @@
                 android:theme="@android:style/Theme.Translucent.NoTitleBar"
                 android:hardwareAccelerated="true" />
 
+        <activity
+                android:name=".utils.offerwalls.supersonic.SupersonicWallActivity"
+                />
+
         <!-- Алиас для главной активити из первой версии. На всякий случай, а то раньше уже были проблемы с FB -->
         <activity-alias
                 android:name=".ui.MainActivity"

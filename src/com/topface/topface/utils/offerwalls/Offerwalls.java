@@ -12,6 +12,7 @@ import com.topface.topface.data.Options;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.offerwalls.clickky.ClickkyActivity;
+import com.topface.topface.utils.offerwalls.supersonic.SupersonicWallActivity;
 
 import java.util.Random;
 
@@ -46,7 +47,7 @@ public class Offerwalls {
     }
 
     public static void startOfferwall(Activity activity) {
-        String offerwall = CacheProfile.getOptions().offerwall;
+        String offerwall = Options.SUPERSONIC;//CacheProfile.getOptions().offerwall;
         offerwall = offerwall == null ? "" : offerwall;
 
         if (CacheProfile.uid <= 0) {
@@ -70,8 +71,7 @@ public class Offerwalls {
     }
 
     private static void startSupersonic(Activity activity) {
-        //TODO supersonic offerwall
-
+        activity.startActivity(new Intent(activity, SupersonicWallActivity.class));
     }
 
     private static void startRandomOfferwall(Activity activity) {
