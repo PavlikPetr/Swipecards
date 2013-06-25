@@ -16,6 +16,7 @@
         <item name="android:textColorLink">#2371B9</item>
         <item name="android:editTextStyle">@style/topfaceEditText</item>
         <item name="android:checkboxStyle">@style/topfaceCheckbox</item>
+        <item name="android:windowBackground">@null</item>
     </style>
 
     <style name="topfaceEditText">

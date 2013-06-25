@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.style.ImageSpan;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
@@ -20,7 +19,6 @@ import java.util.ArrayList;
 public class IllustratedTextView extends TextView {
 
     public int ICON_ALIGN = TfImageSpan.ALIGN_CENTER;
-    private boolean mIsTextChanged = false;
 
     public IllustratedTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -32,16 +30,8 @@ public class IllustratedTextView extends TextView {
     }
 
     @Override
-    protected void onTextChanged(CharSequence text, int start, int before, int after) {
-        //Так как мы из метода onTextChanged вызываем изменение текста,
-        //то что бы не попась в бесконечный цикл, мы используем флаг.
-        if (!mIsTextChanged) {
-            mIsTextChanged = true;
-            setText(illustrateText(text));
-        } else {
-            mIsTextChanged = false;
-        }
-        super.onTextChanged(text, start, before, after);
+    public void setText(CharSequence text, BufferType type) {
+        super.setText(illustrateText(text), type);
     }
 
     protected SpannableString replaceTemplates(CharSequence text, String template, int icon) {

@@ -103,22 +103,23 @@ public class ImageViewRemote extends ImageView {
     }
 
     private void setPostProcessor(int postProcessorId, float cornerRadius, int maskId) {
-
-        switch (postProcessorId) {
-            case POST_PROCESSOR_ROUNDED:
-                mPostProcessor = new RoundProcessor();
-                break;
-            case POST_PROCESSOR_ROUND_CORNERS:
-                mPostProcessor = new RoundCornersProcessor(cornerRadius);
-                break;
-            case POST_PROCESSOR_MASK:
-                mPostProcessor = new MaskClipProcessor(maskId);
-                break;
-            case POST_PROCESSOR_CIRCUMCIRCLE:
-                mPostProcessor = new CircumCircleProcessor();
-                break;
-            default:
-                mPostProcessor = null;
+        if (!isInEditMode()) {
+            switch (postProcessorId) {
+                case POST_PROCESSOR_ROUNDED:
+                    mPostProcessor = new RoundProcessor();
+                    break;
+                case POST_PROCESSOR_ROUND_CORNERS:
+                    mPostProcessor = new RoundCornersProcessor(cornerRadius);
+                    break;
+                case POST_PROCESSOR_MASK:
+                    mPostProcessor = new MaskClipProcessor(maskId);
+                    break;
+                case POST_PROCESSOR_CIRCUMCIRCLE:
+                    mPostProcessor = new CircumCircleProcessor();
+                    break;
+                default:
+                    mPostProcessor = null;
+            }
         }
     }
 
@@ -155,18 +156,14 @@ public class ImageViewRemote extends ImageView {
                 mCurrentSrc = remoteSrc;
             }
 
-            if (getDrawable() != null) {
-                super.setImageBitmap(null);
-            }
-
+            super.setImageDrawable(null);
 
             getImageLoader()
                     .displayImage(remoteSrc, this, null, getListener(handler, remoteSrc), getPostProcessor());
 
-
         } else {
             isCorrectSrc = false;
-            super.setImageBitmap(null);
+            super.setImageDrawable(null);
             mCurrentSrc = null;
         }
 

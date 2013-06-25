@@ -62,7 +62,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             finish();
             return;
         }
-        setContentView(R.layout.ac_navigation);
         setMenuEnabled(true);
         Debug.log(this, "onCreate");
         mFragmentManager = getSupportFragmentManager();
@@ -346,7 +345,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     public void onDialogCancel() {
-        Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+        Fragment fragment = mFragmentManager.findFragmentById(android.R.id.content);
         if (fragment instanceof DatingFragment) {
             DatingFragment datingFragment = (DatingFragment) fragment;
             datingFragment.onDialogCancel();

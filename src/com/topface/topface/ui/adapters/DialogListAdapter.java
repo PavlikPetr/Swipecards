@@ -18,8 +18,6 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
     public static final int NEW_VIP_ITEM_LAYOUT = R.layout.item_new_feed_vip_dialog;
     public static final int VIP_ITEM_LAYOUT = R.layout.item_feed_vip_dialog;
 
-    public static final String MESSAGE_OF_UNKNOWN_TYPE = "";
-
     public DialogListAdapter(Context context, Updater updateCallback) {
         super(context, updateCallback);
     }
