@@ -686,11 +686,11 @@ public class BannerBlock {
     }
 
     public void onPause() {
-        if (mBannerView instanceof MoPubView) ((MoPubView) mBannerView).destroy();
         if (mBannerView instanceof MobclixMMABannerXLAdView) ((MobclixMMABannerXLAdView) mBannerView).pause();
     }
 
     public void onDestroy() {
+        if (mBannerView instanceof MoPubView) ((MoPubView) mBannerView).destroy();
         if (mPLus1Asker != null) mPLus1Asker.onPause();
         if (mBannerView != null) {
             if (mBannerView instanceof InneractiveAd) {

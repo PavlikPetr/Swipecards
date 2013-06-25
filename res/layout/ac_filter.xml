@@ -112,5 +112,4 @@
 
     </ScrollView>
 
-    <ImageView style="@style/HeaderShadow"/>
 </RelativeLayout>

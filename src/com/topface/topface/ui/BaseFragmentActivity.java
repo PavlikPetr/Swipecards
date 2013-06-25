@@ -8,6 +8,7 @@ import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.View;
 import android.view.WindowManager;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.Static;
@@ -16,6 +17,7 @@ import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.dialogs.ConfirmEmailDialog;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.AuthFragment;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.LocaleConfig;
@@ -253,5 +255,14 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     }
 
     protected void inBackgroundThread() {
+    }
+
+    private ActionBar mActionBar;
+
+    protected ActionBar getActionBar(View view) {
+        if (mActionBar == null) {
+            mActionBar = new ActionBar(this, view);
+        }
+        return mActionBar;
     }
 }

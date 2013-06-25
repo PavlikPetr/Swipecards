@@ -37,6 +37,4 @@
                 android:focusableInTouchMode="true"/>
 
     </LinearLayout>
-
-    <ImageView style="@style/HeaderShadow"/>
 </RelativeLayout>
