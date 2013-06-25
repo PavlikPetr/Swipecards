@@ -17,7 +17,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.util.UUID;
 
 public abstract class ApiRequest implements IApiRequest {
     /**
@@ -183,14 +182,11 @@ public abstract class ApiRequest implements IApiRequest {
     @Override
     public String getId() {
         if (mId == null) {
-            mId = getRequestId();
+            //Уникальный id запроса, привязан к hash текущего запроса и номеру попытки
+            mId = hashCode() + ".." + mResendCnt;
         }
 
         return mId;
-    }
-
-    private String getRequestId() {
-        return UUID.randomUUID().toString();
     }
 
     protected JSONObject getRequest() {

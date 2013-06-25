@@ -13,12 +13,12 @@
             android:layout_below="@id/loNavigationBar"
             android:orientation="vertical">
 
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/loProfileHeader"
-                        android:layout_width="fill_parent"
-                        android:layout_height="159dp"
-                        android:orientation="vertical"
-                        android:gravity="center">
+        <RelativeLayout
+                android:id="@+id/loProfileHeader"
+                android:layout_width="fill_parent"
+                android:layout_height="159dp"
+                android:orientation="vertical"
+                android:gravity="center">
 
             <android.support.v4.view.ViewPager
                     android:id="@+id/vpHeaderFragments"
@@ -48,7 +48,7 @@
             <com.viewpagerindicator.TabPageIndicator
                     android:id="@+id/tpiTabs"
                     android:layout_height="wrap_content"
-                    android:layout_width="fill_parent"/>
+                    android:layout_width="fill_parent" />
 
             <android.support.v4.view.ViewPager
                     android:id="@+id/vpFragments"
@@ -69,10 +69,11 @@
             android:layout_marginTop="5dp"
             android:layout_marginRight="5dp"
             layout="@layout/user_actions_layout"
-        />
+            />
+
     <include
             layout="@layout/bar_navigation_header"
-            android:id="@id/loNavigationBar"/>
+            android:id="@id/loNavigationBar" />
 
     <RelativeLayout
             android:layout_width="fill_parent"
@@ -80,11 +81,11 @@
             android:layout_below="@id/loNavigationBar"
             android:background="@drawable/bg_main"
             android:visibility="gone"
-            android:id="@+id/lockScreen"/>
+            android:id="@+id/lockScreen" />
 
     <com.topface.topface.ui.views.LockerView
             android:id="@+id/llvProfileLoading"
             style="@style/LoadingLocker"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
 </RelativeLayout>

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                >
+        >
 
     <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/ivPhoto"
@@ -33,7 +33,7 @@
             android:drawableLeft="@drawable/edit_background_photo_selected_icon"
             android:text="@string/edit_selected"
             android:clickable="false"
-            android:visibility="invisible"
+            android:visibility="gone"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             />
@@ -47,7 +47,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="6dp"
             android:background="@drawable/edit_btn_set_as_main_selector"
-            android:text="@string/edit_set_as_main"/>
+            android:text="@string/edit_set_as_main" />
 
     <Button
             android:id="@+id/btnDeletePhoto"
@@ -58,7 +58,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="10dp"
             android:background="@drawable/edit_btn_delete_photo_selector"
-            android:text="@string/edit_delete"/>
+            android:text="@string/edit_delete" />
 
     <Button
             android:id="@+id/btnRestorePhoto"
@@ -70,6 +70,6 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/edit_btn_set_as_main_selector"
             android:text="@string/edit_restore"
-            android:visibility="invisible"/>
+            android:visibility="gone" />
 
 </RelativeLayout>
