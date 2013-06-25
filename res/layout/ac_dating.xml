@@ -9,28 +9,17 @@
     <com.topface.topface.ui.views.ImageSwitcher
             android:id="@+id/glrDatingAlbum"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"/>
-
-    <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="244dp"
-            android:layout_alignParentBottom="true"
-            android:src="@drawable/dating_shadow"
-            android:scaleType="fitXY"/>
+            android:layout_height="fill_parent" />
 
     <include
             layout="@layout/bar_navigation_header"
-            android:id="@+id/loNavigationBar"/>
+            android:id="@+id/loNavigationBar" />
 
-    <LinearLayout
+    <include
             android:layout_below="@id/loNavigationBar"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:paddingBottom="15dp"
-            android:orientation="vertical">
-
-        <include layout="@layout/dating_control"/>
-    </LinearLayout>
+            layout="@layout/dating_control" />
 
     <ProgressBar
             android:id="@+id/prsDatingLoading"
@@ -38,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:visibility="gone"
-            style="@android:style/Widget.ProgressBar.Small"/>
+            style="@android:style/Widget.ProgressBar.Small" />
 
     <ImageButton
             android:id="@+id/btnUpdate"
@@ -50,14 +39,10 @@
             android:visibility="gone"
             />
 
-    <ImageView
-            android:id="@+id/ivHeaderShadow"
-            style="@style/HeaderShadow"/>
-
     <com.topface.topface.ui.views.NoviceLayout
             android:id="@+id/loNovice"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
 </RelativeLayout>

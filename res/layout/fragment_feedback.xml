@@ -49,6 +49,4 @@
 
     </LinearLayout>
 
-    <ImageView style="@style/HeaderShadow"/>
-
 </RelativeLayout>

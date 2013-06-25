@@ -57,5 +57,4 @@
             android:src="@drawable/auth_logo"
             android:layout_centerHorizontal="true"/>
 
-    <ImageView style="@style/HeaderShadow"/>
 </RelativeLayout>

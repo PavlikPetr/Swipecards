@@ -333,10 +333,6 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
         return position;
     }
 
-    public int getRate() {
-        return mLiked;
-    }
-
     @Override
     public int describeContents() {
         return 0;

@@ -16,12 +16,8 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 
 /**
-* Created with IntelliJ IDEA.
-* User: User
-* Date: 27.03.13
-* Time: 14:55
-* To change this template use File | Settings | File Templates.
-*/
+ * Фрагмент с аватркой и именем пользователя в профиле
+ */
 public class HeaderMainFragment extends BaseFragment {
     private static final String ARG_TAG_AVATAR = "avatar";
     private static final String ARG_TAG_NAME = "name";
@@ -95,7 +91,7 @@ public class HeaderMainFragment extends BaseFragment {
         mCityView.setText(city);
         mCityView.setVisibility(
                 TextUtils.isEmpty(city) ?
-                        View.INVISIBLE :
+                        View.GONE :
                         View.VISIBLE
         );
     }

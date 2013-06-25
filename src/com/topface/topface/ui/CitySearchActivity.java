@@ -203,7 +203,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
     }
 
     private void initHeader() {
-        ActionBar actionBar = new ActionBar(findViewById(R.id.rootContainer));
+        ActionBar actionBar = getActionBar(findViewById(R.id.rootContainer));
         actionBar.setTitleText(getString(R.string.general_city));
         actionBar.showBackButton(new OnClickListener() {
             @Override
