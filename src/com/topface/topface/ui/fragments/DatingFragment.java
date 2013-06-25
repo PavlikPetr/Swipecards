@@ -154,7 +154,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         initResources(view);
         initControlButtons(view);
         initDatingAlbum(view);
-        initNewbieLayout(view);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -219,11 +218,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mImageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
         mImageSwitcher.setOnClickListener(mOnClickListener);
         mImageSwitcher.setUpdateHandler(mUnlockHandler);
-    }
-
-    private void initNewbieLayout(View view) {
-        // Newbie
-        mNoviceLayout = (NoviceLayout) view.findViewById(R.id.loNovice);
     }
 
     private void initResources(View view) {
@@ -665,7 +659,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mNovice.isDatingCompleted())
             return;
 
-        //TODO check flag
+        if (mNoviceLayout == null) {
+            mNoviceLayout = new NoviceLayout(getActivity());
+            mNoviceLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            mNoviceLayout.setVisibility(View.GONE);
+            ((ViewGroup)getView().findViewById(R.id.ac_dating_container)).addView(mNoviceLayout);
+        }
+
         if (mNovice.isShowEnergyToSympathies()) {
             mNoviceLayout.setLayoutRes(R.layout.novice_energy_to_sympathies, null,
                     getResources().getString(CacheProfile.sex == Static.BOY ?

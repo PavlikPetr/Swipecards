@@ -400,9 +400,9 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
             if (novice.isShowFillProfile()) {
                 RelativeLayout rootLayout = (RelativeLayout) getView().findViewById(R.id.MenuLayout);
-                NoviceLayout noviceLayout = (NoviceLayout) getLayoutInflater().inflate(R.layout.layout_novice, null);
+                NoviceLayout noviceLayout = new NoviceLayout(getActivity());
+                noviceLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 rootLayout.addView(noviceLayout);
-
                 noviceLayout.setLayoutRes(
                         R.layout.novice_fill_profile,
                         this.getProfileButtonOnClickListener()
@@ -413,9 +413,5 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 novice.completeShowFillProfile();
             }
         }
-    }
-
-    private LayoutInflater getLayoutInflater() {
-        return getActivity().getLayoutInflater();
     }
 }
