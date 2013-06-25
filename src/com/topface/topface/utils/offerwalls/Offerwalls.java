@@ -60,11 +60,18 @@ public class Offerwalls {
             startSponsorpay(activity);
         } else if (offerwall.equals(Options.CLICKKY)) {
             startClickky(activity);
+        } else if (offerwall.equals(Options.SUPERSONIC)) {
+            startSupersonic(activity);
         } else if (offerwall.equals(Options.RANDOM)) {
             startRandomOfferwall(activity);
         } else {
             startSponsorpay(activity);
         }
+    }
+
+    private static void startSupersonic(Activity activity) {
+        //TODO supersonic offerwall
+
     }
 
     private static void startRandomOfferwall(Activity activity) {

@@ -106,11 +106,13 @@ public class Options extends AbstractData {
     public static final String TAPJOY = "TAPJOY";
     public static final String SPONSORPAY = "SPONSORPAY";
     public static final String CLICKKY = "CLICKKY";
+    public static final String SUPERSONIC = "SUPERSONIC";
     public static final String RANDOM = "RANDOM";
     public final static String[] OFFERWALLS = new String[]{
             TAPJOY,
             SPONSORPAY,
             CLICKKY,
+            SUPERSONIC,
             RANDOM
     };
 
