@@ -8,7 +8,7 @@
     <!-- аватар -->
     <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/ivAvatar"
-            style="@style/FeedAvatar"/>
+            style="@style/FeedAvatar" />
 
     <RelativeLayout
             android:layout_width="fill_parent"
@@ -20,28 +20,28 @@
         <!-- имя, возраст -->
         <TextView
                 android:id="@+id/tvName"
-                style="@style/ListName"/>
+                style="@style/ListName" />
 
         <!-- город -->
         <TextView
                 android:id="@+id/tvCity"
                 android:layout_toRightOf="@id/tvName"
                 android:layout_alignBaseline="@id/tvName"
-                style="@style/ListCity"/>
+                style="@style/ListCity" />
 
         <!-- текст -->
-        <com.topface.IllustratedTextView.IllustratedTextView
-            	
+        <TextView
                 android:id="@+id/tvText"
                 android:layout_below="@id/tvName"
+                android:drawablePadding="3dp"
                 android:layout_toLeftOf="@+id/tvTime"
-                style="@style/ListMessageText"/>
+                style="@style/ListMessageText" />
 
         <!-- время -->
         <TextView
                 android:id="@+id/tvTime"
                 android:layout_alignBaseline="@id/tvText"
-                style="@style/ListTime"/>
+                style="@style/ListTime" />
 
 
     </RelativeLayout>
@@ -50,6 +50,6 @@
     <!-- online -->
     <ImageView
             android:id="@+id/ivOnline"
-            style="@style/OnlineIndicator"/>
+            style="@style/OnlineIndicator" />
 
 </RelativeLayout>
