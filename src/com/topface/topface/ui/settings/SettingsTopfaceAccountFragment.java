@@ -4,10 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -19,19 +16,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.gcm.GCMRegistrar;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Ssid;
-import com.topface.topface.Static;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.*;
-import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -181,12 +173,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
     private void setButtonsState() {
         if (CacheProfile.emailConfirmed) {
-//            if (CacheProfile.needToChangePassword(App.getContext())) {
-//                mBtnLogout.setVisibility(View.GONE);
-//            } else {
             mBtnLogout.setVisibility(View.VISIBLE);
-//            }
-
             setChangeBtnAction(ACTION_CHANGE_PASSWORD);
         } else {
             mBtnLogout.setVisibility(View.GONE);
