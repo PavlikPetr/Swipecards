@@ -89,6 +89,4 @@
                 android:visibility="gone"/>
     </LinearLayout>
 
-    <ImageView style="@style/HeaderShadow"/>
-
 </RelativeLayout>

@@ -90,7 +90,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private EditText mEditBox;
     private TextView mLoadingBackgroundText;
     private AnimationDrawable mLoadingBackgroundDrawable;
-    private RetryViewCreator mRetryView;
     private SwapControl mSwapControl;
     private Button mAddToBlackList;
     private ImageButton mBtnChatAdd;
@@ -213,7 +212,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         // Check premium possibilities
         if (CacheProfile.premium) {
             mAddToBlackList.setOnClickListener(this);
-            title.setVisibility(View.INVISIBLE);
+            title.setVisibility(View.GONE);
             buyVip.setVisibility(View.GONE);
         } else {
             buyVip.setOnClickListener(this);
@@ -271,7 +270,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
                 History item = mAdapter.getItem(position);
                 String[] buttons;
-                if(item.target == 0) {
+                if (item.target == 0) {
                     buttons = editButtonsSelfNames;
                 } else {
                     buttons = editButtonsNames;
@@ -319,7 +318,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private void initLockScreen(View root) {
         mLockScreen = (RelativeLayout) root.findViewById(R.id.llvLockScreen);
 
-        mRetryView = RetryViewCreator.createDefaultRetryView(getActivity(), new View.OnClickListener() {
+        RetryViewCreator retryView = RetryViewCreator.createDefaultRetryView(getActivity(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 update(false, "retry");
@@ -327,7 +326,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
         });
 
-        mLockScreen.addView(mRetryView.getView());
+        mLockScreen.addView(retryView.getView());
     }
 
     private void initNavigationbar(View root, String userName, int userAge, String userCity) {
@@ -624,7 +623,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                                 chatActions.startAnimation(ta);
                             }
                         }
-                        ,mUser.photo);
+                        , mUser.photo
+                );
             }
         }
     }
@@ -715,7 +715,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                                 super.success(response);
                                 if (isAdded()) {
                                     v.setEnabled(false);
-                                    loader.setVisibility(View.INVISIBLE);
+                                    loader.setVisibility(View.GONE);
                                     icon.setVisibility(View.VISIBLE);
                                     textView.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
                                 }
@@ -725,7 +725,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                             public void fail(int codeError, ApiResponse response) {
                                 super.fail(codeError, response);
                                 if (isAdded()) {
-                                    loader.setVisibility(View.INVISIBLE);
+                                    loader.setVisibility(View.GONE);
                                     icon.setVisibility(View.VISIBLE);
                                 }
                             }
@@ -758,11 +758,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         super.success(response);
 //                        Toast.makeText(App.getContext(), getString(R.string.general_user_bookmarkadd), 1500).show();
                         if (mUser != null) {
-                            textView.setText(App.getContext().getString( mUser.bookmarked ? R.string.general_bookmarks_add : R.string.general_bookmarks_delete));
+                            textView.setText(App.getContext().getString(mUser.bookmarked ? R.string.general_bookmarks_add : R.string.general_bookmarks_delete));
                             mUser.bookmarked = !mUser.bookmarked;
                         }
 
-                        loader.setVisibility(View.INVISIBLE);
+                        loader.setVisibility(View.GONE);
                         icon.setVisibility(View.VISIBLE);
                     }
 
@@ -770,7 +770,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     public void always(ApiResponse response) {
                         super.always(response);
                         if (isAdded()) {
-                            loader.setVisibility(View.INVISIBLE);
+                            loader.setVisibility(View.GONE);
                             icon.setVisibility(View.VISIBLE);
                         }
                     }

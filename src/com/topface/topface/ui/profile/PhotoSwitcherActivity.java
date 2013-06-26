@@ -119,8 +119,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 finish();
             }
         });
+        mPhotoAlbumControl.setVisibility(View.GONE);
         if (mUid == CacheProfile.uid) {
-            mPhotoAlbumControl.setVisibility(View.GONE);
             // - set avatar button
             mSetAvatarButton = (TextView) mPhotoAlbumControl.findViewById(R.id.btnSetAvatar);
             mSetAvatarButton.setOnClickListener(new View.OnClickListener() {

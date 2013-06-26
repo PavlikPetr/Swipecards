@@ -147,8 +147,6 @@
         </RelativeLayout>
     </com.topface.topface.ui.views.SwapControl>
 
-    <ImageView style="@style/HeaderShadow"/>
-
     <TextView
             android:id="@+id/tvBackgroundText"
             android:layout_width="wrap_content"

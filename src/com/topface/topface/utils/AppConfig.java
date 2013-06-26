@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import com.topface.topface.Static;
 
 import java.util.HashMap;
-import java.util.Locale;
 
 /**
  * Класс для хранения в SharedPreferences тех настроек, которые обязательны для работы приложения,

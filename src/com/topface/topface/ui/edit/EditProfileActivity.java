@@ -58,7 +58,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         hasStartedFromAuthActivity = getIntent().getBooleanExtra(NavigationActivity.FROM_AUTH, false);
 
         // Navigation bar
-        ActionBar actionBar = new ActionBar(findViewById(R.id.editContainer));
+        ActionBar actionBar = getActionBar(getWindow().getDecorView());
         actionBar.setTitleText(getString(R.string.edit_title));
         actionBar.showBackButton(new OnClickListener() {
             @Override

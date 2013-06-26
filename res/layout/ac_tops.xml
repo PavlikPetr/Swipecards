@@ -47,9 +47,6 @@
         <include layout="@layout/banner"/>
     </LinearLayout>
 
-    <ImageView
-            style="@style/HeaderShadow"/>
-
     <com.topface.topface.ui.views.LockerView
             android:id="@+id/llvTopsLoading"
             style="@style/LoadingLocker"

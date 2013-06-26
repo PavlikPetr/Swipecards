@@ -8,6 +8,7 @@ import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.data.*;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.ProfileRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -138,48 +139,65 @@ public class CacheProfile {
     }
 
     public static void setProfile(Profile profile, ApiResponse response) {
-        Editor.init(profile);
-        uid = profile.uid;
-        first_name = profile.first_name;
-        age = profile.age;
-        sex = profile.sex;
-        city = profile.city;
+        setProfile(profile, response, ProfileRequest.P_ALL);
+    }
 
-        money = profile.money;
-        likes = profile.likes;
+    public static void setProfile(Profile profile, ApiResponse response, int part) {
 
-        average_rate = profile.average_rate;
+        switch (part) {
+            case ProfileRequest.P_NECESSARY_DATA:
+                likes = profile.likes;
+                money = profile.money;
+                gifts = profile.gifts;
+                invisible = profile.invisible;
+                premium = profile.premium;
+                show_ad = profile.show_ad;
+                photo = profile.photo;
+                photos = profile.photos;
+                break;
+            case ProfileRequest.P_ALL:
+                Editor.init(profile);
+                uid = profile.uid;
+                first_name = profile.first_name;
+                age = profile.age;
+                sex = profile.sex;
+                city = profile.city;
 
-        notifications = profile.notifications;
-        hasMail = profile.hasMail;
-        emailConfirmed = profile.email_confirmed;
-        emailGrabbed = profile.email_grabbed;
+                money = profile.money;
+                likes = profile.likes;
 
-        premium = profile.premium;
-        invisible = profile.invisible;
-        dating = profile.dating;
-        forms = profile.forms;
+                average_rate = profile.average_rate;
 
-        photos = profile.photos;
-        photo = profile.photo;
-        status = profile.getStatus();
-        gifts = profile.gifts;
-        background_id = profile.background;
+                notifications = profile.notifications;
+                hasMail = profile.hasMail;
+                emailConfirmed = profile.email_confirmed;
+                emailGrabbed = profile.email_grabbed;
 
-        totalPhotos = profile.totalPhotos;
+                premium = profile.premium;
+                invisible = profile.invisible;
+                dating = profile.dating;
+                forms = profile.forms;
 
-        paid = profile.paid;
-        show_ad = profile.show_ad;
+                photos = profile.photos;
+                photo = profile.photo;
+                status = profile.getStatus();
+                gifts = profile.gifts;
+                background_id = profile.background;
 
-        xstatus = profile.xstatus;
+                totalPhotos = profile.totalPhotos;
 
-        canInvite = profile.canInvite;
+                paid = profile.paid;
+                show_ad = profile.show_ad;
 
-        editor = profile.isEditor();
+                xstatus = profile.xstatus;
 
-//        isGcmSupported = profile
+                canInvite = profile.canInvite;
 
-        setProfileCache(response);
+                editor = profile.isEditor();
+
+                setProfileCache(response);
+                break;
+        }
         setProfileUpdateTime();
     }
 

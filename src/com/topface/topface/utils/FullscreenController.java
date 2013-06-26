@@ -348,7 +348,7 @@ public class FullscreenController {
         ViewGroup fullscreenContainer = (ViewGroup) mActivity.findViewById(R.id.loBannerContainer);
         if (fullscreenContainer == null) {
             fullscreenContainer = (ViewGroup) mActivity.getLayoutInflater().inflate(R.layout.layout_fullscreen, null);
-            ((ViewGroup) mActivity.findViewById(R.id.NavigationLayout)).addView(fullscreenContainer);
+            ((ViewGroup) mActivity.findViewById(android.R.id.content)).addView(fullscreenContainer);
         }
         return fullscreenContainer;
     }
