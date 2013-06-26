@@ -196,6 +196,10 @@ public class FullscreenController {
             }
 
             @Override
+            public void onInterstitialClicked(MoPubInterstitial interstitial) {
+            }
+
+            @Override
             public void onInterstitialDismissed(MoPubInterstitial interstitial) {
             }
         });
