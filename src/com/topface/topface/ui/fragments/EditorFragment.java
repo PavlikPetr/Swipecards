@@ -13,6 +13,7 @@ import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.utils.*;
 import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.social.AuthToken;
@@ -29,6 +30,8 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     private Spinner mEditorModeSpinner;
     private SparseArray<CharSequence> mApiUrlsMap;
     private boolean mConfigInited = false;
+    private EditSwitcher switcher;
+    private long standard_timeout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,14 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         rootLayout.findViewById(R.id.EditorConfigureBanners).setOnClickListener(this);
         rootLayout.findViewById(R.id.EditorResetSettings).setOnClickListener(this);
         rootLayout.findViewById(R.id.EditorSaveSettings).setOnClickListener(this);
+
+        ViewGroup switcherView = (ViewGroup) rootLayout.findViewById(R.id.loPopupSwitcher);
+        switcherView.setOnClickListener(this);
+        switcher = new EditSwitcher(switcherView);
+        switcher.setChecked(CacheProfile.canInvite);
+
+        standard_timeout = CacheProfile.getOptions().popup_timeout;
+
         initNavigationBar(rootLayout);
         initApiUrl(rootLayout);
         initDebugMode(rootLayout);
@@ -223,6 +234,17 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
             case R.id.EditorSaveSettings:
                 mConfig.saveConfig();
                 showCompleteMessage();
+                break;
+            case R.id.loPopupSwitcher:
+                switcher.doSwitch();
+                if (CacheProfile.canInvite) {
+                    CacheProfile.getOptions().popup_timeout = standard_timeout;
+                } else {
+                    CacheProfile.getOptions().popup_timeout = 1;
+                }
+                CacheProfile.canInvite = switcher.isChecked();
+
+                break;
             default:
                 showError();
         }

@@ -67,6 +67,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     private AnimationDrawable mLoader;
     private ActionBar mActionBar;
     private ViewStub mEmptyScreenStub;
+    private boolean needUpdate = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -88,6 +89,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 if (itemId != null) {
                     makeItemReadWithId(itemId);
                 } else {
+                    needUpdate = true;
                     String lastMethod = intent.getStringExtra(CountersManager.METHOD_INTENT_STRING);
                     if (lastMethod != null) {
                         updateDataAfterReceivingCounters(lastMethod);
@@ -141,7 +143,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     @Override
     public void onResume() {
         super.onResume();
-        if (getListAdapter().isNeedUpdate()) {
+        if (getListAdapter().isNeedUpdate() || needUpdate) {
             updateData(false, true);
         }
         if (mFloatBlock != null) {
@@ -668,9 +670,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     private void updateDataAfterReceivingCounters(String lastMethod) {
-        if (!lastMethod.equals(CountersManager.NULL_METHOD) && !lastMethod.equals(getRequest().getServiceName())) {
+        if (!lastMethod.equals(CountersManager.NULL_METHOD) && lastMethod.equals(getRequest().getServiceName())) {
             int counters = CountersManager.getInstance(getActivity()).getCounter(getTypeForCounters());
             if (counters > 0) {
+                needUpdate = false;
                 updateData(true, false);
             }
         }

@@ -111,6 +111,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             }
         }
     };
+    private RelativeLayout mBlocked;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -137,6 +138,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
         bmBtn = (RelativeLayout) mUserActions.findViewById(R.id.acBookmark);
         mBookmarkAction = (TextView) mUserActions.findViewById(R.id.favTV);
+        mBlocked = (RelativeLayout) mUserActions.findViewById(R.id.acBlock);
+
         bmBtn.setOnClickListener(this);
         if (mProfileType == TYPE_USER_PROFILE) {
             mActionBar.showBackButton(new View.OnClickListener() {
@@ -372,6 +375,11 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     } else {
                         mBookmarkAction.setText(App.getContext().getString(R.string.general_bookmarks_add));
                     }
+
+                    if (data.inBlackList) {
+                        mBlocked.setEnabled(false);
+                        ((TextView)mBlocked.findViewById(R.id.blockTV)).setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+                    }
                     mRateController.setOnRateControllerListener(mRateControllerListener);
                     //set info into views for user
                     mTitle.setText(R.string.general_profile);
@@ -518,7 +526,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         @Override
                         public void onRateCompleted() {
                             if (v != null && getActivity() != null) {
-                                Toast.makeText(App.getContext(), R.string.sympathy_sended, 1500).show();
+                                Toast.makeText(App.getContext(), R.string.admiration_sended, 1500).show();
                                 loader.setVisibility(View.INVISIBLE);
                                 icon.setVisibility(View.VISIBLE);
 

@@ -135,7 +135,7 @@
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:background="@drawable/btn_gray_selector"
-                        style="@style/ButtonGrayText"
+                        style="@style/ButtonGray"
                         android:text="@string/black_list_add"
                         android:layout_centerInParent="true"
                         android:layout_marginTop="32dp"

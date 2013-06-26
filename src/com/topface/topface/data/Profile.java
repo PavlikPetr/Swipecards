@@ -102,7 +102,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.paid = resp.optBoolean("paid");
             profile.show_ad = resp.optBoolean("show_ad",true);
             profile.xstatus = resp.optInt("xstatus");
-            profile.canInvite = resp.optBoolean("can_invite");
+            profile.canInvite = true;//resp.optBoolean("can_invite");
             profile.setEditor(resp.optBoolean("editor", false));
 
             parseGifts(profile, resp);

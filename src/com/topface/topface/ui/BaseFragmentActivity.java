@@ -99,6 +99,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     @Override
     protected void onResume() {
         super.onResume();
+        afterOnSaveInstanceState = false;
         checkProfileLoad();
         registerReauthReceiver();
     }
