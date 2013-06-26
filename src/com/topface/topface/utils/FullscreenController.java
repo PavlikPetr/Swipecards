@@ -184,19 +184,28 @@ public class FullscreenController {
                     interstitial.show();
                     addLastFullscreenShowedTime();
                 }
+                Debug.log("MoPub: onInterstitialLoaded()");
             }
 
             @Override
             public void onInterstitialFailed(MoPubInterstitial interstitial, MoPubErrorCode errorCode) {
                 requestFallbackFullscreen();
+                Debug.log("MoPub: onInterstitialFailed()");
             }
 
             @Override
             public void onInterstitialShown(MoPubInterstitial interstitial) {
+                Debug.log("MoPub: onInterstitialShown()");
+            }
+
+            @Override
+            public void onInterstitialClicked(MoPubInterstitial interstitial) {
+                Debug.log("MoPub: onInterstitialClicked()");
             }
 
             @Override
             public void onInterstitialDismissed(MoPubInterstitial interstitial) {
+                Debug.log("MoPub: onInterstitialDismissed()");
             }
         });
         mInterstitial.load();
