@@ -166,6 +166,7 @@ public class FullscreenController {
             mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    addLastFullscreenShowedTime();
                     requestTopfaceFullscreen();
                 }
             });
@@ -187,7 +188,7 @@ public class FullscreenController {
 
             @Override
             public void onInterstitialFailed(MoPubInterstitial interstitial, MoPubErrorCode errorCode) {
-                requestTopfaceFullscreen();
+                requestFallbackFullscreen();
             }
 
             @Override
@@ -212,7 +213,7 @@ public class FullscreenController {
                 adwiredView.setOnNoBannerListener(new OnNoBannerListener() {
                     @Override
                     public void onNoBanner() {
-                        requestTopfaceFullscreen();
+                        requestFallbackFullscreen();
                     }
                 });
                 adwiredView.setOnStopListener(new OnStopListener() {
