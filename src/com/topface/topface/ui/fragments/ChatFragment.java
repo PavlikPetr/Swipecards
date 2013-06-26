@@ -917,8 +917,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void sendCoordinates(Geo geo) {
-        final History fakeItem = new History(IListLoader.ItemType.WAITING);
-        mAdapter.addSentMessage(fakeItem, mListView.getRefreshableView());
+        final History loaderItem = new History(IListLoader.ItemType.WAITING);
+        mAdapter.addSentMessage(loaderItem, mListView.getRefreshableView());
 
         final CoordinatesRequest coordRequest = new CoordinatesRequest(getActivity());
         registerRequest(coordRequest);
@@ -935,7 +935,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             protected void success(History data, ApiResponse response) {
                 data.target = FeedDialog.OUTPUT_USER_MESSAGE;
                 if (mAdapter != null) {
-                    mAdapter.replaceMessage(fakeItem, data, mListView.getRefreshableView());
+                    mAdapter.replaceMessage(loaderItem, data, mListView.getRefreshableView());
                 }
             }
 
@@ -947,7 +947,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             @Override
             public void fail(int codeError, ApiResponse response) {
                 Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
-                mAdapter.showRetrySendMessage(fakeItem, coordRequest);
+                mAdapter.showRetrySendMessage(loaderItem, coordRequest);
             }
         }).exec();
     }
@@ -960,8 +960,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             return;
         }
 
-        final History fakeItem = new History(IListLoader.ItemType.WAITING);
-        mAdapter.addSentMessage(fakeItem, mListView.getRefreshableView());
+        final History loaderItem = new History(IListLoader.ItemType.WAITING);
+        mAdapter.addSentMessage(loaderItem, mListView.getRefreshableView());
 
         final SendGiftRequest sendGift = new SendGiftRequest(getActivity());
         registerRequest(sendGift);
@@ -976,7 +976,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 Debug.log(getActivity(), "likes:" + data.likes + " money:" + data.money);
                 data.history.target = FeedDialog.OUTPUT_USER_MESSAGE;
                 if (mAdapter != null) {
-                    mAdapter.replaceMessage(fakeItem, data.history, mListView.getRefreshableView());
+                    mAdapter.replaceMessage(loaderItem, data.history, mListView.getRefreshableView());
                 }
             }
 
@@ -994,7 +994,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
                     startActivity(intent);
                 }
-                mAdapter.showRetrySendMessage(fakeItem, sendGift);
+                mAdapter.showRetrySendMessage(loaderItem, sendGift);
             }
 
             @Override
@@ -1010,9 +1010,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             return false;
         }
 
-        final History fakeItem = new History(IListLoader.ItemType.WAITING);
+        final History loaderItem = new History(IListLoader.ItemType.WAITING);
         if (mAdapter != null && mListView != null) {
-            mAdapter.addSentMessage(fakeItem, mListView.getRefreshableView());
+            mAdapter.addSentMessage(loaderItem, mListView.getRefreshableView());
         }
 
         final String text = mEditBox.getText().toString();
@@ -1028,7 +1028,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             @Override
             protected void success(History data, ApiResponse response) {
                 if (mAdapter != null) {
-                    mAdapter.replaceMessage(fakeItem, data, mListView.getRefreshableView());
+                    mAdapter.replaceMessage(loaderItem, data, mListView.getRefreshableView());
                 }
             }
 
@@ -1041,7 +1041,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             public void fail(int codeError, ApiResponse response) {
                 if (mAdapter != null) {
                     Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
-                    mAdapter.showRetrySendMessage(fakeItem, messageRequest);
+                    mAdapter.showRetrySendMessage(loaderItem, messageRequest);
                 }
             }
         }).exec();
@@ -1057,8 +1057,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         OsmManager.getAddress(latitude, longitude, new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                final History fakeItem = new History(IListLoader.ItemType.WAITING);
-                mAdapter.addSentMessage(fakeItem, mListView.getRefreshableView());
+                final History loaderItem = new History(IListLoader.ItemType.WAITING);
+                mAdapter.addSentMessage(loaderItem, mListView.getRefreshableView());
 
                 final CoordinatesRequest coordRequest = new CoordinatesRequest(getActivity());
                 registerRequest(coordRequest);
@@ -1073,7 +1073,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     protected void success(History data, ApiResponse response) {
                         toggleAddPanel();
                         if (mAdapter != null) {
-                            mAdapter.replaceMessage(fakeItem, data, mListView.getRefreshableView());
+                            mAdapter.replaceMessage(loaderItem, data, mListView.getRefreshableView());
                         }
                     }
 
@@ -1085,7 +1085,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     @Override
                     public void fail(int codeError, ApiResponse response) {
                         Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
-                        mAdapter.showRetrySendMessage(fakeItem, coordRequest);
+                        mAdapter.showRetrySendMessage(loaderItem, coordRequest);
                     }
                 }).exec();
 

@@ -55,7 +55,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private static final int T_COUNT = 13;
 
     private HashMap<History, ApiRequest> mHashRepeatRequests = new HashMap<History, ApiRequest>();
-    private ArrayList<History> mWaitingItems = new ArrayList<History>();
     private ArrayList<History> mUnrealItems = new ArrayList<History>();
     private ArrayList<History> mShowDatesList = new ArrayList<History>();
     private AddressesCache mAddressesCache = new AddressesCache();
@@ -245,9 +244,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     private void addSentMessage(History item) {
         getData().addFirst(item);
-        if (item.isWaitingItem()) {
-            mWaitingItems.add(item);
-        } else {
+        if (!item.isWaitingItem()) {
             mUnrealItems.add(item);
         }
         notifyDataSetChanged();
@@ -273,7 +270,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         if (positionToReplace != -1) {
             data.remove(positionToReplace);
             data.add(positionToReplace, unrealItem);
-            mWaitingItems.remove(emptyItem);
             mUnrealItems.add(unrealItem);
         }
 

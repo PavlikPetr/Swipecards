@@ -66,20 +66,29 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         Debug.log(this, "onCreate");
         mFragmentManager = getSupportFragmentManager();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-                String isGcmSupported = preferences.getString(GCMUtils.IS_GCM_SUPPORTED, null);
-                if (isGcmSupported != null) {
-                    GCMUtils.GCM_SUPPORTED = Boolean.getBoolean(isGcmSupported);
-                }
-            }
-        }).start();
-
         initSlidingMenu();
         if (!AuthToken.getInstance().isEmpty()) {
             showFragment(savedInstanceState);
+        }
+    }
+
+    @Override
+    protected void onCreateAsync() {
+        super.onCreateAsync();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+        String isGcmSupported = preferences.getString(GCMUtils.IS_GCM_SUPPORTED, null);
+        if (isGcmSupported != null) {
+            GCMUtils.GCM_SUPPORTED = Boolean.getBoolean(isGcmSupported);
+        }
+
+        mNovice = Novice.getInstance(getPreferences());
+        mNovice.initNoviceFlags();
+        try {
+            Looper.prepare();
+            Offerwalls.init(getApplicationContext());
+            Looper.loop();
+        } catch (Exception e) {
+            Debug.error(e);
         }
     }
 
@@ -133,20 +142,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 mFragmentMenu.showNovice(mNovice);
             }
         });
-    }
-
-    @Override
-    protected void inBackgroundThread() {
-        super.inBackgroundThread();
-        mNovice = Novice.getInstance(getPreferences());
-        mNovice.initNoviceFlags();
-        try {
-            Looper.prepare();
-            Offerwalls.init(getApplicationContext());
-            Looper.loop();
-        } catch (Exception e) {
-            Debug.error(e);
-        }
     }
 
     private SharedPreferences getPreferences() {
