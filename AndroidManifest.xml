@@ -247,6 +247,9 @@
                 android:name="com.inneractive.api.ads.InneractiveFullScreenView"
                 android:configChanges="orientation|screenSize" />
 
+        <activity android:name="com.millennialmedia.android.MMActivity"
+                  android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
         <meta-data
                 android:name="com.mobclix.APPLICATION_ID"
                 android:value="18FE3F53-02A6-4585-9518-B2896A13FD6C" />
