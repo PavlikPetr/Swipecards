@@ -968,6 +968,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
                 }
             }
+
+            if (position == ((ImageSwitcher.ImageSwitcherAdapter)mImageSwitcher.getAdapter()).getData().size() - 1) {
+                showControls();
+            }
         }
 
         @Override

@@ -54,14 +54,6 @@ public class AuthRequest extends ApiRequest {
         }
     }
 
-    public AuthRequest(String login, String password, Context context) {
-        this(context);
-
-        this.platform = AuthToken.SN_TOPFACE;
-        this.login = login;
-        this.password = password;
-    }
-
     private String getClientLocale(Context context) {
         String locale;
         //На всякий случай проверяем возможность получить локаль

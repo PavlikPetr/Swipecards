@@ -43,7 +43,6 @@ public class GiftsFragment extends BaseFragment {
     private GridView mGridView;
     private ProfileFragment.OnGiftReceivedListener listener;
 
-
     private Profile mProfile;
     private boolean mIsUpdating = false;
 

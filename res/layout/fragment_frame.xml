@@ -19,7 +19,4 @@
             style="@style/LoadingLocker"
             android:visibility="gone"/>
 
-    <ImageView
-            style="@style/HeaderShadow"/>
-
 </RelativeLayout>

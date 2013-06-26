@@ -74,6 +74,4 @@
                     style="@style/ButtonGray"/>
         </LinearLayout>
     </ScrollView>
-
-    <ImageView style="@style/HeaderShadow"/>
 </RelativeLayout>

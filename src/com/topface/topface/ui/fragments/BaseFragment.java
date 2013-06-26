@@ -56,14 +56,14 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     protected ActionBar getActionBar(View view) {
         if (mActionBar == null) {
-            mActionBar = new ActionBar(view.findViewById(R.id.loNavigationBar));
+            mActionBar = new ActionBar(getActivity(), view);
         }
         return mActionBar;
     }
 
     protected ActionBar getActionBar(Activity activity) {
         if (mActionBar == null) {
-            mActionBar = new ActionBar(activity.findViewById(R.id.loNavigationBar));
+            mActionBar = new ActionBar(activity, activity.getWindow().getDecorView());
         }
         return mActionBar;
     }

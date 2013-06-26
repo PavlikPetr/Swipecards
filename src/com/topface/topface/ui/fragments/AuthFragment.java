@@ -213,7 +213,7 @@ public class AuthFragment extends BaseFragment {
                 String userId = extras.getString(RegistrationFragment.INTENT_USER_ID);
                 AuthToken.getInstance().saveToken(userId, login, password);
                 hideButtons();
-                auth(generateTopfaceAuthRequest(login, password));
+                auth(generateTopfaceAuthRequest(AuthToken.getInstance()));
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
             showButtons();
@@ -320,8 +320,10 @@ public class AuthFragment extends BaseFragment {
         return authRequest;
     }
 
-    private AuthRequest generateTopfaceAuthRequest(final String login, final String password) {
-        final AuthRequest authRequest = new AuthRequest(login, password, getActivity());
+    private AuthRequest generateTopfaceAuthRequest(AuthToken token) {
+        final AuthRequest authRequest = new AuthRequest(token, getActivity());
+        final String login = token.getLogin();
+        final String password = token.getPassword();
         registerRequest(authRequest);
         authRequest.callback(new ApiHandler() {
             @Override
@@ -609,7 +611,8 @@ public class AuthFragment extends BaseFragment {
                 showButtons();
                 return;
             }
-            AuthRequest authRequest = generateTopfaceAuthRequest(login, password);
+            AuthToken.getInstance().saveToken("",login,password);
+            AuthRequest authRequest = generateTopfaceAuthRequest(AuthToken.getInstance());
             authRequest.exec();
         }
     }

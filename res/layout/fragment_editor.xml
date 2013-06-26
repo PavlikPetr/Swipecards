@@ -161,6 +161,27 @@
 
             </RelativeLayout>
 
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="5dp"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="Показывать попап приглашений"/>
+
+                <include
+                        android:id="@+id/loPopupSwitcher"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_alignParentRight="true"
+                        layout="@layout/item_edit_form_switch"/>
+            </RelativeLayout>
+
             <Button
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"

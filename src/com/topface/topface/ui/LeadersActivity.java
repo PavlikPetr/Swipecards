@@ -21,6 +21,7 @@ import com.topface.topface.ui.gridlayout.GridLayout;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryViewCreator;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
@@ -45,11 +46,10 @@ public class LeadersActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_leaders_layout);
-        ((TextView) findViewById(R.id.tvNavigationTitle)).setText(R.string.leaders_go_date);
-        findViewById(R.id.btnNavigationHome).setVisibility(View.INVISIBLE);
-        View backButton = findViewById(R.id.btnNavigationBack);
-        backButton.setVisibility(View.VISIBLE);
-        backButton.setOnClickListener(new OnClickListener() {
+
+        ActionBar actionBar = getActionBar(getWindow().getDecorView());
+        actionBar.setTitleText(getString(R.string.leaders_go_date));
+        actionBar.showBackButton(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();

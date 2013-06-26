@@ -77,7 +77,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_profile_photos, container, false);
-        root.findViewById(R.id.headerShadow).setVisibility(View.VISIBLE);
+
         // Navigation bar
         ActionBar actionBar = getActionBar(root);
         actionBar.setTitleText(getString(R.string.edit_title));

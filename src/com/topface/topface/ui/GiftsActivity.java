@@ -15,6 +15,7 @@ import com.topface.topface.requests.GiftsRequest;
 import com.topface.topface.ui.fragments.GiftsFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.TripleButton;
+import com.topface.topface.utils.ActionBar;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -40,14 +41,11 @@ public class GiftsActivity extends BaseFragmentActivity {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.ac_gifts);
 
-        ((TextView) findViewById(R.id.tvNavigationTitle)).setText(R.string.gifts_title);
-        findViewById(R.id.btnNavigationHome).setVisibility(View.INVISIBLE);
-        View backButton = findViewById(R.id.btnNavigationBack);
-        backButton.setVisibility(View.VISIBLE);
-        backButton.setOnClickListener(new OnClickListener() {
+        ActionBar actionBar = getActionBar(getWindow().getDecorView());
+        actionBar.setTitleText(getString(R.string.gifts_title));
+        actionBar.showBackButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setResult(Activity.RESULT_CANCELED);
                 finish();
             }
         });

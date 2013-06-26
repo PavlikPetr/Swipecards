@@ -173,19 +173,21 @@ public class DeleteAccountDialog extends DialogFragment implements View.OnClickL
 
     public static boolean hasDeltedAccountToken(AuthToken token) {
         SharedPreferences preferences = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_PROFILE, Context.MODE_PRIVATE);
-        String userId = token.getUserId();
-        String prefKey = Static.EMPTY;
-        if (token.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
-            prefKey = Static.PREFERENCES_DELETED_ACCOUNTS_FB_IDS;
-        } else if (token.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
-            prefKey = Static.PREFERENCES_DELETED_ACCOUNTS_VK_IDS;
-        } else if (token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
-            prefKey = Static.PREFERENCES_DELETED_ACCOUNTS_TF_IDS;
-        }
-        String ids = preferences.getString(prefKey, Static.EMPTY);
-        for (String item : ids.split(",")) {
-            if (item.equals(userId)) {
-                return true;
+        if (token != null) {
+            String userId = token.getUserId();
+            String prefKey = Static.EMPTY;
+            if (token.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
+                prefKey = Static.PREFERENCES_DELETED_ACCOUNTS_FB_IDS;
+            } else if (token.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
+                prefKey = Static.PREFERENCES_DELETED_ACCOUNTS_VK_IDS;
+            } else if (token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+                prefKey = Static.PREFERENCES_DELETED_ACCOUNTS_TF_IDS;
+            }
+            String ids = preferences.getString(prefKey, Static.EMPTY);
+            for (String item : ids.split(",")) {
+                if (item.equals(userId)) {
+                    return true;
+                }
             }
         }
         return false;

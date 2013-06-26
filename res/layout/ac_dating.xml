@@ -39,10 +39,6 @@
             android:visibility="gone"
             />
 
-    <ImageView
-            android:id="@+id/ivHeaderShadow"
-            style="@style/HeaderShadow" />
-
     <com.topface.topface.ui.views.NoviceLayout
             android:id="@+id/loNovice"
             android:layout_width="fill_parent"

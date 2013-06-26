@@ -83,8 +83,6 @@
             android:visibility="gone"
             android:id="@+id/lockScreen" />
 
-    <ImageView style="@style/HeaderShadow" />
-
     <com.topface.topface.ui.views.LockerView
             android:id="@+id/llvProfileLoading"
             style="@style/LoadingLocker"

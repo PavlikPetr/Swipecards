@@ -24,7 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ico_drop_menu_profile_w_normal"
+                android:src="@drawable/ico_drop_menu_profile_m_normal"
                 android:layout_marginLeft="8dp"
 
                 />
@@ -36,7 +36,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 style="@android:style/Widget.ProgressBar.Small"
-                android:visibility="gone"
+                android:visibility="invisible"
                 android:layout_marginLeft="12dp" />
 
         <TextView
@@ -48,6 +48,41 @@
     </RelativeLayout>
 
     <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/acWProfile"
+            android:background= "@drawable/actions_menu_delimiter"
+            android:visibility="gone"
+            >
+        <ImageView
+                android:id="@+id/profwIcon"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ico_drop_menu_profile_w_normal"
+                android:layout_marginLeft="8dp"
+                />
+
+        <ProgressBar
+                android:id="@+id/profwPrBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                style="@android:style/Widget.ProgressBar.Small"
+                android:visibility="invisible"
+                android:layout_marginLeft="12dp"/>
+
+        <TextView
+                style="@style/actionsFont"
+                android:layout_toRightOf="@id/profwPrBar"
+                android:text="@string/general_profile"
+                android:id="@+id/delTV"
+                />
+    </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/acDelight"
@@ -73,7 +108,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 style="@android:style/Widget.ProgressBar.Small"
-                android:visibility="gone"
+                android:visibility="invisible"
                 android:layout_marginLeft="12dp" />
 
         <TextView
@@ -110,7 +145,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 style="@android:style/Widget.ProgressBar.Small"
-                android:visibility="gone"
+                android:visibility="invisible"
                 android:layout_marginLeft="12dp" />
 
         <TextView
@@ -147,7 +182,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 style="@android:style/Widget.ProgressBar.Small"
-                android:visibility="gone"
+                android:visibility="invisible"
                 android:layout_marginLeft="12dp" />
 
         <TextView
@@ -184,7 +219,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 style="@android:style/Widget.ProgressBar.Small"
-                android:visibility="gone"
+                android:visibility="invisible"
                 android:layout_marginLeft="12dp" />
 
         <TextView
@@ -221,7 +256,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 style="@android:style/Widget.ProgressBar.Small"
-                android:visibility="gone"
+                android:visibility="invisible"
                 android:layout_marginLeft="12dp" />
 
         <TextView
@@ -258,13 +293,13 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 style="@android:style/Widget.ProgressBar.Small"
-                android:visibility="gone"
+                android:visibility="invisible"
                 android:layout_marginLeft="12dp" />
 
         <TextView
                 style="@style/actionsFont"
                 android:layout_toRightOf="@id/favPrBar"
-                android:text="@string/general_bookmarks"
+                android:text="@string/general_bookmarks_add"
                 android:id="@+id/favTV"
                 />
     </RelativeLayout>
@@ -294,7 +329,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 style="@android:style/Widget.ProgressBar.Small"
-                android:visibility="gone"
+                android:visibility="invisible"
                 android:layout_marginLeft="12dp" />
 
         <TextView
