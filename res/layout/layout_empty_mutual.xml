@@ -8,7 +8,7 @@
             android:id="@+id/tvText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/likes_can_help_you"
+            android:text="@string/rate_and_have_mutual_or_buy_and_chat"
             style="@style/ItemTitleText"
             android:layout_centerInParent="true"
             android:gravity="center"
@@ -26,7 +26,18 @@
             android:layout_marginRight="8dp">
 
         <Button
-                android:id="@+id/btnStartRate"
+                android:id="@+id/btnGetDating"
+                android:layout_width="0dip"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/general_get_dating"
+                style="@style/ButtonGray"
+                android:singleLine="true"
+                android:layout_marginRight="3dp"
+                android:minWidth="210dp"/>
+
+        <Button
+                android:id="@+id/btnRefill"
                 android:layout_width="0dip"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"

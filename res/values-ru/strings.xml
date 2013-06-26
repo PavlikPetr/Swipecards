@@ -670,5 +670,6 @@
     <string name="delete_account_will_be_restored_are_you_sure">Вы пытаетесь войти в удаленный вами аккаунт. При входе аккаунт будет восстановлен. Вы уверены?</string>
     <string name="restore_of_account">Восстановление аккаунта</string>
     <string name="restore">Восстановить</string>
+    <string name="admiration_sended">Восхищение отправлено</string>
 
 </resources>

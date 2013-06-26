@@ -107,6 +107,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private RelativeLayout mLockScreen;
     private String[] editButtonsSelfNames;
     private LinearLayout chatActions;
+    private TextView bookmarksTv;
+    private RelativeLayout blockView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -131,13 +133,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
         chatActions = (LinearLayout) root.findViewById(R.id.mChatActions);
         chatActions.setVisibility(View.INVISIBLE);
-        ArrayList<UserActions.ActionItem> actions = new ArrayList<UserActions.ActionItem>();
-        actions.add(new UserActions.ActionItem(R.id.acProfile, this));
-        actions.add(new UserActions.ActionItem(R.id.acBlock, this));
-        actions.add(new UserActions.ActionItem(R.id.acComplain, this));
-        actions.add(new UserActions.ActionItem(R.id.acBookmark, this));
 
-        new UserActions(chatActions, actions);
         // Locker
         mLoadingBackgroundText = (TextView) root.findViewById(R.id.tvBackgroundText);
         Drawable drawable = mLoadingBackgroundText.getCompoundDrawables()[0];
@@ -537,10 +533,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         if (!mAdapter.isEmpty() && !data.items.isEmpty()) {
             FeedList<History> items = mAdapter.getData();
             int size = items.size();
-            for (int i = 0; i < size; i++) {
+            for (History item1 : items) {
                 List<History> itemsToDelete = new ArrayList<History>();
                 for (History item : data.items) {
-                    if (item.id.equals(items.get(i).id)) {
+                    if (item.id.equals(item1.id)) {
                         itemsToDelete.add(item);
                     }
                 }
@@ -554,13 +550,30 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             if (mUser.deleted || mUser.banned || mUser.photo == null || mUser.photo.isEmpty()) {
                 mActionBar.showProfileAvatar(mUser.sex == Static.BOY ? R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar, null);
             } else {
+                ArrayList<UserActions.ActionItem> actions = new ArrayList<UserActions.ActionItem>();
+                actions.add(new UserActions.ActionItem(mUser.sex == 1? R.id.acProfile : R.id.acWProfile, this));
+                actions.add(new UserActions.ActionItem(R.id.acBlock, this));
+                actions.add(new UserActions.ActionItem(R.id.acComplain, this));
+                actions.add(new UserActions.ActionItem(R.id.acBookmark, this));
+
+
+
+                UserActions userActions = new UserActions(chatActions, actions);
+                bookmarksTv = (TextView) userActions.getViewById(R.id.acBookmark).findViewById(R.id.favTV);
+                blockView = (RelativeLayout) userActions.getViewById(R.id.acBlock);
+
+                bookmarksTv.setText(mUser.bookmarked? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+//                blockView.setEnabled(mUser.);
                 mActionBar.showUserActionsButton(
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                TranslateAnimation ta = new TranslateAnimation(0, 0, -chatActions.getHeight(), 0);
+                                Debug.log("ACTIONSHEIGHT::" + Integer.toString(chatActions.getHeight()));
+                                final TranslateAnimation ta = new TranslateAnimation(0, 0, -chatActions.getHeight(), 0);
                                 ta.setDuration(500);
+                                ta.setStartOffset(0);
                                 ta.setAnimationListener(new Animation.AnimationListener() {
+
                                     @Override
                                     public void onAnimationStart(Animation animation) {
                                         mActionBar.disableActionsButton(true);
@@ -578,7 +591,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
                                     }
                                 });
-                                chatActions.startAnimation(ta);
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        chatActions.startAnimation(ta);
+                                    }
+                                });
                             }
                         }, new View.OnClickListener() {
                             @Override
