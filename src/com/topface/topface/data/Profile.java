@@ -62,7 +62,6 @@ public class Profile extends AbstractDataWithPhotos {
     public boolean paid;
     // Показывать рекламу или нет
     public boolean show_ad;
-    public boolean isGcmSupported;
     /**
      * Флаг того, является ли пользоветль редактором
      */
@@ -100,9 +99,9 @@ public class Profile extends AbstractDataWithPhotos {
             profile.background = resp.optInt("background", ProfileBackgrounds.DEFAULT_BACKGROUND_ID);
             profile.totalPhotos = resp.optInt("photos_count");
             profile.paid = resp.optBoolean("paid");
-            profile.show_ad = resp.optBoolean("show_ad",true);
+            profile.show_ad = resp.optBoolean("show_ad", true);
             profile.xstatus = resp.optInt("xstatus");
-            profile.canInvite = true;//resp.optBoolean("can_invite");
+            profile.canInvite = resp.optBoolean("can_invite");
             profile.setEditor(resp.optBoolean("editor", false));
 
             parseGifts(profile, resp);
@@ -515,7 +514,7 @@ public class Profile extends AbstractDataWithPhotos {
                 return Static.EMPTY;
             }
         }
-        return result.replaceAll("\n"," ");
+        return result.replaceAll("\n", " ");
     }
 
     public boolean isEmpty() {

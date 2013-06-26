@@ -14,9 +14,9 @@ public class DateUtils {
     private final static SimpleDateFormat mDateFormatDayYear = new SimpleDateFormat("dd MMMM yyyy");
     private final static SimpleDateFormat mDateFormatDay = new SimpleDateFormat("dd MMMM");
     private final static SimpleDateFormat mDateFormatDayOfWeek = new SimpleDateFormat("EEEE");
-    public final static SimpleDateFormat mDateFormatHours = new SimpleDateFormat("HH:mm");
+    private final static SimpleDateFormat mDateFormatHours = new SimpleDateFormat("HH:mm");
 
-    public static final long DAY_IN_MILLISECONDS = 24*60*60*1000;
+    public static final long DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000;
 
     public static void syncTime() {
         Calendar cal = Calendar.getInstance();
@@ -27,11 +27,11 @@ public class DateUtils {
         cal.set(Calendar.MILLISECOND, 0);
         DateUtils.midnight = cal.getTimeInMillis();
 
-        cal.set(Calendar.DAY_OF_YEAR,1);
+        cal.set(Calendar.DAY_OF_YEAR, 1);
         DateUtils.current_year = cal.getTimeInMillis();
     }
 
-    public static String getFormattedDate(Context context, long date) {
+    public static String getFormattedTitleDate(Context context, long date) {
         String formattedDate;
 
         if (date > DateUtils.midnight) { // сегодня
@@ -49,7 +49,25 @@ public class DateUtils {
         return formattedDate;
     }
 
-    public static String getFormattedDateHHmm(long date) {
+    public static String getFormattedDate(Context context, long date) {
+        String formattedDate;
+
+        if (date > DateUtils.midnight) { // сегодня
+            formattedDate = mDateFormatHours.format(date);
+        } else if (date > DateUtils.midnight - Utils.DAY) { //вчера
+            formattedDate = context.getString(R.string.time_yesterday);
+        } else if (date > DateUtils.midnight - Utils.DAY * 5) { // день недели
+            formattedDate = mDateFormatDayOfWeek.format(date);
+        } else if (date > DateUtils.current_year) { // неделю назад
+            formattedDate = mDateFormatDay.format(date);
+        } else {
+            formattedDate = mDateFormatDayYear.format(date);
+        }
+
+        return formattedDate;
+    }
+
+    public static String getFormattedTime(long date) {
         return mDateFormatHours.format(date);
     }
 
@@ -88,7 +106,7 @@ public class DateUtils {
     }
 
     public static long getSeconds(Date date) {
-        return date.getTime()/1000;
+        return date.getTime() / 1000;
     }
 
 }

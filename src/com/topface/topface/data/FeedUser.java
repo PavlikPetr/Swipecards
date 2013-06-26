@@ -65,7 +65,7 @@ public class FeedUser extends AbstractData implements SerializableToJson {
     public String getNameAndAge() {
         String result;
         if (!TextUtils.isEmpty(first_name) && age > 0) {
-            result = String.format("%s, %d", first_name, age);
+            result = first_name + ", " + age;
         } else {
             result = first_name;
         }
