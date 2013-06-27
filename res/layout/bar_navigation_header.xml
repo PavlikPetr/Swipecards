@@ -9,89 +9,81 @@
 
     <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:gravity="left|center_vertical"
             >
-
-        <ImageButton
-                android:id="@+id/btnNavigationHome"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:paddingLeft="8dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/navigation_home_selector"
-                />
-
-        <TextView
-                android:id="@+id/tvNotificationDialogs"
-                style="@style/NotificationText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignRight="@id/btnNavigationHome"
-                android:layout_alignTop="@id/btnNavigationHome"
-
-                android:layout_marginTop="5dp"
-                android:background="@drawable/topface_notification_dialogs"
-                android:gravity="center_horizontal"
-                android:paddingLeft="4dp"
-                android:paddingRight="11dp"
-                android:paddingTop="1dp"
-                android:visibility="gone"/>
-
-        <TextView
-                android:id="@+id/tvNotificationLikes"
-                style="@style/NotificationText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignRight="@id/btnNavigationHome"
-                android:layout_alignTop="@id/btnNavigationHome"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/topface_notification_likes"
-                android:gravity="center_horizontal"
-                android:paddingLeft="4dp"
-                android:paddingRight="11dp"
-                android:paddingTop="0dp"
-                android:visibility="gone"/>
-
-        <TextView
-                android:id="@+id/tvNotificationMutual"
-                style="@style/NotificationText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignRight="@id/btnNavigationHome"
-                android:layout_alignTop="@id/btnNavigationHome"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/topface_notification_likes"
-                android:gravity="center_horizontal"
-                android:paddingLeft="4dp"
-                android:paddingRight="11dp"
-                android:paddingTop="0dp"
-                android:visibility="gone"/>
-
-        <ImageButton
-                android:id="@+id/btnNavigationBack"
-                style="@style/BackButton"
-                />
-
-
-    </RelativeLayout>
-
-    <LinearLayout
-            android:layout_width="0dp"
+        <RelativeLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="0.5"
-            android:gravity="left"
-            android:layout_marginLeft="5dp"
-            android:orientation="vertical"
-            android:visibility="visible">
+            android:id="@+id/btnsContainer"
+            >
+            <ImageButton
+                    android:id="@+id/btnNavigationHome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="8dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/navigation_home_selector"
+                    />
 
+            <TextView
+                    android:id="@+id/tvNotificationDialogs"
+                    style="@style/NotificationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignRight="@id/btnNavigationHome"
+                    android:layout_alignTop="@id/btnNavigationHome"
+
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/topface_notification_dialogs"
+                    android:gravity="center_horizontal"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="11dp"
+                    android:paddingTop="1dp"
+                    android:visibility="gone"/>
+
+            <TextView
+                    android:id="@+id/tvNotificationLikes"
+                    style="@style/NotificationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignRight="@id/btnNavigationHome"
+                    android:layout_alignTop="@id/btnNavigationHome"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/topface_notification_likes"
+                    android:gravity="center_horizontal"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="11dp"
+                    android:paddingTop="0dp"
+                    android:visibility="gone"/>
+
+            <TextView
+                    android:id="@+id/tvNotificationMutual"
+                    style="@style/NotificationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignRight="@id/btnNavigationHome"
+                    android:layout_alignTop="@id/btnNavigationHome"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/topface_notification_likes"
+                    android:gravity="center_horizontal"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="11dp"
+                    android:paddingTop="0dp"
+                    android:visibility="gone"/>
+
+            <ImageButton
+                    android:id="@+id/btnNavigationBack"
+                    style="@style/BackButton"
+                    />
+        </RelativeLayout>
         <TextView
                 android:id="@+id/tvNavigationTitle"
                 style="@style/NavigationHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/btnsContainer"
                 android:ellipsize="end"
                 android:gravity="center_horizontal"
                 android:drawablePadding="7dp"
@@ -103,16 +95,25 @@
                 style="@style/NavigationHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/btnsContainer"
+                android:layout_below="@id/tvNavigationTitle"
                 android:gravity="center_horizontal"
                 android:maxWidth="165dp"
                 android:singleLine="false"
                 android:textSize="9sp"
                 android:visibility="gone"/>
-    </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible">
+
+        </LinearLayout>
 
     <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="0.25"
             android:gravity="right"
@@ -121,7 +122,7 @@
         <ImageButton
                 android:id="@+id/btnNavigationSettingsBar"
                 android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
+                android:layout_height="wrap_content"
                 android:paddingRight="5dp"
                 android:paddingLeft="20dp"
                 android:background="@android:color/transparent"
@@ -130,7 +131,7 @@
 
         <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="5dp">
 
 
@@ -155,7 +156,7 @@
         <ImageButton
                 android:id="@+id/btnNavigationProfileBar"
                 android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/navigation_male_profile_selector"
@@ -182,7 +183,7 @@
         <ImageButton
                 android:id="@+id/btnUserProfActions"
                 android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/user_profile_actions_button_selector"
