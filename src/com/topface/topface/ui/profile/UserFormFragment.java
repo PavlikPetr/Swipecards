@@ -55,7 +55,7 @@ public class UserFormFragment extends BaseFragment implements OnClickListener {
         if (mUser != null) {
             setUserData(mUser);
         } else {
-            mTitle.setText(Utils.formatFormMatchesQuantity(0));
+            mTitle.setText(Utils.getQuantityString(R.plurals.form_matches, 0, 0));
             mState.setImageResource(R.drawable.user_cell_center);
         }
         mTitleLayout.setVisibility(View.VISIBLE);
@@ -73,7 +73,9 @@ public class UserFormFragment extends BaseFragment implements OnClickListener {
     }
 
     private void initFormHeader() {
-        mTitle.setText(Utils.formatFormMatchesQuantity(mUser.formMatches));
+        mTitle.setText(
+                Utils.getQuantityString(R.plurals.form_matches, mUser.formMatches, mUser.formMatches)
+        );
 
         if (formIsEmpty(mUser.forms)) {
             mEmptyFormLayout.setVisibility(View.VISIBLE);

@@ -49,7 +49,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             @Override
             public void run() {
                 super.run();
-                inBackgroundThread();
+                onCreateAsync();
             }
         }).start();
     }
@@ -255,7 +255,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         }
     }
 
-    protected void inBackgroundThread() {
+    protected void onCreateAsync() {
     }
 
     private ActionBar mActionBar;

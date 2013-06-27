@@ -8,7 +8,7 @@
     <!-- аватар -->
     <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/ivAvatar"
-            style="@style/FeedAvatar"/>
+            style="@style/FeedAvatar" />
 
     <RelativeLayout
             android:layout_width="fill_parent"
@@ -21,7 +21,7 @@
         <TextView
                 android:id="@+id/tvName"
                 style="@style/ListName"
-                android:textColor="#CFEDFF"/>
+                android:textColor="#CFEDFF" />
 
         <!-- город -->
         <TextView
@@ -29,7 +29,7 @@
                 android:layout_toRightOf="@id/tvName"
                 android:layout_alignBaseline="@id/tvName"
                 style="@style/ListCity"
-                android:textColor="#CFEDFF"/>
+                android:textColor="#CFEDFF" />
 
         <LinearLayout
                 android:id="@+id/loText"
@@ -51,12 +51,12 @@
                     android:textColor="#4D4D4D"
                     android:textStyle="bold"
                     android:visibility="gone"
-                    android:layout_marginRight="5dp"/>
+                    android:layout_marginRight="5dp" />
             <!-- текст -->
-            <com.topface.IllustratedTextView.IllustratedTextView
+            <TextView
                     android:id="@+id/tvText"
                     style="@style/ListMessageText"
-                    android:textColor="#CFEDFF"/>
+                    android:textColor="#CFEDFF" />
         </LinearLayout>
 
         <!-- время -->
@@ -64,13 +64,13 @@
                 android:id="@+id/tvTime"
                 android:layout_alignBottom="@id/loText"
                 style="@style/ListTime"
-                android:textColor="#CFEDFF"/>
+                android:textColor="#CFEDFF" />
 
     </RelativeLayout>
 
     <!-- online -->
     <ImageView
             android:id="@+id/ivOnline"
-            style="@style/OnlineIndicator"/>
+            style="@style/OnlineIndicator" />
 
 </RelativeLayout>

@@ -1,7 +1,6 @@
 package com.topface.topface.utils;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
@@ -29,6 +28,13 @@ public class ActionBar {
 
     public ActionBar(Context context, View actionView) {
         this.actionView = (ViewGroup) actionView.findViewById(R.id.loNavigationBar);
+        initShadow(context);
+        this.actionView.setVisibility(View.VISIBLE);
+        mNavBarController = new NavigationBarController(this.actionView);
+        initViews();
+    }
+
+    private void initShadow(Context context) {
         if (this.actionView.getParent() instanceof RelativeLayout) {
             RelativeLayout parent = (RelativeLayout) this.actionView.getParent();
             View shadow = new ImageView(context);
@@ -39,9 +45,6 @@ public class ActionBar {
             shadow.setTag(context.getString(R.string.tag_header_shadow));
             parent.addView(shadow);
         }
-        this.actionView.setVisibility(View.VISIBLE);
-        mNavBarController = new NavigationBarController(this.actionView);
-        initViews();
     }
 
     private void initViews() {

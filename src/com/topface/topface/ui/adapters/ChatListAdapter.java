@@ -11,7 +11,10 @@ import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.*;
+import com.topface.topface.data.FeedDialog;
+import com.topface.topface.data.FeedUser;
+import com.topface.topface.data.History;
+import com.topface.topface.data.VirusLike;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
@@ -23,7 +26,6 @@ import com.topface.topface.utils.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 
 
 public class ChatListAdapter extends LoadingListAdapter<History> implements AbsListView.OnScrollListener {
@@ -55,7 +57,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private static final int T_COUNT = 13;
 
     private HashMap<History, ApiRequest> mHashRepeatRequests = new HashMap<History, ApiRequest>();
-    private ArrayList<History> mWaitingItems = new ArrayList<History>();
     private ArrayList<History> mUnrealItems = new ArrayList<History>();
     private ArrayList<History> mShowDatesList = new ArrayList<History>();
     private AddressesCache mAddressesCache = new AddressesCache();
@@ -63,8 +64,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private ChatFragment.OnListViewItemLongClickListener mLongClickListener;
 
     private View mHeaderView;
-
-    private FeedUser user;
 
     public ChatListAdapter(Context context, FeedList<History> data, Updater updateCallback) {
         super(context, data, updateCallback);
@@ -143,7 +142,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     }
 
     public void setUser(FeedUser user) {
-        this.user = user;
         if (mHeaderView != null && user != null) {
             if (user.deleted || user.banned || user.photo == null || user.photo.isEmpty()) {
                 ((ImageViewRemote) mHeaderView.findViewById(R.id.ivFriendAvatar)).setImageResource(user.sex == Static.BOY ?
@@ -152,10 +150,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 ((ImageViewRemote) mHeaderView.findViewById(R.id.ivFriendAvatar)).setPhoto(user.photo);
             }
         }
-    }
-
-    public FeedUser getUser() {
-        return this.user;
     }
 
     public void addHeader(ListView parentView) {
@@ -245,9 +239,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     private void addSentMessage(History item) {
         getData().addFirst(item);
-        if (item.isWaitingItem()) {
-            mWaitingItems.add(item);
-        } else {
+        if (!item.isWaitingItem()) {
             mUnrealItems.add(item);
         }
         notifyDataSetChanged();
@@ -273,7 +265,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         if (positionToReplace != -1) {
             data.remove(positionToReplace);
             data.add(positionToReplace, unrealItem);
-            mWaitingItems.remove(emptyItem);
             mUnrealItems.add(unrealItem);
         }
 
@@ -364,7 +355,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
         if (showDate) {
             holder.dateDivider.setVisibility(View.VISIBLE);
-            holder.dateDividerText.setText(DateUtils.getFormattedDate(mContext, item.created).toUpperCase());
+            holder.dateDividerText.setText(DateUtils.getFormattedTitleDate(mContext, item.created).toUpperCase());
         } else {
             holder.dateDivider.setVisibility(View.GONE);
         }
@@ -373,7 +364,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private View inflateConvertView(View convertView, ViewHolder holder, int type, History item) {
         boolean output = (item.target == FeedDialog.OUTPUT_USER_MESSAGE);
 
-        if(type == T_WAITING) {
+        if (type == T_WAITING) {
             convertView = mInflater.inflate(R.layout.item_chat_list_loader_retrier, null, false);
             holder.retrier = convertView.findViewById(R.id.tvLoaderText);
             holder.loader = convertView.findViewById(R.id.prsLoader);
@@ -403,7 +394,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 holder.userInfo = convertView.findViewById(R.id.user_info);
                 holder.likeRequest = (Button) convertView.findViewById(R.id.btn_chat_like_request);
                 holder.prgsLoader = (ProgressBar) convertView.findViewById(R.id.prsLoader);
-                holder.likeRequest.setTag(R.id.prsLoader,holder.prgsLoader);
+                holder.likeRequest.setTag(R.id.prsLoader, holder.prgsLoader);
                 break;
             case T_USER_REQUEST:
                 convertView = mInflater.inflate(R.layout.chat_user, null, false);
@@ -465,7 +456,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         }
         if (holder != null) {
             if (holder.message != null) holder.message.setMovementMethod(LinkMovementMethod.getInstance());
-            if (holder.date != null) holder.date.setText(DateUtils.getFormattedDateHHmm(item.created));
+            if (holder.date != null) holder.date.setText(DateUtils.getFormattedTime(item.created));
         }
 
     }
@@ -491,12 +482,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         notifyDataSetChanged();
     }
 
-    public void removeItems(List<History> items) {
-        getData().removeAll(items);
-        prepareDates();
-        notifyDataSetChanged();
-    }
-
     public String getFirstItemId() {
         FeedList<History> data = getData();
         for (History item : data) {
@@ -516,7 +501,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
         for (int i = data.size() - 1; i >= 0; i--) {
             History item = data.get(i);
-            if(item != null) {
+            if (item != null) {
                 if (isReal(item)) {
                     return item.id;
                 }
@@ -603,7 +588,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         @Override
         public void onClick(final View v) {
             final int position = (Integer) v.getTag();
-            final ProgressBar prsLoader = (ProgressBar)v.getTag(R.id.prsLoader);
+            final ProgressBar prsLoader = (ProgressBar) v.getTag(R.id.prsLoader);
             final History item = getItem(position);
             if (item != null) {
                 EasyTracker.getTracker().trackEvent("VirusLike", "Click", "Chat", 0L);
