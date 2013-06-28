@@ -253,11 +253,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         // Navigation Header
         ActionBar actionBar = getActionBar(view);
         setHeader(view);
-        actionBar.showHomeButton((NavigationActivity) getActivity());
+        final Activity activity = getActivity();
+        if (activity instanceof NavigationActivity) {
+            actionBar.showHomeButton((NavigationActivity) activity);
+        }
         OnClickListener listener = new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity().getApplicationContext(),
+                Intent intent = new Intent(activity.getApplicationContext(),
                         EditContainerActivity.class);
                 startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FILTER);
             }

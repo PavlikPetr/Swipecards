@@ -68,7 +68,10 @@ public class AuthFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Debug.log("AF: onCreate");
-        ((NavigationActivity)getActivity()).setMenuEnabled(false);
+        Activity activity = getActivity();
+        if (activity instanceof NavigationActivity) {
+            ((NavigationActivity) activity).setMenuEnabled(false);
+        }
         View root = inflater.inflate(R.layout.ac_auth, null);
         initViews(root);
         //Если у нас нет токена

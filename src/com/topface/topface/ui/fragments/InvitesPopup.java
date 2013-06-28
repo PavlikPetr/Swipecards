@@ -1,7 +1,9 @@
 package com.topface.topface.ui.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,7 +50,11 @@ public class InvitesPopup extends BaseFragment{
     }
 
    private void init(View view) {
-       ((NavigationActivity)getActivity()).setPopupVisible(true);
+
+       final Activity activity = getActivity();
+       if (activity instanceof NavigationActivity) {
+            ((NavigationActivity) activity).setPopupVisible(true);
+       }
        final RelativeLayout invitesPopup = (RelativeLayout) view.findViewById(R.id.loInvitesPopup);
        TextView invitesTitle = (TextView) view.findViewById(R.id.invitesTitle);
        invitesTitle.setText(Utils.getQuantityString(R.plurals.get_vip_for_invites_plurals, CacheProfile.getOptions().contacts_count, CacheProfile.getOptions().contacts_count));
@@ -56,7 +62,7 @@ public class InvitesPopup extends BaseFragment{
        if(getArguments() != null) {
            contacts = getArguments().getParcelableArrayList(CONTACTS);
        } else {
-           ((BaseFragmentActivity) getActivity()).close(InvitesPopup.this, false);
+           ((BaseFragmentActivity) activity).close(InvitesPopup.this, false);
        }
        invitesPopup.setVisibility(View.VISIBLE);
        final ImageView closeInvites = (ImageView) view.findViewById(R.id.closePopup);
@@ -65,7 +71,7 @@ public class InvitesPopup extends BaseFragment{
            public void onClick(View v) {
                EasyTracker.getTracker().trackEvent("InvitesPopup", "ClosePopup", "", 0L);
                if (isAdded()) {
-                   ((BaseFragmentActivity)getActivity()).close(InvitesPopup.this);
+                   ((BaseFragmentActivity) activity).close(InvitesPopup.this);
                }
            }
        });
@@ -109,7 +115,7 @@ public class InvitesPopup extends BaseFragment{
                if (!invitesCheckBox.isChecked()) {
                    EasyTracker.getTracker().trackEvent("InvitesPopup", "SendContactsBtnClick", "", 0L);
                    startActivity(ContainerActivity.getIntentForContacts(contacts));
-                   ((BaseFragmentActivity)getActivity()).close(InvitesPopup.this);
+                   ((BaseFragmentActivity) activity).close(InvitesPopup.this);
                } else {
                    EasyTracker.getTracker().trackEvent("InvitesPopup", "SendContactsBtnClick", "", 1L);
                    sendInvitesRequest();
