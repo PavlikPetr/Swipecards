@@ -471,12 +471,34 @@
     <string name="general_complain_sended">Vaša sťažnosť je odoslaná, ďakujeme veľmi pekne za pomoc</string>
     <string name="general_complain">Žaloba</string>
     <string name="general_msg">Správa</string>
+    <string name="general_no_notifications">Bohužiaľ, oznámenia na Vašom zariadení nie sú k dispozícii</string>
     <plurals name="vip_add_more_friends">
         <item quantity="few">Pozvite ešte %d priateľov</item>
         <item quantity="other">Pozvite ešte %d priateľov</item>
         <item quantity="one">Pozvite ešte %d priateľa</item>
     </plurals>
+    <string name="general_bookmarks_add_short">Do Obľúbených</string>
+    <string name="black_list_add_short">Na čiernu listinu</string>
     <string name="general_complaint">Sťažovať sa</string>
+    <string name="general_type_complain">Predmet sťažnosti</string>
     <string name="confirm_email_for_dating">Sme proti spamu. Potvrďte svoju e-mailovú adresu, aby ste sa mohli zoznámiť v Topface!</string>
     <string name="confirm">Potvrdiť</string>
+    <string name="complain_type_swearing_msg">Hrubosť, hrozby, nadávky</string>
+    <string name="general_bookmarks_is_deleted">Užívateľ bol z Obľúbených odstránený</string>
+    <string name="general_blacklist_is_deleted">Užívateľ bol z čiernej listiny odstránený</string>
+    <string name="invite_friends_title_short">Pozvať vštkých priateľov do Topface</string>
+    <string name="general_exit">Odísť</string>
+    <string name="likes_can_help_you">Sympatie Vám pomôžu zoznámiť sa</string>
+    <string name="general_get_dating">Zoznámiť sa</string>
+    <string name="settings_select_language">Výber jazyka aplikácie</string>
+    <string name="restart_to_change_locale">Ak chcete zmeniť jazyk, aplikácia sa reštartuje</string>
+    <string name="locale_changing">Zmena jazyka</string>
+    <plurals name="you_was_liked">
+        <item quantity="other">Páčite sa %s ľuďom</item>
+    </plurals>
+    <string name="to_see_likes_by_vip">Ak chcete okamžite zistiť, komu sa páčite, aktivujte si VIP účet.</string>
+    <string name="or">alebo</string>
+    <string name="watch_likes_on_dating">prezrite si sympatie na obrazovke zoznámení, môžu byť na začiatku zoznamu</string>
+    <string name="make_acquaintance">Zoznámiť sa</string>
+    <string name="chat_block_not_mutual">Začať sa rozprávať s užívateľom je možné iba vtedy, ak Vám poslal sympatiu alebo máte VIP status</string>
 </resources>

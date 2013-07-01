@@ -86,8 +86,6 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
 
     private void initActionBar(View view) {
         if (getArguments() != null && getArguments().getBoolean(ACTION_BAR_CONST, false)) {
-            view.findViewById(R.id.loNavigationBar).setVisibility(View.VISIBLE);
-            view.findViewWithTag(getString(R.string.tag_header_shadow)).setVisibility(View.VISIBLE);
             ActionBar actionBar = getActionBar(view);
             actionBar.showBackButton(new OnClickListener() {
                 @Override

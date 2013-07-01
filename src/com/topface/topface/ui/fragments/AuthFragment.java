@@ -68,7 +68,10 @@ public class AuthFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Debug.log("AF: onCreate");
-        ((NavigationActivity)getActivity()).setMenuEnabled(false);
+        Activity activity = getActivity();
+        if (activity instanceof NavigationActivity) {
+            ((NavigationActivity) activity).setMenuEnabled(false);
+        }
         View root = inflater.inflate(R.layout.ac_auth, null);
         initViews(root);
         //Если у нас нет токена
@@ -309,6 +312,7 @@ public class AuthFragment extends BaseFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
+                        showButtons();
                     }
                 }).show();
     }
@@ -613,6 +617,11 @@ public class AuthFragment extends BaseFragment {
             }
             AuthToken.getInstance().saveToken("",login,password);
             AuthRequest authRequest = generateTopfaceAuthRequest(AuthToken.getInstance());
+
+            if (DeleteAccountDialog.hasDeltedAccountToken(authRequest.getAuthToken())) {
+                restoreAccount(authRequest);
+                return;
+            }
             authRequest.exec();
         }
     }
