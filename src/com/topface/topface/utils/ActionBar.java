@@ -11,8 +11,8 @@ import com.topface.topface.ui.views.ImageViewRemote;
 public class ActionBar {
 
     private ViewGroup actionView;
-    private ImageButton mNavigationHome;
-    private ImageButton mNavigationBack;
+    private ImageView mNavigationHome;
+    private ImageView mNavigationBack;
     private TextView mTitle;
     private TextView mSubTitle;
     private ImageButton mSettingsButton;
@@ -25,6 +25,7 @@ public class ActionBar {
 
     private NavigationBarController mNavBarController;
     private ImageButton mSendButton;
+    private RelativeLayout leftContainer;
 
     public ActionBar(Context context, View actionView) {
         this.actionView = (ViewGroup) actionView.findViewById(R.id.loNavigationBar);
@@ -49,8 +50,8 @@ public class ActionBar {
 
     private void initViews() {
 
-        mNavigationBack = (ImageButton) actionView.findViewById(R.id.btnNavigationBack);
-        mNavigationHome = (ImageButton) actionView.findViewById(R.id.btnNavigationHome);
+        mNavigationBack = (ImageView) actionView.findViewById(R.id.btnNavigationBack);
+        mNavigationHome = (ImageView) actionView.findViewById(R.id.btnNavigationHome);
         mTitle = (TextView) actionView.findViewById(R.id.tvNavigationTitle);
         mSubTitle = (TextView) actionView.findViewById(R.id.tvNavigationSubtitle);
         mSettingsButton = (ImageButton) actionView.findViewById(R.id.btnNavigationSettingsBar);
@@ -62,6 +63,7 @@ public class ActionBar {
         mProfileAvatar.setImageResource(R.drawable.feed_banned_male_avatar);
         mSendButton = (ImageButton) actionView.findViewById(R.id.btnNavigationSend);
         checkBox = (CheckBox) actionView.findViewById(R.id.btnNavigationCheckbox);
+        leftContainer = (RelativeLayout) actionView.findViewById(R.id.leftButtonContainer);
     }
 
     public void refreshNotificators() {
@@ -90,7 +92,7 @@ public class ActionBar {
         mNavigationBack.setVisibility(View.GONE);
         mNavigationHome.setVisibility(View.VISIBLE);
         mNavigationHome.setSelected(false);
-        mNavigationHome.setOnClickListener(listener);
+        leftContainer.setOnClickListener(listener);
     }
 
     public void activateHomeButton(boolean activate) {
@@ -101,7 +103,7 @@ public class ActionBar {
     public void showBackButton(View.OnClickListener listener) {
         mNavigationBack.setVisibility(View.VISIBLE);
         mNavigationHome.setVisibility(View.GONE);
-        mNavigationBack.setOnClickListener(listener);
+        leftContainer.setOnClickListener(listener);
     }
 
     public void showEditButton(View.OnClickListener listener) {

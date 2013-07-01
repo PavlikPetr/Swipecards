@@ -207,6 +207,7 @@ public class ImageViewRemote extends ImageView {
     }
 
     public boolean setPhoto(Photo photo, Handler handler, View loader) {
+
         boolean result = true;
         mLoader = loader;
 

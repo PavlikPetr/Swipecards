@@ -471,6 +471,7 @@
     <string name="general_complain_sended">Vaše stížnost je odeslána, moc děkujeme za pomoc</string>
     <string name="general_complain">Stížnost</string>
     <string name="general_msg">Zpráva</string>
+    <string name="general_no_notifications">Bohužel oznámení na Vašem zařízení nejsou k dispozici</string>
     <plurals name="vip_add_more_friends">
         <item quantity="few">Pozvěte ještě %d přítele</item>
         <item quantity="other">Pozvěte ještě %d přátel</item>
@@ -499,5 +500,7 @@
     </plurals>
     <string name="to_see_likes_by_vip">Abyste ihned zjistili, komu se líbíte, aktivujte VIP-účet</string>
     <string name="or">nebo</string>
+    <string name="watch_likes_on_dating">prohlížejte sympatie na obrazovce seznamky, mohou být na začátku horní části seznamu</string>
     <string name="make_acquaintance">Seznámit se</string>
+    <string name="chat_block_not_mutual">Zahájit konverzaci s uživatelem můžete v případě, pokud jste od něj dostali sympatii nebo máte-VIP status</string>
 </resources>

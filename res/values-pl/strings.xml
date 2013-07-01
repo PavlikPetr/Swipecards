@@ -210,6 +210,7 @@
     <string name="settings_melody">Melodia powiadomienia</string>
     <string name="edit_refresh_status">Odnów status</string>
     <string name="ban_title">Gratulacje! Zostałeś/-aś zablokowany/-a</string>
+    <string name="general_ready">Gotowe</string>
     <string name="profile_deleted_user">Użytkownik został usunięty</string>
     <string name="filter_main_parameters">Interesują mnie</string>
     <string name="buying_store_ok">Zakup przebiegł pomyślnie</string>
@@ -467,6 +468,7 @@
     <string name="general_complain_sended">Twoja skarga została wysłana, dziękujemy za pomoc</string>
     <string name="general_complain">Skarga</string>
     <string name="general_msg">Wiadomość</string>
+    <string name="general_no_notifications">Niestety, powiadomienia na Twoim urządzeniu są niedostępne</string>
     <plurals name="vip_add_more_friends">
         <item quantity="few">Zaproś jeszcze %d znajomych</item>
         <item quantity="other">Zaproś jeszcze %d znajomych</item>
@@ -482,4 +484,15 @@
     <string name="general_bookmarks_is_deleted">Użytkownik został usunięty z ulubionych</string>
     <string name="general_blacklist_is_deleted">Użytkownik został usunięty z czarnej listy</string>
     <string name="invite_friends_title_short">Zaproś wszystkich znajomych do Topface</string>
+    <string name="general_exit">Wyloguj się</string>
+    <string name="general_get_dating">Poznawaj</string>
+    <string name="settings_select_language">Wybierz język aplikacji</string>
+    <string name="locale_changing">Zmiana języka</string>
+    <plurals name="you_was_liked">
+        <item quantity="few">Podobasz się %d ludziom</item>
+        <item quantity="other">Podobasz się %d ludziom</item>
+        <item quantity="one">Podobasz się %d osobie</item>
+    </plurals>
+    <string name="to_see_likes_by_vip">Aby natychmiast się dowiedzieć, komu się podobasz, aktywuj VIP-account</string>
+    <string name="or">lub</string>
 </resources>
