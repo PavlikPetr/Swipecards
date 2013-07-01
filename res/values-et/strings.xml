@@ -408,4 +408,10 @@ Sa oled müksanud.</string>
     <string name="general_type_complain">Kaebuse teema</string>
     <string name="confirm">Ära kinnitada</string>
     <string name="invite_friends_title_short">Kutsuda kõik sõbrad Topface\'i</string>
+    <string name="general_exit">Väljuda</string>
+    <string name="general_get_dating">Tutvuda</string>
+    <string name="settings_select_language">Rakenduse keele valik</string>
+    <string name="locale_changing">Keele vahetus</string>
+    <string name="or">või</string>
+    <string name="make_acquaintance">Tuttavaks saada</string>
 </resources>

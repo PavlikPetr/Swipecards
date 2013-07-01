@@ -493,7 +493,14 @@
     <string name="or">or</string>
     <string name="watch_likes_on_dating">Browse likes on the dating screen, they may be at the top of the list</string>
     <string name="make_acquaintance">Get acquainted</string>
+    <string name="settings_delete_account">Delete account</string>
     <string name="chat_block_not_mutual">You can only start chatting with a user if he sent you a like or you have VIP- status</string>
+    <string name="delete_account_are_you_sure">Are you sure?</string>
+    <string name="delete">Delete</string>
+    <string name="delete_account_warning">Attention! You are trying to delete your profile on Topface.</string>
+    <string name="delete_account_error">Unfortunately, your attempt to delete your account failed. You can try it again.</string>
+    <string name="delete_account_will_be_restored_are_you_sure">You are trying to enter to delete your account. Before entering your account, it will be restored. Are you sure?</string>
+    <string name="restore_of_account">Restore account</string>
     <string name="restore">Restore</string>
-
+    <string name="admiration_sended">Admiration sent</string>
 </resources>
