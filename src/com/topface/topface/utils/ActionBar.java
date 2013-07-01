@@ -25,6 +25,7 @@ public class ActionBar {
 
     private NavigationBarController mNavBarController;
     private ImageButton mSendButton;
+    private RelativeLayout leftContainer;
 
     public ActionBar(Context context, View actionView) {
         this.actionView = (ViewGroup) actionView.findViewById(R.id.loNavigationBar);
@@ -62,6 +63,7 @@ public class ActionBar {
         mProfileAvatar.setImageResource(R.drawable.feed_banned_male_avatar);
         mSendButton = (ImageButton) actionView.findViewById(R.id.btnNavigationSend);
         checkBox = (CheckBox) actionView.findViewById(R.id.btnNavigationCheckbox);
+        leftContainer = (RelativeLayout) actionView.findViewById(R.id.leftButtonContainer);
     }
 
     public void refreshNotificators() {
@@ -90,7 +92,7 @@ public class ActionBar {
         mNavigationBack.setVisibility(View.GONE);
         mNavigationHome.setVisibility(View.VISIBLE);
         mNavigationHome.setSelected(false);
-        mNavigationHome.setOnClickListener(listener);
+        leftContainer.setOnClickListener(listener);
     }
 
     public void activateHomeButton(boolean activate) {
@@ -101,7 +103,7 @@ public class ActionBar {
     public void showBackButton(View.OnClickListener listener) {
         mNavigationBack.setVisibility(View.VISIBLE);
         mNavigationHome.setVisibility(View.GONE);
-        mNavigationBack.setOnClickListener(listener);
+        leftContainer.setOnClickListener(listener);
     }
 
     public void showEditButton(View.OnClickListener listener) {

@@ -302,7 +302,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             */
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.btnNavigationHome) {
+        if (view.getId() == R.id.leftButtonContainer) {
             mSlidingMenu.toggle();
         }
     }

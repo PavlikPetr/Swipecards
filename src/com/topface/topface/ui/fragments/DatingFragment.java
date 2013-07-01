@@ -944,6 +944,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
+         private boolean isAfterLast = false;
+
         @Override
         public void onPageSelected(int position) {
 
@@ -971,6 +973,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
             if (position == ((ImageSwitcher.ImageSwitcherAdapter)mImageSwitcher.getAdapter()).getData().size() - 1) {
                 showControls();
+                isAfterLast = true;
+            }
+            if (isAfterLast) {
+                hideControls();
+                isAfterLast = false;
             }
         }
 
