@@ -181,12 +181,7 @@ public abstract class ApiRequest implements IApiRequest {
 
     @Override
     public String getId() {
-        if (mId == null) {
-            //Уникальный id запроса, привязан к hash текущего запроса и номеру попытки
-            mId = hashCode() + ".." + mResendCnt;
-        }
-
-        return mId;
+        return hashCode() + ".." + mResendCnt;
     }
 
     protected JSONObject getRequest() {
