@@ -51,10 +51,10 @@ public class GCMUtils {
 
     public static int lastUserId = -1;
 
-    private static boolean showMessage = true;
-    private static boolean showLikes = true;
-    private static boolean showSympathy = true;
-    private static boolean showVisitors = true;
+    private static boolean showMessage = false;
+    private static boolean showLikes = false;
+    private static boolean showSympathy = false;
+    private static boolean showVisitors = false;
     public static final String GCM_INTENT = "GCM";
     public static boolean GCM_SUPPORTED = true;
 
