@@ -312,6 +312,7 @@ public class AuthFragment extends BaseFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
+                        showButtons();
                     }
                 }).show();
     }
@@ -616,6 +617,11 @@ public class AuthFragment extends BaseFragment {
             }
             AuthToken.getInstance().saveToken("",login,password);
             AuthRequest authRequest = generateTopfaceAuthRequest(AuthToken.getInstance());
+
+            if (DeleteAccountDialog.hasDeltedAccountToken(authRequest.getAuthToken())) {
+                restoreAccount(authRequest);
+                return;
+            }
             authRequest.exec();
         }
     }
