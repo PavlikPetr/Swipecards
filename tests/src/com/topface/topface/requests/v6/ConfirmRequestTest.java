@@ -7,6 +7,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.ConfirmRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.utils.social.AuthToken;
 
 public class ConfirmRequestTest extends AbstractThreadTest {
 
@@ -15,7 +16,9 @@ public class ConfirmRequestTest extends AbstractThreadTest {
             @Override
             public void run() {
                 final Context context = getInstrumentation().getContext();
-                AuthRequest auth = new AuthRequest("iovorobiev@mail.ru", "asdasd", context);
+                AuthToken token = AuthToken.getInstance();
+                token.saveToken("1","iovorobiev@mail.ru","asdasd");
+                AuthRequest auth = new AuthRequest(token, context);
                 auth.callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) {

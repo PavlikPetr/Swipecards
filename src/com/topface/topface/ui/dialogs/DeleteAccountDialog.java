@@ -129,6 +129,7 @@ public class DeleteAccountDialog extends DialogFragment implements View.OnClickL
             prefKey = Static.PREFERENCES_DELETED_ACCOUNTS_VK_IDS;
         } else if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
             prefKey = Static.PREFERENCES_DELETED_ACCOUNTS_TF_IDS;
+            deletedId = authToken.getLogin();
         }
         // add new token
         String ids = preferences.getString(prefKey, Static.EMPTY);
@@ -150,6 +151,7 @@ public class DeleteAccountDialog extends DialogFragment implements View.OnClickL
             prefKey = Static.PREFERENCES_DELETED_ACCOUNTS_VK_IDS;
         } else if (token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
             prefKey = Static.PREFERENCES_DELETED_ACCOUNTS_TF_IDS;
+            userId = token.getLogin();
         }
         // add new token
         String ids = preferences.getString(prefKey, Static.EMPTY);
@@ -182,6 +184,7 @@ public class DeleteAccountDialog extends DialogFragment implements View.OnClickL
                 prefKey = Static.PREFERENCES_DELETED_ACCOUNTS_VK_IDS;
             } else if (token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
                 prefKey = Static.PREFERENCES_DELETED_ACCOUNTS_TF_IDS;
+                userId = token.getLogin();
             }
             String ids = preferences.getString(prefKey, Static.EMPTY);
             for (String item : ids.split(",")) {
