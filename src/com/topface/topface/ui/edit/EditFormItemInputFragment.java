@@ -113,7 +113,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 
     @Override
     protected boolean hasChanges() {
-        return !mData.equals(mInputData);
+        return !TextUtils.equals(mData, mInputData);
     }
 
     @Override
