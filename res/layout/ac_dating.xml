@@ -12,8 +12,7 @@
             android:layout_height="fill_parent" />
 
     <include
-            layout="@layout/bar_navigation_header"
-            android:id="@+id/loNavigationBar" />
+            layout="@layout/bar_navigation_header"/>
 
     <include
             android:layout_below="@id/loNavigationBar"

@@ -6,8 +6,7 @@
 
     <include
             layout="@layout/bar_navigation_header"
-            android:visibility="gone"
-            android:id="@+id/loNavigationBar"/>
+            />
 
     <ScrollView
             android:layout_height="fill_parent"

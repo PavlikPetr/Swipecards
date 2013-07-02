@@ -3,7 +3,6 @@
               android:id="@+id/loNavigationBar"
               android:layout_width="fill_parent"
               android:layout_height="46dp"
-
               android:background="@drawable/im_bar_header"
               android:visibility="gone">
 
@@ -33,7 +32,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignRight="@id/btnNavigationHome"
                     android:layout_alignTop="@id/btnNavigationHome"
-
                     android:layout_marginTop="5dp"
                     android:background="@drawable/topface_notification_dialogs"
                     android:gravity="center_horizontal"

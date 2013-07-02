@@ -7,6 +7,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.utils.*;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import org.json.JSONArray;
@@ -119,7 +120,7 @@ public class Profile extends AbstractDataWithPhotos {
         if (!resp.isNull("form")) {
             JSONObject form = resp.getJSONObject("form");
 
-            FormInfo formInfo = new FormInfo(context, profile);
+            FormInfo formInfo = new FormInfo(context, profile.sex, profile.getType());
 
             FormItem headerItem;
             FormItem formItem;
@@ -482,6 +483,10 @@ public class Profile extends AbstractDataWithPhotos {
 
     public void setEditor(boolean editor) {
         mEditor = editor;
+    }
+
+    public int getType() {
+        return (this instanceof User) ? ProfileFragment.TYPE_USER_PROFILE : ProfileFragment.TYPE_MY_PROFILE;
     }
 
     public static class TopfaceNotifications {
