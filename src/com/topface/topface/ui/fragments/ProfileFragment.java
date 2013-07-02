@@ -153,7 +153,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         } else if (activity instanceof NavigationActivity) {
             mActionBar.showHomeButton((NavigationActivity) activity);
         }
-        mUserActions.setVisibility(View.GONE);
+        mUserActions.setVisibility(View.INVISIBLE);
 
         mTitle = (TextView) root.findViewById(R.id.tvNavigationTitle);
 
@@ -179,8 +179,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            initActionsPanelHeight();
-                            TranslateAnimation ta = new TranslateAnimation(0, 0, -(mUserActions.getHeight() + mUserActionsPanelHeight), 0);
+                            final TranslateAnimation ta = new TranslateAnimation(0, 0, -(mUserActions.getHeight() ), 0);
                             ta.setDuration(500);
                             ta.setAnimationListener(new Animation.AnimationListener() {
                                 @Override
@@ -205,8 +204,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     }, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            initActionsPanelHeight();
-                            TranslateAnimation ta = new TranslateAnimation(0, 0, 0, -(mUserActions.getHeight() + mUserActionsPanelHeight));
+                            TranslateAnimation ta = new TranslateAnimation(0, 0, 0, -(mUserActions.getHeight() ));
                             ta.setDuration(500);
                             ta.setAnimationListener(new Animation.AnimationListener() {
                                 @Override
@@ -218,7 +216,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                                 public void onAnimationEnd(Animation animation) {
                                     mUserActions.clearAnimation();
                                     mActionBar.disableActionsButton(false);
-                                    mUserActions.setVisibility(View.GONE);
+                                    mUserActions.setVisibility(View.INVISIBLE);
                                 }
 
                                 @Override
@@ -260,13 +258,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         new UserActions(mUserActions, actions);
     }
 
-    private void initActionsPanelHeight() {
-        if (mUserActionsPanelHeight == 0) {
-            int actualHeight = mActionBar.getHeight();
-            double density = getResources().getDisplayMetrics().density;
-            mUserActionsPanelHeight = actualHeight == 0 ? actualHeight : (int) (270 * density);   // 270 это видимо высота в пикселях
-        }
-    }
 
     @Override
     public void onResume() {
