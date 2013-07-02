@@ -79,21 +79,21 @@
 
         </RelativeLayout>
         <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_toRightOf="@id/btnsCont"
                 android:gravity="left"
-                android:layout_marginRight="5dp"
                 android:layout_centerVertical="true"
                 >
             <TextView
                     android:id="@+id/tvNavigationTitle"
                     style="@style/NavigationHeader"
-                    android:layout_width="fill_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="left"
                     android:singleLine="true"
+                    android:ellipsize="none"
                     android:textSize="16sp"/>
 
             <TextView
@@ -102,8 +102,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:maxWidth="165dp"
-                    android:singleLine="false"
+                    android:maxWidth="200dp"
+                    android:singleLine="true"
+                    android:ellipsize="end"
                     android:textSize="9sp"
                     android:visibility="gone"/>
         </LinearLayout>
