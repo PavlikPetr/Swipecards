@@ -447,4 +447,25 @@
     <string name="complain_description">불만의 원인에 대해 상세히 이야기 해주세요.</string>
     <string name="black_list_add_short">블랙 리스트로</string>
     <string name="confirm">확인하기</string>
+    <string name="general_get_dating">만남을 갖다</string>
+    <string name="settings_select_language">어플 언어 선택</string>
+    <string name="restart_to_change_locale">언어 변경을 위하여 시스템을 재시작합니다.</string>
+    <string name="locale_changing">언어 변경</string>
+    <plurals name="you_was_liked">
+        <item quantity="other">%d 명의 사람들이 당신을 좋아합니다.</item>
+    </plurals>
+    <string name="to_see_likes_by_vip">지금 바로 당신을 마음에 들어하는 상대를 알아보기 위해서 VIP 계정을 등록하여 보세요.</string>
+    <string name="or">또는</string>
+    <string name="watch_likes_on_dating">데이트 화면의 호감도를 잘 살펴 보십시오. 리스트 초반에 있을수도 있습니다.</string>
+    <string name="make_acquaintance">만남을 갖다</string>
+    <string name="settings_delete_account">계정 삭제</string>
+    <string name="chat_block_not_mutual">특정 사용자와의 교제를 시작하려면 VIP 상태를 소지하고 있거나 상대가 당신에게 호감을 보내야만 합니다.</string>
+    <string name="delete_account_are_you_sure">계속 하시겠습니까?</string>
+    <string name="delete">삭제하기</string>
+    <string name="delete_account_warning">주의 하십시오. Topface의 자신의 프로필 삭제 작업을 시도하였습니다.</string>
+    <string name="delete_account_error">유감스럽게도 당신의 계정 삭제 작업을 실패하였습니다. 다시 시도하실 수 있습니다.</string>
+    <string name="delete_account_will_be_restored_are_you_sure">당신의 계정 삭제를 시도하였습니다. 계정으로 재 로그인시 해당 정보가 저장됩니다. 계속 하시겠습니까?</string>
+    <string name="restore_of_account">계정 저장</string>
+    <string name="restore">저장하기</string>
+    <string name="admiration_sended">감탄사가 전송되었습니다.</string>
 </resources>

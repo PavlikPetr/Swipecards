@@ -488,5 +488,14 @@
     <string name="or">eller</string>
     <string name="watch_likes_on_dating">kolla sympatier på dejtingsskärmen, de kan vara i början på listan</string>
     <string name="make_acquaintance">Dejta</string>
+    <string name="settings_delete_account">Radera konto</string>
     <string name="chat_block_not_mutual">Du kan börja umgås med andra användare endast om de har skickat dig sympatier eller om du har VIP-status</string>
+    <string name="delete_account_are_you_sure">Är du säker?</string>
+    <string name="delete">Radera</string>
+    <string name="delete_account_warning">OBS! Du försöker att radera din profil på Topface.</string>
+    <string name="delete_account_error">Det gick tyvärr inte att radera ditt konto. Du kan försöka en gång till.</string>
+    <string name="delete_account_will_be_restored_are_you_sure">Du försöker logga in i ett raderat konto. Kontot kommer att återaktiveras vid inloggningen. Är du säker?</string>
+    <string name="restore_of_account">Återaktivera konto</string>
+    <string name="restore">Återaktivera</string>
+    <string name="admiration_sended">Beundran har avsänts</string>
 </resources>
