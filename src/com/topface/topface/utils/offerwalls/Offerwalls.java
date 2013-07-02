@@ -82,6 +82,7 @@ public class Offerwalls {
         } catch (Exception e) {
             Debug.error(e);
             if (context != null) initTapjoy(context);
+            TapjoyConnect.getTapjoyConnectInstance().showOffers();
         }
     }
 
@@ -96,6 +97,8 @@ public class Offerwalls {
         } catch (Exception e) {
             Debug.error(e);
             initSponsorpay(activity);
+            Intent offerWallIntent = SponsorPayPublisher.getIntentForOfferWallActivity(activity.getApplicationContext(), true);
+            activity.startActivityForResult(offerWallIntent, SponsorPayPublisher.DEFAULT_OFFERWALL_REQUEST_CODE);
         }
     }
 

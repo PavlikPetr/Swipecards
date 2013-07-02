@@ -217,6 +217,34 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
         mTargetUser.sex = sex;
         mFilter.sex = sex;
+
+        refreshFilterExtraCellsText();
+    }
+
+    private void refreshFilterExtraCellsText() {
+        for (int i=0;i<hashTextViewByTitleId.size();i++) {
+            int titleId = hashTextViewByTitleId.keyAt(i);
+            switch (titleId) {
+                case R.array.form_main_status:
+                    hashTextViewByTitleId.get(titleId).setText(mFormInfo.getEntry(titleId,mFilter.xstatus));
+                    break;
+                case R.array.form_social_marriage:
+                    hashTextViewByTitleId.get(titleId).setText(mFormInfo.getEntry(titleId, mFilter.marriage));
+                    break;
+                case R.array.form_main_character:
+                    hashTextViewByTitleId.get(titleId).setText(mFormInfo.getEntry(titleId,mFilter.character));
+                    break;
+                case R.array.form_habits_alcohol:
+                    hashTextViewByTitleId.get(titleId).setText(mFormInfo.getEntry(titleId,mFilter.alcohol));
+                    break;
+                case R.array.form_social_finances:
+                    hashTextViewByTitleId.get(titleId).setText(mFormInfo.getEntry(titleId,mFilter.finances));
+                    break;
+                case R.array.form_physique_breast:
+                    hashTextViewByTitleId.get(titleId).setText(mFormInfo.getEntry(titleId,mFilter.breast));
+                    break;
+            }
+        }
     }
 
     private void setBackground(int resId, ViewGroup frame) {
