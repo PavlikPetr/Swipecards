@@ -3,7 +3,7 @@
           package="com.topface.topface"
           android:installLocation="auto"
 
-          android:versionCode="79"
+          android:versionCode="80"
           android:versionName="2.6.1">
 
     <uses-sdk
