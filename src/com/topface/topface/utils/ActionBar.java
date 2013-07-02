@@ -186,9 +186,10 @@ public class ActionBar {
     }
 
     public void showUserActionsButton(final View.OnClickListener nonActiveListener, final View.OnClickListener activeListener) {
-        mEditButton.setVisibility(View.GONE);
-        mSettingsButton.setVisibility(View.GONE);
-        mProfileButton.setVisibility(View.GONE);
+//        mEditButton.setVisibility(View.GONE);
+//        mSettingsButton.setVisibility(View.GONE);
+//        mProfileButton.setVisibility(View.GONE);
+        hideRightBarPart();
         mUserActionsControl.setVisibility(View.VISIBLE);
 
         mUserActionsControl.setOnClickListener(new View.OnClickListener() {
