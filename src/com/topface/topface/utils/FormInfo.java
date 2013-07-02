@@ -10,6 +10,7 @@ import com.topface.topface.data.User;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.QuestionaryRequest;
 import com.topface.topface.requests.SettingsRequest;
+import com.topface.topface.ui.fragments.ProfileFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,13 +21,13 @@ public class FormInfo {
     // Data
     private Context mContext;
     private Resources mResources;
-    private Profile mProfile;
+    private int mSex;
+    private int mProfileType;
 
-    public FormInfo(Context context, Profile profile) {
+    public FormInfo(Context context, int sex, int profileType) {
         mResources = context.getResources();
-        if (profile != null) {
-            mProfile = profile;
-        }
+        mSex = sex;
+        mProfileType = profileType;
         mContext = context;
     }
 
@@ -48,9 +49,9 @@ public class FormInfo {
             }
         }
 
-        if (mProfile.sex == Static.BOY) {
+        if (mSex == Static.BOY) {
             if (breastItem != null) items.remove(breastItem);
-        } else if (mProfile.sex == Static.GIRL) {
+        } else if (mSex == Static.GIRL) {
             breastItem  = new FormItem(R.array.form_physique_breast, 0,
                             FormItem.DATA, physiqueHeaderItem);
             fillFormItem(breastItem);
@@ -109,33 +110,33 @@ public class FormInfo {
     public String[] getEntriesByTitleId(int titleId) {
         switch (titleId) {
             case R.array.form_main_status:
-                return mResources.getStringArray(mProfile.sex == Static.GIRL ? R.array.profile_form_status_female : R.array.profile_form_status_male);
+                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_status_female : R.array.profile_form_status_male);
             case R.array.form_main_character:
-                return mResources.getStringArray(mProfile.sex == Static.GIRL ? R.array.profile_form_character_female : R.array.profile_form_character_male);
+                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_character_female : R.array.profile_form_character_male);
             case R.array.form_main_communication:
-                return mResources.getStringArray(mProfile.sex == Static.GIRL ? R.array.profile_form_communication_female : R.array.profile_form_communication_male);
+                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_communication_female : R.array.profile_form_communication_male);
             case R.array.form_habits_alcohol:
-                return mResources.getStringArray(mProfile.sex == Static.GIRL ? R.array.profile_form_alcohol_female : R.array.profile_form_alcohol_male);
+                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_alcohol_female : R.array.profile_form_alcohol_male);
             case R.array.form_habits_smoking:
-                return mResources.getStringArray(mProfile.sex == Static.GIRL ? R.array.profile_form_smoking_female : R.array.profile_form_smoking_male);
+                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_smoking_female : R.array.profile_form_smoking_male);
             case R.array.form_physique_eyes:
-                return mResources.getStringArray(mProfile.sex == Static.GIRL ? R.array.profile_form_eyes_female : R.array.profile_form_eyes_male);
+                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_eyes_female : R.array.profile_form_eyes_male);
             case R.array.form_physique_fitness:
-                return mResources.getStringArray(mProfile.sex == Static.GIRL ? R.array.profile_form_fitness_female : R.array.profile_form_fitness_male);
+                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_fitness_female : R.array.profile_form_fitness_male);
             case R.array.form_physique_hairs:
-                return mResources.getStringArray(mProfile.sex == Static.GIRL ? R.array.profile_form_hair_female : R.array.profile_form_hair_male);
+                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_hair_female : R.array.profile_form_hair_male);
             case R.array.form_physique_breast:
                 return mResources.getStringArray(R.array.profile_form_breast_female);
             case R.array.form_social_car:
-                return mResources.getStringArray(mProfile.sex == Static.GIRL ? R.array.profile_form_car_female : R.array.profile_form_car_male);
+                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_car_female : R.array.profile_form_car_male);
             case R.array.form_social_education:
-                return mResources.getStringArray(mProfile.sex == Static.GIRL ? R.array.profile_form_education_female : R.array.profile_form_education_male);
+                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_education_female : R.array.profile_form_education_male);
             case R.array.form_social_finances:
-                return mResources.getStringArray(mProfile.sex == Static.GIRL ? R.array.profile_form_finances_female : R.array.profile_form_finances_male);
+                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_finances_female : R.array.profile_form_finances_male);
             case R.array.form_social_marriage:
-                return mResources.getStringArray(mProfile.sex == Static.GIRL ? R.array.profile_form_marriage_female : R.array.profile_form_marriage_male);
+                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_marriage_female : R.array.profile_form_marriage_male);
             case R.array.form_social_residence:
-                return mResources.getStringArray(mProfile.sex == Static.GIRL ? R.array.profile_form_residence_female : R.array.profile_form_residence_male);
+                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_residence_female : R.array.profile_form_residence_male);
             default:
                 return null;
         }
@@ -301,8 +302,8 @@ public class FormInfo {
             return variants[0] == null ? result : variants[0];
         }
 
-        if (mProfile instanceof User) {
-            switch (mProfile.sex) {
+        if (mProfileType == ProfileFragment.TYPE_USER_PROFILE) {
+            switch (mSex) {
                 case Static.BOY:
                     result = variants[0];
                     break;
@@ -311,7 +312,7 @@ public class FormInfo {
                     break;
             }
         } else {
-            switch (mProfile.sex) {
+            switch (mSex) {
                 case Static.BOY:
                     result = variants[2];
                     break;

@@ -15,7 +15,9 @@ import com.topface.topface.utils.ActionBar;
 
 public class EditAgeFragment extends AbstractEditFragment {
     private int age_start;
+    private int age_start_before;
     private int age_end;
+    private int age_end_before;
     private int sex;
     private String baseSexString;
 
@@ -32,6 +34,8 @@ public class EditAgeFragment extends AbstractEditFragment {
     public EditAgeFragment(int age_start, int age_end, int sex) {
         this.age_end = age_end;
         this.age_start = age_start;
+        age_end_before = age_start;
+        age_end_before = age_end;
         this.sex = sex;
     }
 
@@ -50,13 +54,7 @@ public class EditAgeFragment extends AbstractEditFragment {
         actionBar.showBackButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (age_start < absoluteMin) age_start = absoluteMin;
-                if (age_end > absoluteMax) age_end = absoluteMax;
-                Intent intent = getActivity().getIntent();
-                intent.putExtra(EditContainerActivity.INTENT_AGE_START, age_start);
-                intent.putExtra(EditContainerActivity.INTENT_AGE_END, age_end);
-                getActivity().setResult(Activity.RESULT_OK, intent);
-                getActivity().finish();
+                saveAge();
             }
         });
 
@@ -83,10 +81,24 @@ public class EditAgeFragment extends AbstractEditFragment {
         return view;
     }
 
+    private void saveAge() {
+        if (age_start < absoluteMin) age_start = absoluteMin;
+        if (age_end > absoluteMax) age_end = absoluteMax;
+        Intent intent = getActivity().getIntent();
+        intent.putExtra(EditContainerActivity.INTENT_AGE_START, age_start);
+        intent.putExtra(EditContainerActivity.INTENT_AGE_END, age_end);
+        getActivity().setResult(Activity.RESULT_OK, intent);
+        age_start_before = age_start;
+        age_end_before = age_end;
+        getActivity().finish();
+    }
+
     private String makeString(int age_start, int age_end) {
         String plus = age_end == absoluteMax ? "+" : "";
         return baseSexString + " " + Integer.toString(age_start) + " - " + Integer.toString(age_end) + plus;
     }
+
+
 
     @Override
     protected void lockUi() {
@@ -100,11 +112,14 @@ public class EditAgeFragment extends AbstractEditFragment {
 
     @Override
     protected boolean hasChanges() {
-        return false;
+        return age_start_before != age_start || age_end_before != age_end;
     }
 
     @Override
     protected void saveChanges(Handler handler) {
         handler.sendEmptyMessage(0);
+        if (hasChanges()) {
+            saveAge();
+        }
     }
 }

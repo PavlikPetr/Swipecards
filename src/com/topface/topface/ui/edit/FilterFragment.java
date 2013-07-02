@@ -56,7 +56,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mTargetUser.sex = CacheProfile.dating.sex;
-        mFormInfo = new FormInfo(getActivity().getApplicationContext(), mTargetUser);
+        mFormInfo = new FormInfo(getActivity().getApplicationContext(), mTargetUser.sex, mTargetUser.getType());
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_filter, container, false);
 

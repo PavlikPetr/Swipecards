@@ -4,8 +4,7 @@
                 android:layout_height="match_parent">
 
     <include
-            layout="@layout/bar_navigation_header"
-            android:id="@+id/loNavigationBar"/>
+            layout="@layout/bar_navigation_header"/>
 
     <ListView
             android:id="@+id/lvList"
