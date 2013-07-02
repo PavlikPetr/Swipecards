@@ -695,6 +695,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     addToBlackList();
                 }
                 break;
+            case R.id.acWProfile:
             case R.id.acProfile:
                 Intent profileIntent = ContainerActivity.getProfileIntent(mUserId, getActivity());
                 startActivity(profileIntent);
@@ -762,7 +763,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                             mUser.bookmarked = !mUser.bookmarked;
                         }
 
-                        loader.setVisibility(View.GONE);
+                        loader.setVisibility(View.INVISIBLE);
                         icon.setVisibility(View.VISIBLE);
                     }
 
@@ -770,7 +771,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     public void always(ApiResponse response) {
                         super.always(response);
                         if (isAdded()) {
-                            loader.setVisibility(View.GONE);
+                            loader.setVisibility(View.INVISIBLE);
                             icon.setVisibility(View.VISIBLE);
                         }
                     }
@@ -779,10 +780,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             case R.id.acComplain:
                 startActivity(ContainerActivity.getComplainIntent(mUserId));
                 break;
-            default: {
-
-            }
-            break;
+            default:
+                break;
         }
     }
 

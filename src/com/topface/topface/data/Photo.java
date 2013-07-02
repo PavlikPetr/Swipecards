@@ -7,10 +7,8 @@ import com.topface.topface.utils.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -109,7 +107,7 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
 
         public boolean isSizeInInterval(Size size) {
             return size.width > minSize.width && size.height > minSize.height
-                    && size.width < maxSize.width &&size.height < maxSize.height;
+                    && size.width < maxSize.width && size.height < maxSize.height;
         }
     }
 
@@ -206,8 +204,6 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
 
     /**
      * Возвращает наиболее подходящий размер фотографии из уже существующих
-     *
-     * @param sizeString
      */
     public String getSuitableLink(String sizeString) {
         String url = null;
