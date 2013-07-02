@@ -21,13 +21,11 @@ public class FormInfo {
     private Context mContext;
     private Resources mResources;
     private Profile mProfile;
-    private int mSex;
 
     public FormInfo(Context context, Profile profile) {
         mResources = context.getResources();
         if (profile != null) {
             mProfile = profile;
-            mSex = profile.sex;
         }
         mContext = context;
     }
@@ -50,9 +48,9 @@ public class FormInfo {
             }
         }
 
-        if (mSex == Static.BOY) {
+        if (mProfile.sex == Static.BOY) {
             if (breastItem != null) items.remove(breastItem);
-        } else if (mSex == Static.GIRL) {
+        } else if (mProfile.sex == Static.GIRL) {
             breastItem  = new FormItem(R.array.form_physique_breast, 0,
                             FormItem.DATA, physiqueHeaderItem);
             fillFormItem(breastItem);
@@ -111,33 +109,33 @@ public class FormInfo {
     public String[] getEntriesByTitleId(int titleId) {
         switch (titleId) {
             case R.array.form_main_status:
-                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_status_female : R.array.profile_form_status_male);
+                return mResources.getStringArray(mProfile.sex == Static.GIRL ? R.array.profile_form_status_female : R.array.profile_form_status_male);
             case R.array.form_main_character:
-                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_character_female : R.array.profile_form_character_male);
+                return mResources.getStringArray(mProfile.sex == Static.GIRL ? R.array.profile_form_character_female : R.array.profile_form_character_male);
             case R.array.form_main_communication:
-                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_communication_female : R.array.profile_form_communication_male);
+                return mResources.getStringArray(mProfile.sex == Static.GIRL ? R.array.profile_form_communication_female : R.array.profile_form_communication_male);
             case R.array.form_habits_alcohol:
-                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_alcohol_female : R.array.profile_form_alcohol_male);
+                return mResources.getStringArray(mProfile.sex == Static.GIRL ? R.array.profile_form_alcohol_female : R.array.profile_form_alcohol_male);
             case R.array.form_habits_smoking:
-                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_smoking_female : R.array.profile_form_smoking_male);
+                return mResources.getStringArray(mProfile.sex == Static.GIRL ? R.array.profile_form_smoking_female : R.array.profile_form_smoking_male);
             case R.array.form_physique_eyes:
-                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_eyes_female : R.array.profile_form_eyes_male);
+                return mResources.getStringArray(mProfile.sex == Static.GIRL ? R.array.profile_form_eyes_female : R.array.profile_form_eyes_male);
             case R.array.form_physique_fitness:
-                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_fitness_female : R.array.profile_form_fitness_male);
+                return mResources.getStringArray(mProfile.sex == Static.GIRL ? R.array.profile_form_fitness_female : R.array.profile_form_fitness_male);
             case R.array.form_physique_hairs:
-                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_hair_female : R.array.profile_form_hair_male);
+                return mResources.getStringArray(mProfile.sex == Static.GIRL ? R.array.profile_form_hair_female : R.array.profile_form_hair_male);
             case R.array.form_physique_breast:
                 return mResources.getStringArray(R.array.profile_form_breast_female);
             case R.array.form_social_car:
-                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_car_female : R.array.profile_form_car_male);
+                return mResources.getStringArray(mProfile.sex == Static.GIRL ? R.array.profile_form_car_female : R.array.profile_form_car_male);
             case R.array.form_social_education:
-                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_education_female : R.array.profile_form_education_male);
+                return mResources.getStringArray(mProfile.sex == Static.GIRL ? R.array.profile_form_education_female : R.array.profile_form_education_male);
             case R.array.form_social_finances:
-                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_finances_female : R.array.profile_form_finances_male);
+                return mResources.getStringArray(mProfile.sex == Static.GIRL ? R.array.profile_form_finances_female : R.array.profile_form_finances_male);
             case R.array.form_social_marriage:
-                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_marriage_female : R.array.profile_form_marriage_male);
+                return mResources.getStringArray(mProfile.sex == Static.GIRL ? R.array.profile_form_marriage_female : R.array.profile_form_marriage_male);
             case R.array.form_social_residence:
-                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_residence_female : R.array.profile_form_residence_male);
+                return mResources.getStringArray(mProfile.sex == Static.GIRL ? R.array.profile_form_residence_female : R.array.profile_form_residence_male);
             default:
                 return null;
         }
@@ -304,7 +302,7 @@ public class FormInfo {
         }
 
         if (mProfile instanceof User) {
-            switch (mSex) {
+            switch (mProfile.sex) {
                 case Static.BOY:
                     result = variants[0];
                     break;
@@ -313,7 +311,7 @@ public class FormInfo {
                     break;
             }
         } else {
-            switch (mSex) {
+            switch (mProfile.sex) {
                 case Static.BOY:
                     result = variants[2];
                     break;
