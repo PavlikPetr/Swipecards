@@ -481,5 +481,14 @@
     <string name="or">ou</string>
     <string name="watch_likes_on_dating">visualize simpatias na tela de encontros, elas podem estar no inicio da lista</string>
     <string name="make_acquaintance">Travar conhecimento</string>
+    <string name="settings_delete_account">Eliminar conta</string>
     <string name="chat_block_not_mutual">Iniciar uma conversação com o usuário só é possível, se ele lhe mandou uma simpatia ou se você tiver um VIP-status</string>
+    <string name="delete_account_are_you_sure">Você está mesmo seguro?</string>
+    <string name="delete">Eliminar</string>
+    <string name="delete_account_warning">Atenção! Você está tentando eliminar o seu perfil em Topface.</string>
+    <string name="delete_account_error">Infelizmente não foi possível eliminar a sua conta. Você pode tentar mais uma vez.</string>
+    <string name="delete_account_will_be_restored_are_you_sure">Você está tentando entrar na sua conta remota. Ao entrar, a conta será restaurada. Você tem certeza?</string>
+    <string name="restore_of_account">Restauração da conta</string>
+    <string name="restore">Restaurar</string>
+    <string name="admiration_sended">Admiração foi enviada</string>
 </resources>
