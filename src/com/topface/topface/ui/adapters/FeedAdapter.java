@@ -111,6 +111,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     @Override
     protected View getContentView(int position, View convertView, ViewGroup viewGroup) {
+
         FeedViewHolder holder = null;
 
         if (convertView != null) {
@@ -139,8 +140,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         if (item != null) {
             // установка аватарки пользователя
             if (item.user.banned || item.user.deleted || item.user.photo == null || item.user.photo.isEmpty()) {
-                holder.avatar.setResourceSrc(item.user.sex == Static.BOY ?
-                        R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
+                holder.avatar.setRemoteSrc("drawable://" + (item.user.sex == Static.BOY ?
+                        R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar));
                 if (item.user.banned || item.user.deleted) {
                     holder.avatar.setOnClickListener(null);
                 } else {
@@ -158,7 +159,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             } else {
                 holder.name.setTextColor(Color.WHITE);
             }
-
             // установка городв
             if (item.user.city != null) {
                 if (item.user.deleted || item.user.banned) {
@@ -178,7 +178,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         }
 
         convertView.setTag(holder);
-
         return convertView;
     }
 
