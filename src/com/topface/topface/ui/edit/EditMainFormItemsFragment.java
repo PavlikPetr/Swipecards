@@ -20,6 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -264,7 +265,8 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                         Intent intent = null;
                         if (CacheProfile.sex != mSex) {
                             CacheProfile.sex = mSex;
-                            FormInfo formInfo = new FormInfo(getContext(), CacheProfile.getProfile());
+                            Profile profile = CacheProfile.getProfile();
+                            FormInfo formInfo = new FormInfo(getContext(), profile.sex, profile.getType());
                             formInfo.fillFormItem(CacheProfile.forms);
                             intent = new Intent();
                             intent.putExtra(INTENT_SEX_CHANGED,true);

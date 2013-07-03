@@ -5,8 +5,7 @@
         >
 
     <include
-            layout="@layout/bar_navigation_header"
-            android:id="@+id/loNavigationBar"/>
+            layout="@layout/bar_navigation_header"/>
 
     <ScrollView
             android:layout_width="fill_parent"

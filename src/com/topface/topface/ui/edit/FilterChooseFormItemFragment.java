@@ -14,7 +14,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
+import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.FormInfo;
 
@@ -25,39 +27,33 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
 
     public static final String INTENT_TITLE_ID = "title_id";
     public static final String INTENT_SELECTED_ID = "selected_id";
+    private static final String ARG_TAG_TITLE_ID = "title_id";
+    private static final String ARG_TAG_DATA_ID = "data_id";
+    private static final String ARG_TAG_DATA = "data";
+    private static final String ARG_TAG_SEX = "sex";
+    private static final String ARG_TAG_PROFILE_TYPE = "profile_type";
 
     private static int mTitleId;
     private static int mDataId;
     private static String mData;
     private FormInfo mFormInfo;
     private static int mSeletedDataId;
-    private static Profile mProfile;
+    private int mSex = Static.BOY;
+    private int mProfileType = ProfileFragment.TYPE_MY_PROFILE;
 
     private ListView mListView;
 
-    public FilterChooseFormItemFragment(int titleId, int dataId, String data, Profile profile) {
-        mTitleId = titleId;
-        mDataId = dataId;
-        mSeletedDataId = mDataId;
-        mData = data;
-        mProfile = profile;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mFormInfo = new FormInfo(getActivity().getApplicationContext(), mProfile);
-
+        restoreState();
+        mFormInfo = new FormInfo(getActivity().getApplicationContext(), mSex, mProfileType);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_edit_with_listview, container,
                 false);
-
         // Navigation bar
         ActionBar actionBar = getActionBar(root);
-
         actionBar.setTitleText(getString(R.string.edit_title));
-
         String formItemTitle = mFormInfo.getFormTitle(mTitleId);
         actionBar.setSubTitleText(formItemTitle);
-
         actionBar.showBackButton(new OnClickListener() {
 
             @Override
@@ -65,14 +61,11 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
                 getActivity().finish();
             }
         });
-
         // List
         mListView = (ListView) root.findViewById(R.id.lvList);
-
         ViewGroup header = (ViewGroup) inflater.inflate(R.layout.item_edit_profile_form_header, mListView, false);
         ((TextView) header.findViewWithTag("tvTitle")).setText(formItemTitle);
         mListView.addHeaderView(header);
-
 
         ArrayList<String> listStr = new ArrayList<String>();
         listStr.addAll(Arrays.asList(mFormInfo.getEntriesByTitleId(mTitleId, new String[]{mData})));
@@ -209,4 +202,28 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
     public boolean isTrackable() {
         return false;
     }
+
+    public static FilterChooseFormItemFragment newInstance(int titleId, int dataId, String data, int sex, int profileType) {
+        FilterChooseFormItemFragment fragment = new FilterChooseFormItemFragment();
+
+        Bundle args = new Bundle();
+        args.putInt(ARG_TAG_TITLE_ID, titleId);
+        args.putInt(ARG_TAG_DATA_ID, dataId);
+        args.putString(ARG_TAG_DATA, data);
+        args.putInt(ARG_TAG_SEX, sex);
+        args.putInt(ARG_TAG_PROFILE_TYPE, profileType);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
+    public void restoreState() {
+        mTitleId = getArguments().getInt(ARG_TAG_TITLE_ID);
+        mDataId = getArguments().getInt(ARG_TAG_DATA_ID);
+        mSeletedDataId = mDataId;
+        mData = getArguments().getString(ARG_TAG_DATA);
+        mSex = getArguments().getInt(ARG_TAG_SEX);
+        mProfileType = getArguments().getInt(ARG_TAG_PROFILE_TYPE);
+    }
+
 }

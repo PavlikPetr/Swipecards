@@ -6,7 +6,6 @@
                 android:layout_height="wrap_content">
 
     <include
-            android:id="@+id/loNavigationBar"
             layout="@layout/bar_navigation_header"/>
 
     <ScrollView
