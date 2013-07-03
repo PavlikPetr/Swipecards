@@ -477,8 +477,8 @@
     <string name="password_changing">Изменение пароля</string>
     <string name="save">Сохранить</string>
     <string name="confirmation_successfully_sent">Подтверждение выслано на указанный вами e-mail</string>
-    <string name="password_hint">пароль</string>
-    <string name="password_confirmation_hint">подтверждение пароля</string>
+    <string name="password_hint">Пароль</string>
+    <string name="password_confirmation_hint">Подтверждение пароля</string>
     <string name="enter_new_password">Введите новый пароль</string>
     <string name="enter_password_confirmation">Введите подтверждение пароля</string>
     <string name="passwords_mismatched">Пароли не совпадают</string>

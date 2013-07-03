@@ -97,7 +97,6 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                 R.drawable.ico_boy :
                 R.drawable.ico_girl);
 
-
         mEditCity = (Button) header.findViewById(R.id.btnEditCity);
         if (CacheProfile.city == null) {
             mEditCity.setText(getString(R.string.general_choose_city));

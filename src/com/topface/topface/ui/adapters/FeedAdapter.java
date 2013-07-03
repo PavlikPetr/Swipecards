@@ -50,7 +50,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         public ViewFlipper flipper;
         public Button flippedBtn;
         public View dataLayout;
-        public ImageView deleteIndicator;
     }
 
     public FeedAdapter(Context context, Updater updateCallback) {
