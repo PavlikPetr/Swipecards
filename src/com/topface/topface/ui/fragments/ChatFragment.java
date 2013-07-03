@@ -575,14 +575,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
                                     @Override
                                     public void onAnimationStart(Animation animation) {
-                                        mActionBar.disableActionsButton(true);
+//                                        mActionBar.disableActionsButton(true);
                                         chatActions.setVisibility(View.VISIBLE);
                                     }
 
                                     @Override
                                     public void onAnimationEnd(Animation animation) {
                                         chatActions.clearAnimation();
-                                        mActionBar.disableActionsButton(false);
+//                                        mActionBar.disableActionsButton(false);
                                     }
 
                                     @Override
@@ -606,14 +606,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                                 ta.setAnimationListener(new Animation.AnimationListener() {
                                     @Override
                                     public void onAnimationStart(Animation animation) {
-                                        mActionBar.disableActionsButton(true);
+//                                        mActionBar.disableActionsButton(true);
                                     }
 
                                     @Override
                                     public void onAnimationEnd(Animation animation) {
                                         chatActions.clearAnimation();
-                                        mActionBar.disableActionsButton(false);
-                                        chatActions.setVisibility(View.GONE);
+//                                        mActionBar.disableActionsButton(false);
+                                        chatActions.setVisibility(View.INVISIBLE);
                                     }
 
                                     @Override
