@@ -2,11 +2,15 @@ package com.topface.topface.ui.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
+import android.graphics.*;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.StateListDrawable;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -18,6 +22,7 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.imageloader.*;
 import com.topface.topface.utils.Debug;
 
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -41,6 +46,10 @@ public class ImageViewRemote extends ImageView {
     public static final int PHOTO_ERROR_RESOURCE = R.drawable.im_photo_error;
     private BitmapProcessor mPostProcessor;
     private String mCurrentSrc;
+    private boolean isFirstTime = true;
+
+    private Bitmap mask;
+    private int borderResId;
     /**
      * Счетчик попыток загрузить фотографию
      */
@@ -53,7 +62,7 @@ public class ImageViewRemote extends ImageView {
      * View, которое используется в качестве индикатора загрузки
      */
     private View mLoader;
-
+    private Bitmap borderClickMask;
 
     public ImageViewRemote(Context context) {
         super(context);
@@ -79,6 +88,16 @@ public class ImageViewRemote extends ImageView {
     private void setAttributes(AttributeSet attrs) {
         TypedArray values = getContext().obtainStyledAttributes(attrs, R.styleable.ImageViewRemote);
 
+        borderResId = values.getResourceId(R.styleable.ImageViewRemote_border, 0);
+
+        int maskId = values.getResourceId(
+                R.styleable.ImageViewRemote_clipMask,
+                MaskClipProcessor.DEFAULT_MASK
+        );
+
+        mask = BitmapFactory.decodeResource(getResources(), maskId);
+        borderClickMask = Bitmap.createScaledBitmap(mask, mask.getWidth() + 2, mask.getHeight() + 2, false);
+
         setPostProcessor(
                 values.getInt(
                         R.styleable.ImageViewRemote_postProcessor,
@@ -94,33 +113,37 @@ public class ImageViewRemote extends ImageView {
                 )
         );
 
+
         setRemoteSrc(
                 values.getString(
                         R.styleable.ImageViewRemote_remoteSrc
                 )
         );
-
     }
 
     private void setPostProcessor(int postProcessorId, float cornerRadius, int maskId) {
-        if (!isInEditMode()) {
-            switch (postProcessorId) {
-                case POST_PROCESSOR_ROUNDED:
-                    mPostProcessor = new RoundProcessor();
-                    break;
-                case POST_PROCESSOR_ROUND_CORNERS:
-                    mPostProcessor = new RoundCornersProcessor(cornerRadius);
-                    break;
-                case POST_PROCESSOR_MASK:
-                    mPostProcessor = new MaskClipProcessor(maskId);
-                    break;
-                case POST_PROCESSOR_CIRCUMCIRCLE:
-                    mPostProcessor = new CircumCircleProcessor();
-                    break;
-                default:
-                    mPostProcessor = null;
-            }
+
+        switch (postProcessorId) {
+            case POST_PROCESSOR_ROUNDED:
+                mPostProcessor = new RoundProcessor();
+                break;
+            case POST_PROCESSOR_ROUND_CORNERS:
+                mPostProcessor = new RoundCornersProcessor(cornerRadius);
+                break;
+            case POST_PROCESSOR_MASK:
+                mPostProcessor = new MaskClipProcessor(maskId, borderResId);
+                break;
+            case POST_PROCESSOR_CIRCUMCIRCLE:
+                mPostProcessor = new CircumCircleProcessor();
+                break;
+            default:
+                mPostProcessor = null;
         }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
     }
 
     public void setResourceSrc(int resource) {
@@ -158,15 +181,19 @@ public class ImageViewRemote extends ImageView {
 
             super.setImageDrawable(null);
 
+
+
             getImageLoader()
                     .displayImage(remoteSrc, this, null, getListener(handler, remoteSrc), getPostProcessor());
 
+            if (borderResId != 0 && isFirstTime) {
+                setImageResource(borderResId);
+            }
         } else {
             isCorrectSrc = false;
             super.setImageDrawable(null);
             mCurrentSrc = null;
         }
-
         return isCorrectSrc;
     }
 
@@ -207,7 +234,6 @@ public class ImageViewRemote extends ImageView {
     }
 
     public boolean setPhoto(Photo photo, Handler handler, View loader) {
-
         boolean result = true;
         mLoader = loader;
 
@@ -228,6 +254,8 @@ public class ImageViewRemote extends ImageView {
         return result;
     }
 
+    long timestart = 0;
+
     class RepeatImageLoadingListener extends SimpleImageLoadingListener {
         private final Handler mHandler;
         private final String mRemoteSrc;
@@ -235,6 +263,12 @@ public class ImageViewRemote extends ImageView {
         public RepeatImageLoadingListener(Handler handler, String remoteSrc) {
             mRemoteSrc = remoteSrc;
             mHandler = handler;
+        }
+
+        @Override
+        public void onLoadingStarted(String imageUri, View view) {
+            super.onLoadingStarted(imageUri, view);
+            isFirstTime = true;
         }
 
         @Override
@@ -248,23 +282,22 @@ public class ImageViewRemote extends ImageView {
                             mHandler.sendEmptyMessage(LOADING_ERROR);
                         }
                         if (mLoader != null) {
-                            mLoader.setVisibility(View.GONE);
+                            setImageResource(PHOTO_ERROR_RESOURCE);
+                        } else {
+                            mRepeatCounter++;
+                            mRepeatTimer = new Timer();
+                            mRepeatTimer.schedule(new TimerTask() {
+                                @Override
+                                public void run() {
+                                    ImageViewRemote.this.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            setRemoteSrc(mRemoteSrc, mHandler, true);
+                                        }
+                                    });
+                                }
+                            }, REPEAT_SCHEDULE);
                         }
-                        setImageResource(PHOTO_ERROR_RESOURCE);
-                    } else {
-                        mRepeatCounter++;
-                        mRepeatTimer = new Timer();
-                        mRepeatTimer.schedule(new TimerTask() {
-                            @Override
-                            public void run() {
-                                ImageViewRemote.this.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        setRemoteSrc(mRemoteSrc, mHandler, true);
-                                    }
-                                });
-                            }
-                        }, REPEAT_SCHEDULE);
                     }
                 } catch (OutOfMemoryError e) {
                     Debug.error("ImageViewRemote:: OnLoadingFailed " + e.toString());
@@ -277,6 +310,10 @@ public class ImageViewRemote extends ImageView {
             super.onLoadingComplete(imageUri, view, loadedImage);
 
             mRepeatCounter = 0;
+            isFirstTime = false;
+            if (mLoader != null) {
+                mLoader.setVisibility(View.GONE);
+            }
             if (mHandler != null) {
                 Message msg = new Message();
                 msg.what = LOADING_COMPLETE;

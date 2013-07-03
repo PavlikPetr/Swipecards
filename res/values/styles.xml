@@ -285,7 +285,7 @@
     <style name="FeedAvatar">
         <item name="postProcessor">mask</item>
         <item name="clipMask">@drawable/feed_photo_mask</item>
-        <item name="android:background">@drawable/feed_photo_selector</item>
+        <item name="border">@drawable/feed_photo_border</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_marginRight">6dp</item>
