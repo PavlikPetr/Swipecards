@@ -71,9 +71,6 @@
             layout="@layout/user_actions_layout"
             />
 
-    <include
-            layout="@layout/bar_navigation_header"
-            android:id="@id/loNavigationBar" />
 
     <RelativeLayout
             android:layout_width="fill_parent"
@@ -87,5 +84,8 @@
             android:id="@+id/llvProfileLoading"
             style="@style/LoadingLocker"
             android:visibility="gone" />
+    <include
+            layout="@layout/bar_navigation_header"
+            android:id="@id/loNavigationBar" />
 
 </RelativeLayout>

@@ -590,12 +590,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
                                     }
                                 });
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        chatActions.startAnimation(ta);
-                                    }
-                                });
+                                chatActions.startAnimation(ta);
                             }
                         }, new View.OnClickListener() {
                             @Override
@@ -676,13 +671,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 break;
             case R.id.btnNavigationProfileBar:
             case R.id.btnNavigationBarAvatar:
-                if (mProfileInvoke) {
-                    getActivity().finish();
-                } else {
-                    if (mUserId > 0) {
-                        startActivity(ContainerActivity.getProfileIntent(mUserId, getActivity()));
-                    }
-                }
+//                if (mProfileInvoke) {
+//                    getActivity().finish();
+//                } else {
+//                    if (mUserId > 0) {
+//                        startActivity(ContainerActivity.getProfileIntent(mUserId, getActivity()));
+//                    }
+//                }
                 break;
             case R.id.btnBuyVip:
                 Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
