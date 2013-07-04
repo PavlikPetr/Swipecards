@@ -560,7 +560,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 UserActions userActions = new UserActions(chatActions, actions);
                 bookmarksTv = (TextView) userActions.getViewById(R.id.acBookmark).findViewById(R.id.favTV);
                 blockView = (RelativeLayout) userActions.getViewById(R.id.acBlock);
-
+                if (mUser.blocked) {
+                    ((TextView)blockView.findViewById(R.id.blockTV)).setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+                    blockView.setEnabled(false);
+                }
                 bookmarksTv.setText(mUser.bookmarked? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
 //                blockView.setEnabled(mUser.);
                 mActionBar.showUserActionsButton(
@@ -716,7 +719,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                                 super.success(response);
                                 if (isAdded()) {
                                     v.setEnabled(false);
-                                    loader.setVisibility(View.GONE);
+                                    loader.setVisibility(View.INVISIBLE);
                                     icon.setVisibility(View.VISIBLE);
                                     textView.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
                                 }
@@ -726,7 +729,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                             public void fail(int codeError, ApiResponse response) {
                                 super.fail(codeError, response);
                                 if (isAdded()) {
-                                    loader.setVisibility(View.GONE);
+                                    loader.setVisibility(View.INVISIBLE);
                                     icon.setVisibility(View.VISIBLE);
                                 }
                             }
