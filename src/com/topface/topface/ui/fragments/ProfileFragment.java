@@ -179,7 +179,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            final TranslateAnimation ta = new TranslateAnimation(0, 0, -(mUserActions.getHeight() ), 0);
+                            final TranslateAnimation ta = new TranslateAnimation(0, 0, -(mUserActions.getHeight()), 0);
                             ta.setDuration(500);
                             ta.setAnimationListener(new Animation.AnimationListener() {
                                 @Override
@@ -204,7 +204,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     }, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            TranslateAnimation ta = new TranslateAnimation(0, 0, 0, -(mUserActions.getHeight() ));
+                            TranslateAnimation ta = new TranslateAnimation(0, 0, 0, -(mUserActions.getHeight()));
                             ta.setDuration(500);
                             ta.setAnimationListener(new Animation.AnimationListener() {
                                 @Override

@@ -399,9 +399,9 @@
     </style>
 
     <style name="NavigationBarAvatar">
-        <item name="postProcessor">mask</item>
-        <item name="clipMask">@drawable/avatar_chat_mask</item>
-        <item name="android:background">@drawable/avatar_chat_frame</item>
+
+        <item name="android:background">@drawable/avatar_chat_mask_selector</item>
+
         <item name="android:layout_width">37dp</item>
         <item name="android:layout_height">37dp</item>
         <item name="android:layout_marginRight">5dp</item>

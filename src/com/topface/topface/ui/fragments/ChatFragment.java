@@ -578,14 +578,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
                                     @Override
                                     public void onAnimationStart(Animation animation) {
-                                        mActionBar.disableActionsButton(true);
+//                                        mActionBar.disableActionsButton(true);
                                         chatActions.setVisibility(View.VISIBLE);
                                     }
 
                                     @Override
                                     public void onAnimationEnd(Animation animation) {
                                         chatActions.clearAnimation();
-                                        mActionBar.disableActionsButton(false);
+//                                        mActionBar.disableActionsButton(false);
                                     }
 
                                     @Override
@@ -593,12 +593,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
                                     }
                                 });
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        chatActions.startAnimation(ta);
-                                    }
-                                });
+                                chatActions.startAnimation(ta);
                             }
                         }, new View.OnClickListener() {
                             @Override
@@ -609,14 +604,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                                 ta.setAnimationListener(new Animation.AnimationListener() {
                                     @Override
                                     public void onAnimationStart(Animation animation) {
-                                        mActionBar.disableActionsButton(true);
+//                                        mActionBar.disableActionsButton(true);
                                     }
 
                                     @Override
                                     public void onAnimationEnd(Animation animation) {
                                         chatActions.clearAnimation();
-                                        mActionBar.disableActionsButton(false);
-                                        chatActions.setVisibility(View.GONE);
+//                                        mActionBar.disableActionsButton(false);
+                                        chatActions.setVisibility(View.INVISIBLE);
                                     }
 
                                     @Override
@@ -679,13 +674,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 break;
             case R.id.btnNavigationProfileBar:
             case R.id.btnNavigationBarAvatar:
-                if (mProfileInvoke) {
-                    getActivity().finish();
-                } else {
-                    if (mUserId > 0) {
-                        startActivity(ContainerActivity.getProfileIntent(mUserId, getActivity()));
-                    }
-                }
+//                if (mProfileInvoke) {
+//                    getActivity().finish();
+//                } else {
+//                    if (mUserId > 0) {
+//                        startActivity(ContainerActivity.getProfileIntent(mUserId, getActivity()));
+//                    }
+//                }
                 break;
             case R.id.btnBuyVip:
                 Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
