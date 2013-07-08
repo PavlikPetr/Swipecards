@@ -1,5 +1,6 @@
 package com.topface.topface.utils.http;
 
+import android.os.Build;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 
@@ -115,13 +116,11 @@ public class HttpUtils {
         connection.setConnectTimeout(CONNECT_TIMEOUT);
         connection.setReadTimeout(READ_TIMEOUT);
 
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
             connection.setRequestProperty("Connection", "Keep-Alive");
         } else {
             connection.setRequestProperty("Connection", "close");
-        }*/
-
-        connection.setRequestProperty("Connection", "close");
+        }
 
         return connection;
     }
