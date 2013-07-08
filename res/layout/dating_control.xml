@@ -205,9 +205,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:drawableLeft="@drawable/user_photo_small_left"
             android:drawablePadding="4dp"
-            android:drawableRight="@drawable/user_photo_small_right"
             android:gravity="center_vertical"
             android:visibility="gone"
             android:textSize="10sp" />

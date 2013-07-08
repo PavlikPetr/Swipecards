@@ -4,6 +4,7 @@
                 android:id="@+id/loPhotoAlbumControl"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
+
     <Button
             android:id="@+id/btnClose"
             android:layout_width="wrap_content"
@@ -27,13 +28,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:drawableLeft="@drawable/user_photo_small_left"
             android:drawablePadding="4dp"
-            android:drawableRight="@drawable/user_photo_small_right"
             android:gravity="center_vertical"
             android:textSize="10sp"
             android:layout_centerHorizontal="true"
-            android:layout_alignParentTop="true"/>
+            android:layout_alignParentTop="true" />
 
     <RelativeLayout
             android:id="@+id/loBottomPanel"
