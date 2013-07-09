@@ -83,13 +83,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
         mNovice = Novice.getInstance(getPreferences());
         mNovice.initNoviceFlags();
-        try {
-            Looper.prepare();
-            Offerwalls.init(getApplicationContext());
-            Looper.loop();
-        } catch (Exception e) {
-            Debug.error(e);
-        }
     }
 
     private void initSlidingMenu() {
