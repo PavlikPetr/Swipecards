@@ -198,20 +198,10 @@ public class ActionBar {
             public void onClick(final View view) {
                 if (mUserActionsControl.isSelected()) {
                     mUserActionsControl.setSelected(false);
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
                             activeListener.onClick(view);
-                        }
-                    });
                 } else {
                     mUserActionsControl.setSelected(true);
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            nonActiveListener.onClick(view);
-                        }
-                    });
+                        nonActiveListener.onClick(view);
                 }
             }
         });

@@ -8,7 +8,7 @@
               android:id="@+id/notification">
 
     <ImageView
-            android:id="@+id/notificationImage"
+            android:id="@+id/fnAvatar"
             android:layout_width="50dp"
             android:layout_height="50dp"
             />
@@ -21,27 +21,25 @@
             >
 
         <TextView
-                android:id="@+id/nfTitle"
+                android:id="@+id/fnTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignRight="@id/notificationImage"
+                android:layout_alignRight="@id/fnAvatar"
                 />
 
-        <ProgressBar
-                android:layout_width="fill_parent"
+        <TextView
+
+                android:id="@+id/fnMsg"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/nfProgress"
-                style="@android:style/Widget.ProgressBar.Horizontal"
-                android:layout_below="@id/nfTitle"
-                android:layout_alignRight="@id/notificationImage"
-                android:indeterminate="true"/>
+                android:layout_alignRight="@id/fnAvatar"/>
 
     </RelativeLayout>
     <Button
-        android:id="@+id/notCancelButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="@string/general_cancel"
-        />
+            android:id="@+id/fnRetry"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/general_dialog_retry"
+            />
 </LinearLayout>
