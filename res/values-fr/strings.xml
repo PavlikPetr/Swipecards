@@ -347,8 +347,6 @@
     <string name="password_changing">Changement du mot de passe</string>
     <string name="save">Sauver</string>
     <string name="confirmation_successfully_sent">La confirmation est envoyée sur l\'e-mail</string>
-    <string name="password_hint">mot de passe</string>
-    <string name="password_confirmation_hint">confirmation du mot de passe</string>
     <string name="enter_new_password">Saisissez un nouveau motb de passe</string>
     <string name="enter_password_confirmation">Saisissez la confirmation du mot de passe</string>
     <string name="passwords_mismatched">Les mots de passes sont différents</string>

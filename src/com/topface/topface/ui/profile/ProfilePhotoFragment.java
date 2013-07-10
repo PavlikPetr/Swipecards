@@ -1,5 +1,6 @@
 package com.topface.topface.ui.profile;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.*;
 import android.os.Bundle;
@@ -16,7 +17,6 @@ import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.requests.*;
-import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.edit.EditContainerActivity;
@@ -31,12 +31,11 @@ import java.util.ArrayList;
 public class ProfilePhotoFragment extends BaseFragment {
 
     private ProfilePhotoGridAdapter mProfilePhotoGridAdapter;
-    private Photos mPhotoLinks;
     private AddPhotoHelper mAddPhotoHelper;
     private ViewFlipper mViewFlipper;
     private GridView mGridAlbum;
-    private BroadcastReceiver mPhotosReceiver;
     private LockerView mLoadingLocker;
+    private TextView mTitle;
 
     public ProfilePhotoFragment() {
         super();
@@ -45,8 +44,7 @@ public class ProfilePhotoFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initPhotoLinks();
-        mProfilePhotoGridAdapter = new ProfilePhotoGridAdapter(getActivity().getApplicationContext(), mPhotoLinks, CacheProfile.totalPhotos, new LoadingListAdapter.Updater() {
+        mProfilePhotoGridAdapter = new ProfilePhotoGridAdapter(getActivity().getApplicationContext(), getPhotoLinks(), CacheProfile.totalPhotos, new LoadingListAdapter.Updater() {
             @Override
             public void onUpdate() {
                 sendAlbumRequest();
@@ -57,15 +55,12 @@ public class ProfilePhotoFragment extends BaseFragment {
     }
 
     private void sendAlbumRequest() {
-        if (mPhotoLinks == null || mPhotoLinks.size() < 2) {
+        Photos photoLinks = mProfilePhotoGridAdapter.getData();
+        if (photoLinks == null || photoLinks.size() < 2) {
             return;
         }
-
-        Photo photo = mPhotoLinks.get(mPhotoLinks.size() - 2);
-        if (photo == null) {
-            return;
-        }
-
+        Photo photo = mProfilePhotoGridAdapter.getLastItem();
+        if (photo == null) return;
         int position = photo.getPosition();
         AlbumRequest request = new AlbumRequest(
                 getActivity(),
@@ -74,28 +69,27 @@ public class ProfilePhotoFragment extends BaseFragment {
                 position + 1,
                 AlbumRequest.MODE_ALBUM
         );
-        request.callback(new ApiHandler() {
+        request.callback(new SimpleApiHandler() {
             @Override
             public void success(ApiResponse response) {
-                if (mGridAlbum != null) {
-                    ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).addData(Photos.parse(response.jsonResult.optJSONArray("items")), response.jsonResult.optBoolean("more"));
+                if (mProfilePhotoGridAdapter != null) {
+                    mProfilePhotoGridAdapter.addData(
+                            Photos.parse(response.jsonResult.optJSONArray("items")),
+                            response.jsonResult.optBoolean("more")
+                    );
                 }
-            }
-
-            @Override
-            public void fail(int codeError, ApiResponse response) {
-
             }
         }).exec();
     }
 
-    private void initPhotoLinks() {
-        if (mPhotoLinks == null) mPhotoLinks = new Photos();
-        mPhotoLinks.clear();
-        mPhotoLinks.add(null);
+    private Photos getPhotoLinks() {
+        Photos photoLinks = new Photos();
+        photoLinks.clear();
+        photoLinks.add(null);
         if (CacheProfile.photos != null) {
-            mPhotoLinks.addAll(CacheProfile.photos);
+            photoLinks.addAll(CacheProfile.photos);
         }
+        return photoLinks;
     }
 
     @Override
@@ -110,6 +104,7 @@ public class ProfilePhotoFragment extends BaseFragment {
             actionBar.showBackButton(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    getActivity().setResult(Activity.RESULT_OK);
                     getActivity().finish();
                 }
             });
@@ -126,16 +121,18 @@ public class ProfilePhotoFragment extends BaseFragment {
         mGridAlbum.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                if (needDialog(mProfilePhotoGridAdapter.getItem(position))) {
-                    startPhotoDialog(mProfilePhotoGridAdapter.getItem(position));
+                Photo item = (Photo) parent.getItemAtPosition(position);
+                if (needDialog(item)) {
+                    startPhotoDialog(item);
+                    return true;
                 }
-                return true;
+                return false;
             }
         });
 
-        final TextView title = (TextView) root.findViewById(R.id.usedTitle);
+        mTitle = (TextView) root.findViewById(R.id.usedTitle);
 
-        initTitleText(title);
+        initTitleText(mTitle);
 
         root.findViewById(R.id.btnAddPhotoAlbum).setOnClickListener(mAddPhotoHelper.getAddPhotoClickListener());
         root.findViewById(R.id.btnAddPhotoCamera).setOnClickListener(mAddPhotoHelper.getAddPhotoClickListener());
@@ -146,24 +143,6 @@ public class ProfilePhotoFragment extends BaseFragment {
                 mViewFlipper.setDisplayedChild(0);
             }
         });
-
-        mPhotosReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                ArrayList<Photo> arrList = intent.getParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS);
-                boolean clear = intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_CLEAR, false);
-                Photos newPhotos = new Photos();
-                newPhotos.addAll(arrList);
-                if (clear) {
-                    // TODO перенести в адаптер логику
-                    newPhotos.addFirst(null);
-                    ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).setData(newPhotos, intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_MORE, false));
-                } else {
-                    ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).addData(newPhotos, intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_MORE, false));
-                }
-                initTitleText(title);
-            }
-        };
 
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mPhotosReceiver, new IntentFilter(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT));
 
@@ -206,7 +185,7 @@ public class ProfilePhotoFragment extends BaseFragment {
                                 CacheProfile.photos.remove(photo);
                                 Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
                                 Photos newPhotos = new Photos();
-                                // TODO перенести в адаптер логику
+                                // TODO перенести логику в адаптер
                                 for (int i = 0; i < CacheProfile.photos.size(); i++) {
                                     newPhotos.add(i, CacheProfile.photos.get(i));
                                 }
@@ -233,21 +212,25 @@ public class ProfilePhotoFragment extends BaseFragment {
     }
 
     private void initTitleText(TextView title) {
-        title.setVisibility(View.VISIBLE);
-        if (mPhotoLinks != null && CacheProfile.photos != null) {
-            if (CacheProfile.photos.size() > 1) {
-                title.setText(Utils.formatPhotoQuantity(CacheProfile.photos.size()));
-                return;
+        if (title != null) {
+            title.setVisibility(View.VISIBLE);
+            if (CacheProfile.photos != null) {
+                int size = CacheProfile.photos.size();
+                if (size > 1) {
+                    title.setText(Utils.formatPhotoQuantity(size));
+                    return;
+                }
             }
+            title.setText(R.string.upload_photos);
         }
-        title.setText(R.string.upload_photos);
     }
 
     @Override
     public void onResume() {
-        initPhotoLinks();
+        getPhotoLinks();
         mProfilePhotoGridAdapter.updateData();
         mProfilePhotoGridAdapter.notifyDataSetChanged();
+        initTitleText(mTitle);
         super.onResume();
     }
 
@@ -273,7 +256,6 @@ public class ProfilePhotoFragment extends BaseFragment {
             intent.putExtra(PhotoSwitcherActivity.INTENT_USER_ID, CacheProfile.uid);
             intent.putExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, --position);
             intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, ((ProfileGridAdapter) mGridAlbum.getAdapter()).getData());
-
             startActivity(intent);
         }
     };
@@ -289,6 +271,7 @@ public class ProfilePhotoFragment extends BaseFragment {
                 mProfilePhotoGridAdapter.addFirst(photo);
 
                 Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
+                initTitleText(mTitle);
             } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
                 Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
             }
@@ -300,5 +283,23 @@ public class ProfilePhotoFragment extends BaseFragment {
         super.onDestroyView();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mPhotosReceiver);
     }
+
+    private BroadcastReceiver mPhotosReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ArrayList<Photo> arrList = intent.getParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS);
+            boolean clear = intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_CLEAR, false);
+            Photos newPhotos = new Photos();
+            newPhotos.addAll(arrList);
+            if (clear) {
+                // TODO перенести логику в адаптер
+                newPhotos.addFirst(null);
+                ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).setData(newPhotos, intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_MORE, false));
+            } else {
+                ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).addData(newPhotos, intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_MORE, false));
+            }
+            initTitleText(mTitle);
+        }
+    };
 }
  

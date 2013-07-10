@@ -351,8 +351,6 @@
     <string name="password_changing">Cambio de contraseña</string>
     <string name="save">Guardar</string>
     <string name="confirmation_successfully_sent">La confirmación enviada al e-mail que indicaste</string>
-    <string name="password_hint">contraseña</string>
-    <string name="password_confirmation_hint">confirmación de contraseña</string>
     <string name="enter_new_password">Introduce la contraseña nueva</string>
     <string name="enter_password_confirmation">Introduce la confirmación de la contraseña</string>
     <string name="passwords_mismatched">Contraseñas no concuerdan</string>
@@ -495,5 +493,14 @@
     <string name="or">o</string>
     <string name="watch_likes_on_dating">echa un vistazo a las simpatías en la pantalla de citas, estas pueden estar al principio de la lista</string>
     <string name="make_acquaintance">Conocer</string>
+    <string name="settings_delete_account">Eliminar la cuenta</string>
     <string name="chat_block_not_mutual">Empezar la comunicación con un usuario es posible si este te ha mandado una simpatía o si tienes el estado VIP</string>
+    <string name="delete_account_are_you_sure">¿Estás completamente seguro?</string>
+    <string name="delete">Eliminar</string>
+    <string name="delete_account_warning">¡Atención! Estas intentando eliminar tu perfil en Topface.</string>
+    <string name="delete_account_error">Lamentablemente, no fue posible eliminar tu cuenta. Puedes repetir el proceso otra vez.</string>
+    <string name="delete_account_will_be_restored_are_you_sure">Estas intentando entrar a una cuenta que eliminaste. Al entrar la cuenta será restaurada. ¿Estás seguro?</string>
+    <string name="restore_of_account">Recuperación de cuenta</string>
+    <string name="restore">Recuperar</string>
+    <string name="admiration_sended">Admiración enviada</string>
 </resources>

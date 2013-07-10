@@ -351,8 +351,6 @@
     <string name="password_changing">Slaptažodžio keitimas</string>
     <string name="save">Išsaugoti</string>
     <string name="confirmation_successfully_sent">Patvirtinimas išsiųstas jūsų nurodytu el. pašto adresu</string>
-    <string name="password_hint">slaptažodis</string>
-    <string name="password_confirmation_hint">slaptažodžio patvirtinimas</string>
     <string name="enter_new_password">Įveskite naują slaptažodį</string>
     <string name="enter_password_confirmation">Įveskite slaptažodžio patvirtinimą</string>
     <string name="passwords_mismatched">Slaptažodžiai nesutampa</string>
@@ -471,6 +469,7 @@
     <string name="general_complain_sended">Jūsų skundas išsiųstas, labai dėkojame už pagalbą</string>
     <string name="general_complain">Skundas</string>
     <string name="general_msg">Pranešimas</string>
+    <string name="general_no_notifications">Deja, jūsų įrenginyje pranešimai neprieinami</string>
     <plurals name="vip_add_more_friends">
         <item quantity="few">Pakvieskite dar %d draugus</item>
         <item quantity="other">Pakvieskite dar %d draugų</item>
@@ -486,6 +485,8 @@
     <string name="general_bookmarks_is_deleted">Vartotojas pašalintas iš išrinktųjų</string>
     <string name="general_blacklist_is_deleted">Vartotojas pašalintas iš juodojo sąrašo</string>
     <string name="invite_friends_title_short">Pakviesti visus draugus į Topface</string>
+    <string name="general_exit">Išeiti</string>
+    <string name="likes_can_help_you">Simpatijos padės susipažinti</string>
     <string name="general_get_dating">Pažindintis</string>
     <string name="settings_select_language">Programos kalbos pasirinkimas</string>
     <string name="restart_to_change_locale">Kad pasikeistų kalba, programa bus perkrauta</string>
@@ -499,5 +500,14 @@
     <string name="or">arba</string>
     <string name="watch_likes_on_dating">Peržiūrinėkite simpatijas pažinčių ekrane, jos gali būti sąrašo pradžioje</string>
     <string name="make_acquaintance">Susipažinti</string>
+    <string name="settings_delete_account">Pašalinti paskyrą</string>
     <string name="chat_block_not_mutual">Pradėti bendravimą su vartotoju galima, jei jis išsiuntė jums simpatiją arba jūs turite VIP-statusą</string>
+    <string name="delete_account_are_you_sure">Jūs tikrai įsitikinę?</string>
+    <string name="delete">Pašalinti</string>
+    <string name="delete_account_warning">Dėmesio! Jūs mėginate pašalinti savo Topface profilį.</string>
+    <string name="delete_account_error">Apgailestaujame, pašalinti jūsų paskyrą nepavyko. Jūs galite pakartoti dar kartą.</string>
+    <string name="delete_account_will_be_restored_are_you_sure">Jūs mėginate įeiti į paskyrą, kurią pašalinote. Įeinant paskyra bus atstatyta. Ar esate įsitikinę?</string>
+    <string name="restore_of_account">Paskyros atstatymas</string>
+    <string name="restore">Atstatyti</string>
+    <string name="admiration_sended">Susižavėjimas išsiųstas</string>
 </resources>

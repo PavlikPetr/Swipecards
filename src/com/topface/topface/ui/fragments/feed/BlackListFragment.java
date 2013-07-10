@@ -17,8 +17,6 @@ import com.topface.topface.ui.adapters.BlackListAdapter;
 import com.topface.topface.utils.ActionBar;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 /**
  * Черный список. Сюда попадают заблокированые пользователи, отныне от них не приходит никакая активность
  */
@@ -75,55 +73,15 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
     protected void initNavigationBar(View view) {
         // Navigation bar
         mActionBar = getActionBar(view);
+        mActionBar.setTitleText(getString(getTitle()));
         mActionBar.showBackButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().finish();
             }
         });
-
-        mActionBar.showEditButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleEditList();
-            }
-        });
     }
 
-    private void toggleEditList() {
-
-        final BlackListAdapter adapter = ((BlackListAdapter) mListAdapter);
-        //Удаляем отмеченные элементы, отправляя запрос на сервер
-        deleteMarkedItems(adapter);
-        mActionBar.activateEditButton();
-        //Переключаем адаптер
-        adapter.toggleEditMode();
-    }
-
-    private void deleteMarkedItems(final BlackListAdapter adapter) {
-        ArrayList<Integer> markedForDelete = adapter.getMarkedForDelete();
-        if (adapter.isEditMode() && markedForDelete.size() > 0) {
-            mLockView.setVisibility(View.VISIBLE);
-            new BlackListDeleteRequest(markedForDelete, getActivity())
-                    .callback(new VipApiHandler() {
-                        @Override
-                        public void success(ApiResponse response) {
-                            if (isAdded()) {
-                                adapter.removeDeleted();
-                            }
-                        }
-
-                        @Override
-                        public void always(ApiResponse response) {
-                            super.always(response);
-                            if (mLockView != null) {
-                                mLockView.setVisibility(View.GONE);
-                            }
-                        }
-                    })
-                    .exec();
-        }
-    }
 
     @Override
     protected DialogInterface.OnClickListener getLongTapActionsListener(final int position) {
@@ -182,22 +140,6 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
     @Override
     protected int getEmptyFeedLayout() {
         return R.layout.layout_empty_blacklist;
-    }
-
-    @Override
-    protected AdapterView.OnItemClickListener getOnItemClickListener() {
-        final AdapterView.OnItemClickListener baseListener = super.getOnItemClickListener();
-        return new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                BlackListAdapter adapter = (BlackListAdapter) getListAdapter();
-                if (adapter.isEditMode()) {
-                    adapter.toggleItemDeleteMark((int) id);
-                } else {
-                    baseListener.onItemClick(parent, view, position, id);
-                }
-            }
-        };
     }
 
     @Override

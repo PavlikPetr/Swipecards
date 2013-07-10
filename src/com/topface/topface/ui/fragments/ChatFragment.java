@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -107,7 +108,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private String[] editButtonsSelfNames;
     private LinearLayout chatActions;
     private TextView bookmarksTv;
-    private RelativeLayout blockView;
+    private TextView blockView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -456,11 +457,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
 
                 setNavigationTitles(data.user.first_name, data.user.age, data.user.city.name);
-                if (data.user.deleted || data.user.banned) {
-                    mActionBar.setOnlineIcon(false);
-                } else {
-                    mActionBar.setOnlineIcon(data.user.online);
-                }
                 wasFailed = false;
                 mUser = data.user;
                 if (!mUser.isEmpty()) {
@@ -531,7 +527,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private void removeAlreadyLoadedItems(HistoryListData data) {
         if (!mAdapter.isEmpty() && !data.items.isEmpty()) {
             FeedList<History> items = mAdapter.getData();
-            int size = items.size();
             for (History item1 : items) {
                 List<History> itemsToDelete = new ArrayList<History>();
                 for (History item : data.items) {
@@ -559,13 +554,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
                 UserActions userActions = new UserActions(chatActions, actions);
                 bookmarksTv = (TextView) userActions.getViewById(R.id.acBookmark).findViewById(R.id.favTV);
-                blockView = (RelativeLayout) userActions.getViewById(R.id.acBlock);
+
                 if (mUser.blocked) {
+
                     ((TextView)blockView.findViewById(R.id.blockTV)).setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
                     blockView.setEnabled(false);
                 }
                 bookmarksTv.setText(mUser.bookmarked? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
-//                blockView.setEnabled(mUser.);
+
                 mActionBar.showUserActionsButton(
                         new View.OnClickListener() {
                             @Override
@@ -953,7 +949,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
         if (id <= 0) {
             showLoadingBackground();
-            Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_SHORT);
+            Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -1003,7 +999,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private boolean sendMessage() {
-        if (TextUtils.isEmpty(mEditBox.getText().toString().trim())) {
+        Editable editText = mEditBox.getText();
+        String editString = editText == null ? "" : editText.toString();
+        if (editText == null || TextUtils.isEmpty(editString.trim()) || mUserId == 0) {
             return false;
         }
 
@@ -1012,14 +1010,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             mAdapter.addSentMessage(loaderItem, mListView.getRefreshableView());
         }
 
-        final String text = mEditBox.getText().toString();
-        if (text == null || TextUtils.isEmpty(text.trim()) || mUserId == 0) return false;
-
         final MessageRequest messageRequest = new MessageRequest(getActivity());
         registerRequest(messageRequest);
-        messageRequest.message = mEditBox.getText().toString();
+        messageRequest.message = editString;
         messageRequest.userid = mUserId;
-        mEditBox.getText().clear();
+        editText.clear();
 
         messageRequest.callback(new DataApiHandler<History>() {
             @Override

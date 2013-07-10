@@ -348,8 +348,6 @@
     <string name="password_changing">Zmiana hasła</string>
     <string name="save">Zapisz</string>
     <string name="confirmation_successfully_sent">Potwierdzenie zostało wysłane na wskazany przez Ciebie e-mail</string>
-    <string name="password_hint">hasło</string>
-    <string name="password_confirmation_hint">potwierdzenie hasła</string>
     <string name="enter_new_password">Wpisz nowe hasło</string>
     <string name="enter_password_confirmation">Wpisz potwierdzenie hasła</string>
     <string name="passwords_mismatched">Hasła nie pokrywają się</string>
