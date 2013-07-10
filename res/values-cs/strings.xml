@@ -351,8 +351,6 @@
     <string name="password_changing">Změna hesla</string>
     <string name="save">Uložit</string>
     <string name="confirmation_successfully_sent">Potvrzení bylo odesláno na uvedenou emailovou adresu</string>
-    <string name="password_hint">heslo</string>
-    <string name="password_confirmation_hint">potvrzení hesla</string>
     <string name="enter_new_password">Zadejte nové heslo</string>
     <string name="enter_password_confirmation">Zadejte heslo ještě jednou</string>
     <string name="passwords_mismatched">Hesla se neshodují</string>
@@ -502,5 +500,14 @@
     <string name="or">nebo</string>
     <string name="watch_likes_on_dating">prohlížejte sympatie na obrazovce seznamky, mohou být na začátku horní části seznamu</string>
     <string name="make_acquaintance">Seznámit se</string>
+    <string name="settings_delete_account">Odstranit účet</string>
     <string name="chat_block_not_mutual">Zahájit konverzaci s uživatelem můžete v případě, pokud jste od něj dostali sympatii nebo máte-VIP status</string>
+    <string name="delete_account_are_you_sure">Jste si jistí?</string>
+    <string name="delete">Odstranit</string>
+    <string name="delete_account_warning">Pozor! Pokoušíte se smazat svůj profil na Topface.</string>
+    <string name="delete_account_error">Bohužel se odstranění Vašého účtu nezdařilo. Můžete opakovat ještě jednou.</string>
+    <string name="delete_account_will_be_restored_are_you_sure">Pokoušíte se přihlásit na Vámi odstraněný účet. Při přihlášení Váš účet bude obnoven. Jste si jisti?</string>
+    <string name="restore_of_account">Obnovení účtu</string>
+    <string name="restore">Obnovit</string>
+    <string name="admiration_sended">Obdiv je odeslán</string>
 </resources>
