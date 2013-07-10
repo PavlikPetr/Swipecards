@@ -328,7 +328,7 @@ public class TopfaceNotificationManager {
 
         private void generateBigText() {
             NotificationCompat.BigTextStyle inboxStyle =
-                    new NotificationCompat.BigTextStyle();
+                    new NotificationCompat.BigTextStyle(notificationBuilder);
 
             inboxStyle.bigText(text).build();
         }
