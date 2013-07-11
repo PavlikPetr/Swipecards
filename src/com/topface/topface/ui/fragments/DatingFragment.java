@@ -666,7 +666,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mNoviceLayout = new NoviceLayout(getActivity());
             mNoviceLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             mNoviceLayout.setVisibility(View.GONE);
-            ((ViewGroup)getView().findViewById(R.id.ac_dating_container)).addView(mNoviceLayout);
+            ((ViewGroup) getView().findViewById(R.id.ac_dating_container)).addView(mNoviceLayout);
         }
 
         if (mNovice.isShowEnergyToSympathies()) {
@@ -865,13 +865,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                             updateFilterData();
                             updateData(false);
                         } else {
-                            fail(response.getResultCode(),response);
+                            fail(response.getResultCode(), response);
                         }
                     }
 
                     @Override
                     public void fail(int codeError, ApiResponse response) {
-                        Toast.makeText(getActivity(),R.string.general_server_error,Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_LONG).show();
                         unlockControls();
                     }
                 }).exec();
@@ -947,7 +947,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
-         private boolean isAfterLast = false;
+        private boolean isAfterLast = false;
 
         @Override
         public void onPageSelected(int position) {
@@ -960,17 +960,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mCurrentPhotoPrevPos = position;
             setCounter(mCurrentPhotoPrevPos);
 
-            if (position + DEFAULT_PRELOAD_ALBUM_RANGE == mLoadedCount) {
+            if (position + DEFAULT_PRELOAD_ALBUM_RANGE == (mLoadedCount-1)) {
                 final Photos data = ((ImageSwitcher.ImageSwitcherAdapter) mImageSwitcher.getAdapter()).getData();
 
-                if (mNeedMore) {
-
-                    mImageSwitcher.getAdapter().notifyDataSetChanged();
-                    if (mCanSendAlbumReq) {
-                        mCanSendAlbumReq = false;
-                        sendAlbumRequest(data);
-                    }
-
+                if (mNeedMore && mCanSendAlbumReq) {
+                    mCanSendAlbumReq = false;
+                    sendAlbumRequest(data);
                 }
             }
 
@@ -979,7 +974,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 isAfterLast = false;
             }
 
-            if (position == ((ImageSwitcher.ImageSwitcherAdapter)mImageSwitcher.getAdapter()).getData().size() - 1) {
+            if (position == ((ImageSwitcher.ImageSwitcherAdapter) mImageSwitcher.getAdapter()).getData().size() - 1) {
                 showControls();
                 isAfterLast = true;
             }
@@ -996,13 +991,18 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     };
 
     private void sendAlbumRequest(final Photos data) {
-        if ((mLoadedCount - 1) >= data.size()) {
+        if (mUserSearchList == null)
             return;
-        }
+        if ((mLoadedCount - 1) >= data.size())
+            return;
+        if (data.get(mLoadedCount - 1) == null)
+            return;
+
         int position = data.get(mLoadedCount - 1).getPosition() + 1;
-        if (mUserSearchList != null && mUserSearchList.getCurrentUser() != null) {
-            AlbumRequest request = new AlbumRequest(getActivity(), mUserSearchList.getCurrentUser().id, PHOTOS_LIMIT, position, AlbumRequest.MODE_SEARCH);
-            final int uid = mUserSearchList.getCurrentUser().id;
+        final SearchUser currentSearchUser = mUserSearchList.getCurrentUser();
+        if (currentSearchUser != null) {
+            AlbumRequest request = new AlbumRequest(getActivity(), currentSearchUser.id, PHOTOS_LIMIT, position, AlbumRequest.MODE_SEARCH);
+            final int uid = currentSearchUser.id;
             request.callback(new ApiHandler() {
                 @Override
                 public void success(ApiResponse response) {
@@ -1018,7 +1018,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         }
                         mLoadedCount += newPhotos.size();
 
-                        if (mImageSwitcher != null) {
+                        if (mImageSwitcher != null && mImageSwitcher.getAdapter() != null) {
                             mImageSwitcher.getAdapter().notifyDataSetChanged();
                         }
                     }
