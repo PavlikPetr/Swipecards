@@ -83,6 +83,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
         mNovice = Novice.getInstance(getPreferences());
         mNovice.initNoviceFlags();
+        Offerwalls.init(this);
     }
 
     private void initSlidingMenu() {

@@ -503,4 +503,5 @@
     <string name="restore_of_account">Restore account</string>
     <string name="restore">Restore</string>
     <string name="admiration_sended">Admiration sent</string>
+    <string name="getjar_auth_title">Pick an account</string>
 </resources>

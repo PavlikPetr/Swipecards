@@ -7,9 +7,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.widget.Toast;
-import com.getjar.sdk.GetJarContext;
-import com.getjar.sdk.GetJarManager;
-import com.getjar.sdk.GetJarPage;
+import com.getjar.sdk.*;
+import com.getjar.sdk.listener.EnsureUserAuthListener;
+import com.getjar.sdk.listener.RecommendedPricesListener;
 import com.getjar.sdk.response.PurchaseSucceededResponse;
 import com.sponsorpay.sdk.android.SponsorPay;
 import com.sponsorpay.sdk.android.publisher.SponsorPayPublisher;
@@ -20,46 +20,29 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.offerwalls.clickky.ClickkyActivity;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Offerwalls {
 
     private static GetJarContext mGetJarContext;
-    private static GetJarPage mRewardPage;
+    private static ConsumableProductHelper mGetJarHelper;
 
-    private final static String GETJAR_APP_KEY = ""; //TODO
-    private final static String GETJAR_ENCRYPTION_KEY = ""; //TODO
+    private final static String GETJAR_APP_KEY = "407c520c-aaba-44e8-9a06-478c2b595437";
+    private final static String GETJAR_ENCRYPTION_KEY = "0000MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCEuY/YoY8n/WiXdXqv2+7v+N7B279TpVZi4IUEjZRXZAJMytPPqelWFFDAByVHcCZZGCzXoCRjwsvIPel/X0XpbPNVmgWXyMtCIe3gfGvRL686RCGu+MJSzAsFqV9JMes4eycBgjN6tzqo0nZjzmLTNLEpEzttAwKeRVG/q3txtwIDAQAB";
+    private static final String GETJAR_PRODUCT_ID = ""; //TODO
+    private static final String GETJAR_PRODUCT_NAME = ""; //TODO
+    private static final String GETJAR_PRODUCT_DESCRIPTION = ""; //TODO
+    private static final long GETJAR_PRICE = 100; //TODO
 
-    private static void initSponsorpay(Context context) {
-        try {
-            SponsorPay.start("11625", Integer.toString(CacheProfile.uid), "0a4c64db64ed3c1ca14a5e5d81aaa23c", context);
-        } catch (Exception e) {
-            Debug.error(e);
-        }
-    }
-
-    private static void initTapjoy(Context context) {
-        try {
-            TapjoyConnect.requestTapjoyConnect(context, "f0563cf4-9e7c-4962-b333-098810c477d2", "AS0AE9vmrWvkyNNGPsyu");
-            TapjoyConnect.getTapjoyConnectInstance().setUserID(Integer.toString(CacheProfile.uid));
-        } catch (Exception e) {
-            Debug.error(e);
-        }
-    }
-
-    private static void initGetJar(Context context) {
-        try {
-            // appKey: Application Key provided by Getjar
-            // encryptionKey: Key provided if you are to use licensing
-            mGetJarContext = GetJarManager.createContext(GETJAR_APP_KEY, GETJAR_ENCRYPTION_KEY, context, new RewardsReceiver(new Handler()));
-            mRewardPage = new GetJarPage(mGetJarContext);
-        } catch (Exception e) {
-            Debug.error(e);
-        }
+    public static void init(Context context) {
+        initSponsorpay(context);
+        initGetJar(context);
+        initTapjoy(context);
     }
 
     public static void startOfferwall(Activity activity) {
-        String offerwall = CacheProfile.getOptions().offerwall;
+        String offerwall = Options.GETJAR;//CacheProfile.getOptions().offerwall;
         offerwall = offerwall == null ? "" : offerwall;
 
         if (CacheProfile.uid <= 0) {
@@ -100,6 +83,18 @@ public class Offerwalls {
         }
     }
 
+    /**
+     * Tapjoy
+     **/
+    private static void initTapjoy(Context context) {
+        try {
+            TapjoyConnect.requestTapjoyConnect(context, "f0563cf4-9e7c-4962-b333-098810c477d2", "AS0AE9vmrWvkyNNGPsyu");
+            TapjoyConnect.getTapjoyConnectInstance().setUserID(Integer.toString(CacheProfile.uid));
+        } catch (Exception e) {
+            Debug.error(e);
+        }
+    }
+
     public static void startTapjoy(Context context) {
         try {
             TapjoyConnect.getTapjoyConnectInstance().showOffers();
@@ -112,6 +107,17 @@ public class Offerwalls {
 
     public static void startTapjoy() {
         startTapjoy(null);
+    }
+
+    /**
+     * Sponsorpay
+     **/
+    private static void initSponsorpay(Context context) {
+        try {
+            SponsorPay.start("11625", Integer.toString(CacheProfile.uid), "0a4c64db64ed3c1ca14a5e5d81aaa23c", context);
+        } catch (Exception e) {
+            Debug.error(e);
+        }
     }
 
     public static void startSponsorpay(Activity activity) {
@@ -128,10 +134,9 @@ public class Offerwalls {
         }
     }
 
-    public static void startGetJar(Activity activity) {
-        mRewardPage.showPage();
-    }
-
+    /**
+     * Clickky
+     **/
     public static void startClickky(Activity activity) {
         try {
             Intent offerWallIntent = new Intent(activity, ClickkyActivity.class);
@@ -142,21 +147,102 @@ public class Offerwalls {
 
     }
 
+    /**
+     * GetJar
+     **/
+    private static void initGetJar(Context context) {
+        try {
+            mGetJarContext = GetJarManager.createContext(GETJAR_APP_KEY, GETJAR_ENCRYPTION_KEY, context, new RewardsReceiver(new Handler()));
+        } catch (Exception e) {
+            Debug.error(e);
+        }
+    }
+
+    public static void startGetJar(Activity activity) {
+        if (mGetJarContext == null) initGetJar(activity);
+        if (mGetJarHelper == null) mGetJarHelper = new ConsumableProductHelper(mGetJarContext);
+
+        ConsumableProduct consumableProduct = new ConsumableProduct(GETJAR_PRODUCT_ID, GETJAR_PRODUCT_NAME,
+                GETJAR_PRODUCT_DESCRIPTION, GETJAR_PRICE);
+        mGetJarHelper.buy(activity.getString(R.string.getjar_auth_title), consumableProduct);
+    }
+
     public static class RewardsReceiver extends ResultReceiver {
         public RewardsReceiver(Handler handler) {
             super(handler);
         }
 
         @Override
-        protected void onReceiveResult (int resultCode, Bundle resultData) {
-            for(String key : resultData.keySet()) {
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            for (String key : resultData.keySet()) {
                 Object value = resultData.get(key);
                 if (value instanceof PurchaseSucceededResponse) {
                     PurchaseSucceededResponse response = (PurchaseSucceededResponse) value;
                     String productName = response.getProductName();
-                    long amount = response.getAmount();// TODO: Handle a successful purchase here
+                    long amount = response.getAmount(); // TODO: Handle a successful purchase here
                 }
             }
         }
+    }
+
+    public static class ConsumableProductHelper {
+
+        private ArrayList<Pricing> consumablePricingList = new ArrayList<Pricing>(1);
+
+        private ConsumableProduct consumableProduct;
+
+        private GetJarContext getJarContext;
+
+        ConsumableProductHelper(GetJarContext getJarContext) {
+            this.getJarContext = getJarContext;
+        }
+
+        void buy(String pickAccountTitle, ConsumableProduct consumableProduct){
+
+            if(consumableProduct==null){throw new IllegalArgumentException("consumableProduct cannot be null");}
+            this.consumableProduct = consumableProduct;
+
+            // Ensure user is authenticated
+            UserAuth userAuth = new UserAuth(getJarContext);
+            userAuth.ensureUserAsync(pickAccountTitle,
+                    consumableUserAuthListener);
+        }
+
+        private void startGetJarRewardPage(ConsumableProduct product) {
+            GetJarPage consumablePage = new GetJarPage(getJarContext);
+            consumablePage.setProduct(product);
+            consumablePage.showPage();
+        }
+
+        private EnsureUserAuthListener consumableUserAuthListener = new EnsureUserAuthListener() {
+
+            @Override
+            public void userAuthCompleted(User user) {
+                if (user != null) {
+                    Debug.log("consumableUserAuthListener^ success");
+                    Localization localization = new Localization (getJarContext);
+                    if (consumablePricingList.isEmpty())
+                    {
+                        consumablePricingList.add(new Pricing((int) consumableProduct.getAmount()));
+                    }
+                    localization.getRecommendedPricesAsync(consumablePricingList, consumableRecommendedPricesListener);
+
+                } else {
+                    Debug.log("consumableUserAuthListener: failed");
+                }
+            }
+        };
+
+        private RecommendedPricesListener consumableRecommendedPricesListener = new RecommendedPricesListener() {
+
+            @Override
+            public void recommendedPricesEvent(RecommendedPrices prices) {
+                Debug.log("consumableRecommendedPricesListener: prices:" + (prices.getRecommendedPrice(consumablePricingList.get(0))));
+                consumableProduct = new ConsumableProduct(consumableProduct.getProductId(), consumableProduct.getProductName(),
+                        consumableProduct.getProductDescription(), prices.getRecommendedPrice(consumablePricingList.get(0)));
+                startGetJarRewardPage(consumableProduct);
+
+            }
+        };
     }
 }
