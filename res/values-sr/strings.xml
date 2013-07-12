@@ -416,7 +416,7 @@
     <string name="general_add">Dodati</string>
     <string name="general_invite_friends">Pozovite prijatelje</string>
     <string name="general_rest_contacts">Ostalo vam je %d kontakata</string>
-    <string name="invite_friends_title">Pozvati sve prijatelje u Topface</string>
+    <string name="invite_friends_title">Poyvati sve prijatelje u Topface</string>
     <string name="invalid_contacts">Neki kontakti nisu bili korektni. Molimo vas da pošaljete korektne kontakte</string>
     <string name="general_choose_action">Odaberite akciju</string>
     <plurals name="vip_status_period">
@@ -454,37 +454,4 @@
     <string name="incorrect_photo_size">Nedozvoljena veličina fotografije</string>
     <string name="input_contact_name">Unesite ime kontakta</string>
     <string name="incorrect_locale">Ako želite da mi možemo pročitati Vaš odgovor, pišite ga na ruskom ili engleskom jeziku</string>
-    <string name="complain_photo_header">Nekorektna fotografija</string>
-    <string name="complain_msg_header">Nekorektna poruka</string>
-    <string name="complain_info_header">Nekorektna  informacija</string>
-    <string name="complain_type_porn">Porno (vide se genitalije)</string>
-    <string name="complain_type_ero">Erotika na glavnoj fotografiji</string>
-    <string name="complain_type_picture">Slika</string>
-    <string name="complain_type_fake_user">Poznati čovek</string>
-    <string name="complain_type_spam_msg">Komercijalna ponuda, spam, reklama, poziv na sajt, telefoni</string>
-    <string name="complain_type_spam_profile">Polja \"status\", \"o meni\" sadrže komercijalnu ponudu</string>
-    <string name="complain_type_swearing_profile">Polja \"status\", \"o meni\" sadrže prostakluk, pretnje, psovke</string>
-    <string name="complain_type_fake_data">Ime, pol, godine i fotografija čoveka se ne slažu</string>
-    <string name="complain_description">recite nešto više o razlogu žalbe</string>
-    <string name="general_complain_sended">Vaša žalba je poslata, puno vam hvala za pomoć</string>
-    <string name="general_complain">Žalba</string>
-    <string name="general_msg">Poruka</string>
-    <string name="general_no_notifications">Na žalost, obaveštenja na vašem uređaju nisu dostupna</string>
-    <plurals name="vip_add_more_friends">
-        <item quantity="few">Pozovite još %d prijatelja</item>
-        <item quantity="other">Pozovite još %d prijatelja</item>
-        <item quantity="one">Pozovite još %d prijatelja</item>
-    </plurals>
-    <string name="general_bookmarks_add_short">U odabrane</string>
-    <string name="black_list_add_short">U crni spisak</string>
-    <string name="general_complaint">Požaliti se</string>
-    <string name="general_type_complain">Predmet žalbe</string>
-    <string name="confirm_email_for_dating">Mi smo protiv spama. Potvrdite svoju poštansku adresu, kako bi se mogli upoznavati u Topface!</string>
-    <string name="confirm">Potvrditi</string>
-    <string name="complain_type_swearing_msg">Prostakluk, pretnje, psovke</string>
-    <string name="general_bookmarks_is_deleted">Korisnik je uklonjen iz odabranih</string>
-    <string name="general_blacklist_is_deleted">Korisnik je uklonjen iz crnog spiska</string>
-    <string name="invite_friends_title_short">Pozvati sve prijatelje u Topface</string>
-    <string name="general_exit">Izaći</string>
-    <string name="likes_can_help_you">Simpatije će pomoći da se upoznate</string>
 </resources>

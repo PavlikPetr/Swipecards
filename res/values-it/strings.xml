@@ -461,7 +461,6 @@
     <string name="general_complain_sended">Il tuo reclamo è stato inviato, grazie per il tuo aiuto</string>
     <string name="general_complain">Reclamo</string>
     <string name="general_msg">Massaggio</string>
-    <string name="general_no_notifications">Purtroppo, per il tuo dispositivo gli avvisi non sono disponibili</string>
     <plurals name="vip_add_more_friends">
         <item quantity="other">Invita ancora %d amici</item>
         <item quantity="one">Invita ancora %d amico</item>
@@ -476,8 +475,6 @@
     <string name="general_bookmarks_is_deleted">L’utente è stato rimosso dai preferiti</string>
     <string name="general_blacklist_is_deleted">L’utente è stato rimosso dalla black list</string>
     <string name="invite_friends_title_short">Invita tutti gli amici su Topface</string>
-    <string name="general_exit">Logout</string>
-    <string name="likes_can_help_you">Le simpatie ti aiutano a conoscere gente</string>
     <string name="general_get_dating">Presentarsi</string>
     <string name="settings_select_language">Scelta della lingua dell’applicazione</string>
     <string name="restart_to_change_locale">L’applicazione sarà riavviata per cambiare lingua</string>
