@@ -1,6 +1,7 @@
 package com.topface.topface.utils.offerwalls;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,21 +29,32 @@ public class Offerwalls {
     private static GetJarContext mGetJarContext;
     private static ConsumableProductHelper mGetJarHelper;
 
-    private final static String GETJAR_APP_KEY = "407c520c-aaba-44e8-9a06-478c2b595437";
+    private final static String GETJAR_APP_KEY = "84150f59-805d-4feb-d232-db2977751e54";
     private final static String GETJAR_ENCRYPTION_KEY = "0000MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCEuY/YoY8n/WiXdXqv2+7v+N7B279TpVZi4IUEjZRXZAJMytPPqelWFFDAByVHcCZZGCzXoCRjwsvIPel/X0XpbPNVmgWXyMtCIe3gfGvRL686RCGu+MJSzAsFqV9JMes4eycBgjN6tzqo0nZjzmLTNLEpEzttAwKeRVG/q3txtwIDAQAB";
-    private static final String GETJAR_PRODUCT_ID = ""; //TODO
-    private static final String GETJAR_PRODUCT_NAME = ""; //TODO
-    private static final String GETJAR_PRODUCT_DESCRIPTION = ""; //TODO
-    private static final long GETJAR_PRICE = 100; //TODO
+    private static final String GETJAR_PRODUCT_ID = "id"; //TODO
+    private static final String GETJAR_PRODUCT_NAME = "100 coins"; //TODO
+    private static final String GETJAR_PRODUCT_DESCRIPTION = "coins"; //TODO
+    private static final long GETJAR_PRICE = 1; //TODO
+    private static final Float GETJAT_MAX_DISCOUNT = 0.1f; //TODO
+    private static final Float GETJAT_MAX_MARKUP = 0.1f; //TODO
+
+    private static String getOfferWallType() {
+        return Options.GETJAR;//CacheProfile.getOptions().offerwall;
+    }
 
     public static void init(Context context) {
-        initSponsorpay(context);
-        initGetJar(context);
-        initTapjoy(context);
+        String offerwall = getOfferWallType();
+        if (offerwall.equals(Options.TAPJOY)) {
+            initTapjoy(context);
+        } else if (offerwall.equals(Options.SPONSORPAY)) {
+            initSponsorpay(context);
+        } else if (offerwall.equals(Options.GETJAR)) {
+            initGetJar(context);
+        }
     }
 
     public static void startOfferwall(Activity activity) {
-        String offerwall = Options.GETJAR;//CacheProfile.getOptions().offerwall;
+        String offerwall = getOfferWallType();
         offerwall = offerwall == null ? "" : offerwall;
 
         if (CacheProfile.uid <= 0) {
@@ -144,7 +156,6 @@ public class Offerwalls {
         } catch (Exception e) {
             Debug.error(e);
         }
-
     }
 
     /**
@@ -153,15 +164,14 @@ public class Offerwalls {
     private static void initGetJar(Context context) {
         try {
             mGetJarContext = GetJarManager.createContext(GETJAR_APP_KEY, GETJAR_ENCRYPTION_KEY, context, new RewardsReceiver(new Handler()));
+            mGetJarHelper = new ConsumableProductHelper(mGetJarContext);
         } catch (Exception e) {
             Debug.error(e);
         }
     }
 
     public static void startGetJar(Activity activity) {
-        if (mGetJarContext == null) initGetJar(activity);
-        if (mGetJarHelper == null) mGetJarHelper = new ConsumableProductHelper(mGetJarContext);
-
+        if (mGetJarContext == null || mGetJarHelper == null) initGetJar(activity);
         ConsumableProduct consumableProduct = new ConsumableProduct(GETJAR_PRODUCT_ID, GETJAR_PRODUCT_NAME,
                 GETJAR_PRODUCT_DESCRIPTION, GETJAR_PRICE);
         mGetJarHelper.buy(activity.getString(R.string.getjar_auth_title), consumableProduct);
@@ -186,11 +196,8 @@ public class Offerwalls {
     }
 
     public static class ConsumableProductHelper {
-
         private ArrayList<Pricing> consumablePricingList = new ArrayList<Pricing>(1);
-
         private ConsumableProduct consumableProduct;
-
         private GetJarContext getJarContext;
 
         ConsumableProductHelper(GetJarContext getJarContext) {
@@ -198,8 +205,7 @@ public class Offerwalls {
         }
 
         void buy(String pickAccountTitle, ConsumableProduct consumableProduct){
-
-            if(consumableProduct==null){throw new IllegalArgumentException("consumableProduct cannot be null");}
+            if(consumableProduct==null) {throw new IllegalArgumentException("consumableProduct cannot be null");}
             this.consumableProduct = consumableProduct;
 
             // Ensure user is authenticated
@@ -221,12 +227,10 @@ public class Offerwalls {
                 if (user != null) {
                     Debug.log("consumableUserAuthListener^ success");
                     Localization localization = new Localization (getJarContext);
-                    if (consumablePricingList.isEmpty())
-                    {
-                        consumablePricingList.add(new Pricing((int) consumableProduct.getAmount()));
+                    if (consumablePricingList.isEmpty()) {
+                        consumablePricingList.add(new Pricing((int) consumableProduct.getAmount(), GETJAT_MAX_DISCOUNT, GETJAT_MAX_MARKUP));
                     }
                     localization.getRecommendedPricesAsync(consumablePricingList, consumableRecommendedPricesListener);
-
                 } else {
                     Debug.log("consumableUserAuthListener: failed");
                 }
@@ -241,7 +245,6 @@ public class Offerwalls {
                 consumableProduct = new ConsumableProduct(consumableProduct.getProductId(), consumableProduct.getProductName(),
                         consumableProduct.getProductDescription(), prices.getRecommendedPrice(consumablePricingList.get(0)));
                 startGetJarRewardPage(consumableProduct);
-
             }
         };
     }
