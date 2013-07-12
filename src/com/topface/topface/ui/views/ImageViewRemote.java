@@ -172,26 +172,19 @@ public class ImageViewRemote extends ImageView {
             mRepeatTimer = null;
         }
 
-
         //Если ссылка не пустая и мы не патаемся скачать уже установленный в View изображение, то начинаем загрузку
         if (!TextUtils.isEmpty(remoteSrc)) {
             if (!remoteSrc.equals(mCurrentSrc)) {
                 mCurrentSrc = remoteSrc;
             }
-
-            super.setImageDrawable(null);
-
-
-
-            getImageLoader()
-                    .displayImage(remoteSrc, this, null, getListener(handler, remoteSrc), getPostProcessor());
-
+            super.setImageBitmap(null);
+            getImageLoader().displayImage(remoteSrc, this, null, getListener(handler, remoteSrc), getPostProcessor());
             if (borderResId != 0 && isFirstTime) {
                 setImageResource(borderResId);
             }
         } else {
             isCorrectSrc = false;
-            super.setImageDrawable(null);
+            super.setImageBitmap(null);
             mCurrentSrc = null;
         }
         return isCorrectSrc;

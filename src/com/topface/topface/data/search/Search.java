@@ -189,7 +189,7 @@ public class Search extends LinkedList<SearchUser> implements SerializableToJson
         SearchUser user = null;
         if (mPosition >= 0 && mPosition < size()) {
             user = get(mPosition);
-            log(String.format("Get current user #%d %s from %s", mPosition, user.getNameAndAge(), user.city.name));
+            log(String.format("Get current user #%d %s from %s id%d", mPosition, user.getNameAndAge(), user.city.name,user.id));
         }
 
         if (mListener != null) {
