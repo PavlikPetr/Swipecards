@@ -170,22 +170,43 @@ public class ActionBar {
         mProfileAvatar.setVisibility(View.VISIBLE);
 
         mProfileAvatar.setPhoto(profilePhotoResource);
-        mProfileAvatar.setOnClickListener(new View.OnClickListener() {
-            boolean selected = false;
-
-            @Override
-            public void onClick(View view) {
-                if (selected) {
-                   selected = false;
-                    activeListener.onClick(view);
-                } else {
-                    selected = true;
-                    nonActiveListener.onClick(view);
-                }
-            }
-        });
+        userActionsOnClickListener = new UserActionsOnClickListener(activeListener, nonActiveListener);
+        mProfileAvatar.setOnClickListener(userActionsOnClickListener);
         mSendButton.setVisibility(View.GONE);
         checkBox.setVisibility(View.GONE);
+    }
+
+    private UserActionsOnClickListener userActionsOnClickListener;
+
+    private class UserActionsOnClickListener implements View.OnClickListener {
+        private boolean selected = false;
+        private View.OnClickListener active, nonactive;
+
+        public UserActionsOnClickListener(View.OnClickListener active, View.OnClickListener nonActive) {
+            this.active = active;
+            this.nonactive = nonActive;
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (selected) {
+                selected = false;
+                active.onClick(view);
+            } else {
+                selected = true;
+                nonactive.onClick(view);
+            }
+        }
+
+        public void setState(boolean state) {
+            selected = state;
+        }
+    };
+
+    public void setUserActionsControlActive(boolean state) {
+        if (userActionsOnClickListener != null) {
+            userActionsOnClickListener.setState(state);
+        }
     }
 
     public void showUserActionsButton(final View.OnClickListener nonActiveListener, final View.OnClickListener activeListener) {

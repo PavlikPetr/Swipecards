@@ -108,7 +108,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private String[] editButtonsSelfNames;
     private LinearLayout chatActions;
     private TextView bookmarksTv;
-    private TextView blockView;
+    private RelativeLayout blockView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -554,66 +554,22 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
                 UserActions userActions = new UserActions(chatActions, actions);
                 bookmarksTv = (TextView) userActions.getViewById(R.id.acBookmark).findViewById(R.id.favTV);
-
-                if (mUser.blocked) {
-
-                    ((TextView)blockView.findViewById(R.id.blockTV)).setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
-                    blockView.setEnabled(false);
-                }
+                blockView = (RelativeLayout) userActions.getViewById(R.id.acBlock);
+                ((TextView)blockView.findViewById(R.id.blockTV)).setText(mUser.blocked?R.string.black_list_delete:R.string.black_list_add_short);
                 bookmarksTv.setText(mUser.bookmarked? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
 
                 mActionBar.showUserActionsButton(
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                Debug.log("ACTIONSHEIGHT::" + Integer.toString(chatActions.getHeight()));
-                                final TranslateAnimation ta = new TranslateAnimation(0, 0, -chatActions.getHeight(), 0);
-                                ta.setDuration(500);
-                                ta.setStartOffset(0);
-                                ta.setAnimationListener(new Animation.AnimationListener() {
-
-                                    @Override
-                                    public void onAnimationStart(Animation animation) {
-//                                        mActionBar.disableActionsButton(true);
-                                        chatActions.setVisibility(View.VISIBLE);
-                                    }
-
-                                    @Override
-                                    public void onAnimationEnd(Animation animation) {
-                                        chatActions.clearAnimation();
-//                                        mActionBar.disableActionsButton(false);
-                                    }
-
-                                    @Override
-                                    public void onAnimationRepeat(Animation animation) {
-
-                                    }
-                                });
+                                final TranslateAnimation ta = getAnimation(false, 500);
                                 chatActions.startAnimation(ta);
                             }
                         }, new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
 //                                initActionsPanelHeight();
-                                TranslateAnimation ta = new TranslateAnimation(0, 0, 0, -chatActions.getHeight());
-                                ta.setDuration(500);
-                                ta.setAnimationListener(new Animation.AnimationListener() {
-                                    @Override
-                                    public void onAnimationStart(Animation animation) {
-//                                        mActionBar.disableActionsButton(true);
-                                    }
-
-                                    @Override
-                                    public void onAnimationEnd(Animation animation) {
-                                        chatActions.clearAnimation();
-//                                        mActionBar.disableActionsButton(false);
-                                        chatActions.setVisibility(View.INVISIBLE);
-                                    }
-
-                                    @Override
-                                    public void onAnimationRepeat(Animation animation) {
-                                    }
-                                });
+                                TranslateAnimation ta = getAnimation(true, 500);
                                 chatActions.startAnimation(ta);
                             }
                         }
@@ -621,6 +577,40 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 );
             }
         }
+    }
+
+    private TranslateAnimation getAnimation(final boolean isActive, int time) {
+        TranslateAnimation ta;
+        if (isActive) {
+            ta = new TranslateAnimation(0, 0, 0, -chatActions.getHeight());
+        } else {
+            ta = new TranslateAnimation(0, 0, -chatActions.getHeight(), 0);
+        }
+
+        ta.setDuration(time);
+        ta.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                mActionBar.disableActionsButton(true);
+                if (!isActive) {
+                    chatActions.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                chatActions.clearAnimation();
+                mActionBar.disableActionsButton(false);
+                if (isActive) {
+                    chatActions.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        return ta;
     }
 
     private void release() {
@@ -692,7 +682,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             case R.id.acWProfile:
             case R.id.acProfile:
                 Intent profileIntent = ContainerActivity.getProfileIntent(mUserId, getActivity());
+                mActionBar.setUserActionsControlActive(false);
                 startActivity(profileIntent);
+                chatActions.startAnimation(getAnimation(true, 0));
+
                 break;
             case R.id.acBlock:
                 if (CacheProfile.premium) {
@@ -703,16 +696,25 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
                         loader.setVisibility(View.VISIBLE);
                         icon.setVisibility(View.GONE);
-                        BlackListAddRequest blackListAddRequest = new BlackListAddRequest(mUserId, getActivity());
-                        blackListAddRequest.callback(new VipApiHandler() {
+                        ApiRequest request;
+                        if (mUser.blocked) {
+                            request = new BlackListDeleteRequest(mUserId, getActivity());
+                        } else {
+                            request = new BlackListAddRequest(mUserId, getActivity());
+                        }
+                        request.callback(new VipApiHandler() {
                             @Override
                             public void success(ApiResponse response) {
                                 super.success(response);
                                 if (isAdded()) {
-                                    v.setEnabled(false);
                                     loader.setVisibility(View.INVISIBLE);
                                     icon.setVisibility(View.VISIBLE);
-                                    textView.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+                                    mUser.blocked = !mUser.blocked;
+                                    if (mUser.blocked) {
+                                        textView.setText(R.string.black_list_delete);
+                                    } else {
+                                        textView.setText(R.string.black_list_add_short);
+                                    }
                                 }
                             }
 
