@@ -14,31 +14,7 @@
             android:src="@drawable/auth_bg_spot"
             /-->
 
-    <RelativeLayout
-            android:id="@+id/redAlert"
-            android:background="@drawable/background_alert_plate"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:visibility="gone"
-            android:padding="10dp"
-              >
-        <TextView
-                android:id="@+id/redAlertTextView"
-                style="@style/RedAlertTextView"
-                android:text="@string/error_login_password"/>
-        <TextView
-            android:id="@+id/redAlertButton"
-            android:layout_centerHorizontal="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/redAlertTextView"
-            android:background="@drawable/btn_create_acc_selector"
-            android:layout_margin="5dp"
-            android:padding="5dp"
-            android:text="@string/create_account"/>
 
-    </RelativeLayout>
 
     <ProgressBar
             android:id="@+id/prsAuthLoading"
@@ -60,4 +36,30 @@
         <include layout="@layout/layout_signin"/>
 
     </ViewFlipper>
+
+    <RelativeLayout
+            android:id="@+id/redAlert"
+            android:background="@drawable/background_alert_plate"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:visibility="gone"
+            android:padding="10dp"
+            >
+        <TextView
+                android:id="@+id/redAlertTextView"
+                style="@style/RedAlertTextView"
+                android:text="@string/error_login_password"/>
+        <TextView
+                android:id="@+id/redAlertButton"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/redAlertTextView"
+                android:background="@drawable/btn_create_acc_selector"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:text="@string/create_account"/>
+
+    </RelativeLayout>
 </RelativeLayout>
