@@ -11,8 +11,8 @@ import com.topface.topface.ui.views.ImageViewRemote;
 public class ActionBar {
 
     private ViewGroup actionView;
-    private ImageButton mNavigationHome;
-    private ImageButton mNavigationBack;
+    private ImageView mNavigationHome;
+    private ImageView mNavigationBack;
     private TextView mTitle;
     private TextView mSubTitle;
     private ImageButton mSettingsButton;
@@ -50,8 +50,8 @@ public class ActionBar {
 
     private void initViews() {
 
-        mNavigationBack = (ImageButton) actionView.findViewById(R.id.btnNavigationBack);
-        mNavigationHome = (ImageButton) actionView.findViewById(R.id.btnNavigationHome);
+        mNavigationBack = (ImageView) actionView.findViewById(R.id.btnNavigationBack);
+        mNavigationHome = (ImageView) actionView.findViewById(R.id.btnNavigationHome);
         mTitle = (TextView) actionView.findViewById(R.id.tvNavigationTitle);
         mSubTitle = (TextView) actionView.findViewById(R.id.tvNavigationSubtitle);
         mSettingsButton = (ImageButton) actionView.findViewById(R.id.btnNavigationSettingsBar);
