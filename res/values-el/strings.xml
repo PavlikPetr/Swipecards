@@ -347,6 +347,8 @@
     <string name="password_changing">Αλλαγή κωδικού</string>
     <string name="save">Αποθήκευση</string>
     <string name="confirmation_successfully_sent">Η επιβεβαίωση θα αποσταλεί στο e-mail σας</string>
+    <string name="password_hint">Το κωδικό</string>
+    <string name="password_confirmation_hint">Επιβεβαίωση του κωδικού της πρόσβασης</string>
     <string name="enter_new_password">Εισάγετε τον νέο κωδικό</string>
     <string name="enter_password_confirmation">Επιβεβαίωση κωδικού</string>
     <string name="passwords_mismatched">Οι κωδικοί πρόσβασης δεν ταιριάζουν</string>
@@ -492,4 +494,8 @@
     <string name="restore_of_account">Ανάκτηση του λογαριασμού σας</string>
     <string name="restore">Αποκαταστήστε</string>
     <string name="admiration_sended">Θαυμασμός εστάλη.</string>
+    <plurals name="general_coins">
+        <item quantity="other">%d κέρματα</item>
+        <item quantity="one">%d κέρμα</item>
+    </plurals>
 </resources>

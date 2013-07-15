@@ -505,4 +505,8 @@
     <string name="restore_of_account">Recuperación de cuenta</string>
     <string name="restore">Recuperar</string>
     <string name="admiration_sended">Admiración enviada</string>
+    <plurals name="general_coins">
+        <item quantity="other">%d monedas</item>
+        <item quantity="one">%d moneda</item>
+    </plurals>
 </resources>

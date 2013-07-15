@@ -348,6 +348,8 @@
     <string name="password_changing">Modifica password</string>
     <string name="save">Salvare</string>
     <string name="confirmation_successfully_sent">All’indirizzo e-mail da te indicato è stata inviata la conferma</string>
+    <string name="password_hint">Password</string>
+    <string name="password_confirmation_hint">Conferma la password</string>
     <string name="enter_new_password">Inserisci la nuova password</string>
     <string name="enter_password_confirmation">Inserisci la conferma di password</string>
     <string name="passwords_mismatched">Password errata</string>
@@ -497,4 +499,8 @@
     <string name="restore_of_account">Ripristino dell’account</string>
     <string name="restore">Ripristinare</string>
     <string name="admiration_sended">L’ammirazione è stata inviata</string>
+    <plurals name="general_coins">
+        <item quantity="other">%d monete</item>
+        <item quantity="one">%d moneta</item>
+    </plurals>
 </resources>
