@@ -343,6 +343,8 @@
     <string name="password_changing">비밀번호 변경</string>
     <string name="save">저장하기</string>
     <string name="confirmation_successfully_sent">설정되어진 이메일을 통해 확인 메일이 전송되었습니다.</string>
+    <string name="password_hint">비밀번호</string>
+    <string name="password_confirmation_hint">비밀번호 재확인</string>
     <string name="enter_new_password">새로운 비밀번호를 입력하십시오</string>
     <string name="enter_password_confirmation">비밀번호 확인 입력</string>
     <string name="passwords_mismatched">비밀번호가 일치하지 않습니다.</string>
@@ -466,4 +468,7 @@
     <string name="restore_of_account">계정 저장</string>
     <string name="restore">저장하기</string>
     <string name="admiration_sended">감탄사가 전송되었습니다.</string>
+    <plurals name="general_coins">
+        <item quantity="other">%d 코인</item>
+    </plurals>
 </resources>
