@@ -469,7 +469,6 @@
     <string name="general_complain_sended">Jūsų skundas išsiųstas, labai dėkojame už pagalbą</string>
     <string name="general_complain">Skundas</string>
     <string name="general_msg">Pranešimas</string>
-    <string name="general_no_notifications">Deja, jūsų įrenginyje pranešimai neprieinami</string>
     <plurals name="vip_add_more_friends">
         <item quantity="few">Pakvieskite dar %d draugus</item>
         <item quantity="other">Pakvieskite dar %d draugų</item>
@@ -485,8 +484,6 @@
     <string name="general_bookmarks_is_deleted">Vartotojas pašalintas iš išrinktųjų</string>
     <string name="general_blacklist_is_deleted">Vartotojas pašalintas iš juodojo sąrašo</string>
     <string name="invite_friends_title_short">Pakviesti visus draugus į Topface</string>
-    <string name="general_exit">Išeiti</string>
-    <string name="likes_can_help_you">Simpatijos padės susipažinti</string>
     <string name="general_get_dating">Pažindintis</string>
     <string name="settings_select_language">Programos kalbos pasirinkimas</string>
     <string name="restart_to_change_locale">Kad pasikeistų kalba, programa bus perkrauta</string>

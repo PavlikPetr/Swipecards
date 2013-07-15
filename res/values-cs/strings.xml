@@ -351,6 +351,8 @@
     <string name="password_changing">Změna hesla</string>
     <string name="save">Uložit</string>
     <string name="confirmation_successfully_sent">Potvrzení bylo odesláno na uvedenou emailovou adresu</string>
+    <string name="password_hint">Heslo</string>
+    <string name="password_confirmation_hint">Potvrzení hesla</string>
     <string name="enter_new_password">Zadejte nové heslo</string>
     <string name="enter_password_confirmation">Zadejte heslo ještě jednou</string>
     <string name="passwords_mismatched">Hesla se neshodují</string>
