@@ -343,13 +343,13 @@
     <string name="get_it_for_free">Get coins for free</string>
     <string name="vip_advantages">VIP advantages</string>
     <string name="change_email">Change e-mail</string>
-    <string name="send_confirmation_email">Send confirmation email</string>
+    <string name="send_confirmation_email">Send confirmation e-mail</string>
     <string name="change_password">Change password</string>
     <string name="password_changing">Changing password</string>
     <string name="save">Save</string>
     <string name="confirmation_successfully_sent">Confirmation was successfully sent to your e-mail</string>
-    <string name="password_hint">Password</string>
-    <string name="password_confirmation_hint">Confirm password</string>
+    <string name="password_hint">password</string>
+    <string name="password_confirmation_hint">password confirmation</string>
     <string name="enter_new_password">Enter new password</string>
     <string name="enter_password_confirmation">Enter the password confirmation</string>
     <string name="passwords_mismatched">Passwords do not match</string>
@@ -439,7 +439,7 @@
     <string name="nobody_chat_with_you_sympathies_will_help">No one wrote you yet. Likes help you in your search for someone to chat with</string>
     <string name="rate_and_have_mutual_or_buy_and_chat">Send likes to people you like and get mutual likes in return. Or buy likes and start chatting with those who you like!</string>
     <string name="start_rate">Start rating</string>
-    <string name="with_vip_find_your_visitors">With a VIP status, you can find out who checked out your page</string>
+    <string name="with_vip_find_your_visitors">With a VIP-status, you can find out who checked out your page</string>
     <string name="on_avatar">On avatar</string>
     <string name="your_avatar">Your avatar</string>
     <string name="avatar_set_successfully">Your avatar has been successfully set</string>
