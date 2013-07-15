@@ -348,6 +348,8 @@
     <string name="password_changing">Alteração de palavra-passe</string>
     <string name="save">Guardar</string>
     <string name="confirmation_successfully_sent">Confirmação enviada para e-mail indicado por você</string>
+    <string name="password_hint">Palavra-passe</string>
+    <string name="password_confirmation_hint">Confirmação de palavra-passe</string>
     <string name="enter_new_password">Introduza uma nova palavra-passe</string>
     <string name="enter_password_confirmation">Introduza a confirmação de palavra-passe</string>
     <string name="passwords_mismatched">Palavras-passe não coincidem</string>
@@ -461,7 +463,6 @@
     <string name="general_complain_sended">A sua queixa foi enviada, muito obrigado pela ajuda</string>
     <string name="general_complain">Queixa</string>
     <string name="general_msg">Mensagem</string>
-    <string name="general_no_notifications">Infelizmente, as notificações no seu dispositivo não estão disponíveis</string>
     <string name="general_bookmarks_add_short">Aos favoritos</string>
     <string name="black_list_add_short">Na lista negra</string>
     <string name="general_complaint">Queixar-se</string>
@@ -472,8 +473,6 @@
     <string name="general_bookmarks_is_deleted">O usuário foi removido dos favoritos</string>
     <string name="general_blacklist_is_deleted">O usuário foi removido da lista negra</string>
     <string name="invite_friends_title_short">Convidar todos os amigos à Topface</string>
-    <string name="general_exit">Sair</string>
-    <string name="likes_can_help_you">Simpatias ajudarão travar conhecimentos</string>
     <string name="general_get_dating">Travar conhecimento</string>
     <string name="settings_select_language">Escolha de idioma para o aplicativo</string>
     <string name="restart_to_change_locale">Para a alteração de idioma, o aplicativo terá que ser reiniciado</string>

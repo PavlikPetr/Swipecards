@@ -671,5 +671,11 @@
     <string name="restore_of_account">Восстановление аккаунта</string>
     <string name="restore">Восстановить</string>
     <string name="admiration_sended">Восхищение отправлено</string>
+    <plurals name="general_coins">
+        <item quantity="one">%d монета</item>
+        <item quantity="few">%d монеты</item>
+        <item quantity="many">%d монет</item>
+        <item quantity="other">%d монет</item>
+    </plurals>
 
 </resources>

@@ -451,7 +451,6 @@
     <string name="general_complain_sended">Plangerea Dmv a fost trimisa, va multumim pentru ajutor</string>
     <string name="general_complain">Plangere</string>
     <string name="general_msg">Mesaj</string>
-    <string name="general_no_notifications">Din pacate, instiintarile, pe instalatia Dmv nu sunt accesibile</string>
     <string name="general_bookmarks_add_short">In alese</string>
     <string name="black_list_add_short">In lista neagra</string>
     <string name="general_complaint">A se plange</string>
@@ -462,7 +461,6 @@
     <string name="general_bookmarks_is_deleted">Utilizatorul a fost sters din alese</string>
     <string name="general_blacklist_is_deleted">Utilizatorul a fost sters din lista neagra</string>
     <string name="invite_friends_title_short">Invita toti prietenii in Topface</string>
-    <string name="general_exit">Iesire</string>
     <string name="likes_can_help_you">Simpatiile va vor ajuta sa faceti cunostinta</string>
     <string name="general_get_dating">A face cunostinta</string>
     <string name="settings_select_language">Alege limba aplicarii</string>
