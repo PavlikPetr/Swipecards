@@ -219,10 +219,10 @@ public class ActionBar {
             public void onClick(final View view) {
                 if (mUserActionsControl.isSelected()) {
                     mUserActionsControl.setSelected(false);
-                            activeListener.onClick(view);
+                    activeListener.onClick(view);
                 } else {
                     mUserActionsControl.setSelected(true);
-                        nonActiveListener.onClick(view);
+                    nonActiveListener.onClick(view);
                 }
             }
         });
