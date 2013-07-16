@@ -349,6 +349,8 @@
     <string name="password_changing">Parolanın değiştirilmesi</string>
     <string name="save">Kaydetmek</string>
     <string name="confirmation_successfully_sent">Gösterdiğiniz e-mailinize onay gönderildi</string>
+    <string name="password_hint">parola</string>
+    <string name="password_confirmation_hint">parolanın onaylanması</string>
     <string name="enter_new_password">Yeni parolaya girin</string>
     <string name="enter_password_confirmation">Parolayı tekrar yazın</string>
     <string name="passwords_mismatched">Parolalar eşleşmedi</string>
