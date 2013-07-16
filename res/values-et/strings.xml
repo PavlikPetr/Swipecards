@@ -318,8 +318,8 @@ Sa oled müksanud.</string>
     <string name="change_password">Muuta salasõna</string>
     <string name="password_changing">Salasõna muutmine</string>
     <string name="save">Salvestada</string>
-    <string name="password_hint">Salasõna</string>
-    <string name="password_confirmation_hint">Salasõna kinnitamine</string>
+    <string name="password_hint">salasõna</string>
+    <string name="password_confirmation_hint">salasõna kinnitus</string>
     <string name="enter_new_password">Sisesta uus salasõna</string>
     <string name="enter_password_confirmation">Sisesta salasõna kinnitus</string>
     <string name="passwords_mismatched">Salasõnad ei lange kokku</string>

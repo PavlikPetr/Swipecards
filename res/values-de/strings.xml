@@ -336,6 +336,8 @@
     <string name="change_password">Passwort ändern</string>
     <string name="password_changing">Passwort ändern</string>
     <string name="save">Speichern</string>
+    <string name="password_hint">Passwort</string>
+    <string name="password_confirmation_hint">Passwort bestätigen</string>
     <string name="enter_new_password">Geben Sie ein neues Passwort ein</string>
     <string name="passwords_mismatched">Passwörter fallen nicht zusammen</string>
     <string name="passwords_changed">Passwort ist geändert</string>

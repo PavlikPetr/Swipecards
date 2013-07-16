@@ -61,7 +61,7 @@
                             android:id="@+id/edPassword"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/password_hint"
+                            android:hint="@string/password"
                             style="@style/EditTextAuth"
                             android:background="@drawable/textlines"
                             android:inputType="textPassword"
