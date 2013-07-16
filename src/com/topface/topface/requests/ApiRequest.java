@@ -99,7 +99,7 @@ public abstract class ApiRequest implements IApiRequest {
         }
 
         mResendCnt++;
-        Debug.error("Try resend request #" + mResendCnt);
+        Debug.error("Try resend request #" + getId() + " try #" + mResendCnt);
 
         return mResendCnt;
     }
