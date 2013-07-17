@@ -274,10 +274,14 @@ public class AddPhotoHelper {
                     public void run() {
                         try {
                             String id = photoAddRequest.getId();
-                            if (fileNames.get(id).delete()) {
-                                Debug.log("Delete temp photo " + id);
-                            } else {
-                                Debug.log("Error delete temp photo " + id);
+                            if (fileNames != null) {
+                                if(fileNames.size() != 0) {
+                                    if (fileNames.get(id).delete()) {
+                                        Debug.log("Delete temp photo " + id);
+                                    } else {
+                                        Debug.log("Error delete temp photo " + id);
+                                    }
+                                }
                             }
                         } catch (Exception e) {
                             Debug.error(e);
