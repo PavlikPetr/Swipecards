@@ -34,8 +34,6 @@ public abstract class ApiRequest implements IApiRequest {
     public static final String CONTENT_TYPE = "application/json";
     public static final String APP_IS_OFFILINE = "App is offiline";
 
-    // Data
-    private String mId;
     public String ssid;
     public ApiHandler handler;
     public Context context;
@@ -101,7 +99,7 @@ public abstract class ApiRequest implements IApiRequest {
         }
 
         mResendCnt++;
-        Debug.error("Try resend request #" + mResendCnt);
+        Debug.error("Try resend request #" + getId() + " try #" + mResendCnt);
 
         return mResendCnt;
     }
