@@ -24,6 +24,8 @@ public class ImageSwitcher extends ViewPager {
     private Handler mUpdatedHandler;
     private static final String VIEW_TAG = "view_container";
     private PreloadManager mPreloadManager;
+    private int mCurrentPhotoPosition;
+    private int mPreviousPhotoPosition;
     private int mPrev;
     private int mNext;
 
@@ -76,8 +78,7 @@ public class ImageSwitcher extends ViewPager {
     };
 
     @Override
-    public void setOnPageChangeListener(OnPageChangeListener listener) {
-        final OnPageChangeListener finalListener = listener;
+    public void setOnPageChangeListener(final OnPageChangeListener finalListener) {
         super.setOnPageChangeListener(new OnPageChangeListener() {
 
             @Override
@@ -108,6 +109,7 @@ public class ImageSwitcher extends ViewPager {
 
             @Override
             public void onPageSelected(int i) {
+                setSelectedPosition(i);
                 finalListener.onPageSelected(i);
             }
 
@@ -116,7 +118,6 @@ public class ImageSwitcher extends ViewPager {
                 finalListener.onPageScrollStateChanged(i);
             }
         });
-
     }
 
     private View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
@@ -279,5 +280,25 @@ public class ImageSwitcher extends ViewPager {
 
     public void notifyDataSetChanged() {
         mImageSwitcherAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void setCurrentItem(int item, boolean smoothScroll) {
+        super.setCurrentItem(item, smoothScroll);
+        mPreviousPhotoPosition = item;
+        mCurrentPhotoPosition = item;
+    }
+
+    private void setSelectedPosition(int i) {
+        mPreviousPhotoPosition = mCurrentPhotoPosition;
+        mCurrentPhotoPosition = i;
+    }
+
+    public int getSelectedPosition() {
+        return mCurrentPhotoPosition;
+    }
+
+    public int getPreviousSelectedPosition() {
+        return mPreviousPhotoPosition;
     }
 }

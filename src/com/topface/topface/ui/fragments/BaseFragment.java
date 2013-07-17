@@ -1,22 +1,23 @@
 package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.*;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.utils.*;
 import com.topface.topface.utils.http.IRequestClient;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public abstract class BaseFragment extends TrackedFragment implements IRequestClient {
@@ -40,6 +41,8 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public static final int F_BOOKMARKS = 1009;
     public static final int F_FANS = 1010;
     public static final int F_EDITOR = 9999;
+
+    public static final String INVITE_POPUP = "INVITE_POPUP";
 
 
     @Override
@@ -218,5 +221,35 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     protected void inBackroundThread() {
+    }
+
+    protected void checkInvitePopup() {
+        FragmentActivity activity = getActivity();
+        if (CacheProfile.canInvite && activity != null) {
+            final SharedPreferences preferences = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+
+            long date_start = preferences.getLong(INVITE_POPUP, 1);
+            long date_now = new java.util.Date().getTime();
+
+            if (date_now - date_start >= CacheProfile.getOptions().popup_timeout) {
+                preferences.edit().putLong(INVITE_POPUP, date_now).commit();
+                ContactsProvider provider = new ContactsProvider(activity);
+                provider.getContacts(-1, 0, new ContactsProvider.GetContactsListener() {
+                    @Override
+                    public void onContactsReceived(ArrayList<ContactsProvider.Contact> contacts) {
+
+                        if (isAdded()) {
+                            showInvitePopup(contacts);
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    public void showInvitePopup(ArrayList<ContactsProvider.Contact> data) {
+        EasyTracker.getTracker().trackEvent("InvitesPopup", "Show", "", 0L);
+        InvitesPopup popup = InvitesPopup.newInstance(data);
+        ((BaseFragmentActivity) getActivity()).startFragment(popup);
     }
 }

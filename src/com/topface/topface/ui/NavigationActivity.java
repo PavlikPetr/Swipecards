@@ -339,14 +339,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         return false;
     }
 
-    public void onDialogCancel() {
-        Fragment fragment = mFragmentManager.findFragmentById(android.R.id.content);
-        if (fragment instanceof DatingFragment) {
-            DatingFragment datingFragment = (DatingFragment) fragment;
-            datingFragment.onDialogCancel();
-        }
-    }
-
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         super.startActivityForResult(intent, requestCode);
