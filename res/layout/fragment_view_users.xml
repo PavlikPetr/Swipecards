@@ -9,10 +9,17 @@
     <com.topface.topface.ui.views.ImageSwitcher
             android:id="@+id/glrDatingAlbum"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
+            android:layout_height="fill_parent"/>
 
     <include
             layout="@layout/bar_navigation_header"/>
+
+    <ViewStub
+            android:id="@+id/vsTopPanelContainer"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/loNavigationBar"
+            />
 
     <ViewStub
             android:id="@+id/vsControls"
@@ -21,28 +28,27 @@
             android:layout_height="fill_parent"
             />
 
-    <ProgressBar
-            android:id="@+id/prsDatingLoading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="gone"
-            style="@android:style/Widget.ProgressBar.Small" />
-
-    <ImageButton
-            android:id="@+id/btnUpdate"
-            android:src="@drawable/btn_refresh_selector"
-            android:layout_centerInParent="true"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:background="#0000"
-            android:visibility="gone"
-            />
-
-    <com.topface.topface.ui.views.NoviceLayout
-            android:id="@+id/loNovice"
+    <RelativeLayout
+            android:id="@+id/loHelperContainer"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:visibility="gone" />
+            android:layout_height="fill_parent">
 
+        <ProgressBar
+                android:id="@+id/prsDatingLoading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone"
+                style="@android:style/Widget.ProgressBar.Small"/>
+
+        <ImageButton
+                android:id="@+id/btnUpdate"
+                android:src="@drawable/btn_refresh_selector"
+                android:layout_centerInParent="true"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:background="#0000"
+                android:visibility="gone"
+                />
+    </RelativeLayout>
 </RelativeLayout>

@@ -21,7 +21,7 @@ import com.topface.topface.R;
 import com.topface.topface.RetryRequestReceiver;
 import com.topface.topface.Static;
 import com.topface.topface.data.*;
-import com.topface.topface.data.search.CachableUsersList;
+import com.topface.topface.data.search.CachableSearchList;
 import com.topface.topface.data.search.OnUsersListEventsListener;
 import com.topface.topface.data.search.UsersList;
 import com.topface.topface.data.search.SearchUser;
@@ -64,7 +64,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private RateController mRateController;
     private ImageSwitcher mImageSwitcher;
-    private CachableUsersList<SearchUser> mUserSearchList;
+    private CachableSearchList<SearchUser> mUserSearchList;
     private ProgressBar mProgressBar;
     private Novice mNovice;
     private AlphaAnimation mAlphaAnimation;
@@ -397,7 +397,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     protected void onLoadProfile() {
         if (mUserSearchList == null) {
-            mUserSearchList = new CachableUsersList<SearchUser>(SearchUser.class);
+            mUserSearchList = new CachableSearchList<SearchUser>(SearchUser.class);
             mUserSearchList.setOnEmptyListListener(mSearchListener);
         }
         //Показываем последнего пользователя

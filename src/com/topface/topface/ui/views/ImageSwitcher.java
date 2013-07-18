@@ -72,7 +72,7 @@ public class ImageSwitcher extends ViewPager {
     private GestureDetector.SimpleOnGestureListener mOnGestureListener = new GestureDetector.SimpleOnGestureListener() {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
-            mOnClickListener.onClick(ImageSwitcher.this);
+            if (mOnClickListener != null) mOnClickListener.onClick(ImageSwitcher.this);
             return false;
         }
     };
@@ -176,7 +176,7 @@ public class ImageSwitcher extends ViewPager {
             imageView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mOnClickListener.onClick(ImageSwitcher.this);
+                    if (mOnClickListener != null) mOnClickListener.onClick(ImageSwitcher.this);
                 }
             });
             //Первую фотографию грузим сразу, или если фотографию уже загружена, то сразу показываем ее

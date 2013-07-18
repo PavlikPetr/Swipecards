@@ -507,4 +507,8 @@
         <item quantity="other">%d coins</item>
         <item quantity="one">%d coin</item>
     </plurals>
+
+    <string name="skip">Skip</string>
+    <string name="chat">Chat</string>
+    <string name="sympathies">Sympathies</string>
 </resources>

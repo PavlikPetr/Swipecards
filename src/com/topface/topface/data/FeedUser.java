@@ -65,7 +65,12 @@ public class FeedUser extends AbstractData implements SerializableToJson {
         this.deleted = user.optBoolean("deleted") || this.isEmpty();
         this.bookmarked = user.optBoolean("bookmarked");
         this.blocked = user.optBoolean("blocked");
-        this.photos = new Photos(user.optJSONArray("photos"));
+        if(user.has("photos")) {
+            this.photos = new Photos(user.optJSONArray("photos"));
+        } else {
+            this.photos = new Photos();
+            this.photos.add(this.photo);
+        }
         this.photosCount = user.optInt("photos_count", photos.size());
     }
 
@@ -92,6 +97,7 @@ public class FeedUser extends AbstractData implements SerializableToJson {
         json.put("premium", premium);
         json.put("bookmarked", bookmarked);
         json.put("blocked", blocked);
+        json.put("photos", photos);
         return json;
     }
 

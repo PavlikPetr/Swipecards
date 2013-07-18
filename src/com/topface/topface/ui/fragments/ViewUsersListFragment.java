@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,12 +10,10 @@ import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewStub;
+import android.view.*;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -26,12 +25,14 @@ import com.topface.topface.data.search.UsersList;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.ui.adapters.FeedList;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.views.ImageSwitcher;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.PreloadManager;
 
-public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFragment implements View.OnClickListener {
+public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFragment {
     public static final int PHOTOS_LIMIT = 5;
     public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 2;
 
@@ -57,6 +58,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
             }
         }
     };
+    private FeedItem mLastFeedItem;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,8 +72,10 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
         View root = inflater.inflate(R.layout.fragment_view_users, null);
 
         getActionBar(root);
-        initControls(root);
-        initImageSwitcher();
+        initActionBar(root);
+        inflateTopPanel(root);
+        inflateControls(root);
+        initImageSwitcher(root);
         initViews(root);
 
         return root;
@@ -107,25 +111,94 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
         }
     }
 
-    private void initControls(View root) {
-        ViewStub controlsStub = (ViewStub) root.findViewById(R.id.vsControls);
-        Integer resId = getControlsLayoutResId();
+    private void inflateTopPanel(View root) {
+        Integer resId = getTopPanelLayoutResId();
         if (resId != null) {
-            controlsStub.setLayoutResource(getControlsLayoutResId());
-            controlsStub.inflate();
+            ViewStub topPanelStub = ((ViewStub)root.findViewById(R.id.vsTopPanelContainer));
+            topPanelStub.setLayoutResource(R.layout.controls_closing_top_panel);
+            final View view = topPanelStub.inflate();
+            initTopPanel(view);
+            ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
+            if (viewTreeObserver.isAlive()) {
+                viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        if (android.os.Build.VERSION.SDK_INT > 16) {
+                            view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        } else {
+                            view.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                        }
+                        int height = view.getHeight() + getActionBar(getActivity()).getHeight();
+                        // shift imageswitcher below top panel
+                        View imageSwitcher = getView().findViewById(R.id.glrDatingAlbum);
+                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) imageSwitcher.getLayoutParams();
+                        params.setMargins(0,height,0,0);
+                        imageSwitcher.setLayoutParams(params);
+                        // shift helperContainer below top panel
+                        View helperContainer = getView().findViewById(R.id.loHelperContainer);
+                        params = (RelativeLayout.LayoutParams) helperContainer.getLayoutParams();
+                        params.setMargins(0, height, 0, 0);
+                        helperContainer.setLayoutParams(params);
+                    }
+                });
+            }
         }
     }
 
-    private void initImageSwitcher() {
-        ImageSwitcher imageSwitcher = getImageSwitcher();
+    private void inflateControls(View root) {
+        Integer resId = getControlsLayoutResId();
+        if (resId != null) {
+            ViewStub controlsStub = (ViewStub) root.findViewById(R.id.vsControls);
+            controlsStub.setLayoutResource(getControlsLayoutResId());
+            initControls(controlsStub.inflate());
+        }
+    }
+
+    protected abstract void initTopPanel(View topPanelView);
+
+    protected abstract void initControls(View controlsView);
+
+    private void initActionBar(View view) {
+        ActionBar actionBar = getActionBar(view);
+        setActionBarTitles(view);
+        final Activity activity = getActivity();
+        if (activity instanceof NavigationActivity) {
+            actionBar.showHomeButton((NavigationActivity) activity);
+        }
+        initActionBarControls(actionBar);
+    }
+
+    protected abstract void initActionBarControls(ActionBar actionbar);
+
+    private void setActionBarTitles(View view) {
+        getActionBar(view).setTitleText(getTitle());
+        getActionBar(view).setSubTitleText(getSubtitle());
+    }
+
+    protected abstract String getTitle();
+
+    protected abstract String getSubtitle();
+
+    private void initImageSwitcher(View root) {
+        ImageSwitcher imageSwitcher = getImageSwitcher(root);
         imageSwitcher.setOnPageChangeListener(getOnPageChangedListener());
         imageSwitcher.setOnClickListener(getOnImgeSwitcherClickListener());
         imageSwitcher.setUpdateHandler(getUnlockControlsHandler());
     }
 
-    private ImageSwitcher getImageSwitcher() {
+    private ImageSwitcher getImageSwitcher() throws NullPointerException {
+        View view = getView();
+        if (view != null) {
+            return getImageSwitcher(view);
+        } else {
+            Debug.error("ERROR: root view for getting ImageSwitcher is NULL");
+            throw new NullPointerException();
+        }
+    }
+
+    private ImageSwitcher getImageSwitcher(View view) {
         if (mImageSwitcher == null) {
-            mImageSwitcher = ((ImageSwitcher) getView().findViewById(R.id.glrDatingAlbum));
+            mImageSwitcher = ((ImageSwitcher) view.findViewById(R.id.glrDatingAlbum));
         }
         return mImageSwitcher;
     }
@@ -140,7 +213,16 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     protected void initViews(View root) {
         mProgressBar = (ProgressBar) root.findViewById(R.id.prsDatingLoading);
         mRetryBtn = (ImageButton) root.findViewById(R.id.btnUpdate);
-        mRetryBtn.setOnClickListener(this);
+        mRetryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (CacheProfile.isLoaded()) {
+                    updateData(false);
+                    mRetryBtn.setVisibility(View.GONE);
+                    mProgressBar.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     private ViewPager.OnPageChangeListener getOnPageChangedListener() {
@@ -181,6 +263,13 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
             mUsersList = createUsersList();
         }
         return mUsersList;
+    }
+
+    protected String getLastFeedId() {
+        if (mLastFeedItem != null)
+            return mLastFeedItem.id;
+        else
+            return null;
     }
 
     protected abstract UsersList<T> createUsersList();
@@ -226,10 +315,16 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                 @Override
                 protected UsersList parseResponse(ApiResponse response) {
                     if (getItemsClass() == SearchUser.class) {
-                        return new UsersList(response, getItemsClass());
+                        return new UsersList<SearchUser>(response, getItemsClass());
                     } else {
-                        FeedListData<FeedItem> items = new FeedListData<FeedItem>(response.getJsonResult(),FeedItem.class);
-                        return new UsersList(items, getItemsClass());
+                        if (getFeedUserContainerClass() != null) {
+                            FeedListData<FeedItem> items = new FeedListData<FeedItem>(response.getJsonResult(), getFeedUserContainerClass());
+                            mLastFeedItem = items.items.get(items.items.size()-1);
+                            return new UsersList<FeedUser>(items, getItemsClass());
+                        } else {
+                            return new UsersList<FeedUser>(getItemsClass());
+                        }
+
                     }
                 }
 
@@ -250,7 +345,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                     super.always(response);
                     mUpdateInProcess = false;
                 }
-            });
+            }).exec();
         }
     }
 
@@ -368,7 +463,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
 
     protected abstract void onShowUser();
 
-    private void showNextUser() {
+    protected void showNextUser() {
         showUser(getUsersList().nextUser());
     }
 
@@ -387,19 +482,11 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
         };
     }
 
-    @Override
-    public void onClick(View view) {
-        if (!CacheProfile.isLoaded()) {
-            return;
-        }
-        switch (view.getId()) {
-            case R.id.btnUpdate:
-                updateData(false);
-                mRetryBtn.setVisibility(View.GONE);
-                mProgressBar.setVisibility(View.VISIBLE);
-                break;
-            default:
-                break;
-        }
+    public Class getFeedUserContainerClass(){
+        return null;
+    }
+
+    public Integer getTopPanelLayoutResId() {
+        return null;
     }
 }
