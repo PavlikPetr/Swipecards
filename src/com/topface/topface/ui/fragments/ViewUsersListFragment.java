@@ -27,12 +27,10 @@ import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.views.ImageSwitcher;
-import com.topface.topface.utils.ActionBar;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.PreloadManager;
+import com.topface.topface.utils.*;
 
 public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFragment {
+    public static final int LIMIT = 40;
     public static final int PHOTOS_LIMIT = 5;
     public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 2;
 
@@ -48,6 +46,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     private boolean mNeedMore;
     private boolean mCanSendAlbumReq = true;
     private T mCurrentUser;
+    private RateController mRateController;
 
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -160,7 +159,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
 
     private void initActionBar(View view) {
         ActionBar actionBar = getActionBar(view);
-        setActionBarTitles(view);
+        refreshActionBarTitles(view);
         final Activity activity = getActivity();
         if (activity instanceof NavigationActivity) {
             actionBar.showHomeButton((NavigationActivity) activity);
@@ -170,7 +169,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
 
     protected abstract void initActionBarControls(ActionBar actionbar);
 
-    private void setActionBarTitles(View view) {
+    protected void refreshActionBarTitles(View view) {
         getActionBar(view).setTitleText(getTitle());
         getActionBar(view).setSubTitleText(getSubtitle());
     }
@@ -265,6 +264,10 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
         return mUsersList;
     }
 
+    protected T getCurrentUser() {
+        return mCurrentUser;
+    }
+
     protected String getLastFeedId() {
         if (mLastFeedItem != null)
             return mLastFeedItem.id;
@@ -278,7 +281,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
         return mProgressBar;
     }
 
-    private void updateData(final boolean isAddition) {
+    protected void updateData(final boolean isAddition) {
         if (!mUpdateInProcess) {
             onUpdateStart(isAddition);
             getUsersListRequest().callback(new DataApiHandler<UsersList>() {
@@ -319,7 +322,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                     } else {
                         if (getFeedUserContainerClass() != null) {
                             FeedListData<FeedItem> items = new FeedListData<FeedItem>(response.getJsonResult(), getFeedUserContainerClass());
-                            mLastFeedItem = items.items.get(items.items.size()-1);
+                            mLastFeedItem = items.items.isEmpty() ? null : items.items.get(items.items.size() - 1);
                             return new UsersList<FeedUser>(items, getItemsClass());
                         } else {
                             return new UsersList<FeedUser>(getItemsClass());
@@ -464,7 +467,11 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     protected abstract void onShowUser();
 
     protected void showNextUser() {
-        showUser(getUsersList().nextUser());
+        T nextUser = getUsersList().nextUser();
+        if (nextUser == null) {
+            onUsersProcessed();
+        }
+        showUser(nextUser);
     }
 
     public OnUsersListEventsListener getOnUsersListEventsListener() {
@@ -489,4 +496,18 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     public Integer getTopPanelLayoutResId() {
         return null;
     }
+
+    protected RateController getRateController() {
+        if (mRateController == null) {
+            mRateController = new RateController(getActivity());
+            mRateController.setOnRateControllerListener(getOnRateListener());
+        }
+        return mRateController;
+    }
+
+    public RateController.OnRateControllerListener getOnRateListener() {
+        return null;
+    }
+
+    protected void onUsersProcessed() { };
 }

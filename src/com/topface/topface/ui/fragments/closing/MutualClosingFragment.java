@@ -9,8 +9,10 @@ import com.topface.topface.data.search.UsersList;
 import com.topface.topface.requests.*;
 import com.topface.topface.ui.fragments.ViewUsersListFragment;
 import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
 
-public class LikesClosingFragment extends ViewUsersListFragment<FeedUser> implements View.OnClickListener{
+public class MutualClosingFragment extends ViewUsersListFragment<FeedUser> implements View.OnClickListener{
 
     private View mBtnSkipAll;
 
@@ -20,12 +22,12 @@ public class LikesClosingFragment extends ViewUsersListFragment<FeedUser> implem
 
     @Override
     protected String getTitle() {
-        return getString(R.string.sympathies);
+        return getString(R.string.mutual_sympathies);
     }
 
     @Override
     protected String getSubtitle() {
-        return null;
+        return Utils.getQuantityString(R.plurals.number_of_sympathies, CacheProfile.unread_mutual, CacheProfile.unread_mutual);
     }
 
     @Override
@@ -35,7 +37,7 @@ public class LikesClosingFragment extends ViewUsersListFragment<FeedUser> implem
 
     @Override
     protected Integer getControlsLayoutResId() {
-        return R.layout.controls_closed_likes;
+        return R.layout.controls_closed_mutuals;
     }
 
     @Override
@@ -45,17 +47,15 @@ public class LikesClosingFragment extends ViewUsersListFragment<FeedUser> implem
 
     @Override
     protected void initControls(View controlsView) {
-        controlsView.findViewById(R.id.btnSkip).setOnClickListener(this);
-        controlsView.findViewById(R.id.btnSkipAll).setOnClickListener(this);
+        controlsView.findViewById(R.id.btnForget).setOnClickListener(this);
         mBtnSkipAll = controlsView.findViewById(R.id.btnSkipAll);
         mBtnSkipAll.setOnClickListener(this);
-        controlsView.findViewById(R.id.btnMutual).setOnClickListener(this);
+        controlsView.findViewById(R.id.btnSkip).setOnClickListener(this);
         controlsView.findViewById(R.id.btnChat).setOnClickListener(this);
     }
 
     @Override
     protected void onPageSelected(int position) {
-
     }
 
     @Override
@@ -65,7 +65,7 @@ public class LikesClosingFragment extends ViewUsersListFragment<FeedUser> implem
 
     @Override
     protected ApiRequest getUsersListRequest() {
-        FeedRequest request = new FeedRequest(FeedRequest.FeedService.LIKES, getActivity());
+        FeedRequest request = new FeedRequest(FeedRequest.FeedService.MUTUAL, getActivity());
         request.limit = LIMIT;
         request.unread = true;
         String lastFeedId = getLastFeedId();
@@ -102,20 +102,21 @@ public class LikesClosingFragment extends ViewUsersListFragment<FeedUser> implem
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btnSkip:
-                //TODO skipLike
-                SkipClosedRequest request = new SkipClosedRequest(getActivity());
-                registerRequest(request);
-                request.item = getCurrentUser().feedItem.id;
+            case R.id.btnForget:
+                DeleteFeedRequest deleteRequest = new DeleteFeedRequest(getCurrentUser().feedItem.id, getActivity());
+                deleteRequest.exec();
                 showNextUser();
                 break;
             case R.id.btnSkipAll:
-                SkipAllClosedRequest skipAllRequest = new SkipAllClosedRequest(SkipAllClosedRequest.LIKES,getActivity());
+                SkipAllClosedRequest skipAllRequest = new SkipAllClosedRequest(SkipAllClosedRequest.MUTUAL,getActivity());
                 skipAllRequest.exec();
                 onUsersProcessed();
                 break;
-            case R.id.btnMutual:
-                getRateController().onRate(getCurrentUser().id, 10, RateRequest.DEFAULT_MUTUAL, null);
+            case R.id.btnSkip:
+                SkipClosedRequest request = new SkipClosedRequest(getActivity());
+                registerRequest(request);
+                request.item = getCurrentUser().feedItem.id;
+                request.exec();
                 showNextUser();
                 break;
             case R.id.btnChat:

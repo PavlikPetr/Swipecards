@@ -3,7 +3,6 @@ package com.topface.topface.ui.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.*;
-import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -380,7 +379,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             return;
         }
 
-        DeleteRequest dr = new DeleteRequest(item.id, getActivity());
+        DeleteFeedRequest dr = new DeleteFeedRequest(item.id, getActivity());
         dr.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {

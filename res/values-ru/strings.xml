@@ -690,5 +690,7 @@
     </plurals>
 
     <string name="watch_as_list">Посмотреть списком</string>
+    <string name="mutual_sympathies">Взаимно</string>
+    <string name="skip_all">Пропустить всех</string>
 
 </resources>

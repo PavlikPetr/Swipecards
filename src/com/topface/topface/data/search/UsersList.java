@@ -36,7 +36,7 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
     public static final int RATED_USERS_CNT = 8;
 
     protected int mPosition = 0;
-    private OnUsersListEventsListener mListener;
+    private OnUsersListEventsListener mOnEmptyListener;
     private String mSignature;
     private boolean useSignature;
     private boolean mNeedPreload = true;
@@ -147,9 +147,9 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
 
 
     public void setOnEmptyListListener(OnUsersListEventsListener listener) {
-        mListener = listener;
-        if (mListener != null && isEmpty()) {
-            mListener.onEmptyList(this);
+        mOnEmptyListener = listener;
+        if (mOnEmptyListener != null && isEmpty()) {
+            mOnEmptyListener.onEmptyList(this);
         }
     }
 
@@ -214,11 +214,11 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
             log(String.format("Get current user #%d %s from %s id%d", mPosition, user.getNameAndAge(), user.city.name,user.id));
         }
 
-        if (mListener != null) {
+        if (mOnEmptyListener != null) {
             if (user == null) {
                 log("Search is empty");
                 //Если текущий пользователь пустой
-                mListener.onEmptyList(this);
+                mOnEmptyListener.onEmptyList(this);
             } else {
                 checkPreload();
             }
@@ -307,7 +307,7 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
     private void checkPreload() {
         if (isNeedPreload()) {
             log(String.format("Search preload on position #%d with size %d", mPosition, size()));
-            mListener.onPreload(this);
+            mOnEmptyListener.onPreload(this);
         }
     }
 

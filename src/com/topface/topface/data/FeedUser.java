@@ -48,8 +48,16 @@ public class FeedUser extends AbstractData implements SerializableToJson {
 
     public boolean blocked;
 
+    // соответствующий пользователю элемент списка, может быть null
+    public FeedItem feedItem;
+
     public FeedUser(JSONObject user) {
         super(user);
+    }
+
+    public FeedUser(JSONObject user, FeedItem item) {
+        super(user);
+        feedItem = item;
     }
 
     public void fillData(JSONObject user) {

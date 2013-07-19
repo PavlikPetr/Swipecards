@@ -511,4 +511,6 @@
     <string name="skip">Skip</string>
     <string name="chat">Chat</string>
     <string name="sympathies">Sympathies</string>
+    <string name="mutual_sympathies">Взаимно</string>
+    <string name="skip_all">Пропустить всех</string>
 </resources>

@@ -72,7 +72,9 @@ public class RateController {
 
         }).exec();
 
-        mOnRateControllerListener.successRate();
+        if (mOnRateControllerListener != null){
+            mOnRateControllerListener.successRate();
+        }
     }
 
     public void onRate(final int userId, final int rate, final int mutualId, OnRateListener listener) {
@@ -80,7 +82,9 @@ public class RateController {
             Intent intent = new Intent(mContext, ContainerActivity.class);
             intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
             mContext.startActivity(intent);
-            mOnRateControllerListener.failRate();
+            if (mOnRateControllerListener != null) {
+                mOnRateControllerListener.failRate();
+            }
             return;
         }
 
