@@ -664,7 +664,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             if (TextUtils.equals(item.id, id) && item.unread) {
                 item.unread = false;
                 getListAdapter().notifyDataSetChanged();
-                decrementCounters();
             }
         }
     }
