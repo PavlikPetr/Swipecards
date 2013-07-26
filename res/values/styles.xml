@@ -243,7 +243,7 @@
     </style>
 
     <style name="LeftMenuButtons">
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColor">@color/left_menu_text</item>
         <item name="android:paddingLeft">10dp</item>
         <item name="android:gravity">left|center_vertical</item>
         <item name="android:drawablePadding">10dp</item>

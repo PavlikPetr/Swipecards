@@ -683,14 +683,17 @@
     <string name="sympathies">Симпатии</string>
 
     <plurals name="number_of_sympathies">
+        <item quantity="zero">%d симпатий</item>
         <item quantity="one">%d симпатия</item>
         <item quantity="few">%d симпатии</item>
-        <item quantity="many">%d симпатия</item>
+        <item quantity="many">%d симпатий</item>
         <item quantity="other">%d симпатий</item>
     </plurals>
 
-    <string name="watch_as_list">Посмотреть списком</string>
     <string name="mutual_sympathies">Взаимно</string>
     <string name="skip_all">Пропустить всех</string>
+    <string name="forget">Забыть</string>
+
+    <string name="watch_as_list">Посмотреть списком</string>
 
 </resources>

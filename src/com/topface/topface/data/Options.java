@@ -145,7 +145,7 @@ public class Options extends AbstractData {
     public long popup_timeout;
     public boolean block_unconfirmed;
     public boolean block_chat_not_mutual;
-    public Closing closing;
+    public Closing closing = new Closing();
 
     public static Options parse(ApiResponse response) {
         Options options = new Options();
@@ -213,11 +213,11 @@ public class Options extends AbstractData {
             }
 
             JSONObject closings = response.jsonResult.optJSONObject("closing");
-            options.closing = new Closing();
-            options.closing.enabledMutual = closings.optBoolean("enable_mutual");
-            options.closing.enableSympathies = closings.optBoolean("enable_sympathies");
-            options.closing.limitMutual = closings.optBoolean("limit_mutual");
-            options.closing.limitSympathies = closings.optBoolean("limit_sympathies");
+            if (options.closing == null) options.closing = new Closing();
+            options.closing.enabledMutual = closings.optBoolean("enabled_mutual");
+            options.closing.enableSympathies = closings.optBoolean("enabled_sympathies");
+            options.closing.limitMutual = closings.optInt("limit_mutual");
+            options.closing.limitSympathies = closings.optInt("limit_sympathies");
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
         }
@@ -399,7 +399,16 @@ public class Options extends AbstractData {
     public static class Closing {
         public boolean enableSympathies;
         public boolean enabledMutual;
-        public boolean limitSympathies;
-        public boolean limitMutual;
+        public int limitSympathies;
+        public int limitMutual;
+    }
+
+    public boolean isClosingsEnabled() {
+        return closing.enabledMutual || closing.enableSympathies;
+    }
+
+    public void onStopClosing() {
+        closing.enableSympathies = false;
+        closing.enabledMutual = false;
     }
 }

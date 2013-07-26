@@ -31,6 +31,8 @@ import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
+import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
+import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.*;
 import com.topface.topface.utils.offerwalls.Offerwalls;
@@ -80,7 +82,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         if (isGcmSupported != null) {
             GCMUtils.GCM_SUPPORTED = Boolean.getBoolean(isGcmSupported);
         }
-
         mNovice = Novice.getInstance(getPreferences());
         mNovice.initNoviceFlags();
         try {
@@ -182,6 +183,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             mFullscreenController = new FullscreenController(this);
             mFullscreenController.requestFullscreen();
         }
+        getIntent().putExtra(GCMUtils.NEXT_INTENT, mFragmentMenu.getCurrentFragmentId());
+        onClosings();
     }
 
     @Override
@@ -432,5 +435,20 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         intent.setAction(MenuFragment.SELECT_MENU_ITEM);
         intent.putExtra(MenuFragment.SELECTED_FRAGMENT_ID, fragmentId);
         LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
+    }
+
+    public void onClosings() {
+        if (CacheProfile.unread_mutual > 0) {
+            mFragmentMenu.onClosings(BaseFragment.F_MUTUAL);
+            showFragment(BaseFragment.F_MUTUAL);
+            return;
+        }
+        if (CacheProfile.unread_likes > 0) {
+            mFragmentMenu.onClosings(BaseFragment.F_LIKES);
+            showFragment(BaseFragment.F_LIKES);
+            return;
+        }
+        mFragmentMenu.onStopClosings();
+        showFragment(null); // it will take fragment id from getIntent() extra data
     }
 }

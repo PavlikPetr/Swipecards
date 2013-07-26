@@ -7,8 +7,11 @@ import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.search.OnUsersListEventsListener;
 import com.topface.topface.data.search.UsersList;
 import com.topface.topface.requests.*;
+import com.topface.topface.requests.handlers.SimpleApiHandler;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.ViewUsersListFragment;
 import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.RateController;
 
 public class LikesClosingFragment extends ViewUsersListFragment<FeedUser> implements View.OnClickListener{
 
@@ -105,17 +108,39 @@ public class LikesClosingFragment extends ViewUsersListFragment<FeedUser> implem
             case R.id.btnSkip:
                 //TODO skipLike
                 SkipClosedRequest request = new SkipClosedRequest(getActivity());
+                request.callback(new SimpleApiHandler(){
+                    @Override
+                    public void always(ApiResponse response) {
+                        refreshActionBarTitles(getView());
+                    }
+                });
                 registerRequest(request);
                 request.item = getCurrentUser().feedItem.id;
                 showNextUser();
                 break;
             case R.id.btnSkipAll:
                 SkipAllClosedRequest skipAllRequest = new SkipAllClosedRequest(SkipAllClosedRequest.LIKES,getActivity());
+                registerRequest(skipAllRequest);
+                skipAllRequest.callback(new SimpleApiHandler(){
+                    @Override
+                    public void always(ApiResponse response) {
+                        refreshActionBarTitles(getView());
+                    }
+                });
                 skipAllRequest.exec();
                 onUsersProcessed();
                 break;
             case R.id.btnMutual:
-                getRateController().onRate(getCurrentUser().id, 10, RateRequest.DEFAULT_MUTUAL, null);
+                getRateController().onRate(getCurrentUser().id, 10, RateRequest.DEFAULT_MUTUAL, new RateController.OnRateListener() {
+                    @Override
+                    public void onRateCompleted() {
+                        refreshActionBarTitles(getView());
+                    }
+
+                    @Override
+                    public void onRateFailed() {
+                    }
+                });
                 showNextUser();
                 break;
             case R.id.btnChat:
@@ -127,9 +152,5 @@ public class LikesClosingFragment extends ViewUsersListFragment<FeedUser> implem
             default:
                 break;
         }
-    }
-
-    protected void onUsersProcessed() {
-        //TODO go to next fragment
     }
 }

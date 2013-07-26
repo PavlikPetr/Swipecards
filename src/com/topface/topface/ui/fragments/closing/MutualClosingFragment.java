@@ -7,6 +7,8 @@ import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.search.OnUsersListEventsListener;
 import com.topface.topface.data.search.UsersList;
 import com.topface.topface.requests.*;
+import com.topface.topface.requests.handlers.SimpleApiHandler;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.ViewUsersListFragment;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
@@ -91,7 +93,7 @@ public class MutualClosingFragment extends ViewUsersListFragment<FeedUser> imple
 
     @Override
     protected void onShowUser() {
-        //TODO change body of implemented methods use File | Settings | File Templates.
+        //TODO
     }
 
     @Override
@@ -103,17 +105,39 @@ public class MutualClosingFragment extends ViewUsersListFragment<FeedUser> imple
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnForget:
-                DeleteFeedRequest deleteRequest = new DeleteFeedRequest(getCurrentUser().feedItem.id, getActivity());
-                deleteRequest.exec();
+                if (getCurrentUser() != null) {
+                    DeleteFeedRequest deleteRequest = new DeleteFeedRequest(getCurrentUser().feedItem.id, getActivity());
+                    deleteRequest.callback(new SimpleApiHandler(){
+                        @Override
+                        public void always(ApiResponse response) {
+                            refreshActionBarTitles(getView());
+                        }
+                    });
+                    registerRequest(deleteRequest);
+                    deleteRequest.exec();
+                }
                 showNextUser();
                 break;
             case R.id.btnSkipAll:
                 SkipAllClosedRequest skipAllRequest = new SkipAllClosedRequest(SkipAllClosedRequest.MUTUAL,getActivity());
+                skipAllRequest.callback(new SimpleApiHandler(){
+                    @Override
+                    public void always(ApiResponse response) {
+                        refreshActionBarTitles(getView());
+                    }
+                });
+                registerRequest(skipAllRequest);
                 skipAllRequest.exec();
                 onUsersProcessed();
                 break;
             case R.id.btnSkip:
                 SkipClosedRequest request = new SkipClosedRequest(getActivity());
+                request.callback(new SimpleApiHandler(){
+                    @Override
+                    public void always(ApiResponse response) {
+                        refreshActionBarTitles(getView());
+                    }
+                });
                 registerRequest(request);
                 request.item = getCurrentUser().feedItem.id;
                 request.exec();
@@ -128,9 +152,5 @@ public class MutualClosingFragment extends ViewUsersListFragment<FeedUser> imple
             default:
                 break;
         }
-    }
-
-    protected void onUsersProcessed() {
-        //TODO go to next fragment
     }
 }

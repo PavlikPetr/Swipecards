@@ -67,6 +67,15 @@
                 android:drawableLeft="@drawable/topface_likes"
                 style="@style/LeftMenuButtons"/>
 
+        <!-- Likes Closing -->
+        <Button
+                android:id="@+id/btnFragmentLikesClosing"
+                android:layout_below="@id/btnFragmentDating"
+                android:text="@string/general_likes"
+                android:drawableLeft="@drawable/topface_likes"
+                style="@style/LeftMenuButtons"
+                android:visibility="gone"/>
+
         <!-- UNREAD LIKES -->
         <TextView
                 android:id="@+id/tvNotifyLikes"
@@ -80,6 +89,15 @@
                 android:text="@string/general_mutual"
                 android:drawableLeft="@drawable/topface_sympathy"
                 style="@style/LeftMenuButtons"/>
+
+        <!-- Mutual - Sympathy - Closing -->
+        <Button
+                android:id="@+id/btnFragmentMutualClosing"
+                android:layout_below="@id/btnFragmentLikes"
+                android:text="@string/general_mutual"
+                android:drawableLeft="@drawable/topface_sympathy"
+                style="@style/LeftMenuButtons"
+                android:visibility="gone"/>
 
         <!-- UNREAD MUTUAL -->
         <TextView

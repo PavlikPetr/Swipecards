@@ -24,6 +24,8 @@ import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
+import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
 import com.topface.topface.ui.fragments.feed.*;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.NoviceLayout;
@@ -211,7 +213,6 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         mProfileInfo.setVisibility(View.VISIBLE);
     }
 
-
     @Override
     public void onClick(View view) {
         if (mClickable) {
@@ -350,10 +351,12 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 fragment = new DatingFragment();
                 break;
             case BaseFragment.F_LIKES:
-                fragment = new LikesFragment();
+                fragment = CacheProfile.getOptions().closing.enableSympathies && CacheProfile.unread_likes > 0 ?
+                        new LikesClosingFragment() : new LikesFragment();
                 break;
             case BaseFragment.F_MUTUAL:
-                fragment = new MutualFragment();
+                fragment = CacheProfile.getOptions().closing.enabledMutual && CacheProfile.unread_mutual > 0 ?
+                        new MutualClosingFragment() : new MutualFragment();
                 break;
             case BaseFragment.F_DIALOGS:
                 fragment = new DialogsFragment();
@@ -371,10 +374,11 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 fragment = new SettingsFragment();
                 break;
             case BaseFragment.F_EDITOR:
+                fragment = null;
                 if (Editor.isEditor()) {
                     fragment = new EditorFragment();
-                    break;
                 }
+                break;
             default:
                 fragment = ProfileFragment.newInstance(CacheProfile.uid, ProfileFragment.TYPE_MY_PROFILE);
                 break;
@@ -412,6 +416,19 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 noviceLayout.startAnimation(alphaAnimation);
                 novice.completeShowFillProfile();
             }
+        }
+    }
+
+    public void onClosings(int type) {
+        for (int i = 0; i < mButtons.size(); i++) {
+            int key = mButtons.keyAt(i);
+            mButtons.get(key).setEnabled(key == F_PROFILE || key == type);
+        }
+    }
+
+    public void onStopClosings() {
+        for (int i = 0; i < mButtons.size(); i++) {
+            mButtons.get(mButtons.keyAt(i)).setEnabled(true);
         }
     }
 }

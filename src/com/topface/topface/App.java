@@ -176,6 +176,7 @@ public class App extends Application {
         request.callback(new DataApiHandler() {
             @Override
             protected void success(Object data, ApiResponse response) {
+
             }
 
             @Override

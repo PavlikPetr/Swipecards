@@ -23,8 +23,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
                 android:background="@android:color/transparent"
-                android:drawableTop="@drawable/forget_selector"
-                android:text="@string/skip"/>
+                android:drawableTop="@drawable/btn_forget_selector"
+                android:text="@string/forget"/>
 
         <Button
                 android:id="@+id/btnSkipAll"
@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
                 android:background="@android:color/transparent"
-                android:drawableTop="@drawable/skip_all_selector"
+                android:drawableTop="@drawable/btn_skip_all_selector"
                 android:text="@string/skip_all"
                 android:visibility="gone"/>
 
@@ -45,7 +45,8 @@
                 android:layout_weight="1.0"
                 android:background="@android:color/transparent"
                 android:drawableTop="@drawable/dating_skip_selector"
-                android:text="@string/skip"/>
+                android:text="@string/skip"
+                android:enabled="false"/>
 
         <Button
                 android:id="@+id/btnChat"

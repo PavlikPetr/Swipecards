@@ -129,15 +129,18 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                         }
                         int height = view.getHeight() + getActionBar(getActivity()).getHeight();
                         // shift imageswitcher below top panel
-                        View imageSwitcher = getView().findViewById(R.id.glrDatingAlbum);
-                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) imageSwitcher.getLayoutParams();
-                        params.setMargins(0,height,0,0);
-                        imageSwitcher.setLayoutParams(params);
-                        // shift helperContainer below top panel
-                        View helperContainer = getView().findViewById(R.id.loHelperContainer);
-                        params = (RelativeLayout.LayoutParams) helperContainer.getLayoutParams();
-                        params.setMargins(0, height, 0, 0);
-                        helperContainer.setLayoutParams(params);
+                        View rootView = getView();
+                        if (rootView != null) {
+                            View imageSwitcher = rootView.findViewById(R.id.glrDatingAlbum);
+                            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) imageSwitcher.getLayoutParams();
+                            params.setMargins(0,height,0,0);
+                            imageSwitcher.setLayoutParams(params);
+                            // shift helperContainer below top panel
+                            View helperContainer = rootView.findViewById(R.id.loHelperContainer);
+                            params = (RelativeLayout.LayoutParams) helperContainer.getLayoutParams();
+                            params.setMargins(0, height, 0, 0);
+                            helperContainer.setLayoutParams(params);
+                        }
                     }
                 });
             }
@@ -311,6 +314,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                         mRetryBtn.setVisibility(View.GONE);
                     } else {
                         getProgressBar().setVisibility(View.GONE);
+                        onEmptyDataReceived();
                     }
                     onUpdateSuccess(isAddition);
                 }
@@ -327,7 +331,6 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                         } else {
                             return new UsersList<FeedUser>(getItemsClass());
                         }
-
                     }
                 }
 
@@ -350,6 +353,9 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                 }
             }).exec();
         }
+    }
+
+    private void onEmptyDataReceived() {
     }
 
     private void sendAlbumRequest() {
@@ -459,6 +465,9 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
             unlockControls();
         }
         mPreloadManager.preloadPhoto(getUsersList());
+        if (user == null) {
+            onUsersProcessed();
+        }
         onShowUser();
     }
 
@@ -468,9 +477,6 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
 
     protected void showNextUser() {
         T nextUser = getUsersList().nextUser();
-        if (nextUser == null) {
-            onUsersProcessed();
-        }
         showUser(nextUser);
     }
 
@@ -509,5 +515,9 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
         return null;
     }
 
-    protected void onUsersProcessed() { };
+    protected void onUsersProcessed() {
+        if (getActivity() instanceof NavigationActivity) {
+            ((NavigationActivity)getActivity()).onClosings();
+        }
+    }
 }
