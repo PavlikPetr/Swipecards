@@ -20,6 +20,7 @@ import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
+import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.PhotoMainRequest;
@@ -96,10 +97,11 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     protected void onResumeAsync() {
         super.onResumeAsync();
-        if (!mHasClosingsForThisSession && !CacheProfile.premium && CacheProfile.getOptions().isClosingsEnabled()) {
+        Options.Closing closing = CacheProfile.getOptions().closing;
+        if (!mHasClosingsForThisSession && !CacheProfile.premium && closing.isClosingsEnabled()) {
             getIntent().putExtra(GCMUtils.NEXT_INTENT, mFragmentMenu.getCurrentFragmentId());
-            MutualClosingFragment.usersProcessed = false;
-            LikesClosingFragment.usersProcessed = false;
+            MutualClosingFragment.usersProcessed = closing.isMutualClosingAvailable();
+            LikesClosingFragment.usersProcessed = closing.isLikesClosingAvailable();
             Looper.prepare();
             onClosings();
             Looper.loop();
@@ -456,16 +458,24 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         if (!mHasClosingsForThisSession) {
             mHasClosingsForThisSession = true;
         }
-        if (!MutualClosingFragment.usersProcessed) {
+        if (CacheProfile.unread_mutual == 0) {
+            MutualClosingFragment.usersProcessed = true;
+        }
+        if (CacheProfile.unread_likes == 0) {
+            LikesClosingFragment.usersProcessed = true;
+        }
+        Options.Closing closing = CacheProfile.getOptions().closing;
+        if (closing.enabledMutual && !MutualClosingFragment.usersProcessed) {
             mFragmentMenu.onClosings(BaseFragment.F_MUTUAL);
             showFragment(BaseFragment.F_MUTUAL);
             return;
         }
-        if (!LikesClosingFragment.usersProcessed) {
+        if (closing.enableSympathies && !LikesClosingFragment.usersProcessed) {
             mFragmentMenu.onClosings(BaseFragment.F_LIKES);
             showFragment(BaseFragment.F_LIKES);
             return;
         }
+        closing.onStopClosings();
         mFragmentMenu.onStopClosings();
         showFragment(null); // it will take fragment id from getIntent() extra data
     }
