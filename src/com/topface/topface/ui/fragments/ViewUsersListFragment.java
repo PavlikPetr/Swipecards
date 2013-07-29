@@ -27,7 +27,6 @@ import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.ClosingsBuyVipDialog;
-import com.topface.topface.ui.dialogs.ConfirmEmailDialog;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.utils.*;
 

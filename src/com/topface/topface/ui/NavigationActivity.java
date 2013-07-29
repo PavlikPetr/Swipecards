@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
@@ -81,6 +82,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         if (isGcmSupported != null) {
             GCMUtils.GCM_SUPPORTED = Boolean.getBoolean(isGcmSupported);
         }
+
         mNovice = Novice.getInstance(getPreferences());
         mNovice.initNoviceFlags();
         try {
