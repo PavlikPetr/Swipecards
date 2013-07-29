@@ -29,6 +29,7 @@ public class ActionBar {
 
     public ActionBar(Context context, View actionView) {
         this.actionView = (ViewGroup) actionView.findViewById(R.id.loNavigationBar);
+        this.actionView.bringToFront();
         initShadow(context);
         this.actionView.setVisibility(View.VISIBLE);
         mNavBarController = new NavigationBarController(this.actionView);

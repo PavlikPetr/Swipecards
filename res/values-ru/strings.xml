@@ -678,4 +678,24 @@
         <item quantity="other">%d монет</item>
     </plurals>
 
+    <string name="skip">Пропустить</string>
+    <string name="chat">Написать</string>
+    <string name="sympathies">Симпатии</string>
+
+    <plurals name="number_of_sympathies">
+        <item quantity="zero">%d симпатий</item>
+        <item quantity="one">%d симпатия</item>
+        <item quantity="few">%d симпатии</item>
+        <item quantity="many">%d симпатий</item>
+        <item quantity="other">%d симпатий</item>
+    </plurals>
+
+    <string name="mutual_sympathies">Взаимно</string>
+    <string name="skip_all">Пропустить всех</string>
+    <string name="forget">Забыть</string>
+
+    <string name="watch_as_list">Посмотреть списком</string>
+    <string name="watching_as_list">Смотреть списком</string>
+    <string name="watching_sequentually">Смотреть последовательно</string>
+    <string name="or_use_common_likes_list">Или просматривайте тех, кому вы понравились в общем списке</string>
 </resources>

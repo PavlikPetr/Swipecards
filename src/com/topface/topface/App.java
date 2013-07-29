@@ -16,6 +16,8 @@ import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.*;
+import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
+import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
 import com.topface.topface.utils.*;
 import com.topface.topface.utils.GeoUtils.GeoLocationManager;
 import com.topface.topface.utils.GeoUtils.GeoPreferencesManager;
@@ -84,6 +86,9 @@ public class App extends Application {
             mConnectionIntent = registerReceiver(mConnectionReceiver, new IntentFilter(CONNECTIVITY_CHANGE_ACTION));
         }
 
+        MutualClosingFragment.usersProcessed = false;
+        LikesClosingFragment.usersProcessed = false;
+
         //Выполнение всего, что можно сделать асинхронно, делаем в отдельном потоке
         new Thread(new Runnable() {
             @Override
@@ -91,7 +96,6 @@ public class App extends Application {
                 onCreateAsync();
             }
         }).start();
-
     }
 
     /**
@@ -173,13 +177,13 @@ public class App extends Application {
 
     public static void sendProfileAndOptionsRequests() {
         OptionsRequest request = new OptionsRequest(App.getContext());
-        request.callback(new DataApiHandler() {
+        request.callback(new DataApiHandler<Options>() {
             @Override
-            protected void success(Object data, ApiResponse response) {
+            protected void success(Options data, ApiResponse response) {
             }
 
             @Override
-            protected Object parseResponse(ApiResponse response) {
+            protected Options parseResponse(ApiResponse response) {
                 return Options.parse(response);
             }
 

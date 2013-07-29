@@ -33,6 +33,8 @@ public class FeedUser extends AbstractData implements SerializableToJson {
      * Объект основного фото пользователя
      */
     public Photo photo;
+    public Photos photos;
+    public int photosCount;
     /**
      * флаг премиум
      */
@@ -46,8 +48,16 @@ public class FeedUser extends AbstractData implements SerializableToJson {
 
     public boolean blocked;
 
+    // соответствующий пользователю элемент списка, может быть null
+    public FeedItem feedItem;
+
     public FeedUser(JSONObject user) {
         super(user);
+    }
+
+    public FeedUser(JSONObject user, FeedItem item) {
+        super(user);
+        feedItem = item;
     }
 
     public void fillData(JSONObject user) {
@@ -63,6 +73,13 @@ public class FeedUser extends AbstractData implements SerializableToJson {
         this.deleted = user.optBoolean("deleted") || this.isEmpty();
         this.bookmarked = user.optBoolean("bookmarked");
         this.blocked = user.optBoolean("blocked");
+        if(user.has("photos")) {
+            this.photos = new Photos(user.optJSONArray("photos"));
+        } else {
+            this.photos = new Photos();
+            this.photos.add(this.photo);
+        }
+        this.photosCount = user.optInt("photos_count", photos.size());
     }
 
     public String getNameAndAge() {
@@ -88,6 +105,7 @@ public class FeedUser extends AbstractData implements SerializableToJson {
         json.put("premium", premium);
         json.put("bookmarked", bookmarked);
         json.put("blocked", blocked);
+        json.put("photos", photos);
         return json;
     }
 
@@ -103,4 +121,5 @@ public class FeedUser extends AbstractData implements SerializableToJson {
     public boolean isEmpty() {
         return id <= 0;
     }
+
 }

@@ -1,6 +1,9 @@
 package com.topface.topface.data.search;
 
 import android.text.TextUtils;
+import com.topface.topface.data.FeedItem;
+import com.topface.topface.data.FeedListData;
+import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.SerializableToJson;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.CacheProfile;
@@ -12,7 +15,7 @@ import org.json.JSONObject;
 import java.util.Collection;
 import java.util.LinkedList;
 
-public class Search extends LinkedList<SearchUser> implements SerializableToJson {
+public class UsersList<T extends FeedUser> extends LinkedList<T> implements SerializableToJson {
 
     /**
      * Определяет за сколько пользователей до конца списка нужно предзагружать список
@@ -21,7 +24,7 @@ public class Search extends LinkedList<SearchUser> implements SerializableToJson
 
     /**
      * Эта константа определяет с какой периодичностью мы чистим список оценненных
-     * Не путать с максимальным количеством оцененных, т.е. с {@link Search#RATED_USERS_CNT}
+     * Не путать с максимальным количеством оцененных, т.е. с {@link UsersList#RATED_USERS_CNT}
      * Данное значение говорит через сколько пользователей после превышения лимита нужно чистить список оцененных
      * Нужно что бы очищать поиск не после каждого пользователя, а через нескольких, это важно для кэша
      */
@@ -33,16 +36,43 @@ public class Search extends LinkedList<SearchUser> implements SerializableToJson
     public static final int RATED_USERS_CNT = 8;
 
     protected int mPosition = 0;
-    private OnSearchEventsListener mListener;
+    private OnUsersListEventsListener mOnEmptyListener;
     private String mSignature;
+    private boolean useSignature;
     private boolean mNeedPreload = true;
+    private final Class<T> mClass;
 
-    public Search() {
+    public UsersList(Class<T> itemClass) {
         super();
+        mClass = itemClass;
+        if (mClass == SearchUser.class) {
+            useSignature = true;
+        } else {
+            useSignature = false;
+        }
+    }
+
+    public UsersList(FeedListData<FeedItem> feedItems, Class<T> itemClass) {
+        this(itemClass);
+        for(FeedItem item : feedItems.items) {
+            add((T) item.user);
+        }
+    }
+
+    public UsersList(ApiResponse response, Class<T> itemClass) {
+        this(itemClass);
+        if (response != null) {
+            parseResult(response.jsonResult);
+        }
+    }
+
+    public UsersList(JSONObject jsonResult, Class<T> itemClass) {
+        this(itemClass);
+        parseResult(jsonResult);
     }
 
     @Override
-    public void add(int location, SearchUser object) {
+    public void add(int location, T object) {
         if (!contains(object)) {
             super.add(location, object);
             int position = getSearchPosition();
@@ -55,7 +85,7 @@ public class Search extends LinkedList<SearchUser> implements SerializableToJson
     }
 
     @Override
-    public boolean addAll(int location, Collection<? extends SearchUser> collection) {
+    public boolean addAll(int location, Collection<? extends T> collection) {
         removeDublicates(collection);
         boolean result = super.addAll(location, collection);
         int position = getSearchPosition();
@@ -69,26 +99,26 @@ public class Search extends LinkedList<SearchUser> implements SerializableToJson
     }
 
     @Override
-    public boolean addAll(Collection<? extends SearchUser> collection) {
+    public boolean addAll(Collection<? extends T> collection) {
         removeDublicates(collection);
         mNeedPreload = collection.size() >= USERS_FOR_PRELOAD_CNT;
         return super.addAll(collection);
     }
 
     @Override
-    public boolean add(SearchUser object) {
+    public boolean add(T object) {
         return !contains(object) && super.add(object);
     }
 
     @Override
-    public void addLast(SearchUser object) {
+    public void addLast(T object) {
         if (!contains(object)) {
             super.addLast(object);
         }
     }
 
     @Override
-    public void addFirst(SearchUser object) {
+    public void addFirst(T object) {
         if (!contains(object)) {
             super.addFirst(object);
             //Если добавляем в начало, то указатель должен увеличиться на 1
@@ -101,11 +131,11 @@ public class Search extends LinkedList<SearchUser> implements SerializableToJson
      *
      * @param collection списко в который нужно добавить
      */
-    private void removeDublicates(Collection<? extends SearchUser> collection) {
-        LinkedList<SearchUser> needRemove = new LinkedList<SearchUser>();
+    private void removeDublicates(Collection<? extends T> collection) {
+        LinkedList<T> needRemove = new LinkedList<T>();
 
         //Ищем пользователей, которые уже есть в списке
-        for (SearchUser user : collection) {
+        for (T user : collection) {
             if (contains(user)) {
                 needRemove.add(user);
                 log(String.format("Remove dublicate user #%d %s", user.id, user.getNameAndAge()));
@@ -116,23 +146,11 @@ public class Search extends LinkedList<SearchUser> implements SerializableToJson
     }
 
 
-    public void setOnEmptyListListener(OnSearchEventsListener listener) {
-        mListener = listener;
-        if (mListener != null && isEmpty()) {
-            mListener.onEmptyList(this);
+    public void setOnEmptyListListener(OnUsersListEventsListener listener) {
+        mOnEmptyListener = listener;
+        if (mOnEmptyListener != null && isEmpty()) {
+            mOnEmptyListener.onEmptyList(this);
         }
-    }
-
-    public Search(ApiResponse response) {
-        this();
-        if (response != null) {
-            parseResult(response.jsonResult);
-        }
-    }
-
-    public Search(JSONObject jsonResult) {
-        this();
-        parseResult(jsonResult);
     }
 
     private void parseResult(JSONObject jsonResult) {
@@ -145,7 +163,11 @@ public class Search extends LinkedList<SearchUser> implements SerializableToJson
     private void fillList(JSONArray users) {
         if (users != null) {
             for (int i = 0; i < users.length(); i++) {
-                add(new SearchUser(users.optJSONObject(i)));
+                try {
+                    add(mClass.getConstructor(JSONObject.class).newInstance(users.optJSONObject(i)));
+                } catch (Exception e) {
+                    Debug.error(e);
+                }
             }
         }
     }
@@ -167,7 +189,7 @@ public class Search extends LinkedList<SearchUser> implements SerializableToJson
         mPosition = position >= 0 ? position : 0;
     }
 
-    public SearchUser nextUser() {
+    public T nextUser() {
         setSearchPosition(mPosition + 1);
         log("Next user #" + mPosition);
         //Удаляем лишнее количество оцененных пользователей
@@ -175,8 +197,8 @@ public class Search extends LinkedList<SearchUser> implements SerializableToJson
         return getCurrentUser();
     }
 
-    public SearchUser prevUser() {
-        SearchUser user = null;
+    public T prevUser() {
+        T user = null;
         if (mPosition > 0 && !isEmpty()) {
             setSearchPosition(mPosition - 1);
             log("Prev user #" + mPosition);
@@ -185,18 +207,18 @@ public class Search extends LinkedList<SearchUser> implements SerializableToJson
         return user;
     }
 
-    public SearchUser getCurrentUser() {
-        SearchUser user = null;
+    public T getCurrentUser() {
+        T user = null;
         if (mPosition >= 0 && mPosition < size()) {
             user = get(mPosition);
             log(String.format("Get current user #%d %s from %s id%d", mPosition, user.getNameAndAge(), user.city.name,user.id));
         }
 
-        if (mListener != null) {
+        if (mOnEmptyListener != null) {
             if (user == null) {
                 log("Search is empty");
                 //Если текущий пользователь пустой
-                mListener.onEmptyList(this);
+                mOnEmptyListener.onEmptyList(this);
             } else {
                 checkPreload();
             }
@@ -216,21 +238,21 @@ public class Search extends LinkedList<SearchUser> implements SerializableToJson
     @Override
     public JSONObject toJson() throws JSONException {
         JSONArray usersJson = new JSONArray();
-        for (SearchUser user : this) {
+        for (T user : this) {
             usersJson.put(user.toJson());
         }
 
         return new JSONObject().put("users", usersJson);
     }
 
-    public void replace(Search search) {
+    public void replace(UsersList usersList) {
         clear();
-        search = search != null ? search : new Search();
+        usersList = usersList != null ? usersList : new UsersList(mClass);
 
-        log("Replace search size " + search.size());
-        setSearchPosition(search.getSearchPosition());
-        setSignature(search.getSignature());
-        addAll(search);
+        log("Replace search size " + usersList.size());
+        setSearchPosition(usersList.getSearchPosition());
+        setSignature(usersList.getSignature());
+        addAll(usersList);
     }
 
     private boolean isNeedPreload() {
@@ -267,6 +289,7 @@ public class Search extends LinkedList<SearchUser> implements SerializableToJson
     }
 
     public boolean setSignature(String signature) {
+        if (!useSignature) return false;
         boolean result = false;
         String currentSignature = getSignature();
         if (currentSignature == null) {
@@ -284,11 +307,12 @@ public class Search extends LinkedList<SearchUser> implements SerializableToJson
     private void checkPreload() {
         if (isNeedPreload()) {
             log(String.format("Search preload on position #%d with size %d", mPosition, size()));
-            mListener.onPreload(this);
+            mOnEmptyListener.onPreload(this);
         }
     }
 
     public boolean updateSignature() {
+        if (!useSignature)  return false;
         return setSignature(CacheProfile.dating != null ? CacheProfile.dating.getFilterSignature() : "");
     }
 
@@ -300,10 +324,10 @@ public class Search extends LinkedList<SearchUser> implements SerializableToJson
     /**
      * Добавляет пользователей в поиск, обновляя подпись фильтра
      *
-     * @param search поиск
+     * @param usersList поиск
      */
-    public void addAndUpdateSignature(Search search) {
-        addAll(search);
+    public void addAndUpdateSignature(UsersList usersList) {
+        addAll(usersList);
         updateSignature();
     }
 }

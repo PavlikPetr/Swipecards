@@ -507,4 +507,20 @@
         <item quantity="other">%d coins</item>
         <item quantity="one">%d coin</item>
     </plurals>
+
+    <string name="skip">Skip</string>
+    <string name="chat">Chat</string>
+    <string name="sympathies">Sympathies</string>
+
+    <plurals name="number_of_sympathies">
+        <item quantity="zero">%d sympathies</item>
+        <item quantity="one">%d sympathy</item>
+        <item quantity="few">%d sympathies</item>
+        <item quantity="many">%d sympathies</item>
+        <item quantity="other">%d sympathies</item>
+    </plurals>
+
+    <string name="mutual_sympathies">Mutual</string>
+    <string name="skip_all">Skip all</string>
+    <string name="forget">Forget</string>
 </resources>

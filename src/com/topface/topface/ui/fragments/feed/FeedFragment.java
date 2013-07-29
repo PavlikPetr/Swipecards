@@ -335,7 +335,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     protected void onDeleteItem(final int position) {
-        DeleteRequest dr = new DeleteRequest(getItem(position).id, getActivity());
+        DeleteFeedRequest dr = new DeleteFeedRequest(getItem(position).id, getActivity());
         dr.callback(new SimpleApiHandler() {
             @Override
             public void success(ApiResponse response) {

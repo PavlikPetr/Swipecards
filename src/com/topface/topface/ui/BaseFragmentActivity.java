@@ -102,6 +102,13 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         afterOnSaveInstanceState = false;
         checkProfileLoad();
         registerReauthReceiver();
+        (new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                onResumeAsync();
+            }
+        }).start();
     }
 
     private void registerReauthReceiver() {
@@ -256,6 +263,9 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     }
 
     protected void onCreateAsync() {
+    }
+
+    protected void onResumeAsync() {
     }
 
     private ActionBar mActionBar;

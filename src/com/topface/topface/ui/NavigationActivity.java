@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
@@ -29,8 +28,9 @@ import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
+import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
+import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.*;
 import com.topface.topface.utils.offerwalls.Offerwalls;
@@ -52,6 +52,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private SlidingMenu mSlidingMenu;
     private boolean isPopupVisible = false;
     private boolean menuEnabled;
+    private static boolean mHasClosingsForThisSession;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,7 +81,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         if (isGcmSupported != null) {
             GCMUtils.GCM_SUPPORTED = Boolean.getBoolean(isGcmSupported);
         }
-
         mNovice = Novice.getInstance(getPreferences());
         mNovice.initNoviceFlags();
         try {
@@ -89,6 +89,19 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             Looper.loop();
         } catch (Exception e) {
             Debug.error(e);
+        }
+    }
+
+    @Override
+    protected void onResumeAsync() {
+        super.onResumeAsync();
+        if (!mHasClosingsForThisSession && !CacheProfile.premium && CacheProfile.getOptions().isClosingsEnabled()) {
+            getIntent().putExtra(GCMUtils.NEXT_INTENT, mFragmentMenu.getCurrentFragmentId());
+            MutualClosingFragment.usersProcessed = false;
+            LikesClosingFragment.usersProcessed = false;
+            Looper.prepare();
+            onClosings();
+            Looper.loop();
         }
     }
 
@@ -339,14 +352,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         return false;
     }
 
-    public void onDialogCancel() {
-        Fragment fragment = mFragmentManager.findFragmentById(android.R.id.content);
-        if (fragment instanceof DatingFragment) {
-            DatingFragment datingFragment = (DatingFragment) fragment;
-            datingFragment.onDialogCancel();
-        }
-    }
-
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         super.startActivityForResult(intent, requestCode);
@@ -440,5 +445,23 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         intent.setAction(MenuFragment.SELECT_MENU_ITEM);
         intent.putExtra(MenuFragment.SELECTED_FRAGMENT_ID, fragmentId);
         LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
+    }
+
+    public void onClosings() {
+        if (!mHasClosingsForThisSession) {
+            mHasClosingsForThisSession = true;
+        }
+        if (!MutualClosingFragment.usersProcessed) {
+            mFragmentMenu.onClosings(BaseFragment.F_MUTUAL);
+            showFragment(BaseFragment.F_MUTUAL);
+            return;
+        }
+        if (!LikesClosingFragment.usersProcessed) {
+            mFragmentMenu.onClosings(BaseFragment.F_LIKES);
+            showFragment(BaseFragment.F_LIKES);
+            return;
+        }
+        mFragmentMenu.onStopClosings();
+        showFragment(null); // it will take fragment id from getIntent() extra data
     }
 }
