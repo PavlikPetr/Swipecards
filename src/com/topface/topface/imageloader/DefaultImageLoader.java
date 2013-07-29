@@ -46,11 +46,11 @@ public class DefaultImageLoader {
     protected DisplayImageOptions getOptimizedDisplayImageConfig() {
         if (mOptimizedConfig == null) {
             DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder();
-            builder.cacheInMemory();
-            builder.cacheOnDisc();
+            builder.cacheInMemory(true);
+            builder.cacheOnDisc(true);
             builder.imageScaleType(ImageScaleType.EXACTLY);
             builder.bitmapConfig(Bitmap.Config.RGB_565);
-            builder.resetViewBeforeLoading();
+            builder.resetViewBeforeLoading(true);
             builder.showImageForEmptyUri(R.drawable.im_photo_error);
             mOptimizedConfig = builder.build();
         }
@@ -59,9 +59,9 @@ public class DefaultImageLoader {
 
     protected DisplayImageOptions.Builder getDisplayImageConfig() {
         DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder();
-        builder.cacheInMemory();
-        builder.cacheOnDisc();
-        builder.resetViewBeforeLoading();
+        builder.cacheInMemory(true);
+        builder.cacheOnDisc(true);
+        builder.resetViewBeforeLoading(true);
         builder.showImageForEmptyUri(R.drawable.im_photo_error);
         return builder;
     }

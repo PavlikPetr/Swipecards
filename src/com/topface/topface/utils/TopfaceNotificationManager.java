@@ -184,7 +184,7 @@ public class TopfaceNotificationManager {
                 case FAIL:
                     return generateFail(isVersionOld(), intent);
                 case STANDARD:
-                    return generateStandard(intent);
+                    return generateSuccess(isVersionOld(), intent);
             }
             return null;
         }
@@ -225,12 +225,44 @@ public class TopfaceNotificationManager {
             }
 
             PendingIntent resultPendingIntent = generatePendingIntent(intent);
-
+            notificationBuilder.setAutoCancel(true);
             notificationBuilder.setContentIntent(resultPendingIntent);
 
 
             //noinspection deprecation
             return notificationBuilder.build();
+        }
+
+        private Notification generateSuccess(boolean isOld, Intent intent) {
+            try {
+                notificationBuilder.setSmallIcon(R.drawable.ic_notification);
+
+                RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.fail_notification_layout);
+                if (image != null) {
+                    Bitmap scaledIcon = Utils.clipAndScaleBitmap(image, (int) width, (int) height);
+                    if (scaledIcon != null) {
+                        views.setBitmap(R.id.fnAvatar, "setImageBitmap", image);
+                    }
+                }
+
+                views.setTextViewText(R.id.fnTitle, title);
+                views.setTextViewText(R.id.fnMsg, text);
+                views.setViewVisibility(R.id.fnRetry, View.GONE);
+
+                if (!isOld) {
+                    generateBigPicture();
+                }
+                PendingIntent resultPendingIntent = generatePendingIntent(intent);
+                notificationBuilder.setAutoCancel(true);
+                notificationBuilder.setContentIntent(resultPendingIntent);
+                Notification not = notificationBuilder.build();
+
+                not.contentView = views;
+                return not;
+            } catch (Exception e) {
+                Debug.error(e);
+            }
+            return null;
         }
 
         private Notification generateFail(boolean isOld, Intent intent) {
@@ -250,7 +282,7 @@ public class TopfaceNotificationManager {
 
                 if (!isOld) {
 
-                    Intent retryIntent = new Intent(AddPhotoHelper.CANCEL_NOTIFICATION_RECEIVER);
+                    Intent retryIntent = new Intent(AddPhotoHelper.CANCEL_NOTIFICATION_RECEIVER + intent.getParcelableExtra("PhotoUrl"));
                     retryIntent.putExtra("id", id);
                     retryIntent.putExtra("isRetry", true);
 
@@ -259,7 +291,7 @@ public class TopfaceNotificationManager {
                     views.setViewVisibility(R.id.fnRetry, View.GONE);
                 }
                 PendingIntent resultPendingIntent = generatePendingIntent(intent);
-
+//                notificationBuilder.setAutoCancel(true);
                 notificationBuilder.setContentIntent(resultPendingIntent);
                 Notification not = notificationBuilder.build();
 
@@ -284,7 +316,7 @@ public class TopfaceNotificationManager {
 
                 views.setTextViewText(R.id.nfTitle, title);
                 if (!isOld) {
-                    Intent cancelIntent = new Intent(AddPhotoHelper.CANCEL_NOTIFICATION_RECEIVER);
+                    Intent cancelIntent = new Intent(AddPhotoHelper.CANCEL_NOTIFICATION_RECEIVER + intent.getParcelableExtra("PhotoUrl"));
                     cancelIntent.putExtra("id", id);
                     views.setOnClickPendingIntent(R.id.notCancelButton, generateBigPicture(cancelIntent, context.getString(R.string.general_cancel)));
                 } else {
@@ -304,8 +336,10 @@ public class TopfaceNotificationManager {
         }
 
         private void generateBigPicture() {
+            Bitmap tficon = BitmapFactory.decodeResource(context.getResources(),
+                    R.drawable.ic_notification);
             NotificationCompat.BigPictureStyle inboxStyle =
-                    new NotificationCompat.BigPictureStyle(notificationBuilder.setContentTitle(title));
+                    new NotificationCompat.BigPictureStyle(notificationBuilder.setLargeIcon(tficon).setContentTitle(title));
 
             inboxStyle.bigPicture(image).build();
         }

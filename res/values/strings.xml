@@ -236,7 +236,7 @@
     <string name="vip_invisible_mode">Invisible mode</string>
     <string name="buying_profile_coins">Your account</string>
     <string name="vip_buy_vip">Purchase of VIP</string>
-    <string name="vip_state_off">Your VIP status is not activated</string>
+    <string name="vip_state_off">Your VIP-status is not activated</string>
     <string name="vip_state_on">Your VIP-status was activated</string>
     <string name="vip_abilities">Your VIP abilities</string>
     <string name="vip_why">Why you need to be a VIP</string>
@@ -246,11 +246,11 @@
     <string name="vip_info_message">Receive odds - your messages will be notable against a general background!</string>
     <string name="vip_info_gift">Choose exclusive VIP gifts, and you will be remembered for sure!</string>
     <string name="vip_info_blackList">Get rid of annoying individuals with the help of \"blacklist\"</string>
-    <string name="vip_info_vip">Be noticeable with your VIP status while searching as well as your profile!</string>
+    <string name="vip_info_vip">Be noticeable with your VIP-status while searching as well as your profile!</string>
     <string name="vip_info_title">VIP privileges</string>
     <string name="black_list_retrieve">Retrieve</string>
     <string name="buying_vip_status">Buy VIP-status</string>
-    <string name="buying_vip_info">To get access to guests, VIP status is necessary</string>
+    <string name="buying_vip_info">To get access to guests, VIP-status is necessary</string>
     <string name="buy_play_market_not_available">Play Market is not available</string>
     <string name="buy_subscription_not_available">Subscriptions are not available</string>
     <string name="default_economy_vip">VIP from 10 USD a month</string>
@@ -409,7 +409,7 @@
     <string name="cant_delete_fake_item">This message has not been sent yet, you cannot delete it. Please try again later.</string>
     <string name="vip_stop_ads">Only chatting, nothing more. VIP users do not see advertisements</string>
     <string name="settings_invalid_name">The name contains incorrect characters</string>
-    <string name="general_fan_access_error">To access your fans, you need to have VIP status</string>
+    <string name="general_fan_access_error">To access your fans, you need to have VIP-status</string>
     <string name="friend_email_hint">Enter your friend\'s e-mail</string>
     <string name="general_add">Add</string>
     <string name="general_invite_friends">Invite friends</string>
@@ -418,8 +418,8 @@
     <string name="invalid_contacts">Some of the contacts were incorrect. Please, send correct contacts</string>
     <string name="general_choose_action">Choose an action</string>
     <plurals name="vip_status_period">
-        <item quantity="other">You received VIP status for %d days</item>
-        <item quantity="one">You received VIP status for %d day</item>
+        <item quantity="other">You received VIP-status for %d days</item>
+        <item quantity="one">You received VIP-status for %d day</item>
     </plurals>
     <plurals name="vip_status_period_btn">
         <item quantity="other">Get VIP for %d days</item>
