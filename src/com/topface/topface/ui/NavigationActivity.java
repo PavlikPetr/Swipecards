@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
@@ -30,8 +29,6 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
-import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
-import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.*;
 import com.topface.topface.utils.offerwalls.Offerwalls;
@@ -259,7 +256,11 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                                     if (CacheProfile.photos != null && CacheProfile.photos.contains(photo)) {
                                         CacheProfile.photos.remove(photo);
                                     }
-                                    Toast.makeText(NavigationActivity.this, App.getContext().getString(R.string.general_wrong_photo_upload), 2000);
+                                    Toast.makeText(
+                                            NavigationActivity.this,
+                                            App.getContext().getString(R.string.general_wrong_photo_upload),
+                                            Toast.LENGTH_LONG
+                                    ).show();
                                 }
                             }
 
@@ -331,7 +332,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         if (mFullscreenController != null && mFullscreenController.isFullScreenBannerVisible() && !isPopupVisible) {
             mFullscreenController.hideFullscreenBanner((ViewGroup) findViewById(R.id.loBannerContainer));
         } else if (mSlidingMenu != null && !isPopupVisible) {
-            if (mSlidingMenu.isMenuShowing() || !mSlidingMenu.isSlidingEnabled()) {
+            if (mSlidingMenu.isMenuShowing() || !mSlidingMenu.isSlidingEnabled() || !menuEnabled) {
                 super.onBackPressed();
             } else {
                 mSlidingMenu.showMenu();

@@ -7,12 +7,11 @@ import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.search.UsersList;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
-import com.topface.topface.ui.fragments.ViewUsersListFragment;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
-public class MutualClosingFragment extends ViewUsersListFragment<FeedUser> implements View.OnClickListener{
+public class MutualClosingFragment extends ClosingFragment implements View.OnClickListener {
 
     public static boolean usersProcessed;
 
@@ -110,7 +109,7 @@ public class MutualClosingFragment extends ViewUsersListFragment<FeedUser> imple
             case R.id.btnForget:
                 if (getCurrentUser() != null) {
                     DeleteFeedRequest deleteRequest = new DeleteFeedRequest(getCurrentUser().feedItem.id, getActivity());
-                    deleteRequest.callback(new SimpleApiHandler(){
+                    deleteRequest.callback(new SimpleApiHandler() {
                         @Override
                         public void always(ApiResponse response) {
                             refreshActionBarTitles(getView());
@@ -122,16 +121,7 @@ public class MutualClosingFragment extends ViewUsersListFragment<FeedUser> imple
                 showNextUser();
                 break;
             case R.id.btnSkipAll:
-                SkipAllClosedRequest skipAllRequest = new SkipAllClosedRequest(SkipAllClosedRequest.MUTUAL,getActivity());
-                skipAllRequest.callback(new SimpleApiHandler(){
-                    @Override
-                    public void always(ApiResponse response) {
-                        refreshActionBarTitles(getView());
-                    }
-                });
-                registerRequest(skipAllRequest);
-                skipAllRequest.exec();
-                onUsersProcessed();
+                skipAllRequests(SkipAllClosedRequest.MUTUAL);
                 break;
             case R.id.btnSkip:
                 if (CacheProfile.premium) {
@@ -153,7 +143,7 @@ public class MutualClosingFragment extends ViewUsersListFragment<FeedUser> imple
                 }
                 break;
             case R.id.btnChat:
-                //TODO chat
+                showChat();
                 break;
             case R.id.btnWatchAsList:
                 showWatchAsListDialog(CacheProfile.unread_mutual);
