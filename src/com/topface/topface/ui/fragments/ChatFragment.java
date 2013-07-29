@@ -68,8 +68,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public static final String INTENT_ITEM_ID = "item_id";
     public static final String MAKE_ITEM_READ = "com.topface.topface.feedfragment.MAKE_READ";
 
-    public static final String DEFAULT_ACTIVATED_COLOR = "#AAAAAA";
-
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
 
     private static final int COMPLAIN_BUTTON = 2;
@@ -81,7 +79,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     private Handler mUpdater;
     private boolean mIsUpdating;
-    private boolean mProfileInvoke;
     private boolean mIsAddPanelOpened;
     private PullToRefreshListView mListView;
     private ChatListAdapter mAdapter;
@@ -125,7 +122,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         // arguments
         itemId = getArguments().getString(INTENT_ITEM_ID);
         mUserId = getArguments().getInt(INTENT_USER_ID, -1);
-        mProfileInvoke = getArguments().getBoolean(INTENT_PROFILE_INVOKE, false);
         String userName = getArguments().getString(INTENT_USER_NAME);
         int userAge = getArguments().getInt(INTENT_USER_AGE, 0);
         String userCity = getArguments().getString(INTENT_USER_CITY);
@@ -544,18 +540,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 mActionBar.showProfileAvatar(mUser.sex == Static.BOY ? R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar, null);
             } else {
                 ArrayList<UserActions.ActionItem> actions = new ArrayList<UserActions.ActionItem>();
-                actions.add(new UserActions.ActionItem(mUser.sex == 1? R.id.acProfile : R.id.acWProfile, this));
+                actions.add(new UserActions.ActionItem(mUser.sex == 1 ? R.id.acProfile : R.id.acWProfile, this));
                 actions.add(new UserActions.ActionItem(R.id.acBlock, this));
                 actions.add(new UserActions.ActionItem(R.id.acComplain, this));
                 actions.add(new UserActions.ActionItem(R.id.acBookmark, this));
 
 
-
                 UserActions userActions = new UserActions(chatActions, actions);
                 bookmarksTv = (TextView) userActions.getViewById(R.id.acBookmark).findViewById(R.id.favTV);
                 blockView = (RelativeLayout) userActions.getViewById(R.id.acBlock);
-                ((TextView)blockView.findViewById(R.id.blockTV)).setText(mUser.blocked?R.string.black_list_delete:R.string.black_list_add_short);
-                bookmarksTv.setText(mUser.bookmarked? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+                ((TextView) blockView.findViewById(R.id.blockTV)).setText(mUser.blocked ? R.string.black_list_delete : R.string.black_list_add_short);
+                bookmarksTv.setText(mUser.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
 
                 mActionBar.showUserActionsButton(
                         new View.OnClickListener() {
@@ -658,15 +653,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 break;
             case R.id.btnNavigationProfileBar:
-            case R.id.btnNavigationBarAvatar:
-//                if (mProfileInvoke) {
-//                    getActivity().finish();
-//                } else {
-//                    if (mUserId > 0) {
-//                        startActivity(ContainerActivity.getProfileIntent(mUserId, getActivity()));
-//                    }
-//                }
-                break;
             case R.id.btnBuyVip:
                 Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
                 startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
@@ -1011,10 +997,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             mAdapter.addSentMessage(loaderItem, mListView.getRefreshableView());
         }
 
-        final MessageRequest messageRequest = new MessageRequest(getActivity());
+        final MessageRequest messageRequest = new MessageRequest(mUserId, editString, getActivity());
         registerRequest(messageRequest);
-        messageRequest.message = editString;
-        messageRequest.userid = mUserId;
         editText.clear();
 
         messageRequest.callback(new DataApiHandler<History>() {

@@ -32,7 +32,7 @@ public class DefaultImageLoader {
     protected ImageLoaderConfiguration.Builder getConfig() {
         ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(mContext);
         if (App.DEBUG) {
-            builder.enableLogging();
+            builder.writeDebugLogs();
         }
         builder.memoryCache(new WeakMemoryCache());
         builder.discCacheSize(DISC_CACHE_SIZE);

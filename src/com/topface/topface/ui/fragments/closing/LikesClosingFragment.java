@@ -4,16 +4,13 @@ import android.view.View;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.FeedUser;
-import com.topface.topface.data.search.OnUsersListEventsListener;
 import com.topface.topface.data.search.UsersList;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
-import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.fragments.ViewUsersListFragment;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.RateController;
 
-public class LikesClosingFragment extends ViewUsersListFragment<FeedUser> implements View.OnClickListener{
+public class LikesClosingFragment extends ClosingFragment implements View.OnClickListener {
 
     private View mBtnSkipAll;
 
@@ -119,16 +116,7 @@ public class LikesClosingFragment extends ViewUsersListFragment<FeedUser> implem
                 showNextUser();
                 break;
             case R.id.btnSkipAll:
-                SkipAllClosedRequest skipAllRequest = new SkipAllClosedRequest(SkipAllClosedRequest.LIKES,getActivity());
-                registerRequest(skipAllRequest);
-                skipAllRequest.callback(new SimpleApiHandler(){
-                    @Override
-                    public void always(ApiResponse response) {
-                        refreshActionBarTitles(getView());
-                    }
-                });
-                skipAllRequest.exec();
-                onUsersProcessed();
+                skipAllRequests(SkipAllClosedRequest.LIKES);
                 break;
             case R.id.btnMutual:
                 getRateController().onRate(getCurrentUser().id, 10, RateRequest.DEFAULT_MUTUAL, new RateController.OnRateListener() {
@@ -144,7 +132,7 @@ public class LikesClosingFragment extends ViewUsersListFragment<FeedUser> implem
                 showNextUser();
                 break;
             case R.id.btnChat:
-                //TODO chat
+                showChat();
                 break;
             case R.id.btnWatchAsList:
                 //TODO as list
