@@ -99,11 +99,17 @@
                     android:text="@string/recover_password"
                     android:paddingTop="16dp"
                     android:paddingBottom="16dp"/>
+
+        </LinearLayout>
+        <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_below="@id/mainContainer"
+                android:paddingTop="30dp">
             <TextView
                     android:id="@+id/tvBackToMainAuth"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/mainContainer"
                     android:layout_centerHorizontal="true"
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="8dp"
@@ -112,10 +118,8 @@
                     android:drawableLeft="@drawable/ic_back"
                     android:drawablePadding="8dp"
                     style="@style/AuthButtonsBigText"
-                    android:gravity="center"
                     />
-        </LinearLayout>
-
+        </RelativeLayout>
         <ImageView
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"

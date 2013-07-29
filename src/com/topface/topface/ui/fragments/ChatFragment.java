@@ -773,6 +773,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }).exec();
                 break;
             case R.id.acComplain:
+                mActionBar.setUserActionsControlActive(false);
+                chatActions.startAnimation(getAnimation(true, 0));
                 startActivity(ContainerActivity.getComplainIntent(mUserId));
                 break;
             default:
