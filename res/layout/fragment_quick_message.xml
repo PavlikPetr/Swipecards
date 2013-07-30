@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:background="@drawable/popup_invite_background"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <include
+            android:id="@+id/chatUserMessage"
+            android:visibility="gone"
+            android:layout_marginBottom="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/sendBlock"
+            layout="@layout/chat_user" />
+
+    <ProgressBar
+            android:id="@+id/quickMessageLoader"
+            android:layout_above="@id/sendBlock"
+            android:visibility="gone"
+            android:layout_alignParentRight="true"
+            android:layout_margin="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    <include
+            android:id="@id/sendBlock"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            layout="@layout/chat_footer_send" />
+
+    <ImageView
+            android:id="@+id/btnClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_close_popup"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="5dp"
+            />
+
+</RelativeLayout>

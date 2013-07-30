@@ -1,6 +1,7 @@
 package com.topface.topface.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.util.SparseArrayCompat;

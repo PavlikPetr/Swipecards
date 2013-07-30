@@ -236,7 +236,7 @@
     <string name="vip_invisible_mode">Invisible mode</string>
     <string name="buying_profile_coins">Your account</string>
     <string name="vip_buy_vip">Purchase of VIP</string>
-    <string name="vip_state_off">Your VIP status is not activated</string>
+    <string name="vip_state_off">Your VIP-status is not activated</string>
     <string name="vip_state_on">Your VIP-status was activated</string>
     <string name="vip_abilities">Your VIP abilities</string>
     <string name="vip_why">Why you need to be a VIP</string>
@@ -246,11 +246,11 @@
     <string name="vip_info_message">Receive odds - your messages will be notable against a general background!</string>
     <string name="vip_info_gift">Choose exclusive VIP gifts, and you will be remembered for sure!</string>
     <string name="vip_info_blackList">Get rid of annoying individuals with the help of \"blacklist\"</string>
-    <string name="vip_info_vip">Be noticeable with your VIP status while searching as well as your profile!</string>
+    <string name="vip_info_vip">Be noticeable with your VIP-status while searching as well as your profile!</string>
     <string name="vip_info_title">VIP privileges</string>
     <string name="black_list_retrieve">Retrieve</string>
-    <string name="buying_vip_status">Buy VIP status</string>
-    <string name="buying_vip_info">To get access to guests, VIP status is necessary</string>
+    <string name="buying_vip_status">Buy VIP-status</string>
+    <string name="buying_vip_info">To get access to guests, VIP-status is necessary</string>
     <string name="buy_play_market_not_available">Play Market is not available</string>
     <string name="buy_subscription_not_available">Subscriptions are not available</string>
     <string name="default_economy_vip">VIP from 10 USD a month</string>
@@ -343,7 +343,7 @@
     <string name="get_it_for_free">Get coins for free</string>
     <string name="vip_advantages">VIP advantages</string>
     <string name="change_email">Change e-mail</string>
-    <string name="send_confirmation_email">Send confirmation email</string>
+    <string name="send_confirmation_email">Send confirmation e-mail</string>
     <string name="change_password">Change password</string>
     <string name="password_changing">Changing password</string>
     <string name="save">Save</string>
@@ -409,7 +409,7 @@
     <string name="cant_delete_fake_item">This message has not been sent yet, you cannot delete it. Please try again later.</string>
     <string name="vip_stop_ads">Only chatting, nothing more. VIP users do not see advertisements</string>
     <string name="settings_invalid_name">The name contains incorrect characters</string>
-    <string name="general_fan_access_error">To access your fans, you need to have VIP status</string>
+    <string name="general_fan_access_error">To access your fans, you need to have VIP-status</string>
     <string name="friend_email_hint">Enter your friend\'s e-mail</string>
     <string name="general_add">Add</string>
     <string name="general_invite_friends">Invite friends</string>
@@ -418,8 +418,8 @@
     <string name="invalid_contacts">Some of the contacts were incorrect. Please, send correct contacts</string>
     <string name="general_choose_action">Choose an action</string>
     <plurals name="vip_status_period">
-        <item quantity="other">You received VIP status for %d days</item>
-        <item quantity="one">You received VIP status for %d day</item>
+        <item quantity="other">You received VIP-status for %d days</item>
+        <item quantity="one">You received VIP-status for %d day</item>
     </plurals>
     <plurals name="vip_status_period_btn">
         <item quantity="other">Get VIP for %d days</item>
@@ -439,7 +439,7 @@
     <string name="nobody_chat_with_you_sympathies_will_help">No one wrote you yet. Likes help you in your search for someone to chat with</string>
     <string name="rate_and_have_mutual_or_buy_and_chat">Send likes to people you like and get mutual likes in return. Or buy likes and start chatting with those who you like!</string>
     <string name="start_rate">Start rating</string>
-    <string name="with_vip_find_your_visitors">With a VIP status, you can find out who checked out your page</string>
+    <string name="with_vip_find_your_visitors">With a VIP-status, you can find out who checked out your page</string>
     <string name="on_avatar">On avatar</string>
     <string name="your_avatar">Your avatar</string>
     <string name="avatar_set_successfully">Your avatar has been successfully set</string>
@@ -499,9 +499,28 @@
     <string name="delete">Delete</string>
     <string name="delete_account_warning">Attention! You are trying to delete your profile on Topface.</string>
     <string name="delete_account_error">Unfortunately, your attempt to delete your account failed. You can try it again.</string>
-    <string name="delete_account_will_be_restored_are_you_sure">You are trying to enter to delete your account. Before entering your account, it will be restored. Are you sure?</string>
+    <string name="delete_account_will_be_restored_are_you_sure">You are trying to enter to delete your account. Before entering your account, it will be restored afterwards. Are you sure?</string>
     <string name="restore_of_account">Restore account</string>
     <string name="restore">Restore</string>
     <string name="admiration_sended">Admiration sent</string>
-    <string name="getjar_auth_title">Pick an account</string>
+    <plurals name="general_coins">
+        <item quantity="other">%d coins</item>
+        <item quantity="one">%d coin</item>
+    </plurals>
+
+    <string name="skip">Skip</string>
+    <string name="chat">Chat</string>
+    <string name="sympathies">Sympathies</string>
+
+    <plurals name="number_of_sympathies">
+        <item quantity="zero">%d sympathies</item>
+        <item quantity="one">%d sympathy</item>
+        <item quantity="few">%d sympathies</item>
+        <item quantity="many">%d sympathies</item>
+        <item quantity="other">%d sympathies</item>
+    </plurals>
+
+    <string name="mutual_sympathies">Mutual</string>
+    <string name="skip_all">Skip all</string>
+    <string name="forget">Forget</string>
 </resources>

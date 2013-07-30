@@ -1,9 +1,10 @@
 package com.topface.topface.data.search;
 
 
+import com.topface.topface.data.FeedUser;
 import com.topface.topface.utils.cache.SearchCacheManager;
 
-public class CachableSearch extends Search {
+public class CachableSearchList<T extends FeedUser> extends UsersList<T> {
 
     private final SearchCacheManager mCache;
 
@@ -14,8 +15,8 @@ public class CachableSearch extends Search {
      */
     public static final int RATED_USERS_IN_CACNE_CNT = 8;
 
-    public CachableSearch() {
-        super();
+    public CachableSearchList(Class<T> itemClass) {
+        super(itemClass);
 
         mCache = new SearchCacheManager();
         super.replace(mCache.getCache());

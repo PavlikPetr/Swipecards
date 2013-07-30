@@ -323,6 +323,7 @@
     <string name="boy">erkek</string>
     <string name="girl">kız</string>
     <string name="start_communication">Sohbete başlamak</string>
+    <string name="birthdate">DT</string>
     <string name="welcome_to_topface">Topface’ye hoş geldiniz!</string>
     <string name="incorrect_email">E-mail yanlıştır</string>
     <string name="incorrect_login">Login yanlıştır</string>
@@ -416,6 +417,7 @@
     <string name="general_invite_friends">Arkadaşlarınızı davet edin</string>
     <string name="general_rest_contacts">Sizin %d kişiniz kaldı</string>
     <string name="invite_friends_title">Telefon defterinden tüm arkadaşları Topface’ye davet etmek</string>
+    <string name="invalid_contacts">Bazı iletişim bilgileriniz uygunsuz biçimindeydi. Lütfen, iletişim bilgilerinizi uygun biçimde gönderin</string>
     <string name="general_choose_action">Hareket seçin</string>
     <plurals name="vip_status_period">
         <item quantity="zero">Siz %d günlük VIP-durumu aldınız</item>
@@ -498,5 +500,14 @@
     <string name="or">veya</string>
     <string name="watch_likes_on_dating">tanışma ekranında sempatileri izleyin, onlar liste başında olabilir</string>
     <string name="make_acquaintance">Tanışmak</string>
+    <string name="settings_delete_account">Hesap silmek</string>
     <string name="chat_block_not_mutual">Kullanıcı size sempati gönderdiyse veya VİP-durumunuz varsa o zaman onunla sohbete başlayabilirsiniz</string>
+    <string name="delete_account_are_you_sure">Kesinlikle emin misiniz?</string>
+    <string name="delete">Silmek</string>
+    <string name="delete_account_warning">Dikkat! Topface’deki profilinizi silmeye çalışıyorsunuz.</string>
+    <string name="delete_account_error">Maalesef, hesabınız silinemedi. Bir daha deneyebilirsiniz.</string>
+    <string name="delete_account_will_be_restored_are_you_sure">Tarafınızdan silinmiş hesabınıza girmeye çalışıyorsunuz. Girdiğinizde hesabınız yeniden düzenlenecek. Emin misiniz?</string>
+    <string name="restore_of_account">Hesap kurtarmak</string>
+    <string name="restore">Kurtarmak</string>
+    <string name="admiration_sended">Hayranlık gönderilmiştir</string>
 </resources>

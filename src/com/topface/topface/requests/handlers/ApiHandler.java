@@ -91,15 +91,14 @@ abstract public class ApiHandler extends Handler {
             JSONObject counters = response.counters;
             String method = response.method;
             if (counters != null) {
-                CountersManager.getInstance(App.getContext()).setMethod(method);
-                CountersManager.getInstance(App.getContext()).
-                        setAllCounters(
+                CountersManager.getInstance(App.getContext())
+                        .setMethod(method)
+                        .setAllCounters(
                                 counters.optInt("unread_likes"),
                                 counters.optInt("unread_symphaties"),
                                 counters.optInt("unread_messages"),
                                 counters.optInt("unread_visitors"),
                                 counters.optInt("unread_fans")
-
                         );
             }
         } catch (Exception e) {

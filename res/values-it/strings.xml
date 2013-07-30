@@ -489,5 +489,18 @@
     <string name="or">o</string>
     <string name="watch_likes_on_dating">visualizza simpatie sulla schermata delle relazioni, possono starci all’inizio dell’elenco</string>
     <string name="make_acquaintance">Presentarsi</string>
+    <string name="settings_delete_account">Cancella l’account</string>
     <string name="chat_block_not_mutual">Puoi iniziare la conversazione con l’utente solo se ti ha inviato una simpatia o se sei utente VIP</string>
+    <string name="delete_account_are_you_sure">Sicuro al 100%?</string>
+    <string name="delete">Cancella</string>
+    <string name="delete_account_warning">Attenzione! Stai cercando di cancellare il tuo account in Topface.</string>
+    <string name="delete_account_error">Purtroppo non siamo riusciti a cancellare il tuo account. Riprova.</string>
+    <string name="delete_account_will_be_restored_are_you_sure">Stai cercando di accedere all’account che hai cancellato. Accedendovi verrà ripristinato. Vuoi farlo?</string>
+    <string name="restore_of_account">Ripristino dell’account</string>
+    <string name="restore">Ripristinare</string>
+    <string name="admiration_sended">L’ammirazione è stata inviata</string>
+    <plurals name="general_coins">
+        <item quantity="other">%d monete</item>
+        <item quantity="one">%d moneta</item>
+    </plurals>
 </resources>

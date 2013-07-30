@@ -26,7 +26,7 @@ public class HttpUtils {
 
     //Параметры соединения
     public static final int CONNECT_TIMEOUT = 5000;
-    public static final int READ_TIMEOUT = 10000;
+    public static final int READ_TIMEOUT = 20000;
     public static final String USER_AGENT_APP_NAME = "Topface";
     public static final String ACCEPT_ENCODING = "gzip,deflate";
 

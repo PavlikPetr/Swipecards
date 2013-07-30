@@ -468,4 +468,7 @@
     <string name="restore_of_account">계정 저장</string>
     <string name="restore">저장하기</string>
     <string name="admiration_sended">감탄사가 전송되었습니다.</string>
+    <plurals name="general_coins">
+        <item quantity="other">%d 코인</item>
+    </plurals>
 </resources>

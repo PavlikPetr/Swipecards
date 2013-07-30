@@ -75,7 +75,7 @@
     <string name="visitors_background_text">Нет гостей</string>
 
     <!-- Mutual -->
-    <string name="mutual_background_text">Симпатий нет</string>
+    <string name="mutual_background_text">Взаимных симпатий нет</string>
 
     <!-- Chat -->
     <string name="chat_background_text">Входящих сообщений нет</string>
@@ -342,7 +342,7 @@
     <string name="general_reconnect">Пытаемся восстановить соединение с Интернет.\nПожалуйста подождите.</string>
     <string name="dating_people_unnoticed">Десять человек остались без вашего внимания!</string>
     <string name="dating_continue">Продолжить знакомствo</string>
-    <string name="dating_better_look">Присмотритесь!\nВозможно вы упускаете свою судьбу!</string>
+    <string name="dating_better_look">Присмотритесь!\nВозможно, вы упускаете свою судьбу!</string>
 
     <string name="edit_my_city">Мой город</string>
     <string name="edit_my_photos">Мои фотографии</string>
@@ -359,9 +359,9 @@
     <string name="leaders_select_cool_picture">Выберите эффектную фотографию:</string>
     <string name="chat_write_message">Написать сообщение</string>
 
-    <string name="buying_sympathies">Покупка симпатий</string>
+    <string name="buying_sympathies">Покупка симпатии</string>
 
-    <string name="novice_sympathies_bonus">Вы получаете %1$d симпатий в\nподарок! Это означает, что вы\nточно
+    <string name="novice_sympathies_bonus">Вы получаете %1$d симпатии в\nподарок! Это означает, что вы\nточно
         понравитесь %2$d людям,\nкоторые выразят вам свою симпатию
     </string>
     <string name="novice_energy_to_sympathies_title">Мы заменили энергию на симпатии</string>
@@ -406,7 +406,7 @@
     <string name="popup_version_update">Обновить</string>
     <string name="popup_version_cancel">Напомнить позже</string>
     <string name="general_internet_off">Пытаемся восстановить соединение с интернетом. Пожалуйста, подождите.</string>
-    <string name="general_version_not_supported">Ваша версия приложения устарела и больше не поддерживается. Пожалуйста
+    <string name="general_version_not_supported">Ваша версия приложения устарела и больше не поддерживается. Пожалуйста,
         обновите приложение
     </string>
     <string name="leaders_select_photo_info">Выберите самое эффектное фото! Фотографии с низким рейтингом выбрать
@@ -477,8 +477,8 @@
     <string name="password_changing">Изменение пароля</string>
     <string name="save">Сохранить</string>
     <string name="confirmation_successfully_sent">Подтверждение выслано на указанный вами e-mail</string>
-    <string name="password_hint">Пароль</string>
-    <string name="password_confirmation_hint">Подтверждение пароля</string>
+    <string name="password_hint">пароль</string>
+    <string name="password_confirmation_hint">подтверждение пароля</string>
     <string name="enter_new_password">Введите новый пароль</string>
     <string name="enter_password_confirmation">Введите подтверждение пароля</string>
     <string name="passwords_mismatched">Пароли не совпадают</string>
@@ -671,6 +671,32 @@
     <string name="restore_of_account">Восстановление аккаунта</string>
     <string name="restore">Восстановить</string>
     <string name="admiration_sended">Восхищение отправлено</string>
+    <plurals name="general_coins">
+        <item quantity="one">%d монета</item>
+        <item quantity="few">%d монеты</item>
+        <item quantity="many">%d монет</item>
+        <item quantity="other">%d монет</item>
+    </plurals>
     <string name="getjar_auth_title">Выберите аккаунт</string>
 
+    <string name="skip">Пропустить</string>
+    <string name="chat">Написать</string>
+    <string name="sympathies">Симпатии</string>
+
+    <plurals name="number_of_sympathies">
+        <item quantity="zero">%d симпатий</item>
+        <item quantity="one">%d симпатия</item>
+        <item quantity="few">%d симпатии</item>
+        <item quantity="many">%d симпатий</item>
+        <item quantity="other">%d симпатий</item>
+    </plurals>
+
+    <string name="mutual_sympathies">Взаимно</string>
+    <string name="skip_all">Пропустить всех</string>
+    <string name="forget">Забыть</string>
+
+    <string name="watch_as_list">Посмотреть списком</string>
+    <string name="watching_as_list">Смотреть списком</string>
+    <string name="watching_sequentually">Смотреть последовательно</string>
+    <string name="or_use_common_likes_list">Или просматривайте тех, кому вы понравились в общем списке</string>
 </resources>

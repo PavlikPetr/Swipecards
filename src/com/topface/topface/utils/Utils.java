@@ -397,8 +397,9 @@ public class Utils {
     }
 
     public static void showSoftKeyboard(Context context, EditText editText) {
+        editText.requestFocus();
         InputMethodManager keyboard = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        keyboard.showSoftInput(editText, 0);
+        keyboard.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
     }
 
     public static int getPxFromDp(int pixels) {

@@ -143,7 +143,6 @@ public class AuthFragment extends BaseFragment {
                 if (activity != null) {
                     Utils.showSoftKeyboard(activity, mLogin);
                     mAuthViewsFlipper.setDisplayedChild(1);
-                    mLogin.requestFocus();
                 }
             }
         });
@@ -615,7 +614,7 @@ public class AuthFragment extends BaseFragment {
                 showButtons();
                 return;
             }
-            AuthToken.getInstance().saveToken("",login,password);
+            AuthToken.getInstance().saveToken("", login, password);
             AuthRequest authRequest = generateTopfaceAuthRequest(AuthToken.getInstance());
 
             if (DeleteAccountDialog.hasDeltedAccountToken(authRequest.getAuthToken())) {

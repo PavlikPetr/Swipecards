@@ -487,5 +487,15 @@
     <string name="or">ή</string>
     <string name="watch_likes_on_dating">συμπαθειες που προβάλετε στην οθονη εξοικειωσης, μπορει να βρισκονται στην κορυφη της λιστας</string>
     <string name="make_acquaintance">Eξοικειωθείτε</string>
+    <string name="settings_delete_account">Διαγραφή του λογαριασμού σας</string>
     <string name="chat_block_not_mutual">Για να ξεκινήσετε συνομιλία με τον χρήστη μπορείτε, αν αυτός σας στείλει μια συμπάθεια ή αν έχετε VIP-κατάσταση</string>
+    <string name="delete_account_are_you_sure">Είστε σίγουροι?</string>
+    <string name="delete">Αφαιρέστε</string>
+    <string name="restore_of_account">Ανάκτηση του λογαριασμού σας</string>
+    <string name="restore">Αποκαταστήστε</string>
+    <string name="admiration_sended">Θαυμασμός εστάλη.</string>
+    <plurals name="general_coins">
+        <item quantity="other">%d κέρματα</item>
+        <item quantity="one">%d κέρμα</item>
+    </plurals>
 </resources>
