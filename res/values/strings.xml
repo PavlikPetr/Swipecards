@@ -504,9 +504,12 @@
     <string name="restore">Restore</string>
     <string name="admiration_sended">Admiration sent</string>
     <plurals name="general_coins">
-        <item quantity="other">%d coins</item>
         <item quantity="one">%d coin</item>
+        <item quantity="few">%d coins</item>
+        <item quantity="many">%d coins</item>
+        <item quantity="other">%d coins</item>
     </plurals>
+    <string name="getjar_auth_title">Choose account</string>
 
     <string name="skip">Skip</string>
     <string name="chat">Chat</string>

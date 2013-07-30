@@ -188,8 +188,8 @@ public class Offerwalls {
                 Object value = resultData.get(key);
                 if (value instanceof PurchaseSucceededResponse) {
                     PurchaseSucceededResponse response = (PurchaseSucceededResponse) value;
-                    String productName = response.getProductName();
-                    long amount = response.getAmount(); // TODO: Handle a successful purchase here
+                    String signedData = response.getSignedPayload();
+                    String signature = response.getSignature();
                 }
             }
         }
