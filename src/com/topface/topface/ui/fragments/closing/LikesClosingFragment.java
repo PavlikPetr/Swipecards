@@ -4,10 +4,8 @@ import android.view.View;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.FeedUser;
-import com.topface.topface.data.search.UsersList;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
-import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RateController;
 
@@ -18,10 +16,6 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     private View mBtnSkipAll;
 
     @Override
-    protected void initActionBarControls(ActionBar actionbar) {
-    }
-
-    @Override
     protected String getTitle() {
         return getString(R.string.sympathies);
     }
@@ -29,11 +23,6 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     @Override
     protected String getSubtitle() {
         return null;
-    }
-
-    @Override
-    public Integer getTopPanelLayoutResId() {
-        return R.layout.controls_closing_top_panel;
     }
 
     @Override
@@ -60,29 +49,11 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     }
 
     @Override
-    protected void onPageSelected(int position) {
-    }
-
-    @Override
-    protected UsersList<FeedUser> createUsersList() {
-        return new UsersList<FeedUser>(FeedUser.class);
-    }
-
-    @Override
-    protected ApiRequest getUsersListRequest() {
-        FeedRequest request = new FeedRequest(FeedRequest.FeedService.LIKES, getActivity());
-        request.limit = LIMIT;
-        request.unread = true;
-        String lastFeedId = getLastFeedId();
-        if (lastFeedId != null)
-            request.to = lastFeedId;
-        return request;
-    }
-
-    @Override
     public Class getItemsClass() {
         return FeedUser.class;
     }
+
+
 
     @Override
     protected void lockControls() {
@@ -155,4 +126,11 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
         usersProcessed = true;
         super.onUsersProcessed();
     }
+
+    @Override
+    protected FeedRequest.FeedService getFeedType() {
+        return FeedRequest.FeedService.LIKES;
+    }
+
+
 }

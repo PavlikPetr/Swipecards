@@ -1,13 +1,18 @@
 package com.topface.topface.ui.fragments.closing;
 
 import android.support.v4.app.FragmentTransaction;
+import com.topface.topface.R;
 import com.topface.topface.data.FeedUser;
+import com.topface.topface.data.search.UsersList;
+import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.SkipAllClosedRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.fragments.OnQuickMessageSentListener;
 import com.topface.topface.ui.fragments.QuickMessageFragment;
 import com.topface.topface.ui.fragments.ViewUsersListFragment;
+import com.topface.topface.utils.ActionBar;
 
 /**
  * Базовый фрагмент экранов запираний
@@ -15,6 +20,25 @@ import com.topface.topface.ui.fragments.ViewUsersListFragment;
 abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> {
 
     public static final int CHAT_CLOSE_DELAY_MILLIS = 1500;
+
+    @Override
+    protected void initActionBarControls(ActionBar actionbar) {
+    }
+
+    @Override
+    public Integer getTopPanelLayoutResId() {
+        return R.layout.controls_closing_top_panel;
+    }
+
+
+    @Override
+    protected void onPageSelected(int position) {
+    }
+
+    @Override
+    protected UsersList<FeedUser> createUsersList() {
+        return new UsersList<FeedUser>(FeedUser.class);
+    }
 
     public void showChat() {
         QuickMessageFragment fragment = QuickMessageFragment.newInstance(getCurrentUser().id, getChatListener());
@@ -63,4 +87,17 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> {
             }
         };
     }
+
+    @Override
+    protected ApiRequest getUsersListRequest() {
+        FeedRequest request = new FeedRequest(getFeedType(), getActivity());
+        request.limit = LIMIT;
+        request.unread = true;
+        String lastFeedId = getLastFeedId();
+        if (lastFeedId != null)
+            request.to = lastFeedId;
+        return request;
+    }
+
+    abstract protected FeedRequest.FeedService getFeedType();
 }
