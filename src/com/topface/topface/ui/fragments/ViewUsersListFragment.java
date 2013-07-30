@@ -315,7 +315,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                         mRetryBtn.setVisibility(View.GONE);
                     } else {
                         getProgressBar().setVisibility(View.GONE);
-                        if (!more) onUsersProcessed();
+                        showUser(null);
                     }
                     onUpdateSuccess(isAddition);
                 }
@@ -519,17 +519,5 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     }
 
     protected void onUsersProcessed() {
-        if (getActivity() instanceof NavigationActivity) {
-            ((NavigationActivity)getActivity()).onClosings();
-        }
-    }
-
-    public void showWatchAsListDialog(int likesCount) {
-        ClosingsBuyVipDialog newFragment = ClosingsBuyVipDialog.newInstance(likesCount);
-        try {
-            newFragment.show(getActivity().getSupportFragmentManager(), ClosingsBuyVipDialog.TAG);
-        } catch (Exception e) {
-            Debug.error(e);
-        }
     }
 }

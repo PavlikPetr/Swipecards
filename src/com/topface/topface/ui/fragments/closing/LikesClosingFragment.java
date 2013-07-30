@@ -107,25 +107,6 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btnSkip:
-                //TODO skipLike
-                if (getCurrentUser() != null && getCurrentUser().feedItem != null) {
-                    SkipClosedRequest request = new SkipClosedRequest(getActivity());
-                    request.callback(new SimpleApiHandler(){
-                        @Override
-                        public void always(ApiResponse response) {
-                            refreshActionBarTitles(getView());
-                        }
-                    });
-                    registerRequest(request);
-                    request.item = getCurrentUser().feedItem.id;
-                    request.exec();
-                }
-                showNextUser();
-                break;
-            case R.id.btnSkipAll:
-                skipAllRequests(SkipAllClosedRequest.LIKES);
-                break;
             case R.id.btnMutual:
                 getRateController().onRate(getCurrentUser().id, 10, RateRequest.DEFAULT_MUTUAL, new RateController.OnRateListener() {
                     @Override
@@ -139,14 +120,8 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
                 });
                 showNextUser();
                 break;
-            case R.id.btnChat:
-                showChat();
-                break;
-            case R.id.btnWatchAsList:
-                showWatchAsListDialog(CacheProfile.unread_likes);
-                break;
             default:
-                break;
+                super.onClick(v);
         }
     }
 
@@ -154,5 +129,10 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     protected void onUsersProcessed() {
         usersProcessed = true;
         super.onUsersProcessed();
+    }
+
+    @Override
+    protected int getSkipAllRequestType() {
+        return SkipAllClosedRequest.LIKES;
     }
 }

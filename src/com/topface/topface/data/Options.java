@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.CacheProfile;
@@ -400,10 +401,31 @@ public class Options extends AbstractData {
     }
 
     public static class Closing {
+        private static Ssid.ISsidUpdateListener listener;
         public boolean enableSympathies;
         public boolean enabledMutual;
         public int limitSympathies;
         public int limitMutual;
+
+        public Closing() {
+            if (listener == null) {
+                listener = new Ssid.ISsidUpdateListener() {
+                    @Override
+                    public void onUpdate() {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = pref.edit();
+                                editor.putLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME, 0);
+                                editor.commit();
+                            }
+                        }).start();
+                    }
+                };
+                Ssid.addUpdateListener(listener);
+            }
+        }
 
         public void onStopClosings() {
             new Thread(new Runnable() {
@@ -425,6 +447,7 @@ public class Options extends AbstractData {
 
         public boolean isMutualClosingAvailable() {
             SharedPreferences pref =  App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+            long currentTime = System.currentTimeMillis();
             long lastCallTime = pref.getLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME,0);
             return DateUtils.isWithin24Hours(lastCallTime,System.currentTimeMillis());
         }

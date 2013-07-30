@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,16 +25,14 @@ import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.dialogs.ClosingsBuyVipDialog;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
 import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
 import com.topface.topface.ui.fragments.feed.*;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.ui.views.ServicesTextView;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Editor;
-import com.topface.topface.utils.Novice;
+import com.topface.topface.utils.*;
 
 public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
@@ -422,13 +421,49 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
     public void onClosings(int type) {
         for (int i = 0; i < mButtons.size(); i++) {
             int key = mButtons.keyAt(i);
-            mButtons.get(key).setEnabled(key == F_PROFILE || key == type);
+            Button btn = mButtons.get(key);
+            if (key != F_PROFILE && key != type) {
+                setAlphaToTextAndDrawable(btn,102);
+                btn.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!MutualClosingFragment.usersProcessed) {
+                            showWatchAsListDialog(CacheProfile.unread_mutual);
+                        } else if (!LikesClosingFragment.usersProcessed) {
+                            showWatchAsListDialog(CacheProfile.unread_likes);
+                        } else {
+                            showWatchAsListDialog(CacheProfile.unread_likes + CacheProfile.unread_mutual);
+                        }
+
+                    }
+                });
+            } else {
+                setAlphaToTextAndDrawable(btn,255);
+            }
+        }
+    }
+
+    private void setAlphaToTextAndDrawable(Button btn, int alpha) {
+        btn.setTextColor(Color.argb(alpha, 255, 255, 255));
+        if (btn.getCompoundDrawables()[0] != null) {
+            btn.getCompoundDrawables()[0].setAlpha(alpha);
         }
     }
 
     public void onStopClosings() {
         for (int i = 0; i < mButtons.size(); i++) {
-            mButtons.get(mButtons.keyAt(i)).setEnabled(true);
+            Button btn = mButtons.get(mButtons.keyAt(i));
+            setAlphaToTextAndDrawable(btn,255);
+            btn.setOnClickListener(this);
+        }
+    }
+
+    public void showWatchAsListDialog(int likesCount) {
+        ClosingsBuyVipDialog newFragment = ClosingsBuyVipDialog.newInstance(likesCount);
+        try {
+            newFragment.show(getActivity().getSupportFragmentManager(), ClosingsBuyVipDialog.TAG);
+        } catch (Exception e) {
+            Debug.error(e);
         }
     }
 }

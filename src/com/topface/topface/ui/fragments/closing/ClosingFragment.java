@@ -1,18 +1,25 @@
 package com.topface.topface.ui.fragments.closing;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentTransaction;
+import android.view.View;
+import com.topface.topface.R;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.SkipAllClosedRequest;
+import com.topface.topface.requests.SkipClosedRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
+import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.OnQuickMessageSentListener;
 import com.topface.topface.ui.fragments.QuickMessageFragment;
 import com.topface.topface.ui.fragments.ViewUsersListFragment;
+import com.topface.topface.utils.CacheProfile;
 
 /**
  * Базовый фрагмент экранов запираний
  */
-abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> {
+abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> implements View.OnClickListener{
 
     public static final int CHAT_CLOSE_DELAY_MILLIS = 1500;
 
@@ -62,5 +69,57 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> {
                 transaction.commit();
             }
         };
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnSkipAll:
+                skipAllRequests(getSkipAllRequestType());
+                break;
+            case R.id.btnSkip:
+                if (CacheProfile.premium || alowSkipForNonPremium()) {
+                    if(getCurrentUser() != null  && getCurrentUser().feedItem != null) {
+                        SkipClosedRequest request = new SkipClosedRequest(getActivity());
+                        request.callback(new SimpleApiHandler(){
+                            @Override
+                            public void always(ApiResponse response) {
+                                refreshActionBarTitles(getView());
+                            }
+                        });
+                        registerRequest(request);
+                        request.item = getCurrentUser().feedItem.id;
+                        request.exec();
+                    }
+                    showNextUser();
+                } else {
+                    Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
+                    startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                }
+                break;
+            case R.id.btnChat:
+                showChat();
+                break;
+            case R.id.btnWatchAsList:
+                Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
+                startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                break;
+            default:
+                break;
+        }
+    }
+
+    protected boolean alowSkipForNonPremium(){
+        return true;
+    }
+
+    protected abstract int getSkipAllRequestType();
+
+    @Override
+    protected void onUsersProcessed() {
+        super.onUsersProcessed();
+        if (getActivity() instanceof NavigationActivity) {
+            ((NavigationActivity)getActivity()).onClosings();
+        }
     }
 }

@@ -54,7 +54,9 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
         if (CacheProfile.unread_mutual > CacheProfile.getOptions().closing.limitMutual) {
             mBtnSkipAll.setVisibility(View.VISIBLE);
         }
-        controlsView.findViewById(R.id.btnSkip).setOnClickListener(this);
+        View btnSkip = controlsView.findViewById(R.id.btnSkip);
+        btnSkip.setOnClickListener(this);
+        btnSkip.setActivated(true);
         controlsView.findViewById(R.id.btnChat).setOnClickListener(this);
     }
 
@@ -120,36 +122,8 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
                 }
                 showNextUser();
                 break;
-            case R.id.btnSkipAll:
-                skipAllRequests(SkipAllClosedRequest.MUTUAL);
-                break;
-            case R.id.btnSkip:
-                if (CacheProfile.premium) {
-                    if(getCurrentUser() != null  && getCurrentUser().feedItem != null) {
-                        SkipClosedRequest request = new SkipClosedRequest(getActivity());
-                        request.callback(new SimpleApiHandler(){
-                            @Override
-                            public void always(ApiResponse response) {
-                                refreshActionBarTitles(getView());
-                            }
-                        });
-                        registerRequest(request);
-                        request.item = getCurrentUser().feedItem.id;
-                        request.exec();
-                    }
-                    showNextUser();
-                } else {
-                    showWatchAsListDialog(CacheProfile.unread_mutual);
-                }
-                break;
-            case R.id.btnChat:
-                showChat();
-                break;
-            case R.id.btnWatchAsList:
-                showWatchAsListDialog(CacheProfile.unread_mutual);
-                break;
             default:
-                break;
+                super.onClick(v);
         }
     }
 
@@ -159,4 +133,13 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
         super.onUsersProcessed();
     }
 
+    @Override
+    protected int getSkipAllRequestType() {
+        return SkipAllClosedRequest.MUTUAL;
+    }
+
+    @Override
+    protected boolean alowSkipForNonPremium() {
+        return false;
+    }
 }

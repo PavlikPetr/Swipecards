@@ -95,16 +95,14 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     @Override
-    protected void onResumeAsync() {
-        super.onResumeAsync();
+    protected void onProfileUpdated() {
+        super.onProfileUpdated();
         Options.Closing closing = CacheProfile.getOptions().closing;
         if (!mHasClosingsForThisSession && !CacheProfile.premium && closing.isClosingsEnabled()) {
             getIntent().putExtra(GCMUtils.NEXT_INTENT, mFragmentMenu.getCurrentFragmentId());
             MutualClosingFragment.usersProcessed = !closing.isMutualClosingAvailable();
             LikesClosingFragment.usersProcessed = !closing.isLikesClosingAvailable();
-            Looper.prepare();
             onClosings();
-            Looper.loop();
         }
     }
 
@@ -478,5 +476,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         closing.onStopClosings();
         mFragmentMenu.onStopClosings();
         showFragment(null); // it will take fragment id from getIntent() extra data
+    }
+
+    public static void onLogout() {
+        mHasClosingsForThisSession = false;
     }
 }

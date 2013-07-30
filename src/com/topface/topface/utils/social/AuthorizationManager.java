@@ -323,6 +323,7 @@ public class AuthorizationManager {
                 new SearchCacheManager().clearCache();
             }
         }).start();
+        NavigationActivity.onLogout();
     }
 
     @SuppressWarnings({"rawtypes", "hiding"})

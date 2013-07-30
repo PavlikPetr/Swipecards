@@ -44,9 +44,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
                 android:background="@android:color/transparent"
-                android:drawableTop="@drawable/dating_skip_selector"
+                android:drawableTop="@drawable/dating_skip_diabled"
                 android:text="@string/skip"
-                android:enabled="false"/>
+                />
 
         <Button
                 android:id="@+id/btnChat"
