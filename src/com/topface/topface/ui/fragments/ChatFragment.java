@@ -552,6 +552,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 ((TextView) blockView.findViewById(R.id.blockTV)).setText(mUser.blocked ? R.string.black_list_delete : R.string.black_list_add_short);
                 bookmarksTv.setText(mUser.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
 
+                mActionBar.setOnlineIcon(mUser.online && (!mUser.deleted && !mUser.banned));
                 mActionBar.showUserActionsButton(
                         new View.OnClickListener() {
                             @Override
