@@ -98,7 +98,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     protected void onProfileUpdated() {
         super.onProfileUpdated();
         Options.Closing closing = CacheProfile.getOptions().closing;
-        if (!mHasClosingsForThisSession && !CacheProfile.premium && closing.isClosingsEnabled()) {
+        if (!CacheProfile.premium && closing.isClosingsEnabled()) {
             getIntent().putExtra(GCMUtils.NEXT_INTENT, mFragmentMenu.getCurrentFragmentId());
             MutualClosingFragment.usersProcessed = !closing.isMutualClosingAvailable();
             LikesClosingFragment.usersProcessed = !closing.isLikesClosingAvailable();
@@ -230,6 +230,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         new ExternalLinkExecuter(mListener).execute(getIntent());
 
         App.checkProfileUpdate();
+        if(!mHasClosingsForThisSession) {
+            onClosings();
+        }
     }
 
 
@@ -453,9 +456,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     public void onClosings() {
-        if (!mHasClosingsForThisSession) {
-            mHasClosingsForThisSession = true;
-        }
         if (CacheProfile.unread_mutual == 0) {
             MutualClosingFragment.usersProcessed = true;
         }
@@ -472,6 +472,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             mFragmentMenu.onClosings(BaseFragment.F_LIKES);
             showFragment(BaseFragment.F_LIKES);
             return;
+        }
+        if (!mHasClosingsForThisSession) {
+            mHasClosingsForThisSession = true;
         }
         closing.onStopClosings();
         mFragmentMenu.onStopClosings();

@@ -1,19 +1,20 @@
 package com.topface.topface.ui.fragments.closing;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.search.UsersList;
-import com.topface.topface.requests.ApiRequest;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.FeedRequest;
-import com.topface.topface.requests.SkipAllClosedRequest;
+import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
+import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.OnQuickMessageSentListener;
 import com.topface.topface.ui.fragments.QuickMessageFragment;
 import com.topface.topface.ui.fragments.ViewUsersListFragment;
 import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.CacheProfile;
 
 /**
  * Базовый фрагмент экранов запираний
@@ -30,7 +31,6 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     public Integer getTopPanelLayoutResId() {
         return R.layout.controls_closing_top_panel;
     }
-
 
     @Override
     protected void onPageSelected(int position) {
@@ -153,4 +153,9 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     }
 
     abstract protected FeedRequest.FeedService getFeedType();
+
+    @Override
+    public Class getItemsClass() {
+        return FeedUser.class;
+    }
 }

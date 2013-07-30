@@ -6,6 +6,7 @@ import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RateController;
 
@@ -56,13 +57,6 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
         controlsView.findViewById(R.id.btnMutual).setOnClickListener(this);
         controlsView.findViewById(R.id.btnChat).setOnClickListener(this);
     }
-
-    @Override
-    public Class getItemsClass() {
-        return FeedUser.class;
-    }
-
-
 
     @Override
     protected void lockControls() {

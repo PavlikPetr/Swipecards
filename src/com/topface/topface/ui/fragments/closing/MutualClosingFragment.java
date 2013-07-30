@@ -55,11 +55,6 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
     }
 
     @Override
-    public Class getItemsClass() {
-        return FeedUser.class;
-    }
-
-    @Override
     protected void lockControls() {
         //TODO change body of implemented methods use File | Settings | File Templates.
     }
