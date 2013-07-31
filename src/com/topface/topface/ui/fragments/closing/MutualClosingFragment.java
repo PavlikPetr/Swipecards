@@ -3,7 +3,6 @@ package com.topface.topface.ui.fragments.closing;
 import android.view.View;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
-import com.topface.topface.data.FeedUser;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.utils.CacheProfile;
@@ -99,6 +98,7 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
     @Override
     protected void onUsersProcessed() {
         usersProcessed = true;
+        CacheProfile.getOptions().closing.onStopMutualClosings();
         super.onUsersProcessed();
     }
 

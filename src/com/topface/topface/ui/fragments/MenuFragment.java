@@ -329,7 +329,13 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private String getTagById(int id) {
-        return "fragment_switch_controller_" + id;
+        if(id == F_LIKES && !LikesClosingFragment.usersProcessed) {
+            return "fragment_switch_controller_closed_" + id;
+        } else if(id == F_MUTUAL && !MutualClosingFragment.usersProcessed) {
+            return "fragment_switch_controller_closed_" + id;
+        } else {
+            return "fragment_switch_controller_" + id;
+        }
     }
 
     public BaseFragment getCurrentFragment() {
@@ -427,9 +433,9 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 btn.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (!MutualClosingFragment.usersProcessed) {
+                        if (mCurrentFragmentId == F_MUTUAL) {
                             showWatchAsListDialog(CacheProfile.unread_mutual);
-                        } else if (!LikesClosingFragment.usersProcessed) {
+                        } else if (mCurrentFragmentId == F_LIKES) {
                             showWatchAsListDialog(CacheProfile.unread_likes);
                         } else {
                             showWatchAsListDialog(CacheProfile.unread_likes + CacheProfile.unread_mutual);
@@ -456,6 +462,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             setAlphaToTextAndDrawable(btn,255);
             btn.setOnClickListener(this);
         }
+
     }
 
     public void showWatchAsListDialog(int likesCount) {
