@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
+
     <ImageView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -44,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
                 android:background="@android:color/transparent"
-                android:drawableTop="@drawable/dating_skip_diabled"
+                android:drawableTop="@drawable/btn_skip_disabled"
                 android:text="@string/skip"
                 />
 
@@ -56,6 +57,6 @@
                 android:layout_weight="1.0"
                 android:background="@null"
                 android:drawableTop="@drawable/dating_chat_selector"
-                android:text="@string/chat"/>
+                android:text="@string/chat" />
     </LinearLayout>
 </RelativeLayout>

@@ -9,6 +9,7 @@ import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RateController;
+import com.topface.topface.utils.Utils;
 
 public class LikesClosingFragment extends ClosingFragment implements View.OnClickListener {
 
@@ -27,7 +28,11 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
 
     @Override
     protected String getSubtitle() {
-        return null;
+        return Utils.getQuantityString(
+                R.plurals.number_of_sympathies,
+                CacheProfile.unread_likes,
+                CacheProfile.unread_likes
+        );
     }
 
     @Override

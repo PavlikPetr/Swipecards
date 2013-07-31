@@ -10,10 +10,12 @@ import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -23,7 +25,10 @@ import com.topface.topface.data.search.OnUsersListEventsListener;
 import com.topface.topface.data.search.SearchUser;
 import com.topface.topface.data.search.UsersList;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
-import com.topface.topface.requests.*;
+import com.topface.topface.requests.AlbumRequest;
+import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.ClosingsBuyVipDialog;
@@ -114,37 +119,11 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     private void inflateTopPanel(View root) {
         Integer resId = getTopPanelLayoutResId();
         if (resId != null) {
-            ViewStub topPanelStub = ((ViewStub)root.findViewById(R.id.vsTopPanelContainer));
+            ViewStub topPanelStub = ((ViewStub) root.findViewById(R.id.vsTopPanelContainer));
             topPanelStub.setLayoutResource(R.layout.controls_closing_top_panel);
             final View view = topPanelStub.inflate();
             initTopPanel(view);
-            ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
-            if (viewTreeObserver.isAlive()) {
-                viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        if (android.os.Build.VERSION.SDK_INT > 16) {
-                            view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        } else {
-                            view.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                        }
-                        int height = view.getHeight() + getActionBar(getActivity()).getHeight();
-                        // shift imageswitcher below top panel
-                        View rootView = getView();
-                        if (rootView != null) {
-                            View imageSwitcher = rootView.findViewById(R.id.glrDatingAlbum);
-                            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) imageSwitcher.getLayoutParams();
-                            params.setMargins(0,height,0,0);
-                            imageSwitcher.setLayoutParams(params);
-                            // shift helperContainer below top panel
-                            View helperContainer = rootView.findViewById(R.id.loHelperContainer);
-                            params = (RelativeLayout.LayoutParams) helperContainer.getLayoutParams();
-                            params.setMargins(0, height, 0, 0);
-                            helperContainer.setLayoutParams(params);
-                        }
-                    }
-                });
-            }
+
         }
     }
 
@@ -207,8 +186,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     }
 
     private ImageSwitcher.ImageSwitcherAdapter getImageSwitcherAdapter() {
-        ImageSwitcher.ImageSwitcherAdapter adapter = (ImageSwitcher.ImageSwitcherAdapter) getImageSwitcher().getAdapter();
-        return adapter;
+        return (ImageSwitcher.ImageSwitcherAdapter) getImageSwitcher().getAdapter();
     }
 
     protected abstract Integer getControlsLayoutResId();
@@ -290,6 +268,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
             onUpdateStart(isAddition);
             getUsersListRequest().callback(new DataApiHandler<UsersList>() {
                 private boolean more = true;
+
                 @Override
                 protected void success(UsersList data, ApiResponse response) {
                     UsersList.log("load success. Loaded " + data.size() + " users");
@@ -320,18 +299,20 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                     onUpdateSuccess(isAddition);
                 }
 
+                @SuppressWarnings("unchecked")
                 @Override
                 protected UsersList parseResponse(ApiResponse response) {
-                    if (getItemsClass() == SearchUser.class) {
-                        return new UsersList<SearchUser>(response, getItemsClass());
+                    Class itemsClass = getItemsClass();
+                    if (itemsClass == SearchUser.class) {
+                        return new UsersList<SearchUser>(response, itemsClass);
                     } else {
                         if (getFeedUserContainerClass() != null) {
                             FeedListData<FeedItem> items = new FeedListData<FeedItem>(response.getJsonResult(), getFeedUserContainerClass());
                             more = items.more;
                             mLastFeedItem = items.items.isEmpty() ? null : items.items.get(items.items.size() - 1);
-                            return new UsersList<FeedUser>(items, getItemsClass());
+                            return new UsersList<FeedUser>(items, itemsClass);
                         } else {
-                            return new UsersList<FeedUser>(getItemsClass());
+                            return new UsersList<FeedUser>(itemsClass);
                         }
                     }
                 }
@@ -498,7 +479,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
         };
     }
 
-    public Class getFeedUserContainerClass(){
+    public Class getFeedUserContainerClass() {
         return null;
     }
 
