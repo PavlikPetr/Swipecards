@@ -56,7 +56,7 @@ public class ClosingsBuyVipDialog extends DialogFragment implements View.OnClick
         root.findViewById(R.id.btnWatchAsList).setOnClickListener(this);
         root.findViewById(R.id.btnWatchSequentually).setOnClickListener(this);
         ((TextView) root.findViewById(R.id.idYouWasLiked)).setText(Utils.getQuantityString(R.plurals.you_was_liked,likesCount,likesCount));
-
+        root.findViewById(R.id.btnClose).setOnClickListener(this);
         return root;
     }
 
@@ -70,6 +70,7 @@ public class ClosingsBuyVipDialog extends DialogFragment implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnWatchSequentually:
+            case R.id.btnClose:
                 closeDialog();
                 break;
             case R.id.btnWatchAsList:

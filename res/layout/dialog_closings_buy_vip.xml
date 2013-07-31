@@ -47,4 +47,14 @@
                 android:text="@string/watching_sequentually" android:singleLine="true" android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"/>
     </LinearLayout>
+
+    <ImageButton
+            android:id="@+id/btnClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@id/loDialog"
+            android:layout_alignTop="@id/loDialog"
+            android:background="@drawable/btn_dialog_close_selector"
+            android:layout_marginTop="-16dp"
+            android:layout_marginRight="-16dp"/>
 </RelativeLayout>
