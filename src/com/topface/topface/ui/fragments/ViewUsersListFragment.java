@@ -245,6 +245,10 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
         return mUsersList;
     }
 
+    protected void clearUsersList() {
+        getUsersList().clear();
+    }
+
     protected T getCurrentUser() {
         return mCurrentUser;
     }
@@ -287,6 +291,8 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                         if (currentUser != null && mCurrentUser != currentUser) {
                             showUser(currentUser);
                             unlockControls();
+                        } else {
+                            showUser(null);
                         }
                         //Скрываем кнопку отправки повтора
                         mRetryBtn.setVisibility(View.GONE);

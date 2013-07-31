@@ -427,7 +427,7 @@ public class Options extends AbstractData {
             }
         }
 
-        public void onStopClosings() {
+        public void onStopMutualClosings() {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -435,6 +435,18 @@ public class Options extends AbstractData {
                     SharedPreferences.Editor editor = pref.edit();
                     long currentTime = System.currentTimeMillis();
                     editor.putLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME, currentTime);
+                    editor.commit();
+                }
+            }).start();
+        }
+
+        public void onStopLikesClosings() {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = pref.edit();
+                    long currentTime = System.currentTimeMillis();
                     editor.putLong(Static.PREFERENCES_LIKES_CLOSING_LAST_TIME, currentTime);
                     editor.commit();
                 }

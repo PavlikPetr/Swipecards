@@ -230,7 +230,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         new ExternalLinkExecuter(mListener).execute(getIntent());
 
         App.checkProfileUpdate();
-        if(!mHasClosingsForThisSession) {
+        if (!mHasClosingsForThisSession) {
             onClosings();
         }
     }
@@ -477,7 +477,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         if (!mHasClosingsForThisSession) {
             mHasClosingsForThisSession = true;
         }
-        closing.onStopClosings();
         mFragmentMenu.onStopClosings();
         showFragment(null); // it will take fragment id from getIntent() extra data
     }
