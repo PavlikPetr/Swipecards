@@ -426,7 +426,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     ExternalLinkExecuter.OnExternalLinkListener mListener = new ExternalLinkExecuter.OnExternalLinkListener() {
         @Override
         public void onProfileLink(int profileID) {
-            ContainerActivity.getProfileIntent(profileID, NavigationActivity.this);
+            startActivity(ContainerActivity.getProfileIntent(profileID, NavigationActivity.this));
+            getIntent().setData(null);
         }
 
         @Override

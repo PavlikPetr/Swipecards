@@ -31,7 +31,6 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.dialogs.ClosingsBuyVipDialog;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.utils.*;
 
@@ -316,7 +315,6 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                     } else {
                         if (getFeedUserContainerClass() != null) {
                             FeedListData<FeedItem> items = new FeedListData<FeedItem>(response.getJsonResult(), getFeedUserContainerClass());
-                            more = items.more;
                             mLastFeedItem = items.items.isEmpty() ? null : items.items.get(items.items.size() - 1);
                             return new UsersList<FeedUser>(items, itemsClass);
                         } else {
@@ -363,7 +361,6 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
             AlbumRequest request = new AlbumRequest(getActivity(), currentUser.id, PHOTOS_LIMIT,
                     position, AlbumRequest.MODE_SEARCH);
             final int uid = currentUser.id;
-            registerRequest(request);
             request.callback(new ApiHandler() {
                 @Override
                 public void success(ApiResponse response) {
