@@ -49,7 +49,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
         transaction.commit();
     }
 
-    protected void skipAllRequests(int type) {
+    protected void skipAllRequest(int type) {
         SkipAllClosedRequest skipAllRequest = new SkipAllClosedRequest(type, getActivity());
         skipAllRequest.callback(new SimpleApiHandler() {
             @Override
@@ -93,7 +93,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSkipAll:
-                skipAllRequests(getSkipAllRequestType());
+                skipAllRequest(getSkipAllRequestType());
                 break;
             case R.id.btnSkip:
                 if (CacheProfile.premium || alowSkipForNonPremium()) {

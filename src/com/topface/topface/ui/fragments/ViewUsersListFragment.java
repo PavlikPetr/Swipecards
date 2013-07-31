@@ -270,7 +270,9 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     protected void updateData(final boolean isAddition) {
         if (!mUpdateInProcess) {
             onUpdateStart(isAddition);
-            getUsersListRequest().callback(new DataApiHandler<UsersList>() {
+            ApiRequest request = getUsersListRequest();
+            registerRequest(request);
+            request.callback(new DataApiHandler<UsersList>() {
                 private boolean more = true;
 
                 @Override
@@ -361,6 +363,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
             AlbumRequest request = new AlbumRequest(getActivity(), currentUser.id, PHOTOS_LIMIT,
                     position, AlbumRequest.MODE_SEARCH);
             final int uid = currentUser.id;
+            registerRequest(request);
             request.callback(new ApiHandler() {
                 @Override
                 public void success(ApiResponse response) {
