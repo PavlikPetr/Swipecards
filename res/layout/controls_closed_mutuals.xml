@@ -2,12 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
+
     <ImageView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:src="@drawable/dating_shadow"
-            android:scaleType="fitXY"/>
+            android:scaleType="fitXY" />
 
     <LinearLayout
             android:orientation="horizontal"
@@ -24,7 +25,7 @@
                 android:layout_weight="1.0"
                 android:background="@android:color/transparent"
                 android:drawableTop="@drawable/btn_forget_selector"
-                android:text="@string/forget"/>
+                android:text="@string/forget" />
 
         <Button
                 android:id="@+id/btnSkipAll"
@@ -35,7 +36,7 @@
                 android:background="@android:color/transparent"
                 android:drawableTop="@drawable/btn_skip_all_selector"
                 android:text="@string/skip_all"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
         <Button
                 android:id="@+id/btnSkip"
@@ -44,9 +45,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
                 android:background="@android:color/transparent"
-                android:drawableTop="@drawable/dating_skip_selector"
+                android:drawableTop="@drawable/btn_skip_selector"
                 android:text="@string/skip"
-                android:enabled="false"/>
+                android:enabled="false" />
 
         <Button
                 android:id="@+id/btnChat"
@@ -56,6 +57,6 @@
                 android:layout_weight="1.0"
                 android:background="@null"
                 android:drawableTop="@drawable/dating_chat_selector"
-                android:text="@string/chat"/>
+                android:text="@string/chat" />
     </LinearLayout>
 </RelativeLayout>

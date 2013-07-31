@@ -198,11 +198,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void initMutualDrawables() {
         if (isAdded()) {
-            singleMutual = getResources().getDrawable(R.drawable.dating_mutual_selector);
-            singleDelight = getResources().getDrawable(R.drawable.dating_delight_selector);
+            singleMutual = getResources().getDrawable(R.drawable.dating_like_selector);
+            singleDelight = getResources().getDrawable(R.drawable.dating_admiration_selector);
 
-            doubleMutual = getResources().getDrawable(R.drawable.dating_dbl_mutual_selector);
-            doubleDelight = getResources().getDrawable(R.drawable.dating_dbl_delight_selector);
+            doubleMutual = getResources().getDrawable(R.drawable.dating_mutual_selector);
+            doubleDelight = getResources().getDrawable(R.drawable.dating_dbl_admiration_selector);
         }
     }
 
