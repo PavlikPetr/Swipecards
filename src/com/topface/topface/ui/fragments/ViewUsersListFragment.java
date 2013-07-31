@@ -295,13 +295,13 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                             showUser(currentUser);
                             unlockControls();
                         } else {
-                            showUser(null);
+                            if (!more) showUser(null);
                         }
                         //Скрываем кнопку отправки повтора
                         mRetryBtn.setVisibility(View.GONE);
                     } else {
                         getProgressBar().setVisibility(View.GONE);
-                        showUser(null);
+                        if (!more) showUser(null);
                     }
                     onUpdateSuccess(isAddition);
                 }
@@ -315,6 +315,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                     } else {
                         if (getFeedUserContainerClass() != null) {
                             FeedListData<FeedItem> items = new FeedListData<FeedItem>(response.getJsonResult(), getFeedUserContainerClass());
+                            more = items.more;
                             mLastFeedItem = items.items.isEmpty() ? null : items.items.get(items.items.size() - 1);
                             return new UsersList<FeedUser>(items, itemsClass);
                         } else {
