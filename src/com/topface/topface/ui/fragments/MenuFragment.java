@@ -462,7 +462,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             setAlphaToTextAndDrawable(btn,255);
             btn.setOnClickListener(this);
         }
-
+        mCurrentFragmentId = F_UNDEFINED;
     }
 
     public void showWatchAsListDialog(int likesCount) {

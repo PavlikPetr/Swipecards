@@ -34,6 +34,8 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.utils.*;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFragment {
     public static final int LIMIT = 40;
     public static final int PHOTOS_LIMIT = 5;
@@ -52,7 +54,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     private boolean mCanSendAlbumReq = true;
     private T mCurrentUser;
     private RateController mRateController;
-
+    private AtomicBoolean mFragmentPaused = new AtomicBoolean(false);
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -89,12 +91,20 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     public void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));
+        mFragmentPaused.set(false);
+        if (mCurrentUser == null) {
+            showUser(getUsersList().getCurrentUser());
+            unlockControls();
+            mRetryBtn.setVisibility(View.GONE);
+            getProgressBar().setVisibility(View.GONE);
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
+        mFragmentPaused.set(true);
     }
 
     @Override
@@ -270,7 +280,6 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
         if (!mUpdateInProcess) {
             onUpdateStart(isAddition);
             ApiRequest request = getUsersListRequest();
-            registerRequest(request);
             request.callback(new DataApiHandler<UsersList>() {
                 private boolean more = true;
 
@@ -278,6 +287,11 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                 protected void success(UsersList data, ApiResponse response) {
                     UsersList.log("load success. Loaded " + data.size() + " users");
                     UsersList<T> usersList = getUsersList();
+                    if (mFragmentPaused.get()) {
+                        usersList.addAndUpdateSignature(data);
+                        mCurrentUser = null;
+                        return;
+                    }
                     if (data.size() != 0) {
                         getImageSwitcher().setVisibility(View.VISIBLE);
                         usersList.addAndUpdateSignature(data);
