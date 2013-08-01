@@ -463,11 +463,9 @@ public class Profile extends AbstractDataWithPhotos {
     private static void compareFormItemData(FormItem item, Profile profile,
                                             boolean matches) {
         item.equal = matches;
-        if (item.dataId > 0) {
-            profile.forms.add(item);
-            if (item.equal) {
-                ((User) profile).formMatches++;
-            }
+        profile.forms.add(item);
+        if (item.equal) {
+            ((User) profile).formMatches++;
         }
     }
 
