@@ -34,6 +34,8 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.utils.*;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFragment {
     public static final int LIMIT = 40;
     public static final int PHOTOS_LIMIT = 5;
@@ -52,7 +54,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     private boolean mCanSendAlbumReq = true;
     private T mCurrentUser;
     private RateController mRateController;
-
+    private AtomicBoolean mFragmentPaused = new AtomicBoolean(false);
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -89,12 +91,20 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     public void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));
+        mFragmentPaused.set(false);
+        if (mCurrentUser == null) {
+            showUser(getUsersList().getCurrentUser());
+            unlockControls();
+            mRetryBtn.setVisibility(View.GONE);
+            getProgressBar().setVisibility(View.GONE);
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
+        mFragmentPaused.set(true);
     }
 
     @Override
@@ -269,12 +279,19 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     protected void updateData(final boolean isAddition) {
         if (!mUpdateInProcess) {
             onUpdateStart(isAddition);
-            getUsersListRequest().callback(new DataApiHandler<UsersList>() {
+            ApiRequest request = getUsersListRequest();
+            request.callback(new DataApiHandler<UsersList>() {
+                private boolean more = true;
 
                 @Override
                 protected void success(UsersList data, ApiResponse response) {
                     UsersList.log("load success. Loaded " + data.size() + " users");
                     UsersList<T> usersList = getUsersList();
+                    if (mFragmentPaused.get()) {
+                        usersList.addAndUpdateSignature(data);
+                        mCurrentUser = null;
+                        return;
+                    }
                     if (data.size() != 0) {
                         getImageSwitcher().setVisibility(View.VISIBLE);
                         usersList.addAndUpdateSignature(data);
@@ -292,13 +309,13 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                             showUser(currentUser);
                             unlockControls();
                         } else {
-                            showUser(null);
+                            if (!more) showUser(null);
                         }
                         //Скрываем кнопку отправки повтора
                         mRetryBtn.setVisibility(View.GONE);
                     } else {
                         getProgressBar().setVisibility(View.GONE);
-                        showUser(null);
+                        if (!more) showUser(null);
                     }
                     onUpdateSuccess(isAddition);
                 }
@@ -312,6 +329,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                     } else {
                         if (getFeedUserContainerClass() != null) {
                             FeedListData<FeedItem> items = new FeedListData<FeedItem>(response.getJsonResult(), getFeedUserContainerClass());
+                            more = items.more;
                             mLastFeedItem = items.items.isEmpty() ? null : items.items.get(items.items.size() - 1);
                             return new UsersList<FeedUser>(items, itemsClass);
                         } else {

@@ -42,6 +42,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public static final int F_FANS = 1010;
 
     public static final int F_EDITOR = 9999;
+    public static final int F_UNDEFINED = 9998;
 
     public static final String INVITE_POPUP = "INVITE_POPUP";
 

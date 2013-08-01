@@ -251,6 +251,8 @@
     <string name="general_edit_profile_message">Пожалуйста, заполните необходимые поля анкеты</string>
     <string name="general_premium_access_error">Для данной функции необходим VIP-статус</string>
 
+    <string name="address_book_access_error">Это приложение не имеет доступа к вашим контактам. Вы можете разрешить доступ в настройках приватности вашего устройства</string>
+    
     <string name="general_search_null_response_error">Ничего не найдено. Попробуйте изменить фильтры</string>
     <string name="change_filters">Изменить фильтры</string>
     <string name="general_sex">Пол</string>
