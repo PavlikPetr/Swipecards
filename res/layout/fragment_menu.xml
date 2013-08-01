@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent">
+            android:layout_height="fill_parent"
+            android:fillViewport="true">
 
     <RelativeLayout
             android:id="@+id/MenuLayout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:background="@android:color/black"
             >
         <!-- Profile -->
         <RelativeLayout
@@ -56,7 +58,7 @@
                 android:id="@+id/btnFragmentDating"
                 android:layout_below="@id/btnProfileLayout"
                 android:text="@string/general_dating"
-                android:drawableLeft="@drawable/ic_dating"
+                android:drawableLeft="@drawable/ic_dating_selector"
                 style="@style/LeftMenuButtons"/>
 
         <!-- Likes -->
@@ -64,17 +66,8 @@
                 android:id="@+id/btnFragmentLikes"
                 android:layout_below="@id/btnFragmentDating"
                 android:text="@string/general_likes"
-                android:drawableLeft="@drawable/topface_likes"
+                android:drawableLeft="@drawable/topface_likes_selector"
                 style="@style/LeftMenuButtons"/>
-
-        <!-- Likes Closing -->
-        <Button
-                android:id="@+id/btnFragmentLikesClosing"
-                android:layout_below="@id/btnFragmentDating"
-                android:text="@string/general_likes"
-                android:drawableLeft="@drawable/topface_likes"
-                style="@style/LeftMenuButtons"
-                android:visibility="gone"/>
 
         <!-- UNREAD LIKES -->
         <TextView
@@ -87,17 +80,8 @@
                 android:id="@+id/btnFragmentMutual"
                 android:layout_below="@id/btnFragmentLikes"
                 android:text="@string/general_mutual"
-                android:drawableLeft="@drawable/topface_sympathy"
+                android:drawableLeft="@drawable/topface_sympathy_selector"
                 style="@style/LeftMenuButtons"/>
-
-        <!-- Mutual - Sympathy - Closing -->
-        <Button
-                android:id="@+id/btnFragmentMutualClosing"
-                android:layout_below="@id/btnFragmentLikes"
-                android:text="@string/general_mutual"
-                android:drawableLeft="@drawable/topface_sympathy"
-                style="@style/LeftMenuButtons"
-                android:visibility="gone"/>
 
         <!-- UNREAD MUTUAL -->
         <TextView
@@ -110,7 +94,7 @@
                 android:id="@+id/btnFragmentDialogs"
                 android:layout_below="@id/btnFragmentMutual"
                 android:text="@string/general_dialogs"
-                android:drawableLeft="@drawable/ic_dialog"
+                android:drawableLeft="@drawable/ic_dialog_selector"
                 style="@style/LeftMenuButtons"/>
 
         <!-- UNREAD DIALOGS -->
@@ -124,7 +108,7 @@
                 android:id="@+id/btnFragmentBookmarks"
                 android:layout_below="@id/btnFragmentDialogs"
                 android:text="@string/general_bookmarks"
-                android:drawableLeft="@drawable/ic_star"
+                android:drawableLeft="@drawable/ic_star_selector"
                 style="@style/LeftMenuButtons"
                 />
         <!--Fans-->
@@ -132,7 +116,7 @@
                 android:id="@+id/btnFragmentFans"
                 android:layout_below="@id/btnFragmentBookmarks"
                 android:text="@string/general_fans"
-                android:drawableLeft="@drawable/ic_fans"
+                android:drawableLeft="@drawable/ic_fans_selector"
                 style="@style/LeftMenuButtons"
                 />
 
@@ -146,8 +130,9 @@
                 android:id="@+id/btnFragmentVisitors"
                 android:layout_below="@id/btnFragmentFans"
                 android:text="@string/general_visitors"
-                android:drawableLeft="@drawable/topface_guests"
-                style="@style/LeftMenuButtons"/>
+                android:drawableLeft="@drawable/topface_guests_selector"
+                style="@style/LeftMenuButtons"
+                />
 
         <TextView
                 android:id="@+id/tvNotifyVisitors"
@@ -167,7 +152,7 @@
                 android:layout_below="@id/countersLayout"
                 android:visibility="gone"
                 android:text="@string/editor_menu_admin"
-                android:drawableLeft="@drawable/topface_settings"
+                android:drawableLeft="@drawable/topface_settings_selector"
                 style="@style/LeftMenuButtons"/>
 
     </RelativeLayout>

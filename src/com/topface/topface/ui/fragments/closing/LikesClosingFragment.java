@@ -4,12 +4,12 @@ import android.view.View;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.FeedUser;
-import com.topface.topface.data.search.UsersList;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RateController;
+import com.topface.topface.utils.Utils;
 
 public class LikesClosingFragment extends ClosingFragment implements View.OnClickListener {
 
@@ -28,7 +28,11 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
 
     @Override
     protected String getSubtitle() {
-        return null;
+        return Utils.getQuantityString(
+                R.plurals.number_of_sympathies,
+                CacheProfile.unread_likes,
+                CacheProfile.unread_likes
+        );
     }
 
     @Override
@@ -60,31 +64,6 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     }
 
     @Override
-    protected void onPageSelected(int position) {
-    }
-
-    @Override
-    protected UsersList<FeedUser> createUsersList() {
-        return new UsersList<FeedUser>(FeedUser.class);
-    }
-
-    @Override
-    protected ApiRequest getUsersListRequest() {
-        FeedRequest request = new FeedRequest(FeedRequest.FeedService.LIKES, getActivity());
-        request.limit = LIMIT;
-        request.unread = true;
-        String lastFeedId = getLastFeedId();
-        if (lastFeedId != null)
-            request.to = lastFeedId;
-        return request;
-    }
-
-    @Override
-    public Class getItemsClass() {
-        return FeedUser.class;
-    }
-
-    @Override
     protected void lockControls() {
         //TODO change body of implemented methods use File | Settings | File Templates.
     }
@@ -107,25 +86,6 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btnSkip:
-                //TODO skipLike
-                if (getCurrentUser() != null && getCurrentUser().feedItem != null) {
-                    SkipClosedRequest request = new SkipClosedRequest(getActivity());
-                    request.callback(new SimpleApiHandler(){
-                        @Override
-                        public void always(ApiResponse response) {
-                            refreshActionBarTitles(getView());
-                        }
-                    });
-                    registerRequest(request);
-                    request.item = getCurrentUser().feedItem.id;
-                    request.exec();
-                }
-                showNextUser();
-                break;
-            case R.id.btnSkipAll:
-                skipAllRequests(SkipAllClosedRequest.LIKES);
-                break;
             case R.id.btnMutual:
                 getRateController().onRate(getCurrentUser().id, 10, RateRequest.DEFAULT_MUTUAL, new RateController.OnRateListener() {
                     @Override
@@ -139,20 +99,27 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
                 });
                 showNextUser();
                 break;
-            case R.id.btnChat:
-                showChat();
-                break;
-            case R.id.btnWatchAsList:
-                showWatchAsListDialog(CacheProfile.unread_likes);
-                break;
             default:
-                break;
+                super.onClick(v);
         }
     }
 
     @Override
     protected void onUsersProcessed() {
         usersProcessed = true;
+        CacheProfile.getOptions().closing.onStopMutualClosings();
         super.onUsersProcessed();
     }
+
+    @Override
+    protected int getSkipAllRequestType() {
+        return SkipAllClosedRequest.LIKES;
+    }
+
+    @Override
+    protected FeedRequest.FeedService getFeedType() {
+        return FeedRequest.FeedService.LIKES;
+    }
+
+
 }

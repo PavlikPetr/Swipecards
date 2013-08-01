@@ -23,8 +23,8 @@ import com.topface.topface.Static;
 import com.topface.topface.data.*;
 import com.topface.topface.data.search.CachableSearchList;
 import com.topface.topface.data.search.OnUsersListEventsListener;
-import com.topface.topface.data.search.UsersList;
 import com.topface.topface.data.search.SearchUser;
+import com.topface.topface.data.search.UsersList;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -34,8 +34,10 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditAgeFragment;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.FilterFragment;
-import com.topface.topface.ui.views.*;
+import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
+import com.topface.topface.ui.views.NoviceLayout;
+import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.*;
 
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
@@ -196,11 +198,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void initMutualDrawables() {
         if (isAdded()) {
-            singleMutual = getResources().getDrawable(R.drawable.dating_mutual_selector);
-            singleDelight = getResources().getDrawable(R.drawable.dating_delight_selector);
+            singleMutual = getResources().getDrawable(R.drawable.dating_like_selector);
+            singleDelight = getResources().getDrawable(R.drawable.dating_admiration_selector);
 
-            doubleMutual = getResources().getDrawable(R.drawable.dating_dbl_mutual_selector);
-            doubleDelight = getResources().getDrawable(R.drawable.dating_dbl_delight_selector);
+            doubleMutual = getResources().getDrawable(R.drawable.dating_mutual_selector);
+            doubleDelight = getResources().getDrawable(R.drawable.dating_dbl_admiration_selector);
         }
     }
 
@@ -368,6 +370,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     }
                 }
 
+                @SuppressWarnings("unchecked")
                 @Override
                 protected UsersList parseResponse(ApiResponse response) {
                     return new UsersList(response, SearchUser.class);

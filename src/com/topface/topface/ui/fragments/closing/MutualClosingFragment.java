@@ -3,11 +3,8 @@ package com.topface.topface.ui.fragments.closing;
 import android.view.View;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
-import com.topface.topface.data.FeedUser;
-import com.topface.topface.data.search.UsersList;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
-import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
@@ -16,10 +13,6 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
     public static boolean usersProcessed;
 
     private View mBtnSkipAll;
-
-    @Override
-    protected void initActionBarControls(ActionBar actionbar) {
-    }
 
     @Override
     protected String getTitle() {
@@ -32,18 +25,8 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
     }
 
     @Override
-    public Integer getTopPanelLayoutResId() {
-        return R.layout.controls_closing_top_panel;
-    }
-
-    @Override
     protected Integer getControlsLayoutResId() {
         return R.layout.controls_closed_mutuals;
-    }
-
-    @Override
-    protected void initTopPanel(View topPanelView) {
-        topPanelView.findViewById(R.id.btnWatchAsList).setOnClickListener(this);
     }
 
     @Override
@@ -54,33 +37,20 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
         if (CacheProfile.unread_mutual > CacheProfile.getOptions().closing.limitMutual) {
             mBtnSkipAll.setVisibility(View.VISIBLE);
         }
-        controlsView.findViewById(R.id.btnSkip).setOnClickListener(this);
+        View btnSkip = controlsView.findViewById(R.id.btnSkip);
+        btnSkip.setOnClickListener(this);
+        btnSkip.setActivated(true);
         controlsView.findViewById(R.id.btnChat).setOnClickListener(this);
     }
 
     @Override
-    protected void onPageSelected(int position) {
+    protected void initTopPanel(View topPanelView) {
+        topPanelView.findViewById(R.id.btnWatchAsList).setOnClickListener(this);
     }
 
     @Override
-    protected UsersList<FeedUser> createUsersList() {
-        return new UsersList<FeedUser>(FeedUser.class);
-    }
-
-    @Override
-    protected ApiRequest getUsersListRequest() {
-        FeedRequest request = new FeedRequest(FeedRequest.FeedService.MUTUAL, getActivity());
-        request.limit = LIMIT;
-        request.unread = true;
-        String lastFeedId = getLastFeedId();
-        if (lastFeedId != null)
-            request.to = lastFeedId;
-        return request;
-    }
-
-    @Override
-    public Class getItemsClass() {
-        return FeedUser.class;
+    protected FeedRequest.FeedService getFeedType() {
+        return FeedRequest.FeedService.MUTUAL;
     }
 
     @Override
@@ -120,43 +90,25 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
                 }
                 showNextUser();
                 break;
-            case R.id.btnSkipAll:
-                skipAllRequests(SkipAllClosedRequest.MUTUAL);
-                break;
-            case R.id.btnSkip:
-                if (CacheProfile.premium) {
-                    if(getCurrentUser() != null  && getCurrentUser().feedItem != null) {
-                        SkipClosedRequest request = new SkipClosedRequest(getActivity());
-                        request.callback(new SimpleApiHandler(){
-                            @Override
-                            public void always(ApiResponse response) {
-                                refreshActionBarTitles(getView());
-                            }
-                        });
-                        registerRequest(request);
-                        request.item = getCurrentUser().feedItem.id;
-                        request.exec();
-                    }
-                    showNextUser();
-                } else {
-                    showWatchAsListDialog(CacheProfile.unread_mutual);
-                }
-                break;
-            case R.id.btnChat:
-                showChat();
-                break;
-            case R.id.btnWatchAsList:
-                showWatchAsListDialog(CacheProfile.unread_mutual);
-                break;
             default:
-                break;
+                super.onClick(v);
         }
     }
 
     @Override
     protected void onUsersProcessed() {
         usersProcessed = true;
+        CacheProfile.getOptions().closing.onStopMutualClosings();
         super.onUsersProcessed();
     }
 
+    @Override
+    protected int getSkipAllRequestType() {
+        return SkipAllClosedRequest.MUTUAL;
+    }
+
+    @Override
+    protected boolean alowSkipForNonPremium() {
+        return false;
+    }
 }

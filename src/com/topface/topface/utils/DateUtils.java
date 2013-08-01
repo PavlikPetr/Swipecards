@@ -81,6 +81,10 @@ public class DateUtils {
         return (prev < cal.getTimeInMillis());
     }
 
+    public static boolean isWithin24Hours(long prev, long current) {
+        return Math.abs(current - prev) > DAY_IN_MILLISECONDS;
+    }
+
     public static Date getDate(int year, int month, int day) {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, year);

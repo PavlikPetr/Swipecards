@@ -1,6 +1,7 @@
 package com.topface.topface.data;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.TextUtils;
@@ -11,8 +12,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.Ssid;
+import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -399,18 +403,73 @@ public class Options extends AbstractData {
     }
 
     public static class Closing {
+        private static Ssid.ISsidUpdateListener listener;
         public boolean enableSympathies;
         public boolean enabledMutual;
         public int limitSympathies;
         public int limitMutual;
-    }
 
-    public boolean isClosingsEnabled() {
-        return (closing.enabledMutual || closing.enableSympathies) && !CacheProfile.premium;
-    }
+        public Closing() {
+            if (listener == null) {
+                listener = new Ssid.ISsidUpdateListener() {
+                    @Override
+                    public void onUpdate() {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = pref.edit();
+                                editor.putLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME, 0);
+                                editor.commit();
+                            }
+                        }).start();
+                    }
+                };
+                Ssid.addUpdateListener(listener);
+            }
+        }
 
-    public void onStopClosing() {
-        closing.enableSympathies = false;
-        closing.enabledMutual = false;
+        public void onStopMutualClosings() {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = pref.edit();
+                    long currentTime = System.currentTimeMillis();
+                    editor.putLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME, currentTime);
+                    editor.commit();
+                }
+            }).start();
+        }
+
+        public void onStopLikesClosings() {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = pref.edit();
+                    long currentTime = System.currentTimeMillis();
+                    editor.putLong(Static.PREFERENCES_LIKES_CLOSING_LAST_TIME, currentTime);
+                    editor.commit();
+                }
+            }).start();
+        }
+
+        public boolean isClosingsEnabled() {
+            return (enabledMutual || enableSympathies) && !CacheProfile.premium;
+        }
+
+        public boolean isMutualClosingAvailable() {
+            SharedPreferences pref =  App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+            long currentTime = System.currentTimeMillis();
+            long lastCallTime = pref.getLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME,0);
+            return DateUtils.isWithin24Hours(lastCallTime,System.currentTimeMillis());
+        }
+
+        public boolean isLikesClosingAvailable() {
+            SharedPreferences pref =  App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+            long lastCallTime = pref.getLong(Static.PREFERENCES_LIKES_CLOSING_LAST_TIME,0);
+            return DateUtils.isWithin24Hours(lastCallTime,System.currentTimeMillis());
+        }
     }
 }

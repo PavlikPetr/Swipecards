@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import com.google.analytics.tracking.android.EasyTracker;
-import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
@@ -35,7 +34,8 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public static final int F_LIKES = 1003;
     public static final int F_MUTUAL = 1004;
     public static final int F_DIALOGS = 1005;
-    public static final int F_TOPS = 1006;
+    //Страницы топов у нас больше нет
+    //public static final int F_TOPS = 1006;
     public static final int F_SETTINGS = 1007;
     public static final int F_VISITORS = 1008;
     public static final int F_BOOKMARKS = 1009;

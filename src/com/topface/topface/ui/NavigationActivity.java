@@ -20,6 +20,7 @@ import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
+import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.PhotoMainRequest;
@@ -87,15 +88,14 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     @Override
-    protected void onResumeAsync() {
-        super.onResumeAsync();
-        if (!mHasClosingsForThisSession && !CacheProfile.premium && CacheProfile.getOptions().isClosingsEnabled()) {
+    protected void onProfileUpdated() {
+        super.onProfileUpdated();
+        Options.Closing closing = CacheProfile.getOptions().closing;
+        if (!CacheProfile.premium && closing.isClosingsEnabled()) {
             getIntent().putExtra(GCMUtils.NEXT_INTENT, mFragmentMenu.getCurrentFragmentId());
-            MutualClosingFragment.usersProcessed = false;
-            LikesClosingFragment.usersProcessed = false;
-            Looper.prepare();
+            MutualClosingFragment.usersProcessed = !closing.isMutualClosingAvailable();
+            LikesClosingFragment.usersProcessed = !closing.isLikesClosingAvailable();
             onClosings();
-            Looper.loop();
         }
     }
 
@@ -223,6 +223,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         new ExternalLinkExecuter(mListener).execute(getIntent());
 
         App.checkProfileUpdate();
+        if (!mHasClosingsForThisSession) {
+            onClosings();
+        }
     }
 
 
@@ -416,7 +419,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     ExternalLinkExecuter.OnExternalLinkListener mListener = new ExternalLinkExecuter.OnExternalLinkListener() {
         @Override
         public void onProfileLink(int profileID) {
-            ContainerActivity.getProfileIntent(profileID, NavigationActivity.this);
+            startActivity(ContainerActivity.getProfileIntent(profileID, NavigationActivity.this));
+            getIntent().setData(null);
         }
 
         @Override
@@ -446,20 +450,31 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     public void onClosings() {
-        if (!mHasClosingsForThisSession) {
-            mHasClosingsForThisSession = true;
+        if (CacheProfile.unread_mutual == 0) {
+            MutualClosingFragment.usersProcessed = true;
         }
-        if (!MutualClosingFragment.usersProcessed) {
+        if (CacheProfile.unread_likes == 0) {
+            LikesClosingFragment.usersProcessed = true;
+        }
+        Options.Closing closing = CacheProfile.getOptions().closing;
+        if (closing.enabledMutual && !MutualClosingFragment.usersProcessed) {
             mFragmentMenu.onClosings(BaseFragment.F_MUTUAL);
             showFragment(BaseFragment.F_MUTUAL);
             return;
         }
-        if (!LikesClosingFragment.usersProcessed) {
+        if (closing.enableSympathies && !LikesClosingFragment.usersProcessed) {
             mFragmentMenu.onClosings(BaseFragment.F_LIKES);
             showFragment(BaseFragment.F_LIKES);
             return;
         }
+        if (!mHasClosingsForThisSession) {
+            mHasClosingsForThisSession = true;
+        }
         mFragmentMenu.onStopClosings();
         showFragment(null); // it will take fragment id from getIntent() extra data
+    }
+
+    public static void onLogout() {
+        mHasClosingsForThisSession = false;
     }
 }

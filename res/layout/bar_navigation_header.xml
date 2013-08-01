@@ -16,6 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:duplicateParentState="true"
+            android:paddingRight="8dp"
             android:id="@+id/btnsCont">
             <ImageView
                     android:id="@+id/btnNavigationHome"

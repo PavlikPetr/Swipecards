@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.dialogs.ConfirmEmailDialog;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
@@ -38,6 +39,12 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     protected boolean mNeedAnimate = true;
     private BroadcastReceiver mProfileLoadReceiver;
     private boolean afterOnSaveInstanceState;
+    private BroadcastReceiver mUpdateProfileReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            onProfileUpdated();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +103,9 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         }
     }
 
+    protected void onProfileUpdated() {
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -109,6 +119,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
                 onResumeAsync();
             }
         }).start();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mUpdateProfileReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
     }
 
     private void registerReauthReceiver() {
@@ -186,6 +197,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         } catch (Exception ex) {
             Debug.error(ex);
         }
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mUpdateProfileReceiver);
     }
 
     private void removeAllRequests() {
