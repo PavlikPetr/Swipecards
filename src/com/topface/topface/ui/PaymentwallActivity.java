@@ -39,7 +39,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
         mUid = getIntent().getIntExtra(USER_ID, 0);
         mSuccessUrl = getSuccessUrl(getWidgetUrl());
         if (mUid == 0 || TextUtils.isEmpty(mSuccessUrl)) {
-            Toast.makeText(this, R.string.general_data_error, Toast.LENGTH_SHORT);
+            Toast.makeText(this, R.string.general_data_error, Toast.LENGTH_SHORT).show();
             finishActivity(RESULT_ERROR);
             return;
         }
@@ -51,6 +51,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
 
         // WebView
         WebView webView = (WebView) findViewById(R.id.wvWebFrame);
+        //noinspection AndroidLintSetJavaScriptEnabled
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setVerticalScrollbarOverlay(true);
         webView.setVerticalFadingEdgeEnabled(true);
