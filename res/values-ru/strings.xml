@@ -690,6 +690,15 @@
         <item quantity="other">%d симпатий</item>
     </plurals>
 
+    <plurals name="popup_vip_messages">
+        <item quantity="one">Получено %d сообщение с экспресс-доставкой</item>
+        <item quantity="few">Получено %d сообщения с экспресс-доставкой</item>
+        <item quantity="many">Получено %d сообщений с экспресс-доставкой</item>
+        <item quantity="other">Получено %d сообщений с экспресс-доставкой</item>
+    </plurals>
+    <string name="general_attention">Внимание!</string>
+    <string name="general_delete_messages">Удалить сообщения</string>
+
     <string name="mutual_sympathies">Взаимно</string>
     <string name="skip_all">Пропустить всех</string>
     <string name="forget">Забыть</string>
