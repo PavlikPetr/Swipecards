@@ -325,6 +325,10 @@ public class Utils {
         return email != null && EMAIL_ADDRESS_PATTERN.matcher(email).matches();
     }
 
+    public static void goToUrl(Context context, String url) {
+        context.startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse(url)));
+    }
+
     public static void goToMarket(Context context) {
         context.startActivity(getMarketIntent(context));
     }
