@@ -82,10 +82,9 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
                     deleteRequest.callback(new SimpleApiHandler() {
                         @Override
                         public void always(ApiResponse response) {
-                            refreshActionBarTitles(getView());
+                            if (!isCanceled()) refreshActionBarTitles(getView());
                         }
                     });
-                    registerRequest(deleteRequest);
                     deleteRequest.exec();
                 }
                 showNextUser();
