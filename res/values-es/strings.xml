@@ -188,6 +188,7 @@
     <string name="novice_fill_profile">¡Elige tus mejores fotos para recibir más simpatías!</string>
     <string name="general_edit_profile_message">Por favor, rellena los campos necesarios de tu perfil</string>
     <string name="general_premium_access_error">Para esta función es necesario estar Premium</string>
+    <string name="address_book_access_error">Esta aplicación no tiene acceso a tus contactos. Puedes permitir tal acceso desde los ajustes de privacidad de tu dispositivo</string>
     <string name="general_search_null_response_error">De nada es encontrado. Prueba cambiar filtros</string>
     <string name="change_filters">Cambiar filtros</string>
     <string name="general_sex">Sexo</string>
@@ -509,4 +510,25 @@
         <item quantity="other">%d monedas</item>
         <item quantity="one">%d moneda</item>
     </plurals>
+    <string name="skip">Omitir</string>
+    <string name="chat">Escribir</string>
+    <string name="sympathies">Simpatías</string>
+    <plurals name="number_of_sympathies">
+        <item quantity="zero">%d simpatías</item>
+        <item quantity="other">%d simpatías</item>
+        <item quantity="one">%d simpatía</item>
+    </plurals>
+    <plurals name="popup_vip_messages">
+        <item quantity="other">Recibido %d mensaje con la entrega express</item>
+        <item quantity="one">Recibido %d mensaje con la entrega express</item>
+    </plurals>
+    <string name="general_attention">¡Atención!</string>
+    <string name="general_delete_messages">Eliminar mensajes</string>
+    <string name="mutual_sympathies">Mutua</string>
+    <string name="skip_all">Omitir todas</string>
+    <string name="forget">Olvidar</string>
+    <string name="watch_as_list">Ver en forma de lista</string>
+    <string name="watching_as_list">Mirar en forma de lista</string>
+    <string name="watching_sequentually">Mirar consecutivamente</string>
+    <string name="or_use_common_likes_list">O vea a aquellos a los que has gustado en la lista general</string>
 </resources>
