@@ -194,7 +194,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                 }
             });
         } else {
-            if (CacheProfile.unread_likes > 0 || isBlockOnClosing()) {
+            if (CacheProfile.unread_likes > 0) {
                 ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(1);
                 String title = Utils.getQuantityString(R.plurals.you_was_liked, CacheProfile.unread_likes, CacheProfile.unread_likes);
                 ((TextView) inflated.findViewById(R.id.tvTitle)).setText(title);
