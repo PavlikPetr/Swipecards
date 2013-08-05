@@ -54,6 +54,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private boolean isPopupVisible = false;
     private boolean menuEnabled;
     private static boolean mHasClosingsForThisSession;
+    private boolean mClosingsOnProfileUpdateInvoked = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,14 +96,17 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     @Override
-    protected void onProfileUpdated() {
-        super.onProfileUpdated();
-        Options.Closing closing = CacheProfile.getOptions().closing;
-        if (!CacheProfile.premium && closing.isClosingsEnabled()) {
-            getIntent().putExtra(GCMUtils.NEXT_INTENT, mFragmentMenu.getCurrentFragmentId());
-            MutualClosingFragment.usersProcessed = !closing.isMutualClosingAvailable();
-            LikesClosingFragment.usersProcessed = !closing.isLikesClosingAvailable();
-            onClosings();
+    protected void onClosingDataReceived() {
+        super.onClosingDataReceived();
+        if (!mClosingsOnProfileUpdateInvoked) {
+            mClosingsOnProfileUpdateInvoked = true;
+            Options.Closing closing = CacheProfile.getOptions().closing;
+            if (!CacheProfile.premium && closing.isClosingsEnabled()) {
+                getIntent().putExtra(GCMUtils.NEXT_INTENT, mFragmentMenu.getCurrentFragmentId());
+                MutualClosingFragment.usersProcessed = !closing.isMutualClosingAvailable();
+                LikesClosingFragment.usersProcessed = !closing.isLikesClosingAvailable();
+                onClosings();
+            }
         }
     }
 
@@ -231,7 +235,9 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
         App.checkProfileUpdate();
         if (!mHasClosingsForThisSession) {
-            onClosings();
+            if (CacheProfile.unread_likes > 0 || CacheProfile.unread_mutual > 0) {
+                onClosings();
+            }
         }
     }
 

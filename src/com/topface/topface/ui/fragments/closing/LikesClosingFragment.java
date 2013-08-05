@@ -107,7 +107,7 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     @Override
     protected void onUsersProcessed() {
         usersProcessed = true;
-        CacheProfile.getOptions().closing.onStopMutualClosings();
+        CacheProfile.getOptions().closing.onStopLikesClosings();
         super.onUsersProcessed();
     }
 

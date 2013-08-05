@@ -215,8 +215,8 @@ public class App extends Application {
                 @Override
                 protected void success(Profile data, ApiResponse response) {
                     CacheProfile.setProfile(data, response, part);
-
-                    LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                    LocalBroadcastManager.getInstance(getContext())
+                            .sendBroadcast(new Intent(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
                 }
 
                 @Override

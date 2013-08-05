@@ -401,6 +401,8 @@ public class Options extends AbstractData {
     }
 
     public static class Closing {
+        public static String DATA_FOR_CLOSING_RECEIVED_ACTION = "DATA_FOR_CLOSING_RECEIVED_ACTION";
+
         private static Ssid.ISsidUpdateListener listener;
         public boolean enableSympathies;
         public boolean enabledMutual;
@@ -461,13 +463,13 @@ public class Options extends AbstractData {
             SharedPreferences pref =  App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
             long currentTime = System.currentTimeMillis();
             long lastCallTime = pref.getLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME,0);
-            return DateUtils.isWithin24Hours(lastCallTime,System.currentTimeMillis());
+            return DateUtils.isOutside24Hours(lastCallTime, System.currentTimeMillis());
         }
 
         public boolean isLikesClosingAvailable() {
             SharedPreferences pref =  App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
             long lastCallTime = pref.getLong(Static.PREFERENCES_LIKES_CLOSING_LAST_TIME,0);
-            return DateUtils.isWithin24Hours(lastCallTime,System.currentTimeMillis());
+            return DateUtils.isOutside24Hours(lastCallTime, System.currentTimeMillis());
         }
     }
 }

@@ -81,7 +81,7 @@ public class DateUtils {
         return (prev < cal.getTimeInMillis());
     }
 
-    public static boolean isWithin24Hours(long prev, long current) {
+    public static boolean isOutside24Hours(long prev, long current) {
         return Math.abs(current - prev) > DAY_IN_MILLISECONDS;
     }
 

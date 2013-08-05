@@ -92,7 +92,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
         super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));
         mFragmentPaused.set(false);
-        if (mCurrentUser == null) {
+        if (mCurrentUser == null && !getUsersList().isEmpty()) {
             showUser(getUsersList().getCurrentUser());
             unlockControls();
             mRetryBtn.setVisibility(View.GONE);

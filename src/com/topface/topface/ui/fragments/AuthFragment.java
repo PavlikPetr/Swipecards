@@ -402,7 +402,8 @@ public class AuthFragment extends BaseFragment {
                 Options.parse(response);
                 Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
                 ((BaseFragmentActivity) getActivity()).close(AuthFragment.this, true);
-                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                LocalBroadcastManager.getInstance(getContext())
+                        .sendBroadcast(new Intent(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
             }
 
             @Override
