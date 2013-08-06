@@ -3,9 +3,9 @@ package com.topface.topface.ui.fragments.closing;
 import android.view.View;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
-import com.topface.topface.data.FeedUser;
-import com.topface.topface.requests.*;
-import com.topface.topface.requests.handlers.SimpleApiHandler;
+import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.requests.RateRequest;
+import com.topface.topface.requests.SkipAllClosedRequest;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RateController;
@@ -87,7 +87,7 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnMutual:
-                getRateController().onRate(getCurrentUser().id, 10, RateRequest.DEFAULT_MUTUAL, new RateController.OnRateListener() {
+                getRateController().onRate(getCurrentUser().id, 9, RateRequest.DEFAULT_MUTUAL, new RateController.OnRateListener() {
                     @Override
                     public void onRateCompleted() {
                         refreshActionBarTitles(getView());

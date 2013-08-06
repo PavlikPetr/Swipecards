@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ClosingsBuyVipDialog extends DialogFragment implements View.OnClickListener {
+public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnClickListener {
 
     public static final String TAG = "com.topface.topface.ui.dialogs.ClosingsBuyVipDialog_TAG";
     private static final String ARG_LIKES = "likesCount";
