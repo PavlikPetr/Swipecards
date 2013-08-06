@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
@@ -356,11 +357,15 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 fragment = new DatingFragment();
                 break;
             case BaseFragment.F_LIKES:
-                fragment = LikesClosingFragment.usersProcessed ?
-                        new LikesFragment() : new LikesClosingFragment();
+                if (LikesClosingFragment.usersProcessed || CacheProfile.premium) {
+                    fragment = new LikesFragment();
+                } else {
+                    getActivity().getIntent().putExtra(GCMUtils.NEXT_INTENT, getCurrentFragmentId());
+                    fragment = new LikesClosingFragment();
+                }
                 break;
             case BaseFragment.F_MUTUAL:
-                fragment = MutualClosingFragment.usersProcessed && CacheProfile.unread_likes == 0?
+                fragment = MutualClosingFragment.usersProcessed || CacheProfile.premium?
                         new MutualFragment() : new MutualClosingFragment();
                 break;
             case BaseFragment.F_DIALOGS:

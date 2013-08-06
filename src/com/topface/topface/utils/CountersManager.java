@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.LeadersRequest;
+import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
 
 public class CountersManager {
     private static int likesCounter;
@@ -166,6 +167,9 @@ public class CountersManager {
                 sympathyCounter != CacheProfile.unread_mutual ||
                 visitorsCounter != CacheProfile.unread_visitors ||
                 fansCounter != CacheProfile.unread_fans) {
+            if (CacheProfile.unread_likes < likesCounter) {
+                LikesClosingFragment.usersProcessed = false;
+            }
             CacheProfile.unread_likes = likesCounter;
             CacheProfile.unread_messages = dialogsCounter;
             CacheProfile.unread_mutual = sympathyCounter;

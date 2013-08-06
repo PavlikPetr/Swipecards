@@ -120,6 +120,4 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     protected FeedRequest.FeedService getFeedType() {
         return FeedRequest.FeedService.LIKES;
     }
-
-
 }

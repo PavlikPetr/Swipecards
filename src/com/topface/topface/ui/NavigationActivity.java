@@ -98,10 +98,10 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     protected void onClosingDataReceived() {
         super.onClosingDataReceived();
-        if (!mClosingsOnProfileUpdateInvoked) {
+        if (!CacheProfile.premium && !mClosingsOnProfileUpdateInvoked) {
             mClosingsOnProfileUpdateInvoked = true;
             Options.Closing closing = CacheProfile.getOptions().closing;
-            if (!CacheProfile.premium && closing.isClosingsEnabled()) {
+            if (closing.isClosingsEnabled()) {
                 getIntent().putExtra(GCMUtils.NEXT_INTENT, mFragmentMenu.getCurrentFragmentId());
                 MutualClosingFragment.usersProcessed = !closing.isMutualClosingAvailable();
                 LikesClosingFragment.usersProcessed = !closing.isLikesClosingAvailable();
@@ -234,7 +234,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         new ExternalLinkExecuter(mListener).execute(getIntent());
 
         App.checkProfileUpdate();
-        if (!mHasClosingsForThisSession) {
+        if (!CacheProfile.premium && !mHasClosingsForThisSession) {
             if (CacheProfile.unread_likes > 0 || CacheProfile.unread_mutual > 0) {
                 onClosings();
             }
