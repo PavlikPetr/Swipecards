@@ -61,7 +61,6 @@ public class LocaleConfig {
     }
 
     public String getApplicationLocale() {
-        fetchToSystemLocale();
         if (mApplicationLocale == null) {
             mApplicationLocale = getPreferences().getString(APPLICATION_LOCALE,Locale.getDefault().getLanguage());
         }
