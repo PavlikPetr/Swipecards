@@ -54,10 +54,11 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
         skipAllRequest.callback(new SimpleApiHandler() {
             @Override
             public void always(ApiResponse response) {
-                refreshActionBarTitles(getView());
+                if (!isCanceled()) {
+                    refreshActionBarTitles(getView());
+                }
             }
         });
-        registerRequest(skipAllRequest);
         skipAllRequest.exec();
         onUsersProcessed();
     }
@@ -102,10 +103,11 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
                         request.callback(new SimpleApiHandler(){
                             @Override
                             public void always(ApiResponse response) {
-                                refreshActionBarTitles(getView());
+                                if (!isCanceled()) {
+                                    refreshActionBarTitles(getView());
+                                }
                             }
                         });
-                        registerRequest(request);
                         request.item = getCurrentUser().feedItem.id;
                         request.exec();
                     }

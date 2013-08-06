@@ -709,4 +709,7 @@
     <string name="watching_as_list">Смотреть списком</string>
     <string name="watching_sequentually">Смотреть последовательно</string>
     <string name="or_use_common_likes_list">Или просматривайте тех, кому вы понравились в общем списке</string>
+    <string name="settings_feedback_transaction_number">Номер заказа</string>
+    <string name="settings_feedback_transaction_link">где найти номер заказа?</string>
+
 </resources>

@@ -129,4 +129,8 @@ abstract public class ApiHandler extends Handler {
     protected boolean isShowPremiumError() {
         return true;
     }
+
+    protected boolean isCanceled() {
+        return mCancel;
+    }
 }

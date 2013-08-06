@@ -6,6 +6,7 @@ import com.topface.topface.data.FeedLike;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 
 public class MutualClosingFragment extends ClosingFragment implements View.OnClickListener {
@@ -82,10 +83,9 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
                     deleteRequest.callback(new SimpleApiHandler() {
                         @Override
                         public void always(ApiResponse response) {
-                            refreshActionBarTitles(getView());
+                            if (!isCanceled()) refreshActionBarTitles(getView());
                         }
                     });
-                    registerRequest(deleteRequest);
                     deleteRequest.exec();
                 }
                 showNextUser();
@@ -98,6 +98,7 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
     @Override
     protected void onUsersProcessed() {
         usersProcessed = true;
+        CountersManager.getInstance(getActivity()).setCounter(CountersManager.LIKES,0,true);
         CacheProfile.getOptions().closing.onStopMutualClosings();
         super.onUsersProcessed();
     }

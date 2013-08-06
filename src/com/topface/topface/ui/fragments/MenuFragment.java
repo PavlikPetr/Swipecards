@@ -360,7 +360,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                         new LikesFragment() : new LikesClosingFragment();
                 break;
             case BaseFragment.F_MUTUAL:
-                fragment = MutualClosingFragment.usersProcessed ?
+                fragment = MutualClosingFragment.usersProcessed && CacheProfile.unread_likes == 0?
                         new MutualFragment() : new MutualClosingFragment();
                 break;
             case BaseFragment.F_DIALOGS:
