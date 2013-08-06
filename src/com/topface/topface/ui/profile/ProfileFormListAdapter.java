@@ -1,6 +1,7 @@
 package com.topface.topface.ui.profile;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -143,7 +144,7 @@ public class ProfileFormListAdapter extends BaseAdapter {
                 break;
             case T_DATA:
                 holder.mTitle.setText(item.title.toUpperCase());
-                if (item.value != null && item.dataId != FormItem.NOT_SPECIFIED_ID) {
+                if (!TextUtils.isEmpty(item.value.trim()) && item.dataId != FormItem.NOT_SPECIFIED_ID) {
                     holder.mState.setImageResource(R.drawable.user_cell);
                     holder.mValue.setText(item.value.toLowerCase());
                     holder.mValue.setVisibility(View.VISIBLE);
@@ -159,7 +160,7 @@ public class ProfileFormListAdapter extends BaseAdapter {
             case T_STATUS:
                 holder.mTitle.setText(item.title.toUpperCase());
                 holder.mState.setImageResource(R.drawable.user_cell);
-                if (item.value.trim().length() != 0) {
+                if (!TextUtils.isEmpty(item.value.trim())) {
                     holder.mValue.setText(item.value);
                     holder.mValue.setVisibility(View.VISIBLE);
                 } else {

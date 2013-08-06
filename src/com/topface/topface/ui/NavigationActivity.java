@@ -54,7 +54,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private boolean isPopupVisible = false;
     private boolean menuEnabled;
     private static boolean mHasClosingsForThisSession;
-    private boolean mClosingsOnProfileUpdateInvoked = false;
+    private static boolean mClosingsOnProfileUpdateInvoked = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -489,5 +489,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     public static void onLogout() {
         mHasClosingsForThisSession = false;
+        mClosingsOnProfileUpdateInvoked = false;
     }
 }

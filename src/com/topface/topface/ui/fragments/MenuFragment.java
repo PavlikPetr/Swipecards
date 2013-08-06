@@ -445,6 +445,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 });
             } else {
                 setAlphaToTextAndDrawable(btn,255);
+                btn.setOnClickListener(this);
             }
         }
     }
