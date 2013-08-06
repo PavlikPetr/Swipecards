@@ -77,6 +77,23 @@ case "${DPI}" in
 	mogrify -resize 37.5% -format png res/drawable-ldpi/*
 	;;
 
+	"xxhdpi" | "XXHDPI" )
+	mkdir res
+	mkdir res/drawable-xxhdpi
+	mkdir res/drawable-xhdpi
+	mkdir res/drawable-hdpi
+	mkdir res/drawable-mdpi
+	mkdir res/drawable-ldpi
+	cp ${SOURCE}/*png res/drawable-xxhdpi
+	cp ${SOURCE}/*png res/drawable-xhdpi
+	cp ${SOURCE}/*png res/drawable-hdpi
+	cp ${SOURCE}/*png res/drawable-mdpi
+	cp ${SOURCE}/*png res/drawable-ldpi
+	mogrify -resize 75% -format png res/drawable-xhdpi/*
+	mogrify -resize 50% -format png res/drawable-hdpi/*
+	mogrify -resize 33.3% -format png res/drawable-mdpi/*
+	mogrify -resize 20% -format png res/drawable-ldpi/*
+	;;
 	* )
 	echo ${USAGE}
 	exit 1
