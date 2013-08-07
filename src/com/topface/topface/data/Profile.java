@@ -377,8 +377,7 @@ public class Profile extends AbstractDataWithPhotos {
                     headerItem);
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
-                if (restraunts != null)
-                    profile.forms.add(formItem);
+                if (restraunts != null) profile.forms.add(formItem);
             } else {
                 profile.forms.add(formItem);
             }
@@ -398,8 +397,7 @@ public class Profile extends AbstractDataWithPhotos {
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
-                if (datingDetails != null)
-                    profile.forms.add(formItem);
+                if (datingDetails != null) profile.forms.add(formItem);
             } else {
                 profile.forms.add(formItem);
             }
@@ -411,15 +409,13 @@ public class Profile extends AbstractDataWithPhotos {
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
-                if (achievments != null)
-                    profile.forms.add(formItem);
+                if (achievments != null) profile.forms.add(formItem);
             } else {
                 profile.forms.add(formItem);
             }
 
             // 27 DIVIDER
             profile.forms.add(FormItem.getDivider());
-
         }
     }
 

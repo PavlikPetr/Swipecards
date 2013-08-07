@@ -138,7 +138,6 @@ public class ProfileFormListAdapter extends BaseAdapter {
 
         switch (type) {
             case T_HEADER:
-
                 holder.mHeader.setText(item.title);
                 holder.mState.setImageResource(getHeaderPicture(item));
                 break;

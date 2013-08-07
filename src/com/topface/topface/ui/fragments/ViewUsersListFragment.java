@@ -464,10 +464,11 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
         if (user != null) {
             fillUserInfo(user);
             unlockControls();
-        }
-        mPreloadManager.preloadPhoto(getUsersList());
-        if (user == null) {
-            onUsersProcessed();
+            mPreloadManager.preloadPhoto(getUsersList());
+        } else {
+            if (getUsersList().isEnded()) {
+                onUsersProcessed();
+            }
         }
         onShowUser();
     }

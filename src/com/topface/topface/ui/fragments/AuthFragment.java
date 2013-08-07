@@ -604,6 +604,9 @@ public class AuthFragment extends BaseFragment {
     private void btnTFClick() {
         if (checkOnline()) {
             hideButtons();
+            // костыль, надо избавить от viewflipper к чертовой бабушке
+            mProgressBar.setVisibility(View.GONE);
+            //---------------------------------------------------------
             String login = mLogin.getText().toString();
             String password = mPassword.getText().toString();
             if (TextUtils.isEmpty(login.trim()) || TextUtils.isEmpty(password.trim())) {

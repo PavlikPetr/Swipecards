@@ -68,6 +68,8 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         }
     };
 
+    private boolean isClosed = false;
+
     private BroadcastReceiver mSelectMenuReceiver = new BroadcastReceiver() {
 
         @Override
@@ -360,7 +362,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 if (LikesClosingFragment.usersProcessed || CacheProfile.premium) {
                     fragment = new LikesFragment();
                 } else {
-                    getActivity().getIntent().putExtra(GCMUtils.NEXT_INTENT, getCurrentFragmentId());
+                    if (!isClosed) getActivity().getIntent().putExtra(GCMUtils.NEXT_INTENT, getCurrentFragmentId());
                     fragment = new LikesClosingFragment();
                 }
                 break;
@@ -453,6 +455,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 btn.setOnClickListener(this);
             }
         }
+        isClosed = true;
     }
 
     private void setAlphaToTextAndDrawable(Button btn, int alpha) {
@@ -460,6 +463,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         if (btn.getCompoundDrawables()[0] != null) {
             btn.getCompoundDrawables()[0].setAlpha(alpha);
         }
+        isClosed = false;
     }
 
     public void onStopClosings() {
@@ -472,6 +476,8 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
     }
 
     public void showWatchAsListDialog(int likesCount) {
+        if (ClosingsBuyVipDialog.opened) return;
+
         ClosingsBuyVipDialog newFragment = ClosingsBuyVipDialog.newInstance(likesCount);
         try {
             newFragment.show(getActivity().getSupportFragmentManager(), ClosingsBuyVipDialog.TAG);
