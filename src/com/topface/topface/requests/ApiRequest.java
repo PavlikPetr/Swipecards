@@ -43,6 +43,7 @@ public abstract class ApiRequest implements IApiRequest {
     private int mResendCnt = 0;
     private String mPostData;
     protected String mApiUrl;
+    private boolean isNeedCounters = true;
 
     public ApiRequest(Context context) {
         //Нельзя передавать Application Context!!!! Только контекст Activity
@@ -64,6 +65,7 @@ public abstract class ApiRequest implements IApiRequest {
     @Override
     public void exec() {
         setEmptyHandler();
+        handler.setNeedCounters(isNeedCounters);
 
         if (context != null && !App.isOnline() && doNeedAlert) {
             RetryDialog retryDialog = new RetryDialog(context, this);
@@ -347,5 +349,9 @@ public abstract class ApiRequest implements IApiRequest {
     @Override
     public boolean isNeedAuth() {
         return true;
+    }
+
+    protected void setNeedCounters(boolean value) {
+        isNeedCounters = value;
     }
 }

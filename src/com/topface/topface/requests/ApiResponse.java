@@ -12,6 +12,7 @@ public class ApiResponse implements IApiResponse, SerializableToJson {
     public int code = RESULT_DONT_SET;
     public String message = "";
     public JSONObject jsonResult;
+    // can be null
     public JSONObject counters;
     public String method;
     public String id;
@@ -77,7 +78,7 @@ public class ApiResponse implements IApiResponse, SerializableToJson {
                 message = jsonResult.optString("message", "");
             } else if (!jsonResult.isNull("result")) {
                 if (!jsonResult.isNull("counters")) {
-                    counters = jsonResult.getJSONObject("counters");
+                    counters = jsonResult.optJSONObject("counters");
                 }
                 if (!jsonResult.isNull("method")) {
                     method = jsonResult.optString("method");

@@ -183,6 +183,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         return FeedRequest.FeedService.LIKES;
     }
 
+    private TextView mEmptyFeedViewTitle;
+
     @Override
     protected void initEmptyFeedView(View inflated) {
         if (CacheProfile.premium) {
@@ -197,7 +199,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
             if (CacheProfile.unread_likes > 0) {
                 ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(1);
                 String title = Utils.getQuantityString(R.plurals.you_was_liked, CacheProfile.unread_likes, CacheProfile.unread_likes);
-                ((TextView) inflated.findViewById(R.id.tvTitle)).setText(title);
+                mEmptyFeedViewTitle = ((TextView) inflated.findViewById(R.id.tvTitle));
+                mEmptyFeedViewTitle.setText(title);
                 inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -242,5 +245,14 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected boolean isBlockOnClosing() {
         return true;
+    }
+
+    @Override
+    protected void onCountersUpdated() {
+        super.onCountersUpdated();
+        if (mEmptyFeedViewTitle != null) {
+            String title = Utils.getQuantityString(R.plurals.you_was_liked, CacheProfile.unread_likes, CacheProfile.unread_likes);
+            mEmptyFeedViewTitle.setText(title);
+        }
     }
 }

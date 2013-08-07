@@ -151,6 +151,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
                     if (mActionBar != null) {
                         mActionBar.refreshNotificators();
                     }
+                    onCountersUpdated();
                 }
             };
             if (isAdded()) {
@@ -161,6 +162,9 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
                         );
             }
         }
+    }
+
+    protected void onCountersUpdated() {
     }
 
     @Override

@@ -90,7 +90,7 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
                 getRateController().onRate(getCurrentUser().id, 9, RateRequest.DEFAULT_MUTUAL, new RateController.OnRateListener() {
                     @Override
                     public void onRateCompleted() {
-                        refreshActionBarTitles(getView());
+                        if(isAdded()) refreshActionBarTitles(getView());
                     }
 
                     @Override

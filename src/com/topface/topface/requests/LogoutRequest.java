@@ -10,6 +10,7 @@ public class LogoutRequest extends ApiRequest {
 
     public LogoutRequest(Context context) {
         super(context);
+        setNeedCounters(false);
     }
 
     @Override
