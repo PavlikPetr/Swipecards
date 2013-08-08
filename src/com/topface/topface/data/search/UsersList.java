@@ -45,13 +45,10 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
     public UsersList(Class<T> itemClass) {
         super();
         mClass = itemClass;
-        if (mClass == SearchUser.class) {
-            useSignature = true;
-        } else {
-            useSignature = false;
-        }
+        useSignature = mClass == SearchUser.class;
     }
 
+    @SuppressWarnings("unchecked")
     public UsersList(FeedListData<FeedItem> feedItems, Class<T> itemClass) {
         this(itemClass);
         for(FeedItem item : feedItems.items) {
@@ -245,6 +242,7 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
         return new JSONObject().put("users", usersJson);
     }
 
+    @SuppressWarnings("unchecked")
     public void replace(UsersList usersList) {
         clear();
         usersList = usersList != null ? usersList : new UsersList(mClass);
@@ -312,8 +310,7 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
     }
 
     public boolean updateSignature() {
-        if (!useSignature)  return false;
-        return setSignature(CacheProfile.dating != null ? CacheProfile.dating.getFilterSignature() : "");
+        return useSignature && setSignature(CacheProfile.dating != null ? CacheProfile.dating.getFilterSignature() : "");
     }
 
     public void updateSignatureAndUpdate() {
@@ -327,6 +324,7 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
      * @param usersList поиск
      */
     public void addAndUpdateSignature(UsersList usersList) {
+        //noinspection unchecked
         addAll(usersList);
         updateSignature();
     }

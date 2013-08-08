@@ -636,10 +636,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         }
     }
 
-    protected void decrementCounters() {
-
-    }
-
     private void initRetryViews() {
         if (mRetryView == null) {
             mRetryView = RetryViewCreator.createDefaultRetryView(getActivity(), new View.OnClickListener() {
