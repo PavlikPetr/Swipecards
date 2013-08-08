@@ -106,6 +106,7 @@ public class FormItem implements Parcelable{
         dest.writeInt(dataId);
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public static final Parcelable.Creator CREATOR =
             new Parcelable.Creator() {
                 public FormItem createFromParcel(Parcel in) {

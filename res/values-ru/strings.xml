@@ -711,14 +711,4 @@
     <string name="or_use_common_likes_list">Или просматривайте тех, кому вы понравились в общем списке</string>
     <string name="settings_feedback_transaction_number">Номер заказа</string>
     <string name="settings_feedback_transaction_link">где найти номер заказа?</string>
-
-    <plurals name="popup_vip_messages">
-        <item quantity="one">Получено %d сообщение с экспресс-доставкой</item>
-        <item quantity="few">Получено %d сообщения с экспресс-доставкой</item>
-        <item quantity="many">Получено %d сообщений с экспресс-доставкой</item>
-        <item quantity="other">Получено %d сообщений с экспресс-доставкой</item>
-    </plurals>
-    <string name="general_attention">Внимание!</string>
-    <string name="general_delete_messages">Удалить сообщения</string>
-
 </resources>

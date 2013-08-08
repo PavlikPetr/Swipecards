@@ -82,6 +82,7 @@ public class Ssid {
      * @param minutes время в минутах
      * @return старше ли SSID чем число минут передах в аргменте minutes
      */
+    @SuppressWarnings("UnusedDeclaration")
     public synchronized static boolean isOlderThan(int minutes) {
         int millis = minutes * 60 * 1000;
         return System.currentTimeMillis() > (millis + mLastUpdate);

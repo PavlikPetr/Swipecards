@@ -90,7 +90,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/closePopup"
-            android:src="@drawable/ic_close_popup"
+            android:src="@drawable/ic_close_dialog"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_margin="5dp"

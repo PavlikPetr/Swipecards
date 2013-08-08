@@ -337,7 +337,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
         });
 
-        mActionBar.showProfileAvatar(R.drawable.feed_banned_male_avatar, null);
+        mActionBar.showProfileAvatar(null);
 
         setNavigationTitles(userName, userAge, userCity);
     }
@@ -537,7 +537,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private void onUserLoaded() {
         if (mActionBar != null) {
             if (mUser.deleted || mUser.banned || mUser.photo == null || mUser.photo.isEmpty()) {
-                mActionBar.showProfileAvatar(mUser.sex == Static.BOY ? R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar, null);
+                mActionBar.showProfileAvatar(null);
             } else {
                 ArrayList<UserActions.ActionItem> actions = new ArrayList<UserActions.ActionItem>();
                 actions.add(new UserActions.ActionItem(mUser.sex == 1 ? R.id.acProfile : R.id.acWProfile, this));

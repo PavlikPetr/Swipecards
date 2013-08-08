@@ -96,7 +96,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private RelativeLayout bmBtn;
     private TextView mBookmarkAction;
 
-    private int mUserActionsPanelHeight;
     private ProgressBar giftsLoader;
     private ImageView giftsIcon;
 

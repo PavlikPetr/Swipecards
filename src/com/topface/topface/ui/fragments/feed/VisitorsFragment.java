@@ -69,11 +69,6 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     }
 
     @Override
-    protected void decrementCounters() {
-        CountersManager.getInstance(getActivity().getApplicationContext()).decrementCounter(CountersManager.VISITORS);
-    }
-
-    @Override
     protected int getTypeForGCM() {
         return GCMUtils.GCM_TYPE_GUESTS;
     }
