@@ -371,8 +371,8 @@ public class Profile extends AbstractDataWithPhotos {
             }
 
             // 22 restaurants position 14
-            String rest = form.optString("restaurants");
-            String restraunts = TextUtils.isEmpty(rest.trim()) ? null : rest;
+            String rest = form.optString("restaurants").trim();
+            String restraunts = TextUtils.isEmpty(rest) ? null : rest;
             formItem = new FormItem(R.array.form_habits_restaurants, restraunts, FormItem.DATA,
                     headerItem);
             formInfo.fillFormItem(formItem);
@@ -391,8 +391,8 @@ public class Profile extends AbstractDataWithPhotos {
             profile.forms.add(headerItem);
 
             // 25 first_dating position 15
-            String dd = form.optString("first_dating");
-            String datingDetails = TextUtils.isEmpty(dd.trim()) ? null : dd;
+            String dd = form.optString("first_dating").trim();
+            String datingDetails = TextUtils.isEmpty(dd) ? null : dd;
             formItem = new FormItem(R.array.form_detail_about_dating, datingDetails,
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
@@ -403,8 +403,8 @@ public class Profile extends AbstractDataWithPhotos {
             }
 
             // 26 achievements position 16
-            String ach = form.optString("achievements");
-            String achievments = TextUtils.isEmpty(ach.trim()) ? null : ach;
+            String ach = form.optString("achievements").trim();
+            String achievments = TextUtils.isEmpty(ach) ? null : ach;
             formItem = new FormItem(R.array.form_detail_archievements, achievments,
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
