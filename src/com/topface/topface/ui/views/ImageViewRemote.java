@@ -2,10 +2,7 @@ package com.topface.topface.ui.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.*;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.StateListDrawable;
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -22,7 +19,6 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.imageloader.*;
 import com.topface.topface.utils.Debug;
 
-import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -48,7 +44,6 @@ public class ImageViewRemote extends ImageView {
     private String mCurrentSrc;
     private boolean isFirstTime = true;
 
-    private Bitmap mask;
     private int borderResId;
     /**
      * Счетчик попыток загрузить фотографию
@@ -62,7 +57,6 @@ public class ImageViewRemote extends ImageView {
      * View, которое используется в качестве индикатора загрузки
      */
     private View mLoader;
-    private Bitmap borderClickMask;
 
     public ImageViewRemote(Context context) {
         super(context);
@@ -89,14 +83,6 @@ public class ImageViewRemote extends ImageView {
         TypedArray values = getContext().obtainStyledAttributes(attrs, R.styleable.ImageViewRemote);
 
         borderResId = values.getResourceId(R.styleable.ImageViewRemote_border, 0);
-
-        int maskId = values.getResourceId(
-                R.styleable.ImageViewRemote_clipMask,
-                MaskClipProcessor.DEFAULT_MASK
-        );
-
-        mask = BitmapFactory.decodeResource(getResources(), maskId);
-        borderClickMask = Bitmap.createScaledBitmap(mask, mask.getWidth() + 2, mask.getHeight() + 2, false);
 
         setPostProcessor(
                 values.getInt(
@@ -241,8 +227,6 @@ public class ImageViewRemote extends ImageView {
         }
         return result;
     }
-
-    long timestart = 0;
 
     class RepeatImageLoadingListener extends SimpleImageLoadingListener {
         private final Handler mHandler;

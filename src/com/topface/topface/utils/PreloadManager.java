@@ -24,14 +24,11 @@ public class PreloadManager<T extends FeedUser> {
         this(0, 0);
     }
 
+    @SuppressWarnings("unchecked")
     public void preloadPhoto(UsersList userList) {
         if (!userList.isEnded()) {
             preloadNextPhoto(((T)userList.get(userList.getSearchPosition() + 1)).photos.getFirst());
         }
-    }
-
-    public void preloadPhoto(T currentUser, int position) {
-        preloadNextPhoto(currentUser.photos.get(position));
     }
 
     public boolean preloadPhoto(Photos photos, int position) {
@@ -65,10 +62,6 @@ public class PreloadManager<T extends FeedUser> {
         }
 
         return result;
-    }
-
-    private void preloadImage(String url) {
-        preloadImage(url, null);
     }
 
     private void preloadImage(String url, ImageLoadingListener listener) {

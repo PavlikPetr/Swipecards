@@ -11,7 +11,6 @@ import android.view.*;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.topface.topface.R;
-import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.PreloadManager;

@@ -247,9 +247,10 @@ public class ContainerActivity extends BaseFragmentActivity {
         return intent;
     }
 
-    public static Intent getVipBuyIntent(String extraText) {
-        Intent intent = new Intent(App.getContext(),ContainerActivity.class);
+    public static Intent getVipBuyIntent(String extraText, String from) {
+        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
         intent.putExtra(VipBuyFragment.ARG_TAG_EXRA_TEXT, extraText);
+        intent.putExtra(VipBuyFragment.ARG_TAG_FROM, from);
         return intent;
     }
 

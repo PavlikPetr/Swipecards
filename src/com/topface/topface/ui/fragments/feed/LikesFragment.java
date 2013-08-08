@@ -11,7 +11,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
-import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -166,11 +165,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected FeedListData<FeedLike> getFeedList(JSONObject response) {
         return new FeedListData<FeedLike>(response, FeedLike.class);
-    }
-
-    @Override
-    protected void decrementCounters() {
-        CountersManager.getInstance(App.getContext()).decrementCounter(CountersManager.LIKES);
     }
 
     @Override

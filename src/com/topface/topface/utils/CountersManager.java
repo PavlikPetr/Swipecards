@@ -74,6 +74,7 @@ public class CountersManager {
         commitCounters();
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public void decrementCounter(int type) {
         switch (type) {
             case LIKES:

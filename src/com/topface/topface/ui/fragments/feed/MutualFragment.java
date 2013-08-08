@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import com.topface.topface.GCMUtils;
@@ -64,11 +63,6 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
         return R.layout.layout_empty_mutual;
     }
 
-
-    @Override
-    protected void decrementCounters() {
-        CountersManager.getInstance(getActivity().getApplicationContext()).decrementCounter(CountersManager.SYMPATHY);
-    }
 
     @Override
     protected int getTypeForGCM() {
