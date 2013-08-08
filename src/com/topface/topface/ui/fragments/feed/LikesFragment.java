@@ -30,7 +30,7 @@ import org.json.JSONObject;
 public class LikesFragment extends FeedFragment<FeedLike> {
 
     private RateController mRateController;
-
+    private View mEmptyFeedView;
 
     @Override
     protected void init() {
@@ -183,10 +183,9 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         return FeedRequest.FeedService.LIKES;
     }
 
-    private TextView mEmptyFeedViewTitle;
-
     @Override
     protected void initEmptyFeedView(View inflated) {
+        if(mEmptyFeedView != null) mEmptyFeedView = inflated;
         if (CacheProfile.premium) {
             ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(0);
             inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
@@ -199,8 +198,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
             if (CacheProfile.unread_likes > 0) {
                 ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(1);
                 String title = Utils.getQuantityString(R.plurals.you_was_liked, CacheProfile.unread_likes, CacheProfile.unread_likes);
-                mEmptyFeedViewTitle = ((TextView) inflated.findViewById(R.id.tvTitle));
-                mEmptyFeedViewTitle.setText(title);
+                ((TextView) inflated.findViewById(R.id.tvTitle)).setText(title);
                 inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -250,9 +248,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected void onCountersUpdated() {
         super.onCountersUpdated();
-        if (mEmptyFeedViewTitle != null) {
-            String title = Utils.getQuantityString(R.plurals.you_was_liked, CacheProfile.unread_likes, CacheProfile.unread_likes);
-            mEmptyFeedViewTitle.setText(title);
+        if (mEmptyFeedView != null) {
+            initEmptyFeedView(mEmptyFeedView);
         }
     }
 }

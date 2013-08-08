@@ -60,6 +60,7 @@ public class AuthFragment extends BaseFragment {
     private TextView mBackButton;
     private Timer mTimer = new Timer();
     private RetryViewCreator mRetryView;
+    private boolean mProcessingTFReg = false;
 
     public static AuthFragment newInstance() {
         return new AuthFragment();
@@ -578,8 +579,11 @@ public class AuthFragment extends BaseFragment {
         mCreateAccountView.setVisibility(View.GONE);
         mRetryView.setVisibility(View.GONE);
         mTFButton.setVisibility(View.INVISIBLE);
-        mProgressBar.setVisibility(View.VISIBLE);
-        mLoginSendingProgress.setVisibility(View.VISIBLE);
+        if(mProcessingTFReg) {
+            mLoginSendingProgress.setVisibility(View.VISIBLE);
+        } else {
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
         mRecoverPwd.setEnabled(false);
         mLogin.setEnabled(false);
         mPassword.setEnabled(false);
@@ -587,14 +591,17 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void btnVKClick() {
+        // костыль, надо избавить от viewflipper к чертовой бабушке
+        mProcessingTFReg = false;
         if (checkOnline() && mAuthorizationManager != null) {
             hideButtons();
             mAuthorizationManager.vkontakteAuth();
         }
-//
     }
 
     private void btnFBClick() {
+        // костыль, надо избавить от viewflipper к чертовой бабушке
+        mProcessingTFReg = false;
         if (checkOnline() && mAuthorizationManager != null) {
             hideButtons();
             mAuthorizationManager.facebookAuth();
@@ -602,11 +609,11 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void btnTFClick() {
+        // костыль, надо избавить от viewflipper к чертовой бабушке
+        mProcessingTFReg = true;
+        //---------------------------------------------------------
         if (checkOnline()) {
             hideButtons();
-            // костыль, надо избавить от viewflipper к чертовой бабушке
-            mProgressBar.setVisibility(View.GONE);
-            //---------------------------------------------------------
             String login = mLogin.getText().toString();
             String password = mPassword.getText().toString();
             if (TextUtils.isEmpty(login.trim()) || TextUtils.isEmpty(password.trim())) {

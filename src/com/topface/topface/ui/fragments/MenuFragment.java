@@ -367,7 +367,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 }
                 break;
             case BaseFragment.F_MUTUAL:
-                fragment = MutualClosingFragment.usersProcessed || CacheProfile.premium?
+                fragment = MutualClosingFragment.usersProcessed || CacheProfile.premium ?
                         new MutualFragment() : new MutualClosingFragment();
                 break;
             case BaseFragment.F_DIALOGS:

@@ -177,14 +177,12 @@ public class ImageViewRemote extends ImageView {
             if (!remoteSrc.equals(mCurrentSrc)) {
                 mCurrentSrc = remoteSrc;
             }
-            super.setImageBitmap(null);
             getImageLoader().displayImage(remoteSrc, this, null, getListener(handler, remoteSrc), getPostProcessor());
             if (borderResId != 0 && isFirstTime) {
                 setImageResource(borderResId);
             }
         } else {
             isCorrectSrc = false;
-            super.setImageBitmap(null);
             mCurrentSrc = null;
         }
         return isCorrectSrc;
@@ -240,10 +238,7 @@ public class ImageViewRemote extends ImageView {
                     result = setRemoteSrc(photo.getSuitableLink(Photo.SIZE_960), handler);
                 }
             }
-        } else {
-            result = setRemoteSrc(null);
         }
-
         return result;
     }
 
