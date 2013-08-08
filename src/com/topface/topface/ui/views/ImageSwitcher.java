@@ -127,16 +127,6 @@ public class ImageSwitcher extends ViewPager {
         }
     };
 
-    @Override
-    public void childHasTransientStateChanged(View child, boolean hasTransientState) {
-
-    }
-
-    @Override
-    public void childAccessibilityStateChanged(View child) {
-
-    }
-
     /*
     *  class ImageSwitcherAdapter
     */
