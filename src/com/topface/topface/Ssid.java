@@ -37,17 +37,27 @@ public class Ssid {
 
     public synchronized static void save(String ssid) {
         mSsid = TextUtils.isEmpty(ssid) ? Static.EMPTY : ssid;
-        SharedPreferences preferences = mContext.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(Static.PREFERENCES_SSID, mSsid);
-        editor.commit();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferences preferences = mContext.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(Static.PREFERENCES_SSID, mSsid);
+                editor.commit();
+            }
+        }).start();
     }
 
     public synchronized static void remove() {
         mSsid = Static.EMPTY;
-        SharedPreferences preferences = mContext.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(Static.PREFERENCES_SSID, Static.EMPTY);
-        editor.commit();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferences preferences = mContext.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(Static.PREFERENCES_SSID, Static.EMPTY);
+                editor.commit();
+            }
+        }).start();
     }
 }

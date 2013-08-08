@@ -34,8 +34,10 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditAgeFragment;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.FilterFragment;
-import com.topface.topface.ui.views.*;
+import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
+import com.topface.topface.ui.views.NoviceLayout;
+import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.*;
 
 import java.util.ArrayList;
@@ -522,7 +524,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mCurrentUser.mutual) {
             openChat(getActivity());
         } else {
-            Intent intent = ContainerActivity.getVipBuyIntent(getString(R.string.chat_block_not_mutual));
+            Intent intent = ContainerActivity.getVipBuyIntent(getString(R.string.chat_block_not_mutual), "DatingChatLock");
             startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
         }
     }

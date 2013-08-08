@@ -31,7 +31,7 @@ public class DefaultImageLoader {
     protected ImageLoaderConfiguration.Builder getConfig() {
         ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(mContext);
         if (App.DEBUG) {
-            builder.enableLogging();
+            builder.writeDebugLogs();
         }
         builder.discCacheSize(DISC_CACHE_SIZE);
         builder.defaultDisplayImageOptions(getDisplayImageConfig().build());

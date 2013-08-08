@@ -28,6 +28,7 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
+import com.topface.topface.ui.fragments.AirMessagesPopupFragment;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
@@ -177,11 +178,13 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         PopupManager manager = new PopupManager(this);
         manager.showOldVersionPopup(CacheProfile.getOptions().max_version);
         manager.showRatePopup();
+        AirMessagesPopupFragment.showIfNeeded(getSupportFragmentManager());
         actionsAfterRegistration();
         if (CacheProfile.show_ad) {
             mFullscreenController = new FullscreenController(this);
             mFullscreenController.requestFullscreen();
         }
+
     }
 
     @Override
@@ -244,7 +247,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                                     if (CacheProfile.photos != null && CacheProfile.photos.contains(photo)) {
                                         CacheProfile.photos.remove(photo);
                                     }
-                                    Toast.makeText(NavigationActivity.this, App.getContext().getString(R.string.general_wrong_photo_upload), 2000);
+                                    Toast.makeText(NavigationActivity.this, App.getContext().getString(R.string.general_wrong_photo_upload), Toast.LENGTH_LONG).show();
                                 }
                             }
 
