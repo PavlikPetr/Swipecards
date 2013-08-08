@@ -3,7 +3,6 @@ package com.topface.topface.ui.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.*;
-import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -12,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -68,8 +68,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public static final String INTENT_ITEM_ID = "item_id";
     public static final String MAKE_ITEM_READ = "com.topface.topface.feedfragment.MAKE_READ";
 
-    public static final String DEFAULT_ACTIVATED_COLOR = "#AAAAAA";
-
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
 
     private static final int COMPLAIN_BUTTON = 2;
@@ -81,7 +79,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     private Handler mUpdater;
     private boolean mIsUpdating;
-    private boolean mProfileInvoke;
     private boolean mIsAddPanelOpened;
     private PullToRefreshListView mListView;
     private ChatListAdapter mAdapter;
@@ -125,7 +122,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         // arguments
         itemId = getArguments().getString(INTENT_ITEM_ID);
         mUserId = getArguments().getInt(INTENT_USER_ID, -1);
-        mProfileInvoke = getArguments().getBoolean(INTENT_PROFILE_INVOKE, false);
         String userName = getArguments().getString(INTENT_USER_NAME);
         int userAge = getArguments().getInt(INTENT_USER_AGE, 0);
         String userCity = getArguments().getString(INTENT_USER_CITY);
@@ -379,7 +375,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             return;
         }
 
-        DeleteRequest dr = new DeleteRequest(item.id, getActivity());
+        DeleteFeedRequest dr = new DeleteFeedRequest(item.id, getActivity());
         dr.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
@@ -456,11 +452,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
 
                 setNavigationTitles(data.user.first_name, data.user.age, data.user.city.name);
-                if (data.user.deleted || data.user.banned) {
-                    mActionBar.setOnlineIcon(false);
-                } else {
-                    mActionBar.setOnlineIcon(data.user.online);
-                }
                 wasFailed = false;
                 mUser = data.user;
                 if (!mUser.isEmpty()) {
@@ -531,7 +522,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private void removeAlreadyLoadedItems(HistoryListData data) {
         if (!mAdapter.isEmpty() && !data.items.isEmpty()) {
             FeedList<History> items = mAdapter.getData();
-            int size = items.size();
             for (History item1 : items) {
                 List<History> itemsToDelete = new ArrayList<History>();
                 for (History item : data.items) {
@@ -550,76 +540,31 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 mActionBar.showProfileAvatar(mUser.sex == Static.BOY ? R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar, null);
             } else {
                 ArrayList<UserActions.ActionItem> actions = new ArrayList<UserActions.ActionItem>();
-                actions.add(new UserActions.ActionItem(mUser.sex == 1? R.id.acProfile : R.id.acWProfile, this));
+                actions.add(new UserActions.ActionItem(mUser.sex == 1 ? R.id.acProfile : R.id.acWProfile, this));
                 actions.add(new UserActions.ActionItem(R.id.acBlock, this));
                 actions.add(new UserActions.ActionItem(R.id.acComplain, this));
                 actions.add(new UserActions.ActionItem(R.id.acBookmark, this));
 
 
-
                 UserActions userActions = new UserActions(chatActions, actions);
                 bookmarksTv = (TextView) userActions.getViewById(R.id.acBookmark).findViewById(R.id.favTV);
                 blockView = (RelativeLayout) userActions.getViewById(R.id.acBlock);
+                ((TextView) blockView.findViewById(R.id.blockTV)).setText(mUser.blocked ? R.string.black_list_delete : R.string.black_list_add_short);
+                bookmarksTv.setText(mUser.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
 
-                bookmarksTv.setText(mUser.bookmarked? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
-//                blockView.setEnabled(mUser.);
+                mActionBar.setOnlineIcon(mUser.online && (!mUser.deleted && !mUser.banned));
                 mActionBar.showUserActionsButton(
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                Debug.log("ACTIONSHEIGHT::" + Integer.toString(chatActions.getHeight()));
-                                final TranslateAnimation ta = new TranslateAnimation(0, 0, -chatActions.getHeight(), 0);
-                                ta.setDuration(500);
-                                ta.setStartOffset(0);
-                                ta.setAnimationListener(new Animation.AnimationListener() {
-
-                                    @Override
-                                    public void onAnimationStart(Animation animation) {
-                                        mActionBar.disableActionsButton(true);
-                                        chatActions.setVisibility(View.VISIBLE);
-                                    }
-
-                                    @Override
-                                    public void onAnimationEnd(Animation animation) {
-                                        chatActions.clearAnimation();
-                                        mActionBar.disableActionsButton(false);
-                                    }
-
-                                    @Override
-                                    public void onAnimationRepeat(Animation animation) {
-
-                                    }
-                                });
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        chatActions.startAnimation(ta);
-                                    }
-                                });
+                                final TranslateAnimation ta = getAnimation(false, 500);
+                                chatActions.startAnimation(ta);
                             }
                         }, new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
 //                                initActionsPanelHeight();
-                                TranslateAnimation ta = new TranslateAnimation(0, 0, 0, -chatActions.getHeight());
-                                ta.setDuration(500);
-                                ta.setAnimationListener(new Animation.AnimationListener() {
-                                    @Override
-                                    public void onAnimationStart(Animation animation) {
-                                        mActionBar.disableActionsButton(true);
-                                    }
-
-                                    @Override
-                                    public void onAnimationEnd(Animation animation) {
-                                        chatActions.clearAnimation();
-                                        mActionBar.disableActionsButton(false);
-                                        chatActions.setVisibility(View.GONE);
-                                    }
-
-                                    @Override
-                                    public void onAnimationRepeat(Animation animation) {
-                                    }
-                                });
+                                TranslateAnimation ta = getAnimation(true, 500);
                                 chatActions.startAnimation(ta);
                             }
                         }
@@ -627,6 +572,40 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 );
             }
         }
+    }
+
+    private TranslateAnimation getAnimation(final boolean isActive, int time) {
+        TranslateAnimation ta;
+        if (isActive) {
+            ta = new TranslateAnimation(0, 0, 0, -chatActions.getHeight());
+        } else {
+            ta = new TranslateAnimation(0, 0, -chatActions.getHeight(), 0);
+        }
+
+        ta.setDuration(time);
+        ta.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                mActionBar.disableActionsButton(true);
+                if (!isActive) {
+                    chatActions.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                chatActions.clearAnimation();
+                mActionBar.disableActionsButton(false);
+                if (isActive) {
+                    chatActions.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        return ta;
     }
 
     private void release() {
@@ -675,15 +654,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 break;
             case R.id.btnNavigationProfileBar:
-            case R.id.btnNavigationBarAvatar:
-                if (mProfileInvoke) {
-                    getActivity().finish();
-                } else {
-                    if (mUserId > 0) {
-                        startActivity(ContainerActivity.getProfileIntent(mUserId, getActivity()));
-                    }
-                }
-                break;
             case R.id.btnBuyVip:
                 Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
                 startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
@@ -698,7 +668,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             case R.id.acWProfile:
             case R.id.acProfile:
                 Intent profileIntent = ContainerActivity.getProfileIntent(mUserId, getActivity());
+                mActionBar.setUserActionsControlActive(false);
                 startActivity(profileIntent);
+                chatActions.startAnimation(getAnimation(true, 0));
+
                 break;
             case R.id.acBlock:
                 if (CacheProfile.premium) {
@@ -709,16 +682,25 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
                         loader.setVisibility(View.VISIBLE);
                         icon.setVisibility(View.GONE);
-                        BlackListAddRequest blackListAddRequest = new BlackListAddRequest(mUserId, getActivity());
-                        blackListAddRequest.callback(new VipApiHandler() {
+                        ApiRequest request;
+                        if (mUser.blocked) {
+                            request = new BlackListDeleteRequest(mUserId, getActivity());
+                        } else {
+                            request = new BlackListAddRequest(mUserId, getActivity());
+                        }
+                        request.callback(new VipApiHandler() {
                             @Override
                             public void success(ApiResponse response) {
                                 super.success(response);
                                 if (isAdded()) {
-                                    v.setEnabled(false);
-                                    loader.setVisibility(View.GONE);
+                                    loader.setVisibility(View.INVISIBLE);
                                     icon.setVisibility(View.VISIBLE);
-                                    textView.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+                                    mUser.blocked = !mUser.blocked;
+                                    if (mUser.blocked) {
+                                        textView.setText(R.string.black_list_delete);
+                                    } else {
+                                        textView.setText(R.string.black_list_add_short);
+                                    }
                                 }
                             }
 
@@ -726,7 +708,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                             public void fail(int codeError, ApiResponse response) {
                                 super.fail(codeError, response);
                                 if (isAdded()) {
-                                    loader.setVisibility(View.GONE);
+                                    loader.setVisibility(View.INVISIBLE);
                                     icon.setVisibility(View.VISIBLE);
                                 }
                             }
@@ -778,6 +760,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }).exec();
                 break;
             case R.id.acComplain:
+                mActionBar.setUserActionsControlActive(false);
+                chatActions.startAnimation(getAnimation(true, 0));
                 startActivity(ContainerActivity.getComplainIntent(mUserId));
                 break;
             default:
@@ -955,7 +939,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
         if (id <= 0) {
             showLoadingBackground();
-            Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_SHORT);
+            Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -1005,7 +989,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private boolean sendMessage() {
-        if (TextUtils.isEmpty(mEditBox.getText().toString().trim())) {
+        Editable editText = mEditBox.getText();
+        String editString = editText == null ? "" : editText.toString();
+        if (editText == null || TextUtils.isEmpty(editString.trim()) || mUserId == 0) {
             return false;
         }
 
@@ -1014,14 +1000,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             mAdapter.addSentMessage(loaderItem, mListView.getRefreshableView());
         }
 
-        final String text = mEditBox.getText().toString();
-        if (text == null || TextUtils.isEmpty(text.trim()) || mUserId == 0) return false;
-
-        final MessageRequest messageRequest = new MessageRequest(getActivity());
+        final MessageRequest messageRequest = new MessageRequest(mUserId, editString, getActivity());
         registerRequest(messageRequest);
-        messageRequest.message = mEditBox.getText().toString();
-        messageRequest.userid = mUserId;
-        mEditBox.getText().clear();
+        editText.clear();
 
         messageRequest.callback(new DataApiHandler<History>() {
             @Override

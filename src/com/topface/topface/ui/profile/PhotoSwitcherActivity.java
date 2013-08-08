@@ -130,6 +130,9 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                     if (CacheProfile.photo != null && currentPhoto != null && currentPhoto.getId() != CacheProfile.photo.getId()) {
                         if (!mDeletedPhotos.contains(currentPhoto)) {
                             setAsMainRequest(currentPhoto);
+                        } else {
+                            mDeletedPhotos.remove(currentPhoto);
+                            refreshButtonsState();
                         }
                     }
                 }

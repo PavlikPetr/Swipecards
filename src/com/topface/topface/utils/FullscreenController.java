@@ -320,6 +320,14 @@ public class FullscreenController {
                     }
                 }
             }
+
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+                super.fail(codeError, response);
+                if (codeError == ApiResponse.BANNER_NOT_FOUND) {
+                    addLastFullscreenShowedTime();
+                }
+            }
         }).exec();
     }
 

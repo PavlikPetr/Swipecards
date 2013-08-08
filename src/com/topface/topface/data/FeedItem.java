@@ -61,6 +61,6 @@ abstract public class FeedItem extends LoaderData {
         this.target = item.optInt("target");
         this.unread = item.optBoolean("unread");
         this.unreadCounter = item.optInt("unreadCount");
-        this.user = new FeedUser(item.optJSONObject("user"));
+        this.user = new FeedUser(item.optJSONObject("user"), this);
     }
 }

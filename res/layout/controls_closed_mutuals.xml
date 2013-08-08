@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+    <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/dating_shadow"
+            android:scaleType="fitXY"/>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="8dp">
+
+        <Button
+                android:id="@+id/btnForget"
+                style="@style/DatingButtonsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:background="@android:color/transparent"
+                android:drawableTop="@drawable/btn_forget_selector"
+                android:text="@string/forget"/>
+
+        <Button
+                android:id="@+id/btnSkipAll"
+                style="@style/DatingButtonsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:background="@android:color/transparent"
+                android:drawableTop="@drawable/btn_skip_all_selector"
+                android:text="@string/skip_all"
+                android:visibility="gone"/>
+
+        <Button
+                android:id="@+id/btnSkip"
+                style="@style/DatingButtonsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:background="@android:color/transparent"
+                android:drawableTop="@drawable/btn_skip_disabled"
+                android:text="@string/skip"
+                />
+
+        <Button
+                android:id="@+id/btnChat"
+                style="@style/DatingButtonsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:background="@null"
+                android:drawableTop="@drawable/dating_chat_selector"
+                android:text="@string/chat" />
+    </LinearLayout>
+</RelativeLayout>

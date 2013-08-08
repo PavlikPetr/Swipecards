@@ -1,6 +1,7 @@
 package com.topface.topface.data;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.preference.PreferenceManager;
@@ -12,8 +13,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.Ssid;
+import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -147,6 +151,7 @@ public class Options extends AbstractData {
     public long popup_timeout;
     public boolean block_unconfirmed;
     public boolean block_chat_not_mutual;
+    public Closing closing = new Closing();
     public PremiumMessages premium_messages;
 
     public static Options parse(ApiResponse response) {
@@ -220,7 +225,12 @@ public class Options extends AbstractData {
                 }
             }
 
-
+            JSONObject closings = response.jsonResult.optJSONObject("closing");
+            if (options.closing == null) options.closing = new Closing();
+            options.closing.enabledMutual = closings.optBoolean("enabled_mutual");
+            options.closing.enableSympathies = closings.optBoolean("enabled_sympathies");
+            options.closing.limitMutual = closings.optInt("limit_mutual");
+            options.closing.limitSympathies = closings.optInt("limit_sympathies");
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
         }
@@ -452,6 +462,78 @@ public class Options extends AbstractData {
         private long getLashShowTime() {
             return  PreferenceManager.getDefaultSharedPreferences(App.getContext())
                     .getLong(PREMIUM_MESSAGES_POPUP_SHOW_TIME, 0);
+        }
+    }
+    public static class Closing {
+        public static String DATA_FOR_CLOSING_RECEIVED_ACTION = "DATA_FOR_CLOSING_RECEIVED_ACTION";
+
+        private static Ssid.ISsidUpdateListener listener;
+        public boolean enableSympathies;
+        public boolean enabledMutual;
+        public int limitSympathies;
+        public int limitMutual;
+
+        public Closing() {
+            if (listener == null) {
+                listener = new Ssid.ISsidUpdateListener() {
+                    @Override
+                    public void onUpdate() {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = pref.edit();
+                                editor.putLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME, 0);
+                                editor.commit();
+                            }
+                        }).start();
+                    }
+                };
+                Ssid.addUpdateListener(listener);
+            }
+        }
+
+        public void onStopMutualClosings() {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = pref.edit();
+                    long currentTime = System.currentTimeMillis();
+                    editor.putLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME, currentTime);
+                    editor.commit();
+                }
+            }).start();
+        }
+
+        public void onStopLikesClosings() {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = pref.edit();
+                    long currentTime = System.currentTimeMillis();
+                    editor.putLong(Static.PREFERENCES_LIKES_CLOSING_LAST_TIME, currentTime);
+                    editor.commit();
+                }
+            }).start();
+        }
+
+        public boolean isClosingsEnabled() {
+            return (enabledMutual || enableSympathies) && !CacheProfile.premium;
+        }
+
+        public boolean isMutualClosingAvailable() {
+            SharedPreferences pref =  App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+            long currentTime = System.currentTimeMillis();
+            long lastCallTime = pref.getLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME,0);
+            return DateUtils.isOutside24Hours(lastCallTime, System.currentTimeMillis());
+        }
+
+        public boolean isLikesClosingAvailable() {
+            SharedPreferences pref =  App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+            long lastCallTime = pref.getLong(Static.PREFERENCES_LIKES_CLOSING_LAST_TIME,0);
+            return DateUtils.isOutside24Hours(lastCallTime, System.currentTimeMillis());
         }
     }
 }

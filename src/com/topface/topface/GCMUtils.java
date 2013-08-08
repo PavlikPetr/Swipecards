@@ -137,7 +137,7 @@ public class GCMUtils {
                             notificationManager.showNotification(
                                     title,
                                     data,
-                                    null,
+                                    true, null,
                                     getUnread(extra),
                                     intent,
                                     false);
@@ -156,7 +156,7 @@ public class GCMUtils {
                         notificationManager.showNotification(
                                 title,
                                 data,
-                                null,
+                                true, null,
                                 getUnread(extra),
                                 intent,
                                 false);
@@ -220,7 +220,7 @@ public class GCMUtils {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 if (user.id != lastUserId) {
-                    notificationManager.showNotification(finalTitle, data, fakeImageView.getImageBitmap(), unread, newI, false);
+                    notificationManager.showNotification(finalTitle, data, true, fakeImageView.getImageBitmap(), unread, newI, false);
                 }
             }
         });

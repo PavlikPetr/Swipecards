@@ -73,8 +73,6 @@ public class CacheProfile {
     private static boolean editor;
     public static boolean canInvite;
 
-    public static boolean isGcmSupported;
-
     private static void setProfileCache(final ApiResponse response) {
         //Пишем в SharedPreferences в отдельном потоке
         new Thread(new Runnable() {

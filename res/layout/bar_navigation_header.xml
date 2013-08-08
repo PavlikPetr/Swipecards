@@ -15,14 +15,23 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:duplicateParentState="true"
+            android:paddingRight="8dp"
             android:id="@+id/btnsCont">
             <ImageView
                     android:id="@+id/btnNavigationHome"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:duplicateParentState="true"
                     android:paddingLeft="8dp"
                     android:background="@android:color/transparent"
                     android:src="@drawable/navigation_home_selector"
+                    />
+
+            <ImageView
+                    android:id="@+id/btnNavigationBack"
+                    style="@style/BackButton"
+                    android:duplicateParentState="true"
                     />
 
             <TextView
@@ -70,10 +79,7 @@
                     android:paddingTop="0dp"
                     android:visibility="gone"/>
 
-            <ImageView
-                    android:id="@+id/btnNavigationBack"
-                    style="@style/BackButton"
-                    />
+
 
         </RelativeLayout>
         <LinearLayout
@@ -89,6 +95,7 @@
                     style="@style/NavigationHeader"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:drawablePadding="4dp"
                     android:gravity="left"
                     android:singleLine="true"
                     android:ellipsize="none"

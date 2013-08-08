@@ -29,6 +29,7 @@ public class ActionBar {
 
     public ActionBar(Context context, View actionView) {
         this.actionView = (ViewGroup) actionView.findViewById(R.id.loNavigationBar);
+        this.actionView.bringToFront();
         initShadow(context);
         this.actionView.setVisibility(View.VISIBLE);
         mNavBarController = new NavigationBarController(this.actionView);
@@ -60,7 +61,7 @@ public class ActionBar {
         mUserActionsControl = (ImageButton) actionView.findViewById(R.id.btnUserProfActions);
         mRightProgressBar = (ProgressBar) actionView.findViewById(R.id.prsNavigationRight);
         mProfileAvatar = (ImageViewRemote) actionView.findViewById(R.id.btnNavigationBarAvatar);
-        mProfileAvatar.setImageResource(R.drawable.feed_banned_male_avatar);
+//        mProfileAvatar.setBackgroundResource(R.drawable.feed_photo_selector);
         mSendButton = (ImageButton) actionView.findViewById(R.id.btnNavigationSend);
         checkBox = (CheckBox) actionView.findViewById(R.id.btnNavigationCheckbox);
         leftContainer = (RelativeLayout) actionView.findViewById(R.id.leftButtonContainer);
@@ -77,14 +78,14 @@ public class ActionBar {
     public void showProfileAvatar(final Photo profilePhoto, View.OnClickListener listener) {
         hideRightBarPart();
         mProfileAvatar.setVisibility(View.VISIBLE);
-        mProfileAvatar.setPhoto(profilePhoto);
+//        mProfileAvatar.setPhoto(profilePhoto);
         mProfileAvatar.setOnClickListener(listener);
     }
 
     public void showProfileAvatar(final int profilePhotorResource, View.OnClickListener listener) {
         hideRightBarPart();
         mProfileAvatar.setVisibility(View.VISIBLE);
-        mProfileAvatar.setImageResource(profilePhotorResource);
+//        mProfileAvatar.setImageResource(profilePhotorResource);
         mProfileAvatar.setOnClickListener(listener);
     }
 
@@ -100,7 +101,7 @@ public class ActionBar {
 
     }
 
-    public void showBackButton(View.OnClickListener listener) {
+    public void showBackButton(final View.OnClickListener listener) {
         mNavigationBack.setVisibility(View.VISIBLE);
         mNavigationHome.setVisibility(View.GONE);
         leftContainer.setOnClickListener(listener);
@@ -168,33 +169,55 @@ public class ActionBar {
     public void showUserActionsButton(final View.OnClickListener nonActiveListener, final View.OnClickListener activeListener, final Photo profilePhotoResource) {
         hideRightBarPart();
         mProfileAvatar.setVisibility(View.VISIBLE);
+
         mProfileAvatar.setPhoto(profilePhotoResource);
-        mProfileAvatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mProfileButton.isSelected()) {
-                    mProfileButton.setSelected(false);
-                    activeListener.onClick(view);
-                } else {
-                    mProfileButton.setSelected(true);
-                    nonActiveListener.onClick(view);
-                }
-            }
-        });
+        userActionsOnClickListener = new UserActionsOnClickListener(activeListener, nonActiveListener);
+        mProfileAvatar.setOnClickListener(userActionsOnClickListener);
         mSendButton.setVisibility(View.GONE);
         checkBox.setVisibility(View.GONE);
     }
 
+    private UserActionsOnClickListener userActionsOnClickListener;
+
+    private class UserActionsOnClickListener implements View.OnClickListener {
+        private boolean selected = false;
+        private View.OnClickListener active, nonactive;
+
+        public UserActionsOnClickListener(View.OnClickListener active, View.OnClickListener nonActive) {
+            this.active = active;
+            this.nonactive = nonActive;
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (selected) {
+                selected = false;
+                active.onClick(view);
+            } else {
+                selected = true;
+                nonactive.onClick(view);
+            }
+        }
+
+        public void setState(boolean state) {
+            selected = state;
+        }
+    };
+
+    public void setUserActionsControlActive(boolean state) {
+        if (userActionsOnClickListener != null) {
+            userActionsOnClickListener.setState(state);
+        }
+    }
+
     public void showUserActionsButton(final View.OnClickListener nonActiveListener, final View.OnClickListener activeListener) {
-//        mEditButton.setVisibility(View.GONE);
-//        mSettingsButton.setVisibility(View.GONE);
-//        mProfileButton.setVisibility(View.GONE);
+
         hideRightBarPart();
         mUserActionsControl.setVisibility(View.VISIBLE);
 
         mUserActionsControl.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 if (mUserActionsControl.isSelected()) {
                     mUserActionsControl.setSelected(false);
                     activeListener.onClick(view);

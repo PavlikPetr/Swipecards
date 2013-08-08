@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.LeadersRequest;
+import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
 
 public class CountersManager {
     private static int likesCounter;
@@ -155,32 +156,33 @@ public class CountersManager {
         return -1;
     }
 
-    public void setMethod(String method) {
+    public CountersManager setMethod(String method) {
         lastRequestMethod = method;
+        return this;
     }
 
     private void commitCounters() {
-        //Хз как тут сделать по-другому, подумаю еще
-        if (likesCounter != CacheProfile.unread_likes || dialogsCounter != CacheProfile.unread_messages ||
-                sympathyCounter != CacheProfile.unread_mutual || visitorsCounter != CacheProfile.unread_visitors ||
+        if (likesCounter != CacheProfile.unread_likes ||
+                dialogsCounter != CacheProfile.unread_messages ||
+                sympathyCounter != CacheProfile.unread_mutual ||
+                visitorsCounter != CacheProfile.unread_visitors ||
                 fansCounter != CacheProfile.unread_fans) {
+            if (CacheProfile.unread_likes < likesCounter) {
+                LikesClosingFragment.usersProcessed = false;
+            }
             CacheProfile.unread_likes = likesCounter;
             CacheProfile.unread_messages = dialogsCounter;
             CacheProfile.unread_mutual = sympathyCounter;
             CacheProfile.unread_visitors = visitorsCounter;
             CacheProfile.unread_fans = fansCounter;
-            updateUICounters(); //кидаем broadcast о том, что счетчики обновились и причину их обновления
-            //название метода, если это запрос, или константу, если это GCM
-        } else {
-
-            CacheProfile.unread_likes = likesCounter;
-            CacheProfile.unread_messages = dialogsCounter;
-            CacheProfile.unread_mutual = sympathyCounter;
-            CacheProfile.unread_visitors = visitorsCounter;
-            CacheProfile.unread_fans = fansCounter;
+            updateUICounters();
         }
     }
 
+    /**
+        кидаем broadcast о том, что счетчики обновились и причину их обновления
+        название метода, если это запрос, или константу, если это GCM
+     */
     private void updateUICounters() {
         String method = lastRequestMethod == null ? NULL_METHOD : lastRequestMethod;
         if (!checkMethodIsDenyed(method)) {

@@ -7,6 +7,7 @@
                 android:gravity="right">
 
     <include
+            android:visibility="gone"
             layout="@layout/chat_date_divider"
             android:id="@+id/loDateDivider"/>
 

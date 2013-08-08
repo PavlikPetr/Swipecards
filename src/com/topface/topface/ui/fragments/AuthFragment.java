@@ -143,7 +143,6 @@ public class AuthFragment extends BaseFragment {
                 if (activity != null) {
                     Utils.showSoftKeyboard(activity, mLogin);
                     mAuthViewsFlipper.setDisplayedChild(1);
-                    mLogin.requestFocus();
                 }
             }
         });
@@ -403,7 +402,8 @@ public class AuthFragment extends BaseFragment {
                 Options.parse(response);
                 Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
                 ((BaseFragmentActivity) getActivity()).close(AuthFragment.this, true);
-                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                LocalBroadcastManager.getInstance(getContext())
+                        .sendBroadcast(new Intent(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
             }
 
             @Override
@@ -615,7 +615,7 @@ public class AuthFragment extends BaseFragment {
                 showButtons();
                 return;
             }
-            AuthToken.getInstance().saveToken("",login,password);
+            AuthToken.getInstance().saveToken("", login, password);
             AuthRequest authRequest = generateTopfaceAuthRequest(AuthToken.getInstance());
 
             if (DeleteAccountDialog.hasDeltedAccountToken(authRequest.getAuthToken())) {

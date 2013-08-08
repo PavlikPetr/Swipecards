@@ -238,4 +238,9 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     protected boolean isForPremium() {
         return true;
     }
+
+    @Override
+    protected boolean isBlockOnClosing() {
+        return true;
+    }
 }

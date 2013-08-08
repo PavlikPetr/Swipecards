@@ -34,10 +34,7 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryViewCreator;
-import com.topface.topface.utils.ActionBar;
-import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.*;
 import org.json.JSONObject;
 
 import static android.widget.AdapterView.OnItemClickListener;
@@ -335,7 +332,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     protected void onDeleteItem(final int position) {
-        DeleteRequest dr = new DeleteRequest(getItem(position).id, getActivity());
+        DeleteFeedRequest dr = new DeleteFeedRequest(getItem(position).id, getActivity());
         dr.callback(new SimpleApiHandler() {
             @Override
             public void success(ApiResponse response) {
@@ -393,6 +390,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     protected void updateData(final boolean isPushUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {
+        if (isBlockOnClosing() && !CacheProfile.premium) {
+            showUpdateErrorMessage(ApiResponse.PREMIUM_ACCESS_ONLY);
+            return;
+        }
         mIsUpdating = true;
         onUpdateStart(isPushUpdating || isHistoryLoad);
 
@@ -664,7 +665,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             if (TextUtils.equals(item.id, id) && item.unread) {
                 item.unread = false;
                 getListAdapter().notifyDataSetChanged();
-                decrementCounters();
             }
         }
     }
@@ -697,4 +697,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         return mLoader;
     }
 
+    protected boolean isBlockOnClosing() {
+        return false;
+    }
 }

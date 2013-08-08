@@ -21,10 +21,10 @@ import com.topface.topface.R;
 import com.topface.topface.RetryRequestReceiver;
 import com.topface.topface.Static;
 import com.topface.topface.data.*;
-import com.topface.topface.data.search.CachableSearch;
-import com.topface.topface.data.search.OnSearchEventsListener;
-import com.topface.topface.data.search.Search;
+import com.topface.topface.data.search.CachableSearchList;
+import com.topface.topface.data.search.OnUsersListEventsListener;
 import com.topface.topface.data.search.SearchUser;
+import com.topface.topface.data.search.UsersList;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -40,15 +40,12 @@ import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.*;
 
-import java.util.ArrayList;
-
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
         RateController.OnRateControllerListener {
 
     public static final int SEARCH_LIMIT = 30;
     public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 2;
-    public static final String INVITE_POPUP = "INVITE_POPUP";
-    private int mCurrentPhotoPrevPos;
+
     private TextView mResourcesLikes;
     private TextView mResourcesMoney;
     private Button mDelightBtn;
@@ -65,20 +62,19 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private TextView mCounter;
     private TextView mDatingLovePrice;
     private View mDatingGroup;
+    private View mDatingResources;
+
+    private RateController mRateController;
     private ImageSwitcher mImageSwitcher;
-    private CachableSearch mUserSearchList;
+    private CachableSearchList<SearchUser> mUserSearchList;
     private ProgressBar mProgressBar;
     private Novice mNovice;
     private AlphaAnimation mAlphaAnimation;
-    private RateController mRateController;
     private RelativeLayout mDatingLoveBtnLayout;
     private ViewFlipper mViewFlipper;
     private RetryViewCreator mRetryView;
-
     private ImageButton mRetryBtn;
-    private PreloadManager mPreloadManager;
-
-    private BroadcastReceiver mReceiver;
+    private PreloadManager<SearchUser> mPreloadManager;
 
     private Drawable singleMutual;
     private Drawable singleDelight;
@@ -86,9 +82,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private Drawable doubleDelight;
 
     private NoviceLayout mNoviceLayout;
-    private View mDatingResources;
-
-    public static final int PHOTOS_LIMIT = 5;
 
     private boolean hasOneSympathyOrDelight = false;
     private boolean mCanSendAlbumReq = true;
@@ -100,17 +93,36 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private BroadcastReceiver mProfileReceiver;
     private boolean mNeedMore;
     private int mLoadedCount;
-    private ActionBar mActionBar;
 
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (mPreloadManager != null) {
+                mPreloadManager.checkConnectionType(intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE, 0));
+            }
+        }
+    };
+
+    private OnClickListener mSettingsListener = new OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(getActivity().getApplicationContext(),
+                    EditContainerActivity.class);
+            startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FILTER);
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPreloadManager = new PreloadManager();
+        mPreloadManager = new PreloadManager<SearchUser>();
         // Animation
         mAlphaAnimation = new AlphaAnimation(0.0F, 1.0F);
         mAlphaAnimation.setDuration(400L);
         initMutualDrawables();
+        // Rate Controller
+        mRateController = new RateController(getActivity());
+        mRateController.setOnRateControllerListener(this);
     }
 
     @Override
@@ -119,88 +131,78 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         SharedPreferences preferences = getActivity().getSharedPreferences(
                 Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         mNovice = Novice.getInstance(preferences);
+        checkInvitePopup();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
 
-        View view = inflater.inflate(R.layout.ac_dating, null);
+        View root = inflater.inflate(R.layout.ac_dating, null);
 
-        mActionBar = getActionBar(view);
+        getActionBar(root);
+        initViews(root);
+        initActionBar(root);
+        initEmptySearchDialog(root, mSettingsListener);
+        initImageSwitcher(root);
 
-        mRetryBtn = (ImageButton) view.findViewById(R.id.btnUpdate);
-        mRetryBtn.setOnClickListener(this);
-
-        mViewFlipper = (ViewFlipper) view.findViewById(R.id.vfFlipper);
-
-        // Rate Controller
-        mRateController = new RateController(getActivity());
-        mRateController.setOnRateControllerListener(this);
-
-        // Dating controls
-        mDatingGroup = view.findViewById(R.id.loDatingGroup);
-        mDatingLoveBtnLayout = (RelativeLayout) view.findViewById(R.id.loDatingLove);
-
-        // User Info
-        mUserInfoName = ((TextView) view.findViewById(R.id.tvDatingUserName));
-        mUserInfoCity = ((TextView) view.findViewById(R.id.tvDatingUserCity));
-        mUserInfoStatus = ((TextView) view.findViewById(R.id.tvDatingUserStatus));
-
-        // Counter
-        mCounter = ((TextView) view.findViewById(R.id.tvDatingCounter));
-
-        // Progress
-        mProgressBar = (ProgressBar) view.findViewById(R.id.prsDatingLoading);
-
-        initResources(view);
-        initControlButtons(view);
-        initDatingAlbum(view);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                checkInvitePopup();
-            }
-        }).start();
-
-        mDatingLovePrice = (TextView) view.findViewById(R.id.tvDatingLovePrice);
-
-        initEmptySearchDialog(view, initNavigationHeader(view));
-
-        return view;
+        return root;
     }
 
-    private void checkInvitePopup() {
-        FragmentActivity activity = getActivity();
-        if (CacheProfile.canInvite && activity != null) {
-            final SharedPreferences preferences = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+    @Override
+    public void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
+        setHighRatePrice();
+        updateResources();
+    }
 
-            long date_start = preferences.getLong(INVITE_POPUP, 1);
-            long date_now = new java.util.Date().getTime();
-
-            if (date_now - date_start >= CacheProfile.getOptions().popup_timeout) {
-                preferences.edit().putLong(INVITE_POPUP, date_now).commit();
-                ContactsProvider provider = new ContactsProvider(activity);
-                provider.getContacts(-1, 0, new ContactsProvider.GetContactsListener() {
-                    @Override
-                    public void onContactsReceived(ArrayList<ContactsProvider.Contact> contacts) {
-
-                        if (isAdded()) {
-                            showInvitePopup(contacts);
-                        }
-                    }
-                });
-            }
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
+        //При выходе из фрагмента сохраняем кэш поиска
+        if (mUserSearchList != null) {
+            mUserSearchList.saveCache();
         }
+    }
+
+    private void initViews(View root) {
+        mRetryBtn = (ImageButton) root.findViewById(R.id.btnUpdate);
+        mRetryBtn.setOnClickListener(this);
+
+        mViewFlipper = (ViewFlipper) root.findViewById(R.id.vfFlipper);
+
+        // Dating controls
+        mDatingGroup = root.findViewById(R.id.loDatingGroup);
+        mDatingLoveBtnLayout = (RelativeLayout) root.findViewById(R.id.loDatingLove);
+
+        // User Info
+        mUserInfoName = ((TextView) root.findViewById(R.id.tvDatingUserName));
+        mUserInfoCity = ((TextView) root.findViewById(R.id.tvDatingUserCity));
+        mUserInfoStatus = ((TextView) root.findViewById(R.id.tvDatingUserStatus));
+
+        // Counter
+        mCounter = ((TextView) root.findViewById(R.id.tvDatingCounter));
+
+        // Progress
+        mProgressBar = (ProgressBar) root.findViewById(R.id.prsDatingLoading);
+
+        initResources(root);
+        initControlButtons(root);
+
+        mDatingLovePrice = (TextView) root.findViewById(R.id.tvDatingLovePrice);
     }
 
     private void initMutualDrawables() {
         if (isAdded()) {
-            singleMutual = getResources().getDrawable(R.drawable.dating_mutual_selector);
-            singleDelight = getResources().getDrawable(R.drawable.dating_delight_selector);
+            singleMutual = getResources().getDrawable(R.drawable.dating_like_selector);
+            singleDelight = getResources().getDrawable(R.drawable.dating_admiration_selector);
 
-            doubleMutual = getResources().getDrawable(R.drawable.dating_dbl_mutual_selector);
-            doubleDelight = getResources().getDrawable(R.drawable.dating_dbl_delight_selector);
+            doubleMutual = getResources().getDrawable(R.drawable.dating_mutual_selector);
+            doubleDelight = getResources().getDrawable(R.drawable.dating_dbl_admiration_selector);
         }
     }
 
@@ -214,7 +216,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
-    private void initDatingAlbum(View view) {
+    private void initImageSwitcher(View view) {
         // Dating Album
         mImageSwitcher = ((ImageSwitcher) view.findViewById(R.id.glrDatingAlbum));
         mImageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
@@ -251,28 +253,46 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mSwitchPrevBtn.setOnClickListener(this);
     }
 
-    private OnClickListener initNavigationHeader(View view) {
+    private void initActionBar(View view) {
         // Navigation Header
         ActionBar actionBar = getActionBar(view);
-        setHeader(view);
+        setActionBarTitles(view);
         final Activity activity = getActivity();
         if (activity instanceof NavigationActivity) {
             actionBar.showHomeButton((NavigationActivity) activity);
         }
-        OnClickListener listener = new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(activity.getApplicationContext(),
-                        EditContainerActivity.class);
-                startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FILTER);
-            }
-        };
-        actionBar.showSettingsButton(listener, false);
-        return listener;
+        actionBar.showSettingsButton(mSettingsListener, false);
+    }
+
+    private void setActionBarTitles(View view) {
+        getActionBar(view).setTitleText(getTitle());
+        getActionBar(view).setSubTitleText(getSubtitle());
+    }
+
+    private String getTitle() {
+        if (CacheProfile.dating != null) {
+            int age = CacheProfile.dating.age_end == DatingFilter.webAbsoluteMaxAge ?
+                    EditAgeFragment.absoluteMax : CacheProfile.dating.age_end;
+            String headerText = getString(CacheProfile.dating.sex == Static.BOY ?
+                    R.string.dating_header_guys : R.string.dating_header_girls,
+                    CacheProfile.dating.age_start, age);
+            String plus = CacheProfile.dating.age_end == DatingFilter.webAbsoluteMaxAge ? "+" : "";
+            return headerText + plus;
+        }
+        return Static.EMPTY;
+    }
+
+    private String getSubtitle() {
+        if (CacheProfile.dating != null) {
+            String cityString = CacheProfile.dating.city == null || CacheProfile.dating.city.isEmpty() ?
+                    getString(R.string.filter_cities_all) : CacheProfile.dating.city.name;
+            String onlineString = DatingFilter.getOnlineField() ? getString(R.string.dating_online_only) : "%s";
+            return String.format(onlineString, cityString);
+        }
+        return Static.EMPTY;
     }
 
     private void initEmptySearchDialog(View view, OnClickListener settingsListener) {
-
         String text = getString(R.string.general_search_null_response_error);
         mRetryView = RetryViewCreator.createDefaultRetryView(getActivity(), text, new OnClickListener() {
             @Override
@@ -283,15 +303,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         hideEmptySearchDialog();
         ((RelativeLayout) view.findViewById(R.id.ac_dating_container)).addView(mRetryView.getView());
-
-        mReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (mPreloadManager != null) {
-                    mPreloadManager.checkConnectionType(intent.getIntExtra(ConnectionChangeReceiver.CONNECTION_TYPE, 0));
-                }
-            }
-        };
 
         mProfileReceiver = new BroadcastReceiver() {
             @Override
@@ -308,7 +319,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mUserSearchList != null) {
             mUserSearchList.updateSignatureAndUpdate();
         }
-        setHeader(getView());
+        setActionBarTitles(getView());
     }
 
     private void updateData(final boolean isAddition) {
@@ -321,17 +332,17 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
             mUpdateInProcess = true;
 
-            Search.log("Update start: " + (isAddition ? "addition" : "replace"));
+            UsersList.log("Update start: " + (isAddition ? "addition" : "replace"));
 
-            getSearchRequest().callback(new DataApiHandler<Search>() {
+            getSearchRequest().callback(new DataApiHandler<UsersList>() {
 
                 @Override
-                protected void success(Search search, ApiResponse response) {
-                    Search.log("load success. Loaded " + search.size() + " users");
-                    if (search.size() != 0) {
+                protected void success(UsersList usersList, ApiResponse response) {
+                    UsersList.log("load success. Loaded " + usersList.size() + " users");
+                    if (usersList.size() != 0) {
                         mImageSwitcher.setVisibility(View.VISIBLE);
                         //Добавляем новых пользователей
-                        mUserSearchList.addAndUpdateSignature(search);
+                        mUserSearchList.addAndUpdateSignature(usersList);
                         //если список был пуст, то просто показываем нового пользователя
                         SearchUser currentUser = mUserSearchList.getCurrentUser();
                         //NOTE: Если в поиске никого нет, то мы показываем следующего юзера
@@ -359,17 +370,17 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     }
                 }
 
-
+                @SuppressWarnings("unchecked")
                 @Override
-                protected Search parseResponse(ApiResponse response) {
-                    return new Search(response);
+                protected UsersList parseResponse(ApiResponse response) {
+                    return new UsersList(response, SearchUser.class);
                 }
 
                 @Override
                 public void fail(int codeError, ApiResponse response) {
                     FragmentActivity activity = getActivity();
                     if (activity != null) {
-                        Search.log("load error: " + response.message);
+                        UsersList.log("load error: " + response.message);
                         Toast.makeText(activity, App.getContext().getString(R.string.general_data_error),
                                 Toast.LENGTH_SHORT).show();
                         onUpdateFail(isAddition);
@@ -389,7 +400,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     protected void onLoadProfile() {
         if (mUserSearchList == null) {
-            mUserSearchList = new CachableSearch();
+            mUserSearchList = new CachableSearchList<SearchUser>(SearchUser.class);
             mUserSearchList.setOnEmptyListListener(mSearchListener);
         }
         //Показываем последнего пользователя
@@ -516,6 +527,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 mRetryBtn.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.VISIBLE);
             }
+            break;
             default:
         }
     }
@@ -588,8 +600,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         mImageSwitcher.setData(currUser.photos);
         mImageSwitcher.setCurrentItem(0, true);
-        mCurrentPhotoPrevPos = 0;
-        setCounter(mCurrentPhotoPrevPos);
+        setCounter(0);
     }
 
     private void setUserOnlineStatus(SearchUser currUser, Resources res) {
@@ -660,6 +671,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void showNovice() {
         if (mNovice == null) return;
+        if (!isAdded()) return;
 
         if (mNovice.isDatingCompleted())
             return;
@@ -668,7 +680,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mNoviceLayout = new NoviceLayout(getActivity());
             mNoviceLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             mNoviceLayout.setVisibility(View.GONE);
-            ((ViewGroup)getView().findViewById(R.id.ac_dating_container)).addView(mNoviceLayout);
+            ((ViewGroup) getView().findViewById(R.id.ac_dating_container)).addView(mNoviceLayout);
         }
 
         if (mNovice.isShowEnergyToSympathies()) {
@@ -729,12 +741,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
-    public void showInvitePopup(ArrayList<ContactsProvider.Contact> data) {
-        EasyTracker.getTracker().trackEvent("InvitesPopup", "Show", "", 0L);
-        InvitesPopup popup = InvitesPopup.newInstance(data);
-        ((BaseFragmentActivity) getActivity()).startFragment(popup);
-    }
-
     public void setCounter(int position) {
         if (mCurrentUser != null) {
             mCounter.setText((position + 1) + "/" + mCurrentUser.photos.size());
@@ -792,7 +798,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void showControls() {
-        mActionBar.show();
+        getActionBar(getView()).show();
         mDatingGroup.setVisibility(View.VISIBLE);
         mIsHide = false;
     }
@@ -800,7 +806,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void hideControls() {
         mDatingGroup.setVisibility(View.GONE);
-        mActionBar.hide();
+        getActionBar(getView()).hide();
         mIsHide = true;
     }
 
@@ -841,15 +847,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
-        setHighRatePrice();
-        updateResources();
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
             lockControls();
@@ -867,13 +864,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                             updateFilterData();
                             updateData(false);
                         } else {
-                            fail(response.getResultCode(),response);
+                            fail(response.getResultCode(), response);
                         }
                     }
 
                     @Override
                     public void fail(int codeError, ApiResponse response) {
-                        Toast.makeText(getActivity(),R.string.general_server_error,Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_LONG).show();
                         unlockControls();
                     }
                 }).exec();
@@ -885,29 +882,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void hideEmptySearchDialog() {
         mRetryView.setVisibility(View.GONE);
-    }
-
-    private void setHeader(View view) {
-        if (CacheProfile.dating != null) {
-            String plus = CacheProfile.dating.age_end == DatingFilter.webAbsoluteMaxAge ? "+" : "";
-            int age = CacheProfile.dating.age_end == DatingFilter.webAbsoluteMaxAge ? EditAgeFragment.absoluteMax : CacheProfile.dating.age_end;
-            Context context = App.getContext();
-            String headerText = context.getString(
-                    CacheProfile.dating.sex == Static.BOY ? R.string.dating_header_guys : R.string.dating_header_girls,
-                    CacheProfile.dating.age_start, age);
-            getActionBar(view).setTitleText(headerText + plus);
-
-            getActionBar(view).setSubTitleText(getSubtitle(context));
-        }
-    }
-
-    private String getSubtitle(Context context) {
-        String cityString = CacheProfile.dating.city == null || CacheProfile.dating.city.isEmpty() ?
-                context.getString(R.string.filter_cities_all) :
-                CacheProfile.dating.city.name;
-
-        String onlineString = DatingFilter.getOnlineField() ? context.getString(R.string.dating_online_only) : "%s";
-        return String.format(onlineString, cityString);
     }
 
     private boolean mIsHide;
@@ -922,66 +896,43 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     };
 
-    private Handler mUnlockHandler;
-
-    {
-        mUnlockHandler = new Handler() {
-            @Override
-            public void handleMessage(android.os.Message msg) {
-                unlockControls();
-            }
-        };
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
-        //При выходе из фрагмента сохраняем кэш поиска
-        if (mUserSearchList != null) {
-            mUserSearchList.saveCache();
+    private Handler mUnlockHandler = new Handler() {
+        @Override
+        public void handleMessage(android.os.Message msg) {
+            unlockControls();
         }
-    }
+    };
 
-    public void onDialogCancel() {
-        unlockControls();
-    }
 
     private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
-         private boolean isAfterLast = false;
+        private boolean isAfterLast = false;
 
         @Override
         public void onPageSelected(int position) {
 
-            if (position == 1 && mCurrentPhotoPrevPos == 0) {
-                hideControls();
-            } else if (position == 0 && mCurrentPhotoPrevPos > 0) {
-                showControls();
-            }
-            mCurrentPhotoPrevPos = position;
-            setCounter(mCurrentPhotoPrevPos);
-
-            if (position + DEFAULT_PRELOAD_ALBUM_RANGE == mLoadedCount) {
+            if (position + DEFAULT_PRELOAD_ALBUM_RANGE == (mLoadedCount - 1)) {
                 final Photos data = ((ImageSwitcher.ImageSwitcherAdapter) mImageSwitcher.getAdapter()).getData();
 
-                if (mNeedMore) {
-
-                    mImageSwitcher.getAdapter().notifyDataSetChanged();
-                    if (mCanSendAlbumReq) {
-                        mCanSendAlbumReq = false;
-                        sendAlbumRequest(data);
-                    }
-
+                if (mNeedMore && mCanSendAlbumReq) {
+                    mCanSendAlbumReq = false;
+                    sendAlbumRequest(data);
                 }
             }
+
+            int currentPhotoPosition = mImageSwitcher.getPreviousSelectedPosition();
+            if (position == 1 && currentPhotoPosition == 0) {
+                hideControls();
+            } else if (position == 0 && currentPhotoPosition > 0) {
+                showControls();
+            }
+            setCounter(mImageSwitcher.getSelectedPosition());
 
             if (isAfterLast) {
                 hideControls();
                 isAfterLast = false;
             }
 
-            if (position == ((ImageSwitcher.ImageSwitcherAdapter)mImageSwitcher.getAdapter()).getData().size() - 1) {
+            if (position == ((ImageSwitcher.ImageSwitcherAdapter) mImageSwitcher.getAdapter()).getData().size() - 1) {
                 showControls();
                 isAfterLast = true;
             }
@@ -998,13 +949,19 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     };
 
     private void sendAlbumRequest(final Photos data) {
-        if ((mLoadedCount - 1) >= data.size()) {
+        if (mUserSearchList == null)
             return;
-        }
+        if ((mLoadedCount - 1) >= data.size())
+            return;
+        if (data.get(mLoadedCount - 1) == null)
+            return;
+
         int position = data.get(mLoadedCount - 1).getPosition() + 1;
-        if (mUserSearchList != null && mUserSearchList.getCurrentUser() != null) {
-            AlbumRequest request = new AlbumRequest(getActivity(), mUserSearchList.getCurrentUser().id, PHOTOS_LIMIT, position, AlbumRequest.MODE_SEARCH);
-            final int uid = mUserSearchList.getCurrentUser().id;
+        final SearchUser currentSearchUser = mUserSearchList.getCurrentUser();
+        if (currentSearchUser != null) {
+            AlbumRequest request = new AlbumRequest(getActivity(), currentSearchUser.id,
+                    ViewUsersListFragment.PHOTOS_LIMIT, position, AlbumRequest.MODE_SEARCH);
+            final int uid = currentSearchUser.id;
             request.callback(new ApiHandler() {
                 @Override
                 public void success(ApiResponse response) {
@@ -1020,7 +977,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         }
                         mLoadedCount += newPhotos.size();
 
-                        if (mImageSwitcher != null) {
+                        if (mImageSwitcher != null && mImageSwitcher.getAdapter() != null) {
                             mImageSwitcher.getAdapter().notifyDataSetChanged();
                         }
                     }
@@ -1040,14 +997,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mResourcesMoney.setText(Integer.toString(CacheProfile.money));
     }
 
-    private OnSearchEventsListener mSearchListener = new OnSearchEventsListener() {
+    private OnUsersListEventsListener mSearchListener = new OnUsersListEventsListener() {
         @Override
-        public void onEmptyList(Search search) {
+        public void onEmptyList(UsersList usersList) {
             updateData(false);
         }
 
         @Override
-        public void onPreload(Search search) {
+        public void onPreload(UsersList usersList) {
             updateData(true);
         }
 

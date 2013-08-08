@@ -11,6 +11,7 @@ import android.view.*;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.topface.topface.R;
+import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.PreloadManager;
@@ -23,6 +24,8 @@ public class ImageSwitcher extends ViewPager {
     private Handler mUpdatedHandler;
     private static final String VIEW_TAG = "view_container";
     private PreloadManager mPreloadManager;
+    private int mCurrentPhotoPosition;
+    private int mPreviousPhotoPosition;
     private int mPrev;
     private int mNext;
 
@@ -69,14 +72,13 @@ public class ImageSwitcher extends ViewPager {
     private GestureDetector.SimpleOnGestureListener mOnGestureListener = new GestureDetector.SimpleOnGestureListener() {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
-            mOnClickListener.onClick(ImageSwitcher.this);
+            if (mOnClickListener != null) mOnClickListener.onClick(ImageSwitcher.this);
             return false;
         }
     };
 
     @Override
-    public void setOnPageChangeListener(OnPageChangeListener listener) {
-        final OnPageChangeListener finalListener = listener;
+    public void setOnPageChangeListener(final OnPageChangeListener finalListener) {
         super.setOnPageChangeListener(new OnPageChangeListener() {
 
             @Override
@@ -107,6 +109,7 @@ public class ImageSwitcher extends ViewPager {
 
             @Override
             public void onPageSelected(int i) {
+                setSelectedPosition(i);
                 finalListener.onPageSelected(i);
             }
 
@@ -115,7 +118,6 @@ public class ImageSwitcher extends ViewPager {
                 finalListener.onPageScrollStateChanged(i);
             }
         });
-
     }
 
     private View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
@@ -174,7 +176,7 @@ public class ImageSwitcher extends ViewPager {
             imageView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mOnClickListener.onClick(ImageSwitcher.this);
+                    if (mOnClickListener != null) mOnClickListener.onClick(ImageSwitcher.this);
                 }
             });
             //Первую фотографию грузим сразу, или если фотографию уже загружена, то сразу показываем ее
@@ -278,5 +280,25 @@ public class ImageSwitcher extends ViewPager {
 
     public void notifyDataSetChanged() {
         mImageSwitcherAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void setCurrentItem(int item, boolean smoothScroll) {
+        super.setCurrentItem(item, smoothScroll);
+        mPreviousPhotoPosition = item;
+        mCurrentPhotoPosition = item;
+    }
+
+    private void setSelectedPosition(int i) {
+        mPreviousPhotoPosition = mCurrentPhotoPosition;
+        mCurrentPhotoPosition = i;
+    }
+
+    public int getSelectedPosition() {
+        return mCurrentPhotoPosition;
+    }
+
+    public int getPreviousSelectedPosition() {
+        return mPreviousPhotoPosition;
     }
 }
