@@ -106,7 +106,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 getIntent().putExtra(GCMUtils.NEXT_INTENT, mFragmentMenu.getCurrentFragmentId());
                 MutualClosingFragment.usersProcessed = !closing.isMutualClosingAvailable();
                 LikesClosingFragment.usersProcessed = !closing.isLikesClosingAvailable();
-                onClosings();
+                if (!MutualClosingFragment.usersProcessed) onClosings();
             }
         }
     }

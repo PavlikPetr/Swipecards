@@ -1,7 +1,9 @@
 package com.topface.topface.utils.social;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -17,8 +19,10 @@ import com.facebook.topface.Facebook.DialogListener;
 import com.facebook.topface.FacebookError;
 import com.google.android.gcm.GCMRegistrar;
 import com.topface.topface.App;
+import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
+import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -338,5 +342,19 @@ public class AuthorizationManager {
             return null;
         }
 
+    }
+
+    public static void showRetryLogoutDialog(Activity activity, final LogoutRequest logoutRequest) {
+        AlertDialog.Builder retryBuilder = new AlertDialog.Builder(activity);
+        retryBuilder.setMessage(R.string.general_logout_error)
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) { dialog.cancel(); }
+                })
+                .setPositiveButton(R.string.auth_retry, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) { logoutRequest.exec(); }
+                });
+        retryBuilder.create().show();
     }
 }
