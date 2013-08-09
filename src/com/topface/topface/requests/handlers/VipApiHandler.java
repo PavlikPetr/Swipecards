@@ -17,7 +17,7 @@ public class VipApiHandler extends SimpleApiHandler {
             Context context = getContext();
             if (context instanceof Activity) {
                 ((Activity) context).startActivityForResult(
-                        ContainerActivity.getVipBuyIntent("", "PremiumAccessOnly"),
+                        ContainerActivity.getVipBuyIntent(null, "PremiumAccessOnly"),
                         ContainerActivity.INTENT_BUY_VIP_FRAGMENT
                 );
             }

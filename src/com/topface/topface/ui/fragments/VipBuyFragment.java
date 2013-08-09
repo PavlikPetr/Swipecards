@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,7 +111,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
             text = getArguments().getString(ARG_TAG_EXRA_TEXT);
             textView.setText(text);
         }
-        textView.setVisibility(text == null ? View.GONE : View.VISIBLE);
+        textView.setVisibility(TextUtils.isEmpty(text) ? View.GONE : View.VISIBLE);
     }
 
     private void switchLayouts() {

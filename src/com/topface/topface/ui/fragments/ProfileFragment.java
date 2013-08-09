@@ -651,7 +651,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         }).exec();
                     }
                 } else {
-                    startActivity(ContainerActivity.getVipBuyIntent("", "ProfileSuperSkills"));
+                    startActivityForResult(ContainerActivity.getVipBuyIntent(null, "ProfileSuperSkills"), ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                 }
                 break;
             case R.id.acBookmark:

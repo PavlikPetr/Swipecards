@@ -684,7 +684,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 break;
             case R.id.btnBuyVip:
-                startActivityForResult(ContainerActivity.getVipBuyIntent("", "Chat"), ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                startActivityForResult(ContainerActivity.getVipBuyIntent(null, "Chat"), ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                 break;
             case R.id.btnAddToBlackList:
                 if (isInBlackList) {
@@ -731,7 +731,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         }).exec();
                     }
                 } else {
-                    startActivity(ContainerActivity.getVipBuyIntent("", "Chat"));
+                    startActivityForResult(ContainerActivity.getVipBuyIntent(null, "Chat"), ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                 }
                 break;
             case R.id.acBookmark:
