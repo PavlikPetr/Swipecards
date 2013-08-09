@@ -42,11 +42,16 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     }
 
     public void showChat() {
-        QuickMessageFragment fragment = QuickMessageFragment.newInstance(getCurrentUser().id, getChatListener());
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.add(android.R.id.content, fragment, fragment.getClass().getName());
-        transaction.addToBackStack(null);
-        transaction.commit();
+        FeedUser user = getCurrentUser();
+        if(user != null) {
+            QuickMessageFragment fragment = QuickMessageFragment.newInstance(user.id, getChatListener());
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.add(android.R.id.content, fragment, fragment.getClass().getName());
+            transaction.addToBackStack(null);
+            transaction.commit();
+        } else {
+            showNextUser();
+        }
     }
 
     protected void skipAllRequest(int type) {

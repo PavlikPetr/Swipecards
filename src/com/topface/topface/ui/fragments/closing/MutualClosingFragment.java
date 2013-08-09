@@ -7,6 +7,8 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DeleteFeedRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.SkipAllClosedRequest;
+import com.topface.topface.data.FeedUser;
+import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
@@ -81,8 +83,9 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnForget:
-                if (getCurrentUser() != null) {
-                    DeleteFeedRequest deleteRequest = new DeleteFeedRequest(getCurrentUser().feedItem.id, getActivity());
+                FeedUser user = getCurrentUser();
+                if (user != null) {
+                    DeleteFeedRequest deleteRequest = new DeleteFeedRequest(user.feedItem.id, getActivity());
                     deleteRequest.callback(new SimpleApiHandler() {
                         @Override
                         public void always(ApiResponse response) {
