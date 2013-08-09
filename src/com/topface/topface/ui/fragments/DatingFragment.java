@@ -131,7 +131,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         SharedPreferences preferences = getActivity().getSharedPreferences(
                 Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         mNovice = Novice.getInstance(preferences);
-        checkInvitePopup();
+        showPromoDialog();
     }
 
     @Override
@@ -437,9 +437,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         switch (view.getId()) {
             case R.id.loDatingResources: {
                 EasyTracker.getTracker().trackEvent("Dating", "BuyClick", "", 1L);
-                Intent intent = new Intent(getActivity(), ContainerActivity.class);
-                intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
-                startActivity(intent);
+                startActivity(ContainerActivity.getBuyingIntent("Dating"));
             }
             break;
             case R.id.btnDatingLove: {
@@ -536,8 +534,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mCurrentUser.mutual) {
             openChat(getActivity());
         } else {
-            Intent intent = ContainerActivity.getVipBuyIntent(getString(R.string.chat_block_not_mutual), "DatingChatLock");
-            startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+            startActivityForResult(
+                    ContainerActivity.getVipBuyIntent(
+                            getString(R.string.chat_block_not_mutual),
+                            "DatingChatLock"
+                    ),
+                    ContainerActivity.INTENT_BUY_VIP_FRAGMENT
+            );
         }
     }
 

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import com.topface.billing.BillingFragment;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -100,7 +101,7 @@ public class ContainerActivity extends BaseFragmentActivity {
         Intent intent = getIntent();
         switch (id) {
             case INTENT_BUY_VIP_FRAGMENT:
-                fragment = VipBuyFragment.newInstance(true,intent.getStringExtra(VipBuyFragment.ARG_TAG_EXRA_TEXT));
+                fragment = VipBuyFragment.newInstance(true, intent.getStringExtra(VipBuyFragment.ARG_TAG_EXRA_TEXT));
                 break;
             case INTENT_BUYING_FRAGMENT:
                 Bundle extras = getIntent().getExtras();
@@ -205,7 +206,7 @@ public class ContainerActivity extends BaseFragmentActivity {
     }
 
     public static Intent getIntentForContacts(ArrayList<ContactsProvider.Contact> data) {
-        Intent intent  = new Intent(App.getContext(), ContainerActivity.class);
+        Intent intent = new Intent(App.getContext(), ContainerActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_CONTACTS_FRAGMENT);
         intent.putExtra(CONTACTS_DATA, data);
         return intent;
@@ -215,9 +216,10 @@ public class ContainerActivity extends BaseFragmentActivity {
         return getProfileIntent(userId, null, Static.EMPTY, context);
     }
 
-    public static Intent getProfileIntent(int userId, String itemId,  Context context) {
-        return getProfileIntent(userId,itemId,null,context);
+    public static Intent getProfileIntent(int userId, String itemId, Context context) {
+        return getProfileIntent(userId, itemId, null, context);
     }
+
     public static Intent getProfileIntent(int userId, Class callingClass, Context context) {
         return getProfileIntent(userId, null, callingClass.getName(), context);
     }
@@ -231,7 +233,7 @@ public class ContainerActivity extends BaseFragmentActivity {
         i.putExtra(ProfileFragment.INTENT_UID, userId);
         i.putExtra(ProfileFragment.INTENT_TYPE, type);
         if (className != null) {
-            i.putExtra(ProfileFragment.INTENT_CALLING_FRAGMENT,className);
+            i.putExtra(ProfileFragment.INTENT_CALLING_FRAGMENT, className);
         }
         if (itemId != null) {
             i.putExtra(ProfileFragment.INTENT_ITEM_ID, itemId);
@@ -257,13 +259,14 @@ public class ContainerActivity extends BaseFragmentActivity {
         Intent intent = new Intent(App.getContext(), ContainerActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUY_VIP_FRAGMENT);
         intent.putExtra(VipBuyFragment.ARG_TAG_EXRA_TEXT, extraText);
-        intent.putExtra(VipBuyFragment.ARG_TAG_FROM, from);
+        intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
         return intent;
     }
 
-    public static Intent getBuyingIntent() {
+    public static Intent getBuyingIntent(String from) {
         Intent intent = new Intent(App.getContext(), ContainerActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUYING_FRAGMENT);
+        intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
         return intent;
 
     }

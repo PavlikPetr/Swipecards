@@ -30,6 +30,7 @@ import com.mobclix.android.sdk.MobclixAdViewListener;
 import com.mobclix.android.sdk.MobclixMMABannerXLAdView;
 import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.mobileads.MoPubView;
+import com.topface.billing.BillingFragment;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -389,11 +390,11 @@ public class BannerBlock {
                                 maxHeight = ((ImageViewRemote) mBannerView).getMaxHeight();
                             }
                             int scaledHeight = (int) ((deviceWidth / imageWidth) * imageHeight);
-                            if(maxHeight > scaledHeight)  {
+                            if (maxHeight > scaledHeight) {
                                 params.height = scaledHeight;
                             } else {
                                 params.height = maxHeight;
-                                params.width = (int) ((maxHeight*imageWidth)/imageHeight);
+                                params.width = (int) ((maxHeight * imageWidth) / imageHeight);
                             }
                             mBannerView.setLayoutParams(params);
                             mBannerView.invalidate();
@@ -416,6 +417,7 @@ public class BannerBlock {
                     } else {
                         intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
                     }
+                    intent.putExtra(BillingFragment.ARG_TAG_SOURCE, "Banner_" + banner.name);
                 } else if (banner.action.equals(Banner.ACTION_URL)) {
                     intent = new Intent(Intent.ACTION_VIEW, Uri.parse(banner.parameter));
                 } else if (banner.action.equals(Banner.ACTION_METHOD)) {

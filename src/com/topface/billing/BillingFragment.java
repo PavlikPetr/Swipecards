@@ -8,6 +8,7 @@ import com.topface.topface.ui.fragments.BaseFragment;
  */
 abstract public class BillingFragment extends BaseFragment implements BillingListener, BillingSupportListener {
 
+    public static final String ARG_TAG_SOURCE = "from_value";
     private BillingDriver mBillingDriver;
 
     @Override
@@ -40,16 +41,20 @@ abstract public class BillingFragment extends BaseFragment implements BillingLis
         mBillingDriver.onDestroy();
     }
 
-    protected BillingDriver getBillingDriver() {
-        return mBillingDriver;
-    }
-
     protected void buyItem(String itemId) {
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            BillingDriver.setSourceValue(arguments.getString(ARG_TAG_SOURCE, ""));
+        }
         mBillingDriver.buyItem(itemId);
     }
 
-    protected void buySubscriotion(String subscriptionId) {
-        mBillingDriver.buySubscriotion(subscriptionId);
+    protected void buySubscription(String subscriptionId) {
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            BillingDriver.setSourceValue(getArguments().getString(ARG_TAG_SOURCE, ""));
+        }
+        mBillingDriver.buySubscription(subscriptionId);
     }
 
     @Override
