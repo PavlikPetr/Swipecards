@@ -45,7 +45,6 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
         }
         View btnSkip = controlsView.findViewById(R.id.btnSkip);
         btnSkip.setOnClickListener(this);
-        btnSkip.setActivated(true);
         controlsView.findViewById(R.id.btnChat).setOnClickListener(this);
     }
 
