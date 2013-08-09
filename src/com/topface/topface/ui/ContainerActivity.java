@@ -249,6 +249,7 @@ public class ContainerActivity extends BaseFragmentActivity {
 
     public static Intent getVipBuyIntent(String extraText, String from) {
         Intent intent = new Intent(App.getContext(), ContainerActivity.class);
+        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUY_VIP_FRAGMENT);
         intent.putExtra(VipBuyFragment.ARG_TAG_EXRA_TEXT, extraText);
         intent.putExtra(VipBuyFragment.ARG_TAG_FROM, from);
         return intent;
