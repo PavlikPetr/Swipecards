@@ -158,7 +158,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         buyButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(ContainerActivity.getNewIntent(ContainerActivity.INTENT_BUYING_FRAGMENT));
+                startActivity(ContainerActivity.getBuyingIntent("Menu"));
             }
         });
 

@@ -8,7 +8,6 @@ import android.view.View.OnClickListener;
 import android.widget.*;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.Profile;
@@ -96,9 +95,7 @@ public class LeadersActivity extends BaseFragmentActivity {
             @Override
             public void onClick(View view) {
                 if (CacheProfile.money < CacheProfile.getOptions().price_leader) {
-                    Intent intent = new Intent(LeadersActivity.this, ContainerActivity.class);
-                    intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
-                    startActivity(intent);
+                    startActivity(ContainerActivity.getBuyingIntent("Leaders"));
                 } else if (mSelectedPhoto.isSelected()) {
                     mLoadingLocker.setVisibility(View.VISIBLE);
                     new LeaderRequest(mSelectedPhoto.getPhotoId(), LeadersActivity.this)

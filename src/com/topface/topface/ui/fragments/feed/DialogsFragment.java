@@ -96,7 +96,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
         inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(ContainerActivity.getBuyingIntent());
+                startActivity(ContainerActivity.getBuyingIntent("EmptyDialogs"));
             }
         });
 

@@ -33,10 +33,12 @@ public class GooglePlayV2BillingDriver extends BillingDriver {
     }
 
     @Override
-    public void onResume() {}
+    public void onResume() {
+    }
 
     @Override
-    public void onStop() {}
+    public void onStop() {
+    }
 
     protected void checkBillingSupport(BillingSupportListener listener) {
         if (listener != null) {
@@ -66,7 +68,7 @@ public class GooglePlayV2BillingDriver extends BillingDriver {
     }
 
     @Override
-    public void buySubscriotion(String subscriptionId) {
+    public void buySubscription(String subscriptionId) {
         mBillingService.requestPurchase(subscriptionId, Consts.ITEM_TYPE_SUBSCRIPTION, getDeveloperPayload());
     }
 

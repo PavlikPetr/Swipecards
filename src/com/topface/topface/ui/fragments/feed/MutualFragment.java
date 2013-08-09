@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import com.topface.topface.GCMUtils;
@@ -54,7 +53,7 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
         inflated.findViewById(R.id.btnRefill).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(ContainerActivity.getBuyingIntent());
+                startActivity(ContainerActivity.getBuyingIntent("EmptyMutual"));
             }
         });
     }

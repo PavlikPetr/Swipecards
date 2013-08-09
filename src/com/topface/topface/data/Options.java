@@ -211,6 +211,8 @@ public class Options extends AbstractData {
                 options.premium_messages = new PremiumMessages(
                         response.jsonResult.optJSONObject("premium_messages")
                 );
+            } else {
+                options.premium_messages = new PremiumMessages(false, 10, 1000);
             }
 
             if (response.jsonResult.has("links")) {

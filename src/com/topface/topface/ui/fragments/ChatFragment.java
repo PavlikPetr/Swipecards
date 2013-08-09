@@ -550,18 +550,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 mActionBar.showProfileAvatar(mUser.sex == Static.BOY ? R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar, null);
             } else {
                 ArrayList<UserActions.ActionItem> actions = new ArrayList<UserActions.ActionItem>();
-                actions.add(new UserActions.ActionItem(mUser.sex == 1? R.id.acProfile : R.id.acWProfile, this));
+                actions.add(new UserActions.ActionItem(mUser.sex == 1 ? R.id.acProfile : R.id.acWProfile, this));
                 actions.add(new UserActions.ActionItem(R.id.acBlock, this));
                 actions.add(new UserActions.ActionItem(R.id.acComplain, this));
                 actions.add(new UserActions.ActionItem(R.id.acBookmark, this));
-
 
 
                 UserActions userActions = new UserActions(chatActions, actions);
                 bookmarksTv = (TextView) userActions.getViewById(R.id.acBookmark).findViewById(R.id.favTV);
                 blockView = (RelativeLayout) userActions.getViewById(R.id.acBlock);
 
-                bookmarksTv.setText(mUser.bookmarked? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+                bookmarksTv.setText(mUser.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
 //                blockView.setEnabled(mUser.);
                 mActionBar.showUserActionsButton(
                         new View.OnClickListener() {
@@ -685,8 +684,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
                 break;
             case R.id.btnBuyVip:
-                Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
-                startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                startActivityForResult(ContainerActivity.getVipBuyIntent("", "Chat"), ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                 break;
             case R.id.btnAddToBlackList:
                 if (isInBlackList) {
@@ -733,9 +731,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         }).exec();
                     }
                 } else {
-                    Intent buyingIntent = new Intent(getActivity(), ContainerActivity.class);
-                    buyingIntent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
-                    startActivity(buyingIntent);
+                    startActivity(ContainerActivity.getVipBuyIntent("", "Chat"));
                 }
                 break;
             case R.id.acBookmark:
@@ -987,8 +983,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             @Override
             public void fail(int codeError, ApiResponse response) {
                 if (response.code == ApiResponse.PAYMENT) {
-                    Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
-                    intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
+                    Intent intent = ContainerActivity.getBuyingIntent("Chat");
                     intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
                     intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
                     startActivity(intent);
