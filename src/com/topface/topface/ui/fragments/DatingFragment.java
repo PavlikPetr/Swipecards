@@ -156,6 +156,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         setHighRatePrice();
         updateResources();
+        refreshActionBarTitles(getView());
     }
 
     @Override
@@ -256,7 +257,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private void initActionBar(View view) {
         // Navigation Header
         ActionBar actionBar = getActionBar(view);
-        setActionBarTitles(view);
+        refreshActionBarTitles(view);
         final Activity activity = getActivity();
         if (activity instanceof NavigationActivity) {
             actionBar.showHomeButton((NavigationActivity) activity);
@@ -264,7 +265,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         actionBar.showSettingsButton(mSettingsListener, false);
     }
 
-    private void setActionBarTitles(View view) {
+    private void refreshActionBarTitles(View view) {
         getActionBar(view).setTitleText(getTitle());
         getActionBar(view).setSubTitleText(getSubtitle());
     }
@@ -319,7 +320,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mUserSearchList != null) {
             mUserSearchList.updateSignatureAndUpdate();
         }
-        setActionBarTitles(getView());
+        refreshActionBarTitles(getView());
     }
 
     private void updateData(final boolean isAddition) {
