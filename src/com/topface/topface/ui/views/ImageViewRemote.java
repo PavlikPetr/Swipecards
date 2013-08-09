@@ -3,6 +3,7 @@ package com.topface.topface.ui.views;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -57,6 +58,8 @@ public class ImageViewRemote extends ImageView {
      * View, которое используется в качестве индикатора загрузки
      */
     private View mLoader;
+    private int mMaxHeight;
+    private int mMaxWidth;
 
     public ImageViewRemote(Context context) {
         super(context);
@@ -105,6 +108,8 @@ public class ImageViewRemote extends ImageView {
                         R.styleable.ImageViewRemote_remoteSrc
                 )
         );
+        mMaxHeight = values.getDimensionPixelSize(R.styleable.ImageViewRemote_android_maxHeight, 0);
+        mMaxWidth = values.getDimensionPixelSize(R.styleable.ImageViewRemote_android_maxWidth,0);
     }
 
     private void setPostProcessor(int postProcessorId, float cornerRadius, int maskId) {
@@ -304,5 +309,15 @@ public class ImageViewRemote extends ImageView {
                 mHandler.sendEmptyMessage(LOADING_ERROR);
             }
         }
+    }
+
+    @Override
+    public int getMaxHeight() {
+        return mMaxHeight;
+    }
+
+    @Override
+    public int getMaxWidth() {
+        return mMaxWidth;
     }
 }

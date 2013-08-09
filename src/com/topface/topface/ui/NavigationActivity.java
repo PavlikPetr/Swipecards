@@ -99,7 +99,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     protected void onClosingDataReceived() {
         super.onClosingDataReceived();
-        if (!CacheProfile.premium && !mClosingsOnProfileUpdateInvoked) {
+        if (!CacheProfile.premium && !mClosingsOnProfileUpdateInvoked && !mHasClosingsForThisSession) {
             mClosingsOnProfileUpdateInvoked = true;
             Options.Closing closing = CacheProfile.getOptions().closing;
             if (closing.isClosingsEnabled()) {

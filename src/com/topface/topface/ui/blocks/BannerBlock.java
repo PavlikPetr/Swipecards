@@ -384,7 +384,17 @@ public class BannerBlock {
                         //Если ширина экрана больше, чем у нашего баннера, то пропорционально увеличиваем высоту imageView
                         if (deviceWidth > imageWidth) {
                             ViewGroup.LayoutParams params = mBannerView.getLayoutParams();
-                            params.height = (int) ((deviceWidth / imageWidth) * imageHeight);
+                            int maxHeight = 0;
+                            if (mBannerView instanceof ImageViewRemote) {
+                                maxHeight = ((ImageViewRemote) mBannerView).getMaxHeight();
+                            }
+                            int scaledHeight = (int) ((deviceWidth / imageWidth) * imageHeight);
+                            if(maxHeight > scaledHeight)  {
+                                params.height = scaledHeight;
+                            } else {
+                                params.height = maxHeight;
+                                params.width = (int) ((maxHeight*imageWidth)/imageHeight);
+                            }
                             mBannerView.setLayoutParams(params);
                             mBannerView.invalidate();
                         }
