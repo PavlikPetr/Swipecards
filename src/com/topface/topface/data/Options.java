@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -119,6 +120,7 @@ public class Options extends AbstractData {
             GETJAR,
             RANDOM
     };
+    public static final String PREMIUM_MESSAGES_POPUP_SHOW_TIME = "premium_messages_popup_show_time";
 
     /**
      * Настройки для каждого типа страниц
@@ -152,6 +154,7 @@ public class Options extends AbstractData {
     public boolean block_unconfirmed;
     public boolean block_chat_not_mutual;
     public Closing closing = new Closing();
+    public PremiumMessages premium_messages;
 
     public static Options parse(ApiResponse response) {
         Options options = new Options();
@@ -210,6 +213,12 @@ public class Options extends AbstractData {
             options.premium_period = contacts_invite.optInt("premium_period");
             options.contacts_count = contacts_invite.optInt("contacts_count");
             options.popup_timeout = contacts_invite.optInt("show_popup_timeout") * 60 * 60 * 1000;
+
+            if (response.jsonResult.has("premium_messages")) {
+                options.premium_messages = new PremiumMessages(
+                        response.jsonResult.optJSONObject("premium_messages")
+                );
+            }
 
             if (response.jsonResult.has("links")) {
                 JSONObject links = response.jsonResult.optJSONObject("links");
@@ -402,7 +411,64 @@ public class Options extends AbstractData {
         return paymentwall;
     }
 
+    public static class PremiumMessages {
+        public static final int DEFAULT_COUNT = 10;
+        private static final int DEFAULT_TIMEOUT = 1000;
+        /**
+         * включен ли механизм для данного пользователя в булевых константах
+         */
+        private boolean mEnabled;
+        /**
+         * количесто отправляемых пользователю сообщений в штуках
+         */
+        private int mCount;
+        /**
+         * таймаут для отображения попапа покупки премиума в часах
+         */
+        private int mTimeout;
+
+        public PremiumMessages(JSONObject premiumMessages) {
+            if (premiumMessages != null) {
+                mEnabled = premiumMessages.optBoolean("enabled");
+                mCount = premiumMessages.optInt("count", DEFAULT_COUNT);
+                mTimeout = premiumMessages.optInt("timeout", DEFAULT_TIMEOUT);
+            }
+        }
+
+        public PremiumMessages(boolean enabled, int count, int timeout) {
+            mEnabled = enabled;
+            mCount = count;
+            mTimeout = timeout;
+        }
+
+        public int getCount() {
+            return mCount;
+        }
+
+        public boolean isNeedShow() {
+            return mEnabled && (getLashShowTime() + mTimeout * 60 * 60 * 1000) < System.currentTimeMillis();
+        }
+
+        public void setPopupShowTime() {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    PreferenceManager.getDefaultSharedPreferences(App.getContext())
+                            .edit()
+                            .putLong(PREMIUM_MESSAGES_POPUP_SHOW_TIME, System.currentTimeMillis())
+                            .commit();
+                }
+            }).run();
+        }
+
+        private long getLashShowTime() {
+            return  PreferenceManager.getDefaultSharedPreferences(App.getContext())
+                    .getLong(PREMIUM_MESSAGES_POPUP_SHOW_TIME, 0);
+        }
+    }
     public static class Closing {
+        public static String DATA_FOR_CLOSING_RECEIVED_ACTION = "DATA_FOR_CLOSING_RECEIVED_ACTION";
+
         private static Ssid.ISsidUpdateListener listener;
         public boolean enableSympathies;
         public boolean enabledMutual;
@@ -463,13 +529,13 @@ public class Options extends AbstractData {
             SharedPreferences pref =  App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
             long currentTime = System.currentTimeMillis();
             long lastCallTime = pref.getLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME,0);
-            return DateUtils.isWithin24Hours(lastCallTime,System.currentTimeMillis());
+            return DateUtils.isOutside24Hours(lastCallTime, System.currentTimeMillis());
         }
 
         public boolean isLikesClosingAvailable() {
             SharedPreferences pref =  App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
             long lastCallTime = pref.getLong(Static.PREFERENCES_LIKES_CLOSING_LAST_TIME,0);
-            return DateUtils.isWithin24Hours(lastCallTime,System.currentTimeMillis());
+            return DateUtils.isOutside24Hours(lastCallTime, System.currentTimeMillis());
         }
     }
 }

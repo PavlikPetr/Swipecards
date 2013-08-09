@@ -34,6 +34,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
 
     public static final String ACTION_BAR_CONST = "needActionBar";
     public static final String ARG_TAG_EXRA_TEXT = "extra_text";
+    public static final String ARG_TAG_FROM = "from_value";
     EditSwitcher mInvisSwitcher;
 
     ProgressBar mInvisLoadBar;
@@ -139,7 +140,12 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
                 @Override
                 public void onClick(String id) {
                     buySubscriotion(id);
-                    EasyTracker.getTracker().trackEvent("Subscription", "ButtonClick", id, 0L);
+                    Bundle arguments = getArguments();
+                    String from = "";
+                    if (arguments != null) {
+                        from = "From" + arguments.getString(ARG_TAG_FROM);
+                    }
+                    EasyTracker.getTracker().trackEvent("Subscription", "ButtonClick" + from, id, 0L);
                 }
             });
         }
@@ -283,19 +289,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
 
     @Override
     public void onClick(View v) {
-        //Подписки на премиумы
-//        switch (v.getId()) {
-//            case R.id.fbpBuyingMonth:
-//                buySubscriotion("topface.premium.month.1");
-//                EasyTracker.getTracker().trackEvent("Subscription", "ButtonClick", "Month", 0L);
-//                break;
-//
-//            case R.id.fbpBuyingYear:
-//                buySubscriotion("topface.premium.year.1");
-//                EasyTracker.getTracker().trackEvent("Subscription", "ButtonClick", "Year", 0L);
-//                break;
-//
-//        }
+
     }
 
     @Override

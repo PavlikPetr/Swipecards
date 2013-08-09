@@ -119,7 +119,7 @@ public class AddPhotoHelper {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(mContext, R.string.general_data_error, 1500).show();
+                                Toast.makeText(mContext, R.string.general_data_error, Toast.LENGTH_SHORT).show();
                             }
                         });
                         return;
@@ -329,13 +329,13 @@ public class AddPhotoHelper {
     private void showErrorMessage(int codeError) {
         switch (codeError) {
             case ApiResponse.INCORRECT_PHOTO_DATA:
-                Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo), 2000).show();
+                Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo), Toast.LENGTH_LONG).show();
                 break;
             case ApiResponse.INCORRECT_PHOTO_FORMAT:
-                Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo_format), 2000).show();
+                Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo_format), Toast.LENGTH_LONG).show();
                 break;
             case ApiResponse.INCORRECT_PHOTO_SIZES:
-                Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo_size), 2000).show();
+                Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo_size), Toast.LENGTH_LONG).show();
                 break;
         }
     }

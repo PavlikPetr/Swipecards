@@ -91,6 +91,7 @@
                             />
                 </RelativeLayout>
             </LinearLayout>
+
             <TextView
                     android:id="@+id/tvRecoverPwd"
                     android:layout_width="wrap_content"
@@ -101,11 +102,13 @@
                     android:paddingBottom="16dp"/>
 
         </LinearLayout>
+
         <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_below="@id/mainContainer"
                 android:paddingTop="30dp">
+
             <TextView
                     android:id="@+id/tvBackToMainAuth"
                     android:layout_width="wrap_content"
@@ -120,6 +123,7 @@
                     style="@style/AuthButtonsBigText"
                     />
         </RelativeLayout>
+
         <ImageView
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
@@ -127,8 +131,6 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/auth_bg_bottom_spot"
                 />
-
-
     </RelativeLayout>
 
 </ScrollView>

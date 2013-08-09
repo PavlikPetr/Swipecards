@@ -32,4 +32,5 @@
     <dimen name="take_photo_max_height">320dp</dimen>
 
     <string name="tag_header_shadow">ivHeaderShadow</string>
+    <string name="transaction_info_link">http://topface.com/faq-mobile?from=android</string>
 </resources>

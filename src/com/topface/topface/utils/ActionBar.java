@@ -75,6 +75,7 @@ public class ActionBar {
         }
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public void showProfileAvatar(final Photo profilePhoto, View.OnClickListener listener) {
         hideRightBarPart();
         mProfileAvatar.setVisibility(View.VISIBLE);
@@ -82,7 +83,7 @@ public class ActionBar {
         mProfileAvatar.setOnClickListener(listener);
     }
 
-    public void showProfileAvatar(final int profilePhotorResource, View.OnClickListener listener) {
+    public void showProfileAvatar(View.OnClickListener listener) {
         hideRightBarPart();
         mProfileAvatar.setVisibility(View.VISIBLE);
 //        mProfileAvatar.setImageResource(profilePhotorResource);
@@ -202,7 +203,7 @@ public class ActionBar {
         public void setState(boolean state) {
             selected = state;
         }
-    };
+    }
 
     public void setUserActionsControlActive(boolean state) {
         if (userActionsOnClickListener != null) {
@@ -250,14 +251,6 @@ public class ActionBar {
 
     public void hideUserActionButton() {
         mUserActionsControl.setVisibility(View.GONE);
-    }
-
-    public void activateEditButton() {
-        if (mEditButton.isSelected()) {
-            mEditButton.setSelected(false);
-        } else {
-            mEditButton.setSelected(true);
-        }
     }
 
     public void disableActionsButton(boolean disabled) {

@@ -101,6 +101,38 @@
                     android:hint="@string/general_input_email"
                     android:visibility="gone"/>
 
+            <TextView
+                    android:paddingTop="8dp"
+                    android:id="@+id/tvTransactionIdTitle"
+                    style="@style/BackgroundFormTitleText"
+                    android:text="@string/settings_feedback_transaction_number"
+                    android:visibility="gone"/>
+
+            <EditText
+                    android:id="@+id/edTransactionId"
+                    android:layout_width="fill_parent"
+                    android:layout_height="34dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:gravity="top|left"
+                    android:inputType="text"
+                    android:padding="10dp"
+                    android:textSize="14sp"
+                    android:hint="@string/settings_feedback_transaction_number"
+                    android:visibility="gone"/>
+
+            <TextView
+                    android:id="@+id/tvTransactionIdInfoLink"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_gravity="left"
+                    android:text="@string/settings_feedback_transaction_link"
+                    android:textColor="#697DFF"
+                    android:visibility="gone"/>
+
         </LinearLayout>
     </ScrollView>
 

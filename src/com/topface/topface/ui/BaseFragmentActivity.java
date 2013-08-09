@@ -12,10 +12,9 @@ import android.view.View;
 import android.view.WindowManager;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.Static;
+import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiRequest;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
-import com.topface.topface.ui.dialogs.ConfirmEmailDialog;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.ActionBar;
@@ -39,10 +38,10 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     protected boolean mNeedAnimate = true;
     private BroadcastReceiver mProfileLoadReceiver;
     private boolean afterOnSaveInstanceState;
-    private BroadcastReceiver mUpdateProfileReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver mClosingDataReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            onProfileUpdated();
+            onClosingDataReceived();
         }
     };
 
@@ -103,7 +102,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         }
     }
 
-    protected void onProfileUpdated() {
+    protected void onClosingDataReceived() {
     }
 
     @Override
@@ -119,7 +118,8 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
                 onResumeAsync();
             }
         }).start();
-        LocalBroadcastManager.getInstance(this).registerReceiver(mUpdateProfileReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(mClosingDataReceiver, new IntentFilter(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
     }
 
     private void registerReauthReceiver() {
@@ -197,7 +197,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         } catch (Exception ex) {
             Debug.error(ex);
         }
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mUpdateProfileReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mClosingDataReceiver);
     }
 
     private void removeAllRequests() {
@@ -262,15 +262,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
                 Debug.error(e);
             }
             needOpenDialog = false;
-        }
-    }
-
-    protected void showConfirmEmailDialog() {
-        ConfirmEmailDialog newFragment = ConfirmEmailDialog.newInstance();
-        try {
-            newFragment.show(getSupportFragmentManager(), ConfirmEmailDialog.TAG);
-        } catch (Exception e) {
-            Debug.error(e);
         }
     }
 

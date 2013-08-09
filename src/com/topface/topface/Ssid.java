@@ -46,11 +46,17 @@ public class Ssid {
     public synchronized static void save(String ssid) {
         mSsid = TextUtils.isEmpty(ssid) ? Static.EMPTY : ssid;
         mLastUpdate = System.currentTimeMillis();
-        SharedPreferences preferences = mContext.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(PREFERENCES_SSID_KEY, mSsid);
-        editor.putLong(PREFERENCES_LAST_UPDATE_KEY, mLastUpdate);
-        editor.commit();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferences preferences = mContext.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(PREFERENCES_SSID_KEY, mSsid);
+                editor.putLong(PREFERENCES_LAST_UPDATE_KEY, mLastUpdate);
+                editor.commit();
+            }
+        }).start();
+        
         for (ISsidUpdateListener listener : updateListeners) {
             listener.onUpdate();
         }
@@ -58,11 +64,16 @@ public class Ssid {
 
     public synchronized static void remove() {
         mSsid = Static.EMPTY;
-        SharedPreferences preferences = mContext.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(PREFERENCES_SSID_KEY, Static.EMPTY);
-        editor.putLong(PREFERENCES_LAST_UPDATE_KEY, 0);
-        editor.commit();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferences preferences = mContext.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(PREFERENCES_SSID_KEY, Static.EMPTY);
+                editor.putLong(PREFERENCES_LAST_UPDATE_KEY, 0);
+                editor.commit();
+            }
+        }).start();
     }
 
     /**
@@ -71,6 +82,7 @@ public class Ssid {
      * @param minutes время в минутах
      * @return старше ли SSID чем число минут передах в аргменте minutes
      */
+    @SuppressWarnings("UnusedDeclaration")
     public synchronized static boolean isOlderThan(int minutes) {
         int millis = minutes * 60 * 1000;
         return System.currentTimeMillis() > (millis + mLastUpdate);

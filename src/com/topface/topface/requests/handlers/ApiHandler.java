@@ -18,6 +18,7 @@ abstract public class ApiHandler extends Handler {
 
     private Context mContext;
     private boolean mCancel = false;
+    private boolean mNeedCounters = true;
 
     @Override
     public void handleMessage(Message msg) {
@@ -87,6 +88,7 @@ abstract public class ApiHandler extends Handler {
     }
 
     private void setCounters(ApiResponse response) {
+        if(!mNeedCounters) return;
         try {
             JSONObject counters = response.counters;
             String method = response.method;
@@ -128,5 +130,13 @@ abstract public class ApiHandler extends Handler {
 
     protected boolean isShowPremiumError() {
         return true;
+    }
+
+    protected boolean isCanceled() {
+        return mCancel;
+    }
+
+    public void setNeedCounters(boolean needCounter) {
+        this.mNeedCounters = needCounter;
     }
 }

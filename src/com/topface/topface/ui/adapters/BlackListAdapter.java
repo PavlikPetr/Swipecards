@@ -1,15 +1,11 @@
 package com.topface.topface.ui.adapters;
 
 import android.content.Context;
-import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import com.topface.topface.R;
 import com.topface.topface.data.BlackListItem;
-
-import java.util.ArrayList;
 
 public class BlackListAdapter extends FeedAdapter<BlackListItem> {
 

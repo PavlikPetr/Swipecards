@@ -251,6 +251,8 @@
     <string name="general_edit_profile_message">Пожалуйста, заполните необходимые поля анкеты</string>
     <string name="general_premium_access_error">Для данной функции необходим VIP-статус</string>
 
+    <string name="address_book_access_error">Это приложение не имеет доступа к вашим контактам. Вы можете разрешить доступ в настройках приватности вашего устройства</string>
+    
     <string name="general_search_null_response_error">Ничего не найдено. Попробуйте изменить фильтры</string>
     <string name="change_filters">Изменить фильтры</string>
     <string name="general_sex">Пол</string>
@@ -691,6 +693,15 @@
         <item quantity="other">%d симпатий</item>
     </plurals>
 
+    <plurals name="popup_vip_messages">
+        <item quantity="one">Получено %d сообщение с экспресс-доставкой</item>
+        <item quantity="few">Получено %d сообщения с экспресс-доставкой</item>
+        <item quantity="many">Получено %d сообщений с экспресс-доставкой</item>
+        <item quantity="other">Получено %d сообщений с экспресс-доставкой</item>
+    </plurals>
+    <string name="general_attention">Внимание!</string>
+    <string name="general_delete_messages">Удалить сообщения</string>
+
     <string name="mutual_sympathies">Взаимно</string>
     <string name="skip_all">Пропустить всех</string>
     <string name="forget">Забыть</string>
@@ -699,4 +710,7 @@
     <string name="watching_as_list">Смотреть списком</string>
     <string name="watching_sequentually">Смотреть последовательно</string>
     <string name="or_use_common_likes_list">Или просматривайте тех, кому вы понравились в общем списке</string>
+    <string name="settings_feedback_transaction_number">Номер заказа</string>
+    <string name="settings_feedback_transaction_link">где найти номер заказа?</string>
+    <string name="general_logout_error">К сожалению, не удалось выйти из аккаунта</string>
 </resources>

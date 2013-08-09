@@ -70,36 +70,37 @@ public class SettingsAccountFragment extends BaseFragment implements OnClickList
 
     private void showExitPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(R.string.settings_logout_msg);
-        builder.setNegativeButton(R.string.general_no, new DialogInterface.OnClickListener() {
+        builder.setMessage(R.string.settings_logout_msg)
+                .setNegativeButton(R.string.general_no, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
-        });
-        builder.setPositiveButton(R.string.general_yes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                LogoutRequest logoutRequest = new LogoutRequest(getActivity());
-                lockerView.setVisibility(View.VISIBLE);
-                logoutRequest.callback(new ApiHandler() {
+        })
+                .setPositiveButton(R.string.general_yes, new DialogInterface.OnClickListener() {
                     @Override
-                    public void success(ApiResponse response) {
-                        AuthorizationManager.logout(getActivity());
-                    }
+                    public void onClick(DialogInterface dialog, int which) {
+                        final LogoutRequest logoutRequest = new LogoutRequest(getActivity());
+                        lockerView.setVisibility(View.VISIBLE);
+                        logoutRequest.callback(new ApiHandler() {
+                            @Override
+                            public void success(ApiResponse response) {
+                                AuthorizationManager.logout(getActivity());
+                            }
 
-                    @Override
-                    public void fail(int codeError, ApiResponse response) {
-                        FragmentActivity activity = getActivity();
-                        if (activity != null) {
-                            lockerView.setVisibility(View.GONE);
-                            Toast.makeText(activity, R.string.general_server_error, Toast.LENGTH_LONG).show();
-                        }
-                    }
-                }).exec();
+                            @Override
+                            public void fail(int codeError, ApiResponse response) {
+                                FragmentActivity activity = getActivity();
+                                if (activity != null) {
+                                    lockerView.setVisibility(View.GONE);
+                                    Toast.makeText(activity, R.string.general_server_error, Toast.LENGTH_LONG).show();
+                                    AuthorizationManager.showRetryLogoutDialog(activity,logoutRequest);
+                                }
+                            }
+                        }).exec();
 
-            }
-        });
+                    }
+                });
         builder.create().show();
     }
 

@@ -3,9 +3,15 @@ package com.topface.topface.ui.fragments.closing;
 import android.view.View;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DeleteFeedRequest;
+import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.requests.SkipAllClosedRequest;
+import com.topface.topface.data.FeedUser;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 
 public class MutualClosingFragment extends ClosingFragment implements View.OnClickListener {
@@ -77,15 +83,15 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnForget:
-                if (getCurrentUser() != null) {
-                    DeleteFeedRequest deleteRequest = new DeleteFeedRequest(getCurrentUser().feedItem.id, getActivity());
+                FeedUser user = getCurrentUser();
+                if (user != null) {
+                    DeleteFeedRequest deleteRequest = new DeleteFeedRequest(user.feedItem.id, getActivity());
                     deleteRequest.callback(new SimpleApiHandler() {
                         @Override
                         public void always(ApiResponse response) {
-                            refreshActionBarTitles(getView());
+                            if(isAdded()) refreshActionBarTitles(getView());
                         }
                     });
-                    registerRequest(deleteRequest);
                     deleteRequest.exec();
                 }
                 showNextUser();
@@ -98,6 +104,8 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
     @Override
     protected void onUsersProcessed() {
         usersProcessed = true;
+        LikesClosingFragment.usersProcessed = false;
+        CountersManager.getInstance(getActivity()).setCounter(CountersManager.LIKES,0,true);
         CacheProfile.getOptions().closing.onStopMutualClosings();
         super.onUsersProcessed();
     }

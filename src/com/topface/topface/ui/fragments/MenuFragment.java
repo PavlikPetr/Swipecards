@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
@@ -66,6 +67,8 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             setMenuData();
         }
     };
+
+    private boolean isClosed = false;
 
     private BroadcastReceiver mSelectMenuReceiver = new BroadcastReceiver() {
 
@@ -356,11 +359,15 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 fragment = new DatingFragment();
                 break;
             case BaseFragment.F_LIKES:
-                fragment = LikesClosingFragment.usersProcessed ?
-                        new LikesFragment() : new LikesClosingFragment();
+                if (LikesClosingFragment.usersProcessed || CacheProfile.premium) {
+                    fragment = new LikesFragment();
+                } else {
+                    if (!isClosed) getActivity().getIntent().putExtra(GCMUtils.NEXT_INTENT, getCurrentFragmentId());
+                    fragment = new LikesClosingFragment();
+                }
                 break;
             case BaseFragment.F_MUTUAL:
-                fragment = MutualClosingFragment.usersProcessed ?
+                fragment = MutualClosingFragment.usersProcessed || CacheProfile.premium ?
                         new MutualFragment() : new MutualClosingFragment();
                 break;
             case BaseFragment.F_DIALOGS:
@@ -445,8 +452,10 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 });
             } else {
                 setAlphaToTextAndDrawable(btn,255);
+                btn.setOnClickListener(this);
             }
         }
+        isClosed = true;
     }
 
     private void setAlphaToTextAndDrawable(Button btn, int alpha) {
@@ -454,6 +463,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         if (btn.getCompoundDrawables()[0] != null) {
             btn.getCompoundDrawables()[0].setAlpha(alpha);
         }
+        isClosed = false;
     }
 
     public void onStopClosings() {
@@ -462,10 +472,12 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             setAlphaToTextAndDrawable(btn,255);
             btn.setOnClickListener(this);
         }
-
+        mCurrentFragmentId = F_UNDEFINED;
     }
 
     public void showWatchAsListDialog(int likesCount) {
+        if (ClosingsBuyVipDialog.opened) return;
+
         ClosingsBuyVipDialog newFragment = ClosingsBuyVipDialog.newInstance(likesCount);
         try {
             newFragment.show(getActivity().getSupportFragmentManager(), ClosingsBuyVipDialog.TAG);

@@ -13,9 +13,7 @@ import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.RemoteViews;
-import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
-import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -23,7 +21,6 @@ import com.topface.topface.ui.views.ImageViewRemote;
 public class TopfaceNotificationManager {
     private static TopfaceNotificationManager mInstance;
     public static final int NOTIFICATION_ID = 1312; //Completely random number
-    public static final int PROGRESS_ID = 1313;
 
 
     private NotificationManager notificationManager;
@@ -130,7 +127,7 @@ public class TopfaceNotificationManager {
 
         private int id;
 
-        public enum Type {PROGRESS, STANDARD, FAIL};
+        public enum Type {PROGRESS, STANDARD, FAIL}
 
         private Type type;
         private boolean isTextNotification;
@@ -190,13 +187,10 @@ public class TopfaceNotificationManager {
         }
 
         private boolean isVersionOld() {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                return true;
-            } else {
-                return false;
-            }
+            return Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH;
         }
 
+        @SuppressWarnings("UnusedDeclaration")
         private Notification generateStandard(Intent intent) {
             notificationBuilder.setSmallIcon(R.drawable.ic_notification);
 
@@ -367,6 +361,7 @@ public class TopfaceNotificationManager {
             inboxStyle.bigText(text).build();
         }
 
+        @SuppressWarnings("UnusedDeclaration")
         private void generateBigText(RemoteViews views, Intent cancelIntent, String name) {
             PendingIntent pi = PendingIntent.getBroadcast(context, 0, cancelIntent
                     , PendingIntent.FLAG_CANCEL_CURRENT);

@@ -28,6 +28,7 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
+import com.topface.topface.ui.fragments.AirMessagesPopupFragment;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
@@ -54,6 +55,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private boolean isPopupVisible = false;
     private boolean menuEnabled;
     private static boolean mHasClosingsForThisSession;
+    private static boolean mClosingsOnProfileUpdateInvoked = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -88,14 +90,17 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     @Override
-    protected void onProfileUpdated() {
-        super.onProfileUpdated();
-        Options.Closing closing = CacheProfile.getOptions().closing;
-        if (!CacheProfile.premium && closing.isClosingsEnabled()) {
-            getIntent().putExtra(GCMUtils.NEXT_INTENT, mFragmentMenu.getCurrentFragmentId());
-            MutualClosingFragment.usersProcessed = !closing.isMutualClosingAvailable();
-            LikesClosingFragment.usersProcessed = !closing.isLikesClosingAvailable();
-            onClosings();
+    protected void onClosingDataReceived() {
+        super.onClosingDataReceived();
+        if (!CacheProfile.premium && !mClosingsOnProfileUpdateInvoked) {
+            mClosingsOnProfileUpdateInvoked = true;
+            Options.Closing closing = CacheProfile.getOptions().closing;
+            if (closing.isClosingsEnabled()) {
+                getIntent().putExtra(GCMUtils.NEXT_INTENT, mFragmentMenu.getCurrentFragmentId());
+                MutualClosingFragment.usersProcessed = !closing.isMutualClosingAvailable();
+                LikesClosingFragment.usersProcessed = !closing.isLikesClosingAvailable();
+                if (!MutualClosingFragment.usersProcessed) onClosings();
+            }
         }
     }
 
@@ -184,11 +189,13 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         PopupManager manager = new PopupManager(this);
         manager.showOldVersionPopup(CacheProfile.getOptions().max_version);
         manager.showRatePopup();
+        AirMessagesPopupFragment.showIfNeeded(getSupportFragmentManager());
         actionsAfterRegistration();
         if (CacheProfile.show_ad) {
             mFullscreenController = new FullscreenController(this);
             mFullscreenController.requestFullscreen();
         }
+
     }
 
     @Override
@@ -223,8 +230,11 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         new ExternalLinkExecuter(mListener).execute(getIntent());
 
         App.checkProfileUpdate();
-        if (!mHasClosingsForThisSession) {
-            onClosings();
+        if (!CacheProfile.premium && !mHasClosingsForThisSession &&
+                mFragmentMenu.getCurrentFragmentId() != MenuFragment.F_PROFILE) {
+            if (CacheProfile.unread_likes > 0 || CacheProfile.unread_mutual > 0) {
+                onClosings();
+            }
         }
     }
 
@@ -476,5 +486,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     public static void onLogout() {
         mHasClosingsForThisSession = false;
+        mClosingsOnProfileUpdateInvoked = false;
     }
 }

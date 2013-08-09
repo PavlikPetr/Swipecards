@@ -60,6 +60,7 @@ public class AuthFragment extends BaseFragment {
     private TextView mBackButton;
     private Timer mTimer = new Timer();
     private RetryViewCreator mRetryView;
+    private boolean mProcessingTFReg = false;
 
     public static AuthFragment newInstance() {
         return new AuthFragment();
@@ -402,7 +403,8 @@ public class AuthFragment extends BaseFragment {
                 Options.parse(response);
                 Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
                 ((BaseFragmentActivity) getActivity()).close(AuthFragment.this, true);
-                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                LocalBroadcastManager.getInstance(getContext())
+                        .sendBroadcast(new Intent(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
             }
 
             @Override
@@ -577,8 +579,11 @@ public class AuthFragment extends BaseFragment {
         mCreateAccountView.setVisibility(View.GONE);
         mRetryView.setVisibility(View.GONE);
         mTFButton.setVisibility(View.INVISIBLE);
-        mProgressBar.setVisibility(View.VISIBLE);
-        mLoginSendingProgress.setVisibility(View.VISIBLE);
+        if(mProcessingTFReg) {
+            mLoginSendingProgress.setVisibility(View.VISIBLE);
+        } else {
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
         mRecoverPwd.setEnabled(false);
         mLogin.setEnabled(false);
         mPassword.setEnabled(false);
@@ -586,14 +591,17 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void btnVKClick() {
+        // костыль, надо избавить от viewflipper к чертовой бабушке
+        mProcessingTFReg = false;
         if (checkOnline() && mAuthorizationManager != null) {
             hideButtons();
             mAuthorizationManager.vkontakteAuth();
         }
-//
     }
 
     private void btnFBClick() {
+        // костыль, надо избавить от viewflipper к чертовой бабушке
+        mProcessingTFReg = false;
         if (checkOnline() && mAuthorizationManager != null) {
             hideButtons();
             mAuthorizationManager.facebookAuth();
@@ -601,6 +609,9 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void btnTFClick() {
+        // костыль, надо избавить от viewflipper к чертовой бабушке
+        mProcessingTFReg = true;
+        //---------------------------------------------------------
         if (checkOnline()) {
             hideButtons();
             String login = mLogin.getText().toString();

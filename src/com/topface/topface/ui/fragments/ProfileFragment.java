@@ -96,7 +96,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private RelativeLayout bmBtn;
     private TextView mBookmarkAction;
 
-    private int mUserActionsPanelHeight;
     private ProgressBar giftsLoader;
     private ImageView giftsIcon;
 
@@ -515,7 +514,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         @Override
                         public void onRateCompleted() {
                             if (v != null && getActivity() != null) {
-                                Toast.makeText(App.getContext(), R.string.admiration_sended, 1500).show();
+                                Toast.makeText(App.getContext(), R.string.admiration_sended, Toast.LENGTH_SHORT).show();
                                 loader.setVisibility(View.INVISIBLE);
                                 icon.setVisibility(View.VISIBLE);
 
@@ -528,7 +527,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                             if (v != null && getActivity() != null) {
                                 loader.setVisibility(View.INVISIBLE);
                                 icon.setVisibility(View.VISIBLE);
-                                Toast.makeText(App.getContext(), R.string.general_server_error, 1500).show();
+                                Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                                 v.setEnabled(true);
                                 v.setSelected(false);
                                 if (v instanceof TextView) {
@@ -559,7 +558,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         @Override
                         public void onRateCompleted() {
                             if (v != null && getActivity() != null) {
-                                Toast.makeText(App.getContext(), R.string.sympathy_sended, 1500).show();
+                                Toast.makeText(App.getContext(), R.string.sympathy_sended, Toast.LENGTH_SHORT).show();
                                 loader.setVisibility(View.INVISIBLE);
                                 icon.setVisibility(View.VISIBLE);
                             }
@@ -569,7 +568,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         @Override
                         public void onRateFailed() {
                             if (v != null && getActivity() != null) {
-                                Toast.makeText(App.getContext(), R.string.general_server_error, 1500).show();
+                                Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                                 loader.setVisibility(View.INVISIBLE);
                                 icon.setVisibility(View.VISIBLE);
                                 v.setEnabled(true);
@@ -607,7 +606,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     if (mCallingClass != null && mUserProfile != null && (mUserProfile instanceof User)) {
                         if (mCallingClass.equals(DatingFragment.class.getName()) || mCallingClass.equals(LeadersDialog.class.getName())) {
                             if (!((User) mUserProfile).mutual) {
-                                Intent intent = ContainerActivity.getVipBuyIntent(getString(R.string.chat_block_not_mutual));
+                                Intent intent = ContainerActivity.getVipBuyIntent(getString(R.string.chat_block_not_mutual), "ProfileChatLock");
                                 startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                                 break;
                             }
@@ -852,7 +851,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     } else {
                         mUserProfile.gifts.add(0, sendedGift.gift);
                     }
-                    Toast.makeText(getContext(), R.string.chat_gift_out, 1500).show();
+                    Toast.makeText(getContext(), R.string.chat_gift_out, Toast.LENGTH_SHORT).show();
                 }
 
                 @Override

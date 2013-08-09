@@ -2,10 +2,11 @@ package com.topface.topface.utils;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.*;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.widget.Toast;
 import com.topface.topface.App;
@@ -17,7 +18,6 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.Locale;
@@ -61,7 +61,6 @@ public class LocaleConfig {
     }
 
     public String getApplicationLocale() {
-        fetchToSystemLocale();
         if (mApplicationLocale == null) {
             mApplicationLocale = getPreferences().getString(APPLICATION_LOCALE,Locale.getDefault().getLanguage());
         }

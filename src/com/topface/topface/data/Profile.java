@@ -371,14 +371,13 @@ public class Profile extends AbstractDataWithPhotos {
             }
 
             // 22 restaurants position 14
-            String rest = form.optString("restaurants");
-            String restraunts = TextUtils.isEmpty(rest.trim()) ? null : rest;
+            String rest = form.optString("restaurants").trim();
+            String restraunts = TextUtils.isEmpty(rest) ? null : rest;
             formItem = new FormItem(R.array.form_habits_restaurants, restraunts, FormItem.DATA,
                     headerItem);
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
-                if (restraunts != null)
-                    profile.forms.add(formItem);
+                if (restraunts != null) profile.forms.add(formItem);
             } else {
                 profile.forms.add(formItem);
             }
@@ -392,34 +391,31 @@ public class Profile extends AbstractDataWithPhotos {
             profile.forms.add(headerItem);
 
             // 25 first_dating position 15
-            String dd = form.optString("first_dating");
-            String datingDetails = TextUtils.isEmpty(dd.trim()) ? null : dd;
+            String dd = form.optString("first_dating").trim();
+            String datingDetails = TextUtils.isEmpty(dd) ? null : dd;
             formItem = new FormItem(R.array.form_detail_about_dating, datingDetails,
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
-                if (datingDetails != null)
-                    profile.forms.add(formItem);
+                if (datingDetails != null) profile.forms.add(formItem);
             } else {
                 profile.forms.add(formItem);
             }
 
             // 26 achievements position 16
-            String ach = form.optString("achievements");
-            String achievments = TextUtils.isEmpty(ach.trim()) ? null : ach;
+            String ach = form.optString("achievements").trim();
+            String achievments = TextUtils.isEmpty(ach) ? null : ach;
             formItem = new FormItem(R.array.form_detail_archievements, achievments,
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
-                if (achievments != null)
-                    profile.forms.add(formItem);
+                if (achievments != null) profile.forms.add(formItem);
             } else {
                 profile.forms.add(formItem);
             }
 
             // 27 DIVIDER
             profile.forms.add(FormItem.getDivider());
-
         }
     }
 
@@ -463,7 +459,7 @@ public class Profile extends AbstractDataWithPhotos {
     private static void compareFormItemData(FormItem item, Profile profile,
                                             boolean matches) {
         item.equal = matches;
-        if (item.dataId > 0) {
+        if(!TextUtils.isEmpty(item.value)) {
             profile.forms.add(item);
             if (item.equal) {
                 ((User) profile).formMatches++;

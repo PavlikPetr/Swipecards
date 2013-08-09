@@ -510,4 +510,9 @@
     <string name="restore_of_account">Hesap kurtarmak</string>
     <string name="restore">Kurtarmak</string>
     <string name="admiration_sended">Hayranlık gönderilmiştir</string>
+    <plurals name="general_coins">
+        <item quantity="zero">%d para</item>
+        <item quantity="other">%d para</item>
+        <item quantity="one">%d para</item>
+    </plurals>
 </resources>
