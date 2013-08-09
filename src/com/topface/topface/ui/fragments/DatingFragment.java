@@ -196,6 +196,37 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mDatingLovePrice = (TextView) root.findViewById(R.id.tvDatingLovePrice);
     }
 
+    private void showPromoDialogs() {
+        FragmentActivity activity = getActivity();
+        boolean invitePopupShow = false;
+        if (CacheProfile.canInvite && activity != null) {
+            final SharedPreferences preferences = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+
+            long date_start = preferences.getLong(INVITE_POPUP, 1);
+            long date_now = new java.util.Date().getTime();
+
+            if (date_now - date_start >= CacheProfile.getOptions().popup_timeout) {
+                invitePopupShow = true;
+                preferences.edit().putLong(INVITE_POPUP, date_now).commit();
+                ContactsProvider provider = new ContactsProvider(activity);
+                provider.getContacts(-1, 0, new ContactsProvider.GetContactsListener() {
+                    @Override
+                    public void onContactsReceived(ArrayList<ContactsProvider.Contact> contacts) {
+
+                        if (isAdded()) {
+                            showInvitePopup(contacts);
+                        }
+                    }
+                });
+            }
+        }
+
+        //Показываем рекламу AirMessages только если не показываем инвайты
+        if (!invitePopupShow) {
+            AirMessagesPopupFragment.showIfNeeded(getFragmentManager());
+        }
+    }
+
     private void initMutualDrawables() {
         if (isAdded()) {
             singleMutual = getResources().getDrawable(R.drawable.dating_like_selector);
@@ -437,9 +468,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         switch (view.getId()) {
             case R.id.loDatingResources: {
                 EasyTracker.getTracker().trackEvent("Dating", "BuyClick", "", 1L);
-                Intent intent = new Intent(getActivity(), ContainerActivity.class);
-                intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
-                startActivity(intent);
+                startActivity(ContainerActivity.getBuyingIntent("Dating"));
             }
             break;
             case R.id.btnDatingLove: {
@@ -536,8 +565,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mCurrentUser.mutual) {
             openChat(getActivity());
         } else {
-            Intent intent = ContainerActivity.getVipBuyIntent(getString(R.string.chat_block_not_mutual), "DatingChatLock");
-            startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+            startActivityForResult(
+                    ContainerActivity.getVipBuyIntent(
+                            getString(R.string.chat_block_not_mutual),
+                            "DatingChatLock"
+                    ),
+                    ContainerActivity.INTENT_BUY_VIP_FRAGMENT
+            );
         }
     }
 

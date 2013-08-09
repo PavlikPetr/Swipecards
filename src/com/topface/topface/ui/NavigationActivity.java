@@ -28,7 +28,6 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
-import com.topface.topface.ui.fragments.AirMessagesPopupFragment;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
@@ -199,7 +198,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         PopupManager manager = new PopupManager(this);
         manager.showOldVersionPopup(CacheProfile.getOptions().max_version);
         manager.showRatePopup();
-        AirMessagesPopupFragment.showIfNeeded(getSupportFragmentManager());
         actionsAfterRegistration();
         if (CacheProfile.show_ad) {
             mFullscreenController = new FullscreenController(this);
