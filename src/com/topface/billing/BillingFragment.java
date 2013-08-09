@@ -41,10 +41,6 @@ abstract public class BillingFragment extends BaseFragment implements BillingLis
         mBillingDriver.onDestroy();
     }
 
-    protected BillingDriver getBillingDriver() {
-        return mBillingDriver;
-    }
-
     protected void buyItem(String itemId) {
         Bundle arguments = getArguments();
         if (arguments != null) {

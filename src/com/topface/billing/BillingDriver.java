@@ -37,8 +37,6 @@ abstract public class BillingDriver {
         return mBillingListener;
     }
 
-    public abstract String getDriverName();
-
     protected Activity getActivity() {
         return mActivity;
     }

@@ -131,7 +131,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         SharedPreferences preferences = getActivity().getSharedPreferences(
                 Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         mNovice = Novice.getInstance(preferences);
-        checkInvitePopup();
+        showPromoDialog();
     }
 
     @Override
@@ -194,37 +194,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         initControlButtons(root);
 
         mDatingLovePrice = (TextView) root.findViewById(R.id.tvDatingLovePrice);
-    }
-
-    private void showPromoDialogs() {
-        FragmentActivity activity = getActivity();
-        boolean invitePopupShow = false;
-        if (CacheProfile.canInvite && activity != null) {
-            final SharedPreferences preferences = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-
-            long date_start = preferences.getLong(INVITE_POPUP, 1);
-            long date_now = new java.util.Date().getTime();
-
-            if (date_now - date_start >= CacheProfile.getOptions().popup_timeout) {
-                invitePopupShow = true;
-                preferences.edit().putLong(INVITE_POPUP, date_now).commit();
-                ContactsProvider provider = new ContactsProvider(activity);
-                provider.getContacts(-1, 0, new ContactsProvider.GetContactsListener() {
-                    @Override
-                    public void onContactsReceived(ArrayList<ContactsProvider.Contact> contacts) {
-
-                        if (isAdded()) {
-                            showInvitePopup(contacts);
-                        }
-                    }
-                });
-            }
-        }
-
-        //Показываем рекламу AirMessages только если не показываем инвайты
-        if (!invitePopupShow) {
-            AirMessagesPopupFragment.showIfNeeded(getFragmentManager());
-        }
     }
 
     private void initMutualDrawables() {

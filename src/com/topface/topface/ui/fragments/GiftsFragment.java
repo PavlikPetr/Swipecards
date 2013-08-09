@@ -221,7 +221,7 @@ public class GiftsFragment extends BaseFragment {
         if (mProfile.gifts != null) mProfile.gifts.add(0, sendedGift.gift);
         mGridAdapter.notifyDataSetChanged();
         if (getActivity() != null) {
-            Toast.makeText(getActivity(), R.string.chat_gift_out, 1500).show();
+            Toast.makeText(getActivity(), R.string.chat_gift_out, Toast.LENGTH_LONG).show();
         }
     }
 

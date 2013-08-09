@@ -76,11 +76,6 @@ public class GooglePlayV2BillingDriver extends BillingDriver {
         return "{\"id\": " + CacheProfile.uid + "}";
     }
 
-    @Override
-    public String getDriverName() {
-        return "Google Play version 2";
-    }
-
     private class GooglePlayPurchaseObserver extends PurchaseObserver {
         public GooglePlayPurchaseObserver(Handler handler) {
             super(getActivity(), handler);

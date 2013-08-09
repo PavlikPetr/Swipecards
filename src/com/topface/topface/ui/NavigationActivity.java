@@ -103,7 +103,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             Options.Closing closing = CacheProfile.getOptions().closing;
             if (closing.isClosingsEnabled()) {
                 getIntent().putExtra(GCMUtils.NEXT_INTENT, mFragmentMenu.getCurrentFragmentId());
-                Debug.log("Closing:Last fragment ID="+mFragmentMenu.getCurrentFragmentId()+" from NavigationActivity");
+                Debug.log("Closing:Last fragment ID=" + mFragmentMenu.getCurrentFragmentId() + " from NavigationActivity");
                 MutualClosingFragment.usersProcessed = !closing.isMutualClosingAvailable();
                 LikesClosingFragment.usersProcessed = !closing.isLikesClosingAvailable();
                 if (!MutualClosingFragment.usersProcessed || !LikesClosingFragment.usersProcessed) {
