@@ -309,7 +309,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                             showUser(currentUser);
                             unlockControls();
                         } else {
-                            if (!more) showUser(null);
+                            showNextUser();
                         }
                         //Скрываем кнопку отправки повтора
                         mRetryBtn.setVisibility(View.GONE);

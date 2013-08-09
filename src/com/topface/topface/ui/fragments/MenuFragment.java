@@ -363,6 +363,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                     fragment = new LikesFragment();
                 } else {
                     if (!isClosed) getActivity().getIntent().putExtra(GCMUtils.NEXT_INTENT, getCurrentFragmentId());
+                    Debug.log("Closing:Last fragment F_LIKES from MenuFragment");
                     fragment = new LikesClosingFragment();
                 }
                 break;
