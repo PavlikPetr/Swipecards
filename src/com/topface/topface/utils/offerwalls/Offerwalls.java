@@ -29,7 +29,7 @@ public class Offerwalls {
     private static GetJarContext mGetJarContext;
     private static ConsumableProductHelper mGetJarHelper;
 
-    private final static String GETJAR_APP_KEY = "84150f59-805d-4feb-d232-db2977751e54";
+    private final static String GETJAR_APP_KEY = "407c520c-aaba-44e8-9a06-478c2b595437";
     private final static String GETJAR_ENCRYPTION_KEY = "0000MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCEuY/YoY8n/WiXdXqv2+7v+N7B279TpVZi4IUEjZRXZAJMytPPqelWFFDAByVHcCZZGCzXoCRjwsvIPel/X0XpbPNVmgWXyMtCIe3gfGvRL686RCGu+MJSzAsFqV9JMes4eycBgjN6tzqo0nZjzmLTNLEpEzttAwKeRVG/q3txtwIDAQAB";
     private static final String GETJAR_PRODUCT_ID = "id"; //TODO
     private static final String GETJAR_PRODUCT_NAME = "100 coins"; //TODO
