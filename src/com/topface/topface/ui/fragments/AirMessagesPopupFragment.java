@@ -26,7 +26,7 @@ public class AirMessagesPopupFragment extends BaseFragment implements View.OnCli
 
     public static void showIfNeeded(FragmentManager manager) {
         Options.PremiumMessages options = CacheProfile.getOptions().premium_messages;
-        if (options.isNeedShow()) {
+        if (options != null && options.isNeedShow()) {
             manager
                     .beginTransaction()
                     .add(android.R.id.content, new AirMessagesPopupFragment())
