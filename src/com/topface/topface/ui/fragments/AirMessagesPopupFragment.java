@@ -61,13 +61,17 @@ public class AirMessagesPopupFragment extends BaseFragment implements View.OnCli
             case R.id.deleteMessages:
             case R.id.closePopup:
                 EasyTracker.getTracker().trackEvent("AirMessages", "Dismiss", v.getId() == R.id.deleteMessages ? "Delete" : "Close", 0L);
-                getFragmentManager()
-                        .beginTransaction()
-                        .remove(AirMessagesPopupFragment.this)
-                        .commit();
-                CacheProfile.getOptions().premium_messages.setPopupShowTime();
                 break;
         }
+        closeFragment();
+    }
+
+    private void closeFragment() {
+        getFragmentManager()
+                .beginTransaction()
+                .remove(AirMessagesPopupFragment.this)
+                .commit();
+        CacheProfile.getOptions().premium_messages.setPopupShowTime();
     }
 
     @Override

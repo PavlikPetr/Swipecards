@@ -179,13 +179,13 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     @Override
     protected void initEmptyFeedView(View inflated) {
-        if(mEmptyFeedView != null) mEmptyFeedView = inflated;
+        if (mEmptyFeedView != null) mEmptyFeedView = inflated;
         if (CacheProfile.premium) {
             ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(0);
             inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(ContainerActivity.getBuyingIntent());
+                    startActivity(ContainerActivity.getBuyingIntent("EmptyLikes"));
                 }
             });
         } else {
@@ -217,7 +217,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                 inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(ContainerActivity.getBuyingIntent());
+                        startActivity(ContainerActivity.getBuyingIntent("EmptyLikes"));
                     }
                 });
             }

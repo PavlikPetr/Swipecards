@@ -162,7 +162,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         buyButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(ContainerActivity.getNewIntent(ContainerActivity.INTENT_BUYING_FRAGMENT));
+                startActivity(ContainerActivity.getBuyingIntent("Menu"));
             }
         });
 
@@ -332,9 +332,9 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private String getTagById(int id) {
-        if(id == F_LIKES && !LikesClosingFragment.usersProcessed) {
+        if (id == F_LIKES && !LikesClosingFragment.usersProcessed) {
             return "fragment_switch_controller_closed_" + id;
-        } else if(id == F_MUTUAL && !MutualClosingFragment.usersProcessed) {
+        } else if (id == F_MUTUAL && !MutualClosingFragment.usersProcessed) {
             return "fragment_switch_controller_closed_" + id;
         } else {
             return "fragment_switch_controller_" + id;
@@ -437,7 +437,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             int key = mButtons.keyAt(i);
             Button btn = mButtons.get(key);
             if (key != F_PROFILE && key != F_EDITOR && key != type) {
-                setAlphaToTextAndDrawable(btn,102);
+                setAlphaToTextAndDrawable(btn, 102);
                 btn.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -452,7 +452,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                     }
                 });
             } else {
-                setAlphaToTextAndDrawable(btn,255);
+                setAlphaToTextAndDrawable(btn, 255);
                 btn.setOnClickListener(this);
             }
         }
@@ -470,7 +470,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
     public void onStopClosings() {
         for (int i = 0; i < mButtons.size(); i++) {
             Button btn = mButtons.get(mButtons.keyAt(i));
-            setAlphaToTextAndDrawable(btn,255);
+            setAlphaToTextAndDrawable(btn, 255);
             btn.setOnClickListener(this);
         }
         mCurrentFragmentId = F_UNDEFINED;

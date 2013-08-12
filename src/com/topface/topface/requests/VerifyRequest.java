@@ -1,6 +1,7 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+import com.topface.billing.BillingDriver;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,7 +20,8 @@ public class VerifyRequest extends ApiRequest {
     protected JSONObject getRequestData() throws JSONException {
         return new JSONObject()
                 .put("data", data)
-                .put("signature", signature);
+                .put("signature", signature)
+                .put("source", BillingDriver.getSourceValue());
     }
 
     @Override

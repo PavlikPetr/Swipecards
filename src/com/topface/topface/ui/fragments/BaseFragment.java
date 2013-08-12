@@ -229,8 +229,9 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     protected void inBackroundThread() {
     }
 
-    protected void checkInvitePopup() {
+    protected void showPromoDialog() {
         FragmentActivity activity = getActivity();
+        boolean invitePopupShow = false;
         if (CacheProfile.canInvite && activity != null) {
             final SharedPreferences preferences = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
 
@@ -238,6 +239,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
             long date_now = new java.util.Date().getTime();
 
             if (date_now - date_start >= CacheProfile.getOptions().popup_timeout) {
+                invitePopupShow = true;
                 preferences.edit().putLong(INVITE_POPUP, date_now).commit();
                 ContactsProvider provider = new ContactsProvider(activity);
                 provider.getContacts(-1, 0, new ContactsProvider.GetContactsListener() {
@@ -250,6 +252,11 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
                     }
                 });
             }
+        }
+
+        //Показываем рекламу AirMessages только если не показываем инвайты
+        if (!invitePopupShow) {
+            AirMessagesPopupFragment.showIfNeeded(getFragmentManager());
         }
     }
 

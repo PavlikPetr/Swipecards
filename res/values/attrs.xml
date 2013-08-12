@@ -35,6 +35,8 @@
         <attr name="cornersRadius" format="dimension"/>
         <attr name="clipMask" format="reference"/>
         <attr name="border" format="reference"/>
+        <attr name="android:maxHeight"/>
+        <attr name="android:maxWidth"/>
         <attr name="postProcessor">
             <flag name="none" value="0"/>
             <flag name="rounded" value="1"/>
