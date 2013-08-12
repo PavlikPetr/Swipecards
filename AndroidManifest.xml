@@ -4,7 +4,7 @@
           android:installLocation="auto"
 
           android:versionCode="83"
-          android:versionName="2.6.2">
+          android:versionName="2.6.3">
 
     <uses-sdk
             android:minSdkVersion="7"
