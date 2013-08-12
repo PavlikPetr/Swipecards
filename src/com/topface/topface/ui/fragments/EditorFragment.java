@@ -55,6 +55,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         rootLayout.findViewById(R.id.EditorConfigureBanners).setOnClickListener(this);
         rootLayout.findViewById(R.id.EditorResetSettings).setOnClickListener(this);
         rootLayout.findViewById(R.id.EditorSaveSettings).setOnClickListener(this);
+        rootLayout.findViewById(R.id.EditorClearAirMessages).setOnClickListener(this);
 
         ViewGroup switcherView = (ViewGroup) rootLayout.findViewById(R.id.loPopupSwitcher);
         switcherView.setOnClickListener(this);
@@ -244,6 +245,9 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                 }
                 CacheProfile.canInvite = switcher.isChecked();
 
+                break;
+            case R.id.EditorClearAirMessages:
+                CacheProfile.getOptions().premium_messages.clearPopupShowTime();
                 break;
             default:
                 showError();

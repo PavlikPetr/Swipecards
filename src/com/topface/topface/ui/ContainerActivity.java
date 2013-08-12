@@ -99,17 +99,26 @@ public class ContainerActivity extends BaseFragmentActivity {
     private Fragment getFragment(int id) {
         Fragment fragment = null;
         Intent intent = getIntent();
+
         switch (id) {
             case INTENT_BUY_VIP_FRAGMENT:
-                fragment = VipBuyFragment.newInstance(true, intent.getStringExtra(VipBuyFragment.ARG_TAG_EXRA_TEXT));
+                fragment = VipBuyFragment.newInstance(
+                        true,
+                        intent.getStringExtra(VipBuyFragment.ARG_TAG_EXRA_TEXT),
+                        intent.getStringExtra(BillingFragment.ARG_TAG_SOURCE)
+                );
                 break;
             case INTENT_BUYING_FRAGMENT:
                 Bundle extras = getIntent().getExtras();
+                String source = intent.getStringExtra(BillingFragment.ARG_TAG_SOURCE);
                 if (extras.containsKey(BuyingFragment.ARG_ITEM_TYPE) && extras.containsKey(BuyingFragment.ARG_ITEM_PRICE)) {
-                    fragment = BuyingFragment.newInstance(extras.getInt(BuyingFragment.ARG_ITEM_TYPE),
-                            extras.getInt(BuyingFragment.ARG_ITEM_PRICE));
+                    fragment = BuyingFragment.newInstance(
+                            extras.getInt(BuyingFragment.ARG_ITEM_TYPE),
+                            extras.getInt(BuyingFragment.ARG_ITEM_PRICE),
+                            source
+                    );
                 } else {
-                    fragment = BuyingFragment.newInstance();
+                    fragment = BuyingFragment.newInstance(source);
                 }
                 break;
             case INTENT_CHAT_FRAGMENT:
@@ -130,7 +139,6 @@ public class ContainerActivity extends BaseFragmentActivity {
                 break;
             case INTENT_PROFILE_FRAGMENT:
                 //Открываем профиль
-                intent = getIntent();
                 fragment = ProfileFragment.newInstance(
                         intent.getStringExtra(ProfileFragment.INTENT_ITEM_ID),
                         intent.getIntExtra(ProfileFragment.INTENT_UID, 0),
@@ -143,12 +151,10 @@ public class ContainerActivity extends BaseFragmentActivity {
                 fragment = new SettingsFragment();
                 break;
             case INTENT_CONTACTS_FRAGMENT:
-                intent = getIntent();
                 ArrayList<ContactsProvider.Contact> contacts = intent.getParcelableArrayListExtra(CONTACTS_DATA);
                 fragment = ContactsFragment.newInstance(contacts);
                 break;
             case INTENT_COMPLAIN_FRAGMENT:
-                intent = getIntent();
                 int userId = intent.getIntExtra(INTENT_USERID, 0);
                 String feedId = intent.getStringExtra(FEED_ID);
                 if (feedId != null) {

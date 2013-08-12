@@ -531,4 +531,6 @@
     <string name="watching_as_list">Mirar en forma de lista</string>
     <string name="watching_sequentually">Mirar consecutivamente</string>
     <string name="or_use_common_likes_list">O vea a aquellos a los que has gustado en la lista general</string>
+    <string name="settings_feedback_transaction_number">Número del pedido</string>
+    <string name="settings_feedback_transaction_link">dónde encontrar el número del pedido?</string>
 </resources>
