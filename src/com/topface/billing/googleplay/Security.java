@@ -5,6 +5,7 @@ package com.topface.billing.googleplay;
 import android.text.TextUtils;
 import android.util.Log;
 import com.topface.billing.googleplay.Consts.PurchaseState;
+import com.topface.topface.App;
 import com.topface.topface.utils.Base64;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -126,6 +127,10 @@ public class Security {
                 Log.w(TAG, "signature does not match data.");
                 return null;
             }
+        } else if (App.DEBUG) {
+            //Если подпись пустая и включен режим дебага, то считаем что подпись верная
+            //Так мы можем проводить тестовые покупки
+            verified = true;
         }
 
         JSONObject jObject;
@@ -157,7 +162,6 @@ public class Security {
                 int response = jElement.getInt("purchaseState");
                 PurchaseState purchaseState = PurchaseState.valueOf(response);
                 String productId = jElement.getString("productId");
-                String packageName = jElement.getString("packageName");
                 long purchaseTime = jElement.getLong("purchaseTime");
                 String orderId = jElement.optString("orderId", "");
                 String notifyId = null;
