@@ -223,6 +223,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         if (App.getConfig().getLocaleConfig().fetchToSystemLocale()) {
             LocaleConfig.changeLocale(this, App.getConfig().getLocaleConfig().getApplicationLocale(), mFragmentMenu.getCurrentFragmentId());
             return;
+        } else {
+            LocaleConfig.localeChangeInitiated = false;
         }
 
         //Отправляем не обработанные запросы на покупку
