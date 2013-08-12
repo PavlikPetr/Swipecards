@@ -37,6 +37,9 @@ public class RateController {
             if (mOnRateControllerListener != null) {
                 mOnRateControllerListener.failRate();
             }
+            if (listener != null) {
+                listener.onRateFailed();
+            }
             return;
         }
 
