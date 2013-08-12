@@ -30,6 +30,7 @@ public class LocaleConfig {
     private Context mContext;
     private String mSystemLocale;
     private String mApplicationLocale;
+    public static boolean localeChangeInitiated = false;
 
     public LocaleConfig(Context context) {
         mContext = context;
@@ -95,6 +96,7 @@ public class LocaleConfig {
     }
 
     public static void changeLocale(final Activity activity, String selectedLocale,final int fragmentId) {
+        localeChangeInitiated = true;
         final ProgressDialog progress = new ProgressDialog(activity);
         progress.setTitle(R.string.locale_changing);
         progress.setMessage(activity.getResources().getString(R.string.general_dialog_loading));
@@ -127,6 +129,11 @@ public class LocaleConfig {
             public void fail(int codeError, ApiResponse response) {
                 progress.dismiss();
                 Toast.makeText(activity, R.string.general_server_error, Toast.LENGTH_SHORT);
+            }
+
+            @Override
+            public void always(ApiResponse response) {
+                super.always(response);
             }
         }).exec();
     }

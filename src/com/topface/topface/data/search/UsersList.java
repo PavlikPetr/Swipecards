@@ -51,7 +51,7 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
     @SuppressWarnings("unchecked")
     public UsersList(FeedListData<FeedItem> feedItems, Class<T> itemClass) {
         this(itemClass);
-        for(FeedItem item : feedItems.items) {
+        for (FeedItem item : feedItems.items) {
             add((T) item.user);
         }
     }
@@ -208,7 +208,7 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
         T user = null;
         if (mPosition >= 0 && mPosition < size()) {
             user = get(mPosition);
-            log(String.format("Get current user #%d %s from %s id%d", mPosition, user.getNameAndAge(), user.city.name,user.id));
+            log(String.format("Get current user #%d %s from %s id%d", mPosition, user.getNameAndAge(), user.city.name, user.id));
         }
 
         if (mOnEmptyListener != null) {
@@ -276,6 +276,22 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
         }
 
         return result;
+    }
+
+    protected boolean removeAllUsersExceptCurrent() {
+        int searchPosition = getSearchPosition();
+        if (searchPosition < size()) {
+            try {
+                removeRange(searchPosition+1,size());
+                removeRange(0,searchPosition);
+                setSearchPosition(0);
+            } catch (Exception ex) {
+                Debug.error("Remove users exception", ex);
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public static void log(String message) {
