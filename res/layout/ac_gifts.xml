@@ -14,10 +14,7 @@
             android:orientation="vertical">
 
         <include layout="@layout/bar_navigation_header"/>
-        <ImageView style="@style/HeaderShadow"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:background="@drawable/im_bar_header_shadow"/>
+        <ImageView style="@style/HeaderShadow"/>
 
         <include layout="@layout/bar_triple_btn" android:layout_marginTop="-2dp"/>        
     </LinearLayout>

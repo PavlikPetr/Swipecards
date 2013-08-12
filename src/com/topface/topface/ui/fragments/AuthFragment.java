@@ -1,10 +1,8 @@
 package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.app.AlertDialog;
+import android.content.*;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -29,6 +27,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -69,7 +68,10 @@ public class AuthFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Debug.log("AF: onCreate");
-        ((NavigationActivity)getActivity()).setMenuEnabled(false);
+        Activity activity = getActivity();
+        if (activity instanceof NavigationActivity) {
+            ((NavigationActivity) activity).setMenuEnabled(false);
+        }
         View root = inflater.inflate(R.layout.ac_auth, null);
         initViews(root);
         //Если у нас нет токена
@@ -214,7 +216,7 @@ public class AuthFragment extends BaseFragment {
                 String userId = extras.getString(RegistrationFragment.INTENT_USER_ID);
                 AuthToken.getInstance().saveToken(userId, login, password);
                 hideButtons();
-                auth(generateTopfaceAuthRequest(login, password));
+                auth(generateTopfaceAuthRequest(AuthToken.getInstance()));
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
             showButtons();
@@ -273,6 +275,11 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void auth(final AuthRequest authRequest) {
+        if (DeleteAccountDialog.hasDeltedAccountToken(authRequest.getAuthToken())) {
+            restoreAccount(authRequest);
+            return;
+        }
+
         authRequest.callback(new ApiHandler() {
             @Override
             public void success(ApiResponse response) {
@@ -290,16 +297,37 @@ public class AuthFragment extends BaseFragment {
         }).exec();
     }
 
+    private void restoreAccount(final AuthRequest authRequest) {
+        new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.restore_of_account)
+                .setMessage(R.string.delete_account_will_be_restored_are_you_sure)
+                .setPositiveButton(R.string.restore, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        DeleteAccountDialog.removeDeletedAccountToken(authRequest.getAuthToken());
+                        auth(authRequest);
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        showButtons();
+                    }
+                }).show();
+    }
+
     private AuthRequest generateAuthRequest(AuthToken token) {
         AuthRequest authRequest = new AuthRequest(token, getActivity());
         registerRequest(authRequest);
         EasyTracker.getTracker().trackEvent("Profile", "Auth", "FromActivity" + token.getSocialNet(), 1L);
-
         return authRequest;
     }
 
-    private AuthRequest generateTopfaceAuthRequest(final String login, final String password) {
-        final AuthRequest authRequest = new AuthRequest(login, password, getActivity());
+    private AuthRequest generateTopfaceAuthRequest(AuthToken token) {
+        final AuthRequest authRequest = new AuthRequest(token, getActivity());
+        final String login = token.getLogin();
+        final String password = token.getPassword();
         registerRequest(authRequest);
         authRequest.callback(new ApiHandler() {
             @Override
@@ -587,7 +615,13 @@ public class AuthFragment extends BaseFragment {
                 showButtons();
                 return;
             }
-            AuthRequest authRequest = generateTopfaceAuthRequest(login, password);
+            AuthToken.getInstance().saveToken("",login,password);
+            AuthRequest authRequest = generateTopfaceAuthRequest(AuthToken.getInstance());
+
+            if (DeleteAccountDialog.hasDeltedAccountToken(authRequest.getAuthToken())) {
+                restoreAccount(authRequest);
+                return;
+            }
             authRequest.exec();
         }
     }

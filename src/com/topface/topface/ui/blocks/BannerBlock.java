@@ -30,6 +30,7 @@ import com.mobclix.android.sdk.MobclixAdViewListener;
 import com.mobclix.android.sdk.MobclixMMABannerXLAdView;
 import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.mobileads.MoPubView;
+import com.topface.billing.BillingFragment;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -406,6 +407,7 @@ public class BannerBlock {
                     } else {
                         intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
                     }
+                    intent.putExtra(BillingFragment.ARG_TAG_SOURCE, "Banner_" + banner.name);
                 } else if (banner.action.equals(Banner.ACTION_URL)) {
                     intent = new Intent(Intent.ACTION_VIEW, Uri.parse(banner.parameter));
                 } else if (banner.action.equals(Banner.ACTION_METHOD)) {
@@ -686,11 +688,11 @@ public class BannerBlock {
     }
 
     public void onPause() {
-        if (mBannerView instanceof MoPubView) ((MoPubView) mBannerView).destroy();
         if (mBannerView instanceof MobclixMMABannerXLAdView) ((MobclixMMABannerXLAdView) mBannerView).pause();
     }
 
     public void onDestroy() {
+        if (mBannerView instanceof MoPubView) ((MoPubView) mBannerView).destroy();
         if (mPLus1Asker != null) mPLus1Asker.onPause();
         if (mBannerView != null) {
             if (mBannerView instanceof InneractiveAd) {

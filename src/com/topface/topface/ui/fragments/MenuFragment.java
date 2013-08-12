@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments;
 
+import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -30,13 +31,13 @@ import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.Editor;
+import com.topface.topface.utils.Novice;
 
 public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
     public static final String SELECT_MENU_ITEM = "com.topface.topface.action.menu.selectitem";
-    public static final  String SELECTED_FRAGMENT_ID = "com.topface.topface.action.menu.item";
+    public static final String SELECTED_FRAGMENT_ID = "com.topface.topface.action.menu.item";
     private SparseArray<Button> mButtons;
 
     private TextView mTvNotifyLikes;
@@ -158,7 +159,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         buyButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(ContainerActivity.getNewIntent(ContainerActivity.INTENT_BUYING_FRAGMENT));
+                startActivity(ContainerActivity.getBuyingIntent("Menu"));
             }
         });
 
@@ -169,9 +170,14 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         mTvNotifyFans = (TextView) rootLayout.findViewById(R.id.tvNotifyFans);
         mTvNotifyVisitors = (TextView) rootLayout.findViewById(R.id.tvNotifyVisitors);
 
-        mHardwareAccelerated = Build.VERSION.SDK_INT >= 11 && rootLayout.isHardwareAccelerated();
+        mHardwareAccelerated = isHardwareAccelerated(rootLayout);
 
         return rootLayout;
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private boolean isHardwareAccelerated(View rootLayout) {
+        return Build.VERSION.SDK_INT >= 11 && rootLayout.isHardwareAccelerated();
     }
 
     private SparseArray<Button> getButtonsMap(View rootLayout) {
@@ -212,7 +218,6 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
     }
 
 
-
     @Override
     public void onClick(View view) {
         if (mClickable) {
@@ -233,35 +238,35 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             mTvNotifyLikes.setText(Integer.toString(CacheProfile.unread_likes));
             mTvNotifyLikes.setVisibility(View.VISIBLE);
         } else {
-            mTvNotifyLikes.setVisibility(View.INVISIBLE);
+            mTvNotifyLikes.setVisibility(View.GONE);
         }
 
         if (CacheProfile.unread_mutual > 0) {
             mTvNotifyMutual.setText(Integer.toString(CacheProfile.unread_mutual));
             mTvNotifyMutual.setVisibility(View.VISIBLE);
         } else {
-            mTvNotifyMutual.setVisibility(View.INVISIBLE);
+            mTvNotifyMutual.setVisibility(View.GONE);
         }
 
         if (CacheProfile.unread_messages > 0) {
             mTvNotifyDialogs.setText(Integer.toString(CacheProfile.unread_messages));
             mTvNotifyDialogs.setVisibility(View.VISIBLE);
         } else {
-            mTvNotifyDialogs.setVisibility(View.INVISIBLE);
+            mTvNotifyDialogs.setVisibility(View.GONE);
         }
 
         if (CacheProfile.unread_visitors > 0) {
             mTvNotifyVisitors.setText(Integer.toString(CacheProfile.unread_visitors));
             mTvNotifyVisitors.setVisibility(View.VISIBLE);
         } else {
-            mTvNotifyVisitors.setVisibility(View.INVISIBLE);
+            mTvNotifyVisitors.setVisibility(View.GONE);
         }
 
         if (CacheProfile.unread_fans > 0) {
             mTvNotifyFans.setText(Integer.toString(CacheProfile.unread_fans));
             mTvNotifyFans.setVisibility(View.VISIBLE);
         } else {
-            mTvNotifyFans.setVisibility(View.INVISIBLE);
+            mTvNotifyFans.setVisibility(View.GONE);
         }
     }
 
@@ -299,7 +304,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
     private void switchFragment() {
         FragmentManager fragmentManager = getFragmentManager();
-        Fragment oldFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+        Fragment oldFragment = fragmentManager.findFragmentById(android.R.id.content);
 
         BaseFragment newFragment = (BaseFragment) fragmentManager.findFragmentByTag(getTagById(mCurrentFragmentId));
         //Если не нашли в FragmentManager уже существующего инстанса, то создаем новый
@@ -313,7 +318,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             if (mHardwareAccelerated) {
                 transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             }
-            transaction.replace(R.id.fragment_container, newFragment, getTagById(mCurrentFragmentId));
+            transaction.replace(android.R.id.content, newFragment, getTagById(mCurrentFragmentId));
             transaction.commit();
 
             mCurrentFragment = newFragment;
@@ -401,9 +406,9 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
             if (novice.isShowFillProfile()) {
                 RelativeLayout rootLayout = (RelativeLayout) getView().findViewById(R.id.MenuLayout);
-                NoviceLayout noviceLayout = (NoviceLayout) getLayoutInflater().inflate(R.layout.layout_novice,null);
+                NoviceLayout noviceLayout = new NoviceLayout(getActivity());
+                noviceLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 rootLayout.addView(noviceLayout);
-
                 noviceLayout.setLayoutRes(
                         R.layout.novice_fill_profile,
                         this.getProfileButtonOnClickListener()
@@ -414,9 +419,5 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 novice.completeShowFillProfile();
             }
         }
-    }
-
-    private LayoutInflater getLayoutInflater() {
-        return getActivity().getLayoutInflater();
     }
 }

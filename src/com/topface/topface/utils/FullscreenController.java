@@ -166,6 +166,7 @@ public class FullscreenController {
             mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    addLastFullscreenShowedTime();
                     requestTopfaceFullscreen();
                 }
             });
@@ -183,19 +184,28 @@ public class FullscreenController {
                     interstitial.show();
                     addLastFullscreenShowedTime();
                 }
+                Debug.log("MoPub: onInterstitialLoaded()");
             }
 
             @Override
             public void onInterstitialFailed(MoPubInterstitial interstitial, MoPubErrorCode errorCode) {
-                requestTopfaceFullscreen();
+                requestFallbackFullscreen();
+                Debug.log("MoPub: onInterstitialFailed()");
             }
 
             @Override
             public void onInterstitialShown(MoPubInterstitial interstitial) {
+                Debug.log("MoPub: onInterstitialShown()");
+            }
+
+            @Override
+            public void onInterstitialClicked(MoPubInterstitial interstitial) {
+                Debug.log("MoPub: onInterstitialClicked()");
             }
 
             @Override
             public void onInterstitialDismissed(MoPubInterstitial interstitial) {
+                Debug.log("MoPub: onInterstitialDismissed()");
             }
         });
         mInterstitial.load();
@@ -212,7 +222,7 @@ public class FullscreenController {
                 adwiredView.setOnNoBannerListener(new OnNoBannerListener() {
                     @Override
                     public void onNoBanner() {
-                        requestTopfaceFullscreen();
+                        requestFallbackFullscreen();
                     }
                 });
                 adwiredView.setOnStopListener(new OnStopListener() {
@@ -348,7 +358,7 @@ public class FullscreenController {
         ViewGroup fullscreenContainer = (ViewGroup) mActivity.findViewById(R.id.loBannerContainer);
         if (fullscreenContainer == null) {
             fullscreenContainer = (ViewGroup) mActivity.getLayoutInflater().inflate(R.layout.layout_fullscreen, null);
-            ((ViewGroup) mActivity.findViewById(R.id.NavigationLayout)).addView(fullscreenContainer);
+            ((ViewGroup) mActivity.findViewById(android.R.id.content)).addView(fullscreenContainer);
         }
         return fullscreenContainer;
     }

@@ -34,6 +34,8 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
     public static final float MAX_DIFFERENCE = 1.5f;
     public static final int SMALL_PHOTO_SIZE = 100;
 
+    private HashMap<Interval, String> intervals;
+
     //Этот флаг нужен для того, чтобы ставить пустые фото в поиске, которые, будут подгружаться после запроса альбома
     private boolean isFakePhoto = false;
 
@@ -66,6 +68,16 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
             height = 0;
         }
 
+        @Override
+        public boolean equals(Object o) {
+            if (o instanceof Size) {
+                Size s = (Size) o;
+                return s.width == width && s.height == height;
+            }
+
+            return super.equals(o);    //To change body of overridden methods use File | Settings | File Templates.
+        }
+
         public boolean isSquare() {
             //Если разница высоты и ширины меньше 10% от размера фотографии, то считаем ее условно квадратной
             return Math.abs(width - height) < Math.min(width, height) * SQUARE_MODIFICATOR;
@@ -81,6 +93,21 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
 
         public int getMaxSideSize() {
             return getMaxSide().equals(WIDTH) ? width : height;
+        }
+    }
+
+    private class Interval {
+        private Size minSize;
+        private Size maxSize;
+
+        public Interval(Size minSize, Size maxSize) {
+            this.minSize = minSize;
+            this.maxSize = maxSize;
+        }
+
+        public boolean isSizeInInterval(Size size) {
+            return size.width > minSize.width && size.height > minSize.height
+                    && size.width < maxSize.width && size.height < maxSize.height;
         }
     }
 
@@ -100,6 +127,7 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
         this.links = links;
         this.mLiked = liked;
         this.position = position;
+        initIntervals();
     }
 
     public Photo(Photo photo) {
@@ -108,16 +136,26 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
         this.links = photo.links;
         this.canBecomeLeader = photo.canBecomeLeader;
         this.position = photo.position;
+        initIntervals();
+    }
+
+    private void initIntervals() {
+        intervals = new HashMap<Interval, String>();
+        intervals.put(new Interval(new Size(30, 30), new Size(128, 128)), SIZE_128);
+        intervals.put(new Interval(new Size(129, 129), new Size(192, 192)), SIZE_192);
+        intervals.put(new Interval(new Size(193, 193), new Size(256, 256)), SIZE_256);
     }
 
     //Конструктор по умолчанию создает фэйковую фотку
     public Photo() {
         isFakePhoto = true;
         links = new HashMap<String, String>();
+        initIntervals();
     }
 
     public Photo(ApiResponse response) {
         fillData(response.jsonResult.optJSONObject("photo"));
+
     }
 
     public boolean isFake() {
@@ -145,6 +183,7 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
             canBecomeLeader = photoItem.optBoolean("canBecomeLeader");
             mLiked = photoItem.optInt("liked");
             position = photoItem.optInt("position", 0);
+            initIntervals();
         }
     }
 
@@ -165,8 +204,6 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
 
     /**
      * Возвращает наиболее подходящий размер фотографии из уже существующих
-     *
-     * @param sizeString
      */
     public String getSuitableLink(String sizeString) {
         String url = null;
@@ -189,13 +226,41 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
     public String getSuitableLink(int width, int height) {
         String url = null;
         Size windowSize = new Size(width, height);
+
         if (links != null) {
-            url = getSuitableLinkForSameImageForm(windowSize);
+            url = checkInterval(width, height);
             if (url == null) {
-                url = getSuitableLinkForAnotherForm(windowSize);
+                url = getSuitableLinkForSameImageForm(windowSize);
+                if (url == null) {
+                    url = getSuitableLinkForAnotherForm(windowSize);
+                }
             }
         }
         return url;
+    }
+
+    private String checkInterval(int width, int height) {
+        String targetSize = null;
+        for (HashMap.Entry<Interval, String> entry : intervals.entrySet()) {
+            if (entry.getKey().isSizeInInterval(new Size(width, height))) {
+                targetSize = entry.getValue();
+                break;
+            }
+        }
+
+        if (targetSize != null) {
+            return getUrlByTargetSize(targetSize);
+        }
+        return null;
+    }
+
+    private String getUrlByTargetSize(String target) {
+        for (HashMap.Entry<String, String> entry : links.entrySet()) {
+            if (entry.getKey().equals(target)) {
+                return entry.getValue();
+            }
+        }
+        return null;
     }
 
     private String getSuitableLinkForSameImageForm(Size windowSize) {
@@ -333,10 +398,6 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
         return position;
     }
 
-    public int getRate() {
-        return mLiked;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -368,6 +429,8 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
                     for (int i = 0; i < hashSize; i++) {
                         links.put(in.readString(), in.readString());
                     }
+
+//                    for (int i = 0; i < hash)
 
                     return new Photo(id, links, pos, liked);
                 }

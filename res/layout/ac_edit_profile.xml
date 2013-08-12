@@ -7,7 +7,7 @@
 
     <!-- header bar -->
 
-    <include android:id="@+id/loNavigationBar" layout="@layout/bar_navigation_header"/>
+    <include layout="@layout/bar_navigation_header"/>
 
     <ListView
             android:id="@+id/lvEdits"
@@ -19,8 +19,5 @@
             android:fadeScrollbars="true"
             android:fadingEdge="none"
             android:listSelector="@android:color/transparent"/>
-
-    <ImageView
-            style="@style/HeaderShadow"/>
 
 </RelativeLayout>

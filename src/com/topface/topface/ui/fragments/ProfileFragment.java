@@ -96,7 +96,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private RelativeLayout bmBtn;
     private TextView mBookmarkAction;
 
-    private int mUserActionsPanelHeight;
     private ProgressBar giftsLoader;
     private ImageView giftsIcon;
 
@@ -111,6 +110,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             }
         }
     };
+    private RelativeLayout mBlocked;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -137,6 +137,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
         bmBtn = (RelativeLayout) mUserActions.findViewById(R.id.acBookmark);
         mBookmarkAction = (TextView) mUserActions.findViewById(R.id.favTV);
+        mBlocked = (RelativeLayout) mUserActions.findViewById(R.id.acBlock);
+
         bmBtn.setOnClickListener(this);
         if (mProfileType == TYPE_USER_PROFILE) {
             mActionBar.showBackButton(new View.OnClickListener() {
@@ -150,7 +152,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         } else if (activity instanceof NavigationActivity) {
             mActionBar.showHomeButton((NavigationActivity) activity);
         }
-        mUserActions.setVisibility(View.GONE);
+        mUserActions.setVisibility(View.INVISIBLE);
 
         mTitle = (TextView) root.findViewById(R.id.tvNavigationTitle);
 
@@ -176,8 +178,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            initActionsPanelHeight();
-                            TranslateAnimation ta = new TranslateAnimation(0, 0, -(mUserActions.getHeight() + mUserActionsPanelHeight), 0);
+                            final TranslateAnimation ta = new TranslateAnimation(0, 0, -(mUserActions.getHeight()), 0);
                             ta.setDuration(500);
                             ta.setAnimationListener(new Animation.AnimationListener() {
                                 @Override
@@ -202,8 +203,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     }, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            initActionsPanelHeight();
-                            TranslateAnimation ta = new TranslateAnimation(0, 0, 0, -(mUserActions.getHeight() + mUserActionsPanelHeight));
+                            TranslateAnimation ta = new TranslateAnimation(0, 0, 0, -(mUserActions.getHeight()));
                             ta.setDuration(500);
                             ta.setAnimationListener(new Animation.AnimationListener() {
                                 @Override
@@ -215,7 +215,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                                 public void onAnimationEnd(Animation animation) {
                                     mUserActions.clearAnimation();
                                     mActionBar.disableActionsButton(false);
-                                    mUserActions.setVisibility(View.GONE);
+                                    mUserActions.setVisibility(View.INVISIBLE);
                                 }
 
                                 @Override
@@ -257,13 +257,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         new UserActions(mUserActions, actions);
     }
 
-    private void initActionsPanelHeight() {
-        if (mUserActionsPanelHeight == 0) {
-            int actualHeight = mActionBar.getHeight();
-            double density = getResources().getDisplayMetrics().density;
-            mUserActionsPanelHeight = actualHeight == 0 ? actualHeight : (int) (270 * density);   // 270 это видимо высота в пикселях
-        }
-    }
 
     @Override
     public void onResume() {
@@ -372,6 +365,11 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     } else {
                         mBookmarkAction.setText(App.getContext().getString(R.string.general_bookmarks_add));
                     }
+
+                    if (data.inBlackList) {
+                        mBlocked.setEnabled(false);
+                        ((TextView) mBlocked.findViewById(R.id.blockTV)).setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+                    }
                     mRateController.setOnRateControllerListener(mRateControllerListener);
                     //set info into views for user
                     mTitle.setText(R.string.general_profile);
@@ -462,7 +460,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             addBodyPage(ProfilePhotoFragment.class.getName(), getResources().getString(R.string.profile_photo));
             addBodyPage(ProfileFormFragment.class.getName(), getResources().getString(R.string.profile_form));
             addBodyPage(VipBuyFragment.class.getName(), getResources().getString(R.string.profile_vip_status));
-            addBodyPage(ServicesFragment.class.getName(), getResources().getString(R.string.profile_services));
             addBodyPage(GiftsFragment.class.getName(), getResources().getString(R.string.profile_gifts));
         } else {
             addBodyPage(UserPhotoFragment.class.getName(), getResources().getString(R.string.profile_photo));
@@ -518,7 +515,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         @Override
                         public void onRateCompleted() {
                             if (v != null && getActivity() != null) {
-                                Toast.makeText(App.getContext(), R.string.sympathy_sended, 1500).show();
+                                Toast.makeText(App.getContext(), R.string.admiration_sended, Toast.LENGTH_SHORT).show();
                                 loader.setVisibility(View.INVISIBLE);
                                 icon.setVisibility(View.VISIBLE);
 
@@ -531,7 +528,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                             if (v != null && getActivity() != null) {
                                 loader.setVisibility(View.INVISIBLE);
                                 icon.setVisibility(View.VISIBLE);
-                                Toast.makeText(App.getContext(), R.string.general_server_error, 1500).show();
+                                Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                                 v.setEnabled(true);
                                 v.setSelected(false);
                                 if (v instanceof TextView) {
@@ -562,7 +559,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         @Override
                         public void onRateCompleted() {
                             if (v != null && getActivity() != null) {
-                                Toast.makeText(App.getContext(), R.string.sympathy_sended, 1500).show();
+                                Toast.makeText(App.getContext(), R.string.sympathy_sended, Toast.LENGTH_SHORT).show();
                                 loader.setVisibility(View.INVISIBLE);
                                 icon.setVisibility(View.VISIBLE);
                             }
@@ -572,7 +569,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         @Override
                         public void onRateFailed() {
                             if (v != null && getActivity() != null) {
-                                Toast.makeText(App.getContext(), R.string.general_server_error, 1500).show();
+                                Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                                 loader.setVisibility(View.INVISIBLE);
                                 icon.setVisibility(View.VISIBLE);
                                 v.setEnabled(true);
@@ -610,8 +607,10 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     if (mCallingClass != null && mUserProfile != null && (mUserProfile instanceof User)) {
                         if (mCallingClass.equals(DatingFragment.class.getName()) || mCallingClass.equals(LeadersDialog.class.getName())) {
                             if (!((User) mUserProfile).mutual) {
-                                Intent intent = ContainerActivity.getVipBuyIntent(getString(R.string.chat_block_not_mutual));
-                                startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                                startActivityForResult(
+                                        ContainerActivity.getVipBuyIntent(getString(R.string.chat_block_not_mutual), "ProfileChatLock"),
+                                        ContainerActivity.INTENT_BUY_VIP_FRAGMENT
+                                );
                                 break;
                             }
                         }
@@ -652,9 +651,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         }).exec();
                     }
                 } else {
-                    Intent intent = new Intent(getActivity(), ContainerActivity.class);
-                    intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
-                    startActivity(intent);
+                    startActivityForResult(ContainerActivity.getVipBuyIntent(null, "ProfileSuperSkills"), ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                 }
                 break;
             case R.id.acBookmark:
@@ -846,7 +843,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     } else {
                         mUserProfile.gifts.add(0, sendedGift.gift);
                     }
-                    Toast.makeText(getContext(), R.string.chat_gift_out, 1500).show();
+                    Toast.makeText(getContext(), R.string.chat_gift_out, Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -860,9 +857,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     if (response.code == ApiResponse.PAYMENT) {
                         FragmentActivity activity = getActivity();
                         if (activity != null) {
-                            Intent intent = new Intent(activity.getApplicationContext(),
-                                    ContainerActivity.class);
-                            intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
+                            Intent intent = ContainerActivity.getBuyingIntent("Profile");
                             intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
                             intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
                             startActivity(intent);

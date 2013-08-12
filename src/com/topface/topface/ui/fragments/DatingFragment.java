@@ -34,8 +34,10 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditAgeFragment;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.FilterFragment;
-import com.topface.topface.ui.views.*;
+import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
+import com.topface.topface.ui.views.NoviceLayout;
+import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.*;
 
 import java.util.ArrayList;
@@ -154,11 +156,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         initResources(view);
         initControlButtons(view);
         initDatingAlbum(view);
-        initNewbieLayout(view);
         new Thread(new Runnable() {
             @Override
             public void run() {
-                checkInvitePopup();
+                showPromoDialogs();
             }
         }).start();
 
@@ -169,8 +170,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         return view;
     }
 
-    private void checkInvitePopup() {
+    private void showPromoDialogs() {
         FragmentActivity activity = getActivity();
+        boolean invitePopupShow = false;
         if (CacheProfile.canInvite && activity != null) {
             final SharedPreferences preferences = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
 
@@ -178,6 +180,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             long date_now = new java.util.Date().getTime();
 
             if (date_now - date_start >= CacheProfile.getOptions().popup_timeout) {
+                invitePopupShow = true;
                 preferences.edit().putLong(INVITE_POPUP, date_now).commit();
                 ContactsProvider provider = new ContactsProvider(activity);
                 provider.getContacts(-1, 0, new ContactsProvider.GetContactsListener() {
@@ -190,6 +193,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     }
                 });
             }
+        }
+
+        //Показываем рекламу AirMessages только если не показываем инвайты
+        if (!invitePopupShow) {
+            AirMessagesPopupFragment.showIfNeeded(getFragmentManager());
         }
     }
 
@@ -219,11 +227,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mImageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
         mImageSwitcher.setOnClickListener(mOnClickListener);
         mImageSwitcher.setUpdateHandler(mUnlockHandler);
-    }
-
-    private void initNewbieLayout(View view) {
-        // Newbie
-        mNoviceLayout = (NoviceLayout) view.findViewById(R.id.loNovice);
     }
 
     private void initResources(View view) {
@@ -259,11 +262,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         // Navigation Header
         ActionBar actionBar = getActionBar(view);
         setHeader(view);
-        actionBar.showHomeButton((NavigationActivity) getActivity());
+        final Activity activity = getActivity();
+        if (activity instanceof NavigationActivity) {
+            actionBar.showHomeButton((NavigationActivity) activity);
+        }
         OnClickListener listener = new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity().getApplicationContext(),
+                Intent intent = new Intent(activity.getApplicationContext(),
                         EditContainerActivity.class);
                 startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FILTER);
             }
@@ -427,9 +433,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         switch (view.getId()) {
             case R.id.loDatingResources: {
                 EasyTracker.getTracker().trackEvent("Dating", "BuyClick", "", 1L);
-                Intent intent = new Intent(getActivity(), ContainerActivity.class);
-                intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
-                startActivity(intent);
+                startActivity(ContainerActivity.getBuyingIntent("Dating"));
             }
             break;
             case R.id.btnDatingLove: {
@@ -525,8 +529,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mCurrentUser.mutual) {
             openChat(getActivity());
         } else {
-            Intent intent = ContainerActivity.getVipBuyIntent(getString(R.string.chat_block_not_mutual));
-            startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+            startActivityForResult(
+                    ContainerActivity.getVipBuyIntent(
+                            getString(R.string.chat_block_not_mutual),
+                            "DatingChatLock"
+                    ),
+                    ContainerActivity.INTENT_BUY_VIP_FRAGMENT
+            );
         }
     }
 
@@ -665,7 +674,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mNovice.isDatingCompleted())
             return;
 
-        //TODO check flag
+        if (mNoviceLayout == null) {
+            mNoviceLayout = new NoviceLayout(getActivity());
+            mNoviceLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            mNoviceLayout.setVisibility(View.GONE);
+            ((ViewGroup)getView().findViewById(R.id.ac_dating_container)).addView(mNoviceLayout);
+        }
+
         if (mNovice.isShowEnergyToSympathies()) {
             mNoviceLayout.setLayoutRes(R.layout.novice_energy_to_sympathies, null,
                     getResources().getString(CacheProfile.sex == Static.BOY ?
@@ -944,6 +959,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
+         private boolean isAfterLast = false;
+
         @Override
         public void onPageSelected(int position) {
 
@@ -967,6 +984,16 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     }
 
                 }
+            }
+
+            if (isAfterLast) {
+                hideControls();
+                isAfterLast = false;
+            }
+
+            if (position == ((ImageSwitcher.ImageSwitcherAdapter)mImageSwitcher.getAdapter()).getData().size() - 1) {
+                showControls();
+                isAfterLast = true;
             }
         }
 

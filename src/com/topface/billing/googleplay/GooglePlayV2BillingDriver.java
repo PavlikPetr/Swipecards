@@ -6,6 +6,7 @@ import com.topface.billing.BillingDriver;
 import com.topface.billing.BillingListener;
 import com.topface.billing.BillingSupportListener;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 
 /**
@@ -32,10 +33,12 @@ public class GooglePlayV2BillingDriver extends BillingDriver {
     }
 
     @Override
-    public void onResume() {}
+    public void onResume() {
+    }
 
     @Override
-    public void onStop() {}
+    public void onStop() {
+    }
 
     protected void checkBillingSupport(BillingSupportListener listener) {
         if (listener != null) {
@@ -61,12 +64,16 @@ public class GooglePlayV2BillingDriver extends BillingDriver {
 
     @Override
     public void buyItem(String itemId) {
-        mBillingService.requestPurchase(itemId, Consts.ITEM_TYPE_INAPP, null);
+        mBillingService.requestPurchase(itemId, Consts.ITEM_TYPE_INAPP, getDeveloperPayload());
     }
 
     @Override
-    public void buySubscriotion(String subscriptionId) {
-        mBillingService.requestPurchase(subscriptionId, Consts.ITEM_TYPE_SUBSCRIPTION, null);
+    public void buySubscription(String subscriptionId) {
+        mBillingService.requestPurchase(subscriptionId, Consts.ITEM_TYPE_SUBSCRIPTION, getDeveloperPayload());
+    }
+
+    private String getDeveloperPayload() {
+        return "{\"id\": " + CacheProfile.uid + "}";
     }
 
     @Override

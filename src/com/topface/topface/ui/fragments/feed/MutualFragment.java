@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import com.topface.topface.GCMUtils;
@@ -11,6 +10,7 @@ import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.MutualListAdapter;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CountersManager;
 import org.json.JSONObject;
 
@@ -43,10 +43,17 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     @Override
     protected void initEmptyFeedView(View inflated) {
 
-        inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
+        inflated.findViewById(R.id.btnGetDating).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(ContainerActivity.getBuyingIntent());
+                NavigationActivity.selectFragment(BaseFragment.F_DATING);
+            }
+        });
+
+        inflated.findViewById(R.id.btnRefill).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(ContainerActivity.getBuyingIntent("EmptyMutual"));
             }
         });
     }

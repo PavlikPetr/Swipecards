@@ -7,7 +7,7 @@ import com.topface.billing.BillingListener;
 
 /**
  * Платежный драйвер для Amazon In-App Purchasing
- *
+ * <p/>
  * NOTE: В AmazonBillingDriver не поддерживаются события onInAppBillingUnsupported и onSubscriptionBillingUnsupported
  * Будут выполнены только коллбэки, когда API доступно
  */
@@ -29,10 +29,12 @@ public class AmazonBillingDriver extends BillingDriver {
     }
 
     @Override
-    public void onStop() {}
+    public void onStop() {
+    }
 
     @Override
-    public void onDestroy() {}
+    public void onDestroy() {
+    }
 
     @Override
     public void buyItem(String itemId) {
@@ -40,7 +42,7 @@ public class AmazonBillingDriver extends BillingDriver {
     }
 
     @Override
-    public void buySubscriotion(String subscriptionId) {
+    public void buySubscription(String subscriptionId) {
         PurchasingManager.initiatePurchaseRequest(subscriptionId);
     }
 
@@ -48,7 +50,6 @@ public class AmazonBillingDriver extends BillingDriver {
     public String getDriverName() {
         return "Amazon In-App Purchasing";
     }
-
 
 
 }

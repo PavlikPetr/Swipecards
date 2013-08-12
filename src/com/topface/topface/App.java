@@ -198,15 +198,19 @@ public class App extends Application {
     }
 
     public static void sendProfileRequest() {
+        sendProfileRequest(ProfileRequest.P_ALL);
+    }
+
+    public static void sendProfileRequest(final int part) {
         if (mProfileUpdating.compareAndSet(false, true)) {
             mLastProfileUpdate = System.currentTimeMillis();
-            ProfileRequest profileRequest = new ProfileRequest(App.getContext());
-            profileRequest.part = ProfileRequest.P_ALL;
+            final ProfileRequest profileRequest = new ProfileRequest(App.getContext());
+            profileRequest.part = part;
             profileRequest.callback(new DataApiHandler<Profile>() {
 
                 @Override
                 protected void success(Profile data, ApiResponse response) {
-                    CacheProfile.setProfile(data, response);
+                    CacheProfile.setProfile(data, response, part);
 
                     LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
                 }
@@ -240,7 +244,7 @@ public class App extends Application {
     public static void checkProfileUpdate() {
         if (System.currentTimeMillis() > mLastProfileUpdate + PROFILE_UPDATE_TIMEOUT) {
             mLastProfileUpdate = System.currentTimeMillis();
-            sendProfileRequest();
+            sendProfileRequest(ProfileRequest.P_NECESSARY_DATA);
         }
     }
 

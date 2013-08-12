@@ -463,7 +463,6 @@
     <string name="general_complain_sended">Il tuo reclamo è stato inviato, grazie per il tuo aiuto</string>
     <string name="general_complain">Reclamo</string>
     <string name="general_msg">Massaggio</string>
-    <string name="general_no_notifications">Purtroppo, per il tuo dispositivo gli avvisi non sono disponibili</string>
     <plurals name="vip_add_more_friends">
         <item quantity="other">Invita ancora %d amici</item>
         <item quantity="one">Invita ancora %d amico</item>
@@ -478,7 +477,32 @@
     <string name="general_bookmarks_is_deleted">L’utente è stato rimosso dai preferiti</string>
     <string name="general_blacklist_is_deleted">L’utente è stato rimosso dalla black list</string>
     <string name="invite_friends_title_short">Invita tutti gli amici su Topface</string>
-    <string name="general_exit">Logout</string>
-    <string name="likes_can_help_you">Le simpatie ti aiutano a conoscere gente</string>
     <string name="general_get_dating">Presentarsi</string>
+    <string name="settings_select_language">Scelta della lingua dell’applicazione</string>
+    <string name="restart_to_change_locale">L’applicazione sarà riavviata per cambiare lingua</string>
+    <string name="locale_changing">Lingua</string>
+    <plurals name="you_was_liked">
+        <item quantity="other">Piaci a %d persone</item>
+        <item quantity="one">Piaci a %d persona</item>
+    </plurals>
+    <string name="to_see_likes_by_vip">Attiva l’account VIP per scoprire ora a chi piaci</string>
+    <string name="or">o</string>
+    <string name="watch_likes_on_dating">visualizza simpatie sulla schermata delle relazioni, possono starci all’inizio dell’elenco</string>
+    <string name="make_acquaintance">Presentarsi</string>
+    <string name="settings_delete_account">Cancella l’account</string>
+    <string name="chat_block_not_mutual">Puoi iniziare la conversazione con l’utente solo se ti ha inviato una simpatia o se sei utente VIP</string>
+    <string name="delete_account_are_you_sure">Sicuro al 100%?</string>
+    <string name="delete">Cancella</string>
+    <string name="delete_account_warning">Attenzione! Stai cercando di cancellare il tuo account in Topface.</string>
+    <string name="delete_account_error">Purtroppo non siamo riusciti a cancellare il tuo account. Riprova.</string>
+    <string name="delete_account_will_be_restored_are_you_sure">Stai cercando di accedere all’account che hai cancellato. Accedendovi verrà ripristinato. Vuoi farlo?</string>
+    <string name="restore_of_account">Ripristino dell’account</string>
+    <string name="restore">Ripristinare</string>
+    <string name="admiration_sended">L’ammirazione è stata inviata</string>
+    <plurals name="popup_vip_messages">
+        <item quantity="other">Ricevuti %d messaggi con la consegna celere</item>
+        <item quantity="one">Ricevuto %d messaggio con la consegna celere</item>
+    </plurals>
+    <string name="general_attention">Attenzione!</string>
+    <string name="general_delete_messages">Elimina messaggi</string>
 </resources>

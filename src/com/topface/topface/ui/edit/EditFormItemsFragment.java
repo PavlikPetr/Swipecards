@@ -54,7 +54,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 
         mProfile = CacheProfile.getProfile();
 
-        mFormInfo = new FormInfo(getActivity(), mProfile);
+        mFormInfo = new FormInfo(getActivity(), mProfile.sex, mProfile.getType());
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_edit_with_listview, container,
                 false);

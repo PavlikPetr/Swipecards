@@ -453,7 +453,6 @@
     <string name="general_complain_sended">Plangerea Dmv a fost trimisa, va multumim pentru ajutor</string>
     <string name="general_complain">Plangere</string>
     <string name="general_msg">Mesaj</string>
-    <string name="general_no_notifications">Din pacate, instiintarile, pe instalatia Dmv nu sunt accesibile</string>
     <string name="general_bookmarks_add_short">In alese</string>
     <string name="black_list_add_short">In lista neagra</string>
     <string name="general_complaint">A se plange</string>
@@ -464,14 +463,23 @@
     <string name="general_bookmarks_is_deleted">Utilizatorul a fost sters din alese</string>
     <string name="general_blacklist_is_deleted">Utilizatorul a fost sters din lista neagra</string>
     <string name="invite_friends_title_short">Invita toti prietenii in Topface</string>
-    <string name="general_exit">Iesire</string>
     <string name="likes_can_help_you">Simpatiile va vor ajuta sa faceti cunostinta</string>
     <string name="general_get_dating">A face cunostinta</string>
+    <string name="settings_select_language">Alege limba aplicarii</string>
     <string name="restart_to_change_locale">Pentru a schimba limba aplicarea va fi restartata</string>
     <string name="locale_changing">Schimba limba</string>
     <string name="to_see_likes_by_vip">Pentru a afla acum, cui ati placut, activati VIP - acaunt</string>
     <string name="or">sau</string>
     <string name="watch_likes_on_dating">vizionati simpatiile pe ecranul de cunostinte, ele pot fi la inceput de lista</string>
     <string name="make_acquaintance">Fa cunostinta</string>
+    <string name="settings_delete_account">Sterge acaunt</string>
     <string name="chat_block_not_mutual">A incepe conversarea cu utilizatorul se poate, numai daca el va trimis simpatie sau in caz ca aveti VIP - statut</string>
+    <string name="delete_account_are_you_sure">Sunteti increzut?</string>
+    <string name="delete">Sterge</string>
+    <string name="delete_account_warning">Atentie! Dmv incercati sa stergeti profilul sau in Topface.</string>
+    <string name="delete_account_error">Din pacate nu am reusit sa stergem acauntul Dmv. Puteti sa mai faceti o incercare mai tarziu.</string>
+    <string name="delete_account_will_be_restored_are_you_sure">Dmv incercati sa intrati in acauntul sters de Dmv. La intrare acauntul va fi restabilit. Sunteti increzut?</string>
+    <string name="restore_of_account">Restabilire acaunt</string>
+    <string name="restore">Restabileste</string>
+    <string name="admiration_sended">Admirare trimisa</string>
 </resources>

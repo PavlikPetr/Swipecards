@@ -483,5 +483,32 @@
     <string name="invite_friends_title_short">Invitar a todos los amigos a Topface</string>
     <string name="general_exit">Salir</string>
     <string name="likes_can_help_you">Las simpatías te ayudarán a conocer gente</string>
-    <string name="general_get_dating">Conocer gente</string>
+    <string name="general_get_dating">Conocer</string>
+    <string name="settings_select_language">Elección del idioma de la aplicación</string>
+    <string name="restart_to_change_locale">Para cambiar el idioma la aplicación se reiniciará</string>
+    <string name="locale_changing">Cambiar idioma</string>
+    <plurals name="you_was_liked">
+        <item quantity="other">Le has gustado a %d personas</item>
+        <item quantity="one">Le has gustado a %d persona</item>
+    </plurals>
+    <string name="to_see_likes_by_vip">Para descubrir ahora mismo a quién te has gustado, activa la cuenta VIP</string>
+    <string name="or">o</string>
+    <string name="watch_likes_on_dating">echa un vistazo a las simpatías en la pantalla de citas, estas pueden estar al principio de la lista</string>
+    <string name="make_acquaintance">Conocer</string>
+    <string name="settings_delete_account">Eliminar la cuenta</string>
+    <string name="chat_block_not_mutual">Empezar la comunicación con un usuario es posible si este te ha mandado una simpatía o si tienes el estado VIP</string>
+    <string name="delete_account_are_you_sure">¿Estás completamente seguro?</string>
+    <string name="delete">Eliminar</string>
+    <string name="delete_account_warning">¡Atención! Estas intentando eliminar tu perfil en Topface.</string>
+    <string name="delete_account_error">Lamentablemente, no fue posible eliminar tu cuenta. Puedes repetir el proceso otra vez.</string>
+    <string name="delete_account_will_be_restored_are_you_sure">Estas intentando entrar a una cuenta que eliminaste. Al entrar la cuenta será restaurada. ¿Estás seguro?</string>
+    <string name="restore_of_account">Recuperación de cuenta</string>
+    <string name="restore">Recuperar</string>
+    <string name="admiration_sended">Admiración enviada</string>
+    <plurals name="popup_vip_messages">
+        <item quantity="other">Recibido %d mensaje con la entrega express</item>
+        <item quantity="one">Recibido %d mensaje con la entrega express</item>
+    </plurals>
+    <string name="general_attention">¡Atención!</string>
+    <string name="general_delete_messages">Eliminar mensajes</string>
 </resources>

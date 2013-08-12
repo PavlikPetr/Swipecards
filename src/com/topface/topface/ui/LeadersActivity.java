@@ -8,7 +8,6 @@ import android.view.View.OnClickListener;
 import android.widget.*;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.Profile;
@@ -21,6 +20,7 @@ import com.topface.topface.ui.gridlayout.GridLayout;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryViewCreator;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
@@ -45,11 +45,10 @@ public class LeadersActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_leaders_layout);
-        ((TextView) findViewById(R.id.tvNavigationTitle)).setText(R.string.leaders_go_date);
-        findViewById(R.id.btnNavigationHome).setVisibility(View.INVISIBLE);
-        View backButton = findViewById(R.id.btnNavigationBack);
-        backButton.setVisibility(View.VISIBLE);
-        backButton.setOnClickListener(new OnClickListener() {
+
+        ActionBar actionBar = getActionBar(getWindow().getDecorView());
+        actionBar.setTitleText(getString(R.string.leaders_go_date));
+        actionBar.showBackButton(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -96,9 +95,7 @@ public class LeadersActivity extends BaseFragmentActivity {
             @Override
             public void onClick(View view) {
                 if (CacheProfile.money < CacheProfile.getOptions().price_leader) {
-                    Intent intent = new Intent(LeadersActivity.this, ContainerActivity.class);
-                    intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
-                    startActivity(intent);
+                    startActivity(ContainerActivity.getBuyingIntent("Leaders"));
                 } else if (mSelectedPhoto.isSelected()) {
                     mLoadingLocker.setVisibility(View.VISIBLE);
                     new LeaderRequest(mSelectedPhoto.getPhotoId(), LeadersActivity.this)

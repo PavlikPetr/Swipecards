@@ -1,11 +1,9 @@
 package com.topface.topface.utils;
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.ImageButton;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -13,8 +11,8 @@ import com.topface.topface.ui.views.ImageViewRemote;
 public class ActionBar {
 
     private ViewGroup actionView;
-    private ImageButton mNavigationHome;
-    private ImageButton mNavigationBack;
+    private ImageView mNavigationHome;
+    private ImageView mNavigationBack;
     private TextView mTitle;
     private TextView mSubTitle;
     private ImageButton mSettingsButton;
@@ -27,18 +25,33 @@ public class ActionBar {
 
     private NavigationBarController mNavBarController;
     private ImageButton mSendButton;
+    private RelativeLayout leftContainer;
 
-    public ActionBar(View actionView) {
+    public ActionBar(Context context, View actionView) {
         this.actionView = (ViewGroup) actionView.findViewById(R.id.loNavigationBar);
+        initShadow(context);
         this.actionView.setVisibility(View.VISIBLE);
         mNavBarController = new NavigationBarController(this.actionView);
         initViews();
     }
 
+    private void initShadow(Context context) {
+        if (this.actionView.getParent() instanceof RelativeLayout) {
+            RelativeLayout parent = (RelativeLayout) this.actionView.getParent();
+            View shadow = new ImageView(context);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.addRule(RelativeLayout.BELOW, R.id.loNavigationBar);
+            shadow.setLayoutParams(params);
+            shadow.setBackgroundResource(R.drawable.im_bar_header_shadow);
+            shadow.setTag(context.getString(R.string.tag_header_shadow));
+            parent.addView(shadow);
+        }
+    }
+
     private void initViews() {
 
-        mNavigationBack = (ImageButton) actionView.findViewById(R.id.btnNavigationBack);
-        mNavigationHome = (ImageButton) actionView.findViewById(R.id.btnNavigationHome);
+        mNavigationBack = (ImageView) actionView.findViewById(R.id.btnNavigationBack);
+        mNavigationHome = (ImageView) actionView.findViewById(R.id.btnNavigationHome);
         mTitle = (TextView) actionView.findViewById(R.id.tvNavigationTitle);
         mSubTitle = (TextView) actionView.findViewById(R.id.tvNavigationSubtitle);
         mSettingsButton = (ImageButton) actionView.findViewById(R.id.btnNavigationSettingsBar);
@@ -50,6 +63,7 @@ public class ActionBar {
         mProfileAvatar.setImageResource(R.drawable.feed_banned_male_avatar);
         mSendButton = (ImageButton) actionView.findViewById(R.id.btnNavigationSend);
         checkBox = (CheckBox) actionView.findViewById(R.id.btnNavigationCheckbox);
+        leftContainer = (RelativeLayout) actionView.findViewById(R.id.leftButtonContainer);
     }
 
     public void refreshNotificators() {
@@ -78,7 +92,7 @@ public class ActionBar {
         mNavigationBack.setVisibility(View.GONE);
         mNavigationHome.setVisibility(View.VISIBLE);
         mNavigationHome.setSelected(false);
-        mNavigationHome.setOnClickListener(listener);
+        leftContainer.setOnClickListener(listener);
     }
 
     public void activateHomeButton(boolean activate) {
@@ -89,7 +103,7 @@ public class ActionBar {
     public void showBackButton(View.OnClickListener listener) {
         mNavigationBack.setVisibility(View.VISIBLE);
         mNavigationHome.setVisibility(View.GONE);
-        mNavigationBack.setOnClickListener(listener);
+        leftContainer.setOnClickListener(listener);
     }
 
     public void showEditButton(View.OnClickListener listener) {
@@ -172,9 +186,10 @@ public class ActionBar {
     }
 
     public void showUserActionsButton(final View.OnClickListener nonActiveListener, final View.OnClickListener activeListener) {
-        mEditButton.setVisibility(View.GONE);
-        mSettingsButton.setVisibility(View.GONE);
-        mProfileButton.setVisibility(View.GONE);
+//        mEditButton.setVisibility(View.GONE);
+//        mSettingsButton.setVisibility(View.GONE);
+//        mProfileButton.setVisibility(View.GONE);
+        hideRightBarPart();
         mUserActionsControl.setVisibility(View.VISIBLE);
 
         mUserActionsControl.setOnClickListener(new View.OnClickListener() {

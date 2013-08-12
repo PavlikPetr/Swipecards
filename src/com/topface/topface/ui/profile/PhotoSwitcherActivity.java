@@ -119,15 +119,15 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 finish();
             }
         });
+        mPhotoAlbumControl.setVisibility(View.GONE);
         if (mUid == CacheProfile.uid) {
-            mPhotoAlbumControl.setVisibility(View.GONE);
             // - set avatar button
             mSetAvatarButton = (TextView) mPhotoAlbumControl.findViewById(R.id.btnSetAvatar);
             mSetAvatarButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     final Photo currentPhoto = mPhotoLinks.get(mCurrentPosition);
-                    if (currentPhoto != null && currentPhoto.getId() != CacheProfile.photo.getId()) {
+                    if (CacheProfile.photo != null && currentPhoto != null && currentPhoto.getId() != CacheProfile.photo.getId()) {
                         if (!mDeletedPhotos.contains(currentPhoto)) {
                             setAsMainRequest(currentPhoto);
                         }

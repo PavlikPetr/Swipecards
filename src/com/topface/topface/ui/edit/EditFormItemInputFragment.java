@@ -28,6 +28,8 @@ import com.topface.topface.utils.FormItem;
 
 public class EditFormItemInputFragment extends AbstractEditFragment {
 
+    private static final String ARG_TAG_TITLE_ID = "titleId";
+    private static final String ARG_TAG_DATA = "data";
     private int mTitleId;
     private String mData;
     private String mInputData = "";
@@ -40,16 +42,25 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         super();
     }
 
-    public EditFormItemInputFragment(int titleId, String data) {
-        this();
-        mTitleId = titleId;
-        mData = data == null ? Static.EMPTY : data;
+    public static EditFormItemInputFragment newInstance(int titleId, String data) {
+        EditFormItemInputFragment fragment = new EditFormItemInputFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_TAG_TITLE_ID, titleId);
+        args.putString(ARG_TAG_DATA, data);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    private void restoreState() {
+        mTitleId = getArguments().getInt(ARG_TAG_TITLE_ID);
+        mData = getArguments().getString(ARG_TAG_DATA);
         mProfile = CacheProfile.getProfile();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mFormInfo = new FormInfo(getActivity(), mProfile);
+        restoreState();
+        mFormInfo = new FormInfo(getActivity(), mProfile.sex, mProfile.getType());
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_edit_input, null, false);
 
@@ -102,7 +113,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 
     @Override
     protected boolean hasChanges() {
-        return !mData.equals(mInputData);
+        return !TextUtils.equals(mData, mInputData);
     }
 
     @Override

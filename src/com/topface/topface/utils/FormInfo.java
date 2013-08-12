@@ -10,6 +10,7 @@ import com.topface.topface.data.User;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.QuestionaryRequest;
 import com.topface.topface.requests.SettingsRequest;
+import com.topface.topface.ui.fragments.ProfileFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,15 +21,13 @@ public class FormInfo {
     // Data
     private Context mContext;
     private Resources mResources;
-    private Profile mProfile;
     private int mSex;
+    private int mProfileType;
 
-    public FormInfo(Context context, Profile profile) {
+    public FormInfo(Context context, int sex, int profileType) {
         mResources = context.getResources();
-        if (profile != null) {
-            mProfile = profile;
-            mSex = profile.sex;
-        }
+        mSex = sex;
+        mProfileType = profileType;
         mContext = context;
     }
 
@@ -303,7 +302,7 @@ public class FormInfo {
             return variants[0] == null ? result : variants[0];
         }
 
-        if (mProfile instanceof User) {
+        if (mProfileType == ProfileFragment.TYPE_USER_PROFILE) {
             switch (mSex) {
                 case Static.BOY:
                     result = variants[0];

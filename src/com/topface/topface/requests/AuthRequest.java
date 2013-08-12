@@ -28,6 +28,8 @@ public class AuthRequest extends ApiRequest {
     private String login;  // логин для нашей авторизации
     private String password; // пароль для нашей авторизации
 
+    private AuthToken mAuthToken;
+
     private AuthRequest(Context context) {
         super(context);
         doNeedAlert(false);
@@ -41,9 +43,8 @@ public class AuthRequest extends ApiRequest {
 
     public AuthRequest(AuthToken authToken, Context context) {
         this(context);
-
+        mAuthToken = authToken;
         platform = authToken.getSocialNet();
-
         if (TextUtils.equals(platform, AuthToken.SN_TOPFACE)) {
             login = authToken.getLogin();
             password = authToken.getPassword();
@@ -51,14 +52,6 @@ public class AuthRequest extends ApiRequest {
             sid = authToken.getUserId();
             token = authToken.getTokenKey();
         }
-    }
-
-    public AuthRequest(String login, String password, Context context) {
-        this(context);
-
-        this.platform = AuthToken.SN_TOPFACE;
-        this.login = login;
-        this.password = password;
     }
 
     private String getClientLocale(Context context) {
@@ -134,5 +127,9 @@ public class AuthRequest extends ApiRequest {
 
     public void setLocale(String locale) {
         this.locale = locale;
+    }
+
+    public AuthToken getAuthToken() {
+        return mAuthToken;
     }
 }

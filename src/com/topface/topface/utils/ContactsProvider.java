@@ -6,12 +6,10 @@ import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.ContactsContract;
-import android.util.StringBuilderPrinter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class ContactsProvider {
 
@@ -37,18 +35,21 @@ public class ContactsProvider {
     private void getContactsAsync(int limit, int offset) {
         ContentResolver cr = getContentResolver();
 
-        String limitCondition = (limit == -1)?"":" LIMIT " + limit + " offset " + offset;
-        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, " _id" + limitCondition );
+        String limitCondition = (limit == -1) ? "" : " LIMIT " + limit + " offset " + offset;
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, " _id" + limitCondition);
+        if (cur == null) {
+            return;
+        }
         if (cur.getCount() > 0) {
             while (!cur.isLast()) {
                 cur.moveToNext();
                 String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
                 String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                 String email = "";
-                Cursor emailCur = cr.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI,null,ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ? ", new String[]{String.valueOf(id)},null);
+                Cursor emailCur = cr.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, null, ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ? ", new String[]{String.valueOf(id)}, null);
                 while (emailCur.isLast()) {
                     emailCur.moveToNext();
-                    email = emailCur.getString( emailCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+                    email = emailCur.getString(emailCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
                     break;
                 }
                 emailCur.close();
@@ -61,8 +62,8 @@ public class ContactsProvider {
                         Contact contact = new Contact(name, getContactFromCursor(phoneCursor), false);
                         while (!phoneCursor.isLast()) {
                             phoneCursor.moveToNext();
-                            int isPrimary = phoneCursor.getInt( phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.IS_SUPER_PRIMARY) );
-                            if(isPrimary > 0) {
+                            int isPrimary = phoneCursor.getInt(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.IS_SUPER_PRIMARY));
+                            if (isPrimary > 0) {
                                 String phone = getContactFromCursor(phoneCursor);
                                 contact = new Contact(name, phone, false);
                                 break;
@@ -81,14 +82,14 @@ public class ContactsProvider {
     }
 
     private String getContactFromCursor(Cursor cursor) {
-        return cursor.getString( cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+        return cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
     }
 
-    private ContentResolver getContentResolver () {
-        return  ctx.getContentResolver();
+    private ContentResolver getContentResolver() {
+        return ctx.getContentResolver();
     }
 
-    public static class Contact implements Parcelable{
+    public static class Contact implements Parcelable {
         private String name;
         private String phone;
         private boolean email;

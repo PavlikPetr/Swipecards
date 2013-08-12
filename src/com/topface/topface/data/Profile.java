@@ -7,6 +7,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.utils.*;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import org.json.JSONArray;
@@ -62,7 +63,6 @@ public class Profile extends AbstractDataWithPhotos {
     public boolean paid;
     // Показывать рекламу или нет
     public boolean show_ad;
-    public boolean isGcmSupported;
     /**
      * Флаг того, является ли пользоветль редактором
      */
@@ -90,7 +90,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.age = resp.optInt("age");
             profile.sex = resp.optInt("sex");
             profile.status = normilizeStatus(resp.optString("status"));
-            profile.first_name = resp.optString("first_name");
+            profile.first_name = resp.optString("first_name").trim();
             profile.inBlackList = resp.optBoolean("in_blacklist");
             profile.city = new City(resp.optJSONObject("city"));
             profile.dating = new DatingFilter(resp.optJSONObject("dating"));
@@ -100,7 +100,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.background = resp.optInt("background", ProfileBackgrounds.DEFAULT_BACKGROUND_ID);
             profile.totalPhotos = resp.optInt("photos_count");
             profile.paid = resp.optBoolean("paid");
-            profile.show_ad = resp.optBoolean("show_ad",true);
+            profile.show_ad = resp.optBoolean("show_ad", true);
             profile.xstatus = resp.optInt("xstatus");
             profile.canInvite = resp.optBoolean("can_invite");
             profile.setEditor(resp.optBoolean("editor", false));
@@ -120,7 +120,7 @@ public class Profile extends AbstractDataWithPhotos {
         if (!resp.isNull("form")) {
             JSONObject form = resp.getJSONObject("form");
 
-            FormInfo formInfo = new FormInfo(context, profile);
+            FormInfo formInfo = new FormInfo(context, profile.sex, profile.getType());
 
             FormItem headerItem;
             FormItem formItem;
@@ -485,6 +485,10 @@ public class Profile extends AbstractDataWithPhotos {
         mEditor = editor;
     }
 
+    public int getType() {
+        return (this instanceof User) ? ProfileFragment.TYPE_USER_PROFILE : ProfileFragment.TYPE_MY_PROFILE;
+    }
+
     public static class TopfaceNotifications {
         public boolean apns;
         public boolean mail;
@@ -515,7 +519,7 @@ public class Profile extends AbstractDataWithPhotos {
                 return Static.EMPTY;
             }
         }
-        return result.replaceAll("\n"," ");
+        return result.replaceAll("\n", " ");
     }
 
     public boolean isEmpty() {

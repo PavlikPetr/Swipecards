@@ -6,10 +6,7 @@
         >
 
     <include
-            layout="@layout/bar_navigation_header"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/loNavigationBar"/>
+            layout="@layout/bar_navigation_header"/>
 
     <LinearLayout
             android:layout_width="fill_parent"
@@ -83,7 +80,20 @@
                 />
     </LinearLayout>
 
-    <ImageView style="@style/HeaderShadow"/>
+    <Button
+            android:id="@+id/btnDeleteAccount"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/buying_purchase_selector"
+            android:text="@string/settings_delete_account"
+            style="@style/ItemtText"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_alignParentBottom="true"
+            />
 
     <com.topface.topface.ui.views.LockerView
             android:id="@+id/llvLogoutLoading"

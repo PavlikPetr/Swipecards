@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.*;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
@@ -42,7 +41,6 @@ public class GiftsFragment extends BaseFragment {
     private GiftsAdapter mGridAdapter;
     private GridView mGridView;
     private ProfileFragment.OnGiftReceivedListener listener;
-
 
     private Profile mProfile;
     private boolean mIsUpdating = false;
@@ -194,9 +192,7 @@ public class GiftsFragment extends BaseFragment {
                     if (response.code == ApiResponse.PAYMENT) {
                         FragmentActivity activity = getActivity();
                         if (activity != null) {
-                            Intent intent = new Intent(activity.getApplicationContext(),
-                                    ContainerActivity.class);
-                            intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
+                            Intent intent = ContainerActivity.getBuyingIntent("Dating");
                             intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
                             intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
                             startActivity(intent);
@@ -222,7 +218,7 @@ public class GiftsFragment extends BaseFragment {
             mGridAdapter.add(sendedGift);
             mTitle.setText(R.string.gifts);
         }
-        if (mProfile.gifts != null) mProfile.gifts.add(0,sendedGift.gift);
+        if (mProfile.gifts != null) mProfile.gifts.add(0, sendedGift.gift);
         mGridAdapter.notifyDataSetChanged();
         if (getActivity() != null) {
             Toast.makeText(getActivity(), R.string.chat_gift_out, 1500).show();
@@ -313,9 +309,7 @@ public class GiftsFragment extends BaseFragment {
                         mBtnInfo.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(getActivity(), ContainerActivity.class);
-                                intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
-                                startActivity(intent);
+                                startActivity(ContainerActivity.getBuyingIntent("ProfileGifts"));
                             }
                         });
                     } else {

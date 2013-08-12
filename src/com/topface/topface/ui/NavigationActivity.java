@@ -62,25 +62,33 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             finish();
             return;
         }
-        setContentView(R.layout.ac_navigation);
         setMenuEnabled(true);
         Debug.log(this, "onCreate");
         mFragmentManager = getSupportFragmentManager();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-                String isGcmSupported = preferences.getString(GCMUtils.IS_GCM_SUPPORTED, null);
-                if (isGcmSupported != null) {
-                    GCMUtils.GCM_SUPPORTED = Boolean.getBoolean(isGcmSupported);
-                }
-            }
-        }).start();
-
         initSlidingMenu();
         if (!AuthToken.getInstance().isEmpty()) {
             showFragment(savedInstanceState);
+        }
+    }
+
+    @Override
+    protected void onCreateAsync() {
+        super.onCreateAsync();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+        String isGcmSupported = preferences.getString(GCMUtils.IS_GCM_SUPPORTED, null);
+        if (isGcmSupported != null) {
+            GCMUtils.GCM_SUPPORTED = Boolean.getBoolean(isGcmSupported);
+        }
+
+        mNovice = Novice.getInstance(getPreferences());
+        mNovice.initNoviceFlags();
+        try {
+            Looper.prepare();
+            Offerwalls.init(getApplicationContext());
+            Looper.loop();
+        } catch (Exception e) {
+            Debug.error(e);
         }
     }
 
@@ -136,20 +144,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         });
     }
 
-    @Override
-    protected void inBackgroundThread() {
-        super.inBackgroundThread();
-        mNovice = Novice.getInstance(getPreferences());
-        mNovice.initNoviceFlags();
-        try {
-            Looper.prepare();
-            Offerwalls.init(getApplicationContext());
-            Looper.loop();
-        } catch (Exception e) {
-            Debug.error(e);
-        }
-    }
-
     private SharedPreferences getPreferences() {
         if (mPreferences == null) {
             mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
@@ -188,6 +182,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             mFullscreenController = new FullscreenController(this);
             mFullscreenController.requestFullscreen();
         }
+
     }
 
     @Override
@@ -250,7 +245,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                                     if (CacheProfile.photos != null && CacheProfile.photos.contains(photo)) {
                                         CacheProfile.photos.remove(photo);
                                     }
-                                    Toast.makeText(NavigationActivity.this, App.getContext().getString(R.string.general_wrong_photo_upload), 2000);
+                                    Toast.makeText(NavigationActivity.this, App.getContext().getString(R.string.general_wrong_photo_upload), Toast.LENGTH_LONG).show();
                                 }
                             }
 
@@ -308,7 +303,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             */
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.btnNavigationHome) {
+        if (view.getId() == R.id.leftButtonContainer) {
             mSlidingMenu.toggle();
         }
     }
@@ -346,7 +341,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     public void onDialogCancel() {
-        Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
+        Fragment fragment = mFragmentManager.findFragmentById(android.R.id.content);
         if (fragment instanceof DatingFragment) {
             DatingFragment datingFragment = (DatingFragment) fragment;
             datingFragment.onDialogCancel();

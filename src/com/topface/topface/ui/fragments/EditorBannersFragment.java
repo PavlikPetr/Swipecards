@@ -72,7 +72,7 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
     }
 
     private void initHeader(View root) {
-        ActionBar actionBar = new ActionBar(root);
+        ActionBar actionBar = getActionBar(root);
         actionBar.setTitleText(getString(R.string.editor_configure_banners));
         actionBar.showBackButton(new View.OnClickListener() {
             @Override

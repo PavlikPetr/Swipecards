@@ -16,6 +16,7 @@
         <item name="android:textColorLink">#2371B9</item>
         <item name="android:editTextStyle">@style/topfaceEditText</item>
         <item name="android:checkboxStyle">@style/topfaceCheckbox</item>
+        <item name="android:windowBackground">@null</item>
     </style>
 
     <style name="topfaceEditText">
@@ -294,6 +295,7 @@
     </style>
 
     <style name="HeaderShadow">
+        <item name="android:tag">@string/tag_header_shadow</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_below">@id/loNavigationBar</item>
@@ -466,12 +468,13 @@
     <style name="BackButton" parent="android:Widget.ImageButton">
         <item name="android:src">@drawable/navigation_back_selector</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:background">@android:color/transparent</item>
         <item name="android:paddingLeft">5dp</item>
         <item name="android:visibility">gone</item>
+        <item name="android:clickable">false</item>
     </style>
 
     <style name="chat_message_layout">
