@@ -28,8 +28,11 @@ public class ContainerActivity extends BaseFragmentActivity {
     private Fragment mCurrentFragment;
     private static final String TAG_FRAGMENT = "current_fragment";
 
+    /**
+     * Constant keys for different fragments
+     * Values have to be > 0
+     */
     public static final int INTENT_BUY_VIP_FRAGMENT = 1;
-
     public static final int INTENT_BUYING_FRAGMENT = 2;
     public static final int INTENT_CHAT_FRAGMENT = 3;
     public static final int INTENT_REGISTRATION_FRAGMENT = 4;
@@ -60,7 +63,10 @@ public class ContainerActivity extends BaseFragmentActivity {
             } catch (Exception ex) {
                 Debug.error(ex);
                 finish();
+            } finally {
+                if (App.DEBUG && mCurrentFragmentId <= 0) throw new IllegalArgumentException("ContainerActivity needs request code, use static ContainerActivity methods to get Intents");
             }
+
         }
     }
 
