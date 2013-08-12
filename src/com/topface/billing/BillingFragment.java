@@ -48,7 +48,7 @@ abstract public class BillingFragment extends BaseFragment implements BillingLis
     protected void buyItem(String itemId) {
         Bundle arguments = getArguments();
         if (arguments != null) {
-            BillingDriver.setSourceValue(arguments.getString(ARG_TAG_SOURCE, ""));
+            BillingDriver.setSourceValue(arguments.getString(ARG_TAG_SOURCE));
         }
         mBillingDriver.buyItem(itemId);
     }
@@ -56,7 +56,7 @@ abstract public class BillingFragment extends BaseFragment implements BillingLis
     protected void buySubscription(String subscriptionId) {
         Bundle arguments = getArguments();
         if (arguments != null) {
-            BillingDriver.setSourceValue(getArguments().getString(ARG_TAG_SOURCE, ""));
+            BillingDriver.setSourceValue(getArguments().getString(ARG_TAG_SOURCE));
         }
         mBillingDriver.buySubscription(subscriptionId);
     }

@@ -114,7 +114,7 @@ public class Options extends AbstractData {
             CLICKKY,
             RANDOM
     };
-    public static final String PREMIUM_MESSAGES_POPUP_SHOW_TIME = "premium_messages_popup_show_time";
+    public static final String PREMIUM_MESSAGES_POPUP_SHOW_TIME = "premium_messages_popup_last_show";
 
     /**
      * Настройки для каждого типа страниц

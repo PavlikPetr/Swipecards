@@ -407,6 +407,8 @@ Sa oled müksanud.</string>
     <string name="general_complaint">Edasi kaevata</string>
     <string name="general_type_complain">Kaebuse teema</string>
     <string name="confirm">Ära kinnitada</string>
+    <string name="general_bookmarks_is_deleted">Kasutaja on väljavalitute hulgast ära kustutatud</string>
+    <string name="general_blacklist_is_deleted">Kasutaja on mustast nimekirjast ära kustutatud</string>
     <string name="invite_friends_title_short">Kutsuda kõik sõbrad Topface\'i</string>
     <string name="general_exit">Väljuda</string>
     <string name="general_get_dating">Tutvuda</string>
@@ -414,4 +416,7 @@ Sa oled müksanud.</string>
     <string name="locale_changing">Keele vahetus</string>
     <string name="or">või</string>
     <string name="make_acquaintance">Tuttavaks saada</string>
+    <string name="delete_account_are_you_sure">Kas sa oled päris kindel?</string>
+    <string name="delete">Ära kustutada</string>
+    <string name="restore">Taastada</string>
 </resources>

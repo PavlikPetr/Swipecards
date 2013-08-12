@@ -499,5 +499,21 @@
     <string name="or">arba</string>
     <string name="watch_likes_on_dating">Peržiūrinėkite simpatijas pažinčių ekrane, jos gali būti sąrašo pradžioje</string>
     <string name="make_acquaintance">Susipažinti</string>
+    <string name="settings_delete_account">Pašalinti paskyrą</string>
     <string name="chat_block_not_mutual">Pradėti bendravimą su vartotoju galima, jei jis išsiuntė jums simpatiją arba jūs turite VIP-statusą</string>
+    <string name="delete_account_are_you_sure">Jūs tikrai įsitikinę?</string>
+    <string name="delete">Pašalinti</string>
+    <string name="delete_account_warning">Dėmesio! Jūs mėginate pašalinti savo Topface profilį.</string>
+    <string name="delete_account_error">Apgailestaujame, pašalinti jūsų paskyrą nepavyko. Jūs galite pakartoti dar kartą.</string>
+    <string name="delete_account_will_be_restored_are_you_sure">Jūs mėginate įeiti į paskyrą, kurią pašalinote. Įeinant paskyra bus atstatyta. Ar esate įsitikinę?</string>
+    <string name="restore_of_account">Paskyros atstatymas</string>
+    <string name="restore">Atstatyti</string>
+    <string name="admiration_sended">Susižavėjimas išsiųstas</string>
+    <plurals name="popup_vip_messages">
+        <item quantity="few">Gauti %d pranešimai su ekspress-pristatymu</item>
+        <item quantity="other">Gauta %d pranešimų su ekspress-pristatymu</item>
+        <item quantity="one">Gautas %d pranešimas su ekspress-pristatymu</item>
+    </plurals>
+    <string name="general_attention">Dėmesio!</string>
+    <string name="general_delete_messages">Pašalinti pranešimus</string>
 </resources>

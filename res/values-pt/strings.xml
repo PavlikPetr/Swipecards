@@ -491,4 +491,6 @@
     <string name="restore_of_account">Restauração da conta</string>
     <string name="restore">Restaurar</string>
     <string name="admiration_sended">Admiração foi enviada</string>
+    <string name="general_attention">Atenção!</string>
+    <string name="general_delete_messages">Eliminar mensagens</string>
 </resources>

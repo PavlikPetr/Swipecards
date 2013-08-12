@@ -303,7 +303,7 @@
     <string name="dating_online_only">%s, seulement en ligne</string>
     <string name="leaders_pick_condition">Vous ne pouvez pas choisir une photot avec une côte de popularité moins %d%%:</string>
     <string name="map_popup_address">Adresse</string>
-    <string name="black_list_info">Vous avez ajouté l\'interlocuteur à la liste noire. Vous pouvez le changer dans  de votre profile, dans les paramètres du statut VIP.</string>
+    <string name="black_list_info">Vous avez ajouté l\'interlocuteur à la liste noire. Vous pouvez l\'annuler à votre profile, dans les paramètres du statut VIP.</string>
     <string name="general_gift">Cadeau</string>
     <string name="user_actions_chat">Conversation</string>
     <string name="general_place">Endroit</string>
@@ -424,6 +424,10 @@
         <item quantity="other">Recevoir le VIP pour %d jours</item>
         <item quantity="one">recevoir le VIP pour %d jour</item>
     </plurals>
+    <plurals name="invite_friends_plurals">
+        <item quantity="other">Inviter %1$d amis, pour recevoir le VIP-statut pour %2$d jours</item>
+        <item quantity="one">Invitez %1$d amis, pour recevoir le VIP-statut pour %2$d jour</item>
+    </plurals>
     <plurals name="get_vip_for_invites_plurals">
         <item quantity="other">Reçois le VIP gratuit pour %d invitations</item>
         <item quantity="one">Reçois le VIP gratuit pour %d invitation</item>
@@ -485,5 +489,20 @@
     <string name="or">ou</string>
     <string name="watch_likes_on_dating">regardez les sympathies sur l\'écran des connaissances, elles peuvent être au début de la liste</string>
     <string name="make_acquaintance">Faire connaissance</string>
+    <string name="settings_delete_account">Supprimer le compte</string>
     <string name="chat_block_not_mutual">Vous pouvez commencer à communiquer avec l\'utilisateur seulement s\'ils vous envoie une sympathie ou si vous avez le statut VIP</string>
+    <string name="delete_account_are_you_sure">Vous êtes vraiment sûr?</string>
+    <string name="delete">Supprimer</string>
+    <string name="delete_account_warning">Attention! Vous essayez de supprimer votre profil sur Topface.</string>
+    <string name="delete_account_error">Malheureusement on n\'a pas réussi à supprimer voter compte. Vous pouvez répéter encore une fois.</string>
+    <string name="delete_account_will_be_restored_are_you_sure">Vous essayez d\'entrer à votre compte supprimé. Le compte sera rétabli. Vous êtes sûr?</string>
+    <string name="restore_of_account">Rétablissement du compte</string>
+    <string name="restore">Rétablir</string>
+    <string name="admiration_sended">Le ravissement est envoyé</string>
+    <plurals name="popup_vip_messages">
+        <item quantity="other">Il y a %d message reçu avec la distribution expresse</item>
+        <item quantity="one">Il y a %d message reçu avec la distribution expresse</item>
+    </plurals>
+    <string name="general_attention">Attention!</string>
+    <string name="general_delete_messages">Supprimer des messages</string>
 </resources>

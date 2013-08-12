@@ -494,11 +494,20 @@
     <string name="restart_to_change_locale">Ak chcete zmeniť jazyk, aplikácia sa reštartuje</string>
     <string name="locale_changing">Zmena jazyka</string>
     <plurals name="you_was_liked">
-        <item quantity="other">Páčite sa %s ľuďom</item>
+        <item quantity="few">Páčite sa %s ľuďom</item>
     </plurals>
     <string name="to_see_likes_by_vip">Ak chcete okamžite zistiť, komu sa páčite, aktivujte si VIP účet.</string>
     <string name="or">alebo</string>
     <string name="watch_likes_on_dating">prezrite si sympatie na obrazovke zoznámení, môžu byť na začiatku zoznamu</string>
     <string name="make_acquaintance">Zoznámiť sa</string>
+    <string name="settings_delete_account">Vymazať účet</string>
     <string name="chat_block_not_mutual">Začať sa rozprávať s užívateľom je možné iba vtedy, ak Vám poslal sympatiu alebo máte VIP status</string>
+    <string name="delete_account_are_you_sure">Ste si istí?</string>
+    <string name="delete">Vymazať</string>
+    <string name="delete_account_warning">Pozor! Pokúšate sa zrušiť svoj profil na Topface.</string>
+    <string name="delete_account_error">Váš účet sa bohužiaľ nepodarilo zrušiť. Môžete sa o to pokúsiť ešte raz.</string>
+    <string name="delete_account_will_be_restored_are_you_sure">Pokúšate sa vojsť do Vami zrušeného účtu na Topface. Ak vojdete obnovíte ho. Ste si istí?</string>
+    <string name="restore_of_account">Obnoviť účet</string>
+    <string name="restore">Obnoviť</string>
+    <string name="admiration_sended">Údiv bol poslaný</string>
 </resources>
