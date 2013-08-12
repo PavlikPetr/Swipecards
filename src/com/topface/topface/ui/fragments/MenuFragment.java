@@ -436,7 +436,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         for (int i = 0; i < mButtons.size(); i++) {
             int key = mButtons.keyAt(i);
             Button btn = mButtons.get(key);
-            if (key != F_PROFILE && key != type) {
+            if (key != F_PROFILE && key != F_EDITOR && key != type) {
                 setAlphaToTextAndDrawable(btn,102);
                 btn.setOnClickListener(new OnClickListener() {
                     @Override
