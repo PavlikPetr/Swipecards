@@ -30,8 +30,7 @@ public class Offerwalls {
     private static ConsumableProductHelper mGetJarHelper;
 
     private final static String GETJAR_APP_KEY = "407c520c-aaba-44e8-9a06-478c2b595437";
-    private final static String GETJAR_ENCRYPTION_KEY = "0000MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCEuY/YoY8n/WiXdXqv2+7v+N7B279TpVZi4IUEjZRXZAJMytPPqelWFFDAByVHcCZZGCzXoCRjwsvIPel/X0XpbPNVmgWXyMtCIe3gfGvRL686RCGu+MJSzAsFqV9JMes4eycBgjN6tzqo0nZjzmLTNLEpEzttAwKeRVG/q3txtwIDAQAB";
-    private static final String GETJAR_PRODUCT_ID = "id"; //TODO
+    private static final String GETJAR_PRODUCT_ID = "id100"; //TODO
     private static final String GETJAR_PRODUCT_NAME = "100 coins"; //TODO
     private static final String GETJAR_PRODUCT_DESCRIPTION = "coins"; //TODO
     private static final long GETJAR_PRICE = 1; //TODO
@@ -163,7 +162,7 @@ public class Offerwalls {
      **/
     private static void initGetJar(Context context) {
         try {
-            mGetJarContext = GetJarManager.createContext(GETJAR_APP_KEY, GETJAR_ENCRYPTION_KEY, context, new RewardsReceiver(new Handler()));
+            mGetJarContext = GetJarManager.createContext(GETJAR_APP_KEY, context, new RewardsReceiver(new Handler()));
             mGetJarHelper = new ConsumableProductHelper(mGetJarContext);
         } catch (Exception e) {
             Debug.error(e);
@@ -173,7 +172,7 @@ public class Offerwalls {
     public static void startGetJar(Activity activity) {
         if (mGetJarContext == null || mGetJarHelper == null) initGetJar(activity);
         ConsumableProduct consumableProduct = new ConsumableProduct(GETJAR_PRODUCT_ID, GETJAR_PRODUCT_NAME,
-                GETJAR_PRODUCT_DESCRIPTION, GETJAR_PRICE);
+                GETJAR_PRODUCT_DESCRIPTION, GETJAR_PRICE, R.drawable.ic_coins);
         mGetJarHelper.buy(activity.getString(R.string.getjar_auth_title), consumableProduct);
     }
 
