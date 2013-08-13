@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments;
 
+import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -173,9 +174,14 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         mTvNotifyFans = (TextView) rootLayout.findViewById(R.id.tvNotifyFans);
         mTvNotifyVisitors = (TextView) rootLayout.findViewById(R.id.tvNotifyVisitors);
 
-        mHardwareAccelerated = Build.VERSION.SDK_INT >= 11 && rootLayout.isHardwareAccelerated();
+        mHardwareAccelerated = isHardwareAccelerated(rootLayout);
 
         return rootLayout;
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private boolean isHardwareAccelerated(View rootLayout) {
+        return Build.VERSION.SDK_INT >= 11 && rootLayout.isHardwareAccelerated();
     }
 
     private SparseArray<Button> getButtonsMap(View rootLayout) {
@@ -436,7 +442,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         for (int i = 0; i < mButtons.size(); i++) {
             int key = mButtons.keyAt(i);
             Button btn = mButtons.get(key);
-            if (key != F_PROFILE && key != type) {
+            if (key != F_PROFILE && key != F_EDITOR && key != type) {
                 setAlphaToTextAndDrawable(btn, 102);
                 btn.setOnClickListener(new OnClickListener() {
                     @Override

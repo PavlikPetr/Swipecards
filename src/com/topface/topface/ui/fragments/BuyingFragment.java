@@ -51,17 +51,26 @@ public class BuyingFragment extends BillingFragment {
     private ServicesTextView mCurLikes;
     private TextView mResourcesInfo;
 
-    public static BuyingFragment newInstance(int type, int coins) {
+    public static BuyingFragment newInstance(int type, int coins, String from) {
         BuyingFragment fragment = new BuyingFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_ITEM_TYPE, type);
         args.putInt(ARG_ITEM_PRICE, coins);
+        if (from != null) {
+            args.putString(ARG_TAG_SOURCE, from);
+        }
         fragment.setArguments(args);
         return fragment;
     }
 
-    public static BuyingFragment newInstance() {
-        return new BuyingFragment();
+    public static BuyingFragment newInstance(String from) {
+        BuyingFragment buyingFragment = new BuyingFragment();
+        if (from != null) {
+            Bundle args = new Bundle();
+            args.putString(ARG_TAG_SOURCE, from);
+            buyingFragment.setArguments(args);
+        }
+        return buyingFragment;
     }
 
     @Override
