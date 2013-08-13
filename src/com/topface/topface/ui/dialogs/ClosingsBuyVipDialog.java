@@ -63,6 +63,7 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
             case R.id.btnWatchAsList:
                 Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
                 startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                closeDialog();
                 break;
             default:
                 break;

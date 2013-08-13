@@ -533,4 +533,5 @@
     <string name="or_use_common_likes_list">Or browse those that liked you in the common list</string>
     <string name="settings_feedback_transaction_number">Order number</string>
     <string name="settings_feedback_transaction_link">Where to find the order number?</string>
+    <string name="settings_feedback_transaction_number_hint">Enter order number</string>
 </resources>
