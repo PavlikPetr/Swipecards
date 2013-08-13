@@ -266,10 +266,10 @@ public class ProfilePhotoFragment extends BaseFragment {
             mViewFlipper.setDisplayedChild(0);
             if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
                 Photo photo = (Photo) msg.obj;
-
+                CacheProfile.photo = photo;
                 CacheProfile.photos.addFirst(photo);
                 mProfilePhotoGridAdapter.addFirst(photo);
-
+                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
                 Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
                 initTitleText(mTitle);
             } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
