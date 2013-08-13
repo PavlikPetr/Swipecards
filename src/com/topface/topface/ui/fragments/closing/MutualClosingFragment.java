@@ -104,7 +104,6 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
     protected void onUsersProcessed() {
         usersProcessed = true;
         LikesClosingFragment.usersProcessed = false;
-        CountersManager.getInstance(getActivity()).setCounter(CountersManager.LIKES,0,true);
         CacheProfile.getOptions().closing.onStopMutualClosings();
         super.onUsersProcessed();
     }

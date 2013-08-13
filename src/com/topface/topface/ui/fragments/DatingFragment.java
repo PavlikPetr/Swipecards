@@ -166,7 +166,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
         //При выходе из фрагмента сохраняем кэш поиска
         if (mUserSearchList != null) {
-            mUserSearchList.saveCache();
+            if (LocaleConfig.localeChangeInitiated) {
+                mUserSearchList.saveCurrentInCache();
+            } else {
+                mUserSearchList.saveCache();
+            }
         }
     }
 

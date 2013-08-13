@@ -6,10 +6,7 @@ import com.topface.topface.data.FeedLike;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.RateRequest;
 import com.topface.topface.requests.SkipAllClosedRequest;
-import com.topface.topface.utils.ActionBar;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.RateController;
-import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.*;
 
 public class LikesClosingFragment extends ClosingFragment implements View.OnClickListener {
 
@@ -107,6 +104,7 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     @Override
     protected void onUsersProcessed() {
         usersProcessed = true;
+        CountersManager.getInstance(getActivity()).setCounter(CountersManager.LIKES,0,true);
         CacheProfile.getOptions().closing.onStopLikesClosings();
         super.onUsersProcessed();
     }

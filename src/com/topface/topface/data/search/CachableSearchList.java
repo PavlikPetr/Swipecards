@@ -29,6 +29,15 @@ public class CachableSearchList<T extends FeedUser> extends UsersList<T> {
         mCache.setCache(this);
     }
 
+    /**
+     * Сохранить в кэш текущего пользователя
+     */
+    public void saveCurrentInCache() {
+        removeAllUsersExceptCurrent();
+        log("Save in Cache current user");
+        mCache.setCache(this);
+    }
+
     public boolean setSignature(final String signature) {
         boolean result = super.setSignature(signature);
         if (result) {

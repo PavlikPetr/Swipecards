@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.SearchManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -38,6 +39,7 @@ import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.settings.SettingsAccountFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.*;
+import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -378,6 +380,8 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                                     @Override
                                     public void onClick(DialogInterface dialogConfirm, int which) {
                                         String selectedLocale = locales[selectedPosition];
+                                        (new SearchCacheManager()).clearCache();
+
                                         LocaleConfig.changeLocale(getActivity(), selectedLocale,MenuFragment.F_PROFILE);
                                     }
                                 })

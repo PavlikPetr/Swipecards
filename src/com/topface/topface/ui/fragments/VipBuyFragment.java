@@ -42,23 +42,24 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     private LinearLayout mBuyVipViewsContainer;
     private LinearLayout mEditPremiumContainer;
 
-    // В этот метод потом можно будет передать аргументы,
-    // чтобы потом установить их с помощью setArguments();
-    public static VipBuyFragment newInstance() {
-        return new VipBuyFragment();
-    }
 
-    public static VipBuyFragment newInstance(boolean needActionBar) {
-        return newInstance(needActionBar, null);
-    }
-
-
-    public static VipBuyFragment newInstance(boolean needActionBar, String text) {
+    /**
+     * Создает новый инстанс фрагмента покупки VIP
+     *
+     * @param needActionBar включает показ ActionBar (он не нужен например в профиле
+     * @param text          сопроводительный текст фрагмента (нужен например что-бы объяснить, что определнная функция только для VIP)
+     * @param from          параметр для статистики покупок, что бы определить откуда пользователь пришел
+     * @return Фрагмент покупки VIP
+     */
+    public static VipBuyFragment newInstance(boolean needActionBar, String text, String from) {
         VipBuyFragment fragment = new VipBuyFragment();
         Bundle args = new Bundle();
         args.putBoolean(ACTION_BAR_CONST, needActionBar);
         if (text != null) {
             args.putString(ARG_TAG_EXRA_TEXT, text);
+        }
+        if (from != null) {
+            args.putString(ARG_TAG_SOURCE, from);
         }
         fragment.setArguments(args);
         return fragment;
@@ -139,7 +140,6 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
                 @Override
                 public void onClick(String id) {
                     buySubscription(id);
-//                    buyItem("android.test.purchased");
                     Bundle arguments = getArguments();
                     String from = "";
                     if (arguments != null) {
@@ -245,7 +245,6 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
             public void fail(int codeError, ApiResponse response) throws NullPointerException {
                 if (mInvisSwitcher != null && getActivity() != null) {
                     if (CacheProfile.invisible != mInvisSwitcher.isChecked()) {
-                        //TODO: Нужно как-то оповещать пользователя, что не получилось
                         mInvisSwitcher.doSwitch();
                         mInvisLoadBar.setVisibility(View.GONE);
                         mInvisSwitcher.setVisibility(View.VISIBLE);
@@ -300,7 +299,6 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
 
     @Override
     public void onError() {
-        //TODO: сделать обработку ошибок
     }
 
     @Override

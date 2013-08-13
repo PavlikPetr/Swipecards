@@ -173,15 +173,16 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
                 emailContainer.setVisibility(View.GONE);
                 root.findViewById(R.id.tvTransactionIdTitle).setVisibility(View.VISIBLE);
                 mTransactionIdEditText.setVisibility(View.VISIBLE);
-                TextView link = ((TextView)root.findViewById(R.id.tvTransactionIdInfoLink));
-                link.setVisibility(View.VISIBLE);
-                link.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Utils.hideSoftKeyboard(getActivity(),mEditText,mEditEmail,mTransactionIdEditText);
-                        Utils.goToUrl(getActivity(),getString(R.string.transaction_info_link));
-                    }
-                });
+                //TODO when link will be available
+//                TextView link = ((TextView)root.findViewById(R.id.tvTransactionIdInfoLink));
+//                link.setVisibility(View.VISIBLE);
+//                link.setOnClickListener(new OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Utils.hideSoftKeyboard(getActivity(),mEditText,mEditEmail,mTransactionIdEditText);
+//                        Utils.goToUrl(getActivity(),getString(R.string.transaction_info_link));
+//                    }
+//                });
                 break;
             case ERROR_MESSAGE:
             case COOPERATION_MESSAGE:

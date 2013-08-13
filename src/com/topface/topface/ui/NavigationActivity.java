@@ -223,6 +223,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         if (App.getConfig().getLocaleConfig().fetchToSystemLocale()) {
             LocaleConfig.changeLocale(this, App.getConfig().getLocaleConfig().getApplicationLocale(), mFragmentMenu.getCurrentFragmentId());
             return;
+        } else {
+            LocaleConfig.localeChangeInitiated = false;
         }
 
         //Отправляем не обработанные запросы на покупку
@@ -238,7 +240,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         new ExternalLinkExecuter(mListener).execute(getIntent());
 
         App.checkProfileUpdate();
-        if (!CacheProfile.premium && !mHasClosingsForThisSession &&
+        if (!AuthToken.getInstance().isEmpty() &&
+                !CacheProfile.premium && !mHasClosingsForThisSession &&
                 mFragmentMenu.getCurrentFragmentId() != MenuFragment.F_PROFILE) {
             if (CacheProfile.unread_likes > 0 || CacheProfile.unread_mutual > 0) {
                 onClosings();
