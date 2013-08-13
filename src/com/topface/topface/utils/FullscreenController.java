@@ -12,6 +12,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import com.inneractive.api.ads.InneractiveAd;
 import com.inneractive.api.ads.InneractiveAdListener;
+import com.ivengo.adv.AdvListener;
+import com.ivengo.adv.AdvView;
 import com.mobclix.android.sdk.MobclixFullScreenAdView;
 import com.mobclix.android.sdk.MobclixFullScreenAdViewListener;
 import com.mopub.mobileads.MoPubErrorCode;
@@ -41,11 +43,13 @@ public class FullscreenController {
     public static final String URL_SEPARATOR = "::";
     private static boolean isFullScreenBannerVisible = false;
     private static final String MOPUB_INTERSTITIAL_ID = "00db7208a90811e281c11231392559e4";
+    private static final String IVENGO_APP_ID = "aggeas97392g";
 
     private SharedPreferences mPreferences;
     private Activity mActivity;
 
     private MoPubInterstitial mInterstitial;
+    private AdvView advViewIvengo;
 
     public FullscreenController(Activity activity) {
         mActivity = activity;
@@ -66,10 +70,36 @@ public class FullscreenController {
                         requestInneractiveFullscreen();
                     } else if (startPage.banner.equals(Options.BANNER_MOBCLIX)) {
                         requestMobclixFullscreen();
+                    } else if (startPage.banner.equals(Options.BANNER_IVENGO)) {
+                        requestIvengoFullscreen();
                     }
                 }
             }
         }
+    }
+
+    private void requestIvengoFullscreen() {
+        advViewIvengo= AdvView.create(mActivity, IVENGO_APP_ID);
+        advViewIvengo.showBanner();
+        advViewIvengo.setAdvListener(new AdvListener() {
+            @Override
+            public void onDisplayAd() {
+                addLastFullscreenShowedTime();
+            }
+
+            @Override
+            public void onAdClick(String s) {
+            }
+
+            @Override
+            public void onFailedToReceiveAd(AdvView.ErrorCode errorCode) {
+                requestFallbackFullscreen();
+            }
+
+            @Override
+            public void onCloseAd(int i) {
+            }
+        });
     }
 
     private void requestMobclixFullscreen() {
@@ -373,5 +403,11 @@ public class FullscreenController {
 
     public void onDestroy() {
         if (mInterstitial != null) mInterstitial.destroy();
+    }
+
+    public void onPause() {
+        if(advViewIvengo != null) {
+            advViewIvengo.dismiss();
+        }
     }
 }

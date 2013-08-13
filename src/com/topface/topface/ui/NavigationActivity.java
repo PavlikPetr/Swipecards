@@ -203,7 +203,14 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             mFullscreenController = new FullscreenController(this);
             mFullscreenController.requestFullscreen();
         }
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mFullscreenController != null) {
+            mFullscreenController.onPause();
+        }
     }
 
     @Override
