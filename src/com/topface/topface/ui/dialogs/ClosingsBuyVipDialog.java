@@ -21,6 +21,7 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
 
     public static final String TAG = "com.topface.topface.ui.dialogs.ClosingsBuyVipDialog_TAG";
     private static final String ARG_LIKES = "likesCount";
+    private IWatchSequentialyListener mWatchSequentialyListener;
 
 
     @Override
@@ -53,6 +54,9 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnWatchSequentually:
+                if(mWatchSequentialyListener != null) mWatchSequentialyListener.onWatchSequentialy();
+                closeDialog();
+                break;
             case R.id.btnClose:
                 closeDialog();
                 break;
@@ -86,5 +90,13 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
     public void show(FragmentManager manager, String tag) {
         super.show(manager, tag);
         ClosingsBuyVipDialog.opened = true;
+    }
+
+    public void setOnWatchSequentialyListener(IWatchSequentialyListener listener) {
+        mWatchSequentialyListener = listener;
+    }
+
+    public interface IWatchSequentialyListener {
+        void onWatchSequentialy();
     }
 }

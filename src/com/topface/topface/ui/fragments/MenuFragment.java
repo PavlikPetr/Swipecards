@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments;
 
+import android.app.Activity;
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -27,6 +28,7 @@ import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.ClosingsBuyVipDialog;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
 import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
@@ -486,6 +488,15 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         if (ClosingsBuyVipDialog.opened) return;
 
         ClosingsBuyVipDialog newFragment = ClosingsBuyVipDialog.newInstance(likesCount);
+        newFragment.setOnWatchSequentialyListener(new ClosingsBuyVipDialog.IWatchSequentialyListener() {
+            @Override
+            public void onWatchSequentialy() {
+                Activity activity = getActivity();
+                if (activity instanceof NavigationActivity) {
+                    ((NavigationActivity)activity).showContent();
+                }
+            }
+        });
         try {
             newFragment.show(getActivity().getSupportFragmentManager(), ClosingsBuyVipDialog.TAG);
         } catch (Exception e) {

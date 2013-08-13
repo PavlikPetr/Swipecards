@@ -190,6 +190,10 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         showFragment(currentFragment);
     }
 
+    public void showContent() {
+        mSlidingMenu.showContent();
+    }
+
     @Override
     public void onLoadProfile() {
         super.onLoadProfile();
