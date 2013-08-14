@@ -20,9 +20,9 @@ public class ValidateGetJarRequest extends ApiRequest{
     @Override
     protected JSONObject getRequestData() throws JSONException {
         return (new JSONObject())
-                .put("signedData", signedData)
+                .put("signeddata", signedData)
                 .put("signature", signature)
-                .put("transactionId", transactionId);
+                .put("transaction", transactionId);
     }
 
     @Override

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
+import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 import com.getjar.sdk.*;
 import com.getjar.sdk.listener.EnsureUserAuthListener;
@@ -18,11 +19,13 @@ import com.tapjoy.TapjoyConnect;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.ValidateGetJarRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.offerwalls.clickky.ClickkyActivity;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -33,7 +36,6 @@ public class Offerwalls {
     private static ConsumableProductHelper mGetJarHelper;
 
     private final static String GETJAR_APP_KEY = "407c520c-aaba-44e8-9a06-478c2b595437";
-    private static final String GETJAR_PRODUCT_DESCRIPTION = ""; //TODO
     private static final Float GETJAT_MAX_DISCOUNT = 0.1f; //TODO
     private static final Float GETJAT_MAX_MARKUP = 0.1f; //TODO
 
@@ -182,7 +184,7 @@ public class Offerwalls {
         ConsumableProduct consumableProduct = new ConsumableProduct(
                 CacheProfile.getOptions().getJar.getId(),
                 CacheProfile.getOptions().getJar.getName(),
-                GETJAR_PRODUCT_DESCRIPTION,
+                CacheProfile.getOptions().getJar.getName(),
                 CacheProfile.getOptions().getJar.getPrice(),
                 R.drawable.ic_coins
         );
@@ -202,19 +204,32 @@ public class Offerwalls {
                     PurchaseSucceededResponse response = (PurchaseSucceededResponse) value;
                     ValidateGetJarRequest request = new ValidateGetJarRequest(
                             mGetJarContext.getAndroidContext(),
-                            response.getSignature(),
+                            response.getSignedPayload(),
                             response.getSignature(),
                             response.getTransactionId());
                     request.callback(new ApiHandler() {
                         @Override
                         public void success(ApiResponse response) {
-                            boolean valid = response.getJsonResult().optBoolean("valid",false);
-                            if (valid) {
-                                StringBuilder builder = new StringBuilder();
-                                builder.append(getContext().getString(R.string.youve_earned))
-                                        .append(" ")
-                                        .append(CacheProfile.getOptions().getJar.getName());
-                                Toast.makeText(getContext(), builder.toString(), Toast.LENGTH_LONG).show();
+                            JSONObject result = response.getJsonResult();
+                            if (result != null) {
+                                boolean valid = result.optBoolean("valid",false);
+                                if (valid) {
+                                    StringBuilder builder = new StringBuilder();
+                                    builder.append(getContext().getString(R.string.youve_earned))
+                                            .append(" ")
+                                            .append(CacheProfile.getOptions().getJar.getName());
+                                    if (result.has("money")) {
+                                        CacheProfile.money = result.optInt("money", CacheProfile.money);
+                                    }
+                                    if (result.has("likes")) {
+                                        CacheProfile.likes = result.optInt("likes", CacheProfile.likes);
+                                    }
+                                    Toast.makeText(getContext(), builder.toString(), Toast.LENGTH_LONG).show();
+                                    LocalBroadcastManager.getInstance(getContext())
+                                            .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                                } else {
+                                    showToast(R.string.general_server_error);
+                                }
                             } else {
                                 showToast(R.string.general_server_error);
                             }
