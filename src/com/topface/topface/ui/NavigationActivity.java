@@ -28,7 +28,6 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
-import com.topface.topface.ui.fragments.AirMessagesPopupFragment;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
@@ -92,14 +91,17 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     protected void onClosingDataReceived() {
         super.onClosingDataReceived();
-        if (!CacheProfile.premium && !mClosingsOnProfileUpdateInvoked) {
+        if (!CacheProfile.premium && !mClosingsOnProfileUpdateInvoked && !mHasClosingsForThisSession) {
             mClosingsOnProfileUpdateInvoked = true;
             Options.Closing closing = CacheProfile.getOptions().closing;
             if (closing.isClosingsEnabled()) {
                 getIntent().putExtra(GCMUtils.NEXT_INTENT, mFragmentMenu.getCurrentFragmentId());
+                Debug.log("Closing:Last fragment ID=" + mFragmentMenu.getCurrentFragmentId() + " from NavigationActivity");
                 MutualClosingFragment.usersProcessed = !closing.isMutualClosingAvailable();
                 LikesClosingFragment.usersProcessed = !closing.isLikesClosingAvailable();
-                if (!MutualClosingFragment.usersProcessed) onClosings();
+                if (!MutualClosingFragment.usersProcessed || !LikesClosingFragment.usersProcessed) {
+                    onClosings();
+                }
             }
         }
     }
@@ -181,6 +183,10 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         showFragment(currentFragment);
     }
 
+    public void showContent() {
+        mSlidingMenu.showContent();
+    }
+
     @Override
     public void onLoadProfile() {
         super.onLoadProfile();
@@ -189,7 +195,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         PopupManager manager = new PopupManager(this);
         manager.showOldVersionPopup(CacheProfile.getOptions().max_version);
         manager.showRatePopup();
-        AirMessagesPopupFragment.showIfNeeded(getSupportFragmentManager());
         actionsAfterRegistration();
         if (CacheProfile.show_ad) {
             mFullscreenController = new FullscreenController(this);
@@ -215,6 +220,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         if (App.getConfig().getLocaleConfig().fetchToSystemLocale()) {
             LocaleConfig.changeLocale(this, App.getConfig().getLocaleConfig().getApplicationLocale(), mFragmentMenu.getCurrentFragmentId());
             return;
+        } else {
+            LocaleConfig.localeChangeInitiated = false;
         }
 
         //Отправляем не обработанные запросы на покупку
@@ -230,7 +237,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         new ExternalLinkExecuter(mListener).execute(getIntent());
 
         App.checkProfileUpdate();
-        if (!CacheProfile.premium && !mHasClosingsForThisSession &&
+        if (!AuthToken.getInstance().isEmpty() &&
+                !CacheProfile.premium && !mHasClosingsForThisSession &&
                 mFragmentMenu.getCurrentFragmentId() != MenuFragment.F_PROFILE) {
             if (CacheProfile.unread_likes > 0 || CacheProfile.unread_mutual > 0) {
                 onClosings();

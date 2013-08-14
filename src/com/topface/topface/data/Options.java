@@ -120,12 +120,12 @@ public class Options extends AbstractData {
             GETJAR,
             RANDOM
     };
-    public static final String PREMIUM_MESSAGES_POPUP_SHOW_TIME = "premium_messages_popup_show_time";
+    public static final String PREMIUM_MESSAGES_POPUP_SHOW_TIME = "premium_messages_popup_last_show";
 
     /**
      * Настройки для каждого типа страниц
      */
-    public HashMap<String, Options.Page> pages = new HashMap<String, Options.Page>();
+    public HashMap<String, Page> pages = new HashMap<String, Options.Page>();
     public LinkedList<BuyButton> coins = new LinkedList<BuyButton>();
     public LinkedList<BuyButton> likes = new LinkedList<BuyButton>();
     public LinkedList<BuyButton> premium = new LinkedList<BuyButton>();
@@ -218,6 +218,8 @@ public class Options extends AbstractData {
                 options.premium_messages = new PremiumMessages(
                         response.jsonResult.optJSONObject("premium_messages")
                 );
+            } else {
+                options.premium_messages = new PremiumMessages(false, 10, 1000);
             }
 
             if (response.jsonResult.has("links")) {
@@ -456,6 +458,18 @@ public class Options extends AbstractData {
                     PreferenceManager.getDefaultSharedPreferences(App.getContext())
                             .edit()
                             .putLong(PREMIUM_MESSAGES_POPUP_SHOW_TIME, System.currentTimeMillis())
+                            .commit();
+                }
+            }).run();
+        }
+
+        public void clearPopupShowTime() {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    PreferenceManager.getDefaultSharedPreferences(App.getContext())
+                            .edit()
+                            .remove(PREMIUM_MESSAGES_POPUP_SHOW_TIME)
                             .commit();
                 }
             }).run();

@@ -131,7 +131,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         SharedPreferences preferences = getActivity().getSharedPreferences(
                 Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         mNovice = Novice.getInstance(preferences);
-        checkInvitePopup();
+        showPromoDialog();
     }
 
     @Override
@@ -156,6 +156,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         setHighRatePrice();
         updateResources();
+        refreshActionBarTitles(getView());
     }
 
     @Override
@@ -165,7 +166,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
         //При выходе из фрагмента сохраняем кэш поиска
         if (mUserSearchList != null) {
-            mUserSearchList.saveCache();
+            if (LocaleConfig.localeChangeInitiated) {
+                mUserSearchList.saveCurrentInCache();
+            } else {
+                mUserSearchList.saveCache();
+            }
         }
     }
 
@@ -256,7 +261,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private void initActionBar(View view) {
         // Navigation Header
         ActionBar actionBar = getActionBar(view);
-        setActionBarTitles(view);
+        refreshActionBarTitles(view);
         final Activity activity = getActivity();
         if (activity instanceof NavigationActivity) {
             actionBar.showHomeButton((NavigationActivity) activity);
@@ -264,7 +269,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         actionBar.showSettingsButton(mSettingsListener, false);
     }
 
-    private void setActionBarTitles(View view) {
+    private void refreshActionBarTitles(View view) {
         getActionBar(view).setTitleText(getTitle());
         getActionBar(view).setSubTitleText(getSubtitle());
     }
@@ -307,8 +312,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mProfileReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                updateFilterData();
-                updateResources();
+                if (isAdded()) {
+                    updateFilterData();
+                    updateResources();
+                }
             }
         };
     }
@@ -319,7 +326,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mUserSearchList != null) {
             mUserSearchList.updateSignatureAndUpdate();
         }
-        setActionBarTitles(getView());
+        refreshActionBarTitles(getView());
     }
 
     private void updateData(final boolean isAddition) {
@@ -437,9 +444,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         switch (view.getId()) {
             case R.id.loDatingResources: {
                 EasyTracker.getTracker().trackEvent("Dating", "BuyClick", "", 1L);
-                Intent intent = new Intent(getActivity(), ContainerActivity.class);
-                intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
-                startActivity(intent);
+                startActivity(ContainerActivity.getBuyingIntent("Dating"));
             }
             break;
             case R.id.btnDatingLove: {
@@ -536,8 +541,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mCurrentUser.mutual) {
             openChat(getActivity());
         } else {
-            Intent intent = ContainerActivity.getVipBuyIntent(getString(R.string.chat_block_not_mutual), "DatingChatLock");
-            startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+            startActivityForResult(
+                    ContainerActivity.getVipBuyIntent(
+                            getString(R.string.chat_block_not_mutual),
+                            "DatingChatLock"
+                    ),
+                    ContainerActivity.INTENT_BUY_VIP_FRAGMENT
+            );
         }
     }
 

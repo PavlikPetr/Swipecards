@@ -45,7 +45,6 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
         }
         View btnSkip = controlsView.findViewById(R.id.btnSkip);
         btnSkip.setOnClickListener(this);
-        btnSkip.setActivated(true);
         controlsView.findViewById(R.id.btnChat).setOnClickListener(this);
     }
 
@@ -105,7 +104,6 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
     protected void onUsersProcessed() {
         usersProcessed = true;
         LikesClosingFragment.usersProcessed = false;
-        CountersManager.getInstance(getActivity()).setCounter(CountersManager.LIKES,0,true);
         CacheProfile.getOptions().closing.onStopMutualClosings();
         super.onUsersProcessed();
     }

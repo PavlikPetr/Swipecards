@@ -458,7 +458,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             addBodyPage(ProfilePhotoFragment.class.getName(), getResources().getString(R.string.profile_photo));
             addBodyPage(ProfileFormFragment.class.getName(), getResources().getString(R.string.profile_form));
             addBodyPage(VipBuyFragment.class.getName(), getResources().getString(R.string.profile_vip_status));
-            addBodyPage(ServicesFragment.class.getName(), getResources().getString(R.string.profile_services));
             addBodyPage(GiftsFragment.class.getName(), getResources().getString(R.string.profile_gifts));
         } else {
             addBodyPage(UserPhotoFragment.class.getName(), getResources().getString(R.string.profile_photo));
@@ -499,7 +498,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             case R.id.acDelight:
                 if (v.isEnabled()) {
                     v.setSelected(true);
-                    TextView textView = (TextView) v.findViewById(R.id.delTV);
+                    final TextView textView = (TextView) v.findViewById(R.id.delTV);
                     final ProgressBar loader = (ProgressBar) v.findViewById(R.id.delPrBar);
                     final ImageView icon = (ImageView) v.findViewById(R.id.delIcon);
 
@@ -530,9 +529,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                                 Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                                 v.setEnabled(true);
                                 v.setSelected(false);
-                                if (v instanceof TextView) {
-                                    TextView view = (TextView) v;
-                                    view.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
+                                if (textView != null) {
+                                    textView.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
                                 }
                             }
                         }
@@ -606,8 +604,10 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     if (mCallingClass != null && mUserProfile != null && (mUserProfile instanceof User)) {
                         if (mCallingClass.equals(DatingFragment.class.getName()) || mCallingClass.equals(LeadersDialog.class.getName())) {
                             if (!((User) mUserProfile).mutual) {
-                                Intent intent = ContainerActivity.getVipBuyIntent(getString(R.string.chat_block_not_mutual), "ProfileChatLock");
-                                startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                                startActivityForResult(
+                                        ContainerActivity.getVipBuyIntent(getString(R.string.chat_block_not_mutual), "ProfileChatLock"),
+                                        ContainerActivity.INTENT_BUY_VIP_FRAGMENT
+                                );
                                 break;
                             }
                         }
@@ -657,9 +657,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         }).exec();
                     }
                 } else {
-                    Intent intent = new Intent(getActivity(), ContainerActivity.class);
-                    intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
-                    startActivity(intent);
+                    startActivityForResult(ContainerActivity.getVipBuyIntent(null, "ProfileSuperSkills"), ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                 }
                 break;
             case R.id.acBookmark:
@@ -865,9 +863,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     if (response.code == ApiResponse.PAYMENT) {
                         FragmentActivity activity = getActivity();
                         if (activity != null) {
-                            Intent intent = new Intent(activity.getApplicationContext(),
-                                    ContainerActivity.class);
-                            intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
+                            Intent intent = ContainerActivity.getBuyingIntent("Profile");
                             intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
                             intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
                             startActivity(intent);

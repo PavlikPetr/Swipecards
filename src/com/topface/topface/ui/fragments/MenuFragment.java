@@ -1,5 +1,7 @@
 package com.topface.topface.ui.fragments;
 
+import android.app.Activity;
+import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -26,6 +28,7 @@ import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.ClosingsBuyVipDialog;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
 import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
@@ -162,7 +165,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         buyButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(ContainerActivity.getNewIntent(ContainerActivity.INTENT_BUYING_FRAGMENT));
+                startActivity(ContainerActivity.getBuyingIntent("Menu"));
             }
         });
 
@@ -173,9 +176,14 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         mTvNotifyFans = (TextView) rootLayout.findViewById(R.id.tvNotifyFans);
         mTvNotifyVisitors = (TextView) rootLayout.findViewById(R.id.tvNotifyVisitors);
 
-        mHardwareAccelerated = Build.VERSION.SDK_INT >= 11 && rootLayout.isHardwareAccelerated();
+        mHardwareAccelerated = isHardwareAccelerated(rootLayout);
 
         return rootLayout;
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private boolean isHardwareAccelerated(View rootLayout) {
+        return Build.VERSION.SDK_INT >= 11 && rootLayout.isHardwareAccelerated();
     }
 
     private SparseArray<Button> getButtonsMap(View rootLayout) {
@@ -332,9 +340,9 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private String getTagById(int id) {
-        if(id == F_LIKES && !LikesClosingFragment.usersProcessed) {
+        if (id == F_LIKES && !LikesClosingFragment.usersProcessed) {
             return "fragment_switch_controller_closed_" + id;
-        } else if(id == F_MUTUAL && !MutualClosingFragment.usersProcessed) {
+        } else if (id == F_MUTUAL && !MutualClosingFragment.usersProcessed) {
             return "fragment_switch_controller_closed_" + id;
         } else {
             return "fragment_switch_controller_" + id;
@@ -363,6 +371,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                     fragment = new LikesFragment();
                 } else {
                     if (!isClosed) getActivity().getIntent().putExtra(GCMUtils.NEXT_INTENT, getCurrentFragmentId());
+                    Debug.log("Closing:Last fragment F_LIKES from MenuFragment");
                     fragment = new LikesClosingFragment();
                 }
                 break;
@@ -435,8 +444,8 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         for (int i = 0; i < mButtons.size(); i++) {
             int key = mButtons.keyAt(i);
             Button btn = mButtons.get(key);
-            if (key != F_PROFILE && key != type) {
-                setAlphaToTextAndDrawable(btn,102);
+            if (key != F_PROFILE && key != F_EDITOR && key != type) {
+                setAlphaToTextAndDrawable(btn, 102);
                 btn.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -451,7 +460,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                     }
                 });
             } else {
-                setAlphaToTextAndDrawable(btn,255);
+                setAlphaToTextAndDrawable(btn, 255);
                 btn.setOnClickListener(this);
             }
         }
@@ -469,7 +478,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
     public void onStopClosings() {
         for (int i = 0; i < mButtons.size(); i++) {
             Button btn = mButtons.get(mButtons.keyAt(i));
-            setAlphaToTextAndDrawable(btn,255);
+            setAlphaToTextAndDrawable(btn, 255);
             btn.setOnClickListener(this);
         }
         mCurrentFragmentId = F_UNDEFINED;
@@ -479,6 +488,15 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         if (ClosingsBuyVipDialog.opened) return;
 
         ClosingsBuyVipDialog newFragment = ClosingsBuyVipDialog.newInstance(likesCount);
+        newFragment.setOnWatchSequentialyListener(new ClosingsBuyVipDialog.IWatchSequentialyListener() {
+            @Override
+            public void onWatchSequentialy() {
+                Activity activity = getActivity();
+                if (activity instanceof NavigationActivity) {
+                    ((NavigationActivity)activity).showContent();
+                }
+            }
+        });
         try {
             newFragment.show(getActivity().getSupportFragmentManager(), ClosingsBuyVipDialog.TAG);
         } catch (Exception e) {

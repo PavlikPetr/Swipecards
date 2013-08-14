@@ -22,7 +22,7 @@
     </style>
 
     <style name="ShadowUserText">
-        <item name="android:shadowColor">#806060</item>
+        <item name="android:shadowColor">#606060</item>
         <item name="android:shadowRadius">1</item>
         <item name="android:shadowDx">0</item>
         <item name="android:shadowDy">1</item>

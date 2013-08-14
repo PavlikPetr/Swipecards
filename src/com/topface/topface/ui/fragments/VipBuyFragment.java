@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,6 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
 
     public static final String ACTION_BAR_CONST = "needActionBar";
     public static final String ARG_TAG_EXRA_TEXT = "extra_text";
-    public static final String ARG_TAG_FROM = "from_value";
     EditSwitcher mInvisSwitcher;
 
     ProgressBar mInvisLoadBar;
@@ -42,24 +42,24 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     private LinearLayout mBuyVipViewsContainer;
     private LinearLayout mEditPremiumContainer;
 
-    // В этот метод потом можно будет передать аргументы,
-    // чтобы потом установить их с помощью setArguments();
-    public static VipBuyFragment newInstance() {
-        VipBuyFragment fragment = new VipBuyFragment();
-        return fragment;
-    }
 
-    public static VipBuyFragment newInstance(boolean needActionBar) {
-        return newInstance(needActionBar,null);
-    }
-
-
-    public static VipBuyFragment newInstance(boolean needActionBar, String text) {
+    /**
+     * Создает новый инстанс фрагмента покупки VIP
+     *
+     * @param needActionBar включает показ ActionBar (он не нужен например в профиле
+     * @param text          сопроводительный текст фрагмента (нужен например что-бы объяснить, что определнная функция только для VIP)
+     * @param from          параметр для статистики покупок, что бы определить откуда пользователь пришел
+     * @return Фрагмент покупки VIP
+     */
+    public static VipBuyFragment newInstance(boolean needActionBar, String text, String from) {
         VipBuyFragment fragment = new VipBuyFragment();
         Bundle args = new Bundle();
         args.putBoolean(ACTION_BAR_CONST, needActionBar);
         if (text != null) {
             args.putString(ARG_TAG_EXRA_TEXT, text);
+        }
+        if (from != null) {
+            args.putString(ARG_TAG_SOURCE, from);
         }
         fragment.setArguments(args);
         return fragment;
@@ -106,13 +106,13 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     }
 
     private void initExtraText(View root) {
-        TextView textView = (TextView)root.findViewById(R.id.tvExtraText);
+        TextView textView = (TextView) root.findViewById(R.id.tvExtraText);
         String text = null;
         if (getArguments() != null) {
             text = getArguments().getString(ARG_TAG_EXRA_TEXT);
             textView.setText(text);
         }
-        textView.setVisibility(text == null ? View.GONE : View.VISIBLE);
+        textView.setVisibility(TextUtils.isEmpty(text) ? View.GONE : View.VISIBLE);
     }
 
     private void switchLayouts() {
@@ -139,11 +139,11 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
             Options.setButton(btnContainer, curBtn, getActivity(), new Options.BuyButtonClickListener() {
                 @Override
                 public void onClick(String id) {
-                    buySubscriotion(id);
+                    buySubscription(id);
                     Bundle arguments = getArguments();
                     String from = "";
                     if (arguments != null) {
-                        from = "From" + arguments.getString(ARG_TAG_FROM);
+                        from = "From" + arguments.getString(ARG_TAG_SOURCE);
                     }
                     EasyTracker.getTracker().trackEvent("Subscription", "ButtonClick" + from, id, 0L);
                 }
@@ -176,26 +176,6 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
         mInvisSwitcher = new EditSwitcher(invisLayout);
         mInvisLoadBar = (ProgressBar) invisLayout.findViewWithTag("vsiLoadBar");
         mInvisSwitcher.setChecked(CacheProfile.invisible);
-
-//  Здесь работа с переключателем отображения VIP бэкграунда в элементах ленты,
-//  так как пока решили его не использовать, из основного layouta он был удален.
-//  View.gone ему нельзя было сделать, так как он был подключен с помощью include
-//
-//        RelativeLayout bgSwitchLayout =
-//                initEditItem(root,
-//                    R.id.fepMsgsBG,
-//                    R.drawable.edit_big_btn_bottom_selector,
-//                    R.drawable.ic_vip_message_bg_min,
-//                    getString(R.string.vip_messages_bg),
-//                    new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//
-//                        }
-//                    }
-//                    );
-//        mBgSwitcher = new EditSwitcher(bgSwitchLayout);
-//        mBgSwitcher.setChecked(false);
 
         initEditItem(root,
                 R.id.fepBlackList,
@@ -265,7 +245,6 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
             public void fail(int codeError, ApiResponse response) throws NullPointerException {
                 if (mInvisSwitcher != null && getActivity() != null) {
                     if (CacheProfile.invisible != mInvisSwitcher.isChecked()) {
-                        //TODO: Нужно как-то оповещать пользователя, что не получилось
                         mInvisSwitcher.doSwitch();
                         mInvisLoadBar.setVisibility(View.GONE);
                         mInvisSwitcher.setVisibility(View.VISIBLE);
@@ -320,7 +299,6 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
 
     @Override
     public void onError() {
-        //TODO: сделать обработку ошибок
     }
 
     @Override

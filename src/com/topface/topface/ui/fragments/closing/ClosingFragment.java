@@ -166,4 +166,10 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     public Class getItemsClass() {
         return FeedUser.class;
     }
+
+    @Override
+    protected void onCountersUpdated() {
+        super.onCountersUpdated();
+        refreshActionBarTitles(getView());
+    }
 }
