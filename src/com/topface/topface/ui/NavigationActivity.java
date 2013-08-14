@@ -88,24 +88,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mNovice.initNoviceFlags();
     }
 
-    @Override
-    protected void onClosingDataReceived() {
-        super.onClosingDataReceived();
-        if (!CacheProfile.premium && !mClosingsOnProfileUpdateInvoked && !mHasClosingsForThisSession) {
-            mClosingsOnProfileUpdateInvoked = true;
-            Options.Closing closing = CacheProfile.getOptions().closing;
-            if (closing.isClosingsEnabled()) {
-                getIntent().putExtra(GCMUtils.NEXT_INTENT, mFragmentMenu.getCurrentFragmentId());
-                Debug.log("Closing:Last fragment ID=" + mFragmentMenu.getCurrentFragmentId() + " from NavigationActivity");
-                MutualClosingFragment.usersProcessed = !closing.isMutualClosingAvailable();
-                LikesClosingFragment.usersProcessed = !closing.isLikesClosingAvailable();
-                if (!MutualClosingFragment.usersProcessed || !LikesClosingFragment.usersProcessed) {
-                    onClosings();
-                }
-            }
-        }
-    }
-
     private void initSlidingMenu() {
         mSlidingMenu = new SlidingMenu(this);
         mSlidingMenu.setMode(SlidingMenu.LEFT);
@@ -467,6 +449,29 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
     }
 
+    public static void onLogout() {
+        mHasClosingsForThisSession = false;
+        mClosingsOnProfileUpdateInvoked = false;
+    }
+
+    @Override
+    protected void onClosingDataReceived() {
+        super.onClosingDataReceived();
+        if (!CacheProfile.premium && !mClosingsOnProfileUpdateInvoked && !mHasClosingsForThisSession) {
+            mClosingsOnProfileUpdateInvoked = true;
+            Options.Closing closing = CacheProfile.getOptions().closing;
+            if (closing.isClosingsEnabled()) {
+                getIntent().putExtra(GCMUtils.NEXT_INTENT, mFragmentMenu.getCurrentFragmentId());
+                Debug.log("Closing:Last fragment ID=" + mFragmentMenu.getCurrentFragmentId() + " from NavigationActivity");
+                MutualClosingFragment.usersProcessed = !closing.isMutualClosingAvailable();
+                LikesClosingFragment.usersProcessed = !closing.isLikesClosingAvailable();
+                if (!MutualClosingFragment.usersProcessed || !LikesClosingFragment.usersProcessed) {
+                    onClosings();
+                }
+            }
+        }
+    }
+
     public void onClosings() {
         if (CacheProfile.unread_mutual == 0) {
             MutualClosingFragment.usersProcessed = true;
@@ -490,10 +495,5 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
         mFragmentMenu.onStopClosings();
         showFragment(null); // it will take fragment id from getIntent() extra data
-    }
-
-    public static void onLogout() {
-        mHasClosingsForThisSession = false;
-        mClosingsOnProfileUpdateInvoked = false;
     }
 }

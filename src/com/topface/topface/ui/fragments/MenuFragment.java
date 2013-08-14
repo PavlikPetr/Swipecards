@@ -370,7 +370,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 if (LikesClosingFragment.usersProcessed || CacheProfile.premium) {
                     fragment = new LikesFragment();
                 } else {
-                    if (!isClosed) getActivity().getIntent().putExtra(GCMUtils.NEXT_INTENT, getCurrentFragmentId());
+                    if (!isClosed) getActivity().getIntent().putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_LIKES);
                     Debug.log("Closing:Last fragment F_LIKES from MenuFragment");
                     fragment = new LikesClosingFragment();
                 }
@@ -472,7 +472,6 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         if (btn.getCompoundDrawables()[0] != null) {
             btn.getCompoundDrawables()[0].setAlpha(alpha);
         }
-        isClosed = false;
     }
 
     public void onStopClosings() {
@@ -482,6 +481,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             btn.setOnClickListener(this);
         }
         mCurrentFragmentId = F_UNDEFINED;
+        isClosed = false;
     }
 
     public void showWatchAsListDialog(int likesCount) {
