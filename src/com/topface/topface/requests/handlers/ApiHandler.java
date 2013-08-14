@@ -61,7 +61,7 @@ abstract public class ApiHandler extends Handler {
         }
     }
 
-    private void showToast(final int stringId) {
+    protected void showToast(final int stringId) {
         if (mContext != null && mContext instanceof Activity) {
             try {
                 //показываем уведомление
