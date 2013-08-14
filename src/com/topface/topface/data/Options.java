@@ -155,6 +155,7 @@ public class Options extends AbstractData {
     public boolean block_chat_not_mutual;
     public Closing closing = new Closing();
     public PremiumMessages premium_messages;
+    public GetJar getJar;
 
     public static Options parse(ApiResponse response) {
         Options options = new Options();
@@ -235,6 +236,9 @@ public class Options extends AbstractData {
             options.closing.enableSympathies = closings.optBoolean("enabled_sympathies");
             options.closing.limitMutual = closings.optInt("limit_mutual");
             options.closing.limitSympathies = closings.optInt("limit_sympathies");
+
+            JSONObject getJar = response.jsonResult.optJSONObject("getjar");
+            options.getJar = new GetJar(getJar.optString("id"),getJar.optString("name"),getJar.optLong("price"));
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
         }
@@ -550,6 +554,30 @@ public class Options extends AbstractData {
             SharedPreferences pref =  App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
             long lastCallTime = pref.getLong(Static.PREFERENCES_LIKES_CLOSING_LAST_TIME,0);
             return DateUtils.isOutside24Hours(lastCallTime, System.currentTimeMillis());
+        }
+    }
+
+    public static class GetJar {
+        String id = "unknown";
+        String name = "coins";
+        long price = Integer.MAX_VALUE;
+
+        public GetJar(String id,String name,long price) {
+            this.id = id;
+            this.name = name;
+            this.price = price;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public long getPrice() {
+            return price;
         }
     }
 }

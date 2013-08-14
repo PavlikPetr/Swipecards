@@ -17,6 +17,9 @@ import com.sponsorpay.sdk.android.publisher.SponsorPayPublisher;
 import com.tapjoy.TapjoyConnect;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.ValidateGetJarRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.offerwalls.clickky.ClickkyActivity;
@@ -30,10 +33,7 @@ public class Offerwalls {
     private static ConsumableProductHelper mGetJarHelper;
 
     private final static String GETJAR_APP_KEY = "407c520c-aaba-44e8-9a06-478c2b595437";
-    private static final String GETJAR_PRODUCT_ID = "id100"; //TODO
-    private static final String GETJAR_PRODUCT_NAME = "100 coins"; //TODO
-    private static final String GETJAR_PRODUCT_DESCRIPTION = "coins"; //TODO
-    private static final long GETJAR_PRICE = 1; //TODO
+    private static final String GETJAR_PRODUCT_DESCRIPTION = ""; //TODO
     private static final Float GETJAT_MAX_DISCOUNT = 0.1f; //TODO
     private static final Float GETJAT_MAX_MARKUP = 0.1f; //TODO
 
@@ -170,9 +170,22 @@ public class Offerwalls {
     }
 
     public static void startGetJar(Activity activity) {
-        if (mGetJarContext == null || mGetJarHelper == null) initGetJar(activity);
-        ConsumableProduct consumableProduct = new ConsumableProduct(GETJAR_PRODUCT_ID, GETJAR_PRODUCT_NAME,
-                GETJAR_PRODUCT_DESCRIPTION, GETJAR_PRICE, R.drawable.ic_coins);
+
+        if (mGetJarContext == null || mGetJarHelper == null) {
+            ProgressDialog prgs = new ProgressDialog(activity);
+            prgs.setTitle(R.string.general_dialog_loading);
+            prgs.setCancelable(false);
+            prgs.show();
+            initGetJar(activity);
+            prgs.dismiss();
+        }
+        ConsumableProduct consumableProduct = new ConsumableProduct(
+                CacheProfile.getOptions().getJar.getId(),
+                CacheProfile.getOptions().getJar.getName(),
+                GETJAR_PRODUCT_DESCRIPTION,
+                CacheProfile.getOptions().getJar.getPrice(),
+                R.drawable.ic_coins
+        );
         mGetJarHelper.buy(activity.getString(R.string.getjar_auth_title), consumableProduct);
     }
 
@@ -187,8 +200,33 @@ public class Offerwalls {
                 Object value = resultData.get(key);
                 if (value instanceof PurchaseSucceededResponse) {
                     PurchaseSucceededResponse response = (PurchaseSucceededResponse) value;
-                    String signedData = response.getSignedPayload();
-                    String signature = response.getSignature();
+                    ValidateGetJarRequest request = new ValidateGetJarRequest(
+                            mGetJarContext.getAndroidContext(),
+                            response.getSignature(),
+                            response.getSignature(),
+                            response.getTransactionId());
+                    request.callback(new ApiHandler() {
+                        @Override
+                        public void success(ApiResponse response) {
+                            boolean valid = response.getJsonResult().optBoolean("valid",false);
+                            if (valid) {
+                                StringBuilder builder = new StringBuilder();
+                                builder.append(getContext().getString(R.string.youve_earned))
+                                        .append(" ")
+                                        .append(CacheProfile.getOptions().getJar.getName());
+                                Toast.makeText(getContext(), builder.toString(), Toast.LENGTH_LONG).show();
+                            } else {
+                                showToast(R.string.general_server_error);
+                            }
+                        }
+
+                        @Override
+                        public void fail(int codeError, ApiResponse response) {
+                            showToast(R.string.general_server_error);
+                        }
+
+
+                    }).exec();
                 }
             }
         }
