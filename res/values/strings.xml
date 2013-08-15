@@ -505,13 +505,10 @@
     <string name="restore">Restore</string>
     <string name="admiration_sended">Admiration sent</string>
     <plurals name="general_coins">
-        <item quantity="one">%d coin</item>
-        <item quantity="few">%d coins</item>
-        <item quantity="many">%d coins</item>
         <item quantity="other">%d coins</item>
+        <item quantity="one">%d coin</item>
     </plurals>
     <string name="getjar_auth_title">Choose account</string>
-
     <string name="skip">Skip</string>
     <string name="chat">Chat</string>
     <string name="sympathies">Sympathies</string>
@@ -538,4 +535,6 @@
     <string name="settings_feedback_transaction_number">Order number</string>
     <string name="settings_feedback_transaction_link">Where to find the order number?</string>
     <string name="settings_feedback_transaction_number_hint">Enter order number</string>
+    <string name="youve_earned">You have earned %s</string>
+    <string name="general_logout_error">Failed to sign out</string>
 </resources>
