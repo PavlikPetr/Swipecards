@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
@@ -166,7 +165,11 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     public void showContent() {
-        mSlidingMenu.showContent();
+        mSlidingMenu.showContent(true);
+    }
+
+    public void showContent(boolean animation) {
+        mSlidingMenu.showContent(animation);
     }
 
     @Override
@@ -221,7 +224,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         App.checkProfileUpdate();
         if (!AuthToken.getInstance().isEmpty() &&
                 !CacheProfile.premium && !mHasClosingsForThisSession &&
-                mFragmentMenu.getCurrentFragmentId() != MenuFragment.F_PROFILE) {
+                mFragmentMenu.getCurrentFragmentId() != MenuFragment.F_PROFILE
+                && !mFragmentMenu.isClosed() && mClosingsOnProfileUpdateInvoked) {
             if (CacheProfile.unread_likes > 0 || CacheProfile.unread_mutual > 0) {
                 onClosings();
             }

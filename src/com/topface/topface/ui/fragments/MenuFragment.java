@@ -484,16 +484,20 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         isClosed = false;
     }
 
+    public boolean isClosed() {
+        return isClosed;
+    }
+
     public void showWatchAsListDialog(int likesCount) {
         if (ClosingsBuyVipDialog.opened) return;
 
         ClosingsBuyVipDialog newFragment = ClosingsBuyVipDialog.newInstance(likesCount);
         newFragment.setOnWatchSequentialyListener(new ClosingsBuyVipDialog.IWatchSequentialyListener() {
             @Override
-            public void onWatchSequentialy() {
+            public void onWatchSequentialy(boolean animate) {
                 Activity activity = getActivity();
                 if (activity instanceof NavigationActivity) {
-                    ((NavigationActivity)activity).showContent();
+                    ((NavigationActivity)activity).showContent(animate);
                 }
             }
         });

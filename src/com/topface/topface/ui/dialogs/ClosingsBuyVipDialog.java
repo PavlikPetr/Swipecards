@@ -54,7 +54,7 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnWatchSequentually:
-                if(mWatchSequentialyListener != null) mWatchSequentialyListener.onWatchSequentialy();
+                if(mWatchSequentialyListener != null) mWatchSequentialyListener.onWatchSequentialy(true);
                 closeDialog();
                 break;
             case R.id.btnClose:
@@ -98,6 +98,6 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
     }
 
     public interface IWatchSequentialyListener {
-        void onWatchSequentialy();
+        void onWatchSequentialy(boolean animate);
     }
 }
