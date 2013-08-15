@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
@@ -86,31 +85,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
         mNovice = Novice.getInstance(getPreferences());
         mNovice.initNoviceFlags();
-        try {
-            Looper.prepare();
-            Offerwalls.init(getApplicationContext());
-            Looper.loop();
-        } catch (Exception e) {
-            Debug.error(e);
-        }
-    }
-
-    @Override
-    protected void onClosingDataReceived() {
-        super.onClosingDataReceived();
-        if (!CacheProfile.premium && !mClosingsOnProfileUpdateInvoked && !mHasClosingsForThisSession) {
-            mClosingsOnProfileUpdateInvoked = true;
-            Options.Closing closing = CacheProfile.getOptions().closing;
-            if (closing.isClosingsEnabled()) {
-                getIntent().putExtra(GCMUtils.NEXT_INTENT, mFragmentMenu.getCurrentFragmentId());
-                Debug.log("Closing:Last fragment ID=" + mFragmentMenu.getCurrentFragmentId() + " from NavigationActivity");
-                MutualClosingFragment.usersProcessed = !closing.isMutualClosingAvailable();
-                LikesClosingFragment.usersProcessed = !closing.isLikesClosingAvailable();
-                if (!MutualClosingFragment.usersProcessed || !LikesClosingFragment.usersProcessed) {
-                    onClosings();
-                }
-            }
-        }
     }
 
     private void initSlidingMenu() {
@@ -190,6 +164,14 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         showFragment(currentFragment);
     }
 
+    public void showContent() {
+        mSlidingMenu.showContent(true);
+    }
+
+    public void showContent(boolean animation) {
+        mSlidingMenu.showContent(animation);
+    }
+
     @Override
     public void onLoadProfile() {
         super.onLoadProfile();
@@ -249,7 +231,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         App.checkProfileUpdate();
         if (!AuthToken.getInstance().isEmpty() &&
                 !CacheProfile.premium && !mHasClosingsForThisSession &&
-                mFragmentMenu.getCurrentFragmentId() != MenuFragment.F_PROFILE) {
+                mFragmentMenu.getCurrentFragmentId() != MenuFragment.F_PROFILE
+                && !mFragmentMenu.isClosed() && mClosingsOnProfileUpdateInvoked) {
             if (CacheProfile.unread_likes > 0 || CacheProfile.unread_mutual > 0) {
                 onClosings();
             }
@@ -477,6 +460,29 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
     }
 
+    public static void onLogout() {
+        mHasClosingsForThisSession = false;
+        mClosingsOnProfileUpdateInvoked = false;
+    }
+
+    @Override
+    protected void onClosingDataReceived() {
+        super.onClosingDataReceived();
+        if (!CacheProfile.premium && !mClosingsOnProfileUpdateInvoked && !mHasClosingsForThisSession) {
+            mClosingsOnProfileUpdateInvoked = true;
+            Options.Closing closing = CacheProfile.getOptions().closing;
+            if (closing.isClosingsEnabled()) {
+                getIntent().putExtra(GCMUtils.NEXT_INTENT, mFragmentMenu.getCurrentFragmentId());
+                Debug.log("Closing:Last fragment ID=" + mFragmentMenu.getCurrentFragmentId() + " from NavigationActivity");
+                MutualClosingFragment.usersProcessed = !closing.isMutualClosingAvailable();
+                LikesClosingFragment.usersProcessed = !closing.isLikesClosingAvailable();
+                if (!MutualClosingFragment.usersProcessed || !LikesClosingFragment.usersProcessed) {
+                    onClosings();
+                }
+            }
+        }
+    }
+
     public void onClosings() {
         if (CacheProfile.unread_mutual == 0) {
             MutualClosingFragment.usersProcessed = true;
@@ -500,10 +506,5 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
         mFragmentMenu.onStopClosings();
         showFragment(null); // it will take fragment id from getIntent() extra data
-    }
-
-    public static void onLogout() {
-        mHasClosingsForThisSession = false;
-        mClosingsOnProfileUpdateInvoked = false;
     }
 }

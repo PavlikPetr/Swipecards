@@ -498,7 +498,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             case R.id.acDelight:
                 if (v.isEnabled()) {
                     v.setSelected(true);
-                    TextView textView = (TextView) v.findViewById(R.id.delTV);
+                    final TextView textView = (TextView) v.findViewById(R.id.delTV);
                     final ProgressBar loader = (ProgressBar) v.findViewById(R.id.delPrBar);
                     final ImageView icon = (ImageView) v.findViewById(R.id.delIcon);
 
@@ -529,9 +529,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                                 Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                                 v.setEnabled(true);
                                 v.setSelected(false);
-                                if (v instanceof TextView) {
-                                    TextView view = (TextView) v;
-                                    view.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
+                                if (textView != null) {
+                                    textView.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
                                 }
                             }
                         }

@@ -229,6 +229,8 @@ public class ImageViewRemote extends ImageView {
                     result = setRemoteSrc(photo.getSuitableLink(Photo.SIZE_960), handler);
                 }
             }
+        } else {
+            setImageBitmap(null);
         }
         return result;
     }

@@ -244,7 +244,11 @@ public class TopfaceNotificationManager {
                 views.setViewVisibility(R.id.fnRetry, View.GONE);
 
                 if (!isOld) {
-                    generateBigPicture();
+                    if(!isTextNotification) {
+                        generateBigPicture();
+                    } else {
+                        generateBigText();
+                    }
                 }
                 PendingIntent resultPendingIntent = generatePendingIntent(intent);
                 notificationBuilder.setAutoCancel(true);
@@ -355,8 +359,10 @@ public class TopfaceNotificationManager {
         }
 
         private void generateBigText() {
+            Bitmap tficon = BitmapFactory.decodeResource(context.getResources(),
+                    R.drawable.ic_notification);
             NotificationCompat.BigTextStyle inboxStyle =
-                    new NotificationCompat.BigTextStyle(notificationBuilder);
+                    new NotificationCompat.BigTextStyle(notificationBuilder.setLargeIcon(tficon).setContentTitle(title));
 
             inboxStyle.bigText(text).build();
         }

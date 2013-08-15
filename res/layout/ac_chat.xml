@@ -76,36 +76,42 @@
                 <Button
                         android:id="@+id/btnChatGift"
                         android:layout_width="wrap_content"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         style="@style/ChatButtonsText"
                         android:text="@string/general_gift"
-                        android:background="@drawable/chat_gift_selector"/>
+                        android:background="@drawable/chat_gift_selector"
+                        android:layout_marginLeft="6dp"/>
 
                 <Button
                         android:id="@+id/btnChatPlace"
                         android:layout_width="wrap_content"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="6dp"
                         style="@style/ChatButtonsText"
                         android:text="@string/general_place"
-                        android:background="@drawable/chat_place_selector"/>
+                        android:background="@drawable/chat_place_selector"
+                        android:layout_marginLeft="6dp"/>
+
 
                 <Button
                         android:id="@+id/btnChatPhoto"
                         android:layout_width="wrap_content"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="6dp"
                         style="@style/ChatButtonsText"
                         android:text="@string/general_soon"
-                        android:background="@drawable/chat_photo_selector"/>
+                        android:background="@drawable/chat_photo_selector"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginRight="6dp"/>
             </LinearLayout>
 
             <RelativeLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/loAddButtons"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
                     android:orientation="vertical"
                     >
 
@@ -122,12 +128,12 @@
                         android:id="@+id/btnBuyVip"
                         android:layout_height="wrap_content"
                         android:layout_width="fill_parent"
-                        android:background="@drawable/btn_blue_selector"
+                        style="@style/ButtonBlue"
                         android:text="@string/buying_vip_status"
                         android:textStyle="bold"
-                        android:layout_centerInParent="true"
-                        android:layout_marginTop="64dp"
-                        android:layout_marginBottom="32dp"
+                        android:layout_below="@id/tvBuyVipTitle"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
                         />
 
                 <Button
@@ -138,8 +144,9 @@
                         style="@style/ButtonGray"
                         android:text="@string/black_list_add"
                         android:layout_centerInParent="true"
-                        android:layout_marginTop="32dp"
-                        android:layout_marginBottom="32dp"
+                        android:layout_below="@id/tvBuyVipTitle"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         />

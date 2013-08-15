@@ -312,8 +312,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mProfileReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                updateFilterData();
-                updateResources();
+                if (isAdded()) {
+                    updateFilterData();
+                    updateResources();
+                }
             }
         };
     }

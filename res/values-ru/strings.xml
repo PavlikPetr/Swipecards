@@ -679,6 +679,7 @@
         <item quantity="many">%d монет</item>
         <item quantity="other">%d монет</item>
     </plurals>
+    <string name="getjar_auth_title">Выберите аккаунт</string>
 
     <string name="skip">Пропустить</string>
     <string name="chat">Написать</string>
@@ -712,4 +713,6 @@
     <string name="settings_feedback_transaction_number">Номер заказа</string>
     <string name="settings_feedback_transaction_link">где найти номер заказа?</string>
     <string name="general_logout_error">К сожалению, не удалось выйти из аккаунта</string>
+    <string name="settings_feedback_transaction_number_hint">Введите номер заказа</string>
+    <string name="youve_earned">Вы заработали</string>
 </resources>
