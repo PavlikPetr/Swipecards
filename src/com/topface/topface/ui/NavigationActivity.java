@@ -229,6 +229,10 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         new ExternalLinkExecuter(mListener).execute(getIntent());
 
         App.checkProfileUpdate();
+        if (MenuFragment.logoutInvoked) {
+            mFragmentMenu.onStopClosings();
+            MenuFragment.logoutInvoked = false;
+        }
         if (!AuthToken.getInstance().isEmpty() &&
                 !CacheProfile.premium && !mHasClosingsForThisSession &&
                 mFragmentMenu.getCurrentFragmentId() != MenuFragment.F_PROFILE
@@ -463,6 +467,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     public static void onLogout() {
         mHasClosingsForThisSession = false;
         mClosingsOnProfileUpdateInvoked = false;
+        MenuFragment.onLogout();
     }
 
     @Override

@@ -42,6 +42,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
     public static final String SELECT_MENU_ITEM = "com.topface.topface.action.menu.selectitem";
     public static final String SELECTED_FRAGMENT_ID = "com.topface.topface.action.menu.item";
+    public static boolean logoutInvoked = false;
     private SparseArray<Button> mButtons;
 
     private TextView mTvNotifyLikes;
@@ -413,6 +414,10 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
     public void setOnFragmentSelected(OnFragmentSelectedListener listener) {
         mOnFragmentSelected = listener;
+    }
+
+    public static void onLogout() {
+        logoutInvoked = true;
     }
 
     public static interface OnFragmentSelectedListener {
