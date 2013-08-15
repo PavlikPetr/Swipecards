@@ -214,17 +214,16 @@ public class Offerwalls {
                             if (result != null) {
                                 boolean valid = result.optBoolean("valid",false);
                                 if (valid) {
-                                    StringBuilder builder = new StringBuilder();
-                                    builder.append(getContext().getString(R.string.youve_earned))
-                                            .append(" ")
-                                            .append(CacheProfile.getOptions().getJar.getName());
+
+                                    String msg = String.format(getContext().getString(R.string.youve_earned),
+                                            CacheProfile.getOptions().getJar.getName());
                                     if (result.has("money")) {
                                         CacheProfile.money = result.optInt("money", CacheProfile.money);
                                     }
                                     if (result.has("likes")) {
                                         CacheProfile.likes = result.optInt("likes", CacheProfile.likes);
                                     }
-                                    Toast.makeText(getContext(), builder.toString(), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
                                     LocalBroadcastManager.getInstance(getContext())
                                             .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
                                 } else {
