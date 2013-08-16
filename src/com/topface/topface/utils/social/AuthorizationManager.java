@@ -32,9 +32,13 @@ import com.topface.topface.utils.http.HttpUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import ru.ok.android.sdk.Odnoklassniki;
+import ru.ok.android.sdk.OkTokenRequestListener;
+import ru.ok.android.sdk.util.OkScope;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 
 /**
@@ -126,6 +130,74 @@ public class AuthorizationManager {
     public void facebookAuth() {
         mAsyncFacebookRunner = new AsyncFacebookRunner(mFacebook);
         mFacebook.authorize(mParentActivity, FB_PERMISSIONS, mDialogListener);
+    }
+
+    public void odnoklassnikiAuth() {
+
+        final Odnoklassniki okAuthObject = Odnoklassniki.createInstance(mParentActivity, Static.AUTH_OK_ID, Static.OK_SECRET_KEY, Static.OK_PUBLIC_KEY);
+
+        okAuthObject.setTokenRequestListener(new OkTokenRequestListener() {
+            @Override
+            public void onSuccess(String s) {
+                GetCurrentUserTask userTask = new GetCurrentUserTask(okAuthObject, s);
+                userTask.execute();
+            }
+
+            @Override
+            public void onError() {
+                mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
+            }
+
+            @Override
+            public void onCancel() {
+                mHandler.sendEmptyMessage(AUTHORIZATION_CANCELLED);
+
+            }
+        });
+
+        okAuthObject.requestAuthorization(mParentActivity, false, OkScope.SET_STATUS, OkScope.PHOTO_CONTENT, OkScope.VALUABLE_ACCESS);
+    }
+
+
+
+    private final class GetCurrentUserTask extends AsyncTask<Void, Void, String> {
+
+        private final Odnoklassniki odnoklassniki;
+        private final String token;
+
+        public GetCurrentUserTask(Odnoklassniki ok, String token) {
+            odnoklassniki = ok;
+            this.token = token;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            try {
+                return odnoklassniki.request("users.getCurrentUser", null, "get");
+            } catch (IOException e) {
+                Debug.error(e);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (s != null) {
+                final AuthToken authToken = AuthToken.getInstance();
+                try {
+                    JSONObject user = new JSONObject(s);
+                    Field f = odnoklassniki.getClass().getDeclaredField("mRefreshToken");
+                    f.setAccessible(true);
+                    authToken.saveToken(AuthToken.SN_ODNOKLASSNIKI, user.optString("uid"), token, (String) f.get(odnoklassniki));
+                    Settings.getInstance().setSocialAccountName(user.optString("name"));
+                    receiveToken(authToken);
+                } catch (Exception e) {
+                    mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
+                    Debug.error(e);
+                }
+
+            }
+        }
     }
 
     private DialogListener mDialogListener = new DialogListener() {
@@ -230,7 +302,9 @@ public class AuthorizationManager {
         } else if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
             handler.sendMessage(Message.obtain(null, SUCCESS_GET_NAME, authToken.getLogin()));
         }
+        //Одноклассников здесь нет, потому что юзер запрашивается и сохраняется при авторизации
     }
+
 
     private static final String VK_NAME_URL = "https://api.vk.com/method/getProfiles?uid=%s&access_token=%s";
     public static final int SUCCESS_GET_NAME = 0;

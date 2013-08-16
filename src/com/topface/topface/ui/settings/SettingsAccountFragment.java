@@ -55,6 +55,8 @@ public class SettingsAccountFragment extends BaseFragment implements OnClickList
             icon = getResources().getDrawable(R.drawable.vk_logo_account);
         } else if (token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
             icon = getResources().getDrawable(R.drawable.tf_logo_account);
+        } else if (token.getSocialNet().equals(AuthToken.SN_ODNOKLASSNIKI)) {
+            icon = getResources().getDrawable(R.drawable.ico_ok_account);
         }
         TextView textName = (TextView) root.findViewById(R.id.tvName);
         textName.setText(Settings.getInstance().getSocialAccountName());

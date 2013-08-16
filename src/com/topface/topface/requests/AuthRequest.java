@@ -16,6 +16,7 @@ public class AuthRequest extends ApiRequest {
     public static final String SERVICE_NAME = "auth";
     public static final String FALLBACK_CLIENT_VERSION = "2.3.7.1";
     public static final String FALLBACK_LOCALE = "en_US";
+
     private String sid; // id пользователя в социальной сети
     private String token; // токен авторизации в соц сети
     private String platform; // код социальной сети
@@ -27,6 +28,7 @@ public class AuthRequest extends ApiRequest {
     private String clientid; // уникальный идентификатор клиентского устройства
     private String login;  // логин для нашей авторизации
     private String password; // пароль для нашей авторизации
+    private String refresh; // еще один токен для одноклассников
 
     private AuthToken mAuthToken;
 
@@ -48,6 +50,10 @@ public class AuthRequest extends ApiRequest {
         if (TextUtils.equals(platform, AuthToken.SN_TOPFACE)) {
             login = authToken.getLogin();
             password = authToken.getPassword();
+        } else if (TextUtils.equals(platform, AuthToken.SN_ODNOKLASSNIKI)){
+            sid = authToken.getUserId();
+            token = authToken.getTokenKey();
+            refresh = mAuthToken.getmExpiresIn();
         } else {
             sid = authToken.getUserId();
             token = authToken.getTokenKey();
@@ -106,7 +112,8 @@ public class AuthRequest extends ApiRequest {
                 .put("clientdevice", clientdevice)
                 .put("clientid", clientid)
                 .put("login", login)
-                .put("password", password);
+                .put("password", password)
+                .put("refresh", refresh);
     }
 
     @Override

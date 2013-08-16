@@ -19,6 +19,9 @@ public class Static {
      */
     public static final String REV = "20121019010";
     public static final String AUTH_VK_ID = "2664589";
+    public static final String AUTH_OK_ID = "192696576";
+    public static final String OK_SECRET_KEY = "A9872F0F0DA2EA47EB876D85";
+    public static final String OK_PUBLIC_KEY = "CBACFNHMABABABABA";
     //Это id нашего забаненого приложения
     //public static final String AUTH_FACEBOOK_ID = "161347997227885";
     /**
@@ -38,6 +41,7 @@ public class Static {
     public static final String INTENT_REQUEST_KEY = "requestCode";
     public static final String PREFERENCES_TAG_GEO = "preferences_geo";
     public static final String PREFERENCES_TAG_SHARED = "preferences_general";
+    public static final String PREFERENCES_TAG_BUTTONS = "preferences_buttons";
 
     public static final String PREFERENCES_NEED_EDIT = "need_edit";
     public static final String PREFERENCES_NEED_CHANGE_PASSWORD = "need_change_password";
@@ -58,6 +62,7 @@ public class Static {
     public static final String PREFERENCES_DELETED_ACCOUNTS_FB_IDS = "fb_tokens";
     public static final String PREFERENCES_DELETED_ACCOUNTS_VK_IDS = "vk_tokens";
     public static final String PREFERENCES_DELETED_ACCOUNTS_TF_IDS = "tf_tokens";
+    public static final String PREFERENCES_DELETED_ACCOUNTS_OK_IDS = "ok_tokens";
 
     public static final String PREFERENCES_MUTUAL_CLOSING_LAST_TIME = "mutual_closing_time";
     public static final String PREFERENCES_LIKES_CLOSING_LAST_TIME = "likes_closing_time";

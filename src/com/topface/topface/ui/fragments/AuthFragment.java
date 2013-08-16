@@ -6,6 +6,7 @@ import android.content.*;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -29,14 +30,15 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.views.RetryViewCreator;
+import com.topface.topface.utils.AuthButtonsController;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.math.BigInteger;
+import java.util.*;
 
 public class AuthFragment extends BaseFragment {
 
@@ -61,6 +63,12 @@ public class AuthFragment extends BaseFragment {
     private Timer mTimer = new Timer();
     private RetryViewCreator mRetryView;
     private boolean mProcessingTFReg = false;
+    private Button mOKButton;
+    private AuthButtonsController btnsController;
+    private LinearLayout mOtherSocialNetworksButton;
+    private static final String MAIN_BUTTONS_GA_TAG = "LoginButtonsTest";
+    private boolean additionalButtonsScreen = false;
+    private boolean hasAuthorized = false;
 
     public static AuthFragment newInstance() {
         return new AuthFragment();
@@ -119,7 +127,16 @@ public class AuthFragment extends BaseFragment {
         });
     }
 
-    private void initButtons(View root) {
+    private void initButtons(final View root) {
+        btnsController = new AuthButtonsController(getActivity(), new AuthButtonsController.OnButtonsSettingsLoadedListener() {
+            @Override
+            public void buttonSettingsLoaded(HashSet<String> settings) {
+                initButtonsWithSettings(root);
+            }
+        });
+    }
+
+    private void initButtonsWithSettings(View root) {
         mVKButton = (Button) root.findViewById(R.id.btnAuthVK);
         mVKButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,6 +144,9 @@ public class AuthFragment extends BaseFragment {
                 btnVKClick();
             }
         });
+        if (btnsController.needSN(AuthToken.SN_VKONTAKTE)) {
+            mVKButton.setVisibility(View.VISIBLE);
+        }
 
         mFBButton = (Button) root.findViewById(R.id.btnAuthFB);
         mFBButton.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +155,53 @@ public class AuthFragment extends BaseFragment {
                 btnFBClick();
             }
         });
+        if (btnsController.needSN(AuthToken.SN_FACEBOOK)) {
+            mFBButton.setVisibility(View.VISIBLE);
+        }
+
+        mOKButton = (Button) root.findViewById(R.id.btnAuthOk);
+        mOKButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnOKClick();
+            }
+        });
+        if (btnsController.needSN(AuthToken.SN_ODNOKLASSNIKI)) {
+            mOKButton.setVisibility(View.VISIBLE);
+        }
+
+        mOtherSocialNetworksButton = (LinearLayout) root.findViewById(R.id.otherServices);
+
+        HashSet<String> otherSN = btnsController.getOhters();
+        if (otherSN.size() == 0) {
+            mOtherSocialNetworksButton.setVisibility(View.GONE);
+        } else {
+            mOtherSocialNetworksButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Debug.log("LOCALE::" + btnsController.getLocaleTag());
+                    EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG, "OtherWaysButtonClicked",btnsController.getLocaleTag(), 1L);
+                    additionalButtonsScreen = true;
+                    btnsController.setAllSettings();
+                    mOtherSocialNetworksButton.setVisibility(View.GONE);
+                    mVKButton.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
+                            R.anim.fade_in));
+                    mVKButton.setVisibility(View.VISIBLE);
+                    mOKButton.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
+                            R.anim.fade_in));
+                    mOKButton.setVisibility(View.VISIBLE);
+                    mFBButton.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
+                            R.anim.fade_in));
+                    mFBButton.setVisibility(View.VISIBLE);
+                }
+            });
+            if (otherSN.contains(AuthToken.SN_VKONTAKTE)) {
+                root.findViewById(R.id.vk_ico).setVisibility(View.VISIBLE);
+            }
+            if (otherSN.contains(AuthToken.SN_ODNOKLASSNIKI)) {
+                root.findViewById(R.id.ok_ico).setVisibility(View.VISIBLE);
+            }
+        }
 
         mSignInView = root.findViewById(R.id.loSignIn);
         mSignInView.setOnClickListener(new View.OnClickListener() {
@@ -178,6 +245,7 @@ public class AuthFragment extends BaseFragment {
             }
         });
     }
+
 
     private void initRetryView(View root) {
         mRetryView = RetryViewCreator.createDefaultRetryView(getActivity(), new View.OnClickListener() {
@@ -284,7 +352,9 @@ public class AuthFragment extends BaseFragment {
             @Override
             public void success(ApiResponse response) {
                 saveAuthInfo(response);
+                btnsController.addSocialNetwork(AuthToken.getInstance().getSocialNet());
                 getProfileAndOptions();
+                hasAuthorized = true;
             }
 
             @Override
@@ -557,8 +627,18 @@ public class AuthFragment extends BaseFragment {
     private void showButtons() {
         //Эта проверка нужна, для безопасной работы в
         if (mFBButton != null && mVKButton != null && mProgressBar != null) {
-            mFBButton.setVisibility(View.VISIBLE);
-            mVKButton.setVisibility(View.VISIBLE);
+            if (btnsController.needSN(AuthToken.SN_FACEBOOK)) {
+                mFBButton.setVisibility(View.VISIBLE);
+            }
+            if (btnsController.needSN(AuthToken.SN_VKONTAKTE)) {
+                mVKButton.setVisibility(View.VISIBLE);
+            }
+            if (btnsController.needSN(AuthToken.SN_ODNOKLASSNIKI)) {
+                mOKButton.setVisibility(View.VISIBLE);
+            }
+            if (btnsController.getOhters().size() > 0) {
+                mOtherSocialNetworksButton.setVisibility(View.VISIBLE);
+            }
             mSignInView.setVisibility(View.VISIBLE);
             mTFButton.setVisibility(View.VISIBLE);
             mCreateAccountView.setVisibility(View.VISIBLE);
@@ -575,6 +655,8 @@ public class AuthFragment extends BaseFragment {
     private void hideButtons() {
         mFBButton.setVisibility(View.GONE);
         mVKButton.setVisibility(View.GONE);
+        mOKButton.setVisibility(View.GONE);
+        mOtherSocialNetworksButton.setVisibility(View.GONE);
         mSignInView.setVisibility(View.GONE);
         mCreateAccountView.setVisibility(View.GONE);
         mRetryView.setVisibility(View.GONE);
@@ -593,6 +675,7 @@ public class AuthFragment extends BaseFragment {
     private void btnVKClick() {
         // костыль, надо избавить от viewflipper к чертовой бабушке
         mProcessingTFReg = false;
+        EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG,additionalButtonsScreen?"LoginAdditionalVk":"LoginMainVk", btnsController.getLocaleTag(),1L);
         if (checkOnline() && mAuthorizationManager != null) {
             hideButtons();
             mAuthorizationManager.vkontakteAuth();
@@ -602,9 +685,20 @@ public class AuthFragment extends BaseFragment {
     private void btnFBClick() {
         // костыль, надо избавить от viewflipper к чертовой бабушке
         mProcessingTFReg = false;
+        EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG,additionalButtonsScreen?"LoginAdditionalFb":"LoginMainFb", btnsController.getLocaleTag(),1L);
         if (checkOnline() && mAuthorizationManager != null) {
             hideButtons();
             mAuthorizationManager.facebookAuth();
+        }
+    }
+
+
+    private void btnOKClick() {
+        mProcessingTFReg = false;
+        EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG,additionalButtonsScreen?"LoginAdditionalOk":"LoginMainOk", btnsController.getLocaleTag(),1L);
+        if (checkOnline() && mAuthorizationManager != null) {
+            hideButtons();
+            mAuthorizationManager.odnoklassnikiAuth();
         }
     }
 
@@ -649,6 +743,14 @@ public class AuthFragment extends BaseFragment {
         super.onPause();
         Debug.log("AF: onPause");
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(connectionChangeListener);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (!hasAuthorized) {
+            EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG,additionalButtonsScreen?"DismissAdditional":"DismissMain", btnsController.getLocaleTag(),1L);
+        }
     }
 
     interface ProfileIdReceiver {

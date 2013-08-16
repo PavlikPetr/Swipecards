@@ -106,6 +106,8 @@ public class Settings {
             textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_vk, 0, 0, 0);
         } else if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
             textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_tf, 0, 0, 0);
+        } else if (authToken.getSocialNet().equals(AuthToken.SN_ODNOKLASSNIKI)) {
+            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ico_ok_settings, 0, 0, 0);
         }
     }
 
