@@ -311,7 +311,6 @@ public class AuthorizationManager {
         //noinspection unchecked
         new FacebookLogoutTask().execute();
         Settings.getInstance().resetSettings();
-        activity.setResult(RESULT_LOGOUT);
         CacheProfile.clearProfile();
         SharedPreferences preferences = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         if (preferences != null) {
@@ -326,7 +325,10 @@ public class AuthorizationManager {
             }
         }).start();
         NavigationActivity.onLogout();
-        activity.finish();
+        if (!(activity instanceof NavigationActivity)) {
+            activity.setResult(RESULT_LOGOUT);
+            activity.finish();
+        }
     }
 
     @SuppressWarnings({"rawtypes", "hiding"})
