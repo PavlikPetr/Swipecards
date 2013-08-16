@@ -312,7 +312,8 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         FragmentManager fragmentManager = getFragmentManager();
         Fragment oldFragment = fragmentManager.findFragmentById(android.R.id.content);
 
-        BaseFragment newFragment = (BaseFragment) fragmentManager.findFragmentByTag(getTagById(mCurrentFragmentId));
+        String fragmentTag = getTagById(mCurrentFragmentId);
+        BaseFragment newFragment = (BaseFragment) fragmentManager.findFragmentByTag(fragmentTag);
         //Если не нашли в FragmentManager уже существующего инстанса, то создаем новый
         if (newFragment == null) {
             newFragment = getFragmentNewInstanceById(mCurrentFragmentId);
@@ -324,7 +325,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             if (mHardwareAccelerated) {
                 transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             }
-            transaction.replace(android.R.id.content, newFragment, getTagById(mCurrentFragmentId));
+            transaction.replace(android.R.id.content, newFragment, fragmentTag);
             transaction.commitAllowingStateLoss();
 
             mCurrentFragment = newFragment;

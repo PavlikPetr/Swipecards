@@ -1,8 +1,10 @@
 package com.topface.topface.ui.fragments.closing;
 
 import android.view.View;
+import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
+import com.topface.topface.data.FeedUser;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.RateRequest;
 import com.topface.topface.requests.SkipAllClosedRequest;
@@ -13,6 +15,8 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     public static boolean usersProcessed;
 
     private View mBtnSkipAll;
+    private TextView mUserName;
+    private TextView mUserCity;
 
     @Override
     protected void initActionBarControls(ActionBar actionbar) {
@@ -58,6 +62,8 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
         }
         controlsView.findViewById(R.id.btnMutual).setOnClickListener(this);
         controlsView.findViewById(R.id.btnChat).setOnClickListener(this);
+        mUserName = (TextView)controlsView.findViewById(R.id.tvUserName);
+        mUserCity = (TextView)controlsView.findViewById(R.id.tvUserCity);
     }
 
     @Override
@@ -110,6 +116,12 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
         CountersManager.getInstance(getActivity()).setCounter(CountersManager.LIKES,0,true);
         CacheProfile.getOptions().closing.onStopLikesClosings();
         super.onUsersProcessed();
+    }
+
+    @Override
+    protected void setUserInfo(FeedUser user) {
+        mUserName.setText(user.getNameAndAge());
+        mUserCity.setText(user.city.name);
     }
 
     @Override

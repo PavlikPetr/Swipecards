@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.closing;
 
 import android.view.View;
+import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.requests.ApiResponse;
@@ -19,6 +20,8 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
     public static boolean usersProcessed;
 
     private View mBtnSkipAll;
+    private TextView mUserName;
+    private TextView mUserCity;
 
     @Override
     protected String getTitle() {
@@ -46,6 +49,8 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
         View btnSkip = controlsView.findViewById(R.id.btnSkip);
         btnSkip.setOnClickListener(this);
         controlsView.findViewById(R.id.btnChat).setOnClickListener(this);
+        mUserName = (TextView)controlsView.findViewById(R.id.tvUserName);
+        mUserCity = (TextView)controlsView.findViewById(R.id.tvUserCity);
     }
 
     @Override
@@ -106,6 +111,12 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
         LikesClosingFragment.usersProcessed = false;
         CacheProfile.getOptions().closing.onStopMutualClosings();
         super.onUsersProcessed();
+    }
+
+    @Override
+    protected void setUserInfo(FeedUser user) {
+        mUserName.setText(user.getNameAndAge());
+        mUserCity.setText(user.city.name);
     }
 
     @Override
