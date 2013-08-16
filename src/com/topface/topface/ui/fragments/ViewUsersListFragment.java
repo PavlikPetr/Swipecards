@@ -453,6 +453,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
             return;
         }
         lockControls();
+        setUserInfo(currUser);
         setUserPhotos(currUser);
         getImageSwitcher().setData(currUser.photos);
         getImageSwitcher().setCurrentItem(0, true);
@@ -523,4 +524,6 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
 
     protected void onUsersProcessed() {
     }
+
+    protected abstract void setUserInfo(T user);
 }
