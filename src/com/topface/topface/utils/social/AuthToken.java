@@ -28,6 +28,7 @@ public class AuthToken {
     public static final String SN_FACEBOOK = "fb";
     public static final String SN_VKONTAKTE = "vk";
     public static final String SN_TOPFACE = "st";
+    public static final String SN_ODNOKLASSNIKI = "ok";
 
     private static AuthToken mInstance = new AuthToken();
 
@@ -103,6 +104,8 @@ public class AuthToken {
             return mTokenKey;
         } else if (getSocialNet().equals(AuthToken.SN_TOPFACE)) {
             return mLogin;
+        } else if (getSocialNet().equals(SN_ODNOKLASSNIKI)) {
+            return mTokenKey;
         }
         return mTokenKey;
     }
@@ -117,5 +120,9 @@ public class AuthToken {
 
     public String getPassword() {
         return mPassword;
+    }
+
+    public String getmExpiresIn() {
+        return mExpiresIn;
     }
 }

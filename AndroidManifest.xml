@@ -256,6 +256,23 @@
                 android:theme="@android:style/Theme.Translucent.NoTitleBar"
                 android:hardwareAccelerated="true" />
 
+
+        <activity
+                android:name="ru.ok.android.sdk.OkAuthActivity"
+                android:launchMode="singleTask"
+                android:configChanges="orientation">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                        android:scheme="okauth" />
+                        android:host="ok192696576"
+            </intent-filter>
+        </activity>
+
         <!-- Алиас для главной активити из первой версии. На всякий случай, а то раньше уже были проблемы с FB -->
         <activity-alias
                 android:name=".ui.MainActivity"

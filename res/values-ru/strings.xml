@@ -712,4 +712,6 @@
     <string name="settings_feedback_transaction_number">Номер заказа</string>
     <string name="settings_feedback_transaction_link">где найти номер заказа?</string>
     <string name="general_logout_error">К сожалению, не удалось выйти из аккаунта</string>
+    <string name="auth_btn_ok">Войти через Одноклассники</string>
+    <string name="other_auth">Войти через другие сервисы</string>
 </resources>
