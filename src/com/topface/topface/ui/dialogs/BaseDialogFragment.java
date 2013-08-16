@@ -3,8 +3,9 @@ package com.topface.topface.ui.dialogs;
 import android.content.Intent;
 import android.support.v4.app.DialogFragment;
 import com.topface.topface.Static;
+import com.topface.topface.ui.analytics.TrackedDialogFragment;
 
-public class BaseDialogFragment extends DialogFragment {
+public class BaseDialogFragment extends TrackedDialogFragment {
 
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {

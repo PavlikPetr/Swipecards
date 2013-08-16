@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.closing;
 
 import android.view.View;
 import android.widget.TextView;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.requests.ApiResponse;
@@ -87,6 +88,7 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnForget:
+                EasyTracker.getTracker().trackEvent(getTrackName(), "Forget", "", 1L);
                 FeedUser user = getCurrentUser();
                 if (user != null) {
                     DeleteFeedRequest deleteRequest = new DeleteFeedRequest(user.feedItem.id, getActivity());
@@ -127,5 +129,10 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
     @Override
     protected boolean alowSkipForNonPremium() {
         return false;
+    }
+
+    @Override
+    protected String getTrackName() {
+        return "MutualsClosing";
     }
 }

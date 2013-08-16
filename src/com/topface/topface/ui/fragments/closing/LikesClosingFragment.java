@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.closing;
 
 import android.view.View;
 import android.widget.TextView;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.FeedUser;
@@ -90,6 +91,7 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnMutual:
+                EasyTracker.getTracker().trackEvent(getTrackName(), "Mutual", "", 1L);
                 getRateController().onRate(getCurrentUser().id, 9, RateRequest.DEFAULT_MUTUAL, new RateController.OnRateListener() {
                     @Override
                     public void onRateCompleted() {
@@ -129,5 +131,10 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     @Override
     protected FeedRequest.FeedService getFeedType() {
         return FeedRequest.FeedService.LIKES;
+    }
+
+    @Override
+    protected String getTrackName() {
+        return "LikesClosing";
     }
 }
