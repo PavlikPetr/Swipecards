@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.closing;
 
 import android.view.View;
 import android.widget.TextView;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.FeedUser;
@@ -14,7 +15,6 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
 
     public static boolean usersProcessed;
 
-    private View mBtnSkipAll;
     private TextView mUserName;
     private TextView mUserCity;
 
@@ -55,10 +55,10 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     protected void initControls(View controlsView) {
         controlsView.findViewById(R.id.btnSkip).setOnClickListener(this);
         controlsView.findViewById(R.id.btnSkipAll).setOnClickListener(this);
-        mBtnSkipAll = controlsView.findViewById(R.id.btnSkipAll);
-        mBtnSkipAll.setOnClickListener(this);
+        View btnSkipAll = controlsView.findViewById(R.id.btnSkipAll);
+        btnSkipAll.setOnClickListener(this);
         if (CacheProfile.unread_likes > CacheProfile.getOptions().closing.limitSympathies) {
-            mBtnSkipAll.setVisibility(View.VISIBLE);
+            btnSkipAll.setVisibility(View.VISIBLE);
         }
         controlsView.findViewById(R.id.btnMutual).setOnClickListener(this);
         controlsView.findViewById(R.id.btnChat).setOnClickListener(this);
@@ -90,6 +90,7 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnMutual:
+                EasyTracker.getTracker().trackEvent(getTrackName(), "Mutual", "", 1L);
                 RateController rateController = getRateController();
                 if (rateController != null) {
                     rateController.onRate(getCurrentUser().id, 9, RateRequest.DEFAULT_MUTUAL, new RateController.OnRateListener() {
@@ -102,8 +103,8 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
                         public void onRateFailed() {
                         }
                     });
+                    showNextUser();
                 }
-                showNextUser();
                 break;
             default:
                 super.onClick(v);
@@ -132,5 +133,10 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     @Override
     protected FeedRequest.FeedService getFeedType() {
         return FeedRequest.FeedService.LIKES;
+    }
+
+    @Override
+    protected String getTrackName() {
+        return "LikesClosing";
     }
 }

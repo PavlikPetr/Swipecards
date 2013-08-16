@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.utils.Utils;
@@ -54,13 +55,16 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnWatchSequentually:
-                if (mWatchSequentialyListener != null) mWatchSequentialyListener.onWatchSequentialy(true);
+                EasyTracker.getTracker().trackEvent(getTrackName(), "WatchSequentially", "", 1L);
+                if(mWatchSequentialyListener != null) mWatchSequentialyListener.onWatchSequentialy(true);
                 closeDialog();
                 break;
             case R.id.btnClose:
+                EasyTracker.getTracker().trackEvent(getTrackName(), "Close", "", 1L);
                 closeDialog();
                 break;
             case R.id.btnWatchAsList:
+                EasyTracker.getTracker().trackEvent(getTrackName(), "WatchAsList", "", 1L);
                 Intent intent = ContainerActivity.getVipBuyIntent(null, "ClosingDialogWatchAsList");
                 startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                 closeDialog();
@@ -99,5 +103,10 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
 
     public interface IWatchSequentialyListener {
         void onWatchSequentialy(boolean animate);
+    }
+
+    @Override
+    protected String getTrackName() {
+        return "ClosingBuyVipPopup";
     }
 }
