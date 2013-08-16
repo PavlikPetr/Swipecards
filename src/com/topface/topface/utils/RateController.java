@@ -1,8 +1,6 @@
 package com.topface.topface.utils;
 
 import android.app.Activity;
-import android.content.Intent;
-import com.topface.topface.Static;
 import com.topface.topface.data.Rate;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
@@ -31,9 +29,7 @@ public class RateController {
 
     public void onRate(final int userId, final int rate, final int mutualId, OnRateListener listener) {
         if (rate == 10 && CacheProfile.money <= 0) {
-            Intent intent = new Intent(mContext, ContainerActivity.class);
-            intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
-            mContext.startActivity(intent);
+            mContext.startActivity(ContainerActivity.getBuyingIntent("RateAdmiration"));
             if (mOnRateControllerListener != null) {
                 mOnRateControllerListener.failRate();
             }

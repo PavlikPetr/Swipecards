@@ -188,6 +188,7 @@
     <string name="novice_fill_profile">Lägg till dina bästa foton,\för att få fler sympatier.</string>
     <string name="general_edit_profile_message">Vänligen fyll i nödvändiga fälten i profilen</string>
     <string name="general_premium_access_error">För denna funktion behövs Premium</string>
+    <string name="address_book_access_error">Denna applikation har inte tillgång till dina kontakter. Du kan tillåta tillgång i säkerhetsinställningar på din enhet</string>
     <string name="general_search_null_response_error">Inget hittats. Försök att ändra sökkriterier</string>
     <string name="change_filters">Ändra filtrar</string>
     <string name="general_sex">Kön</string>
@@ -502,4 +503,27 @@
         <item quantity="other">%d mynt</item>
         <item quantity="one">%d mynt</item>
     </plurals>
+    <string name="skip">Ignorera</string>
+    <string name="chat">Skriv</string>
+    <string name="sympathies">Sympatier</string>
+    <plurals name="number_of_sympathies">
+        <item quantity="zero">%d sympatier</item>
+        <item quantity="other">sympatier</item>
+        <item quantity="one">%d sympati</item>
+    </plurals>
+    <plurals name="popup_vip_messages">
+        <item quantity="other">%d expressmeddelanden erhållits</item>
+        <item quantity="one">%d expressmeddelande erhållits</item>
+    </plurals>
+    <string name="general_attention">OBS!</string>
+    <string name="general_delete_messages">Radera meddelanden</string>
+    <string name="mutual_sympathies">Ömsesidigt</string>
+    <string name="skip_all">Ignorera alla</string>
+    <string name="forget">Glöm</string>
+    <string name="watch_as_list">Se i listan</string>
+    <string name="watching_as_list">Se i listan</string>
+    <string name="watching_sequentually">Se en för en</string>
+    <string name="or_use_common_likes_list">Eller hitta dem du gillar i en gemensam lista</string>
+    <string name="settings_feedback_transaction_number">Order nr</string>
+    <string name="settings_feedback_transaction_link">var kan man hitta order nr?</string>
 </resources>

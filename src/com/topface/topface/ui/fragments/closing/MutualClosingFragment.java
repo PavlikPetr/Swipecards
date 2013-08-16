@@ -1,6 +1,8 @@
 package com.topface.topface.ui.fragments.closing;
 
 import android.view.View;
+import android.widget.TextView;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.requests.ApiResponse;
@@ -19,6 +21,8 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
     public static boolean usersProcessed;
 
     private View mBtnSkipAll;
+    private TextView mUserName;
+    private TextView mUserCity;
 
     @Override
     protected String getTitle() {
@@ -46,6 +50,8 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
         View btnSkip = controlsView.findViewById(R.id.btnSkip);
         btnSkip.setOnClickListener(this);
         controlsView.findViewById(R.id.btnChat).setOnClickListener(this);
+        mUserName = (TextView)controlsView.findViewById(R.id.tvUserName);
+        mUserCity = (TextView)controlsView.findViewById(R.id.tvUserCity);
     }
 
     @Override
@@ -82,6 +88,7 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnForget:
+                EasyTracker.getTracker().trackEvent(getTrackName(), "Forget", "", 1L);
                 FeedUser user = getCurrentUser();
                 if (user != null) {
                     DeleteFeedRequest deleteRequest = new DeleteFeedRequest(user.feedItem.id, getActivity());
@@ -109,6 +116,12 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
     }
 
     @Override
+    protected void setUserInfo(FeedUser user) {
+        mUserName.setText(user.getNameAndAge());
+        mUserCity.setText(user.city.name);
+    }
+
+    @Override
     protected int getSkipAllRequestType() {
         return SkipAllClosedRequest.MUTUAL;
     }
@@ -116,5 +129,10 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
     @Override
     protected boolean alowSkipForNonPremium() {
         return false;
+    }
+
+    @Override
+    protected String getTrackName() {
+        return "MutualsClosing";
     }
 }

@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +28,7 @@ import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.ClosingsBuyVipDialog;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
 import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
@@ -40,6 +42,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
     public static final String SELECT_MENU_ITEM = "com.topface.topface.action.menu.selectitem";
     public static final String SELECTED_FRAGMENT_ID = "com.topface.topface.action.menu.item";
+    public static boolean logoutInvoked = false;
     private SparseArray<Button> mButtons;
 
     private TextView mTvNotifyLikes;
@@ -309,7 +312,8 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         FragmentManager fragmentManager = getFragmentManager();
         Fragment oldFragment = fragmentManager.findFragmentById(android.R.id.content);
 
-        BaseFragment newFragment = (BaseFragment) fragmentManager.findFragmentByTag(getTagById(mCurrentFragmentId));
+        String fragmentTag = getTagById(mCurrentFragmentId);
+        BaseFragment newFragment = (BaseFragment) fragmentManager.findFragmentByTag(fragmentTag);
         //Если не нашли в FragmentManager уже существующего инстанса, то создаем новый
         if (newFragment == null) {
             newFragment = getFragmentNewInstanceById(mCurrentFragmentId);
@@ -321,8 +325,8 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             if (mHardwareAccelerated) {
                 transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             }
-            transaction.replace(android.R.id.content, newFragment, getTagById(mCurrentFragmentId));
-            transaction.commit();
+            transaction.replace(android.R.id.content, newFragment, fragmentTag);
+            transaction.commitAllowingStateLoss();
 
             mCurrentFragment = newFragment;
         }
@@ -368,7 +372,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 if (LikesClosingFragment.usersProcessed || CacheProfile.premium) {
                     fragment = new LikesFragment();
                 } else {
-                    if (!isClosed) getActivity().getIntent().putExtra(GCMUtils.NEXT_INTENT, getCurrentFragmentId());
+                    if (!isClosed) getActivity().getIntent().putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_LIKES);
                     Debug.log("Closing:Last fragment F_LIKES from MenuFragment");
                     fragment = new LikesClosingFragment();
                 }
@@ -411,6 +415,10 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
     public void setOnFragmentSelected(OnFragmentSelectedListener listener) {
         mOnFragmentSelected = listener;
+    }
+
+    public static void onLogout() {
+        logoutInvoked = true;
     }
 
     public static interface OnFragmentSelectedListener {
@@ -470,7 +478,6 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         if (btn.getCompoundDrawables()[0] != null) {
             btn.getCompoundDrawables()[0].setAlpha(alpha);
         }
-        isClosed = false;
     }
 
     public void onStopClosings() {
@@ -480,12 +487,26 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             btn.setOnClickListener(this);
         }
         mCurrentFragmentId = F_UNDEFINED;
+        isClosed = false;
+    }
+
+    public boolean isClosed() {
+        return isClosed;
     }
 
     public void showWatchAsListDialog(int likesCount) {
         if (ClosingsBuyVipDialog.opened) return;
 
         ClosingsBuyVipDialog newFragment = ClosingsBuyVipDialog.newInstance(likesCount);
+        newFragment.setOnWatchSequentialyListener(new ClosingsBuyVipDialog.IWatchSequentialyListener() {
+            @Override
+            public void onWatchSequentialy(boolean animate) {
+                Activity activity = getActivity();
+                if (activity instanceof NavigationActivity) {
+                    ((NavigationActivity)activity).showContent(animate);
+                }
+            }
+        });
         try {
             newFragment.show(getActivity().getSupportFragmentManager(), ClosingsBuyVipDialog.TAG);
         } catch (Exception e) {

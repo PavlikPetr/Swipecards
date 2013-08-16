@@ -14,7 +14,8 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.TextView;
+import android.widget.Toast;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -23,7 +24,6 @@ import com.topface.topface.requests.ProfileDelete;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -95,7 +95,7 @@ public class DeleteAccountDialog extends DialogFragment implements View.OnClickL
 
                                     @Override
                                     public void fail(int codeError, ApiResponse response) {
-                                        Toast.makeText(getActivity(), R.string.delete_account_error, Toast.LENGTH_SHORT)
+                                        Toast.makeText(App.getContext(), R.string.delete_account_error, Toast.LENGTH_SHORT)
                                                 .show();
                                     }
 

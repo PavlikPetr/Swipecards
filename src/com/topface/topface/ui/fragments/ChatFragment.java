@@ -968,12 +968,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             @Override
             public void fail(int codeError, ApiResponse response) {
                 if (response.code == ApiResponse.PAYMENT) {
+                    mAdapter.removeItem(loaderItem);
                     Intent intent = ContainerActivity.getBuyingIntent("Chat");
                     intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
                     intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
                     startActivity(intent);
+                } else {
+                    mAdapter.showRetrySendMessage(loaderItem, sendGift);
                 }
-                mAdapter.showRetrySendMessage(loaderItem, sendGift);
             }
 
             @Override

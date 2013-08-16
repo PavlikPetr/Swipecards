@@ -494,7 +494,8 @@
     <string name="restart_to_change_locale">Ak chcete zmeniť jazyk, aplikácia sa reštartuje</string>
     <string name="locale_changing">Zmena jazyka</string>
     <plurals name="you_was_liked">
-        <item quantity="few">Páčite sa %s ľuďom</item>
+        <item quantity="other">Páčite sa %d ľuďom</item>
+        <item quantity="one">Páčite sa %d človeku</item>
     </plurals>
     <string name="to_see_likes_by_vip">Ak chcete okamžite zistiť, komu sa páčite, aktivujte si VIP účet.</string>
     <string name="or">alebo</string>

@@ -3,10 +3,10 @@
           package="com.topface.topface"
           android:installLocation="auto"
 
-          android:versionCode="84"
-          android:versionName="2.7.0">
+          android:versionCode="85"
+          android:versionName="2.7.1">
 
-    <uses-sdk
+<uses-sdk
             android:minSdkVersion="7"
             android:targetSdkVersion="16" />
 
@@ -30,6 +30,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
 
     <uses-feature
             android:name="android.hardware.location.gps"
@@ -273,6 +274,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name="com.getjar.sdk.rewards.GetJarActivity"
+                  android:configChanges="orientation|keyboard|keyboardHidden|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+
         <!-- Алиас для главной активити из первой версии. На всякий случай, а то раньше уже были проблемы с FB -->
         <activity-alias
                 android:name=".ui.MainActivity"
@@ -284,6 +288,7 @@
 
         <!-- services -->
         <service android:name="com.topface.billing.googleplay.BillingService" />
+        <service android:name="com.getjar.sdk.rewards.GetJarService" />
 
         <!-- receivers -->
         <receiver android:name="com.topface.billing.googleplay.BillingReceiver">
@@ -297,6 +302,14 @@
         <receiver android:name=".receivers.TestNotificationsReceiver">
             <intent-filter>
                 <action android:name="com.topface.topface.NOTIFY" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name="com.getjar.sdk.data.metadata.PackageMonitor" android:enabled="true" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <data android:scheme="package" />
             </intent-filter>
         </receiver>
 

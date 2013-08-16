@@ -1,8 +1,11 @@
 package com.topface.topface.ui.fragments.closing;
 
 import android.view.View;
+import android.widget.TextView;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
+import com.topface.topface.data.FeedUser;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.RateRequest;
 import com.topface.topface.requests.SkipAllClosedRequest;
@@ -12,7 +15,8 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
 
     public static boolean usersProcessed;
 
-    private View mBtnSkipAll;
+    private TextView mUserName;
+    private TextView mUserCity;
 
     @Override
     protected void initActionBarControls(ActionBar actionbar) {
@@ -51,13 +55,15 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     protected void initControls(View controlsView) {
         controlsView.findViewById(R.id.btnSkip).setOnClickListener(this);
         controlsView.findViewById(R.id.btnSkipAll).setOnClickListener(this);
-        mBtnSkipAll = controlsView.findViewById(R.id.btnSkipAll);
-        mBtnSkipAll.setOnClickListener(this);
+        View btnSkipAll = controlsView.findViewById(R.id.btnSkipAll);
+        btnSkipAll.setOnClickListener(this);
         if (CacheProfile.unread_likes > CacheProfile.getOptions().closing.limitSympathies) {
-            mBtnSkipAll.setVisibility(View.VISIBLE);
+            btnSkipAll.setVisibility(View.VISIBLE);
         }
         controlsView.findViewById(R.id.btnMutual).setOnClickListener(this);
         controlsView.findViewById(R.id.btnChat).setOnClickListener(this);
+        mUserName = (TextView)controlsView.findViewById(R.id.tvUserName);
+        mUserCity = (TextView)controlsView.findViewById(R.id.tvUserCity);
     }
 
     @Override
@@ -84,17 +90,21 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnMutual:
-                getRateController().onRate(getCurrentUser().id, 9, RateRequest.DEFAULT_MUTUAL, new RateController.OnRateListener() {
-                    @Override
-                    public void onRateCompleted() {
-                        if(isAdded()) refreshActionBarTitles(getView());
-                    }
+                EasyTracker.getTracker().trackEvent(getTrackName(), "Mutual", "", 1L);
+                RateController rateController = getRateController();
+                if (rateController != null) {
+                    rateController.onRate(getCurrentUser().id, 9, RateRequest.DEFAULT_MUTUAL, new RateController.OnRateListener() {
+                        @Override
+                        public void onRateCompleted() {
+                            if (isAdded()) refreshActionBarTitles(getView());
+                        }
 
-                    @Override
-                    public void onRateFailed() {
-                    }
-                });
-                showNextUser();
+                        @Override
+                        public void onRateFailed() {
+                        }
+                    });
+                    showNextUser();
+                }
                 break;
             default:
                 super.onClick(v);
@@ -110,6 +120,12 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     }
 
     @Override
+    protected void setUserInfo(FeedUser user) {
+        mUserName.setText(user.getNameAndAge());
+        mUserCity.setText(user.city.name);
+    }
+
+    @Override
     protected int getSkipAllRequestType() {
         return SkipAllClosedRequest.LIKES;
     }
@@ -117,5 +133,10 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     @Override
     protected FeedRequest.FeedService getFeedType() {
         return FeedRequest.FeedService.LIKES;
+    }
+
+    @Override
+    protected String getTrackName() {
+        return "LikesClosing";
     }
 }

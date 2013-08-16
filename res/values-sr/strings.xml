@@ -303,7 +303,7 @@
     <string name="popup_version_cancel">Potsetiti kasnije</string>
     <string name="general_version_not_supported">Vaša verzuja priloga je zastarela i više se ne podržava. Molimo vas da obnovite prilkog</string>
     <string name="leaders_select_photo_info">Odaberite najefektivniju fotografiju! Ne mogu se odabrati fotografije sa niskim rejtingom.</string>
-    <string name="default_price_format">Ukupno % 2f USD</string>
+    <string name="default_price_format">Ukupno %2f USD</string>
     <string name="dating_online_only">%s, samo online</string>
     <string name="leaders_pick_condition">Ne možete odabrati fotografiju čiji je rejting manji od %d%%:</string>
     <string name="map_popup_address">Adresa</string>
@@ -461,9 +461,9 @@
     <string name="restart_to_change_locale">Za promenu jezika prilog će biti aktiviran</string>
     <string name="locale_changing">Promena jezika</string>
     <plurals name="you_was_liked">
-        <item quantity="few">Dopali ste se % osobama</item>
-        <item quantity="other">Dopali ste se % ljudima</item>
-        <item quantity="one">Dopali ste se % čpveku</item>
+        <item quantity="few">Dopali ste se %d osobama</item>
+        <item quantity="other">Dopali ste se %d ljudima</item>
+        <item quantity="one">Dopali ste se %d čpveku</item>
     </plurals>
     <string name="to_see_likes_by_vip">Da bi odmah saznali kome ste se dopali, aktivirajte VIP akaunt.</string>
     <string name="or">ili</string>

@@ -117,7 +117,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         } catch (Exception ex) {
             Debug.log(ex.toString());
         }
-
     }
 
     protected ViewStub getEmptyFeedViewStub() {
@@ -146,7 +145,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (mFloatBlock != null) {
             mFloatBlock.onResume();
         }
-
     }
 
     @Override

@@ -482,6 +482,10 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         notifyDataSetChanged();
     }
 
+    public void removeItem(History item) {
+        getData().remove(item);
+    }
+
     public String getFirstItemId() {
         FeedList<History> data = getData();
         for (History item : data) {

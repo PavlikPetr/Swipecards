@@ -504,6 +504,7 @@
         <item quantity="other">%d monete</item>
         <item quantity="one">%d moneta</item>
     </plurals>
+    <string name="getjar_auth_title">Scegli l’account</string>
     <string name="skip">Salta</string>
     <string name="chat">Scrivi</string>
     <string name="sympathies">Simpatie</string>
@@ -527,4 +528,7 @@
     <string name="or_use_common_likes_list">Oppure visualizza quelli a chi piaci dall’elenco principale</string>
     <string name="settings_feedback_transaction_number">Numero dell’ordine</string>
     <string name="settings_feedback_transaction_link">Dove posso trovare numero dell’ordine?</string>
+    <string name="general_logout_error">Purtroppo il logout non è stato effettuato</string>
+    <string name="settings_feedback_transaction_number_hint">Inserisci il numero dell’ordine</string>
+    <string name="youve_earned">Hai guadagnato %s</string>
 </resources>

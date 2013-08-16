@@ -55,6 +55,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     private T mCurrentUser;
     private RateController mRateController;
     private AtomicBoolean mFragmentPaused = new AtomicBoolean(false);
+    private boolean mDatareturnedOnce = false;
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -293,6 +294,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                         return;
                     }
                     if (data.size() != 0) {
+                        if(!mDatareturnedOnce) onNotEmptyDataReturnedOnce();
                         getImageSwitcher().setVisibility(View.VISIBLE);
                         usersList.addAndUpdateSignature(data);
                         //если список был пуст, то просто показываем нового пользователя
@@ -357,6 +359,10 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                 }
             }).exec();
         }
+    }
+
+    protected void onNotEmptyDataReturnedOnce() {
+        mDatareturnedOnce = true;
     }
 
     private void sendAlbumRequest() {
@@ -453,6 +459,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
             return;
         }
         lockControls();
+        setUserInfo(currUser);
         setUserPhotos(currUser);
         getImageSwitcher().setData(currUser.photos);
         getImageSwitcher().setCurrentItem(0, true);
@@ -523,4 +530,6 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
 
     protected void onUsersProcessed() {
     }
+
+    protected abstract void setUserInfo(T user);
 }

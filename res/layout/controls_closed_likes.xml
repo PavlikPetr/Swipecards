@@ -10,6 +10,7 @@
             android:scaleType="fitXY"/>
 
     <LinearLayout
+            android:id="@+id/loButtonsContainer"
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -56,4 +57,38 @@
                 android:drawableTop="@drawable/dating_chat_selector"
                 android:text="@string/chat"/>
     </LinearLayout>
+
+    <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/loButtonsContainer"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="6dp"
+            android:orientation="vertical">
+
+        <TextView
+                android:id="@+id/tvUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical"
+                android:shadowColor="#666666"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="1.2"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
+
+        <TextView
+                android:id="@+id/tvUserCity"
+                style="@style/DatingButtonsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/tvUserName"
+                android:drawableLeft="@drawable/dating_city_pin"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical"
+                android:textSize="14sp" />
+    </RelativeLayout>
 </RelativeLayout>
