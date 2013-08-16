@@ -37,7 +37,7 @@ public class FansFragment extends BookmarksFragment{
             btnBuyVip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
+                    Intent intent = ContainerActivity.getVipBuyIntent(null, "Fans");
                     startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                 }
             });

@@ -259,7 +259,7 @@ public class BuyingFragment extends BillingFragment {
     }
 
     private void goToVipSettings() {
-        Intent intent = new Intent(getActivity(), ContainerActivity.class);
+        Intent intent = ContainerActivity.getVipBuyIntent(null, "BuyingGoToVipSettings");
         intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
         startActivity(intent);
     }

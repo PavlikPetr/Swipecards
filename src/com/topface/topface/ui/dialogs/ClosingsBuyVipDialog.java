@@ -39,7 +39,7 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
 
         root.findViewById(R.id.btnWatchAsList).setOnClickListener(this);
         root.findViewById(R.id.btnWatchSequentually).setOnClickListener(this);
-        ((TextView) root.findViewById(R.id.idYouWasLiked)).setText(Utils.getQuantityString(R.plurals.you_was_liked,likesCount,likesCount));
+        ((TextView) root.findViewById(R.id.idYouWasLiked)).setText(Utils.getQuantityString(R.plurals.you_was_liked, likesCount, likesCount));
         root.findViewById(R.id.btnClose).setOnClickListener(this);
         return root;
     }
@@ -54,14 +54,14 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnWatchSequentually:
-                if(mWatchSequentialyListener != null) mWatchSequentialyListener.onWatchSequentialy(true);
+                if (mWatchSequentialyListener != null) mWatchSequentialyListener.onWatchSequentialy(true);
                 closeDialog();
                 break;
             case R.id.btnClose:
                 closeDialog();
                 break;
             case R.id.btnWatchAsList:
-                Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
+                Intent intent = ContainerActivity.getVipBuyIntent(null, "ClosingDialogWatchAsList");
                 startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                 closeDialog();
                 break;

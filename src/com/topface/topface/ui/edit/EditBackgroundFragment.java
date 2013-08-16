@@ -10,7 +10,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.*;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.SettingsRequest;
@@ -22,7 +24,6 @@ import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.topface.topface.utils.http.ProfileBackgrounds.BackgroundItem;
 import com.topface.topface.utils.http.ProfileBackgrounds.ResourceBackgroundItem;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public class EditBackgroundFragment extends AbstractEditFragment {
@@ -65,7 +66,7 @@ public class EditBackgroundFragment extends AbstractEditFragment {
     private List<BackgroundItem> getBackgroundImagesList() {
         List<BackgroundItem> result = ProfileBackgrounds.getBackgroundItems(getActivity().getApplicationContext(),
                 CacheProfile.background_id);
-        for (int i=0;i<result.size();i++) {
+        for (int i = 0; i < result.size(); i++) {
             if (result.get(i) instanceof ResourceBackgroundItem) {
                 ResourceBackgroundItem item = (ResourceBackgroundItem) result.get(i);
                 if (item instanceof ResourceBackgroundItem) {
@@ -181,10 +182,10 @@ public class EditBackgroundFragment extends AbstractEditFragment {
                     public void onClick(View v) {
                         if (item.isForVip()) {
                             if (CacheProfile.premium) {
-                                select(item,position);
+                                select(item, position);
                                 notifyDataSetChanged();
                             } else {
-                                Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
+                                Intent intent = ContainerActivity.getVipBuyIntent(null, "VipBackground");
                                 startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                             }
                         } else {
@@ -199,7 +200,7 @@ public class EditBackgroundFragment extends AbstractEditFragment {
             return convertView;
         }
 
-        private void select(BackgroundItem item,int position) {
+        private void select(BackgroundItem item, int position) {
             mSelectedIndex = position;
             setSelectedBackground(item);
         }

@@ -126,7 +126,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
                     }
                     showNextUser();
                 } else {
-                    Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
+                    Intent intent = ContainerActivity.getVipBuyIntent(null, getClass().getSimpleName());
                     startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                 }
                 break;
@@ -134,7 +134,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
                 showChat();
                 break;
             case R.id.btnWatchAsList:
-                Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
+                Intent intent = ContainerActivity.getVipBuyIntent(null, getClass().getSimpleName());
                 startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                 break;
             default:

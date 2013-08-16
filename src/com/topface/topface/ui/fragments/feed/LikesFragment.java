@@ -196,7 +196,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                 inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
+                        Intent intent = ContainerActivity.getVipBuyIntent(null, "Likes");
                         startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                     }
                 });
