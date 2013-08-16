@@ -357,8 +357,8 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
 
                 if (activity != null) {
                     Toast.makeText(activity, R.string.photo_add_or, Toast.LENGTH_SHORT).show();
+                    activity.setResult(Activity.RESULT_OK);
                 }
-                getActivity().setResult(Activity.RESULT_OK);
             } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR && activity != null) {
                 Toast.makeText(activity, R.string.photo_add_error, Toast.LENGTH_SHORT).show();
             }

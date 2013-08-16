@@ -128,8 +128,8 @@
     <string name="form_detail">Mais detalhado</string>
     <plurals name="form_matches">
         <item quantity="zero">Vocês não têm coincidências</item>
-        <item quantity="other">У Vocês têm %de coincidências</item>
-        <item quantity="one">Vocês têm %de coincidência</item>
+        <item quantity="other">У Vocês têm %d de coincidências</item>
+        <item quantity="one">Vocês têm %d de coincidência</item>
     </plurals>
     <string name="invite_search_hint">Encontrar amigos</string>
     <string name="invite_title">Convites</string>
@@ -182,8 +182,8 @@
     <string name="photo_add_error">Não foi possivel adicionar fotografia</string>
     <plurals name="photo">
         <item quantity="zero">Não há fotografias</item>
-        <item quantity="other">%de fotografias</item>
-        <item quantity="one">%de fotografias</item>
+        <item quantity="other">%d de fotografias</item>
+        <item quantity="one">%d de fotografias</item>
     </plurals>
     <string name="novice_sympathy">Envie simpatias para aqueles que realmente você gosta, para travar um conhecimento agradável</string>
     <string name="novice_fill_profile">Adicione as suas melhores fotografias, para ganhar mais simpatias.</string>

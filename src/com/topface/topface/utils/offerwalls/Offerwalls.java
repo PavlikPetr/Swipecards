@@ -181,14 +181,17 @@ public class Offerwalls {
             initGetJar(activity);
             prgs.dismiss();
         }
-        ConsumableProduct consumableProduct = new ConsumableProduct(
-                CacheProfile.getOptions().getJar.getId(),
-                CacheProfile.getOptions().getJar.getName(),
-                CacheProfile.getOptions().getJar.getName(),
-                CacheProfile.getOptions().getJar.getPrice(),
-                R.drawable.ic_coins
-        );
-        mGetJarHelper.buy(activity.getString(R.string.getjar_auth_title), consumableProduct);
+        Options options = CacheProfile.getOptions();
+        if (options != null && options.getJar != null) {
+            ConsumableProduct consumableProduct = new ConsumableProduct(
+                    options.getJar.getId(),
+                    options.getJar.getName(),
+                    options.getJar.getName(),
+                    options.getJar.getPrice(),
+                    R.drawable.ic_coins
+            );
+            mGetJarHelper.buy(activity.getString(R.string.getjar_auth_title), consumableProduct);
+        }
     }
 
     public static class RewardsReceiver extends ResultReceiver {

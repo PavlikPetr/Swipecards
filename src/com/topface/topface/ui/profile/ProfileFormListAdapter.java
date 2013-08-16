@@ -143,7 +143,7 @@ public class ProfileFormListAdapter extends BaseAdapter {
                 break;
             case T_DATA:
                 holder.mTitle.setText(item.title.toUpperCase());
-                if (!TextUtils.isEmpty(item.value.trim()) && item.dataId != FormItem.NOT_SPECIFIED_ID) {
+                if (item.value != null && !TextUtils.isEmpty(item.value.trim()) && item.dataId != FormItem.NOT_SPECIFIED_ID) {
                     holder.mState.setImageResource(R.drawable.user_cell);
                     holder.mValue.setText(item.value.toLowerCase());
                     holder.mValue.setVisibility(View.VISIBLE);
@@ -159,7 +159,7 @@ public class ProfileFormListAdapter extends BaseAdapter {
             case T_STATUS:
                 holder.mTitle.setText(item.title.toUpperCase());
                 holder.mState.setImageResource(R.drawable.user_cell);
-                if (!TextUtils.isEmpty(item.value.trim())) {
+                if (item.value != null && !TextUtils.isEmpty(item.value.trim())) {
                     holder.mValue.setText(item.value);
                     holder.mValue.setVisibility(View.VISIBLE);
                 } else {

@@ -84,16 +84,19 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnMutual:
-                getRateController().onRate(getCurrentUser().id, 9, RateRequest.DEFAULT_MUTUAL, new RateController.OnRateListener() {
-                    @Override
-                    public void onRateCompleted() {
-                        if(isAdded()) refreshActionBarTitles(getView());
-                    }
+                RateController rateController = getRateController();
+                if (rateController != null) {
+                    rateController.onRate(getCurrentUser().id, 9, RateRequest.DEFAULT_MUTUAL, new RateController.OnRateListener() {
+                        @Override
+                        public void onRateCompleted() {
+                            if (isAdded()) refreshActionBarTitles(getView());
+                        }
 
-                    @Override
-                    public void onRateFailed() {
-                    }
-                });
+                        @Override
+                        public void onRateFailed() {
+                        }
+                    });
+                }
                 showNextUser();
                 break;
             default:

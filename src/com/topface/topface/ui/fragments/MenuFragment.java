@@ -1,7 +1,7 @@
 package com.topface.topface.ui.fragments;
 
-import android.app.Activity;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -325,7 +325,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             }
             transaction.replace(android.R.id.content, newFragment, getTagById(mCurrentFragmentId));
-            transaction.commit();
+            transaction.commitAllowingStateLoss();
 
             mCurrentFragment = newFragment;
         }

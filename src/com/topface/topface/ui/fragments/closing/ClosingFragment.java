@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.closing;
 
 import android.content.Intent;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import com.topface.topface.R;
@@ -73,13 +74,15 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
             @Override
             public void onMessageSent(String message, final QuickMessageFragment fragment) {
                 //Закрываем чат с задержкой и переключаем пользователя
-                ClosingFragment.this.getView().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        closeFragment(fragment);
-                        showNextUser();
-                    }
-                }, CHAT_CLOSE_DELAY_MILLIS);
+                if (ClosingFragment.this != null) {
+                    ClosingFragment.this.getView().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            closeFragment(fragment);
+                            showNextUser();
+                        }
+                    }, CHAT_CLOSE_DELAY_MILLIS);
+                }
             }
 
             @Override
@@ -88,9 +91,14 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
             }
 
             private void closeFragment(QuickMessageFragment fragment) {
-                FragmentTransaction transaction = ClosingFragment.this.getFragmentManager().beginTransaction();
-                transaction.remove(fragment);
-                transaction.commit();
+                if (ClosingFragment.this != null) {
+                    FragmentManager fragmentManager = ClosingFragment.this.getFragmentManager();
+                    if (ClosingFragment.this != null && fragmentManager != null) {
+                        FragmentTransaction transaction = fragmentManager.beginTransaction();
+                        transaction.remove(fragment);
+                        transaction.commitAllowingStateLoss();
+                    }
+                }
             }
         };
     }
@@ -170,6 +178,8 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     @Override
     protected void onCountersUpdated() {
         super.onCountersUpdated();
-        refreshActionBarTitles(getView());
+        if (isAdded()) {
+            refreshActionBarTitles(getView());
+        }
     }
 }

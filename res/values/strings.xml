@@ -534,7 +534,7 @@
     <string name="or_use_common_likes_list">Or browse those that liked you in the common list</string>
     <string name="settings_feedback_transaction_number">Order number</string>
     <string name="settings_feedback_transaction_link">Where to find the order number?</string>
+    <string name="general_logout_error">Unfortunately, you failed to log out from your account</string>
     <string name="settings_feedback_transaction_number_hint">Enter order number</string>
-    <string name="youve_earned">You have earned %s</string>
-    <string name="general_logout_error">Failed to sign out</string>
+    <string name="youve_earned">You\'ve earned %s</string>
 </resources>

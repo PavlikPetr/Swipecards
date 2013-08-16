@@ -265,7 +265,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     };
 
     private void refreshButtonsState() {
-        if (mUid == CacheProfile.uid && mSetAvatarButton != null) {
+        if (mUid == CacheProfile.uid && mSetAvatarButton != null && mPhotoLinks != null && mPhotoLinks.size() > mCurrentPosition) {
             final Photo currentPhoto = mPhotoLinks.get(mCurrentPosition);
             if (mDeletedPhotos.contains(currentPhoto)) {
                 mDeleteButton.setVisibility(View.VISIBLE);
