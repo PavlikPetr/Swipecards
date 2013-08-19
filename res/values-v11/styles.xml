@@ -2,7 +2,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Основная тема приложения -->
-    <style name="Theme.Topface" parent="android:Theme.Holo.NoActionBar">
+    <style name="Theme.Topface" parent="@style/Theme.AppCompat">
         <item name="vpiIconPageIndicatorStyle">@style/Widget.TopfaceIconPageIndicator</item>
         <item name="vpiTabPageIndicatorStyle">@style/Widget.TopfaceTabPageIndicator</item>
         <item name="vpiCirclePageIndicatorStyle">@style/TopfaceCirclePageIndicator</item>

@@ -2,7 +2,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Базовая тема приложения -->
-    <style name="Theme.Topface" parent="android:Theme.NoTitleBar">
+    <style name="Theme.Topface" parent="@style/Theme.AppCompat">
         <!-- Тема индикаторов для ViewPager -->
         <item name="vpiIconPageIndicatorStyle">@style/Widget.TopfaceIconPageIndicator</item>
         <item name="vpiTabPageIndicatorStyle">@style/Widget.TopfaceTabPageIndicator</item>
