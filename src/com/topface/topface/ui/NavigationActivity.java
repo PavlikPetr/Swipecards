@@ -31,6 +31,8 @@ import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
 import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
+import com.topface.topface.ui.profile.PhotoSwitcherActivity;
+import com.topface.topface.ui.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.*;
 import com.topface.topface.utils.offerwalls.Offerwalls;
@@ -252,6 +254,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                     public void onPhotoSentSuccess(final Photo photo) {
                         if (CacheProfile.photos != null) {
                             CacheProfile.photos.add(photo);
+                            LocalBroadcastManager.getInstance(NavigationActivity.this).sendBroadcast(new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT));
                         }
                         PhotoMainRequest request = new PhotoMainRequest(getApplicationContext());
                         request.photoid = photo.getId();
