@@ -111,6 +111,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FILTER);
         }
     };
+    private boolean moneyDecreased;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -456,16 +457,29 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         lockControls();
                         if (CacheProfile.money > 0) {
                             CacheProfile.money = CacheProfile.money - CacheProfile.getOptions().price_highrate;
+                            moneyDecreased = true;
                         }
                         mRateController.onRate(mCurrentUser.id, 10,
                                 mCurrentUser.mutual ? RateRequest.DEFAULT_MUTUAL
-                                        : RateRequest.DEFAULT_NO_MUTUAL, null);
+                                        : RateRequest.DEFAULT_NO_MUTUAL, new RateController.OnRateListener() {
+                            @Override
+                            public void onRateCompleted() {
+
+                            }
+
+                            @Override
+                            public void onRateFailed() {
+                                if (moneyDecreased) {
+                                    moneyDecreased = true;
+                                    CacheProfile.money += CacheProfile.getOptions().price_highrate;
+                                }
+                            }
+                        });
 
                         EasyTracker.getTracker().trackEvent("Dating", "Rate",
                                 "AdmirationSend" + (mCurrentUser.mutual ? "mutual" : ""),
                                 (long) CacheProfile.getOptions().price_highrate);
                     }
-                    //currentSearch.rated = true;
                 }
             }
             break;
@@ -822,6 +836,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void successRate() {
+        moneyDecreased = false;
         if (mCurrentUser != null) {
             mCurrentUser.rated = true;
         }
@@ -831,6 +846,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void failRate() {
         unlockControls();
+        if (moneyDecreased) {
+            CacheProfile.money += CacheProfile.getOptions().price_highrate;
+            moneyDecreased = false;
+        }
     }
 
     @Override

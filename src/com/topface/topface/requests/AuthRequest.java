@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import org.json.JSONException;
@@ -138,5 +139,14 @@ public class AuthRequest extends ApiRequest {
 
     public AuthToken getAuthToken() {
         return mAuthToken;
+    }
+
+    @Override
+    public void exec() {
+        if (TextUtils.isEmpty(platform) || TextUtils.isEmpty(sid) || TextUtils.isEmpty(token)) {
+            handleFail(ApiResponse.UNVERIFIED_TOKEN, "Key params are empty");
+        } else {
+            super.exec();
+        }
     }
 }

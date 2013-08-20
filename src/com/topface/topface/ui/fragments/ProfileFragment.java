@@ -526,7 +526,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                             if (v != null && getActivity() != null) {
                                 loader.setVisibility(View.INVISIBLE);
                                 icon.setVisibility(View.VISIBLE);
-                                Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                                if (CacheProfile.money > 0) {
+                                    Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                                }
                                 v.setEnabled(true);
                                 v.setSelected(false);
                                 if (textView != null) {

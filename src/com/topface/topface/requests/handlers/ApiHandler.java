@@ -42,6 +42,7 @@ abstract public class ApiHandler extends Handler {
                     fail(response.code, response);
                 } else if (response.isCodeEqual(IApiResponse.UNCONFIRMED_LOGIN)) {
                     ConfirmedApiRequest.showConfirmDialog(mContext);
+                    fail(response.code, response);
                 } else if (response.code != ApiResponse.RESULT_OK) {
                     fail(response.code, response);
                 } else {
