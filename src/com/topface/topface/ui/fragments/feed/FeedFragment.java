@@ -1,12 +1,13 @@
 package com.topface.topface.ui.fragments.feed;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.*;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.view.ActionMode;
 import android.text.TextUtils;
 import android.view.*;
 import android.view.View.OnTouchListener;
@@ -44,6 +45,8 @@ import java.util.List;
 import static android.widget.AdapterView.OnItemClickListener;
 
 public abstract class FeedFragment<T extends FeedItem> extends BaseFragment implements FeedAdapter.OnAvatarClickListener<T> {
+    private static final int FEED_MULTI_SELECTION_LIMIT = 10;
+
     protected PullToRefreshListView mListView;
     protected FeedAdapter<T> mListAdapter;
     private TextView mBackgroundText;
@@ -285,8 +288,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, final long itemPosition) {
                 if (isDeletable) {
-                    getActivity().startActionMode(mActionActivityCallback);
-                    getListAdapter().startMultiSelection();
+                    ((ActionBarActivity)getActivity()).startSupportActionMode(mActionActivityCallback);
+                    getListAdapter().startMultiSelection(getMultiSelectionLimit());
                     getListAdapter().onSelection((int) itemPosition);
                     return true;
                 }
@@ -294,6 +297,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
 
         };
+    }
+
+    protected int getMultiSelectionLimit() {
+        return FEED_MULTI_SELECTION_LIMIT;
     }
 
     private ActionMode.Callback mActionActivityCallback = new ActionMode.Callback() {
@@ -308,46 +315,49 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 }
             });
             getListAdapter().notifyDataSetChanged();
-            return true;
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
             menu.clear();
             getActivity().getMenuInflater().inflate(getContextMenuLayoutRes(), menu);
             return true;
         }
 
         @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            if (mActionMode != null && getListAdapter().selectedCount() > 0) {
-                mActionMode.finish();
-            }
+            boolean result = true;
             switch (item.getItemId()) {
                 case R.id.delete_feed:
-                    onDeleteFeedItems(getListAdapter().getSelectedFeedIds());
-                    return true;
+                    onDeleteFeedItems(getListAdapter().getSelectedFeedIds(), getListAdapter().getSelectedItems());
+                    break;
                 case R.id.add_to_black_list:
-                    onAddToBlackList(getListAdapter().getSelectedUsersIds());
-                    return true;
+                    onAddToBlackList(getListAdapter().getSelectedUsersIds(), getListAdapter().getSelectedItems());
+                    break;
                 case R.id.delete_from_blacklist:
-                    onRemoveFromBlackList(getListAdapter().getSelectedUsersIds());
-                    return true;
+                    onRemoveFromBlackList(getListAdapter().getSelectedUsersIds(), getListAdapter().getSelectedItems());
+                    break;
                 case R.id.delete_from_bookmarks:
-                    onDeleteBookmarksItems(getListAdapter().getSelectedUsersIds());
-                    return true;
+                    onDeleteBookmarksItems(getListAdapter().getSelectedUsersIds(), getListAdapter().getSelectedItems());
+                    break;
                 case R.id.delete_dialogs:
-                    onDeleteDialogItems(getListAdapter().getSelectedUsersIds());
-                    return true;
+                    onDeleteDialogItems(getListAdapter().getSelectedUsersIds(), getListAdapter().getSelectedItems());
+                    break;
                 default:
-                    return false;
+                    result = false;
             }
+            if (result) {
+                getListAdapter().finishMultiSelection();
+                if(mActionMode != null) mActionMode.finish();
+            }
+
+            return result;
         }
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             if (getActionBar(getView()) != null) getActionBar(getView()).show();
-            getListAdapter().finishMultiSelection();
             mActionMode = null;
         }
     };
@@ -357,15 +367,14 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     // CAB actions
-    private void onRemoveFromBlackList(List<Integer> usersIds) {
-        //TODO multiitems delete feedDelete on server
+    private void onRemoveFromBlackList(List<Integer> usersIds, final List<T> items) {
         mLockView.setVisibility(View.VISIBLE);
         new BlackListDeleteRequest(usersIds, getActivity())
                 .callback(new VipApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
                         if (isAdded()) {
-                            getListAdapter().deleteAllSelectedItems();
+                            getListAdapter().removeItems(items);
                         }
                     }
 
@@ -381,29 +390,27 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 }).exec();
     }
 
-    private void onAddToBlackList(List<Integer> items) {
-        //TODO multiitems on server
-        new BlackListAddRequest(items, getActivity())
+    private void onAddToBlackList(List<Integer> ids, final List<T> items) {
+        new BlackListAddManyRequest(ids, getActivity())
                 .callback(new VipApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
                         if (getListAdapter() != null) {
-                            getListAdapter().deleteAllSelectedItems();
+                            getListAdapter().removeItems(items);
                         }
                     }
                 }).exec();
     }
 
-    private void onDeleteFeedItems(List<String> ids) {
-        //TODO multiitems delete feedDelete on server
+    private void onDeleteFeedItems(List<String> ids, final List<T> items) {
         mLockView.setVisibility(View.VISIBLE);
-        DeleteRequest dr = new DeleteRequest(ids, getActivity());
+        FeedDeleteManyRequest dr = new FeedDeleteManyRequest(ids, getActivity());
         dr.callback(new SimpleApiHandler() {
             @Override
             public void success(ApiResponse response) {
                 if (isAdded()) {
                     mLockView.setVisibility(View.GONE);
-                    getListAdapter().deleteAllSelectedItems();
+                    getListAdapter().removeItems(items);
                 }
             }
 
@@ -417,14 +424,13 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         }).exec();
     }
 
-    private void onDeleteBookmarksItems(final List<Integer> usersIds) {
-        //TODO multiItems delete feedDelete on server
-        BookmarkDeleteRequest request = new BookmarkDeleteRequest(getActivity(), usersIds);
+    private void onDeleteBookmarksItems(final List<Integer> usersIds, final List<T> items) {
+        BookmarkDeleteManyRequest request = new BookmarkDeleteManyRequest(getActivity(), usersIds);
         request.callback(new SimpleApiHandler() {
             @Override
             public void success(ApiResponse response) {
                 mLockView.setVisibility(View.GONE);
-                getListAdapter().deleteAllSelectedItems();
+                getListAdapter().removeItems(items);
             }
 
             @Override
@@ -437,14 +443,13 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         }).exec();
     }
 
-    protected void onDeleteDialogItems(final List<Integer> usersIds) {
-        //TODO multiItems delete feedDelete on server
-        new DialogDeleteRequest(usersIds, getActivity())
+    protected void onDeleteDialogItems(final List<Integer> usersIds, final List<T> items) {
+        new DialogDeleteManyRequest(usersIds, getActivity())
                 .callback(new ApiHandler() {
                     @Override
                     public void success(ApiResponse response) {
                         mLockView.setVisibility(View.GONE);
-                        getListAdapter().deleteAllSelectedItems();
+                        getListAdapter().removeItems(items);
                     }
 
                     @Override

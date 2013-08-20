@@ -6,12 +6,13 @@ import com.topface.topface.data.FeedItem;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultiselectionController {
+public class MultiselectionController<T> {
 
-    private List<Object> mSelected = new ArrayList<Object>();
+    private List<T> mSelected = new ArrayList<T>();
     private boolean mMultiSelection = false;
     private IMultiSelectionListener mSelectionListener;
     private BaseAdapter mAdapter;
+    private int mSelectionLimit;
 
     public MultiselectionController(BaseAdapter adapter) {
         mAdapter = adapter;
@@ -31,7 +32,7 @@ public class MultiselectionController {
         if (mSelectionListener != null) mSelectionListener.onSelected(mSelected.size());
     }
 
-    public void onSelection(Object item) {
+    public void onSelection(T item) {
         if (isSelected(item)) {
             removeSelection(item);
         } else {
@@ -42,12 +43,12 @@ public class MultiselectionController {
 
     public void addSelection(int position) {
         if (mAdapter != null) {
-            mSelected.add(mAdapter.getItem(position));
+            mSelected.add((T)mAdapter.getItem(position));
             mAdapter.notifyDataSetChanged();
         }
     }
 
-    public void addSelection(Object item) {
+    public void addSelection(T item) {
         if (mAdapter != null) {
             mSelected.add(item);
             mAdapter.notifyDataSetChanged();
@@ -65,14 +66,14 @@ public class MultiselectionController {
         }
     }
 
-    public void removeSelection(Object item, boolean notify) {
+    public void removeSelection(T item, boolean notify) {
         if (mAdapter != null) {
             mSelected.remove(item);
             if (notify) mAdapter.notifyDataSetChanged();
         }
     }
 
-    public void removeSelection(Object item) {
+    public void removeSelection(T item) {
         removeSelection(item, true);
     }
 
@@ -81,7 +82,7 @@ public class MultiselectionController {
         return isMultiSelectionMode() && mSelected.contains(mAdapter.getItem(position));
     }
 
-    public boolean isSelected(Object item) {
+    public boolean isSelected(T item) {
         return isMultiSelectionMode() && mSelected.contains(item);
     }
 
@@ -96,7 +97,7 @@ public class MultiselectionController {
     }
 
     public void deleteAllSelectedItems() {
-        for (Object item : mSelected) {
+        for (T item : mSelected) {
             removeSelection(item,false);
         }
         if (mAdapter != null) mAdapter.notifyDataSetChanged();
@@ -110,7 +111,7 @@ public class MultiselectionController {
         mSelectionListener = listener;
     }
 
-    public List<Object> getSelected() {
+    public List<T> getSelected() {
         return mSelected;
     }
 

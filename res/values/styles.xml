@@ -18,8 +18,17 @@
         <item name="android:editTextStyle">@style/topfaceEditText</item>
         <item name="android:checkboxStyle">@style/topfaceCheckbox</item>
         <item name="android:windowBackground">@null</item>
-        <item name="actionBarSize">@dimen/default_header_height</item>
+
+        <!-- ActionBar  -->
         <item name="android:actionBarSize">@dimen/default_header_height</item>
+        <item name="actionBarSize">@dimen/default_header_height</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="windowActionBar">false</item>
+    </style>
+
+    <style name="Theme.Topface.Fullscreen" parent="Theme.Topface">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="topfaceEditText">
