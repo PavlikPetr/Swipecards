@@ -118,31 +118,12 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
-    protected void onDeleteItem(final int position) {
-        FeedDialog item = mListAdapter.getItem(position);
-        new DialogDeleteRequest(item.user.id, getActivity())
-                .callback(new ApiHandler() {
-                    @Override
-                    public void success(ApiResponse response) {
-                        mLockView.setVisibility(View.GONE);
-                        FeedList<FeedDialog> mFeedList = mListAdapter.getData();
-                        mFeedList.remove(position);
-                        mListAdapter.setData(mFeedList);
-                    }
-
-                    @Override
-                    public void fail(int codeError, ApiResponse response) {
-                        Debug.log(response.toString());
-                        mLockView.setVisibility(View.GONE);
-                        if (codeError != ApiResponse.PREMIUM_ACCESS_ONLY) {
-                            Utils.showErrorMessage(getActivity());
-                        }
-                    }
-                }).exec();
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    protected int getContextMenuLayoutRes() {
+        return R.menu.feed_context_menu_dialogs;
     }
 }

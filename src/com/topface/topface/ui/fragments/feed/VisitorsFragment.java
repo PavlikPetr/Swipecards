@@ -82,4 +82,9 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     protected boolean isForPremium() {
         return true;
     }
+
+    @Override
+    protected int getContextMenuLayoutRes() {
+        return R.menu.feed_context_menu_visitors;
+    }
 }

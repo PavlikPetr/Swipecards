@@ -55,11 +55,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
-    protected OnItemClickListener getOnItemClickListener() {
-        return null;
-    }
-
-    @Override
     protected int getTypeForGCM() {
         return GCMUtils.GCM_TYPE_LIKE;
     }
@@ -67,74 +62,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected int getTypeForCounters() {
         return CountersManager.LIKES;
-    }
-
-    @Override
-    protected OnTouchListener getListViewOnTouchListener() {
-        final GestureDetector gd = new GestureDetector(getActivity().getApplicationContext(),
-                new SwipeGestureListener(getActivity().getApplicationContext(), mListView.getRefreshableView(),
-                        new SwipeGestureListener.SwipeListener() {
-
-                            @Override
-                            public void onSwipeR2L(int position) {
-                                ((LikesListAdapter) mListAdapter).setSelectedForMutual(position);
-                            }
-
-                            @Override
-                            public void onSwipeL2R(int position) {
-                                ((LikesListAdapter) mListAdapter).setSelectedForMutual(-1);
-                            }
-
-                            @Override
-                            public void onTap(int position) {
-                                FeedItem item = (FeedItem) mListView.getRefreshableView().getItemAtPosition(position);
-                                if (item != null) {
-                                    if (!mIsUpdating && item.isRetrier()) {
-                                        updateUI(new Runnable() {
-                                            public void run() {
-                                                mListAdapter.showLoaderItem();
-                                            }
-                                        });
-                                        updateData(false, true);
-                                    } else {
-                                        try {
-                                            onFeedItemClick(item);
-                                        } catch (Exception e) {
-                                            Debug.error("FeedItem click error:", e);
-                                        }
-                                    }
-                                }
-                            }
-                        })
-        );
-
-        return new OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return gd.onTouchEvent(event);
-            }
-        };
-    }
-
-    protected DialogInterface.OnClickListener getLongTapActionsListener(final int position) {
-        return new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case DELETE_BUTTON:
-                        mLockView.setVisibility(View.VISIBLE);
-                        onDeleteItem(position);
-                        break;
-                    case BLACK_LIST_BUTTON:
-                        onAddToBlackList(position);
-                        break;
-                    case MUTUAL_BUTTON:
-                        onMutual(position);
-                        break;
-                }
-            }
-        };
     }
 
     private void onMutual(int position) {
@@ -152,14 +79,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                 }
             }
         }
-    }
-
-    protected String[] getLongTapActions() {
-        if (editButtonsNames == null) {
-            editButtonsNames = new String[]{getString(R.string.general_delete_title),
-                    getString(R.string.black_list_add), getString(R.string.general_mutual)};
-        }
-        return editButtonsNames;
     }
 
     @Override
@@ -245,5 +164,10 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         if (mEmptyFeedView != null) {
             initEmptyFeedView(mEmptyFeedView);
         }
+    }
+
+    @Override
+    protected int getContextMenuLayoutRes() {
+        return R.menu.feed_context_menu;
     }
 }

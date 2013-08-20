@@ -33,28 +33,6 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
     }
 
     @Override
-    protected void onDeleteItem(final int position) {
-        if(getItem(position) != null) {
-            BookmarkDeleteRequest request = new BookmarkDeleteRequest(getActivity(), getItem(position).user.id);
-            request.callback(new SimpleApiHandler() {
-                @Override
-                public void success(ApiResponse response) {
-                    mLockView.setVisibility(View.GONE);
-                    getListAdapter().removeItem(position);
-                }
-
-                @Override
-                public void always(ApiResponse response) {
-                    super.always(response);
-                    if (mLockView != null) {
-                        mLockView.setVisibility(View.GONE);
-                    }
-                }
-            }).exec();
-        }
-    }
-
-    @Override
     protected int getTypeForCounters() {
         return CountersManager.UNKNOWN_TYPE;
     }
@@ -83,4 +61,8 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
         return R.layout.layout_empty_bookmarks;
     }
 
+    @Override
+    protected int getContextMenuLayoutRes() {
+        return R.menu.feed_context_menu_bookmarks;
+    }
 }

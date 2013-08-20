@@ -3,6 +3,7 @@
 
     <!-- Основная тема приложения -->
     <style name="Theme.Topface" parent="@style/Theme.AppCompat">
+        <item name="android:windowNoTitle">true</item>
         <item name="vpiIconPageIndicatorStyle">@style/Widget.TopfaceIconPageIndicator</item>
         <item name="vpiTabPageIndicatorStyle">@style/Widget.TopfaceTabPageIndicator</item>
         <item name="vpiCirclePageIndicatorStyle">@style/TopfaceCirclePageIndicator</item>
@@ -17,6 +18,8 @@
 
         <item name="android:editTextStyle">@style/topfaceEditText</item>
         <item name="android:checkboxStyle">@style/topfaceCheckbox</item>
+        <item name="actionBarSize">@dimen/default_header_height</item>
+        <item name="android:actionBarSize">@dimen/default_header_height</item>
     </style>
 
 </resources>

@@ -6,5 +6,6 @@
     <dimen name="indicator_internal_padding">4dp</dimen>
 
     <dimen name="default_gap">16dip</dimen>
+    <dimen name="default_header_height">46dp</dimen>
 
 </resources>

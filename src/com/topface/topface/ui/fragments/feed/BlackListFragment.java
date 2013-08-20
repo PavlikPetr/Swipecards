@@ -81,53 +81,6 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
         });
     }
 
-
-    @Override
-    protected DialogInterface.OnClickListener getLongTapActionsListener(final int position) {
-        return new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case BLACK_LIST_DELETE_BUTTON:
-                        mLockView.setVisibility(View.VISIBLE);
-                        onRemoveFromBlackList(position);
-                        break;
-                }
-            }
-        };
-    }
-
-    private void onRemoveFromBlackList(final int position) {
-        mLockView.setVisibility(View.VISIBLE);
-        new BlackListDeleteRequest(getItem(position).user.id, getActivity())
-                .callback(new VipApiHandler() {
-                    @Override
-                    public void success(ApiResponse response) {
-                        if (isAdded()) {
-                            getListAdapter().removeItem(position);
-                        }
-                    }
-
-                    @Override
-                    public void always(ApiResponse response) {
-                        if (isAdded()) {
-                            if (mLockView != null) {
-                                mLockView.setVisibility(View.GONE);
-                            }
-                        }
-                    }
-
-                }).exec();
-    }
-
-    @Override
-    protected String[] getLongTapActions() {
-        if (editButtonsNames == null) {
-            editButtonsNames = new String[]{getString(R.string.black_list_delete)};
-        }
-        return editButtonsNames;
-    }
-
     @Override
     protected void initDoubleButton(View view) {
     }
@@ -143,5 +96,10 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
 
     @Override
     protected void initFloatBlock(ViewGroup view) {
+    }
+
+    @Override
+    protected int getContextMenuLayoutRes() {
+        return R.menu.feed_context_menu_blacklist;
     }
 }

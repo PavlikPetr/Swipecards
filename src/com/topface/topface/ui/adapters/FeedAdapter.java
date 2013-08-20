@@ -12,7 +12,9 @@ import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.ui.views.ImageViewRemote;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 
 /**
@@ -30,8 +32,11 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     private static final long CACHE_TIMEOUT = 1000 * 5 * 60; //5 минут
     private OnAvatarClickListener<T> mOnAvatarClickListener;
 
+    private MultiselectionController mSelectionController = new MultiselectionController(this);
+
     public FeedAdapter(Context context, FeedList<T> data, Updater updateCallback) {
         super(context, data, updateCallback);
+        mSelectionController = new MultiselectionController(this);
     }
 
     public int getLimit() {
@@ -178,6 +183,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         }
 
         convertView.setTag(holder);
+        int state = mSelectionController.isSelected(position) ? android.R.attr.state_checked : -android.R.attr.state_checked;
+        convertView.getBackground().setState(new int[] {state});
         return convertView;
     }
 
@@ -332,5 +339,59 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     public static interface OnAvatarClickListener<T> {
         public void onAvatarClick(T item, View view);
+    }
+
+    public List<String> getSelectedFeedIds() {
+        List<String> ids = new ArrayList<String>();
+        if (mSelectionController != null) {
+            List<Object> selected = mSelectionController.getSelected();
+            for (int i=0;i<selected.size();i++) {
+                ids.add(((T)selected.get(i)).id);
+            }
+        }
+        return ids;
+    }
+
+    public List<Integer> getSelectedUsersIds() {
+        List<Integer> ids = new ArrayList<Integer>();
+        if (mSelectionController != null) {
+            List<Object> selected = mSelectionController.getSelected();
+            for (int i=0;i<selected.size();i++) {
+                ids.add(((T)selected.get(i)).user.id);
+            }
+        }
+        return ids;
+    }
+
+    public void finishMultiSelection() {
+        mSelectionController.finishMultiSelection();
+    }
+
+    public int selectedCount() {
+        return mSelectionController.selectedCount();
+    }
+
+    public void setMultiSelectionListener(MultiselectionController.IMultiSelectionListener listener) {
+        mSelectionController.setMultiSelectionListener(listener);
+    }
+
+    public void deleteAllSelectedItems() {
+        mSelectionController.deleteAllSelectedItems();
+    }
+
+    public void startMultiSelection() {
+        mSelectionController.startMultiSelection();
+    }
+
+    public void onSelection(int position) {
+        mSelectionController.onSelection(position);
+    }
+
+    public void onSelection(Object item) {
+        mSelectionController.onSelection(item);
+    }
+
+    public boolean isMultiSelectionMode() {
+        return mSelectionController.isMultiSelectionMode();
     }
 }
