@@ -9,15 +9,19 @@ import android.content.pm.PackageInfo;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.view.View;
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.ui.views.RatingDialog;
 
 
 public class PopupManager {
     public static final String RATING_POPUP = "RATING_POPUP";
     public static final int RATE_POPUP_TIMEOUT = 86400000; // 1000 * 60 * 60 * 24 * 1 (1 сутки)
     private static boolean CAN_SHOW_POPUP = true;
+
+    public static final String OFF_RATE_TYPE = "OFF";
+    public static final String STANDARD_RATE_TYPE = "STANDARD";
+    public static final String LONG_RATE_TYPE = "LONG";
 
     Context mContext;
     private boolean mRatingPopupIsShowing = false;
@@ -83,9 +87,9 @@ public class PopupManager {
     }
 
     public void showRatePopup() {
-        if (!checkVersion(CacheProfile.getOptions().max_version) && App.isOnline() && mRatingPopupIsShowing && CAN_SHOW_POPUP) {
+//        if (!checkVersion(CacheProfile.getOptions().max_version) && App.isOnline() && mRatingPopupIsShowing && CAN_SHOW_POPUP) {
             ratingPopup();
-        }
+//        }
     }
 
     private void ratingPopup() {
@@ -100,15 +104,15 @@ public class PopupManager {
                 long date_start = preferences.getLong(RATING_POPUP, 1);
                 long date_now = new java.util.Date().getTime();
 
-                if (date_start == 0 || (date_now - date_start < RATE_POPUP_TIMEOUT)) {
-                    return;
-                } else if (date_start == 1) {
-                    saveRatingPopupStatus(new java.util.Date().getTime());
-                    return;
-                }
+//                if (date_start == 0 || (date_now - date_start < RATE_POPUP_TIMEOUT) || CacheProfile.getOptions().ratePopupType.equals(OFF_RATE_TYPE)) {
+//                    return;
+//                } else if (date_start == 1) {
+//                    saveRatingPopupStatus(new java.util.Date().getTime());
+//                    return;
+//                }
 
                 Looper.prepare();
-                getDialog().show();
+                showDialog();
                 mRatingPopupIsShowing = true;
                 Looper.loop();
             }
@@ -116,17 +120,16 @@ public class PopupManager {
 
     }
 
-    private Dialog getDialog() {
+    private Dialog showDialog() {
         CAN_SHOW_POPUP = false;
-        final Dialog ratingPopup = new Dialog(mContext) {
+
+        final RatingDialog ratingPopup = new RatingDialog(mContext, CacheProfile.getOptions().ratePopupType);
+        ratingPopup.setOnBackClickListener(new View.OnClickListener() {
             @Override
-            public void onBackPressed() {
+            public void onClick(View v) {
                 saveRatingPopupStatus(new java.util.Date().getTime());
-                super.onBackPressed();
             }
-        };
-        ratingPopup.setTitle(R.string.dashbrd_popup_title);
-        ratingPopup.setContentView(R.layout.popup_rating);
+        });
         ratingPopup.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
@@ -135,7 +138,9 @@ public class PopupManager {
             }
         });
 
-        ratingPopup.findViewById(R.id.btnRatingPopupRate).setOnClickListener(new View.OnClickListener() {
+        ratingPopup.show();
+
+        ratingPopup.setOnRateClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Utils.goToMarket(mContext);
@@ -143,14 +148,14 @@ public class PopupManager {
                 ratingPopup.cancel();
             }
         });
-        ratingPopup.findViewById(R.id.btnRatingPopupLate).setOnClickListener(new View.OnClickListener() {
+        ratingPopup.setOnLateClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveRatingPopupStatus(new java.util.Date().getTime());
                 ratingPopup.cancel();
             }
         });
-        ratingPopup.findViewById(R.id.btnRatingPopupCancel).setOnClickListener(new View.OnClickListener() {
+        ratingPopup.setOnCancelClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveRatingPopupStatus(0);

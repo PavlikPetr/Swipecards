@@ -132,6 +132,8 @@ public class Options extends AbstractData {
     public LinkedList<BuyButton> likes = new LinkedList<BuyButton>();
     public LinkedList<BuyButton> premium = new LinkedList<BuyButton>();
     public LinkedList<BuyButton> others = new LinkedList<BuyButton>();
+
+    public String ratePopupType;
     private String paymentwall;
 
     public String max_version = "2147483647"; //Integer.MAX_VALUE);
@@ -238,6 +240,8 @@ public class Options extends AbstractData {
             options.closing.enableSympathies = closings.optBoolean("enabled_sympathies");
             options.closing.limitMutual = closings.optInt("limit_mutual");
             options.closing.limitSympathies = closings.optInt("limit_sympathies");
+
+            options.ratePopupType = response.jsonResult.optJSONObject("rate_popup").optString("type");
 
             JSONObject getJar = response.jsonResult.optJSONObject("getjar");
             options.getJar = new GetJar(getJar.optString("id"),getJar.optString("name"),getJar.optLong("price"));
