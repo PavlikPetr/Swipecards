@@ -9,6 +9,7 @@ import android.content.pm.PackageInfo;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.view.View;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.views.RatingDialog;
@@ -87,9 +88,9 @@ public class PopupManager {
     }
 
     public void showRatePopup() {
-//        if (!checkVersion(CacheProfile.getOptions().max_version) && App.isOnline() && mRatingPopupIsShowing && CAN_SHOW_POPUP) {
+        if (!checkVersion(CacheProfile.getOptions().max_version) && App.isOnline() && mRatingPopupIsShowing && CAN_SHOW_POPUP) {
             ratingPopup();
-//        }
+        }
     }
 
     private void ratingPopup() {
@@ -104,12 +105,12 @@ public class PopupManager {
                 long date_start = preferences.getLong(RATING_POPUP, 1);
                 long date_now = new java.util.Date().getTime();
 
-//                if (date_start == 0 || (date_now - date_start < RATE_POPUP_TIMEOUT) || CacheProfile.getOptions().ratePopupType.equals(OFF_RATE_TYPE)) {
-//                    return;
-//                } else if (date_start == 1) {
-//                    saveRatingPopupStatus(new java.util.Date().getTime());
-//                    return;
-//                }
+                if (date_start == 0 || (date_now - date_start < RATE_POPUP_TIMEOUT) || CacheProfile.getOptions().ratePopupType.equals(OFF_RATE_TYPE)) {
+                    return;
+                } else if (date_start == 1) {
+                    saveRatingPopupStatus(new java.util.Date().getTime());
+                    return;
+                }
 
                 Looper.prepare();
                 showDialog();
