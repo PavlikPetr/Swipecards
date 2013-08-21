@@ -16,33 +16,33 @@
             android:paddingRight="20dp"
             android:paddingBottom="10dp"
             >
-            <TextView
-                    android:id="@+id/btnRatingPopupTitle"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_above="@+id/prBtnsContainer"
-                    android:textSize="18sp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_alignParentTop="true"
-                    android:gravity="center"
-                    android:text="@string/like_topface"/>
+
             <LinearLayout
-                android:id="@id/prBtnsContainer"
+                android:id="@+id/prBtnsContainer"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_centerInParent="true"
                 >
+                <TextView
+                        android:id="@+id/btnRatingPopupTitle"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+
+                        android:textSize="18sp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_alignParentTop="true"
+                        android:gravity="center"
+                        android:text="@string/like_topface"/>
                 <Button
                         android:id="@+id/btnRPYes"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:layout_marginTop="10dp"
                         android:text="@string/general_yes"/>
 
                 <Button
@@ -63,6 +63,7 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:paddingBottom="10dp"
+            android:visibility="gone"
                 >
             <TextView
                     android:id="@+id/btnRatingPopupTitle"
