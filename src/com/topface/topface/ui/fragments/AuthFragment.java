@@ -624,6 +624,7 @@ public class AuthFragment extends BaseFragment {
         }
     }
 
+
     private void showButtons() {
         //Эта проверка нужна, для безопасной работы в
         if (mFBButton != null && mVKButton != null && mProgressBar != null) {
@@ -650,6 +651,11 @@ public class AuthFragment extends BaseFragment {
             mPassword.setEnabled(true);
             mBackButton.setEnabled(true);
         }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
     }
 
     private void hideButtons() {

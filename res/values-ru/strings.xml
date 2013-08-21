@@ -717,6 +717,7 @@
     <string name="other_auth">Войти через другие сервисы</string>
     <string name="settings_feedback_transaction_number_hint">Введите номер заказа</string>
     <string name="youve_earned">Вы заработали %s</string>
+    <string name="like_topface">Вам нравится Topface?</string>
 
     <plurals name="selected">
         <item quantity="one">%d выбран</item>
