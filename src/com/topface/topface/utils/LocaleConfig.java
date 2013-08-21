@@ -18,6 +18,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.Locale;
@@ -114,26 +115,19 @@ public class LocaleConfig {
             public void success(ApiResponse response) {
                 Auth auth = new Auth(response);
                 Ssid.save(auth.ssid);
-
                 App.sendProfileAndOptionsRequests();
-
-                Intent intent = new Intent(activity,NavigationActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra(GCMUtils.NEXT_INTENT, fragmentId);
-                progress.dismiss();
-                activity.startActivity(intent);
-                activity.finish();
+                NavigationActivity.restartNavigationActivity(BaseFragment.F_PROFILE);
             }
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                progress.dismiss();
                 Toast.makeText(activity, R.string.general_server_error, Toast.LENGTH_SHORT);
             }
 
             @Override
             public void always(ApiResponse response) {
                 super.always(response);
+                progress.dismiss();
             }
         }).exec();
     }

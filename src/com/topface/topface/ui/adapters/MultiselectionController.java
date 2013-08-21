@@ -18,9 +18,10 @@ public class MultiselectionController<T> {
         mAdapter = adapter;
     }
 
-    public void startMultiSelection() {
+    public void startMultiSelection(int selectionLimit) {
         if (!mSelected.isEmpty()) mSelected.clear();
         mMultiSelection = true;
+        mSelectionLimit = selectionLimit;
     }
 
     public void onSelection(int position) {
@@ -42,6 +43,9 @@ public class MultiselectionController<T> {
     }
 
     public void addSelection(int position) {
+        if (selectedCount()+1 > mSelectionLimit) {
+            return;
+        }
         if (mAdapter != null) {
             mSelected.add((T)mAdapter.getItem(position));
             mAdapter.notifyDataSetChanged();

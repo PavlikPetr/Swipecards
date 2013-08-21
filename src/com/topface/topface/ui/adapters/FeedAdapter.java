@@ -400,7 +400,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     }
 
     public void startMultiSelection(int selectionLimit) {
-        mSelectionController.startMultiSelection();
+        mSelectionController.startMultiSelection(selectionLimit);
     }
 
     public void onSelection(int position) {
