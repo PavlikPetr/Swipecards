@@ -503,6 +503,7 @@
         <item quantity="other">%d mynt</item>
         <item quantity="one">%d mynt</item>
     </plurals>
+    <string name="getjar_auth_title">Välj konto</string>
     <string name="skip">Ignorera</string>
     <string name="chat">Skriv</string>
     <string name="sympathies">Sympatier</string>
@@ -526,4 +527,7 @@
     <string name="or_use_common_likes_list">Eller hitta dem du gillar i en gemensam lista</string>
     <string name="settings_feedback_transaction_number">Order nr</string>
     <string name="settings_feedback_transaction_link">var kan man hitta order nr?</string>
+    <string name="general_logout_error">Det gick tyvärr inte att logga ut</string>
+    <string name="settings_feedback_transaction_number_hint">Välj order nr</string>
+    <string name="youve_earned">Du har tjänat %s</string>
 </resources>

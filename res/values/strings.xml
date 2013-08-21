@@ -537,4 +537,5 @@
     <string name="general_logout_error">Unfortunately, you failed to log out from your account</string>
     <string name="settings_feedback_transaction_number_hint">Enter order number</string>
     <string name="youve_earned">You\'ve earned %s</string>
+    <string name="like_topface">Do you like Topface?</string>
 </resources>

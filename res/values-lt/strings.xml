@@ -515,6 +515,7 @@
         <item quantity="other">%d monetų</item>
         <item quantity="one">%d moneta</item>
     </plurals>
+    <string name="getjar_auth_title">Pasirinkite paskyrą</string>
     <string name="skip">Praleisti</string>
     <string name="chat">Parašyti</string>
     <string name="sympathies">Simpatijos</string>
@@ -540,4 +541,7 @@
     <string name="or_use_common_likes_list">Arba peržiūrinėkite tuos, kam jūs patikote bendrame sąraše</string>
     <string name="settings_feedback_transaction_number">Užsakymo numeris</string>
     <string name="settings_feedback_transaction_link">kur rasti užsakymo numerį?</string>
+    <string name="general_logout_error">Apgailestaujame, nepavyko išeiti iš paskyros.</string>
+    <string name="settings_feedback_transaction_number_hint">Įveskite užsakymo numerį</string>
+    <string name="youve_earned">Jūs uždirbote %s</string>
 </resources>
