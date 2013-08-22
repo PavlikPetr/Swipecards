@@ -9,7 +9,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
-import android.os.Looper;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.support.v4.content.LocalBroadcastManager;
 import com.topface.topface.data.Options;
@@ -89,19 +89,21 @@ public class App extends Application {
         MutualClosingFragment.usersProcessed = false;
         LikesClosingFragment.usersProcessed = false;
 
+        final Handler handler = new Handler();
         //Выполнение всего, что можно сделать асинхронно, делаем в отдельном потоке
         new Thread(new Runnable() {
             @Override
             public void run() {
-                onCreateAsync();
+                onCreateAsync(handler);
             }
         }).start();
     }
 
     /**
      * Вызывается в onCreate, но выполняется в отдельном потоке
+     * @param handler нужен для выполнения запросов
      */
-    private void onCreateAsync() {
+    private void onCreateAsync(Handler handler) {
         DateUtils.syncTime();
 
         Ssid.init();
@@ -113,16 +115,19 @@ public class App extends Application {
                 new Intent(CacheProfile.ACTION_PROFILE_LOAD)
         );
 
-        if (!CacheProfile.isEmpty()) {
-            Looper.prepare();
-            sendProfileAndOptionsRequests();
-            sendLocation();
-            Looper.loop();
-        }
-
         if (Ssid.isLoaded() && AuthToken.getInstance().isEmpty()) {
             // GCM
             GCMUtils.init(getContext());
+        }
+
+        if (!CacheProfile.isEmpty()) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    sendProfileAndOptionsRequests();
+                    sendLocation();
+                }
+            });
         }
 
     }
