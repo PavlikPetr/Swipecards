@@ -127,7 +127,7 @@ public class Options extends AbstractData {
     /**
      * Настройки для каждого типа страниц
      */
-    public HashMap<String, Page> pages = new HashMap<String, Options.Page>();
+    public HashMap<String, Page> pages = new HashMap<String, Page>();
     public LinkedList<BuyButton> coins = new LinkedList<BuyButton>();
     public LinkedList<BuyButton> likes = new LinkedList<BuyButton>();
     public LinkedList<BuyButton> premium = new LinkedList<BuyButton>();
