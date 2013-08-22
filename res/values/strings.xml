@@ -538,11 +538,4 @@
     <string name="settings_feedback_transaction_number_hint">Enter order number</string>
     <string name="youve_earned">You\'ve earned %s</string>
     <string name="like_topface">Do you like Topface?</string>
-
-    <plurals name="selected">
-        <item quantity="one">Selected %d</item>
-        <item quantity="many">Selected %d</item>
-        <item quantity="few">Selected %d</item>
-        <item quantity="other">Selected %d</item>
-    </plurals>
 </resources>
