@@ -8,17 +8,17 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookmarkDeleteRequest extends ApiRequest {
-    public static String SERVICE_NAME = "bookmarkdelete";
+public class BookmarkDeleteManyRequest extends ApiRequest {
+    public static String SERVICE_NAME = "bookmarkDeleteMany";
 
     private final List<Integer> uids;
 
-    public BookmarkDeleteRequest(Context context, List<Integer> uids) {
+    public BookmarkDeleteManyRequest(Context context, List<Integer> uids) {
         super(context);
         this.uids = uids;
     }
 
-    public BookmarkDeleteRequest(Context context, int uid) {
+    public BookmarkDeleteManyRequest(Context context, int uid) {
         super(context);
         List<Integer> list = new ArrayList<Integer>();
         list.add(uid);
@@ -27,7 +27,7 @@ public class BookmarkDeleteRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        return new JSONObject().put("userid", new JSONArray(this.uids));
+        return new JSONObject().put("userids", new JSONArray(this.uids));
     }
 
     @Override

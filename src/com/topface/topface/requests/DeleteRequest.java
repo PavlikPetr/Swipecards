@@ -1,6 +1,7 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+import android.text.TextUtils;
 import com.google.analytics.tracking.android.EasyTracker;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,41 +10,41 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DialogDeleteRequest extends ApiRequest {
-    private static final String SERVICE_NAME = "dialogDelete";
-    private final List<Integer> mUsersIds;
+public class DeleteRequest extends ApiRequest {
+    private List<String> mIds;
 
-    public DialogDeleteRequest(List<Integer> usersIds, Context context) {
+
+    public DeleteRequest(List<String> ids, Context context) {
         super(context);
-        mUsersIds = usersIds;
+        mIds = ids;
     }
 
-    public DialogDeleteRequest(int userId, Context context) {
+    public DeleteRequest(String id, Context context) {
         super(context);
-        List<Integer> list = new ArrayList<Integer>();
-        list.add(userId);
-        mUsersIds = list;
+        List<String> list = new ArrayList<String>();
+        list.add(id);
+        mIds = list;
     }
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        return new JSONObject().put("userid", new JSONArray(mUsersIds));
+        JSONObject data = new JSONObject();
+        data.put("item", new JSONArray(mIds));
+        return data;
     }
 
     @Override
     public String getServiceName() {
-        return SERVICE_NAME;
+        return "feedDelete";
     }
 
     @Override
     public void exec() {
-
-        if (mUsersIds != null && mUsersIds.size() > 0) {
+        if (mIds != null && mIds.size() > 0) {
             super.exec();
+            EasyTracker.getTracker().trackEvent("Feed", "Delete", "", 1L);
         } else {
             handleFail(ApiResponse.ERRORS_PROCCESED, "User list for delete from black list is empty");
         }
     }
-
-
 }

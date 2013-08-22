@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:appcompat="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/delete_dialogs"
+          android:icon="@android:drawable/ic_menu_delete"
+          />
+
+    <item android:id="@+id/add_to_black_list"
+          appcompat:showAsAction="collapseActionView"
+          android:title="@string/black_list_add_short"
+          />
+</menu>

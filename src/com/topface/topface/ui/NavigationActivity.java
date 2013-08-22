@@ -57,10 +57,16 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private static boolean mHasClosingsForThisSession;
     private static boolean mClosingsOnProfileUpdateInvoked = false;
 
+    private static NavigationActivity instance = null;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         mNeedAnimate = false;
         super.onCreate(savedInstanceState);
+        if (instance != this) {
+            if (instance != null) instance.finish();
+            instance = this;
+        }
         if (isNeedBroughtToFront(getIntent())) {
             // При открытии активити из лаунчера перезапускаем ее
             finish();
@@ -514,5 +520,14 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
         mFragmentMenu.onStopClosings();
         showFragment(null); // it will take fragment id from getIntent() extra data
+    }
+
+    public static void restartNavigationActivity(int fragmentId) {
+        Activity activity = instance;
+        Intent intent = new Intent(activity,NavigationActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra(GCMUtils.NEXT_INTENT, fragmentId);
+        activity.startActivity(intent);
+        activity.finish();
     }
 }

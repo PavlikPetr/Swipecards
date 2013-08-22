@@ -1,7 +1,6 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
-import com.google.analytics.tracking.android.EasyTracker;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,16 +8,16 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DialogDeleteRequest extends ApiRequest {
-    private static final String SERVICE_NAME = "dialogDelete";
+public class DialogDeleteManyRequest extends ApiRequest {
+    private static final String SERVICE_NAME = "dialogDeleteMany";
     private final List<Integer> mUsersIds;
 
-    public DialogDeleteRequest(List<Integer> usersIds, Context context) {
+    public DialogDeleteManyRequest(List<Integer> usersIds, Context context) {
         super(context);
         mUsersIds = usersIds;
     }
 
-    public DialogDeleteRequest(int userId, Context context) {
+    public DialogDeleteManyRequest(int userId, Context context) {
         super(context);
         List<Integer> list = new ArrayList<Integer>();
         list.add(userId);
@@ -27,7 +26,7 @@ public class DialogDeleteRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        return new JSONObject().put("userid", new JSONArray(mUsersIds));
+        return new JSONObject().put("userids", new JSONArray(mUsersIds));
     }
 
     @Override

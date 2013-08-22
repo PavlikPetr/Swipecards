@@ -73,4 +73,9 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     protected int getTypeForCounters() {
         return CountersManager.SYMPATHY;
     }
+
+    @Override
+    protected int getContextMenuLayoutRes() {
+        return R.menu.feed_context_menu;
+    }
 }

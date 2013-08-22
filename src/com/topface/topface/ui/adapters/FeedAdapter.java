@@ -2,6 +2,9 @@ package com.topface.topface.ui.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +15,9 @@ import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.ui.views.ImageViewRemote;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 
 /**
@@ -30,8 +35,11 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     private static final long CACHE_TIMEOUT = 1000 * 5 * 60; //5 минут
     private OnAvatarClickListener<T> mOnAvatarClickListener;
 
+    private MultiselectionController<T> mSelectionController = new MultiselectionController(this);
+
     public FeedAdapter(Context context, FeedList<T> data, Updater updateCallback) {
         super(context, data, updateCallback);
+        mSelectionController = new MultiselectionController(this);
     }
 
     public int getLimit() {
@@ -50,6 +58,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         public ViewFlipper flipper;
         public Button flippedBtn;
         public View dataLayout;
+        public Drawable background;
     }
 
     public FeedAdapter(Context context, Updater updateCallback) {
@@ -178,6 +187,11 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         }
 
         convertView.setTag(holder);
+        if (mSelectionController.isSelected(position)) {
+            convertView.setBackgroundResource(R.drawable.feed_bg_pressed);
+        } else {
+            convertView.setBackground(holder.background);
+        }
         return convertView;
     }
 
@@ -275,6 +289,12 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         return result;
     }
 
+    public boolean removeItems(List<T> items) {
+        boolean result = getData().removeAll(items);
+        notifyDataSetChanged();
+        return result;
+    }
+
     public T getLastFeedItem() {
         T item = null;
         if (!isEmpty()) {
@@ -310,6 +330,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         holder.online = (ImageView) convertView.findViewById(R.id.ivOnline);
         holder.flipper = (ViewFlipper) convertView.findViewById(R.id.vfFlipper);
         holder.flippedBtn = (Button) convertView.findViewById(R.id.btnMutual);
+        holder.background = convertView.getBackground();
 
         return holder;
     }
@@ -332,5 +353,65 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     public static interface OnAvatarClickListener<T> {
         public void onAvatarClick(T item, View view);
+    }
+
+    public List<String> getSelectedFeedIds() {
+        List<String> ids = new ArrayList<String>();
+        if (mSelectionController != null) {
+            List<T> selected = mSelectionController.getSelected();
+            for (int i=0;i<selected.size();i++) {
+                ids.add(selected.get(i).id);
+            }
+        }
+        return ids;
+    }
+
+    public List<Integer> getSelectedUsersIds() {
+        List<Integer> ids = new ArrayList<Integer>();
+        if (mSelectionController != null) {
+            List<T> selected = mSelectionController.getSelected();
+            for (int i=0;i<selected.size();i++) {
+                ids.add(selected.get(i).user.id);
+            }
+        }
+        return ids;
+    }
+
+    public List<T> getSelectedItems() {
+        List<T> result = new ArrayList<T>();
+        result.addAll(mSelectionController.getSelected());
+        return result;
+    }
+
+    public void finishMultiSelection() {
+        mSelectionController.finishMultiSelection();
+    }
+
+    public int selectedCount() {
+        return mSelectionController.selectedCount();
+    }
+
+    public void setMultiSelectionListener(MultiselectionController.IMultiSelectionListener listener) {
+        mSelectionController.setMultiSelectionListener(listener);
+    }
+
+    public void deleteAllSelectedItems() {
+        mSelectionController.deleteAllSelectedItems();
+    }
+
+    public void startMultiSelection(int selectionLimit) {
+        mSelectionController.startMultiSelection(selectionLimit);
+    }
+
+    public void onSelection(int position) {
+        mSelectionController.onSelection(position);
+    }
+
+    public void onSelection(T item) {
+        mSelectionController.onSelection(item);
+    }
+
+    public boolean isMultiSelectionMode() {
+        return mSelectionController.isMultiSelectionMode();
     }
 }

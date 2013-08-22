@@ -2,7 +2,8 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Базовая тема приложения -->
-    <style name="Theme.Topface" parent="android:Theme.NoTitleBar">
+    <style name="Theme.Topface" parent="@style/Theme.AppCompat">
+        <item name="android:windowNoTitle">true</item>
         <!-- Тема индикаторов для ViewPager -->
         <item name="vpiIconPageIndicatorStyle">@style/Widget.TopfaceIconPageIndicator</item>
         <item name="vpiTabPageIndicatorStyle">@style/Widget.TopfaceTabPageIndicator</item>
@@ -17,6 +18,17 @@
         <item name="android:editTextStyle">@style/topfaceEditText</item>
         <item name="android:checkboxStyle">@style/topfaceCheckbox</item>
         <item name="android:windowBackground">@null</item>
+
+        <!-- ActionBar  -->
+        <item name="android:actionBarSize">@dimen/default_header_height</item>
+        <item name="actionBarSize">@dimen/default_header_height</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="windowActionBar">false</item>
+    </style>
+
+    <style name="Theme.Topface.Fullscreen" parent="Theme.Topface">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="topfaceEditText">

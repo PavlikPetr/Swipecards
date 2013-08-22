@@ -1,9 +1,9 @@
 package com.topface.topface.ui.analytics;
 
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import com.google.analytics.tracking.android.EasyTracker;
 
-public class TrackedFragmentActivity extends FragmentActivity {
+public class TrackedFragmentActivity extends ActionBarActivity {
 
 
     @Override
