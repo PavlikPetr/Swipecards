@@ -32,6 +32,7 @@ public class RatingDialog extends Dialog {
             ((ViewFlipper) findViewById(R.id.prFlipper)).setDisplayedChild(1);
         } else if (type.equals(PopupManager.LONG_RATE_TYPE)) {
             EasyTracker.getTracker().trackEvent("RatePopup", "LikeTopfacePopup", "show", 1L);
+            findViewById(R.id.btnRatingPopupCancel).setVisibility(View.GONE);
         }
         findViewById(R.id.btnRPYes).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,12 +56,12 @@ public class RatingDialog extends Dialog {
     }
 
     public void setOnRateClickListener(View.OnClickListener listener) {
-        EasyTracker.getTracker().trackEvent("RatePopup", "StandardPopup", "Rate", 1L);
+        EasyTracker.getTracker().trackEvent("RatePopup", getStatisticsTagByType(), "Rate", 1L);
         findViewById(R.id.btnRatingPopupRate).setOnClickListener(listener);
     }
 
     public void setOnLateClickListener(View.OnClickListener listener) {
-        EasyTracker.getTracker().trackEvent("RatePopup", "StandardPopup", "Late", 1L);
+        EasyTracker.getTracker().trackEvent("RatePopup", getStatisticsTagByType(), "Later", 1L);
         findViewById(R.id.btnRatingPopupLate).setOnClickListener(listener);
     }
 
@@ -69,10 +70,14 @@ public class RatingDialog extends Dialog {
         findViewById(R.id.btnRatingPopupCancel).setOnClickListener(listener);
     }
 
+    private String getStatisticsTagByType() {
+        return type.equals(PopupManager.STANDARD_RATE_TYPE)?"StandardPopup":"LikeTopfacePopup";
+    }
+
     @Override
     public void onBackPressed() {
 
-        EasyTracker.getTracker().trackEvent("RatePopup", type.equals(PopupManager.STANDARD_RATE_TYPE)?"StandardPopup":"LikeTopfacePopup", "BackPressed", 1L);
+        EasyTracker.getTracker().trackEvent("RatePopup", getStatisticsTagByType(), "BackPressed", 1L);
         if (backClickListener != null) {
             backClickListener.onClick(null);
         }

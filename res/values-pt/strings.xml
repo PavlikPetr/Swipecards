@@ -464,6 +464,7 @@
     <string name="general_complain_sended">A sua queixa foi enviada, muito obrigado pela ajuda</string>
     <string name="general_complain">Queixa</string>
     <string name="general_msg">Mensagem</string>
+    <string name="general_no_notifications">Infelizmente, as notificações no seu dispositivo não estão disponíveis</string>
     <string name="general_bookmarks_add_short">Aos favoritos</string>
     <string name="black_list_add_short">Na lista negra</string>
     <string name="general_complaint">Queixar-se</string>
@@ -474,6 +475,8 @@
     <string name="general_bookmarks_is_deleted">O usuário foi removido dos favoritos</string>
     <string name="general_blacklist_is_deleted">O usuário foi removido da lista negra</string>
     <string name="invite_friends_title_short">Convidar todos os amigos à Topface</string>
+    <string name="general_exit">Sair</string>
+    <string name="likes_can_help_you">Simpatias ajudarão travar conhecimentos</string>
     <string name="general_get_dating">Travar conhecimento</string>
     <string name="settings_select_language">Escolha de idioma para o aplicativo</string>
     <string name="restart_to_change_locale">Para a alteração de idioma, o aplicativo terá que ser reiniciado</string>
@@ -492,6 +495,7 @@
     <string name="restore_of_account">Restauração da conta</string>
     <string name="restore">Restaurar</string>
     <string name="admiration_sended">Admiração foi enviada</string>
+    <string name="getjar_auth_title">Selecione uma conta</string>
     <string name="skip">deixar passar</string>
     <string name="chat">Escrever</string>
     <string name="sympathies">Simpatias</string>
@@ -506,4 +510,7 @@
     <string name="or_use_common_likes_list">Ou procure aqueles que gostam de você na lista comum</string>
     <string name="settings_feedback_transaction_number">Número de encomenda</string>
     <string name="settings_feedback_transaction_link">onde encontrar o número de encomenda?</string>
+    <string name="general_logout_error">Infelizmente não foi possível sair de conta</string>
+    <string name="settings_feedback_transaction_number_hint">Digite o número de ordem</string>
+    <string name="youve_earned">Você ganhou %s</string>
 </resources>

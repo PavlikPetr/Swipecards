@@ -516,6 +516,7 @@
         <item quantity="other">%d para</item>
         <item quantity="one">%d para</item>
     </plurals>
+    <string name="getjar_auth_title">Hesap seçin</string>
     <string name="skip">Geç</string>
     <string name="chat">Yazmak</string>
     <string name="sympathies">Sempatiler</string>
@@ -540,4 +541,7 @@
     <string name="or_use_common_likes_list">Veya sizi beğenen genel listedekilerini izleyin</string>
     <string name="settings_feedback_transaction_number">Siparişin numarası</string>
     <string name="settings_feedback_transaction_link">Siparişin numarası nerede bulunur?</string>
+    <string name="general_logout_error">Maalesef, hesaptan çıkış yapılamadı</string>
+    <string name="settings_feedback_transaction_number_hint">Sipariş numarasına girin</string>
+    <string name="youve_earned">Kazancınız %s</string>
 </resources>

@@ -2,8 +2,6 @@ package com.topface.topface.ui.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,8 +33,10 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     private static final long CACHE_TIMEOUT = 1000 * 5 * 60; //5 минут
     private OnAvatarClickListener<T> mOnAvatarClickListener;
 
+    @SuppressWarnings("unchecked")
     private MultiselectionController<T> mSelectionController = new MultiselectionController(this);
 
+    @SuppressWarnings("unchecked")
     public FeedAdapter(Context context, FeedList<T> data, Updater updateCallback) {
         super(context, data, updateCallback);
         mSelectionController = new MultiselectionController(this);
@@ -190,7 +190,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         if (mSelectionController.isSelected(position)) {
             convertView.setBackgroundResource(R.drawable.feed_bg_pressed);
         } else {
-            convertView.setBackground(holder.background);
+            //noinspection deprecation
+            convertView.setBackgroundDrawable(holder.background);
         }
         return convertView;
     }
@@ -359,8 +360,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         List<String> ids = new ArrayList<String>();
         if (mSelectionController != null) {
             List<T> selected = mSelectionController.getSelected();
-            for (int i=0;i<selected.size();i++) {
-                ids.add(selected.get(i).id);
+            for (T aSelected : selected) {
+                ids.add(aSelected.id);
             }
         }
         return ids;
@@ -370,8 +371,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         List<Integer> ids = new ArrayList<Integer>();
         if (mSelectionController != null) {
             List<T> selected = mSelectionController.getSelected();
-            for (int i=0;i<selected.size();i++) {
-                ids.add(selected.get(i).user.id);
+            for (T aSelected : selected) {
+                ids.add(aSelected.user.id);
             }
         }
         return ids;
@@ -387,6 +388,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         mSelectionController.finishMultiSelection();
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public int selectedCount() {
         return mSelectionController.selectedCount();
     }
@@ -395,6 +397,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         mSelectionController.setMultiSelectionListener(listener);
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public void deleteAllSelectedItems() {
         mSelectionController.deleteAllSelectedItems();
     }
