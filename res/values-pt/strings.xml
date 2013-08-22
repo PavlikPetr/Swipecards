@@ -492,6 +492,7 @@
     <string name="restore_of_account">Restauração da conta</string>
     <string name="restore">Restaurar</string>
     <string name="admiration_sended">Admiração foi enviada</string>
+    <string name="getjar_auth_title">Selecione uma conta</string>
     <string name="skip">deixar passar</string>
     <string name="chat">Escrever</string>
     <string name="sympathies">Simpatias</string>
@@ -506,4 +507,7 @@
     <string name="or_use_common_likes_list">Ou procure aqueles que gostam de você na lista comum</string>
     <string name="settings_feedback_transaction_number">Número de encomenda</string>
     <string name="settings_feedback_transaction_link">onde encontrar o número de encomenda?</string>
+    <string name="general_logout_error">Infelizmente não foi possível sair de conta</string>
+    <string name="settings_feedback_transaction_number_hint">Digite o número de ordem</string>
+    <string name="youve_earned">Você ganhou %s</string>
 </resources>
