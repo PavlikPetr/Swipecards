@@ -214,6 +214,7 @@ public class AddPhotoHelper {
      * @param uri фотографии
      */
     public void sendRequest(final Uri uri) {
+        Toast.makeText(mContext, R.string.photo_is_uploading, 1500).show();
         if (uri == null) {
             if (mHandler != null) {
                 mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
