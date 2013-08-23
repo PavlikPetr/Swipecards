@@ -122,6 +122,7 @@ public class HeaderMainFragment extends BaseFragment {
                 Bundle args = new Bundle();
                 fragment.setArguments(args);
             }
+
             fragment.getArguments().putParcelable(ARG_TAG_AVATAR, profile.photo);
             fragment.getArguments().putString(ARG_TAG_NAME, profile.getNameAndAge());
             fragment.getArguments().putString(ARG_TAG_CITY, profile.city.name);

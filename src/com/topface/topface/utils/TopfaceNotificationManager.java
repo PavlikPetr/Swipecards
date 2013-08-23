@@ -233,7 +233,7 @@ public class TopfaceNotificationManager {
 
                 RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.fail_notification_layout);
                 if (image != null) {
-                    Bitmap scaledIcon = Utils.clipAndScaleBitmap(image, (int) width, (int) height);
+                    Bitmap scaledIcon = Utils.clippingBitmap(image);
                     if (scaledIcon != null) {
                         views.setBitmap(R.id.fnAvatar, "setImageBitmap", image);
                     }
@@ -269,7 +269,7 @@ public class TopfaceNotificationManager {
 
                 RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.fail_notification_layout);
                 if (image != null) {
-                    Bitmap scaledIcon = Utils.clipAndScaleBitmap(image, (int) width, (int) height);
+                    Bitmap scaledIcon = Utils.clippingBitmap(image);
                     if (scaledIcon != null) {
                         views.setBitmap(R.id.fnAvatar, "setImageBitmap", image);
                     }
@@ -306,7 +306,7 @@ public class TopfaceNotificationManager {
                 notificationBuilder.setSmallIcon(android.R.drawable.stat_sys_upload);
                 RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.notifications_progress_layout);
                 if (image != null) {
-                    Bitmap scaledIcon = Utils.clipAndScaleBitmap(image, (int) width, (int) height);
+                    Bitmap scaledIcon = Utils.clippingBitmap(image);
                     if (scaledIcon != null) {
                         views.setBitmap(R.id.notificationImage, "setImageBitmap", image);
                     }
