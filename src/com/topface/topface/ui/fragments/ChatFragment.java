@@ -486,7 +486,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             @Override
             public void fail(int codeError, ApiResponse response) {
                 showLoadingBackground();
-                if (mLockScreen != null && mAdapter.getData().isEmpty()) {
+                FeedList<History> data = mAdapter != null ? mAdapter.getData() : null;
+                if (mLockScreen != null && (data == null || data.isEmpty())) {
                     mLockScreen.setVisibility(View.VISIBLE);
                 }
                 wasFailed = true;

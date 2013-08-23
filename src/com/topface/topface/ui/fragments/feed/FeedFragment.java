@@ -348,7 +348,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     result = false;
             }
             if (result) {
-                getListAdapter().finishMultiSelection();
                 if(mActionMode != null) mActionMode.finish();
             }
 
@@ -358,6 +357,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             if (getActionBar(getView()) != null) getActionBar(getView()).show();
+            getListAdapter().finishMultiSelection();
             mActionMode = null;
         }
     };
