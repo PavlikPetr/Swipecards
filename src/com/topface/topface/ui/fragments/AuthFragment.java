@@ -76,6 +76,7 @@ public class AuthFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater,container,savedInstanceState);
         Debug.log("AF: onCreate");
         Activity activity = getActivity();
         if (activity instanceof NavigationActivity) {
@@ -92,6 +93,7 @@ public class AuthFragment extends BaseFragment {
             getProfileAndOptions();
         }
         checkOnline();
+        getSupportActionBar().hide();
         return root;
     }
 
@@ -754,6 +756,7 @@ public class AuthFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        getSupportActionBar().show();
         if (!hasAuthorized) {
             EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG,additionalButtonsScreen?"DismissAdditional":"DismissMain", btnsController.getLocaleTag(),1L);
         }
@@ -761,5 +764,10 @@ public class AuthFragment extends BaseFragment {
 
     interface ProfileIdReceiver {
         void onProfileIdReceived(int id);
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.app_name);
     }
 }

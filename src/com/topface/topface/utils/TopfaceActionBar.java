@@ -8,7 +8,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.ui.views.ImageViewRemote;
 
-public class ActionBar {
+public class TopfaceActionBar {
 
     private ViewGroup actionView;
     private ImageView mNavigationHome;
@@ -23,16 +23,12 @@ public class ActionBar {
     private ImageViewRemote mProfileAvatar;
     private CheckBox checkBox;
 
-    private NavigationBarController mNavBarController;
     private ImageButton mSendButton;
     private RelativeLayout leftContainer;
 
-    public ActionBar(Context context, View actionView) {
+    public TopfaceActionBar(Context context, View actionView) {
         this.actionView = (ViewGroup) actionView.findViewById(R.id.loNavigationBar);
-        this.actionView.bringToFront();
         initShadow(context);
-        this.actionView.setVisibility(View.VISIBLE);
-        mNavBarController = new NavigationBarController(this.actionView);
         initViews();
     }
 
@@ -65,14 +61,6 @@ public class ActionBar {
         mSendButton = (ImageButton) actionView.findViewById(R.id.btnNavigationSend);
         checkBox = (CheckBox) actionView.findViewById(R.id.btnNavigationCheckbox);
         leftContainer = (RelativeLayout) actionView.findViewById(R.id.leftButtonContainer);
-    }
-
-    public void refreshNotificators() {
-        if (mNavBarController != null) {
-            if (mNavigationHome.getVisibility() == View.VISIBLE) {
-                mNavBarController.refreshNotificators();
-            }
-        }
     }
 
     @SuppressWarnings("UnusedDeclaration")

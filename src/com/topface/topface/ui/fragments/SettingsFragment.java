@@ -2,45 +2,31 @@ package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.SearchManager;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.Message;
-import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import com.sponsorpay.sdk.android.utils.StringUtils;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
-import com.topface.topface.Ssid;
-import com.topface.topface.data.Auth;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.SendMailNotificationsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
-import com.topface.topface.ui.settings.SettingsAccountFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.*;
 import com.topface.topface.utils.cache.SearchCacheManager;
-import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
 import java.util.HashMap;
@@ -84,8 +70,8 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         mSettings = Settings.getInstance();
 
         // Navigation bar
-        ActionBar actionBar = getActionBar(view);
-        actionBar.showBackButton(new OnClickListener() {
+        TopfaceActionBar topfaceActionBar = getActionBar(view);
+        topfaceActionBar.showBackButton(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(getActivity() != null) {
@@ -93,7 +79,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 }
             }
         });
-        actionBar.setTitleText(getString(R.string.settings_header_title));
+        topfaceActionBar.setTitleText(getString(R.string.settings_header_title));
 
         // Init settings views
         initViews(view);
@@ -108,6 +94,11 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             mSendTimer.cancel();
             mSendTimer.onFinish();
         }
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.settings_header_title);
     }
 
     private void initViews(View root) {

@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.Debug;
 
 import java.text.SimpleDateFormat;
@@ -31,15 +31,15 @@ public class SettingsAboutFragment extends BaseFragment {
         final FragmentActivity activity = getActivity();
 
         // Navigation bar
-        ActionBar actionBar = getActionBar(root);
-        actionBar.showBackButton(new OnClickListener() {
+        TopfaceActionBar topfaceActionBar = getActionBar(root);
+        topfaceActionBar.showBackButton(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 activity.finish();
             }
         });
-        actionBar.setTitleText(getString(R.string.settings_about));
+        topfaceActionBar.setTitleText(getString(R.string.settings_about));
 
         // Version
         TextView version = (TextView) root.findViewById(R.id.tvVersion);
@@ -81,5 +81,10 @@ public class SettingsAboutFragment extends BaseFragment {
         extra.setText(extraText);
 
         return root;
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.settings_about);
     }
 }

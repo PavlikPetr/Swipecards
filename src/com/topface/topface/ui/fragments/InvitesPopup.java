@@ -3,7 +3,6 @@ package com.topface.topface.ui.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,18 +14,15 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.InviteContactsRequest;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.views.LockerView;
-import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class InvitesPopup extends BaseFragment{
 
@@ -40,6 +36,12 @@ public class InvitesPopup extends BaseFragment{
         InvitesPopup popup = new InvitesPopup();
         popup.setArguments(args);
         return popup;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setNeedTitles(false);
     }
 
     @Override

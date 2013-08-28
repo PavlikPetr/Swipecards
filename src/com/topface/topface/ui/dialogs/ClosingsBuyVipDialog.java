@@ -56,7 +56,7 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
         switch (v.getId()) {
             case R.id.btnWatchSequentually:
                 EasyTracker.getTracker().trackEvent(getTrackName(), "WatchSequentially", "", 1L);
-                if(mWatchSequentialyListener != null) mWatchSequentialyListener.onWatchSequentialy(true);
+                if(mWatchSequentialyListener != null) mWatchSequentialyListener.onWatchSequentialy();
                 closeDialog();
                 break;
             case R.id.btnClose:
@@ -102,7 +102,7 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
     }
 
     public interface IWatchSequentialyListener {
-        void onWatchSequentialy(boolean animate);
+        void onWatchSequentialy();
     }
 
     @Override

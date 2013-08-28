@@ -18,7 +18,7 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.views.LockerView;
-import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.Utils;
@@ -48,8 +48,8 @@ public class ContactsFragment extends BaseFragment{
 
         locker = (LockerView) root.findViewById(R.id.clLocker);
 
-        ActionBar mActionBar = getActionBar(root);
-        mActionBar.showBackButton(new View.OnClickListener() {
+        TopfaceActionBar mTopfaceActionBar = getActionBar(root);
+        mTopfaceActionBar.showBackButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().finish();
@@ -59,9 +59,9 @@ public class ContactsFragment extends BaseFragment{
         TextView title = (TextView) root.findViewById(R.id.inviteText);
         title.setText(Utils.getQuantityString(R.plurals.invite_friends_plurals, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().contacts_count, CacheProfile.getOptions().premium_period));
 
-        ActionBar actionBar = getActionBar(root);
-        actionBar.setTitleText(getString(R.string.general_invite_friends));
-        actionBar.showCheckBox(new View.OnClickListener() {
+        TopfaceActionBar topfaceActionBar = getActionBar(root);
+        topfaceActionBar.setTitleText(getString(R.string.general_invite_friends));
+        topfaceActionBar.showCheckBox(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CheckBox checkBox = (CheckBox)v;
@@ -334,5 +334,8 @@ public class ContactsFragment extends BaseFragment{
         }
     }
 
-
+    @Override
+    protected String getTitle() {
+        return getString(R.string.general_invite_friends);
+    }
 }

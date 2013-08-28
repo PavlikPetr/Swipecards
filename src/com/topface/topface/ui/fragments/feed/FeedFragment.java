@@ -63,11 +63,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected boolean isDeletable = true;
     private Drawable mLoader0;
     private AnimationDrawable mLoader;
-    private ActionBar mActionBar;
+    private TopfaceActionBar mTopfaceActionBar;
     private ViewStub mEmptyScreenStub;
     private boolean needUpdate = false;
 
     private ActionMode mActionMode;
+    private FilterBlock mFilterBlock;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -133,9 +134,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     protected void initNavigationBar(View view) {
         // Navigation bar
-        mActionBar = getActionBar(view);
-        mActionBar.showHomeButton((View.OnClickListener) getActivity());
-        mActionBar.setTitleText(getString(getTitle()));
+        mTopfaceActionBar = getActionBar(view);
+        mTopfaceActionBar.showHomeButton((View.OnClickListener) getActivity());
+        mTopfaceActionBar.setTitleText(getTitle());
+        setActionBarTitles(getTitle());
     }
 
 
@@ -189,8 +191,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     protected abstract Drawable getBackIcon();
-
-    abstract protected int getTitle();
 
     abstract protected int getTypeForGCM();
 
@@ -557,9 +557,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 mListView.onRefreshComplete();
                 mListView.setVisibility(View.VISIBLE);
                 mIsUpdating = false;
-                if (mActionBar != null) {
-                    mActionBar.refreshNotificators();
-                }
             }
 
             @Override
@@ -626,7 +623,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     protected void initFilter(View view) {
-        new FilterBlock((ViewGroup) view, R.id.loControlsGroup, mActionBar, R.id.loToolsBar);
+        mFilterBlock = new FilterBlock((ViewGroup) view, R.id.loControlsGroup, mTopfaceActionBar, R.id.loToolsBar);
         initDoubleButton(view);
     }
 
@@ -810,5 +807,16 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     protected boolean isBlockOnClosing() {
         return false;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_filter:
+                mFilterBlock.openControls();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

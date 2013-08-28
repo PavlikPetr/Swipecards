@@ -1,12 +1,8 @@
 package com.topface.topface.ui.settings;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,23 +12,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.gcm.GCMRegistrar;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Ssid;
-import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ChangePasswordRequest;
 import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
-import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Settings;
-import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -55,13 +44,13 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        super.onCreateView(inflater,container,savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_change_password, container, false);
         final FragmentActivity activity = getActivity();
 
         // Navigation bar
-        ActionBar actionBar = getActionBar(root);
-        actionBar.showBackButton(new OnClickListener() {
+        TopfaceActionBar topfaceActionBar = getActionBar(root);
+        topfaceActionBar.showBackButton(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -69,13 +58,7 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
                 activity.finish();
             }
         });
-        actionBar.setTitleText(getString(R.string.password_changing));
-
-
-        Bundle arguments = getArguments();
-        if(arguments != null) {
-            mNeedExit = arguments.getBoolean("needExit");
-        }
+        topfaceActionBar.setTitleText(getString(R.string.password_changing));
 
         mLockerView = (LockerView) root.findViewById(R.id.llvLogoutLoading);
         mLockerView.setVisibility(View.GONE);
@@ -96,6 +79,19 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
         mBtnSave.setOnClickListener(this);
 
         return root;
+    }
+
+    @Override
+    protected void restoreState() {
+        Bundle arguments = getArguments();
+        if(arguments != null) {
+            mNeedExit = arguments.getBoolean("needExit");
+        }
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.password_changing);
     }
 
     @Override

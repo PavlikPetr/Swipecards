@@ -25,7 +25,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.profile.BlackListActivity;
-import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
@@ -66,6 +66,12 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setNeedTitles(false);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
@@ -79,6 +85,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater,container,savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_buy_premium, null);
         initViews(view);
         initActionBar(view);
@@ -87,14 +94,15 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
 
     private void initActionBar(View view) {
         if (getArguments() != null && getArguments().getBoolean(ACTION_BAR_CONST, false)) {
-            ActionBar actionBar = getActionBar(view);
-            actionBar.showBackButton(new OnClickListener() {
+            TopfaceActionBar topfaceActionBar = getActionBar(view);
+            topfaceActionBar.showBackButton(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     getActivity().finish();
                 }
             });
-            actionBar.setTitleText(getString(R.string.vip_buy_vip));
+            topfaceActionBar.setTitleText(getString(R.string.vip_buy_vip));
+            setActionBarTitles(R.string.vip_buy_vip);
         }
     }
 
@@ -311,4 +319,9 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
             switchLayouts();
         }
     };
+
+    @Override
+    protected boolean needOptionsMenu() {
+        return false;
+    }
 }

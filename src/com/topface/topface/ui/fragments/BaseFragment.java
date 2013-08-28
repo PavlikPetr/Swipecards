@@ -5,10 +5,12 @@ import android.content.*;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
-import android.view.View;
-import android.view.ViewGroup;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.*;
 import android.widget.AdapterView;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
@@ -24,7 +26,8 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
 
-    private ActionBar mActionBar;
+    private ActionBar mSupportActionBar;
+    private TopfaceActionBar mTopfaceActionBar;
     private BroadcastReceiver mProfileLoadReceiver;
 
     private BroadcastReceiver updateCountersReceiver;
@@ -45,11 +48,13 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public static final int F_UNDEFINED = 9998;
 
     public static final String INVITE_POPUP = "INVITE_POPUP";
-
+    private boolean mNeedTitles = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setHasOptionsMenu(needOptionsMenu());
         super.onCreate(savedInstanceState);
+        restoreState();
         (new Thread() {
             @Override
             public void run() {
@@ -59,18 +64,28 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         }).start();
     }
 
-    protected ActionBar getActionBar(View view) {
-        if (mActionBar == null) {
-            mActionBar = new ActionBar(getActivity(), view);
-        }
-        return mActionBar;
+    protected boolean needOptionsMenu() {
+        return true;
     }
 
-    protected ActionBar getActionBar(Activity activity) {
-        if (mActionBar == null) {
-            mActionBar = new ActionBar(activity, activity.getWindow().getDecorView());
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (mNeedTitles) setActionBarTitles(getTitle(), getSubtitle());
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    protected TopfaceActionBar getActionBar(View view) {
+        if (mTopfaceActionBar == null) {
+            mTopfaceActionBar = new TopfaceActionBar(getActivity(), view);
         }
-        return mActionBar;
+        return mTopfaceActionBar;
+    }
+
+    protected TopfaceActionBar getActionBar(Activity activity) {
+        if (mTopfaceActionBar == null) {
+            mTopfaceActionBar = new TopfaceActionBar(activity, activity.getWindow().getDecorView());
+        }
+        return mTopfaceActionBar;
     }
 
     protected void onUpdateStart(boolean isFlyUpdating) {
@@ -90,13 +105,9 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     @Override
     public void onResume() {
-        if (mActionBar != null) {
-            mActionBar.refreshNotificators();
-        }
         setUpdateCountersReceiver();
         super.onResume();
         checkProfileLoad();
-
     }
 
     @Override
@@ -148,9 +159,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    if (mActionBar != null) {
-                        mActionBar.refreshNotificators();
-                    }
                     onCountersUpdated();
                 }
             };
@@ -198,8 +206,8 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     public void activateActionBar(boolean activate) {
-        if (mActionBar != null) {
-            mActionBar.activateHomeButton(activate);
+        if (mTopfaceActionBar != null) {
+            mTopfaceActionBar.activateHomeButton(activate);
         }
     }
 
@@ -264,5 +272,67 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         EasyTracker.getTracker().trackEvent("InvitesPopup", "Show", "", 0L);
         InvitesPopup popup = InvitesPopup.newInstance(data);
         ((BaseFragmentActivity) getActivity()).startFragment(popup);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        Integer res = getOptionsMenuRes();
+        if(res != null) {
+            inflater.inflate(res, menu);
+        }
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    protected Integer getOptionsMenuRes() {
+        return null;
+    }
+
+    protected ActionBar getSupportActionBar() {
+        if(mSupportActionBar == null) {
+            Activity activity = getActivity();
+            if (activity instanceof ActionBarActivity) {
+                mSupportActionBar = ((ActionBarActivity)activity).getSupportActionBar();
+            }
+        }
+        return mSupportActionBar;
+    }
+
+    protected void setActionBarTitles(String title, String subtitle) {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(title);
+        actionBar.setSubtitle(subtitle);
+    }
+
+    protected void setActionBarTitles(int title, int subtitle) {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(title);
+        actionBar.setSubtitle(subtitle);
+    }
+
+    protected void setActionBarTitles(String title) {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(title);
+        actionBar.setSubtitle(null);
+    }
+
+    protected void setActionBarTitles(int title) {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(title);
+        actionBar.setSubtitle(null);
+    }
+
+    protected String getTitle() {
+        return null;
+    }
+
+    protected String getSubtitle() {
+        return null;
+    }
+
+    protected void restoreState(){
+    }
+
+    protected void setNeedTitles(boolean needTitles) {
+        mNeedTitles = needTitles;
     }
 }

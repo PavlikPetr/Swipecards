@@ -32,6 +32,7 @@ public class QuickMessageFragment extends BaseFragment implements View.OnClickLi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mUserId = getArguments().getInt(ARG_USER_ID);
+        setNeedTitles(false);
     }
 
     @Override

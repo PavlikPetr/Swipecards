@@ -83,6 +83,12 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         }
     };
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setNeedTitles(false);
+    }
+
     private void setMenuData() {
         if (mMenuAvatar != null) {
             mMenuAvatar.setPhoto(CacheProfile.photo);
@@ -310,7 +316,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
     private void switchFragment() {
         FragmentManager fragmentManager = getFragmentManager();
-        Fragment oldFragment = fragmentManager.findFragmentById(android.R.id.content);
+        Fragment oldFragment = fragmentManager.findFragmentById(R.id.fragment_content);
 
         String fragmentTag = getTagById(mCurrentFragmentId);
         BaseFragment newFragment = (BaseFragment) fragmentManager.findFragmentByTag(fragmentTag);
@@ -325,7 +331,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             if (mHardwareAccelerated) {
                 transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             }
-            transaction.replace(android.R.id.content, newFragment, fragmentTag);
+            transaction.replace(R.id.fragment_content, newFragment, fragmentTag);
             transaction.commitAllowingStateLoss();
 
             mCurrentFragment = newFragment;
@@ -500,10 +506,10 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         ClosingsBuyVipDialog newFragment = ClosingsBuyVipDialog.newInstance(likesCount);
         newFragment.setOnWatchSequentialyListener(new ClosingsBuyVipDialog.IWatchSequentialyListener() {
             @Override
-            public void onWatchSequentialy(boolean animate) {
+            public void onWatchSequentialy() {
                 Activity activity = getActivity();
                 if (activity instanceof NavigationActivity) {
-                    ((NavigationActivity)activity).showContent(animate);
+                    ((NavigationActivity)activity).showContent();
                 }
             }
         });
@@ -512,5 +518,10 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         } catch (Exception e) {
             Debug.error(e);
         }
+    }
+
+    @Override
+    protected boolean needOptionsMenu() {
+        return false;
     }
 }

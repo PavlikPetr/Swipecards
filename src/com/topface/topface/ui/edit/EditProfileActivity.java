@@ -28,7 +28,7 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditProfileItem.Type;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.Utils;
@@ -58,9 +58,9 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         hasStartedFromAuthActivity = getIntent().getBooleanExtra(NavigationActivity.FROM_AUTH, false);
 
         // Navigation bar
-        ActionBar actionBar = getActionBar(getWindow().getDecorView());
-        actionBar.setTitleText(getString(R.string.edit_title));
-        actionBar.showBackButton(new OnClickListener() {
+        TopfaceActionBar topfaceActionBar = getActionBar(getWindow().getDecorView());
+        topfaceActionBar.setTitleText(getString(R.string.edit_title));
+        topfaceActionBar.showBackButton(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (CacheProfile.city != null) {
@@ -75,6 +75,8 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                 finish();
             }
         });
+
+        getSupportActionBar().setTitle(R.string.edit_title);
 
         // ListView
         mEditItems = new LinkedList<EditProfileItem>();

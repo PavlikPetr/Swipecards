@@ -151,16 +151,16 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     protected abstract void initControls(View controlsView);
 
     private void initActionBar(View view) {
-        ActionBar actionBar = getActionBar(view);
+        TopfaceActionBar topfaceActionBar = getActionBar(view);
         refreshActionBarTitles(view);
         final Activity activity = getActivity();
         if (activity instanceof NavigationActivity) {
-            actionBar.showHomeButton((NavigationActivity) activity);
+            topfaceActionBar.showHomeButton((NavigationActivity) activity);
         }
-        initActionBarControls(actionBar);
+        initActionBarControls(topfaceActionBar);
     }
 
-    protected abstract void initActionBarControls(ActionBar actionbar);
+    protected abstract void initActionBarControls(TopfaceActionBar actionbar);
 
     protected void refreshActionBarTitles(View view) {
         getActionBar(view).setTitleText(getTitle());

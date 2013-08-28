@@ -15,7 +15,7 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.OnQuickMessageSentListener;
 import com.topface.topface.ui.fragments.QuickMessageFragment;
 import com.topface.topface.ui.fragments.ViewUsersListFragment;
-import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.CacheProfile;
 
 /**
@@ -26,7 +26,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     public static final int CHAT_CLOSE_DELAY_MILLIS = 1500;
 
     @Override
-    protected void initActionBarControls(ActionBar actionbar) {
+    protected void initActionBarControls(TopfaceActionBar actionbar) {
     }
 
     @Override

@@ -21,7 +21,7 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
@@ -51,32 +51,33 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         return fragment;
     }
 
-    private void restoreState() {
+    @Override
+    protected void restoreState() {
         mTitleId = getArguments().getInt(ARG_TAG_TITLE_ID);
         mData = getArguments().getString(ARG_TAG_DATA);
         mProfile = CacheProfile.getProfile();
+        mFormInfo = new FormInfo(getActivity(), mProfile.sex, mProfile.getType());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        restoreState();
-        mFormInfo = new FormInfo(getActivity(), mProfile.sex, mProfile.getType());
+        super.onCreateView(inflater,container,savedInstanceState);
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_edit_input, null, false);
 
         // Navigation bar
-        ActionBar actionBar = getActionBar(root);
-        actionBar.setTitleText(getString(R.string.edit_title));
-        actionBar.setSubTitleText(mFormInfo.getFormTitle(mTitleId));
+        TopfaceActionBar topfaceActionBar = getActionBar(root);
+        topfaceActionBar.setTitleText(getString(R.string.edit_title));
+        topfaceActionBar.setSubTitleText(mFormInfo.getFormTitle(mTitleId));
 
-        actionBar.showBackButton(new OnClickListener() {
+        topfaceActionBar.showBackButton(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().finish();
             }
         });
 
-        mRightPrsBar = actionBar.getRightProgressBar();
+        mRightPrsBar = topfaceActionBar.getRightProgressBar();
 
         // TextEdit
         ((TextView) root.findViewById(R.id.tvTitle)).setText(mFormInfo.getFormTitle(mTitleId));
@@ -189,5 +190,15 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
     protected void finishRequestSend() {
         super.finishRequestSend();
 
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.edit_title);
+    }
+
+    @Override
+    protected String getSubtitle() {
+        return mFormInfo.getFormTitle(mTitleId);
     }
 }

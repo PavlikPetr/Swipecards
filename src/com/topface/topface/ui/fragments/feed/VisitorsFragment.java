@@ -24,8 +24,8 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     }
 
     @Override
-    protected int getTitle() {
-        return R.string.general_visitors;
+    protected String getTitle() {
+        return getString(R.string.general_visitors);
     }
 
     @Override

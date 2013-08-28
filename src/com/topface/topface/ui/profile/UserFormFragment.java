@@ -31,11 +31,13 @@ public class UserFormFragment extends BaseFragment implements OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setNeedTitles(false);
         mUserFormListAdapter = new UserFormListAdapter(getActivity().getApplicationContext());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater,container,savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_form, container, false);
         ListView listQuestionnaire = (ListView) root.findViewById(R.id.fragmentFormList);
         listQuestionnaire.setAdapter(mUserFormListAdapter);

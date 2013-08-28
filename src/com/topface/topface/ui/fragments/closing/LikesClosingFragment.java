@@ -19,7 +19,7 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     private TextView mUserCity;
 
     @Override
-    protected void initActionBarControls(ActionBar actionbar) {
+    protected void initActionBarControls(TopfaceActionBar actionbar) {
     }
 
     @Override

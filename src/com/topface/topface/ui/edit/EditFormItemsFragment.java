@@ -18,7 +18,7 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
@@ -40,32 +40,18 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (getArguments() != null) {
-            mTitleId = getArguments().getInt(ARG_TAG_TITLE_ID);
-            mDataId = getArguments().getInt(ARG_TAG_DATA_ID);
-            mSeletedDataId = mDataId;
-            mData = getArguments().getString(ARG_TAG_DATA);
-        } else {
-            mTitleId = FormItem.NO_RESOURCE_ID;
-            mDataId = FormItem.NO_RESOURCE_ID;
-            mSeletedDataId = mDataId;
-            mData = Static.EMPTY;
-        }
-
-        mProfile = CacheProfile.getProfile();
-
-        mFormInfo = new FormInfo(getActivity(), mProfile.sex, mProfile.getType());
+        super.onCreateView(inflater,container,savedInstanceState);
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_edit_with_listview, container,
                 false);
 
         // Navigation bar
-        ActionBar actionBar = getActionBar(root);
-        actionBar.setTitleText(getString(R.string.edit_title));
+        TopfaceActionBar topfaceActionBar = getActionBar(root);
+        topfaceActionBar.setTitleText(getString(R.string.edit_title));
         String formItemTitle = mFormInfo.getFormTitle(mTitleId);
-        actionBar.setSubTitleText(formItemTitle);
+        topfaceActionBar.setSubTitleText(formItemTitle);
 
-        actionBar.showBackButton(new OnClickListener() {
+        topfaceActionBar.showBackButton(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -73,7 +59,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
             }
         });
 
-        mRightPrsBar = actionBar.getRightProgressBar();
+        mRightPrsBar = topfaceActionBar.getRightProgressBar();
 
         // List
         mListView = (ListView) root.findViewById(R.id.lvList);
@@ -88,6 +74,24 @@ public class EditFormItemsFragment extends AbstractEditFragment {
                 mFormInfo.getIdsByTitleId(mTitleId), mSeletedDataId);
         mListView.setAdapter(mAdapter);
         return root;
+    }
+
+    @Override
+    protected void restoreState() {
+        if (getArguments() != null) {
+            mTitleId = getArguments().getInt(ARG_TAG_TITLE_ID);
+            mDataId = getArguments().getInt(ARG_TAG_DATA_ID);
+            mSeletedDataId = mDataId;
+            mData = getArguments().getString(ARG_TAG_DATA);
+        } else {
+            mTitleId = FormItem.NO_RESOURCE_ID;
+            mDataId = FormItem.NO_RESOURCE_ID;
+            mSeletedDataId = mDataId;
+            mData = Static.EMPTY;
+        }
+
+        mProfile = CacheProfile.getProfile();
+        mFormInfo = new FormInfo(getActivity(), mProfile.sex, mProfile.getType());
     }
 
     private void setSelectedId(int id) {
@@ -262,5 +266,15 @@ public class EditFormItemsFragment extends AbstractEditFragment {
         fragment.setArguments(args);
 
         return fragment;
+    }
+
+    @Override
+    protected String getTitle() {
+        return  getString(R.string.edit_title);
+    }
+
+    @Override
+    protected String getSubtitle() {
+        return mFormInfo.getFormTitle(mTitleId);
     }
 }

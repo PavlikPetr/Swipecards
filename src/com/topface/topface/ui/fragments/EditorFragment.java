@@ -49,6 +49,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         View rootLayout = inflater.inflate(R.layout.fragment_editor, null);
         rootLayout.findViewById(R.id.EditorRefreshProfile).setOnClickListener(this);
         rootLayout.findViewById(R.id.EditorClearSearchCache).setOnClickListener(this);
@@ -206,9 +207,9 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void initNavigationBar(View view) {
-        ActionBar mActionBar = getActionBar(view);
-        mActionBar.showHomeButton((View.OnClickListener) getActivity());
-        mActionBar.setTitleText(getString(R.string.editor_menu_admin));
+        TopfaceActionBar mTopfaceActionBar = getActionBar(view);
+        mTopfaceActionBar.showHomeButton((View.OnClickListener) getActivity());
+        mTopfaceActionBar.setTitleText(getString(R.string.editor_menu_admin));
     }
 
     @Override
@@ -268,5 +269,10 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         mApiUrl.setSelection(mApiUrlsMap.indexOfValue(mConfig.getApiDomain()));
         mEditorModeSpinner.setSelection(mConfig.getEditorMode());
         mDebugModeSpinner.setSelection(mConfig.getDebugMode());
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.editor_menu_admin);
     }
 }

@@ -1,13 +1,8 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -37,8 +32,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
-    protected int getTitle() {
-        return R.string.general_likes;
+    protected String getTitle() {
+        return getString(R.string.general_likes);
     }
 
     @Override
@@ -169,5 +164,10 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected int getContextMenuLayoutRes() {
         return R.menu.feed_context_menu;
+    }
+
+    @Override
+    protected Integer getOptionsMenuRes() {
+        return R.menu.actions_feed_filtered;
     }
 }

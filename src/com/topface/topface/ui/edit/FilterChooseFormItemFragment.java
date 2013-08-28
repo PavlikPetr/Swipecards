@@ -15,9 +15,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.Profile;
 import com.topface.topface.ui.fragments.ProfileFragment;
-import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.FormInfo;
 
 import java.util.ArrayList;
@@ -45,16 +44,15 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        restoreState();
-        mFormInfo = new FormInfo(getActivity().getApplicationContext(), mSex, mProfileType);
+        super.onCreateView(inflater,container,savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_edit_with_listview, container,
                 false);
         // Navigation bar
-        ActionBar actionBar = getActionBar(root);
-        actionBar.setTitleText(getString(R.string.edit_title));
+        TopfaceActionBar topfaceActionBar = getActionBar(root);
+        topfaceActionBar.setTitleText(getString(R.string.edit_title));
         String formItemTitle = mFormInfo.getFormTitle(mTitleId);
-        actionBar.setSubTitleText(formItemTitle);
-        actionBar.showBackButton(new OnClickListener() {
+        topfaceActionBar.setSubTitleText(formItemTitle);
+        topfaceActionBar.showBackButton(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -217,13 +215,24 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
         return fragment;
     }
 
-    public void restoreState() {
+    @Override
+    protected void restoreState() {
         mTitleId = getArguments().getInt(ARG_TAG_TITLE_ID);
         mDataId = getArguments().getInt(ARG_TAG_DATA_ID);
         mSeletedDataId = mDataId;
         mData = getArguments().getString(ARG_TAG_DATA);
         mSex = getArguments().getInt(ARG_TAG_SEX);
         mProfileType = getArguments().getInt(ARG_TAG_PROFILE_TYPE);
+        mFormInfo = new FormInfo(getActivity().getApplicationContext(), mSex, mProfileType);
     }
 
+    @Override
+    protected String getTitle() {
+        return getString(R.string.edit_title);
+    }
+
+    @Override
+    protected String getSubtitle() {
+        return mFormInfo.getFormTitle(mTitleId);
+    }
 }

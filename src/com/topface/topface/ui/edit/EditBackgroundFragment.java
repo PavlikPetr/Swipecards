@@ -18,7 +18,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.ContainerActivity;
-import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.topface.topface.utils.http.ProfileBackgrounds.BackgroundItem;
@@ -36,24 +36,24 @@ public class EditBackgroundFragment extends AbstractEditFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        super.onCreateView(inflater,container,savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_edit_with_listview, container, false);
 
         mSelectedId = CacheProfile.background_id;
 
         // Navigation bar
-        ActionBar actionBar = getActionBar(root);
-        actionBar.setTitleText(getString(R.string.edit_title));
-        actionBar.setSubTitleText(getString(R.string.edit_bg_photo));
+        TopfaceActionBar topfaceActionBar = getActionBar(root);
+        topfaceActionBar.setTitleText(getString(R.string.edit_title));
+        topfaceActionBar.setSubTitleText(getString(R.string.edit_bg_photo));
 
-        actionBar.showBackButton(new OnClickListener() {
+        topfaceActionBar.showBackButton(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().finish();
             }
         });
 
-        mRightPrsBar = actionBar.getRightProgressBar();
+        mRightPrsBar = topfaceActionBar.getRightProgressBar();
 
         // List
         mBackgroundImagesListView = (ListView) root.findViewById(R.id.lvList);
@@ -221,5 +221,15 @@ public class EditBackgroundFragment extends AbstractEditFragment {
     @Override
     protected void unlockUi() {
         mBackgroundImagesListView.setEnabled(true);
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.edit_title);
+    }
+
+    @Override
+    protected String getSubtitle() {
+        return getString(R.string.edit_bg_photo);
     }
 }

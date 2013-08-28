@@ -1,10 +1,8 @@
 package com.topface.topface.ui;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -15,7 +13,7 @@ import com.topface.topface.requests.GiftsRequest;
 import com.topface.topface.ui.fragments.GiftsFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.TripleButton;
-import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.TopfaceActionBar;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -41,14 +39,15 @@ public class GiftsActivity extends BaseFragmentActivity {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.ac_gifts);
 
-        ActionBar actionBar = getActionBar(getWindow().getDecorView());
-        actionBar.setTitleText(getString(R.string.gifts_title));
-        actionBar.showBackButton(new View.OnClickListener() {
+        TopfaceActionBar topfaceActionBar = getActionBar(getWindow().getDecorView());
+        topfaceActionBar.setTitleText(getString(R.string.gifts_title));
+        topfaceActionBar.showBackButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+        getSupportActionBar().setTitle(getString(R.string.gifts_title));
 
         mLoadingLocker = (LockerView) this.findViewById(R.id.llvGiftsLoading);
 

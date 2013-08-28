@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.ui.views.RangeSeekBar;
-import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.TopfaceActionBar;
 
 public class EditAgeFragment extends AbstractEditFragment {
     private int age_start;
@@ -41,6 +41,7 @@ public class EditAgeFragment extends AbstractEditFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater,container,savedInstanceState);
         View view = inflater.inflate(R.layout.pref_age_picker_hor, null);
 
         if (sex == 0) {
@@ -49,16 +50,16 @@ public class EditAgeFragment extends AbstractEditFragment {
             baseSexString = getString(R.string.age_filter_man);
         }
 
-        ActionBar actionBar = getActionBar(view);
-        actionBar.setTitleText(getString(R.string.filter_age));
-        actionBar.showBackButton(new View.OnClickListener() {
+        TopfaceActionBar topfaceActionBar = getActionBar(view);
+        topfaceActionBar.setTitleText(getString(R.string.filter_age));
+        topfaceActionBar.showBackButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveAge();
             }
         });
 
-        mRightPrsBar = actionBar.getRightProgressBar();
+        mRightPrsBar = topfaceActionBar.getRightProgressBar();
 
         final TextView tv = (TextView) view.findViewById(R.id.apValue);
         tv.setText(makeString(age_start, age_end));
@@ -121,5 +122,10 @@ public class EditAgeFragment extends AbstractEditFragment {
         if (hasChanges()) {
             saveAge();
         }
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.filter_age);
     }
 }

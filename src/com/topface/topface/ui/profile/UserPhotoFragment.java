@@ -29,6 +29,7 @@ public class UserPhotoFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setNeedTitles(false);
         mUpdater = new LoadingListAdapter.Updater() {
             @Override
             public void onUpdate() {

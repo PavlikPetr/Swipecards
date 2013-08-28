@@ -11,8 +11,7 @@ import android.widget.*;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
-import com.topface.topface.ui.blocks.FloatBlock;
-import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Editor;
 
@@ -22,6 +21,7 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater,container,savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_editor_banners, null);
         initHeader(root);
         mConfigContainer = (ViewGroup) root.findViewById(R.id.loBannersConfigurationsContainer);
@@ -72,9 +72,9 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
     }
 
     private void initHeader(View root) {
-        ActionBar actionBar = getActionBar(root);
-        actionBar.setTitleText(getString(R.string.editor_configure_banners));
-        actionBar.showBackButton(new View.OnClickListener() {
+        TopfaceActionBar topfaceActionBar = getActionBar(root);
+        topfaceActionBar.setTitleText(getString(R.string.editor_configure_banners));
+        topfaceActionBar.showBackButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().finish();
@@ -231,5 +231,10 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
             }
 
         }
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.editor_configure_banners);
     }
 }

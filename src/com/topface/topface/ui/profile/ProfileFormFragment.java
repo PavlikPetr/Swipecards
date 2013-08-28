@@ -24,6 +24,8 @@ public class ProfileFormFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setNeedTitles(false);
+        setHasOptionsMenu(false);
         mProfileFormListAdapter = new ProfileFormListAdapter(getActivity().getApplicationContext());
         mProfileFormListAdapter.setOnFillListener(mOnFillClickListener);
     }
@@ -94,4 +96,9 @@ public class ProfileFormFragment extends BaseFragment {
             }
         }
     };
+
+    @Override
+    protected boolean needOptionsMenu() {
+        return false;
+    }
 }

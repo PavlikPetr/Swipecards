@@ -46,6 +46,12 @@ public class GiftsFragment extends BaseFragment {
     private boolean mIsUpdating = false;
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setNeedTitles(false);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_grid, null);
 
@@ -367,5 +373,10 @@ public class GiftsFragment extends BaseFragment {
                 }
             }
         };
+    }
+
+    @Override
+    protected boolean needOptionsMenu() {
+        return false;
     }
 }

@@ -18,7 +18,7 @@ import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.ui.CitySearchActivity;
-import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
@@ -55,16 +55,17 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater,container,savedInstanceState);
         mTargetUser.sex = CacheProfile.dating != null ? CacheProfile.dating.sex : Static.BOY;
         mFormInfo = new FormInfo(getActivity().getApplicationContext(), mTargetUser.sex, mTargetUser.getType());
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_filter, container, false);
 
         // Navigation bar
-        ActionBar actionBar = getActionBar(root);
-        actionBar.setTitleText(getString(R.string.filter_filter));
+        TopfaceActionBar topfaceActionBar = getActionBar(root);
+        topfaceActionBar.setTitleText(getString(R.string.filter_filter));
 
-        actionBar.showBackButton(new OnClickListener() {
+        topfaceActionBar.showBackButton(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -474,5 +475,10 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     protected void finishRequestSend() {
         super.finishRequestSend();
 
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.filter_filter);
     }
 }

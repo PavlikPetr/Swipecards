@@ -33,7 +33,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
     public static final int MAX_AGE = 99;
     public static final int MIN_AGE = 16;
     public static final String INTENT_SEX_CHANGED = "SEX_CHANGED";
-    private ActionBar mActionBar;
+    private TopfaceActionBar mTopfaceActionBar;
     private boolean ageIncorrect = false;
     private boolean nameIncorrect;
 
@@ -66,19 +66,20 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater,container,savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_edit_main_form_items, null, false);
 
         // Navigation bar
-        mActionBar = getActionBar(root);
+        mTopfaceActionBar = getActionBar(root);
 
-        mActionBar.setTitleText(getString(R.string.edit_title));
-        mActionBar.showBackButton(new OnClickListener() {
+        mTopfaceActionBar.setTitleText(getString(R.string.edit_title));
+        mTopfaceActionBar.showBackButton(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().finish();
             }
         });
-        mRightPrsBar = mActionBar.getRightProgressBar();
+        mRightPrsBar = mTopfaceActionBar.getRightProgressBar();
 
 //        mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
 
@@ -194,7 +195,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                 }
             }
         });
-        mActionBar.setSubTitleText(getString(R.string.edit_status));
+        mTopfaceActionBar.setSubTitleText(getString(R.string.edit_status));
     }
 
     private void setAge(ViewGroup loAge, final EditType type, String data) {
@@ -475,5 +476,10 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
     @Override
     protected void finishRequestSend() {
         super.finishRequestSend();
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.edit_title);
     }
 }

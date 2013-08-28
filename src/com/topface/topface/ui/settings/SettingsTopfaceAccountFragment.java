@@ -46,7 +46,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        super.onCreateView(inflater,container,savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_topface_account, container, false);
 
         // Navigation bar
@@ -96,6 +96,11 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     public void onResume() {
         super.onResume();
         setViewsState();
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.settings_account);
     }
 
     private void requestEmailConfirmedFlag() {
@@ -198,8 +203,8 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     }
 
     private void initNavigationBar(View view) {
-        ActionBar actionBar = getActionBar(view);
-        actionBar.showBackButton(new OnClickListener() {
+        TopfaceActionBar topfaceActionBar = getActionBar(view);
+        topfaceActionBar.showBackButton(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -207,7 +212,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                 getActivity().finish();
             }
         });
-        actionBar.setTitleText(getString(R.string.settings_account));
+        topfaceActionBar.setTitleText(getString(R.string.settings_account));
     }
 
     @Override

@@ -14,6 +14,7 @@ import android.support.v4.util.SparseArrayCompat;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -91,7 +92,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private BroadcastReceiver mUpdateProfileReceiver;
 
     private TabPageIndicator mTabIndicator;
-    private ActionBar mActionBar;
+    private TopfaceActionBar mTopfaceActionBar;
     private LinearLayout mUserActions;
     private RelativeLayout bmBtn;
     private TextView mBookmarkAction;
@@ -119,7 +120,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         //init views
         View root = inflater.inflate(R.layout.ac_profile, null);
 
-        mActionBar = getActionBar(root);
+        mTopfaceActionBar = getActionBar(root);
 
         mLoaderView = root.findViewById(R.id.llvProfileLoading);
         final FragmentActivity activity = getActivity();
@@ -132,7 +133,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             LocalBroadcastManager.getInstance(activity).sendBroadcast(intent);
         }
 
-        restoreState();
         initUserActions(root);
 
         bmBtn = (RelativeLayout) mUserActions.findViewById(R.id.acBookmark);
@@ -141,7 +141,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
         bmBtn.setOnClickListener(this);
         if (mProfileType == TYPE_USER_PROFILE) {
-            mActionBar.showBackButton(new View.OnClickListener() {
+            mTopfaceActionBar.showBackButton(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (activity != null) {
@@ -150,7 +150,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 }
             });
         } else if (activity instanceof NavigationActivity) {
-            mActionBar.showHomeButton((NavigationActivity) activity);
+            mTopfaceActionBar.showHomeButton((NavigationActivity) activity);
         }
         mUserActions.setVisibility(View.INVISIBLE);
 
@@ -172,9 +172,11 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
         if (mProfileType == TYPE_MY_PROFILE) {
             mTitle.setText(R.string.profile_header_title);
-            mActionBar.showEditButton(this);
+            setActionBarTitles(R.string.profile_header_title);
+            mTopfaceActionBar.showEditButton(this);
         } else if (mProfileType == TYPE_USER_PROFILE) {
-            mActionBar.showUserActionsButton(
+            setActionBarTitles(R.string.general_profile);
+            mTopfaceActionBar.showUserActionsButton(
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -206,6 +208,17 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         return root;
     }
 
+    @Override
+    protected String getTitle() {
+        if (mProfileType == TYPE_MY_PROFILE) {
+            return getString(R.string.profile_header_title);
+        } else if (mProfileType == TYPE_USER_PROFILE) {
+            return getString(R.string.general_profile);
+        } else {
+            return getString(R.string.general_profile);
+        }
+    }
+
     private TranslateAnimation getAnimation(final boolean isActive, int time) {
         TranslateAnimation ta;
         if (isActive) {
@@ -218,7 +231,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         ta.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                mActionBar.disableActionsButton(true);
+                mTopfaceActionBar.disableActionsButton(true);
                 if (!isActive) {
                     mUserActions.setVisibility(View.VISIBLE);
                 }
@@ -227,7 +240,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             @Override
             public void onAnimationEnd(Animation animation) {
                 mUserActions.clearAnimation();
-                mActionBar.disableActionsButton(false);
+                mTopfaceActionBar.disableActionsButton(false);
                 if (isActive) {
                     mUserActions.setVisibility(View.INVISIBLE);
                 }
@@ -276,8 +289,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateProfileReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         setProfile(mUserProfile);
-
-        mActionBar.refreshNotificators();
     }
 
     @Override
@@ -413,7 +424,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             mLockScreen.setVisibility(View.VISIBLE);
             mRetryView.setText(text);
             mRetryView.showOnlyMessage(true);
-            mActionBar.hideUserActionButton();
+            mTopfaceActionBar.hideUserActionButton();
         }
     }
 
@@ -426,7 +437,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         }
     }
 
-    private void restoreState() {
+    @Override
+    protected void restoreState() {
         mProfileId = getArguments().getInt(ARG_TAG_PROFILE_ID);
         mProfileType = getArguments().getInt(ARG_TAG_PROFILE_TYPE);
         mBodyStartPageClassName = getArguments().getString(ARG_TAG_INIT_BODY_PAGE);
@@ -493,7 +505,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
         switch (v.getId()) {
             case R.id.btnEdit:
-                startActivity(ContainerActivity.getNewIntent(ContainerActivity.INTENT_SETTINGS_FRAGMENT));
+                startSettingsActivity();
                 break;
             case R.id.acDelight:
                 if (v.isEnabled()) {
@@ -707,6 +719,10 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             default:
                 break;
         }
+    }
+
+    private void startSettingsActivity() {
+        startActivity(ContainerActivity.getNewIntent(ContainerActivity.INTENT_SETTINGS_FRAGMENT));
     }
 
     public void openChat() {
@@ -956,5 +972,25 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         public void onReceived();
     }
 
+    @Override
+    protected Integer getOptionsMenuRes() {
+        return mProfileType == TYPE_MY_PROFILE ? R.menu.actions_my_profile : R.menu.actions_user_profile;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                startSettingsActivity();
+                return true;
+            case R.id.action_user_actions_list:
+                boolean checked = !item.isChecked();
+                item.setChecked(checked);
+                final TranslateAnimation ta = getAnimation(!checked, 500);
+                mUserActions.startAnimation(ta);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

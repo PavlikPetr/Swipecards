@@ -23,8 +23,8 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
     }
 
     @Override
-    protected int getTitle() {
-        return R.string.general_bookmarks;
+    protected String getTitle() {
+        return getString(R.string.general_bookmarks);
     }
 
     @Override

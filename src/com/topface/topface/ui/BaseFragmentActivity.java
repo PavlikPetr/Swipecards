@@ -8,6 +8,9 @@ import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.ActionBar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import com.topface.topface.GCMUtils;
@@ -17,7 +20,7 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.AuthFragment;
-import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.LocaleConfig;
@@ -50,7 +53,8 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         super.onCreate(savedInstanceState);
         LocaleConfig.updateConfiguration(getBaseContext());
         setWindowOptions();
-
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
         (new Thread() {
             @Override
             public void run() {
@@ -271,12 +275,27 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     protected void onResumeAsync() {
     }
 
-    private ActionBar mActionBar;
+    private TopfaceActionBar mTopfaceActionBar;
 
-    protected ActionBar getActionBar(View view) {
-        if (mActionBar == null) {
-            mActionBar = new ActionBar(this, view);
+    protected TopfaceActionBar getActionBar(View view) {
+        if (mTopfaceActionBar == null) {
+            mTopfaceActionBar = new TopfaceActionBar(this, view);
         }
-        return mActionBar;
+        return mTopfaceActionBar;
+    }
+
+    protected Integer getOptionsMenuRes() {
+        return null;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

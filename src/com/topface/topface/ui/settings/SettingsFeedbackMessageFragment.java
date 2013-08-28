@@ -25,7 +25,7 @@ import com.topface.topface.requests.FeedbackReport;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.edit.AbstractEditFragment;
 import com.topface.topface.ui.views.LockerView;
-import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
@@ -56,18 +56,18 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         View root = inflater.inflate(R.layout.fragment_feedback_message, null);
 
         // Navigation bar
-        ActionBar actionBar = getActionBar(root);
-        actionBar.showBackButton(new OnClickListener() {
+        TopfaceActionBar topfaceActionBar = getActionBar(root);
+        topfaceActionBar.showBackButton(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 getActivity().finish();
             }
         });
-        actionBar.setTitleText(getString(R.string.settings_feedback));
+        topfaceActionBar.setTitleText(getString(R.string.settings_feedback));
         loadingLocker = (LockerView) root.findViewById(R.id.fbLoadingLocker);
         mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
-        actionBar.showSendButton(new OnClickListener() {
+        topfaceActionBar.showSendButton(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveChanges(new Handler());
@@ -78,19 +78,19 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         switch (feedbackType) {
             case ERROR_MESSAGE:
                 mReport.subject = getResources().getString(R.string.settings_error_message_internal);
-                actionBar.setSubTitleText(getString(R.string.settings_error_message));
+                topfaceActionBar.setSubTitleText(getString(R.string.settings_error_message));
                 break;
             case DEVELOPERS_MESSAGE:
                 mReport.subject = getResources().getString(R.string.settings_ask_developer_internal);
-                actionBar.setSubTitleText(getString(R.string.settings_ask_developer));
+                topfaceActionBar.setSubTitleText(getString(R.string.settings_ask_developer));
                 break;
             case PAYMENT_MESSAGE:
                 mReport.subject = getResources().getString(R.string.settings_payment_problems_internal);
-                actionBar.setSubTitleText(getString(R.string.settings_payment_problems));
+                topfaceActionBar.setSubTitleText(getString(R.string.settings_payment_problems));
                 break;
             case COOPERATION_MESSAGE:
                 mReport.subject = getResources().getString(R.string.settings_cooperation_internal);
-                actionBar.setSubTitleText(getString(R.string.settings_cooperation));
+                topfaceActionBar.setSubTitleText(getString(R.string.settings_cooperation));
                 break;
             case UNKNOWN:
                 mReport.subject = getResources().getString(R.string.settings_feedback_internal);
@@ -148,6 +148,11 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
         return root;
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.settings_feedback);
     }
 
     private void initTextViews(View root, int feedbackType) {

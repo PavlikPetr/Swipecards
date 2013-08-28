@@ -155,6 +155,7 @@
                         />
             </intent-filter>
         </activity>
+
         <activity
                 android:name=".utils.social.VkAuthActivity"
                 android:screenOrientation="portrait">

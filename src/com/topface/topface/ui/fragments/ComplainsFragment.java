@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.requests.ComplainRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.TopfaceActionBar;
 
 public class ComplainsFragment extends BaseFragment {
 
@@ -38,6 +38,7 @@ public class ComplainsFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater,container,savedInstanceState);
         View root = inflater.inflate(R.layout.complains_fragment, container, false);
         Bundle arguments = getArguments();
         if (arguments != null) {
@@ -57,9 +58,9 @@ public class ComplainsFragment extends BaseFragment {
     }
 
     private void initActionBar(View root) {
-        ActionBar actionBar = getActionBar(root);
-        actionBar.setTitleText(getString(R.string.general_complain));
-        actionBar.showBackButton(new View.OnClickListener() {
+        TopfaceActionBar topfaceActionBar = getActionBar(root);
+        topfaceActionBar.setTitleText(getString(R.string.general_complain));
+        topfaceActionBar.showBackButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().finish();
@@ -150,5 +151,10 @@ public class ComplainsFragment extends BaseFragment {
             this.id = id;
             this.title = title;
         }
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.general_complain);
     }
 }

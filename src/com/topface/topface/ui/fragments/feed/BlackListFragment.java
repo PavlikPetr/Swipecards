@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,12 +7,9 @@ import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.BlackListItem;
 import com.topface.topface.data.FeedListData;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BlackListDeleteRequest;
 import com.topface.topface.requests.FeedRequest;
-import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.adapters.BlackListAdapter;
-import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.TopfaceActionBar;
 import org.json.JSONObject;
 
 /**
@@ -22,7 +18,7 @@ import org.json.JSONObject;
 public class BlackListFragment extends FeedFragment<BlackListItem> implements View.OnClickListener {
 
     private static final int BLACK_LIST_DELETE_BUTTON = 0;
-    private ActionBar mActionBar;
+    private TopfaceActionBar mTopfaceActionBar;
 
     @Override
     protected int getLayout() {
@@ -35,8 +31,8 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
     }
 
     @Override
-    protected int getTitle() {
-        return R.string.black_list_title;
+    protected String getTitle() {
+        return getString(R.string.black_list_title);
     }
 
     @Override
@@ -71,9 +67,9 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
     @Override
     protected void initNavigationBar(View view) {
         // Navigation bar
-        mActionBar = getActionBar(view);
-        mActionBar.setTitleText(getString(getTitle()));
-        mActionBar.showBackButton(new View.OnClickListener() {
+        mTopfaceActionBar = getActionBar(view);
+        mTopfaceActionBar.setTitleText(getTitle());
+        mTopfaceActionBar.showBackButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().finish();

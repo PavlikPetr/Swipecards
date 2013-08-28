@@ -1,18 +1,19 @@
 package com.topface.topface.ui;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.*;
+import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
-import android.view.Menu;
-import android.view.View;
-import android.view.ViewGroup;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.internal.widget.ActionBarContainer;
+import android.view.*;
 import android.widget.Toast;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.topface.billing.BillingUtils;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
@@ -32,7 +33,6 @@ import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
 import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
 import com.topface.topface.ui.profile.PhotoSwitcherActivity;
-import com.topface.topface.ui.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.*;
 import com.topface.topface.utils.offerwalls.Offerwalls;
@@ -46,23 +46,33 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     public static final String CURRENT_FRAGMENT_ID = "NAVIGATION_FRAGMENT";
     private FragmentManager mFragmentManager;
     private MenuFragment mFragmentMenu;
+    private DrawerLayout mDrawerLayout;
     private FullscreenController mFullscreenController;
 
     private SharedPreferences mPreferences;
     private Novice mNovice;
     private boolean needAnimate = false;
-    private SlidingMenu mSlidingMenu;
     private boolean isPopupVisible = false;
     private boolean menuEnabled;
     private static boolean mHasClosingsForThisSession;
     private static boolean mClosingsOnProfileUpdateInvoked = false;
 
     private static NavigationActivity instance = null;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private NavigationBarController mNavBarController;
+
+    BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (mNavBarController != null) mNavBarController.refreshNotificators();
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         mNeedAnimate = false;
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.ac_navigation);
         instance = this;
         if (isNeedBroughtToFront(getIntent())) {
             // При открытии активити из лаунчера перезапускаем ее
@@ -73,10 +83,50 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         Debug.log(this, "onCreate");
         mFragmentManager = getSupportFragmentManager();
 
-        initSlidingMenu();
+        initDrawerLayout();
+        initCounterBadges();
         if (!AuthToken.getInstance().isEmpty()) {
             showFragment(savedInstanceState);
         }
+    }
+
+    private void initCounterBadges() {
+        final View badges = getLayoutInflater().inflate(R.layout.layout_notifications_badges, getActionBarContainerLayout(), true);
+        mNavBarController = new NavigationBarController((ViewGroup) badges);
+        final View home = findViewById(android.R.id.home);
+        home.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int diff = home.getTop() - badges.getHeight() / 2;
+                badges.findViewById(R.id.loCounters).setPadding(home.getLeft() + home.getWidth() / 2, diff > 0 ? diff : 0, 0, 0);
+                findViewById(android.R.id.home).setPadding(0, 0, Utils.getPxFromDp(10), 0);
+                mNavBarController.refreshNotificators();
+                if (Build.VERSION.SDK_INT >= 16) {
+                    home.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                } else {
+                    home.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
+            }
+        });
+    }
+
+    private ViewGroup getActionBarContainerLayout() {
+        return recurActionBarContainerSearch((ViewGroup) getWindow().getDecorView());
+    }
+
+    private ViewGroup recurActionBarContainerSearch(ViewGroup viewGroup) {
+        if (viewGroup.getClass().getSimpleName().equals(ActionBarContainer.class.getSimpleName())) {
+            return viewGroup;
+        }
+
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+            View child = viewGroup.getChildAt(i);
+            if (child instanceof ViewGroup) {
+                ViewGroup result = recurActionBarContainerSearch((ViewGroup) child);
+                if (result != null) return result;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -92,54 +142,79 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         mNovice.initNoviceFlags();
     }
 
-    private void initSlidingMenu() {
-        mSlidingMenu = new SlidingMenu(this);
-        mSlidingMenu.setMode(SlidingMenu.LEFT);
-        mSlidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
-        mSlidingMenu.setMenu(R.layout.fragment_side_menu);
-        mSlidingMenu.attachToActivity(this, SlidingMenu.SLIDING_WINDOW);
-        mSlidingMenu.setBehindOffset(Utils.getPxFromDp(60));
-        mSlidingMenu.setShadowWidth(Utils.getPxFromDp(20));
-        mSlidingMenu.setShadowDrawable(R.drawable.shadow);
-        mSlidingMenu.setFadeEnabled(false);
-        mSlidingMenu.setBehindScrollScale(0f);
+    private void initDrawerLayout() {
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.loNavigationDrawer);
+        setSlidingMenuEvents();
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,                  /* host Activity */
+                mDrawerLayout,         /* DrawerLayout object */
+                R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
+                R.string.app_name,  /* "open drawer" description */
+                R.string.app_name  /* "close drawer" description */
+        );
+
+        // Set the drawer toggle as the DrawerListener
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        getSupportActionBar().setHomeButtonEnabled(true);
+
         mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
+        mFragmentMenu.setClickable(true);
         mFragmentMenu.setOnFragmentSelected(new MenuFragment.OnFragmentSelectedListener() {
             @Override
             public void onFragmentSelected(int fragmentId) {
-                mSlidingMenu.showContent();
+                mDrawerLayout.closeDrawer(GravityCompat.START);
             }
         });
-        setSlidingMenuEvents();
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if (mDrawerToggle != null) mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (mDrawerToggle != null) mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setSlidingMenuEvents() {
-        mSlidingMenu.setOnClosedListener(new SlidingMenu.OnClosedListener() {
+        mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
-            public void onClosed() {
-                mFragmentMenu.setClickable(false);
-                BaseFragment currentFragment = mFragmentMenu.getCurrentFragment();
-                if (currentFragment != null) {
-                    currentFragment.activateActionBar(false);
-                }
-                actionsAfterRegistration();
+            public void onDrawerSlide(View view, float v) {
             }
-        });
-        mSlidingMenu.setOnOpenListener(new SlidingMenu.OnOpenListener() {
+
             @Override
-            public void onOpen() {
-                mFragmentMenu.setClickable(true);
-            }
-        });
-        mSlidingMenu.setOnOpenedListener(new SlidingMenu.OnOpenedListener() {
-            @Override
-            public void onOpened() {
+            public void onDrawerOpened(View view) {
                 BaseFragment currentFragment = mFragmentMenu.getCurrentFragment();
                 if (currentFragment != null) {
                     currentFragment.activateActionBar(true);
                 }
 
                 mFragmentMenu.showNovice(mNovice);
+            }
+
+            @Override
+            public void onDrawerClosed(View view) {
+                BaseFragment currentFragment = mFragmentMenu.getCurrentFragment();
+                if (currentFragment != null) {
+                    currentFragment.activateActionBar(false);
+                }
+                actionsAfterRegistration();
+            }
+
+            @Override
+            public void onDrawerStateChanged(int i) {
             }
         });
     }
@@ -170,11 +245,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     public void showContent() {
-        mSlidingMenu.showContent(true);
-    }
-
-    public void showContent(boolean animation) {
-        mSlidingMenu.showContent(animation);
+        mDrawerLayout.openDrawer(GravityCompat.START);
     }
 
     @Override
@@ -195,9 +266,10 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     protected void onPause() {
         super.onPause();
-        if(mFullscreenController != null) {
+        if (mFullscreenController != null) {
             mFullscreenController.onPause();
         }
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mCountersReceiver);
     }
 
     @Override
@@ -246,8 +318,11 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 onClosings();
             }
         }
-    }
 
+        if(mNavBarController != null) mNavBarController.refreshNotificators();
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
+    }
 
     private void actionsAfterRegistration() {
         if (!AuthToken.getInstance().isEmpty()) {
@@ -320,14 +395,14 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     public void onCloseFragment() {
         showFragment(MenuFragment.DEFAULT_FRAGMENT);
-        mSlidingMenu.setSlidingEnabled(true);
+        //TODO mSlidingPane.setSlidingEnabled(true);
     }
 
     @Override
     public boolean startAuth() {
         boolean result = super.startAuth();
         if (result) {
-            mSlidingMenu.setSlidingEnabled(false);
+            //TODO mSlidingMenu.setSlidingEnabled(false);
         }
         return result;
     }
@@ -338,7 +413,15 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.leftButtonContainer) {
-            mSlidingMenu.toggle();
+            toggleDrawerLayout();
+        }
+    }
+
+    private void toggleDrawerLayout() {
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            mDrawerLayout.openDrawer(GravityCompat.START);
         }
     }
 
@@ -350,12 +433,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     public void onBackPressed() {
         if (mFullscreenController != null && mFullscreenController.isFullScreenBannerVisible() && !isPopupVisible) {
             mFullscreenController.hideFullscreenBanner((ViewGroup) findViewById(R.id.loBannerContainer));
-        } else if (mSlidingMenu != null && !isPopupVisible) {
-            if (mSlidingMenu.isMenuShowing() || !mSlidingMenu.isSlidingEnabled() || !menuEnabled) {
-                super.onBackPressed();
-            } else {
-                mSlidingMenu.showMenu();
-            }
         } else {
             super.onBackPressed();
             isPopupVisible = false;
@@ -364,14 +441,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     public void setMenuEnabled(boolean enabled) {
         menuEnabled = enabled;
-    }
-
-    @Override
-    public boolean onCreatePanelMenu(int featureId, Menu menu) {
-        if (mSlidingMenu != null && menuEnabled) {
-            mSlidingMenu.toggle();
-        }
-        return false;
     }
 
     @Override
@@ -521,7 +590,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     public static void restartNavigationActivity(int fragmentId) {
         Activity activity = instance;
-        Intent intent = new Intent(activity,NavigationActivity.class);
+        Intent intent = new Intent(activity, NavigationActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(GCMUtils.NEXT_INTENT, fragmentId);
         activity.startActivity(intent);
