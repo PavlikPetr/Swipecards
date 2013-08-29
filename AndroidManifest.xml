@@ -187,11 +187,6 @@
                 android:name=".ui.settings.SettingsContainerActivity"
                 android:screenOrientation="portrait" />
         <activity android:name=".ui.BanActivity" />
-        <activity
-                android:name="com.google.ads.AdActivity"
-                android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
-        <activity android:name="com.adfonic.android.AdfonicActivity" />
-        <activity android:name="ru.wapstart.plus1.sdk.MraidBrowser" />
         <activity android:name=".ui.profile.BlackListActivity" />
         <activity
                 android:name=".ui.ContainerActivity"
@@ -203,14 +198,11 @@
                     android:value=".ui.NavigationActivity" />
         </activity>
 
+        <activity android:name=".ui.PaymentwallActivity" />
+
+        <!-- ADS -->
         <activity
-                android:name="com.mad.ad.ImageActivity"
-                android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
-        <activity
-                android:name="com.mad.view.Browser"
-                android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
-        <activity
-                android:name="com.mad.view.OrmmaActionHandler"
+                android:name="com.google.ads.AdActivity"
                 android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
 
         <activity
@@ -221,15 +213,15 @@
                 android:configChanges="keyboardHidden|orientation" />
 
         <activity
-                android:name=".ui.PaymentwallActivity" />
-
-        <activity
                 android:name="com.sponsorpay.sdk.android.publisher.OfferWallActivity"
                 android:configChanges="orientation" />
 
         <activity
                 android:name="com.topface.topface.utils.offerwalls.clickky.ClickkyActivity"
                 />
+
+        <activity android:name="com.getjar.sdk.rewards.GetJarActivity"
+                  android:configChanges="orientation|keyboard|keyboardHidden|screenLayout|uiMode|screenSize|smallestScreenSize"/>
 
         <activity
                 android:name="com.mopub.mobileads.MoPubActivity"
@@ -240,25 +232,6 @@
         <activity
                 android:name="com.mopub.mobileads.MraidBrowser"
                 android:configChanges="keyboardHidden|orientation" />
-
-        <activity
-                android:name="com.inneractive.api.ads.InneractiveFullScreenView"
-                android:configChanges="orientation|screenSize" />
-
-        <activity
-                android:name="com.millennialmedia.android.MMActivity"
-                android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
-        <meta-data
-                android:name="com.mobclix.APPLICATION_ID"
-                android:value="18FE3F53-02A6-4585-9518-B2896A13FD6C" />
-        <activity
-                android:name="com.mobclix.android.sdk.MobclixBrowserActivity"
-                android:theme="@android:style/Theme.Translucent.NoTitleBar"
-                android:hardwareAccelerated="true" />
-
-        <activity android:name="com.getjar.sdk.rewards.GetJarActivity"
-                  android:configChanges="orientation|keyboard|keyboardHidden|screenLayout|uiMode|screenSize|smallestScreenSize"/>
 
         <!-- Алиас для главной активити из первой версии. На всякий случай, а то раньше уже были проблемы с FB -->
         <activity-alias
