@@ -148,6 +148,7 @@ public class Options extends AbstractData {
     public Closing closing = new Closing();
     public PremiumMessages premium_messages;
     public GetJar getJar;
+    public String gagType = BANNER_ADMOB;
 
     public static Options parse(ApiResponse response) {
         Options options = new Options();

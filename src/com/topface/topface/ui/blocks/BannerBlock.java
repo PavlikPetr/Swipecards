@@ -324,12 +324,20 @@ public class BannerBlock {
         ((AdView) mBannerView).loadAd(new AdRequest());
     }
 
-    // Не работает для MADNET, BEGUN: нет событий, чтобы "подвеситься"
     private void requestBannerGag() {
         removeBanner();
-        mBannerView = getBannerView(Options.BANNER_TOPFACE);
+        String bannerType = CacheProfile.getOptions().gagType;
+        mBannerView = getBannerView(bannerType);
         mBannerLayout.addView(mBannerView);
-        loadBanner(Options.BANNER_GAG);
+        if (bannerType.equals(Options.BANNER_TOPFACE)) {
+            loadBanner(Options.BANNER_GAG);
+        } else {
+            try {
+                showBanner(null);
+            } catch (Exception e) {
+                Debug.error(e);
+            }
+        }
     }
 
     private void invokeBannerMethod(String param) {
