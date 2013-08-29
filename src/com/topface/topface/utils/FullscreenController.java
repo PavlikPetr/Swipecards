@@ -10,12 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import com.inneractive.api.ads.InneractiveAd;
-import com.inneractive.api.ads.InneractiveAdListener;
 import com.ivengo.adv.AdvListener;
 import com.ivengo.adv.AdvView;
-import com.mobclix.android.sdk.MobclixFullScreenAdView;
-import com.mobclix.android.sdk.MobclixFullScreenAdViewListener;
 import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.mobileads.MoPubInterstitial;
 import com.topface.topface.App;
@@ -66,10 +62,6 @@ public class FullscreenController {
                         requestTopfaceFullscreen();
                     } else if (startPage.banner.equals(Options.BANNER_MOPUB)) {
                         requestMopubFullscreen();
-                    } else if (startPage.banner.equals(Options.BANNER_INNERACTIVE)) {
-                        requestInneractiveFullscreen();
-                    } else if (startPage.banner.equals(Options.BANNER_MOBCLIX)) {
-                        requestMobclixFullscreen();
                     } else if (startPage.banner.equals(Options.BANNER_IVENGO)) {
                         requestIvengoFullscreen();
                     }
@@ -100,95 +92,6 @@ public class FullscreenController {
             public void onCloseAd(int i) {
             }
         });
-    }
-
-    private void requestMobclixFullscreen() {
-        MobclixFullScreenAdView adview = new MobclixFullScreenAdView(mActivity);
-        adview.requestAndDisplayAd();
-        adview.addMobclixAdViewListener(new MobclixFullScreenAdViewListener() {
-            @Override
-            public void onFinishLoad(MobclixFullScreenAdView mobclixFullScreenAdView) {
-                addLastFullscreenShowedTime();
-            }
-
-            @Override
-            public void onFailedLoad(MobclixFullScreenAdView mobclixFullScreenAdView, int i) {
-                requestFallbackFullscreen();
-            }
-
-            @Override
-            public void onPresentAd(MobclixFullScreenAdView mobclixFullScreenAdView) {
-            }
-
-            @Override
-            public void onDismissAd(MobclixFullScreenAdView mobclixFullScreenAdView) {
-            }
-
-            @Override
-            public String keywords() {
-                return null;
-            }
-
-            @Override
-            public String query() {
-                return null;
-            }
-        });
-    }
-
-    private void requestInneractiveFullscreen() {
-        final InneractiveAd iaBanner = new InneractiveAd(mActivity, "Topface_TopfaceAndroid_Android", InneractiveAd.IaAdType.Interstitial, 60);
-        ViewGroup container = getFullscreenBannerContainer();
-        iaBanner.setInneractiveListener(new InneractiveAdListener() {
-            @Override
-            public void onIaAdReceived() {
-                addLastFullscreenShowedTime();
-                Debug.log("Inneractive: onIaAdReceived()");
-            }
-
-            @Override
-            public void onIaDefaultAdReceived() {
-                addLastFullscreenShowedTime();
-                Debug.log("Inneractive: onIaDefaultAdReceived()");
-            }
-
-            @Override
-            public void onIaAdFailed() {
-                Debug.log("Inneractive: onIaAdFailed()");
-                requestFallbackFullscreen();
-            }
-
-            @Override
-            public void onIaAdClicked() {
-                Debug.log("Inneractive: onIaAdClicked()");
-            }
-
-            @Override
-            public void onIaAdResize() {
-                Debug.log("Inneractive: onIaAdResize()");
-            }
-
-            @Override
-            public void onIaAdResizeClosed() {
-                Debug.log("Inneractive: onIaAdResizeClosed()");
-            }
-
-            @Override
-            public void onIaAdExpand() {
-                Debug.log("Inneractive: onIaAdExpand()");
-            }
-
-            @Override
-            public void onIaAdExpandClosed() {
-                Debug.log("Inneractive: onIaAdExpandClosed()");
-            }
-
-            @Override
-            public void onIaDismissScreen() {
-                Debug.log("Inneractive: onIaDismissScreen()");
-            }
-        });
-        container.addView(iaBanner);
     }
 
     private void requestFallbackFullscreen() {
