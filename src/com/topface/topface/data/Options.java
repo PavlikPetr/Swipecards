@@ -166,7 +166,7 @@ public class Options extends AbstractData {
 
                 String pageName = getPageName(page);
                 String floatType = page.optString("float");
-                String bannerType = Options.BANNER_ADCAMP;//page.optString("banner");
+                String bannerType = page.optString("banner");
 
                 options.pages.put(pageName, new Page(pageName, floatType, bannerType));
             }
