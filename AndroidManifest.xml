@@ -299,14 +299,6 @@
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
-
-
-        <!-- providers -->
-        <provider
-                android:name="com.mad.provider.MadProvider"
-                android:authorities="com.topface.topface.mad.provider"
-                android:exported="false"
-                android:multiprocess="true" />
     </application>
 
 </manifest>
