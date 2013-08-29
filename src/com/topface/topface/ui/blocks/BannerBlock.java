@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -42,6 +43,8 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.offerwalls.Offerwalls;
+import ru.adcamp.ads.AdsManager;
+import ru.adcamp.ads.BannerAdView;
 import ru.ideast.adwired.AWView;
 import ru.ideast.adwired.events.OnNoBannerListener;
 import ru.ideast.adwired.events.OnStartListener;
@@ -64,6 +67,7 @@ public class BannerBlock {
     ViewGroup mBannerLayout;
     private Fragment mFragment;
     private View mBannerView;
+    private static boolean mAdcampInitialized = false;
 
     private Map<String, Character> mAdwiredMap = new HashMap<String, Character>();
 
@@ -73,6 +77,16 @@ public class BannerBlock {
         mInflater = (LayoutInflater) mFragment.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mBannerLayout = (ViewGroup) layout.findViewById(R.id.loBannerContainer);
         setBannersMap();
+    }
+
+    public static void init() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+            if (CacheProfile.getOptions().containsBannerType(Options.BANNER_ADCAMP)) {
+                AdsManager.getInstance().initialize(App.getContext());
+                AdsManager.getInstance().addTestDevice("99000200906025");
+                mAdcampInitialized = true;
+            }
+        }
     }
 
     private void setBannersMap() {
@@ -92,6 +106,14 @@ public class BannerBlock {
             if (bannersMap.containsKey(fragmentId) && options != null && options.pages != null) {
                 if (bannersMap.get(fragmentId) != null) {
                     String bannerType = bannersMap.get(fragmentId).banner;
+
+                    //AdCamp uses only FROYO and above
+                    if (bannerType.equals(Options.BANNER_ADCAMP)) {
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO || !mAdcampInitialized) {
+                            requestBannerGag();
+                            return;
+                        }
+                    }
 
                     mBannerView = getBannerView(bannerType);
                     if (mBannerView == null) return;
@@ -122,6 +144,8 @@ public class BannerBlock {
                 return mInflater.inflate(R.layout.banner_adwired, null);
             } else if (bannerType.equals(Options.BANNER_MOPUB)) {
                 return mInflater.inflate(R.layout.banner_mopub, null);
+            } else if (bannerType.equals(Options.BANNER_ADCAMP)) {
+                return mInflater.inflate(R.layout.banner_adcamp, null);
             } else {
                 return null;
             }
@@ -160,6 +184,8 @@ public class BannerBlock {
             showAdwired();
         } else if (mBannerView instanceof MoPubView) {
             showMopub();
+        } else if (mBannerView instanceof BannerAdView) {
+            showAdcamp();
         } else if (mBannerView instanceof ImageView) {
             if (banner == null) {
                 requestBannerGag();
@@ -322,6 +348,33 @@ public class BannerBlock {
             }
         });
         ((AdView) mBannerView).loadAd(new AdRequest());
+    }
+
+    private void showAdcamp() {
+        ((BannerAdView)mBannerView).setBannerAdViewListener(new BannerAdView.BannerAdViewListener() {
+            @Override
+            public void onLoadingStarted(BannerAdView bannerAdView) {
+            }
+
+            @Override
+            public void onLoadingFailed(BannerAdView bannerAdView, String s) {
+                requestBannerGag();
+            }
+
+            @Override
+            public void onBannerDisplayed(BannerAdView bannerAdView) {
+                ViewGroup.LayoutParams params = bannerAdView.getLayoutParams();
+                params.height = Utils.getPxFromDp(50);
+                params.width = Device.getDisplayMetrics(App.getContext()).widthPixels;
+                bannerAdView.setLayoutParams(params);
+            }
+
+            @Override
+            public void onBannerClicked(BannerAdView bannerAdView, String s) {
+            }
+        });
+
+        ((BannerAdView)mBannerView).showAd();
     }
 
     private void requestBannerGag() {

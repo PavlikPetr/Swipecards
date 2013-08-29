@@ -85,6 +85,7 @@ public class Options extends AbstractData {
     public static final String BANNER_ADWIRED = "ADWIRED";
     public static final String BANNER_MOPUB = "MOPUB";
     public static final String BANNER_IVENGO = "IVENGO";
+    public static final String BANNER_ADCAMP = "ADCAMP";
     public static final String BANNER_GAG = "GAG";
     public final static String[] BANNERS = new String[]{
             BANNER_TOPFACE,
@@ -165,7 +166,7 @@ public class Options extends AbstractData {
 
                 String pageName = getPageName(page);
                 String floatType = page.optString("float");
-                String bannerType = page.optString("banner");
+                String bannerType = Options.BANNER_ADCAMP;//page.optString("banner");
 
                 options.pages.put(pageName, new Page(pageName, floatType, bannerType));
             }
@@ -352,6 +353,15 @@ public class Options extends AbstractData {
 
     public interface BuyButtonClickListener {
         public void onClick(String id);
+    }
+
+    public boolean containsBannerType(String bannerType) {
+        for (Page page: pages.values()) {
+            if (page.banner.equals(bannerType)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static class Page {
