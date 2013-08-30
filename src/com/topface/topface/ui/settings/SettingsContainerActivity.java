@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
 
 public class SettingsContainerActivity extends BaseFragmentActivity {
@@ -24,6 +25,7 @@ public class SettingsContainerActivity extends BaseFragmentActivity {
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        Debug.log("FragmentsDebug:: SettingsContainerActivity onCreate");
         setContentView(R.layout.fragment_frame);
 
         overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
@@ -72,6 +74,19 @@ public class SettingsContainerActivity extends BaseFragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Debug.log("FragmentsDebug:: SettingsContainerActivity onResume");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Debug.log("FragmentsDebug:: SettingsContainerActivity onPause");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Debug.log("FragmentsDebug:: SettingsContainerActivity onDestroy");
     }
 
     @Override

@@ -2,10 +2,12 @@ package com.topface.topface.utils.social;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.topface.topface.App;
 import com.topface.topface.Static;
 
-public class AuthToken {
+public class AuthToken implements Parcelable {
     // Data
     private String mSnType;
     private String mUserId;
@@ -125,4 +127,22 @@ public class AuthToken {
     public String getmExpiresIn() {
         return mExpiresIn;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mSnType);
+        dest.writeString(mUserId);
+        dest.writeString(mTokenKey);
+        dest.writeString(mExpiresIn);
+
+        dest.writeString(mLogin);
+        dest.writeString(mPassword);
+    }
+
+
 }

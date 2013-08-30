@@ -151,7 +151,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             if (authFragment == null) {
                 authFragment = AuthFragment.newInstance();
             }
-            getSupportFragmentManager().beginTransaction().add(android.R.id.content, authFragment, AUTH_TAG).commit();
+            getSupportFragmentManager().beginTransaction().replace(android.R.id.content, authFragment, AUTH_TAG).commit();
             return true;
         }
         return false;

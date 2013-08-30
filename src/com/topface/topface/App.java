@@ -25,6 +25,8 @@ import com.topface.topface.utils.social.AuthToken;
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @ReportsCrashes(formKey = "817b00ae731c4a663272b4c4e53e4b61")
@@ -63,6 +65,7 @@ public class App extends Application {
         //android.os.Debug.startMethodTracing("topface_create");
 
         super.onCreate();
+
         mContext = getApplicationContext();
         //Включаем отладку, если это дебаг версия
         checkDebugMode();

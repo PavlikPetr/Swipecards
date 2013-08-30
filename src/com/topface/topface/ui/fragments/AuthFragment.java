@@ -43,6 +43,8 @@ import java.util.*;
 public class AuthFragment extends BaseFragment {
 
     public static final String REAUTH_INTENT = "com.topface.topface.action.AUTH";
+    public static final String BTNS_HIDDEN = "BtnsHidden";
+    public static final String MSG_AUTH_KEY = "msg";
     private RelativeLayout mWrongPasswordAlertView;
     private TextView mWrongDataTextView;
     private TextView mCreateAccountButton;
@@ -69,6 +71,9 @@ public class AuthFragment extends BaseFragment {
     private static final String MAIN_BUTTONS_GA_TAG = "LoginButtonsTest";
     private boolean additionalButtonsScreen = false;
     private boolean hasAuthorized = false;
+    private boolean btnsHidden;
+    private BroadcastReceiver authorizationReceiver;
+    private boolean authReceiverRegistered;
 
     public static AuthFragment newInstance() {
         return new AuthFragment();
@@ -76,17 +81,19 @@ public class AuthFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Debug.log("AF: onCreate");
+        Debug.log("FragmentsDebug:: AuthFragment onCreateView");
+        mAuthorizationManager = new AuthorizationManager(getActivity());
         Activity activity = getActivity();
         if (activity instanceof NavigationActivity) {
             ((NavigationActivity) activity).setMenuEnabled(false);
         }
         View root = inflater.inflate(R.layout.ac_auth, null);
+        if (savedInstanceState != null) {
+            btnsHidden = savedInstanceState.getBoolean(BTNS_HIDDEN);
+        }
         initViews(root);
         //Если у нас нет токена
-        if (AuthToken.getInstance().isEmpty()) {
-            initAuthorizationHandler();
-        } else {
+        if (!AuthToken.getInstance().isEmpty()) {
             //Если мы попали на этот фрагмент с работающей авторизацией, то просто перезапрашиваем профиль
             hideButtons();
             getProfileAndOptions();
@@ -100,14 +107,20 @@ public class AuthFragment extends BaseFragment {
         initButtons(root);
         initRetryView(root);
         initOtherViews(root);
+//        if (btnsHidden && getActivity() != null) {
+//            hideButtons();
+//        } else {
+//            showButtons();
+//        }
     }
 
     private void initAuthorizationHandler() {
-        mAuthorizationManager = new AuthorizationManager(getActivity());
-        mAuthorizationManager.setOnAuthorizationHandler(new Handler() {
+
+        authorizationReceiver = new BroadcastReceiver() {
             @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
+            public void onReceive(Context context, Intent intent) {
+                int msg = intent.getIntExtra(MSG_AUTH_KEY, AuthorizationManager.AUTHORIZATION_CANCELLED);
+                switch (msg) {
                     case AuthorizationManager.AUTHORIZATION_FAILED:
                         authorizationFailed(ApiResponse.NETWORK_CONNECT_ERROR, null);
                         break;
@@ -115,16 +128,16 @@ public class AuthFragment extends BaseFragment {
                         hideButtons();
                         break;
                     case AuthorizationManager.TOKEN_RECEIVED:
-                        auth(generateAuthRequest((AuthToken) msg.obj));
+                        auth(generateAuthRequest((AuthToken) intent.getParcelableExtra("token")));
                         break;
                     case AuthorizationManager.AUTHORIZATION_CANCELLED:
                         showButtons();
                         break;
-                    default:
-                        super.handleMessage(msg);
                 }
             }
-        });
+        };
+        authReceiverRegistered = true;
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(authorizationReceiver, new IntentFilter(AuthorizationManager.AUTHORIZATION_TAG));
     }
 
     private void initButtons(final View root) {
@@ -137,6 +150,7 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void initButtonsWithSettings(View root) {
+
         mVKButton = (Button) root.findViewById(R.id.btnAuthVK);
         mVKButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -244,6 +258,7 @@ public class AuthFragment extends BaseFragment {
                 Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
             }
         });
+
     }
 
 
@@ -273,7 +288,16 @@ public class AuthFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (mAuthorizationManager != null) mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
+
+        if (authorizationReceiver == null || !authReceiverRegistered) {
+            initAuthorizationHandler();
+        }
+
+        if (mAuthorizationManager != null) {
+//            Debug.log("FragmentsDebug:: AuthFragment onActivityResult");
+            hideButtons();
+            mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
+        }
         if (resultCode == Activity.RESULT_OK &&
                 (requestCode == ContainerActivity.INTENT_RECOVER_PASSWORD
                         || requestCode == ContainerActivity.INTENT_REGISTRATION_FRAGMENT)) {
@@ -425,7 +449,7 @@ public class AuthFragment extends BaseFragment {
     private void saveAuthInfo(ApiResponse response) {
         Auth auth = new Auth(response);
         Ssid.save(auth.ssid);
-        GCMUtils.init(getActivity());
+        GCMUtils.init(App.getContext());
     }
 
     private void getProfileAndOptions() {
@@ -466,13 +490,15 @@ public class AuthFragment extends BaseFragment {
     private void getOptions() {
         final OptionsRequest request = new OptionsRequest(getActivity());
         registerRequest(request);
-        hideButtons();
+        if (isAdded()) {
+            hideButtons();
+        }
         request.callback(new ApiHandler() {
             @Override
             public void success(final ApiResponse response) {
                 Options.parse(response);
                 Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
-                ((BaseFragmentActivity) getActivity()).close(AuthFragment.this, true);
+                ((BaseFragmentActivity)getActivity()).close(AuthFragment.this, true);
                 LocalBroadcastManager.getInstance(getContext())
                         .sendBroadcast(new Intent(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
             }
@@ -490,6 +516,12 @@ public class AuthFragment extends BaseFragment {
                 }
             }
         }).exec();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(BTNS_HIDDEN, btnsHidden);
     }
 
     private void authorizationFailed(int codeError, final ApiRequest request) {
@@ -627,6 +659,7 @@ public class AuthFragment extends BaseFragment {
 
     private void showButtons() {
         //Эта проверка нужна, для безопасной работы в
+        btnsHidden = false;
         if (mFBButton != null && mVKButton != null && mProgressBar != null) {
             if (btnsController.needSN(AuthToken.SN_FACEBOOK)) {
                 mFBButton.setVisibility(View.VISIBLE);
@@ -659,6 +692,7 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void hideButtons() {
+        btnsHidden = true;
         mFBButton.setVisibility(View.GONE);
         mVKButton.setVisibility(View.GONE);
         mOKButton.setVisibility(View.GONE);
@@ -682,6 +716,7 @@ public class AuthFragment extends BaseFragment {
         // костыль, надо избавить от viewflipper к чертовой бабушке
         mProcessingTFReg = false;
         EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG,additionalButtonsScreen?"LoginAdditionalVk":"LoginMainVk", btnsController.getLocaleTag(),1L);
+
         if (checkOnline() && mAuthorizationManager != null) {
             hideButtons();
             mAuthorizationManager.vkontakteAuth();
@@ -739,24 +774,37 @@ public class AuthFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        Debug.log("FragmentsDebug:: AuthFragment onResume");
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(connectionChangeListener,
                 new IntentFilter(ConnectionChangeReceiver.REAUTH));
+        if (authorizationReceiver == null || !authReceiverRegistered) {
+            initAuthorizationHandler();
+        }
         removeRedAlert();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Debug.log("AF: onPause");
+        Debug.log("FragmentsDebug:: AuthFragment onPause");
+        authReceiverRegistered = false;
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(authorizationReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(connectionChangeListener);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Debug.log("FragmentsDebug:: AuthFragment onDestroy");
         if (!hasAuthorized) {
-            EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG,additionalButtonsScreen?"DismissAdditional":"DismissMain", btnsController.getLocaleTag(),1L);
+            EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "DismissAdditional" : "DismissMain", btnsController.getLocaleTag(), 1L);
         }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Debug.log("FragmentsDebug:: AuthFragment onDetach");
     }
 
     interface ProfileIdReceiver {

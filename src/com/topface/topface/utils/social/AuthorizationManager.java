@@ -24,6 +24,7 @@ import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
@@ -61,6 +62,7 @@ public class AuthorizationManager {
     public final static int AUTHORIZATION_CANCELLED = 3;
 
     public static final int RESULT_LOGOUT = 666;
+    public static final String AUTHORIZATION_TAG = "com.topface.topface.authorization";
 
     // Constants
     private String[] FB_PERMISSIONS = {"user_photos", "publish_stream", "email", "publish_actions", "offline_access"};
@@ -87,13 +89,7 @@ public class AuthorizationManager {
     }
 
     private void receiveToken(AuthToken authToken) {
-        if (mHandler != null) {
-            mHandler.sendEmptyMessage(DIALOG_COMPLETED);
-            Message msg = new Message();
-            msg.what = TOKEN_RECEIVED;
-            msg.obj = authToken;
-            mHandler.sendMessage(msg);
-        }
+        LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, TOKEN_RECEIVED).putExtra("token", authToken));
     }
 
     public void setOnAuthorizationHandler(Handler handler) {
@@ -145,12 +141,14 @@ public class AuthorizationManager {
 
             @Override
             public void onError() {
-                mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
+                LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, AUTHORIZATION_FAILED));
+//                mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
             }
 
             @Override
             public void onCancel() {
-                mHandler.sendEmptyMessage(AUTHORIZATION_CANCELLED);
+                LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, AUTHORIZATION_CANCELLED));
+//                mHandler.sendEmptyMessage(AUTHORIZATION_CANCELLED);
 
             }
         });
@@ -205,33 +203,37 @@ public class AuthorizationManager {
         public void onComplete(Bundle values) {
             Debug.log("FB", "mDialogListener::onComplete");
             mAsyncFacebookRunner.request("/me", mRequestListener);
-            if (mHandler != null) {
-                mHandler.sendEmptyMessage(DIALOG_COMPLETED);
-            }
+            LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, DIALOG_COMPLETED));
+//            if (mHandler != null) {
+//                mHandler.sendEmptyMessage(DIALOG_COMPLETED);
+//            }
         }
 
         @Override
         public void onFacebookError(FacebookError e) {
             Debug.log("FB", "mDialogListener::onFacebookError:" + e.getMessage());
-            if (mHandler != null) {
-                mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
-            }
+            LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, AUTHORIZATION_FAILED));
+//            if (mHandler != null) {
+//                mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
+//            }
         }
 
         @Override
         public void onError(DialogError e) {
             Debug.log("FB", "mDialogListener::onError");
-            if (mHandler != null) {
-                mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
-            }
+            LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, AUTHORIZATION_FAILED));
+//            if (mHandler != null) {
+//                mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
+//            }
         }
 
         @Override
         public void onCancel() {
             Debug.log("FB", "mDialogListener::onCancel");
-            if (mHandler != null) {
-                mHandler.sendEmptyMessage(AUTHORIZATION_CANCELLED);
-            }
+            LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, AUTHORIZATION_CANCELLED));
+//            if (mHandler != null) {
+//                mHandler.sendEmptyMessage(AUTHORIZATION_CANCELLED);
+//            }
         }
     };
 
@@ -253,42 +255,47 @@ public class AuthorizationManager {
                 receiveToken(authToken);
             } catch (JSONException e) {
                 Debug.log("FB", "mRequestListener::onComplete:error");
-                if (mHandler != null) {
-                    mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
-                }
+                LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, AUTHORIZATION_CANCELLED));
+//                if (mHandler != null) {
+//                    mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
+//                }
             }
         }
 
         @Override
         public void onMalformedURLException(MalformedURLException e, Object state) {
             Debug.log("FB", "mRequestListener::onMalformedURLException");
-            if (mHandler != null) {
-                mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
-            }
+            LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, AUTHORIZATION_FAILED));
+//            if (mHandler != null) {
+//                mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
+//            }
         }
 
         @Override
         public void onIOException(IOException e, Object state) {
             Debug.log("FB", "mRequestListener::onIOException");
-            if (mHandler != null) {
-                mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
-            }
+            LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, AUTHORIZATION_FAILED));
+//            if (mHandler != null) {
+//                mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
+//            }
         }
 
         @Override
         public void onFileNotFoundException(FileNotFoundException e, Object state) {
             Debug.log("FB", "mRequestListener::onFileNotFoundException");
-            if (mHandler != null) {
-                mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
-            }
+            LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, AUTHORIZATION_FAILED));
+//            if (mHandler != null) {
+//                mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
+//            }
         }
 
         @Override
         public void onFacebookError(FacebookError e, Object state) {
             Debug.log("FB", "mRequestListener::onFacebookError:" + e + ":" + state);
-            if (mHandler != null) {
-                mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
-            }
+            LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, AUTHORIZATION_FAILED));
+//            if (mHandler != null) {
+//                mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
+//            }
         }
     };
 

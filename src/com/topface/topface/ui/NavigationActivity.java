@@ -53,27 +53,25 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private boolean needAnimate = false;
     private SlidingMenu mSlidingMenu;
     private boolean isPopupVisible = false;
-    private boolean menuEnabled;
+    private boolean menuEnabled = true;
     private static boolean mHasClosingsForThisSession;
     private static boolean mClosingsOnProfileUpdateInvoked = false;
 
-    private static NavigationActivity instance = null;
+    public static NavigationActivity instance = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         mNeedAnimate = false;
         super.onCreate(savedInstanceState);
-        if (instance != this) {
-            if (instance != null) instance.finish();
-            instance = this;
-        }
+        Debug.log("FragmentsDebug:: NavigationActivity onCreate");
+        instance = this;
+
         if (isNeedBroughtToFront(getIntent())) {
             // При открытии активити из лаунчера перезапускаем ее
             finish();
             return;
         }
         setMenuEnabled(true);
-        Debug.log(this, "onCreate");
         mFragmentManager = getSupportFragmentManager();
 
         initSlidingMenu();
@@ -198,6 +196,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     protected void onPause() {
         super.onPause();
+        Debug.log("FragmentsDebug:: NavigationActivity onPause");
         if(mFullscreenController != null) {
             mFullscreenController.onPause();
         }
@@ -215,7 +214,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     protected void onResume() {
         super.onResume();
-
+        Debug.log("FragmentsDebug:: NavigationActivity onResume");
         //restart -> open NavigationActivity
         if (App.getConfig().getLocaleConfig().fetchToSystemLocale()) {
             LocaleConfig.changeLocale(this, App.getConfig().getLocaleConfig().getApplicationLocale(), mFragmentMenu.getCurrentFragmentId());
@@ -386,6 +385,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     protected void onDestroy() {
         //Для запроса фото при следующем создании NavigationActivity
+        Debug.log("FragmentsDebug:: NavigationActivity onDestroy");
         if (CacheProfile.photo == null) CacheProfile.wasAvatarAsked = false;
         if (mFullscreenController != null) {
             mFullscreenController.onDestroy();
@@ -529,5 +529,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         intent.putExtra(GCMUtils.NEXT_INTENT, fragmentId);
         activity.startActivity(intent);
         activity.finish();
+        instance = null;
+
     }
 }

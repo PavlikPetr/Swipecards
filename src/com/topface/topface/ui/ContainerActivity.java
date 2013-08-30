@@ -1,12 +1,15 @@
 package com.topface.topface.ui;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
 import com.topface.billing.BillingFragment;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -15,6 +18,7 @@ import com.topface.topface.ui.fragments.*;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.social.AuthToken;
 
 import java.util.ArrayList;
 
@@ -48,6 +52,10 @@ public class ContainerActivity extends BaseFragmentActivity {
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        Debug.log("FragmentsDebug:: ContainerActivity onCreate");
+        if (AuthToken.getInstance().isEmpty()) {
+            finish();
+        }
         setContentView(R.layout.fragment_frame);
 
         overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
@@ -73,10 +81,17 @@ public class ContainerActivity extends BaseFragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Debug.log("FragmentsDebug:: ContainerActivity onResume");
         if (mCurrentFragment == null) {
             mCurrentFragment = getFragment(mCurrentFragmentId);
         }
         setRotationMode();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Debug.log("FragmentsDebug:: ContainerActivity onPause");
     }
 
     @Override
@@ -275,5 +290,11 @@ public class ContainerActivity extends BaseFragmentActivity {
         intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
         return intent;
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        Debug.log("FragmentsDebug:: ContainerActivity onDestroy");
+        super.onDestroy();
     }
 }
