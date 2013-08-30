@@ -63,9 +63,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     public void onCreate(Bundle savedInstanceState) {
         mNeedAnimate = false;
         super.onCreate(savedInstanceState);
-        Debug.log("FragmentsDebug:: NavigationActivity onCreate");
         instance = this;
-
         if (isNeedBroughtToFront(getIntent())) {
             // При открытии активити из лаунчера перезапускаем ее
             finish();
@@ -529,7 +527,5 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         intent.putExtra(GCMUtils.NEXT_INTENT, fragmentId);
         activity.startActivity(intent);
         activity.finish();
-        instance = null;
-
     }
 }
