@@ -9,13 +9,14 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
-import android.os.Looper;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.support.v4.content.LocalBroadcastManager;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.*;
+import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
 import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
 import com.topface.topface.utils.*;
@@ -89,42 +90,39 @@ public class App extends Application {
         MutualClosingFragment.usersProcessed = false;
         LikesClosingFragment.usersProcessed = false;
 
+        final Handler handler = new Handler();
         //Выполнение всего, что можно сделать асинхронно, делаем в отдельном потоке
         new Thread(new Runnable() {
             @Override
             public void run() {
-                onCreateAsync();
+                onCreateAsync(handler);
             }
         }).start();
     }
 
     /**
      * Вызывается в onCreate, но выполняется в отдельном потоке
+     * @param handler нужен для выполнения запросов
      */
-    private void onCreateAsync() {
+    private void onCreateAsync(Handler handler) {
         DateUtils.syncTime();
-
         Ssid.init();
-
         CacheProfile.loadProfile();
-
         //Оповещаем о том, что профиль загрузился
-        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(
-                new Intent(CacheProfile.ACTION_PROFILE_LOAD)
-        );
-
-        if (!CacheProfile.isEmpty()) {
-            Looper.prepare();
-            sendProfileAndOptionsRequests();
-            sendLocation();
-            Looper.loop();
-        }
-
+        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
+        //Инициализируем GCM
         if (Ssid.isLoaded() && AuthToken.getInstance().isEmpty()) {
-            // GCM
             GCMUtils.init(getContext());
         }
-
+        if (!CacheProfile.isEmpty()) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    sendProfileAndOptionsRequests();
+                    sendLocation();
+                }
+            });
+        }
     }
 
     private void sendLocation() {
@@ -180,6 +178,8 @@ public class App extends Application {
         request.callback(new DataApiHandler<Options>() {
             @Override
             protected void success(Options data, ApiResponse response) {
+                //Инициализируем баннерные сети
+                BannerBlock.init();
             }
 
             @Override

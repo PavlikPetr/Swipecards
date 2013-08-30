@@ -81,28 +81,17 @@ public class Options extends AbstractData {
      * Идентификаторы типов баннеров
      */
     public final static String BANNER_TOPFACE = "TOPFACE";
-    public final static String BANNER_ADFONIC = "ADFONIC";
     public final static String BANNER_ADMOB = "ADMOB";
-    public final static String BANNER_WAPSTART = "WAPSTART";
     public static final String BANNER_ADWIRED = "ADWIRED";
-    public final static String BANNER_MADNET = "MADNET";
-    public static final String BANNER_BEGUN = "BEGUN";
     public static final String BANNER_MOPUB = "MOPUB";
-    public static final String BANNER_INNERACTIVE = "INNERACTIVE";
-    public static final String BANNER_MOBCLIX = "MOBCLIX";
     public static final String BANNER_IVENGO = "IVENGO";
+    public static final String BANNER_ADCAMP = "ADCAMP";
     public static final String BANNER_GAG = "GAG";
     public final static String[] BANNERS = new String[]{
             BANNER_TOPFACE,
-            BANNER_ADFONIC,
             BANNER_ADMOB,
-            BANNER_WAPSTART,
             BANNER_ADWIRED,
-            BANNER_MADNET,
-            BANNER_BEGUN,
             BANNER_MOPUB,
-            BANNER_INNERACTIVE,
-            BANNER_MOBCLIX,
             BANNER_IVENGO,
             BANNER_GAG
     };
@@ -160,6 +149,7 @@ public class Options extends AbstractData {
     public Closing closing = new Closing();
     public PremiumMessages premium_messages;
     public GetJar getJar;
+    public String gagType = BANNER_ADMOB;
 
     public static Options parse(ApiResponse response) {
         Options options = new Options();
@@ -363,6 +353,15 @@ public class Options extends AbstractData {
 
     public interface BuyButtonClickListener {
         public void onClick(String id);
+    }
+
+    public boolean containsBannerType(String bannerType) {
+        for (Page page: pages.values()) {
+            if (page.banner.equals(bannerType)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static class Page {

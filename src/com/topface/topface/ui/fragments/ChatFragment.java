@@ -268,6 +268,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             public void onLongClick(final int position, final View v) {
 
                 History item = mAdapter.getItem(position);
+                if (item ==null) return;
+
                 String[] buttons;
                 if (item.target == 0) {
                     buttons = editButtonsSelfNames;
