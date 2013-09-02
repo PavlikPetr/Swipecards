@@ -13,7 +13,6 @@ import com.topface.topface.requests.GiftsRequest;
 import com.topface.topface.ui.fragments.GiftsFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.TripleButton;
-import com.topface.topface.utils.TopfaceActionBar;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -39,14 +38,6 @@ public class GiftsActivity extends BaseFragmentActivity {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.ac_gifts);
 
-        TopfaceActionBar topfaceActionBar = getActionBar(getWindow().getDecorView());
-        topfaceActionBar.setTitleText(getString(R.string.gifts_title));
-        topfaceActionBar.showBackButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
         getSupportActionBar().setTitle(getString(R.string.gifts_title));
 
         mLoadingLocker = (LockerView) this.findViewById(R.id.llvGiftsLoading);

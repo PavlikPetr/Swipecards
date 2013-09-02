@@ -28,7 +28,6 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditProfileItem.Type;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.Utils;
@@ -57,25 +56,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
         hasStartedFromAuthActivity = getIntent().getBooleanExtra(NavigationActivity.FROM_AUTH, false);
 
-        // Navigation bar
-        TopfaceActionBar topfaceActionBar = getActionBar(getWindow().getDecorView());
-        topfaceActionBar.setTitleText(getString(R.string.edit_title));
-        topfaceActionBar.showBackButton(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (CacheProfile.city != null) {
-                    if (hasStartedFromAuthActivity && !CacheProfile.city.isEmpty()) {
-                        Intent intent = new Intent(EditProfileActivity.this, NavigationActivity.class);
-                        intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_VIP_PROFILE);
-                        SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-                        preferences.edit().putBoolean(Static.PREFERENCES_NEED_EDIT, false).commit();
-                        startActivity(intent);
-                    }
-                }
-                finish();
-            }
-        });
-
+        //Navigation bar
         getSupportActionBar().setTitle(R.string.edit_title);
 
         // ListView
@@ -505,12 +486,10 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         @Override
         public String getTitle() {
             return 0 + " " + getResources().getString(R.string.edit_interests);
-            // TODO interests number
         }
 
         @Override
         void onClick() {
-            // TODO
         }
     }
 
@@ -582,6 +561,19 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         public EditProfileItem setText(int resId) {
             mTitle = getResources().getString(resId);
             return this;
+        }
+    }
+
+    @Override
+    protected void onPreFinish() {
+        if (CacheProfile.city != null) {
+            if (hasStartedFromAuthActivity && !CacheProfile.city.isEmpty()) {
+                Intent intent = new Intent(EditProfileActivity.this, NavigationActivity.class);
+                intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_VIP_PROFILE);
+                SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                preferences.edit().putBoolean(Static.PREFERENCES_NEED_EDIT, false).commit();
+                startActivity(intent);
+            }
         }
     }
 }

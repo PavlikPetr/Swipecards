@@ -9,7 +9,6 @@ import com.topface.topface.ui.fragments.BaseFragment;
 public abstract class AbstractEditFragment extends BaseFragment {
 
     protected Button mBackButton;
-    protected ProgressBar mRightPrsBar;
     protected Handler mFinishHandler;
 
     public AbstractEditFragment() {
@@ -25,32 +24,22 @@ public abstract class AbstractEditFragment extends BaseFragment {
                 if (mBackButton != null) {
                     mBackButton.setEnabled(false);
                 }
-
-                if (mRightPrsBar != null) {
-                    mRightPrsBar.setVisibility(View.VISIBLE);
-                }
-
+                setSupportProgressBarIndeterminateVisibility(true);
             }
         });
     }
 
     protected void finishRequestSend() {
-        if(getActivity() != null) {
+        if (getActivity() != null) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     if (mBackButton != null) {
                         mBackButton.setEnabled(true);
                     }
-
-                    if (mRightPrsBar != null) {
-                        mRightPrsBar.setVisibility(View.GONE);
-                        if (!hasChanges()) {
-                            mRightPrsBar.setVisibility(View.INVISIBLE);
-                        }
-                    }
+                    setSupportProgressBarIndeterminateVisibility(false);
                     unlockUi();
-                    }
+                }
             });
         }
     }

@@ -137,15 +137,15 @@ public class BannerBlock {
     private View getBannerView(String bannerType) {
         try {
             if (bannerType.equals(Options.BANNER_TOPFACE) || bannerType.equals(Options.BANNER_GAG)) {
-                return mInflater.inflate(R.layout.banner_topface, null);
+                return mInflater.inflate(R.layout.banner_topface, mBannerLayout, false);
             } else if (bannerType.equals(Options.BANNER_ADMOB)) {
-                return mInflater.inflate(R.layout.banner_admob, null);
+                return mInflater.inflate(R.layout.banner_admob, mBannerLayout, false);
             } else if (bannerType.equals(Options.BANNER_ADWIRED)) {
-                return mInflater.inflate(R.layout.banner_adwired, null);
+                return mInflater.inflate(R.layout.banner_adwired, mBannerLayout, false);
             } else if (bannerType.equals(Options.BANNER_MOPUB)) {
-                return mInflater.inflate(R.layout.banner_mopub, null);
+                return mInflater.inflate(R.layout.banner_mopub, mBannerLayout, false);
             } else if (bannerType.equals(Options.BANNER_ADCAMP)) {
-                return mInflater.inflate(R.layout.banner_adcamp, null);
+                return mInflater.inflate(R.layout.banner_adcamp, mBannerLayout, false);
             } else {
                 return null;
             }
@@ -363,10 +363,10 @@ public class BannerBlock {
 
             @Override
             public void onBannerDisplayed(BannerAdView bannerAdView) {
-                ViewGroup.LayoutParams params = bannerAdView.getLayoutParams();
-                params.height = Utils.getPxFromDp(50);
-                params.width = Device.getDisplayMetrics(App.getContext()).widthPixels;
-                bannerAdView.setLayoutParams(params);
+//                ViewGroup.LayoutParams params = bannerAdView.getLayoutParams();
+//                params.height = Utils.getPxFromDp(50);
+//                params.width = Device.getDisplayMetrics(App.getContext()).widthPixels;
+//                bannerAdView.setLayoutParams(params);
             }
 
             @Override

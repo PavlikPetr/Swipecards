@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -21,7 +20,6 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
@@ -64,20 +62,6 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         super.onCreateView(inflater,container,savedInstanceState);
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_edit_input, null, false);
-
-        // Navigation bar
-        TopfaceActionBar topfaceActionBar = getActionBar(root);
-        topfaceActionBar.setTitleText(getString(R.string.edit_title));
-        topfaceActionBar.setSubTitleText(mFormInfo.getFormTitle(mTitleId));
-
-        topfaceActionBar.showBackButton(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().finish();
-            }
-        });
-
-        mRightPrsBar = topfaceActionBar.getRightProgressBar();
 
         // TextEdit
         ((TextView) root.findViewById(R.id.tvTitle)).setText(mFormInfo.getFormTitle(mTitleId));

@@ -156,7 +156,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
         mFragmentMenu.setClickable(true);
@@ -196,20 +196,11 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
             @Override
             public void onDrawerOpened(View view) {
-                BaseFragment currentFragment = mFragmentMenu.getCurrentFragment();
-                if (currentFragment != null) {
-                    currentFragment.activateActionBar(true);
-                }
-
                 mFragmentMenu.showNovice(mNovice);
             }
 
             @Override
             public void onDrawerClosed(View view) {
-                BaseFragment currentFragment = mFragmentMenu.getCurrentFragment();
-                if (currentFragment != null) {
-                    currentFragment.activateActionBar(false);
-                }
                 actionsAfterRegistration();
             }
 
@@ -395,15 +386,11 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     public void onCloseFragment() {
         showFragment(MenuFragment.DEFAULT_FRAGMENT);
-        //TODO mSlidingPane.setSlidingEnabled(true);
     }
 
     @Override
     public boolean startAuth() {
         boolean result = super.startAuth();
-        if (result) {
-            //TODO mSlidingMenu.setSlidingEnabled(false);
-        }
         return result;
     }
 

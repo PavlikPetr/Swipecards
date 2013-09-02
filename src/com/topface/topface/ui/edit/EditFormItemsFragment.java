@@ -18,7 +18,6 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
@@ -45,22 +44,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_edit_with_listview, container,
                 false);
 
-        // Navigation bar
-        TopfaceActionBar topfaceActionBar = getActionBar(root);
-        topfaceActionBar.setTitleText(getString(R.string.edit_title));
         String formItemTitle = mFormInfo.getFormTitle(mTitleId);
-        topfaceActionBar.setSubTitleText(formItemTitle);
-
-        topfaceActionBar.showBackButton(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                getActivity().finish();
-            }
-        });
-
-        mRightPrsBar = topfaceActionBar.getRightProgressBar();
-
         // List
         mListView = (ListView) root.findViewById(R.id.lvList);
 

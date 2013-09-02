@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.fragments.ProfileFragment;
-import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.FormInfo;
 
 import java.util.ArrayList;
@@ -48,17 +47,7 @@ public class FilterChooseFormItemFragment extends AbstractEditFragment {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_edit_with_listview, container,
                 false);
         // Navigation bar
-        TopfaceActionBar topfaceActionBar = getActionBar(root);
-        topfaceActionBar.setTitleText(getString(R.string.edit_title));
         String formItemTitle = mFormInfo.getFormTitle(mTitleId);
-        topfaceActionBar.setSubTitleText(formItemTitle);
-        topfaceActionBar.showBackButton(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                getActivity().finish();
-            }
-        });
         // List
         mListView = (ListView) root.findViewById(R.id.lvList);
         ViewGroup header = (ViewGroup) inflater.inflate(R.layout.item_edit_profile_form_header, mListView, false);

@@ -9,10 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.WindowManager;
+import android.view.*;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
@@ -20,7 +17,6 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.AuthFragment;
-import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.LocaleConfig;
@@ -66,6 +62,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     @SuppressWarnings("deprecation")
     private void setWindowOptions() {
+        supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         getWindow().setFormat(PixelFormat.RGBA_8888);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
         if (mNeedAnimate) {
@@ -275,15 +272,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     protected void onResumeAsync() {
     }
 
-    private TopfaceActionBar mTopfaceActionBar;
-
-    protected TopfaceActionBar getActionBar(View view) {
-        if (mTopfaceActionBar == null) {
-            mTopfaceActionBar = new TopfaceActionBar(this, view);
-        }
-        return mTopfaceActionBar;
-    }
-
     protected Integer getOptionsMenuRes() {
         return null;
     }
@@ -292,10 +280,14 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                onPreFinish();
                 finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    protected void onPreFinish() {
     }
 }

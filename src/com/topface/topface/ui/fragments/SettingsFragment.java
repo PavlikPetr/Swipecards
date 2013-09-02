@@ -25,7 +25,10 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.LocaleConfig;
+import com.topface.topface.utils.Settings;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -68,18 +71,6 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         View view = inflater.inflate(R.layout.ac_settings, null);
 
         mSettings = Settings.getInstance();
-
-        // Navigation bar
-        TopfaceActionBar topfaceActionBar = getActionBar(view);
-        topfaceActionBar.showBackButton(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(getActivity() != null) {
-                    getActivity().finish();
-                }
-            }
-        });
-        topfaceActionBar.setTitleText(getString(R.string.settings_header_title));
 
         // Init settings views
         initViews(view);

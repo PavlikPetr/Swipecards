@@ -4,7 +4,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import com.topface.topface.Static;
-import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.SwapAnimation;
 
 /**
@@ -14,13 +13,11 @@ import com.topface.topface.utils.SwapAnimation;
 public class FilterBlock {
     private final View mToolsBar;
     private final View mControlGroup;
-    private final TopfaceActionBar mTopfaceActionBar;
 
-    public FilterBlock(ViewGroup rootView, int controlGroupId, TopfaceActionBar topfaceActionBar, int toolsBar) {
-        mTopfaceActionBar = topfaceActionBar;
+    public FilterBlock(ViewGroup rootView, int controlGroupId, int toolsBar) {
         mControlGroup = rootView.findViewById(controlGroupId);
         mToolsBar = rootView.findViewById(toolsBar);
-        if (mControlGroup != null && topfaceActionBar != null && mToolsBar != null) {
+        if (mControlGroup != null && mToolsBar != null) {
             initFilter();
         }
     }
@@ -28,13 +25,6 @@ public class FilterBlock {
     protected void initFilter() {
         mControlGroup.setVisibility(View.VISIBLE);
         mToolsBar.setVisibility(View.VISIBLE);
-
-        mTopfaceActionBar.showSettingsButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openControls();
-            }
-        }, true);
 
         ViewTreeObserver vto = mToolsBar.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

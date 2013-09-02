@@ -1,9 +1,7 @@
 package com.topface.topface.ui.fragments;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,7 +11,6 @@ import com.topface.topface.requests.ComplainRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.views.LockerView;
-import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.Utils;
 
 public class ComplainsMessageFragment extends BaseFragment{
@@ -27,8 +24,8 @@ public class ComplainsMessageFragment extends BaseFragment{
     private int userId;
     private EditText description;
     private LockerView complainLocker;
-    private TopfaceActionBar topfaceActionBar;
     private String feedId;
+    private MenuItem mSendMenuItem;
 
     public static ComplainsMessageFragment newInstance(int uid, ComplainRequest.ClassNames className, ComplainRequest.TypesNames typeName) {
         ComplainsMessageFragment fragment = new ComplainsMessageFragment();
@@ -58,19 +55,16 @@ public class ComplainsMessageFragment extends BaseFragment{
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Utils.hideSoftKeyboard(getActivity(), description);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater,container,savedInstanceState);
         View root = inflater.inflate(R.layout.complains_message_fragment, container, false);
-        topfaceActionBar = getActionBar(root);
-        topfaceActionBar.showBackButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.hideSoftKeyboard(getActivity(), description);
-                ((BaseFragmentActivity) getActivity()).close(ComplainsMessageFragment.this);
-            }
-        });
 
-        topfaceActionBar.setTitleText(getString(R.string.general_complain));
         Bundle arguments = getArguments();
         className = (ComplainRequest.ClassNames) arguments.getSerializable(CLASS_NAME);
         typeName = (ComplainRequest.TypesNames) arguments.getSerializable(TYPE_NAME);
@@ -83,18 +77,12 @@ public class ComplainsMessageFragment extends BaseFragment{
 
         description = (EditText) root.findViewById(R.id.etDescription);
 
-        topfaceActionBar.showSendButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.hideSoftKeyboard(getActivity(), description);
-                sendComplainRequest();
-            }
-        });
         return root;
     }
 
     private void sendComplainRequest() {
-        topfaceActionBar.setSendButtonEnabled(false);
+        Utils.hideSoftKeyboard(getActivity(), description);
+        mSendMenuItem.setEnabled(false);
         ComplainRequest request = new ComplainRequest(getActivity(), userId, className, typeName);
         if(!description.getText().toString().equals("")) {
             request.setDescription(description.getText().toString());
@@ -124,7 +112,7 @@ public class ComplainsMessageFragment extends BaseFragment{
                 super.always(response);
                 if(isAdded()) {
                     complainLocker.setVisibility(View.GONE);
-                    topfaceActionBar.setSendButtonEnabled(true);
+                    mSendMenuItem.setEnabled(true);
                 }
             }
         }).exec();
@@ -133,5 +121,27 @@ public class ComplainsMessageFragment extends BaseFragment{
     @Override
     protected String getTitle() {
         return getString(R.string.general_complain);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        mSendMenuItem = menu.findItem(R.id.action_send);
+    }
+
+    @Override
+    protected Integer getOptionsMenuRes() {
+        return R.menu.actions_send;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_send:
+                sendComplainRequest();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

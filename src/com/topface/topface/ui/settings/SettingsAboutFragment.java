@@ -7,13 +7,11 @@ import android.support.v4.app.FragmentActivity;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.Debug;
 
 import java.text.SimpleDateFormat;
@@ -29,17 +27,6 @@ public class SettingsAboutFragment extends BaseFragment {
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_about, container, false);
         final FragmentActivity activity = getActivity();
-
-        // Navigation bar
-        TopfaceActionBar topfaceActionBar = getActionBar(root);
-        topfaceActionBar.showBackButton(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                activity.finish();
-            }
-        });
-        topfaceActionBar.setTitleText(getString(R.string.settings_about));
 
         // Version
         TextView version = (TextView) root.findViewById(R.id.tvVersion);

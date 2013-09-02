@@ -147,19 +147,15 @@ public class SpriteTile extends Drawable {
 
     @Override
     public int getOpacity() {
-// TODO Auto-generated method stub
         return 100;
     }
 
     @Override
     public void setAlpha(int alpha) {
-// TODO Auto-generated method stub
-
     }
 
     @Override
     public void setColorFilter(ColorFilter cf) {
-// TODO Auto-generated method stub
         this.cf = cf;
     }
 

@@ -30,9 +30,11 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.views.ImageSwitcher;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.PreloadManager;
+import com.topface.topface.utils.RateController;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -78,7 +80,6 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_view_users, null);
 
-        getActionBar(root);
         initActionBar(root);
         inflateTopPanel(root);
         inflateControls(root);
@@ -151,20 +152,15 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     protected abstract void initControls(View controlsView);
 
     private void initActionBar(View view) {
-        TopfaceActionBar topfaceActionBar = getActionBar(view);
-        refreshActionBarTitles(view);
-        final Activity activity = getActivity();
-        if (activity instanceof NavigationActivity) {
-            topfaceActionBar.showHomeButton((NavigationActivity) activity);
-        }
-        initActionBarControls(topfaceActionBar);
+        refreshActionBarTitles();
+        initActionBarControls();
     }
 
-    protected abstract void initActionBarControls(TopfaceActionBar actionbar);
+    protected abstract void initActionBarControls();
 
-    protected void refreshActionBarTitles(View view) {
-        getActionBar(view).setTitleText(getTitle());
-        getActionBar(view).setSubTitleText(getSubtitle());
+    protected void refreshActionBarTitles() {
+        getSupportActionBar().setTitle(getTitle());
+        getSupportActionBar().setSubtitle(getSubtitle());
     }
 
     protected abstract String getTitle();

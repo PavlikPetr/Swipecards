@@ -18,7 +18,10 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.LikesListAdapter;
 import com.topface.topface.ui.adapters.LikesListAdapter.OnMutualListener;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.RateController;
+import com.topface.topface.utils.Utils;
 import org.json.JSONObject;
 
 public class LikesFragment extends FeedFragment<FeedLike> {

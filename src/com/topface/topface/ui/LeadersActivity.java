@@ -20,7 +20,6 @@ import com.topface.topface.ui.gridlayout.GridLayout;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryViewCreator;
-import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
@@ -46,14 +45,6 @@ public class LeadersActivity extends BaseFragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_leaders_layout);
 
-        TopfaceActionBar topfaceActionBar = getActionBar(getWindow().getDecorView());
-        topfaceActionBar.setTitleText(getString(R.string.leaders_go_date));
-        topfaceActionBar.showBackButton(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
         getSupportActionBar().setTitle(getString(R.string.leaders_go_date));
 
         mContainer = (RelativeLayout) findViewById(R.id.leadersCont);

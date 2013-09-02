@@ -6,7 +6,6 @@ import android.content.*;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -37,8 +36,9 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-import java.math.BigInteger;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class AuthFragment extends BaseFragment {
 

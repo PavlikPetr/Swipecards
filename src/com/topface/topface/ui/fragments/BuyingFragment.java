@@ -25,7 +25,6 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.views.ServicesTextView;
-import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.offerwalls.Offerwalls;
@@ -84,14 +83,6 @@ public class BuyingFragment extends BillingFragment {
         super.onCreateView(inflater,container,savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_buy, null);
         initViews(root);
-        TopfaceActionBar topfaceActionBar = getActionBar(root);
-        topfaceActionBar.showBackButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().finish();
-            }
-        });
-        topfaceActionBar.setTitleText(getString(R.string.buying_header_title));
         return root;
     }
 

@@ -9,8 +9,11 @@ import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
@@ -28,7 +31,6 @@ import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditAgeFragment;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.FilterFragment;
@@ -144,9 +146,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         View root = inflater.inflate(R.layout.ac_dating, null);
 
-        getActionBar(root);
         initViews(root);
-        initActionBar(root);
+        initActionBar();
         initEmptySearchDialog(root, mSettingsListener);
         initImageSwitcher(root);
 
@@ -262,15 +263,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mSwitchPrevBtn.setOnClickListener(this);
     }
 
-    private void initActionBar(View view) {
+    private void initActionBar() {
         // Navigation Header
-        TopfaceActionBar topfaceActionBar = getActionBar(view);
-        setActionBarTitles(getTitle(),getSubtitle());
-        final Activity activity = getActivity();
-        if (activity instanceof NavigationActivity) {
-            topfaceActionBar.showHomeButton((NavigationActivity) activity);
-        }
-        topfaceActionBar.showSettingsButton(mSettingsListener, false);
+        setActionBarTitles(getTitle(), getSubtitle());
     }
 
     protected String getTitle() {
@@ -820,7 +815,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void showControls() {
-        getActionBar(getView()).show();
         mDatingGroup.setVisibility(View.VISIBLE);
         mIsHide = false;
     }
@@ -828,7 +822,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void hideControls() {
         mDatingGroup.setVisibility(View.GONE);
-        getActionBar(getView()).hide();
         mIsHide = true;
     }
 

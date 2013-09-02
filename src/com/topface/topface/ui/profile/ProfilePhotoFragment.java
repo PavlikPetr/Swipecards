@@ -22,7 +22,6 @@ import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
-import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
@@ -95,18 +94,9 @@ public class ProfilePhotoFragment extends BaseFragment {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_profile_photos, container, false);
 
         //Navigation bar
-        if (getActivity() instanceof EditContainerActivity) {
-            TopfaceActionBar topfaceActionBar = getActionBar(root);
-            topfaceActionBar.setTitleText(getString(R.string.edit_title));
-            topfaceActionBar.setSubTitleText(getString(R.string.edit_album));
-            topfaceActionBar.showBackButton(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getActivity().setResult(Activity.RESULT_OK);
-                    getActivity().finish();
-                }
-            });
 
+        if (getActivity() instanceof EditContainerActivity) {
+            getActivity().setResult(Activity.RESULT_OK);
             setActionBarTitles(getString(R.string.edit_title),getString(R.string.edit_album));
         }
 

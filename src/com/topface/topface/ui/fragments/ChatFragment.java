@@ -88,7 +88,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private SwapControl mSwapControl;
     private Button mAddToBlackList;
     private ImageButton mBtnChatAdd;
-    private TopfaceActionBar mTopfaceActionBar;
 
     private String[] editButtonsNames;
     private boolean mReceiverRegistered = false;
@@ -268,7 +267,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             public void onLongClick(final int position, final View v) {
 
                 History item = mAdapter.getItem(position);
-                if (item ==null) return;
+                if (item == null) return;
 
                 String[] buttons;
                 if (item.target == 0) {
@@ -331,32 +330,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void initNavigationbar(View root, String userName, int userAge, String userCity) {
-        mTopfaceActionBar = getActionBar(root);
-
-        mTopfaceActionBar.showBackButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO костыль для навигации
-                getActivity().setResult(Activity.RESULT_CANCELED);
-                getActivity().finish();
-            }
-        });
-
-        mTopfaceActionBar.showProfileAvatar(null);
-
         setNavigationTitles(userName, userAge, userCity);
     }
 
     private void setNavigationTitles(String userName, int userAge, String userCity) {
         String userTitle = (TextUtils.isEmpty(userName) && userAge == 0) ? Static.EMPTY : (userName + ", " + userAge);
-        mTopfaceActionBar.setTitleText(userTitle);
-        mTopfaceActionBar.setSubTitleText(userCity);
-        setActionBarTitles(userTitle,userCity);
+        setActionBarTitles(userTitle, userCity);
     }
 
     @Override
     protected String getTitle() {
-        if(TextUtils.isEmpty(mUserName) && mUserAge == 0)  {
+        if (TextUtils.isEmpty(mUserName) && mUserAge == 0) {
             return Static.EMPTY;
         } else {
             StringBuilder strBuilder = new StringBuilder();
@@ -553,45 +537,22 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void onUserLoaded() {
-        if (mTopfaceActionBar != null) {
-            if (mUser.deleted || mUser.banned || mUser.photo == null || mUser.photo.isEmpty()) {
-                mTopfaceActionBar.showProfileAvatar(null);
-            } else {
-                ArrayList<UserActions.ActionItem> actions = new ArrayList<UserActions.ActionItem>();
-                actions.add(new UserActions.ActionItem(mUser.sex == 1 ? R.id.acProfile : R.id.acWProfile, this));
-                actions.add(new UserActions.ActionItem(R.id.acBlock, this));
-                actions.add(new UserActions.ActionItem(R.id.acComplain, this));
-                actions.add(new UserActions.ActionItem(R.id.acBookmark, this));
+        if (!(mUser.deleted || mUser.banned || mUser.photo == null || mUser.photo.isEmpty())) {
+            ArrayList<UserActions.ActionItem> actions = new ArrayList<UserActions.ActionItem>();
+            actions.add(new UserActions.ActionItem(mUser.sex == 1 ? R.id.acProfile : R.id.acWProfile, this));
+            actions.add(new UserActions.ActionItem(R.id.acBlock, this));
+            actions.add(new UserActions.ActionItem(R.id.acComplain, this));
+            actions.add(new UserActions.ActionItem(R.id.acBookmark, this));
 
 
-                UserActions userActions = new UserActions(chatActions, actions);
-                bookmarksTv = (TextView) userActions.getViewById(R.id.acBookmark).findViewById(R.id.favTV);
-                blockView = (RelativeLayout) userActions.getViewById(R.id.acBlock);
-                ((TextView) blockView.findViewById(R.id.blockTV)).setText(mUser.blocked ? R.string.black_list_delete : R.string.black_list_add_short);
-                bookmarksTv.setText(mUser.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+            UserActions userActions = new UserActions(chatActions, actions);
+            bookmarksTv = (TextView) userActions.getViewById(R.id.acBookmark).findViewById(R.id.favTV);
+            blockView = (RelativeLayout) userActions.getViewById(R.id.acBlock);
+            ((TextView) blockView.findViewById(R.id.blockTV)).setText(mUser.blocked ? R.string.black_list_delete : R.string.black_list_add_short);
+            bookmarksTv.setText(mUser.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
 
-                mTopfaceActionBar.setOnlineIcon(mUser.online && (!mUser.deleted && !mUser.banned));
-                mTopfaceActionBar.showUserActionsButton(
-                        new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                final TranslateAnimation ta = getAnimation(false, 500);
-                                chatActions.startAnimation(ta);
-                            }
-                        }, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-//                                initActionsPanelHeight();
-                                TranslateAnimation ta = getAnimation(true, 500);
-                                chatActions.startAnimation(ta);
-                            }
-                        }
-                        , mUser.photo
-                );
-
-                if(mBarAvatar != null) {
-                    ((ImageViewRemote) mBarAvatar.getActionView().findViewById(R.id.ivBarAvatar)).setPhoto(mUser.photo);
-                }
+            if (mBarAvatar != null) {
+                ((ImageViewRemote) mBarAvatar.getActionView().findViewById(R.id.ivBarAvatar)).setPhoto(mUser.photo);
             }
         }
     }
@@ -608,7 +569,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         ta.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                mTopfaceActionBar.disableActionsButton(true);
                 if (!isActive) {
                     chatActions.setVisibility(View.VISIBLE);
                 }
@@ -617,7 +577,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             @Override
             public void onAnimationEnd(Animation animation) {
                 chatActions.clearAnimation();
-                mTopfaceActionBar.disableActionsButton(false);
                 if (isActive) {
                     chatActions.setVisibility(View.INVISIBLE);
                 }
@@ -689,7 +648,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             case R.id.acWProfile:
             case R.id.acProfile:
                 Intent profileIntent = ContainerActivity.getProfileIntent(mUserId, getActivity());
-                mTopfaceActionBar.setUserActionsControlActive(false);
                 startActivity(profileIntent);
                 break;
             case R.id.acBlock:
@@ -777,7 +735,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }).exec();
                 break;
             case R.id.acComplain:
-                mTopfaceActionBar.setUserActionsControlActive(false);
                 chatActions.startAnimation(getAnimation(true, 0));
                 startActivity(ContainerActivity.getComplainIntent(mUserId));
                 break;

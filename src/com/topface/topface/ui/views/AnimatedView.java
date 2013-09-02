@@ -91,9 +91,6 @@ public class AnimatedView extends View {
 
     public AnimatedView(Context context) {
         super(context);
-// TODO Auto-generated constructor stub
-
-//        init(context);
     }
 
     private void init(Context context, int src, int sprite)

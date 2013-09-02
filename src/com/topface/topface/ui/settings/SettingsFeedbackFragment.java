@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.utils.TopfaceActionBar;
 
 public class SettingsFeedbackFragment extends BaseFragment implements OnClickListener {
 
@@ -18,17 +17,6 @@ public class SettingsFeedbackFragment extends BaseFragment implements OnClickLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
         View root = inflater.inflate(R.layout.fragment_feedback, null);
-
-        // Navigation bar
-        TopfaceActionBar topfaceActionBar = getActionBar(root);
-        topfaceActionBar.showBackButton(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                getActivity().finish();
-            }
-        });
-        topfaceActionBar.setTitleText(getString(R.string.settings_feedback));
 
         // Init settings views
         initViews(root);

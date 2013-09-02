@@ -11,7 +11,6 @@ import android.widget.*;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
-import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Editor;
 
@@ -23,7 +22,7 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater,container,savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_editor_banners, null);
-        initHeader(root);
+        initHeader();
         mConfigContainer = (ViewGroup) root.findViewById(R.id.loBannersConfigurationsContainer);
         initConfigContainer();
         root.findViewById(R.id.btnSaveSettings).setOnClickListener(this);
@@ -71,15 +70,7 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
         }
     }
 
-    private void initHeader(View root) {
-        TopfaceActionBar topfaceActionBar = getActionBar(root);
-        topfaceActionBar.setTitleText(getString(R.string.editor_configure_banners));
-        topfaceActionBar.showBackButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().finish();
-            }
-        });
+    private void initHeader() {
     }
 
     private void showCompleteMessage() {

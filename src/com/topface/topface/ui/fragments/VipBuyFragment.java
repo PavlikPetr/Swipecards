@@ -25,7 +25,6 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.profile.BlackListActivity;
-import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
@@ -88,20 +87,12 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
         super.onCreateView(inflater,container,savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_buy_premium, null);
         initViews(view);
-        initActionBar(view);
+        initActionBar();
         return view;
     }
 
-    private void initActionBar(View view) {
+    private void initActionBar() {
         if (getArguments() != null && getArguments().getBoolean(ACTION_BAR_CONST, false)) {
-            TopfaceActionBar topfaceActionBar = getActionBar(view);
-            topfaceActionBar.showBackButton(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getActivity().finish();
-                }
-            });
-            topfaceActionBar.setTitleText(getString(R.string.vip_buy_vip));
             setActionBarTitles(R.string.vip_buy_vip);
         }
     }

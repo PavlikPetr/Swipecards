@@ -9,7 +9,6 @@ import com.topface.topface.data.BlackListItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.adapters.BlackListAdapter;
-import com.topface.topface.utils.TopfaceActionBar;
 import org.json.JSONObject;
 
 /**
@@ -18,7 +17,6 @@ import org.json.JSONObject;
 public class BlackListFragment extends FeedFragment<BlackListItem> implements View.OnClickListener {
 
     private static final int BLACK_LIST_DELETE_BUTTON = 0;
-    private TopfaceActionBar mTopfaceActionBar;
 
     @Override
     protected int getLayout() {
@@ -62,19 +60,6 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
 
     @Override
     public void onClick(View view) {
-    }
-
-    @Override
-    protected void initNavigationBar(View view) {
-        // Navigation bar
-        mTopfaceActionBar = getActionBar(view);
-        mTopfaceActionBar.setTitleText(getTitle());
-        mTopfaceActionBar.showBackButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().finish();
-            }
-        });
     }
 
     @Override

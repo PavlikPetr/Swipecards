@@ -25,7 +25,6 @@ import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.ui.profile.ProfilePhotoGridAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.LockerView;
-import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.CacheProfile;
 
 import java.util.ArrayList;
@@ -78,19 +77,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_profile_photos, container, false);
 
-        // Navigation bar
-        TopfaceActionBar topfaceActionBar = getActionBar(root);
-        topfaceActionBar.setTitleText(getString(R.string.edit_title));
-        topfaceActionBar.setSubTitleText(getString(R.string.edit_album));
-
-        mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
         mLoadingLocker = (LockerView) root.findViewById(R.id.fppLocker);
-        topfaceActionBar.showBackButton(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().finish();
-            }
-        });
 
         mViewFlipper = (ViewFlipper) root.findViewById(R.id.vfFlipper);
 

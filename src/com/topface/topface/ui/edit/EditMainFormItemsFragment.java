@@ -17,14 +17,19 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.*;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.FormInfo;
+import com.topface.topface.utils.FormItem;
 
 import java.util.HashMap;
 
@@ -33,7 +38,6 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
     public static final int MAX_AGE = 99;
     public static final int MIN_AGE = 16;
     public static final String INTENT_SEX_CHANGED = "SEX_CHANGED";
-    private TopfaceActionBar mTopfaceActionBar;
     private boolean ageIncorrect = false;
     private boolean nameIncorrect;
 
@@ -68,20 +72,6 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater,container,savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_edit_main_form_items, null, false);
-
-        // Navigation bar
-        mTopfaceActionBar = getActionBar(root);
-
-        mTopfaceActionBar.setTitleText(getString(R.string.edit_title));
-        mTopfaceActionBar.showBackButton(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().finish();
-            }
-        });
-        mRightPrsBar = mTopfaceActionBar.getRightProgressBar();
-
-//        mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
 
         TextView sexTitle = (TextView) root.findViewById(R.id.tvSexTitle);
         sexTitle.setVisibility(View.GONE);
@@ -195,7 +185,6 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                 }
             }
         });
-        mTopfaceActionBar.setSubTitleText(getString(R.string.edit_status));
     }
 
     private void setAge(ViewGroup loAge, final EditType type, String data) {

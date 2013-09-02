@@ -65,7 +65,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
 
         standard_timeout = CacheProfile.getOptions().popup_timeout;
 
-        initNavigationBar(rootLayout);
+        initNavigationBar();
         initApiUrl(rootLayout);
         initDebugMode(rootLayout);
         initEditorMode(rootLayout);
@@ -206,10 +206,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
-    private void initNavigationBar(View view) {
-        TopfaceActionBar mTopfaceActionBar = getActionBar(view);
-        mTopfaceActionBar.showHomeButton((View.OnClickListener) getActivity());
-        mTopfaceActionBar.setTitleText(getString(R.string.editor_menu_admin));
+    private void initNavigationBar() {
     }
 
     @Override

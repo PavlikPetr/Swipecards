@@ -9,11 +9,8 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
-import android.view.View;
+import android.view.*;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.topface.topface.App;
@@ -25,7 +22,6 @@ import com.topface.topface.requests.FeedbackReport;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.edit.AbstractEditFragment;
 import com.topface.topface.ui.views.LockerView;
-import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
@@ -49,6 +45,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
     private Report mReport = new Report();
     private LockerView loadingLocker;
+    private int mFeedbackType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -56,46 +53,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         View root = inflater.inflate(R.layout.fragment_feedback_message, null);
 
         // Navigation bar
-        TopfaceActionBar topfaceActionBar = getActionBar(root);
-        topfaceActionBar.showBackButton(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                getActivity().finish();
-            }
-        });
-        topfaceActionBar.setTitleText(getString(R.string.settings_feedback));
         loadingLocker = (LockerView) root.findViewById(R.id.fbLoadingLocker);
-        mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
-        topfaceActionBar.showSendButton(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveChanges(new Handler());
-            }
-        });
-        Bundle extras = getActivity().getIntent().getExtras();
-        int feedbackType = extras.getInt(INTENT_FEEDBACK_TYPE, UNKNOWN);
-        switch (feedbackType) {
-            case ERROR_MESSAGE:
-                mReport.subject = getResources().getString(R.string.settings_error_message_internal);
-                topfaceActionBar.setSubTitleText(getString(R.string.settings_error_message));
-                break;
-            case DEVELOPERS_MESSAGE:
-                mReport.subject = getResources().getString(R.string.settings_ask_developer_internal);
-                topfaceActionBar.setSubTitleText(getString(R.string.settings_ask_developer));
-                break;
-            case PAYMENT_MESSAGE:
-                mReport.subject = getResources().getString(R.string.settings_payment_problems_internal);
-                topfaceActionBar.setSubTitleText(getString(R.string.settings_payment_problems));
-                break;
-            case COOPERATION_MESSAGE:
-                mReport.subject = getResources().getString(R.string.settings_cooperation_internal);
-                topfaceActionBar.setSubTitleText(getString(R.string.settings_cooperation));
-                break;
-            case UNKNOWN:
-                mReport.subject = getResources().getString(R.string.settings_feedback_internal);
-                break;
-        }
 
         // EditText
         root.findViewById(R.id.tvTitle).setVisibility(View.GONE);
@@ -133,7 +91,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             }
         });
 
-        initTextViews(root, feedbackType);
+        initTextViews(root, mFeedbackType);
 
         try {
             PackageInfo pInfo;
@@ -151,8 +109,47 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
     }
 
     @Override
+    protected void restoreState() {
+        super.restoreState();
+        Bundle extras = getActivity().getIntent().getExtras();
+        mFeedbackType = extras.getInt(INTENT_FEEDBACK_TYPE, UNKNOWN);
+        switch (mFeedbackType) {
+            case ERROR_MESSAGE:
+                mReport.subject = getResources().getString(R.string.settings_error_message_internal);
+                break;
+            case DEVELOPERS_MESSAGE:
+                mReport.subject = getResources().getString(R.string.settings_ask_developer_internal);
+                break;
+            case PAYMENT_MESSAGE:
+                mReport.subject = getResources().getString(R.string.settings_payment_problems_internal);
+                break;
+            case COOPERATION_MESSAGE:
+                mReport.subject = getResources().getString(R.string.settings_cooperation_internal);
+                break;
+            case UNKNOWN:
+                mReport.subject = getResources().getString(R.string.settings_feedback_internal);
+                break;
+        }
+    }
+
+    @Override
     protected String getTitle() {
         return getString(R.string.settings_feedback);
+    }
+
+    protected String getSubtitle() {
+        switch (mFeedbackType) {
+            case ERROR_MESSAGE:
+                return getString(R.string.settings_error_message);
+            case DEVELOPERS_MESSAGE:
+                return getString(R.string.settings_ask_developer);
+            case PAYMENT_MESSAGE:
+                return getString(R.string.settings_payment_problems);
+            case COOPERATION_MESSAGE:
+                return getString(R.string.settings_cooperation);
+            default:
+                return null;
+        }
     }
 
     private void initTextViews(View root, int feedbackType) {
@@ -362,6 +359,22 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         if (loadingLocker != null) {
             mEditText.setEnabled(true);
             loadingLocker.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    protected Integer getOptionsMenuRes() {
+        return R.menu.actions_send;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_send:
+                saveChanges(new Handler());
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

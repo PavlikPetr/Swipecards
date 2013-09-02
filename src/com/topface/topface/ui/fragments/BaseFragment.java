@@ -10,12 +10,14 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.*;
 import android.widget.AdapterView;
 import com.google.analytics.tracking.android.EasyTracker;
-import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.ContactsProvider;
+import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.IRequestClient;
 
 import java.util.ArrayList;
@@ -27,7 +29,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
 
     private ActionBar mSupportActionBar;
-    private TopfaceActionBar mTopfaceActionBar;
     private BroadcastReceiver mProfileLoadReceiver;
 
     private BroadcastReceiver updateCountersReceiver;
@@ -72,20 +73,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (mNeedTitles) setActionBarTitles(getTitle(), getSubtitle());
         return super.onCreateView(inflater, container, savedInstanceState);
-    }
-
-    protected TopfaceActionBar getActionBar(View view) {
-        if (mTopfaceActionBar == null) {
-            mTopfaceActionBar = new TopfaceActionBar(getActivity(), view);
-        }
-        return mTopfaceActionBar;
-    }
-
-    protected TopfaceActionBar getActionBar(Activity activity) {
-        if (mTopfaceActionBar == null) {
-            mTopfaceActionBar = new TopfaceActionBar(activity, activity.getWindow().getDecorView());
-        }
-        return mTopfaceActionBar;
     }
 
     protected void onUpdateStart(boolean isFlyUpdating) {
@@ -205,12 +192,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         }
     }
 
-    public void activateActionBar(boolean activate) {
-        if (mTopfaceActionBar != null) {
-            mTopfaceActionBar.activateHomeButton(activate);
-        }
-    }
-
     public void clearContent() {
     }
 
@@ -295,6 +276,13 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
             }
         }
         return mSupportActionBar;
+    }
+
+    protected void setSupportProgressBarIndeterminateVisibility(boolean visible) {
+        Activity activity = getActivity();
+        if (activity instanceof ActionBarActivity) {
+            ((ActionBarActivity)activity).setSupportProgressBarIndeterminateVisibility(visible);
+        }
     }
 
     protected void setActionBarTitles(String title, String subtitle) {

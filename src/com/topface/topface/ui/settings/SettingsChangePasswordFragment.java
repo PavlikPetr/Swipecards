@@ -1,13 +1,11 @@
 package com.topface.topface.ui.settings;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -20,8 +18,8 @@ import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
-import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -48,18 +46,6 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_change_password, container, false);
         final FragmentActivity activity = getActivity();
 
-        // Navigation bar
-        TopfaceActionBar topfaceActionBar = getActionBar(root);
-        topfaceActionBar.showBackButton(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                hideSoftKeyboard();
-                activity.finish();
-            }
-        });
-        topfaceActionBar.setTitleText(getString(R.string.password_changing));
-
         mLockerView = (LockerView) root.findViewById(R.id.llvLogoutLoading);
         mLockerView.setVisibility(View.GONE);
 
@@ -82,6 +68,12 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Utils.hideSoftKeyboard(getActivity(),mEdPassword,mEdPasswordConfirmation);
+    }
+
+    @Override
     protected void restoreState() {
         Bundle arguments = getArguments();
         if(arguments != null) {
@@ -98,7 +90,7 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSave:
-                hideSoftKeyboard();
+                Utils.hideSoftKeyboard(getActivity(),mEdPassword,mEdPasswordConfirmation);
                 final String password = mEdPassword.getText().toString();
                 final String passwordConfirmation = mEdPasswordConfirmation.getText().toString();
                 if (password.trim().length() <= 0) {
@@ -161,17 +153,6 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
 
 
         }).exec();
-    }
-
-    private void hideSoftKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (mEdPassword != null) {
-            imm.hideSoftInputFromWindow(mEdPassword.getWindowToken(), 0);
-        }
-
-        if (mEdPasswordConfirmation != null) {
-            imm.hideSoftInputFromWindow(mEdPasswordConfirmation.getWindowToken(), 0);
-        }
     }
 
     private void lock() {

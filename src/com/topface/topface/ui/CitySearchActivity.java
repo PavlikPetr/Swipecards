@@ -16,7 +16,6 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.CitiesRequest;
 import com.topface.topface.requests.SearchCitiesRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
@@ -202,15 +201,6 @@ public class CitySearchActivity extends BaseFragmentActivity {
     }
 
     private void initHeader() {
-        TopfaceActionBar topfaceActionBar = getActionBar(findViewById(R.id.rootContainer));
-        topfaceActionBar.setTitleText(getString(R.string.general_city));
-        topfaceActionBar.showBackButton(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.hideSoftKeyboard(CitySearchActivity.this, mCityInputView);
-                finish();
-            }
-        });
         getSupportActionBar().setTitle(R.string.general_city);
     }
 

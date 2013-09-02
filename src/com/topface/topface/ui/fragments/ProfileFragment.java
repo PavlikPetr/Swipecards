@@ -92,7 +92,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private BroadcastReceiver mUpdateProfileReceiver;
 
     private TabPageIndicator mTabIndicator;
-    private TopfaceActionBar mTopfaceActionBar;
     private LinearLayout mUserActions;
     private RelativeLayout bmBtn;
     private TextView mBookmarkAction;
@@ -120,8 +119,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         //init views
         View root = inflater.inflate(R.layout.ac_profile, null);
 
-        mTopfaceActionBar = getActionBar(root);
-
         mLoaderView = root.findViewById(R.id.llvProfileLoading);
         final FragmentActivity activity = getActivity();
         mRateController = new RateController(activity);
@@ -140,18 +137,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mBlocked = (RelativeLayout) mUserActions.findViewById(R.id.acBlock);
 
         bmBtn.setOnClickListener(this);
-        if (mProfileType == TYPE_USER_PROFILE) {
-            mTopfaceActionBar.showBackButton(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (activity != null) {
-                        activity.onBackPressed();
-                    }
-                }
-            });
-        } else if (activity instanceof NavigationActivity) {
-            mTopfaceActionBar.showHomeButton((NavigationActivity) activity);
-        }
+
         mUserActions.setVisibility(View.INVISIBLE);
 
         mTitle = (TextView) root.findViewById(R.id.tvNavigationTitle);
@@ -173,24 +159,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         if (mProfileType == TYPE_MY_PROFILE) {
             mTitle.setText(R.string.profile_header_title);
             setActionBarTitles(R.string.profile_header_title);
-            mTopfaceActionBar.showEditButton(this);
         } else if (mProfileType == TYPE_USER_PROFILE) {
             setActionBarTitles(R.string.general_profile);
-            mTopfaceActionBar.showUserActionsButton(
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            final TranslateAnimation ta = getAnimation(false, 500);
-                            mUserActions.startAnimation(ta);
-                        }
-                    }, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            TranslateAnimation ta = getAnimation(true, 500);
-                            mUserActions.startAnimation(ta);
-                        }
-                    }
-            );
         }
 
         // start pages initialization
@@ -231,7 +201,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         ta.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                mTopfaceActionBar.disableActionsButton(true);
                 if (!isActive) {
                     mUserActions.setVisibility(View.VISIBLE);
                 }
@@ -240,7 +209,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             @Override
             public void onAnimationEnd(Animation animation) {
                 mUserActions.clearAnimation();
-                mTopfaceActionBar.disableActionsButton(false);
                 if (isActive) {
                     mUserActions.setVisibility(View.INVISIBLE);
                 }
@@ -424,7 +392,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             mLockScreen.setVisibility(View.VISIBLE);
             mRetryView.setText(text);
             mRetryView.showOnlyMessage(true);
-            mTopfaceActionBar.hideUserActionButton();
         }
     }
 

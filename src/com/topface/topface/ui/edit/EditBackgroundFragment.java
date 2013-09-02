@@ -18,7 +18,6 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.ContainerActivity;
-import com.topface.topface.utils.TopfaceActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.topface.topface.utils.http.ProfileBackgrounds.BackgroundItem;
@@ -40,20 +39,6 @@ public class EditBackgroundFragment extends AbstractEditFragment {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_edit_with_listview, container, false);
 
         mSelectedId = CacheProfile.background_id;
-
-        // Navigation bar
-        TopfaceActionBar topfaceActionBar = getActionBar(root);
-        topfaceActionBar.setTitleText(getString(R.string.edit_title));
-        topfaceActionBar.setSubTitleText(getString(R.string.edit_bg_photo));
-
-        topfaceActionBar.showBackButton(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().finish();
-            }
-        });
-
-        mRightPrsBar = topfaceActionBar.getRightProgressBar();
 
         // List
         mBackgroundImagesListView = (ListView) root.findViewById(R.id.lvList);
