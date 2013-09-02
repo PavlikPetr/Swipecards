@@ -535,6 +535,13 @@
     <string name="settings_feedback_transaction_number">Número del pedido</string>
     <string name="settings_feedback_transaction_link">dónde encontrar el número del pedido?</string>
     <string name="general_logout_error">Lamentablemente, no se ha podido sañir de la cuenta</string>
+    <string name="auth_btn_ok">Entrar por medio de Одноклассники</string>
+    <string name="other_auth">Entrar usando otros servicios</string>
     <string name="settings_feedback_transaction_number_hint">Introduce el número del pedido</string>
     <string name="youve_earned">Has ganado %s</string>
+    <string name="like_topface">¿Te gusta Topface?</string>
+    <plurals name="selected">
+        <item quantity="other">%d elegidos</item>
+        <item quantity="one">%d elegido</item>
+    </plurals>
 </resources>

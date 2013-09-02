@@ -545,6 +545,14 @@
     <string name="settings_feedback_transaction_number">Užsakymo numeris</string>
     <string name="settings_feedback_transaction_link">kur rasti užsakymo numerį?</string>
     <string name="general_logout_error">Apgailestaujame, nepavyko išeiti iš paskyros.</string>
+    <string name="auth_btn_ok">Įeiti per Bendraklasius</string>
+    <string name="other_auth">Įeiti per kitas svetaines</string>
     <string name="settings_feedback_transaction_number_hint">Įveskite užsakymo numerį</string>
     <string name="youve_earned">Jūs uždirbote %s</string>
+    <string name="like_topface">Jums patinka Topface?</string>
+    <plurals name="selected">
+        <item quantity="few">%d išrinkta</item>
+        <item quantity="other">%d išrinkta</item>
+        <item quantity="one">%d išrinktas</item>
+    </plurals>
 </resources>
