@@ -22,3 +22,6 @@
 [submodule "libs/SlidingMenu"]
 	path = libs/SlidingMenu
 	url = git@github.com:Topface/SlidingMenu.git
+[submodule "libs/LifeStreetMediaSDK"]
+	path = libs/LifeStreetMediaSDK
+	url = git@github.com:Topface/LifeStreetMediaSDK.git
