@@ -20,6 +20,7 @@ import com.google.ads.Ad;
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.lifestreet.android.lsmsdk.*;
 import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.mobileads.MoPubView;
 import com.topface.billing.BillingFragment;
@@ -62,6 +63,7 @@ public class BannerBlock {
 
     public static final String VIRUS_LIKES_BANNER_PARAM = "viruslikes";
     private static final String MOPUB_AD_UNIT_ID = "4ec8274ea73811e295fa123138070049";
+    private static final String LIFESTREET_SLOT_TAG = "http://mobile-android.lfstmedia.com/m2/slot76330?ad_size=320x50&adkey=3f6";
 
     private LayoutInflater mInflater;
     ViewGroup mBannerLayout;
@@ -137,15 +139,17 @@ public class BannerBlock {
     private View getBannerView(String bannerType) {
         try {
             if (bannerType.equals(Options.BANNER_TOPFACE) || bannerType.equals(Options.BANNER_GAG)) {
-                return mInflater.inflate(R.layout.banner_topface, null);
+                return mInflater.inflate(R.layout.banner_topface, mBannerLayout, false);
             } else if (bannerType.equals(Options.BANNER_ADMOB)) {
-                return mInflater.inflate(R.layout.banner_admob, null);
+                return mInflater.inflate(R.layout.banner_admob, mBannerLayout, false);
             } else if (bannerType.equals(Options.BANNER_ADWIRED)) {
-                return mInflater.inflate(R.layout.banner_adwired, null);
+                return mInflater.inflate(R.layout.banner_adwired, mBannerLayout, false);
             } else if (bannerType.equals(Options.BANNER_MOPUB)) {
-                return mInflater.inflate(R.layout.banner_mopub, null);
+                return mInflater.inflate(R.layout.banner_mopub, mBannerLayout, false);
             } else if (bannerType.equals(Options.BANNER_ADCAMP)) {
-                return mInflater.inflate(R.layout.banner_adcamp, null);
+                return mInflater.inflate(R.layout.banner_adcamp, mBannerLayout, false);
+            } else if (bannerType.equals(Options.BANNER_LIFESTREET)) {
+                return mInflater.inflate(R.layout.banner_lifestreet, mBannerLayout, false);
             } else {
                 return null;
             }
@@ -186,6 +190,8 @@ public class BannerBlock {
             showMopub();
         } else if (mBannerView instanceof BannerAdView) {
             showAdcamp();
+        } else if (mBannerView instanceof SlotView) {
+            showLifeStreet();
         } else if (mBannerView instanceof ImageView) {
             if (banner == null) {
                 requestBannerGag();
@@ -193,6 +199,23 @@ public class BannerBlock {
                 showTopface(banner);
             }
         }
+    }
+
+    private void showLifeStreet() {
+        SlotView slotView = (SlotView) mBannerView;
+        slotView.setSlotTag(LIFESTREET_SLOT_TAG);
+        slotView.setListener(new BasicSlotListener() {
+            @Override
+            public void onFailedToLoadSlotView(SlotView slotView) {
+                requestBannerGag();
+            }
+
+            @Override
+            public void onFailedToReceiveAd(BannerAdapter<?> adapter, View view) {
+                requestBannerGag();
+            }
+        });
+        slotView.loadAd();
     }
 
     private void showMopub() {
@@ -508,13 +531,22 @@ public class BannerBlock {
     }
 
     public void onPause() {
+        if (mBannerView instanceof SlotView) {
+            ((SlotView)mBannerView).pause();
+        }
     }
 
     public void onDestroy() {
         if (mBannerView instanceof MoPubView) ((MoPubView) mBannerView).destroy();
+        if (mBannerView instanceof SlotView) {
+            ((SlotView)mBannerView).destroy();
+        }
         removeBanner();
     }
 
     public void onResume() {
+        if (mBannerView instanceof SlotView) {
+            ((SlotView)mBannerView).resume();
+        }
     }
 }
