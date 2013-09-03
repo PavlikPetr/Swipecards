@@ -402,7 +402,7 @@ public class BannerBlock {
 
     private void requestBannerGag() {
         removeBanner();
-        String bannerType = CacheProfile.getOptions().gagType;
+        String bannerType = CacheProfile.getOptions().gagTypeBanner;
         mBannerView = getBannerView(bannerType);
         mBannerLayout.addView(mBannerView);
         if (bannerType.equals(Options.BANNER_TOPFACE)) {

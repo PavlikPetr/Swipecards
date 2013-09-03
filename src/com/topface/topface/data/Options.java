@@ -88,6 +88,7 @@ public class Options extends AbstractData {
     public static final String BANNER_ADCAMP = "ADCAMP";
     public static final String BANNER_LIFESTREET = "LIFESTREET";
     public static final String BANNER_GAG = "GAG";
+    public static final String BANNER_NONE = "NONE";
     public final static String[] BANNERS = new String[]{
             BANNER_TOPFACE,
             BANNER_ADMOB,
@@ -96,7 +97,8 @@ public class Options extends AbstractData {
             BANNER_IVENGO,
             BANNER_ADCAMP,
             BANNER_LIFESTREET,
-            BANNER_GAG
+            BANNER_GAG,
+            BANNER_NONE
     };
 
     /**
@@ -152,7 +154,8 @@ public class Options extends AbstractData {
     public Closing closing = new Closing();
     public PremiumMessages premium_messages;
     public GetJar getJar;
-    public String gagType = BANNER_ADMOB;
+    public String gagTypeBanner = BANNER_ADMOB;
+    public String gagTypeFullscreen = BANNER_NONE;
 
     public static Options parse(ApiResponse response) {
         Options options = new Options();
@@ -238,6 +241,9 @@ public class Options extends AbstractData {
 
             JSONObject getJar = response.jsonResult.optJSONObject("getjar");
             options.getJar = new GetJar(getJar.optString("id"),getJar.optString("name"),getJar.optLong("price"));
+
+            options.gagTypeBanner = response.jsonResult.optString("gag_type_banner");
+            options.gagTypeFullscreen = response.jsonResult.optString("gag_type_fullscreen");
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
         }
