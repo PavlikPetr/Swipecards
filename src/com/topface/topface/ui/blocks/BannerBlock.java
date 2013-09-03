@@ -1,5 +1,8 @@
 package com.topface.topface.ui.blocks;
 
+import ad.labs.sdk.AdBanner;
+import ad.labs.sdk.AdHandler;
+import ad.labs.sdk.AdInitializer;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -62,18 +65,22 @@ public class BannerBlock {
 
     public static final String VIRUS_LIKES_BANNER_PARAM = "viruslikes";
     private static final String MOPUB_AD_UNIT_ID = "4ec8274ea73811e295fa123138070049";
+    private static final String ADLAB_IDENTIFICATOR = ""; //TODO
 
     private LayoutInflater mInflater;
     ViewGroup mBannerLayout;
     private Fragment mFragment;
+    private Context mContext;
     private View mBannerView;
     private static boolean mAdcampInitialized = false;
 
     private Map<String, Character> mAdwiredMap = new HashMap<String, Character>();
+    private AdInitializer mAdlabInitializer;
 
     public BannerBlock(Fragment fragment, ViewGroup layout) {
         super();
         mFragment = fragment;
+        mContext = mFragment.getActivity();
         mInflater = (LayoutInflater) mFragment.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mBannerLayout = (ViewGroup) layout.findViewById(R.id.loBannerContainer);
         setBannersMap();
@@ -146,6 +153,8 @@ public class BannerBlock {
                 return mInflater.inflate(R.layout.banner_mopub, null);
             } else if (bannerType.equals(Options.BANNER_ADCAMP)) {
                 return mInflater.inflate(R.layout.banner_adcamp, null);
+            } else if (bannerType.equals(Options.BANNER_ADLAB)) {
+                return mInflater.inflate(R.layout.banner_adlab, null);
             } else {
                 return null;
             }
@@ -186,6 +195,8 @@ public class BannerBlock {
             showMopub();
         } else if (mBannerView instanceof BannerAdView) {
             showAdcamp();
+        } else if (mBannerView instanceof AdBanner) {
+            showAdlab();
         } else if (mBannerView instanceof ImageView) {
             if (banner == null) {
                 requestBannerGag();
@@ -193,6 +204,17 @@ public class BannerBlock {
                 showTopface(banner);
             }
         }
+    }
+
+    private void showAdlab() {
+        AdBanner adBanner = (AdBanner)mBannerView;
+        mAdlabInitializer = new AdInitializer(mContext, adBanner, ADLAB_IDENTIFICATOR);
+        adBanner.setOnCloseBannerListener(new AdBanner.OnCloseBannerListener() {
+            @Override
+            public void onClose() {
+                requestBannerGag();
+            }
+        });
     }
 
     private void showMopub() {
@@ -508,6 +530,7 @@ public class BannerBlock {
     }
 
     public void onPause() {
+        if (mAdlabInitializer != null) mAdlabInitializer.pause();
     }
 
     public void onDestroy() {
@@ -516,5 +539,6 @@ public class BannerBlock {
     }
 
     public void onResume() {
+        if (mAdlabInitializer != null) mAdlabInitializer.resume();
     }
 }

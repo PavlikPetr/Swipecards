@@ -86,6 +86,7 @@ public class Options extends AbstractData {
     public static final String BANNER_MOPUB = "MOPUB";
     public static final String BANNER_IVENGO = "IVENGO";
     public static final String BANNER_ADCAMP = "ADCAMP";
+    public static final String BANNER_ADLAB = "ADLAB";
     public static final String BANNER_GAG = "GAG";
     public final static String[] BANNERS = new String[]{
             BANNER_TOPFACE,
@@ -93,6 +94,7 @@ public class Options extends AbstractData {
             BANNER_ADWIRED,
             BANNER_MOPUB,
             BANNER_IVENGO,
+            BANNER_ADLAB,
             BANNER_GAG
     };
 
