@@ -231,7 +231,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             mFragmentMenu.onStopClosings();
             MenuFragment.logoutInvoked = false;
         }
-        if (!AuthToken.getInstance().isEmpty() &&
+
+        if  (!AuthToken.getInstance().isEmpty() &&
                 !CacheProfile.premium && !mHasClosingsForThisSession &&
                 mFragmentMenu.getCurrentFragmentId() != MenuFragment.F_PROFILE
                 && !mFragmentMenu.isClosed() && mClosingsOnProfileUpdateInvoked) {
@@ -239,8 +240,11 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 onClosings();
             }
         }
-    }
 
+        if(mFragmentMenu.isClosed()) {
+            updateClosing();
+        }
+    }
 
     private void actionsAfterRegistration() {
         if (!AuthToken.getInstance().isEmpty()) {
@@ -511,15 +515,21 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         showFragment(null); // it will take fragment id from getIntent() extra data
     }
 
+    private void updateClosing() {
+        if(CacheProfile.premium) {
+            if (CacheProfile.premium) {
+                Options.Closing closing = CacheProfile.getOptions().closing;
+                if (closing.isClosingsEnabled()) {
+                    closing.stopForPremium();
+                    onClosings();
+                }
+            }
+        }
+    }
+
     @Override
     protected void onProfileUpdated() {
         super.onProfileUpdated();
-        if (CacheProfile.premium) {
-            Options.Closing closing = CacheProfile.getOptions().closing;
-            if (closing.isClosingsEnabled()) {
-                closing.stopForPremium();
-                onClosings();
-            }
-        }
+        updateClosing();
     }
 }
