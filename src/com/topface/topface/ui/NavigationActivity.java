@@ -1,9 +1,7 @@
 package com.topface.topface.ui;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
@@ -501,7 +499,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             showFragment(BaseFragment.F_MUTUAL);
             return;
         }
-        if (closing.enableSympathies && !LikesClosingFragment.usersProcessed) {
+        if (closing.enabledSympathies && !LikesClosingFragment.usersProcessed) {
             mFragmentMenu.onClosings(BaseFragment.F_LIKES);
             showFragment(BaseFragment.F_LIKES);
             return;
@@ -511,5 +509,17 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
         mFragmentMenu.onStopClosings();
         showFragment(null); // it will take fragment id from getIntent() extra data
+    }
+
+    @Override
+    protected void onProfileUpdated() {
+        super.onProfileUpdated();
+        if (CacheProfile.premium) {
+            Options.Closing closing = CacheProfile.getOptions().closing;
+            if (closing.isClosingsEnabled()) {
+                closing.stopForPremium();
+                onClosings();
+            }
+        }
     }
 }

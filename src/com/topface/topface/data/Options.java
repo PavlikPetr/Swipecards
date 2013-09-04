@@ -233,7 +233,7 @@ public class Options extends AbstractData {
             JSONObject closings = response.jsonResult.optJSONObject("closing");
             if (options.closing == null) options.closing = new Closing();
             options.closing.enabledMutual = closings.optBoolean("enabled_mutual");
-            options.closing.enableSympathies = closings.optBoolean("enabled_sympathies");
+            options.closing.enabledSympathies = closings.optBoolean("enabled_sympathies");
             options.closing.limitMutual = closings.optInt("limit_mutual");
             options.closing.limitSympathies = closings.optInt("limit_sympathies");
 
@@ -502,7 +502,7 @@ public class Options extends AbstractData {
         public static String DATA_FOR_CLOSING_RECEIVED_ACTION = "DATA_FOR_CLOSING_RECEIVED_ACTION";
 
         private static Ssid.ISsidUpdateListener listener;
-        public boolean enableSympathies;
+        public boolean enabledSympathies;
         public boolean enabledMutual;
         public int limitSympathies;
         public int limitMutual;
@@ -554,7 +554,7 @@ public class Options extends AbstractData {
         }
 
         public boolean isClosingsEnabled() {
-            return (enabledMutual || enableSympathies) && !CacheProfile.premium;
+            return (enabledMutual || enabledSympathies) && !CacheProfile.premium;
         }
 
         public boolean isMutualClosingAvailable() {
@@ -568,6 +568,11 @@ public class Options extends AbstractData {
             SharedPreferences pref =  App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
             long lastCallTime = pref.getLong(Static.PREFERENCES_LIKES_CLOSING_LAST_TIME,0);
             return DateUtils.isOutside24Hours(lastCallTime, System.currentTimeMillis());
+        }
+
+        public void stopForPremium() {
+            enabledMutual = false;
+            enabledSympathies = false;
         }
     }
 
