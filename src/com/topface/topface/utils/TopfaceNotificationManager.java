@@ -13,6 +13,7 @@ import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 import com.topface.topface.R;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.profile.AddPhotoHelper;
@@ -200,9 +201,9 @@ public class TopfaceNotificationManager {
                     notificationBuilder.setLargeIcon(scaledIcon);
                 }
             }
-
             if (Settings.getInstance().isVibrationEnabled()) {
                 notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
+
             }
 
             notificationBuilder.setSound(Settings.getInstance().getRingtone());
@@ -250,6 +251,10 @@ public class TopfaceNotificationManager {
                         generateBigText();
                     }
                 }
+                if (Settings.getInstance().isVibrationEnabled()) {
+                    notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
+
+                }
                 PendingIntent resultPendingIntent = generatePendingIntent(intent);
                 notificationBuilder.setAutoCancel(true);
                 notificationBuilder.setContentIntent(resultPendingIntent);
@@ -277,7 +282,10 @@ public class TopfaceNotificationManager {
 
                 views.setTextViewText(R.id.fnTitle, title);
                 views.setTextViewText(R.id.fnMsg, text);
+                if (Settings.getInstance().isVibrationEnabled()) {
+                    notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
 
+                }
                 if (!isOld) {
 
                     Intent retryIntent = new Intent(AddPhotoHelper.CANCEL_NOTIFICATION_RECEIVER + intent.getParcelableExtra("PhotoUrl"));
