@@ -595,7 +595,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             final ProgressBar prsLoader = (ProgressBar) v.getTag(R.id.prsLoader);
             final History item = getItem(position);
             if (item != null) {
-                EasyTracker.getTracker().trackEvent("VirusLike", "Click", "Chat", 0L);
+                EasyTracker.getTracker().sendEvent("VirusLike", "Click", "Chat", 0L);
 
                 prsLoader.setVisibility(View.VISIBLE);
                 v.setVisibility(View.INVISIBLE);
@@ -603,7 +603,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
                     @Override
                     protected void success(VirusLike data, ApiResponse response) {
-                        EasyTracker.getTracker().trackEvent("VirusLike", "Success", "Chat", 0L);
+                        EasyTracker.getTracker().sendEvent("VirusLike", "Success", "Chat", 0L);
                         //После заврешения запроса удаляем элемент
                         removeItem(getPosition(position));
                         //И предлагаем отправить пользователю запрос своим друзьям не из приложения
@@ -646,7 +646,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
                     @Override
                     public void fail(int codeError, ApiResponse response) {
-                        EasyTracker.getTracker().trackEvent("VirusLike", "Fail", "Chat", 0L);
+                        EasyTracker.getTracker().sendEvent("VirusLike", "Fail", "Chat", 0L);
                         Utils.showErrorMessage(getContext());
                     }
 

@@ -443,7 +443,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
         switch (view.getId()) {
             case R.id.loDatingResources: {
-                EasyTracker.getTracker().trackEvent("Dating", "BuyClick", "", 1L);
+                EasyTracker.getTracker().sendEvent("Dating", "BuyClick", "", 1L);
                 startActivity(ContainerActivity.getBuyingIntent("Dating"));
             }
             break;
@@ -461,7 +461,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                 mCurrentUser.mutual ? RateRequest.DEFAULT_MUTUAL
                                         : RateRequest.DEFAULT_NO_MUTUAL, null);
 
-                        EasyTracker.getTracker().trackEvent("Dating", "Rate",
+                        EasyTracker.getTracker().sendEvent("Dating", "Rate",
                                 "AdmirationSend" + (mCurrentUser.mutual ? "mutual" : ""),
                                 (long) CacheProfile.getOptions().price_highrate);
                     }
@@ -480,7 +480,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                 mCurrentUser.mutual ? RateRequest.DEFAULT_MUTUAL
                                         : RateRequest.DEFAULT_NO_MUTUAL, null);
 
-                        EasyTracker.getTracker().trackEvent("Dating", "Rate",
+                        EasyTracker.getTracker().sendEvent("Dating", "Rate",
                                 "SympathySend" + (mCurrentUser.mutual ? "mutual" : ""), 0L);
                     }
                     //currentSearch.rated = true;
@@ -492,21 +492,21 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 if (mCurrentUser != null) {
                     mCurrentUser.skipped = true;
 
-                    EasyTracker.getTracker().trackEvent("Dating", "Rate", "Skip", 0L);
+                    EasyTracker.getTracker().sendEvent("Dating", "Rate", "Skip", 0L);
                 }
                 showNextUser();
             }
             break;
             case R.id.btnDatingPrev: {
                 prevUser();
-                EasyTracker.getTracker().trackEvent("Dating", "Additional", "Prev", 0L);
+                EasyTracker.getTracker().sendEvent("Dating", "Additional", "Prev", 0L);
             }
 
             break;
             case R.id.btnDatingProfile: {
                 if (mCurrentUser != null && getActivity() != null) {
                     getActivity().startActivity(ContainerActivity.getProfileIntent(mCurrentUser.id, DatingFragment.class, getActivity()));
-                    EasyTracker.getTracker().trackEvent("Dating", "Additional", "Profile", 1L);
+                    EasyTracker.getTracker().sendEvent("Dating", "Additional", "Profile", 1L);
                 }
             }
             break;
@@ -520,7 +520,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingSwitchNext: {
                 mViewFlipper.setDisplayedChild(1);
-                EasyTracker.getTracker().trackEvent("Dating", "Additional", "Switch", 1L);
+                EasyTracker.getTracker().sendEvent("Dating", "Additional", "Switch", 1L);
             }
             break;
             case R.id.btnDatingSwitchPrev: {
@@ -560,7 +560,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         intent.putExtra(ChatFragment.INTENT_USER_CITY, mCurrentUser.city.name);
         intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, getClass().getSimpleName());
         activity.startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
-        EasyTracker.getTracker().trackEvent("Dating", "Additional", "Chat", 1L);
+        EasyTracker.getTracker().sendEvent("Dating", "Additional", "Chat", 1L);
     }
 
     private void showUser(SearchUser user) {

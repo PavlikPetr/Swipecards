@@ -291,7 +291,7 @@ public class BannerBlock {
             public void onClick(View v) {
                 Intent intent = null;
                 if (banner.action.equals(Banner.ACTION_PAGE)) {
-                    EasyTracker.getTracker().trackEvent("Purchase", "Banner", "", 0L);
+                    EasyTracker.getTracker().sendEvent("Purchase", "Banner", "", 0L);
                     intent = new Intent(mFragment.getActivity(), ContainerActivity.class);
                     if (banner.parameter.equals("VIP")) {
                         intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
@@ -428,12 +428,12 @@ public class BannerBlock {
         dialog.setMessage(mFragment.getString(R.string.general_dialog_loading));
         dialog.show();
 
-        EasyTracker.getTracker().trackEvent("VirusLike", "Click", "Banner", 0L);
+        EasyTracker.getTracker().sendEvent("VirusLike", "Click", "Banner", 0L);
 
         new VirusLikesRequest(mFragment.getActivity()).callback(new ApiHandler() {
             @Override
             public void success(final ApiResponse response) {
-                EasyTracker.getTracker().trackEvent("VirusLike", "Success", "Banner", 0L);
+                EasyTracker.getTracker().sendEvent("VirusLike", "Success", "Banner", 0L);
                 //И предлагаем отправить пользователю запрос своим друзьям не из приложения
                 new VirusLike(response).sendFacebookRequest(
                         "Banner",
@@ -450,7 +450,7 @@ public class BannerBlock {
 
             @Override
             public void fail(int codeError, ApiResponse response) {
-                EasyTracker.getTracker().trackEvent("VirusLike", "Fail", "Banner", 0L);
+                EasyTracker.getTracker().sendEvent("VirusLike", "Fail", "Banner", 0L);
 
                 if (response.isCodeEqual(ApiResponse.CODE_VIRUS_LIKES_ALREADY_RECEIVED)) {
                     Toast.makeText(getContext(), R.string.virus_error, Toast.LENGTH_LONG).show();
@@ -483,7 +483,7 @@ public class BannerBlock {
     private void sendStat(String action, String label) {
         action = action == null ? "" : action;
         label = label == null ? "" : label;
-        EasyTracker.getTracker().trackEvent("Banner", action, label, TextUtils.equals(label, "click") ? 1L : 0L);
+        EasyTracker.getTracker().sendEvent("Banner", action, label, TextUtils.equals(label, "click") ? 1L : 0L);
     }
 
     private String getBannerName(String bannerUrl) {

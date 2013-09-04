@@ -28,6 +28,6 @@ public class DeleteFeedRequest extends ApiRequest {
     @Override
     public void exec() {
         super.exec();
-        EasyTracker.getTracker().trackEvent("Feed", "Delete", "", 1L);
+        EasyTracker.getTracker().sendEvent("Feed", "Delete", "", 1L);
     }
 }

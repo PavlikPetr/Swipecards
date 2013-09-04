@@ -152,7 +152,7 @@ public class AuthFragment extends BaseFragment {
         mCreateAccountView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EasyTracker.getTracker().trackEvent("Registration", "StartActivity", "FromAuth", 1L);
+                EasyTracker.getTracker().sendEvent("Registration", "StartActivity", "FromAuth", 1L);
                 Intent intent = new Intent(getActivity(), ContainerActivity.class);
                 startActivityForResult(intent, ContainerActivity.INTENT_REGISTRATION_FRAGMENT);
             }
@@ -232,7 +232,7 @@ public class AuthFragment extends BaseFragment {
         mCreateAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EasyTracker.getTracker().trackEvent("Registration", "StartActivity", "FromAuth", 1L);
+                EasyTracker.getTracker().sendEvent("Registration", "StartActivity", "FromAuth", 1L);
                 Intent intent = new Intent(getActivity(), ContainerActivity.class);
                 startActivityForResult(intent, ContainerActivity.INTENT_REGISTRATION_FRAGMENT);
             }
@@ -320,7 +320,7 @@ public class AuthFragment extends BaseFragment {
     private AuthRequest generateAuthRequest(AuthToken token) {
         AuthRequest authRequest = new AuthRequest(token, getActivity());
         registerRequest(authRequest);
-        EasyTracker.getTracker().trackEvent("Profile", "Auth", "FromActivity" + token.getSocialNet(), 1L);
+        EasyTracker.getTracker().sendEvent("Profile", "Auth", "FromActivity" + token.getSocialNet(), 1L);
         return authRequest;
     }
 
@@ -347,7 +347,7 @@ public class AuthFragment extends BaseFragment {
             }
 
         });
-        EasyTracker.getTracker().trackEvent("Profile", "Auth", "FromActivity" + AuthToken.SN_TOPFACE, 1L);
+        EasyTracker.getTracker().sendEvent("Profile", "Auth", "FromActivity" + AuthToken.SN_TOPFACE, 1L);
 
         return authRequest;
     }

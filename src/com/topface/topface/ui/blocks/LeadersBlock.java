@@ -35,7 +35,7 @@ public class LeadersBlock {
     }
 
     public void loadLeaders() {
-        EasyTracker.getTracker().trackEvent("Leaders", "Load", "", 1L);
+        EasyTracker.getTracker().sendEvent("Leaders", "Load", "", 1L);
         LeadersRequest request = new LeadersRequest(mFragment.getActivity().getApplicationContext());
         if (mFragment instanceof BaseFragment) {
             ((BaseFragment) mFragment).registerRequest(request);

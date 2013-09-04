@@ -26,6 +26,6 @@ public class LogoutRequest extends ApiRequest {
     @Override
     public void exec() {
         super.exec();
-        EasyTracker.getTracker().trackEvent("Profile", "Logout", "", 1L);
+        EasyTracker.getTracker().sendEvent("Profile", "Logout", "", 1L);
     }
 }
