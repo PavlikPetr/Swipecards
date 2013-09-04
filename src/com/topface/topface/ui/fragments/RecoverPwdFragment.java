@@ -15,7 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RestorePwdRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.Utils;
@@ -66,13 +66,13 @@ public class RecoverPwdFragment extends BaseFragment {
                 request.login = mEdEmail.getText().toString();
                 request.callback(new ApiHandler() {
                     @Override
-                    public void success(ApiResponse response) {
+                    public void success(IApiResponse response) {
                         showButtons();
                         getActivity().finish();
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) {
+                    public void fail(int codeError, IApiResponse response) {
                         showButtons();
                         redAlert(R.string.enter_email_from_registration);
                     }

@@ -18,7 +18,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
-import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -233,7 +233,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
 
         request.callback(new ApiHandler() {
             @Override
-            public void success(ApiResponse response) throws NullPointerException {
+            public void success(IApiResponse response) throws NullPointerException {
                 CacheProfile.invisible = mInvisSwitcher.isChecked();
                 if (mInvisLoadBar != null && getActivity() != null) {
                     mInvisLoadBar.setVisibility(View.GONE);
@@ -242,7 +242,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) throws NullPointerException {
+            public void fail(int codeError, IApiResponse response) throws NullPointerException {
                 if (mInvisSwitcher != null && getActivity() != null) {
                     if (CacheProfile.invisible != mInvisSwitcher.isChecked()) {
                         mInvisSwitcher.doSwitch();

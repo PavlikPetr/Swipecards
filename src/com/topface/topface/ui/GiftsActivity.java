@@ -1,10 +1,8 @@
 package com.topface.topface.ui;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -12,6 +10,7 @@ import com.topface.topface.data.Gift;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.GiftsRequest;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.fragments.GiftsFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.TripleButton;
@@ -119,7 +118,7 @@ public class GiftsActivity extends BaseFragmentActivity {
             giftRequest.callback(new DataApiHandler<LinkedList<Gift>>() {
 
                 @Override
-                protected void success(LinkedList<Gift> data, ApiResponse response) {
+                protected void success(LinkedList<Gift> data, IApiResponse response) {
                     mGiftsList.addAll(data);
                     mGiftsCollection.add(mGiftsList);
                     mGiftFragment.setGifts(mGiftsCollection.getGifts());
@@ -133,7 +132,7 @@ public class GiftsActivity extends BaseFragmentActivity {
                 }
 
                 @Override
-                public void fail(int codeError, ApiResponse response) {
+                public void fail(int codeError, IApiResponse response) {
                     Toast.makeText(
                             App.getContext(),
                             R.string.general_data_error,

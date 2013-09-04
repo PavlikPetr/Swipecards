@@ -348,7 +348,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         userRequest.callback(new DataApiHandler<User>() {
 
             @Override
-            protected void success(User data, ApiResponse response) {
+            protected void success(User data, IApiResponse response) {
                 mUserProfile = data;
                 if (mUserProfile == null) {
                     showRetryBtn();
@@ -364,9 +364,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     }
 
                     if (data.inBlackList) {
-                        ((TextView)mBlocked.findViewById(R.id.blockTV)).setText(R.string.black_list_delete);
+                        ((TextView) mBlocked.findViewById(R.id.blockTV)).setText(R.string.black_list_delete);
                     } else {
-                        ((TextView)mBlocked.findViewById(R.id.blockTV)).setText(R.string.black_list_add_short);
+                        ((TextView) mBlocked.findViewById(R.id.blockTV)).setText(R.string.black_list_add_short);
                     }
                     mRateController.setOnRateControllerListener(mRateControllerListener);
                     //set info into views for user
@@ -393,7 +393,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             }
 
             @Override
-            public void fail(final int codeError, ApiResponse response) {
+            public void fail(final int codeError, IApiResponse response) {
                 showRetryBtn();
             }
         }).exec();
@@ -634,7 +634,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         }
                         request.callback(new VipApiHandler() {
                             @Override
-                            public void success(ApiResponse response) {
+                            public void success(IApiResponse response) {
                                 super.success(response);
                                 if (isAdded()) {
                                     loader.setVisibility(View.INVISIBLE);
@@ -649,7 +649,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                             }
 
                             @Override
-                            public void fail(int codeError, ApiResponse response) {
+                            public void fail(int codeError, IApiResponse response) {
                                 super.fail(codeError, response);
                                 if (isAdded()) {
                                     loader.setVisibility(View.INVISIBLE);
@@ -679,7 +679,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
                 request.callback(new SimpleApiHandler() {
                     @Override
-                    public void success(ApiResponse response) {
+                    public void success(IApiResponse response) {
                         super.success(response);
 //                        Toast.makeText(App.getContext(), getString(R.string.general_user_bookmarkadd), 1500).show();
                         if (mUserProfile != null) {
@@ -692,7 +692,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     }
 
                     @Override
-                    public void always(ApiResponse response) {
+                    public void always(IApiResponse response) {
                         super.always(response);
                         if (isAdded()) {
                             loader.setVisibility(View.INVISIBLE);
@@ -843,7 +843,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             sendGift.callback(new DataApiHandler<SendGiftAnswer>() {
 
                 @Override
-                protected void success(SendGiftAnswer data, ApiResponse response) {
+                protected void success(SendGiftAnswer data, IApiResponse response) {
                     CacheProfile.likes = data.likes;
                     CacheProfile.money = data.money;
                     if (mGiftFragment != null) {
@@ -860,9 +860,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 }
 
                 @Override
-                public void fail(int codeError, ApiResponse response) {
+                public void fail(int codeError, IApiResponse response) {
                     Utils.showErrorMessage(getContext());
-                    if (response.code == ApiResponse.PAYMENT) {
+                    if (response.isCodeEqual(ApiResponse.PAYMENT)) {
                         FragmentActivity activity = getActivity();
                         if (activity != null) {
                             Intent intent = ContainerActivity.getBuyingIntent("Profile");
@@ -874,7 +874,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 }
 
                 @Override
-                public void always(ApiResponse response) {
+                public void always(IApiResponse response) {
                     super.always(response);
                     giftsReceivedListener.onReceived();
                 }

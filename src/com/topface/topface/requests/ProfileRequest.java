@@ -22,6 +22,11 @@ public class ProfileRequest extends ApiRequest {
         doNeedAlert(false); //чтобы не предупреждать пользователя алертом о пропаже инета
     }
 
+    public ProfileRequest(int part, Context context) {
+        this(context);
+        this.part = part;
+    }
+
     @Override
     protected JSONObject getRequestData() throws JSONException {
 

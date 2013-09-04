@@ -37,11 +37,7 @@ import com.topface.topface.Static;
 import com.topface.topface.data.Banner;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.VirusLike;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BannerRequest;
-import com.topface.topface.requests.VirusLikesRequest;
-import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.requests.handlers.BaseApiHandler;
+import com.topface.topface.requests.*;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.feed.*;
@@ -170,11 +166,10 @@ public class BannerBlock {
         if (mFragment instanceof BaseFragment) {
             ((BaseFragment) mFragment).registerRequest(bannerRequest);
         }
-        bannerRequest.callback(new BaseApiHandler() {
-            @Override
-            public void success(ApiResponse response) {
-                final Banner banner = Banner.parse(response);
+        bannerRequest.callback(new DataApiHandler<Banner>() {
 
+            @Override
+            protected void success(Banner banner, IApiResponse response) {
                 if (mBannerView != null) {
                     try {
                         showBanner(banner);
@@ -182,6 +177,15 @@ public class BannerBlock {
                         Debug.error(e);
                     }
                 }
+            }
+
+            @Override
+            protected Banner parseResponse(ApiResponse response) {
+                return Banner.parse(response);
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
             }
         }).exec();
     }
@@ -591,12 +595,12 @@ public class BannerBlock {
 
         EasyTracker.getTracker().trackEvent("VirusLike", "Click", "Banner", 0L);
 
-        new VirusLikesRequest(mFragment.getActivity()).callback(new ApiHandler() {
+        new VirusLikesRequest(mFragment.getActivity()).callback(new DataApiHandler<VirusLike>() {
             @Override
-            public void success(final ApiResponse response) {
+            protected void success(VirusLike data, IApiResponse response) {
                 EasyTracker.getTracker().trackEvent("VirusLike", "Success", "Banner", 0L);
                 //И предлагаем отправить пользователю запрос своим друзьям не из приложения
-                new VirusLike(response).sendFacebookRequest(
+                new VirusLike((ApiResponse) response).sendFacebookRequest(
                         "Banner",
                         mFragment.getActivity(),
                         new VirusLike.VirusLikeDialogListener(mFragment.getActivity()) {
@@ -610,7 +614,12 @@ public class BannerBlock {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            protected VirusLike parseResponse(ApiResponse response) {
+                return new VirusLike(response);
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
                 EasyTracker.getTracker().trackEvent("VirusLike", "Fail", "Banner", 0L);
 
                 if (response.isCodeEqual(ApiResponse.CODE_VIRUS_LIKES_ALREADY_RECEIVED)) {
@@ -621,7 +630,7 @@ public class BannerBlock {
             }
 
             @Override
-            public void always(ApiResponse response) {
+            public void always(IApiResponse response) {
                 super.always(response);
                 try {
                     dialog.dismiss();
@@ -651,8 +660,7 @@ public class BannerBlock {
         String name = null;
         Pattern pattern = Pattern.compile(".*\\/(.*)\\..+$");
         Matcher matcher = pattern.matcher(bannerUrl);
-        matcher.find();
-        if (matcher.matches()) {
+        if (matcher.find() && matcher.matches()) {
             name = matcher.group(1);
         }
         return (name == null || name.length() < 1) ? bannerUrl : name;

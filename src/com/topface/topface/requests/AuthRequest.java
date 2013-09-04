@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import org.json.JSONException;
@@ -51,7 +50,7 @@ public class AuthRequest extends ApiRequest {
         if (TextUtils.equals(platform, AuthToken.SN_TOPFACE)) {
             login = authToken.getLogin();
             password = authToken.getPassword();
-        } else if (TextUtils.equals(platform, AuthToken.SN_ODNOKLASSNIKI)){
+        } else if (TextUtils.equals(platform, AuthToken.SN_ODNOKLASSNIKI)) {
             sid = authToken.getUserId();
             token = authToken.getTokenKey();
             refresh = mAuthToken.getmExpiresIn();
@@ -123,9 +122,10 @@ public class AuthRequest extends ApiRequest {
     }
 
     @Override
-    public void setSsid(String ssid) {
+    public boolean setSsid(String ssid) {
         //В AuthRequest у нас нет ssid
         this.ssid = null;
+        return true;
     }
 
     @Override

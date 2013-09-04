@@ -25,19 +25,19 @@ public interface IApiRequest {
 
     public ApiHandler getHandler();
 
-    void setSsid(String ssid);
+    boolean setSsid(String ssid);
 
     public String getId();
 
-    public int sendRequest() throws Exception;
+    public IApiResponse sendRequestAndReadResponse() throws Exception;
 
     public void closeConnection();
 
-    public String readRequestResult() throws IOException;
+    public IApiResponse readResponse() throws IOException;
 
     IApiResponse constructApiResponse(int code, String message);
 
-    IApiResponse constructApiResponse(String response);
-
     boolean isNeedAuth();
+
+    public void sendHandlerMessage(IApiResponse response);
 }

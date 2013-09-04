@@ -22,11 +22,11 @@ abstract public class DataApiHandler<T> extends ApiHandler {
     }
 
     @Override
-    public void success(ApiResponse response) {
+    public void success(IApiResponse response) {
         success(mData, response);
     }
 
-    protected abstract void success(T data, ApiResponse response);
+    protected abstract void success(T data, IApiResponse response);
 
     protected abstract T parseResponse(ApiResponse response);
 

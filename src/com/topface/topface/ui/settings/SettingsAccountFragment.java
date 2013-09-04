@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.topface.topface.R;
-import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.DeleteAccountDialog;
@@ -24,7 +24,7 @@ import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-public class SettingsAccountFragment extends BaseFragment implements OnClickListener{
+public class SettingsAccountFragment extends BaseFragment implements OnClickListener {
 
     private LockerView lockerView;
 
@@ -69,16 +69,15 @@ public class SettingsAccountFragment extends BaseFragment implements OnClickList
     }
 
 
-
     private void showExitPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(R.string.settings_logout_msg)
                 .setNegativeButton(R.string.general_no, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        })
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
                 .setPositiveButton(R.string.general_yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -86,17 +85,17 @@ public class SettingsAccountFragment extends BaseFragment implements OnClickList
                         lockerView.setVisibility(View.VISIBLE);
                         logoutRequest.callback(new ApiHandler() {
                             @Override
-                            public void success(ApiResponse response) {
+                            public void success(IApiResponse response) {
                                 AuthorizationManager.logout(getActivity());
                             }
 
                             @Override
-                            public void fail(int codeError, ApiResponse response) {
+                            public void fail(int codeError, IApiResponse response) {
                                 FragmentActivity activity = getActivity();
                                 if (activity != null) {
                                     lockerView.setVisibility(View.GONE);
                                     Toast.makeText(activity, R.string.general_server_error, Toast.LENGTH_LONG).show();
-                                    AuthorizationManager.showRetryLogoutDialog(activity,logoutRequest);
+                                    AuthorizationManager.showRetryLogoutDialog(activity, logoutRequest);
                                 }
                             }
                         }).exec();
@@ -119,11 +118,11 @@ public class SettingsAccountFragment extends BaseFragment implements OnClickList
     }
 
     private void deleteAccountDialog() {
-            DeleteAccountDialog newFragment = DeleteAccountDialog.newInstance();
-            try {
-                newFragment.show(getActivity().getSupportFragmentManager(), DeleteAccountDialog.TAG);
-            } catch (Exception e) {
-                Debug.error(e);
-            }
+        DeleteAccountDialog newFragment = DeleteAccountDialog.newInstance();
+        try {
+            newFragment.show(getActivity().getSupportFragmentManager(), DeleteAccountDialog.TAG);
+        } catch (Exception e) {
+            Debug.error(e);
+        }
     }
 }

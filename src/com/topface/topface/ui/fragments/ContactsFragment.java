@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
-import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.InviteContactsRequest;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -25,7 +25,7 @@ import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 
-public class ContactsFragment extends BaseFragment{
+public class ContactsFragment extends BaseFragment {
     public static final String CONTACTS = "contacts";
     ListView contactsView;
     private Button addButton;
@@ -64,9 +64,9 @@ public class ContactsFragment extends BaseFragment{
         actionBar.showCheckBox(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CheckBox checkBox = (CheckBox)v;
-                ((ContactsListAdapter)contactsView.getAdapter()).setAllDataChecked(checkBox.isChecked());
-                ((ContactsListAdapter)contactsView.getAdapter()).changeButtonState();
+                CheckBox checkBox = (CheckBox) v;
+                ((ContactsListAdapter) contactsView.getAdapter()).setAllDataChecked(checkBox.isChecked());
+                ((ContactsListAdapter) contactsView.getAdapter()).changeButtonState();
             }
         });
 
@@ -75,7 +75,7 @@ public class ContactsFragment extends BaseFragment{
         if (getArguments() != null) {
             data = getArguments().getParcelableArrayList(CONTACTS);
         } else {
-            ((BaseFragmentActivity)getActivity()).close(this, false);
+            ((BaseFragmentActivity) getActivity()).close(this, false);
         }
 
         addButton = (Button) root.findViewById(R.id.addButton);
@@ -91,7 +91,7 @@ public class ContactsFragment extends BaseFragment{
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    ((ContactsListAdapter)contactsView.getAdapter()).getFilter().filter(s);
+                    ((ContactsListAdapter) contactsView.getAdapter()).getFilter().filter(s);
                 }
 
                 @Override
@@ -106,7 +106,7 @@ public class ContactsFragment extends BaseFragment{
                 if (!emailView.getText().toString().equals("")) {
                     ContactsProvider.Contact contact = new ContactsProvider.Contact(emailView.getText().toString(), emailView.getText().toString(), true);
                     ((ContactsListAdapter) contactsView.getAdapter()).addFirst(contact);
-                    ((ContactsListAdapter)contactsView.getAdapter()).changeButtonState();
+                    ((ContactsListAdapter) contactsView.getAdapter()).changeButtonState();
                     emailView.setText("");
                 }
             }
@@ -135,42 +135,42 @@ public class ContactsFragment extends BaseFragment{
     private void sendInvitesRequest() {
         if (contactsView.getAdapter() != null) {
             locker.setVisibility(View.VISIBLE);
-            final ArrayList<ContactsProvider.Contact> contacts = ((ContactsListAdapter)contactsView.getAdapter()).getOnlyChecked();
-            InviteContactsRequest request = new InviteContactsRequest(getActivity(),contacts);
+            final ArrayList<ContactsProvider.Contact> contacts = ((ContactsListAdapter) contactsView.getAdapter()).getOnlyChecked();
+            InviteContactsRequest request = new InviteContactsRequest(getActivity(), contacts);
             request.callback(new ApiHandler() {
                 @Override
-                public void success(ApiResponse response) {
-                    boolean isPremium = response.jsonResult.optBoolean("premium");
+                public void success(IApiResponse response) {
+                    boolean isPremium = response.getJsonResult().optBoolean("premium");
                     if (isPremium) {
-                        EasyTracker.getTracker().trackEvent("InvitesPopup", "SuccessWithChecked", "premiumTrue", (long)contacts.size());
-                        EasyTracker.getTracker().trackEvent("InvitesPopup", "PremiumReceived", "", (long)CacheProfile.getOptions().premium_period);
+                        EasyTracker.getTracker().trackEvent("InvitesPopup", "SuccessWithChecked", "premiumTrue", (long) contacts.size());
+                        EasyTracker.getTracker().trackEvent("InvitesPopup", "PremiumReceived", "", (long) CacheProfile.getOptions().premium_period);
                         if (getActivity() != null) {
 
-                            Toast.makeText(getActivity(), Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period), 1500).show();
+                            Toast.makeText(getActivity(), Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period), Toast.LENGTH_SHORT).show();
                             CacheProfile.premium = true;
                             CacheProfile.canInvite = false;
                             LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
                             getActivity().finish();
                         }
                     } else {
-                        EasyTracker.getTracker().trackEvent("InvitesPopup", "SuccessWithChecked", "premiumFalse", (long)contacts.size());
-                        Toast.makeText(getActivity(), getString(R.string.invalid_contacts), 2000).show();
-                        if(contactsVip != null) {
+                        EasyTracker.getTracker().trackEvent("InvitesPopup", "SuccessWithChecked", "premiumFalse", (long) contacts.size());
+                        Toast.makeText(getActivity(), getString(R.string.invalid_contacts), Toast.LENGTH_LONG).show();
+                        if (contactsVip != null) {
                             contactsVip.setEnabled(true);
                         }
                     }
                 }
 
                 @Override
-                public void fail(int codeError, ApiResponse response) {
+                public void fail(int codeError, IApiResponse response) {
                     EasyTracker.getTracker().trackEvent("InvitesPopup", "RequestFail", Integer.toString(codeError), 0L);
-                    if(contactsVip != null) {
+                    if (contactsVip != null) {
                         contactsVip.setEnabled(true);
                     }
                 }
 
                 @Override
-                public void always(ApiResponse response) {
+                public void always(IApiResponse response) {
                     super.always(response);
                     if (isAdded()) {
                         locker.setVisibility(View.GONE);
@@ -267,8 +267,8 @@ public class ContactsFragment extends BaseFragment{
         public int getCheckedCount() {
             if (wasChanges) {
                 checkedCount = 0;
-                for(ContactsProvider.Contact contact : data) {
-                    if(contact.isChecked()) {
+                for (ContactsProvider.Contact contact : data) {
+                    if (contact.isChecked()) {
                         checkedCount++;
                     }
                 }
@@ -284,7 +284,7 @@ public class ContactsFragment extends BaseFragment{
         public ArrayList<ContactsProvider.Contact> getOnlyChecked() {
             ArrayList<ContactsProvider.Contact> checked = new ArrayList<ContactsProvider.Contact>();
             for (ContactsProvider.Contact contact : data) {
-                if(contact.isChecked()) {
+                if (contact.isChecked()) {
                     checked.add(contact);
                 }
             }
@@ -296,13 +296,13 @@ public class ContactsFragment extends BaseFragment{
             return filter;
         }
 
-        public class ContactsFilter extends Filter{
+        public class ContactsFilter extends Filter {
 
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults Result = new FilterResults();
                 // if constraint is empty return the original names
-                if(constraint.length() == 0 ){
+                if (constraint.length() == 0) {
                     Result.values = data;
                     Result.count = data.size();
                     return Result;
@@ -326,7 +326,7 @@ public class ContactsFragment extends BaseFragment{
 
             @SuppressWarnings("unchecked")
             @Override
-            protected void publishResults(CharSequence constraint,FilterResults results) {
+            protected void publishResults(CharSequence constraint, FilterResults results) {
                 filteredContacts = (ArrayList<ContactsProvider.Contact>) results.values;
                 notifyDataSetChanged();
             }

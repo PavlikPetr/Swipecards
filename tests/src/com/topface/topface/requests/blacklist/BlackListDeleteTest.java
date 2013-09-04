@@ -6,9 +6,9 @@ import android.text.TextUtils;
 import com.topface.topface.data.BlackListItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.AbstractThreadTest;
-import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BlackListDeleteRequest;
 import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.Debug;
 
@@ -37,7 +37,7 @@ public class BlackListDeleteTest extends AbstractThreadTest {
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) {
+                    public void fail(int codeError, IApiResponse response) {
                         assertTrue("ApiResponse error " + response, false);
                         stopTest("testBlackListDeleteRequestExec");
                     }
@@ -55,7 +55,7 @@ public class BlackListDeleteTest extends AbstractThreadTest {
                 new BlackListDeleteRequest(users, getInstrumentation().getContext())
                         .callback(new ApiHandler() {
                             @Override
-                            public void success(ApiResponse response) {
+                            public void success(IApiResponse response) {
                                 //Удалось ли удалить элемент
                                 assertTrue("BlackListDelete not completed", response.isCompleted());
                                 //Проверяем что элемент удален
@@ -70,7 +70,7 @@ public class BlackListDeleteTest extends AbstractThreadTest {
                             }
 
                             @Override
-                            public void fail(int codeError, ApiResponse response) {
+                            public void fail(int codeError, IApiResponse response) {
                                 assertTrue("BlackListDelete error " + response, false);
                                 stopTest("testBlackListDeleteRequestExec");
                             }
@@ -99,7 +99,7 @@ public class BlackListDeleteTest extends AbstractThreadTest {
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) {
+                    public void fail(int codeError, IApiResponse response) {
                         assertTrue("ApiResponse error " + response, false);
                         stopTest("testBlackListDeleteRequestExec");
                     }

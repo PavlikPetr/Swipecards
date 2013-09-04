@@ -15,6 +15,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.History;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.Utils;
@@ -96,7 +97,7 @@ public class QuickMessageFragment extends BaseFragment implements View.OnClickLi
         registerRequest(messageRequest);
         messageRequest.callback(new DataApiHandler<History>() {
             @Override
-            protected void success(History data, ApiResponse response) {
+            protected void success(History data, IApiResponse response) {
                 showMessage(data.text);
                 if (mListener != null) {
                     mListener.onMessageSent(data.text, QuickMessageFragment.this);
@@ -109,7 +110,7 @@ public class QuickMessageFragment extends BaseFragment implements View.OnClickLi
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(int codeError, IApiResponse response) {
                 hideLoader();
                 //Возвращаем текст
                 if (isAdded()) {

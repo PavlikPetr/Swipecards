@@ -32,7 +32,6 @@ public abstract class ApiRequest implements IApiRequest {
      * Mime type наших запросов к серверу
      */
     public static final String CONTENT_TYPE = "application/json";
-    public static final String APP_IS_OFFILINE = "App is offiline";
 
     public String ssid;
     public ApiHandler handler;
@@ -71,7 +70,7 @@ public abstract class ApiRequest implements IApiRequest {
             RetryDialog retryDialog = new RetryDialog(context, this);
             if (handler != null) {
                 Message msg = new Message();
-                msg.obj = new ApiResponse(ApiResponse.ERRORS_PROCCESED, APP_IS_OFFILINE);
+                msg.obj = new ApiResponse(ApiResponse.ERRORS_PROCCESED, "App is offiline");
                 handler.sendMessage(msg);
             }
             try {
@@ -110,11 +109,11 @@ public abstract class ApiRequest implements IApiRequest {
         if (handler == null) {
             handler = new ApiHandler() {
                 @Override
-                public void success(ApiResponse response) {
+                public void success(IApiResponse response) {
                 }
 
                 @Override
-                public void fail(int codeError, ApiResponse response) {
+                public void fail(int codeError, IApiResponse response) {
                 }
             };
             handler.setContext(context);
@@ -152,6 +151,9 @@ public abstract class ApiRequest implements IApiRequest {
 
     @Override
     public String toPostData() {
+        //Непосредственно перед отправкой запроса устанавливаем новый SSID
+        setSsid(Ssid.get());
+
         if (mPostData == null) {
             mPostData = getRequest().toString();
         }
@@ -169,7 +171,7 @@ public abstract class ApiRequest implements IApiRequest {
     }
 
     @Override
-    public void setSsid(String ssid) {
+    public boolean setSsid(String ssid) {
         if (isNeedAuth()) {
             //Если SSID изменился, то сбрасываем кэш данных запроса
             if (!TextUtils.equals(ssid, this.ssid)) {
@@ -177,6 +179,7 @@ public abstract class ApiRequest implements IApiRequest {
             }
             this.ssid = ssid;
         }
+        return true;
     }
 
     @Override
@@ -252,24 +255,32 @@ public abstract class ApiRequest implements IApiRequest {
     }
 
     @Override
-    final public int sendRequest() throws Exception {
+    final public IApiResponse sendRequestAndReadResponse() throws Exception {
+        int responseCode = -1;
+        IApiResponse response;
         mApiUrl = getApiUrl();
         HttpURLConnection connection = getConnection();
         if (connection != null) {
-            //Непосредственно перед отправкой запроса устанавливаем новый SSID
-            setSsid(Ssid.get());
             //Непосредственно пишим данные в подключение
             if (writeData(connection)) {
                 //Возвращаем HTTP статус ответа
-                return getResponseCode(connection);
-            } else {
-                //Если не удалось записать данные, то пишем ошибку запроса
-                return -1;
+                responseCode = getResponseCode(connection);
             }
         } else {
-            Debug.error("CM: getConnection() return null");
-            return -1;
+            Debug.error("ApiResponse: getConnection() return null");
         }
+
+
+        //Проверяем ответ
+        if (HttpUtils.isCorrectResponseCode(responseCode)) {
+            //Если код ответа верный, то читаем данные из потока и создаем IApiResponse
+            response = readResponse();
+        } else {
+            //Если не верный, то конструируем соответсвующий ответ
+            response = constructApiResponse(IApiResponse.WRONG_RESPONSE, "Wrong http response code HTTP/" + responseCode);
+        }
+
+        return response;
 
     }
 
@@ -309,13 +320,20 @@ public abstract class ApiRequest implements IApiRequest {
     }
 
     @Override
-    public String readRequestResult() throws IOException {
-        String result = null;
+    public IApiResponse readResponse() throws IOException {
+        String rawResponse = null;
+        IApiResponse response;
         if (mURLConnection != null) {
-            result = HttpUtils.readStringFromConnection(mURLConnection);
+            rawResponse = HttpUtils.readStringFromConnection(mURLConnection);
             closeConnection();
         }
-        return result;
+        //Если ответ не пустой, то создаем объект ответа
+        if (!TextUtils.isEmpty(rawResponse)) {
+            response = new ApiResponse(rawResponse);
+        } else {
+            response = constructApiResponse(IApiResponse.NULL_RESPONSE, "Null response");
+        }
+        return response;
     }
 
     /**
@@ -337,11 +355,6 @@ public abstract class ApiRequest implements IApiRequest {
     }
 
     @Override
-    public IApiResponse constructApiResponse(String response) {
-        return new ApiResponse(response);
-    }
-
-    @Override
     public IApiResponse constructApiResponse(int code, String message) {
         return new ApiResponse(code, message);
     }
@@ -354,4 +367,13 @@ public abstract class ApiRequest implements IApiRequest {
     protected void setNeedCounters(boolean value) {
         isNeedCounters = value;
     }
+
+    public void sendHandlerMessage(IApiResponse apiResponse) {
+        if (handler != null) {
+            Message msg = new Message();
+            msg.obj = apiResponse;
+            handler.sendMessage(msg);
+        }
+    }
+
 }

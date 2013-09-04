@@ -378,7 +378,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         DeleteFeedRequest dr = new DeleteFeedRequest(item.id, getActivity());
         dr.callback(new ApiHandler() {
             @Override
-            public void success(ApiResponse response) {
+            public void success(IApiResponse response) {
                 if (isAdded()) {
                     int invertedPosition = mAdapter.getPosition(position);
                     if (mAdapter.getFirstItemId().equals(mAdapter.getData().get(invertedPosition).id)) {
@@ -390,7 +390,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(int codeError, IApiResponse response) {
                 Debug.log(response.toString());
                 Utils.showErrorMessage(App.getContext());
             }
@@ -438,7 +438,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
         historyRequest.callback(new DataApiHandler<HistoryListData>() {
             @Override
-            protected void success(HistoryListData data, ApiResponse response) {
+            protected void success(HistoryListData data, IApiResponse response) {
                 if (itemId != null) {
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID, itemId));
                     itemId = null;
@@ -484,7 +484,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(int codeError, IApiResponse response) {
                 showLoadingBackground();
                 FeedList<History> data = mAdapter != null ? mAdapter.getData() : null;
                 if (mLockScreen != null && (data == null || data.isEmpty())) {
@@ -495,7 +495,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
 
             @Override
-            public void always(ApiResponse response) {
+            public void always(IApiResponse response) {
                 super.always(response);
 
                 showLoadingBackground();
@@ -690,7 +690,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         }
                         request.callback(new VipApiHandler() {
                             @Override
-                            public void success(ApiResponse response) {
+                            public void success(IApiResponse response) {
                                 super.success(response);
                                 if (isAdded()) {
                                     loader.setVisibility(View.INVISIBLE);
@@ -705,7 +705,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                             }
 
                             @Override
-                            public void fail(int codeError, ApiResponse response) {
+                            public void fail(int codeError, IApiResponse response) {
                                 super.fail(codeError, response);
                                 if (isAdded()) {
                                     loader.setVisibility(View.INVISIBLE);
@@ -735,7 +735,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
                 request.callback(new SimpleApiHandler() {
                     @Override
-                    public void success(ApiResponse response) {
+                    public void success(IApiResponse response) {
                         super.success(response);
 //                        Toast.makeText(App.getContext(), getString(R.string.general_user_bookmarkadd), 1500).show();
                         if (mUser != null) {
@@ -748,7 +748,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     }
 
                     @Override
-                    public void always(ApiResponse response) {
+                    public void always(IApiResponse response) {
                         super.always(response);
                         if (isAdded()) {
                             loader.setVisibility(View.INVISIBLE);
@@ -774,7 +774,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             deleteBlackListRequest.callback(new VipApiHandler() {
 
                 @Override
-                public void success(ApiResponse response) {
+                public void success(IApiResponse response) {
                     super.success(response);
                     isInBlackList = false;
                     if (mAddToBlackList != null) {
@@ -783,7 +783,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
 
                 @Override
-                public void always(ApiResponse response) {
+                public void always(IApiResponse response) {
                     super.always(response);
                     if (mAddToBlackList != null) {
                         mAddToBlackList.setEnabled(true);
@@ -799,7 +799,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             mAddToBlackList.setEnabled(false);
             blackListRequest.callback(new VipApiHandler() {
                 @Override
-                public void success(ApiResponse response) {
+                public void success(IApiResponse response) {
                     super.success(response);
                     isInBlackList = true;
                     if (mAddToBlackList != null) {
@@ -808,7 +808,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
 
                 @Override
-                public void always(ApiResponse response) {
+                public void always(IApiResponse response) {
                     super.always(response);
                     if (mAddToBlackList != null) {
                         mAddToBlackList.setEnabled(true);
@@ -913,7 +913,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         coordRequest.address = geo.getAddress();
         coordRequest.callback(new DataApiHandler<History>() {
             @Override
-            protected void success(History data, ApiResponse response) {
+            protected void success(History data, IApiResponse response) {
                 data.target = FeedDialog.OUTPUT_USER_MESSAGE;
                 if (mAdapter != null) {
                     mAdapter.replaceMessage(loaderItem, data, mListView.getRefreshableView());
@@ -926,7 +926,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(int codeError, IApiResponse response) {
                 Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                 mAdapter.showRetrySendMessage(loaderItem, coordRequest);
             }
@@ -951,7 +951,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
         sendGift.callback(new DataApiHandler<SendGiftAnswer>() {
             @Override
-            protected void success(SendGiftAnswer data, ApiResponse response) {
+            protected void success(SendGiftAnswer data, IApiResponse response) {
                 CacheProfile.likes = data.likes;
                 CacheProfile.money = data.money;
                 Debug.log(getActivity(), "likes:" + data.likes + " money:" + data.money);
@@ -967,8 +967,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
-                if (response.code == ApiResponse.PAYMENT) {
+            public void fail(int codeError, IApiResponse response) {
+                if (response.isCodeEqual(ApiResponse.PAYMENT)) {
                     mAdapter.removeItem(loaderItem);
                     Intent intent = ContainerActivity.getBuyingIntent("Chat");
                     intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
@@ -980,7 +980,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
 
             @Override
-            public void always(ApiResponse response) {
+            public void always(IApiResponse response) {
                 super.always(response);
                 showLoadingBackground();
             }
@@ -1005,7 +1005,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
         messageRequest.callback(new DataApiHandler<History>() {
             @Override
-            protected void success(History data, ApiResponse response) {
+            protected void success(History data, IApiResponse response) {
                 if (mAdapter != null) {
                     mAdapter.replaceMessage(loaderItem, data, mListView.getRefreshableView());
                 }
@@ -1017,7 +1017,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(int codeError, IApiResponse response) {
                 if (mAdapter != null) {
                     Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
                     mAdapter.showRetrySendMessage(loaderItem, messageRequest);
@@ -1049,7 +1049,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
                 coordRequest.callback(new DataApiHandler<History>() {
                     @Override
-                    protected void success(History data, ApiResponse response) {
+                    protected void success(History data, IApiResponse response) {
                         toggleAddPanel();
                         if (mAdapter != null) {
                             mAdapter.replaceMessage(loaderItem, data, mListView.getRefreshableView());
@@ -1062,7 +1062,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) {
+                    public void fail(int codeError, IApiResponse response) {
                         Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                         mAdapter.showRetrySendMessage(loaderItem, coordRequest);
                     }

@@ -16,10 +16,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.PhotoDeleteRequest;
-import com.topface.topface.requests.PhotoMainRequest;
-import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.ui.profile.ProfilePhotoGridAdapter;
@@ -140,7 +137,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                 deleteRequest.callback(new ApiHandler() {
 
                     @Override
-                    public void success(ApiResponse response) {
+                    public void success(IApiResponse response) {
                         CacheProfile.photos.removeAll(mDeleted);
                         mDeleted.clear();
                         LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
@@ -149,14 +146,14 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) {
+                    public void fail(int codeError, IApiResponse response) {
 //                        finishOperations(handler);
                         Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_LONG).show();
                     }
 
 
                     @Override
-                    public void always(ApiResponse response) {
+                    public void always(IApiResponse response) {
                         super.always(response);
                         if (mLoadingLocker != null) {
                             mLoadingLocker.setVisibility(View.GONE);
@@ -172,7 +169,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                 setAsPhotoMainRequest.callback(new ApiHandler() {
 
                     @Override
-                    public void success(ApiResponse response) {
+                    public void success(IApiResponse response) {
                         CacheProfile.photo = mPhotoLinks.getByPhotoId(mLastSelectedAsMainId);
                         mSelectedAsMainId = mLastSelectedAsMainId;
                         LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
@@ -180,7 +177,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) {
+                    public void fail(int codeError, IApiResponse response) {
                         if (getActivity() != null) {
                             getActivity().setResult(Activity.RESULT_CANCELED);
                             //                        finishOperations(handler);
@@ -200,7 +197,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     }
 
                     @Override
-                    public void always(ApiResponse response) {
+                    public void always(IApiResponse response) {
                         super.always(response);
                         if (mLoadingLocker != null) {
                             mLoadingLocker.setVisibility(View.GONE);
