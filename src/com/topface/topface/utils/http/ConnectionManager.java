@@ -6,9 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Message;
 import android.preference.PreferenceManager;
-import android.text.TextUtils;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.RetryDialog;
@@ -17,7 +15,6 @@ import com.topface.topface.data.Auth;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.IApiRequest;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BanActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.Debug;
@@ -169,7 +166,8 @@ public class ConnectionManager {
             needResend = resendRequest(apiRequest, apiResponse);
         } else if (!apiRequest.isCanceled()) {
             //Если запрос не отменен и мы обработали все ошибки, то отправляем callback
-            needResend = sendHandlerMessage(apiRequest, apiResponse);
+            apiRequest.sendHandlerMessage(apiResponse);
+            needResend = false;
         }
         return needResend;
     }
@@ -205,17 +203,6 @@ public class ConnectionManager {
         return result;
     }
 
-    private boolean sendHandlerMessage(IApiRequest apiRequest, IApiResponse apiResponse) {
-        ApiHandler handler = apiRequest.getHandler();
-        if (handler != null) {
-            Message msg = new Message();
-            msg.obj = apiResponse;
-            handler.sendMessage(msg);
-        }
-
-        return true;
-    }
-
     /**
      * Повторно отправляет запрос, если это возможно
      *
@@ -231,7 +218,7 @@ public class ConnectionManager {
             apiRequest.resend();
         } else if (!apiRequest.isCanceled()) {
             //Если не удалось, то просто отправляем сообщение об ошибке
-            sendHandlerMessage(apiRequest, apiResponse);
+            apiRequest.sendHandlerMessage(apiResponse);
         }
         return needResend;
     }
@@ -320,20 +307,8 @@ public class ConnectionManager {
         String rawResponse = null;
 
         try {
-            int responseCode = apiRequest.sendRequest();
-
-            //Проверяем ответ
-            if (HttpUtils.isCorrectResponseCode(responseCode)) {
-                //Если код ответа верный, то читаем данные из потока и создаем IApiResponse
-                rawResponse = apiRequest.readRequestResult();
-                //Если ответ не пустой, то создаем объект ответа
-                if (!TextUtils.isEmpty(rawResponse)) {
-                    response = apiRequest.constructApiResponse(rawResponse);
-                }
-            } else {
-                //Если не верный, то конструируем соответсвующий ответ
-                response = apiRequest.constructApiResponse(IApiResponse.WRONG_RESPONSE, "Wrong http response code HTTP/" + responseCode);
-            }
+            //Отправляем запрос и сразу читаем ответ
+            response = apiRequest.sendRequestAndReadResponse();
         } catch (UnknownHostException e) {
             Debug.error(TAG + "::Exception", e);
             //Это ошибка соединение, такие запросы мы будем переотправлять

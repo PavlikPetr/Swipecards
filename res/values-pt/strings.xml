@@ -511,6 +511,9 @@
     <string name="settings_feedback_transaction_number">Número de encomenda</string>
     <string name="settings_feedback_transaction_link">onde encontrar o número de encomenda?</string>
     <string name="general_logout_error">Infelizmente não foi possível sair de conta</string>
+    <string name="auth_btn_ok">Entrar através de Condiscípulos</string>
+    <string name="other_auth">Entrar através de outros serviços</string>
     <string name="settings_feedback_transaction_number_hint">Digite o número de ordem</string>
     <string name="youve_earned">Você ganhou %s</string>
+    <string name="like_topface">Você gosta de Topface?</string>
 </resources>

@@ -20,8 +20,8 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
-import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.FeedbackReport;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.edit.AbstractEditFragment;
 import com.topface.topface.ui.views.LockerView;
@@ -104,7 +104,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         //о том, что лучше писать нам по русски или английски, поэтому проверяем тут локаль
         TextView incorrectLocaleTv = (TextView) root.findViewById(R.id.tvLocale);
         String language = Locale.getDefault().getLanguage();
-        if(language.equals("en") || language.equals("ru")) {
+        if (language.equals("en") || language.equals("ru")) {
             incorrectLocaleTv.setVisibility(View.GONE);
         }
 
@@ -243,7 +243,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             feedbackRequest.callback(new ApiHandler() {
 
                 @Override
-                public void success(ApiResponse response) {
+                public void success(IApiResponse response) {
                     if (isAdded()) {
                         mReport.body = Static.EMPTY;
                         finishRequestSend();
@@ -257,7 +257,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
                 }
 
                 @Override
-                public void fail(int codeError, ApiResponse response) {
+                public void fail(int codeError, IApiResponse response) {
                     finishRequestSend();
                     Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
                 }

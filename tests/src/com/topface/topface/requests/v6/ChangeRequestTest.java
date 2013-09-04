@@ -3,8 +3,8 @@ package com.topface.topface.requests.v6;
 
 import android.content.Context;
 import com.topface.topface.requests.AbstractThreadTest;
-import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ChangeLoginRequest;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 
 public class ChangeRequestTest extends AbstractThreadTest {
@@ -20,13 +20,13 @@ public class ChangeRequestTest extends AbstractThreadTest {
                         EMAIL_TEST);
                 request.callback(new ApiHandler() {
                     @Override
-                    public void success(ApiResponse response) {
-                        assertEquals(EMAIL_TEST, response.jsonResult.optString("login"));
+                    public void success(IApiResponse response) {
+                        assertEquals(EMAIL_TEST, response.getJsonResult().optString("login"));
                         stopTest("testChangeRequest");
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) {
+                    public void fail(int codeError, IApiResponse response) {
 
                         assertTrue("Register error: " + codeError, false);
                         stopTest("testChangeRequest");

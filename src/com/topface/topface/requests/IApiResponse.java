@@ -92,4 +92,6 @@ public interface IApiResponse {
     public JSONObject getJsonResult();
 
     public int getResultCode();
+
+    public boolean isCompleted();
 }

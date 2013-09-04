@@ -3,7 +3,6 @@ package com.topface.topface.ui.views;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -103,13 +102,15 @@ public class ImageViewRemote extends ImageView {
         );
 
 
-        setRemoteSrc(
-                values.getString(
-                        R.styleable.ImageViewRemote_remoteSrc
-                )
-        );
+        if (!isInEditMode()) {
+            setRemoteSrc(
+                    values.getString(
+                            R.styleable.ImageViewRemote_remoteSrc
+                    )
+            );
+        }
         mMaxHeight = values.getDimensionPixelSize(R.styleable.ImageViewRemote_android_maxHeight, 0);
-        mMaxWidth = values.getDimensionPixelSize(R.styleable.ImageViewRemote_android_maxWidth,0);
+        mMaxWidth = values.getDimensionPixelSize(R.styleable.ImageViewRemote_android_maxWidth, 0);
     }
 
     private void setPostProcessor(int postProcessorId, float cornerRadius, int maskId) {

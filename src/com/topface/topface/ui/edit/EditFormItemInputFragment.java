@@ -19,7 +19,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiRequest;
-import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
@@ -137,7 +137,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
                     request.callback(new ApiHandler() {
 
                         @Override
-                        public void success(ApiResponse response) {
+                        public void success(IApiResponse response) {
                             item.value = TextUtils.isEmpty(mInputData) ? null : mInputData;
                             mFormInfo.fillFormItem(item);
                             getActivity().setResult(Activity.RESULT_OK);
@@ -148,7 +148,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
                         }
 
                         @Override
-                        public void fail(int codeError, ApiResponse response) {
+                        public void fail(int codeError, IApiResponse response) {
                             getActivity().setResult(Activity.RESULT_CANCELED);
                             finishRequestSend();
                             if (handler != null) handler.sendEmptyMessage(0);

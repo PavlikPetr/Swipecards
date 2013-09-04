@@ -16,7 +16,6 @@ import com.topface.topface.App;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Verify;
 import com.topface.topface.requests.*;
-import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.CacheProfile;
 
 /**
@@ -173,12 +172,12 @@ public class ResponseHandler {
         final VerifyRequest verifyRequest = new VerifyRequest(context);
         verifyRequest.data = data;
         verifyRequest.signature = signature;
-        verifyRequest.callback(new ApiHandler() {
+        verifyRequest.callback(new DataApiHandler<Verify>() {
+
             @Override
-            public void success(ApiResponse response) {
+            protected void success(Verify verify, IApiResponse response) {
                 //Удаляем запрос из очереди запросов
                 GooglePlayV2Queue.getInstance(context).deleteQueueItem(queueId);
-                Verify verify = Verify.parse(response);
                 CacheProfile.likes = verify.likes;
                 CacheProfile.money = verify.money;
                 CacheProfile.premium = verify.premium;
@@ -190,7 +189,12 @@ public class ResponseHandler {
             }
 
             @Override
-            public void fail(int codeError, final ApiResponse response) {
+            protected Verify parseResponse(ApiResponse response) {
+                return Verify.parse(response);
+            }
+
+            @Override
+            public void fail(int codeError, final IApiResponse response) {
                 //Если сервер определил как не верный или поддельный,
                 //или мы не знаем такой продукт, удаляем его из очереди
                 if (BillingUtils.isExceptedBillingError(codeError)) {
@@ -203,7 +207,7 @@ public class ResponseHandler {
             }
 
             @Override
-            public void always(ApiResponse response) {
+            public void always(IApiResponse response) {
                 super.always(response);
                 postDelayed(new Runnable() {
                     @Override
@@ -220,7 +224,7 @@ public class ResponseHandler {
         request.callback(new DataApiHandler<Options>() {
 
             @Override
-            protected void success(Options data, ApiResponse response) {
+            protected void success(Options data, IApiResponse response) {
                 LocalBroadcastManager.getInstance(getContext()).sendBroadcast(
                         new Intent(ProfileRequest.PROFILE_UPDATE_ACTION)
                 );
@@ -232,7 +236,7 @@ public class ResponseHandler {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(int codeError, IApiResponse response) {
 
             }
         }).exec();

@@ -1,7 +1,10 @@
 package com.topface.topface.ui.fragments.feed;
 
 import android.app.Activity;
-import android.content.*;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -113,7 +116,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         initViewStubForEmptyFeed(root);
     }
 
-    protected void initViewStubForEmptyFeed(View root){
+    protected void initViewStubForEmptyFeed(View root) {
         mEmptyScreenStub = (ViewStub) root.findViewById(R.id.stubForEmptyFeed);
         try {
             mEmptyScreenStub.setLayoutResource(getEmptyFeedLayout());
@@ -256,6 +259,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     protected OnItemClickListener getOnItemClickListener() {
         return new OnItemClickListener() {
+            @SuppressWarnings("unchecked")
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long itemPosition) {
                 if (getListAdapter().isMultiSelectionMode()) {
@@ -288,7 +292,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, final long itemPosition) {
                 if (isDeletable) {
-                    ((ActionBarActivity)getActivity()).startSupportActionMode(mActionActivityCallback);
+                    ((ActionBarActivity) getActivity()).startSupportActionMode(mActionActivityCallback);
                     getListAdapter().startMultiSelection(getMultiSelectionLimit());
                     getListAdapter().onSelection((int) itemPosition);
                     return true;
@@ -348,7 +352,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     result = false;
             }
             if (result) {
-                if(mActionMode != null) mActionMode.finish();
+                if (mActionMode != null) mActionMode.finish();
             }
 
             return result;
@@ -372,14 +376,14 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         new BlackListDeleteRequest(usersIds, getActivity())
                 .callback(new VipApiHandler() {
                     @Override
-                    public void success(ApiResponse response) {
+                    public void success(IApiResponse response) {
                         if (isAdded()) {
                             getListAdapter().removeItems(items);
                         }
                     }
 
                     @Override
-                    public void always(ApiResponse response) {
+                    public void always(IApiResponse response) {
                         if (isAdded()) {
                             if (mLockView != null) {
                                 mLockView.setVisibility(View.GONE);
@@ -394,7 +398,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         new BlackListAddManyRequest(ids, getActivity())
                 .callback(new VipApiHandler() {
                     @Override
-                    public void success(ApiResponse response) {
+                    public void success(IApiResponse response) {
                         if (getListAdapter() != null) {
                             getListAdapter().removeItems(items);
                         }
@@ -407,7 +411,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         FeedDeleteManyRequest dr = new FeedDeleteManyRequest(ids, getActivity());
         dr.callback(new SimpleApiHandler() {
             @Override
-            public void success(ApiResponse response) {
+            public void success(IApiResponse response) {
                 if (isAdded()) {
                     mLockView.setVisibility(View.GONE);
                     getListAdapter().removeItems(items);
@@ -415,7 +419,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
 
             @Override
-            public void always(ApiResponse response) {
+            public void always(IApiResponse response) {
                 super.always(response);
                 if (mLockView != null) {
                     mLockView.setVisibility(View.GONE);
@@ -428,13 +432,13 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         BookmarkDeleteManyRequest request = new BookmarkDeleteManyRequest(getActivity(), usersIds);
         request.callback(new SimpleApiHandler() {
             @Override
-            public void success(ApiResponse response) {
+            public void success(IApiResponse response) {
                 mLockView.setVisibility(View.GONE);
                 getListAdapter().removeItems(items);
             }
 
             @Override
-            public void always(ApiResponse response) {
+            public void always(IApiResponse response) {
                 super.always(response);
                 if (mLockView != null) {
                     mLockView.setVisibility(View.GONE);
@@ -447,13 +451,13 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         new DialogDeleteManyRequest(usersIds, getActivity())
                 .callback(new ApiHandler() {
                     @Override
-                    public void success(ApiResponse response) {
+                    public void success(IApiResponse response) {
                         mLockView.setVisibility(View.GONE);
                         getListAdapter().removeItems(items);
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) {
+                    public void fail(int codeError, IApiResponse response) {
                         Debug.log(response.toString());
                         mLockView.setVisibility(View.GONE);
                         if (codeError != ApiResponse.PREMIUM_ACCESS_ONLY) {
@@ -536,7 +540,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
 
             @Override
-            protected void success(FeedListData<T> data, ApiResponse response) {
+            protected void success(FeedListData<T> data, IApiResponse response) {
                 if (isHistoryLoad) {
                     getListAdapter().addData(data);
                 } else if (isPushUpdating) {
@@ -563,7 +567,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
 
             @Override
-            public void fail(final int codeError, ApiResponse response) {
+            public void fail(final int codeError, IApiResponse response) {
                 Activity activity = getActivity();
                 if (activity != null) {
                     if (isHistoryLoad) {
@@ -690,7 +694,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     protected void onEmptyFeed() {
         ViewStub stub = getEmptyFeedViewStub();
-        if(mInflated == null && stub != null) {
+        if (mInflated == null && stub != null) {
             mInflated = stub.inflate();
             initEmptyFeedView(mInflated);
         }

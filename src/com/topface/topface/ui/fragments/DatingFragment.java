@@ -345,7 +345,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             getSearchRequest().callback(new DataApiHandler<UsersList>() {
 
                 @Override
-                protected void success(UsersList usersList, ApiResponse response) {
+                protected void success(UsersList usersList, IApiResponse response) {
                     UsersList.log("load success. Loaded " + usersList.size() + " users");
                     if (usersList.size() != 0) {
                         mImageSwitcher.setVisibility(View.VISIBLE);
@@ -385,10 +385,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 }
 
                 @Override
-                public void fail(int codeError, ApiResponse response) {
+                public void fail(int codeError, IApiResponse response) {
                     FragmentActivity activity = getActivity();
                     if (activity != null) {
-                        UsersList.log("load error: " + response.message);
+                        UsersList.log("load error: " + response.getErrorMessage());
                         Toast.makeText(activity, App.getContext().getString(R.string.general_data_error),
                                 Toast.LENGTH_SHORT).show();
                         onUpdateFail(isAddition);
@@ -397,7 +397,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 }
 
                 @Override
-                public void always(ApiResponse response) {
+                public void always(IApiResponse response) {
                     super.always(response);
                     mUpdateInProcess = false;
                 }
@@ -674,19 +674,23 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             SkipRateRequest skipRateRequest = new SkipRateRequest(getActivity());
             registerRequest(skipRateRequest);
             skipRateRequest.userid = currentSearch.id;
-            skipRateRequest.callback(new ApiHandler() {
+            skipRateRequest.callback(new DataApiHandler<SkipRate>() {
                 @Override
-                public void success(ApiResponse response) {
-                    SkipRate skipRate = SkipRate.parse(response);
-                    if (skipRate.completed) {
-                        CacheProfile.likes = skipRate.likes;
-                        CacheProfile.money = skipRate.money;
+                public void success(SkipRate data, IApiResponse response) {
+                    if (data.completed) {
+                        CacheProfile.likes = data.likes;
+                        CacheProfile.money = data.money;
                         updateResources();
                     }
                 }
 
                 @Override
-                public void fail(int codeError, ApiResponse response) {
+                protected SkipRate parseResponse(ApiResponse response) {
+                    return SkipRate.parse(response);
+                }
+
+                @Override
+                public void fail(int codeError, IApiResponse response) {
 
                 }
             }).exec();
@@ -725,7 +729,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             noviceLikesRequest.callback(new DataApiHandler<NoviceLikes>() {
 
                 @Override
-                protected void success(NoviceLikes noviceLikes, ApiResponse response) {
+                protected void success(NoviceLikes noviceLikes, IApiResponse response) {
                     CacheProfile.likes = noviceLikes.likes;
                     if (noviceLikes.increment > 0) {
                         Novice.giveNoviceLikesQuantity = noviceLikes.increment;
@@ -748,7 +752,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 }
 
                 @Override
-                public void fail(int codeError, ApiResponse response) {
+                public void fail(int codeError, IApiResponse response) {
                 }
 
             }).exec();
@@ -887,7 +891,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 filterRequest.callback(new ApiHandler() {
 
                     @Override
-                    public void success(ApiResponse response) {
+                    public void success(IApiResponse response) {
                         if (response.isCompleted()) {
                             CacheProfile.dating = new DatingFilter(response.getJsonResult().optJSONObject("dating"));
                             updateFilterData();
@@ -898,7 +902,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) {
+                    public void fail(int codeError, IApiResponse response) {
                         Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_LONG).show();
                         unlockControls();
                     }
@@ -991,16 +995,15 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             AlbumRequest request = new AlbumRequest(getActivity(), currentSearchUser.id,
                     ViewUsersListFragment.PHOTOS_LIMIT, position, AlbumRequest.MODE_SEARCH);
             final int uid = currentSearchUser.id;
-            request.callback(new ApiHandler() {
+            request.callback(new DataApiHandler<Photos>() {
                 @Override
-                public void success(ApiResponse response) {
+                public void success(Photos newPhotos, IApiResponse response) {
                     if (uid == mUserSearchList.getCurrentUser().id) {
-                        Photos newPhotos = Photos.parse(response.jsonResult.optJSONArray("items"));
-                        mNeedMore = response.jsonResult.optBoolean("more");
+                        mNeedMore = response.getJsonResult().optBoolean("more");
                         int i = 0;
                         for (Photo photo : newPhotos) {
-                            if (mLoadedCount + i < data.size()) {
-                                data.set(mLoadedCount + i, photo);
+                            if (mLoadedCount + i < newPhotos.size()) {
+                                newPhotos.set(mLoadedCount + i, photo);
                                 i++;
                             }
                         }
@@ -1014,7 +1017,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 }
 
                 @Override
-                public void fail(int codeError, ApiResponse response) {
+                protected Photos parseResponse(ApiResponse response) {
+                    return Photos.parse(response.getJsonResult().optJSONArray("items"));
+                }
+
+                @Override
+                public void fail(int codeError, IApiResponse response) {
                     mCanSendAlbumReq = true;
                 }
             }).exec();

@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ProfileDelete;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -84,7 +84,7 @@ public class DeleteAccountDialog extends DialogFragment implements View.OnClickL
                                         "From Android Device", getActivity());
                                 request.callback(new ApiHandler() {
                                     @Override
-                                    public void success(ApiResponse response) {
+                                    public void success(IApiResponse response) {
                                         if (response.isCompleted()) {
                                             DeleteAccountDialog.saveDeletedAccountToken();
                                             AuthorizationManager.logout(getActivity());
@@ -94,13 +94,13 @@ public class DeleteAccountDialog extends DialogFragment implements View.OnClickL
                                     }
 
                                     @Override
-                                    public void fail(int codeError, ApiResponse response) {
+                                    public void fail(int codeError, IApiResponse response) {
                                         Toast.makeText(App.getContext(), R.string.delete_account_error, Toast.LENGTH_SHORT)
                                                 .show();
                                     }
 
                                     @Override
-                                    public void always(ApiResponse response) {
+                                    public void always(IApiResponse response) {
                                         super.always(response);
                                         progress.dismiss();
                                     }

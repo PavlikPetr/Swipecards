@@ -15,10 +15,7 @@ import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.History;
 import com.topface.topface.data.VirusLike;
-import com.topface.topface.requests.ApiRequest;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.VirusLikesRequest;
+import com.topface.topface.requests.*;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.*;
@@ -602,7 +599,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 new VirusLikesRequest(item.id, mContext).callback(new DataApiHandler<VirusLike>() {
 
                     @Override
-                    protected void success(VirusLike data, ApiResponse response) {
+                    protected void success(VirusLike data, IApiResponse response) {
                         EasyTracker.getTracker().trackEvent("VirusLike", "Success", "Chat", 0L);
                         //После заврешения запроса удаляем элемент
                         removeItem(getPosition(position));
@@ -645,13 +642,13 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) {
+                    public void fail(int codeError, IApiResponse response) {
                         EasyTracker.getTracker().trackEvent("VirusLike", "Fail", "Chat", 0L);
                         Utils.showErrorMessage(getContext());
                     }
 
                     @Override
-                    public void always(ApiResponse response) {
+                    public void always(IApiResponse response) {
                         super.always(response);
                         prsLoader.setVisibility(View.GONE);
                         v.setVisibility(View.VISIBLE);

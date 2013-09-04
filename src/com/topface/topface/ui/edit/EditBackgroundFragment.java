@@ -14,7 +14,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import com.topface.topface.R;
-import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.ContainerActivity;
@@ -99,7 +99,7 @@ public class EditBackgroundFragment extends AbstractEditFragment {
             request.callback(new ApiHandler() {
 
                 @Override
-                public void success(ApiResponse response) {
+                public void success(IApiResponse response) {
                     CacheProfile.background_id = mSelectedId;
                     getActivity().setResult(Activity.RESULT_OK);
                     finishRequestSend();
@@ -107,7 +107,7 @@ public class EditBackgroundFragment extends AbstractEditFragment {
                 }
 
                 @Override
-                public void fail(int codeError, ApiResponse response) {
+                public void fail(int codeError, IApiResponse response) {
                     finishRequestSend();
                 }
             }).exec();

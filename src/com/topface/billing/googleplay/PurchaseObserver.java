@@ -13,7 +13,7 @@ import com.topface.billing.googleplay.BillingService.RequestPurchase;
 import com.topface.billing.googleplay.BillingService.RestoreTransactions;
 import com.topface.billing.googleplay.Consts.PurchaseState;
 import com.topface.billing.googleplay.Consts.ResponseCode;
-import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.IApiResponse;
 
 import java.lang.reflect.Method;
 
@@ -170,7 +170,7 @@ public abstract class PurchaseObserver {
      *
      * @param response ответ от сервера
      */
-    void postVerify(final ApiResponse response) {
+    void postVerify(final IApiResponse response) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -184,5 +184,5 @@ public abstract class PurchaseObserver {
      *
      * @param response объект ответа от сервера
      */
-    abstract public void onVerifyResponse(ApiResponse response);
+    abstract public void onVerifyResponse(IApiResponse response);
 }

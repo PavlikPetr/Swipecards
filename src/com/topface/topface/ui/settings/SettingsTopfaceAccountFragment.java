@@ -24,7 +24,10 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -62,8 +65,8 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             mLockerView.setVisibility(View.VISIBLE);
             request.callback(new ApiHandler() {
                 @Override
-                public void success(ApiResponse response) {
-                    Toast.makeText(App.getContext(), R.string.email_confirmed, 1500).show();
+                public void success(IApiResponse response) {
+                    Toast.makeText(App.getContext(), R.string.email_confirmed, Toast.LENGTH_SHORT).show();
                     CacheProfile.emailConfirmed = true;
                     if (isAdded()) {
                         setViewsState();
@@ -71,12 +74,12 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                 }
 
                 @Override
-                public void fail(int codeError, ApiResponse response) {
-                    Toast.makeText(App.getContext(), R.string.general_server_error, 1500).show();
+                public void fail(int codeError, IApiResponse response) {
+                    Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
-                public void always(ApiResponse response) {
+                public void always(IApiResponse response) {
                     super.always(response);
                     if (mLockerView != null) {
                         mLockerView.setVisibility(View.GONE);
@@ -101,20 +104,29 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     private void requestEmailConfirmedFlag() {
         ProfileRequest profileRequest = new ProfileRequest(getActivity());
         profileRequest.part = ProfileRequest.P_EMAIL_CONFIRMED;
-        profileRequest.callback(new ApiHandler() {
+        profileRequest.callback(new DataApiHandler<Boolean>() {
             @Override
-            public void success(ApiResponse response) {
-                CacheProfile.emailConfirmed = response.jsonResult.optBoolean("email_confirmed");
+            public void success(IApiResponse response) {
+            }
+
+            @Override
+            protected void success(Boolean isEmailConfirmed, IApiResponse response) {
+                CacheProfile.emailConfirmed = isEmailConfirmed;
                 setViewsState();
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            protected Boolean parseResponse(ApiResponse response) {
+                return response.getJsonResult().optBoolean("email_confirmed");
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
                 Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void always(ApiResponse response) {
+            public void always(IApiResponse response) {
                 super.always(response);
                 unlock();
             }
@@ -256,12 +268,12 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                 RemindRequest remindRequest = new RemindRequest(getActivity());
                 remindRequest.callback(new ApiHandler() {
                     @Override
-                    public void success(ApiResponse response) {
+                    public void success(IApiResponse response) {
                         Toast.makeText(App.getContext(), R.string.confirmation_successfully_sent, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) {
+                    public void fail(int codeError, IApiResponse response) {
                         Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                     }
                 }).exec();
@@ -272,13 +284,13 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                     ChangeLoginRequest changeLoginRequest = new ChangeLoginRequest(getActivity(), email);
                     changeLoginRequest.callback(new ApiHandler() {
                         @Override
-                        public void success(ApiResponse response) {
+                        public void success(IApiResponse response) {
                             mToken.saveToken(mToken.getUserId(), email, mToken.getPassword());
                             setChangeBtnAction(ACTION_RESEND_CONFIRM);
                         }
 
                         @Override
-                        public void fail(int codeError, ApiResponse response) {
+                        public void fail(int codeError, IApiResponse response) {
                             Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                         }
                     }).exec();
@@ -298,12 +310,12 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         mLockerView.setVisibility(View.VISIBLE);
         logoutRequest.callback(new ApiHandler() {
             @Override
-            public void success(ApiResponse response) {
+            public void success(IApiResponse response) {
                 AuthorizationManager.logout(getActivity());
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(int codeError, IApiResponse response) {
                 mLockerView.setVisibility(View.GONE);
                 Activity activity = getActivity();
                 if (activity != null) {

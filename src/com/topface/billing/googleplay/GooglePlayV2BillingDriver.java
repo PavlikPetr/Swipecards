@@ -5,7 +5,7 @@ import android.os.Handler;
 import com.topface.billing.BillingDriver;
 import com.topface.billing.BillingListener;
 import com.topface.billing.BillingSupportListener;
-import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 
@@ -140,11 +140,11 @@ public class GooglePlayV2BillingDriver extends BillingDriver {
         }
 
         @Override
-        public void onVerifyResponse(ApiResponse response) {
-            Debug.log(String.format("VerifyResponse: #%d:\n%s", response.code, response.jsonResult));
+        public void onVerifyResponse(IApiResponse response) {
+            Debug.log(String.format("VerifyResponse: #%d:\n%s", response.getResultCode(), response.getJsonResult()));
             BillingListener listener = getBillingListener();
             if (listener != null) {
-                if (response.code == ApiResponse.RESULT_OK) {
+                if (response.isCompleted()) {
                     Debug.log("Billing: onPurchased");
                     listener.onPurchased();
                 } else {

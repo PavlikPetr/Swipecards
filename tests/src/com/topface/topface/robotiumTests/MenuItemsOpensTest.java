@@ -1,24 +1,28 @@
 package com.topface.topface.robotiumTests;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.test.ActivityInstrumentationTestCase2;
 import com.jayway.android.robotium.solo.Solo;
 import com.topface.topface.R;
 import com.topface.topface.ui.NavigationActivity;
 
+@TargetApi(Build.VERSION_CODES.FROYO)
 public class MenuItemsOpensTest extends ActivityInstrumentationTestCase2<NavigationActivity> {
 
     private Solo solo;
 
+    @TargetApi(Build.VERSION_CODES.FROYO)
     public MenuItemsOpensTest() {
         super(NavigationActivity.class);
     }
 
-    public void setUp() throws Exception{
+    public void setUp() throws Exception {
         super.setUp();
         solo = new Solo(getInstrumentation(), getActivity());
     }
 
-    public void testItems() throws Exception{
+    public void testItems() throws Exception {
         try {
             solo.clickOnButton(getActivity().getString(R.string.general_profile));
             solo.clickOnButton(getActivity().getString(R.string.general_dating));

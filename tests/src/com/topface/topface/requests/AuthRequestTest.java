@@ -25,7 +25,7 @@ public class AuthRequestTest extends AbstractThreadTest {
                 AuthRequest authRequest = new AuthRequest(token, context);
                 authRequest.callback(new ApiHandler() {
                     @Override
-                    public void success(ApiResponse response) {
+                    public void success(IApiResponse response) {
                         Auth auth = new Auth(response);
                         assertNotNull("Ssid is null", auth.ssid);
                         assertEquals("Wrong API version", API_VERSION, Static.API_VERSION);
@@ -34,7 +34,7 @@ public class AuthRequestTest extends AbstractThreadTest {
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) {
+                    public void fail(int codeError, IApiResponse response) {
                         assertTrue("Auth error: " + codeError, false);
                         stopTest("testAuthRequest");
                     }

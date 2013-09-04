@@ -43,8 +43,8 @@
     <string name="general_profile">Profilo</string>
     <string name="general_settings">Impostazioni</string>
     <string name="general_chat">Chat</string>
-    <string name="auth_btn_vk">Entra tramite social network</string>
-    <string name="auth_btn_fb">Entra tramite Facebook</string>
+    <string name="auth_btn_vk">Accedi tramite social network</string>
+    <string name="auth_btn_fb">Accedi tramite Facebook</string>
     <string name="auth_retry">Riprovare</string>
     <string name="auth_vk_name">Social network</string>
     <string name="dating_header_girls">Ragazze da %1$d a %2$d</string>
@@ -312,7 +312,7 @@
     <string name="general_soon">In arrivo</string>
     <string name="black_list_activation">Abbonati allo stato VIP e usa la black list</string>
     <string name="profile_edit_age_ranges">L’età deve entrare nel campo tra 16 e 99 anni. Per favore, inserisci il numero valido e riprova.</string>
-    <string name="sign_in">Entra</string>
+    <string name="sign_in">Accedi</string>
     <string name="create_account">Creare profilo</string>
     <string name="email">E-mail</string>
     <string name="password">Password</string>
@@ -532,6 +532,13 @@
     <string name="settings_feedback_transaction_number">Numero dell’ordine</string>
     <string name="settings_feedback_transaction_link">Dove posso trovare numero dell’ordine?</string>
     <string name="general_logout_error">Purtroppo il logout non è stato effettuato</string>
+    <string name="auth_btn_ok">Accedi tramite Odnoklassniki</string>
+    <string name="other_auth">Accedi tramite altri sistemi</string>
     <string name="settings_feedback_transaction_number_hint">Inserisci il numero dell’ordine</string>
     <string name="youve_earned">Hai guadagnato %s</string>
+    <string name="like_topface">Ti piace Topface?</string>
+    <plurals name="selected">
+        <item quantity="other">%d scelti</item>
+        <item quantity="one">%d scelto</item>
+    </plurals>
 </resources>

@@ -2,10 +2,7 @@ package com.topface.topface.requests.v6;
 
 import android.content.Context;
 import com.topface.topface.data.Register;
-import com.topface.topface.requests.AbstractThreadTest;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.RegisterRequest;
-import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.*;
 
 public class RegisterRequestTest extends AbstractThreadTest {
 
@@ -20,16 +17,21 @@ public class RegisterRequestTest extends AbstractThreadTest {
                         "ilya",
                         123456,
                         1);
-                request.callback(new ApiHandler() {
+                request.callback(new DataApiHandler<Register>() {
+
                     @Override
-                    public void success(ApiResponse response) {
-                        Register reg = new Register(response);
+                    protected void success(Register reg, IApiResponse response) {
                         assertNotSame(0, reg.getUserId());
                         stopTest("testRegisterRequest");
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) {
+                    protected Register parseResponse(ApiResponse response) {
+                        return new Register(response);
+                    }
+
+                    @Override
+                    public void fail(int codeError, IApiResponse response) {
 
                         assertTrue("Register error: " + codeError, false);
                         stopTest("testRegisterRequest");

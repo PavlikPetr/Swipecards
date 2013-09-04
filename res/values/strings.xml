@@ -524,7 +524,7 @@
         <item quantity="one">Received %d message with express delivery</item>
     </plurals>
     <string name="general_attention">Attention!</string>
-    <string name="general_delete_messages">delete messages</string>
+    <string name="general_delete_messages">Delete messages</string>
     <string name="mutual_sympathies">Mutual</string>
     <string name="skip_all">Skip all</string>
     <string name="forget">Forget</string>
@@ -535,7 +535,13 @@
     <string name="settings_feedback_transaction_number">Order number</string>
     <string name="settings_feedback_transaction_link">Where to find the order number?</string>
     <string name="general_logout_error">Unfortunately, you failed to log out from your account</string>
+    <string name="auth_btn_ok">Login through Odnoklassniki</string>
+    <string name="other_auth">Login through other services</string>
     <string name="settings_feedback_transaction_number_hint">Enter order number</string>
     <string name="youve_earned">You\'ve earned %s</string>
     <string name="like_topface">Do you like Topface?</string>
+    <plurals name="selected">
+        <item quantity="other">%d selected</item>
+        <item quantity="one">%d selected</item>
+    </plurals>
 </resources>

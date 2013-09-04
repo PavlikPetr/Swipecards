@@ -11,10 +11,7 @@ import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.*;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.FeedGiftsRequest;
-import com.topface.topface.requests.SendGiftRequest;
+import com.topface.topface.requests.*;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -176,7 +173,7 @@ public class GiftsFragment extends BaseFragment {
             sendGift.callback(new DataApiHandler<SendGiftAnswer>() {
 
                 @Override
-                protected void success(SendGiftAnswer answer, ApiResponse response) {
+                protected void success(SendGiftAnswer answer, IApiResponse response) {
                     CacheProfile.likes = answer.likes;
                     CacheProfile.money = answer.money;
                     addGift(sendedGift);
@@ -188,8 +185,8 @@ public class GiftsFragment extends BaseFragment {
                 }
 
                 @Override
-                public void fail(int codeError, final ApiResponse response) {
-                    if (response.code == ApiResponse.PAYMENT) {
+                public void fail(int codeError, final IApiResponse response) {
+                    if (response.isCodeEqual(ApiResponse.PAYMENT)) {
                         FragmentActivity activity = getActivity();
                         if (activity != null) {
                             Intent intent = ContainerActivity.getBuyingIntent("Dating");
@@ -201,7 +198,7 @@ public class GiftsFragment extends BaseFragment {
                 }
 
                 @Override
-                public void always(ApiResponse response) {
+                public void always(IApiResponse response) {
                     super.always(response);
                     if (listener != null) {
                         listener.onReceived();
@@ -254,7 +251,7 @@ public class GiftsFragment extends BaseFragment {
         request.callback(new DataApiHandler<FeedListData<FeedGift>>() {
 
             @Override
-            protected void success(FeedListData<FeedGift> gifts, ApiResponse response) {
+            protected void success(FeedListData<FeedGift> gifts, IApiResponse response) {
 
                 removeLoaderItem();
                 data.addAll(gifts.items);
@@ -275,7 +272,7 @@ public class GiftsFragment extends BaseFragment {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(int codeError, IApiResponse response) {
                 removeLoaderItem();
                 data.add(new FeedGift(ItemType.RETRY));
                 mGridAdapter.notifyDataSetChanged();

@@ -20,6 +20,14 @@ public class TestRequest extends ApiRequest {
         super(context);
     }
 
+    public TestRequest(String required, String nonrequired, int error, Context context) {
+        super(context);
+
+        this.required = required;
+        this.nonrequired = nonrequired;
+        this.error = error;
+    }
+
     @Override
     protected JSONObject getRequestData() throws JSONException {
         JSONObject data = new JSONObject();

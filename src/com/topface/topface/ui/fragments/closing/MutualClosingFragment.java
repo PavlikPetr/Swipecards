@@ -5,15 +5,13 @@ import android.widget.TextView;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
-import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.data.FeedUser;
 import com.topface.topface.requests.DeleteFeedRequest;
 import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SkipAllClosedRequest;
-import com.topface.topface.data.FeedUser;
-import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 
 public class MutualClosingFragment extends ClosingFragment implements View.OnClickListener {
@@ -50,8 +48,8 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
         View btnSkip = controlsView.findViewById(R.id.btnSkip);
         btnSkip.setOnClickListener(this);
         controlsView.findViewById(R.id.btnChat).setOnClickListener(this);
-        mUserName = (TextView)controlsView.findViewById(R.id.tvUserName);
-        mUserCity = (TextView)controlsView.findViewById(R.id.tvUserCity);
+        mUserName = (TextView) controlsView.findViewById(R.id.tvUserName);
+        mUserCity = (TextView) controlsView.findViewById(R.id.tvUserCity);
     }
 
     @Override
@@ -94,8 +92,8 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
                     DeleteFeedRequest deleteRequest = new DeleteFeedRequest(user.feedItem.id, getActivity());
                     deleteRequest.callback(new SimpleApiHandler() {
                         @Override
-                        public void always(ApiResponse response) {
-                            if(isAdded()) refreshActionBarTitles(getView());
+                        public void always(IApiResponse response) {
+                            if (isAdded()) refreshActionBarTitles(getView());
                         }
                     });
                     deleteRequest.exec();

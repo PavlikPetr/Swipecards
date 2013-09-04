@@ -502,4 +502,36 @@
         <item quantity="other">%d κέρματα</item>
         <item quantity="one">%d κέρμα</item>
     </plurals>
+    <string name="getjar_auth_title">Επιλέξτε ένα λογαριασμό</string>
+    <string name="skip">Παραλείψετε</string>
+    <string name="chat">Γράψτε</string>
+    <string name="sympathies">Συμπάθειες</string>
+    <plurals name="number_of_sympathies">
+        <item quantity="zero">%d συμπάθειες</item>
+        <item quantity="other">%d συμπάθειες</item>
+        <item quantity="one">%d συμπάθεια</item>
+    </plurals>
+    <plurals name="popup_vip_messages">
+        <item quantity="other">\'Ελαβε %d μηνύματα με Ταχεία Παράδοση!</item>
+        <item quantity="one">\'Ελαβε %d μήνυμα με Ταχεία Παράδοση!</item>
+    </plurals>
+    <string name="general_attention">Προσοχή!</string>
+    <string name="general_delete_messages">Διαγραφή μηνυμάτων</string>
+    <string name="mutual_sympathies">Αμοιβαία</string>
+    <string name="skip_all">Παραλείψτε όλα</string>
+    <string name="forget">Ξεχάστε</string>
+    <string name="watch_as_list">Εμφανίστε ολόκληρη τη λίστα</string>
+    <string name="watching_as_list">Εμφανίστε ολόκληρη τη λίστα</string>
+    <string name="watching_sequentually">Δείτε σε μια σειρά</string>
+    <string name="settings_feedback_transaction_number">Αριθμός παραγγελίας</string>
+    <string name="settings_feedback_transaction_link">πού να βρείτε τον αριθμό παραγγελίας?</string>
+    <string name="auth_btn_ok">Εισάγετε με Odnoklassniki</string>
+    <string name="other_auth">Συνδεθείτε σε άλλες υπηρεσίες</string>
+    <string name="settings_feedback_transaction_number_hint">Εισάγετε τον αριθμό παραγγελίας σας</string>
+    <string name="youve_earned">έχετε λάβει %s</string>
+    <string name="like_topface">Σας αρέσει Topface?</string>
+    <plurals name="selected">
+        <item quantity="other">%d επιλεγμένο</item>
+        <item quantity="one">%d επιλεγμένο</item>
+    </plurals>
 </resources>

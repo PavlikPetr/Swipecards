@@ -11,7 +11,7 @@ import com.topface.billing.BillingSupportListener;
 import com.topface.billing.BillingUtils;
 import com.topface.topface.App;
 import com.topface.topface.requests.AmazonValidateRequest;
-import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.Debug;
 
@@ -116,7 +116,7 @@ public class AmazonPurchaseObserver extends BasePurchasingObserver {
         new AmazonValidateRequest(sku, userId, purchaseToken, requestId, context)
                 .callback(new ApiHandler() {
                     @Override
-                    public void success(ApiResponse response) {
+                    public void success(IApiResponse response) {
                         AmazonQueue.getInstance(context).deleteQueueItem(queueNewId);
                         if (listener != null) {
                             listener.onPurchased();
@@ -124,7 +124,7 @@ public class AmazonPurchaseObserver extends BasePurchasingObserver {
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) {
+                    public void fail(int codeError, IApiResponse response) {
                         //Если это ошибка оплаты от сервера, то удалям из очереди
                         if (BillingUtils.isExceptedBillingError(codeError)) {
                             AmazonQueue.getInstance(context).deleteQueueItem(queueNewId);
@@ -136,7 +136,7 @@ public class AmazonPurchaseObserver extends BasePurchasingObserver {
                     }
 
                     @Override
-                    public void always(ApiResponse response) {
+                    public void always(IApiResponse response) {
                         super.always(response);
                         //После завершения запроса, проверяем, есть ли элементы в очереди, если есть отправляем их на сервер
                         postDelayed(new Runnable() {

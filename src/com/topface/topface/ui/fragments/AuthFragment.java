@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.*;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -37,8 +34,9 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-import java.math.BigInteger;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class AuthFragment extends BaseFragment {
 
@@ -193,7 +191,7 @@ public class AuthFragment extends BaseFragment {
                 @Override
                 public void onClick(View v) {
                     Debug.log("LOCALE::" + btnsController.getLocaleTag());
-                    EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG, "OtherWaysButtonClicked",btnsController.getLocaleTag(), 1L);
+                    EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG, "OtherWaysButtonClicked", btnsController.getLocaleTag(), 1L);
                     additionalButtonsScreen = true;
                     btnsController.setAllSettings();
                     mOtherSocialNetworksButton.setVisibility(View.GONE);
@@ -372,19 +370,19 @@ public class AuthFragment extends BaseFragment {
 
         authRequest.callback(new ApiHandler() {
             @Override
-            public void success(ApiResponse response) {
-                saveAuthInfo(response);
+            public void success(IApiResponse response) {
+                saveAuthInfo((ApiResponse) response);
                 btnsController.addSocialNetwork(AuthToken.getInstance().getSocialNet());
                 getProfileAndOptions();
                 hasAuthorized = true;
             }
 
             @Override
-            public void fail(final int codeError, ApiResponse response) {
+            public void fail(final int codeError, IApiResponse response) {
                 authorizationFailed(codeError, authRequest);
             }
 
-            public void always(ApiResponse response) {
+            public void always(IApiResponse response) {
             }
         }).exec();
     }
@@ -423,8 +421,8 @@ public class AuthFragment extends BaseFragment {
         registerRequest(authRequest);
         authRequest.callback(new ApiHandler() {
             @Override
-            public void success(ApiResponse response) {
-                saveAuthInfo(response);
+            public void success(IApiResponse response) {
+                saveAuthInfo((ApiResponse) response);
                 getProfileAndOptions(new ProfileIdReceiver() {
                     @Override
                     public void onProfileIdReceived(int profileId) {
@@ -434,7 +432,7 @@ public class AuthFragment extends BaseFragment {
             }
 
             @Override
-            public void fail(final int codeError, ApiResponse response) {
+            public void fail(final int codeError, IApiResponse response) {
                 authorizationFailed(codeError, authRequest);
             }
 
@@ -462,8 +460,8 @@ public class AuthFragment extends BaseFragment {
         profileRequest.callback(new DataApiHandler<Profile>() {
 
             @Override
-            protected void success(Profile data, ApiResponse response) {
-                CacheProfile.setProfile(data, response);
+            protected void success(Profile data, IApiResponse response) {
+                CacheProfile.setProfile(data, (ApiResponse) response);
                 if (idReceiver != null) idReceiver.onProfileIdReceived(CacheProfile.uid);
                 getOptions();
             }
@@ -474,8 +472,8 @@ public class AuthFragment extends BaseFragment {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
-                if (response.code == ApiResponse.BAN)
+            public void fail(int codeError, IApiResponse response) {
+                if (response.isCodeEqual(ApiResponse.BAN))
                     showButtons();
                 else {
                     authorizationFailed(codeError, profileRequest);
@@ -491,19 +489,23 @@ public class AuthFragment extends BaseFragment {
         if (isAdded()) {
             hideButtons();
         }
-        request.callback(new ApiHandler() {
+        request.callback(new DataApiHandler<Options>() {
             @Override
-            public void success(final ApiResponse response) {
-                Options.parse(response);
+            protected void success(Options data, IApiResponse response) {
                 Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
-                ((BaseFragmentActivity)getActivity()).close(AuthFragment.this, true);
+                ((BaseFragmentActivity) getActivity()).close(AuthFragment.this, true);
                 LocalBroadcastManager.getInstance(getContext())
                         .sendBroadcast(new Intent(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
-                if (response.code == ApiResponse.BAN)
+            protected Options parseResponse(ApiResponse response) {
+                return Options.parse(response);
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
+                if (response.isCodeEqual(ApiResponse.BAN))
                     showButtons();
                 else {
                     request.callback(this);
@@ -699,7 +701,7 @@ public class AuthFragment extends BaseFragment {
         mCreateAccountView.setVisibility(View.GONE);
         mRetryView.setVisibility(View.GONE);
         mTFButton.setVisibility(View.INVISIBLE);
-        if(mProcessingTFReg) {
+        if (mProcessingTFReg) {
             mLoginSendingProgress.setVisibility(View.VISIBLE);
         } else {
             mProgressBar.setVisibility(View.VISIBLE);
@@ -713,7 +715,7 @@ public class AuthFragment extends BaseFragment {
     private void btnVKClick() {
         // костыль, надо избавить от viewflipper к чертовой бабушке
         mProcessingTFReg = false;
-        EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG,additionalButtonsScreen?"LoginAdditionalVk":"LoginMainVk", btnsController.getLocaleTag(),1L);
+        EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "LoginAdditionalVk" : "LoginMainVk", btnsController.getLocaleTag(), 1L);
 
         if (checkOnline() && mAuthorizationManager != null) {
             hideButtons();
@@ -724,7 +726,7 @@ public class AuthFragment extends BaseFragment {
     private void btnFBClick() {
         // костыль, надо избавить от viewflipper к чертовой бабушке
         mProcessingTFReg = false;
-        EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG,additionalButtonsScreen?"LoginAdditionalFb":"LoginMainFb", btnsController.getLocaleTag(),1L);
+        EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "LoginAdditionalFb" : "LoginMainFb", btnsController.getLocaleTag(), 1L);
         if (checkOnline() && mAuthorizationManager != null) {
             hideButtons();
             mAuthorizationManager.facebookAuth();
@@ -734,7 +736,7 @@ public class AuthFragment extends BaseFragment {
 
     private void btnOKClick() {
         mProcessingTFReg = false;
-        EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG,additionalButtonsScreen?"LoginAdditionalOk":"LoginMainOk", btnsController.getLocaleTag(),1L);
+        EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "LoginAdditionalOk" : "LoginMainOk", btnsController.getLocaleTag(), 1L);
         if (checkOnline() && mAuthorizationManager != null) {
             hideButtons();
             mAuthorizationManager.odnoklassnikiAuth();

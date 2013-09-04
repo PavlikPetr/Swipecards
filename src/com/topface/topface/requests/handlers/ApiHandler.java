@@ -23,32 +23,35 @@ abstract public class ApiHandler extends Handler {
     @Override
     public void handleMessage(Message msg) {
         super.handleMessage(msg);
-        response((ApiResponse) msg.obj);
+        response((IApiResponse) msg.obj);
     }
 
-    public void response(ApiResponse response) {
+    public void response(IApiResponse response) {
         if (!mCancel) {
             try {
-                if (response.code == ApiResponse.ERRORS_PROCCESED) {
+                int result = response.getResultCode();
+                if (result == ApiResponse.ERRORS_PROCCESED) {
                     fail(ApiResponse.ERRORS_PROCCESED, new ApiResponse(ApiResponse.ERRORS_PROCCESED, "Client exception"));
-                } else if (response.code == ApiResponse.PREMIUM_ACCESS_ONLY) {
-                    Debug.error(App.getContext().getString(R.string.general_premium_access_error));
+                } else if (result == ApiResponse.PREMIUM_ACCESS_ONLY) {
+                    Debug.error("To do this you have to be a VIP");
 
                     if (isShowPremiumError()) {
                         //Сообщение о необходимости Премиум-статуса
                         showToast(R.string.general_premium_access_error);
                     }
 
-                    fail(response.code, response);
+                    fail(result, response);
                 } else if (response.isCodeEqual(IApiResponse.UNCONFIRMED_LOGIN)) {
                     ConfirmedApiRequest.showConfirmDialog(mContext);
-                    fail(response.code, response);
-                } else if (response.code != ApiResponse.RESULT_OK) {
-                    fail(response.code, response);
+                    fail(result, response);
+                } else if (result != ApiResponse.RESULT_OK) {
+                    fail(result, response);
                 } else {
-                    setCounters(response);
+                    if (response instanceof ApiResponse) {
+                        setCounters((ApiResponse) response);
+                        sendUpdateIntent((ApiResponse) response);
+                    }
                     success(response);
-                    sendUpdateIntent(response);
                 }
             } catch (Exception e) {
                 Debug.error("ApiHandler exception", e);
@@ -73,11 +76,11 @@ abstract public class ApiHandler extends Handler {
         }
     }
 
-    abstract public void success(ApiResponse response);
+    abstract public void success(IApiResponse response);
 
-    abstract public void fail(int codeError, ApiResponse response);
+    abstract public void fail(int codeError, IApiResponse response);
 
-    public void always(ApiResponse response) {
+    public void always(IApiResponse response) {
         //Можно переопределить, если вам нужен коллбэк, который выполняется всегда, вне зависимости от результата
     }
 
@@ -89,7 +92,7 @@ abstract public class ApiHandler extends Handler {
     }
 
     private void setCounters(ApiResponse response) {
-        if(!mNeedCounters) return;
+        if (!mNeedCounters) return;
         try {
             JSONObject counters = response.counters;
             String method = response.method;

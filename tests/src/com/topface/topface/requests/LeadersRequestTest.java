@@ -23,8 +23,8 @@ public class LeadersRequestTest extends AbstractThreadTest {
         new LeadersRequest(getInstrumentation().getContext())
                 .callback(new ApiHandler() {
                     @Override
-                    public void success(ApiResponse response) {
-                        FeedUserListData<Leader> leaders = new FeedUserListData<Leader>(response.jsonResult, Leader.class);
+                    public void success(IApiResponse response) {
+                        FeedUserListData<Leader> leaders = new FeedUserListData<Leader>(response.getJsonResult(), Leader.class);
                         assertNotNull("Leaders result is null", leaders);
                         assertTrue("Leaders result is empty", leaders.size() > 0);
                         for (Leader item : leaders) {
@@ -40,7 +40,7 @@ public class LeadersRequestTest extends AbstractThreadTest {
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) {
+                    public void fail(int codeError, IApiResponse response) {
                         assertTrue("Request exec fail: " + codeError, false);
                         stopTest("testLeadersRequestExec");
                     }

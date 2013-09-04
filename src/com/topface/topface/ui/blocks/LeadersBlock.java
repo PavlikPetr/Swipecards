@@ -11,8 +11,8 @@ import com.topface.topface.data.FeedUserListData;
 import com.topface.topface.data.Leader;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.LeadersRequest;
-import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.LeadersActivity;
 import com.topface.topface.ui.adapters.LeadersAdapter;
 import com.topface.topface.ui.dialogs.LeadersDialog;
@@ -43,7 +43,7 @@ public class LeadersBlock {
         request.callback(new DataApiHandler<FeedUserListData<Leader>>() {
 
             @Override
-            protected void success(FeedUserListData<Leader> data, ApiResponse response) {
+            protected void success(FeedUserListData<Leader> data, IApiResponse response) {
                 setAdapter(data);
             }
 
@@ -53,7 +53,7 @@ public class LeadersBlock {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(int codeError, IApiResponse response) {
             }
 
         }).exec();
@@ -100,9 +100,5 @@ public class LeadersBlock {
 
         }
     };
-
-    private void showPopup() {
-
-    }
 
 }
