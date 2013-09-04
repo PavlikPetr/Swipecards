@@ -32,7 +32,6 @@ public class SettingsAccountFragment extends BaseFragment implements OnClickList
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_account, container, false);
-        Debug.log("FragmentsDebug:: SettingsAccountFragment onCreateView");
         // Navigation bar
         ActionBar actionBar = getActionBar(root);
         actionBar.showBackButton(new OnClickListener() {
@@ -71,19 +70,16 @@ public class SettingsAccountFragment extends BaseFragment implements OnClickList
     @Override
     public void onResume() {
         super.onResume();
-        Debug.log("FragmentsDebug:: SettingsAccountFragment onCreateView");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Debug.log("FragmentsDebug:: SettingsAccountFragment onPause");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Debug.log("FragmentsDebug:: SettingsAccountFragment onDestroy");
     }
 
     private void showExitPopup() {

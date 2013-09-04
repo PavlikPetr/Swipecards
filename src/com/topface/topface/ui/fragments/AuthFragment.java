@@ -81,7 +81,6 @@ public class AuthFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Debug.log("FragmentsDebug:: AuthFragment onCreateView");
         mAuthorizationManager = new AuthorizationManager(getActivity());
         Activity activity = getActivity();
         if (activity instanceof NavigationActivity) {
@@ -294,7 +293,6 @@ public class AuthFragment extends BaseFragment {
         }
 
         if (mAuthorizationManager != null) {
-//            Debug.log("FragmentsDebug:: AuthFragment onActivityResult");
             hideButtons();
             mAuthorizationManager.onActivityResult(requestCode, resultCode, data);
         }
@@ -774,7 +772,6 @@ public class AuthFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        Debug.log("FragmentsDebug:: AuthFragment onResume");
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(connectionChangeListener,
                 new IntentFilter(ConnectionChangeReceiver.REAUTH));
         if (authorizationReceiver == null || !authReceiverRegistered) {
@@ -786,7 +783,6 @@ public class AuthFragment extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
-        Debug.log("FragmentsDebug:: AuthFragment onPause");
         authReceiverRegistered = false;
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(authorizationReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(connectionChangeListener);
@@ -795,7 +791,6 @@ public class AuthFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Debug.log("FragmentsDebug:: AuthFragment onDestroy");
         if (!hasAuthorized) {
             EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "DismissAdditional" : "DismissMain", btnsController.getLocaleTag(), 1L);
         }
@@ -804,7 +799,6 @@ public class AuthFragment extends BaseFragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        Debug.log("FragmentsDebug:: AuthFragment onDetach");
     }
 
     interface ProfileIdReceiver {

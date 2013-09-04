@@ -194,7 +194,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     protected void onPause() {
         super.onPause();
-        Debug.log("FragmentsDebug:: NavigationActivity onPause");
         if(mFullscreenController != null) {
             mFullscreenController.onPause();
         }
@@ -212,7 +211,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     protected void onResume() {
         super.onResume();
-        Debug.log("FragmentsDebug:: NavigationActivity onResume");
         //restart -> open NavigationActivity
         if (App.getConfig().getLocaleConfig().fetchToSystemLocale()) {
             LocaleConfig.changeLocale(this, App.getConfig().getLocaleConfig().getApplicationLocale(), mFragmentMenu.getCurrentFragmentId());
@@ -383,7 +381,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     protected void onDestroy() {
         //Для запроса фото при следующем создании NavigationActivity
-        Debug.log("FragmentsDebug:: NavigationActivity onDestroy");
         if (CacheProfile.photo == null) CacheProfile.wasAvatarAsked = false;
         if (mFullscreenController != null) {
             mFullscreenController.onDestroy();

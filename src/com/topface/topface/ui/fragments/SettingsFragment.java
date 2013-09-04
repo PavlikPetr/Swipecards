@@ -80,7 +80,6 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
         View view = inflater.inflate(R.layout.ac_settings, null);
-        Debug.log("FragmentsDebug:: SettingsFragment onCreateView");
         mSettings = Settings.getInstance();
 
         // Navigation bar
@@ -104,7 +103,6 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     @Override
     public void onPause() {
         super.onPause();
-        Debug.log("FragmentsDebug:: SettingsFragment onPause");
         if (mSendTimer != null) {
             mSendTimer.cancel();
             mSendTimer.onFinish();
@@ -477,12 +475,10 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     @Override
     public void onResume() {
         super.onResume();
-        Debug.log("FragmentsDebug:: SettingsFragment onResume");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Debug.log("FragmentsDebug:: SettingsFragment onDestroy");
     }
 }

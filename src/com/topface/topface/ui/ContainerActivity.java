@@ -52,7 +52,6 @@ public class ContainerActivity extends BaseFragmentActivity {
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        Debug.log("FragmentsDebug:: ContainerActivity onCreate");
         if (AuthToken.getInstance().isEmpty()) {
             finish();
         }
@@ -81,7 +80,6 @@ public class ContainerActivity extends BaseFragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Debug.log("FragmentsDebug:: ContainerActivity onResume");
         if (mCurrentFragment == null) {
             mCurrentFragment = getFragment(mCurrentFragmentId);
         }
@@ -91,7 +89,6 @@ public class ContainerActivity extends BaseFragmentActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        Debug.log("FragmentsDebug:: ContainerActivity onPause");
     }
 
     @Override
@@ -294,7 +291,6 @@ public class ContainerActivity extends BaseFragmentActivity {
 
     @Override
     protected void onDestroy() {
-        Debug.log("FragmentsDebug:: ContainerActivity onDestroy");
         super.onDestroy();
     }
 }
