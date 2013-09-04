@@ -90,9 +90,7 @@ public class Novice {
             return mPreferences.getBoolean(Static.PREFERENCES_NOVICE_DATING_ENERGY_TO_SYMPATHIES, false);
         } else {
             boolean result = mPreferences.contains(Static.PREFERENCES_NOVICE_DATING_ENERGY);
-            SharedPreferences.Editor editor = mPreferences.edit();
-            editor.putBoolean(Static.PREFERENCES_NOVICE_DATING_ENERGY_TO_SYMPATHIES, false);
-            editor.commit();
+            commitFlagAsync(Static.PREFERENCES_NOVICE_DATING_ENERGY_TO_SYMPATHIES, false);
             return result;
         }
     }
@@ -107,9 +105,7 @@ public class Novice {
         if (lastTime > 0) {
             return (todayTime - lastTime) >= Utils.WEEK_IN_SECONDS;
         } else {
-            SharedPreferences.Editor editor = mPreferences.edit();
-            editor.putLong(Static.PREFERENCES_NOVICE_DATING_BUY_SYMPATHY_DATE, todayTime);
-            editor.commit();
+            commitFlagAsync(Static.PREFERENCES_NOVICE_DATING_BUY_SYMPATHY_DATE, todayTime);
             return false;
         }
     }
@@ -123,33 +119,24 @@ public class Novice {
         if (lastTime > 0) {
             return (todayTime - lastTime) >= Utils.DAY_IN_SECONDS;
         } else {
-            SharedPreferences.Editor editor = mPreferences.edit();
-            editor.putLong(Static.PREFERENCES_NOVICE_MENU_FILL_PROFILE_DATE, todayTime);
-            editor.commit();
+            commitFlagAsync(Static.PREFERENCES_NOVICE_MENU_FILL_PROFILE_DATE, todayTime);
             return false;
         }
     }
 
     public void completeShowSympathy() {
         showSympathy = false;
-        SharedPreferences.Editor editor = mPreferences.edit();
-        editor.putBoolean(Static.PREFERENCES_NOVICE_DATING_SYMPATHY, false);
-        editor.commit();
+        commitFlagAsync(Static.PREFERENCES_NOVICE_DATING_SYMPATHY, false);
     }
 
     public void completeShowBuySympathies() {
         showBuySympathies = false;
-        SharedPreferences.Editor editor = mPreferences.edit();
-        editor.putLong(Static.PREFERENCES_NOVICE_DATING_BUY_SYMPATHY_DATE, Utils.unixtimeInSeconds());
-        editor.putBoolean(Static.PREFERENCES_NOVICE_DATING_BUY_SYMPATHY, false);
-        editor.commit();
+        commitFlagAsync(Static.PREFERENCES_NOVICE_DATING_BUY_SYMPATHY,false,Static.PREFERENCES_NOVICE_DATING_BUY_SYMPATHY_DATE, Utils.unixtimeInSeconds());
     }
 
     public void completeShowFillProfile() {
         showFillProfile = false;
-        SharedPreferences.Editor editor = mPreferences.edit();
-        editor.putBoolean(Static.PREFERENCES_NOVICE_MENU_FILL_PROFILE, false);
-        editor.commit();
+        commitFlagAsync(Static.PREFERENCES_NOVICE_MENU_FILL_PROFILE,false);
     }
 
     public void completeShowBatteryBonus() {
@@ -159,8 +146,40 @@ public class Novice {
 
     public void completeShowEnergyToSympathies() {
         showEnergyToSympathies = false;
-        SharedPreferences.Editor editor = mPreferences.edit();
-        editor.putBoolean(Static.PREFERENCES_NOVICE_DATING_ENERGY_TO_SYMPATHIES, false);
-        editor.commit();
+        commitFlagAsync(Static.PREFERENCES_NOVICE_DATING_ENERGY_TO_SYMPATHIES,false);
+    }
+
+    private void commitFlagAsync(final String key,final boolean value) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferences.Editor editor = mPreferences.edit();
+                editor.putBoolean(key, value);
+                editor.commit();
+            }
+        }).start();
+    }
+
+    private void commitFlagAsync(final String key,final long value) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferences.Editor editor = mPreferences.edit();
+                editor.putLong(key, value);
+                editor.commit();
+            }
+        }).start();
+    }
+
+    private void commitFlagAsync(final String key,final boolean value,final String key2,final long value2) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferences.Editor editor = mPreferences.edit();
+                editor.putBoolean(key, value);
+                editor.putLong(key2, value2);
+                editor.commit();
+            }
+        }).start();
     }
 }
