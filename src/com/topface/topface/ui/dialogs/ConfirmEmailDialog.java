@@ -14,8 +14,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ChangeLoginRequest;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RemindRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.Utils;
@@ -66,7 +66,7 @@ public class ConfirmEmailDialog extends DialogFragment implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()) {
+        switch (v.getId()) {
             case R.id.btnClose:
                 closeDialog();
                 break;
@@ -91,7 +91,7 @@ public class ConfirmEmailDialog extends DialogFragment implements View.OnClickLi
         onRequestStart();
         changeLoginRequest.callback(new ApiHandler() {
             @Override
-            public void success(ApiResponse response) {
+            public void success(IApiResponse response) {
                 AuthToken token = AuthToken.getInstance();
                 token.saveToken(token.getUserId(), email, token.getPassword());
                 Toast.makeText(App.getContext(), R.string.confirmation_successfully_sent, Toast.LENGTH_SHORT).show();
@@ -99,7 +99,7 @@ public class ConfirmEmailDialog extends DialogFragment implements View.OnClickLi
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(int codeError, IApiResponse response) {
                 onRequestEnd();
                 Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
             }
@@ -111,13 +111,13 @@ public class ConfirmEmailDialog extends DialogFragment implements View.OnClickLi
         onRequestStart();
         request.callback(new ApiHandler() {
             @Override
-            public void success(ApiResponse response) {
+            public void success(IApiResponse response) {
                 Toast.makeText(App.getContext(), R.string.confirmation_successfully_sent, Toast.LENGTH_SHORT).show();
                 closeDialog();
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(int codeError, IApiResponse response) {
                 onRequestEnd();
                 Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
             }

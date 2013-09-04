@@ -25,6 +25,7 @@ import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -71,11 +72,12 @@ public class ProfilePhotoFragment extends BaseFragment {
         );
         request.callback(new SimpleApiHandler() {
             @Override
-            public void success(ApiResponse response) {
+            public void success(IApiResponse response) {
                 if (mProfilePhotoGridAdapter != null) {
+                    JSONObject jsonResult = response.getJsonResult();
                     mProfilePhotoGridAdapter.addData(
-                            Photos.parse(response.jsonResult.optJSONArray("items")),
-                            response.jsonResult.optBoolean("more")
+                            Photos.parse(jsonResult.optJSONArray("items")),
+                            jsonResult.optBoolean("more")
                     );
                 }
             }
@@ -162,14 +164,14 @@ public class ProfilePhotoFragment extends BaseFragment {
                         request.photoid = photo.getId();
                         request.callback(new SimpleApiHandler() {
                             @Override
-                            public void success(ApiResponse response) {
+                            public void success(IApiResponse response) {
                                 super.success(response);
                                 CacheProfile.photo = photo;
                                 LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
                             }
 
                             @Override
-                            public void always(ApiResponse response) {
+                            public void always(IApiResponse response) {
                                 super.always(response);
                                 mLoadingLocker.setVisibility(View.GONE);
                             }
@@ -180,7 +182,7 @@ public class ProfilePhotoFragment extends BaseFragment {
                         deleteRequest.photos = new int[]{photo.getId()};
                         deleteRequest.callback(new SimpleApiHandler() {
                             @Override
-                            public void success(ApiResponse response) {
+                            public void success(IApiResponse response) {
                                 super.success(response);
                                 CacheProfile.photos.remove(photo);
                                 Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
@@ -195,7 +197,7 @@ public class ProfilePhotoFragment extends BaseFragment {
                             }
 
                             @Override
-                            public void always(ApiResponse response) {
+                            public void always(IApiResponse response) {
                                 super.always(response);
                                 mLoadingLocker.setVisibility(View.GONE);
                             }

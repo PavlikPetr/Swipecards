@@ -3,16 +3,17 @@ package com.topface.topface.requests.handlers;
 import android.app.Activity;
 import android.content.Context;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.ContainerActivity;
 
 public class VipApiHandler extends SimpleApiHandler {
     @Override
-    public void success(ApiResponse response) {
+    public void success(IApiResponse response) {
         //Этот метод можно переопределить
     }
 
     @Override
-    public void fail(int codeError, ApiResponse response) {
+    public void fail(int codeError, IApiResponse response) {
         if (codeError == ApiResponse.PREMIUM_ACCESS_ONLY) {
             Context context = getContext();
             if (context instanceof Activity) {
@@ -28,7 +29,7 @@ public class VipApiHandler extends SimpleApiHandler {
 
 
     @Override
-    public void always(ApiResponse response) {
+    public void always(IApiResponse response) {
         //Этот метод можно переопределить
     }
 }

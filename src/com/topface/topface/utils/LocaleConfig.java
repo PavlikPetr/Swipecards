@@ -3,19 +3,17 @@ package com.topface.topface.utils;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.widget.Toast;
 import com.topface.topface.App;
-import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.data.Auth;
-import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AuthRequest;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -64,20 +62,20 @@ public class LocaleConfig {
 
     public String getApplicationLocale() {
         if (mApplicationLocale == null) {
-            mApplicationLocale = getPreferences().getString(APPLICATION_LOCALE,Locale.getDefault().getLanguage());
+            mApplicationLocale = getPreferences().getString(APPLICATION_LOCALE, Locale.getDefault().getLanguage());
         }
         return mApplicationLocale;
     }
 
     public boolean setSystemLocale(String locale) {
         mSystemLocale = locale;
-        return getPreferences().edit().putString(SYSTEM_LOCALE,mSystemLocale).commit();
+        return getPreferences().edit().putString(SYSTEM_LOCALE, mSystemLocale).commit();
     }
 
     public boolean setApplicationLocale(String locale) {
         mApplicationLocale = locale;
         setSystemLocale(Locale.getDefault().getLanguage());
-        return getPreferences().edit().putString(APPLICATION_LOCALE,mApplicationLocale).commit();
+        return getPreferences().edit().putString(APPLICATION_LOCALE, mApplicationLocale).commit();
     }
 
     private SharedPreferences getPreferences() {
@@ -96,7 +94,7 @@ public class LocaleConfig {
         return resources.getString(R.string.app_locale);
     }
 
-    public static void changeLocale(final Activity activity, String selectedLocale,final int fragmentId) {
+    public static void changeLocale(final Activity activity, String selectedLocale) {
         localeChangeInitiated = true;
         final ProgressDialog progress = new ProgressDialog(activity);
         progress.setTitle(R.string.locale_changing);
@@ -107,12 +105,12 @@ public class LocaleConfig {
         //save application locale to preferences
         App.getConfig().getLocaleConfig().setApplicationLocale(selectedLocale);
         //restart -> open NavigationActivity
-        AuthRequest request = new AuthRequest(AuthToken.getInstance(),activity);
-        final String locale = LocaleConfig.getServerLocale(activity,selectedLocale);
+        AuthRequest request = new AuthRequest(AuthToken.getInstance(), activity);
+        final String locale = LocaleConfig.getServerLocale(activity, selectedLocale);
         request.setLocale(locale);
         request.callback(new ApiHandler() {
             @Override
-            public void success(ApiResponse response) {
+            public void success(IApiResponse response) {
                 Auth auth = new Auth(response);
                 Ssid.save(auth.ssid);
                 App.sendProfileAndOptionsRequests();
@@ -120,12 +118,12 @@ public class LocaleConfig {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(int codeError, IApiResponse response) {
                 Toast.makeText(activity, R.string.general_server_error, Toast.LENGTH_SHORT);
             }
 
             @Override
-            public void always(ApiResponse response) {
+            public void always(IApiResponse response) {
                 super.always(response);
                 progress.dismiss();
             }

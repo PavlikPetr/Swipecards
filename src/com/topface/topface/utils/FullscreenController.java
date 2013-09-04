@@ -25,7 +25,8 @@ import com.topface.topface.data.Banner;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
-import com.topface.topface.requests.handlers.BaseApiHandler;
+import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.views.ImageViewRemote;
 import ru.ideast.adwired.AWView;
 import ru.ideast.adwired.events.OnNoBannerListener;
@@ -79,7 +80,7 @@ public class FullscreenController {
     }
 
     private void requestIvengoFullscreen() {
-        advViewIvengo= AdvView.create(mActivity, IVENGO_APP_ID);
+        advViewIvengo = AdvView.create(mActivity, IVENGO_APP_ID);
         advViewIvengo.showBanner();
         advViewIvengo.setAdvListener(new AdvListener() {
             @Override
@@ -316,13 +317,11 @@ public class FullscreenController {
     private void requestTopfaceFullscreen() {
         BannerRequest request = new BannerRequest(App.getContext());
         request.place = Options.PAGE_START;
-        request.callback(new BaseApiHandler() {
+        request.callback(new DataApiHandler<Banner>() {
             @Override
-            public void success(ApiResponse response) {
-                final Banner banner = Banner.parse(response);
-
-                if (banner.action.equals(Banner.ACTION_URL)) {
-                    if (showFullscreenBanner(banner.parameter)) {
+            public void success(final Banner data, IApiResponse response) {
+                if (data.action.equals(Banner.ACTION_URL)) {
+                    if (showFullscreenBanner(data.parameter)) {
                         isFullScreenBannerVisible = true;
                         addLastFullscreenShowedTime();
                         final View fullscreenViewGroup = mActivity.getLayoutInflater().inflate(R.layout.fullscreen_topface, null);
@@ -330,13 +329,13 @@ public class FullscreenController {
                         bannerContainer.addView(fullscreenViewGroup);
                         bannerContainer.setVisibility(View.VISIBLE);
                         final ImageViewRemote fullscreenImage = (ImageViewRemote) fullscreenViewGroup.findViewById(R.id.ivFullScreen);
-                        fullscreenImage.setRemoteSrc(banner.url);
+                        fullscreenImage.setRemoteSrc(data.url);
                         fullscreenImage.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                addNewUrlToFullscreenSet(banner.parameter);
+                                addNewUrlToFullscreenSet(data.parameter);
                                 hideFullscreenBanner(bannerContainer);
-                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(banner.parameter));
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(data.parameter));
                                 mActivity.startActivity(intent);
                             }
                         });
@@ -352,8 +351,12 @@ public class FullscreenController {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
-                super.fail(codeError, response);
+            protected Banner parseResponse(ApiResponse response) {
+                return Banner.parse(response);
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
                 if (codeError == ApiResponse.BANNER_NOT_FOUND) {
                     addLastFullscreenShowedTime();
                 }
@@ -406,7 +409,7 @@ public class FullscreenController {
     }
 
     public void onPause() {
-        if(advViewIvengo != null) {
+        if (advViewIvengo != null) {
             advViewIvengo.dismiss();
         }
     }

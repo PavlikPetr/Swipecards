@@ -4,6 +4,7 @@ import android.app.Activity;
 import com.topface.topface.data.Rate;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RateRequest;
 import com.topface.topface.ui.ContainerActivity;
 
@@ -39,7 +40,7 @@ public class RateController {
             return;
         }
 
-            sendRate(userId, rate, mutualId, listener);
+        sendRate(userId, rate, mutualId, listener);
     }
 
     private void sendRate(final int userid, final int rate, final int mutualId, final OnRateListener listener) {
@@ -50,7 +51,7 @@ public class RateController {
         doRate.callback(new DataApiHandler<Rate>() {
 
             @Override
-            protected void success(Rate rate, ApiResponse response) {
+            protected void success(Rate rate, IApiResponse response) {
                 CacheProfile.likes = rate.likes;
                 CacheProfile.money = rate.money;
                 CacheProfile.average_rate = rate.average;
@@ -65,7 +66,7 @@ public class RateController {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(int codeError, IApiResponse response) {
                 if (listener != null) {
                     listener.onRateFailed();
                 }

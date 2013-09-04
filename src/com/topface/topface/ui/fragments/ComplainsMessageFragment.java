@@ -1,24 +1,22 @@
 package com.topface.topface.ui.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.topface.topface.R;
-import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ComplainRequest;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.Utils;
 
-public class ComplainsMessageFragment extends BaseFragment{
+public class ComplainsMessageFragment extends BaseFragment {
 
     public static final String CLASS_NAME = "class";
     public static final String TYPE_NAME = "type";
@@ -44,7 +42,7 @@ public class ComplainsMessageFragment extends BaseFragment{
     }
 
     public static ComplainsMessageFragment newInstance(int uid, String feedId, ComplainRequest.ClassNames className, ComplainRequest.TypesNames typeName) {
-        if(feedId == null) {
+        if (feedId == null) {
             return newInstance(uid, className, typeName);
         }
         ComplainsMessageFragment fragment = new ComplainsMessageFragment();
@@ -97,7 +95,7 @@ public class ComplainsMessageFragment extends BaseFragment{
     private void sendComplainRequest() {
         actionBar.setSendButtonEnabled(false);
         ComplainRequest request = new ComplainRequest(getActivity(), userId, className, typeName);
-        if(!description.getText().toString().equals("")) {
+        if (!description.getText().toString().equals("")) {
             request.setDescription(description.getText().toString());
         }
         if (feedId != null) {
@@ -106,24 +104,24 @@ public class ComplainsMessageFragment extends BaseFragment{
         complainLocker.setVisibility(View.VISIBLE);
         request.callback(new ApiHandler() {
             @Override
-            public void success(ApiResponse response) {
+            public void success(IApiResponse response) {
                 if (getActivity() != null) {
-                    Toast.makeText(getActivity(), R.string.general_complain_sended, 1500).show();
+                    Toast.makeText(getActivity(), R.string.general_complain_sended, Toast.LENGTH_SHORT).show();
                     getActivity().finish();
                 }
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(int codeError, IApiResponse response) {
                 if (getActivity() != null) {
                     Utils.showErrorMessage(getActivity());
                 }
             }
 
             @Override
-            public void always(ApiResponse response) {
+            public void always(IApiResponse response) {
                 super.always(response);
-                if(isAdded()) {
+                if (isAdded()) {
                     complainLocker.setVisibility(View.GONE);
                     actionBar.setSendButtonEnabled(true);
                 }

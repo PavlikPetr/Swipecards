@@ -12,11 +12,12 @@ import com.topface.topface.R;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.User;
 import com.topface.topface.requests.AlbumRequest;
-import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.Utils;
+import org.json.JSONObject;
 
 public class UserPhotoFragment extends BaseFragment {
     private User mUser;
@@ -37,14 +38,15 @@ public class UserPhotoFragment extends BaseFragment {
                     AlbumRequest request = new AlbumRequest(getActivity(), mUser.uid, AlbumRequest.DEFAULT_PHOTOS_LIMIT, data.get(data.size() - 2).getPosition() + 1, AlbumRequest.MODE_ALBUM);
                     request.callback(new ApiHandler() {
                         @Override
-                        public void success(ApiResponse response) {
+                        public void success(IApiResponse response) {
                             if (mGridAlbum != null) {
-                                ((UserPhotoGridAdapter) mGridAlbum.getAdapter()).addData(Photos.parse(response.jsonResult.optJSONArray("items")), response.jsonResult.optBoolean("more"));
+                                JSONObject jsonResult = response.getJsonResult();
+                                ((UserPhotoGridAdapter) mGridAlbum.getAdapter()).addData(Photos.parse(jsonResult.optJSONArray("items")), jsonResult.optBoolean("more"));
                             }
                         }
 
                         @Override
-                        public void fail(int codeError, ApiResponse response) {
+                        public void fail(int codeError, IApiResponse response) {
 
                         }
                     }).exec();
@@ -99,7 +101,7 @@ public class UserPhotoFragment extends BaseFragment {
     public void setUserData(User user) {
         mUser = user;
         mPhotoLinks = user.photos;
-        if(mGridAlbum != null && mGridAlbum.getAdapter() == null) {
+        if (mGridAlbum != null && mGridAlbum.getAdapter() == null) {
             setPhotos(mPhotoLinks);
             mGridAlbum.setAdapter(mUserPhotoGridAdapter);
             mGridAlbum.setOnScrollListener(mUserPhotoGridAdapter);

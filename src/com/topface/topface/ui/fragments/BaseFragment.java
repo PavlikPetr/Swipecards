@@ -115,10 +115,15 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     private void removeAllRequests() {
         if (mRequests != null && mRequests.size() > 0) {
-            for (ApiRequest request : mRequests) {
-                cancelRequest(request);
-            }
-            mRequests.clear();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (ApiRequest request : mRequests) {
+                        cancelRequest(request);
+                    }
+                    mRequests.clear();
+                }
+            }).start();
         }
     }
 

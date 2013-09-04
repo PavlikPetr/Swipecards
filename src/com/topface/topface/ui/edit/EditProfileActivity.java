@@ -18,7 +18,7 @@ import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
-import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -267,7 +267,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     request.callback(new ApiHandler() {
 
                         @Override
-                        public void success(ApiResponse response) {
+                        public void success(IApiResponse response) {
                             CacheProfile.city = new City(city_id, city_name,
                                     city_full);
                             LocalBroadcastManager.getInstance(getApplicationContext())
@@ -275,7 +275,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                         }
 
                         @Override
-                        public void fail(int codeError, ApiResponse response) {
+                        public void fail(int codeError, IApiResponse response) {
                         }
                     }).exec();
                     mEditCity.setText(city_name);
@@ -396,7 +396,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                 } else if (item instanceof EditForm) {
                     holder.mTitle.setText(item.getTitle());
                     if (item != null && item.getText() != null && item.getText().trim().length() > 0) {
-                        if (((EditForm)item).getId() != FormItem.NOT_SPECIFIED_ID) {
+                        if (((EditForm) item).getId() != FormItem.NOT_SPECIFIED_ID) {
                             holder.mText.setVisibility(View.VISIBLE);
                             holder.mText.setText(item.getText());
                         }

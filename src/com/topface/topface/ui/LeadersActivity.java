@@ -11,10 +11,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.Profile;
-import com.topface.topface.requests.AlbumRequest;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.LeaderRequest;
-import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.gridlayout.GridLayout;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -101,18 +98,18 @@ public class LeadersActivity extends BaseFragmentActivity {
                     new LeaderRequest(mSelectedPhoto.getPhotoId(), LeadersActivity.this)
                             .callback(new ApiHandler() {
                                 @Override
-                                public void success(ApiResponse response) {
+                                public void success(IApiResponse response) {
                                     mLoadingLocker.setVisibility(View.GONE);
                                     Toast.makeText(LeadersActivity.this, R.string.leaders_leader_now, Toast.LENGTH_SHORT).show();
                                     //Обновляем число монет
-                                    CacheProfile.money = response.jsonResult.optInt("money", CacheProfile.money);
+                                    CacheProfile.money = response.getJsonResult().optInt("money", CacheProfile.money);
                                     LocalBroadcastManager.getInstance(LeadersActivity.this)
                                             .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
                                     finish();
                                 }
 
                                 @Override
-                                public void fail(int codeError, ApiResponse response) {
+                                public void fail(int codeError, IApiResponse response) {
                                     mLoadingLocker.setVisibility(View.GONE);
                                     Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                                 }
@@ -140,10 +137,10 @@ public class LeadersActivity extends BaseFragmentActivity {
         mContainer.addView(rv.getView());
 
         mUselessTitle.setVisibility(View.GONE);
-        request.callback(new ApiHandler() {
+        request.callback(new DataApiHandler<Photos>() {
 
             @Override
-            public void always(ApiResponse response) {
+            public void always(IApiResponse response) {
                 super.always(response);
                 if (mLoadingLocker != null) {
                     mLoadingLocker.setVisibility(View.GONE);
@@ -151,16 +148,20 @@ public class LeadersActivity extends BaseFragmentActivity {
             }
 
             @Override
-            public void success(ApiResponse response) {
-                Photos photos = Photos.parse(response.jsonResult.optJSONArray("items"));
-                fillPhotos(photos);
+            protected void success(Photos data, IApiResponse response) {
+                fillPhotos(data);
                 mLoadingLocker.setVisibility(View.GONE);
                 rv.setVisibility(View.GONE);
 //                mUselessTitle.setVisibility(View.VISIBLE);
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            protected Photos parseResponse(ApiResponse response) {
+                return Photos.parse(response.getJsonResult().optJSONArray("items"));
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
                 mLoadingLocker.setVisibility(View.GONE);
                 rv.setVisibility(View.VISIBLE);
 

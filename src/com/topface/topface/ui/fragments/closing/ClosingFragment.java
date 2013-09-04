@@ -21,7 +21,7 @@ import com.topface.topface.utils.CacheProfile;
 /**
  * Базовый фрагмент экранов запираний
  */
-abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> implements View.OnClickListener{
+abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> implements View.OnClickListener {
 
     public static final int CHAT_CLOSE_DELAY_MILLIS = 1500;
 
@@ -45,7 +45,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
 
     public void showChat() {
         FeedUser user = getCurrentUser();
-        if(user != null) {
+        if (user != null) {
             QuickMessageFragment fragment = QuickMessageFragment.newInstance(user.id, getChatListener());
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             transaction.add(android.R.id.content, fragment, fragment.getClass().getName());
@@ -60,8 +60,8 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
         SkipAllClosedRequest skipAllRequest = new SkipAllClosedRequest(type, getActivity());
         skipAllRequest.callback(new SimpleApiHandler() {
             @Override
-            public void always(ApiResponse response) {
-                if(isAdded()) {
+            public void always(IApiResponse response) {
+                if (isAdded()) {
                     refreshActionBarTitles(getView());
                 }
             }
@@ -114,12 +114,12 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
             case R.id.btnSkip:
                 EasyTracker.getTracker().trackEvent(getTrackName(), "Skip", "", 1L);
                 if (CacheProfile.premium || alowSkipForNonPremium()) {
-                    if(getCurrentUser() != null  && getCurrentUser().feedItem != null) {
+                    if (getCurrentUser() != null && getCurrentUser().feedItem != null) {
                         SkipClosedRequest request = new SkipClosedRequest(getActivity());
-                        request.callback(new SimpleApiHandler(){
+                        request.callback(new SimpleApiHandler() {
                             @Override
-                            public void always(ApiResponse response) {
-                                if(isAdded()) {
+                            public void always(IApiResponse response) {
+                                if (isAdded()) {
                                     refreshActionBarTitles(getView());
                                 }
                             }
@@ -147,7 +147,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
         }
     }
 
-    protected boolean alowSkipForNonPremium(){
+    protected boolean alowSkipForNonPremium() {
         return true;
     }
 
@@ -158,7 +158,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
         super.onUsersProcessed();
         clearUsersList();
         if (getActivity() instanceof NavigationActivity) {
-            ((NavigationActivity)getActivity()).onClosings();
+            ((NavigationActivity) getActivity()).onClosings();
         }
     }
 

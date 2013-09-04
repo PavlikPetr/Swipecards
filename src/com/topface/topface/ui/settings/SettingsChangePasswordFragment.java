@@ -1,12 +1,8 @@
 package com.topface.topface.ui.settings;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,23 +12,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.gcm.GCMRegistrar;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Ssid;
-import com.topface.topface.Static;
-import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ChangePasswordRequest;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Settings;
-import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -73,7 +62,7 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
 
 
         Bundle arguments = getArguments();
-        if(arguments != null) {
+        if (arguments != null) {
             mNeedExit = arguments.getBoolean("needExit");
         }
 
@@ -82,7 +71,7 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
 
         TextView mSetPasswordText = (TextView) root.findViewById(R.id.setPasswordText);
 
-        if(mNeedExit) {
+        if (mNeedExit) {
             mSetPasswordText.setVisibility(View.VISIBLE);
         }
 
@@ -116,7 +105,7 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
                     lock();
                     request.callback(new ApiHandler() {
                         @Override
-                        public void success(ApiResponse response) {
+                        public void success(IApiResponse response) {
                             if (response.isCompleted()) {
                                 Toast.makeText(App.getContext(), R.string.passwords_changed, Toast.LENGTH_LONG).show();
                                 mToken.saveToken(mToken.getUserId(), mToken.getLogin(), password);
@@ -130,14 +119,14 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
                         }
 
                         @Override
-                        public void fail(int codeError, ApiResponse response) {
+                        public void fail(int codeError, IApiResponse response) {
                             Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
-                        public void always(ApiResponse response) {
+                        public void always(IApiResponse response) {
                             super.always(response);
-                            if(!mNeedExit) {
+                            if (!mNeedExit) {
                                 unlock();
                             }
                         }
@@ -154,12 +143,12 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
         lock();
         logoutRequest.callback(new ApiHandler() {
             @Override
-            public void success(ApiResponse response) {
+            public void success(IApiResponse response) {
                 AuthorizationManager.logout(getActivity());
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(int codeError, IApiResponse response) {
                 unlock();
             }
 

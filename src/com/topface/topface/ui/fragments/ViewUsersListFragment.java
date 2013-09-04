@@ -25,11 +25,7 @@ import com.topface.topface.data.search.OnUsersListEventsListener;
 import com.topface.topface.data.search.SearchUser;
 import com.topface.topface.data.search.UsersList;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
-import com.topface.topface.requests.AlbumRequest;
-import com.topface.topface.requests.ApiRequest;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.*;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.utils.*;
@@ -285,7 +281,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                 private boolean more = true;
 
                 @Override
-                protected void success(UsersList data, ApiResponse response) {
+                protected void success(UsersList data, IApiResponse response) {
                     UsersList.log("load success. Loaded " + data.size() + " users");
                     UsersList<T> usersList = getUsersList();
                     if (mFragmentPaused.get()) {
@@ -294,7 +290,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                         return;
                     }
                     if (data.size() != 0) {
-                        if(!mDatareturnedOnce) onNotEmptyDataReturnedOnce();
+                        if (!mDatareturnedOnce) onNotEmptyDataReturnedOnce();
                         getImageSwitcher().setVisibility(View.VISIBLE);
                         usersList.addAndUpdateSignature(data);
                         //если список был пуст, то просто показываем нового пользователя
@@ -341,10 +337,10 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                 }
 
                 @Override
-                public void fail(int codeError, ApiResponse response) {
+                public void fail(int codeError, IApiResponse response) {
                     FragmentActivity activity = getActivity();
                     if (activity != null) {
-                        UsersList.log("load error: " + response.message);
+                        UsersList.log("load error: " + response.getErrorMessage());
                         Toast.makeText(activity, App.getContext().getString(R.string.general_data_error),
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -353,7 +349,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                 }
 
                 @Override
-                public void always(ApiResponse response) {
+                public void always(IApiResponse response) {
                     super.always(response);
                     mUpdateInProcess = false;
                 }
@@ -382,12 +378,12 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
             AlbumRequest request = new AlbumRequest(getActivity(), currentUser.id, PHOTOS_LIMIT,
                     position, AlbumRequest.MODE_SEARCH);
             final int uid = currentUser.id;
-            request.callback(new ApiHandler() {
+            request.callback(new DataApiHandler<Photos>() {
+
                 @Override
-                public void success(ApiResponse response) {
+                protected void success(Photos newPhotos, IApiResponse response) {
                     if (uid == usersList.getCurrentUser().id) {
-                        Photos newPhotos = Photos.parse(response.jsonResult.optJSONArray("items"));
-                        mNeedMore = response.jsonResult.optBoolean("more");
+                        mNeedMore = response.getJsonResult().optBoolean("more");
                         int i = 0;
                         for (Photo photo : newPhotos) {
                             if (mLoadedCount + i < photos.size()) {
@@ -404,7 +400,12 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                 }
 
                 @Override
-                public void fail(int codeError, ApiResponse response) {
+                protected Photos parseResponse(ApiResponse response) {
+                    return Photos.parse(response.getJsonResult().optJSONArray("items"));
+                }
+
+                @Override
+                public void fail(int codeError, IApiResponse response) {
                     mCanSendAlbumReq = true;
                 }
             }).exec();

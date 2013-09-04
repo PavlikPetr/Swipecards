@@ -18,7 +18,7 @@ import com.sponsorpay.sdk.android.publisher.SponsorPayPublisher;
 import com.tapjoy.TapjoyConnect;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
-import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.ValidateGetJarRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -98,7 +98,7 @@ public class Offerwalls {
 
     /**
      * Tapjoy
-     **/
+     */
     private static void initTapjoy(Context context) {
         try {
             TapjoyConnect.requestTapjoyConnect(context, "f0563cf4-9e7c-4962-b333-098810c477d2", "AS0AE9vmrWvkyNNGPsyu");
@@ -124,7 +124,7 @@ public class Offerwalls {
 
     /**
      * Sponsorpay
-     **/
+     */
     private static void initSponsorpay(Context context) {
         try {
             SponsorPay.start("11625", Integer.toString(CacheProfile.uid), "0a4c64db64ed3c1ca14a5e5d81aaa23c", context);
@@ -149,7 +149,7 @@ public class Offerwalls {
 
     /**
      * Clickky
-     **/
+     */
     public static void startClickky(Activity activity) {
         try {
             Intent offerWallIntent = new Intent(activity, ClickkyActivity.class);
@@ -161,7 +161,7 @@ public class Offerwalls {
 
     /**
      * GetJar
-     **/
+     */
     private static void initGetJar(Context context) {
         try {
             mGetJarContext = GetJarManager.createContext(GETJAR_APP_KEY, context, new RewardsReceiver(new Handler()));
@@ -212,10 +212,10 @@ public class Offerwalls {
                             response.getTransactionId());
                     request.callback(new ApiHandler() {
                         @Override
-                        public void success(ApiResponse response) {
+                        public void success(IApiResponse response) {
                             JSONObject result = response.getJsonResult();
                             if (result != null) {
-                                boolean valid = result.optBoolean("valid",false);
+                                boolean valid = result.optBoolean("valid", false);
                                 if (valid) {
 
                                     String msg = String.format(getContext().getString(R.string.youve_earned),
@@ -238,7 +238,7 @@ public class Offerwalls {
                         }
 
                         @Override
-                        public void fail(int codeError, ApiResponse response) {
+                        public void fail(int codeError, IApiResponse response) {
                             showToast(R.string.general_server_error);
                         }
 
@@ -258,8 +258,10 @@ public class Offerwalls {
             this.getJarContext = getJarContext;
         }
 
-        void buy(String pickAccountTitle, ConsumableProduct consumableProduct){
-            if(consumableProduct==null) {throw new IllegalArgumentException("consumableProduct cannot be null");}
+        void buy(String pickAccountTitle, ConsumableProduct consumableProduct) {
+            if (consumableProduct == null) {
+                throw new IllegalArgumentException("consumableProduct cannot be null");
+            }
             this.consumableProduct = consumableProduct;
 
             // Ensure user is authenticated
@@ -280,7 +282,7 @@ public class Offerwalls {
             public void userAuthCompleted(User user) {
                 if (user != null) {
                     Debug.log("consumableUserAuthListener^ success");
-                    Localization localization = new Localization (getJarContext);
+                    Localization localization = new Localization(getJarContext);
                     if (consumablePricingList.isEmpty()) {
                         consumablePricingList.add(new Pricing((int) consumableProduct.getAmount(), GETJAT_MAX_DISCOUNT, GETJAT_MAX_MARKUP));
                     }

@@ -21,10 +21,7 @@ import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.PhotoMainRequest;
-import com.topface.topface.requests.ProfileRequest;
-import com.topface.topface.requests.SettingsRequest;
+import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -32,7 +29,6 @@ import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
 import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
 import com.topface.topface.ui.profile.PhotoSwitcherActivity;
-import com.topface.topface.ui.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.*;
 import com.topface.topface.utils.offerwalls.Offerwalls;
@@ -194,8 +190,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     protected void onPause() {
         super.onPause();
-        Debug.log("FragmentsDebug:: NavigationActivity onPause");
-        if(mFullscreenController != null) {
+        if (mFullscreenController != null) {
             mFullscreenController.onPause();
         }
     }
@@ -215,7 +210,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         Debug.log("FragmentsDebug:: NavigationActivity onResume");
         //restart -> open NavigationActivity
         if (App.getConfig().getLocaleConfig().fetchToSystemLocale()) {
-            LocaleConfig.changeLocale(this, App.getConfig().getLocaleConfig().getApplicationLocale(), mFragmentMenu.getCurrentFragmentId());
+            LocaleConfig.changeLocale(this, App.getConfig().getLocaleConfig().getApplicationLocale());
             return;
         } else {
             LocaleConfig.localeChangeInitiated = false;
@@ -264,13 +259,13 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                         request.callback(new ApiHandler() {
 
                             @Override
-                            public void success(ApiResponse response) {
+                            public void success(IApiResponse response) {
                                 CacheProfile.photo = photo;
                                 LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
                             }
 
                             @Override
-                            public void fail(int codeError, ApiResponse response) {
+                            public void fail(int codeError, IApiResponse response) {
                                 if (codeError == ApiResponse.NON_EXIST_PHOTO_ERROR) {
                                     if (CacheProfile.photos != null && CacheProfile.photos.contains(photo)) {
                                         CacheProfile.photos.remove(photo);
@@ -284,7 +279,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                             }
 
                             @Override
-                            public void always(ApiResponse response) {
+                            public void always(IApiResponse response) {
                                 super.always(response);
                             }
                         }).exec();
@@ -412,7 +407,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                     request.callback(new ApiHandler() {
 
                         @Override
-                        public void success(ApiResponse response) {
+                        public void success(IApiResponse response) {
                             CacheProfile.city = new City(city_id, city_name,
                                     city_full);
                             LocalBroadcastManager.getInstance(getApplicationContext())
@@ -420,7 +415,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                         }
 
                         @Override
-                        public void fail(int codeError, ApiResponse response) {
+                        public void fail(int codeError, IApiResponse response) {
                         }
                     }).exec();
                 }
@@ -522,7 +517,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     public static void restartNavigationActivity(int fragmentId) {
         Activity activity = instance;
-        Intent intent = new Intent(activity,NavigationActivity.class);
+        Intent intent = new Intent(activity, NavigationActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(GCMUtils.NEXT_INTENT, fragmentId);
         activity.startActivity(intent);

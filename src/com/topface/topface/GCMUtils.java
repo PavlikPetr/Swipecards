@@ -13,7 +13,7 @@ import android.text.TextUtils;
 import android.widget.ListView;
 import com.google.android.gcm.GCMRegistrar;
 import com.topface.topface.data.Photo;
-import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RegistrationTokenRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
@@ -58,7 +58,7 @@ public class GCMUtils {
     public static final String GCM_INTENT = "GCM";
     public static boolean GCM_SUPPORTED = true;
 
-    public static void init(Context context) {
+    public static void init(final Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
             try {
                 GCMRegistrar.checkDevice(context);
@@ -74,7 +74,12 @@ public class GCMUtils {
                     }
 
                 } else {
-                    GCMRegistrar.register(context, GCMIntentService.SENDER_ID);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            GCMRegistrar.register(context, GCMIntentService.SENDER_ID);
+                        }
+                    }).start();
                     Debug.log("Registered: " + GCMRegistrar.getRegistrationId(context));
                 }
 
@@ -342,12 +347,12 @@ public class GCMUtils {
                 registrationRequest.token = registrationId;
                 registrationRequest.callback(new ApiHandler() {
                     @Override
-                    public void success(ApiResponse response) {
+                    public void success(IApiResponse response) {
                         GCMRegistrar.setRegisteredOnServer(context, true);
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) {
+                    public void fail(int codeError, IApiResponse response) {
                         Debug.error(String.format("RegistrationRequest fail: #%d %s", codeError, response));
                         GCMRegistrar.setRegisteredOnServer(context, false);
                     }

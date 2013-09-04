@@ -166,7 +166,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         request.photos = mDeletedPhotos.getIdsArray();
         request.callback(new ApiHandler() {
             @Override
-            public void success(ApiResponse response) {
+            public void success(IApiResponse response) {
                 for (Photo currentPhoto : mDeletedPhotos) {
                     CacheProfile.photos.removeById(currentPhoto.getId());
                 }
@@ -178,7 +178,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(int codeError, IApiResponse response) {
                 Toast.makeText(PhotoSwitcherActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT).show();
             }
         }).exec();
@@ -190,7 +190,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         registerRequest(request);
         request.callback(new ApiHandler() {
             @Override
-            public void success(ApiResponse response) {
+            public void success(IApiResponse response) {
                 CacheProfile.photo = currentPhoto;
                 sendProfileUpdateBroadcast();
                 refreshButtonsState();
@@ -198,7 +198,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(int codeError, IApiResponse response) {
                 Toast.makeText(PhotoSwitcherActivity.this, R.string.general_server_error, Toast.LENGTH_SHORT)
                         .show();
             }
@@ -293,14 +293,14 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     private void sendAlbumRequest(final Photos data) {
         int position = data.get(mLoadedCount - 2).getPosition() + 1;
         AlbumRequest request = new AlbumRequest(this, mUid, AlbumRequest.DEFAULT_PHOTOS_LIMIT, position, AlbumRequest.MODE_SEARCH);
-        request.callback(new ApiHandler() {
+        request.callback(new DataApiHandler<Photos>() {
+
             @Override
-            public void success(ApiResponse response) {
-                Photos newPhotos = Photos.parse(response.jsonResult.optJSONArray("items"));
-                mNeedMore = response.jsonResult.optBoolean("more");
+            protected void success(Photos newPhotos, IApiResponse response) {
+                mNeedMore = response.getJsonResult().optBoolean("more");
                 int i = -1;
                 for (Photo photo : newPhotos) {
-                    data.set(mLoadedCount + i, photo);
+                    newPhotos.set(mLoadedCount + i, photo);
                     i++;
                 }
                 mLoadedCount += newPhotos.size();
@@ -315,7 +315,12 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            protected Photos parseResponse(ApiResponse response) {
+                return Photos.parse(response.jsonResult.optJSONArray("items"));
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
                 mCanSendAlbumReq = true;
             }
         }).exec();

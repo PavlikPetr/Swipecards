@@ -13,6 +13,8 @@ import java.util.zip.GZIPInputStream;
 public class HttpUtils {
 
     public static final String GZIP_ENCODING = "gzip";
+    public static final String LINE_END = "\r\n";
+    public static final String TWO_HH = "--";
 
     /**
      * Типы HTTP запросов, PUT и т.п. мы не поддерживаем

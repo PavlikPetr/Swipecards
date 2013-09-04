@@ -18,6 +18,7 @@ import com.topface.topface.Static;
 import com.topface.topface.data.Register;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RegisterRequest;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
@@ -144,7 +145,7 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
             request.callback(new DataApiHandler<Register>() {
 
                 @Override
-                protected void success(Register data, ApiResponse response) {
+                protected void success(Register data, IApiResponse response) {
                     Intent intent = new Intent();
                     intent.putExtra(INTENT_LOGIN, email);
                     intent.putExtra(INTENT_PASSWORD, password);
@@ -168,7 +169,7 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
                 }
 
                 @Override
-                public void fail(int codeError, ApiResponse response) {
+                public void fail(int codeError, IApiResponse response) {
                     switch (codeError) {
                         case ApiResponse.INCORRECT_LOGIN:
                             redAlert(R.string.incorrect_email);
@@ -187,7 +188,7 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
                 }
 
                 @Override
-                public void always(ApiResponse response) {
+                public void always(IApiResponse response) {
                     showButtons();
                 }
             });
