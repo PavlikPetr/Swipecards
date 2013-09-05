@@ -22,6 +22,7 @@ public class Settings {
     public static final String SILENT = "silent";
     private static Settings mInstance;
     public static final String SETTINGS_C2DM_RINGTONE = "settings_c2dm_ringtone";
+    public static final String NOTIFICATION_MELODY = "notification_melody";
     public static final String SETTINGS_C2DM_VIBRATION = "settings_c2dm_vibration";
     public static final String SETTINGS_C2DM = "settings_c2dm";
     public static final String DEFAULT_SOUND = "DEFAULT_SOUND";
@@ -69,6 +70,10 @@ public class Settings {
 
     public String getSocialAccountName() {
         return mSettings.getString(SETTINGS_SOCIAL_ACCOUNT_NAME, Static.EMPTY);
+    }
+
+    public String getRingtoneName() {
+        return mSettings.getString(NOTIFICATION_MELODY, Static.EMPTY);
     }
 
     public void getSocialAccountName(final TextView textView) {

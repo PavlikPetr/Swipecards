@@ -121,22 +121,25 @@ abstract public class MultipartApiRequest extends ApiRequest {
 
     @Override
     public void sendHandlerMessage(IApiResponse multipartResponse) {
-        MultipartApiResponse response = (MultipartApiResponse) multipartResponse;
-        if (response != null) {
-            HashMap<String, ApiResponse> responses = response.getResponses();
-            for (Map.Entry<String, ApiResponse> entry : responses.entrySet()) {
-                String key = entry.getKey();
-                //Проверяем, что ответ без ошибки и содержится в списке запросов
-                if (entry.getValue().isCompleted() && mRequests.containsKey(key)) {
-                    //Отправляем в handler подзапроса результат
-                    mRequests.get(key).sendHandlerMessage(entry.getValue());
-                    //И удаляем из списка запросов
-                    mRequests.remove(key);
+        //Не обрабатываем ответы с ошибками
+        if (multipartResponse instanceof MultipartApiResponse) {
+            MultipartApiResponse response = (MultipartApiResponse) multipartResponse;
+            if (response != null) {
+                HashMap<String, ApiResponse> responses = response.getResponses();
+                for (Map.Entry<String, ApiResponse> entry : responses.entrySet()) {
+                    String key = entry.getKey();
+                    //Проверяем, что ответ без ошибки и содержится в списке запросов
+                    if (entry.getValue().isCompleted() && mRequests.containsKey(key)) {
+                        //Отправляем в handler подзапроса результат
+                        mRequests.get(key).sendHandlerMessage(entry.getValue());
+                        //И удаляем из списка запросов
+                        mRequests.remove(key);
+                    }
                 }
             }
+            //Ответ от основного запроса
+            super.sendHandlerMessage(multipartResponse);
         }
-        //Ответ от основного запроса
-        super.sendHandlerMessage(multipartResponse);
 
     }
 

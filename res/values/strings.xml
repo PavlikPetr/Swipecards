@@ -544,4 +544,5 @@
         <item quantity="other">%d selected</item>
         <item quantity="one">%d selected</item>
     </plurals>
+    <string name="silent_ringtone">Silent mode</string>
 </resources>
