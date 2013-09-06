@@ -8,7 +8,7 @@
 
 <uses-sdk
             android:minSdkVersion="7"
-            android:targetSdkVersion="16" />
+            android:targetSdkVersion="17" />
 
     <!-- permissions -->
     <permission
@@ -354,3 +354,4 @@
     </application>
 
 </manifest>
+

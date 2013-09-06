@@ -1,9 +1,11 @@
-
+build
 /bin
 /gen
 /out
 /.idea
 /.settings
+/.gradle
+/build
 *.iml
 .project
 .classpath

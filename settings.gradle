@@ -1,0 +1,9 @@
+include ':android'
+//Topface sub projects
+include ':libs:IllustratedTextView'
+//Third part libs
+include ':libs:Android-ViewPagerIndicator', ':libs:PullToRefresh', ':libs:SlidingMenu', ':libs:PhotoView', ':libs:UniversalImageLoader'
+//Social networks
+include ':libs:Facebook', ':libs:odnoklassniki'
+//Ad networs
+include ':libs:WapStart', ':libs:MoPub'
