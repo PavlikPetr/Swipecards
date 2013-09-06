@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.Toast;
 import com.topface.topface.R;
 import com.topface.topface.utils.CacheProfile;
@@ -27,6 +28,8 @@ public class PaymentwallActivity extends BaseFragmentActivity {
     public static final String DEFAULT_URL = "https://wallapi.com/api/subscription/?key=3b2e96bcaa32b23b34605dfbf51c4df5&uid=[USER_ID]&widget=m2_1&success_url=http://topface.com/paymentwall-success";
     private String mSuccessUrl;
     private View mProgressBar;
+    private WebView webView;
+    private Button close;
 
     public static Intent getIntent(Context context, int userId) {
         Intent intent = new Intent(context, PaymentwallActivity.class);
@@ -48,12 +51,20 @@ public class PaymentwallActivity extends BaseFragmentActivity {
 
         // Progress
         mProgressBar = findViewById(R.id.prsWebLoading);
+        close = (Button) findViewById(R.id.closeWebView);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         // WebView
-        WebView webView = (WebView) findViewById(R.id.wvWebFrame);
+        webView = (WebView) findViewById(R.id.wvWebFrame);
         //noinspection AndroidLintSetJavaScriptEnabled
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setVerticalScrollbarOverlay(true);
+        webView.addJavascriptInterface(new JavascriptInterface(), "jsinterface");
         webView.setVerticalFadingEdgeEnabled(true);
         webView.setWebViewClient(new PaymentwallClient(webView));
     }
@@ -97,6 +108,8 @@ public class PaymentwallActivity extends BaseFragmentActivity {
 
             } else {
                 mProgressBar.setVisibility(View.VISIBLE);
+
+
             }
         }
 
@@ -108,7 +121,34 @@ public class PaymentwallActivity extends BaseFragmentActivity {
                 finishActivity(Activity.RESULT_OK);
             }
             mProgressBar.setVisibility(View.GONE);
+            close.setVisibility(View.VISIBLE);
         }
+
+
+    }
+
+    public final class JavascriptInterface {
+        public JavascriptInterface() {
+
+        }
+
+        public void performBackButtonClick() {
+            finish();
+        }
+
+        public void log(String obj) {
+            Debug.log("JS:" + obj);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mProgressBar.getVisibility() == View.VISIBLE) {
+            super.onBackPressed();
+        }
+        String code = "javascript:if(window.ps_back_button.style.display == 'none' || window.ps_back_button == undefined) {jsinterface.performBackButtonClick();} else { event = document.createEvent( 'HTMLEvents' ); event.initEvent( 'click', true, true );window.ps_back_button.dispatchEvent( event );}";
+        String testCode = "javascript: window.ps_back_button.click();";
+        webView.loadUrl(code);
     }
 
     private String getWidgetUrl() {
