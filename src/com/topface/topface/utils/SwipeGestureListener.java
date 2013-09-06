@@ -50,7 +50,7 @@ public class SwipeGestureListener extends SimpleOnGestureListener {
                 if (mSwipeListener != null) {
                     int position = mListView.pointToPosition((int) e1.getX(), (int) e1.getY());
                     if (position > 0) {
-                        mSwipeListener.onSwipeR2L(position - 2); //TODO магия                        
+                        mSwipeListener.onSwipeR2L(position - 2); //не знаю почему 2 подбиралось экспериментально
                     }
                 }
             } else if (e2.getX() - e1.getX() > REL_SWIPE_MIN_DISTANCE &&
@@ -58,7 +58,7 @@ public class SwipeGestureListener extends SimpleOnGestureListener {
                 if (mSwipeListener != null) {
                     int position = mListView.pointToPosition((int) e1.getX(), (int) e1.getY());
                     if (position > 0) {
-                        mSwipeListener.onSwipeL2R(position - 2); //TODO магия                        
+                        mSwipeListener.onSwipeL2R(position - 2); //не знаю почему 2 подбиралось экспериментально
                     }
                 }
             }

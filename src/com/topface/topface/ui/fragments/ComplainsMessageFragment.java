@@ -64,6 +64,13 @@ public class ComplainsMessageFragment extends BaseFragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater,container,savedInstanceState);
         View root = inflater.inflate(R.layout.complains_message_fragment, container, false);
+        // to prevent clicks through fragment
+        root.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
 
         Bundle arguments = getArguments();
         className = (ComplainRequest.ClassNames) arguments.getSerializable(CLASS_NAME);

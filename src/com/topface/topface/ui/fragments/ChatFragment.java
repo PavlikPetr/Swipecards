@@ -634,7 +634,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     EasyTracker.getTracker().trackEvent("Chat", "SendMapClick", "§", 1L);
                 }
                 break;
-            case R.id.btnNavigationProfileBar:
             case R.id.btnBuyVip:
                 startActivityForResult(ContainerActivity.getVipBuyIntent(null, "Chat"), ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                 break;

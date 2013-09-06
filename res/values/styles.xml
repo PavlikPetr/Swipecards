@@ -17,6 +17,7 @@
         <item name="android:editTextStyle">@style/topfaceEditText</item>
         <item name="android:checkboxStyle">@style/topfaceCheckbox</item>
         <item name="android:windowBackground">@null</item>
+        <item name="android:windowContentOverlay">@drawable/actionbar_shadow</item>
 
         <!-- ActionBar  -->
         <item name="actionBarSize">@dimen/default_header_height</item>
@@ -44,12 +45,16 @@
 
     <style name="Widget.Topface.ActionBar.Title">
         <item name="android:layout_width">fill_parent</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textColor">#FFFFFF</item>
+        <item name="android:shadowColor">#000000</item>
+        <item name="android:shadowRadius">2</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">-2</item>
     </style>
 
     <style name="Widget.Topface.ActionBar.Subtitle" parent="Widget.Topface.ActionBar.Title">
-        <item name="android:textSize">9sp</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
     <style name="Widget.Topface.ActionBar.Buttons" parent="@style/Widget.AppCompat.ActionButton">
@@ -338,16 +343,6 @@
         <item name="android:layout_height">73dp</item>
     </style>
 
-    <style name="HeaderShadow">
-        <item name="android:tag">@string/tag_header_shadow</item>
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_below">@id/loNavigationBar</item>
-        <item name="android:background">@drawable/im_bar_header_shadow</item>
-    </style>
-
-
-
     <style name="OnlineIndicator">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -430,7 +425,7 @@
         <item name="android:singleLine">true</item>
     </style>
 
-    <style name="NavigationHeader" parent="ShadowUserText">
+    <style name="WhiteHeader" parent="ShadowUserText">
         <item name="android:textColor">#FFFFFF</item>
     </style>
 
@@ -626,14 +621,6 @@
     <style name="Widget.TopfaceIconPageIndicator" parent="Widget">
         <item name="android:layout_marginLeft">6dp</item>
         <item name="android:layout_marginRight">6dp</item>
-    </style>
-
-
-    <style name="HeaderBar">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">46dp</item>
-        <item name="android:baselineAligned">false</item>
-        <item name="android:background">@drawable/im_bar_header</item>
     </style>
 
     <style name="TopfaceTextAppearance">

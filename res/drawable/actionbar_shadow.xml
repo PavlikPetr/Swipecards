@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <bitmap xmlns:android="http://schemas.android.com/apk/res/android"
-        android:src="@drawable/bg_action_bar_tile"
-        android:tileMode="repeat"
-        />
+        android:src="@drawable/im_bar_header_shadow"
+        android:tileMode="repeat"/>

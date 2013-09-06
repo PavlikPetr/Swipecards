@@ -140,8 +140,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
         mUserActions.setVisibility(View.INVISIBLE);
 
-        mTitle = (TextView) root.findViewById(R.id.tvNavigationTitle);
-
         initHeaderPages(root);
 
         initBodyPages(root);
@@ -157,7 +155,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mLockScreen.addView(mRetryView.getView());
 
         if (mProfileType == TYPE_MY_PROFILE) {
-            mTitle.setText(R.string.profile_header_title);
             setActionBarTitles(R.string.profile_header_title);
         } else if (mProfileType == TYPE_USER_PROFILE) {
             setActionBarTitles(R.string.general_profile);
@@ -348,8 +345,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         ((TextView)mBlocked.findViewById(R.id.blockTV)).setText(R.string.black_list_add_short);
                     }
                     mRateController.setOnRateControllerListener(mRateControllerListener);
-                    //set info into views for user
-                    mTitle.setText(R.string.general_profile);
 
                     setProfile(data);
                     if (mHeaderMainFragment != null) {
@@ -779,8 +774,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         if (mHeaderPager != null) {
             mHeaderPager.setCurrentItem(0);
         }
-        if (mTitle != null && mLoaderView != null) {
-            mTitle.setText(Static.EMPTY);
+        if (mLoaderView != null) {
             mLoaderView.setVisibility(View.VISIBLE);
         }
         if (mHeaderMainFragment != null) mHeaderMainFragment.clearContent();

@@ -6,9 +6,8 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
+import android.view.animation.TranslateAnimation;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
@@ -49,15 +48,6 @@ public class ContactsFragment extends BaseFragment{
 
         TextView title = (TextView) root.findViewById(R.id.inviteText);
         title.setText(Utils.getQuantityString(R.plurals.invite_friends_plurals, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().contacts_count, CacheProfile.getOptions().premium_period));
-
-        //TODO topfaceActionBar.showCheckBox(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                CheckBox checkBox = (CheckBox)v;
-//                ((ContactsListAdapter)contactsView.getAdapter()).setAllDataChecked(checkBox.isChecked());
-//                ((ContactsListAdapter)contactsView.getAdapter()).changeButtonState();
-//            }
-//        });
 
         contactsView = (ListView) root.findViewById(R.id.contactsList);
         //Получаем список контактов из аргументов. Если он не пришел, закрываем фрагмент.
@@ -326,5 +316,46 @@ public class ContactsFragment extends BaseFragment{
     @Override
     protected String getTitle() {
         return getString(R.string.general_invite_friends);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        final MenuItem selectAllMenuItem = menu.findItem(R.id.action_select_all);
+        CheckBox checkBox = (CheckBox) selectAllMenuItem.getActionView().findViewById(R.id.cbCheckBox);
+        selectAllMenuItem.setChecked(true);
+        checkBox.setChecked(true);
+        checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onOptionsItemSelected(selectAllMenuItem);
+            }
+        });
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                ContactsListAdapter adapter = (ContactsListAdapter)contactsView.getAdapter();
+                adapter.setAllDataChecked(isChecked);
+                adapter.changeButtonState();
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_profile:
+                boolean checked = !item.isChecked();
+                item.setChecked(checked);
+                ((CheckBox)item.getActionView().findViewById(R.id.cbCheckBox)).setChecked(checked);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected Integer getOptionsMenuRes() {
+        return R.menu.actions_invite_contacts;
     }
 }

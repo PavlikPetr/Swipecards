@@ -39,7 +39,7 @@ import com.topface.topface.utils.offerwalls.Offerwalls;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-public class NavigationActivity extends BaseFragmentActivity implements View.OnClickListener {
+public class NavigationActivity extends BaseFragmentActivity {
 
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
 
@@ -392,16 +392,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     public boolean startAuth() {
         boolean result = super.startAuth();
         return result;
-    }
-
-    /*
-            *  обработчик кнопки открытия меню в заголовке фрагмента
-            */
-    @Override
-    public void onClick(View view) {
-        if (view.getId() == R.id.leftButtonContainer) {
-            toggleDrawerLayout();
-        }
     }
 
     private void toggleDrawerLayout() {

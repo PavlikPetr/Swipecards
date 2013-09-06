@@ -102,21 +102,17 @@ public class AnimatedView extends View {
     }
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-// TODO Auto-generated method stub
-//super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+//        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         System.out.println("Width " + widthMeasureSpec);
         setMeasuredDimension(st.getFrameSize().width(), st.getFrameSize().height());
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-// TODO Auto-generated method stub
-//super.onDraw(canvas);
-
+//        super.onDraw(canvas);
         st.setXpos(0);
         st.setYpos(0);
         st.draw(canvas);
         gameloop.start();
-
     }
 }
