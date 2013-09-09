@@ -244,8 +244,8 @@ public class Options extends AbstractData {
             JSONObject getJar = response.jsonResult.optJSONObject("getjar");
             options.getJar = new GetJar(getJar.optString("id"),getJar.optString("name"),getJar.optLong("price"));
 
-            options.gagTypeBanner = response.jsonResult.optString("gag_type_banner");
-            options.gagTypeFullscreen = response.jsonResult.optString("gag_type_fullscreen");
+            options.gagTypeBanner = response.jsonResult.optString("gag_type_banner",Options.BANNER_ADMOB);
+            options.gagTypeFullscreen = response.jsonResult.optString("gag_type_fullscreen", Options.BANNER_NONE);
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
         }

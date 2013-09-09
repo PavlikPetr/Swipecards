@@ -114,7 +114,7 @@ public class BannerBlock {
             Options options = CacheProfile.getOptions();
             if (bannersMap.containsKey(fragmentId) && options != null && options.pages != null) {
                 if (bannersMap.get(fragmentId) != null) {
-                    String bannerType = Options.BANNER_ADLAB;//bannersMap.get(fragmentId).banner;
+                    String bannerType = bannersMap.get(fragmentId).banner;
 
                     //AdCamp uses only FROYO and above
                     if (bannerType.equals(Options.BANNER_ADCAMP)) {
@@ -428,14 +428,16 @@ public class BannerBlock {
         removeBanner();
         String bannerType = CacheProfile.getOptions().gagTypeBanner;
         mBannerView = getBannerView(bannerType);
-        mBannerLayout.addView(mBannerView);
-        if (bannerType.equals(Options.BANNER_TOPFACE)) {
-            loadBanner(Options.BANNER_GAG);
-        } else {
-            try {
-                showBanner(null);
-            } catch (Exception e) {
-                Debug.error(e);
+        if (mBannerView != null) {
+            mBannerLayout.addView(mBannerView);
+            if (bannerType.equals(Options.BANNER_TOPFACE)) {
+                loadBanner(Options.BANNER_GAG);
+            } else {
+                try {
+                    showBanner(null);
+                } catch (Exception e) {
+                    Debug.error(e);
+                }
             }
         }
     }
