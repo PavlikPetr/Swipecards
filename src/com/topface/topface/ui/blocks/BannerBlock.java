@@ -3,6 +3,7 @@ package com.topface.topface.ui.blocks;
 import ad.labs.sdk.AdBanner;
 import ad.labs.sdk.AdHandler;
 import ad.labs.sdk.AdInitializer;
+import ad.labs.sdk.tasks.BannerLoader;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -212,6 +213,12 @@ public class BannerBlock {
         adBanner.setOnCloseBannerListener(new AdBanner.OnCloseBannerListener() {
             @Override
             public void onClose() {
+                requestBannerGag();
+            }
+        });
+        mAdlabInitializer.setOnBannerRequestListener(new BannerLoader.OnBannerRequestListener() {
+            @Override
+            public void onFailedBannerRequest(String s) {
                 requestBannerGag();
             }
         });
