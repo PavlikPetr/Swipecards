@@ -232,12 +232,6 @@ public class BannerBlock {
     private void showAdlab() {
         AdBanner adBanner = (AdBanner)mBannerView;
         mAdlabInitializer = new AdInitializer(mContext, adBanner, ADLAB_IDENTIFICATOR);
-        adBanner.setOnCloseBannerListener(new AdBanner.OnCloseBannerListener() {
-            @Override
-            public void onClose() {
-                requestBannerGag();
-            }
-        });
         mAdlabInitializer.setOnBannerRequestListener(new BannerLoader.OnBannerRequestListener() {
             @Override
             public void onFailedBannerRequest(String s) {
