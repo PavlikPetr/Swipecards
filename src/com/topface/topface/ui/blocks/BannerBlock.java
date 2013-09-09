@@ -1,7 +1,6 @@
 package com.topface.topface.ui.blocks;
 
 import ad.labs.sdk.AdBanner;
-import ad.labs.sdk.AdHandler;
 import ad.labs.sdk.AdInitializer;
 import ad.labs.sdk.tasks.BannerLoader;
 import android.app.ProgressDialog;
@@ -66,7 +65,7 @@ public class BannerBlock {
 
     public static final String VIRUS_LIKES_BANNER_PARAM = "viruslikes";
     private static final String MOPUB_AD_UNIT_ID = "4ec8274ea73811e295fa123138070049";
-    private static final String ADLAB_IDENTIFICATOR = ""; //TODO
+    private static final String ADLAB_IDENTIFICATOR = "399375";
 
     private LayoutInflater mInflater;
     ViewGroup mBannerLayout;
@@ -113,7 +112,7 @@ public class BannerBlock {
             Options options = CacheProfile.getOptions();
             if (bannersMap.containsKey(fragmentId) && options != null && options.pages != null) {
                 if (bannersMap.get(fragmentId) != null) {
-                    String bannerType = bannersMap.get(fragmentId).banner;
+                    String bannerType = Options.BANNER_ADLAB;//bannersMap.get(fragmentId).banner;
 
                     //AdCamp uses only FROYO and above
                     if (bannerType.equals(Options.BANNER_ADCAMP)) {
@@ -220,6 +219,8 @@ public class BannerBlock {
             @Override
             public void onFailedBannerRequest(String s) {
                 requestBannerGag();
+                mAdlabInitializer.pause();
+                mAdlabInitializer = null;
             }
         });
     }
