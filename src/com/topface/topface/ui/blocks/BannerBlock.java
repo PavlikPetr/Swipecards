@@ -1,5 +1,8 @@
 package com.topface.topface.ui.blocks;
 
+import ad.labs.sdk.AdBanner;
+import ad.labs.sdk.AdInitializer;
+import ad.labs.sdk.tasks.BannerLoader;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -64,18 +67,22 @@ public class BannerBlock {
     public static final String VIRUS_LIKES_BANNER_PARAM = "viruslikes";
     private static final String MOPUB_AD_UNIT_ID = "4ec8274ea73811e295fa123138070049";
     private static final String LIFESTREET_SLOT_TAG = "http://mobile-android.lfstmedia.com/m2/slot76330?ad_size=320x50&adkey=3f6";
+    private static final String ADLAB_IDENTIFICATOR = "399375";
 
     private LayoutInflater mInflater;
     ViewGroup mBannerLayout;
     private Fragment mFragment;
+    private Context mContext;
     private View mBannerView;
     private static boolean mAdcampInitialized = false;
 
     private Map<String, Character> mAdwiredMap = new HashMap<String, Character>();
+    private AdInitializer mAdlabInitializer;
 
     public BannerBlock(Fragment fragment, ViewGroup layout) {
         super();
         mFragment = fragment;
+        mContext = mFragment.getActivity();
         mInflater = (LayoutInflater) mFragment.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mBannerLayout = (ViewGroup) layout.findViewById(R.id.loBannerContainer);
         setBannersMap();
@@ -150,6 +157,9 @@ public class BannerBlock {
                 return mInflater.inflate(R.layout.banner_adcamp, mBannerLayout, false);
             } else if (bannerType.equals(Options.BANNER_LIFESTREET)) {
                 return mInflater.inflate(R.layout.banner_lifestreet, mBannerLayout, false);
+                return mInflater.inflate(R.layout.banner_adcamp, null);
+            } else if (bannerType.equals(Options.BANNER_ADLAB)) {
+                return mInflater.inflate(R.layout.banner_adlab, null);
             } else {
                 return null;
             }
@@ -192,6 +202,8 @@ public class BannerBlock {
             showAdcamp();
         } else if (mBannerView instanceof SlotView) {
             showLifeStreet();
+        } else if (mBannerView instanceof AdBanner) {
+            showAdlab();
         } else if (mBannerView instanceof ImageView) {
             if (banner == null) {
                 requestBannerGag();
@@ -216,6 +228,25 @@ public class BannerBlock {
             }
         });
         slotView.loadAd();
+    }
+
+    private void showAdlab() {
+        AdBanner adBanner = (AdBanner)mBannerView;
+        mAdlabInitializer = new AdInitializer(mContext, adBanner, ADLAB_IDENTIFICATOR);
+        adBanner.setOnCloseBannerListener(new AdBanner.OnCloseBannerListener() {
+            @Override
+            public void onClose() {
+                requestBannerGag();
+            }
+        });
+        mAdlabInitializer.setOnBannerRequestListener(new BannerLoader.OnBannerRequestListener() {
+            @Override
+            public void onFailedBannerRequest(String s) {
+                requestBannerGag();
+                mAdlabInitializer.pause();
+                mAdlabInitializer = null;
+            }
+        });
     }
 
     private void showMopub() {
@@ -534,6 +565,7 @@ public class BannerBlock {
         if (mBannerView instanceof SlotView) {
             ((SlotView)mBannerView).pause();
         }
+        if (mAdlabInitializer != null) mAdlabInitializer.pause();
     }
 
     public void onDestroy() {
@@ -548,5 +580,6 @@ public class BannerBlock {
         if (mBannerView instanceof SlotView) {
             ((SlotView)mBannerView).resume();
         }
+        if (mAdlabInitializer != null) mAdlabInitializer.resume();
     }
 }
