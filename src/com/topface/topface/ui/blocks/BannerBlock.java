@@ -114,7 +114,7 @@ public class BannerBlock {
             Options options = CacheProfile.getOptions();
             if (bannersMap.containsKey(fragmentId) && options != null && options.pages != null) {
                 if (bannersMap.get(fragmentId) != null) {
-                    String bannerType = bannersMap.get(fragmentId).banner;
+                    String bannerType = Options.BANNER_ADLAB;//bannersMap.get(fragmentId).banner;
 
                     //AdCamp uses only FROYO and above
                     if (bannerType.equals(Options.BANNER_ADCAMP)) {
@@ -157,7 +157,6 @@ public class BannerBlock {
                 return mInflater.inflate(R.layout.banner_adcamp, mBannerLayout, false);
             } else if (bannerType.equals(Options.BANNER_LIFESTREET)) {
                 return mInflater.inflate(R.layout.banner_lifestreet, mBannerLayout, false);
-                return mInflater.inflate(R.layout.banner_adcamp, null);
             } else if (bannerType.equals(Options.BANNER_ADLAB)) {
                 return mInflater.inflate(R.layout.banner_adlab, null);
             } else {
