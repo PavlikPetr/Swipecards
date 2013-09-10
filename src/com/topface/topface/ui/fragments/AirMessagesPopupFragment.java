@@ -13,16 +13,28 @@ import com.topface.topface.data.Options;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 
 public class AirMessagesPopupFragment extends BaseFragment implements View.OnClickListener {
 
-    private Options.PremiumMessages mPremiumMessages;
+    public static final String AIR_TYPE = "AIR_TYPE";
+
+    private Options.PremiumAirEntity mPremiumMessages;
     private boolean mUserClickButton = false;
+
+    public static AirMessagesPopupFragment newInstance(int airType) {
+        Bundle arguments = new Bundle();
+        arguments.putInt(AIR_TYPE, airType);
+        AirMessagesPopupFragment fragment = new AirMessagesPopupFragment();
+        fragment.setArguments(arguments);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mPremiumMessages = CacheProfile.getOptions().premium_messages;
 
     }
@@ -54,16 +66,16 @@ public class AirMessagesPopupFragment extends BaseFragment implements View.OnCli
         }
     }
 
-    public static void showIfNeeded(FragmentManager manager) {
-        Options.PremiumMessages options = CacheProfile.getOptions().premium_messages;
-        if (options != null && options.isNeedShow()) {
+    public static void showIfNeeded(FragmentManager manager, int type) {
+        Options.PremiumAirEntity options = CacheProfile.getOptions().premium_messages;
+//        if (options != null && options.isNeedShow()) {
             manager
                     .beginTransaction()
-                    .add(android.R.id.content, new AirMessagesPopupFragment())
+                    .add(android.R.id.content, AirMessagesPopupFragment.newInstance(type))
                     .addToBackStack(null)
                     .commit();
             EasyTracker.getTracker().sendEvent("AirMessages", "Show", "", 0L);
-        }
+//        }
     }
 
     @Override
@@ -78,7 +90,16 @@ public class AirMessagesPopupFragment extends BaseFragment implements View.OnCli
 
     private String getMessage() {
         int count = mPremiumMessages.getCount();
-        return Utils.getQuantityString(R.plurals.popup_vip_messages, count, count);
+        if (getArguments().getInt(AIR_TYPE) == Options.PremiumAirEntity.AIR_GUESTS) {
+            int guests = CountersManager.getInstance(getActivity()).getCounter(CountersManager.VISITORS);
+            count = guests > 0? guests:count;
+        }
+        return Utils.getQuantityString(getPluralForm(), count, count);
+    }
+
+    private int getPluralForm() {
+        int type = getArguments().getInt(AIR_TYPE);
+        return type == Options.PremiumAirEntity.AIR_MESSAGES? R.plurals.popup_vip_messages:R.plurals.popup_vip_visitors;
     }
 
     @Override

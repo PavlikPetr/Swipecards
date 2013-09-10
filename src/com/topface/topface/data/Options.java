@@ -17,6 +17,7 @@ import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
 import org.json.JSONArray;
@@ -119,7 +120,7 @@ public class Options extends AbstractData {
             RANDOM
     };
     public static final String PREMIUM_MESSAGES_POPUP_SHOW_TIME = "premium_messages_popup_last_show";
-
+    public static final String PREMIUM_VISITORS_POPUP_SHOW_TIME = "premium_visitors_popup_last_show";
     /**
      * Настройки для каждого типа страниц
      */
@@ -154,7 +155,7 @@ public class Options extends AbstractData {
     public boolean block_unconfirmed;
     public boolean block_chat_not_mutual;
     public Closing closing = new Closing();
-    public PremiumMessages premium_messages;
+    public PremiumAirEntity premium_messages;
     public GetJar getJar;
     public String gagTypeBanner = BANNER_ADMOB;
     public String gagTypeFullscreen = BANNER_NONE;
@@ -218,11 +219,11 @@ public class Options extends AbstractData {
             options.popup_timeout = contacts_invite.optInt("show_popup_timeout") * 60 * 60 * 1000;
 
             if (response.jsonResult.has("premium_messages")) {
-                options.premium_messages = new PremiumMessages(
-                        response.jsonResult.optJSONObject("premium_messages")
+                options.premium_messages = new PremiumAirEntity(
+                        response.jsonResult.optJSONObject("premium_messages"), PremiumAirEntity.AIR_MESSAGES
                 );
             } else {
-                options.premium_messages = new PremiumMessages(false, 10, 1000);
+                options.premium_messages = new PremiumAirEntity(false, 10, 1000);
             }
 
             if (response.jsonResult.has("links")) {
@@ -433,9 +434,11 @@ public class Options extends AbstractData {
         return paymentwall;
     }
 
-    public static class PremiumMessages {
+    public static class PremiumAirEntity {
         public static final int DEFAULT_COUNT = 10;
         private static final int DEFAULT_TIMEOUT = 1000;
+
+        private int airType;
         /**
          * включен ли механизм для данного пользователя в булевых константах
          */
@@ -449,7 +452,11 @@ public class Options extends AbstractData {
          */
         private int mTimeout;
 
-        public PremiumMessages(JSONObject premiumMessages) {
+        public static int AIR_MESSAGES = 0;
+        public static int AIR_GUESTS = 1;
+
+        public PremiumAirEntity(JSONObject premiumMessages, int airType) {
+            this.airType = airType;
             if (premiumMessages != null) {
                 mEnabled = premiumMessages.optBoolean("enabled");
                 mCount = premiumMessages.optInt("count", DEFAULT_COUNT);
@@ -457,7 +464,7 @@ public class Options extends AbstractData {
             }
         }
 
-        public PremiumMessages(boolean enabled, int count, int timeout) {
+        public PremiumAirEntity(boolean enabled, int count, int timeout) {
             mEnabled = enabled;
             mCount = count;
             mTimeout = timeout;
@@ -477,7 +484,7 @@ public class Options extends AbstractData {
                 public void run() {
                     PreferenceManager.getDefaultSharedPreferences(App.getContext())
                             .edit()
-                            .putLong(PREMIUM_MESSAGES_POPUP_SHOW_TIME, System.currentTimeMillis())
+                            .putLong(getPrefsConstant(), System.currentTimeMillis())
                             .commit();
                 }
             }).run();
@@ -489,17 +496,25 @@ public class Options extends AbstractData {
                 public void run() {
                     PreferenceManager.getDefaultSharedPreferences(App.getContext())
                             .edit()
-                            .remove(PREMIUM_MESSAGES_POPUP_SHOW_TIME)
+                            .remove(getPrefsConstant())
                             .commit();
                 }
             }).run();
         }
 
+        public String getPrefsConstant() {
+            return airType == AIR_MESSAGES ? PREMIUM_MESSAGES_POPUP_SHOW_TIME :
+                    PREMIUM_VISITORS_POPUP_SHOW_TIME;
+        }
+
         private long getLashShowTime() {
             return  PreferenceManager.getDefaultSharedPreferences(App.getContext())
-                    .getLong(PREMIUM_MESSAGES_POPUP_SHOW_TIME, 0);
+                    .getLong(getPrefsConstant(), 0);
         }
     }
+
+
+
     public static class Closing {
         public static String DATA_FOR_CLOSING_RECEIVED_ACTION = "DATA_FOR_CLOSING_RECEIVED_ACTION";
 
