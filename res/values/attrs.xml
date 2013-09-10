@@ -43,6 +43,7 @@
             <flag name="roundCorners" value="2"/>
             <flag name="mask" value="3"/>
             <flag name="circumCircle" value="4"/>
+            <flag name="leftMenuClip" value="5"/>
         </attr>
     </declare-styleable>
 
