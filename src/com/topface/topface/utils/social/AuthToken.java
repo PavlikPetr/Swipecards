@@ -2,10 +2,12 @@ package com.topface.topface.utils.social;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.topface.topface.App;
 import com.topface.topface.Static;
 
-public class AuthToken {
+public class AuthToken implements Parcelable {
     // Data
     private String mSnType;
     private String mUserId;
@@ -28,6 +30,7 @@ public class AuthToken {
     public static final String SN_FACEBOOK = "fb";
     public static final String SN_VKONTAKTE = "vk";
     public static final String SN_TOPFACE = "st";
+    public static final String SN_ODNOKLASSNIKI = "ok";
 
     private static AuthToken mInstance = new AuthToken();
 
@@ -97,6 +100,15 @@ public class AuthToken {
     }
 
     public String getTokenKey() {
+        if (getSocialNet().equals(AuthToken.SN_FACEBOOK)){
+            return mTokenKey;
+        } else if (getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
+            return mTokenKey;
+        } else if (getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+            return mLogin;
+        } else if (getSocialNet().equals(SN_ODNOKLASSNIKI)) {
+            return mTokenKey;
+        }
         return mTokenKey;
     }
 
@@ -111,4 +123,26 @@ public class AuthToken {
     public String getPassword() {
         return mPassword;
     }
+
+    public String getmExpiresIn() {
+        return mExpiresIn;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mSnType);
+        dest.writeString(mUserId);
+        dest.writeString(mTokenKey);
+        dest.writeString(mExpiresIn);
+
+        dest.writeString(mLogin);
+        dest.writeString(mPassword);
+    }
+
+
 }

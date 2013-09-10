@@ -16,7 +16,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiRequest;
-import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
@@ -54,7 +54,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 
         mProfile = CacheProfile.getProfile();
 
-        mFormInfo = new FormInfo(getActivity(), mProfile);
+        mFormInfo = new FormInfo(getActivity(), mProfile.sex, mProfile.getType());
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_edit_with_listview, container,
                 false);
@@ -112,7 +112,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
                     request.callback(new ApiHandler() {
 
                         @Override
-                        public void success(ApiResponse response) {
+                        public void success(IApiResponse response) {
                             item.dataId = mSeletedDataId;
                             mFormInfo.fillFormItem(item);
                             mDataId = mSeletedDataId;
@@ -122,7 +122,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
                         }
 
                         @Override
-                        public void fail(int codeError, ApiResponse response) {
+                        public void fail(int codeError, IApiResponse response) {
                             Activity activity = getActivity();
                             if (activity != null) {
                                 getActivity().setResult(Activity.RESULT_CANCELED);

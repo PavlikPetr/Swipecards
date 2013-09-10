@@ -52,11 +52,13 @@ public class RetryViewCreator {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.CENTER_IN_PARENT, -1);
         retryView.setLayoutParams(params);
+
         if (text != null) {
             ((TextView)retryView.findViewById(R.id.tvMessage)).setText(text);
         } else {
             retryView.findViewById(R.id.tvMessage).setVisibility(View.GONE);
         }
+
         ViewGroup buttonsContainer = (ViewGroup)retryView.findViewById(R.id.loButtonsContainer);
         if (btn1 != null) buttonsContainer.addView(btn1.createButtonView(retryView));
         if (btn2 != null) buttonsContainer.addView(btn2.createButtonView(retryView));

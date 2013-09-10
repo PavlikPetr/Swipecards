@@ -1,7 +1,6 @@
 package com.topface.topface.data.search;
 
 import com.topface.topface.data.FeedUser;
-import com.topface.topface.data.Photos;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.SerializableToJson;
 import org.json.JSONException;
@@ -13,15 +12,13 @@ public class SearchUser extends FeedUser implements SerializableToJson {
      */
     protected String status;
     /**
-     * идентификатор пользователя, который послал симпатию, иначе 0
+     * флаг возможности отправки взаимной симпатии
      */
     public boolean mutual;
 
     // Flags
     public boolean skipped = false;
     public boolean rated = false;
-    public Photos photos;
-    public int photosCount;
 
     public SearchUser(JSONObject user) {
         super(user);
@@ -32,16 +29,14 @@ public class SearchUser extends FeedUser implements SerializableToJson {
         super.fillData(user);
 
         status = Profile.normilizeStatus(user.optString("status"));
-        mutual = user.optBoolean("mailmutual");
-        photos = new Photos(user.optJSONArray("photos"));
-        photosCount = user.optInt("photos_count", photos.size());
+        mutual = user.optBoolean("mutual");
     }
 
     @Override
     public JSONObject toJson() throws JSONException {
         JSONObject json = super.toJson();
         json.put("status", status);
-        json.put("mailmutual", mutual);
+        json.put("mutual", mutual);
         json.put("photos", photos.toJson());
         json.put("photos_count", photosCount);
         return json;

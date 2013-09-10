@@ -12,8 +12,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
-import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.CitiesRequest;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SearchCitiesRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.ActionBar;
@@ -203,7 +203,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
     }
 
     private void initHeader() {
-        ActionBar actionBar = new ActionBar(findViewById(R.id.rootContainer));
+        ActionBar actionBar = getActionBar(findViewById(R.id.rootContainer));
         actionBar.setTitleText(getString(R.string.general_city));
         actionBar.showBackButton(new OnClickListener() {
             @Override
@@ -242,7 +242,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
         citiesRequest.type = "top";
         citiesRequest.callback(new ApiHandler() {
             @Override
-            public void success(ApiResponse response) {
+            public void success(IApiResponse response) {
                 final LinkedList<City> citiesList = City.parse(response);
                 if (citiesList.size() == 0 || mTopCitiesList == null) {
                     return;
@@ -259,7 +259,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(int codeError, IApiResponse response) {
                 post(new Runnable() {
                     @Override
                     public void run() {
@@ -279,7 +279,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
         searchCitiesRequest.prefix = prefix;
         searchCitiesRequest.callback(new ApiHandler() {
             @Override
-            public void success(ApiResponse response) {
+            public void success(IApiResponse response) {
                 LinkedList<City> citiesList = City.parse(response);
                 if (citiesList.size() == 0) {
                     cityListView.setVisibility(View.INVISIBLE);
@@ -303,7 +303,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(int codeError, IApiResponse response) {
                 fillData(mTopCitiesList);
                 post(new Runnable() {
                     @Override

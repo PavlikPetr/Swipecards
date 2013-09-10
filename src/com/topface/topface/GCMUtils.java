@@ -3,15 +3,17 @@ package com.topface.topface;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.widget.ListView;
 import com.google.android.gcm.GCMRegistrar;
 import com.topface.topface.data.Photo;
-import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RegistrationTokenRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
@@ -40,22 +42,23 @@ public class GCMUtils {
     public static final int GCM_TYPE_UPDATE = 5;
     public static final int GCM_TYPE_NOTIFICATION = 6;
 
-    public static final String NEXT_INTENT = "next";
+    public static final String NEXT_INTENT = "com.topface.topface_next";
 
     public static final int NOTIFICATION_CANCEL_DELAY = 2000;
+    public static final String IS_GCM_SUPPORTED = "IS_GCM_SUPPORTED";
 
     public static int lastNotificationType = GCM_TYPE_DIALOGS;
 
     public static int lastUserId = -1;
 
-    private static boolean showMessage = true;
-    private static boolean showLikes = true;
-    private static boolean showSympathy = true;
-    private static boolean showVisitors = true;
+    private static boolean showMessage = false;
+    private static boolean showLikes = false;
+    private static boolean showSympathy = false;
+    private static boolean showVisitors = false;
     public static final String GCM_INTENT = "GCM";
     public static boolean GCM_SUPPORTED = true;
 
-    public static void init(Context context) {
+    public static void init(final Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
             try {
                 GCMRegistrar.checkDevice(context);
@@ -71,11 +74,25 @@ public class GCMUtils {
                     }
 
                 } else {
-                    GCMRegistrar.register(context, GCMIntentService.SENDER_ID);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            GCMRegistrar.register(context, GCMIntentService.SENDER_ID);
+                        }
+                    }).start();
                     Debug.log("Registered: " + GCMRegistrar.getRegistrationId(context));
                 }
 
             } catch (Exception ex) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit();
+                        editor.putString(IS_GCM_SUPPORTED, Boolean.toString(false));
+                        editor.commit();
+                    }
+                }).start();
+
                 GCM_SUPPORTED = false;
                 Debug.error("GCM not supported", ex);
             }
@@ -125,7 +142,7 @@ public class GCMUtils {
                             notificationManager.showNotification(
                                     title,
                                     data,
-                                    null,
+                                    true, null,
                                     getUnread(extra),
                                     intent,
                                     false);
@@ -144,7 +161,7 @@ public class GCMUtils {
                         notificationManager.showNotification(
                                 title,
                                 data,
-                                null,
+                                true, null,
                                 getUnread(extra),
                                 intent,
                                 false);
@@ -208,7 +225,7 @@ public class GCMUtils {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 if (user.id != lastUserId) {
-                    notificationManager.showNotification(finalTitle, data, fakeImageView.getImageBitmap(), unread, newI, false);
+                    notificationManager.showNotification(finalTitle, data, true, fakeImageView.getImageBitmap(), unread, newI, false);
                 }
             }
         });
@@ -330,12 +347,12 @@ public class GCMUtils {
                 registrationRequest.token = registrationId;
                 registrationRequest.callback(new ApiHandler() {
                     @Override
-                    public void success(ApiResponse response) {
+                    public void success(IApiResponse response) {
                         GCMRegistrar.setRegisteredOnServer(context, true);
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) {
+                    public void fail(int codeError, IApiResponse response) {
                         Debug.error(String.format("RegistrationRequest fail: #%d %s", codeError, response));
                         GCMRegistrar.setRegisteredOnServer(context, false);
                     }

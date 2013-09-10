@@ -11,25 +11,39 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:gravity="center"
             android:orientation="vertical">
 
         <Button
                 android:id="@+id/btnAuthFB"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/auth_fb_selector"
                 android:text="@string/auth_btn_fb"
                 style="@style/AuthButtonsText"
+                android:visibility="gone"
                 />
 
         <Button
                 android:id="@+id/btnAuthVK"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/auth_vk_selector"
                 android:text="@string/auth_btn_vk"
                 style="@style/AuthButtonsText"
+                android:visibility="gone"
+                />
+
+        <Button
+                android:id="@+id/btnAuthOk"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/auth_ok_selector"
+                android:text="@string/auth_btn_ok"
+                style="@style/AuthButtonsText"
+                android:visibility="gone"
                 />
 
         <RelativeLayout
@@ -96,5 +110,36 @@
             android:layout_marginBottom="24dp"
             android:layout_centerHorizontal="true"
             android:src="@drawable/auth_logo"/>
+
+    <LinearLayout
+            android:id="@+id/otherServices"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="10dp"
+            >
+        <ImageView
+                android:id="@+id/vk_ico"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/ico_vk"/>
+        <ImageView
+                android:id="@+id/ok_ico"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:visibility="gone"
+                android:src="@drawable/ico_ok"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/other_auth"
+                />
+    </LinearLayout>
 
 </RelativeLayout>

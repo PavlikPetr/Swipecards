@@ -32,6 +32,7 @@ public class FilterRequest extends ApiRequest {
 
         if (filter.sex == Static.GIRL) {
             data.put("breast", filter.breast);
+            data.put("finances", filter.finances);
         } else {
             data.put("finances", filter.finances);
         }

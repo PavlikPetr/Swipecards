@@ -25,7 +25,6 @@
               >
         <TextView
                 android:id="@+id/redAlertTextView"
-                android:visibility="gone"
                 style="@style/RedAlertTextView"
                 android:text="@string/error_login_password"/>
         <TextView
@@ -51,6 +50,7 @@
 
     <ViewFlipper
             android:id="@+id/vfAuthViewFlipper"
+            android:layout_below="@id/redAlert"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:inAnimation="@android:anim/fade_in"
@@ -61,4 +61,6 @@
         <include layout="@layout/layout_signin"/>
 
     </ViewFlipper>
+
+
 </RelativeLayout>

@@ -7,6 +7,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.ui.fragments.ProfileFragment;
 import com.topface.topface.utils.*;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import org.json.JSONArray;
@@ -89,7 +90,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.age = resp.optInt("age");
             profile.sex = resp.optInt("sex");
             profile.status = normilizeStatus(resp.optString("status"));
-            profile.first_name = resp.optString("first_name");
+            profile.first_name = resp.optString("first_name").trim();
             profile.inBlackList = resp.optBoolean("in_blacklist");
             profile.city = new City(resp.optJSONObject("city"));
             profile.dating = new DatingFilter(resp.optJSONObject("dating"));
@@ -99,7 +100,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.background = resp.optInt("background", ProfileBackgrounds.DEFAULT_BACKGROUND_ID);
             profile.totalPhotos = resp.optInt("photos_count");
             profile.paid = resp.optBoolean("paid");
-            profile.show_ad = resp.optBoolean("show_ad",true);
+            profile.show_ad = resp.optBoolean("show_ad", true);
             profile.xstatus = resp.optInt("xstatus");
             profile.canInvite = resp.optBoolean("can_invite");
             profile.setEditor(resp.optBoolean("editor", false));
@@ -119,7 +120,7 @@ public class Profile extends AbstractDataWithPhotos {
         if (!resp.isNull("form")) {
             JSONObject form = resp.getJSONObject("form");
 
-            FormInfo formInfo = new FormInfo(context, profile);
+            FormInfo formInfo = new FormInfo(context, profile.sex, profile.getType());
 
             FormItem headerItem;
             FormItem formItem;
@@ -135,24 +136,6 @@ public class Profile extends AbstractDataWithPhotos {
             headerItem = new FormItem(R.string.form_main, FormItem.HEADER);
             formInfo.fillFormItem(headerItem);
             profile.forms.add(headerItem);
-
-            // personal status
-            String status = profile.status;
-            if (status != null) {
-                if (isUserProfile && status.trim().length() == 0) {
-                    status = null;
-                }
-            }
-            formItem = new FormItem(R.array.form_main_personal_status, status,
-                    isUserProfile ? FormItem.DATA : FormItem.STATUS, headerItem);
-            formInfo.fillFormItem(formItem);
-            if (isUserProfile) {
-                if (status != null)
-                    profile.forms.add(formItem);
-            } else {
-                profile.forms.add(formItem);
-            }
-
 
             if (!resp.isNull("email")) {
                 profile.hasMail = resp.optBoolean("email");
@@ -211,6 +194,18 @@ public class Profile extends AbstractDataWithPhotos {
             headerItem = new FormItem(R.string.form_physique, FormItem.HEADER);
             formInfo.fillFormItem(headerItem);
             profile.forms.add(headerItem);
+
+            // 11 breast position 7
+            if (profile.sex == Static.GIRL) {
+                formItem = new FormItem(R.array.form_physique_breast, form.optInt("breast_id"),
+                        FormItem.DATA, headerItem);
+                formInfo.fillFormItem(formItem);
+                if (isUserProfile) {
+                    compareFormItemData(formItem, profile, false);
+                } else {
+                    profile.forms.add(formItem);
+                }
+            }
 
             // 6 fitness position 2
             formItem = new FormItem(R.array.form_physique_fitness, form.optInt("fitness_id"),
@@ -376,14 +371,13 @@ public class Profile extends AbstractDataWithPhotos {
             }
 
             // 22 restaurants position 14
-            String rest = form.optString("restaurants");
-            String restraunts = TextUtils.isEmpty(rest.trim()) ? null : rest;
+            String rest = form.optString("restaurants").trim();
+            String restraunts = TextUtils.isEmpty(rest) ? null : rest;
             formItem = new FormItem(R.array.form_habits_restaurants, restraunts, FormItem.DATA,
                     headerItem);
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
-                if (restraunts != null)
-                    profile.forms.add(formItem);
+                if (restraunts != null) profile.forms.add(formItem);
             } else {
                 profile.forms.add(formItem);
             }
@@ -397,34 +391,31 @@ public class Profile extends AbstractDataWithPhotos {
             profile.forms.add(headerItem);
 
             // 25 first_dating position 15
-            String dd = form.optString("first_dating");
-            String datingDetails = TextUtils.isEmpty(dd.trim()) ? null : dd;
+            String dd = form.optString("first_dating").trim();
+            String datingDetails = TextUtils.isEmpty(dd) ? null : dd;
             formItem = new FormItem(R.array.form_detail_about_dating, datingDetails,
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
-                if (datingDetails != null)
-                    profile.forms.add(formItem);
+                if (datingDetails != null) profile.forms.add(formItem);
             } else {
                 profile.forms.add(formItem);
             }
 
             // 26 achievements position 16
-            String ach = form.optString("achievements");
-            String achievments = TextUtils.isEmpty(ach.trim()) ? null : ach;
+            String ach = form.optString("achievements").trim();
+            String achievments = TextUtils.isEmpty(ach) ? null : ach;
             formItem = new FormItem(R.array.form_detail_archievements, achievments,
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
-                if (achievments != null)
-                    profile.forms.add(formItem);
+                if (achievments != null) profile.forms.add(formItem);
             } else {
                 profile.forms.add(formItem);
             }
 
             // 27 DIVIDER
             profile.forms.add(FormItem.getDivider());
-
         }
     }
 
@@ -468,7 +459,7 @@ public class Profile extends AbstractDataWithPhotos {
     private static void compareFormItemData(FormItem item, Profile profile,
                                             boolean matches) {
         item.equal = matches;
-        if (item.dataId > 0) {
+        if(!TextUtils.isEmpty(item.value)) {
             profile.forms.add(item);
             if (item.equal) {
                 ((User) profile).formMatches++;
@@ -488,6 +479,10 @@ public class Profile extends AbstractDataWithPhotos {
 
     public void setEditor(boolean editor) {
         mEditor = editor;
+    }
+
+    public int getType() {
+        return (this instanceof User) ? ProfileFragment.TYPE_USER_PROFILE : ProfileFragment.TYPE_MY_PROFILE;
     }
 
     public static class TopfaceNotifications {
@@ -515,12 +510,12 @@ public class Profile extends AbstractDataWithPhotos {
             return Static.EMPTY;
         }
         String result = status.trim();
-        for (String EMPTY_STATUSE : EMPTY_STATUSES) {
-            if (EMPTY_STATUSE.equals(result)) {
+        for (String EMPTY_STATUS : EMPTY_STATUSES) {
+            if (EMPTY_STATUS.equals(result)) {
                 return Static.EMPTY;
             }
         }
-        return result;
+        return result.replaceAll("\n", " ");
     }
 
     public boolean isEmpty() {

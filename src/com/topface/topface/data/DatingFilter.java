@@ -106,7 +106,7 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
             else if (filter.marriage != marriage) return false;
             else if (filter.character != character) return false;
             else if (filter.alcohol != alcohol) return false;
-            else if (filter.breast != breast) return false;
+            else if (filter.breast != breast && filter.sex == Static.GIRL) return false;
             else if (filter.finances != finances) return false;
 
             return true;
@@ -135,10 +135,6 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
         filter.finances = finances;
 
         return filter;
-    }
-
-    public int getShowOff() {
-        return sex == Static.GIRL ? breast : finances;
     }
 
     /**

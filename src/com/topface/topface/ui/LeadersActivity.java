@@ -8,19 +8,16 @@ import android.view.View.OnClickListener;
 import android.widget.*;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.Profile;
-import com.topface.topface.requests.AlbumRequest;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.LeaderRequest;
-import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.gridlayout.GridLayout;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryViewCreator;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
@@ -45,11 +42,10 @@ public class LeadersActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_leaders_layout);
-        ((TextView) findViewById(R.id.tvNavigationTitle)).setText(R.string.leaders_go_date);
-        findViewById(R.id.btnNavigationHome).setVisibility(View.INVISIBLE);
-        View backButton = findViewById(R.id.btnNavigationBack);
-        backButton.setVisibility(View.VISIBLE);
-        backButton.setOnClickListener(new OnClickListener() {
+
+        ActionBar actionBar = getActionBar(getWindow().getDecorView());
+        actionBar.setTitleText(getString(R.string.leaders_go_date));
+        actionBar.showBackButton(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -96,26 +92,24 @@ public class LeadersActivity extends BaseFragmentActivity {
             @Override
             public void onClick(View view) {
                 if (CacheProfile.money < CacheProfile.getOptions().price_leader) {
-                    Intent intent = new Intent(LeadersActivity.this, ContainerActivity.class);
-                    intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
-                    startActivity(intent);
+                    startActivity(ContainerActivity.getBuyingIntent("Leaders"));
                 } else if (mSelectedPhoto.isSelected()) {
                     mLoadingLocker.setVisibility(View.VISIBLE);
                     new LeaderRequest(mSelectedPhoto.getPhotoId(), LeadersActivity.this)
                             .callback(new ApiHandler() {
                                 @Override
-                                public void success(ApiResponse response) {
+                                public void success(IApiResponse response) {
                                     mLoadingLocker.setVisibility(View.GONE);
                                     Toast.makeText(LeadersActivity.this, R.string.leaders_leader_now, Toast.LENGTH_SHORT).show();
                                     //Обновляем число монет
-                                    CacheProfile.money = response.jsonResult.optInt("money", CacheProfile.money);
+                                    CacheProfile.money = response.getJsonResult().optInt("money", CacheProfile.money);
                                     LocalBroadcastManager.getInstance(LeadersActivity.this)
                                             .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
                                     finish();
                                 }
 
                                 @Override
-                                public void fail(int codeError, ApiResponse response) {
+                                public void fail(int codeError, IApiResponse response) {
                                     mLoadingLocker.setVisibility(View.GONE);
                                     Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                                 }
@@ -143,10 +137,10 @@ public class LeadersActivity extends BaseFragmentActivity {
         mContainer.addView(rv.getView());
 
         mUselessTitle.setVisibility(View.GONE);
-        request.callback(new ApiHandler() {
+        request.callback(new DataApiHandler<Photos>() {
 
             @Override
-            public void always(ApiResponse response) {
+            public void always(IApiResponse response) {
                 super.always(response);
                 if (mLoadingLocker != null) {
                     mLoadingLocker.setVisibility(View.GONE);
@@ -154,16 +148,20 @@ public class LeadersActivity extends BaseFragmentActivity {
             }
 
             @Override
-            public void success(ApiResponse response) {
-                Photos photos = Photos.parse(response.jsonResult.optJSONArray("items"));
-                fillPhotos(photos);
+            protected void success(Photos data, IApiResponse response) {
+                fillPhotos(data);
                 mLoadingLocker.setVisibility(View.GONE);
                 rv.setVisibility(View.GONE);
 //                mUselessTitle.setVisibility(View.VISIBLE);
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            protected Photos parseResponse(ApiResponse response) {
+                return Photos.parse(response.getJsonResult().optJSONArray("items"));
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
                 mLoadingLocker.setVisibility(View.GONE);
                 rv.setVisibility(View.VISIBLE);
 

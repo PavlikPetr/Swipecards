@@ -24,7 +24,6 @@ import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -110,7 +109,7 @@ public class Utils {
         return clippedBitmap;
     }
 
-    public static Bitmap getRoundedCornerBitmapByMask(Bitmap bitmap, Bitmap mask) {
+    public static Bitmap getRoundedCornerBitmapByMask(Bitmap bitmap, Bitmap mask, Bitmap border) {
         int width = mask.getWidth();
         int height = mask.getHeight();
 
@@ -125,10 +124,14 @@ public class Utils {
 
         Paint paint = new Paint();
         canvas.drawARGB(0, 0, 0, 0);
+//
         canvas.drawBitmap(mask, 0, 0, paint);
         paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
         canvas.drawBitmap(clippedBitmap, 0, 0, paint);
-
+        if (border != null) {
+            paint.setXfermode(null);
+            canvas.drawBitmap(border, 0, 0, paint);
+        }
         clippedBitmap.recycle();
 
         return output;
@@ -247,108 +250,8 @@ public class Utils {
         return scaledBitmap;
     }
 
-
-    public static String formatTime(Context context, long time) {
-        String text;
-
-        long day = 1000 * 60 * 60 * 24;
-
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(time);
-        Calendar cal2 = Calendar.getInstance();
-        int currentYear = cal2.get(Calendar.YEAR);
-        cal2.set(currentYear, Calendar.JANUARY, 1);
-
-        if (time > DateUtils.midnight) {
-            text = DateUtils.mDateFormatHours.format(time);
-        } else if (time > DateUtils.midnight - day * 5) {
-            text = formatDayOfWeek(context, cal.get(Calendar.DAY_OF_WEEK));
-        } else if (time > cal2.getTimeInMillis()) {
-            text = cal.get(Calendar.DAY_OF_MONTH) + " " + formatMonth(context, cal.get(Calendar.MONTH));
-        } else {
-            text = cal.get(Calendar.DAY_OF_MONTH) + " " + formatMonth(context, cal.get(Calendar.MONTH)) + " " + cal.get(Calendar.YEAR);
-        }
-
-        return text;
-    }
-
-    public static String formatDayOfWeek(Context context, int dayOfWeek) {
-        int resurseId = 0;
-        switch (dayOfWeek) {
-            case Calendar.SUNDAY:
-                resurseId = R.string.time_sunday;
-                break;
-            case Calendar.MONDAY:
-                resurseId = R.string.time_monday;
-                break;
-            case Calendar.TUESDAY:
-                resurseId = R.string.time_tuesday;
-                break;
-            case Calendar.WEDNESDAY:
-                resurseId = R.string.time_wednesday;
-                break;
-            case Calendar.THURSDAY:
-                resurseId = R.string.time_thursday;
-                break;
-            case Calendar.FRIDAY:
-                resurseId = R.string.time_friday;
-                break;
-            case Calendar.SATURDAY:
-                resurseId = R.string.time_saturday;
-                break;
-        }
-        return context.getString(resurseId);
-    }
-
-    public static String formatMonth(Context context, int month) {
-        int resurseId = 0;
-        switch (month) {
-            case Calendar.JANUARY:
-                resurseId = R.string.time_january;
-                break;
-            case Calendar.FEBRUARY:
-                resurseId = R.string.time_february;
-                break;
-            case Calendar.MARCH:
-                resurseId = R.string.time_march;
-                break;
-            case Calendar.APRIL:
-                resurseId = R.string.time_april;
-                break;
-            case Calendar.MAY:
-                resurseId = R.string.time_may;
-                break;
-            case Calendar.JUNE:
-                resurseId = R.string.time_june;
-                break;
-            case Calendar.JULY:
-                resurseId = R.string.time_july;
-                break;
-            case Calendar.AUGUST:
-                resurseId = R.string.time_august;
-                break;
-            case Calendar.SEPTEMBER:
-                resurseId = R.string.time_september;
-                break;
-            case Calendar.OCTOBER:
-                resurseId = R.string.time_october;
-                break;
-            case Calendar.NOVEMBER:
-                resurseId = R.string.time_november;
-                break;
-            case Calendar.DECEMBER:
-                resurseId = R.string.time_december;
-                break;
-        }
-        return context.getString(resurseId);
-    }
-
     public static String formatPhotoQuantity(int quantity) {
         return Utils.getQuantityString(R.plurals.photo, quantity, (int) quantity);
-    }
-
-    public static String formatFormMatchesQuantity(int quantity) {
-        return Utils.getQuantityString(R.plurals.form_matches, quantity, (int) quantity);
     }
 
     public static String getQuantityString(int id, int quantity, Object... formatArgs) {
@@ -420,6 +323,10 @@ public class Utils {
 
     public static boolean isValidEmail(CharSequence email) {
         return email != null && EMAIL_ADDRESS_PATTERN.matcher(email).matches();
+    }
+
+    public static void goToUrl(Context context, String url) {
+        context.startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse(url)));
     }
 
     public static void goToMarket(Context context) {
@@ -494,8 +401,9 @@ public class Utils {
     }
 
     public static void showSoftKeyboard(Context context, EditText editText) {
+        editText.requestFocus();
         InputMethodManager keyboard = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        keyboard.showSoftInput(editText, 0);
+        keyboard.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
     }
 
     public static int getPxFromDp(int pixels) {
@@ -522,5 +430,9 @@ public class Utils {
             list.add(key, array.get(key));
         }
         return list;
+    }
+
+    public static String capitalize(String line) {
+        return Character.toUpperCase(line.charAt(0)) + line.substring(1);
     }
 }

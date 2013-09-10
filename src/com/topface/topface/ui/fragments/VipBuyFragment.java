@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
-import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -33,6 +34,7 @@ import static android.view.View.OnClickListener;
 public class VipBuyFragment extends BillingFragment implements OnClickListener {
 
     public static final String ACTION_BAR_CONST = "needActionBar";
+    public static final String ARG_TAG_EXRA_TEXT = "extra_text";
     EditSwitcher mInvisSwitcher;
 
     ProgressBar mInvisLoadBar;
@@ -40,16 +42,25 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     private LinearLayout mBuyVipViewsContainer;
     private LinearLayout mEditPremiumContainer;
 
-    // В этот метод потом можно будет передать аргументы,
-    // чтобы потом установить их с помощью setArguments();
-    public static VipBuyFragment newInstance() {
-        return new VipBuyFragment();
-    }
 
-    public static VipBuyFragment newInstance(boolean needActionBar) {
+    /**
+     * Создает новый инстанс фрагмента покупки VIP
+     *
+     * @param needActionBar включает показ ActionBar (он не нужен например в профиле
+     * @param text          сопроводительный текст фрагмента (нужен например что-бы объяснить, что определнная функция только для VIP)
+     * @param from          параметр для статистики покупок, что бы определить откуда пользователь пришел
+     * @return Фрагмент покупки VIP
+     */
+    public static VipBuyFragment newInstance(boolean needActionBar, String text, String from) {
         VipBuyFragment fragment = new VipBuyFragment();
         Bundle args = new Bundle();
         args.putBoolean(ACTION_BAR_CONST, needActionBar);
+        if (text != null) {
+            args.putString(ARG_TAG_EXRA_TEXT, text);
+        }
+        if (from != null) {
+            args.putString(ARG_TAG_SOURCE, from);
+        }
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,9 +81,12 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_buy_premium, null);
         initViews(view);
+        initActionBar(view);
+        return view;
+    }
+
+    private void initActionBar(View view) {
         if (getArguments() != null && getArguments().getBoolean(ACTION_BAR_CONST, false)) {
-            view.findViewById(R.id.loNavigationBar).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.headerShadow).setVisibility(View.VISIBLE);
             ActionBar actionBar = getActionBar(view);
             actionBar.showBackButton(new OnClickListener() {
                 @Override
@@ -82,13 +96,23 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
             });
             actionBar.setTitleText(getString(R.string.vip_buy_vip));
         }
-        return view;
     }
 
     private void initViews(View root) {
+        initExtraText(root);
         initBuyVipViews(root);
         initEditVipViews(root);
         switchLayouts();
+    }
+
+    private void initExtraText(View root) {
+        TextView textView = (TextView) root.findViewById(R.id.tvExtraText);
+        String text = null;
+        if (getArguments() != null) {
+            text = getArguments().getString(ARG_TAG_EXRA_TEXT);
+            textView.setText(text);
+        }
+        textView.setVisibility(TextUtils.isEmpty(text) ? View.GONE : View.VISIBLE);
     }
 
     private void switchLayouts() {
@@ -115,8 +139,13 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
             Options.setButton(btnContainer, curBtn, getActivity(), new Options.BuyButtonClickListener() {
                 @Override
                 public void onClick(String id) {
-                    buySubscriotion(id);
-                    EasyTracker.getTracker().trackEvent("Subscription", "ButtonClick", id, 0L);
+                    buySubscription(id);
+                    Bundle arguments = getArguments();
+                    String from = "";
+                    if (arguments != null) {
+                        from = "From" + arguments.getString(ARG_TAG_SOURCE);
+                    }
+                    EasyTracker.getTracker().trackEvent("Subscription", "ButtonClick" + from, id, 0L);
                 }
             });
         }
@@ -147,26 +176,6 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
         mInvisSwitcher = new EditSwitcher(invisLayout);
         mInvisLoadBar = (ProgressBar) invisLayout.findViewWithTag("vsiLoadBar");
         mInvisSwitcher.setChecked(CacheProfile.invisible);
-
-//  Здесь работа с переключателем отображения VIP бэкграунда в элементах ленты,
-//  так как пока решили его не использовать, из основного layouta он был удален.
-//  View.gone ему нельзя было сделать, так как он был подключен с помощью include
-//
-//        RelativeLayout bgSwitchLayout =
-//                initEditItem(root,
-//                    R.id.fepMsgsBG,
-//                    R.drawable.edit_big_btn_bottom_selector,
-//                    R.drawable.ic_vip_message_bg_min,
-//                    getString(R.string.vip_messages_bg),
-//                    new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//
-//                        }
-//                    }
-//                    );
-//        mBgSwitcher = new EditSwitcher(bgSwitchLayout);
-//        mBgSwitcher.setChecked(false);
 
         initEditItem(root,
                 R.id.fepBlackList,
@@ -224,7 +233,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
 
         request.callback(new ApiHandler() {
             @Override
-            public void success(ApiResponse response) throws NullPointerException {
+            public void success(IApiResponse response) throws NullPointerException {
                 CacheProfile.invisible = mInvisSwitcher.isChecked();
                 if (mInvisLoadBar != null && getActivity() != null) {
                     mInvisLoadBar.setVisibility(View.GONE);
@@ -233,10 +242,9 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) throws NullPointerException {
+            public void fail(int codeError, IApiResponse response) throws NullPointerException {
                 if (mInvisSwitcher != null && getActivity() != null) {
                     if (CacheProfile.invisible != mInvisSwitcher.isChecked()) {
-                        //TODO: Нужно как-то оповещать пользователя, что не получилось
                         mInvisSwitcher.doSwitch();
                         mInvisLoadBar.setVisibility(View.GONE);
                         mInvisSwitcher.setVisibility(View.VISIBLE);
@@ -260,19 +268,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
 
     @Override
     public void onClick(View v) {
-        //Подписки на премиумы
-//        switch (v.getId()) {
-//            case R.id.fbpBuyingMonth:
-//                buySubscriotion("topface.premium.month.1");
-//                EasyTracker.getTracker().trackEvent("Subscription", "ButtonClick", "Month", 0L);
-//                break;
-//
-//            case R.id.fbpBuyingYear:
-//                buySubscriotion("topface.premium.year.1");
-//                EasyTracker.getTracker().trackEvent("Subscription", "ButtonClick", "Year", 0L);
-//                break;
-//
-//        }
+
     }
 
     @Override
@@ -303,7 +299,6 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
 
     @Override
     public void onError() {
-        //TODO: сделать обработку ошибок
     }
 
     @Override

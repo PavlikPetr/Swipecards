@@ -12,6 +12,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import com.inneractive.api.ads.InneractiveAd;
 import com.inneractive.api.ads.InneractiveAdListener;
+import com.ivengo.adv.AdvListener;
+import com.ivengo.adv.AdvView;
 import com.mobclix.android.sdk.MobclixFullScreenAdView;
 import com.mobclix.android.sdk.MobclixFullScreenAdViewListener;
 import com.mopub.mobileads.MoPubErrorCode;
@@ -23,7 +25,8 @@ import com.topface.topface.data.Banner;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
-import com.topface.topface.requests.handlers.BaseApiHandler;
+import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.views.ImageViewRemote;
 import ru.ideast.adwired.AWView;
 import ru.ideast.adwired.events.OnNoBannerListener;
@@ -41,11 +44,13 @@ public class FullscreenController {
     public static final String URL_SEPARATOR = "::";
     private static boolean isFullScreenBannerVisible = false;
     private static final String MOPUB_INTERSTITIAL_ID = "00db7208a90811e281c11231392559e4";
+    private static final String IVENGO_APP_ID = "aggeas97392g";
 
     private SharedPreferences mPreferences;
     private Activity mActivity;
 
     private MoPubInterstitial mInterstitial;
+    private AdvView advViewIvengo;
 
     public FullscreenController(Activity activity) {
         mActivity = activity;
@@ -66,10 +71,36 @@ public class FullscreenController {
                         requestInneractiveFullscreen();
                     } else if (startPage.banner.equals(Options.BANNER_MOBCLIX)) {
                         requestMobclixFullscreen();
+                    } else if (startPage.banner.equals(Options.BANNER_IVENGO)) {
+                        requestIvengoFullscreen();
                     }
                 }
             }
         }
+    }
+
+    private void requestIvengoFullscreen() {
+        advViewIvengo = AdvView.create(mActivity, IVENGO_APP_ID);
+        advViewIvengo.showBanner();
+        advViewIvengo.setAdvListener(new AdvListener() {
+            @Override
+            public void onDisplayAd() {
+                addLastFullscreenShowedTime();
+            }
+
+            @Override
+            public void onAdClick(String s) {
+            }
+
+            @Override
+            public void onFailedToReceiveAd(AdvView.ErrorCode errorCode) {
+                requestFallbackFullscreen();
+            }
+
+            @Override
+            public void onCloseAd(int i) {
+            }
+        });
     }
 
     private void requestMobclixFullscreen() {
@@ -78,6 +109,7 @@ public class FullscreenController {
         adview.addMobclixAdViewListener(new MobclixFullScreenAdViewListener() {
             @Override
             public void onFinishLoad(MobclixFullScreenAdView mobclixFullScreenAdView) {
+                addLastFullscreenShowedTime();
             }
 
             @Override
@@ -165,6 +197,7 @@ public class FullscreenController {
             mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    addLastFullscreenShowedTime();
                     requestTopfaceFullscreen();
                 }
             });
@@ -182,19 +215,28 @@ public class FullscreenController {
                     interstitial.show();
                     addLastFullscreenShowedTime();
                 }
+                Debug.log("MoPub: onInterstitialLoaded()");
             }
 
             @Override
             public void onInterstitialFailed(MoPubInterstitial interstitial, MoPubErrorCode errorCode) {
-                requestTopfaceFullscreen();
+                requestFallbackFullscreen();
+                Debug.log("MoPub: onInterstitialFailed()");
             }
 
             @Override
             public void onInterstitialShown(MoPubInterstitial interstitial) {
+                Debug.log("MoPub: onInterstitialShown()");
+            }
+
+            @Override
+            public void onInterstitialClicked(MoPubInterstitial interstitial) {
+                Debug.log("MoPub: onInterstitialClicked()");
             }
 
             @Override
             public void onInterstitialDismissed(MoPubInterstitial interstitial) {
+                Debug.log("MoPub: onInterstitialDismissed()");
             }
         });
         mInterstitial.load();
@@ -211,7 +253,7 @@ public class FullscreenController {
                 adwiredView.setOnNoBannerListener(new OnNoBannerListener() {
                     @Override
                     public void onNoBanner() {
-                        requestTopfaceFullscreen();
+                        requestFallbackFullscreen();
                     }
                 });
                 adwiredView.setOnStopListener(new OnStopListener() {
@@ -275,13 +317,11 @@ public class FullscreenController {
     private void requestTopfaceFullscreen() {
         BannerRequest request = new BannerRequest(App.getContext());
         request.place = Options.PAGE_START;
-        request.callback(new BaseApiHandler() {
+        request.callback(new DataApiHandler<Banner>() {
             @Override
-            public void success(ApiResponse response) {
-                final Banner banner = Banner.parse(response);
-
-                if (banner.action.equals(Banner.ACTION_URL)) {
-                    if (showFullscreenBanner(banner.parameter)) {
+            public void success(final Banner data, IApiResponse response) {
+                if (data.action.equals(Banner.ACTION_URL)) {
+                    if (showFullscreenBanner(data.parameter)) {
                         isFullScreenBannerVisible = true;
                         addLastFullscreenShowedTime();
                         final View fullscreenViewGroup = mActivity.getLayoutInflater().inflate(R.layout.fullscreen_topface, null);
@@ -289,13 +329,13 @@ public class FullscreenController {
                         bannerContainer.addView(fullscreenViewGroup);
                         bannerContainer.setVisibility(View.VISIBLE);
                         final ImageViewRemote fullscreenImage = (ImageViewRemote) fullscreenViewGroup.findViewById(R.id.ivFullScreen);
-                        fullscreenImage.setRemoteSrc(banner.url);
+                        fullscreenImage.setRemoteSrc(data.url);
                         fullscreenImage.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                addNewUrlToFullscreenSet(banner.parameter);
+                                addNewUrlToFullscreenSet(data.parameter);
                                 hideFullscreenBanner(bannerContainer);
-                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(banner.parameter));
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(data.parameter));
                                 mActivity.startActivity(intent);
                             }
                         });
@@ -307,6 +347,18 @@ public class FullscreenController {
                             }
                         });
                     }
+                }
+            }
+
+            @Override
+            protected Banner parseResponse(ApiResponse response) {
+                return Banner.parse(response);
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
+                if (codeError == ApiResponse.BANNER_NOT_FOUND) {
+                    addLastFullscreenShowedTime();
                 }
             }
         }).exec();
@@ -347,12 +399,18 @@ public class FullscreenController {
         ViewGroup fullscreenContainer = (ViewGroup) mActivity.findViewById(R.id.loBannerContainer);
         if (fullscreenContainer == null) {
             fullscreenContainer = (ViewGroup) mActivity.getLayoutInflater().inflate(R.layout.layout_fullscreen, null);
-            ((ViewGroup) mActivity.findViewById(R.id.NavigationLayout)).addView(fullscreenContainer);
+            ((ViewGroup) mActivity.findViewById(android.R.id.content)).addView(fullscreenContainer);
         }
         return fullscreenContainer;
     }
 
     public void onDestroy() {
         if (mInterstitial != null) mInterstitial.destroy();
+    }
+
+    public void onPause() {
+        if (advViewIvengo != null) {
+            advViewIvengo.dismiss();
+        }
     }
 }

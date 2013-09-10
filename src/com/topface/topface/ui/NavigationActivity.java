@@ -5,32 +5,30 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Looper;
-import android.support.v4.app.Fragment;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-import com.slidingmenu.lib.SlidingMenu;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.topface.billing.BillingUtils;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
+import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.PhotoMainRequest;
-import com.topface.topface.requests.ProfileRequest;
-import com.topface.topface.requests.SettingsRequest;
+import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.ComplainsFragment;
-import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
+import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
+import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
+import com.topface.topface.ui.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.*;
 import com.topface.topface.utils.offerwalls.Offerwalls;
@@ -51,25 +49,42 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private boolean needAnimate = false;
     private SlidingMenu mSlidingMenu;
     private boolean isPopupVisible = false;
+    private boolean menuEnabled = true;
+    private static boolean mHasClosingsForThisSession;
+    private static boolean mClosingsOnProfileUpdateInvoked = false;
+
+    public static NavigationActivity instance = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         mNeedAnimate = false;
         super.onCreate(savedInstanceState);
+        instance = this;
         if (isNeedBroughtToFront(getIntent())) {
             // При открытии активити из лаунчера перезапускаем ее
             finish();
             return;
         }
-        setContentView(R.layout.ac_navigation);
-
-        Debug.log(this, "onCreate");
+        setMenuEnabled(true);
         mFragmentManager = getSupportFragmentManager();
 
         initSlidingMenu();
         if (!AuthToken.getInstance().isEmpty()) {
             showFragment(savedInstanceState);
         }
+    }
+
+    @Override
+    protected void onCreateAsync() {
+        super.onCreateAsync();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+        String isGcmSupported = preferences.getString(GCMUtils.IS_GCM_SUPPORTED, null);
+        if (isGcmSupported != null) {
+            GCMUtils.GCM_SUPPORTED = Boolean.getBoolean(isGcmSupported);
+        }
+
+        mNovice = Novice.getInstance(getPreferences());
+        mNovice.initNoviceFlags();
     }
 
     private void initSlidingMenu() {
@@ -91,7 +106,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             }
         });
         setSlidingMenuEvents();
-
     }
 
     private void setSlidingMenuEvents() {
@@ -125,16 +139,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         });
     }
 
-    @Override
-    protected void inBackgroundThread() {
-        super.inBackgroundThread();
-        mNovice = Novice.getInstance(getPreferences());
-        mNovice.initNoviceFlags();
-        Looper.prepare();
-        Offerwalls.init(getApplicationContext());
-        Looper.loop();
-    }
-
     private SharedPreferences getPreferences() {
         if (mPreferences == null) {
             mPreferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
@@ -160,6 +164,14 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         showFragment(currentFragment);
     }
 
+    public void showContent() {
+        mSlidingMenu.showContent(true);
+    }
+
+    public void showContent(boolean animation) {
+        mSlidingMenu.showContent(animation);
+    }
+
     @Override
     public void onLoadProfile() {
         super.onLoadProfile();
@@ -175,7 +187,13 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
     }
 
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mFullscreenController != null) {
+            mFullscreenController.onPause();
+        }
+    }
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -189,6 +207,13 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     protected void onResume() {
         super.onResume();
+        //restart -> open NavigationActivity
+        if (App.getConfig().getLocaleConfig().fetchToSystemLocale()) {
+            LocaleConfig.changeLocale(this, App.getConfig().getLocaleConfig().getApplicationLocale());
+            return;
+        } else {
+            LocaleConfig.localeChangeInitiated = false;
+        }
 
         //Отправляем не обработанные запросы на покупку
         BillingUtils.sendQueueItems();
@@ -203,6 +228,18 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         new ExternalLinkExecuter(mListener).execute(getIntent());
 
         App.checkProfileUpdate();
+        if (MenuFragment.logoutInvoked) {
+            mFragmentMenu.onStopClosings();
+            MenuFragment.logoutInvoked = false;
+        }
+        if (!AuthToken.getInstance().isEmpty() &&
+                !CacheProfile.premium && !mHasClosingsForThisSession &&
+                mFragmentMenu.getCurrentFragmentId() != MenuFragment.F_PROFILE
+                && !mFragmentMenu.isClosed() && mClosingsOnProfileUpdateInvoked) {
+            if (CacheProfile.unread_likes > 0 || CacheProfile.unread_mutual > 0) {
+                onClosings();
+            }
+        }
     }
 
 
@@ -214,29 +251,34 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                     public void onPhotoSentSuccess(final Photo photo) {
                         if (CacheProfile.photos != null) {
                             CacheProfile.photos.add(photo);
+                            LocalBroadcastManager.getInstance(NavigationActivity.this).sendBroadcast(new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT));
                         }
                         PhotoMainRequest request = new PhotoMainRequest(getApplicationContext());
                         request.photoid = photo.getId();
                         request.callback(new ApiHandler() {
 
                             @Override
-                            public void success(ApiResponse response) {
+                            public void success(IApiResponse response) {
                                 CacheProfile.photo = photo;
                                 LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
                             }
 
                             @Override
-                            public void fail(int codeError, ApiResponse response) {
+                            public void fail(int codeError, IApiResponse response) {
                                 if (codeError == ApiResponse.NON_EXIST_PHOTO_ERROR) {
                                     if (CacheProfile.photos != null && CacheProfile.photos.contains(photo)) {
                                         CacheProfile.photos.remove(photo);
                                     }
-                                    Toast.makeText(NavigationActivity.this, App.getContext().getString(R.string.general_wrong_photo_upload), 2000);
+                                    Toast.makeText(
+                                            NavigationActivity.this,
+                                            App.getContext().getString(R.string.general_wrong_photo_upload),
+                                            Toast.LENGTH_LONG
+                                    ).show();
                                 }
                             }
 
                             @Override
-                            public void always(ApiResponse response) {
+                            public void always(IApiResponse response) {
                                 super.always(response);
                             }
                         }).exec();
@@ -269,7 +311,6 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
 
-
     @Override
     public void onCloseFragment() {
         showFragment(MenuFragment.DEFAULT_FRAGMENT);
@@ -290,7 +331,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             */
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.btnNavigationHome) {
+        if (view.getId() == R.id.leftButtonContainer) {
             mSlidingMenu.toggle();
         }
     }
@@ -304,7 +345,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         if (mFullscreenController != null && mFullscreenController.isFullScreenBannerVisible() && !isPopupVisible) {
             mFullscreenController.hideFullscreenBanner((ViewGroup) findViewById(R.id.loBannerContainer));
         } else if (mSlidingMenu != null && !isPopupVisible) {
-            if (mSlidingMenu.isMenuShowing() || !mSlidingMenu.isSlidingEnabled()) {
+            if (mSlidingMenu.isMenuShowing() || !mSlidingMenu.isSlidingEnabled() || !menuEnabled) {
                 super.onBackPressed();
             } else {
                 mSlidingMenu.showMenu();
@@ -315,20 +356,16 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
     }
 
+    public void setMenuEnabled(boolean enabled) {
+        menuEnabled = enabled;
+    }
+
     @Override
     public boolean onCreatePanelMenu(int featureId, Menu menu) {
-        if (mSlidingMenu != null) {
+        if (mSlidingMenu != null && menuEnabled) {
             mSlidingMenu.toggle();
         }
         return false;
-    }
-
-    public void onDialogCancel() {
-        Fragment fragment = mFragmentManager.findFragmentById(R.id.fragment_container);
-        if (fragment instanceof DatingFragment) {
-            DatingFragment datingFragment = (DatingFragment) fragment;
-            datingFragment.onDialogCancel();
-        }
     }
 
     @Override
@@ -368,7 +405,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                     request.callback(new ApiHandler() {
 
                         @Override
-                        public void success(ApiResponse response) {
+                        public void success(IApiResponse response) {
                             CacheProfile.city = new City(city_id, city_name,
                                     city_full);
                             LocalBroadcastManager.getInstance(getApplicationContext())
@@ -376,7 +413,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                         }
 
                         @Override
-                        public void fail(int codeError, ApiResponse response) {
+                        public void fail(int codeError, IApiResponse response) {
                         }
                     }).exec();
                 }
@@ -397,7 +434,8 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     ExternalLinkExecuter.OnExternalLinkListener mListener = new ExternalLinkExecuter.OnExternalLinkListener() {
         @Override
         public void onProfileLink(int profileID) {
-            ContainerActivity.getProfileIntent(profileID, NavigationActivity.this);
+            startActivity(ContainerActivity.getProfileIntent(profileID, NavigationActivity.this));
+            getIntent().setData(null);
         }
 
         @Override
@@ -424,5 +462,63 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         intent.setAction(MenuFragment.SELECT_MENU_ITEM);
         intent.putExtra(MenuFragment.SELECTED_FRAGMENT_ID, fragmentId);
         LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
+    }
+
+    public static void onLogout() {
+        mHasClosingsForThisSession = false;
+        mClosingsOnProfileUpdateInvoked = false;
+        MenuFragment.onLogout();
+    }
+
+    @Override
+    protected void onClosingDataReceived() {
+        super.onClosingDataReceived();
+        if (!CacheProfile.premium && !mClosingsOnProfileUpdateInvoked && !mHasClosingsForThisSession) {
+            mClosingsOnProfileUpdateInvoked = true;
+            Options.Closing closing = CacheProfile.getOptions().closing;
+            if (closing.isClosingsEnabled()) {
+                getIntent().putExtra(GCMUtils.NEXT_INTENT, mFragmentMenu.getCurrentFragmentId());
+                Debug.log("Closing:Last fragment ID=" + mFragmentMenu.getCurrentFragmentId() + " from NavigationActivity");
+                MutualClosingFragment.usersProcessed = !closing.isMutualClosingAvailable();
+                LikesClosingFragment.usersProcessed = !closing.isLikesClosingAvailable();
+                if (!MutualClosingFragment.usersProcessed || !LikesClosingFragment.usersProcessed) {
+                    onClosings();
+                }
+            }
+        }
+    }
+
+    public void onClosings() {
+        if (CacheProfile.unread_mutual == 0) {
+            MutualClosingFragment.usersProcessed = true;
+        }
+        if (CacheProfile.unread_likes == 0) {
+            LikesClosingFragment.usersProcessed = true;
+        }
+        Options.Closing closing = CacheProfile.getOptions().closing;
+        if (closing.enabledMutual && !MutualClosingFragment.usersProcessed) {
+            mFragmentMenu.onClosings(BaseFragment.F_MUTUAL);
+            showFragment(BaseFragment.F_MUTUAL);
+            return;
+        }
+        if (closing.enableSympathies && !LikesClosingFragment.usersProcessed) {
+            mFragmentMenu.onClosings(BaseFragment.F_LIKES);
+            showFragment(BaseFragment.F_LIKES);
+            return;
+        }
+        if (!mHasClosingsForThisSession) {
+            mHasClosingsForThisSession = true;
+        }
+        mFragmentMenu.onStopClosings();
+        showFragment(null); // it will take fragment id from getIntent() extra data
+    }
+
+    public static void restartNavigationActivity(int fragmentId) {
+        Activity activity = instance;
+        Intent intent = new Intent(activity, NavigationActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra(GCMUtils.NEXT_INTENT, fragmentId);
+        activity.startActivity(intent);
+        activity.finish();
     }
 }

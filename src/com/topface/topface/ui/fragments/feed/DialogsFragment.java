@@ -10,7 +10,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
@@ -67,11 +66,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
-    protected void decrementCounters() {
-        CountersManager.getInstance(App.getContext()).decrementCounter(CountersManager.DIALOGS);
-    }
-
-    @Override
     protected Drawable getBackIcon() {
         return getResources().getDrawable(R.drawable.chat);
     }
@@ -96,8 +90,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
         inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
-                startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                startActivity(ContainerActivity.getBuyingIntent("EmptyDialogs"));
             }
         });
 
@@ -125,31 +118,12 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
-    protected void onDeleteItem(final int position) {
-        FeedDialog item = mListAdapter.getItem(position);
-        new DialogDeleteRequest(item.user.id, getActivity())
-                .callback(new ApiHandler() {
-                    @Override
-                    public void success(ApiResponse response) {
-                        mLockView.setVisibility(View.GONE);
-                        FeedList<FeedDialog> mFeedList = mListAdapter.getData();
-                        mFeedList.remove(position);
-                        mListAdapter.setData(mFeedList);
-                    }
-
-                    @Override
-                    public void fail(int codeError, ApiResponse response) {
-                        Debug.log(response.toString());
-                        mLockView.setVisibility(View.GONE);
-                        if (codeError != ApiResponse.PREMIUM_ACCESS_ONLY) {
-                            Utils.showErrorMessage(getActivity());
-                        }
-                    }
-                }).exec();
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    protected int getContextMenuLayoutRes() {
+        return R.menu.feed_context_menu_dialogs;
     }
 }

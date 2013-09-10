@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Запрос удаляет пользователя из черного списка
@@ -15,12 +16,12 @@ public class BlackListDeleteRequest extends ApiRequest {
     /**
      * id пользователя, котогорого нужно добавить в черный список
      */
-    private final ArrayList<Integer> mUserIds;
+    private final List<Integer> mUserIds;
 
     /**
      * @param userIds массив id пользовтелей, которые нужно добавить в черный список
      */
-    public BlackListDeleteRequest(ArrayList<Integer> userIds, Context context) {
+    public BlackListDeleteRequest(List<Integer> userIds, Context context) {
         super(context);
         mUserIds = userIds;
     }

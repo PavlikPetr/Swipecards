@@ -3,6 +3,7 @@ package com.topface.topface.imageloader;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
+import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -14,6 +15,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.utils.Debug;
 
+@SuppressWarnings("UnusedDeclaration")
 public class DefaultImageLoader {
 
     private static ImageLoader mImageLoader;
@@ -31,8 +33,9 @@ public class DefaultImageLoader {
     protected ImageLoaderConfiguration.Builder getConfig() {
         ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(mContext);
         if (App.DEBUG) {
-            builder.enableLogging();
+            builder.writeDebugLogs();
         }
+        builder.memoryCache(new WeakMemoryCache());
         builder.discCacheSize(DISC_CACHE_SIZE);
         builder.defaultDisplayImageOptions(getDisplayImageConfig().build());
         return builder;
@@ -44,11 +47,11 @@ public class DefaultImageLoader {
     protected DisplayImageOptions getOptimizedDisplayImageConfig() {
         if (mOptimizedConfig == null) {
             DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder();
-            builder.cacheInMemory();
-            builder.cacheOnDisc();
+            builder.cacheInMemory(true);
+            builder.cacheOnDisc(true);
             builder.imageScaleType(ImageScaleType.EXACTLY);
             builder.bitmapConfig(Bitmap.Config.RGB_565);
-            builder.resetViewBeforeLoading();
+            builder.resetViewBeforeLoading(true);
             builder.showImageForEmptyUri(R.drawable.im_photo_error);
             mOptimizedConfig = builder.build();
         }
@@ -57,9 +60,9 @@ public class DefaultImageLoader {
 
     protected DisplayImageOptions.Builder getDisplayImageConfig() {
         DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder();
-        builder.cacheInMemory();
-        builder.cacheOnDisc();
-        builder.resetViewBeforeLoading();
+        builder.cacheInMemory(true);
+        builder.cacheOnDisc(true);
+        builder.resetViewBeforeLoading(true);
         builder.showImageForEmptyUri(R.drawable.im_photo_error);
         return builder;
     }
@@ -130,10 +133,6 @@ public class DefaultImageLoader {
 
     private ImageLoadingListener getDefaultImageLoaderListener() {
         return new DefaultImageLoaderListener();
-    }
-
-    public void preloadImage(String uri) {
-        preloadImage(uri, null);
     }
 
     public void preloadImage(String uri, ImageLoadingListener listener) {

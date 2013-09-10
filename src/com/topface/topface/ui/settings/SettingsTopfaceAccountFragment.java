@@ -1,13 +1,11 @@
 package com.topface.topface.ui.settings;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -19,37 +17,35 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.gcm.GCMRegistrar;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Ssid;
-import com.topface.topface.Static;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
-import com.topface.topface.utils.*;
-import com.topface.topface.utils.cache.SearchCacheManager;
+import com.topface.topface.utils.ActionBar;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
 public class SettingsTopfaceAccountFragment extends BaseFragment implements OnClickListener {
 
-    public static final int RESULT_LOGOUT = 666;
     public static final String NEED_EXIT = "NEED_EXIT";
     private LockerView mLockerView;
     private EditText mEditText;
     private TextView mText;
     private Button mBtnChange;
     private Button mBtnLogout;
+    private Button mBtnDelete;
     private final AuthToken mToken = AuthToken.getInstance();
 
     private static final int ACTION_RESEND_CONFIRM = 0;
     private static final int ACTION_CHANGE_EMAIL = 1;
     private static final int ACTION_CHANGE_PASSWORD = 2;
     private int mChangeButtonAction = ACTION_CHANGE_PASSWORD;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,8 +65,8 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             mLockerView.setVisibility(View.VISIBLE);
             request.callback(new ApiHandler() {
                 @Override
-                public void success(ApiResponse response) {
-                    Toast.makeText(App.getContext(), R.string.email_confirmed, 1500).show();
+                public void success(IApiResponse response) {
+                    Toast.makeText(App.getContext(), R.string.email_confirmed, Toast.LENGTH_SHORT).show();
                     CacheProfile.emailConfirmed = true;
                     if (isAdded()) {
                         setViewsState();
@@ -78,12 +74,12 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                 }
 
                 @Override
-                public void fail(int codeError, ApiResponse response) {
-                    Toast.makeText(App.getContext(), R.string.general_server_error, 1500).show();
+                public void fail(int codeError, IApiResponse response) {
+                    Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
-                public void always(ApiResponse response) {
+                public void always(IApiResponse response) {
                     super.always(response);
                     if (mLockerView != null) {
                         mLockerView.setVisibility(View.GONE);
@@ -95,10 +91,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         }
 
         initTextViews(root);
-
-
         initButtons(root);
-
         return root;
     }
 
@@ -111,20 +104,29 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     private void requestEmailConfirmedFlag() {
         ProfileRequest profileRequest = new ProfileRequest(getActivity());
         profileRequest.part = ProfileRequest.P_EMAIL_CONFIRMED;
-        profileRequest.callback(new ApiHandler() {
+        profileRequest.callback(new DataApiHandler<Boolean>() {
             @Override
-            public void success(ApiResponse response) {
-                CacheProfile.emailConfirmed = response.jsonResult.optBoolean("email_confirmed");
+            public void success(IApiResponse response) {
+            }
+
+            @Override
+            protected void success(Boolean isEmailConfirmed, IApiResponse response) {
+                CacheProfile.emailConfirmed = isEmailConfirmed;
                 setViewsState();
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            protected Boolean parseResponse(ApiResponse response) {
+                return response.getJsonResult().optBoolean("email_confirmed");
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
                 Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void always(ApiResponse response) {
+            public void always(IApiResponse response) {
                 super.always(response);
                 unlock();
             }
@@ -178,16 +180,13 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         mBtnChange.setOnClickListener(this);
         mBtnLogout = (Button) root.findViewById(R.id.btnLogout);
         mBtnLogout.setOnClickListener(this);
+        mBtnDelete = (Button) root.findViewById(R.id.btnDeleteAccount);
+        mBtnDelete.setOnClickListener(this);
     }
 
     private void setButtonsState() {
         if (CacheProfile.emailConfirmed) {
-//            if (CacheProfile.needToChangePassword(App.getContext())) {
-//                mBtnLogout.setVisibility(View.GONE);
-//            } else {
             mBtnLogout.setVisibility(View.VISIBLE);
-//            }
-
             setChangeBtnAction(ACTION_CHANGE_PASSWORD);
         } else {
             mBtnLogout.setVisibility(View.GONE);
@@ -239,8 +238,20 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             case R.id.btnChange:
                 onChangeButtonClick();
                 break;
+            case R.id.btnDeleteAccount:
+                deleteAccount();
+                break;
             default:
                 break;
+        }
+    }
+
+    private void deleteAccount() {
+        DeleteAccountDialog newFragment = DeleteAccountDialog.newInstance();
+        try {
+            newFragment.show(getActivity().getSupportFragmentManager(), DeleteAccountDialog.TAG);
+        } catch (Exception e) {
+            Debug.error(e);
         }
     }
 
@@ -257,12 +268,12 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                 RemindRequest remindRequest = new RemindRequest(getActivity());
                 remindRequest.callback(new ApiHandler() {
                     @Override
-                    public void success(ApiResponse response) {
+                    public void success(IApiResponse response) {
                         Toast.makeText(App.getContext(), R.string.confirmation_successfully_sent, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) {
+                    public void fail(int codeError, IApiResponse response) {
                         Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                     }
                 }).exec();
@@ -273,13 +284,13 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                     ChangeLoginRequest changeLoginRequest = new ChangeLoginRequest(getActivity(), email);
                     changeLoginRequest.callback(new ApiHandler() {
                         @Override
-                        public void success(ApiResponse response) {
+                        public void success(IApiResponse response) {
                             mToken.saveToken(mToken.getUserId(), email, mToken.getPassword());
                             setChangeBtnAction(ACTION_RESEND_CONFIRM);
                         }
 
                         @Override
-                        public void fail(int codeError, ApiResponse response) {
+                        public void fail(int codeError, IApiResponse response) {
                             Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                         }
                     }).exec();
@@ -294,39 +305,22 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         }
     }
 
-    private void logout(final AuthToken token) {
-        LogoutRequest logoutRequest = new LogoutRequest(getActivity());
+    private void logout() {
+        final LogoutRequest logoutRequest = new LogoutRequest(getActivity());
         mLockerView.setVisibility(View.VISIBLE);
         logoutRequest.callback(new ApiHandler() {
             @Override
-            public void success(ApiResponse response) {
-                GCMRegistrar.unregister(getActivity().getApplicationContext());
-                Ssid.remove();
-                token.removeToken();
-                //noinspection unchecked
-                new FacebookLogoutTask().execute();
-                Settings.getInstance().resetSettings();
-                startActivity(new Intent(getActivity().getApplicationContext(), NavigationActivity.class));
-                getActivity().setResult(RESULT_LOGOUT);
-                CacheProfile.clearProfile();
-                getActivity().finish();
-                SharedPreferences preferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-                if (preferences != null) {
-                    preferences.edit().clear().commit();
-                }
-                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(Static.LOGOUT_INTENT));
-                //Чистим список тех, кого нужно оценить
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        new SearchCacheManager().clearCache();
-                    }
-                }).start();
+            public void success(IApiResponse response) {
+                AuthorizationManager.logout(getActivity());
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(int codeError, IApiResponse response) {
                 mLockerView.setVisibility(View.GONE);
+                Activity activity = getActivity();
+                if (activity != null) {
+                    AuthorizationManager.showRetryLogoutDialog(activity, logoutRequest);
+                }
             }
         }).exec();
     }
@@ -343,23 +337,10 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         builder.setPositiveButton(R.string.general_yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                logout(mToken);
+                logout();
             }
         });
         builder.create().show();
-    }
-
-    @SuppressWarnings({"rawtypes", "hiding"})
-    class FacebookLogoutTask extends AsyncTask {
-        @Override
-        protected Object doInBackground(Object... params) {
-            try {
-                AuthorizationManager.getFacebook().logout(getActivity().getApplicationContext());
-            } catch (Exception e) {
-                Debug.error(e);
-            }
-            return null;
-        }
     }
 
     private void unlock() {
@@ -367,6 +348,4 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             mLockerView.setVisibility(View.GONE);
         }
     }
-
-
 }

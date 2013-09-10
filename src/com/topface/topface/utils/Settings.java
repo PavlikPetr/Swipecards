@@ -4,18 +4,25 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
+import android.widget.TextView;
 import com.topface.topface.App;
+import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.SendMailNotificationsRequest;
+import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
 /**
  * Вспомогательный класс для работы с настройками приложения
  */
 public class Settings {
+    public static final String SILENT = "silent";
     private static Settings mInstance;
     public static final String SETTINGS_C2DM_RINGTONE = "settings_c2dm_ringtone";
+    public static final String NOTIFICATION_MELODY = "notification_melody";
     public static final String SETTINGS_C2DM_VIBRATION = "settings_c2dm_vibration";
     public static final String SETTINGS_C2DM = "settings_c2dm";
     public static final String DEFAULT_SOUND = "DEFAULT_SOUND";
@@ -65,6 +72,50 @@ public class Settings {
         return mSettings.getString(SETTINGS_SOCIAL_ACCOUNT_NAME, Static.EMPTY);
     }
 
+    public String getRingtoneName() {
+        return mSettings.getString(NOTIFICATION_MELODY, Static.EMPTY);
+    }
+
+    public void getSocialAccountName(final TextView textView) {
+        AuthToken authToken = AuthToken.getInstance();
+        if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+            textView.setText(authToken.getLogin());
+        } else {
+            String name = getSocialAccountName();
+            if (TextUtils.isEmpty(name)) {
+                getSocialAccountNameAsync(new Handler(){
+                    @Override
+                    public void handleMessage(Message msg) {
+                        final String socialName = (String) msg.obj;
+                        textView.post(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                textView.setText(socialName);
+                            }
+                        });
+                        setSocialAccountName(socialName);
+                    }
+                });
+            } else {
+                textView.setText(name);
+            }
+        }
+    }
+
+    public void getSocialAccountIcon(final TextView textView) {
+        AuthToken authToken = AuthToken.getInstance();
+        if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
+            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_fb, 0, 0, 0);
+        } else if (authToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
+            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_vk, 0, 0, 0);
+        } else if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_tf, 0, 0, 0);
+        } else if (authToken.getSocialNet().equals(AuthToken.SN_ODNOKLASSNIKI)) {
+            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ico_ok_settings, 0, 0, 0);
+        }
+    }
+
     public String getSocialAccountEmail() {
         return mSettings.getString(SETTINGS_SOCIAL_ACCOUNT_EMAIL, Static.EMPTY);
     }
@@ -79,6 +130,9 @@ public class Settings {
     }
 
     public Uri getRingtone() {
+        if (mSettings.getString(SETTINGS_C2DM_RINGTONE, DEFAULT_SOUND).equals(SILENT)) {
+            return null;
+        }
         return Uri.parse(mSettings.getString(SETTINGS_C2DM_RINGTONE, DEFAULT_SOUND));
     }
 

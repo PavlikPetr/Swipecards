@@ -1,8 +1,10 @@
 package com.topface.topface.data;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +13,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.Ssid;
+import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -31,6 +36,7 @@ public class Options extends AbstractData {
     /**
      * Идентификаторы страниц
      */
+    public static final String PAGE_UNKNOWK = "UNKNOWN_PAGE";
     public final static String PAGE_LIKES = "LIKE";
     public final static String PAGE_MUTUAL = "MUTUAL";
     public final static String PAGE_MESSAGES = "MESSAGES";
@@ -40,6 +46,20 @@ public class Options extends AbstractData {
     public final static String PAGE_BOOKMARKS = "BOOKMARKS";
     public final static String PAGE_VIEWS = "VIEWS";
     public final static String PAGE_START = "START";
+    public final static String PAGE_GAG = "GAG";
+    public final static String[] PAGES = new String[]{
+            PAGE_UNKNOWK,
+            PAGE_LIKES,
+            PAGE_MUTUAL,
+            PAGE_MESSAGES,
+            PAGE_VISITORS,
+            PAGE_DIALOGS,
+            PAGE_FANS,
+            PAGE_BOOKMARKS,
+            PAGE_VIEWS,
+            PAGE_START,
+            PAGE_GAG
+    };
 
     public final static String GENERAL_MAIL_CONST = "mail";
     public final static String GENERAL_APNS_CONST = "apns";
@@ -51,6 +71,11 @@ public class Options extends AbstractData {
     public final static String FLOAT_TYPE_BANNER = "BANNER";
     public final static String FLOAT_TYPE_LEADERS = "LEADERS";
     public final static String FLOAT_TYPE_NONE = "NONE";
+    public final static String[] FLOAT_TYPES = new String[]{
+            FLOAT_TYPE_BANNER,
+            FLOAT_TYPE_LEADERS,
+            FLOAT_TYPE_NONE
+    };
 
     /**
      * Идентификаторы типов баннеров
@@ -65,7 +90,22 @@ public class Options extends AbstractData {
     public static final String BANNER_MOPUB = "MOPUB";
     public static final String BANNER_INNERACTIVE = "INNERACTIVE";
     public static final String BANNER_MOBCLIX = "MOBCLIX";
+    public static final String BANNER_IVENGO = "IVENGO";
     public static final String BANNER_GAG = "GAG";
+    public final static String[] BANNERS = new String[]{
+            BANNER_TOPFACE,
+            BANNER_ADFONIC,
+            BANNER_ADMOB,
+            BANNER_WAPSTART,
+            BANNER_ADWIRED,
+            BANNER_MADNET,
+            BANNER_BEGUN,
+            BANNER_MOPUB,
+            BANNER_INNERACTIVE,
+            BANNER_MOBCLIX,
+            BANNER_IVENGO,
+            BANNER_GAG
+    };
 
     /**
      * Идентификаторы для типов офферволлов
@@ -74,15 +114,26 @@ public class Options extends AbstractData {
     public static final String SPONSORPAY = "SPONSORPAY";
     public static final String CLICKKY = "CLICKKY";
     public static final String RANDOM = "RANDOM";
+    public static final String GETJAR = "GETJAR";
+    public final static String[] OFFERWALLS = new String[]{
+            TAPJOY,
+            SPONSORPAY,
+            CLICKKY,
+            GETJAR,
+            RANDOM
+    };
+    public static final String PREMIUM_MESSAGES_POPUP_SHOW_TIME = "premium_messages_popup_last_show";
 
     /**
      * Настройки для каждого типа страниц
      */
-    public HashMap<String, Options.Page> pages = new HashMap<String, Options.Page>();
+    public HashMap<String, Page> pages = new HashMap<String, Page>();
     public LinkedList<BuyButton> coins = new LinkedList<BuyButton>();
     public LinkedList<BuyButton> likes = new LinkedList<BuyButton>();
     public LinkedList<BuyButton> premium = new LinkedList<BuyButton>();
     public LinkedList<BuyButton> others = new LinkedList<BuyButton>();
+
+    public String ratePopupType;
     private String paymentwall;
 
     public String max_version = "2147483647"; //Integer.MAX_VALUE);
@@ -104,6 +155,11 @@ public class Options extends AbstractData {
     public int premium_period;
     public int contacts_count;
     public long popup_timeout;
+    public boolean block_unconfirmed;
+    public boolean block_chat_not_mutual;
+    public Closing closing = new Closing();
+    public PremiumMessages premium_messages;
+    public GetJar getJar;
 
     public static Options parse(ApiResponse response) {
         Options options = new Options();
@@ -118,7 +174,7 @@ public class Options extends AbstractData {
             for (int i = 0; i < pages.length(); i++) {
                 JSONObject page = pages.getJSONObject(i);
 
-                String pageName = page.optString("name");
+                String pageName = getPageName(page);
                 String floatType = page.optString("float");
                 String bannerType = page.optString("banner");
 
@@ -126,6 +182,8 @@ public class Options extends AbstractData {
             }
             options.offerwall = response.jsonResult.optString("offerwall");
             options.max_version = response.jsonResult.optString("max_version");
+            options.block_unconfirmed = response.jsonResult.optBoolean("block_unconfirmed");
+            options.block_chat_not_mutual = response.jsonResult.optBoolean("block_chat_not_mutual");
 
             JSONObject purchases = response.jsonResult.optJSONObject("purchases");
             if (purchases != null) {
@@ -161,6 +219,14 @@ public class Options extends AbstractData {
             options.contacts_count = contacts_invite.optInt("contacts_count");
             options.popup_timeout = contacts_invite.optInt("show_popup_timeout") * 60 * 60 * 1000;
 
+            if (response.jsonResult.has("premium_messages")) {
+                options.premium_messages = new PremiumMessages(
+                        response.jsonResult.optJSONObject("premium_messages")
+                );
+            } else {
+                options.premium_messages = new PremiumMessages(false, 10, 1000);
+            }
+
             if (response.jsonResult.has("links")) {
                 JSONObject links = response.jsonResult.optJSONObject("links");
                 if (links != null && links.has("paymentwall")) {
@@ -168,13 +234,50 @@ public class Options extends AbstractData {
                 }
             }
 
+            JSONObject closings = response.jsonResult.optJSONObject("closing");
+            if (options.closing == null) options.closing = new Closing();
+            options.closing.enabledMutual = closings.optBoolean("enabled_mutual");
+            options.closing.enableSympathies = closings.optBoolean("enabled_sympathies");
+            options.closing.limitMutual = closings.optInt("limit_mutual");
+            options.closing.limitSympathies = closings.optInt("limit_sympathies");
 
+            options.ratePopupType = response.jsonResult.optJSONObject("rate_popup").optString("type");
+
+            JSONObject getJar = response.jsonResult.optJSONObject("getjar");
+            options.getJar = new GetJar(getJar.optString("id"),getJar.optString("name"),getJar.optLong("price"));
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
         }
 
         CacheProfile.setOptions(options, response.jsonResult);
         return options;
+    }
+
+    private static String getPageName(JSONObject page) {
+        String name = page.optString("name");
+        if (PAGE_LIKES.equals(name)) {
+            return PAGE_LIKES;
+        } else if (PAGE_MUTUAL.equals(name)) {
+            return PAGE_MUTUAL;
+        } else if (PAGE_MESSAGES.equals(name)) {
+            return PAGE_MESSAGES;
+        } else if (PAGE_VISITORS.equals(name)) {
+            return PAGE_VISITORS;
+        } else if (PAGE_DIALOGS.equals(name)) {
+            return PAGE_DIALOGS;
+        } else if (PAGE_FANS.equals(name)) {
+            return PAGE_FANS;
+        } else if (PAGE_BOOKMARKS.equals(name)) {
+            return PAGE_BOOKMARKS;
+        } else if (PAGE_VIEWS.equals(name)) {
+            return PAGE_VIEWS;
+        } else if (PAGE_START.equals(name)) {
+            return PAGE_START;
+        } else if (PAGE_GAG.equals(name)) {
+            return PAGE_GAG;
+        } else {
+            return PAGE_UNKNOWK + "(" + name + ")";
+        }
     }
 
     public BuyButton createBuyButtonFromJSON(JSONObject purchaseItem) {
@@ -267,10 +370,30 @@ public class Options extends AbstractData {
         public String floatType;
         public String banner;
 
+        private static final String SEPARATOR = ";";
+
         public Page(String name, String floatType, String banner) {
             this.name = name;
             this.floatType = floatType;
             this.banner = banner;
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder strBuilder = new StringBuilder();
+            strBuilder.append(name).append(SEPARATOR)
+                    .append(floatType).append(SEPARATOR)
+                    .append(banner);
+            return strBuilder.toString();
+        }
+
+        public static Page parseFromString(String str) {
+            String[] params = str.split(SEPARATOR);
+            if (params.length == 3) {
+                return new Page(params[0],params[1],params[2]);
+            } else {
+                return null;
+            }
         }
     }
 
@@ -300,4 +423,167 @@ public class Options extends AbstractData {
         return paymentwall;
     }
 
+    public static class PremiumMessages {
+        public static final int DEFAULT_COUNT = 10;
+        private static final int DEFAULT_TIMEOUT = 1000;
+        /**
+         * включен ли механизм для данного пользователя в булевых константах
+         */
+        private boolean mEnabled;
+        /**
+         * количесто отправляемых пользователю сообщений в штуках
+         */
+        private int mCount;
+        /**
+         * таймаут для отображения попапа покупки премиума в часах
+         */
+        private int mTimeout;
+
+        public PremiumMessages(JSONObject premiumMessages) {
+            if (premiumMessages != null) {
+                mEnabled = premiumMessages.optBoolean("enabled");
+                mCount = premiumMessages.optInt("count", DEFAULT_COUNT);
+                mTimeout = premiumMessages.optInt("timeout", DEFAULT_TIMEOUT);
+            }
+        }
+
+        public PremiumMessages(boolean enabled, int count, int timeout) {
+            mEnabled = enabled;
+            mCount = count;
+            mTimeout = timeout;
+        }
+
+        public int getCount() {
+            return mCount;
+        }
+
+        public boolean isNeedShow() {
+            return mEnabled && (getLashShowTime() + mTimeout * 60 * 60 * 1000) < System.currentTimeMillis();
+        }
+
+        public void setPopupShowTime() {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    PreferenceManager.getDefaultSharedPreferences(App.getContext())
+                            .edit()
+                            .putLong(PREMIUM_MESSAGES_POPUP_SHOW_TIME, System.currentTimeMillis())
+                            .commit();
+                }
+            }).run();
+        }
+
+        public void clearPopupShowTime() {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    PreferenceManager.getDefaultSharedPreferences(App.getContext())
+                            .edit()
+                            .remove(PREMIUM_MESSAGES_POPUP_SHOW_TIME)
+                            .commit();
+                }
+            }).run();
+        }
+
+        private long getLashShowTime() {
+            return  PreferenceManager.getDefaultSharedPreferences(App.getContext())
+                    .getLong(PREMIUM_MESSAGES_POPUP_SHOW_TIME, 0);
+        }
+    }
+    public static class Closing {
+        public static String DATA_FOR_CLOSING_RECEIVED_ACTION = "DATA_FOR_CLOSING_RECEIVED_ACTION";
+
+        private static Ssid.ISsidUpdateListener listener;
+        public boolean enableSympathies;
+        public boolean enabledMutual;
+        public int limitSympathies;
+        public int limitMutual;
+
+        public Closing() {
+            if (listener == null) {
+                listener = new Ssid.ISsidUpdateListener() {
+                    @Override
+                    public void onUpdate() {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = pref.edit();
+                                editor.putLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME, 0);
+                                editor.commit();
+                            }
+                        }).start();
+                    }
+                };
+                Ssid.addUpdateListener(listener);
+            }
+        }
+
+        public void onStopMutualClosings() {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = pref.edit();
+                    long currentTime = System.currentTimeMillis();
+                    editor.putLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME, currentTime);
+                    editor.commit();
+                }
+            }).start();
+        }
+
+        public void onStopLikesClosings() {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = pref.edit();
+                    long currentTime = System.currentTimeMillis();
+                    editor.putLong(Static.PREFERENCES_LIKES_CLOSING_LAST_TIME, currentTime);
+                    editor.commit();
+                }
+            }).start();
+        }
+
+        public boolean isClosingsEnabled() {
+            return (enabledMutual || enableSympathies) && !CacheProfile.premium;
+        }
+
+        public boolean isMutualClosingAvailable() {
+            SharedPreferences pref =  App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+            long currentTime = System.currentTimeMillis();
+            long lastCallTime = pref.getLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME,0);
+            return DateUtils.isOutside24Hours(lastCallTime, System.currentTimeMillis());
+        }
+
+        public boolean isLikesClosingAvailable() {
+            SharedPreferences pref =  App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+            long lastCallTime = pref.getLong(Static.PREFERENCES_LIKES_CLOSING_LAST_TIME,0);
+            return DateUtils.isOutside24Hours(lastCallTime, System.currentTimeMillis());
+        }
+    }
+
+    public static class GetJar {
+        String id = "unknown";
+        String name = "coins";
+        long price = Integer.MAX_VALUE;
+
+        public GetJar(String id,String name,long price) {
+            this.id = id;
+            this.name = name;
+            this.price = price;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public long getPrice() {
+            return price;
+        }
+    }
 }

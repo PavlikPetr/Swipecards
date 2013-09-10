@@ -1,10 +1,8 @@
 package com.topface.topface.ui;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -12,9 +10,11 @@ import com.topface.topface.data.Gift;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.GiftsRequest;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.fragments.GiftsFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.TripleButton;
+import com.topface.topface.utils.ActionBar;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -40,14 +40,11 @@ public class GiftsActivity extends BaseFragmentActivity {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.ac_gifts);
 
-        ((TextView) findViewById(R.id.tvNavigationTitle)).setText(R.string.gifts_title);
-        findViewById(R.id.btnNavigationHome).setVisibility(View.INVISIBLE);
-        View backButton = findViewById(R.id.btnNavigationBack);
-        backButton.setVisibility(View.VISIBLE);
-        backButton.setOnClickListener(new OnClickListener() {
+        ActionBar actionBar = getActionBar(getWindow().getDecorView());
+        actionBar.setTitleText(getString(R.string.gifts_title));
+        actionBar.showBackButton(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setResult(Activity.RESULT_CANCELED);
                 finish();
             }
         });
@@ -121,7 +118,7 @@ public class GiftsActivity extends BaseFragmentActivity {
             giftRequest.callback(new DataApiHandler<LinkedList<Gift>>() {
 
                 @Override
-                protected void success(LinkedList<Gift> data, ApiResponse response) {
+                protected void success(LinkedList<Gift> data, IApiResponse response) {
                     mGiftsList.addAll(data);
                     mGiftsCollection.add(mGiftsList);
                     mGiftFragment.setGifts(mGiftsCollection.getGifts());
@@ -135,7 +132,7 @@ public class GiftsActivity extends BaseFragmentActivity {
                 }
 
                 @Override
-                public void fail(int codeError, ApiResponse response) {
+                public void fail(int codeError, IApiResponse response) {
                     Toast.makeText(
                             App.getContext(),
                             R.string.general_data_error,

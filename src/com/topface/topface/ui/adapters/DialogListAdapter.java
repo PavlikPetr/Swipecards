@@ -7,7 +7,7 @@ import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedListData;
-import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.DateUtils;
 
 import java.util.Collections;
 
@@ -17,8 +17,6 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
     public static final int ITEM_LAYOUT = R.layout.item_feed_dialog;
     public static final int NEW_VIP_ITEM_LAYOUT = R.layout.item_new_feed_vip_dialog;
     public static final int VIP_ITEM_LAYOUT = R.layout.item_feed_vip_dialog;
-
-    public static final String MESSAGE_OF_UNKNOWN_TYPE = "";
 
     public DialogListAdapter(Context context, Updater updateCallback) {
         super(context, updateCallback);
@@ -30,8 +28,8 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
         FeedViewHolder holder = (FeedViewHolder) convertView.getTag();
 
         FeedDialog dialog = getItem(position);
-        holder.text.setText(getDialogText(dialog));
-        holder.time.setText(Utils.formatTime(getContext(), dialog.created));
+        setDialogText(dialog, holder.text);
+        holder.time.setText(DateUtils.getFormattedDate(mContext, dialog.created));
 
         if (getItemViewType(position) == T_NEW) {
             int unreadCounter = getUnreadCounter(dialog);
@@ -46,54 +44,61 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
         return convertView;
     }
 
-    private String getDialogText(FeedDialog dialog) {
-        String text;
+    private void setDialogText(FeedDialog dialog, TextView view) {
+        String text = null;
+        int image = 0;
+
         if (dialog.user.deleted) {
             text = getContext().getString(R.string.user_is_deleted);
-            return text;
         } else if (dialog.user.banned) {
             text = getContext().getString(R.string.user_is_banned);
-            return text;
+        } else {
+            switch (dialog.type) {
+                case FeedDialog.DEFAULT:
+                case FeedDialog.MESSAGE:
+                case FeedDialog.MESSAGE_WISH:
+                case FeedDialog.MESSAGE_SEXUALITY:
+                case FeedDialog.MESSAGE_WINK:
+                case FeedDialog.RATE:
+                case FeedDialog.PROMOTION:
+                case FeedDialog.PHOTO:
+                    image = (dialog.target == FeedDialog.OUTPUT_USER_MESSAGE) ?
+                            R.drawable.ico_outbox : 0;
+                    break;
+                case FeedDialog.LIKE:
+                    if (dialog.target == FeedDialog.INPUT_FRIEND_MESSAGE) {
+                        text = getContext().getString(R.string.chat_like_in);
+                    } else {
+                        text = getContext().getString(R.string.chat_like_out);
+                        image = R.drawable.ico_outbox;
+                    }
+                    break;
+                case FeedDialog.SYMPHATHY:
+                    if (dialog.target == FeedDialog.INPUT_FRIEND_MESSAGE) {
+                        text = getContext().getString(R.string.chat_mutual_in);
+                    } else {
+                        text = getContext().getString(R.string.chat_mutual_out);
+                        image = R.drawable.ico_outbox;
+                    }
+                    break;
+                case FeedDialog.ADDRESS:
+                    image = R.drawable.ico_map;
+                    break;
+                case FeedDialog.GIFT:
+                    image = R.drawable.ico_gift;
+                    text = (dialog.target == FeedDialog.INPUT_FRIEND_MESSAGE) ?
+                            getContext().getString(R.string.chat_gift_in) :
+                            getContext().getString(R.string.chat_gift_out);
+                    break;
+            }
         }
-        switch (dialog.type) {
-            case FeedDialog.DEFAULT:
-            case FeedDialog.MESSAGE:
-            case FeedDialog.MESSAGE_WISH:
-            case FeedDialog.MESSAGE_SEXUALITY:
-            case FeedDialog.MESSAGE_WINK:
-            case FeedDialog.RATE:
-            case FeedDialog.PROMOTION:
-            case FeedDialog.PHOTO:
-                text = (dialog.target == FeedDialog.OUTPUT_USER_MESSAGE) ? "{{outbox}} " + dialog.text : dialog.text;
-                break;
-            case FeedDialog.LIKE:
-                text = (dialog.target == FeedDialog.INPUT_FRIEND_MESSAGE) ?
-                        getContext().getString(R.string.chat_like_in) :
-                        "{{outbox}} " + getContext().getString(R.string.chat_like_out);
-                break;
-            case FeedDialog.SYMPHATHY:
-                text = (dialog.target == FeedDialog.INPUT_FRIEND_MESSAGE) ?
-                        getContext().getString(R.string.chat_mutual_in) :
-                        "{{outbox}} " + getContext().getString(R.string.chat_mutual_out);
+        //Если иконка или текст пустые, то ставим данные по умолчанию
+        image = (image == 0 && dialog.target == FeedDialog.OUTPUT_USER_MESSAGE) ?
+                R.drawable.ico_outbox : 0;
+        text = (text == null) ? dialog.text : text;
 
-                break;
-            case FeedDialog.ADDRESS:
-                text = "{{map}} " + dialog.text;
-                break;
-            case FeedDialog.MAP:
-                text = "{{my_map}} " + dialog.text;
-                break;
-            case FeedDialog.GIFT:
-                text = "{{gift}} ";
-                text += (dialog.target == FeedDialog.INPUT_FRIEND_MESSAGE) ?
-                        getContext().getString(R.string.chat_gift_in) :
-                        getContext().getString(R.string.chat_gift_out);
-                break;
-            default:
-                //По умолчанию все равно показываем текст
-                text = (dialog.target == FeedDialog.OUTPUT_USER_MESSAGE) ? "{{outbox}} " + dialog.text : dialog.text;
-        }
-        return text;
+        view.setCompoundDrawablesWithIntrinsicBounds(image, 0, 0, 0);
+        view.setText(text);
     }
 
     private int getUnreadCounter(FeedDialog dialog) {

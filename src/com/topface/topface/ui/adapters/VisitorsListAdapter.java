@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.Visitor;
-import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.DateUtils;
 
 public class VisitorsListAdapter extends FeedAdapter<Visitor> {
 
@@ -29,7 +29,7 @@ public class VisitorsListAdapter extends FeedAdapter<Visitor> {
         FeedViewHolder holder = (FeedViewHolder) convertView.getTag();
 
         Visitor visitor = getItem(position);
-        holder.time.setText(Utils.formatTime(getContext(), visitor.created));
+        holder.time.setText(DateUtils.getFormattedDate(mContext, visitor.created));
         holder.time.setVisibility(View.VISIBLE);
 
         return convertView;
@@ -41,9 +41,9 @@ public class VisitorsListAdapter extends FeedAdapter<Visitor> {
     }
 
     @Override
-	protected int getNewItemLayout() {		
-		return R.layout.item_new_feed_like;
-	}
+    protected int getNewItemLayout() {
+        return R.layout.item_new_feed_like;
+    }
 
     @Override
     protected int getVipItemLayout() {
@@ -58,10 +58,6 @@ public class VisitorsListAdapter extends FeedAdapter<Visitor> {
     @Override
     public boolean isNeedUpdate() {
         return super.isNeedUpdate() && !allowUpdating;
-    }
-
-    public void allowUpdating(boolean allow) {
-        allowUpdating = allow;
     }
 
     @Override

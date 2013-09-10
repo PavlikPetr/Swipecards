@@ -4,35 +4,44 @@
               android:orientation="horizontal"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:gravity="center_vertical"
+              android:padding="10dp"
               android:id="@+id/notification">
 
     <ImageView
             android:id="@+id/notificationImage"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:scaleType="centerCrop"
             />
 
-    <RelativeLayout
-            android:layout_width="wrap_content"
+    <LinearLayout
+            android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:layout_weight="0.5"
+            android:orientation="vertical"
             >
 
         <TextView
                 android:id="@+id/nfTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignRight="@id/notificationImage"
                 />
 
         <ProgressBar
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/nfProgress"
-                style="@android:style/Widget.ProgressBar.Horizontal"
-                android:layout_below="@id/nfTitle"
-                android:layout_alignRight="@id/notificationImage"
+                style="?android:attr/progressBarStyleHorizontal"
                 android:indeterminate="true"/>
 
-    </RelativeLayout>
+    </LinearLayout>
+    <Button
+        android:id="@+id/notCancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/general_cancel"
+        />
 </LinearLayout>

@@ -22,9 +22,6 @@ public class TrackedActivity extends Activity {
     public static void setCustomMeticsAndDimensions() {
         //Дополнительные параметры для статистики
         Tracker tracker = EasyTracker.getTracker();
-        tracker.setCustomMetric(1, (long) CacheProfile.age);
-        tracker.setCustomMetric(2, (long) CacheProfile.background_id);
-        tracker.setCustomMetric(3, (long) CacheProfile.money);
 
         String socialNet = AuthToken.getInstance().getSocialNet();
         tracker.setCustomDimension(1, TextUtils.isEmpty(socialNet) ? "Unauthorized" : socialNet);
@@ -32,6 +29,7 @@ public class TrackedActivity extends Activity {
         tracker.setCustomDimension(3, CacheProfile.paid ? "Yes" : "No");
         tracker.setCustomDimension(4, CacheProfile.emailConfirmed ? "Yes" : "No");
         tracker.setCustomDimension(5, CacheProfile.premium ? "Yes" : "No");
+        tracker.setCustomDimension(6, Integer.toString(CacheProfile.age));
     }
 
     @Override

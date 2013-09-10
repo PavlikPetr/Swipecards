@@ -19,7 +19,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiRequest;
-import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
@@ -28,6 +28,8 @@ import com.topface.topface.utils.FormItem;
 
 public class EditFormItemInputFragment extends AbstractEditFragment {
 
+    private static final String ARG_TAG_TITLE_ID = "titleId";
+    private static final String ARG_TAG_DATA = "data";
     private int mTitleId;
     private String mData;
     private String mInputData = "";
@@ -40,16 +42,25 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
         super();
     }
 
-    public EditFormItemInputFragment(int titleId, String data) {
-        this();
-        mTitleId = titleId;
-        mData = data == null ? Static.EMPTY : data;
+    public static EditFormItemInputFragment newInstance(int titleId, String data) {
+        EditFormItemInputFragment fragment = new EditFormItemInputFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_TAG_TITLE_ID, titleId);
+        args.putString(ARG_TAG_DATA, data);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    private void restoreState() {
+        mTitleId = getArguments().getInt(ARG_TAG_TITLE_ID);
+        mData = getArguments().getString(ARG_TAG_DATA);
         mProfile = CacheProfile.getProfile();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mFormInfo = new FormInfo(getActivity(), mProfile);
+        restoreState();
+        mFormInfo = new FormInfo(getActivity(), mProfile.sex, mProfile.getType());
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_edit_input, null, false);
 
@@ -102,7 +113,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 
     @Override
     protected boolean hasChanges() {
-        return !mData.equals(mInputData);
+        return !TextUtils.equals(mData, mInputData);
     }
 
     @Override
@@ -115,7 +126,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
                 if (CacheProfile.forms.get(i).titleId == mTitleId) {
                     final FormItem item = CacheProfile.forms.get(i);
                     FormItem newItem;
-                    mInputData = mEditText.getText().toString();
+                    mInputData = mEditText.getText().toString().trim();
                     newItem = new FormItem(item.titleId, mInputData, FormItem.DATA);
 
                     mFormInfo.fillFormItem(newItem);
@@ -126,7 +137,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
                     request.callback(new ApiHandler() {
 
                         @Override
-                        public void success(ApiResponse response) {
+                        public void success(IApiResponse response) {
                             item.value = TextUtils.isEmpty(mInputData) ? null : mInputData;
                             mFormInfo.fillFormItem(item);
                             getActivity().setResult(Activity.RESULT_OK);
@@ -137,7 +148,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
                         }
 
                         @Override
-                        public void fail(int codeError, ApiResponse response) {
+                        public void fail(int codeError, IApiResponse response) {
                             getActivity().setResult(Activity.RESULT_CANCELED);
                             finishRequestSend();
                             if (handler != null) handler.sendEmptyMessage(0);

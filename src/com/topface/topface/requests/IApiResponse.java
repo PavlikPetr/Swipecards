@@ -9,6 +9,7 @@ public interface IApiResponse {
      * Подробнее: http://tasks.verumnets.ru/projects/topface/wiki/%D0%9A%D0%BE%D0%B4%D1%8B_%D0%BE%D1%88%D0%B8%D0%B1%D0%BE%D0%BA
      */
 
+    public static final int UNCONFIRMED_LOGIN_ACTION = -4;
     public static final int RESULT_DONT_SET = -4;
     public static final int CONNECTION_ERROR = -3;
     public static final int ERRORS_PROCCESED = -2;
@@ -61,6 +62,10 @@ public interface IApiResponse {
     public static final int INCORRECT_PHOTO_DATA = 47;
     public static final int INCORRECT_PHOTO_SIZES = 48;
     public static final int INCORRECT_PHOTO_FORMAT = 49;
+    public static final int TOO_MANY_MESSAGES = 50;
+    public static final int TOO_MANY_DAILY_MESSAGES = 51;
+    public static final int ALREADY_AWARDED = 52;
+    public static final int UNCONFIRMED_LOGIN = 53;
 
     // local
     public static final int NULL_RESPONSE = 100;
@@ -87,4 +92,6 @@ public interface IApiResponse {
     public JSONObject getJsonResult();
 
     public int getResultCode();
+
+    public boolean isCompleted();
 }

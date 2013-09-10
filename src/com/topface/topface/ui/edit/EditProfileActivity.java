@@ -18,7 +18,7 @@ import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
-import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -58,7 +58,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         hasStartedFromAuthActivity = getIntent().getBooleanExtra(NavigationActivity.FROM_AUTH, false);
 
         // Navigation bar
-        ActionBar actionBar = new ActionBar(findViewById(R.id.editContainer));
+        ActionBar actionBar = getActionBar(getWindow().getDecorView());
         actionBar.setTitleText(getString(R.string.edit_title));
         actionBar.showBackButton(new OnClickListener() {
             @Override
@@ -68,7 +68,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                         Intent intent = new Intent(EditProfileActivity.this, NavigationActivity.class);
                         intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_VIP_PROFILE);
                         SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-                        preferences.edit().putBoolean(Static.PREFERENCES_TAG_NEED_EDIT, false).commit();
+                        preferences.edit().putBoolean(Static.PREFERENCES_NEED_EDIT, false).commit();
                         startActivity(intent);
                     }
                 }
@@ -96,7 +96,6 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         mEditSex.setImageResource(CacheProfile.sex == Static.BOY ?
                 R.drawable.ico_boy :
                 R.drawable.ico_girl);
-
 
         mEditCity = (Button) header.findViewById(R.id.btnEditCity);
         if (CacheProfile.city == null) {
@@ -153,8 +152,8 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
     }
 
     private void initEditItems() {
-        mEditItems.add((new EditStatus()).setType(Type.TOP));
-        mEditItems.add((new EditBackPhoto()).setType(Type.MIDDLE));
+        if (!mEditItems.isEmpty()) mEditItems.clear();
+        mEditItems.add((new EditBackPhoto()).setType(Type.TOP));
         mEditItems.add((new EditPhotos()).setType(Type.BOTTOM));
 
         // edit form items
@@ -228,6 +227,12 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     mEditSex.setImageResource(CacheProfile.sex == Static.BOY ?
                             R.drawable.ico_boy :
                             R.drawable.ico_girl);
+                    if (data != null && data.getExtras() != null) {
+                        if (data.getExtras().getBoolean(EditMainFormItemsFragment.INTENT_SEX_CHANGED)) {
+                            initEditItems();
+                        }
+                    }
+                    mAdapter.notifyDataSetChanged();
                     break;
                 case EditContainerActivity.INTENT_EDIT_STATUS:
                     mAdapter.notifyDataSetChanged();
@@ -262,7 +267,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     request.callback(new ApiHandler() {
 
                         @Override
-                        public void success(ApiResponse response) {
+                        public void success(IApiResponse response) {
                             CacheProfile.city = new City(city_id, city_name,
                                     city_full);
                             LocalBroadcastManager.getInstance(getApplicationContext())
@@ -270,7 +275,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                         }
 
                         @Override
-                        public void fail(int codeError, ApiResponse response) {
+                        public void fail(int codeError, IApiResponse response) {
                         }
                     }).exec();
                     mEditCity.setText(city_name);
@@ -391,7 +396,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                 } else if (item instanceof EditForm) {
                     holder.mTitle.setText(item.getTitle());
                     if (item != null && item.getText() != null && item.getText().trim().length() > 0) {
-                        if (((EditForm)item).getId() != FormItem.NOT_SPECIFIED_ID) {
+                        if (((EditForm) item).getId() != FormItem.NOT_SPECIFIED_ID) {
                             holder.mText.setVisibility(View.VISIBLE);
                             holder.mText.setText(item.getText());
                         }

@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import com.topface.topface.GCMUtils;
@@ -11,6 +10,7 @@ import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.MutualListAdapter;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CountersManager;
 import org.json.JSONObject;
 
@@ -42,18 +42,18 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
 
     @Override
     protected void initEmptyFeedView(View inflated) {
-        inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
+
+        inflated.findViewById(R.id.btnGetDating).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
-                startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                NavigationActivity.selectFragment(BaseFragment.F_DATING);
             }
         });
 
-        inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
+        inflated.findViewById(R.id.btnRefill).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NavigationActivity.selectFragment(F_DATING);
+                startActivity(ContainerActivity.getBuyingIntent("EmptyMutual"));
             }
         });
     }
@@ -65,11 +65,6 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
 
 
     @Override
-    protected void decrementCounters() {
-        CountersManager.getInstance(getActivity().getApplicationContext()).decrementCounter(CountersManager.SYMPATHY);
-    }
-
-    @Override
     protected int getTypeForGCM() {
         return GCMUtils.GCM_TYPE_SYMPATHY;
     }
@@ -77,5 +72,10 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     @Override
     protected int getTypeForCounters() {
         return CountersManager.SYMPATHY;
+    }
+
+    @Override
+    protected int getContextMenuLayoutRes() {
+        return R.menu.feed_context_menu;
     }
 }

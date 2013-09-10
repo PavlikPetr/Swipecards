@@ -1,11 +1,9 @@
 package com.topface.topface.utils;
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.ImageButton;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.*;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -13,8 +11,8 @@ import com.topface.topface.ui.views.ImageViewRemote;
 public class ActionBar {
 
     private ViewGroup actionView;
-    private ImageButton mNavigationHome;
-    private ImageButton mNavigationBack;
+    private ImageView mNavigationHome;
+    private ImageView mNavigationBack;
     private TextView mTitle;
     private TextView mSubTitle;
     private ImageButton mSettingsButton;
@@ -27,18 +25,34 @@ public class ActionBar {
 
     private NavigationBarController mNavBarController;
     private ImageButton mSendButton;
+    private RelativeLayout leftContainer;
 
-    public ActionBar(View actionView) {
+    public ActionBar(Context context, View actionView) {
         this.actionView = (ViewGroup) actionView.findViewById(R.id.loNavigationBar);
+        this.actionView.bringToFront();
+        initShadow(context);
         this.actionView.setVisibility(View.VISIBLE);
         mNavBarController = new NavigationBarController(this.actionView);
         initViews();
     }
 
+    private void initShadow(Context context) {
+        if (this.actionView.getParent() instanceof RelativeLayout) {
+            RelativeLayout parent = (RelativeLayout) this.actionView.getParent();
+            View shadow = new ImageView(context);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.addRule(RelativeLayout.BELOW, R.id.loNavigationBar);
+            shadow.setLayoutParams(params);
+            shadow.setBackgroundResource(R.drawable.im_bar_header_shadow);
+            shadow.setTag(context.getString(R.string.tag_header_shadow));
+            parent.addView(shadow);
+        }
+    }
+
     private void initViews() {
 
-        mNavigationBack = (ImageButton) actionView.findViewById(R.id.btnNavigationBack);
-        mNavigationHome = (ImageButton) actionView.findViewById(R.id.btnNavigationHome);
+        mNavigationBack = (ImageView) actionView.findViewById(R.id.btnNavigationBack);
+        mNavigationHome = (ImageView) actionView.findViewById(R.id.btnNavigationHome);
         mTitle = (TextView) actionView.findViewById(R.id.tvNavigationTitle);
         mSubTitle = (TextView) actionView.findViewById(R.id.tvNavigationSubtitle);
         mSettingsButton = (ImageButton) actionView.findViewById(R.id.btnNavigationSettingsBar);
@@ -47,9 +61,10 @@ public class ActionBar {
         mUserActionsControl = (ImageButton) actionView.findViewById(R.id.btnUserProfActions);
         mRightProgressBar = (ProgressBar) actionView.findViewById(R.id.prsNavigationRight);
         mProfileAvatar = (ImageViewRemote) actionView.findViewById(R.id.btnNavigationBarAvatar);
-        mProfileAvatar.setImageResource(R.drawable.feed_banned_male_avatar);
+//        mProfileAvatar.setBackgroundResource(R.drawable.feed_photo_selector);
         mSendButton = (ImageButton) actionView.findViewById(R.id.btnNavigationSend);
         checkBox = (CheckBox) actionView.findViewById(R.id.btnNavigationCheckbox);
+        leftContainer = (RelativeLayout) actionView.findViewById(R.id.leftButtonContainer);
     }
 
     public void refreshNotificators() {
@@ -60,17 +75,18 @@ public class ActionBar {
         }
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public void showProfileAvatar(final Photo profilePhoto, View.OnClickListener listener) {
         hideRightBarPart();
         mProfileAvatar.setVisibility(View.VISIBLE);
-        mProfileAvatar.setPhoto(profilePhoto);
+//        mProfileAvatar.setPhoto(profilePhoto);
         mProfileAvatar.setOnClickListener(listener);
     }
 
-    public void showProfileAvatar(final int profilePhotorResource, View.OnClickListener listener) {
+    public void showProfileAvatar(View.OnClickListener listener) {
         hideRightBarPart();
         mProfileAvatar.setVisibility(View.VISIBLE);
-        mProfileAvatar.setImageResource(profilePhotorResource);
+//        mProfileAvatar.setImageResource(profilePhotorResource);
         mProfileAvatar.setOnClickListener(listener);
     }
 
@@ -78,7 +94,7 @@ public class ActionBar {
         mNavigationBack.setVisibility(View.GONE);
         mNavigationHome.setVisibility(View.VISIBLE);
         mNavigationHome.setSelected(false);
-        mNavigationHome.setOnClickListener(listener);
+        leftContainer.setOnClickListener(listener);
     }
 
     public void activateHomeButton(boolean activate) {
@@ -86,10 +102,10 @@ public class ActionBar {
 
     }
 
-    public void showBackButton(View.OnClickListener listener) {
+    public void showBackButton(final View.OnClickListener listener) {
         mNavigationBack.setVisibility(View.VISIBLE);
         mNavigationHome.setVisibility(View.GONE);
-        mNavigationBack.setOnClickListener(listener);
+        leftContainer.setOnClickListener(listener);
     }
 
     public void showEditButton(View.OnClickListener listener) {
@@ -151,15 +167,58 @@ public class ActionBar {
         mSubTitle.setText(text);
     }
 
-    public void showUserActionsButton(final View.OnClickListener nonActiveListener, final View.OnClickListener activeListener) {
-        mEditButton.setVisibility(View.GONE);
-        mSettingsButton.setVisibility(View.GONE);
-        mProfileButton.setVisibility(View.GONE);
+    public void showUserActionsButton(final View.OnClickListener nonActiveListener, final View.OnClickListener activeListener, final Photo profilePhotoResource) {
+        hideRightBarPart();
+        mProfileAvatar.setVisibility(View.VISIBLE);
 
+        mProfileAvatar.setPhoto(profilePhotoResource);
+        userActionsOnClickListener = new UserActionsOnClickListener(activeListener, nonActiveListener);
+        mProfileAvatar.setOnClickListener(userActionsOnClickListener);
+        mSendButton.setVisibility(View.GONE);
+        checkBox.setVisibility(View.GONE);
+    }
+
+    private UserActionsOnClickListener userActionsOnClickListener;
+
+    private class UserActionsOnClickListener implements View.OnClickListener {
+        private boolean selected = false;
+        private View.OnClickListener active, nonactive;
+
+        public UserActionsOnClickListener(View.OnClickListener active, View.OnClickListener nonActive) {
+            this.active = active;
+            this.nonactive = nonActive;
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (selected) {
+                selected = false;
+                active.onClick(view);
+            } else {
+                selected = true;
+                nonactive.onClick(view);
+            }
+        }
+
+        public void setState(boolean state) {
+            selected = state;
+        }
+    }
+
+    public void setUserActionsControlActive(boolean state) {
+        if (userActionsOnClickListener != null) {
+            userActionsOnClickListener.setState(state);
+        }
+    }
+
+    public void showUserActionsButton(final View.OnClickListener nonActiveListener, final View.OnClickListener activeListener) {
+
+        hideRightBarPart();
         mUserActionsControl.setVisibility(View.VISIBLE);
+
         mUserActionsControl.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 if (mUserActionsControl.isSelected()) {
                     mUserActionsControl.setSelected(false);
                     activeListener.onClick(view);
@@ -172,6 +231,7 @@ public class ActionBar {
         mSendButton.setVisibility(View.GONE);
         checkBox.setVisibility(View.GONE);
     }
+
 
     public void showCheckBox(View.OnClickListener listener) {
         hideRightButtons();
@@ -193,16 +253,12 @@ public class ActionBar {
         mUserActionsControl.setVisibility(View.GONE);
     }
 
-    public void activateEditButton() {
-        if (mEditButton.isSelected()) {
-            mEditButton.setSelected(false);
-        } else {
-            mEditButton.setSelected(true);
-        }
-    }
-
     public void disableActionsButton(boolean disabled) {
-        mUserActionsControl.setEnabled(!disabled);
+        if (mUserActionsControl.getVisibility() == View.VISIBLE) {
+            mUserActionsControl.setEnabled(!disabled);
+        } else if (mProfileAvatar.getVisibility() == View.VISIBLE) {
+            mProfileAvatar.setEnabled(!disabled);
+        }
     }
 
     public void setSendButtonEnabled(boolean enabled) {

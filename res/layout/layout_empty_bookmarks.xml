@@ -4,30 +4,33 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:orientation="vertical">
-
-    <ImageView
-            android:id="@+id/ivBookmarksExample"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/add_bookmark_example"
-            android:layout_centerInParent="true"/>
-
     <TextView
+            android:id="@+id/tvText"
             android:layout_width="wrap_content"
-            android:maxWidth="200dp"
             android:layout_height="wrap_content"
             android:text="@string/add_bookmarks_to_be_connected"
-            android:layout_above="@+id/ivBookmarksExample"
-            android:layout_centerHorizontal="true"
+            style="@style/ItemTitleText"
+            android:layout_centerInParent="true"
             android:gravity="center"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
+
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvText"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="17dp"
+            android:orientation="horizontal"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp">
+    </LinearLayout>
 
     <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/add_bookmark_arrow_example"
-            android:layout_toLeftOf="@id/ivBookmarksExample"
-            android:layout_alignTop="@id/ivBookmarksExample"
-            android:layout_marginTop="-16dp"
-            android:layout_marginRight="8dp"/>
+            android:src="@drawable/favorite"
+            android:layout_above="@id/tvText"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="18dp"/>
 </RelativeLayout>

@@ -32,13 +32,13 @@ public class DialogsTest extends FeedTest<FeedDialog> {
                 new DialogDeleteRequest(0, getContext())
                         .callback(new ApiHandler() {
                             @Override
-                            public void success(ApiResponse response) {
+                            public void success(IApiResponse response) {
                                 assertTrue("This request must return error", false);
                                 stopTest("testFeedDialogDeleteRequestExecWithWrongId");
                             }
 
                             @Override
-                            public void fail(int codeError, ApiResponse response) {
+                            public void fail(int codeError, IApiResponse response) {
                                 assertEquals("Wrong error code", ApiResponse.MISSING_REQUIRE_PARAMETER, codeError);
                                 stopTest("testFeedDialogDeleteRequestExecWithWrongId");
                             }

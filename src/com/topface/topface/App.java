@@ -1,5 +1,6 @@
 package com.topface.topface;
 
+import android.annotation.TargetApi;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
@@ -16,14 +17,14 @@ import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.*;
+import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
+import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
 import com.topface.topface.utils.*;
 import com.topface.topface.utils.GeoUtils.GeoLocationManager;
 import com.topface.topface.utils.GeoUtils.GeoPreferencesManager;
 import com.topface.topface.utils.social.AuthToken;
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @ReportsCrashes(formKey = "817b00ae731c4a663272b4c4e53e4b61")
 public class App extends Application {
@@ -36,7 +37,6 @@ public class App extends Application {
     private static Context mContext;
     private static Intent mConnectionIntent;
     private static ConnectionChangeReceiver mConnectionReceiver;
-    private static AtomicBoolean mProfileUpdating = new AtomicBoolean(false);
     private static long mLastProfileUpdate;
     private static AppConfig mBaseConfig;
 
@@ -61,6 +61,7 @@ public class App extends Application {
         //android.os.Debug.startMethodTracing("topface_create");
 
         super.onCreate();
+
         mContext = getApplicationContext();
         //Включаем отладку, если это дебаг версия
         checkDebugMode();
@@ -84,6 +85,9 @@ public class App extends Application {
             mConnectionIntent = registerReceiver(mConnectionReceiver, new IntentFilter(CONNECTIVITY_CHANGE_ACTION));
         }
 
+        MutualClosingFragment.usersProcessed = false;
+        LikesClosingFragment.usersProcessed = false;
+
         //Выполнение всего, что можно сделать асинхронно, делаем в отдельном потоке
         new Thread(new Runnable() {
             @Override
@@ -91,9 +95,7 @@ public class App extends Application {
                 onCreateAsync();
             }
         }).start();
-
     }
-
 
     /**
      * Вызывается в onCreate, но выполняется в отдельном потоке
@@ -152,6 +154,7 @@ public class App extends Application {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     private void checkStrictMode() {
         //Для разработчиков включаем StrictMode, что бы не расслоблялись
         if (DEBUG && Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
@@ -172,62 +175,62 @@ public class App extends Application {
         }
     }
 
+    /**
+     * Множественный запрос Options и профиля
+     */
     public static void sendProfileAndOptionsRequests() {
-        OptionsRequest request = new OptionsRequest(App.getContext());
-        request.callback(new DataApiHandler() {
-            @Override
-            protected void success(Object data, ApiResponse response) {
-            }
+        new ParallelApiRequest(App.getContext())
+                .addRequest(getOptionsRequst())
+                .addRequest(getProfileRequest(ProfileRequest.P_ALL))
+                .exec();
+    }
 
-            @Override
-            protected Object parseResponse(ApiResponse response) {
-                return Options.parse(response);
-            }
+    private static ApiRequest getOptionsRequst() {
+        return new OptionsRequest(App.getContext())
+                .callback(new DataApiHandler<Options>() {
+                    @Override
+                    protected void success(Options data, IApiResponse response) {
+                        //При парсинге запроса все данные сохраняют, так что тут нам уже делать нечего
+                    }
 
-            @Override
-            public void fail(int codeError, ApiResponse response) {
-                Debug.log("options::fail");
-            }
+                    @Override
+                    protected Options parseResponse(ApiResponse response) {
+                        return Options.parse(response);
+                    }
 
-            @Override
-            public void always(ApiResponse response) {
-                super.always(response);
-                //После окончания запроса options запрашиваем профиль
-                sendProfileRequest();
-            }
-        }).exec();
+                    @Override
+                    public void fail(int codeError, IApiResponse response) {
+                        Debug.log("Options::fail");
+                    }
+                });
     }
 
     public static void sendProfileRequest() {
-        if (mProfileUpdating.compareAndSet(false, true)) {
-            mLastProfileUpdate = System.currentTimeMillis();
-            ProfileRequest profileRequest = new ProfileRequest(App.getContext());
-            profileRequest.part = ProfileRequest.P_ALL;
-            profileRequest.callback(new DataApiHandler<Profile>() {
+        getProfileRequest(ProfileRequest.P_ALL).exec();
+    }
 
-                @Override
-                protected void success(Profile data, ApiResponse response) {
-                    CacheProfile.setProfile(data, response);
+    public static ApiRequest getProfileRequest(final int part) {
+        mLastProfileUpdate = System.currentTimeMillis();
+        return new ProfileRequest(part, App.getContext())
+                .callback(new DataApiHandler<Profile>() {
 
-                    LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
-                }
+                    @Override
+                    protected void success(Profile data, IApiResponse response) {
+                        CacheProfile.setProfile(data, (ApiResponse) response, part);
+                        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(getContext());
+                        broadcastManager.sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                        broadcastManager.sendBroadcast(new Intent(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
+                    }
 
-                @Override
-                protected Profile parseResponse(ApiResponse response) {
-                    return Profile.parse(response);
-                }
+                    @Override
+                    protected Profile parseResponse(ApiResponse response) {
+                        return Profile.parse(response);
+                    }
 
-                @Override
-                public void fail(int codeError, ApiResponse response) {
-                }
-
-                @Override
-                public void always(ApiResponse response) {
-                    super.always(response);
-                    mProfileUpdating.set(false);
-                }
-            }).exec();
-        }
+                    @Override
+                    public void fail(int codeError, IApiResponse response) {
+                    }
+                });
     }
 
     public static Context getContext() {
@@ -241,7 +244,7 @@ public class App extends Application {
     public static void checkProfileUpdate() {
         if (System.currentTimeMillis() > mLastProfileUpdate + PROFILE_UPDATE_TIMEOUT) {
             mLastProfileUpdate = System.currentTimeMillis();
-            sendProfileRequest();
+            getProfileRequest(ProfileRequest.P_NECESSARY_DATA);
         }
     }
 

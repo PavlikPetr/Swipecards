@@ -6,6 +6,7 @@ import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.AbstractThreadTest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BlackListAddRequest;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -24,7 +25,7 @@ public class BlackListAddTest extends AbstractThreadTest {
                 new BlackListAddRequest(Integer.parseInt(TEST_USER_ID), getInstrumentation().getContext())
                         .callback(new ApiHandler() {
                             @Override
-                            public void success(ApiResponse response) {
+                            public void success(IApiResponse response) {
                                 assertTrue("BlackListAdd response is't completed", response.isCompleted());
                                 try {
                                     checkUserIsAdded();
@@ -36,7 +37,7 @@ public class BlackListAddTest extends AbstractThreadTest {
                             }
 
                             @Override
-                            public void fail(int codeError, ApiResponse response) {
+                            public void fail(int codeError, IApiResponse response) {
                                 if (codeError == ApiResponse.PREMIUM_ACCESS_ONLY) {
                                     assertFalse("User has premium, but does not get premium", CacheProfile.premium);
                                 } else {
@@ -70,7 +71,7 @@ public class BlackListAddTest extends AbstractThreadTest {
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) {
+                    public void fail(int codeError, IApiResponse response) {
                         stopTest("checkUserIsAdded");
                     }
                 }, getInstrumentation().getContext());

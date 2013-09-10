@@ -10,6 +10,10 @@ import com.topface.topface.data.User;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.QuestionaryRequest;
 import com.topface.topface.requests.SettingsRequest;
+import com.topface.topface.ui.fragments.ProfileFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /* понять и простить за эту хуйню */
 public class FormInfo {
@@ -17,19 +21,44 @@ public class FormInfo {
     // Data
     private Context mContext;
     private Resources mResources;
-    private Profile mProfile;
     private int mSex;
+    private int mProfileType;
 
-    public FormInfo(Context context, Profile profile) {
+    public FormInfo(Context context, int sex, int profileType) {
         mResources = context.getResources();
-        if (profile != null) {
-            mProfile = profile;
-            mSex = profile.sex;
-        }
+        mSex = sex;
+        mProfileType = profileType;
         mContext = context;
     }
 
     // =============================== Common methods ===============================
+    public void fillFormItem(List<FormItem> items) {
+        FormItem breastItem = null;
+        FormItem physiqueHeaderItem = null;
+        int physiqueIndex = -1;
+        for (int i=0;i<items.size();i++) {
+            FormItem item = items.get(i);
+            if (item.titleId == R.array.form_physique_breast) {
+                breastItem = item;
+            } else {
+                if (item.titleId == R.string.form_physique) {
+                    physiqueHeaderItem = item;
+                    physiqueIndex = i;
+                }
+                fillFormItem(item);
+            }
+        }
+
+        if (mSex == Static.BOY) {
+            if (breastItem != null) items.remove(breastItem);
+        } else if (mSex == Static.GIRL) {
+            breastItem  = new FormItem(R.array.form_physique_breast, 0,
+                            FormItem.DATA, physiqueHeaderItem);
+            fillFormItem(breastItem);
+            items.add(physiqueIndex+1, breastItem);
+        }
+    }
+
     public void fillFormItem(FormItem formItem) {
         String title = formItem.title;
         String data = formItem.value;
@@ -273,7 +302,7 @@ public class FormInfo {
             return variants[0] == null ? result : variants[0];
         }
 
-        if (mProfile instanceof User) {
+        if (mProfileType == ProfileFragment.TYPE_USER_PROFILE) {
             switch (mSex) {
                 case Static.BOY:
                     result = variants[0];

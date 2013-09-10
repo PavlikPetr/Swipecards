@@ -1,25 +1,22 @@
 package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.*;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import com.topface.topface.R;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
-import com.topface.topface.utils.ActionBar;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.*;
 import com.topface.topface.utils.http.IRequestClient;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public abstract class BaseFragment extends TrackedFragment implements IRequestClient {
@@ -37,12 +34,17 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public static final int F_LIKES = 1003;
     public static final int F_MUTUAL = 1004;
     public static final int F_DIALOGS = 1005;
-    public static final int F_TOPS = 1006;
+    //Страницы топов у нас больше нет
+    //public static final int F_TOPS = 1006;
     public static final int F_SETTINGS = 1007;
     public static final int F_VISITORS = 1008;
     public static final int F_BOOKMARKS = 1009;
     public static final int F_FANS = 1010;
+
     public static final int F_EDITOR = 9999;
+    public static final int F_UNDEFINED = 9998;
+
+    public static final String INVITE_POPUP = "INVITE_POPUP";
 
 
     @Override
@@ -59,14 +61,14 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     protected ActionBar getActionBar(View view) {
         if (mActionBar == null) {
-            mActionBar = new ActionBar(view.findViewById(R.id.loNavigationBar));
+            mActionBar = new ActionBar(getActivity(), view);
         }
         return mActionBar;
     }
 
     protected ActionBar getActionBar(Activity activity) {
         if (mActionBar == null) {
-            mActionBar = new ActionBar(activity.findViewById(R.id.loNavigationBar));
+            mActionBar = new ActionBar(activity, activity.getWindow().getDecorView());
         }
         return mActionBar;
     }
@@ -113,10 +115,15 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     private void removeAllRequests() {
         if (mRequests != null && mRequests.size() > 0) {
-            for (ApiRequest request : mRequests) {
-                cancelRequest(request);
-            }
-            mRequests.clear();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (ApiRequest request : mRequests) {
+                        cancelRequest(request);
+                    }
+                    mRequests.clear();
+                }
+            }).start();
         }
     }
 
@@ -149,6 +156,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
                     if (mActionBar != null) {
                         mActionBar.refreshNotificators();
                     }
+                    onCountersUpdated();
                 }
             };
             if (isAdded()) {
@@ -159,6 +167,9 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
                         );
             }
         }
+    }
+
+    protected void onCountersUpdated() {
     }
 
     @Override
@@ -221,5 +232,42 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     protected void inBackroundThread() {
+    }
+
+    protected void showPromoDialog() {
+        FragmentActivity activity = getActivity();
+        boolean invitePopupShow = false;
+        if (CacheProfile.canInvite && activity != null) {
+            final SharedPreferences preferences = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+
+            long date_start = preferences.getLong(INVITE_POPUP, 1);
+            long date_now = new java.util.Date().getTime();
+
+            if (date_now - date_start >= CacheProfile.getOptions().popup_timeout) {
+                invitePopupShow = true;
+                preferences.edit().putLong(INVITE_POPUP, date_now).commit();
+                ContactsProvider provider = new ContactsProvider(activity);
+                provider.getContacts(-1, 0, new ContactsProvider.GetContactsListener() {
+                    @Override
+                    public void onContactsReceived(ArrayList<ContactsProvider.Contact> contacts) {
+
+                        if (isAdded()) {
+                            showInvitePopup(contacts);
+                        }
+                    }
+                });
+            }
+        }
+
+        //Показываем рекламу AirMessages только если не показываем инвайты
+        if (!invitePopupShow) {
+            AirMessagesPopupFragment.showIfNeeded(getFragmentManager());
+        }
+    }
+
+    public void showInvitePopup(ArrayList<ContactsProvider.Contact> data) {
+        EasyTracker.getTracker().trackEvent("InvitesPopup", "Show", "", 0L);
+        InvitesPopup popup = InvitesPopup.newInstance(data);
+        ((BaseFragmentActivity) getActivity()).startFragment(popup);
     }
 }

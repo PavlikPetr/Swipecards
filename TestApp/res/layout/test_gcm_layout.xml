@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#000000"
+        >
+    <LinearLayout
+        android:id="@+id/sendContainer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        >
+
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="fill_parent"
+            android:layout_marginTop="5dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/general_email"
+            android:layout_weight="0.5"
+            />
+        <Button
+            android:id="@+id/sendBtn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/general_send_mail"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"/>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/serverResponse"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sendContainer"
+        android:padding="10dp"
+        android:textIsSelectable="true"
+        />
+
+
+</RelativeLayout>

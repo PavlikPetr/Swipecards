@@ -5,7 +5,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class SendGiftRequest extends ApiRequest {
+public class SendGiftRequest extends ConfirmedApiRequest {
 
     static final String USER_ID = "userid";
     static final String GIFT_ID = "giftid";

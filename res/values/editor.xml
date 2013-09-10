@@ -19,6 +19,11 @@
     <string name="editor_title_debug">Отладка:</string>
     <string name="editor_api_title_version">\?v=</string>
     <string name="editor_title_editor_mode">Инструменты редактора:</string>
+    <string name="editor_configure_banners">Настройка баннеров</string>
+    <string name="editor_save_banners_settings">Сохранить в SharedPreferences</string>
+    <string name="editor_reset_banners_settings">Сбросить к серверным</string>
+    <string name="editor_on_start_banners_settings">Применять на старте</string>
+    <string name="editor_clear_air_messages">Сбросить флаг попапа "Сообщения за VIP"</string>
 
     <string-array name="editor_debug_titles">
         <item>Только в debug режиме</item>

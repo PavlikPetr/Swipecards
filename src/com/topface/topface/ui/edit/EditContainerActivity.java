@@ -67,7 +67,7 @@ public class EditContainerActivity extends BaseFragmentActivity {
             case INTENT_EDIT_INPUT_FORM_ITEM:
                 titleId = intent.getIntExtra(INTENT_FORM_TITLE_ID, -1);
                 data = intent.getStringExtra(INTENT_FORM_DATA);
-                mFragment = new EditFormItemInputFragment(titleId, data);
+                mFragment = EditFormItemInputFragment.newInstance(titleId, data);
                 break;
             case INTENT_EDIT_ALBUM:
                 mFragment = new EditProfilePhotoFragment(lv);
@@ -79,7 +79,8 @@ public class EditContainerActivity extends BaseFragmentActivity {
                 titleId = intent.getIntExtra(INTENT_FORM_TITLE_ID, -1);
                 dataId = intent.getIntExtra(INTENT_FORM_DATA_ID, -1);
                 data = intent.getStringExtra(INTENT_FORM_DATA);
-                mFragment = new FilterChooseFormItemFragment(titleId, dataId, data, FilterFragment.mTargetUser);
+                mFragment = FilterChooseFormItemFragment.newInstance(titleId, dataId, data,
+                        FilterFragment.mTargetUser.sex, FilterFragment.mTargetUser.getType());
                 break;
             case INTENT_EDIT_PROFILE_PHOTO:
                 mFragment = new EditProfilePhotoFragment(lv);

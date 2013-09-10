@@ -10,12 +10,8 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.*;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.FeedGiftsRequest;
-import com.topface.topface.requests.SendGiftRequest;
+import com.topface.topface.requests.*;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -42,7 +38,6 @@ public class GiftsFragment extends BaseFragment {
     private GiftsAdapter mGridAdapter;
     private GridView mGridView;
     private ProfileFragment.OnGiftReceivedListener listener;
-
 
     private Profile mProfile;
     private boolean mIsUpdating = false;
@@ -178,7 +173,7 @@ public class GiftsFragment extends BaseFragment {
             sendGift.callback(new DataApiHandler<SendGiftAnswer>() {
 
                 @Override
-                protected void success(SendGiftAnswer answer, ApiResponse response) {
+                protected void success(SendGiftAnswer answer, IApiResponse response) {
                     CacheProfile.likes = answer.likes;
                     CacheProfile.money = answer.money;
                     addGift(sendedGift);
@@ -190,13 +185,11 @@ public class GiftsFragment extends BaseFragment {
                 }
 
                 @Override
-                public void fail(int codeError, final ApiResponse response) {
-                    if (response.code == ApiResponse.PAYMENT) {
+                public void fail(int codeError, final IApiResponse response) {
+                    if (response.isCodeEqual(ApiResponse.PAYMENT)) {
                         FragmentActivity activity = getActivity();
                         if (activity != null) {
-                            Intent intent = new Intent(activity.getApplicationContext(),
-                                    ContainerActivity.class);
-                            intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
+                            Intent intent = ContainerActivity.getBuyingIntent("Dating");
                             intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
                             intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
                             startActivity(intent);
@@ -205,7 +198,7 @@ public class GiftsFragment extends BaseFragment {
                 }
 
                 @Override
-                public void always(ApiResponse response) {
+                public void always(IApiResponse response) {
                     super.always(response);
                     if (listener != null) {
                         listener.onReceived();
@@ -222,10 +215,10 @@ public class GiftsFragment extends BaseFragment {
             mGridAdapter.add(sendedGift);
             mTitle.setText(R.string.gifts);
         }
-        if (mProfile.gifts != null) mProfile.gifts.add(0,sendedGift.gift);
+        if (mProfile.gifts != null) mProfile.gifts.add(0, sendedGift.gift);
         mGridAdapter.notifyDataSetChanged();
         if (getActivity() != null) {
-            Toast.makeText(getActivity(), R.string.chat_gift_out, 1500).show();
+            Toast.makeText(getActivity(), R.string.chat_gift_out, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -258,7 +251,7 @@ public class GiftsFragment extends BaseFragment {
         request.callback(new DataApiHandler<FeedListData<FeedGift>>() {
 
             @Override
-            protected void success(FeedListData<FeedGift> gifts, ApiResponse response) {
+            protected void success(FeedListData<FeedGift> gifts, IApiResponse response) {
 
                 removeLoaderItem();
                 data.addAll(gifts.items);
@@ -279,7 +272,7 @@ public class GiftsFragment extends BaseFragment {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(int codeError, IApiResponse response) {
                 removeLoaderItem();
                 data.add(new FeedGift(ItemType.RETRY));
                 mGridAdapter.notifyDataSetChanged();
@@ -313,9 +306,7 @@ public class GiftsFragment extends BaseFragment {
                         mBtnInfo.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(getActivity(), ContainerActivity.class);
-                                intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
-                                startActivity(intent);
+                                startActivity(ContainerActivity.getBuyingIntent("ProfileGifts"));
                             }
                         });
                     } else {

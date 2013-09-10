@@ -384,5 +384,51 @@
     <string name="general_input_email">Geben Sie Ihre E-Mail-Adresse ein</string>
     <string name="friend_email_hint">Geben Sie E-Mail oder Handynummer eines Freundes ein</string>
     <string name="general_add">Hinzufügen</string>
+    <string name="general_invite_friends">Laden Sie Freunde ein</string>
+    <plurals name="vip_status_period">
+        <item quantity="other">Sie bekommen VIP-Status für %d Tage</item>
+        <item quantity="one">Sie bekommen VIP-Status für %d Tag</item>
+    </plurals>
+    <plurals name="vip_status_period_btn">
+        <item quantity="other">VIP für %d Tage bekommen</item>
+        <item quantity="one">VIP für %d Tag bekommen</item>
+    </plurals>
+    <plurals name="get_vip_for_invites_plurals">
+        <item quantity="other">Bekommen Sie VIP kostenlos für %d Einladungen</item>
+        <item quantity="one">Bekommen Sie VIP kostenlos für %d Einladung</item>
+    </plurals>
     <string name="filter_hint">Geben Sie Ihre Name ein</string>
+    <string name="your_avatar">Ihr Profilbild</string>
+    <string name="complain_type_picture">Bild</string>
+    <string name="general_msg">Nachricht</string>
+    <string name="black_list_add_short">In die schwarze Liste</string>
+    <string name="general_complaint">Melden</string>
+    <string name="confirm">Bestätigen</string>
+    <string name="general_exit">Ausloggen</string>
+    <string name="general_get_dating">Kennen lernen</string>
+    <plurals name="you_was_liked">
+        <item quantity="other">Sie gefallen %d Menschen</item>
+        <item quantity="one">Sie gefallen %d Menschen</item>
+    </plurals>
+    <string name="or">oder</string>
+    <string name="settings_delete_account">Account löschen</string>
+    <string name="restore">Wiederherstellen</string>
+    <plurals name="general_coins">
+        <item quantity="other">%d Coins</item>
+        <item quantity="one">%d Coin</item>
+    </plurals>
+    <string name="skip">Überspringen</string>
+    <string name="sympathies">Sympathien</string>
+    <plurals name="number_of_sympathies">
+        <item quantity="zero">%d Sympathien</item>
+        <item quantity="other">%d Sympathien</item>
+        <item quantity="one">%d Sympathie</item>
+    </plurals>
+    <plurals name="popup_vip_messages">
+        <item quantity="other">%d Nachrichten wurden mit dem Express-Versand empfangen</item>
+        <item quantity="one">%d Nachricht wurde mit dem Express-Versand empfangen</item>
+    </plurals>
+    <string name="general_attention">Achtung!</string>
+    <string name="general_delete_messages">Nachrichten löschen</string>
+    <string name="forget">Vergessen</string>
 </resources>

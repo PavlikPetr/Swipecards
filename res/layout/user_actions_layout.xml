@@ -10,13 +10,87 @@
               android:paddingRight="3dp"
         >
 
+    <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/acProfile"
+            android:background="@drawable/actions_menu_delimiter"
+            android:visibility="gone"
+            >
+
+        <ImageView
+                android:id="@+id/profIcon"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ico_drop_menu_profile_m_normal"
+                android:layout_marginLeft="8dp"
+
+                />
+
+        <ProgressBar
+                android:id="@+id/profPrBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                style="@android:style/Widget.ProgressBar.Small"
+                android:visibility="invisible"
+                android:layout_marginLeft="12dp" />
+
+        <TextView
+                style="@style/actionsFont"
+                android:layout_toRightOf="@id/profPrBar"
+                android:text="@string/general_profile"
+                android:id="@+id/delTV"
+                />
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/acWProfile"
+            android:background= "@drawable/actions_menu_delimiter"
+            android:visibility="gone"
+            >
+        <ImageView
+                android:id="@+id/profwIcon"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ico_drop_menu_profile_w_normal"
+                android:layout_marginLeft="8dp"
+                />
+
+        <ProgressBar
+                android:id="@+id/profwPrBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                style="@android:style/Widget.ProgressBar.Small"
+                android:visibility="invisible"
+                android:layout_marginLeft="12dp"/>
+
+        <TextView
+                style="@style/actionsFont"
+                android:layout_toRightOf="@id/profwPrBar"
+                android:text="@string/general_profile"
+                android:id="@+id/delTV"
+                />
+    </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/acDelight"
-            android:background= "@drawable/actions_menu_delimiter"
-                >
-            <ImageView
+            android:background="@drawable/actions_menu_delimiter"
+            android:visibility="gone"
+            >
+
+        <ImageView
                 android:id="@+id/delIcon"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
@@ -26,30 +100,33 @@
                 android:layout_marginLeft="8dp"
 
                 />
-            <ProgressBar
-                    android:id="@+id/delPrBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    style="@android:style/Widget.ProgressBar.Small"
-                    android:visibility="invisible"
-                    android:layout_marginLeft="12dp"/>
 
-            <TextView
-                    style="@style/actionsFont"
-                    android:layout_toRightOf="@id/delPrBar"
-                    android:text="@string/general_delight"
-                    android:id="@+id/delTV"
-                    />
-        </RelativeLayout>
+        <ProgressBar
+                android:id="@+id/delPrBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                style="@android:style/Widget.ProgressBar.Small"
+                android:visibility="invisible"
+                android:layout_marginLeft="12dp" />
+
+        <TextView
+                style="@style/actionsFont"
+                android:layout_toRightOf="@id/delPrBar"
+                android:text="@string/general_delight"
+                android:id="@+id/delTV"
+                />
+    </RelativeLayout>
 
     <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/acSympathy"
-            android:background= "@drawable/actions_menu_delimiter"
+            android:background="@drawable/actions_menu_delimiter"
+            android:visibility="gone"
             >
+
         <ImageView
                 android:id="@+id/likeIcon"
                 android:layout_height="wrap_content"
@@ -60,6 +137,7 @@
                 android:layout_marginLeft="8dp"
 
                 />
+
         <ProgressBar
                 android:id="@+id/likePrBar"
                 android:layout_width="wrap_content"
@@ -68,7 +146,7 @@
                 android:layout_centerVertical="true"
                 style="@android:style/Widget.ProgressBar.Small"
                 android:visibility="invisible"
-                android:layout_marginLeft="12dp"/>
+                android:layout_marginLeft="12dp" />
 
         <TextView
                 style="@style/actionsFont"
@@ -82,8 +160,10 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/acChat"
-            android:background= "@drawable/actions_menu_delimiter"
+            android:background="@drawable/actions_menu_delimiter"
+            android:visibility="gone"
             >
+
         <ImageView
                 android:id="@+id/chatIcon"
                 android:layout_height="wrap_content"
@@ -94,6 +174,7 @@
                 android:layout_marginLeft="8dp"
 
                 />
+
         <ProgressBar
                 android:id="@+id/chatPrBar"
                 android:layout_width="wrap_content"
@@ -102,7 +183,7 @@
                 android:layout_centerVertical="true"
                 style="@android:style/Widget.ProgressBar.Small"
                 android:visibility="invisible"
-                android:layout_marginLeft="12dp"/>
+                android:layout_marginLeft="12dp" />
 
         <TextView
                 style="@style/actionsFont"
@@ -116,8 +197,10 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/acGift"
-            android:background= "@drawable/actions_menu_delimiter"
+            android:background="@drawable/actions_menu_delimiter"
+            android:visibility="gone"
             >
+
         <ImageView
                 android:id="@+id/giftIcon"
                 android:layout_height="wrap_content"
@@ -128,6 +211,7 @@
                 android:layout_marginLeft="8dp"
 
                 />
+
         <ProgressBar
                 android:id="@+id/giftPrBar"
                 android:layout_width="wrap_content"
@@ -136,7 +220,7 @@
                 android:layout_centerVertical="true"
                 style="@android:style/Widget.ProgressBar.Small"
                 android:visibility="invisible"
-                android:layout_marginLeft="12dp"/>
+                android:layout_marginLeft="12dp" />
 
         <TextView
                 style="@style/actionsFont"
@@ -150,8 +234,10 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/acBlock"
-            android:background= "@drawable/actions_menu_delimiter"
+            android:background="@drawable/actions_menu_delimiter"
+            android:visibility="gone"
             >
+
         <ImageView
                 android:id="@+id/blockIcon"
                 android:layout_height="wrap_content"
@@ -162,6 +248,7 @@
                 android:layout_marginLeft="8dp"
 
                 />
+
         <ProgressBar
                 android:id="@+id/blockPrBar"
                 android:layout_width="wrap_content"
@@ -170,7 +257,7 @@
                 android:layout_centerVertical="true"
                 style="@android:style/Widget.ProgressBar.Small"
                 android:visibility="invisible"
-                android:layout_marginLeft="12dp"/>
+                android:layout_marginLeft="12dp" />
 
         <TextView
                 style="@style/actionsFont"
@@ -184,8 +271,10 @@
             android:id="@+id/acBookmark"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background= "@drawable/actions_menu_delimiter"
+            android:background="@drawable/actions_menu_delimiter"
+            android:visibility="gone"
             >
+
         <ImageView
                 android:id="@+id/favIcon"
                 android:layout_height="wrap_content"
@@ -196,6 +285,7 @@
                 android:layout_marginLeft="8dp"
 
                 />
+
         <ProgressBar
                 android:id="@+id/favPrBar"
                 android:layout_width="wrap_content"
@@ -204,20 +294,23 @@
                 android:layout_centerVertical="true"
                 style="@android:style/Widget.ProgressBar.Small"
                 android:visibility="invisible"
-                android:layout_marginLeft="12dp"/>
+                android:layout_marginLeft="12dp" />
 
         <TextView
                 style="@style/actionsFont"
                 android:layout_toRightOf="@id/favPrBar"
-                android:text="@string/general_bookmarks"
+                android:text="@string/general_bookmarks_add"
                 android:id="@+id/favTV"
                 />
     </RelativeLayout>
+
     <RelativeLayout
             android:id="@+id/acComplain"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             >
+
         <ImageView
                 android:id="@+id/comIcon"
                 android:layout_height="wrap_content"
@@ -228,6 +321,7 @@
                 android:layout_marginLeft="8dp"
 
                 />
+
         <ProgressBar
                 android:id="@+id/comPrBar"
                 android:layout_width="wrap_content"
@@ -236,7 +330,7 @@
                 android:layout_centerVertical="true"
                 style="@android:style/Widget.ProgressBar.Small"
                 android:visibility="invisible"
-                android:layout_marginLeft="12dp"/>
+                android:layout_marginLeft="12dp" />
 
         <TextView
                 style="@style/actionsFont"

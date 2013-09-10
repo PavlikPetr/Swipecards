@@ -18,14 +18,14 @@ public class ComplainRequestTest extends AbstractThreadTest {
                 ComplainRequest request = new ComplainRequest(context, 43945394, ComplainRequest.ClassNames.PRIVATE_MSG, ComplainRequest.TypesNames.SPAM);
                 request.callback(new ApiHandler() {
                     @Override
-                    public void success(ApiResponse response) {
-                        assertTrue(response.jsonResult.optBoolean("completed"));
+                    public void success(IApiResponse response) {
+                        assertTrue(response.getJsonResult().optBoolean("completed"));
                         stopTest("testComplainRequest");
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) {
-                        assertFalse(response.jsonResult.optBoolean("completed",false));
+                    public void fail(int codeError, IApiResponse response) {
+                        assertFalse(response.getJsonResult().optBoolean("completed", false));
                         stopTest("testComplainRequest");
                     }
                 }).exec();

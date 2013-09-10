@@ -2,7 +2,8 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Базовая тема приложения -->
-    <style name="Theme.Topface" parent="android:Theme.NoTitleBar">
+    <style name="Theme.Topface" parent="@style/Theme.AppCompat">
+        <item name="android:windowNoTitle">true</item>
         <!-- Тема индикаторов для ViewPager -->
         <item name="vpiIconPageIndicatorStyle">@style/Widget.TopfaceIconPageIndicator</item>
         <item name="vpiTabPageIndicatorStyle">@style/Widget.TopfaceTabPageIndicator</item>
@@ -16,6 +17,18 @@
         <item name="android:textColorLink">#2371B9</item>
         <item name="android:editTextStyle">@style/topfaceEditText</item>
         <item name="android:checkboxStyle">@style/topfaceCheckbox</item>
+        <item name="android:windowBackground">@null</item>
+
+        <!-- ActionBar  -->
+        <item name="android:actionBarSize">@dimen/default_header_height</item>
+        <item name="actionBarSize">@dimen/default_header_height</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="windowActionBar">false</item>
+    </style>
+
+    <style name="Theme.Topface.Fullscreen" parent="Theme.Topface">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="topfaceEditText">
@@ -242,7 +255,7 @@
     </style>
 
     <style name="LeftMenuButtons">
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColor">@color/left_menu_text</item>
         <item name="android:paddingLeft">10dp</item>
         <item name="android:gravity">left|center_vertical</item>
         <item name="android:drawablePadding">10dp</item>
@@ -284,7 +297,7 @@
     <style name="FeedAvatar">
         <item name="postProcessor">mask</item>
         <item name="clipMask">@drawable/feed_photo_mask</item>
-        <item name="android:background">@drawable/feed_photo_selector</item>
+        <item name="border">@drawable/feed_photo_border</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_marginRight">6dp</item>
@@ -294,11 +307,13 @@
     </style>
 
     <style name="HeaderShadow">
+        <item name="android:tag">@string/tag_header_shadow</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_below">@id/loNavigationBar</item>
         <item name="android:background">@drawable/im_bar_header_shadow</item>
     </style>
+
 
 
     <style name="OnlineIndicator">
@@ -397,9 +412,9 @@
     </style>
 
     <style name="NavigationBarAvatar">
-        <item name="postProcessor">mask</item>
-        <item name="clipMask">@drawable/avatar_chat_mask</item>
-        <item name="android:background">@drawable/avatar_chat_frame</item>
+
+        <item name="android:background">@drawable/avatar_chat_mask_selector</item>
+
         <item name="android:layout_width">37dp</item>
         <item name="android:layout_height">37dp</item>
         <item name="android:layout_marginRight">5dp</item>
@@ -464,15 +479,15 @@
     </style>
 
     <style name="BackButton" parent="android:Widget.ImageButton">
-        <item name="android:src">@drawable/navigation_back_selector</item>
+        <item name="android:background">@drawable/navigation_back_selector</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_alignParentLeft">true</item>
-        <item name="android:background">@android:color/transparent</item>
+
         <item name="android:paddingLeft">5dp</item>
-        <item name="android:paddingRight">30dp</item>
         <item name="android:visibility">gone</item>
+        <item name="android:clickable">false</item>
     </style>
 
     <style name="chat_message_layout">
@@ -541,7 +556,7 @@
     <style name="ProfileAvatar">
         <item name="postProcessor">mask</item>
         <item name="clipMask">@drawable/photo_mask</item>
-        <item name="android:background">@drawable/photo_border</item>
+        <item name="border">@drawable/photo_border</item>
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:layout_marginRight">6dp</item>

@@ -28,20 +28,16 @@ import com.mad.ad.AdStaticView;
 import com.mobclix.android.sdk.MobclixAdView;
 import com.mobclix.android.sdk.MobclixAdViewListener;
 import com.mobclix.android.sdk.MobclixMMABannerXLAdView;
-import com.mobclix.android.sdk.MobclixSimpleAdViewListener;
 import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.mobileads.MoPubView;
+import com.topface.billing.BillingFragment;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Banner;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.VirusLike;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BannerRequest;
-import com.topface.topface.requests.VirusLikesRequest;
-import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.requests.handlers.BaseApiHandler;
+import com.topface.topface.requests.*;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.feed.*;
@@ -85,7 +81,6 @@ public class BannerBlock {
     private Fragment mFragment;
     private View mBannerView;
     private Plus1BannerAsker mPLus1Asker;
-    private Map<String, String> mBannersMap = new HashMap<String, String>();
 
     private Map<String, Character> mAdwiredMap = new HashMap<String, Character>();
 
@@ -98,13 +93,6 @@ public class BannerBlock {
     }
 
     private void setBannersMap() {
-        mBannersMap.put(LikesFragment.class.toString(), Options.PAGE_LIKES);
-        mBannersMap.put(MutualFragment.class.toString(), Options.PAGE_MUTUAL);
-        mBannersMap.put(DialogsFragment.class.toString(), Options.PAGE_DIALOGS);
-        mBannersMap.put(VisitorsFragment.class.toString(), Options.PAGE_VISITORS);
-        mBannersMap.put(BookmarksFragment.class.toString(), Options.PAGE_BOOKMARKS);
-        mBannersMap.put(FansFragment.class.toString(), Options.PAGE_FANS);
-
         mAdwiredMap.put(LikesFragment.class.toString(), '1');
         mAdwiredMap.put(MutualFragment.class.toString(), '2');
         mAdwiredMap.put(DialogsFragment.class.toString(), '3');
@@ -114,19 +102,20 @@ public class BannerBlock {
     }
 
     private void initBanner() {
-        if (mFragment != null && mBannersMap != null) {
+        Map<String, Options.Page> bannersMap = FloatBlock.getActivityMap();
+        if (mFragment != null && bannersMap != null) {
             String fragmentId = mFragment.getClass().toString();
             Options options = CacheProfile.getOptions();
-            if (mBannersMap.containsKey(fragmentId) && options != null && options.pages != null) {
-                if (options.pages.get(mBannersMap.get(fragmentId)) != null) {
-                    String bannerType = options.pages.get(mBannersMap.get(fragmentId)).banner;
+            if (bannersMap.containsKey(fragmentId) && options != null && options.pages != null) {
+                if (bannersMap.get(fragmentId) != null) {
+                    String bannerType = bannersMap.get(fragmentId).banner;
 
                     mBannerView = getBannerView(bannerType);
                     if (mBannerView == null) return;
                     mBannerLayout.addView(mBannerView);
                     if (bannerType.equals(Options.BANNER_TOPFACE)) {
-                        if (isCorrectResolution() && mBannersMap.containsKey(fragmentId)) {
-                            loadBanner(mBannersMap.get(mFragment.getClass().toString()));
+                        if (isCorrectResolution() && bannersMap.containsKey(fragmentId)) {
+                            loadBanner(bannersMap.get(fragmentId).name);
                         }
                     } else {
                         try {
@@ -177,11 +166,10 @@ public class BannerBlock {
         if (mFragment instanceof BaseFragment) {
             ((BaseFragment) mFragment).registerRequest(bannerRequest);
         }
-        bannerRequest.callback(new BaseApiHandler() {
-            @Override
-            public void success(ApiResponse response) {
-                final Banner banner = Banner.parse(response);
+        bannerRequest.callback(new DataApiHandler<Banner>() {
 
+            @Override
+            protected void success(Banner banner, IApiResponse response) {
                 if (mBannerView != null) {
                     try {
                         showBanner(banner);
@@ -189,6 +177,15 @@ public class BannerBlock {
                         Debug.error(e);
                     }
                 }
+            }
+
+            @Override
+            protected Banner parseResponse(ApiResponse response) {
+                return Banner.parse(response);
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
             }
         }).exec();
     }
@@ -263,7 +260,7 @@ public class BannerBlock {
     }
 
     private void showInneractive() {
-        InneractiveAd inneractive = ((InneractiveAd)mBannerView);
+        InneractiveAd inneractive = ((InneractiveAd) mBannerView);
         inneractive.setAge(CacheProfile.age);
         inneractive.setGender(CacheProfile.sex == Static.BOY ? "Male" : "Female");
         inneractive.setInneractiveListener(new InneractiveAdListener() {
@@ -392,7 +389,17 @@ public class BannerBlock {
                         //Если ширина экрана больше, чем у нашего баннера, то пропорционально увеличиваем высоту imageView
                         if (deviceWidth > imageWidth) {
                             ViewGroup.LayoutParams params = mBannerView.getLayoutParams();
-                            params.height = (int) ((deviceWidth / imageWidth) * imageHeight);
+                            int maxHeight = 0;
+                            if (mBannerView instanceof ImageViewRemote) {
+                                maxHeight = ((ImageViewRemote) mBannerView).getMaxHeight();
+                            }
+                            int scaledHeight = (int) ((deviceWidth / imageWidth) * imageHeight);
+                            if (maxHeight > scaledHeight) {
+                                params.height = scaledHeight;
+                            } else {
+                                params.height = maxHeight;
+                                params.width = (int) ((maxHeight * imageWidth) / imageHeight);
+                            }
                             mBannerView.setLayoutParams(params);
                             mBannerView.invalidate();
                         }
@@ -414,6 +421,7 @@ public class BannerBlock {
                     } else {
                         intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUYING_FRAGMENT);
                     }
+                    intent.putExtra(BillingFragment.ARG_TAG_SOURCE, "Banner_" + banner.name);
                 } else if (banner.action.equals(Banner.ACTION_URL)) {
                     intent = new Intent(Intent.ACTION_VIEW, Uri.parse(banner.parameter));
                 } else if (banner.action.equals(Banner.ACTION_METHOD)) {
@@ -587,26 +595,31 @@ public class BannerBlock {
 
         EasyTracker.getTracker().trackEvent("VirusLike", "Click", "Banner", 0L);
 
-        new VirusLikesRequest(mFragment.getActivity()).callback(new ApiHandler() {
+        new VirusLikesRequest(mFragment.getActivity()).callback(new DataApiHandler<VirusLike>() {
             @Override
-            public void success(final ApiResponse response) {
+            protected void success(VirusLike data, IApiResponse response) {
                 EasyTracker.getTracker().trackEvent("VirusLike", "Success", "Banner", 0L);
                 //И предлагаем отправить пользователю запрос своим друзьям не из приложения
-                new VirusLike(response).sendFacebookRequest(
+                new VirusLike((ApiResponse) response).sendFacebookRequest(
                         "Banner",
                         mFragment.getActivity(),
                         new VirusLike.VirusLikeDialogListener(mFragment.getActivity()) {
                             @Override
                             public void onComplete(Bundle values) {
                                 super.onComplete(values);
-                                loadBanner(mBannersMap.get(mFragment.getClass().toString()));
+                                loadBanner(FloatBlock.getActivityMap().get(mFragment.getClass().toString()).name);
                             }
                         }
                 );
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            protected VirusLike parseResponse(ApiResponse response) {
+                return new VirusLike(response);
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
                 EasyTracker.getTracker().trackEvent("VirusLike", "Fail", "Banner", 0L);
 
                 if (response.isCodeEqual(ApiResponse.CODE_VIRUS_LIKES_ALREADY_RECEIVED)) {
@@ -617,7 +630,7 @@ public class BannerBlock {
             }
 
             @Override
-            public void always(ApiResponse response) {
+            public void always(IApiResponse response) {
                 super.always(response);
                 try {
                     dialog.dismiss();
@@ -647,8 +660,7 @@ public class BannerBlock {
         String name = null;
         Pattern pattern = Pattern.compile(".*\\/(.*)\\..+$");
         Matcher matcher = pattern.matcher(bannerUrl);
-        matcher.find();
-        if (matcher.matches()) {
+        if (matcher.find() && matcher.matches()) {
             name = matcher.group(1);
         }
         return (name == null || name.length() < 1) ? bannerUrl : name;
@@ -694,17 +706,21 @@ public class BannerBlock {
     }
 
     public void onPause() {
-        if (mBannerView instanceof MoPubView) ((MoPubView)mBannerView).destroy();
         if (mBannerView instanceof MobclixMMABannerXLAdView) ((MobclixMMABannerXLAdView) mBannerView).pause();
     }
 
     public void onDestroy() {
+        if (mBannerView instanceof MoPubView) ((MoPubView) mBannerView).destroy();
         if (mPLus1Asker != null) mPLus1Asker.onPause();
         if (mBannerView != null) {
-            if (mBannerView instanceof InneractiveAd){
-                ((InneractiveAd)mBannerView).cleanUp();
+            if (mBannerView instanceof InneractiveAd) {
+                ((InneractiveAd) mBannerView).cleanUp();
             }
         }
         removeBanner();
+    }
+
+    public void onResume() {
+        if (mBannerView instanceof MobclixMMABannerXLAdView) ((MobclixMMABannerXLAdView) mBannerView).resume();
     }
 }

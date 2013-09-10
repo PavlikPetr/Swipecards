@@ -8,10 +8,6 @@
 
     <include
             layout="@layout/bar_navigation_header"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/loNavigationBar"
-            android:layout_alignParentTop="true"
             />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -48,7 +44,5 @@
                 layout="@layout/item_edit_form_select"/>
 
     </LinearLayout>
-
-    <ImageView style="@style/HeaderShadow"/>
 
 </RelativeLayout>

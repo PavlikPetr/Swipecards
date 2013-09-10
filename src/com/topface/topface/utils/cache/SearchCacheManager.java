@@ -1,7 +1,8 @@
 package com.topface.topface.utils.cache;
 
 import android.text.TextUtils;
-import com.topface.topface.data.search.Search;
+import com.topface.topface.data.search.SearchUser;
+import com.topface.topface.data.search.UsersList;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import org.json.JSONObject;
@@ -11,7 +12,7 @@ import org.json.JSONObject;
  */
 public class SearchCacheManager extends PreferencesCacheManager {
     private static final String CACHE_KEY = "Search";
-    private static final int LIFE_TIME = 86400; //6 часов: 6 * 60 * 60
+    private static final int LIFE_TIME = 7200; //2 часа: 2 * 60 * 60
     private static final String CACHE_KEY_SEARCH_POSITION_POSTFIX = "_search_position";
     private static final String CACHE_KEY_SEARCH_SIGNATURE_POSTFIX = "_search_signature";
 
@@ -19,16 +20,16 @@ public class SearchCacheManager extends PreferencesCacheManager {
         super();
     }
 
-    public void setCache(final Search search) {
+    public void setCache(final UsersList usersList) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     getEditor()
-                            .putString(getDataCacheKey(CACHE_KEY), search.toJson().toString())
+                            .putString(getDataCacheKey(CACHE_KEY), usersList.toJson().toString())
                             .putLong(getExpireDateCacheKey(CACHE_KEY), getExpireDateTimestamp(LIFE_TIME))
-                            .putInt(getSearchPositionCacheKey(CACHE_KEY), search.getSearchPosition())
-                            .putString(getSearchSignatureCacheKey(CACHE_KEY), search.getSignature())
+                            .putInt(getSearchPositionCacheKey(CACHE_KEY), usersList.getSearchPosition())
+                            .putString(getSearchSignatureCacheKey(CACHE_KEY), usersList.getSignature())
                             .commit();
                 } catch (Exception e) {
                     Debug.error(e);
@@ -38,28 +39,29 @@ public class SearchCacheManager extends PreferencesCacheManager {
     }
 
     public void saveSearchSignature(String searchSignature) {
-        Search.log("save signature to cache " + searchSignature);
+        UsersList.log("save signature to cache " + searchSignature);
         getEditor().putString(getSearchSignatureCacheKey(CACHE_KEY), searchSignature).commit();
     }
 
-    public Search getCache() {
+    public UsersList getCache() {
         return parseCacheData(super.getCache(CACHE_KEY));
     }
 
-    private Search parseCacheData(String cache) {
-        Search search = null;
+    @SuppressWarnings("unchecked")
+    private UsersList parseCacheData(String cache) {
+        UsersList usersList = null;
 
         if (cache != null) {
             try {
-                search = new Search(new JSONObject(cache));
-                search.setSearchPosition(getSearchPosition());
-                search.updateSignature();
+                usersList = new UsersList(new JSONObject(cache), SearchUser.class);
+                usersList.setSearchPosition(getSearchPosition());
+                usersList.updateSignature();
             } catch (Exception e) {
                 Debug.error(e);
             }
         }
 
-        return search;
+        return usersList;
     }
 
     public int getSearchPosition() {
@@ -84,11 +86,7 @@ public class SearchCacheManager extends PreferencesCacheManager {
 
     @Override
     protected boolean isCacheExpired(String cacheKey) {
-        if (CacheProfile.dating == null) {
-            return true;
-        }
-        return super.isCacheExpired(cacheKey) ||
-                //Проверяем соответсвие кэша текущему фильтру поиска
+        return CacheProfile.dating == null || super.isCacheExpired(cacheKey) || //Проверяем соответсвие кэша текущему фильтру поиска
                 !TextUtils.equals(getSignatureFromCache(), CacheProfile.dating.getFilterSignature());
     }
 

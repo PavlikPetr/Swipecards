@@ -17,8 +17,8 @@ public abstract class FeedTest<T extends FeedItem> extends AbstractThreadTest {
         request.callback(new ApiHandler() {
 
             @Override
-            public void success(ApiResponse response) {
-                final FeedListData<T> feedList = getFeedList(response);
+            public void success(IApiResponse response) {
+                final FeedListData<T> feedList = getFeedList((ApiResponse) response);
                 assertNotNull("Feed list is null", feedList);
                 assertNotNull("Feed list items is null", feedList.items);
                 //В данный момент не используем счетчики, и они соответсвенно не разбираются
@@ -34,7 +34,7 @@ public abstract class FeedTest<T extends FeedItem> extends AbstractThreadTest {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(int codeError, IApiResponse response) {
                 assertTrue("Request exec fail: " + codeError, false);
                 stopTest(testName);
             }

@@ -1,49 +1,37 @@
 package com.topface.topface.ui.settings;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.gcm.GCMRegistrar;
 import com.topface.topface.R;
-import com.topface.topface.Ssid;
-import com.topface.topface.Static;
-import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.ActionBar;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
-import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-public class SettingsAccountFragment extends BaseFragment {
+public class SettingsAccountFragment extends BaseFragment implements OnClickListener {
 
-    public static final int RESULT_LOGOUT = 666;
     private LockerView lockerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_account, container, false);
-
         // Navigation bar
         ActionBar actionBar = getActionBar(root);
         actionBar.showBackButton(new OnClickListener() {
@@ -66,95 +54,73 @@ public class SettingsAccountFragment extends BaseFragment {
             icon = getResources().getDrawable(R.drawable.vk_logo_account);
         } else if (token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
             icon = getResources().getDrawable(R.drawable.tf_logo_account);
+        } else if (token.getSocialNet().equals(AuthToken.SN_ODNOKLASSNIKI)) {
+            icon = getResources().getDrawable(R.drawable.ico_ok_account);
         }
         TextView textName = (TextView) root.findViewById(R.id.tvName);
         textName.setText(Settings.getInstance().getSocialAccountName());
         textName.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
 
-        root.findViewById(R.id.btnLogout).setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                showExitPopup();
-
-            }
-        });
+        root.findViewById(R.id.btnLogout).setOnClickListener(this);
+        root.findViewById(R.id.btnDeleteAccount).setOnClickListener(this);
 
         return root;
     }
 
-    private void logout(Context context, AuthToken token) {
-        GCMRegistrar.unregister(getActivity().getApplicationContext());
-        Ssid.remove();
-        token.removeToken();
-        //noinspection unchecked
-        new FacebookLogoutTask().execute();
-        Settings.getInstance().resetSettings();
-        startActivity(new Intent(getActivity().getApplicationContext(), NavigationActivity.class));
-        getActivity().setResult(RESULT_LOGOUT);
-        CacheProfile.clearProfile();
-        getActivity().finish();
-        SharedPreferences preferences = getActivity().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        if (preferences != null) {
-            preferences.edit().clear().commit();
-        }
-        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(Static.LOGOUT_INTENT));
-        //Чистим список тех, кого нужно оценить
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                new SearchCacheManager().clearCache();
-            }
-        }).start();
-    }
-
     private void showExitPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(R.string.settings_logout_msg);
-        builder.setNegativeButton(R.string.general_no, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        builder.setPositiveButton(R.string.general_yes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                LogoutRequest logoutRequest = new LogoutRequest(getActivity());
-                lockerView.setVisibility(View.VISIBLE);
-                logoutRequest.callback(new ApiHandler() {
+        builder.setMessage(R.string.settings_logout_msg)
+                .setNegativeButton(R.string.general_no, new DialogInterface.OnClickListener() {
                     @Override
-                    public void success(ApiResponse response) {
-                        logout(getActivity(), AuthToken.getInstance());
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
                     }
-
+                })
+                .setPositiveButton(R.string.general_yes, new DialogInterface.OnClickListener() {
                     @Override
-                    public void fail(int codeError, ApiResponse response) {
-                        FragmentActivity activity = getActivity();
-                        if (activity != null) {
-                            lockerView.setVisibility(View.GONE);
-                            Toast.makeText(activity, R.string.general_server_error, Toast.LENGTH_LONG).show();
-                        }
-                    }
-                }).exec();
+                    public void onClick(DialogInterface dialog, int which) {
+                        final LogoutRequest logoutRequest = new LogoutRequest(getActivity());
+                        lockerView.setVisibility(View.VISIBLE);
+                        logoutRequest.callback(new ApiHandler() {
+                            @Override
+                            public void success(IApiResponse response) {
+                                AuthorizationManager.logout(getActivity());
+                            }
 
-            }
-        });
+                            @Override
+                            public void fail(int codeError, IApiResponse response) {
+                                FragmentActivity activity = getActivity();
+                                if (activity != null) {
+                                    lockerView.setVisibility(View.GONE);
+                                    Toast.makeText(activity, R.string.general_server_error, Toast.LENGTH_LONG).show();
+                                    AuthorizationManager.showRetryLogoutDialog(activity, logoutRequest);
+                                }
+                            }
+                        }).exec();
+
+                    }
+                });
         builder.create().show();
     }
 
-    @SuppressWarnings({"rawtypes", "hiding"})
-    class FacebookLogoutTask extends AsyncTask {
-        @Override
-        protected java.lang.Object doInBackground(java.lang.Object... params) {
-            try {
-                AuthorizationManager.getFacebook().logout(getActivity().getApplicationContext());
-
-            } catch (Exception e) {
-                Debug.error(e);
-            }
-            return null;
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnDeleteAccount:
+                deleteAccountDialog();
+                break;
+            case R.id.btnLogout:
+                showExitPopup();
+                break;
         }
+    }
 
+    private void deleteAccountDialog() {
+        DeleteAccountDialog newFragment = DeleteAccountDialog.newInstance();
+        try {
+            newFragment.show(getActivity().getSupportFragmentManager(), DeleteAccountDialog.TAG);
+        } catch (Exception e) {
+            Debug.error(e);
+        }
     }
 }

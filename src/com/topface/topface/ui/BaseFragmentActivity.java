@@ -8,16 +8,19 @@ import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.View;
 import android.view.WindowManager;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.Static;
+import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
-import com.topface.topface.ui.dialogs.ConfirmEmailDialog;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.AuthFragment;
+import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.http.IRequestClient;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -35,17 +38,24 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     protected boolean mNeedAnimate = true;
     private BroadcastReceiver mProfileLoadReceiver;
     private boolean afterOnSaveInstanceState;
+    private BroadcastReceiver mClosingDataReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            onClosingDataReceived();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LocaleConfig.updateConfiguration(getBaseContext());
         setWindowOptions();
 
         (new Thread() {
             @Override
             public void run() {
                 super.run();
-                inBackgroundThread();
+                onCreateAsync();
             }
         }).start();
     }
@@ -92,11 +102,24 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         }
     }
 
+    protected void onClosingDataReceived() {
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
+        afterOnSaveInstanceState = false;
         checkProfileLoad();
         registerReauthReceiver();
+        (new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                onResumeAsync();
+            }
+        }).start();
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(mClosingDataReceiver, new IntentFilter(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
     }
 
     private void registerReauthReceiver() {
@@ -128,7 +151,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             if (authFragment == null) {
                 authFragment = AuthFragment.newInstance();
             }
-            getSupportFragmentManager().beginTransaction().add(android.R.id.content, authFragment, AUTH_TAG).commit();
+            getSupportFragmentManager().beginTransaction().replace(android.R.id.content, authFragment, AUTH_TAG).commit();
             return true;
         }
         return false;
@@ -174,14 +197,20 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         } catch (Exception ex) {
             Debug.error(ex);
         }
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mClosingDataReceiver);
     }
 
     private void removeAllRequests() {
         if (mRequests != null && mRequests.size() > 0) {
-            for (ApiRequest request : mRequests) {
-                cancelRequest(request);
-            }
-            mRequests.clear();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (ApiRequest request : mRequests) {
+                        cancelRequest(request);
+                    }
+                    mRequests.clear();
+                }
+            }).start();
         }
     }
 
@@ -241,15 +270,18 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         }
     }
 
-    protected void showConfirmEmailDialog() {
-        ConfirmEmailDialog newFragment = ConfirmEmailDialog.newInstance();
-        try {
-            newFragment.show(getSupportFragmentManager(), ConfirmEmailDialog.TAG);
-        } catch (Exception e) {
-            Debug.error(e);
-        }
+    protected void onCreateAsync() {
     }
 
-    protected void inBackgroundThread() {
+    protected void onResumeAsync() {
+    }
+
+    private ActionBar mActionBar;
+
+    protected ActionBar getActionBar(View view) {
+        if (mActionBar == null) {
+            mActionBar = new ActionBar(this, view);
+        }
+        return mActionBar;
     }
 }

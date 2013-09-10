@@ -1,10 +1,11 @@
 package com.topface.topface.ui.profile;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PhotoAddRequest;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -35,6 +37,7 @@ import java.util.UUID;
  */
 public class AddPhotoHelper {
 
+    public static final String CANCEL_NOTIFICATION_RECEIVER = "CancelNotificationReceiver";
     public static String PATH_TO_FILE;
     private String mFileName = "/tmp.jpg";
 
@@ -117,7 +120,7 @@ public class AddPhotoHelper {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(mContext, R.string.general_error, 1500).show();
+                                Toast.makeText(mContext, R.string.general_data_error, Toast.LENGTH_SHORT).show();
                             }
                         });
                         return;
@@ -212,6 +215,7 @@ public class AddPhotoHelper {
      * @param uri фотографии
      */
     public void sendRequest(final Uri uri) {
+        Toast.makeText(mContext, R.string.photo_is_uploading, Toast.LENGTH_SHORT).show();
         if (uri == null) {
             if (mHandler != null) {
                 mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
@@ -223,34 +227,57 @@ public class AddPhotoHelper {
 
         final TopfaceNotificationManager.TempImageViewRemote fakeImageView = new TopfaceNotificationManager.TempImageViewRemote(mContext);
         fakeImageView.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.MATCH_PARENT));
-        final boolean[] doNeedSendProgressNotification = {true};
-        final int[] progressId = new int[1];
-
+        final OnNotificationListener listener = new OnNotificationListener();
         fakeImageView.setRemoteSrc(uri.toString(), new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                if (doNeedSendProgressNotification[0]) {
-                    progressId[0] = mNotificationManager.showProgressNotification(mContext.getString(R.string.default_photo_upload), "", fakeImageView.getImageBitmap(), new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE));
+                if (listener.isResponseReceived == -1) {
+                    listener.onNotificationIdReceived(mNotificationManager.showProgressNotification(mContext.getString(R.string.default_photo_upload), fakeImageView.getImageBitmap(), new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE).putExtra("PhotoUrl", uri)));
+                } else if (listener.isResponseReceived == listener.SUCCESS) {
+                    mNotificationManager.showNotification(mContext.getString(R.string.default_photo_upload_complete), "", false, fakeImageView.getImageBitmap(), 1, new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE), true);
+                } else if (listener.isResponseReceived == listener.FAIL) {
+                    mNotificationManager.showFailNotification(mContext.getString(R.string.default_photo_upload_error), "", fakeImageView.getImageBitmap(), new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE).putExtra("PhotoUrl", uri));
                 }
+
             }
         });
 
         final PhotoAddRequest photoAddRequest = new PhotoAddRequest(uri, mContext);
         fileNames.put(photoAddRequest.getId(), outputFile);
+
+        final BroadcastReceiver receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                mNotificationManager.cancelNotification(intent.getIntExtra("id", 1));
+                if (!intent.getBooleanExtra("isRetry", false) && photoAddRequest != null) {
+                    photoAddRequest.cancel();
+                } else if (intent.getBooleanExtra("isRetry", false)) {
+                    photoAddRequest.cancel();
+                    sendRequest(uri);
+                }
+                mContext.unregisterReceiver(this);
+            }
+        };
+
+        mContext.registerReceiver(receiver, new IntentFilter(CANCEL_NOTIFICATION_RECEIVER + uri));
+
         photoAddRequest.callback(new DataApiHandler<Photo>() {
             @Override
-            protected void success(Photo photo, ApiResponse response) {
+            protected void success(Photo photo, IApiResponse response) {
                 if (mHandler != null) {
                     Message msg = new Message();
                     msg.what = ADD_PHOTO_RESULT_OK;
                     msg.obj = photo;
                     mHandler.sendMessage(msg);
                 }
-
-                doNeedSendProgressNotification[0] = false;
-                mNotificationManager.cancelNotification(progressId[0]);
-                mNotificationManager.showNotification(mContext.getString(R.string.default_photo_upload_complete), "", fakeImageView.getImageBitmap(), 1, new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE), true);
+                listener.onResponseReceived(listener.SUCCESS);
+                if (listener.notificationId != -1) {
+                    mNotificationManager.showNotification(mContext.getString(R.string.default_photo_upload_complete), "", false, fakeImageView.getImageBitmap(), 1, new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE), true);
+                }
+                if (mContext != null) {
+                    mContext.unregisterReceiver(receiver);
+                }
             }
 
             @Override
@@ -259,18 +286,20 @@ public class AddPhotoHelper {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(int codeError, IApiResponse response) {
                 if (mHandler != null) {
                     mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
                 }
+                photoAddRequest.cancel();
                 showErrorMessage(codeError);
-                doNeedSendProgressNotification[0] = false;
-                mNotificationManager.cancelNotification(progressId[0]);
-                mNotificationManager.showNotification(mContext.getString(R.string.default_photo_upload_error), "", fakeImageView.getImageBitmap(), 1, new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE), true);
+                listener.onResponseReceived(listener.FAIL);
+                if (listener.notificationId != -1) {
+                    mNotificationManager.showFailNotification(mContext.getString(R.string.default_photo_upload_error), "", fakeImageView.getImageBitmap(), new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE).putExtra("PhotoUrl", uri));
+                }
             }
 
             @Override
-            public void always(final ApiResponse response) {
+            public void always(final IApiResponse response) {
                 super.always(response);
                 hideProgressDialog();
                 //Удаляем все временные картинки
@@ -279,10 +308,14 @@ public class AddPhotoHelper {
                     public void run() {
                         try {
                             String id = photoAddRequest.getId();
-                            if (fileNames.get(id).delete()) {
-                                Debug.log("Delete temp photo " + id);
-                            } else {
-                                Debug.log("Error delete temp photo " + id);
+                            if (fileNames != null) {
+                                if (fileNames.size() != 0) {
+                                    if (fileNames.get(id).delete()) {
+                                        Debug.log("Delete temp photo " + id);
+                                    } else {
+                                        Debug.log("Error delete temp photo " + id);
+                                    }
+                                }
                             }
                         } catch (Exception e) {
                             Debug.error(e);
@@ -292,20 +325,49 @@ public class AddPhotoHelper {
                 }).start();
             }
         }).exec();
+
     }
 
     private void showErrorMessage(int codeError) {
         switch (codeError) {
             case ApiResponse.INCORRECT_PHOTO_DATA:
-                Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo), 2000).show();
+                Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo), Toast.LENGTH_LONG).show();
                 break;
             case ApiResponse.INCORRECT_PHOTO_FORMAT:
-                Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo_format), 2000).show();
+                Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo_format), Toast.LENGTH_LONG).show();
                 break;
             case ApiResponse.INCORRECT_PHOTO_SIZES:
-                Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo_size), 2000).show();
+                Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo_size), Toast.LENGTH_LONG).show();
                 break;
         }
+    }
+
+
+    private class OnNotificationListener {
+
+        private int notificationId = -1;
+        private int isResponseReceived = -1;
+
+        private final int SUCCESS = 1;
+        private final int FAIL = 0;
+
+
+        public void onNotificationIdReceived(int id) {
+            if (isResponseReceived != -1) {
+                mNotificationManager.cancelNotification(id);
+            } else {
+                notificationId = id;
+            }
+        }
+
+        public void onResponseReceived(int type) {
+            if (notificationId != -1) {
+                mNotificationManager.cancelNotification(notificationId);
+            } else {
+                isResponseReceived = type;
+            }
+        }
+
     }
 
 }

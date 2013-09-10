@@ -19,8 +19,7 @@ import java.util.Map;
  * Блок для страниц, где нужно показывать баннеры или лидеров
  */
 public class FloatBlock {
-    private static Map<String, String> mFloatTypeMap;
-    private static Options mOptions;
+    private static Map<String, Options.Page> mBannersMap;
     private Fragment mFragment;
     private BannerBlock mBanner;
     private final ViewGroup mLayout;
@@ -28,57 +27,57 @@ public class FloatBlock {
     private BroadcastReceiver mOptionsUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            mFloatTypeMap = null;
-            setActivityMap();
+            resetActivityMap();
+            getActivityMap();
         }
     };
 
     public FloatBlock(Fragment fragment, ViewGroup layoutView) {
         super();
-        mOptions = CacheProfile.getOptions();
         mFragment = fragment;
         mLayout = layoutView;
-        setActivityMap();
+        getActivityMap();
         initBlock();
     }
 
     private void initBlock() {
         String currentFragment = mFragment.getClass().toString();
-        if (mFloatTypeMap.containsKey(currentFragment)) {
-            String floatType = mFloatTypeMap.get(currentFragment);
+        if (getActivityMap().containsKey(currentFragment)) {
+            String floatType = getActivityMap().get(currentFragment).floatType;
             if (floatType.equals(Options.FLOAT_TYPE_BANNER)) {
                 if (!CacheProfile.show_ad) return;
                 mBanner = new BannerBlock(mFragment, mLayout);
             } else if (floatType.equals(Options.FLOAT_TYPE_LEADERS)) {
                 mLeaders = new LeadersBlock(mFragment, mLayout);
             }
-            //mLeaders = new LeadersBlock(mActivity, mLayout);
         }
         //Если переданого активити нет в карте, то не инициализируем ни один блок
     }
 
-    public static void setActivityMap() {
-        if (mFloatTypeMap == null) {
-            mFloatTypeMap = new HashMap<String, String>();
+    public static Map<String,Options.Page> getActivityMap() {
+        if (mBannersMap == null) {
+            mBannersMap = new HashMap<String, Options.Page>();
+            Options mOptions = CacheProfile.getOptions();
             if (mOptions.pages.containsKey(Options.PAGE_LIKES)) {
-                mFloatTypeMap.put(LikesFragment.class.toString(), mOptions.pages.get(Options.PAGE_LIKES).floatType);
+                mBannersMap.put(LikesFragment.class.toString(), mOptions.pages.get(Options.PAGE_LIKES));
             }
             if (mOptions.pages.containsKey(Options.PAGE_MUTUAL)) {
-                mFloatTypeMap.put(MutualFragment.class.toString(), mOptions.pages.get(Options.PAGE_MUTUAL).floatType);
+                mBannersMap.put(MutualFragment.class.toString(), mOptions.pages.get(Options.PAGE_MUTUAL));
             }
             if (mOptions.pages.containsKey(Options.PAGE_DIALOGS)) {
-                mFloatTypeMap.put(DialogsFragment.class.toString(), mOptions.pages.get(Options.PAGE_DIALOGS).floatType);
+                mBannersMap.put(DialogsFragment.class.toString(), mOptions.pages.get(Options.PAGE_DIALOGS));
             }
             if (mOptions.pages.containsKey(Options.PAGE_VISITORS)) {
-                mFloatTypeMap.put(VisitorsFragment.class.toString(), mOptions.pages.get(Options.PAGE_VISITORS).floatType);
+                mBannersMap.put(VisitorsFragment.class.toString(), mOptions.pages.get(Options.PAGE_VISITORS));
             }
             if (mOptions.pages.containsKey(Options.PAGE_BOOKMARKS)) {
-                mFloatTypeMap.put(BookmarksFragment.class.toString(), mOptions.pages.get(Options.PAGE_BOOKMARKS).floatType);
+                mBannersMap.put(BookmarksFragment.class.toString(), mOptions.pages.get(Options.PAGE_BOOKMARKS));
             }
             if (mOptions.pages.containsKey(Options.PAGE_FANS)) {
-                mFloatTypeMap.put(FansFragment.class.toString(), mOptions.pages.get(Options.PAGE_FANS).floatType);
+                mBannersMap.put(FansFragment.class.toString(), mOptions.pages.get(Options.PAGE_FANS));
             }
         }
+        return mBannersMap;
     }
 
     public void onCreate() {
@@ -101,5 +100,10 @@ public class FloatBlock {
                 new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION)
         );
         if (mLeaders != null) mLeaders.loadLeaders();
+        if (mBanner != null) mBanner.onResume();
+    }
+
+    public static void resetActivityMap() {
+        mBannersMap = null;
     }
 }
