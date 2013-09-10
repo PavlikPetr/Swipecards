@@ -145,7 +145,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
                     if (arguments != null) {
                         from = "From" + arguments.getString(ARG_TAG_SOURCE);
                     }
-                    EasyTracker.getTracker().trackEvent("Subscription", "ButtonClick" + from, id, 0L);
+                    EasyTracker.getTracker().sendEvent("Subscription", "ButtonClick" + from, id, 0L);
                 }
             });
         }

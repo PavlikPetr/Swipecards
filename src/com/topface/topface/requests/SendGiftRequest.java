@@ -31,6 +31,6 @@ public class SendGiftRequest extends ConfirmedApiRequest {
     @Override
     public void exec() {
         super.exec();
-        EasyTracker.getTracker().trackEvent("Gifts", "Send", Integer.toString(giftId), 1L);
+        EasyTracker.getTracker().sendEvent("Gifts", "Send", Integer.toString(giftId), 1L);
     }
 }

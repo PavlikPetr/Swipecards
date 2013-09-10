@@ -266,7 +266,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     public void showInvitePopup(ArrayList<ContactsProvider.Contact> data) {
-        EasyTracker.getTracker().trackEvent("InvitesPopup", "Show", "", 0L);
+        EasyTracker.getTracker().sendEvent("InvitesPopup", "Show", "", 0L);
         InvitesPopup popup = InvitesPopup.newInstance(data);
         ((BaseFragmentActivity) getActivity()).startFragment(popup);
     }

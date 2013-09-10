@@ -1,5 +1,6 @@
 package com.topface.topface.requests;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Message;
 import android.text.TextUtils;
@@ -66,7 +67,7 @@ public abstract class ApiRequest implements IApiRequest {
         setEmptyHandler();
         handler.setNeedCounters(isNeedCounters);
 
-        if (context != null && !App.isOnline() && doNeedAlert) {
+        if (context != null && context instanceof Activity && !App.isOnline() && doNeedAlert) {
             RetryDialog retryDialog = new RetryDialog(context, this);
             if (handler != null) {
                 Message msg = new Message();

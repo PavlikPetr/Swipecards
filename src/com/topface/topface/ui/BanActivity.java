@@ -9,11 +9,12 @@ import android.widget.TextView;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.analytics.TrackedActivity;
+import com.topface.topface.utils.AppConfig;
 
 public class BanActivity extends TrackedActivity {
 
     private SharedPreferences mPreferences;
-    public static final String FLOOD_ENDS_TIME = "flood_ens_time";
+
 
     public static final int TYPE_UNKNOWN = 0;
     public static final int TYPE_BAN = 1;
@@ -36,11 +37,11 @@ public class BanActivity extends TrackedActivity {
         TextView messageContainer = (TextView) findViewById(R.id.banned_message);
         mTimerContainer = (TextView) findViewById(R.id.banned_timer);
 
-        int type = getIntent().getIntExtra(INTENT_TYPE,TYPE_UNKNOWN);
+        int type = getIntent().getIntExtra(INTENT_TYPE, TYPE_UNKNOWN);
 
         String title = "";
         String message = "";
-        switch(type) {
+        switch (type) {
             case TYPE_BAN:
                 title = getString(R.string.ban_title);
                 message = getIntent().getStringExtra(BANNING_TEXT_INTENT);
@@ -59,16 +60,21 @@ public class BanActivity extends TrackedActivity {
         messageContainer.setText(message);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        App.getConfig().saveConfigField(AppConfig.FLOOD_ENDS_TIME);
+    }
+
     private long getFloodTime() {
+        AppConfig config = App.getConfig();
         long result;
-        long endTime = mPreferences.getLong(FLOOD_ENDS_TIME,0L);
+        long endTime = config.getFloodEndsTime();
         long now = System.currentTimeMillis();
 
         if (endTime < now) {
             endTime = now + FLOOD_WAIT_TIME;
-            SharedPreferences.Editor editor = mPreferences.edit();
-            editor.putLong(FLOOD_ENDS_TIME,endTime);
-            editor.commit();
+            config.setFloodEndsTime(endTime);
             result = FLOOD_WAIT_TIME;
         } else {
             result = endTime - now;
@@ -83,7 +89,7 @@ public class BanActivity extends TrackedActivity {
             public void onTick(long millis) {
                 int seconds = (int) (millis / 1000);
                 int minutes = seconds / 60;
-                seconds     = seconds % 60;
+                seconds = seconds % 60;
 
                 mTimerContainer.setText(String.format("%d:%02d", minutes, seconds));
             }
