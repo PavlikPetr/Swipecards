@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import com.topface.topface.R;
 
+import java.util.Collections;
 import java.util.LinkedList;
 
 public class ProfileBackgrounds {
@@ -55,6 +56,14 @@ public class ProfileBackgrounds {
 
     public static int[] getVipBackgroundIds(Context context) {
         return context.getResources().getIntArray(R.array.profile_vip_background_images_ids);
+    }
+
+    public static boolean isVipBackgroundId(Context context, int id) {
+        int[] ids = getVipBackgroundIds(context);
+        for (int i=0; i < ids.length; i++) {
+            if (ids[i] == id) return true;
+        }
+        return false;
     }
 
     public static LinkedList<BackgroundItem> getBackgroundItems(Context context) {

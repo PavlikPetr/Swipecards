@@ -71,8 +71,12 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (mNeedTitles) setActionBarTitles(getTitle(), getSubtitle());
+        refreshActionBarTitles();
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    public void refreshActionBarTitles() {
+        if (mNeedTitles) setActionBarTitles(getTitle(), getSubtitle());
     }
 
     protected void onUpdateStart(boolean isFlyUpdating) {

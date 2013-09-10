@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.internal.widget.ActionBarContainer;
 import android.view.*;
 import android.widget.Toast;
@@ -97,7 +98,7 @@ public class NavigationActivity extends BaseFragmentActivity {
         home.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                int diff = home.getTop() - badges.getHeight() / 2;
+                int diff = home.getTop() - badges.getHeight() / 7; // badges.getHeight()/6 - 1/6 бэйджа будет торчать над home иконкой
                 badges.findViewById(R.id.loCounters).setPadding(home.getLeft() + home.getWidth() / 2, diff > 0 ? diff : 0, 0, 0);
                 findViewById(android.R.id.home).setPadding(0, 0, Utils.getPxFromDp(10), 0);
                 mNavBarController.refreshNotificators();
@@ -144,14 +145,30 @@ public class NavigationActivity extends BaseFragmentActivity {
 
     private void initDrawerLayout() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.loNavigationDrawer);
-        setSlidingMenuEvents();
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
                 mDrawerLayout,         /* DrawerLayout object */
                 R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
                 R.string.app_name,  /* "open drawer" description */
                 R.string.app_name  /* "close drawer" description */
-        );
+        ) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                mFragmentMenu.showNovice(mNovice);
+//                ActionBar actionBar = getSupportActionBar();
+//                actionBar.setTitle(R.string.app_name);
+//                actionBar.setSubtitle(null);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                actionsAfterRegistration();
+//                mFragmentMenu.getCurrentFragment().refreshActionBarTitles();
+            }
+        };
+
 
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
@@ -186,28 +203,6 @@ public class NavigationActivity extends BaseFragmentActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void setSlidingMenuEvents() {
-        mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerSlide(View view, float v) {
-            }
-
-            @Override
-            public void onDrawerOpened(View view) {
-                mFragmentMenu.showNovice(mNovice);
-            }
-
-            @Override
-            public void onDrawerClosed(View view) {
-                actionsAfterRegistration();
-            }
-
-            @Override
-            public void onDrawerStateChanged(int i) {
-            }
-        });
     }
 
     private SharedPreferences getPreferences() {

@@ -30,9 +30,10 @@
 
     <dimen name="take_photo_max_width">275dp</dimen>
     <dimen name="take_photo_max_height">320dp</dimen>
-    <dimen name="left_menu_width">250dp</dimen>
-    <dimen name="left_menu_height">109dp</dimen>
+    <dimen name="left_menu_width">256dp</dimen>
+    <dimen name="left_menu_background_height">124dp</dimen>
 
     <string name="tag_header_shadow">ivHeaderShadow</string>
     <string name="transaction_info_link">http://topface.com/faq-mobile?from=android</string>
+    <bool name="needProfileBackground">true</bool>
 </resources>

@@ -158,11 +158,6 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
 
     protected abstract void initActionBarControls();
 
-    protected void refreshActionBarTitles() {
-        getSupportActionBar().setTitle(getTitle());
-        getSupportActionBar().setSubtitle(getSubtitle());
-    }
-
     protected abstract String getTitle();
 
     protected abstract String getSubtitle();

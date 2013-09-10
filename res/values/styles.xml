@@ -43,14 +43,10 @@
         <item name="android:subtitleTextStyle">@style/Widget.Topface.ActionBar.Subtitle</item>
     </style>
 
-    <style name="Widget.Topface.ActionBar.Title">
+    <style name="Widget.Topface.ActionBar.Title" parent="ShadowBlackTop">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">#FFFFFF</item>
-        <item name="android:shadowColor">#000000</item>
-        <item name="android:shadowRadius">2</item>
-        <item name="android:shadowDx">0</item>
-        <item name="android:shadowDy">-2</item>
     </style>
 
     <style name="Widget.Topface.ActionBar.Subtitle" parent="Widget.Topface.ActionBar.Title">
@@ -163,6 +159,12 @@
         <item name="android:shadowRadius">1</item>
     </style>
 
+    <style name="ShadowBlackBottom">
+        <item name="android:shadowColor">#000000</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">1</item>
+    </style>
 
     <style name="BackgroundText" parent='ShadowUserText'>
         <item name="android:textColor">#2F2F2F</item>
@@ -291,15 +293,15 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="LeftMenuButtons">
+    <style name="LeftMenuButtons" parent="ShadowBlackBottom">
         <item name="android:textColor">@color/left_menu_text</item>
         <item name="android:paddingLeft">10dp</item>
         <item name="android:gravity">left|center_vertical</item>
-        <item name="android:drawablePadding">10dp</item>
+        <item name="android:drawablePadding">12dp</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/navigation_menu_item_selector</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="LoadingLocker">
