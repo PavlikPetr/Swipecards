@@ -103,8 +103,8 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
                         public void onRateFailed() {
                         }
                     });
+                    showNextUser();
                 }
-                showNextUser();
                 break;
             default:
                 super.onClick(v);

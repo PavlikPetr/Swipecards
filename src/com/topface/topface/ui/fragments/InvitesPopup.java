@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
+import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.InviteContactsRequest;
 import com.topface.topface.requests.ProfileRequest;

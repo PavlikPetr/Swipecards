@@ -23,7 +23,9 @@ import com.google.ads.Ad;
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 import com.google.analytics.tracking.android.EasyTracker;
-import com.lifestreet.android.lsmsdk.*;
+import com.lifestreet.android.lsmsdk.BannerAdapter;
+import com.lifestreet.android.lsmsdk.BasicSlotListener;
+import com.lifestreet.android.lsmsdk.SlotView;
 import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.mobileads.MoPubView;
 import com.topface.billing.BillingFragment;
@@ -482,6 +484,7 @@ public class BannerBlock {
             protected VirusLike parseResponse(ApiResponse response) {
                 return new VirusLike(response);
             }
+
 
             @Override
             public void fail(int codeError, IApiResponse response) {

@@ -359,6 +359,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                             unlockControls();
                         } else if (!isAddition || mUserSearchList.isEmpty()) {
                             showEmptySearchDialog();
+                        } else if (!mUserSearchList.isEnded()){
+                            showNextUser();
+                            unlockControls();
+                        } else {
+                            showEmptySearchDialog();
                         }
 
                         //Скрываем кнопку отправки повтора
@@ -845,6 +850,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             CacheProfile.money += CacheProfile.getOptions().price_highrate;
             moneyDecreased = false;
         }
+        showNextUser();
     }
 
     @Override
@@ -1028,7 +1034,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private OnUsersListEventsListener mSearchListener = new OnUsersListEventsListener() {
         @Override
         public void onEmptyList(UsersList usersList) {
-            updateData(false);
+            lockControls();
+            showEmptySearchDialog();
+//            updateData(false);
         }
 
         @Override
