@@ -5,10 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import com.topface.topface.App;
-import com.topface.topface.R;
-import com.topface.topface.RetryDialog;
-import com.topface.topface.Ssid;
+import com.topface.topface.*;
 import com.topface.topface.data.Auth;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.IApiRequest;
@@ -253,6 +250,10 @@ public class ConnectionManager {
     }
 
     private void showFloodActivity(IApiRequest apiRequest) {
+        // закрываем воркер, чтобы удалить висящие запросы
+        mWorker.shutdownNow();
+        mWorker = Executors.newFixedThreadPool(THREAD_PULL_SIZE);
+        // открываем экран флуда
         Intent intent = new Intent(apiRequest.getContext(), BanActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(BanActivity.INTENT_TYPE, BanActivity.TYPE_FLOOD);
@@ -342,7 +343,7 @@ public class ConnectionManager {
 
         //Если наш пришли данные от сервера, то логируем их, если нет, то логируем объект запроса
         Debug.logJson(TAG, "RESPONSE <<< Request ID #" + apiRequest.getId(),
-                rawResponse != null ? rawResponse : response.toString()
+                response != null ? response.toString() : rawResponse
         );
 
         return response;
