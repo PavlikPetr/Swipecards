@@ -2,7 +2,6 @@ package com.topface.topface.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;

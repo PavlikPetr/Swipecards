@@ -17,7 +17,6 @@ import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
 import org.json.JSONArray;

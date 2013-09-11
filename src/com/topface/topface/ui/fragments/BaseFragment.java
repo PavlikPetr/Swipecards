@@ -11,14 +11,10 @@ import android.view.*;
 import android.widget.AdapterView;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.Static;
-import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.ContactsProvider;
-import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.*;
 import com.topface.topface.utils.http.IRequestClient;
 
 import java.util.ArrayList;
