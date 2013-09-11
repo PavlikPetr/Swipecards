@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -10,7 +11,6 @@ import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.requests.ComplainRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.utils.ActionBar;
 
 public class ComplainsFragment extends BaseFragment {
 
@@ -38,6 +38,7 @@ public class ComplainsFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater,container,savedInstanceState);
         View root = inflater.inflate(R.layout.complains_fragment, container, false);
         Bundle arguments = getArguments();
         if (arguments != null) {
@@ -51,20 +52,8 @@ public class ComplainsFragment extends BaseFragment {
     }
 
     private void initViews(View root) {
-        initActionBar(root);
         setHeaders(root);
         initItems(root);
-    }
-
-    private void initActionBar(View root) {
-        ActionBar actionBar = getActionBar(root);
-        actionBar.setTitleText(getString(R.string.general_complain));
-        actionBar.showBackButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().finish();
-            }
-        });
     }
 
     private void setHeaders(View root) {
@@ -150,5 +139,10 @@ public class ComplainsFragment extends BaseFragment {
             this.id = id;
             this.title = title;
         }
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.general_complain);
     }
 }

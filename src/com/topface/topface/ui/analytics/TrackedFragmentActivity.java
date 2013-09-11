@@ -29,6 +29,4 @@ public class TrackedFragmentActivity extends ActionBarActivity {
     protected String getTrackName() {
         return this.getClass().getSimpleName().replace("Activity", "");
     }
-
-
 }

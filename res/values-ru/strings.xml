@@ -720,6 +720,7 @@
     <string name="like_topface">Вам нравится Topface?</string>
     <string name="photo_is_uploading">Фотография загружается</string>
     <string name="silent_ringtone">Без звука</string>
+    <string name="select_all">Выбрать все</string>
 
     <plurals name="selected">
         <item quantity="one">%d выбран</item>

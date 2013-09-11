@@ -14,6 +14,7 @@ import android.support.v4.util.SparseArrayCompat;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -91,7 +92,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private BroadcastReceiver mUpdateProfileReceiver;
 
     private TabPageIndicator mTabIndicator;
-    private ActionBar mActionBar;
     private LinearLayout mUserActions;
     private RelativeLayout bmBtn;
     private TextView mBookmarkAction;
@@ -119,8 +119,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         //init views
         View root = inflater.inflate(R.layout.ac_profile, null);
 
-        mActionBar = getActionBar(root);
-
         mLoaderView = root.findViewById(R.id.llvProfileLoading);
         final FragmentActivity activity = getActivity();
         mRateController = new RateController(activity);
@@ -132,7 +130,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             LocalBroadcastManager.getInstance(activity).sendBroadcast(intent);
         }
 
-        restoreState();
         initUserActions(root);
 
         bmBtn = (RelativeLayout) mUserActions.findViewById(R.id.acBookmark);
@@ -140,21 +137,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mBlocked = (RelativeLayout) mUserActions.findViewById(R.id.acBlock);
 
         bmBtn.setOnClickListener(this);
-        if (mProfileType == TYPE_USER_PROFILE) {
-            mActionBar.showBackButton(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (activity != null) {
-                        activity.onBackPressed();
-                    }
-                }
-            });
-        } else if (activity instanceof NavigationActivity) {
-            mActionBar.showHomeButton((NavigationActivity) activity);
-        }
-        mUserActions.setVisibility(View.INVISIBLE);
 
-        mTitle = (TextView) root.findViewById(R.id.tvNavigationTitle);
+        mUserActions.setVisibility(View.INVISIBLE);
 
         initHeaderPages(root);
 
@@ -171,24 +155,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mLockScreen.addView(mRetryView.getView());
 
         if (mProfileType == TYPE_MY_PROFILE) {
-            mTitle.setText(R.string.profile_header_title);
-            mActionBar.showEditButton(this);
+            setActionBarTitles(R.string.profile_header_title);
         } else if (mProfileType == TYPE_USER_PROFILE) {
-            mActionBar.showUserActionsButton(
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            final TranslateAnimation ta = getAnimation(false, 500);
-                            mUserActions.startAnimation(ta);
-                        }
-                    }, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            TranslateAnimation ta = getAnimation(true, 500);
-                            mUserActions.startAnimation(ta);
-                        }
-                    }
-            );
+            setActionBarTitles(R.string.general_profile);
         }
 
         // start pages initialization
@@ -206,6 +175,17 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         return root;
     }
 
+    @Override
+    protected String getTitle() {
+        if (mProfileType == TYPE_MY_PROFILE) {
+            return getString(R.string.profile_header_title);
+        } else if (mProfileType == TYPE_USER_PROFILE) {
+            return getString(R.string.general_profile);
+        } else {
+            return getString(R.string.general_profile);
+        }
+    }
+
     private TranslateAnimation getAnimation(final boolean isActive, int time) {
         TranslateAnimation ta;
         if (isActive) {
@@ -218,7 +198,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         ta.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                mActionBar.disableActionsButton(true);
                 if (!isActive) {
                     mUserActions.setVisibility(View.VISIBLE);
                 }
@@ -227,7 +206,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             @Override
             public void onAnimationEnd(Animation animation) {
                 mUserActions.clearAnimation();
-                mActionBar.disableActionsButton(false);
                 if (isActive) {
                     mUserActions.setVisibility(View.INVISIBLE);
                 }
@@ -276,8 +254,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateProfileReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         setProfile(mUserProfile);
-
-        mActionBar.refreshNotificators();
     }
 
     @Override
@@ -369,8 +345,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         ((TextView) mBlocked.findViewById(R.id.blockTV)).setText(R.string.black_list_add_short);
                     }
                     mRateController.setOnRateControllerListener(mRateControllerListener);
-                    //set info into views for user
-                    mTitle.setText(R.string.general_profile);
 
                     setProfile(data);
                     if (mHeaderMainFragment != null) {
@@ -413,7 +387,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             mLockScreen.setVisibility(View.VISIBLE);
             mRetryView.setText(text);
             mRetryView.showOnlyMessage(true);
-            mActionBar.hideUserActionButton();
         }
     }
 
@@ -426,7 +399,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         }
     }
 
-    private void restoreState() {
+    @Override
+    protected void restoreState() {
         mProfileId = getArguments().getInt(ARG_TAG_PROFILE_ID);
         mProfileType = getArguments().getInt(ARG_TAG_PROFILE_TYPE);
         mBodyStartPageClassName = getArguments().getString(ARG_TAG_INIT_BODY_PAGE);
@@ -493,7 +467,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
         switch (v.getId()) {
             case R.id.btnEdit:
-                startActivity(ContainerActivity.getNewIntent(ContainerActivity.INTENT_SETTINGS_FRAGMENT));
+                startSettingsActivity();
                 break;
             case R.id.acDelight:
                 if (v.isEnabled()) {
@@ -709,6 +683,10 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         }
     }
 
+    private void startSettingsActivity() {
+        startActivity(ContainerActivity.getNewIntent(ContainerActivity.INTENT_SETTINGS_FRAGMENT));
+    }
+
     public void openChat() {
         if (mUserProfile != null) {
             Intent intent = new Intent(getActivity(), ContainerActivity.class);
@@ -796,8 +774,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         if (mHeaderPager != null) {
             mHeaderPager.setCurrentItem(0);
         }
-        if (mTitle != null && mLoaderView != null) {
-            mTitle.setText(Static.EMPTY);
+        if (mLoaderView != null) {
             mLoaderView.setVisibility(View.VISIBLE);
         }
         if (mHeaderMainFragment != null) mHeaderMainFragment.clearContent();
@@ -956,5 +933,25 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         public void onReceived();
     }
 
+    @Override
+    protected Integer getOptionsMenuRes() {
+        return mProfileType == TYPE_MY_PROFILE ? R.menu.actions_my_profile : R.menu.actions_user_profile;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                startSettingsActivity();
+                return true;
+            case R.id.action_user_actions_list:
+                boolean checked = !item.isChecked();
+                item.setChecked(checked);
+                final TranslateAnimation ta = getAnimation(!checked, 500);
+                mUserActions.startAnimation(ta);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

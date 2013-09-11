@@ -53,7 +53,14 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
     private Timer mTimer = new Timer();
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setNeedTitles(false);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater,container,savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_create_account, null);
 
         initViews(root);

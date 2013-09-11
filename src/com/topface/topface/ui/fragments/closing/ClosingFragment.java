@@ -15,7 +15,6 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.OnQuickMessageSentListener;
 import com.topface.topface.ui.fragments.QuickMessageFragment;
 import com.topface.topface.ui.fragments.ViewUsersListFragment;
-import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 
 /**
@@ -26,7 +25,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     public static final int CHAT_CLOSE_DELAY_MILLIS = 1500;
 
     @Override
-    protected void initActionBarControls(ActionBar actionbar) {
+    protected void initActionBarControls() {
     }
 
     @Override
@@ -60,9 +59,9 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
         SkipAllClosedRequest skipAllRequest = new SkipAllClosedRequest(type, getActivity());
         skipAllRequest.callback(new SimpleApiHandler() {
             @Override
-            public void always(IApiResponse response) {
-                if (isAdded()) {
-                    refreshActionBarTitles(getView());
+            public void always(ApiResponse response) {
+                if(isAdded()) {
+                    refreshActionBarTitles();
                 }
             }
         });
@@ -118,9 +117,9 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
                         SkipClosedRequest request = new SkipClosedRequest(getActivity());
                         request.callback(new SimpleApiHandler() {
                             @Override
-                            public void always(IApiResponse response) {
-                                if (isAdded()) {
-                                    refreshActionBarTitles(getView());
+                            public void always(ApiResponse response) {
+                                if(isAdded()) {
+                                    refreshActionBarTitles();
                                 }
                             }
                         });
@@ -184,7 +183,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     protected void onCountersUpdated() {
         super.onCountersUpdated();
         if (isAdded()) {
-            refreshActionBarTitles(getView());
+            refreshActionBarTitles();
         }
     }
 

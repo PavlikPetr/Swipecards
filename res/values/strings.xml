@@ -540,9 +540,13 @@
     <string name="settings_feedback_transaction_number_hint">Enter order number</string>
     <string name="youve_earned">You\'ve earned %s</string>
     <string name="like_topface">Do you like Topface?</string>
+    <string name="select_all">Select all</string>
+
     <plurals name="selected">
-        <item quantity="other">%d selected</item>
         <item quantity="one">%d selected</item>
-    </plurals>
+        <item quantity="many">%d selected</item>
+        <item quantity="few">%d selected</item>
+        <item quantity="other">%d selected</item>
+    </plurals>    
     <string name="silent_ringtone">Silent mode</string>
 </resources>

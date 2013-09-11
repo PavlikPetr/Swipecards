@@ -102,7 +102,7 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
     }
 
     public interface IWatchSequentialyListener {
-        void onWatchSequentialy(boolean animate);
+        void onWatchSequentialy();
     }
 
     @Override

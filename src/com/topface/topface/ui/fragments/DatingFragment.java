@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -30,7 +31,6 @@ import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditAgeFragment;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.FilterFragment;
@@ -106,11 +106,16 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private OnClickListener mSettingsListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(getActivity().getApplicationContext(),
-                    EditContainerActivity.class);
-            startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FILTER);
+            startDatingFilterActivity();
         }
     };
+
+    private void startDatingFilterActivity() {
+        Intent intent = new Intent(getActivity().getApplicationContext(),
+                EditContainerActivity.class);
+        startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FILTER);
+    }
+
     private boolean moneyDecreased;
 
     @Override
@@ -141,9 +146,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         View root = inflater.inflate(R.layout.ac_dating, null);
 
-        getActionBar(root);
         initViews(root);
-        initActionBar(root);
+        initActionBar();
         initEmptySearchDialog(root, mSettingsListener);
         initImageSwitcher(root);
 
@@ -157,7 +161,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         setHighRatePrice();
         updateResources();
-        refreshActionBarTitles(getView());
+        setActionBarTitles(getTitle(),getSubtitle());
     }
 
     @Override
@@ -259,23 +263,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mSwitchPrevBtn.setOnClickListener(this);
     }
 
-    private void initActionBar(View view) {
+    private void initActionBar() {
         // Navigation Header
-        ActionBar actionBar = getActionBar(view);
-        refreshActionBarTitles(view);
-        final Activity activity = getActivity();
-        if (activity instanceof NavigationActivity) {
-            actionBar.showHomeButton((NavigationActivity) activity);
-        }
-        actionBar.showSettingsButton(mSettingsListener, false);
+        setActionBarTitles(getTitle(), getSubtitle());
     }
 
-    private void refreshActionBarTitles(View view) {
-        getActionBar(view).setTitleText(getTitle());
-        getActionBar(view).setSubTitleText(getSubtitle());
-    }
-
-    private String getTitle() {
+    protected String getTitle() {
         if (CacheProfile.dating != null) {
             int age = CacheProfile.dating.age_end == DatingFilter.webAbsoluteMaxAge ?
                     EditAgeFragment.absoluteMax : CacheProfile.dating.age_end;
@@ -288,7 +281,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         return Static.EMPTY;
     }
 
-    private String getSubtitle() {
+    protected String getSubtitle() {
         if (CacheProfile.dating != null) {
             String cityString = CacheProfile.dating.city == null || CacheProfile.dating.city.isEmpty() ?
                     getString(R.string.filter_cities_all) : CacheProfile.dating.city.name;
@@ -327,7 +320,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mUserSearchList != null) {
             mUserSearchList.updateSignatureAndUpdate();
         }
-        refreshActionBarTitles(getView());
+        setActionBarTitles(getTitle(),getSubtitle());
     }
 
     private void updateData(final boolean isAddition) {
@@ -826,7 +819,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void showControls() {
-        getActionBar(getView()).show();
         mDatingGroup.setVisibility(View.VISIBLE);
         mIsHide = false;
     }
@@ -834,7 +826,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void hideControls() {
         mDatingGroup.setVisibility(View.GONE);
-        getActionBar(getView()).hide();
         mIsHide = true;
     }
 
@@ -1052,5 +1043,21 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mProgressBar.setVisibility(View.GONE);
         mImageSwitcher.setVisibility(View.GONE);
         mRetryView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    protected Integer getOptionsMenuRes() {
+        return R.menu.actions_dating;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_dating_filter:
+                startDatingFilterActivity();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

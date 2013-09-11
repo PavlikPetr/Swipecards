@@ -22,7 +22,6 @@ import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.ui.profile.ProfilePhotoGridAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.LockerView;
-import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 
 import java.util.ArrayList;
@@ -73,21 +72,10 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater,container,savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_profile_photos, container, false);
 
-        // Navigation bar
-        ActionBar actionBar = getActionBar(root);
-        actionBar.setTitleText(getString(R.string.edit_title));
-        actionBar.setSubTitleText(getString(R.string.edit_album));
-
-        mRightPrsBar = (ProgressBar) getActivity().findViewById(R.id.prsNavigationRight);
         mLoadingLocker = (LockerView) root.findViewById(R.id.fppLocker);
-        actionBar.showBackButton(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().finish();
-            }
-        });
 
         mViewFlipper = (ViewFlipper) root.findViewById(R.id.vfFlipper);
 
@@ -361,4 +349,14 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
             }
         }
     };
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.edit_title);
+    }
+
+    @Override
+    protected String getSubtitle() {
+        return getString(R.string.edit_album);
+    }
 }

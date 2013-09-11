@@ -40,7 +40,10 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryViewCreator;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Utils;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -66,18 +69,18 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     protected boolean isDeletable = true;
     private Drawable mLoader0;
     private AnimationDrawable mLoader;
-    private ActionBar mActionBar;
     private ViewStub mEmptyScreenStub;
     private boolean needUpdate = false;
 
     private ActionMode mActionMode;
+    private FilterBlock mFilterBlock;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
         View root = inflater.inflate(getLayout(), null);
         mContainer = (RelativeLayout) root.findViewById(R.id.feedContainer);
-        initNavigationBar(root);
+        initNavigationBar();
         mLockView = (LockerView) root.findViewById(R.id.llvFeedLoading);
         mLockView.setVisibility(View.GONE);
         init();
@@ -134,11 +137,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         mFloatBlock.onCreate();
     }
 
-    protected void initNavigationBar(View view) {
-        // Navigation bar
-        mActionBar = getActionBar(view);
-        mActionBar.showHomeButton((View.OnClickListener) getActivity());
-        mActionBar.setTitleText(getString(getTitle()));
+    protected void initNavigationBar() {
+        setActionBarTitles(getTitle());
     }
 
 
@@ -192,8 +192,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     protected abstract Drawable getBackIcon();
-
-    abstract protected int getTitle();
 
     abstract protected int getTypeForGCM();
 
@@ -310,7 +308,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     private ActionMode.Callback mActionActivityCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            if (getActionBar(getView()) != null) getActionBar(getView()).hide();
             mActionMode = mode;
             getListAdapter().setMultiSelectionListener(new MultiselectionController.IMultiSelectionListener() {
                 @Override
@@ -360,7 +357,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            if (getActionBar(getView()) != null) getActionBar(getView()).show();
             getListAdapter().finishMultiSelection();
             mActionMode = null;
         }
@@ -561,9 +557,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 mListView.onRefreshComplete();
                 mListView.setVisibility(View.VISIBLE);
                 mIsUpdating = false;
-                if (mActionBar != null) {
-                    mActionBar.refreshNotificators();
-                }
             }
 
             @Override
@@ -630,7 +623,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     protected void initFilter(View view) {
-        new FilterBlock((ViewGroup) view, R.id.loControlsGroup, mActionBar, R.id.loToolsBar);
+        mFilterBlock = new FilterBlock((ViewGroup) view, R.id.loControlsGroup, R.id.loToolsBar);
         initDoubleButton(view);
     }
 
@@ -814,5 +807,16 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     protected boolean isBlockOnClosing() {
         return false;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_filter:
+                mFilterBlock.openControls();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

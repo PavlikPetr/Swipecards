@@ -12,10 +12,6 @@
             android:layout_height="fill_parent" />
 
     <include
-            layout="@layout/bar_navigation_header"/>
-
-    <include
-            android:layout_below="@id/loNavigationBar"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             layout="@layout/dating_control" />

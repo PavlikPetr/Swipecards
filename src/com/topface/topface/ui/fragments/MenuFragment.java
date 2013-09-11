@@ -6,6 +6,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,6 +39,7 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.ui.views.ServicesTextView;
 import com.topface.topface.utils.*;
+import com.topface.topface.utils.http.ProfileBackgrounds;
 
 public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
@@ -69,6 +72,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         @Override
         public void onReceive(Context context, Intent intent) {
             setMenuData();
+            switchProfileButton();
         }
     };
 
@@ -82,6 +86,12 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             selectMenu(fragmentId);
         }
     };
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setNeedTitles(false);
+    }
 
     private void setMenuData() {
         if (mMenuAvatar != null) {
@@ -125,6 +135,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileUpdateReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mSelectMenuReceiver, new IntentFilter(SELECT_MENU_ITEM));
+        switchProfileButton();
     }
 
     @Override
@@ -137,30 +148,23 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
-
+        super.onCreateView(inflater,container,saved);
         View rootLayout = inflater.inflate(R.layout.fragment_menu, null);
 
-        //Автарка в меню
-        mMenuAvatar = (ImageViewRemote) rootLayout.findViewById(R.id.ivMenuAvatar);
-        mMenuAvatar.setPhoto(CacheProfile.photo);
-        //При клике на автарку должен происходить клик на кнопку "Профиль"
-        mMenuAvatar.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mButtons.get(BaseFragment.F_PROFILE).performClick();
-            }
-        });
+        View profileLayout = getProfileLayout(rootLayout);
 
         //Делаем список кнопок
-        mButtons = getButtonsMap(rootLayout);
+        mButtons = getButtonsMap(rootLayout, profileLayout);
+
+        //Автарка в меню
+        initMenuAvatar(profileLayout);
+        mProfileInfo = (ImageView) profileLayout.findViewById(R.id.profileInfo);
 
         mCoins = (ServicesTextView) rootLayout.findViewById(R.id.menuCurCoins);
         mLikes = (ServicesTextView) rootLayout.findViewById(R.id.menuCurLikes);
 
         mCoins.setText(Integer.toString(CacheProfile.money));
         mLikes.setText(Integer.toString(CacheProfile.likes));
-
-        mProfileInfo = (ImageView) rootLayout.findViewById(R.id.profileInfo);
 
         buyButton = (Button) rootLayout.findViewById(R.id.menuBuyBtn);
         buyButton.setOnClickListener(new OnClickListener() {
@@ -182,14 +186,26 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         return rootLayout;
     }
 
+    private void initMenuAvatar(View profileLayout) {
+        mMenuAvatar = (ImageViewRemote) profileLayout.findViewById(R.id.ivMenuAvatar);
+        mMenuAvatar.setPhoto(CacheProfile.photo);
+        //При клике на автарку должен происходить клик на кнопку "Профиль"
+        mMenuAvatar.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mButtons.get(BaseFragment.F_PROFILE).performClick();
+            }
+        });
+    }
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private boolean isHardwareAccelerated(View rootLayout) {
         return Build.VERSION.SDK_INT >= 11 && rootLayout.isHardwareAccelerated();
     }
 
-    private SparseArray<Button> getButtonsMap(View rootLayout) {
+    private SparseArray<Button> getButtonsMap(View rootLayout, View profileLayout) {
         SparseArray<Button> buttons = new SparseArray<Button>();
-        buttons.put(BaseFragment.F_PROFILE, (Button) rootLayout.findViewById(R.id.btnFragmentProfile));
+        buttons.put(BaseFragment.F_PROFILE, (Button) profileLayout.findViewById(R.id.btnFragmentProfile));
         buttons.put(BaseFragment.F_DATING, (Button) rootLayout.findViewById(R.id.btnFragmentDating));
         buttons.put(BaseFragment.F_LIKES, (Button) rootLayout.findViewById(R.id.btnFragmentLikes));
         buttons.put(BaseFragment.F_MUTUAL, (Button) rootLayout.findViewById(R.id.btnFragmentMutual));
@@ -310,7 +326,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
     private void switchFragment() {
         FragmentManager fragmentManager = getFragmentManager();
-        Fragment oldFragment = fragmentManager.findFragmentById(android.R.id.content);
+        Fragment oldFragment = fragmentManager.findFragmentById(R.id.fragment_content);
 
         String fragmentTag = getTagById(mCurrentFragmentId);
         BaseFragment newFragment = (BaseFragment) fragmentManager.findFragmentByTag(fragmentTag);
@@ -326,7 +342,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             }
             if (!newFragment.isAdded()) {
-                transaction.replace(android.R.id.content, newFragment, fragmentTag);
+                transaction.replace(R.id.fragment_content, newFragment, fragmentTag);
                 transaction.commitAllowingStateLoss();
                 mCurrentFragment = newFragment;
             }
@@ -422,6 +438,31 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         logoutInvoked = true;
     }
 
+    public View getProfileLayout(View rootLayout) {
+        ViewGroup profileLayout = (ViewGroup) rootLayout.findViewById(R.id.btnProfileLayout);
+        if (!needProfileBackground()) return profileLayout;
+        boolean switchLayoutToPremium = false;
+        if (CacheProfile.premium) {
+            if (ProfileBackgrounds.isVipBackgroundId(getActivity(), CacheProfile.background_id)) {
+                profileLayout.setVisibility(View.GONE);
+                profileLayout = (ViewGroup) rootLayout.findViewById(R.id.btnProfileLayoutWithBackground);
+                profileLayout.setVisibility(View.VISIBLE);
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
+                        ProfileBackgrounds.getBackgroundResource(getActivity(), CacheProfile.background_id));
+                ((ImageViewRemote)profileLayout.findViewById(R.id.ivProfileBackground))
+                        .setRemoteImageBitmap(bitmap);
+                switchLayoutToPremium = true;
+            }
+        }
+        if (!switchLayoutToPremium) {
+            rootLayout.findViewById(R.id.btnProfileLayoutWithBackground).setVisibility(View.GONE);
+            profileLayout.setVisibility(View.VISIBLE);
+        }
+        rootLayout.requestLayout();
+        rootLayout.invalidate();
+        return profileLayout;
+    }
+
     public static interface OnFragmentSelectedListener {
         public void onFragmentSelected(int fragmentId);
     }
@@ -501,10 +542,10 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         ClosingsBuyVipDialog newFragment = ClosingsBuyVipDialog.newInstance(likesCount);
         newFragment.setOnWatchSequentialyListener(new ClosingsBuyVipDialog.IWatchSequentialyListener() {
             @Override
-            public void onWatchSequentialy(boolean animate) {
+            public void onWatchSequentialy() {
                 Activity activity = getActivity();
                 if (activity instanceof NavigationActivity) {
-                    ((NavigationActivity) activity).showContent(animate);
+                    ((NavigationActivity)activity).showContent();
                 }
             }
         });
@@ -513,5 +554,29 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         } catch (Exception e) {
             Debug.error(e);
         }
+    }
+
+    @Override
+    protected boolean needOptionsMenu() {
+        return false;
+    }
+
+    public void switchProfileButton() {
+        View profileLayout = getProfileLayout(getView());
+        initMenuAvatar(profileLayout);
+        Button profileButton = (Button) profileLayout.findViewById(R.id.btnFragmentProfile);
+        final  Button hashedProfileButton = mButtons.get(BaseFragment.F_PROFILE);
+        if (profileButton != hashedProfileButton) {
+            profileButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    hashedProfileButton.performClick();
+                }
+            });
+        }
+    }
+
+    private boolean needProfileBackground() {
+        return getResources().getBoolean(R.bool.needProfileBackground);
     }
 }

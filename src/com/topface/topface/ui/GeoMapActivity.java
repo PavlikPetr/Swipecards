@@ -264,7 +264,6 @@ public class GeoMapActivity extends TrackedMapActivity implements LocationListen
                     addressList = new ArrayList<Address>();
                 }
 
-                //TODO delete empty addresses
                 ArrayList<Address> emptyAddresses = new ArrayList<Address>();
                 for (Address address : addressList) {
                     String addressString = createFormattedAddressFromAddress(address);

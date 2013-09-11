@@ -111,7 +111,6 @@ public class ClickkyOfferWebview extends WebView implements LocationListener
 
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
 				getSiteLink();
 				mTimer.cancel();
 			}
@@ -313,25 +312,18 @@ public class ClickkyOfferWebview extends WebView implements LocationListener
 			return hexString.toString();
 
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return "";
 	}
 
 	public void onProviderDisabled(String arg0) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void onProviderEnabled(String arg0) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

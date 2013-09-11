@@ -30,10 +30,15 @@ public class HeaderStatusFragment extends BaseFragment implements View.OnClickLi
     private String mStatusVal;
     private int mProfileType;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setNeedTitles(false);
+        setHasOptionsMenu(false);
+    }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
-        restoreState();
 
         //init views
         View root = inflater.inflate(R.layout.fragment_profile_header_status, null);
@@ -74,7 +79,8 @@ public class HeaderStatusFragment extends BaseFragment implements View.OnClickLi
         });
     }
 
-    private void restoreState() {
+    @Override
+    protected void restoreState() {
         if (getArguments() != null) {
             mStatusVal = getArguments().getString(ARG_TAG_STATUS);
             mProfileType = getArguments().getInt(ARG_TAG_PROFILE_TYPE);
@@ -142,6 +148,10 @@ public class HeaderStatusFragment extends BaseFragment implements View.OnClickLi
             default:
                 break;
         }
+    }
 
+    @Override
+    protected boolean needOptionsMenu() {
+        return false;
     }
 }

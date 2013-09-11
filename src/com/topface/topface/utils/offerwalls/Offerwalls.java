@@ -36,8 +36,8 @@ public class Offerwalls {
     private static ConsumableProductHelper mGetJarHelper;
 
     private final static String GETJAR_APP_KEY = "407c520c-aaba-44e8-9a06-478c2b595437";
-    private static final Float GETJAT_MAX_DISCOUNT = 0.1f; //TODO
-    private static final Float GETJAT_MAX_MARKUP = 0.1f; //TODO
+    private static final Float GETJAT_MAX_DISCOUNT = 0.1f;
+    private static final Float GETJAT_MAX_MARKUP = 0.1f;
 
     private static String getOfferWallType() {
         return CacheProfile.getOptions().offerwall;

@@ -5,8 +5,6 @@
 
         >
 
-    <include layout="@layout/bar_navigation_header"/>
-
     <LinearLayout
             android:id="@+id/apContainer"
             android:layout_width="wrap_content"

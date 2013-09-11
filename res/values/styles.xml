@@ -3,7 +3,6 @@
 
     <!-- Базовая тема приложения -->
     <style name="Theme.Topface" parent="@style/Theme.AppCompat">
-        <item name="android:windowNoTitle">true</item>
         <!-- Тема индикаторов для ViewPager -->
         <item name="vpiIconPageIndicatorStyle">@style/Widget.TopfaceIconPageIndicator</item>
         <item name="vpiTabPageIndicatorStyle">@style/Widget.TopfaceTabPageIndicator</item>
@@ -18,12 +17,46 @@
         <item name="android:editTextStyle">@style/topfaceEditText</item>
         <item name="android:checkboxStyle">@style/topfaceCheckbox</item>
         <item name="android:windowBackground">@null</item>
+        <item name="android:windowContentOverlay">@drawable/actionbar_shadow</item>
 
         <!-- ActionBar  -->
-        <item name="android:actionBarSize">@dimen/default_header_height</item>
         <item name="actionBarSize">@dimen/default_header_height</item>
-        <item name="android:windowActionBar">false</item>
-        <item name="windowActionBar">false</item>
+        <item name="actionBarStyle">@style/Widget.Topface.ActionBar</item>
+        <item name="actionButtonStyle">@style/Widget.Topface.ActionBar.Buttons</item>
+
+        <item name="android:actionBarSize">@dimen/default_header_height</item>
+        <item name="android:actionBarStyle">@style/Widget.Topface.ActionBar</item>
+        <item name="android:actionButtonStyle">@style/Widget.Topface.ActionBar.Buttons</item>
+    </style>
+
+    <style name="Widget.Topface.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
+        <item name="background">@drawable/im_bar_header</item>
+        <item name="backgroundStacked">@drawable/im_bar_header</item>
+        <item name="backgroundSplit">@drawable/im_bar_header</item>
+        <item name="titleTextStyle">@style/Widget.Topface.ActionBar.Title</item>
+        <item name="subtitleTextStyle">@style/Widget.Topface.ActionBar.Subtitle</item>
+
+        <item name="android:background">@drawable/im_bar_header</item>
+        <item name="android:backgroundStacked">@drawable/im_bar_header</item>
+        <item name="android:backgroundSplit">@drawable/im_bar_header</item>
+        <item name="android:titleTextStyle">@style/Widget.Topface.ActionBar.Title</item>
+        <item name="android:subtitleTextStyle">@style/Widget.Topface.ActionBar.Subtitle</item>
+    </style>
+
+    <style name="Widget.Topface.ActionBar.Title" parent="ShadowBlackTop">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="Widget.Topface.ActionBar.Subtitle" parent="Widget.Topface.ActionBar.Title">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="Widget.Topface.ActionBar.Buttons" parent="@style/Widget.AppCompat.ActionButton">
+        <item name="android:padding">0dp</item>
+        <item name="android:maxWidth">54dp</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="Theme.Topface.Fullscreen" parent="Theme.Topface">
@@ -126,6 +159,12 @@
         <item name="android:shadowRadius">1</item>
     </style>
 
+    <style name="ShadowBlackBottom">
+        <item name="android:shadowColor">#000000</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">1</item>
+    </style>
 
     <style name="BackgroundText" parent='ShadowUserText'>
         <item name="android:textColor">#2F2F2F</item>
@@ -254,15 +293,15 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="LeftMenuButtons">
+    <style name="LeftMenuButtons" parent="ShadowBlackBottom">
         <item name="android:textColor">@color/left_menu_text</item>
         <item name="android:paddingLeft">10dp</item>
         <item name="android:gravity">left|center_vertical</item>
-        <item name="android:drawablePadding">10dp</item>
+        <item name="android:drawablePadding">12dp</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/navigation_menu_item_selector</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="LoadingLocker">
@@ -305,16 +344,6 @@
         <item name="android:layout_width">73dp</item>
         <item name="android:layout_height">73dp</item>
     </style>
-
-    <style name="HeaderShadow">
-        <item name="android:tag">@string/tag_header_shadow</item>
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_below">@id/loNavigationBar</item>
-        <item name="android:background">@drawable/im_bar_header_shadow</item>
-    </style>
-
-
 
     <style name="OnlineIndicator">
         <item name="android:layout_width">wrap_content</item>
@@ -398,7 +427,7 @@
         <item name="android:singleLine">true</item>
     </style>
 
-    <style name="NavigationHeader" parent="ShadowUserText">
+    <style name="WhiteHeader" parent="ShadowUserText">
         <item name="android:textColor">#FFFFFF</item>
     </style>
 
@@ -594,14 +623,6 @@
     <style name="Widget.TopfaceIconPageIndicator" parent="Widget">
         <item name="android:layout_marginLeft">6dp</item>
         <item name="android:layout_marginRight">6dp</item>
-    </style>
-
-
-    <style name="HeaderBar">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">46dp</item>
-        <item name="android:baselineAligned">false</item>
-        <item name="android:background">@drawable/im_bar_header</item>
     </style>
 
     <style name="TopfaceTextAppearance">

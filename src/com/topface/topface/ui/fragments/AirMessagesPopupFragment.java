@@ -24,7 +24,7 @@ public class AirMessagesPopupFragment extends BaseFragment implements View.OnCli
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPremiumMessages = CacheProfile.getOptions().premium_messages;
-
+        setNeedTitles(false);
     }
 
     @Override

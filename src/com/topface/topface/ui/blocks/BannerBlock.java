@@ -414,10 +414,10 @@ public class BannerBlock {
 
             @Override
             public void onBannerDisplayed(BannerAdView bannerAdView) {
-                ViewGroup.LayoutParams params = bannerAdView.getLayoutParams();
-                params.height = Utils.getPxFromDp(50);
-                params.width = Device.getDisplayMetrics(App.getContext()).widthPixels;
-                bannerAdView.setLayoutParams(params);
+//                ViewGroup.LayoutParams params = bannerAdView.getLayoutParams();
+//                params.height = Utils.getPxFromDp(50);
+//                params.width = Device.getDisplayMetrics(App.getContext()).widthPixels;
+//                bannerAdView.setLayoutParams(params);
             }
 
             @Override

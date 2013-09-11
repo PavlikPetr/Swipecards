@@ -25,7 +25,6 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.views.ServicesTextView;
-import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.offerwalls.Offerwalls;
@@ -81,16 +80,9 @@ public class BuyingFragment extends BillingFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater,container,savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_buy, null);
         initViews(root);
-        ActionBar actionBar = getActionBar(root);
-        actionBar.showBackButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().finish();
-            }
-        });
-        actionBar.setTitleText(getString(R.string.buying_header_title));
         return root;
     }
 
@@ -305,5 +297,10 @@ public class BuyingFragment extends BillingFragment {
     @Override
     public void onCancel() {
         //Возможно стоит добавить реакцию на отмену покупки пользователем
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.buying_header_title);
     }
 }

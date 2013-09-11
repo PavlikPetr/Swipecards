@@ -4,15 +4,10 @@
                 android:layout_height="fill_parent"
         >
 
-    <include
-            layout="@layout/bar_navigation_header"
-            />
-
     <ViewFlipper
             android:id="@+id/vfFlipper"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_below="@id/loNavigationBar"
             android:inAnimation="@android:anim/fade_in">
 
         <RelativeLayout

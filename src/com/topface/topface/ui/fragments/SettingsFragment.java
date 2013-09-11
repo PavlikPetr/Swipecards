@@ -20,13 +20,17 @@ import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
+import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendMailNotificationsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.LocaleConfig;
+import com.topface.topface.utils.Settings;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -70,18 +74,6 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         View view = inflater.inflate(R.layout.ac_settings, null);
         mSettings = Settings.getInstance();
 
-        // Navigation bar
-        ActionBar actionBar = getActionBar(view);
-        actionBar.showBackButton(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getActivity() != null) {
-                    getActivity().finish();
-                }
-            }
-        });
-        actionBar.setTitleText(getString(R.string.settings_header_title));
-
         // Init settings views
         initViews(view);
 
@@ -95,6 +87,11 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             mSendTimer.cancel();
             mSendTimer.onFinish();
         }
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.settings_header_title);
     }
 
     private void initViews(View root) {

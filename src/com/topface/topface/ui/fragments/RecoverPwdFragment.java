@@ -33,7 +33,14 @@ public class RecoverPwdFragment extends BaseFragment {
     private Timer mTimer = new Timer();
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setNeedTitles(false);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater,container,savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_recover_pwd, null);
 
 //        getActivity().findViewById(R.id.loNavigationBar).setVisibility(View.GONE);

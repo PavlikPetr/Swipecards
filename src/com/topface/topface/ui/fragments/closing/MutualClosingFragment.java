@@ -6,6 +6,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.FeedUser;
+import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DeleteFeedRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.IApiResponse;
@@ -64,17 +65,14 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
 
     @Override
     protected void lockControls() {
-        //TODO change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     protected void unlockControls() {
-        //TODO change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     protected void onShowUser() {
-        //TODO
     }
 
     @Override
@@ -93,7 +91,7 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
                     deleteRequest.callback(new SimpleApiHandler() {
                         @Override
                         public void always(IApiResponse response) {
-                            if (isAdded()) refreshActionBarTitles(getView());
+                            if(isAdded()) refreshActionBarTitles();
                         }
                     });
                     deleteRequest.exec();

@@ -22,7 +22,6 @@ import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
-import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import org.json.JSONObject;
@@ -38,13 +37,10 @@ public class ProfilePhotoFragment extends BaseFragment {
     private LockerView mLoadingLocker;
     private TextView mTitle;
 
-    public ProfilePhotoFragment() {
-        super();
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setNeedTitles(false);
         mProfilePhotoGridAdapter = new ProfilePhotoGridAdapter(getActivity().getApplicationContext(), getPhotoLinks(), CacheProfile.totalPhotos, new LoadingListAdapter.Updater() {
             @Override
             public void onUpdate() {
@@ -96,20 +92,14 @@ public class ProfilePhotoFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater,container,savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_profile_photos, container, false);
 
         //Navigation bar
+
         if (getActivity() instanceof EditContainerActivity) {
-            ActionBar actionBar = getActionBar(root);
-            actionBar.setTitleText(getString(R.string.edit_title));
-            actionBar.setSubTitleText(getString(R.string.edit_album));
-            actionBar.showBackButton(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getActivity().setResult(Activity.RESULT_OK);
-                    getActivity().finish();
-                }
-            });
+            getActivity().setResult(Activity.RESULT_OK);
+            setActionBarTitles(getString(R.string.edit_title),getString(R.string.edit_album));
         }
 
         mLoadingLocker = (LockerView) root.findViewById(R.id.fppLocker);
@@ -306,5 +296,10 @@ public class ProfilePhotoFragment extends BaseFragment {
             initTitleText(mTitle);
         }
     };
+
+    @Override
+    protected boolean needOptionsMenu() {
+        return false;
+    }
 }
  

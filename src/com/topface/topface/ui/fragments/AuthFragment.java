@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.*;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -79,6 +81,8 @@ public class AuthFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater,container,savedInstanceState);
+        Debug.log("AF: onCreate");
         mAuthorizationManager = new AuthorizationManager(getActivity());
         Activity activity = getActivity();
         if (activity instanceof NavigationActivity) {
@@ -96,6 +100,7 @@ public class AuthFragment extends BaseFragment {
             getProfileAndOptions();
         }
         checkOnline();
+        getSupportActionBar().hide();
         return root;
     }
 
@@ -793,6 +798,7 @@ public class AuthFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        getSupportActionBar().show();
         if (!hasAuthorized) {
             EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "DismissAdditional" : "DismissMain", btnsController.getLocaleTag(), 1L);
         }
@@ -805,5 +811,10 @@ public class AuthFragment extends BaseFragment {
 
     interface ProfileIdReceiver {
         void onProfileIdReceived(int id);
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.app_name);
     }
 }
