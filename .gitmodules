@@ -28,6 +28,6 @@
 [submodule "libs/odnoklassniki"]
 	path = libs/odnoklassniki
 	url = git@github.com:Topface/Odnoklassniki-Android-SDK.git
-[submodule ".\\libs\\AdLabSDK"]
-	path = .\\libs\\AdLabSDK
+[submodule "libs/AdLabSDK"]
+	path = libs/AdLabSDK
 	url = git@github.com:Topface/AdLabSDK.git
