@@ -68,7 +68,7 @@ public class FullscreenController {
     private void requestLifestreetFullscreen() {
         InterstitialSlot slot = new InterstitialSlot(mActivity);
         slot.setSlotTag(LIFESTREET_TAG);
-        slot.setListener(new  BasicSlotListener() {
+        slot.setListener(new BasicSlotListener() {
             @Override
             public void onFailedToLoadSlotView(SlotView slotView) {
                 requestGagFullscreen();

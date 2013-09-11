@@ -7,12 +7,6 @@
 [submodule "libs/Facebook"]
 	path = libs/Facebook
 	url = git@github.com:Topface/facebook-android-sdk.git
-[submodule "libs/WapStart"]
-	path = libs/WapStart
-	url = git@github.com:Topface/plus1-android-sdk.git
-[submodule "plus1-android-sdk"]
-	path = plus1-android-sdk
-	url = git@github.com:Topface/plus1-android-sdk.git
 [submodule "libs/acra"]
 	path = libs/acra
 	url = git@github.com:Topface/acra.git
@@ -28,9 +22,12 @@
 [submodule "libs/SlidingMenu"]
 	path = libs/SlidingMenu
 	url = git@github.com:Topface/SlidingMenu.git
-[submodule "libs/odnoklassniki"]
-	path = libs/odnoklassniki
-	url = git@github.com:Topface/Odnoklassniki-Android-SDK.git
 [submodule "libs/LifeStreetMediaSDK"]
 	path = libs/LifeStreetMediaSDK
 	url = git@github.com:Topface/LifeStreetMediaSDK.git
+[submodule "libs/odnoklassniki"]
+	path = libs/odnoklassniki
+	url = git@github.com:Topface/Odnoklassniki-Android-SDK.git
+[submodule "libs/AdLabSDK"]
+	path = libs/AdLabSDK
+	url = git@github.com:Topface/AdLabSDK.git

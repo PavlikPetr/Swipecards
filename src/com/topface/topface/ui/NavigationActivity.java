@@ -1,7 +1,9 @@
 package com.topface.topface.ui;
 
 import android.app.Activity;
-import android.content.*;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
@@ -188,7 +190,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     protected void onPause() {
         super.onPause();
-        if(mFullscreenController != null) {
+        if (mFullscreenController != null) {
             mFullscreenController.onPause();
         }
     }
@@ -231,7 +233,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             MenuFragment.logoutInvoked = false;
         }
 
-        if  (!AuthToken.getInstance().isEmpty() &&
+        if (!AuthToken.getInstance().isEmpty() &&
                 !CacheProfile.premium && !mHasClosingsForThisSession &&
                 mFragmentMenu.getCurrentFragmentId() != MenuFragment.F_PROFILE
                 && !mFragmentMenu.isClosed() && mClosingsOnProfileUpdateInvoked) {
@@ -240,7 +242,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             }
         }
 
-        if(mFragmentMenu.isClosed()) {
+        if (mFragmentMenu.isClosed()) {
             updateClosing();
         }
     }
@@ -516,7 +518,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     }
 
     private void updateClosing() {
-        if(CacheProfile.premium) {
+        if (CacheProfile.premium) {
             if (CacheProfile.premium) {
                 Options.Closing closing = CacheProfile.getOptions().closing;
                 if (closing.isClosingsEnabled()) {

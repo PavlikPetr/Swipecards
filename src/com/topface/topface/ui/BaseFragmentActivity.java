@@ -296,6 +296,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         return mActionBar;
     }
 
-    protected void onProfileUpdated(){
+    protected void onProfileUpdated() {
     }
 }

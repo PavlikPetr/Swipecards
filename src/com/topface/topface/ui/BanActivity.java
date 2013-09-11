@@ -37,11 +37,11 @@ public class BanActivity extends TrackedActivity {
         TextView messageContainer = (TextView) findViewById(R.id.banned_message);
         mTimerContainer = (TextView) findViewById(R.id.banned_timer);
 
-        int type = getIntent().getIntExtra(INTENT_TYPE,TYPE_UNKNOWN);
+        int type = getIntent().getIntExtra(INTENT_TYPE, TYPE_UNKNOWN);
 
         String title = "";
         String message = "";
-        switch(type) {
+        switch (type) {
             case TYPE_BAN:
                 title = getString(R.string.ban_title);
                 message = getIntent().getStringExtra(BANNING_TEXT_INTENT);
@@ -89,7 +89,7 @@ public class BanActivity extends TrackedActivity {
             public void onTick(long millis) {
                 int seconds = (int) (millis / 1000);
                 int minutes = seconds / 60;
-                seconds     = seconds % 60;
+                seconds = seconds % 60;
 
                 mTimerContainer.setText(String.format("%d:%02d", minutes, seconds));
             }

@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
@@ -43,6 +42,7 @@ public class LeadersDialog extends DialogFragment {
         dialog.setArguments(args);
         return dialog;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.leaders_dialog, container, false);
@@ -98,7 +98,7 @@ public class LeadersDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 if (user.id == CacheProfile.uid) {
-                    ((NavigationActivity)getActivity()).showFragment(BaseFragment.F_PROFILE);
+                    ((NavigationActivity) getActivity()).showFragment(BaseFragment.F_PROFILE);
                     dialog.dismiss();
                 } else {
                     startActivity(ContainerActivity.getProfileIntent(user.id, LeadersDialog.class, getActivity()));
@@ -119,7 +119,7 @@ public class LeadersDialog extends DialogFragment {
     private void openChat() {
         Intent intent = new Intent(getActivity(), ContainerActivity.class);
         intent.putExtra(ChatFragment.INTENT_USER_ID, user.id);
-        intent.putExtra(ChatFragment.INTENT_USER_NAME,user.first_name);
+        intent.putExtra(ChatFragment.INTENT_USER_NAME, user.first_name);
         intent.putExtra(ChatFragment.INTENT_USER_SEX, user.sex);
         intent.putExtra(ChatFragment.INTENT_USER_AGE, user.age);
         intent.putExtra(ChatFragment.INTENT_USER_CITY, user.city.name);

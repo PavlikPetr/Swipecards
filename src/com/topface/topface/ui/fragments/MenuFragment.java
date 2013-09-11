@@ -504,7 +504,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             public void onWatchSequentialy(boolean animate) {
                 Activity activity = getActivity();
                 if (activity instanceof NavigationActivity) {
-                    ((NavigationActivity)activity).showContent(animate);
+                    ((NavigationActivity) activity).showContent(animate);
                 }
             }
         });

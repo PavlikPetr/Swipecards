@@ -56,22 +56,22 @@ public class InvitesPopup extends BaseFragment {
         TextView invitesTitle = (TextView) view.findViewById(R.id.invitesTitle);
         invitesTitle.setText(Utils.getQuantityString(R.plurals.get_vip_for_invites_plurals, CacheProfile.getOptions().contacts_count, CacheProfile.getOptions().contacts_count));
 
-       if(getArguments() != null) {
-           contacts = getArguments().getParcelableArrayList(CONTACTS);
-       } else {
-           ((BaseFragmentActivity) activity).close(InvitesPopup.this, false);
-       }
-       invitesPopup.setVisibility(View.VISIBLE);
-       final ImageView closeInvites = (ImageView) view.findViewById(R.id.closePopup);
-       closeInvites.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               EasyTracker.getTracker().sendEvent("InvitesPopup", "ClosePopup", "", 0L);
-               if (isAdded()) {
-                   ((BaseFragmentActivity) activity).close(InvitesPopup.this);
-               }
-           }
-       });
+        if (getArguments() != null) {
+            contacts = getArguments().getParcelableArrayList(CONTACTS);
+        } else {
+            ((BaseFragmentActivity) activity).close(InvitesPopup.this, false);
+        }
+        invitesPopup.setVisibility(View.VISIBLE);
+        final ImageView closeInvites = (ImageView) view.findViewById(R.id.closePopup);
+        closeInvites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EasyTracker.getTracker().sendEvent("InvitesPopup", "ClosePopup", "", 0L);
+                if (isAdded()) {
+                    ((BaseFragmentActivity) activity).close(InvitesPopup.this);
+                }
+            }
+        });
 
         invitesTitle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,52 +105,52 @@ public class InvitesPopup extends BaseFragment {
 
         locker = (LockerView) view.findViewById(R.id.ipLocker);
 
-       final Button sendContacts = (Button) invitesPopup.findViewById(R.id.sendContacts);
-       sendContacts.setText(Utils.getQuantityString(R.plurals.vip_status_period_btn, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period));
-       sendContacts.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               if (!invitesCheckBox.isChecked()) {
-                   EasyTracker.getTracker().sendEvent("InvitesPopup", "SendContactsBtnClick", "", 0L);
-                   startActivity(ContainerActivity.getIntentForContacts(contacts));
-                   ((BaseFragmentActivity) activity).close(InvitesPopup.this);
-               } else {
-                   EasyTracker.getTracker().sendEvent("InvitesPopup", "SendContactsBtnClick", "", 1L);
-                   sendInvitesRequest();
-               }
-           }
-       });
+        final Button sendContacts = (Button) invitesPopup.findViewById(R.id.sendContacts);
+        sendContacts.setText(Utils.getQuantityString(R.plurals.vip_status_period_btn, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period));
+        sendContacts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!invitesCheckBox.isChecked()) {
+                    EasyTracker.getTracker().sendEvent("InvitesPopup", "SendContactsBtnClick", "", 0L);
+                    startActivity(ContainerActivity.getIntentForContacts(contacts));
+                    ((BaseFragmentActivity) activity).close(InvitesPopup.this);
+                } else {
+                    EasyTracker.getTracker().sendEvent("InvitesPopup", "SendContactsBtnClick", "", 1L);
+                    sendInvitesRequest();
+                }
+            }
+        });
 
     }
 
-   private void sendInvitesRequest() {
-       InviteContactsRequest request = new InviteContactsRequest(getActivity(), contacts);
-       locker.setVisibility(View.VISIBLE);
-       request.callback(new ApiHandler() {
-           @Override
-           public void success(IApiResponse response) {
-               boolean isPremium = response.getJsonResult().optBoolean("premium");
-               if (isPremium) {
-                   EasyTracker.getTracker().sendEvent("InvitesPopup", "SuccessWithNotChecked", "premiumTrue", (long) contacts.size());
-                   EasyTracker.getTracker().sendEvent("InvitesPopup", "PremiumReceived", "", (long) CacheProfile.getOptions().premium_period);
-                   if (getActivity() != null) {
+    private void sendInvitesRequest() {
+        InviteContactsRequest request = new InviteContactsRequest(getActivity(), contacts);
+        locker.setVisibility(View.VISIBLE);
+        request.callback(new ApiHandler() {
+            @Override
+            public void success(ApiResponse response) {
+                boolean isPremium = response.jsonResult.optBoolean("premium");
+                if (isPremium) {
+                    EasyTracker.getTracker().sendEvent("InvitesPopup", "SuccessWithNotChecked", "premiumTrue", (long) contacts.size());
+                    EasyTracker.getTracker().sendEvent("InvitesPopup", "PremiumReceived", "", (long) CacheProfile.getOptions().premium_period);
+                    if (getActivity() != null) {
 
-                       Toast.makeText(getActivity(), Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period), 1500).show();
-                       CacheProfile.premium = true;
-                       CacheProfile.canInvite = false;
-                       LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
-                       ((BaseFragmentActivity)getActivity()).close(InvitesPopup.this);
-                   }
-               } else {
-                   EasyTracker.getTracker().sendEvent("InvitesPopup", "SuccessWithNotChecked", "premiumFalse", (long) contacts.size());
-                   Toast.makeText(getActivity(), getString(R.string.invalid_contacts), 2000).show();
-               }
-           }
+                        Toast.makeText(getActivity(), Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period), 1500).show();
+                        CacheProfile.premium = true;
+                        CacheProfile.canInvite = false;
+                        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                        ((BaseFragmentActivity) getActivity()).close(InvitesPopup.this);
+                    }
+                } else {
+                    EasyTracker.getTracker().sendEvent("InvitesPopup", "SuccessWithNotChecked", "premiumFalse", (long) contacts.size());
+                    Toast.makeText(getActivity(), getString(R.string.invalid_contacts), 2000).show();
+                }
+            }
 
-           @Override
-           public void fail (int codeError, IApiResponse response){
-               EasyTracker.getTracker().sendEvent("InvitesPopup", "RequestFail", Integer.toString(codeError), 0L);
-           }
+            @Override
+            public void fail(int codeError, ApiResponse response) {
+                EasyTracker.getTracker().sendEvent("InvitesPopup", "RequestFail", Integer.toString(codeError), 0L);
+            }
 
             @Override
             public void always(IApiResponse response) {

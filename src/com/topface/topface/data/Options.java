@@ -98,7 +98,7 @@ public class Options extends AbstractData {
             BANNER_MOPUB,
             BANNER_IVENGO,
             BANNER_ADCAMP,
-            BANNER_LIFESTREET,                        
+            BANNER_LIFESTREET,
             BANNER_ADLAB,
             BANNER_GAG,
             BANNER_NONE
@@ -253,9 +253,9 @@ public class Options extends AbstractData {
             options.ratePopupType = response.jsonResult.optJSONObject("rate_popup").optString("type");
 
             JSONObject getJar = response.jsonResult.optJSONObject("getjar");
-            options.getJar = new GetJar(getJar.optString("id"),getJar.optString("name"),getJar.optLong("price"));
+            options.getJar = new GetJar(getJar.optString("id"), getJar.optString("name"), getJar.optLong("price"));
 
-            options.gagTypeBanner = response.jsonResult.optString("gag_type_banner",Options.BANNER_ADMOB);
+            options.gagTypeBanner = response.jsonResult.optString("gag_type_banner", Options.BANNER_ADMOB);
             options.gagTypeFullscreen = response.jsonResult.optString("gag_type_fullscreen", Options.BANNER_NONE);
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
@@ -378,7 +378,7 @@ public class Options extends AbstractData {
     }
 
     public boolean containsBannerType(String bannerType) {
-        for (Page page: pages.values()) {
+        for (Page page : pages.values()) {
             if (page.banner.equals(bannerType)) {
                 return true;
             }
@@ -411,7 +411,7 @@ public class Options extends AbstractData {
         public static Page parseFromString(String str) {
             String[] params = str.split(SEPARATOR);
             if (params.length == 3) {
-                return new Page(params[0],params[1],params[2]);
+                return new Page(params[0], params[1], params[2]);
             } else {
                 return null;
             }
@@ -526,6 +526,7 @@ public class Options extends AbstractData {
 
 
 
+
     public static class Closing {
         public static String DATA_FOR_CLOSING_RECEIVED_ACTION = "DATA_FOR_CLOSING_RECEIVED_ACTION";
 
@@ -586,15 +587,15 @@ public class Options extends AbstractData {
         }
 
         public boolean isMutualClosingAvailable() {
-            SharedPreferences pref =  App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+            SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
             long currentTime = System.currentTimeMillis();
-            long lastCallTime = pref.getLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME,0);
+            long lastCallTime = pref.getLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME, 0);
             return DateUtils.isOutside24Hours(lastCallTime, System.currentTimeMillis());
         }
 
         public boolean isLikesClosingAvailable() {
-            SharedPreferences pref =  App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-            long lastCallTime = pref.getLong(Static.PREFERENCES_LIKES_CLOSING_LAST_TIME,0);
+            SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+            long lastCallTime = pref.getLong(Static.PREFERENCES_LIKES_CLOSING_LAST_TIME, 0);
             return DateUtils.isOutside24Hours(lastCallTime, System.currentTimeMillis());
         }
 
@@ -609,7 +610,7 @@ public class Options extends AbstractData {
         String name = "coins";
         long price = Integer.MAX_VALUE;
 
-        public GetJar(String id,String name,long price) {
+        public GetJar(String id, String name, long price) {
             this.id = id;
             this.name = name;
             this.price = price;

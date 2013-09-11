@@ -13,7 +13,6 @@ import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 import com.topface.topface.R;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.profile.AddPhotoHelper;
@@ -245,7 +244,7 @@ public class TopfaceNotificationManager {
                 views.setViewVisibility(R.id.fnRetry, View.GONE);
 
                 if (!isOld) {
-                    if(!isTextNotification) {
+                    if (!isTextNotification) {
                         generateBigPicture();
                     } else {
                         generateBigText();

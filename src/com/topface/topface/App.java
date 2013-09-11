@@ -101,6 +101,7 @@ public class App extends Application {
 
     /**
      * Вызывается в onCreate, но выполняется в отдельном потоке
+     *
      * @param handler нужен для выполнения запросов
      */
     private void onCreateAsync(Handler handler) {
@@ -188,7 +189,7 @@ public class App extends Application {
                 .callback(new DataApiHandler<Options>() {
                     @Override
                     protected void success(Options data, IApiResponse response) {
-                        //При парсинге запроса все данные сохраняют, так что тут нам уже делать нечего
+                        BannerBlock.init();
                     }
 
                     @Override

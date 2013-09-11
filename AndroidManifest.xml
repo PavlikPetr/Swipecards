@@ -220,8 +220,9 @@
                 android:name="com.topface.topface.utils.offerwalls.clickky.ClickkyActivity"
                 />
 
-        <activity android:name="com.getjar.sdk.rewards.GetJarActivity"
-                  android:configChanges="orientation|keyboard|keyboardHidden|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+        <activity
+                android:name="com.getjar.sdk.rewards.GetJarActivity"
+                android:configChanges="orientation|keyboard|keyboardHidden|screenLayout|uiMode|screenSize|smallestScreenSize"/>
 
         <activity
                 android:name="com.mopub.mobileads.MoPubActivity"
@@ -242,23 +243,18 @@
                 android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
 
         <activity
-                android:name="com.lifestreet.android.lsmsdk.mraid.MRAIDInterstitialActivity"
-                android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
-
-
-        <activity
                 android:name="ru.ok.android.sdk.OkAuthActivity"
                 android:launchMode="singleTask"
                 android:configChanges="orientation">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
-                        android:scheme="okauth" />
-                        android:host="ok192696576"
+                        android:scheme="okauth"/>
+                android:host="ok192696576"
             </intent-filter>
         </activity>
 
@@ -296,11 +292,14 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name="com.getjar.sdk.data.metadata.PackageMonitor" android:enabled="true"
-                  android:exported="true">
+        <receiver
+                android:name="com.getjar.sdk.data.metadata.PackageMonitor"
+                android:enabled="true"
+                android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED"/>
                 <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+
                 <data android:scheme="package"/>
             </intent-filter>
         </receiver>

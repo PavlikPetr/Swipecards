@@ -2,7 +2,6 @@ package com.topface.topface.ui.views;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -10,7 +9,6 @@ import android.widget.ViewFlipper;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.utils.PopupManager;
-import com.topface.topface.utils.Utils;
 
 public class RatingDialog extends Dialog {
     private View.OnClickListener backClickListener;
@@ -37,7 +35,7 @@ public class RatingDialog extends Dialog {
         findViewById(R.id.btnRPYes).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((ViewFlipper)findViewById(R.id.prFlipper)).setDisplayedChild(1);
+                ((ViewFlipper) findViewById(R.id.prFlipper)).setDisplayedChild(1);
                 EasyTracker.getTracker().sendEvent("RatePopup", "LikeTopfacePopup", "Yes", 1L);
             }
         });
@@ -71,7 +69,7 @@ public class RatingDialog extends Dialog {
     }
 
     private String getStatisticsTagByType() {
-        return type.equals(PopupManager.STANDARD_RATE_TYPE)?"StandardPopup":"LikeTopfacePopup";
+        return type.equals(PopupManager.STANDARD_RATE_TYPE) ? "StandardPopup" : "LikeTopfacePopup";
     }
 
     @Override

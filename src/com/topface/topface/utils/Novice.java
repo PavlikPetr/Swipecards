@@ -131,12 +131,12 @@ public class Novice {
 
     public void completeShowBuySympathies() {
         showBuySympathies = false;
-        commitFlagAsync(Static.PREFERENCES_NOVICE_DATING_BUY_SYMPATHY,false,Static.PREFERENCES_NOVICE_DATING_BUY_SYMPATHY_DATE, Utils.unixtimeInSeconds());
+        commitFlagAsync(Static.PREFERENCES_NOVICE_DATING_BUY_SYMPATHY, false, Static.PREFERENCES_NOVICE_DATING_BUY_SYMPATHY_DATE, Utils.unixtimeInSeconds());
     }
 
     public void completeShowFillProfile() {
         showFillProfile = false;
-        commitFlagAsync(Static.PREFERENCES_NOVICE_MENU_FILL_PROFILE,false);
+        commitFlagAsync(Static.PREFERENCES_NOVICE_MENU_FILL_PROFILE, false);
     }
 
     public void completeShowBatteryBonus() {
@@ -146,10 +146,10 @@ public class Novice {
 
     public void completeShowEnergyToSympathies() {
         showEnergyToSympathies = false;
-        commitFlagAsync(Static.PREFERENCES_NOVICE_DATING_ENERGY_TO_SYMPATHIES,false);
+        commitFlagAsync(Static.PREFERENCES_NOVICE_DATING_ENERGY_TO_SYMPATHIES, false);
     }
 
-    private void commitFlagAsync(final String key,final boolean value) {
+    private void commitFlagAsync(final String key, final boolean value) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -160,7 +160,7 @@ public class Novice {
         }).start();
     }
 
-    private void commitFlagAsync(final String key,final long value) {
+    private void commitFlagAsync(final String key, final long value) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -171,7 +171,7 @@ public class Novice {
         }).start();
     }
 
-    private void commitFlagAsync(final String key,final boolean value,final String key2,final long value2) {
+    private void commitFlagAsync(final String key, final boolean value, final String key2, final long value2) {
         new Thread(new Runnable() {
             @Override
             public void run() {

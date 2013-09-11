@@ -236,7 +236,7 @@ public class BannerBlock {
     }
 
     private void showAdlab() {
-        AdBanner adBanner = (AdBanner)mBannerView;
+        AdBanner adBanner = (AdBanner) mBannerView;
         mAdlabInitializer = new AdInitializer(mContext, adBanner, ADLAB_IDENTIFICATOR);
         mAdlabInitializer.setOnBannerRequestListener(new BannerLoader.OnBannerRequestListener() {
             @Override
@@ -404,7 +404,7 @@ public class BannerBlock {
     }
 
     private void showAdcamp() {
-        ((BannerAdView)mBannerView).setBannerAdViewListener(new BannerAdView.BannerAdViewListener() {
+        ((BannerAdView) mBannerView).setBannerAdViewListener(new BannerAdView.BannerAdViewListener() {
             @Override
             public void onLoadingStarted(BannerAdView bannerAdView) {
             }
@@ -427,7 +427,7 @@ public class BannerBlock {
             }
         });
 
-        ((BannerAdView)mBannerView).showAd();
+        ((BannerAdView) mBannerView).showAd();
     }
 
     private void requestBannerGag() {
@@ -465,7 +465,7 @@ public class BannerBlock {
         new VirusLikesRequest(mFragment.getActivity()).callback(new DataApiHandler<VirusLike>() {
             @Override
             protected void success(VirusLike data, IApiResponse response) {
-                EasyTracker.getTracker().trackEvent("VirusLike", "Success", "Banner", 0L);
+                EasyTracker.getTracker().sendEvent("VirusLike", "Success", "Banner", 0L);
                 //И предлагаем отправить пользователю запрос своим друзьям не из приложения
                 new VirusLike((ApiResponse) response).sendFacebookRequest(
                         "Banner",
@@ -569,7 +569,7 @@ public class BannerBlock {
 
     public void onPause() {
         if (mBannerView instanceof SlotView) {
-            ((SlotView)mBannerView).pause();
+            ((SlotView) mBannerView).pause();
         }
         if (mAdlabInitializer != null) mAdlabInitializer.pause();
     }
@@ -577,14 +577,14 @@ public class BannerBlock {
     public void onDestroy() {
         if (mBannerView instanceof MoPubView) ((MoPubView) mBannerView).destroy();
         if (mBannerView instanceof SlotView) {
-            ((SlotView)mBannerView).destroy();
+            ((SlotView) mBannerView).destroy();
         }
         removeBanner();
     }
 
     public void onResume() {
         if (mBannerView instanceof SlotView) {
-            ((SlotView)mBannerView).resume();
+            ((SlotView) mBannerView).resume();
         }
         if (mAdlabInitializer != null) mAdlabInitializer.resume();
     }
