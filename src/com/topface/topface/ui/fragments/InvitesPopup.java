@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
+import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.InviteContactsRequest;
 import com.topface.topface.requests.ProfileRequest;
@@ -127,11 +128,11 @@ public class InvitesPopup extends BaseFragment {
        locker.setVisibility(View.VISIBLE);
        request.callback(new ApiHandler() {
            @Override
-           public void success(ApiResponse response) {
-               boolean isPremium = response.jsonResult.optBoolean("premium");
+           public void success(IApiResponse response) {
+               boolean isPremium = response.getJsonResult().optBoolean("premium");
                if (isPremium) {
-                   EasyTracker.getTracker().sendEvent("InvitesPopup", "SuccessWithNotChecked", "premiumTrue", (long)contacts.size());
-                   EasyTracker.getTracker().sendEvent("InvitesPopup", "PremiumReceived", "", (long)CacheProfile.getOptions().premium_period);
+                   EasyTracker.getTracker().sendEvent("InvitesPopup", "SuccessWithNotChecked", "premiumTrue", (long) contacts.size());
+                   EasyTracker.getTracker().sendEvent("InvitesPopup", "PremiumReceived", "", (long) CacheProfile.getOptions().premium_period);
                    if (getActivity() != null) {
 
                        Toast.makeText(getActivity(), Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period), 1500).show();
@@ -141,13 +142,13 @@ public class InvitesPopup extends BaseFragment {
                        ((BaseFragmentActivity)getActivity()).close(InvitesPopup.this);
                    }
                } else {
-                   EasyTracker.getTracker().sendEvent("InvitesPopup", "SuccessWithNotChecked", "premiumFalse", (long)contacts.size());
+                   EasyTracker.getTracker().sendEvent("InvitesPopup", "SuccessWithNotChecked", "premiumFalse", (long) contacts.size());
                    Toast.makeText(getActivity(), getString(R.string.invalid_contacts), 2000).show();
                }
            }
 
            @Override
-           public void fail (int codeError, ApiResponse response){
+           public void fail (int codeError, IApiResponse response){
                EasyTracker.getTracker().sendEvent("InvitesPopup", "RequestFail", Integer.toString(codeError), 0L);
            }
 

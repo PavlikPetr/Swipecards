@@ -464,8 +464,8 @@ public class BannerBlock {
 
         new VirusLikesRequest(mFragment.getActivity()).callback(new DataApiHandler<VirusLike>() {
             @Override
-            public void success(final ApiResponse response) {
-                EasyTracker.getTracker().sendEvent("VirusLike", "Success", "Banner", 0L);
+            protected void success(VirusLike data, IApiResponse response) {
+                EasyTracker.getTracker().trackEvent("VirusLike", "Success", "Banner", 0L);
                 //И предлагаем отправить пользователю запрос своим друзьям не из приложения
                 new VirusLike((ApiResponse) response).sendFacebookRequest(
                         "Banner",
@@ -481,7 +481,13 @@ public class BannerBlock {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            protected VirusLike parseResponse(ApiResponse response) {
+                return new VirusLike(response);
+            }
+
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
                 EasyTracker.getTracker().sendEvent("VirusLike", "Fail", "Banner", 0L);
 
                 if (response.isCodeEqual(ApiResponse.CODE_VIRUS_LIKES_ALREADY_RECEIVED)) {

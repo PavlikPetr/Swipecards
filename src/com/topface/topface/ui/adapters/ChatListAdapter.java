@@ -599,7 +599,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 new VirusLikesRequest(item.id, mContext).callback(new DataApiHandler<VirusLike>() {
 
                     @Override
-                    protected void success(VirusLike data, ApiResponse response) {
+                    protected void success(VirusLike data, IApiResponse response) {
                         EasyTracker.getTracker().sendEvent("VirusLike", "Success", "Chat", 0L);
                         //После заврешения запроса удаляем элемент
                         removeItem(getPosition(position));
@@ -642,7 +642,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                     }
 
                     @Override
-                    public void fail(int codeError, ApiResponse response) {
+                    public void fail(int codeError, IApiResponse response) {
                         EasyTracker.getTracker().sendEvent("VirusLike", "Fail", "Chat", 0L);
                         Utils.showErrorMessage(getContext());
                     }
