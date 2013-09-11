@@ -90,7 +90,7 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnMutual:
-                EasyTracker.getTracker().trackEvent(getTrackName(), "Mutual", "", 1L);
+                EasyTracker.getTracker().sendEvent(getTrackName(), "Mutual", "", 1L);
                 FeedUser currentUser = getCurrentUser();
                 if (currentUser != null) {
                     getRateController().onRate(currentUser.id, 9, RateRequest.DEFAULT_MUTUAL, new RateController.OnRateListener() {
@@ -103,8 +103,8 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
                         public void onRateFailed() {
                         }
                     });
+                    showNextUser();
                 }
-                showNextUser();
                 break;
             default:
                 super.onClick(v);

@@ -44,7 +44,7 @@ public class ConnectionManager {
 
     public static final String TAG = "ConnectionManager";
     private final HashMap<String, IApiRequest> mPendignRequests;
-    private long mFloodEndsTime = 0;
+    private static long mFloodEndsTime = 0;
 
     private ConnectionManager() {
         mWorker = Executors.newFixedThreadPool(THREAD_PULL_SIZE);
@@ -394,8 +394,7 @@ public class ConnectionManager {
 
     private boolean isBlockedForFlood() {
         if (mFloodEndsTime == 0) {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-            mFloodEndsTime = preferences.getLong(BanActivity.FLOOD_ENDS_TIME, 0L);
+            mFloodEndsTime = App.getConfig().getFloodEndsTime();
         }
         long now = System.currentTimeMillis();
         return mFloodEndsTime > now;

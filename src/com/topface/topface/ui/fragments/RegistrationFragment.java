@@ -151,7 +151,7 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
                     intent.putExtra(INTENT_PASSWORD, password);
                     intent.putExtra(INTENT_USER_ID, data.getUserId());
 
-                    EasyTracker.getTracker().trackEvent(
+                    EasyTracker.getTracker().sendEvent(
                             "Registration",
                             "SubmitRegister",
                             mEdPassword.getVisibility() == View.VISIBLE ? "PasswordEntered" : "PasswordGenerated",

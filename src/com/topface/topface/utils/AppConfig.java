@@ -27,6 +27,7 @@ public class AppConfig {
     private static final String DATA_DEBUG_MODE = "data_debug_mode";
     private static final String DATA_APP_CONFIG_VERSION = "data_app_config_version";
     private static final String DATA_API_VERSION = "data_api_version";
+    public static final String FLOOD_ENDS_TIME = "flood_ens_time";
 
     private BannersConfig mBannerConfig;
     private LocaleConfig mLocaleConfig;
@@ -79,13 +80,21 @@ public class AppConfig {
         return mFields.getStringField(DATA_API_URL);
     }
 
+    public void setFloodEndsTime(long timestamp) {
+        mFields.setField(FLOOD_ENDS_TIME, timestamp);
+    }
+
+    public long getFloodEndsTime() {
+        return mFields.getLongField(FLOOD_ENDS_TIME);
+    }
+
 
     /**
      * Возможные типы полей настроек
      * Поле с типом Unknown не будет обрабатываться (возникает, если поле имеет неизвестный класс у данных)
      */
     public static enum FieldType {
-        String, Integer, Boolean, Unknown
+        String, Integer, Boolean, Long, Unknown
     }
 
     private Context mContext;
@@ -104,6 +113,7 @@ public class AppConfig {
         fields.addStringField(DATA_AUTH_FB_API, Static.AUTH_FACEBOOK_ID);
         fields.addIntegerField(DATA_EDITOR_MODE, Editor.MODE_USER_FIELD);
         fields.addIntegerField(DATA_DEBUG_MODE, Debug.MODE_EDITOR);
+        fields.addLongField(FLOOD_ENDS_TIME, 0l);
         return fields;
     }
 
@@ -132,6 +142,8 @@ public class AppConfig {
                         break;
                     case Boolean:
                         field.value = preferences.getBoolean(field.key, (Boolean) field.value);
+                    case Long:
+                        field.value = preferences.getLong(field.key, (Long) field.value);
                         break;
                 }
             }
@@ -161,8 +173,31 @@ public class AppConfig {
                     break;
                 case Boolean:
                     editor.putBoolean(field.key, (Boolean) field.value);
+                case Long:
+                    editor.putLong(field.key, (Long) field.value);
                     break;
             }
+        }
+        editor.commit();
+        Debug.log("Save AppConfig" + toString());
+    }
+
+    public void saveConfigField(String key) {
+        SharedPreferences.Editor editor = getPreferences().edit();
+        editor.putInt(DATA_APP_CONFIG_VERSION, APP_CONFIG_VERSION);
+        SettingsField field = mFields.get(key);
+        switch (field.getType()) {
+            case String:
+                editor.putString(field.key, (String) field.value);
+                break;
+            case Integer:
+                editor.putInt(field.key, (Integer) field.value);
+                break;
+            case Boolean:
+                editor.putBoolean(field.key, (Boolean) field.value);
+            case Long:
+                editor.putLong(field.key, (Long) field.value);
+                break;
         }
         editor.commit();
         Debug.log("Save AppConfig" + toString());
@@ -202,6 +237,8 @@ public class AppConfig {
                 return FieldType.Integer;
             } else if (value instanceof Boolean) {
                 return FieldType.Boolean;
+            } else if (value instanceof Long) {
+                return FieldType.Long;
             }
             return FieldType.Unknown;
         }
@@ -226,6 +263,11 @@ public class AppConfig {
             return put(fieldName, new SettingsField<Boolean>(fieldName, defaultValue));
         }
 
+        @SuppressWarnings("unchecked")
+        public SettingsField<Long> addLongField(String fieldName, Long defaultValue) {
+            return put(fieldName, new SettingsField<Long>(fieldName, defaultValue));
+        }
+
         public boolean setField(String fieldName, String value) {
             boolean result = false;
             if (containsKey(fieldName)) {
@@ -235,6 +277,14 @@ public class AppConfig {
         }
 
         public boolean setField(String fieldName, Integer value) {
+            boolean result = false;
+            if (containsKey(fieldName)) {
+                get(fieldName).value = value;
+            }
+            return result;
+        }
+
+        public boolean setField(String fieldName, Long value) {
             boolean result = false;
             if (containsKey(fieldName)) {
                 get(fieldName).value = value;
@@ -257,7 +307,6 @@ public class AppConfig {
             if (settingsField != null) {
                 result = (String) settingsField.value;
             }
-
             return result;
         }
 
@@ -267,7 +316,6 @@ public class AppConfig {
             if (settingsField != null) {
                 result = (Integer) settingsField.value;
             }
-
             return result;
         }
 
@@ -278,7 +326,15 @@ public class AppConfig {
             if (settingsField != null) {
                 result = (Boolean) settingsField.value;
             }
+            return result;
+        }
 
+        public Long getLongField(String fieldName) {
+            Long result = 0l;
+            SettingsField settingsField = get(fieldName);
+            if (settingsField != null) {
+                result = (Long) settingsField.value;
+            }
             return result;
         }
     }

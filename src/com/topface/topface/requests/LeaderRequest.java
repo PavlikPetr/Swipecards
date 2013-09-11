@@ -28,6 +28,6 @@ public class LeaderRequest extends ApiRequest {
     @Override
     public void exec() {
         super.exec();
-        EasyTracker.getTracker().trackEvent("Leaders", "Buy", "", (long) CacheProfile.getOptions().price_leader);
+        EasyTracker.getTracker().sendEvent("Leaders", "Buy", "", (long) CacheProfile.getOptions().price_leader);
     }
 }

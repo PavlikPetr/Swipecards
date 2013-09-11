@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.Static;
+import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
@@ -261,12 +262,14 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
         //Показываем рекламу AirMessages только если не показываем инвайты
         if (!invitePopupShow) {
-            AirMessagesPopupFragment.showIfNeeded(getFragmentManager());
+            AirManager manager = new AirManager(getActivity());
+            manager.startFragment(getActivity().getSupportFragmentManager());
+//            AirMessagesPopupFragment.showIfNeeded(getFragmentManager(), Options.PremiumAirEntity.AIR_MESSAGES);
         }
     }
 
     public void showInvitePopup(ArrayList<ContactsProvider.Contact> data) {
-        EasyTracker.getTracker().trackEvent("InvitesPopup", "Show", "", 0L);
+        EasyTracker.getTracker().sendEvent("InvitesPopup", "Show", "", 0L);
         InvitesPopup popup = InvitesPopup.newInstance(data);
         ((BaseFragmentActivity) getActivity()).startFragment(popup);
     }

@@ -265,6 +265,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             public void onLongClick(final int position, final View v) {
 
                 History item = mAdapter.getItem(position);
+                if (item ==null) return;
+
                 String[] buttons;
                 if (item.target == 0) {
                     buttons = editButtonsSelfNames;
@@ -279,15 +281,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                                 switch (which) {
                                     case DELETE_BUTTON:
                                         deleteItem(position);
-                                        EasyTracker.getTracker().trackEvent("Chat", "DeleteItem", "", 1L);
+                                        EasyTracker.getTracker().sendEvent("Chat", "DeleteItem", "", 1L);
                                         break;
                                     case COPY_BUTTON:
                                         mAdapter.copyText(((TextView) v).getText().toString());
-                                        EasyTracker.getTracker().trackEvent("Chat", "CopyItemText", "", 1L);
+                                        EasyTracker.getTracker().sendEvent("Chat", "CopyItemText", "", 1L);
                                         break;
                                     case COMPLAIN_BUTTON:
                                         startActivity(ContainerActivity.getComplainIntent(mUserId, mAdapter.getItem(position).id));
-                                        EasyTracker.getTracker().trackEvent("Chat", "ComplainItemText", "", 1L);
+                                        EasyTracker.getTracker().sendEvent("Chat", "ComplainItemText", "", 1L);
                                         break;
                                 }
                             }
@@ -635,23 +637,23 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             case R.id.btnSend:
                 if (mUserId > 0) {
                     sendMessage();
-                    EasyTracker.getTracker().trackEvent("Chat", "SendMessage", "", 1L);
+                    EasyTracker.getTracker().sendEvent("Chat", "SendMessage", "", 1L);
                 }
                 break;
             case R.id.btnChatAdd:
                 toggleAddPanel();
-                EasyTracker.getTracker().trackEvent("Chat", "AdditionalClick", "", 1L);
+                EasyTracker.getTracker().sendEvent("Chat", "AdditionalClick", "", 1L);
                 break;
             case R.id.btnChatGift:
                 startActivityForResult(new Intent(getActivity(), GiftsActivity.class),
                         GiftsActivity.INTENT_REQUEST_GIFT);
-                EasyTracker.getTracker().trackEvent("Chat", "SendGiftClick", "", 1L);
+                EasyTracker.getTracker().sendEvent("Chat", "SendGiftClick", "", 1L);
                 break;
             case R.id.btnChatPlace:
                 if (Utils.isGoogleMapsAvailable()) {
                     startActivityForResult(new Intent(getActivity(), GeoMapActivity.class),
                             GeoMapActivity.INTENT_REQUEST_GEO);
-                    EasyTracker.getTracker().trackEvent("Chat", "SendMapClick", "§", 1L);
+                    EasyTracker.getTracker().sendEvent("Chat", "SendMapClick", "§", 1L);
                 }
                 break;
             case R.id.btnNavigationProfileBar:

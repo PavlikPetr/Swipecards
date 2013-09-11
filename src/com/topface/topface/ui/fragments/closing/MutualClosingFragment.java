@@ -86,7 +86,7 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnForget:
-                EasyTracker.getTracker().trackEvent(getTrackName(), "Forget", "", 1L);
+                EasyTracker.getTracker().sendEvent(getTrackName(), "Forget", "", 1L);
                 FeedUser user = getCurrentUser();
                 if (user != null) {
                     DeleteFeedRequest deleteRequest = new DeleteFeedRequest(user.feedItem.id, getActivity());

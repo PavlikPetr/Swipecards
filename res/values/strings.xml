@@ -545,4 +545,11 @@
         <item quantity="one">%d selected</item>
     </plurals>
     <string name="silent_ringtone">Silent mode</string>
+    <plurals name="popup_vip_visitors">
+        <item quantity="one">You have %d visitor</item>
+        <item quantity="few">You have %d visitors</item>
+        <item quantity="many">You have %d visitors</item>
+        <item quantity="other">You have %d visitors</item>
+    </plurals>
+    <string name="delete_visitors">delete visitors</string>
 </resources>

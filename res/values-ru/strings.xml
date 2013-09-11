@@ -699,6 +699,14 @@
         <item quantity="many">Получено %d сообщений с экспресс-доставкой</item>
         <item quantity="other">Получено %d сообщений с экспресс-доставкой</item>
     </plurals>
+
+    <plurals name="popup_vip_visitors">
+        <item quantity="one">У вас %d гость</item>
+        <item quantity="few">У вас %d гостя</item>
+        <item quantity="many">У вас %d гостей</item>
+        <item quantity="other">У вас %d гостей</item>
+    </plurals>
+
     <string name="general_attention">Внимание!</string>
     <string name="general_delete_messages">Удалить сообщения</string>
 
@@ -718,6 +726,7 @@
     <string name="settings_feedback_transaction_number_hint">Введите номер заказа</string>
     <string name="youve_earned">Вы заработали %s</string>
     <string name="like_topface">Вам нравится Topface?</string>
+    <string name="delete_visitors">Удалить гостей</string>
     <string name="photo_is_uploading">Фотография загружается</string>
     <string name="silent_ringtone">Без звука</string>
 

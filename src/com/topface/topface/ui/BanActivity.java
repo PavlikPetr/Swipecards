@@ -9,11 +9,12 @@ import android.widget.TextView;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.analytics.TrackedActivity;
+import com.topface.topface.utils.AppConfig;
 
 public class BanActivity extends TrackedActivity {
 
     private SharedPreferences mPreferences;
-    public static final String FLOOD_ENDS_TIME = "flood_ens_time";
+
 
     public static final int TYPE_UNKNOWN = 0;
     public static final int TYPE_BAN = 1;
@@ -59,16 +60,21 @@ public class BanActivity extends TrackedActivity {
         messageContainer.setText(message);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        App.getConfig().saveConfigField(AppConfig.FLOOD_ENDS_TIME);
+    }
+
     private long getFloodTime() {
+        AppConfig config = App.getConfig();
         long result;
-        long endTime = mPreferences.getLong(FLOOD_ENDS_TIME,0L);
+        long endTime = config.getFloodEndsTime();
         long now = System.currentTimeMillis();
 
         if (endTime < now) {
             endTime = now + FLOOD_WAIT_TIME;
-            SharedPreferences.Editor editor = mPreferences.edit();
-            editor.putLong(FLOOD_ENDS_TIME,endTime);
-            editor.commit();
+            config.setFloodEndsTime(endTime);
             result = FLOOD_WAIT_TIME;
         } else {
             result = endTime - now;

@@ -27,6 +27,6 @@ public class PhotoMainRequest extends ApiRequest {
     @Override
     public void exec() {
         super.exec();
-        EasyTracker.getTracker().trackEvent("Profile", "PhotoSetMain", "", 1L);
+        EasyTracker.getTracker().sendEvent("Profile", "PhotoSetMain", "", 1L);
     }
 }
