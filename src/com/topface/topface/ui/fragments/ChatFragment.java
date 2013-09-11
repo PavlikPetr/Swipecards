@@ -440,9 +440,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         historyRequest.callback(new DataApiHandler<HistoryListData>() {
             @Override
             protected void success(HistoryListData data, IApiResponse response) {
-                if (itemId != null) {
-                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID, itemId));
-                    itemId = null;
+                if (mItemId != null) {
+                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID, mItemId));
+                    mItemId = null;
                 }
 
                 // delete duplicates

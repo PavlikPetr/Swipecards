@@ -25,16 +25,14 @@ import com.topface.topface.data.search.OnUsersListEventsListener;
 import com.topface.topface.data.search.SearchUser;
 import com.topface.topface.data.search.UsersList;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
-import com.topface.topface.requests.AlbumRequest;
-import com.topface.topface.requests.ApiRequest;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
+import org.json.JSONObject;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -375,10 +373,11 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
             final int uid = currentUser.id;
             request.callback(new ApiHandler() {
                 @Override
-                public void success(ApiResponse response) {
+                public void success(IApiResponse response) {
                     if (uid == usersList.getCurrentUser().id) {
-                        Photos newPhotos = Photos.parse(response.jsonResult.optJSONArray("items"));
-                        mNeedMore = response.jsonResult.optBoolean("more");
+                        JSONObject jsonResult = response.getJsonResult();
+                        Photos newPhotos = Photos.parse(jsonResult.optJSONArray("items"));
+                        mNeedMore = jsonResult.optBoolean("more");
                         int i = 0;
                         for (Photo photo : newPhotos) {
                             if (mLoadedCount + i < photos.size()) {
@@ -386,7 +385,6 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                                 i++;
                             }
                         }
-
                         if (mImageSwitcher != null && mImageSwitcher.getAdapter() != null) {
                             mImageSwitcher.getAdapter().notifyDataSetChanged();
                         }
@@ -395,7 +393,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                 }
 
                 @Override
-                public void fail(int codeError, ApiResponse response) {
+                public void fail(int codeError, IApiResponse response) {
                     mCanSendAlbumReq = true;
                 }
             }).exec();

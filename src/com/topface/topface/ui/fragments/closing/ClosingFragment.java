@@ -59,7 +59,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
         SkipAllClosedRequest skipAllRequest = new SkipAllClosedRequest(type, getActivity());
         skipAllRequest.callback(new SimpleApiHandler() {
             @Override
-            public void always(ApiResponse response) {
+            public void always(IApiResponse response) {
                 if(isAdded()) {
                     refreshActionBarTitles();
                 }
@@ -117,7 +117,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
                         SkipClosedRequest request = new SkipClosedRequest(getActivity());
                         request.callback(new SimpleApiHandler() {
                             @Override
-                            public void always(ApiResponse response) {
+                            public void always(IApiResponse response) {
                                 if(isAdded()) {
                                     refreshActionBarTitles();
                                 }

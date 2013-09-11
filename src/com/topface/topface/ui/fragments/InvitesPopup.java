@@ -133,8 +133,8 @@ public class InvitesPopup extends BaseFragment {
         locker.setVisibility(View.VISIBLE);
         request.callback(new ApiHandler() {
             @Override
-            public void success(ApiResponse response) {
-                boolean isPremium = response.jsonResult.optBoolean("premium");
+            public void success(IApiResponse response) {
+                boolean isPremium = response.getJsonResult().optBoolean("premium");
                 if (isPremium) {
                     EasyTracker.getTracker().sendEvent("InvitesPopup", "SuccessWithNotChecked", "premiumTrue", (long) contacts.size());
                     EasyTracker.getTracker().sendEvent("InvitesPopup", "PremiumReceived", "", (long) CacheProfile.getOptions().premium_period);
@@ -153,7 +153,7 @@ public class InvitesPopup extends BaseFragment {
             }
 
             @Override
-            public void fail(int codeError, ApiResponse response) {
+            public void fail(int codeError, IApiResponse response) {
                 EasyTracker.getTracker().sendEvent("InvitesPopup", "RequestFail", Integer.toString(codeError), 0L);
             }
 
