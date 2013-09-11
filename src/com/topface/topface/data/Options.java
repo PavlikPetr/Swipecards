@@ -156,6 +156,7 @@ public class Options extends AbstractData {
     public boolean block_chat_not_mutual;
     public Closing closing = new Closing();
     public PremiumAirEntity premium_messages;
+    public PremiumAirEntity premium_visitors;
     public GetJar getJar;
     public String gagTypeBanner = BANNER_ADMOB;
     public String gagTypeFullscreen = BANNER_NONE;
@@ -223,8 +224,17 @@ public class Options extends AbstractData {
                         response.jsonResult.optJSONObject("premium_messages"), PremiumAirEntity.AIR_MESSAGES
                 );
             } else {
-                options.premium_messages = new PremiumAirEntity(false, 10, 1000);
+                options.premium_messages = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_MESSAGES);
             }
+
+            if (response.jsonResult.has("visitors_popup")) {
+                options.premium_visitors = new PremiumAirEntity(
+                        response.jsonResult.optJSONObject("visitors_popup"), PremiumAirEntity.AIR_GUESTS
+                );
+            } else {
+                options.premium_visitors = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_GUESTS);
+            }
+
 
             if (response.jsonResult.has("links")) {
                 JSONObject links = response.jsonResult.optJSONObject("links");
@@ -464,10 +474,11 @@ public class Options extends AbstractData {
             }
         }
 
-        public PremiumAirEntity(boolean enabled, int count, int timeout) {
+        public PremiumAirEntity(boolean enabled, int count, int timeout, int type) {
             mEnabled = enabled;
             mCount = count;
             mTimeout = timeout;
+            airType = type;
         }
 
         public int getCount() {

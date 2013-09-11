@@ -20,8 +20,9 @@ public class AirManager {
     public void startFragment(FragmentManager fm) {
         mType =  getLastFragmentType() == Options.PremiumAirEntity.AIR_MESSAGES ?
                 Options.PremiumAirEntity.AIR_GUESTS : Options.PremiumAirEntity.AIR_MESSAGES;
-        AirMessagesPopupFragment.showIfNeeded(fm, mType);
-        setLastFragmentType();
+        if (AirMessagesPopupFragment.showIfNeeded(fm, mType)) {
+            setLastFragmentType();
+        }
     }
 
     public int getLastFragmentType() {
