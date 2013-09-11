@@ -162,7 +162,7 @@ public class ContactsFragment extends BaseFragment {
                 }
 
                 @Override
-                public void fail(int codeError, ApiResponse response) {
+                public void fail(int codeError, IApiResponse response) {
                     EasyTracker.getTracker().sendEvent("InvitesPopup", "RequestFail", Integer.toString(codeError), 0L);
                     if (contactsVip != null) {
                         contactsVip.setEnabled(true);
