@@ -42,7 +42,7 @@ public class DeleteRequest extends ApiRequest {
     public void exec() {
         if (mIds != null && mIds.size() > 0) {
             super.exec();
-            EasyTracker.getTracker().trackEvent("Feed", "Delete", "", 1L);
+            EasyTracker.getTracker().sendEvent("Feed", "Delete", "", 1L);
         } else {
             handleFail(ApiResponse.ERRORS_PROCCESED, "User list for delete from black list is empty");
         }

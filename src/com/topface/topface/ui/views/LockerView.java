@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -88,8 +89,11 @@ public class LockerView extends RelativeLayout {
         mTextView.setCompoundDrawablePadding(a.getDimensionPixelSize(
                 R.styleable.LockerView_android_drawablePadding, 0));
 
-        //noinspection deprecation
-        mTextView.setBackgroundDrawable(a.getDrawable(R.styleable.LockerView_messageBackground));
+        if (Build.VERSION.SDK_INT >= 16) {
+            mTextView.setBackground(a.getDrawable(R.styleable.LockerView_messageBackground));
+        } else {
+            mTextView.setBackgroundDrawable(a.getDrawable(R.styleable.LockerView_messageBackground));
+        }
 
         int padding = a.getDimensionPixelSize(R.styleable.LockerView_messagePadding, 0);
         if (a.hasValue(R.styleable.LockerView_messagePadding)) {

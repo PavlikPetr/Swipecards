@@ -3,6 +3,7 @@ package com.topface.topface.ui.adapters;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -118,6 +119,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         return resultView;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected View getContentView(int position, View convertView, ViewGroup viewGroup) {
 
@@ -190,8 +192,11 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         if (mSelectionController.isSelected(position)) {
             convertView.setBackgroundResource(R.drawable.feed_bg_pressed);
         } else {
-            //noinspection deprecation
-            convertView.setBackgroundDrawable(holder.background);
+            if (Build.VERSION.SDK_INT >= 16) {
+                convertView.setBackground(holder.background);
+            } else {
+                convertView.setBackgroundDrawable(holder.background);
+            }
         }
         return convertView;
     }

@@ -196,7 +196,7 @@ public class AuthFragment extends BaseFragment {
                 @Override
                 public void onClick(View v) {
                     Debug.log("LOCALE::" + btnsController.getLocaleTag());
-                    EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG, "OtherWaysButtonClicked", btnsController.getLocaleTag(), 1L);
+                    EasyTracker.getTracker().sendEvent(MAIN_BUTTONS_GA_TAG, "OtherWaysButtonClicked", btnsController.getLocaleTag(), 1L);
                     additionalButtonsScreen = true;
                     btnsController.setAllSettings();
                     mOtherSocialNetworksButton.setVisibility(View.GONE);
@@ -720,7 +720,7 @@ public class AuthFragment extends BaseFragment {
     private void btnVKClick() {
         // костыль, надо избавить от viewflipper к чертовой бабушке
         mProcessingTFReg = false;
-        EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "LoginAdditionalVk" : "LoginMainVk", btnsController.getLocaleTag(), 1L);
+        EasyTracker.getTracker().sendEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "LoginAdditionalVk" : "LoginMainVk", btnsController.getLocaleTag(), 1L);
 
         if (checkOnline() && mAuthorizationManager != null) {
             hideButtons();
@@ -731,7 +731,7 @@ public class AuthFragment extends BaseFragment {
     private void btnFBClick() {
         // костыль, надо избавить от viewflipper к чертовой бабушке
         mProcessingTFReg = false;
-        EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "LoginAdditionalFb" : "LoginMainFb", btnsController.getLocaleTag(), 1L);
+        EasyTracker.getTracker().sendEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "LoginAdditionalFb" : "LoginMainFb", btnsController.getLocaleTag(), 1L);
         if (checkOnline() && mAuthorizationManager != null) {
             hideButtons();
             mAuthorizationManager.facebookAuth();
@@ -741,7 +741,7 @@ public class AuthFragment extends BaseFragment {
 
     private void btnOKClick() {
         mProcessingTFReg = false;
-        EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "LoginAdditionalOk" : "LoginMainOk", btnsController.getLocaleTag(), 1L);
+        EasyTracker.getTracker().sendEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "LoginAdditionalOk" : "LoginMainOk", btnsController.getLocaleTag(), 1L);
         if (checkOnline() && mAuthorizationManager != null) {
             hideButtons();
             mAuthorizationManager.odnoklassnikiAuth();
@@ -800,7 +800,7 @@ public class AuthFragment extends BaseFragment {
         super.onDestroy();
         getSupportActionBar().show();
         if (!hasAuthorized) {
-            EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "DismissAdditional" : "DismissMain", btnsController.getLocaleTag(), 1L);
+            EasyTracker.getTracker().sendEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "DismissAdditional" : "DismissMain", btnsController.getLocaleTag(), 1L);
         }
     }
 

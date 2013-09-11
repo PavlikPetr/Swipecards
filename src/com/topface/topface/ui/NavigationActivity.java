@@ -92,6 +92,7 @@ public class NavigationActivity extends BaseFragmentActivity {
         mNavBarController = new NavigationBarController((ViewGroup) badges);
         final View home = findViewById(android.R.id.home);
         home.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @SuppressWarnings("deprecation")
             @Override
             public void onGlobalLayout() {
                 int diff = home.getTop() - badges.getHeight() / 7; // badges.getHeight()/6 - 1/6 бэйджа будет торчать над home иконкой
