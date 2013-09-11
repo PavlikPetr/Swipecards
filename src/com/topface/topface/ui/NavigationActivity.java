@@ -190,7 +190,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     @Override
     protected void onPause() {
         super.onPause();
-        if(mFullscreenController != null) {
+        if (mFullscreenController != null) {
             mFullscreenController.onPause();
         }
     }
@@ -232,6 +232,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             mFragmentMenu.onStopClosings();
             MenuFragment.logoutInvoked = false;
         }
+
         if (!AuthToken.getInstance().isEmpty() &&
                 !CacheProfile.premium && !mHasClosingsForThisSession &&
                 mFragmentMenu.getCurrentFragmentId() != MenuFragment.F_PROFILE
@@ -240,8 +241,11 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                 onClosings();
             }
         }
-    }
 
+        if (mFragmentMenu.isClosed()) {
+            updateClosing();
+        }
+    }
 
     private void actionsAfterRegistration() {
         if (!AuthToken.getInstance().isEmpty()) {
@@ -501,7 +505,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
             showFragment(BaseFragment.F_MUTUAL);
             return;
         }
-        if (closing.enableSympathies && !LikesClosingFragment.usersProcessed) {
+        if (closing.enabledSympathies && !LikesClosingFragment.usersProcessed) {
             mFragmentMenu.onClosings(BaseFragment.F_LIKES);
             showFragment(BaseFragment.F_LIKES);
             return;
@@ -511,6 +515,24 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
         mFragmentMenu.onStopClosings();
         showFragment(null); // it will take fragment id from getIntent() extra data
+    }
+
+    private void updateClosing() {
+        if (CacheProfile.premium) {
+            if (CacheProfile.premium) {
+                Options.Closing closing = CacheProfile.getOptions().closing;
+                if (closing.isClosingsEnabled()) {
+                    closing.stopForPremium();
+                    onClosings();
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onProfileUpdated() {
+        super.onProfileUpdated();
+        updateClosing();
     }
 
     public static void restartNavigationActivity(int fragmentId) {

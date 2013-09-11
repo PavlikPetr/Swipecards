@@ -116,7 +116,7 @@ public class PhotoAddRequest extends ApiRequest {
     public void exec() {
         if (mUri != null) {
             super.exec();
-            EasyTracker.getTracker().trackEvent("Profile", "PhotoAdd", "", 1L);
+            EasyTracker.getTracker().sendEvent("Profile", "PhotoAdd", "", 1L);
         } else {
             handleFail(ApiResponse.MISSING_REQUIRE_PARAMETER, "Need set photo Uri");
         }

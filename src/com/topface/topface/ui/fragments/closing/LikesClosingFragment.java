@@ -62,8 +62,8 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
         }
         controlsView.findViewById(R.id.btnMutual).setOnClickListener(this);
         controlsView.findViewById(R.id.btnChat).setOnClickListener(this);
-        mUserName = (TextView)controlsView.findViewById(R.id.tvUserName);
-        mUserCity = (TextView)controlsView.findViewById(R.id.tvUserCity);
+        mUserName = (TextView) controlsView.findViewById(R.id.tvUserName);
+        mUserCity = (TextView) controlsView.findViewById(R.id.tvUserCity);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnMutual:
-                EasyTracker.getTracker().trackEvent(getTrackName(), "Mutual", "", 1L);
+                EasyTracker.getTracker().sendEvent(getTrackName(), "Mutual", "", 1L);
                 FeedUser currentUser = getCurrentUser();
                 if (currentUser != null) {
                     getRateController().onRate(currentUser.id, 9, RateRequest.DEFAULT_MUTUAL, new RateController.OnRateListener() {
@@ -114,7 +114,7 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     @Override
     protected void onUsersProcessed() {
         usersProcessed = true;
-        CountersManager.getInstance(getActivity()).setCounter(CountersManager.LIKES,0,true);
+        CountersManager.getInstance(getActivity()).setCounter(CountersManager.LIKES, 0, true);
         CacheProfile.getOptions().closing.onStopLikesClosings();
         super.onUsersProcessed();
     }

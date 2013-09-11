@@ -10,7 +10,7 @@ abstract public class TrackedMapActivity extends MapActivity {
         EasyTracker.getInstance().activityStart(this);
         TrackedActivity.setCustomMeticsAndDimensions();
         if (isTrackable()) {
-            EasyTracker.getTracker().trackView(getTrackName());
+            EasyTracker.getTracker().sendView(getTrackName());
         }
     }
 

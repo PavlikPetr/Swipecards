@@ -37,6 +37,6 @@ public class PhotoDeleteRequest extends ApiRequest {
     @Override
     public void exec() {
         super.exec();
-        EasyTracker.getTracker().trackEvent("Profile", "PhotoDelete", "", 1L);
+        EasyTracker.getTracker().sendEvent("Profile", "PhotoDelete", "", 1L);
     }
 }

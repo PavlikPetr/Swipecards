@@ -14,6 +14,7 @@ import com.topface.topface.GCMUtils;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.AuthFragment;
@@ -42,6 +43,13 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         @Override
         public void onReceive(Context context, Intent intent) {
             onClosingDataReceived();
+        }
+    };
+
+    private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            onProfileUpdated();
         }
     };
 
@@ -120,6 +128,8 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         }).start();
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mClosingDataReceiver, new IntentFilter(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(mProfileUpdateReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
     }
 
     private void registerReauthReceiver() {
@@ -198,6 +208,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             Debug.error(ex);
         }
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mClosingDataReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mProfileUpdateReceiver);
     }
 
     private void removeAllRequests() {
@@ -283,5 +294,8 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             mActionBar = new ActionBar(this, view);
         }
         return mActionBar;
+    }
+
+    protected void onProfileUpdated() {
     }
 }

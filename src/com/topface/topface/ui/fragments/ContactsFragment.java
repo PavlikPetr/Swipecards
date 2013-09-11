@@ -142,8 +142,8 @@ public class ContactsFragment extends BaseFragment {
                 public void success(IApiResponse response) {
                     boolean isPremium = response.getJsonResult().optBoolean("premium");
                     if (isPremium) {
-                        EasyTracker.getTracker().trackEvent("InvitesPopup", "SuccessWithChecked", "premiumTrue", (long) contacts.size());
-                        EasyTracker.getTracker().trackEvent("InvitesPopup", "PremiumReceived", "", (long) CacheProfile.getOptions().premium_period);
+                        EasyTracker.getTracker().sendEvent("InvitesPopup", "SuccessWithChecked", "premiumTrue", (long) contacts.size());
+                        EasyTracker.getTracker().sendEvent("InvitesPopup", "PremiumReceived", "", (long) CacheProfile.getOptions().premium_period);
                         if (getActivity() != null) {
 
                             Toast.makeText(getActivity(), Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period), Toast.LENGTH_SHORT).show();
@@ -153,8 +153,8 @@ public class ContactsFragment extends BaseFragment {
                             getActivity().finish();
                         }
                     } else {
-                        EasyTracker.getTracker().trackEvent("InvitesPopup", "SuccessWithChecked", "premiumFalse", (long) contacts.size());
-                        Toast.makeText(getActivity(), getString(R.string.invalid_contacts), Toast.LENGTH_LONG).show();
+                        EasyTracker.getTracker().sendEvent("InvitesPopup", "SuccessWithChecked", "premiumFalse", (long) contacts.size());
+                        Toast.makeText(getActivity(), getString(R.string.invalid_contacts), 2000).show();
                         if (contactsVip != null) {
                             contactsVip.setEnabled(true);
                         }
@@ -162,8 +162,8 @@ public class ContactsFragment extends BaseFragment {
                 }
 
                 @Override
-                public void fail(int codeError, IApiResponse response) {
-                    EasyTracker.getTracker().trackEvent("InvitesPopup", "RequestFail", Integer.toString(codeError), 0L);
+                public void fail(int codeError, ApiResponse response) {
+                    EasyTracker.getTracker().sendEvent("InvitesPopup", "RequestFail", Integer.toString(codeError), 0L);
                     if (contactsVip != null) {
                         contactsVip.setEnabled(true);
                     }

@@ -50,7 +50,7 @@ public class AirMessagesPopupFragment extends BaseFragment implements View.OnCli
         }
 
         if (!mUserClickButton) {
-            EasyTracker.getTracker().trackEvent("AirMessages", "Dismiss", "BackClose", 0L);
+            EasyTracker.getTracker().sendEvent("AirMessages", "Dismiss", "BackClose", 0L);
         }
     }
 
@@ -62,7 +62,7 @@ public class AirMessagesPopupFragment extends BaseFragment implements View.OnCli
                     .add(android.R.id.content, new AirMessagesPopupFragment())
                     .addToBackStack(null)
                     .commit();
-            EasyTracker.getTracker().trackEvent("AirMessages", "Show", "", 0L);
+            EasyTracker.getTracker().sendEvent("AirMessages", "Show", "", 0L);
         }
     }
 
@@ -91,10 +91,10 @@ public class AirMessagesPopupFragment extends BaseFragment implements View.OnCli
                         ContainerActivity.getVipBuyIntent(getMessage(), "VipDelivery"),
                         ContainerActivity.INTENT_BUY_VIP_FRAGMENT
                 );
-                EasyTracker.getTracker().trackEvent("AirMessages", "ClickBuyVip", "", 0L);
+                EasyTracker.getTracker().sendEvent("AirMessages", "ClickBuyVip", "", 0L);
                 break;
             case R.id.deleteMessages:
-                EasyTracker.getTracker().trackEvent("AirMessages", "Dismiss", "Delete", 0L);
+                EasyTracker.getTracker().sendEvent("AirMessages", "Dismiss", "Delete", 0L);
                 break;
         }
 

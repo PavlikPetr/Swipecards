@@ -48,6 +48,6 @@ public class FilterRequest extends ApiRequest {
     @Override
     public void exec() {
         super.exec();
-        EasyTracker.getTracker().trackEvent("Dating", "ChangeFilter", "", 1L);
+        EasyTracker.getTracker().sendEvent("Dating", "ChangeFilter", "", 1L);
     }
 }

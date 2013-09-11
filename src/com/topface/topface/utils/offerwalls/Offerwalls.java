@@ -40,7 +40,7 @@ public class Offerwalls {
     private static final Float GETJAT_MAX_MARKUP = 0.1f; //TODO
 
     private static String getOfferWallType() {
-        return Options.GETJAR;//CacheProfile.getOptions().offerwall;
+        return CacheProfile.getOptions().offerwall;
     }
 
     public static void init(Context context) {
