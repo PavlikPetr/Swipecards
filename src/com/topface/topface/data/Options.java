@@ -17,7 +17,6 @@ import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
 import org.json.JSONArray;
@@ -98,7 +97,7 @@ public class Options extends AbstractData {
             BANNER_MOPUB,
             BANNER_IVENGO,
             BANNER_ADCAMP,
-            BANNER_LIFESTREET,                        
+            BANNER_LIFESTREET,
             BANNER_ADLAB,
             BANNER_GAG,
             BANNER_NONE
@@ -156,6 +155,7 @@ public class Options extends AbstractData {
     public boolean block_chat_not_mutual;
     public Closing closing = new Closing();
     public PremiumAirEntity premium_messages;
+    public PremiumAirEntity premium_visitors;
     public GetJar getJar;
     public String gagTypeBanner = BANNER_ADMOB;
     public String gagTypeFullscreen = BANNER_NONE;
@@ -223,8 +223,17 @@ public class Options extends AbstractData {
                         response.jsonResult.optJSONObject("premium_messages"), PremiumAirEntity.AIR_MESSAGES
                 );
             } else {
-                options.premium_messages = new PremiumAirEntity(false, 10, 1000);
+                options.premium_messages = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_MESSAGES);
             }
+
+            if (response.jsonResult.has("visitors_popup")) {
+                options.premium_visitors = new PremiumAirEntity(
+                        response.jsonResult.optJSONObject("visitors_popup"), PremiumAirEntity.AIR_GUESTS
+                );
+            } else {
+                options.premium_visitors = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_GUESTS);
+            }
+
 
             if (response.jsonResult.has("links")) {
                 JSONObject links = response.jsonResult.optJSONObject("links");
@@ -243,9 +252,9 @@ public class Options extends AbstractData {
             options.ratePopupType = response.jsonResult.optJSONObject("rate_popup").optString("type");
 
             JSONObject getJar = response.jsonResult.optJSONObject("getjar");
-            options.getJar = new GetJar(getJar.optString("id"),getJar.optString("name"),getJar.optLong("price"));
+            options.getJar = new GetJar(getJar.optString("id"), getJar.optString("name"), getJar.optLong("price"));
 
-            options.gagTypeBanner = response.jsonResult.optString("gag_type_banner",Options.BANNER_ADMOB);
+            options.gagTypeBanner = response.jsonResult.optString("gag_type_banner", Options.BANNER_ADMOB);
             options.gagTypeFullscreen = response.jsonResult.optString("gag_type_fullscreen", Options.BANNER_NONE);
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
@@ -368,7 +377,7 @@ public class Options extends AbstractData {
     }
 
     public boolean containsBannerType(String bannerType) {
-        for (Page page: pages.values()) {
+        for (Page page : pages.values()) {
             if (page.banner.equals(bannerType)) {
                 return true;
             }
@@ -401,7 +410,7 @@ public class Options extends AbstractData {
         public static Page parseFromString(String str) {
             String[] params = str.split(SEPARATOR);
             if (params.length == 3) {
-                return new Page(params[0],params[1],params[2]);
+                return new Page(params[0], params[1], params[2]);
             } else {
                 return null;
             }
@@ -464,10 +473,11 @@ public class Options extends AbstractData {
             }
         }
 
-        public PremiumAirEntity(boolean enabled, int count, int timeout) {
+        public PremiumAirEntity(boolean enabled, int count, int timeout, int type) {
             mEnabled = enabled;
             mCount = count;
             mTimeout = timeout;
+            airType = type;
         }
 
         public int getCount() {
@@ -512,6 +522,7 @@ public class Options extends AbstractData {
                     .getLong(getPrefsConstant(), 0);
         }
     }
+
 
 
 
@@ -575,15 +586,15 @@ public class Options extends AbstractData {
         }
 
         public boolean isMutualClosingAvailable() {
-            SharedPreferences pref =  App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+            SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
             long currentTime = System.currentTimeMillis();
-            long lastCallTime = pref.getLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME,0);
+            long lastCallTime = pref.getLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME, 0);
             return DateUtils.isOutside24Hours(lastCallTime, System.currentTimeMillis());
         }
 
         public boolean isLikesClosingAvailable() {
-            SharedPreferences pref =  App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-            long lastCallTime = pref.getLong(Static.PREFERENCES_LIKES_CLOSING_LAST_TIME,0);
+            SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+            long lastCallTime = pref.getLong(Static.PREFERENCES_LIKES_CLOSING_LAST_TIME, 0);
             return DateUtils.isOutside24Hours(lastCallTime, System.currentTimeMillis());
         }
 
@@ -598,7 +609,7 @@ public class Options extends AbstractData {
         String name = "coins";
         long price = Integer.MAX_VALUE;
 
-        public GetJar(String id,String name,long price) {
+        public GetJar(String id, String name, long price) {
             this.id = id;
             this.name = name;
             this.price = price;
