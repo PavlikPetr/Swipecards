@@ -538,4 +538,5 @@
     <string name="settings_feedback_transaction_number_hint">Enter order number</string>
     <string name="youve_earned">You\'ve earned %s</string>
     <string name="like_topface">Do you like Topface?</string>
+    <string name="delete_visitors">Delete visitors</string>
 </resources>

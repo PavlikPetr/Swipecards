@@ -42,7 +42,7 @@ public class AirMessagesPopupFragment extends BaseFragment implements View.OnCli
         mPremiumEntity = airType == Options.PremiumAirEntity.AIR_MESSAGES?
                 CacheProfile.getOptions().premium_messages : CacheProfile.getOptions().premium_visitors;
 
-        setNeedTitles(false);
+//        setNeedTitles(false);
     }
 
     @Override
