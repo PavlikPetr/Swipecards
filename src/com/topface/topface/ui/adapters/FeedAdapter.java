@@ -190,7 +190,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
         convertView.setTag(holder);
         if (mSelectionController.isSelected(position)) {
-            convertView.setBackgroundResource(R.drawable.feed_bg_pressed);
+            convertView.setBackgroundResource(R.drawable.feed_bg_selected);
         } else {
             if (Build.VERSION.SDK_INT >= 16) {
                 convertView.setBackground(holder.background);
