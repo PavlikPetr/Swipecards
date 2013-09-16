@@ -537,6 +537,7 @@
     <string name="settings_feedback_transaction_number_hint">Inserisci il numero dell’ordine</string>
     <string name="youve_earned">Hai guadagnato %s</string>
     <string name="like_topface">Ti piace Topface?</string>
+    <string name="photo_is_uploading">Caricamento della foto</string>
     <plurals name="selected">
         <item quantity="other">%d scelti</item>
         <item quantity="one">%d scelto</item>
