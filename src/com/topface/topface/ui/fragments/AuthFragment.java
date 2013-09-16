@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.*;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -489,7 +487,7 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void getOptions() {
-        final OptionsRequest request = new OptionsRequest(getActivity());
+        final AppOptionsRequest request = new AppOptionsRequest(getActivity());
         registerRequest(request);
         if (isAdded()) {
             hideButtons();

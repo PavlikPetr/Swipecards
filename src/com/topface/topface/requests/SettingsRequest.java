@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 public class SettingsRequest extends ApiRequest {
     // Data
-    public static final String service = "settings";
+    public static final String service = "user.setProfile";
     public String name; // новое имя пользователя в UTF-8
     public int age = -1; // возраст пользователя. Минимальное значение - 12,
     // максимальное - 99. Если указано меньше

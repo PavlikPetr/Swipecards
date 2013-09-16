@@ -5,7 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class VisitorsMarkReadedRequest extends ApiRequest{
-    public static String SERVICE_NAME = "visitorsMarkReaded";
+    public static String SERVICE = "visitor.markAllRead";
 
     public VisitorsMarkReadedRequest(Context context) {
         super(context);
@@ -18,6 +18,6 @@ public class VisitorsMarkReadedRequest extends ApiRequest{
 
     @Override
     public String getServiceName() {
-        return SERVICE_NAME;
+        return SERVICE;
     }
 }

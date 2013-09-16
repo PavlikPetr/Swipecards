@@ -165,7 +165,6 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
     @Override
     protected void fillData(JSONObject photoItem) {
         super.fillData(photoItem);
-
         if (photoItem != null && photoItem.has("id")) {
             mId = photoItem.optInt("id");
             JSONObject linksJson = photoItem.optJSONObject("links");
@@ -176,13 +175,13 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
 
                 while (photoKeys.hasNext()) {
                     String key = photoKeys.next().toString();
-
                     links.put(key, linksJson.optString(key));
                 }
             }
             canBecomeLeader = photoItem.optBoolean("canBecomeLeader");
             mLiked = photoItem.optInt("liked");
             position = photoItem.optInt("position", 0);
+            //TODO clarify parameter: added
             initIntervals();
         }
     }

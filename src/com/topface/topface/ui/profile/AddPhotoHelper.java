@@ -244,6 +244,7 @@ public class AddPhotoHelper {
         });
 
         final PhotoAddRequest photoAddRequest = new PhotoAddRequest(uri, mContext);
+        //TODO также обрабатывать запросы с id...x, где x-порядковый номер переповтора
         fileNames.put(photoAddRequest.getId(), outputFile);
 
         final BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -308,6 +309,7 @@ public class AddPhotoHelper {
                     public void run() {
                         try {
                             String id = photoAddRequest.getId();
+                            //TODO также обрабатывать запросы с id...x, где x-порядковый номер переповтора
                             if (fileNames != null) {
                                 if (fileNames.size() != 0) {
                                     if (fileNames.get(id).delete()) {

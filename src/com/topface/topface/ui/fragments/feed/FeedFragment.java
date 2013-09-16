@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.ActionMode;
@@ -369,7 +370,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     // CAB actions
     private void onRemoveFromBlackList(List<Integer> usersIds, final List<T> items) {
         mLockView.setVisibility(View.VISIBLE);
-        new BlackListDeleteRequest(usersIds, getActivity())
+        new BlackListDeleteManyRequest(usersIds, getActivity())
                 .callback(new VipApiHandler() {
                     @Override
                     public void success(IApiResponse response) {
@@ -404,7 +405,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     private void onDeleteFeedItems(List<String> ids, final List<T> items) {
         mLockView.setVisibility(View.VISIBLE);
-        FeedDeleteManyRequest dr = new FeedDeleteManyRequest(ids, getActivity());
+        DeleteFeedsRequest dr = getDeleteRequest(ids, getActivity());
+        if (dr == null) return;
         dr.callback(new SimpleApiHandler() {
             @Override
             public void success(IApiResponse response) {
@@ -423,6 +425,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
         }).exec();
     }
+
+    protected abstract DeleteFeedsRequest getDeleteRequest(List<String> ids, Context context);
 
     private void onDeleteBookmarksItems(final List<Integer> usersIds, final List<T> items) {
         BookmarkDeleteManyRequest request = new BookmarkDeleteManyRequest(getActivity(), usersIds);

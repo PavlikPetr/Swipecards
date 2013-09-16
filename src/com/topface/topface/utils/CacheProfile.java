@@ -34,7 +34,6 @@ public class CacheProfile {
     public static City city;           // город пользователя
     public static int money;           // количество монет у пользователя
     public static int likes;           // количество симпатий пользователя
-    public static int average_rate;    // средняя оценка текущего пользователя
     public static DatingFilter dating; //Фильтр поиска
 
     public static boolean paid; // признак платящего пользоателя
@@ -96,19 +95,17 @@ public class CacheProfile {
     public static Profile getProfile() {
         Profile profile = new Profile();
         profile.uid = uid;
-        profile.first_name = first_name;
+        profile.firstName = first_name;
         profile.age = age;
         profile.sex = sex;
 
         profile.money = money;
         profile.likes = likes;
 
-        profile.average_rate = average_rate;
-
         profile.notifications = notifications;
         profile.hasMail = hasMail;
-        profile.email_confirmed = emailConfirmed;
-        profile.email_grabbed = emailGrabbed;
+        profile.emailConfirmed = emailConfirmed;
+        profile.emailGrabbed = emailGrabbed;
 
         profile.premium = premium;
         profile.invisible = invisible;
@@ -156,7 +153,7 @@ public class CacheProfile {
             case ProfileRequest.P_ALL:
                 Editor.init(profile);
                 uid = profile.uid;
-                first_name = profile.first_name;
+                first_name = profile.firstName;
                 age = profile.age;
                 sex = profile.sex;
                 city = profile.city;
@@ -164,12 +161,10 @@ public class CacheProfile {
                 money = profile.money;
                 likes = profile.likes;
 
-                average_rate = profile.average_rate;
-
                 notifications = profile.notifications;
                 hasMail = profile.hasMail;
-                emailConfirmed = profile.email_confirmed;
-                emailGrabbed = profile.email_grabbed;
+                emailConfirmed = profile.emailConfirmed;
+                emailGrabbed = profile.emailGrabbed;
 
                 premium = profile.premium;
                 invisible = profile.invisible;

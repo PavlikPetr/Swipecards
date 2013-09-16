@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 public class SendMailNotificationsRequest extends ApiRequest {
 
-    private static final String SERVICE_NAME = "notifications";
+    private static final String SERVICE_NAME = "notification.setOptions";
 
     public Boolean mailsympathy = null;
     public Boolean mailmutual = null;

@@ -2,6 +2,7 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.topface.Static;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,16 +10,16 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FeedDeleteManyRequest extends ApiRequest {
-    private List<String> mIds;
+public abstract class DeleteFeedsRequest extends ApiRequest {
 
+    protected List<String> mIds;
 
-    public FeedDeleteManyRequest(List<String> ids, Context context) {
+    public DeleteFeedsRequest(List<String> ids, Context context) {
         super(context);
         mIds = ids;
     }
 
-    public FeedDeleteManyRequest(String id, Context context) {
+    public DeleteFeedsRequest(String id, Context context) {
         super(context);
         List<String> list = new ArrayList<String>();
         list.add(id);
@@ -33,17 +34,17 @@ public class FeedDeleteManyRequest extends ApiRequest {
     }
 
     @Override
-    public String getServiceName() {
-        return "feedDeleteMany";
-    }
+    public abstract String getServiceName();
 
     @Override
     public void exec() {
         if (mIds != null && mIds.size() > 0) {
             super.exec();
-            EasyTracker.getTracker().sendEvent("Feed", "Delete", "", 1L);
+            EasyTracker.getTracker().sendEvent("Feed", "Delete", getFeedType(), 1L);
         } else {
             handleFail(ApiResponse.ERRORS_PROCCESED, "User list for delete from black list is empty");
         }
     }
+
+    protected abstract String getFeedType();
 }

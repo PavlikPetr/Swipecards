@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DialogDeleteManyRequest extends ApiRequest {
-    private static final String SERVICE_NAME = "dialogDeleteMany";
+    private static final String SERVICE_NAME = "dialog.delete";
     private final List<Integer> mUsersIds;
 
     public DialogDeleteManyRequest(List<Integer> usersIds, Context context) {
@@ -26,7 +26,7 @@ public class DialogDeleteManyRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        return new JSONObject().put("userids", new JSONArray(mUsersIds));
+        return new JSONObject().put("userid", new JSONArray(mUsersIds)); //TODO clarify parameter: userid=>userids
     }
 
     @Override

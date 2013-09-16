@@ -6,7 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LogoutRequest extends ApiRequest {
-    public static final String service = "logout";
+    public static final String service = "auth.logout";
 
     public LogoutRequest(Context context) {
         super(context);

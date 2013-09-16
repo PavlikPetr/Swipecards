@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 public class QuestionaryRequest extends ApiRequest {
     // Data
-    public static final String service = "questionary";
+    public static final String service = "user.setQuestionary";
     public int jobid = -1; // идентификатор рабочей партии пользователя
     public String job; // описание оригинальной работы пользователя
     public int statusid = -1; // идентификатор предопределенного статуса

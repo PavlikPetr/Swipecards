@@ -7,7 +7,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.requests.FeedRequest;
-import com.topface.topface.requests.RateRequest;
+import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.SkipAllClosedRequest;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
@@ -93,16 +93,19 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
                 EasyTracker.getTracker().sendEvent(getTrackName(), "Mutual", "", 1L);
                 FeedUser currentUser = getCurrentUser();
                 if (currentUser != null) {
-                    getRateController().onRate(currentUser.id, 9, RateRequest.DEFAULT_MUTUAL, new RateController.OnRateListener() {
-                        @Override
-                        public void onRateCompleted() {
-                            if (isAdded()) refreshActionBarTitles();
-                        }
+                    getRateController().onLike(
+                            currentUser.id,
+                            SendLikeRequest.DEFAULT_MUTUAL,
+                            new RateController.OnRateRequestListener() {
+                                @Override
+                                public void onRateCompleted() {
+                                    if (isAdded()) refreshActionBarTitles();
+                                }
 
-                        @Override
-                        public void onRateFailed() {
-                        }
-                    });
+                                @Override
+                                public void onRateFailed() {
+                                }
+                            });
                     showNextUser();
                 }
                 break;

@@ -556,4 +556,5 @@
         <item quantity="other">You have %d visitors</item>
     </plurals>
     <string name="delete_visitors">delete visitors</string>
+    <string name="photo_is_uploading">Uploading photo</string>
 </resources>

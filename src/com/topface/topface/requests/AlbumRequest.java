@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 public class AlbumRequest extends ApiRequest {
 
-    public static final String SERVICE_NAME = "album";
+    public static final String SERVICE_NAME = "photo.getList";
 
     public static final String MODE_ALBUM = "album";  // Фотографии в обратном порядке добавление
     public static final String MODE_SEARCH = "search"; // Первая фотка главная

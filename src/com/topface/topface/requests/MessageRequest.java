@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 public class MessageRequest extends ConfirmedApiRequest {
     // Data
-    public static final String service = "message";
+    public static final String service = "message.send";
     private int mUserId; // идентификатор пользователя, кому послали сообщение
     private String mMessage; // текст сообщения в UTF-8. min размер текста - 1 символ, max - 1024
 

@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 public class FeedbackReport extends ApiRequest {
 
-    public static final String service = "clientFeedback";
+    public static final String service = "user.sendFeedback";
 
     public String subject;
     public String text;

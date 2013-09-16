@@ -17,6 +17,8 @@ import java.util.LinkedList;
 
 public class UsersList<T extends FeedUser> extends LinkedList<T> implements SerializableToJson {
 
+    public static final String USERS = "users";
+
     /**
      * Определяет за сколько пользователей до конца списка нужно предзагружать список
      */
@@ -152,7 +154,7 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
 
     private void parseResult(JSONObject jsonResult) {
         if (jsonResult != null) {
-            fillList(jsonResult.optJSONArray("users"));
+            fillList(jsonResult.optJSONArray(USERS));
         }
     }
 
@@ -239,7 +241,7 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
             usersJson.put(user.toJson());
         }
 
-        return new JSONObject().put("users", usersJson);
+        return new JSONObject().put(USERS, usersJson);
     }
 
     @SuppressWarnings("unchecked")

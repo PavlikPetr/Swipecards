@@ -20,7 +20,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.ProfileDelete;
+import com.topface.topface.requests.ProfileDeleteRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
@@ -80,7 +80,7 @@ public class DeleteAccountDialog extends DialogFragment implements View.OnClickL
                                 progress.setMessage(getActivity().getResources().getString(R.string.settings_delete_account));
                                 progress.show();
 
-                                ProfileDelete request = new ProfileDelete(5,
+                                ProfileDeleteRequest request = new ProfileDeleteRequest(5,
                                         "From Android Device", getActivity());
                                 request.callback(new ApiHandler() {
                                     @Override

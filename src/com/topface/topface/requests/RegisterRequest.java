@@ -7,7 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class RegisterRequest extends ApiRequest {
-    public static final String SERVICE_NAME = "register";
+    public static final String SERVICE_NAME = "register.createAccount";
 
     private String login;
     private String password;

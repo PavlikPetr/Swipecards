@@ -16,6 +16,7 @@ import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
@@ -61,63 +62,10 @@ public class Options extends AbstractData {
             PAGE_GAG
     };
 
-    public final static String GENERAL_MAIL_CONST = "mail";
-    public final static String GENERAL_APNS_CONST = "apns";
-    public final static String GENERAL_SEPARATOR = ":";
+    public final static String INNER_MAIL_CONST = "mail";
+    public final static String INNER_APNS_CONST = "apns";
+    public final static String INNER_SEPARATOR = ":";
 
-    /**
-     * Идентификаторы для типов блоков (лидеры, баннеры, не показывать блоки)
-     */
-    public final static String FLOAT_TYPE_BANNER = "BANNER";
-    public final static String FLOAT_TYPE_LEADERS = "LEADERS";
-    public final static String FLOAT_TYPE_NONE = "NONE";
-    public final static String[] FLOAT_TYPES = new String[]{
-            FLOAT_TYPE_BANNER,
-            FLOAT_TYPE_LEADERS,
-            FLOAT_TYPE_NONE
-    };
-
-    /**
-     * Идентификаторы типов баннеров
-     */
-    public final static String BANNER_TOPFACE = "TOPFACE";
-    public final static String BANNER_ADMOB = "ADMOB";
-    public static final String BANNER_ADWIRED = "ADWIRED";
-    public static final String BANNER_MOPUB = "MOPUB";
-    public static final String BANNER_IVENGO = "IVENGO";
-    public static final String BANNER_ADCAMP = "ADCAMP";
-    public static final String BANNER_LIFESTREET = "LIFESTREET";
-    public static final String BANNER_ADLAB = "ADLAB";
-    public static final String BANNER_GAG = "GAG";
-    public static final String BANNER_NONE = "NONE";
-    public final static String[] BANNERS = new String[]{
-            BANNER_TOPFACE,
-            BANNER_ADMOB,
-            BANNER_ADWIRED,
-            BANNER_MOPUB,
-            BANNER_IVENGO,
-            BANNER_ADCAMP,
-            BANNER_LIFESTREET,
-            BANNER_ADLAB,
-            BANNER_GAG,
-            BANNER_NONE
-    };
-
-    /**
-     * Идентификаторы для типов офферволлов
-     */
-    public static final String TAPJOY = "TAPJOY";
-    public static final String SPONSORPAY = "SPONSORPAY";
-    public static final String CLICKKY = "CLICKKY";
-    public static final String RANDOM = "RANDOM";
-    public static final String GETJAR = "GETJAR";
-    public final static String[] OFFERWALLS = new String[]{
-            TAPJOY,
-            SPONSORPAY,
-            CLICKKY,
-            GETJAR,
-            RANDOM
-    };
     public static final String PREMIUM_MESSAGES_POPUP_SHOW_TIME = "premium_messages_popup_last_show";
     public static final String PREMIUM_VISITORS_POPUP_SHOW_TIME = "premium_visitors_popup_last_show";
     /**
@@ -132,17 +80,15 @@ public class Options extends AbstractData {
     public String ratePopupType;
     private String paymentwall;
 
-    public String max_version = "2147483647"; //Integer.MAX_VALUE);
-
+    public String maxVersion = "2147483647";
     /**
      * Стоимость отправки "Восхищения"
      */
-    public int price_highrate = 1;
+    public int priceAdmiration = 1;
     /**
      * Стоимость вставания в лидеры
      */
-    public int price_leader = 6;
-
+    public int priceLeader = 8;
     public int minLeadersPercent = 25; //Не уверен в этом, возможно стоит использовать другое дефолтное значение
 
     public String offerwall;
@@ -157,32 +103,34 @@ public class Options extends AbstractData {
     public PremiumAirEntity premium_messages;
     public PremiumAirEntity premium_visitors;
     public GetJar getJar;
-    public String gagTypeBanner = BANNER_ADMOB;
-    public String gagTypeFullscreen = BANNER_NONE;
+    public String gagTypeBanner = BannerBlock.BANNER_ADMOB;
+    public String gagTypeFullscreen = BannerBlock.BANNER_NONE;
 
     public static Options parse(ApiResponse response) {
         Options options = new Options();
 
         try {
             options.saleExists = false;
-            options.price_highrate = response.jsonResult.optInt("price_highrate");
-            options.price_leader = response.jsonResult.optInt("price_leader");
-            options.minLeadersPercent = response.jsonResult.optInt("leader_percent");
+            options.priceAdmiration = response.jsonResult.optInt("admirationPrice");
+            options.priceLeader = response.jsonResult.optInt("leaderPrice");
+            options.minLeadersPercent = response.jsonResult.optInt("leaderPercent");
             // Pages initialization
             JSONArray pages = response.jsonResult.optJSONArray("pages");
             for (int i = 0; i < pages.length(); i++) {
                 JSONObject page = pages.getJSONObject(i);
-
-                String pageName = getPageName(page);
-                String floatType = page.optString("float");
-                String bannerType = page.optString("banner");
-
-                options.pages.put(pageName, new Page(pageName, floatType, bannerType));
+                String pageName = getPageName(page, "name");
+                options.pages.put(pageName,
+                        new Page(
+                                pageName,
+                                page.optString("float"),
+                                page.optString("banner")
+                        )
+                );
             }
             options.offerwall = response.jsonResult.optString("offerwall");
-            options.max_version = response.jsonResult.optString("max_version");
-            options.block_unconfirmed = response.jsonResult.optBoolean("block_unconfirmed");
-            options.block_chat_not_mutual = response.jsonResult.optBoolean("block_chat_not_mutual");
+            options.maxVersion = response.jsonResult.optString("maxVersion");
+            options.block_unconfirmed = response.jsonResult.optBoolean("blockUnconfirmed");
+            options.block_chat_not_mutual = response.jsonResult.optBoolean("blockChatNotMutual");
 
             JSONObject purchases = response.jsonResult.optJSONObject("purchases");
             if (purchases != null) {
@@ -213,22 +161,22 @@ public class Options extends AbstractData {
                 }
             }
 
-            JSONObject contacts_invite = response.jsonResult.optJSONObject("contacts_invite");
-            options.premium_period = contacts_invite.optInt("premium_period");
-            options.contacts_count = contacts_invite.optInt("contacts_count");
-            options.popup_timeout = contacts_invite.optInt("show_popup_timeout") * 60 * 60 * 1000;
+            JSONObject contacts_invite = response.jsonResult.optJSONObject("inviteContacts");
+            options.premium_period = contacts_invite.optInt("premiumPeriod");
+            options.contacts_count = contacts_invite.optInt("contactsCount");
+            options.popup_timeout = contacts_invite.optInt("showPopupTimeout") * 60 * 60 * 1000;
 
-            if (response.jsonResult.has("premium_messages")) {
+            if (response.jsonResult.has("premiumMessages")) {
                 options.premium_messages = new PremiumAirEntity(
-                        response.jsonResult.optJSONObject("premium_messages"), PremiumAirEntity.AIR_MESSAGES
+                        response.jsonResult.optJSONObject("premiumMessages"), PremiumAirEntity.AIR_MESSAGES
                 );
             } else {
                 options.premium_messages = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_MESSAGES);
             }
 
-            if (response.jsonResult.has("visitors_popup")) {
+            if (response.jsonResult.has("visitorsPopup")) {
                 options.premium_visitors = new PremiumAirEntity(
-                        response.jsonResult.optJSONObject("visitors_popup"), PremiumAirEntity.AIR_GUESTS
+                        response.jsonResult.optJSONObject("visitorsPopup"), PremiumAirEntity.AIR_GUESTS
                 );
             } else {
                 options.premium_visitors = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_GUESTS);
@@ -244,18 +192,21 @@ public class Options extends AbstractData {
 
             JSONObject closings = response.jsonResult.optJSONObject("closing");
             if (options.closing == null) options.closing = new Closing();
-            options.closing.enabledMutual = closings.optBoolean("enabled_mutual");
-            options.closing.enabledSympathies = closings.optBoolean("enabled_sympathies");
-            options.closing.limitMutual = closings.optInt("limit_mutual");
-            options.closing.limitSympathies = closings.optInt("limit_sympathies");
+            options.closing.enabledMutual = closings.optBoolean("enabledMutual");
+            options.closing.enabledSympathies = closings.optBoolean("enabledSympathies");
+            options.closing.limitMutual = closings.optInt("limitMutual");
+            options.closing.limitSympathies = closings.optInt("limitSympathies");
 
-            options.ratePopupType = response.jsonResult.optJSONObject("rate_popup").optString("type");
+            //TODO clarify parameter: timeout
+            options.ratePopupType = response.jsonResult.optJSONObject("ratePopup").optString("type");
 
             JSONObject getJar = response.jsonResult.optJSONObject("getjar");
             options.getJar = new GetJar(getJar.optString("id"), getJar.optString("name"), getJar.optLong("price"));
 
-            options.gagTypeBanner = response.jsonResult.optString("gag_type_banner", Options.BANNER_ADMOB);
-            options.gagTypeFullscreen = response.jsonResult.optString("gag_type_fullscreen", Options.BANNER_NONE);
+            options.gagTypeBanner = response.jsonResult.optString("gagTypeBanner", BannerBlock.BANNER_ADMOB);
+            options.gagTypeFullscreen = response.jsonResult.optString("gagTypeFullscreen", BannerBlock.BANNER_NONE);
+
+            //TODO need protocol: premiumShowAd, minVersion
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
         }
@@ -264,8 +215,8 @@ public class Options extends AbstractData {
         return options;
     }
 
-    private static String getPageName(JSONObject page) {
-        String name = page.optString("name");
+    private static String getPageName(JSONObject page, String key) {
+        String name = page.optString(key);
         if (PAGE_LIKES.equals(name)) {
             return PAGE_LIKES;
         } else if (PAGE_MUTUAL.equals(name)) {
@@ -308,7 +259,7 @@ public class Options extends AbstractData {
     }
 
     public static String generateKey(int type, boolean isMail) {
-        return Integer.toString(type) + GENERAL_SEPARATOR + ((isMail) ? GENERAL_MAIL_CONST : GENERAL_APNS_CONST);
+        return Integer.toString(type) + INNER_SEPARATOR + ((isMail) ? INNER_MAIL_CONST : INNER_APNS_CONST);
     }
 
     public static RelativeLayout setButton(LinearLayout root, final BuyButton curBtn, Context context, final BuyButtonClickListener l) {

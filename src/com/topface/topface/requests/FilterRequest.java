@@ -8,7 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class FilterRequest extends ApiRequest {
-    private static final String SERVICE_NAME = "filter";
+    private static final String SERVICE_NAME = "search.setFilter";
 
     protected DatingFilter filter;
 
@@ -22,9 +22,9 @@ public class FilterRequest extends ApiRequest {
         JSONObject data = new JSONObject()
                 .put("beautiful", filter.beautiful)
                 .put("sex", filter.sex)
-                .put("city", filter.city.id)
-                .put("agebegin", filter.age_start)
-                .put("ageend", filter.age_end)
+                .put("cityId", filter.city.id)
+                .put("agebegin", filter.ageStart) //TODO clarify parameter: ageStart or ageBegin
+                .put("ageend", filter.ageEnd) //TODO camel case: ageEnd
                 .put("xstatus", filter.xstatus)
                 .put("marriage", filter.marriage)
                 .put("character", filter.character)

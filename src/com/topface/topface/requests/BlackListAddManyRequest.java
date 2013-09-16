@@ -12,7 +12,7 @@ import java.util.List;
  * Запрос добавляющий пользователя в черный список
  */
 public class BlackListAddManyRequest extends ApiRequest {
-    public static final String SERVICE_NAME = "blacklistAddMany";
+    public static final String SERVICE_NAME = "blacklist.add";
     /**
      * id пользователя, котогорого нужно добавить в черный список
      */

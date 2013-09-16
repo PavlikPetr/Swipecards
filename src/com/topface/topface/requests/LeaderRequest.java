@@ -7,7 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LeaderRequest extends ApiRequest {
-    public static final String SERVICE_NAME = "leader";
+    public static final String SERVICE_NAME = "leader.become";
     private int mPhotoId;
 
     public LeaderRequest(int photoId, Context context) {
@@ -28,6 +28,6 @@ public class LeaderRequest extends ApiRequest {
     @Override
     public void exec() {
         super.exec();
-        EasyTracker.getTracker().sendEvent("Leaders", "Buy", "", (long) CacheProfile.getOptions().price_leader);
+        EasyTracker.getTracker().sendEvent("Leaders", "Buy", "", (long) CacheProfile.getOptions().priceLeader);
     }
 }

@@ -15,7 +15,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 
 public class PhotoAddRequest extends ApiRequest {
-    public static final String SERVICE_NAME = "photoAdd";
+    public static final String SERVICE_NAME = "photo.add";
 
     //Данные для конструирования HTTP запроса
     public static final String BOUNDARY = "FAfsadkfn23412034aHJSAdnk";

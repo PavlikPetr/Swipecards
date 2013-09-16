@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 public class LeadersRequest extends ApiRequest {
 
-    public static final String SERVICE_NAME = "leaders";
+    public static final String SERVICE_NAME = "leader.getList";
 
     public LeadersRequest(Context context) {
         super(context);

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 
 public class VirusLikesRequest extends ConfirmedApiRequest {
-    public static final String SERVICE_NAME = "virusLikes";
+    public static final String SERVICE = "virus.sendLikes";
     /**
      * идентификатор сообщения из ленты для получения лайков. Если параметр указан, данное сообщение будет удалено
      */
@@ -50,6 +50,6 @@ public class VirusLikesRequest extends ConfirmedApiRequest {
 
     @Override
     public String getServiceName() {
-        return SERVICE_NAME;
+        return SERVICE;
     }
 }

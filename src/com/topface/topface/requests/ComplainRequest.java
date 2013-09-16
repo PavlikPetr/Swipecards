@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 public class ComplainRequest extends ApiRequest {
 
-    public static final String SERVICE_NAME = "complain";
+    public static final String SERVICE_NAME = "moderation.complain";
     public enum ClassNames {WALL_MSG, PHOTO, PRIVATE_MSG, USER, LEADER};
     public enum TypesNames {SWEARING, ERO, FAKE_USER, FAKE_DATA, FAKE_PHOTO, PORN, SPAM};
 

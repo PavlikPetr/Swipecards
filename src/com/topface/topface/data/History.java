@@ -25,7 +25,7 @@ public class History extends FeedDialog implements Parcelable {
     }
 
     public History(ApiResponse response) {
-        super(response.jsonResult.optJSONObject("item"));
+        super(response.jsonResult);
         mJsonForParse = response.jsonResult.toString();
     }
 

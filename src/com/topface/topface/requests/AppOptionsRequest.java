@@ -7,12 +7,12 @@ import org.json.JSONObject;
 /**
  * Реализация метода api options
  */
-public class OptionsRequest extends ApiRequest {
+public class AppOptionsRequest extends ApiRequest {
 
-    public static final String SERVICE_NAME = "options";
+    public static final String SERVICE_NAME = "user.getAppOptions";
     public static final String VERSION_INTENT = "com.topface.topface.OPTIONS";
 
-    public OptionsRequest(Context context) {
+    public AppOptionsRequest(Context context) {
         super(context);
         doNeedAlert(false);
     }

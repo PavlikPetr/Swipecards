@@ -128,7 +128,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         initMutualDrawables();
         // Rate Controller
         mRateController = new RateController(getActivity());
-        mRateController.setOnRateControllerListener(this);
+        mRateController.setOnRateControllerUiListener(this);
     }
 
     @Override
@@ -161,7 +161,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         setHighRatePrice();
         updateResources();
-        setActionBarTitles(getTitle(),getSubtitle());
+        setActionBarTitles(getTitle(), getSubtitle());
     }
 
     @Override
@@ -218,9 +218,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void setHighRatePrice() {
         // Dating Love Price
-        final int delightPrice = CacheProfile.getOptions().price_highrate;
+        final int delightPrice = CacheProfile.getOptions().priceAdmiration;
         if (delightPrice > 0) {
-            mDatingLovePrice.setText(Integer.toString(CacheProfile.getOptions().price_highrate));
+            mDatingLovePrice.setText(Integer.toString(CacheProfile.getOptions().priceAdmiration));
         } else {
             mDatingLovePrice.setVisibility(View.GONE);
         }
@@ -270,12 +270,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     protected String getTitle() {
         if (CacheProfile.dating != null) {
-            int age = CacheProfile.dating.age_end == DatingFilter.webAbsoluteMaxAge ?
-                    EditAgeFragment.absoluteMax : CacheProfile.dating.age_end;
+            int age = CacheProfile.dating.ageEnd == DatingFilter.webAbsoluteMaxAge ?
+                    EditAgeFragment.absoluteMax : CacheProfile.dating.ageEnd;
             String headerText = getString(CacheProfile.dating.sex == Static.BOY ?
                     R.string.dating_header_guys : R.string.dating_header_girls,
-                    CacheProfile.dating.age_start, age);
-            String plus = CacheProfile.dating.age_end == DatingFilter.webAbsoluteMaxAge ? "+" : "";
+                    CacheProfile.dating.ageStart, age);
+            String plus = CacheProfile.dating.ageEnd == DatingFilter.webAbsoluteMaxAge ? "+" : "";
             return headerText + plus;
         }
         return Static.EMPTY;
@@ -320,7 +320,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mUserSearchList != null) {
             mUserSearchList.updateSignatureAndUpdate();
         }
-        setActionBarTitles(getTitle(),getSubtitle());
+        setActionBarTitles(getTitle(), getSubtitle());
     }
 
     private void updateData(final boolean isAddition) {
@@ -359,7 +359,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                             unlockControls();
                         } else if (!isAddition || mUserSearchList.isEmpty()) {
                             showEmptySearchDialog();
-                        } else if (!mUserSearchList.isEnded()){
+                        } else if (!mUserSearchList.isEnded()) {
                             showNextUser();
                             unlockControls();
                         } else {
@@ -454,29 +454,33 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     } else {
                         lockControls();
                         if (CacheProfile.money > 0) {
-                            CacheProfile.money = CacheProfile.money - CacheProfile.getOptions().price_highrate;
+                            CacheProfile.money = CacheProfile.money - CacheProfile.getOptions().priceAdmiration;
                             moneyDecreased = true;
                         }
-                        mRateController.onRate(mCurrentUser.id, 10,
-                                mCurrentUser.mutual ? RateRequest.DEFAULT_MUTUAL
-                                        : RateRequest.DEFAULT_NO_MUTUAL, new RateController.OnRateListener() {
-                            @Override
-                            public void onRateCompleted() {
+                        mRateController.onAdmiration(
+                                mCurrentUser.id,
+                                mCurrentUser.mutual ?
+                                        SendLikeRequest.DEFAULT_MUTUAL
+                                        : SendLikeRequest.DEFAULT_NO_MUTUAL,
+                                new RateController.OnRateRequestListener() {
+                                    @Override
+                                    public void onRateCompleted() {
 
-                            }
+                                    }
 
-                            @Override
-                            public void onRateFailed() {
-                                if (moneyDecreased) {
-                                    moneyDecreased = true;
-                                    CacheProfile.money += CacheProfile.getOptions().price_highrate;
+                                    @Override
+                                    public void onRateFailed() {
+                                        if (moneyDecreased) {
+                                            moneyDecreased = true;
+                                            CacheProfile.money += CacheProfile.getOptions().priceAdmiration;
+                                        }
+                                    }
                                 }
-                            }
-                        });
+                        );
 
                         EasyTracker.getTracker().sendEvent("Dating", "Rate",
                                 "AdmirationSend" + (mCurrentUser.mutual ? "mutual" : ""),
-                                (long) CacheProfile.getOptions().price_highrate);
+                                (long) CacheProfile.getOptions().priceAdmiration);
                     }
                 }
             }
@@ -488,9 +492,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         return;
                     } else {
                         lockControls();
-                        mRateController.onRate(mCurrentUser.id, 9,
-                                mCurrentUser.mutual ? RateRequest.DEFAULT_MUTUAL
-                                        : RateRequest.DEFAULT_NO_MUTUAL, null);
+                        mRateController.onLike(mCurrentUser.id,
+                                mCurrentUser.mutual ?
+                                        SendLikeRequest.DEFAULT_MUTUAL
+                                        : SendLikeRequest.DEFAULT_NO_MUTUAL,
+                                null
+                        );
 
                         EasyTracker.getTracker().sendEvent("Dating", "Rate",
                                 "SympathySend" + (mCurrentUser.mutual ? "mutual" : ""), 0L);
@@ -847,7 +854,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void failRate() {
         unlockControls();
         if (moneyDecreased) {
-            CacheProfile.money += CacheProfile.getOptions().price_highrate;
+            CacheProfile.money += CacheProfile.getOptions().priceAdmiration;
             moneyDecreased = false;
         }
         showNextUser();

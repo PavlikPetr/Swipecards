@@ -29,7 +29,7 @@ public class SearchUser extends FeedUser implements SerializableToJson {
         super.fillData(user);
 
         status = Profile.normilizeStatus(user.optString("status"));
-        mutual = user.optBoolean("mutual");
+        mutual = user.optBoolean("isMutualPossible");
     }
 
     @Override
@@ -38,7 +38,7 @@ public class SearchUser extends FeedUser implements SerializableToJson {
         json.put("status", status);
         json.put("mutual", mutual);
         json.put("photos", photos.toJson());
-        json.put("photos_count", photosCount);
+        json.put("photosCount", photosCount);
         return json;
     }
 

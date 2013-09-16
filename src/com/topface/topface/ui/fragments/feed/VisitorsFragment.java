@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.View;
@@ -7,6 +8,7 @@ import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Visitor;
+import com.topface.topface.requests.DeleteFeedsRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -14,6 +16,8 @@ import com.topface.topface.ui.adapters.VisitorsListAdapter;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import org.json.JSONObject;
+
+import java.util.List;
 
 
 public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
@@ -86,5 +90,10 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     @Override
     protected int getContextMenuLayoutRes() {
         return R.menu.feed_context_menu_visitors;
+    }
+
+    @Override
+    protected DeleteFeedsRequest getDeleteRequest(List<String> ids, Context context) {
+        return null;
     }
 }

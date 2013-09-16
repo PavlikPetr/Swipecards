@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ValidateGetJarRequest extends ApiRequest{
+    private static final String SERVICE = "getjar.charge";
 
     private String signedData;
     private String signature;
@@ -27,6 +28,6 @@ public class ValidateGetJarRequest extends ApiRequest{
 
     @Override
     public String getServiceName() {
-        return "validateGetjar";
+        return SERVICE;
     }
 }

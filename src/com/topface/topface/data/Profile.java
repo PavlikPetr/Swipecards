@@ -22,9 +22,8 @@ public class Profile extends AbstractDataWithPhotos {
 
     private static String[] EMPTY_STATUSES = {Static.EMPTY, "-", "."};
 
-
     public int uid; // id пользователя в топфейсе
-    public String first_name; // имя пользователя
+    public String firstName; // имя пользователя
     public int age; // возраст пользователя
     public int sex; // пол пользователя
 
@@ -34,8 +33,6 @@ public class Profile extends AbstractDataWithPhotos {
     // Resources
     public int money; // количество монет у пользователя
     public int likes; // количество энергии пользователя
-
-    public int average_rate; // средняя оценка текущего пользователя
 
     // Фильтр поиска
     public DatingFilter dating;
@@ -52,8 +49,8 @@ public class Profile extends AbstractDataWithPhotos {
     public ArrayList<Gift> gifts = new ArrayList<Gift>();
     public SparseArrayCompat<TopfaceNotifications> notifications = new SparseArrayCompat<TopfaceNotifications>();
     public boolean hasMail;
-    public boolean email_grabbed;
-    public boolean email_confirmed;
+    public boolean emailGrabbed;
+    public boolean emailConfirmed;
     public int xstatus;
 
     public int totalPhotos;
@@ -63,12 +60,8 @@ public class Profile extends AbstractDataWithPhotos {
     public boolean paid;
     // Показывать рекламу или нет
     public boolean show_ad;
-    /**
-     * Флаг того, является ли пользоветль редактором
-     */
+    // Флаг того, является ли пользоветль редактором
     private boolean mEditor;
-    // private static final String profileFileName = "profile.out";
-    // private static final long serialVersionUID = 2748391675222256671L;
     public boolean canInvite;
 
     public static Profile parse(ApiResponse response) {
@@ -77,42 +70,38 @@ public class Profile extends AbstractDataWithPhotos {
 
     protected static Profile parse(Profile profile, JSONObject resp) {
         try {
-            profile.average_rate = resp.optInt("average_rate");
-            profile.money = resp.optInt("money");
-
             if (!(profile instanceof User)) {
-                Novice.giveNoviceLikes = !resp.optBoolean("novice_likes", true);
+                Novice.giveNoviceLikes = !resp.optBoolean("noviceLikes", true);
             }
-
+            profile.money = resp.optInt("money");
             profile.likes = resp.optInt("likes");
-
             profile.uid = resp.optInt("id");
             profile.age = resp.optInt("age");
             profile.sex = resp.optInt("sex");
             profile.status = normilizeStatus(resp.optString("status"));
-            profile.first_name = resp.optString("first_name").trim();
-            profile.inBlackList = resp.optBoolean("in_blacklist");
+            profile.firstName = resp.optString("firstName").trim();
             profile.city = new City(resp.optJSONObject("city"));
             profile.dating = new DatingFilter(resp.optJSONObject("dating"));
             profile.hasMail = resp.optBoolean("email");
+            profile.emailGrabbed = resp.optBoolean("emailGrabbed");
+            profile.emailConfirmed = resp.optBoolean("emailConfirmed");
             profile.premium = resp.optBoolean("premium");
             profile.invisible = resp.optBoolean("invisible");
-            profile.background = resp.optInt("background", ProfileBackgrounds.DEFAULT_BACKGROUND_ID);
-            profile.totalPhotos = resp.optInt("photos_count");
+            profile.background = resp.optInt("bg", ProfileBackgrounds.DEFAULT_BACKGROUND_ID);
+            profile.totalPhotos = resp.optInt("photosCount");
             profile.paid = resp.optBoolean("paid");
-            profile.show_ad = resp.optBoolean("show_ad", true);
+            profile.show_ad = resp.optBoolean("showAd", true);
             profile.xstatus = resp.optInt("xstatus");
-            profile.canInvite = resp.optBoolean("can_invite");
+            profile.canInvite = resp.optBoolean("canInvite");
             profile.setEditor(resp.optBoolean("editor", false));
-
             parseGifts(profile, resp);
             parseNotifications(profile, resp);
             parseForm(profile, resp, App.getContext());
             initPhotos(resp, profile);
+            //TODO clarify parameter: canBecomeLeader
         } catch (Exception e) {
             Debug.error("Profile Wrong response parsing: ", e);
         }
-
         return profile;
     }
 
@@ -128,7 +117,6 @@ public class Profile extends AbstractDataWithPhotos {
             boolean isUserProfile = false;
             if (profile instanceof User) {
                 isUserProfile = true;
-                // ((User) profile).formMatches = form.optInt("goodness");
                 ((User) profile).formMatches = 0;
             }
 
@@ -136,18 +124,6 @@ public class Profile extends AbstractDataWithPhotos {
             headerItem = new FormItem(R.string.form_main, FormItem.HEADER);
             formInfo.fillFormItem(headerItem);
             profile.forms.add(headerItem);
-
-            if (!resp.isNull("email")) {
-                profile.hasMail = resp.optBoolean("email");
-            }
-
-            if (!resp.isNull("email_grabbed")) {
-                profile.email_grabbed = resp.optBoolean("email_grabbed");
-            }
-
-            if (!resp.isNull("email_confirmed")) {
-                profile.email_confirmed = resp.optBoolean("email_confirmed");
-            }
 
             // 1.2 xstatus position -1
             formItem = new FormItem(R.array.form_main_status, profile.xstatus,
@@ -166,7 +142,7 @@ public class Profile extends AbstractDataWithPhotos {
             }
 
             // 2 character position 0
-            formItem = new FormItem(R.array.form_main_character, form.optInt("character_id"),
+            formItem = new FormItem(R.array.form_main_character, form.optInt("characterId"),
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
@@ -178,7 +154,7 @@ public class Profile extends AbstractDataWithPhotos {
 
             // 3 communication position 1
             formItem = new FormItem(R.array.form_main_communication,
-                    form.optInt("communication_id"), FormItem.DATA, headerItem);
+                    form.optInt("communicationId"), FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
                 compareFormItemData(formItem, profile,
@@ -197,7 +173,7 @@ public class Profile extends AbstractDataWithPhotos {
 
             // 11 breast position 7
             if (profile.sex == Static.GIRL) {
-                formItem = new FormItem(R.array.form_physique_breast, form.optInt("breast_id"),
+                formItem = new FormItem(R.array.form_physique_breast, form.optInt("breastId"),
                         FormItem.DATA, headerItem);
                 formInfo.fillFormItem(formItem);
                 if (isUserProfile) {
@@ -208,7 +184,7 @@ public class Profile extends AbstractDataWithPhotos {
             }
 
             // 6 fitness position 2
-            formItem = new FormItem(R.array.form_physique_fitness, form.optInt("fitness_id"),
+            formItem = new FormItem(R.array.form_physique_fitness, form.optInt("fitnessId"),
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
@@ -256,7 +232,7 @@ public class Profile extends AbstractDataWithPhotos {
             }
 
             // 9 hair position 5
-            formItem = new FormItem(R.array.form_physique_hairs, form.optInt("hair_id"),
+            formItem = new FormItem(R.array.form_physique_hairs, form.optInt("hairId"),
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
@@ -267,7 +243,7 @@ public class Profile extends AbstractDataWithPhotos {
             }
 
             // 10 eye position 6
-            formItem = new FormItem(R.array.form_physique_eyes, form.optInt("eye_id"),
+            formItem = new FormItem(R.array.form_physique_eyes, form.optInt("eyeId"),
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
@@ -286,7 +262,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.forms.add(headerItem);
 
             // 13 marriage position 7
-            formItem = new FormItem(R.array.form_social_marriage, form.optInt("marriage_id"),
+            formItem = new FormItem(R.array.form_social_marriage, form.optInt("marriageId"),
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
@@ -297,7 +273,7 @@ public class Profile extends AbstractDataWithPhotos {
             }
 
             // 14 education position 8
-            formItem = new FormItem(R.array.form_social_education, form.optInt("education_id"),
+            formItem = new FormItem(R.array.form_social_education, form.optInt("educationId"),
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
@@ -308,7 +284,7 @@ public class Profile extends AbstractDataWithPhotos {
             }
 
             // 15 finances position 9
-            formItem = new FormItem(R.array.form_social_finances, form.optInt("finances_id"),
+            formItem = new FormItem(R.array.form_social_finances, form.optInt("financesId"),
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
@@ -319,7 +295,7 @@ public class Profile extends AbstractDataWithPhotos {
             }
 
             // 16 residence position 10
-            formItem = new FormItem(R.array.form_social_residence, form.optInt("residence_id"),
+            formItem = new FormItem(R.array.form_social_residence, form.optInt("residenceId"),
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
@@ -330,7 +306,7 @@ public class Profile extends AbstractDataWithPhotos {
             }
 
             // 17 car vs car_id position 11
-            formItem = new FormItem(R.array.form_social_car, form.optInt("car_id"),
+            formItem = new FormItem(R.array.form_social_car, form.optInt("carId"),
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
@@ -349,7 +325,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.forms.add(headerItem);
 
             // 20 smoking position 12
-            formItem = new FormItem(R.array.form_habits_smoking, form.optInt("smoking_id"),
+            formItem = new FormItem(R.array.form_habits_smoking, form.optInt("smokingId"),
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
@@ -360,7 +336,7 @@ public class Profile extends AbstractDataWithPhotos {
             }
 
             // 21 alcohol position 13
-            formItem = new FormItem(R.array.form_habits_alcohol, form.optInt("alcohol_id"),
+            formItem = new FormItem(R.array.form_habits_alcohol, form.optInt("alcoholId"),
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
@@ -391,7 +367,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.forms.add(headerItem);
 
             // 25 first_dating position 15
-            String dd = form.optString("first_dating").trim();
+            String dd = form.optString("firstDating").trim();
             String datingDetails = TextUtils.isEmpty(dd) ? null : dd;
             formItem = new FormItem(R.array.form_detail_about_dating, datingDetails,
                     FormItem.DATA, headerItem);
@@ -416,6 +392,8 @@ public class Profile extends AbstractDataWithPhotos {
 
             // 27 DIVIDER
             profile.forms.add(FormItem.getDivider());
+
+            //TODO clarify parameters: car,jobId,countries,statusId,valuables,childrenId,aspirations,job
         }
     }
 
@@ -431,12 +409,6 @@ public class Profile extends AbstractDataWithPhotos {
                 int type = notification.optInt("type");
 
                 profile.notifications.put(type, new TopfaceNotifications(apns, mail, type));
-            }
-
-            initPhotos(resp, profile);
-
-            if (!resp.isNull("photos_count")) {
-                profile.totalPhotos = resp.optInt("photos_count");
             }
         }
     }
@@ -469,10 +441,10 @@ public class Profile extends AbstractDataWithPhotos {
 
     public String getNameAndAge() {
         String result;
-        if (first_name != null && first_name.length() > 0 && age > 0) {
-            result = first_name + ", " + age;
+        if (firstName != null && firstName.length() > 0 && age > 0) {
+            result = firstName + ", " + age;
         } else {
-            result = first_name;
+            result = firstName;
         }
         return result;
     }

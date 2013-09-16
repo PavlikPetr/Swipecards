@@ -88,7 +88,7 @@ public class PopupManager {
     }
 
     public void showRatePopup() {
-        if (!checkVersion(CacheProfile.getOptions().max_version) && App.isOnline() && mRatingPopupIsShowing && CAN_SHOW_POPUP) {
+        if (!checkVersion(CacheProfile.getOptions().maxVersion) && App.isOnline() && mRatingPopupIsShowing && CAN_SHOW_POPUP) {
             ratingPopup();
         }
     }

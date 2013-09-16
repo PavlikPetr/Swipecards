@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.internal.widget.ActionBarContainer;
 import android.view.*;
 import android.widget.Toast;
@@ -237,7 +236,7 @@ public class NavigationActivity extends BaseFragmentActivity {
         mFragmentMenu.onLoadProfile();
         AuthorizationManager.extendAccessToken(NavigationActivity.this);
         PopupManager manager = new PopupManager(this);
-        manager.showOldVersionPopup(CacheProfile.getOptions().max_version);
+        manager.showOldVersionPopup(CacheProfile.getOptions().maxVersion);
         manager.showRatePopup();
         actionsAfterRegistration();
         if (CacheProfile.show_ad) {

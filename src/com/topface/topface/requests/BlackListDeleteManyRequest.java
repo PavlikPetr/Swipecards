@@ -11,8 +11,8 @@ import java.util.List;
 /**
  * Запрос удаляет пользователя из черного списка
  */
-public class BlackListDeleteRequest extends ApiRequest {
-    public static final String SERVICE_NAME = "blacklistDelete";
+public class BlackListDeleteManyRequest extends ApiRequest {
+    public static final String SERVICE_NAME = "blacklist.delete";
     /**
      * id пользователя, котогорого нужно добавить в черный список
      */
@@ -21,7 +21,7 @@ public class BlackListDeleteRequest extends ApiRequest {
     /**
      * @param userIds массив id пользовтелей, которые нужно добавить в черный список
      */
-    public BlackListDeleteRequest(List<Integer> userIds, Context context) {
+    public BlackListDeleteManyRequest(List<Integer> userIds, Context context) {
         super(context);
         mUserIds = userIds;
     }
@@ -29,7 +29,7 @@ public class BlackListDeleteRequest extends ApiRequest {
     /**
      * @param userId пользователя, которого нужно добавить в черный список
      */
-    public BlackListDeleteRequest(int userId, Context context) {
+    public BlackListDeleteManyRequest(int userId, Context context) {
         super(context);
         ArrayList<Integer> list = new ArrayList<Integer>();
         list.add(userId);

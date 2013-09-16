@@ -11,6 +11,8 @@ import android.widget.*;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
+import com.topface.topface.ui.blocks.BannerBlock;
+import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Editor;
 
@@ -159,14 +161,14 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
             ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(
                     getActivity(),
                     android.R.layout.simple_spinner_item,
-                    Options.BANNERS
+                    BannerBlock.BANNERS
             );
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             mBannerTypeSpinner.setAdapter(adapter);
             mBannerTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    getPage().banner = Options.BANNERS[position];
+                    getPage().banner = BannerBlock.BANNERS[position];
                 }
 
                 @Override
@@ -180,15 +182,15 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
             ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(
                     getActivity(),
                     android.R.layout.simple_spinner_item,
-                    Options.FLOAT_TYPES
+                    FloatBlock.FLOAT_TYPES
             );
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             mFloatTypeSpinner.setAdapter(adapter);
             mFloatTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    getPage().floatType = Options.FLOAT_TYPES[position];
-                    mBannerTypeSpinner.setVisibility(Options.FLOAT_TYPES[position].equals(Options.FLOAT_TYPE_BANNER) ? View.VISIBLE : View.GONE);
+                    getPage().floatType = FloatBlock.FLOAT_TYPES[position];
+                    mBannerTypeSpinner.setVisibility(FloatBlock.FLOAT_TYPES[position].equals(FloatBlock.FLOAT_TYPE_BANNER) ? View.VISIBLE : View.GONE);
                 }
 
                 @Override
@@ -205,18 +207,18 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
             mPage = page;
             mTitleText.setText(page.name);
             mPage = page;
-            for (int i = 0; i < Options.FLOAT_TYPES.length; i++) {
-                if (Options.FLOAT_TYPES[i].equals(mPage.floatType)) {
+            for (int i = 0; i < FloatBlock.FLOAT_TYPES.length; i++) {
+                if (FloatBlock.FLOAT_TYPES[i].equals(mPage.floatType)) {
                     mFloatTypeSpinner.setSelection(i);
-                    mBannerTypeSpinner.setVisibility(Options.FLOAT_TYPES[i].equals(Options.FLOAT_TYPE_BANNER) ? View.VISIBLE : View.GONE);
+                    mBannerTypeSpinner.setVisibility(FloatBlock.FLOAT_TYPES[i].equals(FloatBlock.FLOAT_TYPE_BANNER) ? View.VISIBLE : View.GONE);
                 }
             }
             if (mPage.name.equals(Options.PAGE_GAG) || mPage.name.equals(Options.PAGE_START)) {
                 mFloatTypeSpinner.setVisibility(View.GONE);
             }
 
-            for (int i = 0; i < Options.BANNERS.length; i++) {
-                if (Options.BANNERS[i].equals(mPage.banner)) {
+            for (int i = 0; i < BannerBlock.BANNERS.length; i++) {
+                if (BannerBlock.BANNERS[i].equals(mPage.banner)) {
                     mBannerTypeSpinner.setSelection(i);
                 }
             }

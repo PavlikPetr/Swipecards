@@ -185,7 +185,7 @@ public class App extends Application {
     }
 
     private static ApiRequest getOptionsRequst() {
-        return new OptionsRequest(App.getContext())
+        return new AppOptionsRequest(App.getContext())
                 .callback(new DataApiHandler<Options>() {
                     @Override
                     protected void success(Options data, IApiResponse response) {

@@ -8,7 +8,7 @@ public class StandardMessageSendRequest extends ConfirmedApiRequest {
     public static final int MESSAGE_FILL_INTERESTS = 14;
 
 
-    public final static String SERVICE_NAME = "standardMessageSend";
+    public final static String SERVICE = "message.sendStandard";
     private int userId;
     private int messageId;
 
@@ -28,6 +28,6 @@ public class StandardMessageSendRequest extends ConfirmedApiRequest {
 
     @Override
     public String getServiceName() {
-        return SERVICE_NAME;
+        return SERVICE;
     }
 }

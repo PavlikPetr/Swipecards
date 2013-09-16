@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.View;
@@ -12,6 +13,8 @@ import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.FeedListData;
+import com.topface.topface.requests.DeleteFeedsRequest;
+import com.topface.topface.requests.DeleteLikesRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
@@ -23,6 +26,8 @@ import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
 import org.json.JSONObject;
+
+import java.util.List;
 
 public class LikesFragment extends FeedFragment<FeedLike> {
 
@@ -70,7 +75,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         if (!(item.user.deleted || item.user.banned)) {
             if (item instanceof FeedLike) {
                 if (!((FeedLike) item).mutualed) {
-                    mRateController.onRate(item.user.id, RateController.MUTUAL_VALUE, 0, null);
+                    mRateController.onLike(item.user.id, 0, null);
                     ((FeedLike) item).mutualed = true;
                     getListAdapter().notifyDataSetChanged();
                     Toast.makeText(getActivity(), R.string.general_mutual, Toast.LENGTH_SHORT).show();
@@ -167,6 +172,11 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected int getContextMenuLayoutRes() {
         return R.menu.feed_context_menu;
+    }
+
+    @Override
+    protected DeleteFeedsRequest getDeleteRequest(List<String> ids, Context context) {
+        return new DeleteLikesRequest(ids,context);
     }
 
     @Override

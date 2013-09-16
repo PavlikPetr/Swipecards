@@ -11,7 +11,7 @@ import org.json.JSONObject;
 @SuppressWarnings("UnusedDeclaration")
 public class TestRequest extends ApiRequest {
 
-    public static final String SERVICE_NAME = "test";
+    public static final String SERVICE_NAME = "dev.test";
     public String required;
     private String nonrequired;
     public int error;

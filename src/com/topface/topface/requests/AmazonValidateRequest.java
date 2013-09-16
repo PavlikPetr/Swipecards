@@ -13,7 +13,7 @@ public class AmazonValidateRequest extends ApiRequest {
 
     private String mPurchaseToken;
 
-    public static final String SERVICE_NAME = "validate";
+    public static final String SERVICE_NAME = "amazon.purchase";
     private String mRequestId;
     private final String mSku;
 

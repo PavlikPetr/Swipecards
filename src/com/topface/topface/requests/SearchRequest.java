@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 public class SearchRequest extends ApiRequest {
     // Data
-    public static final String SERVICE_NAME = "search";
+    public static final String SERVICE_NAME = "search.getList";
     public int limit; // размер получаемой выборки 10 <= limit <= 50
     public boolean online; // необходимость выборки только онлайн-пользователей
 

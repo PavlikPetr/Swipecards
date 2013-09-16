@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 public class RegistrationTokenRequest extends ApiRequest {
     // Data
-    public static final String service = "registrationToken";
+    public static final String service = "googleplay.setPushToken";
     public String token; //Токен регистрации в C2DM
 
     public RegistrationTokenRequest(Context context) {

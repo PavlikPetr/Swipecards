@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 public class PhotoDeleteRequest extends ApiRequest {
     // Data
-    public static final String service = "photoDelete";
+    public static final String service = "photo.delete";
     //TODO передалть на объекты Photo
     public int[] photos;
 

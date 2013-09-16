@@ -13,13 +13,13 @@ import com.topface.topface.ui.views.LockerView;
 
 public class EditContainerActivity extends BaseFragmentActivity {
 
-    public static final String INTENT_FORM_TITLE_ID = "title_id";
-    public static final String INTENT_FORM_DATA_ID = "data_id";
+    public static final String INTENT_FORM_TITLE_ID = "titleId";
+    public static final String INTENT_FORM_DATA_ID = "dataId";
     public static final String INTENT_FORM_DATA = "data";
 
-    public static final String INTENT_AGE_START = "age_start";
-    public static final String INTENT_AGE_END = "age_end";
-    public static final String FILTER_SEX = "filter_sex";
+    public static final String INTENT_AGE_START = "ageStart";
+    public static final String INTENT_AGE_END = "ageEnd";
+    public static final String FILTER_SEX = "filterSex";
 
     public static final int INTENT_EDIT_NAME_AGE = 101;
     public static final int INTENT_EDIT_STATUS = 102;

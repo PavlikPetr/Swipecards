@@ -14,12 +14,15 @@ import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedListData;
+import com.topface.topface.requests.DeleteFeedsRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.DialogListAdapter;
 import com.topface.topface.utils.CountersManager;
 import org.json.JSONObject;
+
+import java.util.List;
 
 public class DialogsFragment extends FeedFragment<FeedDialog> {
 
@@ -118,6 +121,11 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     @Override
     protected int getContextMenuLayoutRes() {
         return R.menu.feed_context_menu_dialogs;
+    }
+
+    @Override
+    protected DeleteFeedsRequest getDeleteRequest(List<String> ids, Context context) {
+        return null;
     }
 
     @Override

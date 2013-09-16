@@ -17,7 +17,6 @@ public class CountersManager {
     private Context mContext;
 
     private final static String[] DeniedMethod = {BannerRequest.SERVICE_NAME, LeadersRequest.SERVICE_NAME};
-    //    private final static String DeniedMethod = "banner";
     public final static String UPDATE_COUNTERS = "com.topface.topface.UPDATE_COUNTERS";
 
     public final static String NULL_METHOD = "null_method";
@@ -25,7 +24,6 @@ public class CountersManager {
     public final static String METHOD_INTENT_STRING = "method";
 
     public final static int UNKNOWN_TYPE = -1;
-
     public final static int LIKES = 0;
     public final static int SYMPATHY = 1;
     public final static int VISITORS = 2;
@@ -52,61 +50,6 @@ public class CountersManager {
         fansCounter = CacheProfile.unread_fans;
     }
 
-    @SuppressWarnings("UnusedDeclaration")
-    public void incrementCounter(int type) {
-        switch (type) {
-            case LIKES:
-                likesCounter++;
-                break;
-            case SYMPATHY:
-                sympathyCounter++;
-                break;
-            case VISITORS:
-                visitorsCounter++;
-                break;
-            case DIALOGS:
-                dialogsCounter++;
-                break;
-            case FANS:
-                fansCounter++;
-                break;
-        }
-        commitCounters();
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public void decrementCounter(int type) {
-        switch (type) {
-            case LIKES:
-                if (likesCounter > 0) {
-                    likesCounter--;
-                }
-                break;
-            case SYMPATHY:
-                if (sympathyCounter > 0) {
-                    sympathyCounter--;
-                }
-                break;
-            case VISITORS:
-                if (visitorsCounter > 0) {
-                    visitorsCounter--;
-                }
-                break;
-            case DIALOGS:
-                if (dialogsCounter > 0) {
-                    dialogsCounter--;
-                }
-                break;
-            case FANS:
-                if (fansCounter > 0) {
-                    fansCounter--;
-                }
-                break;
-        }
-        commitCounters();
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
     public void setCounter(int type, int value, boolean doNeedUpdate) {
         switch (type) {
             case LIKES:

@@ -19,6 +19,18 @@ import java.util.Map;
  * Блок для страниц, где нужно показывать баннеры или лидеров
  */
 public class FloatBlock {
+    /**
+     * Идентификаторы для типов блоков (лидеры, баннеры, не показывать блоки)
+     */
+    public final static String FLOAT_TYPE_BANNER = "BANNER";
+    public final static String FLOAT_TYPE_LEADERS = "LEADERS";
+    public final static String FLOAT_TYPE_NONE = "NONE";
+    public final static String[] FLOAT_TYPES = new String[]{
+            FLOAT_TYPE_BANNER,
+            FLOAT_TYPE_LEADERS,
+            FLOAT_TYPE_NONE
+    };
+
     private static Map<String, Options.Page> mBannersMap;
     private Fragment mFragment;
     private BannerBlock mBanner;
@@ -44,10 +56,10 @@ public class FloatBlock {
         String currentFragment = mFragment.getClass().toString();
         if (getActivityMap().containsKey(currentFragment)) {
             String floatType = getActivityMap().get(currentFragment).floatType;
-            if (floatType.equals(Options.FLOAT_TYPE_BANNER)) {
+            if (floatType.equals(FLOAT_TYPE_BANNER)) {
                 if (!CacheProfile.show_ad) return;
                 mBanner = new BannerBlock(mFragment, mLayout);
-            } else if (floatType.equals(Options.FLOAT_TYPE_LEADERS)) {
+            } else if (floatType.equals(FLOAT_TYPE_LEADERS)) {
                 mLeaders = new LeadersBlock(mFragment, mLayout);
             }
         }

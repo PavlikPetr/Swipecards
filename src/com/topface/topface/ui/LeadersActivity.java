@@ -69,7 +69,7 @@ public class LeadersActivity extends BaseFragmentActivity {
     }
 
     private void setPrice() {
-        int leadersPrice = CacheProfile.getOptions().price_leader;
+        int leadersPrice = CacheProfile.getOptions().priceLeader;
         mBuyButton.setText(
                 Utils.getQuantityString(
                         R.plurals.leaders_price,
@@ -83,7 +83,7 @@ public class LeadersActivity extends BaseFragmentActivity {
         mBuyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (CacheProfile.money < CacheProfile.getOptions().price_leader) {
+                if (CacheProfile.money < CacheProfile.getOptions().priceLeader) {
                     startActivity(ContainerActivity.getBuyingIntent("Leaders"));
                 } else if (mSelectedPhoto.isSelected()) {
                     mLoadingLocker.setVisibility(View.VISIBLE);

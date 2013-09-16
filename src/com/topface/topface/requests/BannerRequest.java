@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 public class BannerRequest extends ApiRequest {
     // Data
-    public static final String SERVICE_NAME = "banner";
+    public static final String SERVICE_NAME = "banner.get";
     public String place; // идентификатор места отображения баннера. Возможные значения: LIKE, MUTUAL, MESSAGES, TOP
 
     public BannerRequest(Context context) {

@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 public class GiftsRequest extends ApiRequest {
 
-    public static final String service = "gifts";
+    public static final String service = "gift.getAvailable";
 
     public GiftsRequest(Context context) {
         super(context);

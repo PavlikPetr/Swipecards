@@ -116,7 +116,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
             @Override
             protected Boolean parseResponse(ApiResponse response) {
-                return response.getJsonResult().optBoolean("email_confirmed");
+                return response.getJsonResult().optBoolean("emailConfirmed");
             }
 
             @Override

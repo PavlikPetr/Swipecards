@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 public class HistoryRequest extends ApiRequest {
     // Data
-    public static final String service = "history";
+    public static final String service = "dialog.get";
     public int userid; // идентификатор пользователя для получения истории сообщений с ним текущего пользвоателя
     //public int offset; // смещение истории сообщений
     public int limit; // количество получаемых элементов истории сообщений

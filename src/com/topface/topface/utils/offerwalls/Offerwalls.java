@@ -32,12 +32,28 @@ import java.util.Random;
 
 public class Offerwalls {
 
-    private static GetJarContext mGetJarContext;
-    private static ConsumableProductHelper mGetJarHelper;
+    /**
+     * Идентификаторы для типов офферволлов
+     */
+    public static final String TAPJOY = "TAPJOY";
+    public static final String SPONSORPAY = "SPONSORPAY";
+    public static final String CLICKKY = "CLICKKY";
+    public static final String RANDOM = "RANDOM";
+    public static final String GETJAR = "GETJAR";
+    public final static String[] OFFERWALLS = new String[]{
+            TAPJOY,
+            SPONSORPAY,
+            CLICKKY,
+            GETJAR,
+            RANDOM
+    };
 
     private final static String GETJAR_APP_KEY = "407c520c-aaba-44e8-9a06-478c2b595437";
-    private static final Float GETJAT_MAX_DISCOUNT = 0.1f;
-    private static final Float GETJAT_MAX_MARKUP = 0.1f;
+    private static final Float  GETJAT_MAX_DISCOUNT = 0.1f;
+    private static final Float  GETJAT_MAX_MARKUP = 0.1f;
+
+    private static GetJarContext mGetJarContext;
+    private static ConsumableProductHelper mGetJarHelper;
 
     private static String getOfferWallType() {
         return CacheProfile.getOptions().offerwall;
@@ -45,11 +61,11 @@ public class Offerwalls {
 
     public static void init(Context context) {
         String offerwall = getOfferWallType();
-        if (offerwall.equals(Options.TAPJOY)) {
+        if (offerwall.equals(TAPJOY)) {
             initTapjoy(context);
-        } else if (offerwall.equals(Options.SPONSORPAY)) {
+        } else if (offerwall.equals(SPONSORPAY)) {
             initSponsorpay(context);
-        } else if (offerwall.equals(Options.GETJAR)) {
+        } else if (offerwall.equals(GETJAR)) {
             initGetJar(context);
         }
     }
@@ -63,15 +79,15 @@ public class Offerwalls {
             return;
         }
 
-        if (offerwall.equals(Options.TAPJOY)) {
+        if (offerwall.equals(TAPJOY)) {
             startTapjoy(activity);
-        } else if (offerwall.equals(Options.SPONSORPAY)) {
+        } else if (offerwall.equals(SPONSORPAY)) {
             startSponsorpay(activity);
-        } else if (offerwall.equals(Options.CLICKKY)) {
+        } else if (offerwall.equals(CLICKKY)) {
             startClickky(activity);
-        } else if (offerwall.equals(Options.GETJAR)) {
+        } else if (offerwall.equals(GETJAR)) {
             startGetJar(activity);
-        } else if (offerwall.equals(Options.RANDOM)) {
+        } else if (offerwall.equals(RANDOM)) {
             startRandomOfferwall(activity);
         } else {
             startSponsorpay(activity);

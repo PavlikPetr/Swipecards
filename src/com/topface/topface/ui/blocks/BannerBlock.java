@@ -63,6 +63,32 @@ import java.util.regex.Pattern;
 public class BannerBlock {
 
     public static final String VIRUS_LIKES_BANNER_PARAM = "viruslikes";
+    /**
+     * Идентификаторы типов баннеров
+     */
+    public final static String BANNER_TOPFACE = "TOPFACE";
+    public final static String BANNER_ADMOB = "ADMOB";
+    public static final String BANNER_ADWIRED = "ADWIRED";
+    public static final String BANNER_MOPUB = "MOPUB";
+    public static final String BANNER_IVENGO = "IVENGO";
+    public static final String BANNER_ADCAMP = "ADCAMP";
+    public static final String BANNER_LIFESTREET = "LIFESTREET";
+    public static final String BANNER_ADLAB = "ADLAB";
+    public static final String BANNER_GAG = "GAG";
+    public static final String BANNER_NONE = "NONE";
+    public final static String[] BANNERS = new String[]{
+            BANNER_TOPFACE,
+            BANNER_ADMOB,
+            BANNER_ADWIRED,
+            BANNER_MOPUB,
+            BANNER_IVENGO,
+            BANNER_ADCAMP,
+            BANNER_LIFESTREET,
+            BANNER_ADLAB,
+            BANNER_GAG,
+            BANNER_NONE
+    };
+
     private static final String MOPUB_AD_UNIT_ID = "4ec8274ea73811e295fa123138070049";
     private static final String LIFESTREET_SLOT_TAG = "http://mobile-android.lfstmedia.com/m2/slot76330?ad_size=320x50&adkey=3f6";
     private static final String ADLAB_IDENTIFICATOR = "399375";
@@ -88,7 +114,7 @@ public class BannerBlock {
 
     public static void init() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
-            if (CacheProfile.getOptions().containsBannerType(Options.BANNER_ADCAMP)) {
+            if (CacheProfile.getOptions().containsBannerType(BANNER_ADCAMP)) {
                 AdsManager.getInstance().initialize(App.getContext());
                 AdsManager.getInstance().addTestDevice("99000200906025");
                 mAdcampInitialized = true;
@@ -115,7 +141,7 @@ public class BannerBlock {
                     String bannerType = bannersMap.get(fragmentId).banner;
 
                     //AdCamp uses only FROYO and above
-                    if (bannerType.equals(Options.BANNER_ADCAMP)) {
+                    if (bannerType.equals(BANNER_ADCAMP)) {
                         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO || !mAdcampInitialized) {
                             requestBannerGag();
                             return;
@@ -125,7 +151,7 @@ public class BannerBlock {
                     mBannerView = getBannerView(bannerType);
                     if (mBannerView == null) return;
                     mBannerLayout.addView(mBannerView);
-                    if (bannerType.equals(Options.BANNER_TOPFACE)) {
+                    if (bannerType.equals(BANNER_TOPFACE)) {
                         if (isCorrectResolution() && bannersMap.containsKey(fragmentId)) {
                             loadBanner(bannersMap.get(fragmentId).name);
                         }
@@ -143,19 +169,19 @@ public class BannerBlock {
 
     private View getBannerView(String bannerType) {
         try {
-            if (bannerType.equals(Options.BANNER_TOPFACE) || bannerType.equals(Options.BANNER_GAG)) {
+            if (bannerType.equals(BANNER_TOPFACE) || bannerType.equals(BANNER_GAG)) {
                 return mInflater.inflate(R.layout.banner_topface, mBannerLayout, false);
-            } else if (bannerType.equals(Options.BANNER_ADMOB)) {
+            } else if (bannerType.equals(BANNER_ADMOB)) {
                 return mInflater.inflate(R.layout.banner_admob, mBannerLayout, false);
-            } else if (bannerType.equals(Options.BANNER_ADWIRED)) {
+            } else if (bannerType.equals(BANNER_ADWIRED)) {
                 return mInflater.inflate(R.layout.banner_adwired, mBannerLayout, false);
-            } else if (bannerType.equals(Options.BANNER_MOPUB)) {
+            } else if (bannerType.equals(BANNER_MOPUB)) {
                 return mInflater.inflate(R.layout.banner_mopub, mBannerLayout, false);
-            } else if (bannerType.equals(Options.BANNER_ADCAMP)) {
+            } else if (bannerType.equals(BANNER_ADCAMP)) {
                 return mInflater.inflate(R.layout.banner_adcamp, mBannerLayout, false);
-            } else if (bannerType.equals(Options.BANNER_LIFESTREET)) {
+            } else if (bannerType.equals(BANNER_LIFESTREET)) {
                 return mInflater.inflate(R.layout.banner_lifestreet, mBannerLayout, false);
-            } else if (bannerType.equals(Options.BANNER_ADLAB)) {
+            } else if (bannerType.equals(BANNER_ADLAB)) {
                 return mInflater.inflate(R.layout.banner_adlab, null);
             } else {
                 return null;
@@ -334,9 +360,9 @@ public class BannerBlock {
                 } else if (banner.action.equals(Banner.ACTION_METHOD)) {
                     invokeBannerMethod(banner.parameter);
                 } else if (banner.action.equals(Banner.ACTION_OFFERWALL)) {
-                    if (banner.parameter.equals(Options.TAPJOY)) {
+                    if (banner.parameter.equals(Offerwalls.TAPJOY)) {
                         Offerwalls.startTapjoy();
-                    } else if (banner.parameter.equals(Options.SPONSORPAY)) {
+                    } else if (banner.parameter.equals(Offerwalls.SPONSORPAY)) {
                         Offerwalls.startSponsorpay(mFragment.getActivity());
                     } else {
                         Offerwalls.startOfferwall(mFragment.getActivity());
@@ -436,8 +462,8 @@ public class BannerBlock {
         mBannerView = getBannerView(bannerType);
         if (mBannerView != null) {
             mBannerLayout.addView(mBannerView);
-            if (bannerType.equals(Options.BANNER_TOPFACE)) {
-                loadBanner(Options.BANNER_GAG);
+            if (bannerType.equals(BANNER_TOPFACE)) {
+                loadBanner(BANNER_GAG);
             } else {
                 try {
                     showBanner(null);

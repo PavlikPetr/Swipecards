@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,9 +8,12 @@ import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.BlackListItem;
 import com.topface.topface.data.FeedListData;
+import com.topface.topface.requests.DeleteFeedsRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.adapters.BlackListAdapter;
 import org.json.JSONObject;
+
+import java.util.List;
 
 /**
  * Черный список. Сюда попадают заблокированые пользователи, отныне от них не приходит никакая активность
@@ -82,5 +86,10 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
     @Override
     protected int getContextMenuLayoutRes() {
         return R.menu.feed_context_menu_blacklist;
+    }
+
+    @Override
+    protected DeleteFeedsRequest getDeleteRequest(List<String> ids, Context context) {
+        return null;
     }
 }

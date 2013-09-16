@@ -220,7 +220,7 @@ public class ResponseHandler {
     }
 
     private static void sendOptionsRequest(Context context) {
-        final OptionsRequest request = new OptionsRequest(context);
+        final AppOptionsRequest request = new AppOptionsRequest(context);
         request.callback(new DataApiHandler<Options>() {
 
             @Override
