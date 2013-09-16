@@ -13,7 +13,7 @@
     <ImageView
             android:src="@drawable/frame_top_shadow"
             android:scaleType="fitXY"
-            android:paddingTop="0.5dp"
+            android:paddingTop="1dp"
             android:layout_width="108dp"
             android:layout_height="108dp"/>
 
