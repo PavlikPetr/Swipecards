@@ -5,10 +5,6 @@
                 android:background="@drawable/auth_bg"
                 android:orientation="vertical">
 
-    <include
-            layout="@layout/bar_navigation_header"
-            />
-
     <LinearLayout
             android:id="@+id/loText"
             android:layout_width="wrap_content"

@@ -6,10 +6,7 @@ import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedBookmark;
 import com.topface.topface.data.FeedListData;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BookmarkDeleteRequest;
 import com.topface.topface.requests.FeedRequest;
-import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.adapters.BookmarksListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.utils.CountersManager;
@@ -23,8 +20,8 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
     }
 
     @Override
-    protected int getTitle() {
-        return R.string.general_bookmarks;
+    protected String getTitle() {
+        return getString(R.string.general_bookmarks);
     }
 
     @Override

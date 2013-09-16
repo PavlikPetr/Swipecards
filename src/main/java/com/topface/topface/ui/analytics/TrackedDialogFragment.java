@@ -10,7 +10,7 @@ public class TrackedDialogFragment extends DialogFragment {
         super.onAttach(activity);
         EasyTracker.getInstance().setContext(getActivity());
         if (isTrackable()) {
-            EasyTracker.getTracker().trackView(getTrackName());
+            EasyTracker.getTracker().sendView(getTrackName());
         }
     }
 

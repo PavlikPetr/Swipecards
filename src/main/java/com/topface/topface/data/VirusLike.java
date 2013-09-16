@@ -110,7 +110,7 @@ public class VirusLike extends AbstractData {
                 @Override
                 public void onComplete(Bundle values) {
 
-                    EasyTracker.getTracker().trackEvent(
+                    EasyTracker.getTracker().sendEvent(
                             "VirusLikeRequest", "Complete",
                             from, (long) socialIdForRequest.size()
                     );
@@ -131,7 +131,7 @@ public class VirusLike extends AbstractData {
                 public void onFacebookError(FacebookError e) {
                     super.onFacebookError(e);
 
-                    EasyTracker.getTracker().trackEvent(
+                    EasyTracker.getTracker().sendEvent(
                             "VirusLikeRequest", "FacebookError_" + e.getErrorType(),
                             from, (long) socialIdForRequest.size()
                     );
@@ -143,7 +143,7 @@ public class VirusLike extends AbstractData {
                 public void onError(DialogError e) {
                     super.onError(e);
 
-                    EasyTracker.getTracker().trackEvent(
+                    EasyTracker.getTracker().sendEvent(
                             "VirusLikeRequest", "DialogError",
                             from, 0L
                     );
@@ -155,7 +155,7 @@ public class VirusLike extends AbstractData {
                 public void onCancel() {
                     super.onCancel();
 
-                    EasyTracker.getTracker().trackEvent(
+                    EasyTracker.getTracker().sendEvent(
                             "VirusLikeRequest", "Cancel",
                             from, 0L
                     );

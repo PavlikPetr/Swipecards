@@ -16,8 +16,8 @@ public class FansFragment extends BookmarksFragment{
     }
 
     @Override
-    protected int getTitle() {
-        return R.string.general_fans;
+    protected String getTitle() {
+        return getString(R.string.general_fans);
     }
 
     @Override

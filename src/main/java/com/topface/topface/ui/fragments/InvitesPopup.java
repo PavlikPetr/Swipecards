@@ -39,6 +39,12 @@ public class InvitesPopup extends BaseFragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setNeedTitles(false);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.invites_popup, container, false);
         init(root);
@@ -65,7 +71,7 @@ public class InvitesPopup extends BaseFragment {
         closeInvites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EasyTracker.getTracker().trackEvent("InvitesPopup", "ClosePopup", "", 0L);
+                EasyTracker.getTracker().sendEvent("InvitesPopup", "ClosePopup", "", 0L);
                 if (isAdded()) {
                     ((BaseFragmentActivity) activity).close(InvitesPopup.this);
                 }
@@ -110,11 +116,11 @@ public class InvitesPopup extends BaseFragment {
             @Override
             public void onClick(View v) {
                 if (!invitesCheckBox.isChecked()) {
-                    EasyTracker.getTracker().trackEvent("InvitesPopup", "SendContactsBtnClick", "", 0L);
+                    EasyTracker.getTracker().sendEvent("InvitesPopup", "SendContactsBtnClick", "", 0L);
                     startActivity(ContainerActivity.getIntentForContacts(contacts));
                     ((BaseFragmentActivity) activity).close(InvitesPopup.this);
                 } else {
-                    EasyTracker.getTracker().trackEvent("InvitesPopup", "SendContactsBtnClick", "", 1L);
+                    EasyTracker.getTracker().sendEvent("InvitesPopup", "SendContactsBtnClick", "", 1L);
                     sendInvitesRequest();
                 }
             }
@@ -130,25 +136,25 @@ public class InvitesPopup extends BaseFragment {
             public void success(IApiResponse response) {
                 boolean isPremium = response.getJsonResult().optBoolean("premium");
                 if (isPremium) {
-                    EasyTracker.getTracker().trackEvent("InvitesPopup", "SuccessWithNotChecked", "premiumTrue", (long) contacts.size());
-                    EasyTracker.getTracker().trackEvent("InvitesPopup", "PremiumReceived", "", (long) CacheProfile.getOptions().premium_period);
+                    EasyTracker.getTracker().sendEvent("InvitesPopup", "SuccessWithNotChecked", "premiumTrue", (long) contacts.size());
+                    EasyTracker.getTracker().sendEvent("InvitesPopup", "PremiumReceived", "", (long) CacheProfile.getOptions().premium_period);
                     if (getActivity() != null) {
 
-                        Toast.makeText(getActivity(), Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period), 1500).show();
                         CacheProfile.premium = true;
                         CacheProfile.canInvite = false;
                         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
                         ((BaseFragmentActivity) getActivity()).close(InvitesPopup.this);
                     }
                 } else {
-                    EasyTracker.getTracker().trackEvent("InvitesPopup", "SuccessWithNotChecked", "premiumFalse", (long) contacts.size());
-                    Toast.makeText(getActivity(), getString(R.string.invalid_contacts), Toast.LENGTH_SHORT).show();
+                    EasyTracker.getTracker().sendEvent("InvitesPopup", "SuccessWithNotChecked", "premiumFalse", (long) contacts.size());
+                    Toast.makeText(getActivity(), getString(R.string.invalid_contacts), 2000).show();
                 }
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                EasyTracker.getTracker().trackEvent("InvitesPopup", "RequestFail", Integer.toString(codeError), 0L);
+                EasyTracker.getTracker().sendEvent("InvitesPopup", "RequestFail", Integer.toString(codeError), 0L);
             }
 
             @Override

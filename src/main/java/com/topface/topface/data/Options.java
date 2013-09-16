@@ -81,30 +81,26 @@ public class Options extends AbstractData {
      * Идентификаторы типов баннеров
      */
     public final static String BANNER_TOPFACE = "TOPFACE";
-    public final static String BANNER_ADFONIC = "ADFONIC";
     public final static String BANNER_ADMOB = "ADMOB";
-    public final static String BANNER_WAPSTART = "WAPSTART";
     public static final String BANNER_ADWIRED = "ADWIRED";
-    public final static String BANNER_MADNET = "MADNET";
-    public static final String BANNER_BEGUN = "BEGUN";
     public static final String BANNER_MOPUB = "MOPUB";
-    public static final String BANNER_INNERACTIVE = "INNERACTIVE";
-    public static final String BANNER_MOBCLIX = "MOBCLIX";
     public static final String BANNER_IVENGO = "IVENGO";
+    public static final String BANNER_ADCAMP = "ADCAMP";
+    public static final String BANNER_LIFESTREET = "LIFESTREET";
+    public static final String BANNER_ADLAB = "ADLAB";
     public static final String BANNER_GAG = "GAG";
+    public static final String BANNER_NONE = "NONE";
     public final static String[] BANNERS = new String[]{
             BANNER_TOPFACE,
-            BANNER_ADFONIC,
             BANNER_ADMOB,
-            BANNER_WAPSTART,
             BANNER_ADWIRED,
-            BANNER_MADNET,
-            BANNER_BEGUN,
             BANNER_MOPUB,
-            BANNER_INNERACTIVE,
-            BANNER_MOBCLIX,
             BANNER_IVENGO,
-            BANNER_GAG
+            BANNER_ADCAMP,
+            BANNER_LIFESTREET,
+            BANNER_ADLAB,
+            BANNER_GAG,
+            BANNER_NONE
     };
 
     /**
@@ -123,7 +119,7 @@ public class Options extends AbstractData {
             RANDOM
     };
     public static final String PREMIUM_MESSAGES_POPUP_SHOW_TIME = "premium_messages_popup_last_show";
-
+    public static final String PREMIUM_VISITORS_POPUP_SHOW_TIME = "premium_visitors_popup_last_show";
     /**
      * Настройки для каждого типа страниц
      */
@@ -158,8 +154,11 @@ public class Options extends AbstractData {
     public boolean block_unconfirmed;
     public boolean block_chat_not_mutual;
     public Closing closing = new Closing();
-    public PremiumMessages premium_messages;
+    public PremiumAirEntity premium_messages;
+    public PremiumAirEntity premium_visitors;
     public GetJar getJar;
+    public String gagTypeBanner = BANNER_ADMOB;
+    public String gagTypeFullscreen = BANNER_NONE;
 
     public static Options parse(ApiResponse response) {
         Options options = new Options();
@@ -220,12 +219,21 @@ public class Options extends AbstractData {
             options.popup_timeout = contacts_invite.optInt("show_popup_timeout") * 60 * 60 * 1000;
 
             if (response.jsonResult.has("premium_messages")) {
-                options.premium_messages = new PremiumMessages(
-                        response.jsonResult.optJSONObject("premium_messages")
+                options.premium_messages = new PremiumAirEntity(
+                        response.jsonResult.optJSONObject("premium_messages"), PremiumAirEntity.AIR_MESSAGES
                 );
             } else {
-                options.premium_messages = new PremiumMessages(false, 10, 1000);
+                options.premium_messages = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_MESSAGES);
             }
+
+            if (response.jsonResult.has("visitors_popup")) {
+                options.premium_visitors = new PremiumAirEntity(
+                        response.jsonResult.optJSONObject("visitors_popup"), PremiumAirEntity.AIR_GUESTS
+                );
+            } else {
+                options.premium_visitors = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_GUESTS);
+            }
+
 
             if (response.jsonResult.has("links")) {
                 JSONObject links = response.jsonResult.optJSONObject("links");
@@ -237,14 +245,17 @@ public class Options extends AbstractData {
             JSONObject closings = response.jsonResult.optJSONObject("closing");
             if (options.closing == null) options.closing = new Closing();
             options.closing.enabledMutual = closings.optBoolean("enabled_mutual");
-            options.closing.enableSympathies = closings.optBoolean("enabled_sympathies");
+            options.closing.enabledSympathies = closings.optBoolean("enabled_sympathies");
             options.closing.limitMutual = closings.optInt("limit_mutual");
             options.closing.limitSympathies = closings.optInt("limit_sympathies");
 
             options.ratePopupType = response.jsonResult.optJSONObject("rate_popup").optString("type");
 
             JSONObject getJar = response.jsonResult.optJSONObject("getjar");
-            options.getJar = new GetJar(getJar.optString("id"),getJar.optString("name"),getJar.optLong("price"));
+            options.getJar = new GetJar(getJar.optString("id"), getJar.optString("name"), getJar.optLong("price"));
+
+            options.gagTypeBanner = response.jsonResult.optString("gag_type_banner", Options.BANNER_ADMOB);
+            options.gagTypeFullscreen = response.jsonResult.optString("gag_type_fullscreen", Options.BANNER_NONE);
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
         }
@@ -365,6 +376,15 @@ public class Options extends AbstractData {
         public void onClick(String id);
     }
 
+    public boolean containsBannerType(String bannerType) {
+        for (Page page : pages.values()) {
+            if (page.banner.equals(bannerType)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static class Page {
         public String name;
         public String floatType;
@@ -390,7 +410,7 @@ public class Options extends AbstractData {
         public static Page parseFromString(String str) {
             String[] params = str.split(SEPARATOR);
             if (params.length == 3) {
-                return new Page(params[0],params[1],params[2]);
+                return new Page(params[0], params[1], params[2]);
             } else {
                 return null;
             }
@@ -423,9 +443,11 @@ public class Options extends AbstractData {
         return paymentwall;
     }
 
-    public static class PremiumMessages {
+    public static class PremiumAirEntity {
         public static final int DEFAULT_COUNT = 10;
         private static final int DEFAULT_TIMEOUT = 1000;
+
+        private int airType;
         /**
          * включен ли механизм для данного пользователя в булевых константах
          */
@@ -439,7 +461,11 @@ public class Options extends AbstractData {
          */
         private int mTimeout;
 
-        public PremiumMessages(JSONObject premiumMessages) {
+        public static int AIR_MESSAGES = 0;
+        public static int AIR_GUESTS = 1;
+
+        public PremiumAirEntity(JSONObject premiumMessages, int airType) {
+            this.airType = airType;
             if (premiumMessages != null) {
                 mEnabled = premiumMessages.optBoolean("enabled");
                 mCount = premiumMessages.optInt("count", DEFAULT_COUNT);
@@ -447,10 +473,11 @@ public class Options extends AbstractData {
             }
         }
 
-        public PremiumMessages(boolean enabled, int count, int timeout) {
+        public PremiumAirEntity(boolean enabled, int count, int timeout, int type) {
             mEnabled = enabled;
             mCount = count;
             mTimeout = timeout;
+            airType = type;
         }
 
         public int getCount() {
@@ -467,7 +494,7 @@ public class Options extends AbstractData {
                 public void run() {
                     PreferenceManager.getDefaultSharedPreferences(App.getContext())
                             .edit()
-                            .putLong(PREMIUM_MESSAGES_POPUP_SHOW_TIME, System.currentTimeMillis())
+                            .putLong(getPrefsConstant(), System.currentTimeMillis())
                             .commit();
                 }
             }).run();
@@ -479,22 +506,31 @@ public class Options extends AbstractData {
                 public void run() {
                     PreferenceManager.getDefaultSharedPreferences(App.getContext())
                             .edit()
-                            .remove(PREMIUM_MESSAGES_POPUP_SHOW_TIME)
+                            .remove(getPrefsConstant())
                             .commit();
                 }
             }).run();
         }
 
+        public String getPrefsConstant() {
+            return airType == AIR_MESSAGES ? PREMIUM_MESSAGES_POPUP_SHOW_TIME :
+                    PREMIUM_VISITORS_POPUP_SHOW_TIME;
+        }
+
         private long getLashShowTime() {
             return  PreferenceManager.getDefaultSharedPreferences(App.getContext())
-                    .getLong(PREMIUM_MESSAGES_POPUP_SHOW_TIME, 0);
+                    .getLong(getPrefsConstant(), 0);
         }
     }
+
+
+
+
     public static class Closing {
         public static String DATA_FOR_CLOSING_RECEIVED_ACTION = "DATA_FOR_CLOSING_RECEIVED_ACTION";
 
         private static Ssid.ISsidUpdateListener listener;
-        public boolean enableSympathies;
+        public boolean enabledSympathies;
         public boolean enabledMutual;
         public int limitSympathies;
         public int limitMutual;
@@ -546,20 +582,25 @@ public class Options extends AbstractData {
         }
 
         public boolean isClosingsEnabled() {
-            return (enabledMutual || enableSympathies) && !CacheProfile.premium;
+            return (enabledMutual || enabledSympathies) && !CacheProfile.premium;
         }
 
         public boolean isMutualClosingAvailable() {
-            SharedPreferences pref =  App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+            SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
             long currentTime = System.currentTimeMillis();
-            long lastCallTime = pref.getLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME,0);
+            long lastCallTime = pref.getLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME, 0);
             return DateUtils.isOutside24Hours(lastCallTime, System.currentTimeMillis());
         }
 
         public boolean isLikesClosingAvailable() {
-            SharedPreferences pref =  App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-            long lastCallTime = pref.getLong(Static.PREFERENCES_LIKES_CLOSING_LAST_TIME,0);
+            SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+            long lastCallTime = pref.getLong(Static.PREFERENCES_LIKES_CLOSING_LAST_TIME, 0);
             return DateUtils.isOutside24Hours(lastCallTime, System.currentTimeMillis());
+        }
+
+        public void stopForPremium() {
+            enabledMutual = false;
+            enabledSympathies = false;
         }
     }
 
@@ -568,7 +609,7 @@ public class Options extends AbstractData {
         String name = "coins";
         long price = Integer.MAX_VALUE;
 
-        public GetJar(String id,String name,long price) {
+        public GetJar(String id, String name, long price) {
             this.id = id;
             this.name = name;
             this.price = price;

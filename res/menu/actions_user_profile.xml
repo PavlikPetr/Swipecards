@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:appcompat="http://schemas.android.com/apk/res-auto"
+        >
+    <item android:id="@+id/action_user_actions_list"
+          android:title="@string/profile_actions"
+          android:icon="@drawable/user_profile_actions_button_selector"
+          appcompat:showAsAction="always"/>
+</menu>

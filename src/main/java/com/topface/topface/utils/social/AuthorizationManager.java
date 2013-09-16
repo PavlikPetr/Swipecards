@@ -53,7 +53,6 @@ import java.net.MalformedURLException;
  * @author kirussell
  */
 
-//TODO make some Strategy or State pattern for different social networks 
 public class AuthorizationManager {
 
     public final static int AUTHORIZATION_FAILED = 0;

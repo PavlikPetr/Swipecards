@@ -200,9 +200,9 @@ public class TopfaceNotificationManager {
                     notificationBuilder.setLargeIcon(scaledIcon);
                 }
             }
-
             if (Settings.getInstance().isVibrationEnabled()) {
                 notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
+
             }
 
             notificationBuilder.setSound(Settings.getInstance().getRingtone());
@@ -244,11 +244,15 @@ public class TopfaceNotificationManager {
                 views.setViewVisibility(R.id.fnRetry, View.GONE);
 
                 if (!isOld) {
-                    if(!isTextNotification) {
+                    if (!isTextNotification) {
                         generateBigPicture();
                     } else {
                         generateBigText();
                     }
+                }
+                if (Settings.getInstance().isVibrationEnabled()) {
+                    notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
+
                 }
                 PendingIntent resultPendingIntent = generatePendingIntent(intent);
                 notificationBuilder.setAutoCancel(true);
@@ -277,7 +281,10 @@ public class TopfaceNotificationManager {
 
                 views.setTextViewText(R.id.fnTitle, title);
                 views.setTextViewText(R.id.fnMsg, text);
+                if (Settings.getInstance().isVibrationEnabled()) {
+                    notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
 
+                }
                 if (!isOld) {
 
                     Intent retryIntent = new Intent(AddPhotoHelper.CANCEL_NOTIFICATION_RECEIVER + intent.getParcelableExtra("PhotoUrl"));

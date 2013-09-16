@@ -43,6 +43,12 @@ public class GiftsFragment extends BaseFragment {
     private boolean mIsUpdating = false;
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setNeedTitles(false);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_grid, null);
 
@@ -86,7 +92,7 @@ public class GiftsFragment extends BaseFragment {
                                         intent.putExtra(GiftsActivity.INTENT_GIFT_URL, item.gift.link);
                                         intent.putExtra(GiftsActivity.INTENT_GIFT_PRICE, item.gift.price);
 
-                                        EasyTracker.getTracker().trackEvent("Gifts", "Send", "GiftId=" + item.gift.id, (long) item.gift.price);
+                                        EasyTracker.getTracker().sendEvent("Gifts", "Send", "GiftId=" + item.gift.id, (long) item.gift.price);
                                         activity.setResult(Activity.RESULT_OK, intent);
                                         activity.finish();
                                     }
@@ -364,5 +370,10 @@ public class GiftsFragment extends BaseFragment {
                 }
             }
         };
+    }
+
+    @Override
+    protected boolean needOptionsMenu() {
+        return false;
     }
 }

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.*;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -79,6 +81,8 @@ public class AuthFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater,container,savedInstanceState);
+        Debug.log("AF: onCreate");
         mAuthorizationManager = new AuthorizationManager(getActivity());
         Activity activity = getActivity();
         if (activity instanceof NavigationActivity) {
@@ -96,6 +100,7 @@ public class AuthFragment extends BaseFragment {
             getProfileAndOptions();
         }
         checkOnline();
+        getSupportActionBar().hide();
         return root;
     }
 
@@ -191,7 +196,7 @@ public class AuthFragment extends BaseFragment {
                 @Override
                 public void onClick(View v) {
                     Debug.log("LOCALE::" + btnsController.getLocaleTag());
-                    EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG, "OtherWaysButtonClicked", btnsController.getLocaleTag(), 1L);
+                    EasyTracker.getTracker().sendEvent(MAIN_BUTTONS_GA_TAG, "OtherWaysButtonClicked", btnsController.getLocaleTag(), 1L);
                     additionalButtonsScreen = true;
                     btnsController.setAllSettings();
                     mOtherSocialNetworksButton.setVisibility(View.GONE);
@@ -230,7 +235,7 @@ public class AuthFragment extends BaseFragment {
         mCreateAccountView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EasyTracker.getTracker().trackEvent("Registration", "StartActivity", "FromAuth", 1L);
+                EasyTracker.getTracker().sendEvent("Registration", "StartActivity", "FromAuth", 1L);
                 Intent intent = new Intent(getActivity(), ContainerActivity.class);
                 startActivityForResult(intent, ContainerActivity.INTENT_REGISTRATION_FRAGMENT);
             }
@@ -320,7 +325,7 @@ public class AuthFragment extends BaseFragment {
         mCreateAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EasyTracker.getTracker().trackEvent("Registration", "StartActivity", "FromAuth", 1L);
+                EasyTracker.getTracker().sendEvent("Registration", "StartActivity", "FromAuth", 1L);
                 Intent intent = new Intent(getActivity(), ContainerActivity.class);
                 startActivityForResult(intent, ContainerActivity.INTENT_REGISTRATION_FRAGMENT);
             }
@@ -410,7 +415,7 @@ public class AuthFragment extends BaseFragment {
     private AuthRequest generateAuthRequest(AuthToken token) {
         AuthRequest authRequest = new AuthRequest(token, getActivity());
         registerRequest(authRequest);
-        EasyTracker.getTracker().trackEvent("Profile", "Auth", "FromActivity" + token.getSocialNet(), 1L);
+        EasyTracker.getTracker().sendEvent("Profile", "Auth", "FromActivity" + token.getSocialNet(), 1L);
         return authRequest;
     }
 
@@ -437,7 +442,7 @@ public class AuthFragment extends BaseFragment {
             }
 
         });
-        EasyTracker.getTracker().trackEvent("Profile", "Auth", "FromActivity" + AuthToken.SN_TOPFACE, 1L);
+        EasyTracker.getTracker().sendEvent("Profile", "Auth", "FromActivity" + AuthToken.SN_TOPFACE, 1L);
 
         return authRequest;
     }
@@ -715,7 +720,7 @@ public class AuthFragment extends BaseFragment {
     private void btnVKClick() {
         // костыль, надо избавить от viewflipper к чертовой бабушке
         mProcessingTFReg = false;
-        EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "LoginAdditionalVk" : "LoginMainVk", btnsController.getLocaleTag(), 1L);
+        EasyTracker.getTracker().sendEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "LoginAdditionalVk" : "LoginMainVk", btnsController.getLocaleTag(), 1L);
 
         if (checkOnline() && mAuthorizationManager != null) {
             hideButtons();
@@ -726,7 +731,7 @@ public class AuthFragment extends BaseFragment {
     private void btnFBClick() {
         // костыль, надо избавить от viewflipper к чертовой бабушке
         mProcessingTFReg = false;
-        EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "LoginAdditionalFb" : "LoginMainFb", btnsController.getLocaleTag(), 1L);
+        EasyTracker.getTracker().sendEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "LoginAdditionalFb" : "LoginMainFb", btnsController.getLocaleTag(), 1L);
         if (checkOnline() && mAuthorizationManager != null) {
             hideButtons();
             mAuthorizationManager.facebookAuth();
@@ -736,7 +741,7 @@ public class AuthFragment extends BaseFragment {
 
     private void btnOKClick() {
         mProcessingTFReg = false;
-        EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "LoginAdditionalOk" : "LoginMainOk", btnsController.getLocaleTag(), 1L);
+        EasyTracker.getTracker().sendEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "LoginAdditionalOk" : "LoginMainOk", btnsController.getLocaleTag(), 1L);
         if (checkOnline() && mAuthorizationManager != null) {
             hideButtons();
             mAuthorizationManager.odnoklassnikiAuth();
@@ -793,8 +798,9 @@ public class AuthFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        getSupportActionBar().show();
         if (!hasAuthorized) {
-            EasyTracker.getTracker().trackEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "DismissAdditional" : "DismissMain", btnsController.getLocaleTag(), 1L);
+            EasyTracker.getTracker().sendEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "DismissAdditional" : "DismissMain", btnsController.getLocaleTag(), 1L);
         }
     }
 
@@ -805,5 +811,10 @@ public class AuthFragment extends BaseFragment {
 
     interface ProfileIdReceiver {
         void onProfileIdReceived(int id);
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.app_name);
     }
 }

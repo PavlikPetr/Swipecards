@@ -6,9 +6,8 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
+import android.view.animation.TranslateAnimation;
 import android.widget.*;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
@@ -18,7 +17,6 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.views.LockerView;
-import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.Utils;
@@ -48,27 +46,8 @@ public class ContactsFragment extends BaseFragment {
 
         locker = (LockerView) root.findViewById(R.id.clLocker);
 
-        ActionBar mActionBar = getActionBar(root);
-        mActionBar.showBackButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().finish();
-            }
-        });
-
         TextView title = (TextView) root.findViewById(R.id.inviteText);
         title.setText(Utils.getQuantityString(R.plurals.invite_friends_plurals, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().contacts_count, CacheProfile.getOptions().premium_period));
-
-        ActionBar actionBar = getActionBar(root);
-        actionBar.setTitleText(getString(R.string.general_invite_friends));
-        actionBar.showCheckBox(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CheckBox checkBox = (CheckBox) v;
-                ((ContactsListAdapter) contactsView.getAdapter()).setAllDataChecked(checkBox.isChecked());
-                ((ContactsListAdapter) contactsView.getAdapter()).changeButtonState();
-            }
-        });
 
         contactsView = (ListView) root.findViewById(R.id.contactsList);
         //Получаем список контактов из аргументов. Если он не пришел, закрываем фрагмент.
@@ -142,8 +121,8 @@ public class ContactsFragment extends BaseFragment {
                 public void success(IApiResponse response) {
                     boolean isPremium = response.getJsonResult().optBoolean("premium");
                     if (isPremium) {
-                        EasyTracker.getTracker().trackEvent("InvitesPopup", "SuccessWithChecked", "premiumTrue", (long) contacts.size());
-                        EasyTracker.getTracker().trackEvent("InvitesPopup", "PremiumReceived", "", (long) CacheProfile.getOptions().premium_period);
+                        EasyTracker.getTracker().sendEvent("InvitesPopup", "SuccessWithChecked", "premiumTrue", (long) contacts.size());
+                        EasyTracker.getTracker().sendEvent("InvitesPopup", "PremiumReceived", "", (long) CacheProfile.getOptions().premium_period);
                         if (getActivity() != null) {
 
                             Toast.makeText(getActivity(), Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period), Toast.LENGTH_SHORT).show();
@@ -153,8 +132,8 @@ public class ContactsFragment extends BaseFragment {
                             getActivity().finish();
                         }
                     } else {
-                        EasyTracker.getTracker().trackEvent("InvitesPopup", "SuccessWithChecked", "premiumFalse", (long) contacts.size());
-                        Toast.makeText(getActivity(), getString(R.string.invalid_contacts), Toast.LENGTH_LONG).show();
+                        EasyTracker.getTracker().sendEvent("InvitesPopup", "SuccessWithChecked", "premiumFalse", (long) contacts.size());
+                        Toast.makeText(getActivity(), getString(R.string.invalid_contacts), 2000).show();
                         if (contactsVip != null) {
                             contactsVip.setEnabled(true);
                         }
@@ -163,7 +142,7 @@ public class ContactsFragment extends BaseFragment {
 
                 @Override
                 public void fail(int codeError, IApiResponse response) {
-                    EasyTracker.getTracker().trackEvent("InvitesPopup", "RequestFail", Integer.toString(codeError), 0L);
+                    EasyTracker.getTracker().sendEvent("InvitesPopup", "RequestFail", Integer.toString(codeError), 0L);
                     if (contactsVip != null) {
                         contactsVip.setEnabled(true);
                     }
@@ -334,5 +313,49 @@ public class ContactsFragment extends BaseFragment {
         }
     }
 
+    @Override
+    protected String getTitle() {
+        return getString(R.string.general_invite_friends);
+    }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        final MenuItem selectAllMenuItem = menu.findItem(R.id.action_select_all);
+        CheckBox checkBox = (CheckBox) selectAllMenuItem.getActionView().findViewById(R.id.cbCheckBox);
+        selectAllMenuItem.setChecked(true);
+        checkBox.setChecked(true);
+        checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onOptionsItemSelected(selectAllMenuItem);
+            }
+        });
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                ContactsListAdapter adapter = (ContactsListAdapter)contactsView.getAdapter();
+                adapter.setAllDataChecked(isChecked);
+                adapter.changeButtonState();
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_profile:
+                boolean checked = !item.isChecked();
+                item.setChecked(checked);
+                ((CheckBox)item.getActionView().findViewById(R.id.cbCheckBox)).setChecked(checked);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected Integer getOptionsMenuRes() {
+        return R.menu.actions_invite_contacts;
+    }
 }

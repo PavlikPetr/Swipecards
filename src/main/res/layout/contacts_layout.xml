@@ -1,48 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
-    <include
-        layout="@layout/bar_navigation_header"
-        />
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <RelativeLayout
             android:id="@+id/addContainer"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:layout_below="@id/loNavigationBar"
-        >
-            <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            >
+
+        <TextView
                 android:id="@+id/inviteText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="8sp"
                 android:textSize="12sp"
                 android:layout_alignParentTop="true"
-                    android:layout_marginBottom="5dp"/>
-            <RelativeLayout
+                android:layout_marginBottom="5dp"/>
+
+        <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/inviteText"
-                >
-                <Button
-                        android:id="@+id/addButton"
-                        style="@style/ButtonGray"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/general_add"
-                        android:textColor="#FFFFFF"
-                        android:padding="10dp"
-                        android:minHeight="10dp"
-                        android:textSize="12sp"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginLeft="5dp"
-                        />
+                android:layout_below="@id/inviteText">
 
-                <EditText
+            <Button
+                    android:id="@+id/addButton"
+                    style="@style/ButtonGray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/general_add"
+                    android:textColor="#FFFFFF"
+                    android:padding="10dp"
+                    android:minHeight="10dp"
+                    android:textSize="12sp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="5dp"
+                    />
+
+            <EditText
                     android:id="@+id/addInput"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -52,23 +50,26 @@
                     android:textSize="12sp"
                     />
 
-            </RelativeLayout>
         </RelativeLayout>
+    </RelativeLayout>
+
     <RelativeLayout
-        android:id="@+id/buttonContainer"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:background="@drawable/bottom_plate"
-        android:layout_alignParentBottom="true"
-        >
-        <Button
-            android:id="@+id/contactsVip"
+            android:id="@+id/buttonContainer"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            style="@style/ButtonBlue"
-            />
+            android:padding="10dp"
+            android:background="@drawable/bottom_plate"
+            android:layout_alignParentBottom="true"
+            >
+
+        <Button
+                android:id="@+id/contactsVip"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                style="@style/ButtonBlue"
+                />
     </RelativeLayout>
+
     <ListView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
@@ -76,6 +77,7 @@
             android:layout_below="@id/addContainer"
             android:layout_above="@id/buttonContainer"
             />
+
     <TextView
             android:id="@+id/tvBackgroundText"
             android:layout_width="wrap_content"
@@ -88,13 +90,13 @@
             android:text="@string/general_dialog_loading"
             android:drawableLeft="@drawable/loader"
             android:visibility="gone"/>
+
     <com.topface.topface.ui.views.LockerView
-        android:id="@+id/clLocker"
-        android:visibility="gone"
-        android:layout_below="@id/loNavigationBar"
-        style="@style/LoadingLocker"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-    />
+            android:id="@+id/clLocker"
+            android:visibility="gone"
+            style="@style/LoadingLocker"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            />
 
 </RelativeLayout>

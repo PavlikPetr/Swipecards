@@ -14,17 +14,11 @@ import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedListData;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.DialogDeleteRequest;
 import com.topface.topface.requests.FeedRequest;
-import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.DialogListAdapter;
-import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Debug;
-import com.topface.topface.utils.Utils;
 import org.json.JSONObject;
 
 public class DialogsFragment extends FeedFragment<FeedDialog> {
@@ -44,8 +38,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
-        IntentFilter filter = new IntentFilter(UPDATE_DIALOGS);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, filter);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, new IntentFilter(UPDATE_DIALOGS));
         return super.onCreateView(inflater, container, saved);
     }
 
@@ -56,8 +49,8 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
-    protected int getTitle() {
-        return R.string.general_dialogs;
+    protected String getTitle() {
+        return getString(R.string.general_dialogs);
     }
 
     @Override
@@ -125,5 +118,10 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     @Override
     protected int getContextMenuLayoutRes() {
         return R.menu.feed_context_menu_dialogs;
+    }
+
+    @Override
+    protected Integer getOptionsMenuRes() {
+        return R.menu.actions_feed_filtered;
     }
 }

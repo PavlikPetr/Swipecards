@@ -1462,7 +1462,9 @@ public class Base64 {
 
         Base64.InputStream bis = null;
         try {
-            byte[] buffer = new byte[Math.min(stream.available(), 8192)];
+            int available = stream.available();
+            available = available == 0 ? 4096 : available;
+            byte[] buffer = new byte[Math.min(available, 8192)];
             int length = 0;
             int numBytes = 0;
 

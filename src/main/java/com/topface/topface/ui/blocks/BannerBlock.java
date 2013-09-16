@@ -1,10 +1,14 @@
 package com.topface.topface.ui.blocks;
 
+import ad.labs.sdk.AdBanner;
+import ad.labs.sdk.AdInitializer;
+import ad.labs.sdk.tasks.BannerLoader;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,19 +19,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
-import com.adfonic.android.AdListener;
-import com.adfonic.android.AdfonicView;
-import com.adfonic.android.api.Request;
 import com.google.ads.Ad;
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 import com.google.analytics.tracking.android.EasyTracker;
-import com.inneractive.api.ads.InneractiveAd;
-import com.inneractive.api.ads.InneractiveAdListener;
-import com.mad.ad.AdStaticView;
-import com.mobclix.android.sdk.MobclixAdView;
-import com.mobclix.android.sdk.MobclixAdViewListener;
-import com.mobclix.android.sdk.MobclixMMABannerXLAdView;
+import com.lifestreet.android.lsmsdk.BannerAdapter;
+import com.lifestreet.android.lsmsdk.BasicSlotListener;
+import com.lifestreet.android.lsmsdk.SlotView;
 import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.mobileads.MoPubView;
 import com.topface.billing.BillingFragment;
@@ -47,20 +45,14 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.offerwalls.Offerwalls;
-import ru.begun.adlib.Callback;
-import ru.begun.adlib.RequestParam;
+import ru.adcamp.ads.AdsManager;
+import ru.adcamp.ads.BannerAdView;
 import ru.ideast.adwired.AWView;
 import ru.ideast.adwired.events.OnNoBannerListener;
 import ru.ideast.adwired.events.OnStartListener;
 import ru.ideast.adwired.events.OnStopListener;
-import ru.wapstart.plus1.sdk.Plus1BannerAsker;
-import ru.wapstart.plus1.sdk.Plus1BannerDownloadListener;
-import ru.wapstart.plus1.sdk.Plus1BannerRequest;
-import ru.wapstart.plus1.sdk.Plus1BannerView;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -70,26 +62,38 @@ import java.util.regex.Pattern;
  */
 public class BannerBlock {
 
-    public static final String ADFONIC_SLOT_ID = "9f83e583-a247-4b78-94a0-bf2beb8775fc";
-    public static final int PLUS1_ID = 7227;
-    private static final String BEGUN_KEY = "pad_id:320304962|block_id:320308422";
     public static final String VIRUS_LIKES_BANNER_PARAM = "viruslikes";
     private static final String MOPUB_AD_UNIT_ID = "4ec8274ea73811e295fa123138070049";
+    private static final String LIFESTREET_SLOT_TAG = "http://mobile-android.lfstmedia.com/m2/slot76330?ad_size=320x50&adkey=3f6";
+    private static final String ADLAB_IDENTIFICATOR = "399375";
 
     private LayoutInflater mInflater;
     ViewGroup mBannerLayout;
     private Fragment mFragment;
+    private Context mContext;
     private View mBannerView;
-    private Plus1BannerAsker mPLus1Asker;
+    private static boolean mAdcampInitialized = false;
 
     private Map<String, Character> mAdwiredMap = new HashMap<String, Character>();
+    private AdInitializer mAdlabInitializer;
 
     public BannerBlock(Fragment fragment, ViewGroup layout) {
         super();
         mFragment = fragment;
+        mContext = mFragment.getActivity();
         mInflater = (LayoutInflater) mFragment.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mBannerLayout = (ViewGroup) layout.findViewById(R.id.loBannerContainer);
         setBannersMap();
+    }
+
+    public static void init() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+            if (CacheProfile.getOptions().containsBannerType(Options.BANNER_ADCAMP)) {
+                AdsManager.getInstance().initialize(App.getContext());
+                AdsManager.getInstance().addTestDevice("99000200906025");
+                mAdcampInitialized = true;
+            }
+        }
     }
 
     private void setBannersMap() {
@@ -109,6 +113,14 @@ public class BannerBlock {
             if (bannersMap.containsKey(fragmentId) && options != null && options.pages != null) {
                 if (bannersMap.get(fragmentId) != null) {
                     String bannerType = bannersMap.get(fragmentId).banner;
+
+                    //AdCamp uses only FROYO and above
+                    if (bannerType.equals(Options.BANNER_ADCAMP)) {
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO || !mAdcampInitialized) {
+                            requestBannerGag();
+                            return;
+                        }
+                    }
 
                     mBannerView = getBannerView(bannerType);
                     if (mBannerView == null) return;
@@ -132,25 +144,19 @@ public class BannerBlock {
     private View getBannerView(String bannerType) {
         try {
             if (bannerType.equals(Options.BANNER_TOPFACE) || bannerType.equals(Options.BANNER_GAG)) {
-                return mInflater.inflate(R.layout.banner_topface, null);
+                return mInflater.inflate(R.layout.banner_topface, mBannerLayout, false);
             } else if (bannerType.equals(Options.BANNER_ADMOB)) {
-                return mInflater.inflate(R.layout.banner_admob, null);
-            } else if (bannerType.equals(Options.BANNER_ADFONIC)) {
-                return mInflater.inflate(R.layout.banner_adfonic, null);
-            } else if (bannerType.equals(Options.BANNER_WAPSTART)) {
-                return mInflater.inflate(R.layout.banner_wapstart, null);
+                return mInflater.inflate(R.layout.banner_admob, mBannerLayout, false);
             } else if (bannerType.equals(Options.BANNER_ADWIRED)) {
-                return mInflater.inflate(R.layout.banner_adwired, null);
-            } else if (bannerType.equals(Options.BANNER_MADNET)) {
-                return mInflater.inflate(R.layout.banner_madnet, null);
-            } else if (bannerType.equals(Options.BANNER_BEGUN)) {
-                return mInflater.inflate(R.layout.banner_begun, null);
+                return mInflater.inflate(R.layout.banner_adwired, mBannerLayout, false);
             } else if (bannerType.equals(Options.BANNER_MOPUB)) {
-                return mInflater.inflate(R.layout.banner_mopub, null);
-            } else if (bannerType.equals(Options.BANNER_INNERACTIVE)) {
-                return mInflater.inflate(R.layout.banner_inneractive, null);
-            } else if (bannerType.equals(Options.BANNER_MOBCLIX)) {
-                return mInflater.inflate(R.layout.banner_mobclix, null);
+                return mInflater.inflate(R.layout.banner_mopub, mBannerLayout, false);
+            } else if (bannerType.equals(Options.BANNER_ADCAMP)) {
+                return mInflater.inflate(R.layout.banner_adcamp, mBannerLayout, false);
+            } else if (bannerType.equals(Options.BANNER_LIFESTREET)) {
+                return mInflater.inflate(R.layout.banner_lifestreet, mBannerLayout, false);
+            } else if (bannerType.equals(Options.BANNER_ADLAB)) {
+                return mInflater.inflate(R.layout.banner_adlab, null);
             } else {
                 return null;
             }
@@ -193,22 +199,16 @@ public class BannerBlock {
     private void showBanner(final Banner banner) throws Exception {
         if (mBannerView instanceof AdView) {
             showAdMob();
-        } else if (mBannerView instanceof AdfonicView) {
-            showAdFonic();
-        } else if (mBannerView instanceof Plus1BannerView) {
-            showWapStart();
         } else if (mBannerView instanceof AWView) {
             showAdwired();
-        } else if (mBannerView instanceof AdStaticView) {
-            showMadnet();
-        } else if (mBannerView instanceof ru.begun.adlib.AdView) {
-            showBegun();
         } else if (mBannerView instanceof MoPubView) {
             showMopub();
-        } else if (mBannerView instanceof InneractiveAd) {
-            showInneractive();
-        } else if (mBannerView instanceof MobclixMMABannerXLAdView) {
-            showMobclix();
+        } else if (mBannerView instanceof BannerAdView) {
+            showAdcamp();
+        } else if (mBannerView instanceof SlotView) {
+            showLifeStreet();
+        } else if (mBannerView instanceof AdBanner) {
+            showAdlab();
         } else if (mBannerView instanceof ImageView) {
             if (banner == null) {
                 requestBannerGag();
@@ -218,97 +218,32 @@ public class BannerBlock {
         }
     }
 
-    private void showMobclix() {
-        ((MobclixMMABannerXLAdView) mBannerView).addMobclixAdViewListener(new MobclixAdViewListener() {
+    private void showLifeStreet() {
+        SlotView slotView = (SlotView) mBannerView;
+        slotView.setSlotTag(LIFESTREET_SLOT_TAG);
+        slotView.setListener(new BasicSlotListener() {
             @Override
-            public void onSuccessfulLoad(MobclixAdView mobclixAdView) {
+            public void onFailedToLoadSlotView(SlotView slotView) {
+                requestBannerGag();
             }
 
             @Override
-            public void onFailedLoad(MobclixAdView adView, int errorCode) {
-                adView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        requestBannerGag();
-                    }
-                });
-            }
-
-            @Override
-            public void onAdClick(MobclixAdView mobclixAdView) {
-            }
-
-            @Override
-            public boolean onOpenAllocationLoad(MobclixAdView mobclixAdView, int i) {
-                return false;
-            }
-
-            @Override
-            public void onCustomAdTouchThrough(MobclixAdView mobclixAdView, String s) {
-            }
-
-            @Override
-            public String keywords() {
-                return null;
-            }
-
-            @Override
-            public String query() {
-                return null;
+            public void onFailedToReceiveAd(BannerAdapter<?> adapter, View view) {
+                requestBannerGag();
             }
         });
+        slotView.loadAd();
     }
 
-    private void showInneractive() {
-        InneractiveAd inneractive = ((InneractiveAd) mBannerView);
-        inneractive.setAge(CacheProfile.age);
-        inneractive.setGender(CacheProfile.sex == Static.BOY ? "Male" : "Female");
-        inneractive.setInneractiveListener(new InneractiveAdListener() {
+    private void showAdlab() {
+        AdBanner adBanner = (AdBanner) mBannerView;
+        mAdlabInitializer = new AdInitializer(mContext, adBanner, ADLAB_IDENTIFICATOR);
+        mAdlabInitializer.setOnBannerRequestListener(new BannerLoader.OnBannerRequestListener() {
             @Override
-            public void onIaAdReceived() {
-                Debug.log("Inneractive: onIaAdReceived()");
-            }
-
-            @Override
-            public void onIaDefaultAdReceived() {
-                Debug.log("Inneractive: onIaDefaultAdReceived()");
-            }
-
-            @Override
-            public void onIaAdFailed() {
-                Debug.log("Inneractive: onIaAdFailed()");
-                if (mFragment != null && mFragment.getActivity() != null) {
-                    mFragment.getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            requestBannerGag();
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onIaAdClicked() {
-            }
-
-            @Override
-            public void onIaAdResize() {
-            }
-
-            @Override
-            public void onIaAdResizeClosed() {
-            }
-
-            @Override
-            public void onIaAdExpand() {
-            }
-
-            @Override
-            public void onIaAdExpandClosed() {
-            }
-
-            @Override
-            public void onIaDismissScreen() {
+            public void onFailedBannerRequest(String s) {
+                requestBannerGag();
+                mAdlabInitializer.pause();
+                mAdlabInitializer = null;
             }
         });
     }
@@ -339,34 +274,6 @@ public class BannerBlock {
             }
         });
         adView.loadAd();
-    }
-
-    private void showBegun() {
-        final ru.begun.adlib.AdView adView = ((ru.begun.adlib.AdView) mBannerView);
-        adView.setOnApiListener(new Callback() {
-            @Override
-            public void init() {
-                ArrayList<RequestParam> al = new ArrayList<RequestParam>();
-                RequestParam rp = new RequestParam();
-                rp.name = "environmentVars";
-                rp.value = BEGUN_KEY;
-                al.add(rp);
-                adView.api("initAd", al);
-            }
-
-            @Override
-            public void callback(String s, String s1) {
-                if (s.equals("AdLoaded")) {
-                    adView.api("startAd");
-                }/* else if (s.equals("AdClickThru")) {
-
-                } else if (s.equals("AdStopped")) {
-
-                }*/
-            }
-        });
-        adView.onDebug = App.DEBUG;
-        adView.init();
     }
 
     private void showTopface(final Banner banner) {
@@ -414,7 +321,7 @@ public class BannerBlock {
             public void onClick(View v) {
                 Intent intent = null;
                 if (banner.action.equals(Banner.ACTION_PAGE)) {
-                    EasyTracker.getTracker().trackEvent("Purchase", "Banner", "", 0L);
+                    EasyTracker.getTracker().sendEvent("Purchase", "Banner", "", 0L);
                     intent = new Intent(mFragment.getActivity(), ContainerActivity.class);
                     if (banner.parameter.equals("VIP")) {
                         intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
@@ -444,16 +351,6 @@ public class BannerBlock {
         });
     }
 
-    private void showMadnet() {
-        mBannerView.setVisibility(View.VISIBLE);
-        com.mad.ad.AdRequest.Builder requestBuilder = new com.mad.ad.AdRequest.Builder();
-        requestBuilder.setGender(CacheProfile.sex == Static.BOY ?
-                com.mad.ad.AdRequest.Gender.MALE : com.mad.ad.AdRequest.Gender.FEMALE);
-        requestBuilder.setGenderInterest(CacheProfile.dating.sex == Static.BOY ?
-                com.mad.ad.AdRequest.GenderInterest.MALE : com.mad.ad.AdRequest.GenderInterest.FEMALE);
-        com.mad.ad.AdRequest request = requestBuilder.getRequest();
-        ((AdStaticView) mBannerView).showBanners(request);
-    }
 
     private void showAdwired() {
         // request onResume
@@ -474,73 +371,6 @@ public class BannerBlock {
             public void onNoBanner() {
                 Debug.log("Adwired: No banner");
                 requestBannerGag();
-            }
-        });
-    }
-
-    private void showWapStart() {
-        mBannerView.setVisibility(View.VISIBLE);
-        mPLus1Asker = new Plus1BannerAsker(new Plus1BannerRequest().setApplicationId(PLUS1_ID),
-                ((Plus1BannerView) mBannerView).setAutorefreshEnabled(false));
-        mPLus1Asker.setRemoveBannersOnPause(true);
-        mPLus1Asker.setDisabledWebViewCorePausing(true);
-        mPLus1Asker.setDownloadListener(new Plus1BannerDownloadListener() {
-            @Override
-            public void onBannerLoaded() {
-
-            }
-
-            @Override
-            public void onBannerLoadFailed(LoadError error) {
-                requestBannerGag();
-            }
-        });
-    }
-
-    private void showAdFonic() {
-        Request request = new Request();
-        request.setLanguage(Locale.getDefault().getLanguage());
-        request.setSlotId(ADFONIC_SLOT_ID);
-        request.setRefreshAd(false);
-        AdfonicView adfonicView = (AdfonicView) mBannerView;
-        adfonicView.loadAd(request);
-        adfonicView.setAdListener(new AdListener() {
-            @Override
-            public void onReceivedAd() {
-                mBannerView.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onPresentScreen() {
-            }
-
-            @Override
-            public void onLeaveApplication() {
-            }
-
-            @Override
-            public void onInvalidRequest() {
-            }
-
-            @Override
-            public void onNetworkError() {
-            }
-
-            @Override
-            public void onNoFill() {
-                requestBannerGag();
-            }
-
-            @Override
-            public void onInternalError() {
-            }
-
-            @Override
-            public void onDismissScreen() {
-            }
-
-            @Override
-            public void onClick() {
             }
         });
     }
@@ -573,12 +403,49 @@ public class BannerBlock {
         ((AdView) mBannerView).loadAd(new AdRequest());
     }
 
-    // Не работает для MADNET, BEGUN: нет событий, чтобы "подвеситься"
+    private void showAdcamp() {
+        ((BannerAdView) mBannerView).setBannerAdViewListener(new BannerAdView.BannerAdViewListener() {
+            @Override
+            public void onLoadingStarted(BannerAdView bannerAdView) {
+            }
+
+            @Override
+            public void onLoadingFailed(BannerAdView bannerAdView, String s) {
+                requestBannerGag();
+            }
+
+            @Override
+            public void onBannerDisplayed(BannerAdView bannerAdView) {
+//                ViewGroup.LayoutParams params = bannerAdView.getLayoutParams();
+//                params.height = Utils.getPxFromDp(50);
+//                params.width = Device.getDisplayMetrics(App.getContext()).widthPixels;
+//                bannerAdView.setLayoutParams(params);
+            }
+
+            @Override
+            public void onBannerClicked(BannerAdView bannerAdView, String s) {
+            }
+        });
+
+        ((BannerAdView) mBannerView).showAd();
+    }
+
     private void requestBannerGag() {
         removeBanner();
-        mBannerView = getBannerView(Options.BANNER_TOPFACE);
-        mBannerLayout.addView(mBannerView);
-        loadBanner(Options.BANNER_GAG);
+        String bannerType = CacheProfile.getOptions().gagTypeBanner;
+        mBannerView = getBannerView(bannerType);
+        if (mBannerView != null) {
+            mBannerLayout.addView(mBannerView);
+            if (bannerType.equals(Options.BANNER_TOPFACE)) {
+                loadBanner(Options.BANNER_GAG);
+            } else {
+                try {
+                    showBanner(null);
+                } catch (Exception e) {
+                    Debug.error(e);
+                }
+            }
+        }
     }
 
     private void invokeBannerMethod(String param) {
@@ -593,12 +460,12 @@ public class BannerBlock {
         dialog.setMessage(mFragment.getString(R.string.general_dialog_loading));
         dialog.show();
 
-        EasyTracker.getTracker().trackEvent("VirusLike", "Click", "Banner", 0L);
+        EasyTracker.getTracker().sendEvent("VirusLike", "Click", "Banner", 0L);
 
         new VirusLikesRequest(mFragment.getActivity()).callback(new DataApiHandler<VirusLike>() {
             @Override
             protected void success(VirusLike data, IApiResponse response) {
-                EasyTracker.getTracker().trackEvent("VirusLike", "Success", "Banner", 0L);
+                EasyTracker.getTracker().sendEvent("VirusLike", "Success", "Banner", 0L);
                 //И предлагаем отправить пользователю запрос своим друзьям не из приложения
                 new VirusLike((ApiResponse) response).sendFacebookRequest(
                         "Banner",
@@ -618,9 +485,10 @@ public class BannerBlock {
                 return new VirusLike(response);
             }
 
+
             @Override
             public void fail(int codeError, IApiResponse response) {
-                EasyTracker.getTracker().trackEvent("VirusLike", "Fail", "Banner", 0L);
+                EasyTracker.getTracker().sendEvent("VirusLike", "Fail", "Banner", 0L);
 
                 if (response.isCodeEqual(ApiResponse.CODE_VIRUS_LIKES_ALREADY_RECEIVED)) {
                     Toast.makeText(getContext(), R.string.virus_error, Toast.LENGTH_LONG).show();
@@ -653,7 +521,7 @@ public class BannerBlock {
     private void sendStat(String action, String label) {
         action = action == null ? "" : action;
         label = label == null ? "" : label;
-        EasyTracker.getTracker().trackEvent("Banner", action, label, TextUtils.equals(label, "click") ? 1L : 0L);
+        EasyTracker.getTracker().sendEvent("Banner", action, label, TextUtils.equals(label, "click") ? 1L : 0L);
     }
 
     private String getBannerName(String bannerUrl) {
@@ -693,34 +561,31 @@ public class BannerBlock {
     public void onCreate() {
         initBanner();
         if (mBannerView != null) {
-            if (mBannerView instanceof AdfonicView) {
-                mBannerView.invalidate();
-            } else if (mBannerView instanceof AWView) {
+            if (mBannerView instanceof AWView) {
                 ((AWView) mBannerView).request(mAdwiredMap.get(mFragment.getClass().toString()));
-            } else if (mBannerView instanceof ru.begun.adlib.AdView) {
-                ((ru.begun.adlib.AdView) mBannerView).api("resumeAd");
             }
         }
-
-        if (mPLus1Asker != null) mPLus1Asker.onResume();
     }
 
     public void onPause() {
-        if (mBannerView instanceof MobclixMMABannerXLAdView) ((MobclixMMABannerXLAdView) mBannerView).pause();
+        if (mBannerView instanceof SlotView) {
+            ((SlotView) mBannerView).pause();
+        }
+        if (mAdlabInitializer != null) mAdlabInitializer.pause();
     }
 
     public void onDestroy() {
         if (mBannerView instanceof MoPubView) ((MoPubView) mBannerView).destroy();
-        if (mPLus1Asker != null) mPLus1Asker.onPause();
-        if (mBannerView != null) {
-            if (mBannerView instanceof InneractiveAd) {
-                ((InneractiveAd) mBannerView).cleanUp();
-            }
+        if (mBannerView instanceof SlotView) {
+            ((SlotView) mBannerView).destroy();
         }
         removeBanner();
     }
 
     public void onResume() {
-        if (mBannerView instanceof MobclixMMABannerXLAdView) ((MobclixMMABannerXLAdView) mBannerView).resume();
+        if (mBannerView instanceof SlotView) {
+            ((SlotView) mBannerView).resume();
+        }
+        if (mAdlabInitializer != null) mAdlabInitializer.resume();
     }
 }

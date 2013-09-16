@@ -18,7 +18,6 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
-import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.social.AuthToken;
@@ -32,18 +31,9 @@ public class SettingsAccountFragment extends BaseFragment implements OnClickList
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_account, container, false);
-        // Navigation bar
-        ActionBar actionBar = getActionBar(root);
-        actionBar.showBackButton(new OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                getActivity().finish();
-            }
-        });
         lockerView = (LockerView) root.findViewById(R.id.llvLogoutLoading);
         lockerView.setVisibility(View.GONE);
-        actionBar.setTitleText(getString(R.string.settings_account));
 
         Drawable icon = null;
         final AuthToken token = AuthToken.getInstance();
@@ -67,6 +57,11 @@ public class SettingsAccountFragment extends BaseFragment implements OnClickList
         return root;
     }
 
+    @Override
+    protected String getTitle() {
+        return getString(R.string.settings_account);
+    }
+    
     private void showExitPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(R.string.settings_logout_msg)

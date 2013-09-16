@@ -10,12 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import com.inneractive.api.ads.InneractiveAd;
-import com.inneractive.api.ads.InneractiveAdListener;
 import com.ivengo.adv.AdvListener;
 import com.ivengo.adv.AdvView;
-import com.mobclix.android.sdk.MobclixFullScreenAdView;
-import com.mobclix.android.sdk.MobclixFullScreenAdViewListener;
+import com.lifestreet.android.lsmsdk.*;
 import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.mobileads.MoPubInterstitial;
 import com.topface.topface.App;
@@ -45,6 +42,7 @@ public class FullscreenController {
     private static boolean isFullScreenBannerVisible = false;
     private static final String MOPUB_INTERSTITIAL_ID = "00db7208a90811e281c11231392559e4";
     private static final String IVENGO_APP_ID = "aggeas97392g";
+    private static final String LIFESTREET_TAG = "http://mobile-android.lfstmedia.com/m2/slot76331?ad_size=320x480&adkey=a25";
 
     private SharedPreferences mPreferences;
     private Activity mActivity;
@@ -61,22 +59,43 @@ public class FullscreenController {
             Options.Page startPage = CacheProfile.getOptions().pages.get(Options.PAGE_START);
             if (startPage != null) {
                 if (startPage.floatType.equals(Options.FLOAT_TYPE_BANNER)) {
-                    if (startPage.banner.equals(Options.BANNER_ADWIRED)) {
-                        requestAdwiredFullscreen();
-                    } else if (startPage.banner.equals(Options.BANNER_TOPFACE)) {
-                        requestTopfaceFullscreen();
-                    } else if (startPage.banner.equals(Options.BANNER_MOPUB)) {
-                        requestMopubFullscreen();
-                    } else if (startPage.banner.equals(Options.BANNER_INNERACTIVE)) {
-                        requestInneractiveFullscreen();
-                    } else if (startPage.banner.equals(Options.BANNER_MOBCLIX)) {
-                        requestMobclixFullscreen();
-                    } else if (startPage.banner.equals(Options.BANNER_IVENGO)) {
-                        requestIvengoFullscreen();
-                    }
+                    requestFullscreen(startPage.banner);
                 }
             }
         }
+    }
+
+    private void requestLifestreetFullscreen() {
+        InterstitialSlot slot = new InterstitialSlot(mActivity);
+        slot.setSlotTag(LIFESTREET_TAG);
+        slot.setListener(new BasicSlotListener() {
+            @Override
+            public void onFailedToLoadSlotView(SlotView slotView) {
+                requestGagFullscreen();
+            }
+
+            @Override
+            public void onReceiveInterstitialAd(InterstitialAdapter<?> adapter, Object ad) {
+                addLastFullscreenShowedTime();
+            }
+
+            @Override
+            public void onPresentInterstitialScreen(InterstitialAdapter<?> adapter, Object ad) {
+                addLastFullscreenShowedTime();
+            }
+
+            @Override
+            public void onFailedToReceiveAd(BannerAdapter<?> adapter, View view) {
+                requestGagFullscreen();
+            }
+
+            @Override
+            public void onFailedToReceiveInterstitialAd(InterstitialAdapter<?> adapter, Object ad) {
+                requestGagFullscreen();
+            }
+        });
+        slot.setShowCloseButton(true);
+        slot.loadAd();
     }
 
     private void requestIvengoFullscreen() {
@@ -103,102 +122,13 @@ public class FullscreenController {
         });
     }
 
-    private void requestMobclixFullscreen() {
-        MobclixFullScreenAdView adview = new MobclixFullScreenAdView(mActivity);
-        adview.requestAndDisplayAd();
-        adview.addMobclixAdViewListener(new MobclixFullScreenAdViewListener() {
-            @Override
-            public void onFinishLoad(MobclixFullScreenAdView mobclixFullScreenAdView) {
-                addLastFullscreenShowedTime();
-            }
-
-            @Override
-            public void onFailedLoad(MobclixFullScreenAdView mobclixFullScreenAdView, int i) {
-                requestFallbackFullscreen();
-            }
-
-            @Override
-            public void onPresentAd(MobclixFullScreenAdView mobclixFullScreenAdView) {
-            }
-
-            @Override
-            public void onDismissAd(MobclixFullScreenAdView mobclixFullScreenAdView) {
-            }
-
-            @Override
-            public String keywords() {
-                return null;
-            }
-
-            @Override
-            public String query() {
-                return null;
-            }
-        });
-    }
-
-    private void requestInneractiveFullscreen() {
-        final InneractiveAd iaBanner = new InneractiveAd(mActivity, "Topface_TopfaceAndroid_Android", InneractiveAd.IaAdType.Interstitial, 60);
-        ViewGroup container = getFullscreenBannerContainer();
-        iaBanner.setInneractiveListener(new InneractiveAdListener() {
-            @Override
-            public void onIaAdReceived() {
-                addLastFullscreenShowedTime();
-                Debug.log("Inneractive: onIaAdReceived()");
-            }
-
-            @Override
-            public void onIaDefaultAdReceived() {
-                addLastFullscreenShowedTime();
-                Debug.log("Inneractive: onIaDefaultAdReceived()");
-            }
-
-            @Override
-            public void onIaAdFailed() {
-                Debug.log("Inneractive: onIaAdFailed()");
-                requestFallbackFullscreen();
-            }
-
-            @Override
-            public void onIaAdClicked() {
-                Debug.log("Inneractive: onIaAdClicked()");
-            }
-
-            @Override
-            public void onIaAdResize() {
-                Debug.log("Inneractive: onIaAdResize()");
-            }
-
-            @Override
-            public void onIaAdResizeClosed() {
-                Debug.log("Inneractive: onIaAdResizeClosed()");
-            }
-
-            @Override
-            public void onIaAdExpand() {
-                Debug.log("Inneractive: onIaAdExpand()");
-            }
-
-            @Override
-            public void onIaAdExpandClosed() {
-                Debug.log("Inneractive: onIaAdExpandClosed()");
-            }
-
-            @Override
-            public void onIaDismissScreen() {
-                Debug.log("Inneractive: onIaDismissScreen()");
-            }
-        });
-        container.addView(iaBanner);
-    }
-
     private void requestFallbackFullscreen() {
         if (mActivity != null) {
             mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     addLastFullscreenShowedTime();
-                    requestTopfaceFullscreen();
+                    requestGagFullscreen();
                 }
             });
         }
@@ -312,6 +242,26 @@ public class FullscreenController {
         SharedPreferences.Editor editor = getPreferences().edit();
         editor.putString(Static.PREFERENCES_FULLSCREEN_URLS_SET, TextUtils.join(URL_SEPARATOR, urlSet));
         editor.commit();
+    }
+
+    private void requestGagFullscreen() {
+        requestFullscreen(CacheProfile.getOptions().gagTypeFullscreen);
+    }
+
+    public void requestFullscreen(String type) {
+        if (type.equals(Options.BANNER_NONE)) {
+            return;
+        } else if (type.equals(Options.BANNER_ADWIRED)) {
+            requestAdwiredFullscreen();
+        } else if (type.equals(Options.BANNER_TOPFACE)) {
+            requestTopfaceFullscreen();
+        } else if (type.equals(Options.BANNER_MOPUB)) {
+            requestMopubFullscreen();
+        } else if (type.equals(Options.BANNER_IVENGO)) {
+            requestIvengoFullscreen();
+        } else if (type.equals(Options.BANNER_LIFESTREET)) {
+            requestLifestreetFullscreen();
+        }
     }
 
     private void requestTopfaceFullscreen() {

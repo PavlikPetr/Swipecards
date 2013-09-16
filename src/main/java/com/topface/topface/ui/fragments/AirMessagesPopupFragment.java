@@ -10,21 +10,39 @@ import android.widget.TextView;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
+import com.topface.topface.requests.VisitorsMarkReadedRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 
 public class AirMessagesPopupFragment extends BaseFragment implements View.OnClickListener {
 
-    private Options.PremiumMessages mPremiumMessages;
+    public static final String AIR_TYPE = "AIR_TYPE";
+
+    private Options.PremiumAirEntity mPremiumEntity;
     private boolean mUserClickButton = false;
+    private int airType = Options.PremiumAirEntity.AIR_MESSAGES;
+
+    public static AirMessagesPopupFragment newInstance(int airType) {
+        Bundle arguments = new Bundle();
+        arguments.putInt(AIR_TYPE, airType);
+        AirMessagesPopupFragment fragment = new AirMessagesPopupFragment();
+        fragment.setArguments(arguments);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPremiumMessages = CacheProfile.getOptions().premium_messages;
+        if (getArguments() != null) {
+            airType = getArguments().getInt(AIR_TYPE, Options.PremiumAirEntity.AIR_MESSAGES);
+        }
+        mPremiumEntity = airType == Options.PremiumAirEntity.AIR_MESSAGES?
+                CacheProfile.getOptions().premium_messages : CacheProfile.getOptions().premium_visitors;
 
+        setNeedTitles(false);
     }
 
     @Override
@@ -50,35 +68,61 @@ public class AirMessagesPopupFragment extends BaseFragment implements View.OnCli
         }
 
         if (!mUserClickButton) {
-            EasyTracker.getTracker().trackEvent("AirMessages", "Dismiss", "BackClose", 0L);
+            EasyTracker.getTracker().sendEvent(getMainTag(airType), "Dismiss", "BackClose", 0L);
         }
     }
 
-    public static void showIfNeeded(FragmentManager manager) {
-        Options.PremiumMessages options = CacheProfile.getOptions().premium_messages;
-        if (options != null && options.isNeedShow()) {
+    public static boolean showIfNeeded(FragmentManager manager, int type) {
+        Options.PremiumAirEntity premiumEntity;
+        if (type == Options.PremiumAirEntity.AIR_MESSAGES) {
+            premiumEntity = CacheProfile.getOptions().premium_messages;
+        } else {
+            premiumEntity = CacheProfile.getOptions().premium_visitors;
+        }
+        if (premiumEntity != null && premiumEntity.isNeedShow()) {
             manager
                     .beginTransaction()
-                    .add(android.R.id.content, new AirMessagesPopupFragment())
+                    .add(android.R.id.content, AirMessagesPopupFragment.newInstance(type))
                     .addToBackStack(null)
                     .commit();
-            EasyTracker.getTracker().trackEvent("AirMessages", "Show", "", 0L);
+            EasyTracker.getTracker().sendEvent(getMainTag(type), "Show", "", 0L);
+            return true;
         }
+        return false;
+    }
+
+    public static String getMainTag(int type) {
+        return type == Options.PremiumAirEntity.AIR_MESSAGES? "AirMessages" : "key_7_1";
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.air_messages_popup, container, false);
         root.findViewById(R.id.buyVip).setOnClickListener(this);
+        if (airType == Options.PremiumAirEntity.AIR_GUESTS) {
+            ((TextView)root.findViewById(R.id.deleteMessages)).setText(R.string.delete_visitors);
+        } else {
+            ((TextView)root.findViewById(R.id.deleteMessages)).setText(R.string.general_delete_messages);
+        }
         root.findViewById(R.id.deleteMessages).setOnClickListener(this);
         TextView popupText = (TextView) root.findViewById(R.id.airMessagesText);
+        int curVisitCounter = CountersManager.getInstance(getActivity()).getCounter(CountersManager.VISITORS);
+        CountersManager.getInstance(getActivity()).setCounter(CountersManager.VISITORS, curVisitCounter + mPremiumEntity.getCount(), true);
         popupText.setText(getMessage());
         return root;
     }
 
     private String getMessage() {
-        int count = mPremiumMessages.getCount();
-        return Utils.getQuantityString(R.plurals.popup_vip_messages, count, count);
+        int count = mPremiumEntity.getCount();
+        if (airType == Options.PremiumAirEntity.AIR_GUESTS) {
+            int guests = CountersManager.getInstance(getActivity()).getCounter(CountersManager.VISITORS);
+            count = guests > 0? guests:count;
+        }
+        return Utils.getQuantityString(getPluralForm(), count, count);
+    }
+
+    private int getPluralForm() {
+        return airType == Options.PremiumAirEntity.AIR_MESSAGES? R.plurals.popup_vip_messages:R.plurals.popup_vip_visitors;
     }
 
     @Override
@@ -91,10 +135,18 @@ public class AirMessagesPopupFragment extends BaseFragment implements View.OnCli
                         ContainerActivity.getVipBuyIntent(getMessage(), "VipDelivery"),
                         ContainerActivity.INTENT_BUY_VIP_FRAGMENT
                 );
-                EasyTracker.getTracker().trackEvent("AirMessages", "ClickBuyVip", "", 0L);
+                EasyTracker.getTracker().sendEvent(getMainTag(airType), "ClickBuyVip", "", 0L);
                 break;
             case R.id.deleteMessages:
-                EasyTracker.getTracker().trackEvent("AirMessages", "Dismiss", "Delete", 0L);
+                if (airType == Options.PremiumAirEntity.AIR_GUESTS) {
+                    //Отправляем запрос удаления гостей
+                    VisitorsMarkReadedRequest request = new VisitorsMarkReadedRequest(getActivity());
+                    request.exec();
+                    //Откручиваем счетчик назад
+                    int curVisitCounter = CountersManager.getInstance(getActivity()).getCounter(CountersManager.VISITORS);
+                    CountersManager.getInstance(getActivity()).setCounter(CountersManager.VISITORS, curVisitCounter - mPremiumEntity.getCount(), true);
+                }
+                EasyTracker.getTracker().sendEvent(getMainTag(airType), "Dismiss", "Delete", 0L);
                 break;
         }
 

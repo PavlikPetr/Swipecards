@@ -40,6 +40,6 @@ public class UserRequest extends ApiRequest {
     @Override
     public void exec() {
         super.exec();
-        EasyTracker.getTracker().trackEvent("Profile", "LoadUser", "", (long) (uids != null ? uids.size() : 0));
+        EasyTracker.getTracker().sendEvent("Profile", "LoadUser", "", (long) (uids != null ? uids.size() : 0));
     }
 }

@@ -26,9 +26,13 @@ import com.topface.topface.data.search.SearchUser;
 import com.topface.topface.data.search.UsersList;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.*;
-import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.views.ImageSwitcher;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.PreloadManager;
+import com.topface.topface.utils.RateController;
+import org.json.JSONObject;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -74,7 +78,6 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_view_users, null);
 
-        getActionBar(root);
         initActionBar(root);
         inflateTopPanel(root);
         inflateControls(root);
@@ -147,21 +150,11 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     protected abstract void initControls(View controlsView);
 
     private void initActionBar(View view) {
-        ActionBar actionBar = getActionBar(view);
-        refreshActionBarTitles(view);
-        final Activity activity = getActivity();
-        if (activity instanceof NavigationActivity) {
-            actionBar.showHomeButton((NavigationActivity) activity);
-        }
-        initActionBarControls(actionBar);
+        refreshActionBarTitles();
+        initActionBarControls();
     }
 
-    protected abstract void initActionBarControls(ActionBar actionbar);
-
-    protected void refreshActionBarTitles(View view) {
-        getActionBar(view).setTitleText(getTitle());
-        getActionBar(view).setSubTitleText(getSubtitle());
-    }
+    protected abstract void initActionBarControls();
 
     protected abstract String getTitle();
 
@@ -378,12 +371,13 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
             AlbumRequest request = new AlbumRequest(getActivity(), currentUser.id, PHOTOS_LIMIT,
                     position, AlbumRequest.MODE_SEARCH);
             final int uid = currentUser.id;
-            request.callback(new DataApiHandler<Photos>() {
-
+            request.callback(new ApiHandler() {
                 @Override
-                protected void success(Photos newPhotos, IApiResponse response) {
+                public void success(IApiResponse response) {
                     if (uid == usersList.getCurrentUser().id) {
-                        mNeedMore = response.getJsonResult().optBoolean("more");
+                        JSONObject jsonResult = response.getJsonResult();
+                        Photos newPhotos = Photos.parse(jsonResult.optJSONArray("items"));
+                        mNeedMore = jsonResult.optBoolean("more");
                         int i = 0;
                         for (Photo photo : newPhotos) {
                             if (mLoadedCount + i < photos.size()) {
@@ -391,17 +385,11 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                                 i++;
                             }
                         }
-
                         if (mImageSwitcher != null && mImageSwitcher.getAdapter() != null) {
                             mImageSwitcher.getAdapter().notifyDataSetChanged();
                         }
                     }
                     mCanSendAlbumReq = true;
-                }
-
-                @Override
-                protected Photos parseResponse(ApiResponse response) {
-                    return Photos.parse(response.getJsonResult().optJSONArray("items"));
                 }
 
                 @Override

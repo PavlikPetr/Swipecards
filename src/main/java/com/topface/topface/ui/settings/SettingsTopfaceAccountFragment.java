@@ -2,7 +2,6 @@ package com.topface.topface.ui.settings;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -24,7 +22,6 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
-import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
@@ -49,11 +46,8 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        super.onCreateView(inflater,container,savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_topface_account, container, false);
-
-        // Navigation bar
-        initNavigationBar(root);
 
         mLockerView = (LockerView) root.findViewById(R.id.llvLogoutLoading);
         mLockerView.setVisibility(View.GONE);
@@ -99,6 +93,11 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     public void onResume() {
         super.onResume();
         setViewsState();
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.settings_account);
     }
 
     private void requestEmailConfirmedFlag() {
@@ -209,22 +208,9 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         mChangeButtonAction = action;
     }
 
-    private void initNavigationBar(View view) {
-        ActionBar actionBar = getActionBar(view);
-        actionBar.showBackButton(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                hideSoftKeyboard();
-                getActivity().finish();
-            }
-        });
-        actionBar.setTitleText(getString(R.string.settings_account));
-    }
-
     @Override
     public void onClick(View v) {
-        hideSoftKeyboard();
+        Utils.hideSoftKeyboard(getActivity(), mEditText);
         switch (v.getId()) {
             case R.id.btnLogout:
                 if (CacheProfile.needToChangePassword(App.getContext())) {
@@ -252,13 +238,6 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             newFragment.show(getActivity().getSupportFragmentManager(), DeleteAccountDialog.TAG);
         } catch (Exception e) {
             Debug.error(e);
-        }
-    }
-
-    private void hideSoftKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (mEditText != null) {
-            imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
         }
     }
 
@@ -347,5 +326,12 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         if (mLockerView != null) {
             mLockerView.setVisibility(View.GONE);
         }
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Utils.hideSoftKeyboard(getActivity(),mEditText);
     }
 }

@@ -15,7 +15,6 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.OnQuickMessageSentListener;
 import com.topface.topface.ui.fragments.QuickMessageFragment;
 import com.topface.topface.ui.fragments.ViewUsersListFragment;
-import com.topface.topface.utils.ActionBar;
 import com.topface.topface.utils.CacheProfile;
 
 /**
@@ -26,7 +25,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     public static final int CHAT_CLOSE_DELAY_MILLIS = 1500;
 
     @Override
-    protected void initActionBarControls(ActionBar actionbar) {
+    protected void initActionBarControls() {
     }
 
     @Override
@@ -61,8 +60,8 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
         skipAllRequest.callback(new SimpleApiHandler() {
             @Override
             public void always(IApiResponse response) {
-                if (isAdded()) {
-                    refreshActionBarTitles(getView());
+                if(isAdded()) {
+                    refreshActionBarTitles();
                 }
             }
         });
@@ -108,19 +107,19 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSkipAll:
-                EasyTracker.getTracker().trackEvent(getTrackName(), "SkipAll", "", 1L);
+                EasyTracker.getTracker().sendEvent(getTrackName(), "SkipAll", "", 1L);
                 skipAllRequest(getSkipAllRequestType());
                 break;
             case R.id.btnSkip:
-                EasyTracker.getTracker().trackEvent(getTrackName(), "Skip", "", 1L);
+                EasyTracker.getTracker().sendEvent(getTrackName(), "Skip", "", 1L);
                 if (CacheProfile.premium || alowSkipForNonPremium()) {
                     if (getCurrentUser() != null && getCurrentUser().feedItem != null) {
                         SkipClosedRequest request = new SkipClosedRequest(getActivity());
                         request.callback(new SimpleApiHandler() {
                             @Override
                             public void always(IApiResponse response) {
-                                if (isAdded()) {
-                                    refreshActionBarTitles(getView());
+                                if(isAdded()) {
+                                    refreshActionBarTitles();
                                 }
                             }
                         });
@@ -134,11 +133,11 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
                 }
                 break;
             case R.id.btnChat:
-                EasyTracker.getTracker().trackEvent(getTrackName(), "Chat", "", 1L);
+                EasyTracker.getTracker().sendEvent(getTrackName(), "Chat", "", 1L);
                 showChat();
                 break;
             case R.id.btnWatchAsList:
-                EasyTracker.getTracker().trackEvent(getTrackName(), "WatchAsList", "", 1L);
+                EasyTracker.getTracker().sendEvent(getTrackName(), "WatchAsList", "", 1L);
                 Intent intent = ContainerActivity.getVipBuyIntent(null, getClass().getSimpleName());
                 startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                 break;
@@ -184,7 +183,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     protected void onCountersUpdated() {
         super.onCountersUpdated();
         if (isAdded()) {
-            refreshActionBarTitles(getView());
+            refreshActionBarTitles();
         }
     }
 
@@ -196,6 +195,6 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     @Override
     protected void onNotEmptyDataReturnedOnce() {
         super.onNotEmptyDataReturnedOnce();
-        EasyTracker.getTracker().trackView(getTrackName());
+        EasyTracker.getTracker().sendView(getTrackName());
     }
 }

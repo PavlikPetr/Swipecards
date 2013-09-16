@@ -9,7 +9,10 @@ import com.topface.topface.data.FeedUser;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.RateRequest;
 import com.topface.topface.requests.SkipAllClosedRequest;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.RateController;
+import com.topface.topface.utils.Utils;
 
 public class LikesClosingFragment extends ClosingFragment implements View.OnClickListener {
 
@@ -19,7 +22,7 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     private TextView mUserCity;
 
     @Override
-    protected void initActionBarControls(ActionBar actionbar) {
+    protected void initActionBarControls() {
     }
 
     @Override
@@ -62,23 +65,20 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
         }
         controlsView.findViewById(R.id.btnMutual).setOnClickListener(this);
         controlsView.findViewById(R.id.btnChat).setOnClickListener(this);
-        mUserName = (TextView)controlsView.findViewById(R.id.tvUserName);
-        mUserCity = (TextView)controlsView.findViewById(R.id.tvUserCity);
+        mUserName = (TextView) controlsView.findViewById(R.id.tvUserName);
+        mUserCity = (TextView) controlsView.findViewById(R.id.tvUserCity);
     }
 
     @Override
     protected void lockControls() {
-        //TODO change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     protected void unlockControls() {
-        //TODO change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     protected void onShowUser() {
-        //TODO change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
@@ -90,21 +90,21 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnMutual:
-                EasyTracker.getTracker().trackEvent(getTrackName(), "Mutual", "", 1L);
+                EasyTracker.getTracker().sendEvent(getTrackName(), "Mutual", "", 1L);
                 FeedUser currentUser = getCurrentUser();
                 if (currentUser != null) {
                     getRateController().onRate(currentUser.id, 9, RateRequest.DEFAULT_MUTUAL, new RateController.OnRateListener() {
                         @Override
                         public void onRateCompleted() {
-                            if (isAdded()) refreshActionBarTitles(getView());
+                            if (isAdded()) refreshActionBarTitles();
                         }
 
                         @Override
                         public void onRateFailed() {
                         }
                     });
+                    showNextUser();
                 }
-                showNextUser();
                 break;
             default:
                 super.onClick(v);
@@ -114,7 +114,7 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     @Override
     protected void onUsersProcessed() {
         usersProcessed = true;
-        CountersManager.getInstance(getActivity()).setCounter(CountersManager.LIKES,0,true);
+        CountersManager.getInstance(getActivity()).setCounter(CountersManager.LIKES, 0, true);
         CacheProfile.getOptions().closing.onStopLikesClosings();
         super.onUsersProcessed();
     }

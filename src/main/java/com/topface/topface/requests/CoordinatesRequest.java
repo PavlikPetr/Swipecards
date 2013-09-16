@@ -38,7 +38,7 @@ public class CoordinatesRequest extends ApiRequest {
     @Override
     public void exec() {
         super.exec();
-        EasyTracker.getTracker().trackEvent("Feed", "CoordinatesSend", "Type" + String.valueOf(type), 1L);
+        EasyTracker.getTracker().sendEvent("Feed", "CoordinatesSend", "Type" + String.valueOf(type), 1L);
     }
 
 }

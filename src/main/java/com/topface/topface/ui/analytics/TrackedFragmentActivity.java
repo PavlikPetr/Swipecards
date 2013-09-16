@@ -12,7 +12,7 @@ public class TrackedFragmentActivity extends ActionBarActivity {
         EasyTracker.getInstance().activityStart(this);
         TrackedActivity.setCustomMeticsAndDimensions();
         if (isTrackable()) {
-            EasyTracker.getTracker().trackView(getTrackName());
+            EasyTracker.getTracker().sendView(getTrackName());
         }
     }
 
@@ -29,6 +29,4 @@ public class TrackedFragmentActivity extends ActionBarActivity {
     protected String getTrackName() {
         return this.getClass().getSimpleName().replace("Activity", "");
     }
-
-
 }

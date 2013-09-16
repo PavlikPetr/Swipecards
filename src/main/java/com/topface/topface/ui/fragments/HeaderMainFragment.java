@@ -36,13 +36,13 @@ public class HeaderMainFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setNeedTitles(false);
+        setHasOptionsMenu(false);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
-        restoreState();
 
         View root = inflater.inflate(R.layout.fragment_profile_header_main, null);
         mAvatarView = (ImageViewRemote) root.findViewById(R.id.ivUserAvatar);
@@ -96,7 +96,8 @@ public class HeaderMainFragment extends BaseFragment {
         );
     }
 
-    private void restoreState() {
+    @Override
+    protected void restoreState() {
         if (getArguments() != null) {
             mAvatarVal = getArguments().getParcelable(ARG_TAG_AVATAR);
             mNameVal = getArguments().getString(ARG_TAG_NAME);
@@ -153,5 +154,10 @@ public class HeaderMainFragment extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
+    }
+
+    @Override
+    protected boolean needOptionsMenu() {
+        return false;
     }
 }

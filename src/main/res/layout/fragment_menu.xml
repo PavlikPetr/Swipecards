@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
+            android:scrollbars="none"
             android:fillViewport="true">
 
     <RelativeLayout
@@ -10,14 +11,89 @@
             android:layout_height="wrap_content"
             android:background="@android:color/black"
             >
+
+        <!-- Profile with background -->
+        <RelativeLayout
+                android:id="@+id/btnProfileLayoutWithBackground"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:addStatesFromChildren="true"
+                android:layout_alignParentTop="true"
+                android:visibility="gone"
+                >
+
+            <com.topface.topface.ui.views.ImageViewRemote
+                    xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
+                    ivr:postProcessor="leftMenuClip"
+                    android:id="@+id/ivProfileBackground"
+                    android:layout_width="fill_parent"
+                    android:layout_height="@dimen/left_menu_background_height"
+                    android:scaleType="centerCrop"
+                    />
+
+            <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shadow_left_menu_background"
+                    android:layout_alignParentBottom="true"
+                    />
+
+            <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="bottom"
+                    android:layout_alignParentBottom="true"
+                    android:paddingBottom="6dp"
+                    >
+
+                <com.topface.topface.ui.views.ImageViewRemote
+                        xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
+                        ivr:postProcessor="mask"
+                        ivr:clipMask="@drawable/frame_menu_mask"
+                        android:background="@drawable/frame_menu_big_avatar_selector"
+                        android:id="@+id/ivMenuAvatar"
+                        android:src="@drawable/topface_male_profile_button"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="8dp"/>
+
+                <Button
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/general_profile"
+                        android:paddingLeft="14dp"
+                        android:background="@android:color/transparent"
+                        style="@style/LeftMenuButtons"
+                        android:gravity="bottom"/>
+
+                <ImageView
+                        android:id="@+id/profileInfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginRight="15dp"
+                        android:visibility="gone"
+                        />
+            </LinearLayout>
+
+            <Button
+                    android:id="@+id/btnFragmentProfile"
+                    android:layout_width="fill_parent"
+                    android:layout_height="@dimen/left_menu_background_height"
+                    android:background="@drawable/bg_semitransparent_black"
+                    />
+        </RelativeLayout>
+
         <!-- Profile -->
         <RelativeLayout
                 android:id="@+id/btnProfileLayout"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="7dp"
                 android:background="@drawable/navigation_menu_item_selector"
-                android:addStatesFromChildren="true">
+                android:addStatesFromChildren="true"
+                android:layout_below="@id/btnProfileLayoutWithBackground">
 
             <com.topface.topface.ui.views.ImageViewRemote
                     xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
@@ -28,7 +104,8 @@
                     android:src="@drawable/topface_male_profile_button"
                     android:layout_centerVertical="true"
                     android:layout_width="30dp"
-                    android:layout_height="30dp"/>
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="8dp"/>
 
             <Button
                     android:id="@+id/btnFragmentProfile"

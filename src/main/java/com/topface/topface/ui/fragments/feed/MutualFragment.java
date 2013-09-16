@@ -21,8 +21,8 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     }
 
     @Override
-    protected int getTitle() {
-        return R.string.general_mutual;
+    protected String getTitle() {
+        return getString(R.string.general_mutual);
     }
 
     @Override
@@ -77,5 +77,10 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     @Override
     protected int getContextMenuLayoutRes() {
         return R.menu.feed_context_menu;
+    }
+
+    @Override
+    protected Integer getOptionsMenuRes() {
+        return R.menu.actions_feed_filtered;
     }
 }

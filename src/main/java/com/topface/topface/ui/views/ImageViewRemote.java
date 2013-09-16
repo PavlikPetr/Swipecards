@@ -29,6 +29,7 @@ public class ImageViewRemote extends ImageView {
     private static final int POST_PROCESSOR_ROUND_CORNERS = 2;
     private static final int POST_PROCESSOR_MASK = 3;
     private static final int POST_PROCESSOR_CIRCUMCIRCLE = 4;
+    private static final int POST_PROCESSOR_LEFTMENUCLIP = 5;
     public static final int LOADING_COMPLETE = 0;
     private static final int LOADING_ERROR = 1;
     /**
@@ -128,6 +129,9 @@ public class ImageViewRemote extends ImageView {
             case POST_PROCESSOR_CIRCUMCIRCLE:
                 mPostProcessor = new CircumCircleProcessor();
                 break;
+            case POST_PROCESSOR_LEFTMENUCLIP:
+                mPostProcessor = new LeftMenuClipProcessor();
+                break;
             default:
                 mPostProcessor = null;
         }
@@ -178,6 +182,15 @@ public class ImageViewRemote extends ImageView {
             mCurrentSrc = null;
         }
         return isCorrectSrc;
+    }
+
+    public void setRemoteImageBitmap(Bitmap bitmap) {
+        BitmapProcessor processor = getPostProcessor();
+        if (processor != null) {
+            setImageBitmap(processor.process(bitmap));
+        } else {
+            setImageBitmap(bitmap);
+        }
     }
 
     @Override
