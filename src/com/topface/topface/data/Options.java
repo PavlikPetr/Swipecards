@@ -228,10 +228,10 @@ public class Options extends AbstractData {
 
             if (response.jsonResult.has("visitors_popup")) {
                 options.premium_visitors = new PremiumAirEntity(
-                        response.jsonResult.optJSONObject("visitors_popup"), PremiumAirEntity.AIR_GUESTS
+                        response.jsonResult.optJSONObject("visitors_popup"), PremiumAirEntity.AIR_VISITORS
                 );
             } else {
-                options.premium_visitors = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_GUESTS);
+                options.premium_visitors = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_VISITORS);
             }
 
 
@@ -461,8 +461,9 @@ public class Options extends AbstractData {
          */
         private int mTimeout;
 
-        public static int AIR_MESSAGES = 0;
-        public static int AIR_GUESTS = 1;
+        public static int AIR_NONE = 0;
+        public static int AIR_MESSAGES = 1;
+        public static int AIR_VISITORS = 2;
 
         public PremiumAirEntity(JSONObject premiumMessages, int airType) {
             this.airType = airType;

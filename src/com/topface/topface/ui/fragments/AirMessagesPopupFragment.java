@@ -99,7 +99,7 @@ public class AirMessagesPopupFragment extends BaseFragment implements View.OnCli
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.air_messages_popup, container, false);
         root.findViewById(R.id.buyVip).setOnClickListener(this);
-        if (airType == Options.PremiumAirEntity.AIR_GUESTS) {
+        if (airType == Options.PremiumAirEntity.AIR_VISITORS) {
             ((TextView)root.findViewById(R.id.deleteMessages)).setText(R.string.delete_visitors);
         } else {
             ((TextView)root.findViewById(R.id.deleteMessages)).setText(R.string.general_delete_messages);
@@ -114,7 +114,7 @@ public class AirMessagesPopupFragment extends BaseFragment implements View.OnCli
 
     private String getMessage() {
         int count = mPremiumEntity.getCount();
-        if (airType == Options.PremiumAirEntity.AIR_GUESTS) {
+        if (airType == Options.PremiumAirEntity.AIR_VISITORS) {
             int guests = CountersManager.getInstance(getActivity()).getCounter(CountersManager.VISITORS);
             count = guests > 0? guests:count;
         }
@@ -138,7 +138,7 @@ public class AirMessagesPopupFragment extends BaseFragment implements View.OnCli
                 EasyTracker.getTracker().sendEvent(getMainTag(airType), "ClickBuyVip", "", 0L);
                 break;
             case R.id.deleteMessages:
-                if (airType == Options.PremiumAirEntity.AIR_GUESTS) {
+                if (airType == Options.PremiumAirEntity.AIR_VISITORS) {
                     //Отправляем запрос удаления гостей
                     VisitorsMarkReadedRequest request = new VisitorsMarkReadedRequest(getActivity());
                     request.exec();
