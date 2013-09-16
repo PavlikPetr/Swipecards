@@ -43,8 +43,8 @@
     <string name="general_profile">Profilo</string>
     <string name="general_settings">Impostazioni</string>
     <string name="general_chat">Chat</string>
-    <string name="auth_btn_vk">Entra tramite social network</string>
-    <string name="auth_btn_fb">Entra tramite Facebook</string>
+    <string name="auth_btn_vk">Accedi tramite social network</string>
+    <string name="auth_btn_fb">Accedi tramite Facebook</string>
     <string name="auth_retry">Riprovare</string>
     <string name="auth_vk_name">Social network</string>
     <string name="dating_header_girls">Ragazze da %1$d a %2$d</string>
@@ -312,7 +312,7 @@
     <string name="general_soon">In arrivo</string>
     <string name="black_list_activation">Abbonati allo stato VIP e usa la black list</string>
     <string name="profile_edit_age_ranges">L’età deve entrare nel campo tra 16 e 99 anni. Per favore, inserisci il numero valido e riprova.</string>
-    <string name="sign_in">Entra</string>
+    <string name="sign_in">Accedi</string>
     <string name="create_account">Creare profilo</string>
     <string name="email">E-mail</string>
     <string name="password">Password</string>
@@ -464,6 +464,7 @@
     <string name="general_complain_sended">Il tuo reclamo è stato inviato, grazie per il tuo aiuto</string>
     <string name="general_complain">Reclamo</string>
     <string name="general_msg">Massaggio</string>
+    <string name="general_no_notifications">Purtroppo, per il tuo dispositivo gli avvisi non sono disponibili</string>
     <plurals name="vip_add_more_friends">
         <item quantity="other">Invita ancora %d amici</item>
         <item quantity="one">Invita ancora %d amico</item>
@@ -478,6 +479,8 @@
     <string name="general_bookmarks_is_deleted">L’utente è stato rimosso dai preferiti</string>
     <string name="general_blacklist_is_deleted">L’utente è stato rimosso dalla black list</string>
     <string name="invite_friends_title_short">Invita tutti gli amici su Topface</string>
+    <string name="general_exit">Logout</string>
+    <string name="likes_can_help_you">Le simpatie ti aiutano a conoscere gente</string>
     <string name="general_get_dating">Presentarsi</string>
     <string name="settings_select_language">Scelta della lingua dell’applicazione</string>
     <string name="restart_to_change_locale">L’applicazione sarà riavviata per cambiare lingua</string>
@@ -531,4 +534,5 @@
     <string name="general_logout_error">Purtroppo il logout non è stato effettuato</string>
     <string name="settings_feedback_transaction_number_hint">Inserisci il numero dell’ordine</string>
     <string name="youve_earned">Hai guadagnato %s</string>
+    <string name="like_topface">Ti piace Topface?</string>
 </resources>

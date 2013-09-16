@@ -523,8 +523,14 @@
         <item quantity="other">Received %d messages with express delivery</item>
         <item quantity="one">Received %d message with express delivery</item>
     </plurals>
+    <plurals name="popup_vip_visitors">
+        <item quantity="few">You have %d visitors</item>
+        <item quantity="many">You have %d visitors</item>
+        <item quantity="other">You have %d visitors</item>
+        <item quantity="one">You have %d visitor</item>
+    </plurals>
     <string name="general_attention">Attention!</string>
-    <string name="general_delete_messages">delete messages</string>
+    <string name="general_delete_messages">Delete messages</string>
     <string name="mutual_sympathies">Mutual</string>
     <string name="skip_all">Skip all</string>
     <string name="forget">Forget</string>
@@ -538,5 +544,5 @@
     <string name="settings_feedback_transaction_number_hint">Enter order number</string>
     <string name="youve_earned">You\'ve earned %s</string>
     <string name="like_topface">Do you like Topface?</string>
-    <string name="delete_visitors">Delete visitors</string>
+    <string name="delete_visitors">delete visitors</string>
 </resources>
