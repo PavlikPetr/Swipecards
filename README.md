@@ -17,7 +17,7 @@
 
 ## Ключ для подписи APK
 Ключ для подписи apk файла (необходим для загрузки в Android Market): 
-topface-apk.key
+misc/topface-apk.key
 
     логин: topface
     пароль: Sonetica2012
