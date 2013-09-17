@@ -1,3 +1,8 @@
+//Константы для сборки приложения. В подмодулях следует использовать именно их, а не хардкодить значения
+def defaultCompileSdkVersion = "Google Inc.:Google APIs:17"
+def defaultBuildToolsVersion = "18.1"
+def supportLibrary = "com.android.support:support-v4:18.0.0"
+
 buildscript {
      repositories {
          mavenCentral()
@@ -15,7 +20,7 @@ apply plugin: 'android'
 
 dependencies {
 	//Android Support libs
-	compile 'com.android.support:support-v4:18.0.0'
+	compile supportLibrary
 	compile 'com.android.support:appcompat-v7:18.0.0'
 
     //All jar libs
@@ -43,8 +48,8 @@ dependencies {
 }
 
 android {
-    compileSdkVersion "Google Inc.:Google APIs:17"
-    buildToolsVersion "18.1"
+    compileSdkVersion defaultCompileSdkVersion
+    buildToolsVersion defaultBuildToolsVersion
 
     defaultConfig {
         minSdkVersion 7
@@ -64,7 +69,7 @@ project(':libs:IllustratedTextView') {
 project(':libs:Android-ViewPagerIndicator') {
     apply plugin: 'android-library'
     dependencies {
-	    compile 'com.android.support:support-v4:18.0.0'
+	    compile supportLibrary
 	    compile project(':libs:IllustratedTextView')
     }
     android.sourceSets.main {
@@ -125,7 +130,7 @@ project(':libs:odnoklassniki') {
 project(':libs:MoPub') {
     apply plugin: 'android-library'
     dependencies {
-    	compile 'com.android.support:support-v4:18.0.0'
+    	compile supportLibrary
     	compile files('../GoogleAdMobAdsSdk.jar')
         compile fileTree(dir: '../mopub-libs', include: '*.jar')
     }
@@ -155,20 +160,20 @@ project(':libs:AdLabSDK') {
 project(':libs:LifeStreetMediaSDK') {
     apply plugin: 'android-library'
     dependencies {
-    	compile 'com.android.support:support-v4:18.0.0'
+    	compile supportLibrary
     }
     android.sourceSets.main {
         manifest.srcFile 'AndroidManifest.xml'
         java.srcDirs = ['sdk', '3rdparty/OpenUDID']
         res.srcDirs = ['res']
-	}
+    }
 }
 
 //Стандартные настройки подпроектов
 subprojects {
     buildDir "../../build/projects/$project.name"
     android {
-        compileSdkVersion "Google Inc.:Google APIs:17"
-        buildToolsVersion "18.1"
+        compileSdkVersion defaultCompileSdkVersion
+        buildToolsVersion defaultBuildToolsVersion
     }
 }
