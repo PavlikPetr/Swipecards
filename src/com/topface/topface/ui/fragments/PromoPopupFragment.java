@@ -17,7 +17,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 
-public class AirMessagesPopupFragment extends BaseFragment implements View.OnClickListener {
+public abstract class PromoPopupFragment extends BaseFragment implements View.OnClickListener {
 
     public static final String AIR_TYPE = "AIR_TYPE";
 
@@ -25,25 +25,15 @@ public class AirMessagesPopupFragment extends BaseFragment implements View.OnCli
     private boolean mUserClickButton = false;
     private int airType = Options.PremiumAirEntity.AIR_MESSAGES;
 
-    public static AirMessagesPopupFragment newInstance(int airType) {
-        Bundle arguments = new Bundle();
-        arguments.putInt(AIR_TYPE, airType);
-        AirMessagesPopupFragment fragment = new AirMessagesPopupFragment();
-        fragment.setArguments(arguments);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            airType = getArguments().getInt(AIR_TYPE, Options.PremiumAirEntity.AIR_MESSAGES);
-        }
-        mPremiumEntity = airType == Options.PremiumAirEntity.AIR_MESSAGES?
-                CacheProfile.getOptions().premium_messages : CacheProfile.getOptions().premium_visitors;
+        mPremiumEntity = getPremiumEntity();
 
 //        setNeedTitles(false);
     }
+
+    public abstract Options.PremiumAirEntity getPremiumEntity();
 
     @Override
     public void onResume() {
@@ -68,32 +58,11 @@ public class AirMessagesPopupFragment extends BaseFragment implements View.OnCli
         }
 
         if (!mUserClickButton) {
-            EasyTracker.getTracker().sendEvent(getMainTag(airType), "Dismiss", "BackClose", 0L);
+            EasyTracker.getTracker().sendEvent(getMainTag(), "Dismiss", "BackClose", 0L);
         }
     }
 
-    public static boolean showIfNeeded(FragmentManager manager, int type) {
-        Options.PremiumAirEntity premiumEntity;
-        if (type == Options.PremiumAirEntity.AIR_MESSAGES) {
-            premiumEntity = CacheProfile.getOptions().premium_messages;
-        } else {
-            premiumEntity = CacheProfile.getOptions().premium_visitors;
-        }
-        if (premiumEntity != null && premiumEntity.isNeedShow()) {
-            manager
-                    .beginTransaction()
-                    .add(android.R.id.content, AirMessagesPopupFragment.newInstance(type))
-                    .addToBackStack(null)
-                    .commit();
-            EasyTracker.getTracker().sendEvent(getMainTag(type), "Show", "", 0L);
-            return true;
-        }
-        return false;
-    }
-
-    public static String getMainTag(int type) {
-        return type == Options.PremiumAirEntity.AIR_MESSAGES? "AirMessages" : "key_7_1";
-    }
+    public abstract String getMainTag();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -109,21 +78,13 @@ public class AirMessagesPopupFragment extends BaseFragment implements View.OnCli
         int curVisitCounter = CountersManager.getInstance(getActivity()).getCounter(CountersManager.VISITORS);
         CountersManager.getInstance(getActivity()).setCounter(CountersManager.VISITORS, curVisitCounter + mPremiumEntity.getCount(), true);
         popupText.setText(getMessage());
+        EasyTracker.getTracker().sendEvent(getMainTag(), "Show", "", 0L);
         return root;
     }
 
-    private String getMessage() {
-        int count = mPremiumEntity.getCount();
-        if (airType == Options.PremiumAirEntity.AIR_VISITORS) {
-            int guests = CountersManager.getInstance(getActivity()).getCounter(CountersManager.VISITORS);
-            count = guests > 0? guests:count;
-        }
-        return Utils.getQuantityString(getPluralForm(), count, count);
-    }
+    protected abstract String getMessage();
 
-    private int getPluralForm() {
-        return airType == Options.PremiumAirEntity.AIR_MESSAGES? R.plurals.popup_vip_messages:R.plurals.popup_vip_visitors;
-    }
+    protected abstract int getPluralForm();
 
     @Override
     public void onClick(View v) {
@@ -132,31 +93,30 @@ public class AirMessagesPopupFragment extends BaseFragment implements View.OnCli
         switch (v.getId()) {
             case R.id.buyVip:
                 startActivityForResult(
-                        ContainerActivity.getVipBuyIntent(getMessage(), "VipDelivery"),
+                        ContainerActivity.getVipBuyIntent(getMessage(), getTagForBuyingFragment()),
                         ContainerActivity.INTENT_BUY_VIP_FRAGMENT
                 );
-                EasyTracker.getTracker().sendEvent(getMainTag(airType), "ClickBuyVip", "", 0L);
+                EasyTracker.getTracker().sendEvent(getMainTag(), "ClickBuyVip", "", 0L);
                 break;
             case R.id.deleteMessages:
-                if (airType == Options.PremiumAirEntity.AIR_VISITORS) {
-                    //Отправляем запрос удаления гостей
-                    VisitorsMarkReadedRequest request = new VisitorsMarkReadedRequest(getActivity());
-                    request.exec();
-                    //Откручиваем счетчик назад
-                    int curVisitCounter = CountersManager.getInstance(getActivity()).getCounter(CountersManager.VISITORS);
-                    CountersManager.getInstance(getActivity()).setCounter(CountersManager.VISITORS, curVisitCounter - mPremiumEntity.getCount(), true);
-                }
-                EasyTracker.getTracker().sendEvent(getMainTag(airType), "Dismiss", "Delete", 0L);
+                deleteMessages();
+                EasyTracker.getTracker().sendEvent(getMainTag(), "Dismiss", "Delete", 0L);
                 break;
         }
 
         closeFragment();
     }
 
+    protected abstract void deleteMessages();
+
+    protected String getTagForBuyingFragment() {
+        return getMainTag();
+    }
+
     private void closeFragment() {
         getFragmentManager()
                 .beginTransaction()
-                .remove(AirMessagesPopupFragment.this)
+                .remove(PromoPopupFragment.this)
                 .commit();
     }
 

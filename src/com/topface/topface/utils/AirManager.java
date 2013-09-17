@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.support.v4.app.FragmentManager;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
-import com.topface.topface.ui.fragments.AirMessagesPopupFragment;
+import com.topface.topface.ui.fragments.PromoPopupFragment;
 
 public class AirManager {
     public static final String AIR_TYPE_LAST_TAG = "air_type_last_tag";
@@ -26,7 +26,7 @@ public class AirManager {
             mType = Options.PremiumAirEntity.AIR_MESSAGES;
         }
 
-        if (AirMessagesPopupFragment.showIfNeeded(fm, mType)) {
+        if (PromoPopupFragment.showIfNeeded(fm, mType)) {
             setLastFragmentType();
         }
     }
