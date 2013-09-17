@@ -72,10 +72,6 @@ public class Options extends AbstractData {
      * Настройки для каждого типа страниц
      */
     public HashMap<String, Page> pages = new HashMap<String, Page>();
-    public LinkedList<BuyButton> coins = new LinkedList<BuyButton>();
-    public LinkedList<BuyButton> likes = new LinkedList<BuyButton>();
-    public LinkedList<BuyButton> premium = new LinkedList<BuyButton>();
-    public LinkedList<BuyButton> others = new LinkedList<BuyButton>();
 
     public String ratePopupType;
     private String paymentwall;
@@ -92,7 +88,6 @@ public class Options extends AbstractData {
     public int minLeadersPercent = 25; //Не уверен в этом, возможно стоит использовать другое дефолтное значение
 
     public String offerwall;
-    public boolean saleExists = false;
 
     public int premium_period;
     public int contacts_count;
@@ -110,7 +105,6 @@ public class Options extends AbstractData {
         Options options = new Options();
 
         try {
-            options.saleExists = false;
             options.priceAdmiration = response.jsonResult.optInt("admirationPrice");
             options.priceLeader = response.jsonResult.optInt("leaderPrice");
             options.minLeadersPercent = response.jsonResult.optInt("leaderPercent");
@@ -132,39 +126,10 @@ public class Options extends AbstractData {
             options.block_unconfirmed = response.jsonResult.optBoolean("blockUnconfirmed");
             options.block_chat_not_mutual = response.jsonResult.optBoolean("blockChatNotMutual");
 
-            JSONObject purchases = response.jsonResult.optJSONObject("purchases");
-            if (purchases != null) {
-                JSONArray coinsJSON = purchases.optJSONArray("coins");
-                if (coinsJSON != null) {
-                    for (int i = 0; i < coinsJSON.length(); i++) {
-                        options.coins.add(options.createBuyButtonFromJSON(coinsJSON.optJSONObject(i)));
-                    }
-                }
-
-                JSONArray likesJSON = purchases.optJSONArray("likes");
-                for (int i = 0; i < likesJSON.length(); i++) {
-                    options.likes.add(options.createBuyButtonFromJSON(likesJSON.optJSONObject(i)));
-                }
-
-                JSONArray premiumJSON = purchases.optJSONArray("premium");
-                if (premiumJSON != null) {
-                    for (int i = 0; i < premiumJSON.length(); i++) {
-                        options.premium.add(options.createBuyButtonFromJSON(premiumJSON.optJSONObject(i)));
-                    }
-                }
-
-                JSONArray othersJSON = purchases.optJSONArray("others");
-                if (othersJSON != null) {
-                    for (int i = 0; i < othersJSON.length(); i++) {
-                        options.others.add(options.createBuyButtonFromJSON(othersJSON.optJSONObject(i)));
-                    }
-                }
-            }
-
-            JSONObject contacts_invite = response.jsonResult.optJSONObject("inviteContacts");
-            options.premium_period = contacts_invite.optInt("premiumPeriod");
-            options.contacts_count = contacts_invite.optInt("contactsCount");
-            options.popup_timeout = contacts_invite.optInt("showPopupTimeout") * 60 * 60 * 1000;
+            JSONObject contactsInvite = response.jsonResult.optJSONObject("inviteContacts");
+            options.premium_period = contactsInvite.optInt("premiumPeriod");
+            options.contacts_count = contactsInvite.optInt("contactsCount");
+            options.popup_timeout = contactsInvite.optInt("showPopupTimeout") * 60 * 60 * 1000;
 
             if (response.jsonResult.has("premiumMessages")) {
                 options.premium_messages = new PremiumAirEntity(
@@ -211,7 +176,7 @@ public class Options extends AbstractData {
             Debug.error("Options parsing error", e);
         }
 
-        CacheProfile.setOptions(options, response.jsonResult);
+        CacheProfile.setOptions(options, response.getJsonResult());
         return options;
     }
 
@@ -242,89 +207,8 @@ public class Options extends AbstractData {
         }
     }
 
-    public BuyButton createBuyButtonFromJSON(JSONObject purchaseItem) {
-        if (purchaseItem.optInt("discount") > 0) {
-            saleExists = true;
-
-        }
-        return new BuyButton(
-                purchaseItem.optString("id"),
-                purchaseItem.optString("title"),
-                purchaseItem.optInt("price"),
-                purchaseItem.optString("hint"),
-                purchaseItem.optInt("showType"),
-                purchaseItem.optString("type"),
-                purchaseItem.optInt("discount")
-        );
-    }
-
     public static String generateKey(int type, boolean isMail) {
         return Integer.toString(type) + INNER_SEPARATOR + ((isMail) ? INNER_MAIL_CONST : INNER_APNS_CONST);
-    }
-
-    public static RelativeLayout setButton(LinearLayout root, final BuyButton curBtn, Context context, final BuyButtonClickListener l) {
-        if (context != null && !curBtn.title.equals("")) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.item_buying_btn, root, false);
-
-            RelativeLayout container = (RelativeLayout) view.findViewById(R.id.itContainer);
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) container.getLayoutParams();
-            double density = context.getResources().getDisplayMetrics().density;
-
-            int bgResource;
-            if (curBtn.discount > 0) {
-                bgResource = R.drawable.btn_sale_selector;
-                container.setPadding((int) (5 * density), (int) (5 * density), (int) (56 * density), (int) (5 * density));
-            } else {
-                bgResource = curBtn.showType == 0 ?
-                        R.drawable.btn_gray_selector :
-                        R.drawable.btn_blue_selector;
-            }
-            container.setBackgroundResource(bgResource);
-
-
-            container.requestLayout();
-
-            String color = curBtn.showType == 0 ? "#B8B8B8" : "#FFFFFF";
-
-            TextView title = (TextView) view.findViewById(R.id.itText);
-            title.setText(curBtn.title);
-            title.setTypeface(Typeface.DEFAULT_BOLD);
-            title.setTextColor(Color.parseColor(color));
-
-            TextView value = (TextView) view.findViewById(R.id.itValue);
-
-            value.setText(
-                    String.format(
-                            App.getContext().getString(R.string.default_price_format),
-                            curBtn.price / 100f
-                    )
-            );
-            value.setTextColor(Color.parseColor(color));
-            TextView economy = (TextView) view.findViewById(R.id.itEconomy);
-            economy.setTextColor(Color.parseColor(color));
-
-            if (!TextUtils.isEmpty(curBtn.hint)) {
-                economy.setText(curBtn.hint);
-            } else {
-                economy.setVisibility(View.GONE);
-            }
-
-            container.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    l.onClick(curBtn.id);
-                }
-            });
-            root.addView(view);
-            return container;
-        } else {
-            return null;
-        }
-    }
-
-    public interface BuyButtonClickListener {
-        public void onClick(String id);
     }
 
     public boolean containsBannerType(String bannerType) {
@@ -365,28 +249,6 @@ public class Options extends AbstractData {
             } else {
                 return null;
             }
-        }
-    }
-
-    public static class BuyButton {
-        public String id;
-        public String title;
-        public int price;
-        private int showType;
-        public String hint;
-        public String type;
-        public int discount;
-        public static final String COINS_NAME = "coins";
-        public static final String LIKES_NAME = "likes";
-
-        public BuyButton(String id, String title, int price, String hint, int showType, String type, int discount) {
-            this.id = id;
-            this.title = title;
-            this.price = price;
-            this.hint = hint;
-            this.showType = showType;
-            this.type = type;
-            this.discount = discount;
         }
     }
 

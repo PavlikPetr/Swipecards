@@ -20,7 +20,7 @@ public class ChangePasswordRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        return new JSONObject().put("current", currentPassword).put("new", newPassword);
+        return new JSONObject().put("current", currentPassword).put("updated", newPassword);
     }
 
     @Override

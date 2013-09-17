@@ -35,7 +35,7 @@ public class TestRequest extends ApiRequest {
         data.put("required", required != null ? required : "value");
 
         if (!TextUtils.isEmpty(nonrequired)) {
-            data.put("nonrequired", nonrequired);
+            data.put("nonRequired", nonrequired);
         }
         if (error > 0) {
             data.put("error", error);

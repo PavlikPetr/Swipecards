@@ -5,14 +5,11 @@ import android.content.res.Resources;
 import android.text.InputType;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.Profile;
-import com.topface.topface.data.User;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.QuestionaryRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.ui.fragments.ProfileFragment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /* понять и простить за эту хуйню */
@@ -197,43 +194,43 @@ public class FormInfo {
                 result.status = selectedValue;
                 break;
             case R.array.form_main_character:
-                result.characterid = selectedValueId;
+                result.characterId = selectedValueId;
                 break;
             case R.array.form_main_communication:
-                result.communicationid = selectedValueId;
+                result.communicationId = selectedValueId;
                 break;
             case R.array.form_habits_alcohol:
-                result.alcoholid = selectedValueId;
+                result.alcoholId = selectedValueId;
                 break;
             case R.array.form_habits_smoking:
-                result.smokingid = selectedValueId;
+                result.smokingId = selectedValueId;
                 break;
             case R.array.form_physique_eyes:
-                result.eyeid = selectedValueId;
+                result.eyeId = selectedValueId;
                 break;
             case R.array.form_physique_fitness:
-                result.fitnessid = selectedValueId;
+                result.fitnessId = selectedValueId;
                 break;
             case R.array.form_physique_hairs:
-                result.hairid = selectedValueId;
+                result.hairId = selectedValueId;
                 break;
             case R.array.form_physique_breast:
-                result.breastid = selectedValueId;
+                result.breastId = selectedValueId;
                 break;
             case R.array.form_social_car:
-                result.carid = selectedValueId;
+                result.carId = selectedValueId;
                 break;
             case R.array.form_social_education:
-                result.educationid = selectedValueId;
+                result.educationId = selectedValueId;
                 break;
             case R.array.form_social_finances:
-                result.financesid = selectedValueId;
+                result.financesId = selectedValueId;
                 break;
             case R.array.form_social_marriage:
-                result.marriageid = selectedValueId;
+                result.marriageId = selectedValueId;
                 break;
             case R.array.form_social_residence:
-                result.residenceid = selectedValueId;
+                result.residenceId = selectedValueId;
                 break;
             case R.array.form_main_height:
                 try {
@@ -253,7 +250,7 @@ public class FormInfo {
                 result.restaurants = selectedValue;
                 break;
             case R.array.form_detail_about_dating:
-                result.firstdating = selectedValue;
+                result.firstDating = selectedValue;
                 break;
             case R.array.form_detail_archievements:
                 result.achievements = selectedValue;

@@ -24,7 +24,7 @@ public class UserRequest extends ApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         return new JSONObject()
-                .put("userid", userId)
+                .put("userId", userId)
                 .put("visitor", visitor);
     }
 

@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.support.v4.content.LocalBroadcastManager;
+import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
@@ -181,7 +182,26 @@ public class App extends Application {
         new ParallelApiRequest(App.getContext())
                 .addRequest(getOptionsRequst())
                 .addRequest(getProfileRequest(ProfileRequest.P_ALL))
+                .addRequest(getGooglePlayProductsRequest())
                 .exec();
+    }
+
+    private static ApiRequest getGooglePlayProductsRequest() {
+        return new GooglePlayProductsRequest(App.getContext()).callback(new DataApiHandler<GooglePlayProducts>() {
+            @Override
+            protected void success(GooglePlayProducts data, IApiResponse response) {
+            }
+
+            @Override
+            protected GooglePlayProducts parseResponse(ApiResponse response) {
+                return GooglePlayProducts.parse(response);
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
+
+            }
+        });
     }
 
     private static ApiRequest getOptionsRequst() {

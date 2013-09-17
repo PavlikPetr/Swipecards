@@ -29,6 +29,7 @@ import com.topface.topface.data.search.UsersList;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.edit.EditAgeFragment;
@@ -109,6 +110,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             startDatingFilterActivity();
         }
     };
+    private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateResources();
+        }
+    };
 
     private void startDatingFilterActivity() {
         Intent intent = new Intent(getActivity().getApplicationContext(),
@@ -127,7 +134,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mAlphaAnimation.setDuration(400L);
         initMutualDrawables();
         // Rate Controller
-        mRateController = new RateController(getActivity());
+        mRateController = new RateController(getActivity(), SendLikeRequest.Place.FROM_SEARCH);
         mRateController.setOnRateControllerUiListener(this);
     }
 
@@ -158,17 +165,18 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         setHighRatePrice();
-        updateResources();
         setActionBarTitles(getTitle(), getSubtitle());
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mCountersReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileReceiver);
         //При выходе из фрагмента сохраняем кэш поиска
         if (mUserSearchList != null) {
             if (LocaleConfig.localeChangeInitiated) {
@@ -240,7 +248,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mDatingResources.setOnClickListener(this);
         mResourcesLikes = (TextView) view.findViewById(R.id.tvResourcesLikes);
         mResourcesMoney = (TextView) view.findViewById(R.id.tvResourcesMoney);
-        updateResources();
     }
 
     private void initControlButtons(View view) {
@@ -308,7 +315,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             public void onReceive(Context context, Intent intent) {
                 if (isAdded()) {
                     updateFilterData();
-                    updateResources();
                 }
             }
         };
@@ -420,7 +426,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
 
         updateFilterData();
-        updateResources();
     }
 
     private SearchRequest getSearchRequest() {
@@ -456,6 +461,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         if (CacheProfile.money > 0) {
                             CacheProfile.money = CacheProfile.money - CacheProfile.getOptions().priceAdmiration;
                             moneyDecreased = true;
+                            updateResources();
                         }
                         mRateController.onAdmiration(
                                 mCurrentUser.id,
@@ -465,7 +471,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                 new RateController.OnRateRequestListener() {
                                     @Override
                                     public void onRateCompleted() {
-
                                     }
 
                                     @Override
@@ -473,6 +478,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                         if (moneyDecreased) {
                                             moneyDecreased = true;
                                             CacheProfile.money += CacheProfile.getOptions().priceAdmiration;
+                                            updateResources();
                                         }
                                     }
                                 }
@@ -593,7 +599,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
 
         mPreloadManager.preloadPhoto(mUserSearchList);
-        updateResources();
     }
 
     private void showNextUser() {
@@ -679,26 +684,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             SkipRateRequest skipRateRequest = new SkipRateRequest(getActivity());
             registerRequest(skipRateRequest);
             skipRateRequest.userid = currentSearch.id;
-            skipRateRequest.callback(new DataApiHandler<SkipRate>() {
-                @Override
-                public void success(SkipRate data, IApiResponse response) {
-                    if (data.completed) {
-                        CacheProfile.likes = data.likes;
-                        CacheProfile.money = data.money;
-                        updateResources();
-                    }
-                }
-
-                @Override
-                protected SkipRate parseResponse(ApiResponse response) {
-                    return SkipRate.parse(response);
-                }
-
-                @Override
-                public void fail(int codeError, IApiResponse response) {
-
-                }
-            }).exec();
+            skipRateRequest.callback(new SimpleApiHandler()).exec();
         }
     }
 
@@ -856,6 +842,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (moneyDecreased) {
             CacheProfile.money += CacheProfile.getOptions().priceAdmiration;
             moneyDecreased = false;
+            updateResources();
         }
         showNextUser();
     }

@@ -30,9 +30,9 @@ abstract public class ApiHandler extends Handler {
         if (!mCancel) {
             try {
                 int result = response.getResultCode();
-                if (result == ApiResponse.ERRORS_PROCCESED) {
-                    fail(ApiResponse.ERRORS_PROCCESED, new ApiResponse(ApiResponse.ERRORS_PROCCESED, "Client exception"));
-                } else if (result == ApiResponse.PREMIUM_ACCESS_ONLY) {
+                if (result == ErrorCodes.ERRORS_PROCCESED) {
+                    fail(ErrorCodes.ERRORS_PROCCESED, new ApiResponse(ErrorCodes.ERRORS_PROCCESED, "Client exception"));
+                } else if (result == ErrorCodes.PREMIUM_ACCESS_ONLY) {
                     Debug.error("To do this you have to be a VIP");
 
                     if (isShowPremiumError()) {
@@ -41,21 +41,22 @@ abstract public class ApiHandler extends Handler {
                     }
 
                     fail(result, response);
-                } else if (response.isCodeEqual(IApiResponse.UNCONFIRMED_LOGIN)) {
+                } else if (response.isCodeEqual(ErrorCodes.UNCONFIRMED_LOGIN)) {
                     ConfirmedApiRequest.showConfirmDialog(mContext);
                     fail(result, response);
-                } else if (result != ApiResponse.RESULT_OK) {
+                } else if (result != ErrorCodes.RESULT_OK) {
                     fail(result, response);
                 } else {
                     if (response instanceof ApiResponse) {
-                        setCounters((ApiResponse) response);
-                        sendUpdateIntent((ApiResponse) response);
+                        ApiResponse apiResponse = (ApiResponse) response;
+                        setCounters(apiResponse);
+                        sendUpdateIntent(apiResponse);
                     }
                     success(response);
                 }
             } catch (Exception e) {
                 Debug.error("ApiHandler exception", e);
-                fail(ApiResponse.ERRORS_PROCCESED, new ApiResponse(ApiResponse.ERRORS_PROCCESED, e.getMessage()));
+                fail(ErrorCodes.ERRORS_PROCCESED, new ApiResponse(ErrorCodes.ERRORS_PROCCESED, e.getMessage()));
             }
             try {
                 always(response);
@@ -94,18 +95,24 @@ abstract public class ApiHandler extends Handler {
     private void setCounters(ApiResponse response) {
         if (!mNeedCounters) return;
         try {
-            JSONObject counters = response.counters;
+            JSONObject unread = response.unread;
+            JSONObject balance = response.balance;
             String method = response.method;
-            if (counters != null) {
-                CountersManager.getInstance(App.getContext())
-                        .setMethod(method)
-                        .setAllCounters(
-                                counters.optInt("unread_likes"),
-                                counters.optInt("unread_symphaties"),
-                                counters.optInt("unread_messages"),
-                                counters.optInt("unread_visitors"),
-                                counters.optInt("unread_fans")
-                        );
+            CountersManager manager = CountersManager.getInstance(App.getContext());
+            if (unread != null) {
+                manager.setMethod(method).setEntitiesCounters(
+                        unread.optInt("likes"),
+                        unread.optInt("mutual"),
+                        unread.optInt("dialogs"),
+                        unread.optInt("visitors"),
+                        unread.optInt("fans")
+                );
+            }
+            if (balance != null) {
+                manager.setMethod(method).setBalanceCounters(
+                        balance.optInt("likes"),
+                        balance.optInt("money")
+                );
             }
         } catch (Exception e) {
             Debug.error("api handler exception", e);
@@ -113,9 +120,9 @@ abstract public class ApiHandler extends Handler {
     }
 
     private void sendUpdateIntent(ApiResponse response) {
-        if (response.method.equals(ProfileRequest.SERVICE_NAME)) {
+        if (response.method.equals(ProfileRequest.SERVICE)) {
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
-        } else if (response.method.equals(AppOptionsRequest.SERVICE_NAME)) {
+        } else if (response.method.equals(AppOptionsRequest.SERVICE)) {
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(AppOptionsRequest.VERSION_INTENT));
         }
     }

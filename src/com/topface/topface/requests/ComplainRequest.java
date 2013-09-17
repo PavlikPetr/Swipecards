@@ -55,17 +55,17 @@ public class ComplainRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        JSONObject object = new JSONObject().put("targetid", userId)
+        JSONObject object = new JSONObject().put("targetId", userId)
                     .put("class", complainClass)
                     .put("type", complainType);
         if (description != null) {
             object.put("description", description);
         }
         if (photoId != null) {
-            object.put("photoid", photoId);
+            object.put("photoId", photoId);
         }
         if (feedId != null) {
-            object.put("feedid", feedId);
+            object.put("feedId", feedId);
         }
         return object;
     }

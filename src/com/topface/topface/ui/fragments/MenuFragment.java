@@ -107,7 +107,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         canChangeProfileIcons = true;
 
         //Кнопка распродаж
-        if (CacheProfile.getOptions().saleExists) {
+        if (CacheProfile.getGooglePlayProducts().saleExists) {
             buyButton.setBackgroundResource(R.drawable.btn_sale_selector);
         } else {
             buyButton.setBackgroundResource(R.drawable.btn_blue_selector);

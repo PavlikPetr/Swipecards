@@ -27,7 +27,7 @@ public class BookmarkDeleteManyRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        return new JSONObject().put("userids", new JSONArray(this.userIds));
+        return new JSONObject().put("userIds", new JSONArray(this.userIds));
     }
 
     @Override

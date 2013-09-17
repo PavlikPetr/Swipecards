@@ -16,6 +16,7 @@ import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.DeleteFeedsRequest;
 import com.topface.topface.requests.DeleteLikesRequest;
 import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.LikesListAdapter;
@@ -36,7 +37,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     @Override
     protected void init() {
-        mRateController = new RateController(getActivity());
+        mRateController = new RateController(getActivity(), SendLikeRequest.Place.FROM_FEED);
     }
 
     @Override

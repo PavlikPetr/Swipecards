@@ -23,8 +23,8 @@ public class FilterRequest extends ApiRequest {
                 .put("beautiful", filter.beautiful)
                 .put("sex", filter.sex)
                 .put("cityId", filter.city.id)
-                .put("agebegin", filter.ageStart) //TODO clarify parameter: ageStart or ageBegin
-                .put("ageend", filter.ageEnd) //TODO camel case: ageEnd
+                .put("ageStart", filter.ageStart) //TODO clarify parameter: ageStart or ageBegin
+                .put("ageEnd", filter.ageEnd) //TODO camel case: ageEnd
                 .put("xstatus", filter.xstatus)
                 .put("marriage", filter.marriage)
                 .put("character", filter.character)

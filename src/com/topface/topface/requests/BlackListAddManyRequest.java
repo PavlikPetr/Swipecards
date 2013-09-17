@@ -1,6 +1,7 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,7 +39,7 @@ public class BlackListAddManyRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        return new JSONObject().put("userids", new JSONArray(mUserIds));
+        return new JSONObject().put("userIds", new JSONArray(mUserIds));
     }
 
     @Override
@@ -51,7 +52,7 @@ public class BlackListAddManyRequest extends ApiRequest {
         if (mUserIds != null && mUserIds.size() > 0) {
             super.exec();
         } else {
-            handleFail(ApiResponse.ERRORS_PROCCESED, "User list for delete from black list is empty");
+            handleFail(ErrorCodes.ERRORS_PROCCESED, "User list for delete from black list is empty");
         }
     }
 }

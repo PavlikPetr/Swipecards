@@ -1,6 +1,7 @@
 package com.topface.topface.requests;
 
 import com.topface.topface.data.SerializableToJson;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.Debug;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,11 +10,12 @@ import java.util.Arrays;
 
 public class ApiResponse implements IApiResponse, SerializableToJson {
     // Data
-    protected int code = RESULT_DONT_SET;
+    protected int code = ErrorCodes.RESULT_DONT_SET;
     public String message = "";
     public JSONObject jsonResult;
     // can be null
-    public JSONObject counters;
+    public JSONObject unread;
+    public JSONObject balance;
     public String method;
     public String id;
 
@@ -50,7 +52,7 @@ public class ApiResponse implements IApiResponse, SerializableToJson {
                 json = new JSONObject(response);
                 parseJson(json);
             } catch (JSONException e) {
-                code = WRONG_RESPONSE;
+                code = ErrorCodes.WRONG_RESPONSE;
                 Debug.error("json response is wrong: " + response, e);
             }
         }
@@ -66,7 +68,7 @@ public class ApiResponse implements IApiResponse, SerializableToJson {
     public void parseJson(JSONObject response) {
         if (response == null) {
             Debug.error("JSON response is null");
-            code = NULL_RESPONSE;
+            code = ErrorCodes.NULL_RESPONSE;
             return;
         }
 
@@ -77,8 +79,11 @@ public class ApiResponse implements IApiResponse, SerializableToJson {
                 code = jsonResult.getInt("code");
                 message = jsonResult.optString("message", "");
             } else if (!jsonResult.isNull("result")) {
-                if (!jsonResult.isNull("counters")) {
-                    counters = jsonResult.optJSONObject("counters");
+                if (!jsonResult.isNull("unread")) {
+                    unread = jsonResult.optJSONObject("unread");
+                }
+                if (!jsonResult.isNull("balance")) {
+                    balance = jsonResult.optJSONObject("balance");
                 }
                 if (!jsonResult.isNull("method")) {
                     method = jsonResult.optString("method");
@@ -87,12 +92,12 @@ public class ApiResponse implements IApiResponse, SerializableToJson {
                     id = jsonResult.optString("id");
                 }
                 jsonResult = jsonResult.getJSONObject("result");
-                code = RESULT_OK;
+                code = ErrorCodes.RESULT_OK;
             } else {
-                code = WRONG_RESPONSE;
+                code = ErrorCodes.WRONG_RESPONSE;
             }
         } catch (Exception e) {
-            code = WRONG_RESPONSE;
+            code = ErrorCodes.WRONG_RESPONSE;
             Debug.error("Json response is wrong:" + response, e);
         }
     }
@@ -120,7 +125,7 @@ public class ApiResponse implements IApiResponse, SerializableToJson {
      * @return флаг выполенения запроса
      */
     public boolean isCompleted() {
-        return isCodeEqual(RESULT_OK);
+        return isCodeEqual(ErrorCodes.RESULT_OK);
     }
 
     /**
@@ -135,11 +140,11 @@ public class ApiResponse implements IApiResponse, SerializableToJson {
      */
     public boolean isWrongAuthError() {
         return isCodeEqual(
-                UNKNOWN_PLATFORM,
-                UNKNOWN_SOCIAL_USER,
-                UNVERIFIED_TOKEN,
-                INCORRECT_LOGIN,
-                INCORRECT_PASSWORD
+                ErrorCodes.UNKNOWN_PLATFORM,
+                ErrorCodes.UNKNOWN_SOCIAL_USER,
+                ErrorCodes.UNVERIFIED_TOKEN,
+                ErrorCodes.INCORRECT_LOGIN,
+                ErrorCodes.INCORRECT_PASSWORD
         );
     }
 

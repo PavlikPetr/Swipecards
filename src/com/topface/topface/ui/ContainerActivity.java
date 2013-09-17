@@ -52,14 +52,11 @@ public class ContainerActivity extends BaseFragmentActivity {
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        if (AuthToken.getInstance().isEmpty()) {
+        if (isNeedAuth() && AuthToken.getInstance().isEmpty()) {
             finish();
         }
         setContentView(R.layout.fragment_frame);
-
         overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
-
-        initRequestKey();
     }
 
     private void initRequestKey() {
@@ -73,7 +70,6 @@ public class ContainerActivity extends BaseFragmentActivity {
             } finally {
                 if (App.DEBUG && mCurrentFragmentId <= 0) throw new IllegalArgumentException("ContainerActivity needs request code, use static ContainerActivity methods to get Intents");
             }
-
         }
     }
 
@@ -144,9 +140,11 @@ public class ContainerActivity extends BaseFragmentActivity {
                         intent.getStringExtra(BaseFragmentActivity.INTENT_PREV_ENTITY));
                 break;
             case INTENT_REGISTRATION_FRAGMENT:
+                getSupportActionBar().hide();
                 fragment = new RegistrationFragment();
                 break;
             case INTENT_RECOVER_PASSWORD:
+                getSupportActionBar().hide();
                 fragment = new RecoverPwdFragment();
                 break;
             case INTENT_PROFILE_FRAGMENT:

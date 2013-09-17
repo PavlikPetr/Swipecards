@@ -16,7 +16,7 @@ public class PhotoMainRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        return new JSONObject().put("photoid", photoid);
+        return new JSONObject().put("photoId", photoid);
     }
 
     @Override

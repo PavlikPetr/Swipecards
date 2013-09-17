@@ -48,7 +48,7 @@ public class SettingsRequest extends ApiRequest {
         //if (lat != -1) data.put("lat", lat);
         //if (lng != -1) data.put("lng", lng);
         if (cityid != -1) {
-            data.put("cityid", cityid);
+            data.put("cityId", cityid);
         }
         if (background != -1) {
             data.put("background", background);

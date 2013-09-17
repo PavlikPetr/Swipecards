@@ -23,7 +23,7 @@ public class CoordinatesRequest extends ApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         return new JSONObject()
-                .put("receiverid", userid)
+                .put("receiverId", userid)
                 .put("longitude", longitude)
                 .put("latitude", latitude)
                 .put("type", type)

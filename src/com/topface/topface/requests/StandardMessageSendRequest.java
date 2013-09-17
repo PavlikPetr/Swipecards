@@ -21,8 +21,8 @@ public class StandardMessageSendRequest extends ConfirmedApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         JSONObject request = new JSONObject();
-        request.put("messageid", messageId);
-        request.put("userid", userId);
+        request.put("messageId", messageId);
+        request.put("userId", userId);
         return request;
     }
 

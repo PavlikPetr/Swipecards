@@ -8,7 +8,6 @@ import android.content.IntentFilter;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.ActionMode;
@@ -27,6 +26,7 @@ import com.topface.topface.data.FeedListData;
 import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
@@ -460,7 +460,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     public void fail(int codeError, IApiResponse response) {
                         Debug.log(response.toString());
                         mLockView.setVisibility(View.GONE);
-                        if (codeError != ApiResponse.PREMIUM_ACCESS_ONLY) {
+                        if (codeError != ErrorCodes.PREMIUM_ACCESS_ONLY) {
                             Utils.showErrorMessage(getActivity());
                         }
                     }
@@ -510,7 +510,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     protected void updateData(final boolean isPushUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {
         if (isBlockOnClosing() && !CacheProfile.premium) {
-            showUpdateErrorMessage(ApiResponse.PREMIUM_ACCESS_ONLY);
+            showUpdateErrorMessage(ErrorCodes.PREMIUM_ACCESS_ONLY);
             return;
         }
         mIsUpdating = true;
@@ -573,7 +573,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     showUpdateErrorMessage(codeError);
 
                     //Если это не ошибка доступа, то показываем стандартное сообщение об ошибке
-                    if (codeError != ApiResponse.PREMIUM_ACCESS_ONLY) {
+                    if (codeError != ErrorCodes.PREMIUM_ACCESS_ONLY) {
                         Utils.showErrorMessage(activity);
                     }
                     onUpdateFail(isPushUpdating || isHistoryLoad);
@@ -596,7 +596,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     private void showUpdateErrorMessage(int codeError) {
         mListView.setVisibility(View.INVISIBLE);
         switch (codeError) {
-            case ApiResponse.PREMIUM_ACCESS_ONLY:
+            case ErrorCodes.PREMIUM_ACCESS_ONLY:
                 onEmptyFeed();
                 break;
             default:

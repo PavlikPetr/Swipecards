@@ -6,21 +6,18 @@ import com.topface.topface.requests.*;
 import com.topface.topface.ui.ContainerActivity;
 
 public class RateController {
-    /**
-     * Для теста отключаем диалог восхищения
-     */
 
-    public static final int MUTUAL_VALUE = 9;
-
+    private final SendLikeRequest.Place mPlace;
     private Activity mContext;
     private OnRateControllerListener mOnRateControllerUiListener;
 
-    public RateController(final Activity context) {
+    public RateController(final Activity context, SendLikeRequest.Place place) {
         mContext = context;
+        mPlace = place;
     }
 
     public void onLike(final int userId, final int mutualId, final OnRateRequestListener requestListener) {
-        sendRate(new SendLikeRequest(mContext), userId, mutualId, requestListener);
+        sendRate(new SendLikeRequest(mContext, userId, mutualId, mPlace), requestListener);
     }
 
     public void onAdmiration(final int userId, final int mutualId, final OnRateRequestListener requestListener) {
@@ -34,7 +31,7 @@ public class RateController {
             }
             return;
         }
-        sendRate(new SendAdmirationRequest(mContext), userId, mutualId, requestListener);
+        sendRate(new SendAdmirationRequest(mContext, userId, mutualId, mPlace), requestListener);
     }
 
     public void onRate(final int userId, final int rate, final int mutualId, OnRateRequestListener requestListener) {
@@ -45,9 +42,7 @@ public class RateController {
         }
     }
 
-    private void sendRate(SendLikeRequest sendLike, final int userid, final int mutualId, final OnRateRequestListener listener) {
-        sendLike.userid = userid;
-        sendLike.mutualid = mutualId;
+    private void sendRate(SendLikeRequest sendLike, final OnRateRequestListener listener) {
         sendLike.callback(new DataApiHandler<Rate>() {
 
             @Override

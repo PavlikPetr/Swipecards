@@ -21,6 +21,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PhotoAddRequest;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
@@ -332,13 +333,13 @@ public class AddPhotoHelper {
 
     private void showErrorMessage(int codeError) {
         switch (codeError) {
-            case ApiResponse.INCORRECT_PHOTO_DATA:
+            case ErrorCodes.INCORRECT_PHOTO_DATA:
                 Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo), Toast.LENGTH_LONG).show();
                 break;
-            case ApiResponse.INCORRECT_PHOTO_FORMAT:
+            case ErrorCodes.INCORRECT_PHOTO_FORMAT:
                 Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo_format), Toast.LENGTH_LONG).show();
                 break;
-            case ApiResponse.INCORRECT_PHOTO_SIZES:
+            case ErrorCodes.INCORRECT_PHOTO_SIZES:
                 Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo_size), Toast.LENGTH_LONG).show();
                 break;
         }

@@ -8,7 +8,7 @@
 
     <!-- Опции логирования работы библиотеки -->
     <logging>
-        <enabled>true</enabled>
+        <enabled>false</enabled>
         <level>verbose</level>
     </logging>
 

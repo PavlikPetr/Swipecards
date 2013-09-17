@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import com.topface.topface.data.Options;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.dialogs.ConfirmEmailDialog;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.social.AuthToken;
@@ -25,7 +26,7 @@ abstract public class ConfirmedApiRequest extends ApiRequest {
             super.exec();
         } else {
             showConfirmDialog(context);
-            handleFail(IApiResponse.UNCONFIRMED_LOGIN_ACTION, "Need confirm email");
+            handleFail(ErrorCodes.UNCONFIRMED_LOGIN_ACTION, "Need confirm email");
         }
     }
 

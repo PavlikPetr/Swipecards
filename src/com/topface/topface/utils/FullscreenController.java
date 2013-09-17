@@ -20,10 +20,8 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Banner;
 import com.topface.topface.data.Options;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BannerRequest;
-import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.*;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -309,7 +307,7 @@ public class FullscreenController {
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                if (codeError == ApiResponse.BANNER_NOT_FOUND) {
+                if (codeError == ErrorCodes.BANNER_NOT_FOUND) {
                     addLastFullscreenShowedTime();
                 }
             }

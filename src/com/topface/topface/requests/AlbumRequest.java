@@ -37,7 +37,7 @@ public class AlbumRequest extends ApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         JSONObject response =  new JSONObject().put("limit", limit)
-                .put("userid", uid);
+                .put("userId", uid);
         if (from != 0) {
             response.put("from", from);
         }

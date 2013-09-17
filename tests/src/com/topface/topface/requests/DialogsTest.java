@@ -3,6 +3,7 @@ package com.topface.topface.requests;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.ErrorCodes;
 
 public class DialogsTest extends FeedTest<FeedDialog> {
 
@@ -39,7 +40,7 @@ public class DialogsTest extends FeedTest<FeedDialog> {
 
                             @Override
                             public void fail(int codeError, IApiResponse response) {
-                                assertEquals("Wrong error code", ApiResponse.MISSING_REQUIRE_PARAMETER, codeError);
+                                assertEquals("Wrong error code", ErrorCodes.MISSING_REQUIRE_PARAMETER, codeError);
                                 stopTest("testFeedDialogDeleteRequestExecWithWrongId");
                             }
                         }).exec();

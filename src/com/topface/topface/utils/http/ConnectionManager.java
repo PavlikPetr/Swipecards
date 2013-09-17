@@ -8,6 +8,7 @@ import android.content.Intent;
 import com.topface.topface.*;
 import com.topface.topface.data.Auth;
 import com.topface.topface.requests.AuthRequest;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.IApiRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.BanActivity;
@@ -106,16 +107,16 @@ public class ConnectionManager {
                 //Если у нас нет авторизационного токена, то выкидываем на авторизацию
                 if (AuthToken.getInstance().isEmpty()) {
                     //Если токен пустой, то сразу конструируем ошибку
-                    response = request.constructApiResponse(IApiResponse.UNKNOWN_SOCIAL_USER, "AuthToken is empty");
+                    response = request.constructApiResponse(ErrorCodes.UNKNOWN_SOCIAL_USER, "AuthToken is empty");
                 } else {
                     //Если SSID пустой, то сразу пишим ответ
-                    response = request.constructApiResponse(IApiResponse.SESSION_NOT_FOUND, "SSID is empty");
+                    response = request.constructApiResponse(ErrorCodes.SESSION_NOT_FOUND, "SSID is empty");
                 }
 
             }
 
             //Проверяем запрос на ошибку неверной сессии
-            if (response.isCodeEqual(IApiResponse.SESSION_NOT_FOUND)) {
+            if (response.isCodeEqual(ErrorCodes.SESSION_NOT_FOUND)) {
                 //если сессия истекла, то переотправляем запрос авторизации в том же потоке
                 response = resendAfterAuth(request);
 
@@ -147,13 +148,13 @@ public class ConnectionManager {
     private boolean processResponse(IApiRequest apiRequest, IApiResponse apiResponse) {
         boolean needResend = false;
         //Некоторые ошибки обрабатываем дополнительно, не возвращая в клиентский код
-        if (apiResponse.isCodeEqual(IApiResponse.BAN)) {
+        if (apiResponse.isCodeEqual(ErrorCodes.BAN)) {
             //Если в результате получили ответ, что забанен, прекращаем обработку, сообщаем об этом
             showBanActivity(apiRequest, apiResponse);
-        } else if (apiResponse.isCodeEqual(IApiResponse.DETECT_FLOOD)) {
+        } else if (apiResponse.isCodeEqual(ErrorCodes.DETECT_FLOOD)) {
             //Если пользователь заблокирован за флуд, показываем соответсвующий экран
             showFloodActivity(apiRequest);
-        } else if (apiResponse.isCodeEqual(IApiResponse.MAINTENANCE)) {
+        } else if (apiResponse.isCodeEqual(ErrorCodes.MAINTENANCE)) {
             //Если на сервере ведуться работы, то показыаем диалог повтора
             needResend = showRetryDialog(apiRequest);
         } else if (isNeedResend(apiResponse)) {
@@ -227,17 +228,17 @@ public class ConnectionManager {
     private boolean isNeedResend(IApiResponse apiResponse) {
         return App.isOnline() && apiResponse.isCodeEqual(
                 //Если ответ пустой
-                IApiResponse.NULL_RESPONSE,
+                ErrorCodes.NULL_RESPONSE,
                 //Если с сервера пришел не корректный json
-                IApiResponse.WRONG_RESPONSE,
+                ErrorCodes.WRONG_RESPONSE,
                 //Если после переавторизации у нас все же не верный ssid, то пробуем все повторить
-                IApiResponse.SESSION_NOT_FOUND,
+                ErrorCodes.SESSION_NOT_FOUND,
                 //Если у нас ошибки подключения
-                IApiResponse.CONNECTION_ERROR,
+                ErrorCodes.CONNECTION_ERROR,
                 //Если проблема с подключением к социальной сети у сервера
-                IApiResponse.NETWORK_CONNECT_ERROR,
+                ErrorCodes.NETWORK_CONNECT_ERROR,
                 //Если на сервере что-то упало, то пробуем переотправить запрос
-                IApiResponse.INTERNAL_SERVER_ERROR
+                ErrorCodes.INTERNAL_SERVER_ERROR
         );
     }
 
@@ -311,33 +312,33 @@ public class ConnectionManager {
         } catch (UnknownHostException e) {
             Debug.error(TAG + "::Exception", e);
             //Это ошибка соединение, такие запросы мы будем переотправлять
-            response = apiRequest.constructApiResponse(IApiResponse.CONNECTION_ERROR, "Connection exception: " + e.toString());
+            response = apiRequest.constructApiResponse(ErrorCodes.CONNECTION_ERROR, "Connection exception: " + e.toString());
         } catch (SocketException e) {
             Debug.error(TAG + "::Exception", e);
             //Это ошибка подключения, такие запросы мы будем переотправлять
-            response = apiRequest.constructApiResponse(IApiResponse.CONNECTION_ERROR, "Socket exception: " + e.toString());
+            response = apiRequest.constructApiResponse(ErrorCodes.CONNECTION_ERROR, "Socket exception: " + e.toString());
         } catch (SocketTimeoutException e) {
             Debug.error(TAG + "::Exception", e);
             //Это ошибка подключения, такие запросы мы будем переотправлять
-            response = apiRequest.constructApiResponse(IApiResponse.CONNECTION_ERROR, "Socket exception: " + e.toString());
+            response = apiRequest.constructApiResponse(ErrorCodes.CONNECTION_ERROR, "Socket exception: " + e.toString());
         } catch (SSLException e) {
             Debug.error(TAG + "::Exception", e);
             //Это ошибка соединение, такие запросы мы будем переотправлять
-            response = apiRequest.constructApiResponse(IApiResponse.CONNECTION_ERROR, "Connection exception: " + e.toString());
+            response = apiRequest.constructApiResponse(ErrorCodes.CONNECTION_ERROR, "Connection exception: " + e.toString());
         } catch (Exception e) {
             Debug.error(TAG + "::Exception", e);
             //Это ошибка нашего кода, не нужно автоматически переотправлять такой запрос
-            response = apiRequest.constructApiResponse(IApiResponse.ERRORS_PROCCESED, "Request exception: " + e.toString());
+            response = apiRequest.constructApiResponse(ErrorCodes.ERRORS_PROCCESED, "Request exception: " + e.toString());
         } catch (OutOfMemoryError e) {
             Debug.error(TAG + "::" + e.toString());
             //Если OutOfMemory, то отменяем запросы, толку от этого все равно нет
-            response = apiRequest.constructApiResponse(IApiResponse.ERRORS_PROCCESED, "Request OutOfMemory: " + e.toString());
+            response = apiRequest.constructApiResponse(ErrorCodes.ERRORS_PROCCESED, "Request OutOfMemory: " + e.toString());
         } finally {
             //Закрываем соединение
             apiRequest.closeConnection();
 
             if (response == null) {
-                response = apiRequest.constructApiResponse(IApiResponse.NULL_RESPONSE, "Null response");
+                response = apiRequest.constructApiResponse(ErrorCodes.NULL_RESPONSE, "Null response");
             }
         }
 
@@ -366,7 +367,7 @@ public class ConnectionManager {
         );
 
         //Проверяем, что авторизация прошла и нет ошибки
-        if (authResponse.isCodeEqual(IApiResponse.RESULT_OK)) {
+        if (authResponse.isCodeEqual(ErrorCodes.RESULT_OK)) {
             Auth auth = new Auth(authResponse);
             //Сохраняем новый SSID в SharedPreferences
             Ssid.save(auth.ssid);

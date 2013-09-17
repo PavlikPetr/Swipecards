@@ -18,7 +18,7 @@ public class VirusLikesRequest extends ConfirmedApiRequest {
     /**
      * перечень социальных идентификаторов пользвоателей, которым были отпралвены приглашения на установку приложения
      */
-    private static final String VIRUS_REQUEST_IDS = "socialids";
+    private static final String VIRUS_REQUEST_IDS = "socialIds";
 
     private String mFeedId;
     private ArrayList<Long> mSocialids;

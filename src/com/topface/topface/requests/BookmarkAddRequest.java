@@ -15,7 +15,7 @@ public class BookmarkAddRequest extends ConfirmedApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        return new JSONObject().put("userid", uid);
+        return new JSONObject().put("userId", uid);
     }
 
     @Override

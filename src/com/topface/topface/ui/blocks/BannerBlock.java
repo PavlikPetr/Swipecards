@@ -36,6 +36,7 @@ import com.topface.topface.data.Banner;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.VirusLike;
 import com.topface.topface.requests.*;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.feed.*;
@@ -516,7 +517,7 @@ public class BannerBlock {
             public void fail(int codeError, IApiResponse response) {
                 EasyTracker.getTracker().sendEvent("VirusLike", "Fail", "Banner", 0L);
 
-                if (response.isCodeEqual(ApiResponse.CODE_VIRUS_LIKES_ALREADY_RECEIVED)) {
+                if (response.isCodeEqual(ErrorCodes.CODE_VIRUS_LIKES_ALREADY_RECEIVED)) {
                     Toast.makeText(getContext(), R.string.virus_error, Toast.LENGTH_LONG).show();
                 } else {
                     Utils.showErrorMessage(getContext());

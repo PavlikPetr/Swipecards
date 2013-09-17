@@ -17,6 +17,7 @@ import com.topface.billing.BillingFragment;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ProfileRequest;
@@ -84,7 +85,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater,container,savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_buy_premium, null);
         initViews(view);
         initActionBar();
@@ -129,24 +130,25 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     private void initBuyVipViews(View root) {
         mBuyVipViewsContainer = (LinearLayout) root.findViewById(R.id.fbpContainer);
         LinearLayout btnContainer = (LinearLayout) root.findViewById(R.id.fbpBtnContainer);
-        if (CacheProfile.getOptions().premium.isEmpty()) {
+        if (CacheProfile.getGooglePlayProducts().premium.isEmpty()) {
             root.findViewById(R.id.fbpBuyingDisabled).setVisibility(View.VISIBLE);
         } else {
             root.findViewById(R.id.fbpBuyingDisabled).setVisibility(View.GONE);
         }
-        for (Options.BuyButton curBtn : CacheProfile.getOptions().premium) {
-            Options.setButton(btnContainer, curBtn, getActivity(), new Options.BuyButtonClickListener() {
-                @Override
-                public void onClick(String id) {
-                    buySubscription(id);
-                    Bundle arguments = getArguments();
-                    String from = "";
-                    if (arguments != null) {
-                        from = "From" + arguments.getString(ARG_TAG_SOURCE);
-                    }
-                    EasyTracker.getTracker().sendEvent("Subscription", "ButtonClick" + from, id, 0L);
-                }
-            });
+        for (GooglePlayProducts.BuyButton curBtn : CacheProfile.getGooglePlayProducts().premium) {
+            GooglePlayProducts.setButton(btnContainer, curBtn, getActivity(),
+                    new GooglePlayProducts.BuyButtonClickListener() {
+                        @Override
+                        public void onClick(String id) {
+                            buySubscription(id);
+                            Bundle arguments = getArguments();
+                            String from = "";
+                            if (arguments != null) {
+                                from = "From" + arguments.getString(ARG_TAG_SOURCE);
+                            }
+                            EasyTracker.getTracker().sendEvent("Subscription", "ButtonClick" + from, id, 0L);
+                        }
+                    });
         }
     }
 

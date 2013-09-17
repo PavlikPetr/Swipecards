@@ -22,6 +22,7 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
@@ -72,6 +73,7 @@ public class AuthFragment extends BaseFragment {
     private boolean btnsHidden;
     private BroadcastReceiver authorizationReceiver;
     private boolean authReceiverRegistered;
+    private boolean mButtonsInitialized = false;
 
     public static AuthFragment newInstance() {
         return new AuthFragment();
@@ -122,7 +124,7 @@ public class AuthFragment extends BaseFragment {
                 int msg = intent.getIntExtra(MSG_AUTH_KEY, AuthorizationManager.AUTHORIZATION_CANCELLED);
                 switch (msg) {
                     case AuthorizationManager.AUTHORIZATION_FAILED:
-                        authorizationFailed(ApiResponse.NETWORK_CONNECT_ERROR, null);
+                        authorizationFailed(ErrorCodes.NETWORK_CONNECT_ERROR, null);
                         break;
                     case AuthorizationManager.DIALOG_COMPLETED:
                         hideButtons();
@@ -258,7 +260,7 @@ public class AuthFragment extends BaseFragment {
                 Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
             }
         });
-
+        mButtonsInitialized = true;
     }
 
 
@@ -476,7 +478,7 @@ public class AuthFragment extends BaseFragment {
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                if (response.isCodeEqual(ApiResponse.BAN))
+                if (response.isCodeEqual(ErrorCodes.BAN))
                     showButtons();
                 else {
                     authorizationFailed(codeError, profileRequest);
@@ -508,7 +510,7 @@ public class AuthFragment extends BaseFragment {
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                if (response.isCodeEqual(ApiResponse.BAN))
+                if (response.isCodeEqual(ErrorCodes.BAN))
                     showButtons();
                 else {
                     request.callback(this);
@@ -537,7 +539,7 @@ public class AuthFragment extends BaseFragment {
         strBuilder.append(RetryViewCreator.REFRESH_TEMPLATE).append(getString(R.string.general_dialog_retry));
         if (isAdded()) {
             switch (codeError) {
-                case IApiResponse.NETWORK_CONNECT_ERROR:
+                case ErrorCodes.NETWORK_CONNECT_ERROR:
                     fillRetryView(getString(R.string.general_reconnect_social), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -547,7 +549,7 @@ public class AuthFragment extends BaseFragment {
                         }
                     }, strBuilder.toString());
                     break;
-                case IApiResponse.MAINTENANCE:
+                case ErrorCodes.MAINTENANCE:
                     fillRetryView(getString(R.string.general_maintenance), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -557,7 +559,7 @@ public class AuthFragment extends BaseFragment {
                         }
                     }, strBuilder.toString());
                     break;
-                case IApiResponse.CODE_OLD_APPLICATION_VERSION:
+                case ErrorCodes.CODE_OLD_APPLICATION_VERSION:
                     fillRetryView(getString(R.string.general_version_not_supported), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -565,17 +567,17 @@ public class AuthFragment extends BaseFragment {
                         }
                     }, getString(R.string.popup_version_update));
                     break;
-                case IApiResponse.INCORRECT_LOGIN:
-                case IApiResponse.UNKNOWN_SOCIAL_USER:
+                case ErrorCodes.INCORRECT_LOGIN:
+                case ErrorCodes.UNKNOWN_SOCIAL_USER:
                     redAlert(R.string.incorrect_login);
                     needShowRetry = false;
                     break;
-                case IApiResponse.INCORRECT_PASSWORD:
+                case ErrorCodes.INCORRECT_PASSWORD:
                     redAlert(R.string.incorrect_password);
                     mRecoverPwd.setVisibility(View.VISIBLE);
                     needShowRetry = false;
                     break;
-                case IApiResponse.MISSING_REQUIRE_PARAMETER:
+                case ErrorCodes.MISSING_REQUIRE_PARAMETER:
                     redAlert(R.string.empty_fields);
                     needShowRetry = false;
                     break;
@@ -695,24 +697,26 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void hideButtons() {
-        btnsHidden = true;
-        mFBButton.setVisibility(View.GONE);
-        mVKButton.setVisibility(View.GONE);
-        mOKButton.setVisibility(View.GONE);
-        mOtherSocialNetworksButton.setVisibility(View.GONE);
-        mSignInView.setVisibility(View.GONE);
-        mCreateAccountView.setVisibility(View.GONE);
-        mRetryView.setVisibility(View.GONE);
-        mTFButton.setVisibility(View.INVISIBLE);
-        if (mProcessingTFReg) {
-            mLoginSendingProgress.setVisibility(View.VISIBLE);
-        } else {
-            mProgressBar.setVisibility(View.VISIBLE);
+        if (mButtonsInitialized) {
+            btnsHidden = true;
+            mFBButton.setVisibility(View.GONE);
+            mVKButton.setVisibility(View.GONE);
+            mOKButton.setVisibility(View.GONE);
+            mOtherSocialNetworksButton.setVisibility(View.GONE);
+            mSignInView.setVisibility(View.GONE);
+            mCreateAccountView.setVisibility(View.GONE);
+            mRetryView.setVisibility(View.GONE);
+            mTFButton.setVisibility(View.INVISIBLE);
+            if (mProcessingTFReg) {
+                mLoginSendingProgress.setVisibility(View.VISIBLE);
+            } else {
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
+            mRecoverPwd.setEnabled(false);
+            mLogin.setEnabled(false);
+            mPassword.setEnabled(false);
+            mBackButton.setEnabled(false);
         }
-        mRecoverPwd.setEnabled(false);
-        mLogin.setEnabled(false);
-        mPassword.setEnabled(false);
-        mBackButton.setEnabled(false);
     }
 
     private void btnVKClick() {

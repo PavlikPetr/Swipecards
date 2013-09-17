@@ -14,7 +14,7 @@ import org.json.JSONObject;
  */
 public class DatingFilter extends AbstractData implements Cloneable, Parcelable {
 
-    public static final String DATING_ONLINE_FIELD = "dating_online";
+    public static final String DATING_ONLINE_FIELD = "datingOnline";
 
     public static final int webAbsoluteMaxAge = 99;
     public static final int webAbsoluteMinAge = 16;

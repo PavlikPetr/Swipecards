@@ -25,6 +25,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
@@ -120,7 +121,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
         mLoaderView = root.findViewById(R.id.llvProfileLoading);
         final FragmentActivity activity = getActivity();
-        mRateController = new RateController(activity);
+        mRateController = new RateController(activity, SendLikeRequest.Place.FROM_PROFILE);
 
         String itemId = getArguments().getString(ARG_FEED_ITEM_ID);
         if (itemId != null) {
@@ -846,7 +847,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 @Override
                 public void fail(int codeError, IApiResponse response) {
                     Utils.showErrorMessage(getContext());
-                    if (response.isCodeEqual(ApiResponse.PAYMENT)) {
+                    if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
                         FragmentActivity activity = getActivity();
                         if (activity != null) {
                             Intent intent = ContainerActivity.getBuyingIntent("Profile");

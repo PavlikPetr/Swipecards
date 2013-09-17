@@ -8,8 +8,8 @@ import org.json.JSONObject;
 public class SendGiftRequest extends ConfirmedApiRequest {
     public static final String SERVICE = "gift.send";
 
-    static final String USER_ID = "userid";
-    static final String GIFT_ID = "giftid";
+    static final String USER_ID = "userId";
+    static final String GIFT_ID = "giftId";
 
     public int userId;
     public int giftId;

@@ -40,7 +40,7 @@ public class RegisterRequest extends ApiRequest {
                 .put("name", name)
                 .put("birthday", birthday)
                 .put("sex", sex)
-                .put("clienttype", clientType)
+                .put("clientType", clientType)
                 .put("locale", locale);
     }
 

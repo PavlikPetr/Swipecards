@@ -75,13 +75,19 @@ public class CountersManager {
         }
     }
 
-    public void setAllCounters(int likesCounter, int sympathyCounter, int dialogsCounter, int visitorsCounter, int fansCounter) {
-        CountersManager.likesCounter = likesCounter;
-        CountersManager.sympathyCounter = sympathyCounter;
-        CountersManager.dialogsCounter = dialogsCounter;
-        CountersManager.visitorsCounter = visitorsCounter;
-        CountersManager.fansCounter = fansCounter;
+    public void setEntitiesCounters(int likes, int mutual, int dialogs, int visitors, int fans) {
+        CountersManager.likesCounter = likes;
+        CountersManager.sympathyCounter = mutual;
+        CountersManager.dialogsCounter = dialogs;
+        CountersManager.visitorsCounter = visitors;
+        CountersManager.fansCounter = fans;
         commitCounters();
+    }
+
+    public void setBalanceCounters(int likes, int money) {
+        CacheProfile.likes = likes;
+        CacheProfile.money = money;
+        updateUICounters();
     }
 
     public int getCounter(int type) {

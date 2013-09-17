@@ -110,7 +110,7 @@ public class GCMUtils {
         intent.putExtra("title", "da");
         intent.putExtra("type", "5");
         intent.putExtra("unread", "1");
-        intent.putExtra("counters", "788");
+        intent.putExtra("counters", "788"); // поле counters в ответе от сервера переименованно в unread
 //        try {                  topface://chat?id=13123
 //            intent.putExtra("user", new JSONObject().put("id", "43945394").put("photo", new JSONObject().put("c128x128", "http://imgs.topface.com/u43945394/c128x128/nnf6g6.jpg")).put("name", "Ilya").put("age", "21").toString());
 //
@@ -186,7 +186,7 @@ public class GCMUtils {
     }
 
     private static void setCounters(Intent extra, Context context) {
-        String countersString = extra.getStringExtra("counters");
+        String countersString = extra.getStringExtra("unread");
         if (countersString != null) {
             setCounters(countersString, context);
         }
@@ -306,7 +306,7 @@ public class GCMUtils {
         try {
             JSONObject countersJson = new JSONObject(counters);
             CountersManager.getInstance(context).setMethod(CountersManager.CHANGED_BY_GCM);
-            CountersManager.getInstance(context).setAllCounters(countersJson.optInt("unread_likes"),
+            CountersManager.getInstance(context).setEntitiesCounters(countersJson.optInt("unread_likes"),
                     countersJson.optInt("unread_sympaties"),
                     countersJson.optInt("unread_messages"),
                     countersJson.optInt("unread_visitors"),

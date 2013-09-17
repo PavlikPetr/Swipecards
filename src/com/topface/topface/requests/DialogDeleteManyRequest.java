@@ -1,6 +1,7 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,7 +27,7 @@ public class DialogDeleteManyRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        return new JSONObject().put("userid", new JSONArray(mUsersIds)); //TODO clarify parameter: userid=>userids
+        return new JSONObject().put("userId", new JSONArray(mUsersIds)); //TODO clarify parameter: userid=>userids
     }
 
     @Override
@@ -40,7 +41,7 @@ public class DialogDeleteManyRequest extends ApiRequest {
         if (mUsersIds != null && mUsersIds.size() > 0) {
             super.exec();
         } else {
-            handleFail(ApiResponse.ERRORS_PROCCESED, "User list for delete from black list is empty");
+            handleFail(ErrorCodes.ERRORS_PROCCESED, "User list for delete from black list is empty");
         }
     }
 

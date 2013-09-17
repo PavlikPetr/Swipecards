@@ -12,6 +12,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -192,7 +193,7 @@ public class GiftsFragment extends BaseFragment {
 
                 @Override
                 public void fail(int codeError, final IApiResponse response) {
-                    if (response.isCodeEqual(ApiResponse.PAYMENT)) {
+                    if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
                         FragmentActivity activity = getActivity();
                         if (activity != null) {
                             Intent intent = ContainerActivity.getBuyingIntent("Dating");

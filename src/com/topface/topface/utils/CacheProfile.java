@@ -58,6 +58,7 @@ public class CacheProfile {
 
     public static final String PROFILE_CACHE_KEY = "profile_cache";
     public static final String OPTIONS_CACHE_KEY = "options_cache";
+    public static final String GP_PRODUCTS_CACHE_KEY = "google_play_products_cache";
 
     public static ArrayList<Gift> gifts = new ArrayList<Gift>();
     public static SparseArrayCompat<Profile.TopfaceNotifications> notifications;
@@ -86,6 +87,7 @@ public class CacheProfile {
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.remove(PROFILE_CACHE_KEY);
                     editor.remove(OPTIONS_CACHE_KEY);
+                    editor.remove(GP_PRODUCTS_CACHE_KEY);
                     editor.commit();
                 }
             }
@@ -98,9 +100,6 @@ public class CacheProfile {
         profile.firstName = first_name;
         profile.age = age;
         profile.sex = sex;
-
-        profile.money = money;
-        profile.likes = likes;
 
         profile.notifications = notifications;
         profile.hasMail = hasMail;
@@ -141,8 +140,6 @@ public class CacheProfile {
 
         switch (part) {
             case ProfileRequest.P_NECESSARY_DATA:
-                likes = profile.likes;
-                money = profile.money;
                 gifts = profile.gifts;
                 invisible = profile.invisible;
                 premium = profile.premium;
@@ -157,9 +154,6 @@ public class CacheProfile {
                 age = profile.age;
                 sex = profile.sex;
                 city = profile.city;
-
-                money = profile.money;
-                likes = profile.likes;
 
                 notifications = profile.notifications;
                 hasMail = profile.hasMail;
@@ -240,6 +234,7 @@ public class CacheProfile {
      * Опции по умолчанию
      */
     private static Options options;
+    private static GooglePlayProducts gpProducts;
 
     /**
      * Данные из сервиса options
@@ -268,6 +263,35 @@ public class CacheProfile {
             }
         }
         return options;
+    }
+
+    /**
+     * Данные из сервиса googleplay.getProducts
+     */
+    public static GooglePlayProducts getGooglePlayProducts() {
+        if (gpProducts == null) {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+            String productsCache = preferences.getString(GP_PRODUCTS_CACHE_KEY, null);
+            if (productsCache != null) {
+                //Получаем опции из кэша
+                try {
+                    gpProducts = GooglePlayProducts.parse(
+                            new ApiResponse(
+                                    new JSONObject(productsCache)
+                            )
+                    );
+                } catch (JSONException e) {
+                    Debug.error(e);
+                }
+            }
+
+            if (gpProducts == null) {
+                //Если по каким то причинам кэша нет и опции нам в данный момент взять негде.
+                //то просто используем их по умолчанию
+                gpProducts = new GooglePlayProducts();
+            }
+        }
+        return gpProducts;
     }
 
     public static boolean checkIsFillData() {
@@ -304,6 +328,19 @@ public class CacheProfile {
             public void run() {
                 SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit();
                 editor.putString(OPTIONS_CACHE_KEY, response.toString());
+                editor.commit();
+            }
+        }).start();
+    }
+
+    public static void setGooglePlayProducts(GooglePlayProducts products, final JSONObject response) {
+        gpProducts = products;
+        //Каждый раз не забываем кешировать запрос опций, но делаем это в отдельном потоке
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit();
+                editor.putString(GP_PRODUCTS_CACHE_KEY, response.toString());
                 editor.commit();
             }
         }).start();

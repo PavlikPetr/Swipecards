@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 import com.topface.topface.R;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import org.json.JSONException;
@@ -106,11 +107,11 @@ public class AuthRequest extends ApiRequest {
                 .put("token", token)
                 .put("platform", platform)
                 .put("locale", locale)
-                .put("clienttype", clienttype)
-                .put("clientversion", clientversion)
-                .put("clientosversion", clientosversion)
-                .put("clientdevice", clientdevice)
-                .put("clientid", clientid)
+                .put("clientType", clienttype)
+                .put("clientVersion", clientversion)
+                .put("clientosVersion", clientosversion)
+                .put("clientDevice", clientdevice)
+                .put("clientId", clientid)
                 .put("login", login)
                 .put("password", password)
                 .put("refresh", refresh);
@@ -143,10 +144,20 @@ public class AuthRequest extends ApiRequest {
 
     @Override
     public void exec() {
-        if (TextUtils.isEmpty(platform) || TextUtils.isEmpty(sid) || TextUtils.isEmpty(token)) {
-            handleFail(ApiResponse.UNVERIFIED_TOKEN, "Key params are empty");
+        if (TextUtils.isEmpty(platform)) {
+            handleFail(ErrorCodes.UNVERIFIED_TOKEN,"Key params are empty");
+            return;
         } else {
-            super.exec();
+            if (TextUtils.equals(platform, AuthToken.SN_TOPFACE)) {
+                if (TextUtils.isEmpty(login) || TextUtils.isEmpty(password)) {
+                    handleFail(ErrorCodes.UNVERIFIED_TOKEN, "Key params are empty");
+                    return;
+                }
+            } else if (TextUtils.isEmpty(sid) || TextUtils.isEmpty(token)) {
+                handleFail(ErrorCodes.UNVERIFIED_TOKEN, "Key params are empty");
+                return;
+            }
         }
+        super.exec();
     }
 }

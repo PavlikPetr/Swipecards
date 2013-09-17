@@ -506,7 +506,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
 
     protected RateController getRateController() {
         if (mRateController == null) {
-            mRateController = new RateController(getActivity());
+            mRateController = new RateController(getActivity(), SendLikeRequest.Place.FROM_FEED);
             mRateController.setOnRateControllerUiListener(getOnRateListener());
         }
         return mRateController;

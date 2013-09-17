@@ -30,10 +30,6 @@ public class Profile extends AbstractDataWithPhotos {
     //Город текущего пользователя
     public City city;
 
-    // Resources
-    public int money; // количество монет у пользователя
-    public int likes; // количество энергии пользователя
-
     // Фильтр поиска
     public DatingFilter dating;
 
@@ -73,8 +69,6 @@ public class Profile extends AbstractDataWithPhotos {
             if (!(profile instanceof User)) {
                 Novice.giveNoviceLikes = !resp.optBoolean("noviceLikes", true);
             }
-            profile.money = resp.optInt("money");
-            profile.likes = resp.optInt("likes");
             profile.uid = resp.optInt("id");
             profile.age = resp.optInt("age");
             profile.sex = resp.optInt("sex");
@@ -147,7 +141,7 @@ public class Profile extends AbstractDataWithPhotos {
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
                 compareFormItemData(formItem, profile,
-                        form.optBoolean("character_goodness", false));
+                        form.optBoolean("characterSimilarity", false));
             } else {
                 profile.forms.add(formItem);
             }
@@ -158,7 +152,7 @@ public class Profile extends AbstractDataWithPhotos {
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
                 compareFormItemData(formItem, profile,
-                        form.optBoolean("communication_goodness", false));
+                        form.optBoolean("communicationSimilarity", false));
             } else {
                 profile.forms.add(formItem);
             }
@@ -189,7 +183,7 @@ public class Profile extends AbstractDataWithPhotos {
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
                 compareFormItemData(formItem, profile,
-                        form.optBoolean("fitness_goodness", false));
+                        form.optBoolean("fitnessSimilarity", false));
             } else {
                 profile.forms.add(formItem);
             }
@@ -214,7 +208,7 @@ public class Profile extends AbstractDataWithPhotos {
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
                 compareFormItemData(formItem, profile,
-                        form.optBoolean("height_goodness", false));
+                        form.optBoolean("heightSimilarity", false));
             } else {
                 profile.forms.add(formItem);
             }
@@ -226,7 +220,7 @@ public class Profile extends AbstractDataWithPhotos {
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
                 compareFormItemData(formItem, profile,
-                        form.optBoolean("weight_goodness", false));
+                        form.optBoolean("weightSimilarity", false));
             } else {
                 profile.forms.add(formItem);
             }
@@ -237,7 +231,7 @@ public class Profile extends AbstractDataWithPhotos {
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
                 compareFormItemData(formItem, profile,
-                        form.optBoolean("hair_goodness", false));
+                        form.optBoolean("hairSimilarity", false));
             } else {
                 profile.forms.add(formItem);
             }
@@ -248,7 +242,7 @@ public class Profile extends AbstractDataWithPhotos {
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
                 compareFormItemData(formItem, profile,
-                        form.optBoolean("eye_goodness", false));
+                        form.optBoolean("eyeSimilarity", false));
             } else {
                 profile.forms.add(formItem);
             }
@@ -267,7 +261,7 @@ public class Profile extends AbstractDataWithPhotos {
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
                 compareFormItemData(formItem, profile,
-                        form.optBoolean("marriage_goodness", false));
+                        form.optBoolean("marriageSimilarity", false));
             } else {
                 profile.forms.add(formItem);
             }
@@ -278,7 +272,7 @@ public class Profile extends AbstractDataWithPhotos {
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
                 compareFormItemData(formItem, profile,
-                        form.optBoolean("education_goodness", false));
+                        form.optBoolean("educationSimilarity", false));
             } else {
                 profile.forms.add(formItem);
             }
@@ -289,7 +283,7 @@ public class Profile extends AbstractDataWithPhotos {
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
                 compareFormItemData(formItem, profile,
-                        form.optBoolean("finances_goodness", false));
+                        form.optBoolean("financesSimilarity", false));
             } else {
                 profile.forms.add(formItem);
             }
@@ -300,7 +294,7 @@ public class Profile extends AbstractDataWithPhotos {
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
                 compareFormItemData(formItem, profile,
-                        form.optBoolean("residence_goodness", false));
+                        form.optBoolean("residenceSimilarity", false));
             } else {
                 profile.forms.add(formItem);
             }
@@ -311,7 +305,7 @@ public class Profile extends AbstractDataWithPhotos {
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
                 compareFormItemData(formItem, profile,
-                        form.optBoolean("car_goodness", false));
+                        form.optBoolean("carSimilarity", false));
             } else {
                 profile.forms.add(formItem);
             }
@@ -330,7 +324,7 @@ public class Profile extends AbstractDataWithPhotos {
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
                 compareFormItemData(formItem, profile,
-                        form.optBoolean("smoking_goodness", false));
+                        form.optBoolean("smokingSimilarity", false));
             } else {
                 profile.forms.add(formItem);
             }
@@ -341,7 +335,7 @@ public class Profile extends AbstractDataWithPhotos {
             formInfo.fillFormItem(formItem);
             if (isUserProfile) {
                 compareFormItemData(formItem, profile,
-                        form.optBoolean("alcohol_goodness", false));
+                        form.optBoolean("alcoholSimilarity", false));
             } else {
                 profile.forms.add(formItem);
             }

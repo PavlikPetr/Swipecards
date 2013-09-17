@@ -2,7 +2,7 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 import com.google.analytics.tracking.android.EasyTracker;
-import com.topface.topface.Static;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,7 +42,7 @@ public abstract class DeleteFeedsRequest extends ApiRequest {
             super.exec();
             EasyTracker.getTracker().sendEvent("Feed", "Delete", getFeedType(), 1L);
         } else {
-            handleFail(ApiResponse.ERRORS_PROCCESED, "User list for delete from black list is empty");
+            handleFail(ErrorCodes.ERRORS_PROCCESED, "User list for delete from black list is empty");
         }
     }
 

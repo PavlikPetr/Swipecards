@@ -20,7 +20,7 @@ public class HistoryRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        JSONObject data = new JSONObject().put("userid", userid).put("limit", limit);
+        JSONObject data = new JSONObject().put("userId", userid).put("limit", limit);
         if (to != null) {
             data.put("to", to);
         }
