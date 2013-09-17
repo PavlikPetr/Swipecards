@@ -167,7 +167,6 @@ project(':libs:LifeStreetMediaSDK') {
 //Стандартные настройки подпроектов
 subprojects {
     buildDir "../../build/projects/$project.name"
-    println project.name
     android {
         compileSdkVersion "Google Inc.:Google APIs:17"
         buildToolsVersion "18.1"
