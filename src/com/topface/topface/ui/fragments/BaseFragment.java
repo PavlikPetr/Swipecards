@@ -259,7 +259,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         if (!invitePopupShow) {
             AirManager manager = new AirManager(getActivity());
             manager.startFragment(getActivity().getSupportFragmentManager());
-//            PromoPopupFragment.showIfNeeded(getFragmentManager(), Options.PremiumAirEntity.AIR_MESSAGES);
+//            PromoPopupFragment.canShow(getFragmentManager(), Options.PremiumAirEntity.AIR_MESSAGES);
         }
     }
 

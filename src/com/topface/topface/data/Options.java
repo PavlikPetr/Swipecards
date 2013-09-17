@@ -120,6 +120,7 @@ public class Options extends AbstractData {
     };
     public static final String PREMIUM_MESSAGES_POPUP_SHOW_TIME = "premium_messages_popup_last_show";
     public static final String PREMIUM_VISITORS_POPUP_SHOW_TIME = "premium_visitors_popup_last_show";
+    public static final String PREMIUM_ADMIRATION_POPUP_SHOW_TIME = "premium_admirations_popup_last_show";
     /**
      * Настройки для каждого типа страниц
      */
@@ -156,6 +157,7 @@ public class Options extends AbstractData {
     public Closing closing = new Closing();
     public PremiumAirEntity premium_messages;
     public PremiumAirEntity premium_visitors;
+    public PremiumAirEntity premium_admirations;
     public GetJar getJar;
     public String gagTypeBanner = BANNER_ADMOB;
     public String gagTypeFullscreen = BANNER_NONE;
@@ -461,9 +463,10 @@ public class Options extends AbstractData {
          */
         private int mTimeout;
 
-        public static int AIR_NONE = 0;
-        public static int AIR_MESSAGES = 1;
-        public static int AIR_VISITORS = 2;
+        public static final int AIR_NONE = 0;
+        public static final int AIR_MESSAGES = 1;
+        public static final int AIR_VISITORS = 2;
+        public static final int AIR_ADMIRATIONS = 3;
 
         public PremiumAirEntity(JSONObject premiumMessages, int airType) {
             this.airType = airType;
@@ -514,8 +517,16 @@ public class Options extends AbstractData {
         }
 
         public String getPrefsConstant() {
-            return airType == AIR_MESSAGES ? PREMIUM_MESSAGES_POPUP_SHOW_TIME :
-                    PREMIUM_VISITORS_POPUP_SHOW_TIME;
+            switch (airType) {
+                case AIR_MESSAGES:
+                    return PREMIUM_MESSAGES_POPUP_SHOW_TIME;
+                case AIR_VISITORS:
+                    return PREMIUM_VISITORS_POPUP_SHOW_TIME;
+                case AIR_ADMIRATIONS:
+                    return PREMIUM_ADMIRATION_POPUP_SHOW_TIME;
+            }
+
+            return PREMIUM_MESSAGES_POPUP_SHOW_TIME;
         }
 
         private long getLashShowTime() {

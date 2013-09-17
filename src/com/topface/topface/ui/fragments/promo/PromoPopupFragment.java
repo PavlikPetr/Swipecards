@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments;
+package com.topface.topface.ui.fragments.promo;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -10,12 +10,11 @@ import android.widget.TextView;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
-import com.topface.topface.requests.VisitorsMarkReadedRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Utils;
 
 public abstract class PromoPopupFragment extends BaseFragment implements View.OnClickListener {
 
@@ -23,14 +22,11 @@ public abstract class PromoPopupFragment extends BaseFragment implements View.On
 
     private Options.PremiumAirEntity mPremiumEntity;
     private boolean mUserClickButton = false;
-    private int airType = Options.PremiumAirEntity.AIR_MESSAGES;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPremiumEntity = getPremiumEntity();
-
-//        setNeedTitles(false);
     }
 
     public abstract Options.PremiumAirEntity getPremiumEntity();
@@ -68,11 +64,7 @@ public abstract class PromoPopupFragment extends BaseFragment implements View.On
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.air_messages_popup, container, false);
         root.findViewById(R.id.buyVip).setOnClickListener(this);
-        if (airType == Options.PremiumAirEntity.AIR_VISITORS) {
-            ((TextView)root.findViewById(R.id.deleteMessages)).setText(R.string.delete_visitors);
-        } else {
-            ((TextView)root.findViewById(R.id.deleteMessages)).setText(R.string.general_delete_messages);
-        }
+        ((TextView)root.findViewById(R.id.deleteMessages)).setText(getDeleteButtonText());
         root.findViewById(R.id.deleteMessages).setOnClickListener(this);
         TextView popupText = (TextView) root.findViewById(R.id.airMessagesText);
         int curVisitCounter = CountersManager.getInstance(getActivity()).getCounter(CountersManager.VISITORS);
@@ -81,6 +73,9 @@ public abstract class PromoPopupFragment extends BaseFragment implements View.On
         EasyTracker.getTracker().sendEvent(getMainTag(), "Show", "", 0L);
         return root;
     }
+
+    //Здесь нужно возращать айди строки в ресурсах
+    protected abstract int getDeleteButtonText();
 
     protected abstract String getMessage();
 
