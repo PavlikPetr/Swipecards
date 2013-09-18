@@ -198,6 +198,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         buttons.put(BaseFragment.F_VISITORS, (Button) rootLayout.findViewById(R.id.btnFragmentVisitors));
         buttons.put(BaseFragment.F_BOOKMARKS, (Button) rootLayout.findViewById(R.id.btnFragmentBookmarks));
         buttons.put(BaseFragment.F_EDITOR, (Button) rootLayout.findViewById(R.id.btnEditor));
+        buttons.put(BaseFragment.F_ADMIRATIONS, (Button) rootLayout.findViewById(R.id.btnFragmentAdmirations));
 
         //Устанавливаем теги и листенеры на кнопки
         for (int i = 0; i < buttons.size(); i++) {
@@ -368,6 +369,9 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case BaseFragment.F_DATING:
                 fragment = new DatingFragment();
+                break;
+            case BaseFragment.F_ADMIRATIONS:
+                fragment = new AdmirationFragment();
                 break;
             case BaseFragment.F_LIKES:
                 if (LikesClosingFragment.usersProcessed || CacheProfile.premium) {

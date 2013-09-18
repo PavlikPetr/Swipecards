@@ -41,6 +41,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public static final int F_VISITORS = 1008;
     public static final int F_BOOKMARKS = 1009;
     public static final int F_FANS = 1010;
+    public static final int F_ADMIRATIONS = 1011;
 
     public static final int F_EDITOR = 9999;
     public static final int F_UNDEFINED = 9998;
@@ -259,7 +260,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         if (!invitePopupShow) {
             AirManager manager = new AirManager(getActivity());
             manager.startFragment(getActivity().getSupportFragmentManager());
-//            PromoPopupFragment.canShow(getFragmentManager(), Options.PremiumAirEntity.AIR_MESSAGES);
         }
     }
 

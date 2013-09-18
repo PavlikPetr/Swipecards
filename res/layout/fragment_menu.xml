@@ -75,10 +75,24 @@
                 android:layout_alignBaseline="@+id/btnFragmentLikes"
                 style="@style/Informer"/>
 
+        <!-- Admirations -->
+        <Button
+                android:id="@+id/btnFragmentAdmirations"
+                android:layout_below="@id/btnFragmentLikes"
+                android:text="@string/general_admirations"
+                android:drawableLeft="@drawable/topface_likes_selector"
+                style="@style/LeftMenuButtons"/>
+
+        <!-- UNREAD ADMIRATIONS -->
+        <TextView
+                android:id="@+id/tvNotifyAdmirations"
+                android:layout_alignBaseline="@+id/btnFragmentAdmirations"
+                style="@style/Informer"/>
+
         <!-- Mutual - Sympathy -->
         <Button
                 android:id="@+id/btnFragmentMutual"
-                android:layout_below="@id/btnFragmentLikes"
+                android:layout_below="@id/btnFragmentAdmirations"
                 android:text="@string/general_mutual"
                 android:drawableLeft="@drawable/topface_sympathy_selector"
                 style="@style/LeftMenuButtons"/>

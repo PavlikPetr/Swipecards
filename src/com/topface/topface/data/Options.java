@@ -236,6 +236,13 @@ public class Options extends AbstractData {
                 options.premium_visitors = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_VISITORS);
             }
 
+            if (response.jsonResult.has("admiration_popup")) {
+                options.premium_admirations = new PremiumAirEntity(
+                        response.jsonResult.optJSONObject("admiration_popup"), PremiumAirEntity.AIR_ADMIRATIONS
+                );
+            } else {
+                options.premium_admirations = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_ADMIRATIONS);
+            }
 
             if (response.jsonResult.has("links")) {
                 JSONObject links = response.jsonResult.optJSONObject("links");
