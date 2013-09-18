@@ -92,6 +92,7 @@ public class NavigationActivity extends BaseFragmentActivity {
         final View badges = getLayoutInflater().inflate(R.layout.layout_notifications_badges, getActionBarContainerLayout(), true);
         mNavBarController = new NavigationBarController((ViewGroup) badges);
         final View home = findViewById(android.R.id.home);
+        if (home == null) return;
         home.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @SuppressWarnings("deprecation")
             @Override
