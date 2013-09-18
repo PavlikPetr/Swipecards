@@ -74,6 +74,7 @@ public class AuthFragment extends BaseFragment {
     private boolean btnsHidden;
     private BroadcastReceiver authorizationReceiver;
     private boolean authReceiverRegistered;
+    private boolean mButtonsInitialized = false;
 
     public static AuthFragment newInstance() {
         return new AuthFragment();
@@ -260,7 +261,7 @@ public class AuthFragment extends BaseFragment {
                 Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
             }
         });
-
+        mButtonsInitialized = true;
     }
 
 
@@ -697,24 +698,26 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void hideButtons() {
-        btnsHidden = true;
-        mFBButton.setVisibility(View.GONE);
-        mVKButton.setVisibility(View.GONE);
-        mOKButton.setVisibility(View.GONE);
-        mOtherSocialNetworksButton.setVisibility(View.GONE);
-        mSignInView.setVisibility(View.GONE);
-        mCreateAccountView.setVisibility(View.GONE);
-        mRetryView.setVisibility(View.GONE);
-        mTFButton.setVisibility(View.INVISIBLE);
-        if (mProcessingTFReg) {
-            mLoginSendingProgress.setVisibility(View.VISIBLE);
-        } else {
-            mProgressBar.setVisibility(View.VISIBLE);
+        if (mButtonsInitialized) {
+            btnsHidden = true;
+            mFBButton.setVisibility(View.GONE);
+            mVKButton.setVisibility(View.GONE);
+            mOKButton.setVisibility(View.GONE);
+            mOtherSocialNetworksButton.setVisibility(View.GONE);
+            mSignInView.setVisibility(View.GONE);
+            mCreateAccountView.setVisibility(View.GONE);
+            mRetryView.setVisibility(View.GONE);
+            mTFButton.setVisibility(View.INVISIBLE);
+            if (mProcessingTFReg) {
+                mLoginSendingProgress.setVisibility(View.VISIBLE);
+            } else {
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
+            mRecoverPwd.setEnabled(false);
+            mLogin.setEnabled(false);
+            mPassword.setEnabled(false);
+            mBackButton.setEnabled(false);
         }
-        mRecoverPwd.setEnabled(false);
-        mLogin.setEnabled(false);
-        mPassword.setEnabled(false);
-        mBackButton.setEnabled(false);
     }
 
     private void btnVKClick() {
