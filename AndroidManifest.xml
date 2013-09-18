@@ -202,6 +202,23 @@
 
         <activity android:name=".ui.PaymentwallActivity"/>
 
+        <activity
+                android:name="ru.ok.android.sdk.OkAuthActivity"
+                android:launchMode="singleTask"
+                android:configChanges="orientation">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                        android:host="ok192696576"
+                        android:scheme="okauth"/>
+
+            </intent-filter>
+        </activity>
+
         <!-- ADS -->
         <activity
                 android:name="com.google.ads.AdActivity"
@@ -235,6 +252,20 @@
         <activity
                 android:name="com.mopub.mobileads.MraidBrowser"
                 android:configChanges="keyboardHidden|orientation"/>
+
+        <activity
+                android:name="com.lifestreet.android.lsmsdk.ads.InterstitialAdActivity"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+
+        <activity
+                android:name="com.lifestreet.android.lsmsdk.mraid.MRAIDActivity"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+
+        <service android:name="org.OpenUDID.OpenUDID_service">
+            <intent-filter>
+                <action android:name="org.openudid.GETUDID"/>
+            </intent-filter>
+        </service>
 
         <!-- Алиас для главной активити из первой версии. На всякий случай, а то раньше уже были проблемы с FB -->
         <activity-alias
