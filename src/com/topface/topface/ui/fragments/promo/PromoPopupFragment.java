@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.promo;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -38,6 +39,7 @@ public abstract class PromoPopupFragment extends BaseFragment implements View.On
         FragmentActivity activity = getActivity();
         if (activity instanceof NavigationActivity) {
             ((NavigationActivity) activity).setPopupVisible(true);
+            ((NavigationActivity) activity).setMenuEnabled(false);
         }
     }
 
@@ -51,6 +53,7 @@ public abstract class PromoPopupFragment extends BaseFragment implements View.On
         FragmentActivity activity = getActivity();
         if (activity instanceof NavigationActivity) {
             ((NavigationActivity) activity).setPopupVisible(false);
+            ((NavigationActivity) activity).setMenuEnabled(true);
         }
 
         if (!mUserClickButton) {
@@ -63,6 +66,13 @@ public abstract class PromoPopupFragment extends BaseFragment implements View.On
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.air_messages_popup, container, false);
+        //Магия для того, чтобы клики не проходили в дэйтинг фрагмент
+        root.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         root.findViewById(R.id.buyVip).setOnClickListener(this);
         ((TextView)root.findViewById(R.id.deleteMessages)).setText(getDeleteButtonText());
         root.findViewById(R.id.deleteMessages).setOnClickListener(this);
@@ -109,6 +119,7 @@ public abstract class PromoPopupFragment extends BaseFragment implements View.On
     }
 
     private void closeFragment() {
+
         getFragmentManager()
                 .beginTransaction()
                 .remove(PromoPopupFragment.this)

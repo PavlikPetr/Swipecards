@@ -27,7 +27,6 @@ public class AirManager {
         Options.PremiumAirEntity premiumMessages = CacheProfile.getOptions().premium_messages;
         Options.PremiumAirEntity premiumVisitors = CacheProfile.getOptions().premium_visitors;
         Options.PremiumAirEntity premiumAdmirations = CacheProfile.getOptions().premium_admirations;
-
         //Проверяем можем ли мы показать какой-нибудь попап и не был ли он показан последним.
         //Если ничего не можем показать, ничего и не показываем.
         if (checkIsNeedShow(premiumMessages) &&

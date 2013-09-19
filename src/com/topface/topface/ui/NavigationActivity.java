@@ -361,12 +361,16 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
 
     public void setMenuEnabled(boolean enabled) {
         menuEnabled = enabled;
+        if (mSlidingMenu != null) {
+            mSlidingMenu.setSlidingEnabled(enabled);
+        }
     }
 
     @Override
     public boolean onCreatePanelMenu(int featureId, Menu menu) {
         if (mSlidingMenu != null && menuEnabled) {
             mSlidingMenu.toggle();
+
         }
         return false;
     }
