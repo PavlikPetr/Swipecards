@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
@@ -126,7 +127,9 @@ public class HeaderMainFragment extends BaseFragment {
 
             fragment.getArguments().putParcelable(ARG_TAG_AVATAR, profile.photo);
             fragment.getArguments().putString(ARG_TAG_NAME, profile.getNameAndAge());
-            fragment.getArguments().putString(ARG_TAG_CITY, profile.city.name);
+            if (profile.city != null) {
+                fragment.getArguments().putString(ARG_TAG_CITY, profile.city.name);
+            }
             fragment.getArguments().putInt(ARG_TAG_BACKGROUND, profile.background);
         }
     }
