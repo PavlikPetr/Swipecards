@@ -97,7 +97,6 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         if (mMenuAvatar != null) {
             mMenuAvatar.setPhoto(CacheProfile.photo);
         }
-
         //Иконки на профиле
         if (!CacheProfile.checkIsFillData() && canChangeProfileIcons) {
             showNotEnoughDataIcon();
@@ -105,14 +104,12 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             mProfileInfo.setVisibility(View.GONE);
         }
         canChangeProfileIcons = true;
-
         //Кнопка распродаж
         if (CacheProfile.getGooglePlayProducts().saleExists) {
             buyButton.setBackgroundResource(R.drawable.btn_sale_selector);
         } else {
             buyButton.setBackgroundResource(R.drawable.btn_blue_selector);
         }
-
         //Новые данные монет и лайков
         mCoins.setText(Integer.toString(CacheProfile.money));
         mLikes.setText(Integer.toString(CacheProfile.likes));
@@ -152,7 +149,6 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         View rootLayout = inflater.inflate(R.layout.fragment_menu, null);
 
         View profileLayout = getProfileLayout(rootLayout);
-
         //Делаем список кнопок
         mButtons = getButtonsMap(rootLayout, profileLayout);
 
@@ -162,7 +158,6 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
         mCoins = (ServicesTextView) rootLayout.findViewById(R.id.menuCurCoins);
         mLikes = (ServicesTextView) rootLayout.findViewById(R.id.menuCurLikes);
-
         mCoins.setText(Integer.toString(CacheProfile.money));
         mLikes.setText(Integer.toString(CacheProfile.likes));
 

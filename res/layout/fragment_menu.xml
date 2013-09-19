@@ -62,7 +62,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/general_profile"
-                        android:paddingLeft="12dp"
+                        android:paddingLeft="14dp"
                         android:background="@android:color/transparent"
                         style="@style/LeftMenuButtons"
                         android:gravity="bottom"/>

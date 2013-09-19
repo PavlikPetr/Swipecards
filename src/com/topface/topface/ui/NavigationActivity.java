@@ -3,6 +3,7 @@ package com.topface.topface.ui;
 import android.app.Activity;
 import android.content.*;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -98,7 +99,7 @@ public class NavigationActivity extends BaseFragmentActivity {
             public void onGlobalLayout() {
                 int diff = home.getTop() - badges.getHeight() / 7; // badges.getHeight()/6 - 1/6 бэйджа будет торчать над home иконкой
                 badges.findViewById(R.id.loCounters).setPadding(home.getLeft() + home.getWidth() / 2, diff > 0 ? diff : 0, 0, 0);
-                findViewById(android.R.id.home).setPadding(0, 0, Utils.getPxFromDp(10), 0);
+                findViewById(android.R.id.home).setPadding(0, 0, Utils.getPxFromDp(6), 0);
                 mNavBarController.refreshNotificators();
                 if (Build.VERSION.SDK_INT >= 16) {
                     home.getViewTreeObserver().removeOnGlobalLayoutListener(this);
@@ -117,7 +118,6 @@ public class NavigationActivity extends BaseFragmentActivity {
         if (viewGroup.getClass().getSimpleName().equals(ActionBarContainer.class.getSimpleName())) {
             return viewGroup;
         }
-
         for (int i = 0; i < viewGroup.getChildCount(); i++) {
             View child = viewGroup.getChildAt(i);
             if (child instanceof ViewGroup) {
@@ -136,13 +136,14 @@ public class NavigationActivity extends BaseFragmentActivity {
         if (isGcmSupported != null) {
             GCMUtils.GCM_SUPPORTED = Boolean.getBoolean(isGcmSupported);
         }
-
         mNovice = Novice.getInstance(getPreferences());
         mNovice.initNoviceFlags();
     }
 
     private void initDrawerLayout() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.loNavigationDrawer);
+        mDrawerLayout.setScrimColor(Color.argb(217,0,0,0));
+        mDrawerLayout.setDrawerShadow(R.drawable.shadow_left_menu_right,GravityCompat.START);
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
                 mDrawerLayout,         /* DrawerLayout object */
@@ -166,8 +167,6 @@ public class NavigationActivity extends BaseFragmentActivity {
 //                mFragmentMenu.getCurrentFragment().refreshActionBarTitles();
             }
         };
-
-
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 

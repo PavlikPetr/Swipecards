@@ -495,6 +495,7 @@
     <string name="chat_block_not_mutual">Για να ξεκινήσετε συνομιλία με τον χρήστη μπορείτε, αν αυτός σας στείλει μια συμπάθεια ή αν έχετε VIP-κατάσταση</string>
     <string name="delete_account_are_you_sure">Είστε σίγουροι?</string>
     <string name="delete">Αφαιρέστε</string>
+    <string name="delete_account_error">Σφάλμα κατά τη διαγραφή του λογαριασμού. Προσπαθήστε να επαναλάβετε τη δράση αργότερα.</string>
     <string name="restore_of_account">Ανάκτηση του λογαριασμού σας</string>
     <string name="restore">Αποκαταστήστε</string>
     <string name="admiration_sended">Θαυμασμός εστάλη.</string>
@@ -523,6 +524,7 @@
     <string name="watch_as_list">Εμφανίστε ολόκληρη τη λίστα</string>
     <string name="watching_as_list">Εμφανίστε ολόκληρη τη λίστα</string>
     <string name="watching_sequentually">Δείτε σε μια σειρά</string>
+    <string name="or_use_common_likes_list">\'Η μπορείτε να δείτε τους ανθρώπους, στους οποίους αρέσετε, στη λίστα επαφών σας</string>
     <string name="settings_feedback_transaction_number">Αριθμός παραγγελίας</string>
     <string name="settings_feedback_transaction_link">πού να βρείτε τον αριθμό παραγγελίας?</string>
     <string name="auth_btn_ok">Εισάγετε με Odnoklassniki</string>
@@ -530,6 +532,7 @@
     <string name="settings_feedback_transaction_number_hint">Εισάγετε τον αριθμό παραγγελίας σας</string>
     <string name="youve_earned">έχετε λάβει %s</string>
     <string name="like_topface">Σας αρέσει Topface?</string>
+    <string name="photo_is_uploading">Η φωτογραφία είναι σε εξέλιξη</string>
     <plurals name="selected">
         <item quantity="other">%d επιλεγμένο</item>
         <item quantity="one">%d επιλεγμένο</item>

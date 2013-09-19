@@ -27,6 +27,13 @@
         <item name="android:actionBarSize">@dimen/default_header_height</item>
         <item name="android:actionBarStyle">@style/Widget.Topface.ActionBar</item>
         <item name="android:actionButtonStyle">@style/Widget.Topface.ActionBar.Buttons</item>
+
+        <!-- Action Mode (CAB)-->
+        <item name="actionModeBackground">@drawable/bg_action_mode</item>
+        <item name="actionModeCloseDrawable">@drawable/ic_check</item>
+
+        <item name="android:actionModeBackground">@drawable/bg_action_mode</item>
+        <item name="android:actionModeCloseDrawable">@drawable/ic_check</item>
     </style>
 
     <style name="Widget.Topface.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
