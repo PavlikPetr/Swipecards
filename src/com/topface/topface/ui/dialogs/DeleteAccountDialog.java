@@ -20,7 +20,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.ProfileDelete;
+import com.topface.topface.requests.ProfileDeleteRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
@@ -68,7 +68,6 @@ public class DeleteAccountDialog extends DialogFragment implements View.OnClickL
                 closeDialog();
                 break;
             case R.id.btnOk:
-
                 new AlertDialog.Builder(getActivity())
                         .setTitle(R.string.settings_delete_account)
                         .setMessage(R.string.delete_account_are_you_sure)
@@ -80,13 +79,12 @@ public class DeleteAccountDialog extends DialogFragment implements View.OnClickL
                                 progress.setMessage(getActivity().getResources().getString(R.string.settings_delete_account));
                                 progress.show();
 
-                                ProfileDelete request = new ProfileDelete(5,
+                                ProfileDeleteRequest request = new ProfileDeleteRequest(5,
                                         "From Android Device", getActivity());
                                 request.callback(new ApiHandler() {
                                     @Override
                                     public void success(IApiResponse response) {
                                         if (response.isCompleted()) {
-                                            DeleteAccountDialog.saveDeletedAccountToken();
                                             AuthorizationManager.logout(getActivity());
                                         } else {
                                             fail(response.getResultCode(), response);
@@ -116,90 +114,6 @@ public class DeleteAccountDialog extends DialogFragment implements View.OnClickL
                         }).show();
                 break;
         }
-    }
-
-    private static void saveDeletedAccountToken() {
-        SharedPreferences preferences = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_PROFILE, Context.MODE_PRIVATE);
-        AuthToken authToken = AuthToken.getInstance();
-        String deletedId = authToken.getUserId();
-        String prefKey = Static.EMPTY;
-        if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
-            prefKey = Static.PREFERENCES_DELETED_ACCOUNTS_FB_IDS;
-        } else if (authToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
-            prefKey = Static.PREFERENCES_DELETED_ACCOUNTS_VK_IDS;
-        } else if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
-            prefKey = Static.PREFERENCES_DELETED_ACCOUNTS_TF_IDS;
-            deletedId = authToken.getLogin();
-        } else if (authToken.getSocialNet().equals(AuthToken.SN_ODNOKLASSNIKI)) {
-            prefKey = Static.PREFERENCES_DELETED_ACCOUNTS_OK_IDS;
-        }
-        // add new token
-        String ids = preferences.getString(prefKey, Static.EMPTY);
-        List<String> arrIds = new ArrayList<String>(Arrays.asList(ids.split(",")));
-        arrIds.add(deletedId);
-        ids = TextUtils.join(",", arrIds);
-        // save new tokens' list to preferences
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(prefKey, ids).commit();
-    }
-
-    public static void removeDeletedAccountToken(AuthToken token) {
-        SharedPreferences preferences = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_PROFILE, Context.MODE_PRIVATE);
-        String userId = token.getUserId();
-        String prefKey = Static.EMPTY;
-        if (token.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
-            prefKey = Static.PREFERENCES_DELETED_ACCOUNTS_FB_IDS;
-        } else if (token.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
-            prefKey = Static.PREFERENCES_DELETED_ACCOUNTS_VK_IDS;
-        } else if (token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
-            prefKey = Static.PREFERENCES_DELETED_ACCOUNTS_TF_IDS;
-            userId = token.getLogin();
-        } else if (token.getSocialNet().equals(AuthToken.SN_ODNOKLASSNIKI)) {
-            prefKey = Static.PREFERENCES_DELETED_ACCOUNTS_OK_IDS;
-        }
-        // add new token
-        String ids = preferences.getString(prefKey, Static.EMPTY);
-        List<String> arrIds = new ArrayList<String>(Arrays.asList(ids.split(",")));
-        String delete = null;
-        for (String item : arrIds) {
-            if (item.equals(userId)) {
-                delete = item;
-            }
-        }
-        if (arrIds.size() > 1) {
-            if (delete != null) arrIds.remove(delete);
-            ids = TextUtils.join(",", arrIds);
-        } else {
-            if (delete != null) ids = Static.EMPTY;
-        }
-        // save new tokens' list to preferences
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(prefKey, ids).commit();
-    }
-
-    public static boolean hasDeltedAccountToken(AuthToken token) {
-        SharedPreferences preferences = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_PROFILE, Context.MODE_PRIVATE);
-        if (token != null) {
-            String userId = token.getUserId();
-            String prefKey = Static.EMPTY;
-            if (token.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
-                prefKey = Static.PREFERENCES_DELETED_ACCOUNTS_FB_IDS;
-            } else if (token.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
-                prefKey = Static.PREFERENCES_DELETED_ACCOUNTS_VK_IDS;
-            } else if (token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
-                prefKey = Static.PREFERENCES_DELETED_ACCOUNTS_TF_IDS;
-                userId = token.getLogin();
-            } else if (token.getSocialNet().equals(AuthToken.SN_ODNOKLASSNIKI)) {
-                prefKey = Static.PREFERENCES_DELETED_ACCOUNTS_OK_IDS;
-            }
-            String ids = preferences.getString(prefKey, Static.EMPTY);
-            for (String item : ids.split(",")) {
-                if (item.equals(userId)) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     private void closeDialog() {

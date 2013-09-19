@@ -29,6 +29,7 @@ import com.topface.topface.data.search.UsersList;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.edit.EditAgeFragment;
@@ -109,6 +110,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             startDatingFilterActivity();
         }
     };
+    private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateResources();
+        }
+    };
 
     private void startDatingFilterActivity() {
         Intent intent = new Intent(getActivity().getApplicationContext(),
@@ -127,8 +134,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mAlphaAnimation.setDuration(400L);
         initMutualDrawables();
         // Rate Controller
-        mRateController = new RateController(getActivity());
-        mRateController.setOnRateControllerListener(this);
+        mRateController = new RateController(getActivity(), SendLikeRequest.Place.FROM_SEARCH);
+        mRateController.setOnRateControllerUiListener(this);
     }
 
     @Override
@@ -158,17 +165,18 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         setHighRatePrice();
-        updateResources();
-        setActionBarTitles(getTitle(),getSubtitle());
+        setActionBarTitles(getTitle(), getSubtitle());
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mCountersReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileReceiver);
         //При выходе из фрагмента сохраняем кэш поиска
         if (mUserSearchList != null) {
             if (LocaleConfig.localeChangeInitiated) {
@@ -218,9 +226,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void setHighRatePrice() {
         // Dating Love Price
-        final int delightPrice = CacheProfile.getOptions().price_highrate;
+        final int delightPrice = CacheProfile.getOptions().priceAdmiration;
         if (delightPrice > 0) {
-            mDatingLovePrice.setText(Integer.toString(CacheProfile.getOptions().price_highrate));
+            mDatingLovePrice.setText(Integer.toString(CacheProfile.getOptions().priceAdmiration));
         } else {
             mDatingLovePrice.setVisibility(View.GONE);
         }
@@ -240,7 +248,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mDatingResources.setOnClickListener(this);
         mResourcesLikes = (TextView) view.findViewById(R.id.tvResourcesLikes);
         mResourcesMoney = (TextView) view.findViewById(R.id.tvResourcesMoney);
-        updateResources();
     }
 
     private void initControlButtons(View view) {
@@ -270,12 +277,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     protected String getTitle() {
         if (CacheProfile.dating != null) {
-            int age = CacheProfile.dating.age_end == DatingFilter.webAbsoluteMaxAge ?
-                    EditAgeFragment.absoluteMax : CacheProfile.dating.age_end;
+            int age = CacheProfile.dating.ageEnd == DatingFilter.webAbsoluteMaxAge ?
+                    EditAgeFragment.absoluteMax : CacheProfile.dating.ageEnd;
             String headerText = getString(CacheProfile.dating.sex == Static.BOY ?
                     R.string.dating_header_guys : R.string.dating_header_girls,
-                    CacheProfile.dating.age_start, age);
-            String plus = CacheProfile.dating.age_end == DatingFilter.webAbsoluteMaxAge ? "+" : "";
+                    CacheProfile.dating.ageStart, age);
+            String plus = CacheProfile.dating.ageEnd == DatingFilter.webAbsoluteMaxAge ? "+" : "";
             return headerText + plus;
         }
         return Static.EMPTY;
@@ -308,7 +315,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             public void onReceive(Context context, Intent intent) {
                 if (isAdded()) {
                     updateFilterData();
-                    updateResources();
                 }
             }
         };
@@ -320,7 +326,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mUserSearchList != null) {
             mUserSearchList.updateSignatureAndUpdate();
         }
-        setActionBarTitles(getTitle(),getSubtitle());
+        setActionBarTitles(getTitle(), getSubtitle());
     }
 
     private void updateData(final boolean isAddition) {
@@ -359,7 +365,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                             unlockControls();
                         } else if (!isAddition || mUserSearchList.isEmpty()) {
                             showEmptySearchDialog();
-                        } else if (!mUserSearchList.isEnded()){
+                        } else if (!mUserSearchList.isEnded()) {
                             showNextUser();
                             unlockControls();
                         } else {
@@ -420,7 +426,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
 
         updateFilterData();
-        updateResources();
     }
 
     private SearchRequest getSearchRequest() {
@@ -454,29 +459,34 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     } else {
                         lockControls();
                         if (CacheProfile.money > 0) {
-                            CacheProfile.money = CacheProfile.money - CacheProfile.getOptions().price_highrate;
+                            CacheProfile.money = CacheProfile.money - CacheProfile.getOptions().priceAdmiration;
                             moneyDecreased = true;
+                            updateResources();
                         }
-                        mRateController.onRate(mCurrentUser.id, 10,
-                                mCurrentUser.mutual ? RateRequest.DEFAULT_MUTUAL
-                                        : RateRequest.DEFAULT_NO_MUTUAL, new RateController.OnRateListener() {
-                            @Override
-                            public void onRateCompleted() {
+                        mRateController.onAdmiration(
+                                mCurrentUser.id,
+                                mCurrentUser.mutual ?
+                                        SendLikeRequest.DEFAULT_MUTUAL
+                                        : SendLikeRequest.DEFAULT_NO_MUTUAL,
+                                new RateController.OnRateRequestListener() {
+                                    @Override
+                                    public void onRateCompleted() {
+                                    }
 
-                            }
-
-                            @Override
-                            public void onRateFailed() {
-                                if (moneyDecreased) {
-                                    moneyDecreased = true;
-                                    CacheProfile.money += CacheProfile.getOptions().price_highrate;
+                                    @Override
+                                    public void onRateFailed() {
+                                        if (moneyDecreased) {
+                                            moneyDecreased = true;
+                                            CacheProfile.money += CacheProfile.getOptions().priceAdmiration;
+                                            updateResources();
+                                        }
+                                    }
                                 }
-                            }
-                        });
+                        );
 
                         EasyTracker.getTracker().sendEvent("Dating", "Rate",
                                 "AdmirationSend" + (mCurrentUser.mutual ? "mutual" : ""),
-                                (long) CacheProfile.getOptions().price_highrate);
+                                (long) CacheProfile.getOptions().priceAdmiration);
                     }
                 }
             }
@@ -488,9 +498,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         return;
                     } else {
                         lockControls();
-                        mRateController.onRate(mCurrentUser.id, 9,
-                                mCurrentUser.mutual ? RateRequest.DEFAULT_MUTUAL
-                                        : RateRequest.DEFAULT_NO_MUTUAL, null);
+                        mRateController.onLike(mCurrentUser.id,
+                                mCurrentUser.mutual ?
+                                        SendLikeRequest.DEFAULT_MUTUAL
+                                        : SendLikeRequest.DEFAULT_NO_MUTUAL,
+                                null
+                        );
 
                         EasyTracker.getTracker().sendEvent("Dating", "Rate",
                                 "SympathySend" + (mCurrentUser.mutual ? "mutual" : ""), 0L);
@@ -586,7 +599,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
 
         mPreloadManager.preloadPhoto(mUserSearchList);
-        updateResources();
     }
 
     private void showNextUser() {
@@ -672,26 +684,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             SkipRateRequest skipRateRequest = new SkipRateRequest(getActivity());
             registerRequest(skipRateRequest);
             skipRateRequest.userid = currentSearch.id;
-            skipRateRequest.callback(new DataApiHandler<SkipRate>() {
-                @Override
-                public void success(SkipRate data, IApiResponse response) {
-                    if (data.completed) {
-                        CacheProfile.likes = data.likes;
-                        CacheProfile.money = data.money;
-                        updateResources();
-                    }
-                }
-
-                @Override
-                protected SkipRate parseResponse(ApiResponse response) {
-                    return SkipRate.parse(response);
-                }
-
-                @Override
-                public void fail(int codeError, IApiResponse response) {
-
-                }
-            }).exec();
+            skipRateRequest.callback(new SimpleApiHandler()).exec();
         }
     }
 
@@ -847,8 +840,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void failRate() {
         unlockControls();
         if (moneyDecreased) {
-            CacheProfile.money += CacheProfile.getOptions().price_highrate;
+            CacheProfile.money += CacheProfile.getOptions().priceAdmiration;
             moneyDecreased = false;
+            updateResources();
         }
         showNextUser();
     }

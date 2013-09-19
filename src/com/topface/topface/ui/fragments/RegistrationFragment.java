@@ -20,6 +20,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RegisterRequest;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
@@ -33,7 +34,7 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
 
     public static final String INTENT_LOGIN = "registration_login";
     public static final String INTENT_PASSWORD = "registration_password";
-    public static final String INTENT_USER_ID = "registration_iser_id";
+    public static final String INTENT_USER_ID = "registration_user_id";
 
     private static final int START_SHIFT = 33;
 
@@ -178,17 +179,17 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
                 @Override
                 public void fail(int codeError, IApiResponse response) {
                     switch (codeError) {
-                        case ApiResponse.INCORRECT_LOGIN:
+                        case ErrorCodes.INCORRECT_LOGIN:
                             redAlert(R.string.incorrect_email);
                             break;
-                        case ApiResponse.USER_ALREADY_REGISTERED:
+                        case ErrorCodes.USER_ALREADY_REGISTERED:
                             redAlert(R.string.email_already_registered);
                             break;
-                        case ApiResponse.MISSING_REQUIRE_PARAMETER:
+                        case ErrorCodes.MISSING_REQUIRE_PARAMETER:
                             redAlert(R.string.empty_fields);
                             break;
-                        case ApiResponse.INCORRECT_PASSWORD:
-                        case ApiResponse.INCORRECT_VALUE:
+                        case ErrorCodes.INCORRECT_PASSWORD:
+                        case ErrorCodes.INCORRECT_VALUE:
                         default:
                             break;
                     }

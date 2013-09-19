@@ -6,6 +6,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class RestorePwdRequest extends ApiRequest {
+    private static final String SERVICE = "register.restorePassword";
+
     public String login;
 
     public RestorePwdRequest(Context context) {
@@ -21,7 +23,7 @@ public class RestorePwdRequest extends ApiRequest {
 
     @Override
     public String getServiceName() {
-        return "restore";
+        return SERVICE;
     }
 
     @Override

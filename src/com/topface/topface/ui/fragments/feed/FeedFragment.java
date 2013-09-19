@@ -26,6 +26,7 @@ import com.topface.topface.data.FeedListData;
 import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
@@ -345,6 +346,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 case R.id.delete_dialogs:
                     onDeleteDialogItems(getListAdapter().getSelectedUsersIds(), getListAdapter().getSelectedItems());
                     break;
+                case R.id.delete_visitors:
+                    onDeleteVisitors(getListAdapter().getSelectedFeedIds(), getListAdapter().getSelectedItems());
+                    break;
                 default:
                     result = false;
             }
@@ -369,7 +373,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     // CAB actions
     private void onRemoveFromBlackList(List<Integer> usersIds, final List<T> items) {
         mLockView.setVisibility(View.VISIBLE);
-        new BlackListDeleteRequest(usersIds, getActivity())
+        new BlackListDeleteManyRequest(usersIds, getActivity())
                 .callback(new VipApiHandler() {
                     @Override
                     public void success(IApiResponse response) {
@@ -404,12 +408,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     private void onDeleteFeedItems(List<String> ids, final List<T> items) {
         mLockView.setVisibility(View.VISIBLE);
-        FeedDeleteManyRequest dr = new FeedDeleteManyRequest(ids, getActivity());
+        DeleteFeedsRequest dr = getDeleteRequest(ids, getActivity());
+        if (dr == null) return;
         dr.callback(new SimpleApiHandler() {
             @Override
             public void success(IApiResponse response) {
                 if (isAdded()) {
-                    mLockView.setVisibility(View.GONE);
                     getListAdapter().removeItems(items);
                 }
             }
@@ -424,12 +428,13 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         }).exec();
     }
 
+    protected abstract DeleteFeedsRequest getDeleteRequest(List<String> ids, Context context);
+
     private void onDeleteBookmarksItems(final List<Integer> usersIds, final List<T> items) {
         BookmarkDeleteManyRequest request = new BookmarkDeleteManyRequest(getActivity(), usersIds);
         request.callback(new SimpleApiHandler() {
             @Override
             public void success(IApiResponse response) {
-                mLockView.setVisibility(View.GONE);
                 getListAdapter().removeItems(items);
             }
 
@@ -448,21 +453,52 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 .callback(new ApiHandler() {
                     @Override
                     public void success(IApiResponse response) {
-                        mLockView.setVisibility(View.GONE);
                         getListAdapter().removeItems(items);
                     }
 
                     @Override
                     public void fail(int codeError, IApiResponse response) {
                         Debug.log(response.toString());
-                        mLockView.setVisibility(View.GONE);
-                        if (codeError != ApiResponse.PREMIUM_ACCESS_ONLY) {
+                        if (codeError != ErrorCodes.PREMIUM_ACCESS_ONLY) {
                             Utils.showErrorMessage(getActivity());
+                        }
+                    }
+
+                    @Override
+                    public void always(IApiResponse response) {
+                        super.always(response);
+                        if (mLockView != null) {
+                            mLockView.setVisibility(View.GONE);
                         }
                     }
                 }).exec();
     }
 
+    private void onDeleteVisitors(List<String> selectedIds, final List<T> selectedItems) {
+        new DeleteVisitorsRequest(selectedIds, getActivity())
+                .callback(new ApiHandler() {
+                    @Override
+                    public void success(IApiResponse response) {
+                        getListAdapter().removeItems(selectedItems);
+                    }
+
+                    @Override
+                    public void fail(int codeError, IApiResponse response) {
+                        Debug.log(response.toString());
+                        if (codeError != ErrorCodes.PREMIUM_ACCESS_ONLY) {
+                            Utils.showErrorMessage(getActivity());
+                        }
+                    }
+
+                    @Override
+                    public void always(IApiResponse response) {
+                        super.always(response);
+                        if (mLockView != null) {
+                            mLockView.setVisibility(View.GONE);
+                        }
+                    }
+                }).exec();
+    }
 
     protected T getItem(int position) {
         return getListAdapter().getItem(position);
@@ -506,7 +542,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     protected void updateData(final boolean isPushUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {
         if (isBlockOnClosing() && !CacheProfile.premium) {
-            showUpdateErrorMessage(ApiResponse.PREMIUM_ACCESS_ONLY);
+            showUpdateErrorMessage(ErrorCodes.PREMIUM_ACCESS_ONLY);
             return;
         }
         mIsUpdating = true;
@@ -569,7 +605,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     showUpdateErrorMessage(codeError);
 
                     //Если это не ошибка доступа, то показываем стандартное сообщение об ошибке
-                    if (codeError != ApiResponse.PREMIUM_ACCESS_ONLY) {
+                    if (codeError != ErrorCodes.PREMIUM_ACCESS_ONLY) {
                         Utils.showErrorMessage(activity);
                     }
                     onUpdateFail(isPushUpdating || isHistoryLoad);
@@ -592,7 +628,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     private void showUpdateErrorMessage(int codeError) {
         mListView.setVisibility(View.INVISIBLE);
         switch (codeError) {
-            case ApiResponse.PREMIUM_ACCESS_ONLY:
+            case ErrorCodes.PREMIUM_ACCESS_ONLY:
                 onEmptyFeed();
                 break;
             default:

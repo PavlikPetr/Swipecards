@@ -4,6 +4,7 @@ import android.content.Context;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.Debug;
 
 public class ParallelRequestTest extends AbstractThreadTest {
@@ -14,7 +15,7 @@ public class ParallelRequestTest extends AbstractThreadTest {
             public void run() {
                 Context context = getInstrumentation().getContext();
                 ParallelApiRequest request = new ParallelApiRequest(context);
-                request.addRequest(new OptionsRequest(context).callback(new DataApiHandler<Options>() {
+                request.addRequest(new AppOptionsRequest(context).callback(new DataApiHandler<Options>() {
                     @Override
                     protected void success(Options data, IApiResponse response) {
                         Debug.log("[ParallelRequest] Options response " + response);
@@ -33,7 +34,7 @@ public class ParallelRequestTest extends AbstractThreadTest {
                         stopTest("testParallelRequest");
                     }
                 }));
-                request.addRequest(new TestRequest(null, null, IApiResponse.SESSION_NOT_FOUND, context).callback(new DataApiHandler<Profile>() {
+                request.addRequest(new TestRequest(null, null, ErrorCodes.SESSION_NOT_FOUND, context).callback(new DataApiHandler<Profile>() {
 
                     @Override
                     protected void success(Profile data, IApiResponse response) {

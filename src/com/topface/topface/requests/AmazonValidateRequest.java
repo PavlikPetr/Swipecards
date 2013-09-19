@@ -13,7 +13,7 @@ public class AmazonValidateRequest extends ApiRequest {
 
     private String mPurchaseToken;
 
-    public static final String SERVICE_NAME = "validate";
+    public static final String SERVICE_NAME = "amazon.purchase";
     private String mRequestId;
     private final String mSku;
 
@@ -29,8 +29,8 @@ public class AmazonValidateRequest extends ApiRequest {
     protected JSONObject getRequestData() throws JSONException {
         return new JSONObject()
                 .put("product", mSku)
-                .put("userid", mUserId)
-                .put("requestid", mRequestId)
+                .put("userId", mUserId)
+                .put("requestId", mRequestId)
                 .put("token", mPurchaseToken);
     }
 

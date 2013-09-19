@@ -74,6 +74,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     @SuppressWarnings("deprecation")
     private void setWindowOptions() {
         supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        setSupportProgressBarIndeterminateVisibility(false);
         getWindow().setFormat(PixelFormat.RGBA_8888);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
         if (mNeedAnimate) {

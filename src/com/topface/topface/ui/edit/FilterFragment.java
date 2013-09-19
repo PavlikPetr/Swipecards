@@ -278,9 +278,9 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     }
 
     private String buildAgeString() {
-        String plus = mFilter.age_end == DatingFilter.webAbsoluteMaxAge ? "+" : "";
-        int age_end = mFilter.age_end == DatingFilter.webAbsoluteMaxAge ? EditAgeFragment.absoluteMax : mFilter.age_end;
-        return getString(R.string.filter_age_string, mFilter.age_start, age_end) + plus;
+        String plus = mFilter.ageEnd == DatingFilter.webAbsoluteMaxAge ? "+" : "";
+        int age_end = mFilter.ageEnd == DatingFilter.webAbsoluteMaxAge ? EditAgeFragment.absoluteMax : mFilter.ageEnd;
+        return getString(R.string.filter_age_string, mFilter.ageStart, age_end) + plus;
     }
 
     @Override
@@ -318,8 +318,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 break;
             case R.id.loAge:
                 Intent ageEditIntent = new Intent(getActivity().getApplicationContext(), EditContainerActivity.class);
-                ageEditIntent.putExtra(EditContainerActivity.INTENT_AGE_START, mFilter.age_start);
-                ageEditIntent.putExtra(EditContainerActivity.INTENT_AGE_END, mFilter.age_end);
+                ageEditIntent.putExtra(EditContainerActivity.INTENT_AGE_START, mFilter.ageStart);
+                ageEditIntent.putExtra(EditContainerActivity.INTENT_AGE_END, mFilter.ageEnd);
                 ageEditIntent.putExtra(EditContainerActivity.FILTER_SEX, mFilter.sex);
                 startActivityForResult(ageEditIntent, EditContainerActivity.INTENT_EDIT_AGE);
                 break;
@@ -404,8 +404,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                         ageEnd = DatingFilter.webAbsoluteMaxAge;
                     }
                 }
-                mFilter.age_end = ageEnd;
-                mFilter.age_start = ageStart;
+                mFilter.ageEnd = ageEnd;
+                mFilter.ageStart = ageStart;
                 setText(buildAgeString(), mAgeFrame);
             }
             refreshSaveState();

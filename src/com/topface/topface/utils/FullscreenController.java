@@ -20,10 +20,10 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Banner;
 import com.topface.topface.data.Options;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BannerRequest;
-import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.*;
+import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.ui.blocks.BannerBlock;
+import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.views.ImageViewRemote;
 import ru.ideast.adwired.AWView;
 import ru.ideast.adwired.events.OnNoBannerListener;
@@ -58,7 +58,7 @@ public class FullscreenController {
         if (!CacheProfile.isEmpty() && isTimePassed()) {
             Options.Page startPage = CacheProfile.getOptions().pages.get(Options.PAGE_START);
             if (startPage != null) {
-                if (startPage.floatType.equals(Options.FLOAT_TYPE_BANNER)) {
+                if (startPage.floatType.equals(FloatBlock.FLOAT_TYPE_BANNER)) {
                     requestFullscreen(startPage.banner);
                 }
             }
@@ -249,17 +249,17 @@ public class FullscreenController {
     }
 
     public void requestFullscreen(String type) {
-        if (type.equals(Options.BANNER_NONE)) {
+        if (type.equals(BannerBlock.BANNER_NONE)) {
             return;
-        } else if (type.equals(Options.BANNER_ADWIRED)) {
+        } else if (type.equals(BannerBlock.BANNER_ADWIRED)) {
             requestAdwiredFullscreen();
-        } else if (type.equals(Options.BANNER_TOPFACE)) {
+        } else if (type.equals(BannerBlock.BANNER_TOPFACE)) {
             requestTopfaceFullscreen();
-        } else if (type.equals(Options.BANNER_MOPUB)) {
+        } else if (type.equals(BannerBlock.BANNER_MOPUB)) {
             requestMopubFullscreen();
-        } else if (type.equals(Options.BANNER_IVENGO)) {
+        } else if (type.equals(BannerBlock.BANNER_IVENGO)) {
             requestIvengoFullscreen();
-        } else if (type.equals(Options.BANNER_LIFESTREET)) {
+        } else if (type.equals(BannerBlock.BANNER_LIFESTREET)) {
             requestLifestreetFullscreen();
         }
     }
@@ -307,7 +307,7 @@ public class FullscreenController {
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                if (codeError == ApiResponse.BANNER_NOT_FOUND) {
+                if (codeError == ErrorCodes.BANNER_NOT_FOUND) {
                     addLastFullscreenShowedTime();
                 }
             }

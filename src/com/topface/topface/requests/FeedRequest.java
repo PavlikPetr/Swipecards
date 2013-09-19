@@ -57,23 +57,23 @@ public class FeedRequest extends ApiRequest {
         String service = null;
         switch (mService) {
             case DIALOGS:
-                service = "dialogs";
+                service = "dialog.getList";
                 break;
             case LIKES:
-                service = "feedLike";
+                service = "like.getList";
                 break;
             case MUTUAL:
-                service = "feedSympathy";
+                service = "mutual.getList";
                 break;
             case VISITORS:
-                service = "visitors";
+                service = "visitor.getList";
                 break;
             case BLACK_LIST:
-                service = "blacklistGet";
+                service = "blacklist.getList";
                 break;
             case FANS:
             case BOOKMARKS:
-                service = "bookmarks";
+                service = "bookmark.getList";
                 break;
         }
         return service;

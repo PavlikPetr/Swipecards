@@ -25,12 +25,12 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
 import com.topface.topface.ui.dialogs.LeadersDialog;
 import com.topface.topface.ui.profile.ProfileFormFragment;
@@ -121,7 +121,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
         mLoaderView = root.findViewById(R.id.llvProfileLoading);
         final FragmentActivity activity = getActivity();
-        mRateController = new RateController(activity);
+        mRateController = new RateController(activity, SendLikeRequest.Place.FROM_PROFILE);
 
         String itemId = getArguments().getString(ARG_FEED_ITEM_ID);
         if (itemId != null) {
@@ -344,7 +344,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     } else {
                         ((TextView) mBlocked.findViewById(R.id.blockTV)).setText(R.string.black_list_add_short);
                     }
-                    mRateController.setOnRateControllerListener(mRateControllerListener);
+                    mRateController.setOnRateControllerUiListener(mRateControllerListener);
 
                     setProfile(data);
                     if (mHeaderMainFragment != null) {
@@ -482,35 +482,39 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     textView.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
                     v.findViewById(R.id.delPrBar).setVisibility(View.VISIBLE);
                     v.setEnabled(false);
-                    mRateController.onRate(mUserProfile.uid, 10, ((User) mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL, new RateController.OnRateListener() {
-                        @SuppressWarnings("ConstantConditions")
-                        @Override
-                        public void onRateCompleted() {
-                            if (v != null && getActivity() != null) {
-                                Toast.makeText(App.getContext(), R.string.admiration_sended, Toast.LENGTH_SHORT).show();
-                                loader.setVisibility(View.INVISIBLE);
-                                icon.setVisibility(View.VISIBLE);
+                    mRateController.onAdmiration(
+                            mUserProfile.uid,
+                            ((User) mUserProfile).mutual ?
+                                    SendLikeRequest.DEFAULT_MUTUAL : SendLikeRequest.DEFAULT_NO_MUTUAL,
+                            new RateController.OnRateRequestListener() {
+                                @SuppressWarnings("ConstantConditions")
+                                @Override
+                                public void onRateCompleted() {
+                                    if (v != null && getActivity() != null) {
+                                        Toast.makeText(App.getContext(), R.string.admiration_sended, Toast.LENGTH_SHORT).show();
+                                        loader.setVisibility(View.INVISIBLE);
+                                        icon.setVisibility(View.VISIBLE);
 
-                            }
-                        }
+                                    }
+                                }
 
-                        @SuppressWarnings("ConstantConditions")
-                        @Override
-                        public void onRateFailed() {
-                            if (v != null && getActivity() != null) {
-                                loader.setVisibility(View.INVISIBLE);
-                                icon.setVisibility(View.VISIBLE);
-                                if (CacheProfile.money > 0) {
-                                    Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                                @SuppressWarnings("ConstantConditions")
+                                @Override
+                                public void onRateFailed() {
+                                    if (v != null && getActivity() != null) {
+                                        loader.setVisibility(View.INVISIBLE);
+                                        icon.setVisibility(View.VISIBLE);
+                                        if (CacheProfile.money > 0) {
+                                            Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                                        }
+                                        v.setEnabled(true);
+                                        v.setSelected(false);
+                                        if (textView != null) {
+                                            textView.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
+                                        }
+                                    }
                                 }
-                                v.setEnabled(true);
-                                v.setSelected(false);
-                                if (textView != null) {
-                                    textView.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
-                                }
-                            }
-                        }
-                    });
+                            });
 
                     //noinspection deprecation
 //                    ((TextView) v).setAlpha(80);
@@ -527,33 +531,37 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     icon.setVisibility(View.GONE);
                     textView.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
                     v.setEnabled(false);
-                    mRateController.onRate(mUserProfile.uid, 9, ((User) mUserProfile).mutual ? RateRequest.DEFAULT_MUTUAL : RateRequest.DEFAULT_NO_MUTUAL, new RateController.OnRateListener() {
-                        @SuppressWarnings("ConstantConditions")
-                        @Override
-                        public void onRateCompleted() {
-                            if (v != null && getActivity() != null) {
-                                Toast.makeText(App.getContext(), R.string.sympathy_sended, Toast.LENGTH_SHORT).show();
-                                loader.setVisibility(View.INVISIBLE);
-                                icon.setVisibility(View.VISIBLE);
-                            }
-                        }
-
-                        @SuppressWarnings("ConstantConditions")
-                        @Override
-                        public void onRateFailed() {
-                            if (v != null && getActivity() != null) {
-                                Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
-                                loader.setVisibility(View.INVISIBLE);
-                                icon.setVisibility(View.VISIBLE);
-                                v.setEnabled(true);
-                                v.setSelected(false);
-                                if (v instanceof TextView) {
-                                    TextView view = (TextView) v;
-                                    view.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
+                    mRateController.onLike(
+                            mUserProfile.uid,
+                            ((User) mUserProfile).mutual ?
+                                    SendLikeRequest.DEFAULT_MUTUAL : SendLikeRequest.DEFAULT_NO_MUTUAL,
+                            new RateController.OnRateRequestListener() {
+                                @SuppressWarnings("ConstantConditions")
+                                @Override
+                                public void onRateCompleted() {
+                                    if (v != null && getActivity() != null) {
+                                        Toast.makeText(App.getContext(), R.string.sympathy_sended, Toast.LENGTH_SHORT).show();
+                                        loader.setVisibility(View.INVISIBLE);
+                                        icon.setVisibility(View.VISIBLE);
+                                    }
                                 }
-                            }
-                        }
-                    });
+
+                                @SuppressWarnings("ConstantConditions")
+                                @Override
+                                public void onRateFailed() {
+                                    if (v != null && getActivity() != null) {
+                                        Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                                        loader.setVisibility(View.INVISIBLE);
+                                        icon.setVisibility(View.VISIBLE);
+                                        v.setEnabled(true);
+                                        v.setSelected(false);
+                                        if (v instanceof TextView) {
+                                            TextView view = (TextView) v;
+                                            view.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
+                                        }
+                                    }
+                                }
+                            });
 
 
                     //noinspection deprecation
@@ -602,9 +610,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                         icon.setVisibility(View.GONE);
                         ApiRequest request;
                         if (mUserProfile.inBlackList) {
-                            request = new BlackListDeleteRequest(mUserProfile.uid, getActivity());
+                            request = new BlackListDeleteManyRequest(mUserProfile.uid, getActivity());
                         } else {
-                            request = new BlackListAddRequest(mUserProfile.uid, getActivity());
+                            request = new BlackListAddManyRequest(mUserProfile.uid, getActivity());
                         }
                         request.callback(new VipApiHandler() {
                             @Override
@@ -646,7 +654,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 ApiRequest request;
 
                 if (mUserProfile instanceof User && ((User) mUserProfile).bookmarked) {
-                    request = new BookmarkDeleteRequest(getActivity(), mUserProfile.uid);
+                    request = new BookmarkDeleteManyRequest(getActivity(), mUserProfile.uid);
                 } else {
                     request = new BookmarkAddRequest(getActivity(), mUserProfile.uid);
                 }
@@ -691,8 +699,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         if (mUserProfile != null) {
             Intent intent = new Intent(getActivity(), ContainerActivity.class);
             intent.putExtra(ChatFragment.INTENT_USER_ID, mUserProfile.uid);
-            intent.putExtra(ChatFragment.INTENT_USER_NAME, mUserProfile.first_name == null ?
-                    mUserProfile.first_name : Static.EMPTY);
+            intent.putExtra(ChatFragment.INTENT_USER_NAME, mUserProfile.firstName == null ?
+                    mUserProfile.firstName : Static.EMPTY);
             intent.putExtra(ChatFragment.INTENT_USER_SEX, mUserProfile.sex);
             intent.putExtra(ChatFragment.INTENT_USER_AGE, mUserProfile.age);
             intent.putExtra(ChatFragment.INTENT_USER_CITY, mUserProfile.city == null ? "" : mUserProfile.city.name);
@@ -839,7 +847,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 @Override
                 public void fail(int codeError, IApiResponse response) {
                     Utils.showErrorMessage(getContext());
-                    if (response.isCodeEqual(ApiResponse.PAYMENT)) {
+                    if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
                         FragmentActivity activity = getActivity();
                         if (activity != null) {
                             Intent intent = ContainerActivity.getBuyingIntent("Profile");

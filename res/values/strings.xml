@@ -554,4 +554,6 @@
         <item quantity="other">%d selected</item>
         <item quantity="one">%d selected</item>
     </plurals>
+    <string name="delete_visitors">delete visitors</string>
+    <string name="photo_is_uploading">Uploading photo</string>
 </resources>

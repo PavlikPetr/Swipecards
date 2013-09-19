@@ -11,7 +11,7 @@ import org.json.JSONObject;
 @SuppressWarnings("UnusedDeclaration")
 public class TestRequest extends ApiRequest {
 
-    public static final String SERVICE_NAME = "test";
+    public static final String SERVICE_NAME = "dev.test";
     public String required;
     private String nonrequired;
     public int error;
@@ -35,7 +35,7 @@ public class TestRequest extends ApiRequest {
         data.put("required", required != null ? required : "value");
 
         if (!TextUtils.isEmpty(nonrequired)) {
-            data.put("nonrequired", nonrequired);
+            data.put("nonRequired", nonrequired);
         }
         if (error > 0) {
             data.put("error", error);

@@ -4,7 +4,7 @@ import android.content.Context;
 import org.json.JSONObject;
 
 public class NoviceLikesRequest extends ApiRequest {
-    public static final String SERVICE_NAME = "noviceLikes";
+    public static final String SERVICE_NAME = "user.becomeNoviceLikes";
 
     public NoviceLikesRequest(Context context) {
         super(context);

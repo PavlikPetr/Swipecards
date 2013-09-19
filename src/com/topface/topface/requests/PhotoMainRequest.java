@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 public class PhotoMainRequest extends ApiRequest {
     // Data
-    public static final String service = "photoMain";
+    public static final String service = "photo.setMain";
     public int photoid; // идентификатор фотографии для установки в качестве главной
 
     public PhotoMainRequest(Context context) {
@@ -16,7 +16,7 @@ public class PhotoMainRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        return new JSONObject().put("photoid", photoid);
+        return new JSONObject().put("photoId", photoid);
     }
 
     @Override

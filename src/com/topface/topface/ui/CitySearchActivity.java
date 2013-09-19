@@ -14,7 +14,6 @@ import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.requests.CitiesRequest;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.SearchCitiesRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -263,7 +262,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
 
 
     private void city(final String prefix) {
-        SearchCitiesRequest searchCitiesRequest = new SearchCitiesRequest(this);
+        CitiesRequest searchCitiesRequest = new CitiesRequest(this);
         registerRequest(searchCitiesRequest);
         cityListView.setVisibility(View.VISIBLE);
         searchCitiesRequest.prefix = prefix;

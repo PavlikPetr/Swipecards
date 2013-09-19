@@ -10,6 +10,7 @@
         >
 
     <ImageView
+            android:id="@+id/ivBan"
             android:src="@drawable/ic_ban"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
@@ -39,6 +40,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/default_ban_time"
+            />
+
+    <Button
+            android:id="@+id/btnButton"
+            android:gravity="center"
+            android:layout_marginTop="15dip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
             />
 </LinearLayout>
 

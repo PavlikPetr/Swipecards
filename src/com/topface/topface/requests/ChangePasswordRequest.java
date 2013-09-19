@@ -7,7 +7,7 @@ import org.json.JSONObject;
 @SuppressWarnings("UnusedDeclaration")
 public class ChangePasswordRequest extends ApiRequest {
 
-    public static final String SERVICE_NAME = "changePassword";
+    public static final String SERVICE_NAME = "register.changePassword";
 
     private String currentPassword;
     private String newPassword;
@@ -20,7 +20,7 @@ public class ChangePasswordRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        return new JSONObject().put("current", currentPassword).put("new", newPassword);
+        return new JSONObject().put("current", currentPassword).put("updated", newPassword);
     }
 
     @Override

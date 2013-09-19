@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 public class SkipAllClosedRequest extends ApiRequest {
 
-    public static final String service = "skipAllClosed";
+    public static final String service = "search.skipAllClosed";
 
     public static final int LIKES = 0;
     public static final int MUTUAL = 1;

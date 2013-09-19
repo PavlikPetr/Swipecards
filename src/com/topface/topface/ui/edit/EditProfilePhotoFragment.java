@@ -18,6 +18,7 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.profile.AddPhotoHelper;
 import com.topface.topface.ui.profile.ProfilePhotoGridAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -169,7 +170,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                         if (getActivity() != null) {
                             getActivity().setResult(Activity.RESULT_CANCELED);
                             //                        finishOperations(handler);
-                            if (codeError == ApiResponse.NON_EXIST_PHOTO_ERROR) {
+                            if (codeError == ErrorCodes.NON_EXIST_PHOTO_ERROR) {
                                 Photo removedPhoto = mPhotoLinks.getByPhotoId(mLastSelectedAsMainId);
                                 mPhotoGridAdapter.getData().remove(removedPhoto);
                                 mPhotoGridAdapter.notifyDataSetChanged();

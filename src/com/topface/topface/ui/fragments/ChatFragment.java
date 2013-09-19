@@ -28,6 +28,7 @@ import com.topface.topface.Static;
 import com.topface.topface.data.*;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
@@ -376,7 +377,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             return;
         }
 
-        DeleteFeedRequest dr = new DeleteFeedRequest(item.id, getActivity());
+        DeleteMessagesRequest dr = new DeleteMessagesRequest(item.id,getActivity());
         dr.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
@@ -660,9 +661,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         icon.setVisibility(View.GONE);
                         ApiRequest request;
                         if (mUser.blocked) {
-                            request = new BlackListDeleteRequest(mUserId, getActivity());
+                            request = new BlackListDeleteManyRequest(mUserId, getActivity());
                         } else {
-                            request = new BlackListAddRequest(mUserId, getActivity());
+                            request = new BlackListAddManyRequest(mUserId, getActivity());
                         }
                         request.callback(new VipApiHandler() {
                             @Override
@@ -704,7 +705,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 ApiRequest request;
 
                 if (mUser.bookmarked) {
-                    request = new BookmarkDeleteRequest(getActivity(), mUserId);
+                    request = new BookmarkDeleteManyRequest(getActivity(), mUserId);
                 } else {
                     request = new BookmarkAddRequest(getActivity(), mUserId);
                 }
@@ -747,7 +748,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     private void removeFromBlackList() {
         if (mUserId > 0) {
-            BlackListDeleteRequest deleteBlackListRequest = new BlackListDeleteRequest(mUserId, getActivity());
+            BlackListDeleteManyRequest deleteBlackListRequest = new BlackListDeleteManyRequest(mUserId, getActivity());
             mAddToBlackList.setEnabled(false);
             deleteBlackListRequest.callback(new VipApiHandler() {
 
@@ -773,7 +774,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     private void addToBlackList() {
         if (mUserId > 0) {
-            BlackListAddRequest blackListRequest = new BlackListAddRequest(mUserId, getActivity());
+            BlackListAddManyRequest blackListRequest = new BlackListAddManyRequest(mUserId,getActivity());
             mAddToBlackList.setEnabled(false);
             blackListRequest.callback(new VipApiHandler() {
                 @Override
@@ -946,7 +947,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                if (response.isCodeEqual(ApiResponse.PAYMENT)) {
+                if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
                     mAdapter.removeItem(loaderItem);
                     Intent intent = ContainerActivity.getBuyingIntent("Chat");
                     intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);

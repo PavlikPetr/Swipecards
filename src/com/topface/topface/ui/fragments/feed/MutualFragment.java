@@ -1,11 +1,14 @@
 package com.topface.topface.ui.fragments.feed;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedMutual;
+import com.topface.topface.requests.DeleteFeedsRequest;
+import com.topface.topface.requests.DeleteMutualsRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
@@ -13,6 +16,8 @@ import com.topface.topface.ui.adapters.MutualListAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CountersManager;
 import org.json.JSONObject;
+
+import java.util.List;
 
 public class MutualFragment extends FeedFragment<FeedMutual> {
     @Override
@@ -77,6 +82,11 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     @Override
     protected int getContextMenuLayoutRes() {
         return R.menu.feed_context_menu;
+    }
+
+    @Override
+    protected DeleteFeedsRequest getDeleteRequest(List<String> ids, Context context) {
+        return new DeleteMutualsRequest(ids, context);
     }
 
     @Override

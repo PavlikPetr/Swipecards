@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.internal.widget.ActionBarContainer;
 import android.view.*;
 import android.widget.Toast;
@@ -26,6 +25,7 @@ import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.*;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
@@ -92,6 +92,7 @@ public class NavigationActivity extends BaseFragmentActivity {
         final View badges = getLayoutInflater().inflate(R.layout.layout_notifications_badges, getActionBarContainerLayout(), true);
         mNavBarController = new NavigationBarController((ViewGroup) badges);
         final View home = findViewById(android.R.id.home);
+        if (home == null) return;
         home.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @SuppressWarnings("deprecation")
             @Override
@@ -236,7 +237,7 @@ public class NavigationActivity extends BaseFragmentActivity {
         mFragmentMenu.onLoadProfile();
         AuthorizationManager.extendAccessToken(NavigationActivity.this);
         PopupManager manager = new PopupManager(this);
-        manager.showOldVersionPopup(CacheProfile.getOptions().max_version);
+        manager.showOldVersionPopup(CacheProfile.getOptions().maxVersion);
         manager.showRatePopup();
         actionsAfterRegistration();
         if (CacheProfile.show_ad) {
@@ -332,7 +333,7 @@ public class NavigationActivity extends BaseFragmentActivity {
 
                             @Override
                             public void fail(int codeError, IApiResponse response) {
-                                if (codeError == ApiResponse.NON_EXIST_PHOTO_ERROR) {
+                                if (codeError == ErrorCodes.NON_EXIST_PHOTO_ERROR) {
                                     if (CacheProfile.photos != null && CacheProfile.photos.contains(photo)) {
                                         CacheProfile.photos.remove(photo);
                                     }

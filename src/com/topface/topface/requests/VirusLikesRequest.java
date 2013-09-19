@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 
 public class VirusLikesRequest extends ConfirmedApiRequest {
-    public static final String SERVICE_NAME = "virusLikes";
+    public static final String SERVICE = "virus.sendLikes";
     /**
      * идентификатор сообщения из ленты для получения лайков. Если параметр указан, данное сообщение будет удалено
      */
@@ -18,7 +18,7 @@ public class VirusLikesRequest extends ConfirmedApiRequest {
     /**
      * перечень социальных идентификаторов пользвоателей, которым были отпралвены приглашения на установку приложения
      */
-    private static final String VIRUS_REQUEST_IDS = "socialids";
+    private static final String VIRUS_REQUEST_IDS = "socialIds";
 
     private String mFeedId;
     private ArrayList<Long> mSocialids;
@@ -50,6 +50,6 @@ public class VirusLikesRequest extends ConfirmedApiRequest {
 
     @Override
     public String getServiceName() {
-        return SERVICE_NAME;
+        return SERVICE;
     }
 }

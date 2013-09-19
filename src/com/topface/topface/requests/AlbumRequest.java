@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 public class AlbumRequest extends ApiRequest {
 
-    public static final String SERVICE_NAME = "album";
+    public static final String SERVICE_NAME = "photo.getList";
 
     public static final String MODE_ALBUM = "album";  // Фотографии в обратном порядке добавление
     public static final String MODE_SEARCH = "search"; // Первая фотка главная
@@ -37,7 +37,7 @@ public class AlbumRequest extends ApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         JSONObject response =  new JSONObject().put("limit", limit)
-                .put("userid", uid);
+                .put("userId", uid);
         if (from != 0) {
             response.put("from", from);
         }

@@ -1,6 +1,7 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,8 +12,8 @@ import java.util.List;
 /**
  * Запрос удаляет пользователя из черного списка
  */
-public class BlackListDeleteRequest extends ApiRequest {
-    public static final String SERVICE_NAME = "blacklistDelete";
+public class BlackListDeleteManyRequest extends ApiRequest {
+    public static final String SERVICE_NAME = "blacklist.delete";
     /**
      * id пользователя, котогорого нужно добавить в черный список
      */
@@ -21,7 +22,7 @@ public class BlackListDeleteRequest extends ApiRequest {
     /**
      * @param userIds массив id пользовтелей, которые нужно добавить в черный список
      */
-    public BlackListDeleteRequest(List<Integer> userIds, Context context) {
+    public BlackListDeleteManyRequest(List<Integer> userIds, Context context) {
         super(context);
         mUserIds = userIds;
     }
@@ -29,7 +30,7 @@ public class BlackListDeleteRequest extends ApiRequest {
     /**
      * @param userId пользователя, которого нужно добавить в черный список
      */
-    public BlackListDeleteRequest(int userId, Context context) {
+    public BlackListDeleteManyRequest(int userId, Context context) {
         super(context);
         ArrayList<Integer> list = new ArrayList<Integer>();
         list.add(userId);
@@ -38,7 +39,7 @@ public class BlackListDeleteRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        return new JSONObject().put("userids", new JSONArray(mUserIds));
+        return new JSONObject().put("userIds", new JSONArray(mUserIds));
     }
 
     @Override
@@ -51,7 +52,7 @@ public class BlackListDeleteRequest extends ApiRequest {
         if (mUserIds != null && mUserIds.size() > 0) {
             super.exec();
         } else {
-            handleFail(ApiResponse.ERRORS_PROCCESED, "User list for delete from black list is empty");
+            handleFail(ErrorCodes.ERRORS_PROCCESED, "User list for delete from black list is empty");
         }
     }
 }

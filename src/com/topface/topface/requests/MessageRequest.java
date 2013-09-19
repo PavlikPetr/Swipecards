@@ -2,12 +2,13 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 import android.text.TextUtils;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MessageRequest extends ConfirmedApiRequest {
     // Data
-    public static final String service = "message";
+    public static final String service = "message.send";
     private int mUserId; // идентификатор пользователя, кому послали сообщение
     private String mMessage; // текст сообщения в UTF-8. min размер текста - 1 символ, max - 1024
 
@@ -20,7 +21,7 @@ public class MessageRequest extends ConfirmedApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         return new JSONObject()
-                .put("userid", mUserId)
+                .put("userId", mUserId)
                 .put("message", mMessage);
     }
 
@@ -32,9 +33,9 @@ public class MessageRequest extends ConfirmedApiRequest {
     @Override
     public void exec() {
         if (mUserId < 1) {
-            handleFail(ApiResponse.MISSING_REQUIRE_PARAMETER, "Wrong user id");
+            handleFail(ErrorCodes.MISSING_REQUIRE_PARAMETER, "Wrong user id");
         } else if (TextUtils.isEmpty(mMessage) || mMessage.length() <= 1) {
-            handleFail(ApiResponse.MISSING_REQUIRE_PARAMETER, "Message is too short");
+            handleFail(ErrorCodes.MISSING_REQUIRE_PARAMETER, "Message is too short");
         } else {
             super.exec();
         }

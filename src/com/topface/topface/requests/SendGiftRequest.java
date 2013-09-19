@@ -6,11 +6,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class SendGiftRequest extends ConfirmedApiRequest {
+    public static final String SERVICE = "gift.send";
 
-    static final String USER_ID = "userid";
-    static final String GIFT_ID = "giftid";
+    static final String USER_ID = "userId";
+    static final String GIFT_ID = "giftId";
 
-    public static final String service = "gift";
     public int userId;
     public int giftId;
 
@@ -25,7 +25,7 @@ public class SendGiftRequest extends ConfirmedApiRequest {
 
     @Override
     public String getServiceName() {
-        return service;
+        return SERVICE;
     }
 
     @Override

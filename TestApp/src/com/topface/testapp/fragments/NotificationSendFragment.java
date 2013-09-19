@@ -82,7 +82,7 @@ public class NotificationSendFragment extends Fragment {
         intent.putExtra("unread", "1");
 
         try {
-            intent.putExtra("counters", new JSONObject().put("unread_likes",0).put("unread_sympaties",0).put("unread_messages",0).put("unread_visitors",0).toString());
+            intent.putExtra("unread", new JSONObject().put("likes",0).put("sympaties",0).put("dialogs",0).put("visitors",0).toString());
             intent.putExtra("user", new JSONObject().put("id", "43945394").put("photo", new JSONObject().put("c128x128", "http://ii.cdn.tf/u42917754/r450x-/5:1n08oy8.jpg")).put("name", "Ilya").put("age", "21").toString());
             getActivity().sendBroadcast(intent);
         } catch (Exception e) {

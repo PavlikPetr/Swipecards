@@ -62,7 +62,7 @@ public class FeedUser extends AbstractData implements SerializableToJson {
 
     public void fillData(JSONObject user) {
         this.id = user.optInt("id");
-        this.first_name = user.optString("first_name");
+        this.first_name = user.optString("firstName");
         this.age = user.optInt("age");
         this.online = user.optBoolean("online");
         this.city = new City(user.optJSONObject("city"));
@@ -79,7 +79,7 @@ public class FeedUser extends AbstractData implements SerializableToJson {
             this.photos = new Photos();
             this.photos.add(this.photo);
         }
-        this.photosCount = user.optInt("photos_count", photos.size());
+        this.photosCount = user.optInt("photos_count", photos.size()); //TODO camel case
     }
 
     public String getNameAndAge() {
@@ -96,7 +96,7 @@ public class FeedUser extends AbstractData implements SerializableToJson {
     public JSONObject toJson() throws JSONException {
         JSONObject json = new JSONObject();
         json.put("id", id);
-        json.put("first_name", first_name);
+        json.put("firstName", first_name);
         json.put("sex", sex);
         json.put("age", age);
         json.put("online", online);

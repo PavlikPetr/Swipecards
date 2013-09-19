@@ -2,59 +2,53 @@ package com.topface.topface.utils;
 
 import android.app.Activity;
 import com.topface.topface.data.Rate;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.RateRequest;
+import com.topface.topface.requests.*;
 import com.topface.topface.ui.ContainerActivity;
 
 public class RateController {
-    /**
-     * Для теста отключаем диалог восхищения
-     */
 
-    public static final int MUTUAL_VALUE = 9;
-
+    private final SendLikeRequest.Place mPlace;
     private Activity mContext;
-    private OnRateControllerListener mOnRateControllerListener;
+    private OnRateControllerListener mOnRateControllerUiListener;
 
-    public interface OnRateControllerListener {
-        public void successRate();
-
-        public void failRate();
-    }
-
-    public RateController(final Activity context) {
+    public RateController(final Activity context, SendLikeRequest.Place place) {
         mContext = context;
+        mPlace = place;
     }
 
-    public void onRate(final int userId, final int rate, final int mutualId, OnRateListener listener) {
-        if (rate == 10 && CacheProfile.money <= 0) {
+    public void onLike(final int userId, final int mutualId, final OnRateRequestListener requestListener) {
+        sendRate(new SendLikeRequest(mContext, userId, mutualId, mPlace), requestListener);
+    }
+
+    public void onAdmiration(final int userId, final int mutualId, final OnRateRequestListener requestListener) {
+        if (CacheProfile.money <= 0) {
             mContext.startActivity(ContainerActivity.getBuyingIntent("RateAdmiration"));
-            if (mOnRateControllerListener != null) {
-                mOnRateControllerListener.failRate();
+            if (mOnRateControllerUiListener != null) {
+                mOnRateControllerUiListener.failRate();
             }
-            if (listener != null) {
-                listener.onRateFailed();
+            if (requestListener != null) {
+                requestListener.onRateFailed();
             }
             return;
         }
-
-        sendRate(userId, rate, mutualId, listener);
+        sendRate(new SendAdmirationRequest(mContext, userId, mutualId, mPlace), requestListener);
     }
 
-    private void sendRate(final int userid, final int rate, final int mutualId, final OnRateListener listener) {
-        RateRequest doRate = new RateRequest(mContext);
-        doRate.userid = userid;
-        doRate.rate = rate;
-        doRate.mutualid = mutualId;
-        doRate.callback(new DataApiHandler<Rate>() {
+    public void onRate(final int userId, final int rate, final int mutualId, OnRateRequestListener requestListener) {
+        if (rate == 10) {
+            onAdmiration(userId,mutualId,requestListener);
+        } else {
+            onLike(userId,mutualId,requestListener);
+        }
+    }
+
+    private void sendRate(SendLikeRequest sendLike, final OnRateRequestListener listener) {
+        sendLike.callback(new DataApiHandler<Rate>() {
 
             @Override
             protected void success(Rate rate, IApiResponse response) {
                 CacheProfile.likes = rate.likes;
                 CacheProfile.money = rate.money;
-                CacheProfile.average_rate = rate.average;
                 if (listener != null) {
                     listener.onRateCompleted();
                 }
@@ -74,18 +68,28 @@ public class RateController {
 
         }).exec();
 
-        if (mOnRateControllerListener != null) {
-            mOnRateControllerListener.successRate();
+        if (mOnRateControllerUiListener != null) {
+            mOnRateControllerUiListener.successRate();
         }
     }
 
-    public void setOnRateControllerListener(OnRateControllerListener onRateControllerListener) {
-        mOnRateControllerListener = onRateControllerListener;
+    public void setOnRateControllerUiListener(OnRateControllerListener onRateControllerUiListener) {
+        mOnRateControllerUiListener = onRateControllerUiListener;
     }
 
-    public interface OnRateListener {
-        public void onRateCompleted();
+    /**
+     * Interface for UI callbacks
+     */
+    public interface OnRateControllerListener {
+        public void successRate();
+        public void failRate();
+    }
 
+    /**
+     * Interface for api request callbacks
+     */
+    public interface OnRateRequestListener {
+        public void onRateCompleted();
         public void onRateFailed();
     }
 }

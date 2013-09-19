@@ -1,6 +1,7 @@
 package com.topface.topface.requests;
 
 import android.text.TextUtils;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.multipart.MultipartStream;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.FlushedInputStream;
@@ -25,7 +26,7 @@ import java.util.regex.Pattern;
 public class MultipartApiResponse implements IApiResponse {
 
     // Data
-    public int code = RESULT_DONT_SET;
+    public int code = ErrorCodes.RESULT_DONT_SET;
     public String message;
     public JSONObject jsonResult;
     public String method;
@@ -36,20 +37,20 @@ public class MultipartApiResponse implements IApiResponse {
             //Разбиваем ответ на подответы, в итоге получим массив json объектов
             LinkedList<String> responses = splitResponses(connection);
             if (responses == null || responses.isEmpty()) {
-                setError(NULL_RESPONSE, "Responses is null");
+                setError(ErrorCodes.NULL_RESPONSE, "Responses is null");
             } else {
                 //Парсим ответы.
                 parseResponses(responses);
             }
         } catch (IOException e) {
             Debug.error(e);
-            setError(ERRORS_PROCCESED, "Parse response error");
+            setError(ErrorCodes.ERRORS_PROCCESED, "Parse response error");
         }
     }
 
 
     private void parseResponses(LinkedList<String> parts) {
-        int result = RESULT_OK;
+        int result = ErrorCodes.RESULT_OK;
         for (String responseString : parts) {
             if (!TextUtils.isEmpty(responseString)) {
                 ApiResponse response = new ApiResponse(responseString);
@@ -76,7 +77,7 @@ public class MultipartApiResponse implements IApiResponse {
 
                 String boundary = getBoundary(connection.getContentType());
                 if (TextUtils.isEmpty(boundary)) {
-                    setError(IApiResponse.WRONG_RESPONSE, "Boundary not found");
+                    setError(ErrorCodes.WRONG_RESPONSE, "Boundary not found");
                     return null;
                 }
 
@@ -140,7 +141,7 @@ public class MultipartApiResponse implements IApiResponse {
      * Проверяет, является ли этот ответ от сервера ошибокой переданно в параметре errorCode
      */
     public boolean isCodeEqual(Integer... errorCode) {
-        if (code == RESULT_DONT_SET) {
+        if (code == ErrorCodes.RESULT_DONT_SET) {
             //Проверяем по очереди каждый ответ, если есть хоть один такой статус
             for (ApiResponse response : mResponses.values()) {
                 if (response.isCodeEqual(errorCode)) {
@@ -158,11 +159,11 @@ public class MultipartApiResponse implements IApiResponse {
      */
     public boolean isWrongAuthError() {
         return isCodeEqual(
-                UNKNOWN_PLATFORM,
-                UNKNOWN_SOCIAL_USER,
-                UNVERIFIED_TOKEN,
-                INCORRECT_LOGIN,
-                INCORRECT_PASSWORD
+                ErrorCodes.UNKNOWN_PLATFORM,
+                ErrorCodes.UNKNOWN_SOCIAL_USER,
+                ErrorCodes.UNVERIFIED_TOKEN,
+                ErrorCodes.INCORRECT_LOGIN,
+                ErrorCodes.INCORRECT_PASSWORD
         );
     }
 
@@ -173,7 +174,7 @@ public class MultipartApiResponse implements IApiResponse {
 
     @Override
     public boolean isCompleted() {
-        return isCodeEqual(RESULT_OK);
+        return isCodeEqual(ErrorCodes.RESULT_OK);
     }
 
     @Override

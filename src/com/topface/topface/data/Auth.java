@@ -6,8 +6,9 @@ import org.json.JSONObject;
 
 public class Auth extends AbstractData {
     // Data
-    public int api_version;
+    public int apiVersion;
     public String ssid;
+    public String userId;
 
     public Auth(IApiResponse response) {
         fillData(response.getJsonResult());
@@ -17,7 +18,8 @@ public class Auth extends AbstractData {
     protected void fillData(JSONObject jsonResult) {
         try {
             ssid = jsonResult.getString("ssid");
-            api_version = jsonResult.optInt("version");
+            apiVersion = jsonResult.optInt("version");
+            userId = jsonResult.optString("userId");
         } catch (Exception e) {
             Debug.error("Auth: Wrong response parsing: ", e);
         }

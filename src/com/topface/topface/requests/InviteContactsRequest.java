@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class InviteContactsRequest extends ConfirmedApiRequest {
 
-    public final static String SERVICE_NAME = "inviteContacts";
+    public final static String SERVICE_NAME = "virus.inviteContacts";
     private ArrayList<ContactsProvider.Contact> emails;
     private ArrayList<ContactsProvider.Contact> phones;
 

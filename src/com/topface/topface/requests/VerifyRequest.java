@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 public class VerifyRequest extends ApiRequest {
     // Data
-    public static final String service = "verify";
+    public static final String service = "googleplay.purchase";
     public String data; // строка данных заказа от Google Play
     public String signature; // подпись данных заказа
 

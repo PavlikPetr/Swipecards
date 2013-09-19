@@ -6,8 +6,9 @@ import org.json.JSONObject;
 
 public class CitiesRequest extends ApiRequest {
     // Data
-    public static final String SERVICE_NAME = "cities";
+    public static final String SERVICE_NAME = "geo.getCities";
     public String type; // тип выборки перечня городов. Пока поддерживается только “top”
+    public String prefix;
 
     public CitiesRequest(Context context) {
         super(context);
@@ -15,7 +16,14 @@ public class CitiesRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        return new JSONObject().put("type", type);
+        JSONObject data = new JSONObject();
+        if (type != null) {
+            data.put("type", type);
+        }
+        if(prefix != null) {
+            data.put("prefix", prefix);
+        }
+        return data;
     }
 
     @Override

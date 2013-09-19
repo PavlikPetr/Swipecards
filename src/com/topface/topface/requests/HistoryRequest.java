@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 public class HistoryRequest extends ApiRequest {
     // Data
-    public static final String service = "history";
+    public static final String service = "dialog.get";
     public int userid; // идентификатор пользователя для получения истории сообщений с ним текущего пользвоателя
     //public int offset; // смещение истории сообщений
     public int limit; // количество получаемых элементов истории сообщений
@@ -20,7 +20,7 @@ public class HistoryRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        JSONObject data = new JSONObject().put("userid", userid).put("limit", limit);
+        JSONObject data = new JSONObject().put("userId", userid).put("limit", limit);
         if (to != null) {
             data.put("to", to);
         }

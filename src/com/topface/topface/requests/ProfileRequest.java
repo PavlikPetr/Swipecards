@@ -8,7 +8,7 @@ import org.json.JSONObject;
 public class ProfileRequest extends ApiRequest {
     // Data
     public static final String PROFILE_UPDATE_ACTION = "com.topface.topface.UPDATE_PROFILE";
-    public static final String SERVICE_NAME = "profile";
+    public static final String SERVICE = "user.getOwnProfile";
     public int part; // часть профиля, необходимая для загрузки
     //public String  fields;  //массив интересующих полей профиля
     // Constants
@@ -37,7 +37,7 @@ public class ProfileRequest extends ApiRequest {
                 break;
             case P_EMAIL_CONFIRMED:
                 fields = new JSONArray();
-                fields.put("email_confirmed");
+                fields.put("emailConfirmed");
                 break;
             case P_BALANCE_COUNTERS:
                 fields = new JSONArray();
@@ -48,11 +48,11 @@ public class ProfileRequest extends ApiRequest {
                 fields = new JSONArray();
                 fields.put("likes");
                 fields.put("money");
-                fields.put("can_become_leader");
+                fields.put("canBecomeLeader");
                 fields.put("gifts");
                 fields.put("invisible");
                 fields.put("premium");
-                fields.put("show_ad");
+                fields.put("showAd");
                 fields.put("photo");
                 fields.put("photos");
                 break;
@@ -73,7 +73,7 @@ public class ProfileRequest extends ApiRequest {
 
     @Override
     public String getServiceName() {
-        return SERVICE_NAME;
+        return SERVICE;
     }
 
 }

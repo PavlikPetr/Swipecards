@@ -8,7 +8,7 @@ public class StandardMessageSendRequest extends ConfirmedApiRequest {
     public static final int MESSAGE_FILL_INTERESTS = 14;
 
 
-    public final static String SERVICE_NAME = "standardMessageSend";
+    public final static String SERVICE = "message.sendStandard";
     private int userId;
     private int messageId;
 
@@ -21,13 +21,13 @@ public class StandardMessageSendRequest extends ConfirmedApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         JSONObject request = new JSONObject();
-        request.put("messageid", messageId);
-        request.put("userid", userId);
+        request.put("messageId", messageId);
+        request.put("userId", userId);
         return request;
     }
 
     @Override
     public String getServiceName() {
-        return SERVICE_NAME;
+        return SERVICE;
     }
 }

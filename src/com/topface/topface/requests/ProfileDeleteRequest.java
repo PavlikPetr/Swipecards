@@ -5,12 +5,13 @@ import com.google.analytics.tracking.android.EasyTracker;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ProfileDelete extends ApiRequest {
+public class ProfileDeleteRequest extends ApiRequest {
+    private static final String SERVICE = "user.delete";
 
     private int reason;
     private String message;
 
-    public ProfileDelete(int reasonId, String userMessage, Context context) {
+    public ProfileDeleteRequest(int reasonId, String userMessage, Context context) {
         super(context);
         reason = reasonId;
         message = userMessage;
@@ -26,6 +27,6 @@ public class ProfileDelete extends ApiRequest {
 
     @Override
     public String getServiceName() {
-        return "profileDelete";
+        return SERVICE;
     }
 }

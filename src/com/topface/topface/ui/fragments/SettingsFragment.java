@@ -20,7 +20,6 @@ import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
-import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendMailNotificationsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -388,9 +387,9 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
         final String key = (String) buttonView.getTag();
 
-        String[] buttonInfo = key.split(Options.GENERAL_SEPARATOR);
+        String[] buttonInfo = key.split(Options.INNER_SEPARATOR);
         final Integer type = Integer.parseInt(buttonInfo[0]);
-        final boolean isMail = buttonInfo[1].equals(Options.GENERAL_MAIL_CONST);
+        final boolean isMail = buttonInfo[1].equals(Options.INNER_MAIL_CONST);
         final ProgressBar prs = hashNotifiersProgressBars.get(key);
 
         if (isMail) {

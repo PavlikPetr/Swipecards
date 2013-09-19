@@ -9,6 +9,7 @@ import com.topface.topface.RetryDialog;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.http.ConnectionManager;
@@ -71,7 +72,7 @@ public abstract class ApiRequest implements IApiRequest {
             RetryDialog retryDialog = new RetryDialog(context, this);
             if (handler != null) {
                 Message msg = new Message();
-                msg.obj = new ApiResponse(ApiResponse.ERRORS_PROCCESED, "App is offiline");
+                msg.obj = new ApiResponse(ErrorCodes.ERRORS_PROCCESED, "App is offiline");
                 handler.sendMessage(msg);
             }
             try {
@@ -278,7 +279,7 @@ public abstract class ApiRequest implements IApiRequest {
             response = readResponse();
         } else {
             //Если не верный, то конструируем соответсвующий ответ
-            response = constructApiResponse(IApiResponse.WRONG_RESPONSE, "Wrong http response code HTTP/" + responseCode);
+            response = constructApiResponse(ErrorCodes.WRONG_RESPONSE, "Wrong http response code HTTP/" + responseCode);
         }
 
         return response;
@@ -332,7 +333,7 @@ public abstract class ApiRequest implements IApiRequest {
         if (!TextUtils.isEmpty(rawResponse)) {
             response = new ApiResponse(rawResponse);
         } else {
-            response = constructApiResponse(IApiResponse.NULL_RESPONSE, "Null response");
+            response = constructApiResponse(ErrorCodes.NULL_RESPONSE, "Null response");
         }
         return response;
     }

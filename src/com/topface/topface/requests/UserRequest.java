@@ -9,18 +9,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class UserRequest extends ApiRequest {
-    private ArrayList<Integer> uids; // массив id пользователя в топфейсе
-    //private ArrayList<String> fields; // массив интересующих полей профиля
+    private static final String SERVICE = "user.getProfile";
+
+    private int userId; // массив id пользователя в топфейсе
     public Boolean visitor = true; // флаг определения текущего пользователя посетителем профилей запрошенных пользователей
 
     public UserRequest(int uid, Context context) {
         super(context);
-        ArrayList<Integer> data = new ArrayList<Integer>();
-        data.add(uid);
-        uids = data;
-        if (uids.size() < 1) {
-            throw new NullPointerException();
-        }
+        userId = uid;
         doNeedAlert(false);
 
     }
@@ -28,18 +24,18 @@ public class UserRequest extends ApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         return new JSONObject()
-                .put("uids", new JSONArray(uids))
+                .put("userId", userId)
                 .put("visitor", visitor);
     }
 
     @Override
     public String getServiceName() {
-        return "profiles";
+        return SERVICE;
     }
 
     @Override
     public void exec() {
         super.exec();
-        EasyTracker.getTracker().sendEvent("Profile", "LoadUser", "", (long) (uids != null ? uids.size() : 0));
+        EasyTracker.getTracker().sendEvent("Profile", "LoadUser", "", 1l);
     }
 }

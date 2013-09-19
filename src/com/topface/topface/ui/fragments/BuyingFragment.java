@@ -20,6 +20,7 @@ import com.topface.billing.BillingFragment;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
@@ -80,7 +81,7 @@ public class BuyingFragment extends BillingFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater,container,savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_buy, null);
         initViews(root);
         return root;
@@ -146,29 +147,30 @@ public class BuyingFragment extends BillingFragment {
         LinearLayout likesButtons = (LinearLayout) root.findViewById(R.id.fbLikes);
 
 
-        if (CacheProfile.getOptions().coins.isEmpty()) {
+        if (CacheProfile.getGooglePlayProducts().coins.isEmpty()) {
             root.findViewById(R.id.coins_title).setVisibility(View.GONE);
         } else {
             root.findViewById(R.id.coins_title).setVisibility(View.VISIBLE);
         }
 
-        if (CacheProfile.getOptions().likes.isEmpty()) {
+        if (CacheProfile.getGooglePlayProducts().likes.isEmpty()) {
             root.findViewById(R.id.likes_title).setVisibility(View.GONE);
         } else {
             root.findViewById(R.id.likes_title).setVisibility(View.VISIBLE);
         }
 
-        if (CacheProfile.getOptions().likes.isEmpty() && CacheProfile.getOptions().coins.isEmpty()) {
+        if (CacheProfile.getGooglePlayProducts().likes.isEmpty() && CacheProfile.getGooglePlayProducts().coins.isEmpty()) {
             root.findViewById(R.id.fbBuyingDisabled).setVisibility(View.VISIBLE);
         }
 
-        for (Options.BuyButton curButton : CacheProfile.getOptions().likes) {
-            RelativeLayout newButton = Options.setButton(likesButtons, curButton, getActivity(), new Options.BuyButtonClickListener() {
-                @Override
-                public void onClick(String id) {
-                    buyItem(id);
-                }
-            });
+        for (GooglePlayProducts.BuyButton curButton : CacheProfile.getGooglePlayProducts().likes) {
+            RelativeLayout newButton = GooglePlayProducts.setButton(likesButtons, curButton, getActivity(),
+                    new GooglePlayProducts.BuyButtonClickListener() {
+                        @Override
+                        public void onClick(String id) {
+                            buyItem(id);
+                        }
+                    });
             if (newButton != null) {
                 purchaseButtons.add(newButton);
             }
@@ -176,13 +178,14 @@ public class BuyingFragment extends BillingFragment {
 
 
         LinearLayout coinsButtons = (LinearLayout) root.findViewById(R.id.fbCoins);
-        for (Options.BuyButton curButton : CacheProfile.getOptions().coins) {
-            RelativeLayout newButton = Options.setButton(coinsButtons, curButton, getActivity(), new Options.BuyButtonClickListener() {
-                @Override
-                public void onClick(String id) {
-                    buyItem(id);
-                }
-            });
+        for (GooglePlayProducts.BuyButton curButton : CacheProfile.getGooglePlayProducts().coins) {
+            RelativeLayout newButton = GooglePlayProducts.setButton(coinsButtons, curButton, getActivity(),
+                    new GooglePlayProducts.BuyButtonClickListener() {
+                        @Override
+                        public void onClick(String id) {
+                            buyItem(id);
+                        }
+                    });
             if (newButton != null) {
                 purchaseButtons.add(newButton);
             }

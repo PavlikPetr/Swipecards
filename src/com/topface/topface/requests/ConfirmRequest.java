@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 public class ConfirmRequest extends ApiRequest {
 
-    private static final String SERVICE_NAME = "confirm";
+    private static final String SERVICE_NAME = "register.confirm";
     private static final String LOGIN_FIELD_NAME = "login";
     private static final String CODE_FIELD_NAME = "code";
     private String login;

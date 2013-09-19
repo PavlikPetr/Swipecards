@@ -22,15 +22,12 @@ public class User extends Profile {
         User user = new User();
 
         try {
-            JSONObject profiles = response.jsonResult.optJSONObject("profiles");
-            String profileId = Integer.toString(userId);
-
-            if (profiles != null && profiles.has(profileId)) {
-                JSONObject item = profiles.getJSONObject(profileId);
-
+            JSONObject item = response.getJsonResult();
+            if (item != null) {
                 parse(user, item);
                 user.platform = item.optString("platform");
-                user.last_visit = item.optInt("last_visit");
+                user.last_visit = item.optInt("lastVisit");
+                user.inBlackList = item.optBoolean("inBlacklist");
                 user.status = item.optString("status");
                 user.online = item.optBoolean("online");
                 user.mutual = item.optBoolean("mutual");
@@ -42,11 +39,9 @@ public class User extends Profile {
                 user.deleted = true;
                 user.uid = userId;
             }
-
         } catch (Exception e) {
             Debug.error("Wrong response parsing", e);
         }
-
         return user;
     }
 

@@ -9,7 +9,7 @@ public class CoordinatesRequest extends ApiRequest {
     public static final int COORDINATES_TYPE_SELF = 1;
     public static final int COORDINATES_TYPE_PLACE = 2;
     // Data
-    public static final String SERVICE_NAME = "coordinates";
+    public static final String SERVICE_NAME = "message.sendCoordinates";
     public int userid; // идентификатор пользователя, кому послали сообщение
     public double longitude; // долгота отправляемого местоположения -180,+180
     public double latitude; // широта отправляемого местоположения -90,+90
@@ -23,7 +23,7 @@ public class CoordinatesRequest extends ApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         return new JSONObject()
-                .put("receiverid", userid)
+                .put("receiverId", userid)
                 .put("longitude", longitude)
                 .put("latitude", latitude)
                 .put("type", type)

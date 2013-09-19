@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 public class ComplainRequest extends ApiRequest {
 
-    public static final String SERVICE_NAME = "complain";
+    public static final String SERVICE_NAME = "moderation.complain";
     public enum ClassNames {WALL_MSG, PHOTO, PRIVATE_MSG, USER, LEADER};
     public enum TypesNames {SWEARING, ERO, FAKE_USER, FAKE_DATA, FAKE_PHOTO, PORN, SPAM};
 
@@ -55,17 +55,17 @@ public class ComplainRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        JSONObject object = new JSONObject().put("targetid", userId)
+        JSONObject object = new JSONObject().put("targetId", userId)
                     .put("class", complainClass)
                     .put("type", complainType);
         if (description != null) {
             object.put("description", description);
         }
         if (photoId != null) {
-            object.put("photoid", photoId);
+            object.put("photoId", photoId);
         }
         if (feedId != null) {
-            object.put("feedid", feedId);
+            object.put("feedId", feedId);
         }
         return object;
     }

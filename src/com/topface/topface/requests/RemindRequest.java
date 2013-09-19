@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 public class RemindRequest extends ApiRequest {
 
-    private static final String SERVICE_NAME = "remind";
+    private static final String SERVICE_NAME = "register.resendConfirmation";
 
     public RemindRequest(Context context) {
         super(context);

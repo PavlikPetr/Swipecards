@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -507,8 +506,8 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
 
     protected RateController getRateController() {
         if (mRateController == null) {
-            mRateController = new RateController(getActivity());
-            mRateController.setOnRateControllerListener(getOnRateListener());
+            mRateController = new RateController(getActivity(), SendLikeRequest.Place.FROM_FEED);
+            mRateController.setOnRateControllerUiListener(getOnRateListener());
         }
         return mRateController;
     }

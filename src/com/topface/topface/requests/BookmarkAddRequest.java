@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 public class BookmarkAddRequest extends ConfirmedApiRequest {
     private int uid;
-    public static final String SERVICE_NAME = "bookmarkadd";
+    public static final String SERVICE_NAME = "bookmark.add";
 
     public BookmarkAddRequest(Context context, int userId) {
         super(context);
@@ -15,7 +15,7 @@ public class BookmarkAddRequest extends ConfirmedApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        return new JSONObject().put("userid", uid);
+        return new JSONObject().put("userId", uid);
     }
 
     @Override

@@ -5,7 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class SkipRateRequest extends ApiRequest {
-    public static final String SERVICE_NAME = "skipRate";
+    public static final String SERVICE = "search.skip";
     public int userid; // идентификатор пользователя для оценки
 
     public SkipRateRequest(Context context) {
@@ -15,12 +15,12 @@ public class SkipRateRequest extends ApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         return new JSONObject()
-                .put("userid", userid);
+                .put("userId", userid);
     }
 
     @Override
     public String getServiceName() {
-        return SERVICE_NAME;
+        return SERVICE;
     }
 
     @Override

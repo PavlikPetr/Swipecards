@@ -6,7 +6,7 @@ import com.topface.billing.amazon.AmazonQueue;
 import com.topface.billing.googleplay.GooglePlayV2Queue;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.Utils;
 
 public class BillingUtils {
@@ -21,13 +21,13 @@ public class BillingUtils {
         boolean isExcepted;
 
         switch (responseCode) {
-            case ApiResponse.INVALID_TRANSACTION:
-            case ApiResponse.INVALID_PRODUCT:
-            case ApiResponse.INCORRECT_VALUE:
-            case ApiResponse.INVALID_PURCHASE_TOKEN:
-            case ApiResponse.INVALID_FORMAT:
-            case ApiResponse.UNVERIFIED_SIGNATURE:
-            case ApiResponse.MISSING_REQUIRE_PARAMETER:
+            case ErrorCodes.INVALID_TRANSACTION:
+            case ErrorCodes.INVALID_PRODUCT:
+            case ErrorCodes.INCORRECT_VALUE:
+            case ErrorCodes.INVALID_PURCHASE_TOKEN:
+            case ErrorCodes.INVALID_FORMAT:
+            case ErrorCodes.UNVERIFIED_SIGNATURE:
+            case ErrorCodes.MISSING_REQUIRE_PARAMETER:
                 isExcepted = true;
                 break;
             default:
