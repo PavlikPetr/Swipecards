@@ -66,6 +66,7 @@ public class ErrorCodes {
     public static final int TOO_MANY_DAILY_MESSAGES = 51;
     public static final int ALREADY_AWARDED = 52;
     public static final int UNCONFIRMED_LOGIN = 53;
+    public static final int USER_DELETED = 54;
     // local
     public static final int NULL_RESPONSE = 100;
     public static final int WRONG_RESPONSE = 101;

@@ -368,11 +368,6 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void auth(final AuthRequest authRequest) {
-        if (DeleteAccountDialog.hasDeltedAccountToken(authRequest.getAuthToken())) {
-            restoreAccount(authRequest);
-            return;
-        }
-
         authRequest.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
@@ -390,26 +385,6 @@ public class AuthFragment extends BaseFragment {
             public void always(IApiResponse response) {
             }
         }).exec();
-    }
-
-    private void restoreAccount(final AuthRequest authRequest) {
-        new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.restore_of_account)
-                .setMessage(R.string.delete_account_will_be_restored_are_you_sure)
-                .setPositiveButton(R.string.restore, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        DeleteAccountDialog.removeDeletedAccountToken(authRequest.getAuthToken());
-                        auth(authRequest);
-                    }
-                })
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        showButtons();
-                    }
-                }).show();
     }
 
     private AuthRequest generateAuthRequest(AuthToken token) {
@@ -769,11 +744,6 @@ public class AuthFragment extends BaseFragment {
             }
             AuthToken.getInstance().saveToken("", login, password);
             AuthRequest authRequest = generateTopfaceAuthRequest(AuthToken.getInstance());
-
-            if (DeleteAccountDialog.hasDeltedAccountToken(authRequest.getAuthToken())) {
-                restoreAccount(authRequest);
-                return;
-            }
             authRequest.exec();
         }
     }

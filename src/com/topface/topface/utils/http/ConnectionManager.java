@@ -154,6 +154,9 @@ public class ConnectionManager {
         } else if (apiResponse.isCodeEqual(ErrorCodes.DETECT_FLOOD)) {
             //Если пользователь заблокирован за флуд, показываем соответсвующий экран
             showFloodActivity(apiRequest);
+        } else if (apiResponse.isCodeEqual(ErrorCodes.USER_DELETED)) {
+            //Если пользователь удален, показываем соответсвующий экран
+            showRestoreAccountActivity(apiRequest);
         } else if (apiResponse.isCodeEqual(ErrorCodes.MAINTENANCE)) {
             //Если на сервере ведуться работы, то показыаем диалог повтора
             needResend = showRetryDialog(apiRequest);
@@ -247,6 +250,13 @@ public class ConnectionManager {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(BanActivity.INTENT_TYPE, BanActivity.TYPE_BAN);
         intent.putExtra(BanActivity.BANNING_TEXT_INTENT, apiResponse.getErrorMessage());
+        apiRequest.getContext().startActivity(intent);
+    }
+
+    private void showRestoreAccountActivity(IApiRequest apiRequest) {
+        Intent intent = new Intent(apiRequest.getContext(), BanActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(BanActivity.INTENT_TYPE, BanActivity.TYPE_RESTORE);
         apiRequest.getContext().startActivity(intent);
     }
 
