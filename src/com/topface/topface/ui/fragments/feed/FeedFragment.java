@@ -346,6 +346,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 case R.id.delete_dialogs:
                     onDeleteDialogItems(getListAdapter().getSelectedUsersIds(), getListAdapter().getSelectedItems());
                     break;
+                case R.id.delete_visitors:
+                    onDeleteVisitors(getListAdapter().getSelectedFeedIds(), getListAdapter().getSelectedItems());
+                    break;
                 default:
                     result = false;
             }
@@ -411,7 +414,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             @Override
             public void success(IApiResponse response) {
                 if (isAdded()) {
-                    mLockView.setVisibility(View.GONE);
                     getListAdapter().removeItems(items);
                 }
             }
@@ -433,7 +435,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         request.callback(new SimpleApiHandler() {
             @Override
             public void success(IApiResponse response) {
-                mLockView.setVisibility(View.GONE);
                 getListAdapter().removeItems(items);
             }
 
@@ -452,21 +453,52 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 .callback(new ApiHandler() {
                     @Override
                     public void success(IApiResponse response) {
-                        mLockView.setVisibility(View.GONE);
                         getListAdapter().removeItems(items);
                     }
 
                     @Override
                     public void fail(int codeError, IApiResponse response) {
                         Debug.log(response.toString());
-                        mLockView.setVisibility(View.GONE);
                         if (codeError != ErrorCodes.PREMIUM_ACCESS_ONLY) {
                             Utils.showErrorMessage(getActivity());
+                        }
+                    }
+
+                    @Override
+                    public void always(IApiResponse response) {
+                        super.always(response);
+                        if (mLockView != null) {
+                            mLockView.setVisibility(View.GONE);
                         }
                     }
                 }).exec();
     }
 
+    private void onDeleteVisitors(List<String> selectedIds, final List<T> selectedItems) {
+        new DeleteVisitorsRequest(selectedIds, getActivity())
+                .callback(new ApiHandler() {
+                    @Override
+                    public void success(IApiResponse response) {
+                        getListAdapter().removeItems(selectedItems);
+                    }
+
+                    @Override
+                    public void fail(int codeError, IApiResponse response) {
+                        Debug.log(response.toString());
+                        if (codeError != ErrorCodes.PREMIUM_ACCESS_ONLY) {
+                            Utils.showErrorMessage(getActivity());
+                        }
+                    }
+
+                    @Override
+                    public void always(IApiResponse response) {
+                        super.always(response);
+                        if (mLockView != null) {
+                            mLockView.setVisibility(View.GONE);
+                        }
+                    }
+                }).exec();
+    }
 
     protected T getItem(int position) {
         return getListAdapter().getItem(position);

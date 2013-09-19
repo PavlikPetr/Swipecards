@@ -29,8 +29,12 @@ public abstract class DeleteFeedsRequest extends ApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         JSONObject data = new JSONObject();
-        data.put("items", new JSONArray(mIds));
+        data.put(getKeyForItems(), new JSONArray(mIds));
         return data;
+    }
+
+    protected String getKeyForItems() {
+        return "items";
     }
 
     @Override
