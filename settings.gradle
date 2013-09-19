@@ -1,4 +1,3 @@
-include ':android'
 //Topface sub projects
 include ':libs:IllustratedTextView'
 //Third part libs

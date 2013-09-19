@@ -17,6 +17,7 @@ repositories {
 }
 
 apply plugin: 'android'
+apply plugin: 'idea'
 
 dependencies {
 	//Android Support libs
@@ -54,6 +55,20 @@ android {
     defaultConfig {
         minSdkVersion 7
         targetSdkVersion 17
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("misc/topface-apk.key")
+            storePassword "Sonetica2012"
+            keyAlias "topface"
+            keyPassword "Sonetica2012"
+        }
+    }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
     }
 }
 
@@ -171,7 +186,9 @@ project(':libs:LifeStreetMediaSDK') {
 
 //Стандартные настройки подпроектов
 subprojects {
-    buildDir "../../build/projects/$project.name"
+    //До лучших времен закоментировал эту строку, пока Idea отказывается делать такие штуки, как папка сборки вне пределов проекта
+    //buildDir "../../build/projects/$project.name"
+    apply plugin: 'idea'
     android {
         compileSdkVersion defaultCompileSdkVersion
         buildToolsVersion defaultBuildToolsVersion
