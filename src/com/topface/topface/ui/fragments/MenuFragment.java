@@ -49,6 +49,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
     private TextView mTvNotifyMutual;
     private TextView mTvNotifyDialogs;
     private TextView mTvNotifyVisitors;
+    private TextView mTvNotifyAdmirations;
 
     private ImageViewRemote mMenuAvatar;
     private ServicesTextView mCoins;
@@ -176,7 +177,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         mTvNotifyDialogs = (TextView) rootLayout.findViewById(R.id.tvNotifyDialogs);
         mTvNotifyFans = (TextView) rootLayout.findViewById(R.id.tvNotifyFans);
         mTvNotifyVisitors = (TextView) rootLayout.findViewById(R.id.tvNotifyVisitors);
-
+        mTvNotifyAdmirations = (TextView) rootLayout.findViewById(R.id.tvNotifyAdmirations);
         mHardwareAccelerated = isHardwareAccelerated(rootLayout);
 
         return rootLayout;
@@ -274,6 +275,13 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             mTvNotifyFans.setVisibility(View.VISIBLE);
         } else {
             mTvNotifyFans.setVisibility(View.GONE);
+        }
+
+        if (CacheProfile.unread_admirations > 0) {
+            mTvNotifyAdmirations.setText(Integer.toString(CacheProfile.unread_admirations));
+            mTvNotifyAdmirations.setVisibility(View.VISIBLE);
+        } else {
+            mTvNotifyAdmirations.setVisibility(View.GONE);
         }
     }
 

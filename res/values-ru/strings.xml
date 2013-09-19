@@ -707,6 +707,13 @@
         <item quantity="other">У вас %d гостей</item>
     </plurals>
 
+    <plurals name="popup_vip_admirations">
+        <item quantity="few">You have %d admirations</item>
+        <item quantity="many">You have %d admirations</item>
+        <item quantity="other">You have %d admirations</item>
+        <item quantity="one">You have %d admiration</item>
+    </plurals>
+
     <string name="general_attention">Внимание!</string>
     <string name="general_delete_messages">Удалить сообщения</string>
 
@@ -727,4 +734,11 @@
     <string name="delete_visitors">Удалить гостей</string>
     <string name="delete_admirations">Удалить восхищения</string>
     <string name="general_admirations">Восхищения</string>
+
+    <plurals name="you_was_admirated">
+        <item quantity="one">Вам отправил восхищение %d человек</item>
+        <item quantity="many">Вам отправили восхищение %d человек</item>
+        <item quantity="few">Вам отправили восхищение %d человека</item>
+        <item quantity="other">Вам отправили восхищение %d человек</item>
+    </plurals>
 </resources>

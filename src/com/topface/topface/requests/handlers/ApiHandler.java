@@ -100,7 +100,8 @@ abstract public class ApiHandler extends Handler {
                                 counters.optInt("unread_symphaties"),
                                 counters.optInt("unread_messages"),
                                 counters.optInt("unread_visitors"),
-                                counters.optInt("unread_fans")
+                                counters.optInt("unread_fans"),
+                                counters.optInt("unread_admirations")
                         );
             }
         } catch (Exception e) {
