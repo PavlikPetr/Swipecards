@@ -457,8 +457,11 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                     Cursor mCursor = getActivity().getContentResolver().query(uri, null, null, null, null);
 
                     if (mCursor.moveToFirst()) {
-                        ringtoneName = mCursor.getString(mCursor.getColumnIndex("title"));
+                        if (mCursor.getColumnIndex("title") >= 0) {
+                            ringtoneName = mCursor.getString(mCursor.getColumnIndex("title"));
+                        }
                     }
+                    mCursor.close();
                 }
                 mSettings.setSetting(Settings.NOTIFICATION_MELODY, ringtoneName);
                 melodyName.setText(ringtoneName);
