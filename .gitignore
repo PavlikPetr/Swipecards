@@ -1,11 +1,16 @@
-
+build
 /bin
 /gen
 /out
 /.idea
 /.settings
+/.gradle
+/build
 *.iml
 .project
 .classpath
 localist.db
 *.DS_Store
+local.properties
+*.swp
+*~

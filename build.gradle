@@ -1,0 +1,196 @@
+//Константы для сборки приложения. В подмодулях следует использовать именно их, а не хардкодить значения
+def defaultCompileSdkVersion = "Google Inc.:Google APIs:17"
+def defaultBuildToolsVersion = "18.1"
+def supportLibrary = "com.android.support:support-v4:18.0.0"
+
+buildscript {
+     repositories {
+         mavenCentral()
+     }
+     dependencies {
+         classpath 'com.android.tools.build:gradle:0.5.+'
+     }
+}
+
+repositories {
+    mavenCentral()
+}
+
+apply plugin: 'android'
+apply plugin: 'idea'
+
+dependencies {
+	//Android Support libs
+	compile supportLibrary
+	compile 'com.android.support:appcompat-v7:18.0.0'
+
+    //All jar libs
+    compile fileTree(dir: 'libs', include: '*.jar', exclude: 'GoogleAdMobAdsSdk.jar')
+
+    //Topface sub libs
+    compile project(':libs:IllustratedTextView')
+
+    //Third party libs
+    compile 'ch.acra:acra:4.5.0'
+    compile project(':libs:Android-ViewPagerIndicator')
+    compile project(':libs:PullToRefresh')
+    compile project(':libs:PhotoView')
+    compile project(':libs:UniversalImageLoader')
+
+    //Social networks SDK
+    compile project(':libs:Facebook')
+    compile project(':libs:odnoklassniki')
+
+    //Ad networks SDK
+    compile project(':libs:MoPub')
+    compile project(':libs:AdLabSDK')
+    compile project(':libs:LifeStreetMediaSDK')
+
+}
+
+android {
+    compileSdkVersion defaultCompileSdkVersion
+    buildToolsVersion defaultBuildToolsVersion
+
+    defaultConfig {
+        minSdkVersion 7
+        targetSdkVersion 17
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("misc/topface-apk.key")
+            storePassword "Sonetica2012"
+            keyAlias "topface"
+            keyPassword "Sonetica2012"
+        }
+    }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
+}
+
+project(':libs:IllustratedTextView') {
+    apply plugin: 'android-library'
+    android.sourceSets.main {
+        manifest.srcFile 'AndroidManifest.xml'
+        java.srcDirs = ['src']
+        res.srcDirs = ['res']
+	}
+}
+
+project(':libs:Android-ViewPagerIndicator') {
+    apply plugin: 'android-library'
+    dependencies {
+	    compile supportLibrary
+	    compile project(':libs:IllustratedTextView')
+    }
+    android.sourceSets.main {
+        manifest.srcFile 'library/AndroidManifest.xml'
+        java.srcDirs = ['library/src']
+        res.srcDirs = ['library/res']
+    }
+}
+
+project(':libs:PullToRefresh') {
+    apply plugin: 'android-library'
+    android.sourceSets.main {
+        manifest.srcFile 'library/AndroidManifest.xml'
+        java.srcDirs = ['library/src']
+        res.srcDirs = ['library/res']
+    }
+
+}
+
+project(':libs:PhotoView') {
+    apply plugin: 'android-library'
+    android.sourceSets.main {
+        manifest.srcFile 'library/AndroidManifest.xml'
+        java.srcDirs = ['library/src']
+        res.srcDirs = ['library/res']
+    }
+}
+
+project(':libs:UniversalImageLoader') {
+    apply plugin: 'android-library'
+    android.sourceSets.main {
+        manifest.srcFile 'library/AndroidManifest.xml'
+        java.srcDirs = ['library/src']
+        res.srcDirs = ['library/res']
+    }
+}
+
+//Social networks 
+project(':libs:Facebook') {
+    apply plugin: 'android-library'
+    android.sourceSets.main {
+        manifest.srcFile 'facebook/AndroidManifest.xml'
+        java.srcDirs = ['facebook/src']
+        res.srcDirs = ['facebook/res']
+	}
+}
+
+project(':libs:odnoklassniki') {
+    apply plugin: 'android-library'
+    android.sourceSets.main {
+        manifest.srcFile 'AndroidManifest.xml'
+        java.srcDirs = ['src']
+        res.srcDirs = ['res']
+	}
+}
+
+//Ad networks
+project(':libs:MoPub') {
+    apply plugin: 'android-library'
+    dependencies {
+    	compile supportLibrary
+    	compile files('../GoogleAdMobAdsSdk.jar')
+        compile fileTree(dir: '../mopub-libs', include: '*.jar')
+    }
+    android.sourceSets.main {
+        manifest.srcFile 'mopub-sdk/AndroidManifest.xml'
+        java.srcDirs = ['mopub-sdk/src/main/java']
+        res.srcDirs = ['mopub-sdk/res']
+	}
+}
+
+
+project(':libs:AdLabSDK') {
+    apply plugin: 'android-library'
+    dependencies {
+    	compile files('libs/apache-mime4j-0.6.jar')
+        compile files('libs/commons-io-1.4.jar')
+    	compile files('libs/httpmime-4.0.jar')
+    }
+    android.sourceSets.main {
+        manifest.srcFile 'AndroidManifest.xml'
+        java.srcDirs = ['src']
+        res.srcDirs = ['res']
+    }
+}
+
+
+project(':libs:LifeStreetMediaSDK') {
+    apply plugin: 'android-library'
+    dependencies {
+    	compile supportLibrary
+    }
+    android.sourceSets.main {
+        manifest.srcFile 'AndroidManifest.xml'
+        java.srcDirs = ['sdk', '3rdparty/OpenUDID']
+        res.srcDirs = ['res']
+    }
+}
+
+//Стандартные настройки подпроектов
+subprojects {
+    //До лучших времен закоментировал эту строку, пока Idea отказывается делать такие штуки, как папка сборки вне пределов проекта
+    //buildDir "../../build/projects/$project.name"
+    apply plugin: 'idea'
+    android {
+        compileSdkVersion defaultCompileSdkVersion
+        buildToolsVersion defaultBuildToolsVersion
+    }
+}
