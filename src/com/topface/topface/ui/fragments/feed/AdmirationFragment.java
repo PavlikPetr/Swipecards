@@ -40,7 +40,7 @@ public class AdmirationFragment extends LikesFragment{
         } else {
             if (CacheProfile.unread_admirations > 0) {
                 ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(1);
-                String title = Utils.getQuantityString(R.plurals.you_was_admirated, CacheProfile.unread_admirations, CacheProfile.unread_admirations);
+                String title = Utils.getQuantityString(R.plurals.popup_vip_admirations, CacheProfile.unread_admirations, CacheProfile.unread_admirations);
                 ((TextView) inflated.findViewById(R.id.tvTitle)).setText(title);
                 inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
                     @Override

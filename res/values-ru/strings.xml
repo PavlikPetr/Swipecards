@@ -735,7 +735,7 @@
     <string name="delete_admirations">Удалить восхищения</string>
     <string name="general_admirations">Восхищения</string>
 
-    <plurals name="you_was_admirated">
+    <plurals name="popup_vip_admirations">
         <item quantity="one">Вам отправил восхищение %d человек</item>
         <item quantity="many">Вам отправили восхищение %d человек</item>
         <item quantity="few">Вам отправили восхищение %d человека</item>

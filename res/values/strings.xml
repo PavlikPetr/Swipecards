@@ -524,14 +524,10 @@
         <item quantity="one">Received %d message with express delivery</item>
     </plurals>
     <plurals name="popup_vip_visitors">
-        <item quantity="few">You have %d visitors</item>
-        <item quantity="many">You have %d visitors</item>
         <item quantity="other">You have %d visitors</item>
         <item quantity="one">You have %d visitor</item>
     </plurals>
     <plurals name="popup_vip_admirations">
-        <item quantity="few">You have %d admirations</item>
-        <item quantity="many">You have %d admirations</item>
         <item quantity="other">You have %d admirations</item>
         <item quantity="one">You have %d admiration</item>
     </plurals>
