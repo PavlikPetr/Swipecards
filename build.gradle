@@ -147,7 +147,6 @@ project(':libs:MoPub') {
     dependencies {
     	compile supportLibrary
     	compile files('../GoogleAdMobAdsSdk.jar')
-        compile fileTree(dir: '../mopub-libs', include: '*.jar')
     }
     android.sourceSets.main {
         manifest.srcFile 'mopub-sdk/AndroidManifest.xml'
@@ -194,3 +193,4 @@ subprojects {
         buildToolsVersion defaultBuildToolsVersion
     }
 }
+
