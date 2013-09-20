@@ -77,7 +77,7 @@ public class FeedRequest extends ApiRequest {
                 service = "bookmark.getList";
                 break;
             case ADMIRATIONS:
-                service = "admirations.getList";
+                service = "admiration.getList";
                 break;
         }
         return service;
