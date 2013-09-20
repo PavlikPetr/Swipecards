@@ -310,7 +310,8 @@ public class GCMUtils {
                     countersJson.optInt("unread_sympaties"),
                     countersJson.optInt("unread_messages"),
                     countersJson.optInt("unread_visitors"),
-                    countersJson.optInt("unread_fans"));
+                    countersJson.optInt("unread_fans"),
+                    countersJson.optInt("unread_admirations"));
         } catch (JSONException e) {
             Debug.error(e);
         }

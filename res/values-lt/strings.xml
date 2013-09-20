@@ -550,10 +550,4 @@
     <string name="settings_feedback_transaction_number_hint">Įveskite užsakymo numerį</string>
     <string name="youve_earned">Jūs uždirbote %s</string>
     <string name="like_topface">Jums patinka Topface?</string>
-    <string name="photo_is_uploading">Fotografija įkraunama</string>
-    <plurals name="selected">
-        <item quantity="few">%d išrinkta</item>
-        <item quantity="other">%d išrinkta</item>
-        <item quantity="one">%d išrinktas</item>
-    </plurals>
 </resources>

@@ -16,6 +16,7 @@ import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
@@ -68,6 +69,7 @@ public class Options extends AbstractData {
 
     public static final String PREMIUM_MESSAGES_POPUP_SHOW_TIME = "premium_messages_popup_last_show";
     public static final String PREMIUM_VISITORS_POPUP_SHOW_TIME = "premium_visitors_popup_last_show";
+    public static final String PREMIUM_ADMIRATION_POPUP_SHOW_TIME = "premium_admirations_popup_last_show";
     /**
      * Настройки для каждого типа страниц
      */
@@ -97,6 +99,7 @@ public class Options extends AbstractData {
     public Closing closing = new Closing();
     public PremiumAirEntity premium_messages;
     public PremiumAirEntity premium_visitors;
+    public PremiumAirEntity premium_admirations;
     public GetJar getJar;
     public String gagTypeBanner = BannerBlock.BANNER_ADMOB;
     public String gagTypeFullscreen = BannerBlock.BANNER_NONE;
@@ -139,14 +142,21 @@ public class Options extends AbstractData {
                 options.premium_messages = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_MESSAGES);
             }
 
-            if (response.jsonResult.has("visitorsPopup")) {
+            if (response.jsonResult.has("visitors_popup")) {
                 options.premium_visitors = new PremiumAirEntity(
-                        response.jsonResult.optJSONObject("visitorsPopup"), PremiumAirEntity.AIR_GUESTS
+                        response.jsonResult.optJSONObject("visitors_popup"), PremiumAirEntity.AIR_VISITORS
                 );
             } else {
-                options.premium_visitors = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_GUESTS);
+                options.premium_visitors = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_VISITORS);
             }
 
+            if (response.jsonResult.has("admiration_popup")) {
+                options.premium_admirations = new PremiumAirEntity(
+                        response.jsonResult.optJSONObject("admiration_popup"), PremiumAirEntity.AIR_ADMIRATIONS
+                );
+            } else {
+                options.premium_admirations = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_ADMIRATIONS);
+            }
 
             if (response.jsonResult.has("links")) {
                 JSONObject links = response.jsonResult.optJSONObject("links");
@@ -168,10 +178,8 @@ public class Options extends AbstractData {
             JSONObject getJar = response.jsonResult.optJSONObject("getjar");
             options.getJar = new GetJar(getJar.optString("id"), getJar.optString("name"), getJar.optLong("price"));
 
-            options.gagTypeBanner = response.jsonResult.optString("gagTypeBanner", BannerBlock.BANNER_ADMOB);
-            options.gagTypeFullscreen = response.jsonResult.optString("gagTypeFullscreen", BannerBlock.BANNER_NONE);
-
-            //TODO need protocol: premiumShowAd, minVersion
+            options.gagTypeBanner = response.jsonResult.optString("gag_type_banner", BannerBlock.BANNER_ADMOB);
+            options.gagTypeFullscreen = response.jsonResult.optString("gag_type_fullscreen", BannerBlock.BANNER_NONE);
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
         }
@@ -274,8 +282,10 @@ public class Options extends AbstractData {
          */
         private int mTimeout;
 
-        public static int AIR_MESSAGES = 0;
-        public static int AIR_GUESTS = 1;
+        public static final int AIR_NONE = 0;
+        public static final int AIR_MESSAGES = 1;
+        public static final int AIR_VISITORS = 2;
+        public static final int AIR_ADMIRATIONS = 3;
 
         public PremiumAirEntity(JSONObject premiumMessages, int airType) {
             this.airType = airType;
@@ -326,8 +336,16 @@ public class Options extends AbstractData {
         }
 
         public String getPrefsConstant() {
-            return airType == AIR_MESSAGES ? PREMIUM_MESSAGES_POPUP_SHOW_TIME :
-                    PREMIUM_VISITORS_POPUP_SHOW_TIME;
+            switch (airType) {
+                case AIR_MESSAGES:
+                    return PREMIUM_MESSAGES_POPUP_SHOW_TIME;
+                case AIR_VISITORS:
+                    return PREMIUM_VISITORS_POPUP_SHOW_TIME;
+                case AIR_ADMIRATIONS:
+                    return PREMIUM_ADMIRATION_POPUP_SHOW_TIME;
+            }
+
+            return PREMIUM_MESSAGES_POPUP_SHOW_TIME;
         }
 
         private long getLashShowTime() {
@@ -335,7 +353,6 @@ public class Options extends AbstractData {
                     .getLong(getPrefsConstant(), 0);
         }
     }
-
 
 
 

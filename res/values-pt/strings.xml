@@ -516,5 +516,4 @@
     <string name="settings_feedback_transaction_number_hint">Digite o número de ordem</string>
     <string name="youve_earned">Você ganhou %s</string>
     <string name="like_topface">Você gosta de Topface?</string>
-    <string name="photo_is_uploading">A foto está a carregar-se</string>
 </resources>

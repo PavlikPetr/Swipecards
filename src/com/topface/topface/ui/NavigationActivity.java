@@ -28,6 +28,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
 import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
@@ -414,6 +415,9 @@ public class NavigationActivity extends BaseFragmentActivity {
 
     public void setMenuEnabled(boolean enabled) {
         menuEnabled = enabled;
+//        if (mSlidingMenu != null) {
+//            mSlidingMenu.setSlidingEnabled(enabled);
+//        }
     }
 
     @Override
@@ -532,11 +536,14 @@ public class NavigationActivity extends BaseFragmentActivity {
                 if (!MutualClosingFragment.usersProcessed || !LikesClosingFragment.usersProcessed) {
                     onClosings();
                 }
+            } else {
+                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(DatingFragment.CLOSINGS_FILTER));
             }
         }
     }
 
     public void onClosings() {
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(DatingFragment.CLOSINGS_FILTER));
         if (CacheProfile.unread_mutual == 0) {
             MutualClosingFragment.usersProcessed = true;
         }

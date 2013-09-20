@@ -99,7 +99,7 @@ public class ServicesTextView extends View {
 
             if (imageId != 0) {
                 mImageBitmap = BitmapFactory.decodeResource(getResources(), imageId);
-                mImageBitmap = Bitmap.createScaledBitmap(mImageBitmap, dstWidth, (int) (dstHeight / 1.5), false);
+//                mImageBitmap = Bitmap.createScaledBitmap(mImageBitmap, dstWidth, (int) (dstHeight / 1.5), false);
             }
         }
 

@@ -33,7 +33,7 @@ import java.util.List;
 public class LikesFragment extends FeedFragment<FeedLike> {
 
     private RateController mRateController;
-    private View mEmptyFeedView;
+    protected View mEmptyFeedView;
 
     @Override
     protected void init() {

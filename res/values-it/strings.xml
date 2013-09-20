@@ -532,8 +532,6 @@
     <string name="settings_feedback_transaction_number">Numero dell’ordine</string>
     <string name="settings_feedback_transaction_link">Dove posso trovare numero dell’ordine?</string>
     <string name="general_logout_error">Purtroppo il logout non è stato effettuato</string>
-    <string name="auth_btn_ok">Accedi tramite Odnoklassniki</string>
-    <string name="other_auth">Accedi tramite altri sistemi</string>
     <string name="settings_feedback_transaction_number_hint">Inserisci il numero dell’ordine</string>
     <string name="youve_earned">Hai guadagnato %s</string>
     <string name="like_topface">Ti piace Topface?</string>

@@ -98,18 +98,20 @@ abstract public class ApiHandler extends Handler {
             JSONObject unread = response.unread;
             JSONObject balance = response.balance;
             String method = response.method;
-            CountersManager manager = CountersManager.getInstance(App.getContext());
             if (unread != null) {
-                manager.setMethod(method).setEntitiesCounters(
-                        unread.optInt("likes"),
-                        unread.optInt("mutual"),
-                        unread.optInt("dialogs"),
-                        unread.optInt("visitors"),
-                        unread.optInt("fans")
-                );
+                CountersManager.getInstance(App.getContext())
+                        .setMethod(method)
+                        .setEntitiesCounters(
+                                unread.optInt("unread_likes"),
+                                unread.optInt("unread_symphaties"),
+                                unread.optInt("unread_messages"),
+                                unread.optInt("unread_visitors"),
+                                unread.optInt("unread_fans"),
+                                unread.optInt("unread_admirations")
+                        );
             }
             if (balance != null) {
-                manager.setMethod(method).setBalanceCounters(
+                CountersManager.getInstance(App.getContext()).setMethod(method).setBalanceCounters(
                         balance.optInt("likes"),
                         balance.optInt("money")
                 );

@@ -46,6 +46,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     public static final int SEARCH_LIMIT = 30;
     public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 2;
+    public static final String CLOSINGS_FILTER = "com.topface.topface.CLOSINGS";
 
     private TextView mResourcesLikes;
     private TextView mResourcesMoney;
@@ -94,6 +95,15 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private BroadcastReceiver mProfileReceiver;
     private boolean mNeedMore;
     private int mLoadedCount;
+
+    private boolean mCanShowPromo;
+    private BroadcastReceiver closingsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mCanShowPromo = true;
+            showPromoDialog();
+        }
+    };
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -144,7 +154,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         SharedPreferences preferences = getActivity().getSharedPreferences(
                 Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         mNovice = Novice.getInstance(preferences);
-        showPromoDialog();
+//        showPromoDialog();
     }
 
     @Override
@@ -157,7 +167,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         initActionBar();
         initEmptySearchDialog(root, mSettingsListener);
         initImageSwitcher(root);
-
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(closingsReceiver, new IntentFilter(CLOSINGS_FILTER));
         return root;
     }
 
@@ -169,6 +179,18 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         setHighRatePrice();
         setActionBarTitles(getTitle(), getSubtitle());
+        updateResources();
+        refreshActionBarTitles();
+        if (mCanShowPromo) {
+            showPromoDialog();
+            mCanShowPromo = false;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(closingsReceiver);
     }
 
     @Override

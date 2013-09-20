@@ -13,6 +13,7 @@ public class CountersManager {
     private static int visitorsCounter;
     private static int dialogsCounter;
     private static int fansCounter;
+    private static int admirationsCounter;
 
     private Context mContext;
 
@@ -29,6 +30,7 @@ public class CountersManager {
     public final static int VISITORS = 2;
     public final static int DIALOGS = 3;
     public final static int FANS = 4;
+    public final static int ADMIRATIONS = 5;
 
     private static String lastRequestMethod;
 
@@ -48,8 +50,72 @@ public class CountersManager {
         visitorsCounter = CacheProfile.unread_visitors;
         dialogsCounter = CacheProfile.unread_messages;
         fansCounter = CacheProfile.unread_fans;
+        admirationsCounter = CacheProfile.unread_admirations;
     }
 
+    @SuppressWarnings("UnusedDeclaration")
+    public void incrementCounter(int type) {
+        switch (type) {
+            case LIKES:
+                likesCounter++;
+                break;
+            case SYMPATHY:
+                sympathyCounter++;
+                break;
+            case VISITORS:
+                visitorsCounter++;
+                break;
+            case DIALOGS:
+                dialogsCounter++;
+                break;
+            case FANS:
+                fansCounter++;
+                break;
+            case ADMIRATIONS:
+                admirationsCounter++;
+                break;
+        }
+        commitCounters();
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void decrementCounter(int type) {
+        switch (type) {
+            case LIKES:
+                if (likesCounter > 0) {
+                    likesCounter--;
+                }
+                break;
+            case SYMPATHY:
+                if (sympathyCounter > 0) {
+                    sympathyCounter--;
+                }
+                break;
+            case VISITORS:
+                if (visitorsCounter > 0) {
+                    visitorsCounter--;
+                }
+                break;
+            case DIALOGS:
+                if (dialogsCounter > 0) {
+                    dialogsCounter--;
+                }
+                break;
+            case FANS:
+                if (fansCounter > 0) {
+                    fansCounter--;
+                }
+                break;
+            case ADMIRATIONS:
+                if (admirationsCounter > 0) {
+                    admirationsCounter--;
+                }
+                break;
+        }
+        commitCounters();
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
     public void setCounter(int type, int value, boolean doNeedUpdate) {
         switch (type) {
             case LIKES:
@@ -72,15 +138,20 @@ public class CountersManager {
                 fansCounter = value;
                 commitCounters();
                 break;
+            case ADMIRATIONS:
+                admirationsCounter = value;
+                commitCounters();
+                break;
         }
     }
 
-    public void setEntitiesCounters(int likes, int mutual, int dialogs, int visitors, int fans) {
-        CountersManager.likesCounter = likes;
-        CountersManager.sympathyCounter = mutual;
-        CountersManager.dialogsCounter = dialogs;
-        CountersManager.visitorsCounter = visitors;
-        CountersManager.fansCounter = fans;
+    public void setEntitiesCounters(int likesCounter, int sympathyCounter, int dialogsCounter, int visitorsCounter, int fansCounter, int admirationsCounter) {
+        CountersManager.likesCounter = likesCounter;
+        CountersManager.sympathyCounter = sympathyCounter;
+        CountersManager.dialogsCounter = dialogsCounter;
+        CountersManager.visitorsCounter = visitorsCounter;
+        CountersManager.fansCounter = fansCounter;
+        CountersManager.admirationsCounter = admirationsCounter;
         commitCounters();
     }
 
@@ -102,6 +173,8 @@ public class CountersManager {
                 return visitorsCounter;
             case FANS:
                 return fansCounter;
+            case ADMIRATIONS:
+                return admirationsCounter;
         }
         return -1;
     }
@@ -116,7 +189,8 @@ public class CountersManager {
                 dialogsCounter != CacheProfile.unread_messages ||
                 sympathyCounter != CacheProfile.unread_mutual ||
                 visitorsCounter != CacheProfile.unread_visitors ||
-                fansCounter != CacheProfile.unread_fans) {
+                fansCounter != CacheProfile.unread_fans ||
+                admirationsCounter != CacheProfile.unread_admirations) {
             if (CacheProfile.unread_likes < likesCounter) {
                 LikesClosingFragment.usersProcessed = false;
             }
@@ -125,6 +199,7 @@ public class CountersManager {
             CacheProfile.unread_mutual = sympathyCounter;
             CacheProfile.unread_visitors = visitorsCounter;
             CacheProfile.unread_fans = fansCounter;
+            CacheProfile.unread_admirations = admirationsCounter;
             updateUICounters();
         }
     }

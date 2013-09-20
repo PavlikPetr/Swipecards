@@ -17,7 +17,7 @@ public class FeedRequest extends ApiRequest {
     //private boolean leave; //Оставить сообщения не прочитанными
 
     public static enum FeedService {
-        DIALOGS, LIKES, MUTUAL, VISITORS, BLACK_LIST, BOOKMARKS, FANS
+        DIALOGS, LIKES, MUTUAL, VISITORS, BLACK_LIST, BOOKMARKS, FANS, ADMIRATIONS
     }
 
     public FeedRequest(FeedService service, Context context) {
@@ -60,7 +60,8 @@ public class FeedRequest extends ApiRequest {
                 service = "dialog.getList";
                 break;
             case LIKES:
-                service = "like.getList";
+                service = "likes.getList";
+                service = "feedLikes";
                 break;
             case MUTUAL:
                 service = "mutual.getList";
@@ -74,6 +75,9 @@ public class FeedRequest extends ApiRequest {
             case FANS:
             case BOOKMARKS:
                 service = "bookmark.getList";
+                break;
+            case ADMIRATIONS:
+                service = "feedAdmirations";
                 break;
         }
         return service;

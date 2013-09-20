@@ -547,10 +547,4 @@
     <string name="settings_feedback_transaction_number_hint">Sipariş numarasına girin</string>
     <string name="youve_earned">Kazancınız %s</string>
     <string name="like_topface">Topface’yi beğeniyor musunuz?</string>
-    <string name="photo_is_uploading">Fotoğraf yükleniyor</string>
-    <plurals name="selected">
-        <item quantity="zero">%d seçilmiş</item>
-        <item quantity="other">%d seçilmiş</item>
-        <item quantity="one">%d seçilmiş</item>
-    </plurals>
 </resources>
