@@ -524,12 +524,10 @@
         <item quantity="one">Received %d message with express delivery</item>
     </plurals>
     <plurals name="popup_vip_visitors">
+        <item quantity="few">You have %d visitors</item>
+        <item quantity="many">You have %d visitors</item>
         <item quantity="other">You have %d visitors</item>
         <item quantity="one">You have %d visitor</item>
-    </plurals>
-    <plurals name="popup_vip_admirations">
-        <item quantity="other">You have %d admirations</item>
-        <item quantity="one">You have %d admiration</item>
     </plurals>
     <string name="general_attention">Attention!</string>
     <string name="general_delete_messages">Delete messages</string>
@@ -551,13 +549,15 @@
     <string name="delete_visitors">delete visitors</string>
     <string name="delete_admirations">delete admirations</string>
     <string name="general_admirations">Admirations</string>
-    <string name="delete_visitors">delete visitors</string>
-    <string name="silent_ringtone">Silent mode</string>
+    <plurals name="popup_vip_admirations">
+        <item quantity="other">You have %d admirations</item>
+        <item quantity="one">You have %d admiration</item>
+    </plurals>
     <string name="select_all">Select all</string>
+    <string name="silent_ringtone">Silent mode</string>
     <plurals name="selected">
         <item quantity="other">%d selected</item>
         <item quantity="one">%d selected</item>
     </plurals>
-    <string name="delete_visitors">delete visitors</string>
     <string name="photo_is_uploading">Uploading photo</string>
 </resources>
