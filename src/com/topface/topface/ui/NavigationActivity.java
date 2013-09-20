@@ -535,6 +535,8 @@ public class NavigationActivity extends BaseFragmentActivity {
                 LikesClosingFragment.usersProcessed = !closing.isLikesClosingAvailable();
                 if (!MutualClosingFragment.usersProcessed || !LikesClosingFragment.usersProcessed) {
                     onClosings();
+                } else {
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(DatingFragment.CLOSINGS_FILTER));
                 }
             } else {
                 LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(DatingFragment.CLOSINGS_FILTER));

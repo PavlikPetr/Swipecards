@@ -253,7 +253,9 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         //Показываем рекламу AirMessages только если не показываем инвайты
         if (!invitePopupShow) {
             AirManager manager = new AirManager(getActivity());
-            manager.startFragment(getActivity().getSupportFragmentManager());
+            if (getActivity() != null) {
+                manager.startFragment(getActivity().getSupportFragmentManager());
+            }
         }
     }
 
