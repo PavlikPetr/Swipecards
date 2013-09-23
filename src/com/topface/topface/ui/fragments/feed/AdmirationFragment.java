@@ -2,19 +2,33 @@ package com.topface.topface.ui.fragments.feed;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.Options;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.AirManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
 public class AdmirationFragment extends LikesFragment{
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
+        if (!CacheProfile.premium) {
+            AirManager manager = new AirManager(getActivity());
+            manager.showPromoPopup(getActivity().getSupportFragmentManager(), Options.PremiumAirEntity.AIR_ADMIRATIONS);
+        }
+        return super.onCreateView(inflater, container, saved);
+    }
 
     @Override
     protected int getTitle() {
