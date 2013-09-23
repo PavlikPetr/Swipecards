@@ -1,9 +1,14 @@
 package com.topface.topface.ui.fragments.promo;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +16,11 @@ import android.widget.TextView;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
+import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.fragments.VipBuyFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 
@@ -23,6 +30,15 @@ public abstract class PromoPopupFragment extends BaseFragment implements View.On
 
     private Options.PremiumAirEntity mPremiumEntity;
     private boolean mUserClickButton = false;
+
+    private BroadcastReceiver vipPurchasedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (isAdded() && getActivity() != null) {
+//                closeFragment();
+            }
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,10 +93,9 @@ public abstract class PromoPopupFragment extends BaseFragment implements View.On
         ((TextView)root.findViewById(R.id.deleteMessages)).setText(getDeleteButtonText());
         root.findViewById(R.id.deleteMessages).setOnClickListener(this);
         TextView popupText = (TextView) root.findViewById(R.id.airMessagesText);
-        int curVisitCounter = CountersManager.getInstance(getActivity()).getCounter(CountersManager.VISITORS);
-        CountersManager.getInstance(getActivity()).setCounter(CountersManager.VISITORS, curVisitCounter + mPremiumEntity.getCount(), true);
         popupText.setText(getMessage());
         EasyTracker.getTracker().sendEvent(getMainTag(), "Show", "", 0L);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(vipPurchasedReceiver, new IntentFilter(VipBuyFragment.VIP_PURCHASED_INTENT));
         return root;
     }
 
@@ -106,10 +121,18 @@ public abstract class PromoPopupFragment extends BaseFragment implements View.On
             case R.id.deleteMessages:
                 deleteMessages();
                 EasyTracker.getTracker().sendEvent(getMainTag(), "Dismiss", "Delete", 0L);
+                closeFragment();
                 break;
         }
 
-        closeFragment();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (getActivity() != null) {
+            LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(vipPurchasedReceiver);
+        }
     }
 
     protected abstract void deleteMessages();

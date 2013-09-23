@@ -95,14 +95,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private boolean mNeedMore;
     private int mLoadedCount;
 
-    private boolean mCanShowPromo;
-    private BroadcastReceiver closingsReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            mCanShowPromo = true;
-            showPromoDialog();
-        }
-    };
+    private boolean mCanShowPromo = true;
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -141,7 +134,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         SharedPreferences preferences = getActivity().getSharedPreferences(
                 Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         mNovice = Novice.getInstance(preferences);
-//        showPromoDialog();
     }
 
     @Override
@@ -155,7 +147,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         initActionBar(root);
         initEmptySearchDialog(root, mSettingsListener);
         initImageSwitcher(root);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(closingsReceiver, new IntentFilter(CLOSINGS_FILTER));
+//        if (((NavigationActivity)getActivity()).canShowPromo()) {
+            showPromoDialog();
+//            ((NavigationActivity)getActivity()).setNeedShowPromo(false);
+//        }
         return root;
     }
 
@@ -167,16 +162,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         setHighRatePrice();
         updateResources();
         refreshActionBarTitles(getView());
-        if (mCanShowPromo) {
-            showPromoDialog();
-            mCanShowPromo = false;
-        }
+
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(closingsReceiver);
     }
 
     @Override
