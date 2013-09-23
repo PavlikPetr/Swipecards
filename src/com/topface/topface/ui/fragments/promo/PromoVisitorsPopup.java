@@ -19,7 +19,7 @@ public class PromoVisitorsPopup extends PromoPopupFragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         int curVisitCounter = CountersManager.getInstance(getActivity()).getCounter(CountersManager.VISITORS);
-        if (curVisitCounter > 0) {
+        if (curVisitCounter == 0) {
             CountersManager.getInstance(getActivity()).setCounter(CountersManager.VISITORS, curVisitCounter + getPremiumEntity().getCount(), true);
             counterUpdated = true;
         }

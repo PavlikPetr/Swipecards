@@ -1,12 +1,31 @@
 package com.topface.topface.ui.fragments.promo;
 
 
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 
 public class PromoAdmirationsPopup extends PromoPopupFragment{
+
+    private boolean counterUpdated;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        int curVisitCounter = CountersManager.getInstance(getActivity()).getCounter(CountersManager.ADMIRATIONS);
+        if (curVisitCounter == 0) {
+            CountersManager.getInstance(getActivity()).setCounter(CountersManager.ADMIRATIONS, curVisitCounter + getPremiumEntity().getCount(), true);
+            counterUpdated = true;
+        }
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
     @Override
     public Options.PremiumAirEntity getPremiumEntity() {
         return CacheProfile.getOptions().premium_admirations;
@@ -25,6 +44,8 @@ public class PromoAdmirationsPopup extends PromoPopupFragment{
     @Override
     protected String getMessage() {
         int count = getPremiumEntity().getCount();
+        int admirations = CountersManager.getInstance(getActivity()).getCounter(CountersManager.ADMIRATIONS);
+        count = admirations > 0? admirations:count;
         return Utils.getQuantityString(getPluralForm(), count, count);
     }
 
@@ -35,5 +56,9 @@ public class PromoAdmirationsPopup extends PromoPopupFragment{
 
     @Override
     protected void deleteMessages() {
+        int curVisitCounter = CountersManager.getInstance(getActivity()).getCounter(CountersManager.VISITORS);
+        if (counterUpdated) {
+            CountersManager.getInstance(getActivity()).setCounter(CountersManager.VISITORS, curVisitCounter - getPremiumEntity().getCount(), true);
+        }
     }
 }

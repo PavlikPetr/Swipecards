@@ -300,6 +300,18 @@ public class Options extends AbstractData {
         }
     }
 
+    public PremiumAirEntity getPremiumEntityByType(int type) {
+        switch (type) {
+            case PremiumAirEntity.AIR_ADMIRATIONS:
+                return premium_admirations;
+            case PremiumAirEntity.AIR_VISITORS:
+                return  premium_visitors;
+            case PremiumAirEntity.AIR_MESSAGES:
+                return premium_messages;
+        }
+        return null;
+    }
+
     public BuyButton createBuyButtonFromJSON(JSONObject purchaseItem) {
         if (purchaseItem.optInt("discount") > 0) {
             saleExists = true;
