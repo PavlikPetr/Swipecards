@@ -53,6 +53,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
     private boolean menuEnabled;
     private static boolean mHasClosingsForThisSession;
     private static boolean mClosingsOnProfileUpdateInvoked = false;
+    private boolean mCanShowPromo = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,7 +67,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         setMenuEnabled(true);
         Debug.log(this, "onCreate");
         mFragmentManager = getSupportFragmentManager();
-
+        Debug.log("time", Long.toString(System.currentTimeMillis()));
         initSlidingMenu();
         if (!AuthToken.getInstance().isEmpty()) {
             showFragment(savedInstanceState);
@@ -499,8 +500,15 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
     }
 
+    public boolean canShowPromo() {
+        return mCanShowPromo;
+    }
+
+    public void setNeedShowPromo(boolean canShowPromo) {
+        mCanShowPromo = canShowPromo;
+    }
+
     public void onClosings() {
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(DatingFragment.CLOSINGS_FILTER));
         if (CacheProfile.unread_mutual == 0) {
             MutualClosingFragment.usersProcessed = true;
         }
@@ -523,6 +531,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
         }
         mFragmentMenu.onStopClosings();
         showFragment(null); // it will take fragment id from getIntent() extra data
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(DatingFragment.CLOSINGS_FILTER));
     }
 
     private void updateClosing() {

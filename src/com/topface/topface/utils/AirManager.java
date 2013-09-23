@@ -56,6 +56,10 @@ public class AirManager {
             .commit();
     }
 
+
+
+
+
     private boolean checkIsNeedShow(Options.PremiumAirEntity entity) {
         return entity != null && entity.isNeedShow();
     }
