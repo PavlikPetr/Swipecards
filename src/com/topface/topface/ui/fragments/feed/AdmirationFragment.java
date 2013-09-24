@@ -26,9 +26,9 @@ public class AdmirationFragment extends LikesFragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
-        if (!CacheProfile.premium) {
+        if (!CacheProfile.premium && CacheProfile.unread_admirations == 0) {
             AirManager manager = new AirManager(getActivity());
-            if(manager.showPromoPopup(getActivity().getSupportFragmentManager(), Options.PremiumAirEntity.AIR_ADMIRATIONS)) {
+            if(manager.showPromoPopup(getActivity().getSupportFragmentManager(), Options.PremiumAirEntity.AIR_ADMIRATIONS, false)) {
                 isPopupShowed = true;
             }
 
@@ -56,7 +56,7 @@ public class AdmirationFragment extends LikesFragment{
 
     @Override
     protected void initEmptyFeedView(View inflated) {
-        if (mEmptyFeedView != null) mEmptyFeedView = inflated;
+        if (mEmptyFeedView == null) mEmptyFeedView = inflated;
         if (CacheProfile.premium) {
             ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(0);
             inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
@@ -68,7 +68,12 @@ public class AdmirationFragment extends LikesFragment{
         } else {
             if (CacheProfile.unread_admirations > 0 || isPopupShowed) {
                 ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(1);
-                String title = Utils.getQuantityString(R.plurals.popup_vip_admirations, CacheProfile.unread_admirations, CacheProfile.unread_admirations);
+                int curCounter = CacheProfile.unread_admirations;
+                if (curCounter == 0) {
+                    curCounter = CacheProfile.getOptions().premium_admirations.getCount();
+                }
+
+                String title = Utils.getQuantityString(R.plurals.popup_vip_admirations, curCounter, curCounter);
                 ((TextView) inflated.findViewById(R.id.tvTitle)).setText(title);
                 inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
                     @Override

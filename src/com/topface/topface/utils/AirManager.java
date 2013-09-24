@@ -24,7 +24,7 @@ public class AirManager {
             return;
         } else if (showPromoPopup(fm, Options.PremiumAirEntity.AIR_VISITORS)) {
             return;
-        } else if (showPromoPopup(fm, Options.PremiumAirEntity.AIR_ADMIRATIONS)) {
+        } else if (showPromoPopup(fm, Options.PremiumAirEntity.AIR_ADMIRATIONS, false)) {
             return;
         }
     }
