@@ -63,7 +63,7 @@ public abstract class PromoPopupFragment extends BaseFragment implements View.On
     public void onPause() {
         super.onPause();
         //Отмечаем время закрытия попапа
-        CacheProfile.getOptions().premium_messages.setPopupShowTime();
+        getPremiumEntity().setPopupShowTime();
 
         //Включаем боковое меню
         FragmentActivity activity = getActivity();

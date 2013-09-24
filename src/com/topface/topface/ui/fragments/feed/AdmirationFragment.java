@@ -25,7 +25,7 @@ public class AdmirationFragment extends LikesFragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         if (!CacheProfile.premium) {
             AirManager manager = new AirManager(getActivity());
-            manager.showPromoPopup(getActivity().getSupportFragmentManager(), Options.PremiumAirEntity.AIR_ADMIRATIONS);
+            manager.showPromoPopup(getActivity().getSupportFragmentManager(), Options.PremiumAirEntity.AIR_ADMIRATIONS, false);
         }
         return super.onCreateView(inflater, container, saved);
     }
@@ -48,7 +48,7 @@ public class AdmirationFragment extends LikesFragment{
             inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(ContainerActivity.getBuyingIntent("EmptyLikes"));
+                    startActivity(ContainerActivity.getBuyingIntent("EmptyAdmirations"));
                 }
             });
         } else {
