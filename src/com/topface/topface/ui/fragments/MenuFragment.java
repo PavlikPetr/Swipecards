@@ -335,6 +335,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             }
             try {
+
                 transaction.replace(android.R.id.content, newFragment, fragmentTag);
                 transaction.commitAllowingStateLoss();
                 mCurrentFragment = newFragment;
