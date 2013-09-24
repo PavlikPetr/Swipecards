@@ -37,7 +37,26 @@ public class AirManager {
             promo = getFragmentByType(type);
         }
         if (promo != null) {
-            setLastFragmentType();
+            setLastFragmentType(type);
+
+            fm.beginTransaction()
+                    .add(android.R.id.content, promo)
+                    .addToBackStack(null)
+                    .commit();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean showPromoPopup(FragmentManager fm, int type, boolean doNeedSetLastType) {
+        PromoPopupFragment promo = null;
+        if (checkIsNeedShow(CacheProfile.getOptions().getPremiumEntityByType(type)) &&
+                getLastFragmentType() != type) {
+            mType = type;
+            promo = getFragmentByType(type);
+        }
+        if (promo != null) {
+            setLastFragmentType(Options.PremiumAirEntity.AIR_NONE);
 
             fm.beginTransaction()
                     .add(android.R.id.content, promo)
@@ -69,13 +88,15 @@ public class AirManager {
         return prefs.getInt(AIR_TYPE_LAST_TAG, Options.PremiumAirEntity.AIR_NONE);
     }
 
-    public void setLastFragmentType() {
+    public void setLastFragmentType(final int type) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 SharedPreferences prefs = mContext.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-                prefs.edit().putInt(AIR_TYPE_LAST_TAG, mType).commit();
+                prefs.edit().putInt(AIR_TYPE_LAST_TAG, type).commit();
             }
         }).start();
     }
+
+
 }

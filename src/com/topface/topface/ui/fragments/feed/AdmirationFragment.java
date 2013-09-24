@@ -48,7 +48,7 @@ public class AdmirationFragment extends LikesFragment{
             inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(ContainerActivity.getBuyingIntent("EmptyLikes"));
+                    startActivity(ContainerActivity.getBuyingIntent("EmptyAdmirations"));
                 }
             });
         } else {
