@@ -57,12 +57,14 @@ public class PromoAdmirationsPopup extends PromoPopupFragment{
 
     @Override
     protected void deleteMessages() {
-        FeedRequest request = new FeedRequest(FeedRequest.FeedService.ADMIRATIONS, getActivity());
-        request.exec();
-
         int curVisitCounter = CountersManager.getInstance(getActivity()).getCounter(CountersManager.ADMIRATIONS);
+        FeedRequest request = new FeedRequest(FeedRequest.FeedService.ADMIRATIONS, getActivity());
         if (counterUpdated) {
             CountersManager.getInstance(getActivity()).setCounter(CountersManager.ADMIRATIONS, curVisitCounter - getPremiumEntity().getCount(), true);
+        } else {
+            request.limit = curVisitCounter;
+            request.unread = true;
         }
+        request.exec();
     }
 }
