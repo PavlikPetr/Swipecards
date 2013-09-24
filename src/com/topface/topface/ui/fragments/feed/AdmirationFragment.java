@@ -17,15 +17,21 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.AirManager;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 
 public class AdmirationFragment extends LikesFragment{
+
+    private boolean isPopupShowed;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         if (!CacheProfile.premium) {
             AirManager manager = new AirManager(getActivity());
-            manager.showPromoPopup(getActivity().getSupportFragmentManager(), Options.PremiumAirEntity.AIR_ADMIRATIONS);
+            if(manager.showPromoPopup(getActivity().getSupportFragmentManager(), Options.PremiumAirEntity.AIR_ADMIRATIONS)) {
+                isPopupShowed = true;
+            }
+
         }
         return super.onCreateView(inflater, container, saved);
     }
@@ -33,6 +39,14 @@ public class AdmirationFragment extends LikesFragment{
     @Override
     protected int getTitle() {
         return R.string.general_admirations;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mEmptyFeedView != null) {
+            initEmptyFeedView(mEmptyFeedView);
+        }
     }
 
     @Override
@@ -52,7 +66,7 @@ public class AdmirationFragment extends LikesFragment{
                 }
             });
         } else {
-            if (CacheProfile.unread_admirations > 0) {
+            if (CacheProfile.unread_admirations > 0 || isPopupShowed) {
                 ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(1);
                 String title = Utils.getQuantityString(R.plurals.popup_vip_admirations, CacheProfile.unread_admirations, CacheProfile.unread_admirations);
                 ((TextView) inflated.findViewById(R.id.tvTitle)).setText(title);
@@ -75,6 +89,7 @@ public class AdmirationFragment extends LikesFragment{
                         .setResourceSrc(CacheProfile.dating.sex == Static.GIRL ? R.drawable.likes_male_two : R.drawable.likes_female_two);
                 ((ImageViewRemote) inflated.findViewById(R.id.ivThree))
                         .setResourceSrc(CacheProfile.dating.sex == Static.GIRL ? R.drawable.likes_male_three : R.drawable.likes_female_three);
+                isPopupShowed = false;
             } else {
                 ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(0);
                 inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
