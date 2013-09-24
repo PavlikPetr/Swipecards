@@ -28,9 +28,7 @@ public class AdmirationFragment extends LikesFragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         if (!CacheProfile.premium && CacheProfile.unread_admirations == 0) {
             AirManager manager = new AirManager(getActivity());
-            if(manager.showPromoPopup(getActivity().getSupportFragmentManager(), Options.PremiumAirEntity.AIR_ADMIRATIONS, false)) {
-                isPopupShowed = true;
-            }
+            isPopupShowed = manager.showPromoPopup(getActivity().getSupportFragmentManager(), Options.PremiumAirEntity.AIR_ADMIRATIONS, false);
 
         }
         return super.onCreateView(inflater, container, saved);
