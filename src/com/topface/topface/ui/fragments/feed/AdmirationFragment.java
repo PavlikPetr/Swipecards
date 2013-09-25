@@ -26,7 +26,7 @@ public class AdmirationFragment extends LikesFragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
-        if (!CacheProfile.premium && CacheProfile.unread_admirations == 0) {
+        if (!CacheProfile.premium ) {
             AirManager manager = new AirManager(getActivity());
             if(manager.showPromoPopup(getActivity().getSupportFragmentManager(), Options.PremiumAirEntity.AIR_ADMIRATIONS, false)) {
                 isPopupShowed = true;

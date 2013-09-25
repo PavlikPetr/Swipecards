@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
+import com.topface.topface.requests.AdmirationsReadedRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
@@ -58,12 +59,9 @@ public class PromoAdmirationsPopup extends PromoPopupFragment{
     @Override
     protected void deleteMessages() {
         int curVisitCounter = CountersManager.getInstance(getActivity()).getCounter(CountersManager.ADMIRATIONS);
-        FeedRequest request = new FeedRequest(FeedRequest.FeedService.ADMIRATIONS, getActivity());
+        AdmirationsReadedRequest request = new AdmirationsReadedRequest(getActivity());
         if (counterUpdated) {
             CountersManager.getInstance(getActivity()).setCounter(CountersManager.ADMIRATIONS, curVisitCounter - getPremiumEntity().getCount(), true);
-        } else {
-            request.limit = curVisitCounter;
-            request.unread = true;
         }
         request.exec();
     }
