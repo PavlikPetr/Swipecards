@@ -11,6 +11,7 @@ import android.view.*;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.topface.topface.R;
+import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.PreloadManager;
@@ -233,8 +234,9 @@ public class ImageSwitcher extends ViewPager {
                 Debug.log("IS: setPhoto " + position);
                 View progressBar = baseLayout.findViewById(R.id.pgrsAlbum);
                 progressBar.setVisibility(View.VISIBLE);
-                imageView.setPhoto(mPhotoLinks.get(position), mUpdatedHandler, progressBar);
-                imageView.setTag(R.string.photo_is_set_tag, true);
+                Photo photo = mPhotoLinks.get(position);
+                imageView.setPhoto(photo, mUpdatedHandler, progressBar);
+                imageView.setTag(R.string.photo_is_set_tag, !photo.isFake());
             }
             mLoadedPhotos.put(position, true);
         }
@@ -249,6 +251,12 @@ public class ImageSwitcher extends ViewPager {
 
         public void setIsFirstInstantiate(boolean value) {
             isFirstInstantiate = value;
+        }
+
+        @Override
+        public void notifyDataSetChanged() {
+            super.notifyDataSetChanged();
+            setPhotoToPosition(getSelectedPosition(),true);
         }
     }
 

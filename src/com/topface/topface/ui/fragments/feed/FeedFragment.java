@@ -228,8 +228,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         mListView.getRefreshableView().setOnItemClickListener(getOnItemClickListener());
         mListView.getRefreshableView().setOnTouchListener(getListViewOnTouchListener());
         mListView.getRefreshableView().setOnItemLongClickListener(getOnItemLongClickListener());
-
-        mListView.scrollBy(0, 2);
     }
 
     /**
