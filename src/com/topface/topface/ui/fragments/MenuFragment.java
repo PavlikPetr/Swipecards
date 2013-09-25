@@ -334,14 +334,11 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             if (mHardwareAccelerated) {
                 transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             }
-            try {
 
-                transaction.replace(android.R.id.content, newFragment, fragmentTag);
-                transaction.commitAllowingStateLoss();
-                mCurrentFragment = newFragment;
-            } catch (Exception ex) {
-                Debug.error(ex.toString());
-            }
+            transaction.replace(android.R.id.content, newFragment, fragmentTag);
+            transaction.commitAllowingStateLoss();
+            fragmentManager.executePendingTransactions();
+            mCurrentFragment = newFragment;
         }
 
         //Закрываем меню только после создания фрагмента
@@ -519,7 +516,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             public void onWatchSequentialy(boolean animate) {
                 Activity activity = getActivity();
                 if (activity instanceof NavigationActivity) {
-                    ((NavigationActivity)activity).showContent(animate);
+                    ((NavigationActivity) activity).showContent(animate);
                 }
             }
         });
