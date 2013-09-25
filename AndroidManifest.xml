@@ -201,6 +201,10 @@
         <activity android:name=".ui.PaymentwallActivity"/>
 
         <!-- ADS -->
+
+        <activity android:name="com.inneractive.api.ads.InneractiveFullScreenView"
+                  android:configChanges="orientation|screenSize"/>
+
         <activity
                 android:name="com.google.ads.AdActivity"
                 android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
