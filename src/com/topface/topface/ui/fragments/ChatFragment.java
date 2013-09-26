@@ -538,7 +538,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     private void onUserLoaded() {
         if (mActionBar != null) {
-            if (mUser.deleted || mUser.banned || mUser.photo == null || mUser.photo.isEmpty()) {
+            if (mUser.deleted || mUser.banned) {
                 mActionBar.showProfileAvatar(null);
             } else {
                 ArrayList<UserActions.ActionItem> actions = new ArrayList<UserActions.ActionItem>();
@@ -546,7 +546,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 actions.add(new UserActions.ActionItem(R.id.acBlock, this));
                 actions.add(new UserActions.ActionItem(R.id.acComplain, this));
                 actions.add(new UserActions.ActionItem(R.id.acBookmark, this));
-
 
                 UserActions userActions = new UserActions(chatActions, actions);
                 bookmarksTv = (TextView) userActions.getViewById(R.id.acBookmark).findViewById(R.id.favTV);
@@ -565,7 +564,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         }, new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-//                                initActionsPanelHeight();
                                 TranslateAnimation ta = getAnimation(true, 500);
                                 chatActions.startAnimation(ta);
                             }

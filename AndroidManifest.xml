@@ -3,8 +3,8 @@
           package="com.topface.topface"
           android:installLocation="auto"
 
-          android:versionCode="89"
-          android:versionName="2.7.5">
+          android:versionCode="90"
+          android:versionName="2.7.6">
 
     <uses-sdk
             android:minSdkVersion="7"
@@ -201,6 +201,10 @@
         <activity android:name=".ui.PaymentwallActivity"/>
 
         <!-- ADS -->
+
+        <activity android:name="com.inneractive.api.ads.InneractiveFullScreenView"
+                  android:configChanges="orientation|screenSize"/>
+
         <activity
                 android:name="com.google.ads.AdActivity"
                 android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
