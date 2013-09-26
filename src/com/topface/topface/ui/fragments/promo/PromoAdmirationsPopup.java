@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.promo;
 
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;

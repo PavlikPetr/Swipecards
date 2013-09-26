@@ -19,6 +19,7 @@ import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
+import com.topface.topface.data.Photos;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.ProfileRequest;
@@ -30,11 +31,14 @@ import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
 import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
+import com.topface.topface.ui.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.*;
 import com.topface.topface.utils.offerwalls.Offerwalls;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
+
+import java.util.ArrayList;
 
 public class NavigationActivity extends BaseFragmentActivity implements View.OnClickListener {
 
@@ -257,6 +261,11 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                         if (CacheProfile.photos != null) {
                             CacheProfile.photos.add(photo);
                         }
+                        Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
+                        ArrayList<Photo> photos = new ArrayList<Photo>();
+                        photos.add(photo);
+                        intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, photos);
+                        LocalBroadcastManager.getInstance(NavigationActivity.this).sendBroadcast(intent);
                         PhotoMainRequest request = new PhotoMainRequest(getApplicationContext());
                         request.photoid = photo.getId();
                         request.callback(new ApiHandler() {
@@ -264,7 +273,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                             @Override
                             public void success(ApiResponse response) {
                                 CacheProfile.photo = photo;
-                                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+
                             }
 
                             @Override

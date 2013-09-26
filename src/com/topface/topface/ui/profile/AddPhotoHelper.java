@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ListView;
@@ -276,6 +277,7 @@ public class AddPhotoHelper {
                 if (mContext != null) {
                     mContext.unregisterReceiver(receiver);
                 }
+
             }
 
             @Override
