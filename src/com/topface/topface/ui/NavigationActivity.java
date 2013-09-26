@@ -273,7 +273,7 @@ public class NavigationActivity extends BaseFragmentActivity implements View.OnC
                             @Override
                             public void success(ApiResponse response) {
                                 CacheProfile.photo = photo;
-
+                                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
                             }
 
                             @Override
