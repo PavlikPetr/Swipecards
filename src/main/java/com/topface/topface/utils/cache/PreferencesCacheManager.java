@@ -2,6 +2,7 @@ package com.topface.topface.utils.cache;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
 import com.topface.topface.App;
 
 /**

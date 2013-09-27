@@ -2,12 +2,19 @@ package com.topface.topface.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import com.topface.topface.Static;
 import com.topface.topface.utils.social.AuthToken;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.Random;
 
 public class AuthButtonsController {
 

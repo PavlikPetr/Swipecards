@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+
 import com.topface.billing.BillingUtils;
 import com.topface.billing.googleplay.BillingService.RequestPurchase;
 import com.topface.billing.googleplay.BillingService.RestoreTransactions;
@@ -15,7 +16,12 @@ import com.topface.billing.googleplay.Consts.ResponseCode;
 import com.topface.topface.App;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Verify;
-import com.topface.topface.requests.*;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.AppOptionsRequest;
+import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.requests.VerifyRequest;
 import com.topface.topface.utils.CacheProfile;
 
 /**

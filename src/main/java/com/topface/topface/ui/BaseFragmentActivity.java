@@ -5,12 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.PixelFormat;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
-import android.view.*;
+import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
+
 import com.topface.topface.GCMUtils;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
@@ -58,10 +60,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         super.onCreate(savedInstanceState);
         LocaleConfig.updateConfiguration(getBaseContext());
         setWindowOptions();
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        initActionBar(getSupportActionBar());
         (new Thread() {
             @Override
             public void run() {
@@ -71,12 +70,27 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         }).start();
     }
 
+    /**
+     * Выставляем опции для ActionBar
+     */
+    protected void initActionBar(ActionBar actionBar) {
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    /**
+     * Установка флагов Window
+     */
     @SuppressWarnings("deprecation")
     private void setWindowOptions() {
+        // supportRequestWindowFeature() вызывать только до setContent(),
+        // метод setSupportProgressBarIndeterminateVisibility(boolean) вызывать строго после setContent();
         supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        setSupportProgressBarIndeterminateVisibility(false);
+        // для корректного отображения картинок
         getWindow().setFormat(PixelFormat.RGBA_8888);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
+        // добавляем анимацию открытия нового activity
         if (mNeedAnimate) {
             overridePendingTransition(com.topface.topface.R.anim.slide_in_from_right, com.topface.topface.R.anim.slide_out_left);
         }

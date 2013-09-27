@@ -2,7 +2,7 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 import android.location.Location;
-import com.topface.topface.utils.CacheProfile;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 

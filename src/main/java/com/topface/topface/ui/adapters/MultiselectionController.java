@@ -1,7 +1,6 @@
 package com.topface.topface.ui.adapters;
 
 import android.widget.BaseAdapter;
-import com.topface.topface.data.FeedItem;
 
 import java.util.ArrayList;
 import java.util.List;

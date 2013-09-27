@@ -1,11 +1,17 @@
 package com.topface.topface.ui.fragments;
 
 import android.os.Bundle;
-import android.view.*;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.topface.topface.R;
 import com.topface.topface.requests.ComplainRequest;
 import com.topface.topface.requests.IApiResponse;

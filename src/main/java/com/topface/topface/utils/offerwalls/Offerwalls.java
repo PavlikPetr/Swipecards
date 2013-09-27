@@ -9,7 +9,16 @@ import android.os.Handler;
 import android.os.ResultReceiver;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
-import com.getjar.sdk.*;
+
+import com.getjar.sdk.ConsumableProduct;
+import com.getjar.sdk.GetJarContext;
+import com.getjar.sdk.GetJarManager;
+import com.getjar.sdk.GetJarPage;
+import com.getjar.sdk.Localization;
+import com.getjar.sdk.Pricing;
+import com.getjar.sdk.RecommendedPrices;
+import com.getjar.sdk.User;
+import com.getjar.sdk.UserAuth;
 import com.getjar.sdk.listener.EnsureUserAuthListener;
 import com.getjar.sdk.listener.RecommendedPricesListener;
 import com.getjar.sdk.response.PurchaseSucceededResponse;
@@ -25,6 +34,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.offerwalls.clickky.ClickkyActivity;
+
 import org.json.JSONObject;
 
 import java.util.ArrayList;

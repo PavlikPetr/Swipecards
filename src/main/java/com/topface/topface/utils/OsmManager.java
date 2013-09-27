@@ -3,8 +3,10 @@ package com.topface.topface.utils;
 import android.location.Address;
 import android.os.Handler;
 import android.os.Message;
+
 import com.topface.topface.Static;
 import com.topface.topface.utils.http.HttpUtils;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

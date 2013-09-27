@@ -7,9 +7,15 @@ import android.content.IntentFilter;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.ViewGroup;
+
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.ProfileRequest;
-import com.topface.topface.ui.fragments.feed.*;
+import com.topface.topface.ui.fragments.feed.BookmarksFragment;
+import com.topface.topface.ui.fragments.feed.DialogsFragment;
+import com.topface.topface.ui.fragments.feed.FansFragment;
+import com.topface.topface.ui.fragments.feed.LikesFragment;
+import com.topface.topface.ui.fragments.feed.MutualFragment;
+import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.utils.CacheProfile;
 
 import java.util.HashMap;

@@ -61,7 +61,7 @@ public class FeedRequest extends ApiRequest {
                 service = "dialog.getList";
                 break;
             case LIKES:
-                service = "likes.getList";
+                service = "like.getList";
                 break;
             case MUTUAL:
                 service = "mutual.getList";

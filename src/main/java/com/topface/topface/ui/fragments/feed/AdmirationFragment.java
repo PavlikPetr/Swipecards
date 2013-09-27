@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
+
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.FeedRequest;

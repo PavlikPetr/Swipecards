@@ -11,10 +11,12 @@ import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.utils.Debug;
+
 import org.apache.http.client.utils.URLEncodedUtils;
 
 import java.net.URI;

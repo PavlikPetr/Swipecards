@@ -13,6 +13,7 @@ import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.RemoteViews;
+
 import com.topface.topface.R;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.profile.AddPhotoHelper;

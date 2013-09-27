@@ -13,18 +13,33 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.support.v4.content.LocalBroadcastManager;
+
 import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
-import com.topface.topface.requests.*;
+import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.AppOptionsRequest;
+import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.GooglePlayProductsRequest;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.ParallelApiRequest;
+import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
 import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.AppConfig;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.DateUtils;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.GeoUtils.GeoLocationManager;
 import com.topface.topface.utils.GeoUtils.GeoPreferencesManager;
+import com.topface.topface.utils.HockeySender;
 import com.topface.topface.utils.social.AuthToken;
+
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 

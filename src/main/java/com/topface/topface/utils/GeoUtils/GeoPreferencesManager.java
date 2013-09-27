@@ -4,9 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
-import android.location.LocationProvider;
+
 import com.topface.topface.Static;
-import com.topface.topface.utils.Debug;
 
 public class GeoPreferencesManager {
     public static String LATITUDE = "latitude";

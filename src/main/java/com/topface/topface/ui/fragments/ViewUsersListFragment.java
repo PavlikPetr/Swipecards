@@ -16,21 +16,32 @@ import android.view.ViewStub;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.RetryRequestReceiver;
-import com.topface.topface.data.*;
+import com.topface.topface.data.FeedItem;
+import com.topface.topface.data.FeedListData;
+import com.topface.topface.data.FeedUser;
+import com.topface.topface.data.Photo;
+import com.topface.topface.data.Photos;
 import com.topface.topface.data.search.OnUsersListEventsListener;
 import com.topface.topface.data.search.SearchUser;
 import com.topface.topface.data.search.UsersList;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
-import com.topface.topface.requests.*;
+import com.topface.topface.requests.AlbumRequest;
+import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
+
 import org.json.JSONObject;
 
 import java.util.concurrent.atomic.AtomicBoolean;

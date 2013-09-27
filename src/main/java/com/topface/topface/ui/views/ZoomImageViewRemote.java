@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**

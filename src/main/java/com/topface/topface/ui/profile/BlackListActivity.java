@@ -1,6 +1,7 @@
 package com.topface.topface.ui.profile;
 
 import android.os.Bundle;
+
 import com.topface.topface.R;
 import com.topface.topface.ui.BaseFragmentActivity;
 

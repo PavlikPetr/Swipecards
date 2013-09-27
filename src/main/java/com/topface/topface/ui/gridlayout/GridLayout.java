@@ -30,12 +30,24 @@ import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.LinearLayout;
+
 import com.topface.topface.R;
 
 import java.lang.reflect.Array;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static android.view.Gravity.*;
+import static android.view.Gravity.AXIS_PULL_AFTER;
+import static android.view.Gravity.AXIS_PULL_BEFORE;
+import static android.view.Gravity.AXIS_SPECIFIED;
+import static android.view.Gravity.AXIS_X_SHIFT;
+import static android.view.Gravity.AXIS_Y_SHIFT;
+import static android.view.Gravity.HORIZONTAL_GRAVITY_MASK;
+import static android.view.Gravity.RELATIVE_LAYOUT_DIRECTION;
+import static android.view.Gravity.VERTICAL_GRAVITY_MASK;
 import static android.view.View.MeasureSpec.EXACTLY;
 import static android.view.View.MeasureSpec.makeMeasureSpec;
 import static java.lang.Math.max;

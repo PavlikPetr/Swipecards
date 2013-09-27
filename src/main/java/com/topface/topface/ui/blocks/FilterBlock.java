@@ -4,6 +4,7 @@ import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+
 import com.topface.topface.Static;
 import com.topface.topface.utils.SwapAnimation;
 

@@ -3,10 +3,12 @@ package com.topface.topface.requests;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
+
 import com.topface.topface.R;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 

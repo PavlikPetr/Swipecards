@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.webkit.WebView;
 import android.widget.RelativeLayout;
+
 import com.topface.topface.utils.CacheProfile;
 
 public class ClickkyActivity extends Activity{

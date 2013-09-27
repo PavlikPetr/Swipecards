@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+
 import com.topface.topface.R;
 import com.topface.topface.data.BlackListItem;
 

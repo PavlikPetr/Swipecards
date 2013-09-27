@@ -3,6 +3,7 @@ package com.topface.topface.utils;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.topface.topface.data.History;
 
 public class AddressesCache {

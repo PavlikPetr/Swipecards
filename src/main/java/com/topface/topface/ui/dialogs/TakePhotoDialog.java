@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.ui.profile.AddPhotoHelper;

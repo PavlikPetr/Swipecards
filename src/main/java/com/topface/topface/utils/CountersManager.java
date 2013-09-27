@@ -3,6 +3,7 @@ package com.topface.topface.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
+
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.LeadersRequest;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;

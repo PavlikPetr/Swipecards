@@ -1,8 +1,13 @@
 package com.topface.topface.utils;
 
 import android.app.Activity;
+
 import com.topface.topface.data.Rate;
-import com.topface.topface.requests.*;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.SendAdmirationRequest;
+import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.ui.ContainerActivity;
 
 public class RateController {

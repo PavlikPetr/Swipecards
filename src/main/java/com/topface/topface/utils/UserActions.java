@@ -1,8 +1,8 @@
 package com.topface.topface.utils;
-import java.util.ArrayList;
-
 
 import android.view.View;
+
+import java.util.ArrayList;
 
 public class UserActions {
     private ArrayList<ActionItem> items;

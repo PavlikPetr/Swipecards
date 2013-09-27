@@ -11,6 +11,7 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.widget.ListView;
+
 import com.google.android.gcm.GCMRegistrar;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.IApiResponse;
@@ -21,7 +22,12 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.ChatFragment;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.TopfaceNotificationManager;
+import com.topface.topface.utils.Utils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 

@@ -1,6 +1,7 @@
 package com.topface.topface.ui.adapters;
 
 import android.content.Context;
+
 import com.topface.topface.R;
 import com.topface.topface.data.FeedMutual;
 

@@ -2,6 +2,7 @@ package com.topface.topface.imageloader;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+
 import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 import com.topface.topface.App;
 import com.topface.topface.R;

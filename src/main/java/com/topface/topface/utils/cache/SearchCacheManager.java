@@ -1,10 +1,12 @@
 package com.topface.topface.utils.cache;
 
 import android.text.TextUtils;
+
 import com.topface.topface.data.search.SearchUser;
 import com.topface.topface.data.search.UsersList;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
+
 import org.json.JSONObject;
 
 /**

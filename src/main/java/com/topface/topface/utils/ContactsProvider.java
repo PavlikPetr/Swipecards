@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.ContactsContract;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 

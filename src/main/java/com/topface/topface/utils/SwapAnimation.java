@@ -3,6 +3,7 @@ package com.topface.topface.utils;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
+
 import com.topface.topface.Static;
 
 public class SwapAnimation extends Animation {

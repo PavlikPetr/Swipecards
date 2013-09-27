@@ -1,7 +1,12 @@
 package com.topface.topface.utils;
 
-import android.content.*;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.support.v4.content.LocalBroadcastManager;
+
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.ProfileRequest;

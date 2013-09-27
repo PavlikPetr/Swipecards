@@ -3,9 +3,11 @@ package com.topface.topface.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+
 import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.utils.Debug;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 

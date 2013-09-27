@@ -3,6 +3,7 @@ package com.topface.topface.imageloader;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.util.SparseArrayCompat;
+
 import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 import com.topface.topface.App;
 import com.topface.topface.R;

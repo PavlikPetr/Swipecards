@@ -1,11 +1,5 @@
 package com.topface.topface.ui.views;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-
-import android.util.DisplayMetrics;
-import org.xmlpull.v1.XmlPullParser;
-
 import android.content.Context;
 import android.content.res.XmlResourceParser;
 import android.graphics.Bitmap;
@@ -14,7 +8,13 @@ import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.util.DisplayMetrics;
 import android.util.Log;
+
+import org.xmlpull.v1.XmlPullParser;
+
+import java.util.ArrayList;
+import java.util.Hashtable;
 
 /**
  * @author maximo guerrero

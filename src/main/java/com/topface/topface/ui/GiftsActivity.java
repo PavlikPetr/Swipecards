@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
+
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Gift;

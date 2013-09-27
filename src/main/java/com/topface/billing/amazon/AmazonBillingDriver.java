@@ -1,6 +1,7 @@
 package com.topface.billing.amazon;
 
 import android.app.Activity;
+
 import com.amazon.inapp.purchasing.PurchasingManager;
 import com.topface.billing.BillingDriver;
 import com.topface.billing.BillingListener;

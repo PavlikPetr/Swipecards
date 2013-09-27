@@ -1,6 +1,7 @@
 package com.topface.topface.data.search;
 
 import android.text.TextUtils;
+
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedUser;
@@ -8,6 +9,7 @@ import com.topface.topface.data.SerializableToJson;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

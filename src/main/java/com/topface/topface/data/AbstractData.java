@@ -1,6 +1,7 @@
 package com.topface.topface.data;
 
 import com.topface.topface.requests.ApiResponse;
+
 import org.json.JSONObject;
 
 public abstract class AbstractData {

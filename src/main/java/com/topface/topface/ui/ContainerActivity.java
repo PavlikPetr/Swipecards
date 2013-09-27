@@ -1,20 +1,28 @@
 package com.topface.topface.ui;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.LocalBroadcastManager;
+import android.view.View;
+
 import com.topface.billing.BillingFragment;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.ui.fragments.*;
+import com.topface.topface.ui.fragments.BuyingFragment;
+import com.topface.topface.ui.fragments.ChatFragment;
+import com.topface.topface.ui.fragments.ComplainsFragment;
+import com.topface.topface.ui.fragments.ContactsFragment;
+import com.topface.topface.ui.fragments.EditorBannersFragment;
+import com.topface.topface.ui.fragments.ProfileFragment;
+import com.topface.topface.ui.fragments.RecoverPwdFragment;
+import com.topface.topface.ui.fragments.RegistrationFragment;
+import com.topface.topface.ui.fragments.SettingsFragment;
+import com.topface.topface.ui.fragments.VipBuyFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.Debug;
@@ -22,7 +30,7 @@ import com.topface.topface.utils.social.AuthToken;
 
 import java.util.ArrayList;
 
-public class ContainerActivity extends BaseFragmentActivity {
+public class ContainerActivity extends CustomTitlesBaseFragmentActivity implements ChatFragment.IUserOnlineListener{
 
     public static final String CONTACTS_DATA = "contacts_data";
     public static final String INTENT_USERID = "INTENT_USERID";
@@ -49,6 +57,8 @@ public class ContainerActivity extends BaseFragmentActivity {
     // Id для админки начиная со 101
     public static final int INTENT_EDITOR_BANNERS = 101;
 
+    private View mOnlineIcon;
+
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -57,6 +67,16 @@ public class ContainerActivity extends BaseFragmentActivity {
         }
         setContentView(R.layout.fragment_frame);
         overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
+    }
+
+    @Override
+    protected void initCustomActionBarView(View mCustomView) {
+        mOnlineIcon = mCustomView.findViewById(R.id.online);
+    }
+
+    @Override
+    protected int getActionBarCustomViewResId() {
+        return R.layout.actionbar_container_title_view;
     }
 
     private void initRequestKey() {
@@ -290,5 +310,12 @@ public class ContainerActivity extends BaseFragmentActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void setUserOnline(boolean online) {
+        if (mOnlineIcon != null) {
+            mOnlineIcon.setVisibility(online ? View.VISIBLE : View.INVISIBLE);
+        }
     }
 }

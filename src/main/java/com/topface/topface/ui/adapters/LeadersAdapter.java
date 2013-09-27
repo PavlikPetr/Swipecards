@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+
 import com.topface.topface.R;
 import com.topface.topface.data.Leader;
 import com.topface.topface.ui.views.ImageViewRemote;

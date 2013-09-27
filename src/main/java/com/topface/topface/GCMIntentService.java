@@ -3,10 +3,12 @@ package com.topface.topface;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Looper;
+
 import com.google.android.gcm.GCMBaseIntentService;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.Settings;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 

@@ -1,9 +1,9 @@
 package com.topface.topface.ui.adapters;
 
 import android.content.Context;
+
 import com.topface.topface.R;
 import com.topface.topface.data.FeedBookmark;
-import com.topface.topface.data.Visitor;
 
 public class BookmarksListAdapter extends FeedAdapter<FeedBookmark> {
 

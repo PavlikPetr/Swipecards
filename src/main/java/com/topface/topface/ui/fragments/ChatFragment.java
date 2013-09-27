@@ -2,7 +2,11 @@ package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.*;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -11,13 +15,30 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.MenuItemCompat;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.view.*;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.analytics.tracking.android.EasyTracker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -25,8 +46,26 @@ import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.*;
-import com.topface.topface.requests.*;
+import com.topface.topface.data.Coordinates;
+import com.topface.topface.data.FeedDialog;
+import com.topface.topface.data.FeedUser;
+import com.topface.topface.data.Geo;
+import com.topface.topface.data.History;
+import com.topface.topface.data.HistoryListData;
+import com.topface.topface.data.SendGiftAnswer;
+import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.BlackListAddManyRequest;
+import com.topface.topface.requests.BlackListDeleteManyRequest;
+import com.topface.topface.requests.BookmarkAddRequest;
+import com.topface.topface.requests.BookmarkDeleteManyRequest;
+import com.topface.topface.requests.CoordinatesRequest;
+import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.DeleteMessagesRequest;
+import com.topface.topface.requests.HistoryRequest;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.MessageRequest;
+import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
@@ -43,8 +82,14 @@ import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.SwapControl;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.DateUtils;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.GeoUtils.GeoLocationManager;
+import com.topface.topface.utils.OsmManager;
+import com.topface.topface.utils.UserActions;
+import com.topface.topface.utils.Utils;
+
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -72,6 +117,16 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private static final int COMPLAIN_BUTTON = 2;
     private static final int DELETE_BUTTON = 1;
     private static final int COPY_BUTTON = 0;
+
+    /**
+     * Interface to pass online state
+     * TODO it is better to move it to ContainerActivity to use one with other fragments
+     */
+    public interface IUserOnlineListener {
+        void setUserOnline(boolean online);
+    }
+
+    private IUserOnlineListener mUserOnlineListener;
 
     // Data
     private int mUserId;
@@ -112,6 +167,16 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DateUtils.syncTime();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mUserOnlineListener = (IUserOnlineListener) activity;
+        } catch (ClassCastException e) {
+            Debug.error(e.toString());
+        }
     }
 
     @Override
@@ -237,7 +302,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     }
                     mUser = new FeedUser(new JSONObject(savedInstanceState.getString(FRIEND_FEED_USER)));
                     if (!mUser.isEmpty()) {
-                        onUserLoaded();
+                        onUserLoaded(mUser);
                     }
 
                     if (was_failed) {
@@ -457,7 +522,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 wasFailed = false;
                 mUser = data.user;
                 if (!mUser.isEmpty()) {
-                    onUserLoaded();
+                    onUserLoaded(mUser);
                 }
                 if (mAdapter != null) {
                     if (!data.items.isEmpty()) {
@@ -537,23 +602,26 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     }
 
-    private void onUserLoaded() {
-        if (!(mUser.deleted || mUser.banned || mUser.photo == null || mUser.photo.isEmpty())) {
+    private void onUserLoaded(FeedUser user) {
+        if (!(user.deleted || user.banned)) {
+            // список действий в контекстном меню
             ArrayList<UserActions.ActionItem> actions = new ArrayList<UserActions.ActionItem>();
-            actions.add(new UserActions.ActionItem(mUser.sex == 1 ? R.id.acProfile : R.id.acWProfile, this));
+            actions.add(new UserActions.ActionItem(user.sex == 1 ? R.id.acProfile : R.id.acWProfile, this));
             actions.add(new UserActions.ActionItem(R.id.acBlock, this));
             actions.add(new UserActions.ActionItem(R.id.acComplain, this));
             actions.add(new UserActions.ActionItem(R.id.acBookmark, this));
-
-
             UserActions userActions = new UserActions(chatActions, actions);
             bookmarksTv = (TextView) userActions.getViewById(R.id.acBookmark).findViewById(R.id.favTV);
             blockView = (RelativeLayout) userActions.getViewById(R.id.acBlock);
-            ((TextView) blockView.findViewById(R.id.blockTV)).setText(mUser.blocked ? R.string.black_list_delete : R.string.black_list_add_short);
-            bookmarksTv.setText(mUser.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
-
-            if (mBarAvatar != null) {
-                ((ImageViewRemote) mBarAvatar.getActionView().findViewById(R.id.ivBarAvatar)).setPhoto(mUser.photo);
+            ((TextView) blockView.findViewById(R.id.blockTV)).setText(user.blocked ? R.string.black_list_delete : R.string.black_list_add_short);
+            bookmarksTv.setText(user.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
+            // ставим фото пользователя в иконку в actionbar
+            if (mBarAvatar != null && user.photo != null && !user.photo.isEmpty()) {
+                ((ImageViewRemote) mBarAvatar.getActionView().findViewById(R.id.ivBarAvatar)).setPhoto(user.photo);
+            }
+            // ставим значок онлайн в нужное состояние
+            if (mUserOnlineListener != null) {
+                mUserOnlineListener.setUserOnline(user.online);
             }
         }
     }
@@ -1162,7 +1230,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         mBarAvatar = menu.findItem(R.id.action_profile);
-        mBarAvatar.getActionView().findViewById(R.id.ivBarAvatar).setOnClickListener(this);
+        MenuItemCompat.getActionView(mBarAvatar).findViewById(R.id.ivBarAvatar).setOnClickListener(this);
     }
 
     @Override
@@ -1183,4 +1251,5 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 return super.onOptionsItemSelected(item);
         }
     }
+
 }

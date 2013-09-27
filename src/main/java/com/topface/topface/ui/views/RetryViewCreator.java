@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.topface.IllustratedTextView.IllustratedTextView;
 import com.topface.topface.R;
 

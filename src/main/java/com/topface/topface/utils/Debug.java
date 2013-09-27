@@ -1,7 +1,9 @@
 package com.topface.topface.utils;
 
 import android.util.Log;
+
 import com.topface.topface.App;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;

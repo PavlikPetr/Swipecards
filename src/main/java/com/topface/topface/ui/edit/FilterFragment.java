@@ -11,6 +11,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;

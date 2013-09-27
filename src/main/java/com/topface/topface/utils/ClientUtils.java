@@ -2,6 +2,7 @@ package com.topface.topface.utils;
 
 import android.content.Context;
 import android.os.Build;
+
 import com.topface.topface.R;
 
 public class ClientUtils {

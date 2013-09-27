@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.topface.topface.R;
 import com.topface.topface.ui.views.RangeSeekBar;
 

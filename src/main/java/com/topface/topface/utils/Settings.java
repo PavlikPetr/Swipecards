@@ -8,6 +8,7 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.widget.TextView;
+
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;

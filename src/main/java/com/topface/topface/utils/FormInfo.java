@@ -3,6 +3,7 @@ package com.topface.topface.utils;
 import android.content.Context;
 import android.content.res.Resources;
 import android.text.InputType;
+
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;

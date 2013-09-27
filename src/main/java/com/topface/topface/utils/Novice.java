@@ -2,6 +2,7 @@ package com.topface.topface.utils;
 
 
 import android.content.SharedPreferences;
+
 import com.topface.topface.Static;
 
 public class Novice {

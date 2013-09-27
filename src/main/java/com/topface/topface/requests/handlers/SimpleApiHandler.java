@@ -1,6 +1,7 @@
 package com.topface.topface.requests.handlers;
 
 import android.app.Activity;
+
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.Utils;
 

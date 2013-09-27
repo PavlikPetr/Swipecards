@@ -1,6 +1,7 @@
 package com.topface.topface.ui.edit;
 
 import android.graphics.drawable.Drawable;
+
 import com.topface.topface.R;
 
 public abstract class EditProfileItem {

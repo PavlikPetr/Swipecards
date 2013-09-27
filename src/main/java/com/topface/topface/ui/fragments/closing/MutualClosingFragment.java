@@ -2,11 +2,15 @@ package com.topface.topface.ui.fragments.closing;
 
 import android.view.View;
 import android.widget.TextView;
+
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.FeedUser;
-import com.topface.topface.requests.*;
+import com.topface.topface.requests.DeleteMutualsRequest;
+import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.SkipAllClosedRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
