@@ -61,8 +61,6 @@ public class App extends Application {
 
     @Override
     public void onCreate() {
-        //android.os.Debug.startMethodTracing("topface_create");
-
         super.onCreate();
         mContext = getApplicationContext();
         //Включаем отладку, если это дебаг версия
@@ -105,6 +103,7 @@ public class App extends Application {
      * @param handler нужен для выполнения запросов
      */
     private void onCreateAsync(Handler handler) {
+        Debug.log("App", "+onCreateAsync");
         DateUtils.syncTime();
         Ssid.init();
         CacheProfile.loadProfile();
@@ -114,14 +113,16 @@ public class App extends Application {
         if (Ssid.isLoaded() && AuthToken.getInstance().isEmpty()) {
             GCMUtils.init(getContext());
         }
-        if (!CacheProfile.isEmpty()) {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    sendProfileAndOptionsRequests();
-                    sendLocation();
-                }
-            });
+        if (!GCMIntentService.isOnMessageReceived.getAndSet(false)) {
+            if (!CacheProfile.isEmpty()) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        sendProfileAndOptionsRequests();
+                        sendLocation();
+                    }
+                });
+            }
         }
     }
 
