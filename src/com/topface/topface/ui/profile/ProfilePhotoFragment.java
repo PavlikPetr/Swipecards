@@ -242,7 +242,10 @@ public class ProfilePhotoFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
+        if (requestCode == AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA ||
+                requestCode == AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY) {
+            mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
+        }
     }
 
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
