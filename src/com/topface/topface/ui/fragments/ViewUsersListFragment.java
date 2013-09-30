@@ -38,7 +38,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFragment {
     public static final int LIMIT = 40;
-    public static final int PHOTOS_LIMIT = 5;
+    public static final int PHOTOS_LIMIT = 20;
     public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 2;
 
     private ProgressBar mProgressBar;

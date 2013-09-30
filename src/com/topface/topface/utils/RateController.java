@@ -28,8 +28,9 @@ public class RateController {
     }
 
     public void onRate(final int userId, final int rate, final int mutualId, OnRateListener listener) {
-        if (rate == 10 && CacheProfile.money <= 0) {
+        if (rate == 10 && CacheProfile.money <= 0 && !CacheProfile.premium) {
             mContext.startActivity(ContainerActivity.getBuyingIntent("RateAdmiration"));
+
             if (mOnRateControllerListener != null) {
                 mOnRateControllerListener.failRate();
             }
@@ -39,7 +40,7 @@ public class RateController {
             return;
         }
 
-            sendRate(userId, rate, mutualId, listener);
+        sendRate(userId, rate, mutualId, listener);
     }
 
     private void sendRate(final int userid, final int rate, final int mutualId, final OnRateListener listener) {
