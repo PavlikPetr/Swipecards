@@ -34,7 +34,11 @@ public class PromoAdmirationsPopup extends PromoPopupFragment{
 
     @Override
     public String getMainTag() {
-        return "key_8_1";
+
+
+
+
+        return "key81";
     }
 
     @Override

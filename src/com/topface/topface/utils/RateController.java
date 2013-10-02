@@ -28,7 +28,7 @@ public class RateController {
     }
 
     public void onRate(final int userId, final int rate, final int mutualId, OnRateListener listener) {
-        if (rate == 10 && CacheProfile.money <= 0 && !CacheProfile.premium) {
+        if (rate == 10 && CacheProfile.money < CacheProfile.getOptions().price_highrate) {
             mContext.startActivity(ContainerActivity.getBuyingIntent("RateAdmiration"));
 
             if (mOnRateControllerListener != null) {

@@ -33,7 +33,7 @@ public class PromoVisitorsPopup extends PromoPopupFragment{
 
     @Override
     public String getMainTag() {
-        return "key_7_1";
+        return "key71";
     }
 
     @Override
