@@ -320,7 +320,10 @@ public class NavigationActivity extends BaseFragmentActivity {
                     public void onPhotoSentSuccess(final Photo photo) {
                         if (CacheProfile.photos != null) {
                             CacheProfile.photos.add(photo);
-                            LocalBroadcastManager.getInstance(NavigationActivity.this).sendBroadcast(new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT));
+                            Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
+                            intent.putExtra(PhotoSwitcherActivity.INTENT_CLEAR, true);
+                            intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, CacheProfile.photos);
+                            LocalBroadcastManager.getInstance(NavigationActivity.this).sendBroadcast(intent);
                         }
                         PhotoMainRequest request = new PhotoMainRequest(getApplicationContext());
                         request.photoid = photo.getId();
