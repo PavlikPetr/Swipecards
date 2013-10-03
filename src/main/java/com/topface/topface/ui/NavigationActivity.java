@@ -395,7 +395,9 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     }
 
     public void setMenuEnabled(boolean enabled) {
-        mDrawerLayout.setEnabled(enabled);
+        if (mDrawerLayout != null) {
+            mDrawerLayout.setEnabled(enabled);
+        }
     }
 
     @Override
