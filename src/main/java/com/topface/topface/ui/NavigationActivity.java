@@ -55,6 +55,8 @@ import com.topface.topface.utils.offerwalls.Offerwalls;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
+import java.util.ArrayList;
+
 public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
@@ -69,10 +71,8 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     private Novice mNovice;
     private boolean needAnimate = false;
     private boolean isPopupVisible = false;
-    private boolean menuEnabled = true;
     private static boolean mHasClosingsForThisSession;
     private static boolean mClosingsOnProfileUpdateInvoked = false;
-    private boolean mCanShowPromo = true;
 
     private static NavigationActivity instance = null;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -181,10 +181,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     private SharedPreferences getPreferences() {
@@ -374,12 +371,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         showFragment(MenuFragment.DEFAULT_FRAGMENT);
     }
 
-    @Override
-    public boolean startAuth() {
-        boolean result = super.startAuth();
-        return result;
-    }
-
+    @SuppressWarnings("UnusedDeclaration")
     private void toggleDrawerLayout() {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -403,10 +395,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     }
 
     public void setMenuEnabled(boolean enabled) {
-        menuEnabled = enabled;
-//        if (mSlidingMenu != null) {
-//            mSlidingMenu.setSlidingEnabled(enabled);
-//        }
+        mDrawerLayout.setEnabled(enabled);
     }
 
     @Override
@@ -531,14 +520,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
                 LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(DatingFragment.CLOSINGS_FILTER));
             }
         }
-    }
-
-    public boolean canShowPromo() {
-        return mCanShowPromo;
-    }
-
-    public void setNeedShowPromo(boolean canShowPromo) {
-        mCanShowPromo = canShowPromo;
     }
 
     public void onClosings() {

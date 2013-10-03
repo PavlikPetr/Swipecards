@@ -188,7 +188,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         initActionBar();
         initEmptySearchDialog(root, mSettingsListener);
         initImageSwitcher(root);
-            showPromoDialog();
+        showPromoDialog();
         return root;
     }
 
@@ -201,7 +201,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         setHighRatePrice();
         setActionBarTitles(getTitle(), getSubtitle());
         updateResources();
-        refreshActionBarTitles(getView());
+        refreshActionBarTitles();
         if (mCanShowPromo) {
             showPromoDialog();
             mCanShowPromo = false;
@@ -1014,7 +1014,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     };
 
-    private void sendAlbumRequest (final Photos data) {
+    private void sendAlbumRequest(final Photos data) {
         sendAlbumRequest(data, true);
     }
 
@@ -1029,7 +1029,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         int loadedPosition = data.get(mLoadedCount - 1).getPosition() + 1;
         final SearchUser currentSearchUser = mUserSearchList.getCurrentUser();
         if (currentSearchUser != null) {
-            int limit = defaultLoading? ViewUsersListFragment.PHOTOS_LIMIT : getCurrentPhotosLimit();
+            int limit = defaultLoading ? ViewUsersListFragment.PHOTOS_LIMIT : getCurrentPhotosLimit();
             AlbumRequest request = new AlbumRequest(getActivity(), currentSearchUser.id,
                     limit, loadedPosition, AlbumRequest.MODE_SEARCH);
             final int uid = currentSearchUser.id;
@@ -1048,7 +1048,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         mLoadedCount += newPhotos.size();
 
                         if (mImageSwitcher.getSelectedPosition() > mLoadedCount + DEFAULT_PRELOAD_ALBUM_RANGE) {
-                           sendAlbumRequest(data, false);
+                            sendAlbumRequest(data, false);
                         }
 
                         if (mImageSwitcher != null && mImageSwitcher.getAdapter() != null) {
@@ -1073,7 +1073,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private int getCurrentPhotosLimit() {
         int limit = mImageSwitcher.getSelectedPosition() - mLoadedCount + DEFAULT_PRELOAD_ALBUM_RANGE;
-        return limit > AlbumRequest.DEFAULT_PHOTOS_LIMIT? AlbumRequest.DEFAULT_PHOTOS_LIMIT : limit;
+        return limit > AlbumRequest.DEFAULT_PHOTOS_LIMIT ? AlbumRequest.DEFAULT_PHOTOS_LIMIT : limit;
     }
 
     private void updateResources() {

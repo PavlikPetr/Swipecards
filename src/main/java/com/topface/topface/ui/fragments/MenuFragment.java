@@ -73,7 +73,6 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
     private Button buyButton;
     private boolean canChangeProfileIcons = false;
     private int mCurrentFragmentId;
-    private BaseFragment mCurrentFragment;
     private boolean mHardwareAccelerated;
 
     public static final int DEFAULT_FRAGMENT = BaseFragment.F_DATING;
@@ -360,7 +359,6 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 transaction.replace(R.id.fragment_content, newFragment, fragmentTag);
                 transaction.commitAllowingStateLoss();
                 fragmentManager.executePendingTransactions();
-                mCurrentFragment = newFragment;
             }
         }
 
@@ -382,10 +380,6 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         } else {
             return "fragment_switch_controller_" + id;
         }
-    }
-
-    public BaseFragment getCurrentFragment() {
-        return mCurrentFragment;
     }
 
     private BaseFragment getFragmentNewInstanceById(int id) {
@@ -564,7 +558,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             public void onWatchSequentialy() {
                 Activity activity = getActivity();
                 if (activity instanceof NavigationActivity) {
-                    ((NavigationActivity)activity).showContent(animate);
+                    ((NavigationActivity) activity).showContent();
                 }
             }
         });
