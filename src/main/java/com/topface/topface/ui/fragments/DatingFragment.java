@@ -1052,7 +1052,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         public void onEmptyList(UsersList usersList) {
             lockControls();
             showEmptySearchDialog();
-//            updateData(false);
+            updateData(false);
         }
 
         @Override
