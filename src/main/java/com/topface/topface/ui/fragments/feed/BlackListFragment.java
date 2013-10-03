@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.BlackListItem;
@@ -11,6 +12,7 @@ import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.DeleteFeedsRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.adapters.BlackListAdapter;
+
 import org.json.JSONObject;
 
 import java.util.List;

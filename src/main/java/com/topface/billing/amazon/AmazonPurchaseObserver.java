@@ -2,6 +2,7 @@ package com.topface.billing.amazon;
 
 import android.content.Context;
 import android.text.TextUtils;
+
 import com.amazon.inapp.purchasing.BasePurchasingObserver;
 import com.amazon.inapp.purchasing.PurchaseResponse;
 import com.amazon.inapp.purchasing.PurchasingManager;

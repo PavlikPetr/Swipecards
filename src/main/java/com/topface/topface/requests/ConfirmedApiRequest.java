@@ -3,6 +3,7 @@ package com.topface.topface.requests;
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.dialogs.ConfirmEmailDialog;

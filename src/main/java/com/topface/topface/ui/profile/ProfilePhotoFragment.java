@@ -2,7 +2,11 @@ package com.topface.topface.ui.profile;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.*;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,12 +15,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.GridView;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ViewFlipper;
+
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
-import com.topface.topface.requests.*;
+import com.topface.topface.requests.AlbumRequest;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.PhotoDeleteRequest;
+import com.topface.topface.requests.PhotoMainRequest;
+import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.edit.EditContainerActivity;
@@ -24,6 +37,7 @@ import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
+
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -237,7 +251,10 @@ public class ProfilePhotoFragment extends BaseFragment {
         if (resultCode == Activity.RESULT_OK) {
             mViewFlipper.setDisplayedChild(0);
         }
-        mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
+        if (requestCode == AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA ||
+                requestCode == AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY) {
+            mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
+        }
     }
 
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
@@ -261,9 +278,14 @@ public class ProfilePhotoFragment extends BaseFragment {
             mViewFlipper.setDisplayedChild(0);
             if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
                 Photo photo = (Photo) msg.obj;
-                CacheProfile.photo = photo;
+                // ставим фото на аватарку только если она едиснтвенная
+                if (CacheProfile.photos.size() == 0) {
+                    CacheProfile.photo = photo;
+                }
+                // добавляется фото в начало списка
                 CacheProfile.photos.addFirst(photo);
                 mProfilePhotoGridAdapter.addFirst(photo);
+                // оповещаем всех об изменениях
                 LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
                 Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
                 initTitleText(mTitle);

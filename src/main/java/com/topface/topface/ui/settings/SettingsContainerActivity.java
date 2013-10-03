@@ -3,10 +3,10 @@ package com.topface.topface.ui.settings;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
 
 public class SettingsContainerActivity extends BaseFragmentActivity {

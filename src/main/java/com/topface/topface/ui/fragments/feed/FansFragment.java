@@ -3,6 +3,7 @@ package com.topface.topface.ui.fragments.feed;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+
 import com.topface.topface.R;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.ContainerActivity;

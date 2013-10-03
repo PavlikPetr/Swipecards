@@ -3,6 +3,7 @@ package com.topface.topface.ui.fragments.feed;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedBookmark;
@@ -12,6 +13,7 @@ import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.adapters.BookmarksListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.utils.CountersManager;
+
 import org.json.JSONObject;
 
 import java.util.List;

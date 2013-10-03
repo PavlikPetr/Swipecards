@@ -9,10 +9,12 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
@@ -280,6 +282,7 @@ public class AddPhotoHelper {
                 if (mContext != null) {
                     mContext.unregisterReceiver(receiver);
                 }
+
             }
 
             @Override
@@ -312,8 +315,9 @@ public class AddPhotoHelper {
                             String id = photoAddRequest.getId();
                             //TODO также обрабатывать запросы с id...x, где x-порядковый номер переповтора
                             if (fileNames != null) {
-                                if (fileNames.size() != 0) {
-                                    if (fileNames.get(id).delete()) {
+                                if(fileNames.size() != 0) {
+                                    File file = fileNames.get(id);
+                                    if (file != null && file.delete()) {
                                         Debug.log("Delete temp photo " + id);
                                     } else {
                                         Debug.log("Error delete temp photo " + id);

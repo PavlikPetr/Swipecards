@@ -2,6 +2,7 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 import android.net.Uri;
+
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.Base64;
@@ -9,10 +10,15 @@ import com.topface.topface.utils.BitmapUtils;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.HttpUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 
 public class PhotoAddRequest extends ApiRequest {

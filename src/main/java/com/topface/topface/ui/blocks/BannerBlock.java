@@ -1,8 +1,5 @@
 package com.topface.topface.ui.blocks;
 
-import ad.labs.sdk.AdBanner;
-import ad.labs.sdk.AdInitializer;
-import ad.labs.sdk.tasks.BannerLoader;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -19,10 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import com.google.ads.Ad;
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.inneractive.api.ads.InneractiveAd;
+import com.inneractive.api.ads.InneractiveAdListener;
 import com.lifestreet.android.lsmsdk.BannerAdapter;
 import com.lifestreet.android.lsmsdk.BasicSlotListener;
 import com.lifestreet.android.lsmsdk.SlotView;
@@ -35,28 +35,41 @@ import com.topface.topface.Static;
 import com.topface.topface.data.Banner;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.VirusLike;
-import com.topface.topface.requests.*;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.BannerRequest;
+import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.VirusLikesRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.feed.*;
+import com.topface.topface.ui.fragments.feed.BookmarksFragment;
+import com.topface.topface.ui.fragments.feed.DialogsFragment;
+import com.topface.topface.ui.fragments.feed.FansFragment;
+import com.topface.topface.ui.fragments.feed.LikesFragment;
+import com.topface.topface.ui.fragments.feed.MutualFragment;
+import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.offerwalls.Offerwalls;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import ad.labs.sdk.AdBanner;
+import ad.labs.sdk.AdInitializer;
+import ad.labs.sdk.tasks.BannerLoader;
 import ru.adcamp.ads.AdsManager;
 import ru.adcamp.ads.BannerAdView;
 import ru.ideast.adwired.AWView;
 import ru.ideast.adwired.events.OnNoBannerListener;
 import ru.ideast.adwired.events.OnStartListener;
 import ru.ideast.adwired.events.OnStopListener;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Показываем баннер на нужных страницах
@@ -184,6 +197,8 @@ public class BannerBlock {
                 return mInflater.inflate(R.layout.banner_lifestreet, mBannerLayout, false);
             } else if (bannerType.equals(BANNER_ADLAB)) {
                 return mInflater.inflate(R.layout.banner_adlab, null);
+            } else if (bannerType.equals(Options.BANNER_INNERACTIVE)) {
+                return mInflater.inflate(R.layout.banner_inneractive, null);
             } else {
                 return null;
             }
@@ -236,6 +251,8 @@ public class BannerBlock {
             showLifeStreet();
         } else if (mBannerView instanceof AdBanner) {
             showAdlab();
+        } else if (mBannerView instanceof InneractiveAd) {
+            showInneractive();
         } else if (mBannerView instanceof ImageView) {
             if (banner == null) {
                 requestBannerGag();
@@ -243,6 +260,60 @@ public class BannerBlock {
                 showTopface(banner);
             }
         }
+    }
+
+    private void showInneractive() {
+        InneractiveAd inneractive = ((InneractiveAd) mBannerView);
+        inneractive.setAge(CacheProfile.age);
+        inneractive.setGender(CacheProfile.sex == Static.BOY ? "Male" : "Female");
+        inneractive.setInneractiveListener(new InneractiveAdListener() {
+            @Override
+            public void onIaAdReceived() {
+                Debug.log("Inneractive: onIaAdReceived()");
+            }
+
+            @Override
+            public void onIaDefaultAdReceived() {
+                Debug.log("Inneractive: onIaDefaultAdReceived()");
+            }
+
+            @Override
+            public void onIaAdFailed() {
+                Debug.log("Inneractive: onIaAdFailed()");
+                if (mFragment != null && mFragment.getActivity() != null) {
+                    mFragment.getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            requestBannerGag();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onIaAdClicked() {
+            }
+
+            @Override
+            public void onIaAdResize() {
+            }
+
+            @Override
+            public void onIaAdResizeClosed() {
+            }
+
+            @Override
+            public void onIaAdExpand() {
+            }
+
+            @Override
+            public void onIaAdExpandClosed() {
+            }
+
+            @Override
+            public void onIaDismissScreen() {
+            }
+        });
     }
 
     private void showLifeStreet() {
@@ -263,7 +334,7 @@ public class BannerBlock {
     }
 
     private void showAdlab() {
-        AdBanner adBanner = (AdBanner) mBannerView;
+        AdBanner adBanner = (AdBanner)mBannerView;
         mAdlabInitializer = new AdInitializer(mContext, adBanner, ADLAB_IDENTIFICATOR);
         mAdlabInitializer.setOnBannerRequestListener(new BannerLoader.OnBannerRequestListener() {
             @Override
@@ -605,6 +676,11 @@ public class BannerBlock {
         if (mBannerView instanceof MoPubView) ((MoPubView) mBannerView).destroy();
         if (mBannerView instanceof SlotView) {
             ((SlotView) mBannerView).destroy();
+        }
+        if (mBannerView != null) {
+            if (mBannerView instanceof InneractiveAd) {
+                ((InneractiveAd) mBannerView).cleanUp();
+            }
         }
         removeBanner();
     }

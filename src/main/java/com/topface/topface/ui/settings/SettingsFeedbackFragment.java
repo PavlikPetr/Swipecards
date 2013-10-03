@@ -8,6 +8,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
 

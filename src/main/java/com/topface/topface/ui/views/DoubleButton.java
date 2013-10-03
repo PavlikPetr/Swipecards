@@ -8,6 +8,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+
 import com.topface.topface.R;
 
 public class DoubleButton extends LinearLayout implements CompoundButton.OnCheckedChangeListener {

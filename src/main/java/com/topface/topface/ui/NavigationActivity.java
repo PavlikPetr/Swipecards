@@ -1,10 +1,13 @@
 package com.topface.topface.ui;
 
 import android.app.Activity;
-import android.content.*;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -12,9 +15,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.internal.widget.ActionBarContainer;
-import android.view.*;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
+
 import com.topface.billing.BillingUtils;
 import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
@@ -23,7 +28,10 @@ import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
-import com.topface.topface.requests.*;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.PhotoMainRequest;
+import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
@@ -34,12 +42,22 @@ import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
 import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
 import com.topface.topface.ui.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.ExternalLinkExecuter;
+import com.topface.topface.utils.FullscreenController;
+import com.topface.topface.utils.LocaleConfig;
+import com.topface.topface.utils.NavigationBarController;
+import com.topface.topface.utils.Novice;
+import com.topface.topface.utils.PopupManager;
 import com.topface.topface.utils.offerwalls.Offerwalls;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-public class NavigationActivity extends BaseFragmentActivity {
+import java.util.ArrayList;
+
+public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
 
@@ -53,7 +71,6 @@ public class NavigationActivity extends BaseFragmentActivity {
     private Novice mNovice;
     private boolean needAnimate = false;
     private boolean isPopupVisible = false;
-    private boolean menuEnabled = true;
     private static boolean mHasClosingsForThisSession;
     private static boolean mClosingsOnProfileUpdateInvoked = false;
 
@@ -73,6 +90,8 @@ public class NavigationActivity extends BaseFragmentActivity {
         mNeedAnimate = false;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_navigation);
+        // этот метод можно использовать только после setContent
+        setSupportProgressBarIndeterminateVisibility(false);
         instance = this;
         if (isNeedBroughtToFront(getIntent())) {
             // При открытии активити из лаунчера перезапускаем ее
@@ -83,50 +102,21 @@ public class NavigationActivity extends BaseFragmentActivity {
         mFragmentManager = getSupportFragmentManager();
 
         initDrawerLayout();
-        initCounterBadges();
         if (!AuthToken.getInstance().isEmpty()) {
             showFragment(savedInstanceState);
         }
     }
 
-    private void initCounterBadges() {
-        final View badges = getLayoutInflater().inflate(R.layout.layout_notifications_badges, getActionBarContainerLayout(), true);
-        mNavBarController = new NavigationBarController((ViewGroup) badges);
-        final View home = findViewById(android.R.id.home);
-        if (home == null) return;
-        home.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @SuppressWarnings("deprecation")
-            @Override
-            public void onGlobalLayout() {
-                int diff = home.getTop() - badges.getHeight() / 7; // badges.getHeight()/6 - 1/6 бэйджа будет торчать над home иконкой
-                badges.findViewById(R.id.loCounters).setPadding(home.getLeft() + home.getWidth() / 2, diff > 0 ? diff : 0, 0, 0);
-                findViewById(android.R.id.home).setPadding(0, 0, Utils.getPxFromDp(6), 0);
-                mNavBarController.refreshNotificators();
-                if (Build.VERSION.SDK_INT >= 16) {
-                    home.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                } else {
-                    home.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                }
-            }
-        });
+    @Override
+    protected void initCustomActionBarView(View mCustomView) {
+        mNavBarController = new NavigationBarController(
+                (ViewGroup) getCustomActionBarView().findViewById(R.id.loCounters)
+        );
     }
 
-    private ViewGroup getActionBarContainerLayout() {
-        return recurActionBarContainerSearch((ViewGroup) getWindow().getDecorView());
-    }
-
-    private ViewGroup recurActionBarContainerSearch(ViewGroup viewGroup) {
-        if (viewGroup.getClass().getSimpleName().equals(ActionBarContainer.class.getSimpleName())) {
-            return viewGroup;
-        }
-        for (int i = 0; i < viewGroup.getChildCount(); i++) {
-            View child = viewGroup.getChildAt(i);
-            if (child instanceof ViewGroup) {
-                ViewGroup result = recurActionBarContainerSearch((ViewGroup) child);
-                if (result != null) return result;
-            }
-        }
-        return null;
+    @Override
+    protected int getActionBarCustomViewResId() {
+        return R.layout.actionbar_navigation_title_view;
     }
 
     @Override
@@ -156,22 +146,16 @@ public class NavigationActivity extends BaseFragmentActivity {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 mFragmentMenu.showNovice(mNovice);
-//                ActionBar actionBar = getSupportActionBar();
-//                actionBar.setTitle(R.string.app_name);
-//                actionBar.setSubtitle(null);
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 actionsAfterRegistration();
-//                mFragmentMenu.getCurrentFragment().refreshActionBarTitles();
             }
         };
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
         mFragmentMenu.setClickable(true);
@@ -197,10 +181,7 @@ public class NavigationActivity extends BaseFragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     private SharedPreferences getPreferences() {
@@ -325,6 +306,11 @@ public class NavigationActivity extends BaseFragmentActivity {
                             intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, CacheProfile.photos);
                             LocalBroadcastManager.getInstance(NavigationActivity.this).sendBroadcast(intent);
                         }
+                        Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
+                        ArrayList<Photo> photos = new ArrayList<Photo>();
+                        photos.add(photo);
+                        intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, photos);
+                        LocalBroadcastManager.getInstance(NavigationActivity.this).sendBroadcast(intent);
                         PhotoMainRequest request = new PhotoMainRequest(getApplicationContext());
                         request.photoid = photo.getId();
                         request.callback(new ApiHandler() {
@@ -388,12 +374,7 @@ public class NavigationActivity extends BaseFragmentActivity {
         showFragment(MenuFragment.DEFAULT_FRAGMENT);
     }
 
-    @Override
-    public boolean startAuth() {
-        boolean result = super.startAuth();
-        return result;
-    }
-
+    @SuppressWarnings("UnusedDeclaration")
     private void toggleDrawerLayout() {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -417,10 +398,9 @@ public class NavigationActivity extends BaseFragmentActivity {
     }
 
     public void setMenuEnabled(boolean enabled) {
-        menuEnabled = enabled;
-//        if (mSlidingMenu != null) {
-//            mSlidingMenu.setSlidingEnabled(enabled);
-//        }
+        if (mDrawerLayout != null) {
+            mDrawerLayout.setEnabled(enabled);
+        }
     }
 
     @Override
@@ -548,7 +528,6 @@ public class NavigationActivity extends BaseFragmentActivity {
     }
 
     public void onClosings() {
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(DatingFragment.CLOSINGS_FILTER));
         if (CacheProfile.unread_mutual == 0) {
             MutualClosingFragment.usersProcessed = true;
         }
@@ -571,6 +550,7 @@ public class NavigationActivity extends BaseFragmentActivity {
         }
         mFragmentMenu.onStopClosings();
         showFragment(null); // it will take fragment id from getIntent() extra data
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(DatingFragment.CLOSINGS_FILTER));
     }
 
     private void updateClosing() {

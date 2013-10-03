@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import com.topface.topface.App;
 import com.topface.topface.Static;
 

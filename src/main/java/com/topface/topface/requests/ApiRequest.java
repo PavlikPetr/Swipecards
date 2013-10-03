@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Message;
 import android.text.TextUtils;
+
 import com.topface.topface.App;
 import com.topface.topface.RetryDialog;
 import com.topface.topface.Ssid;
@@ -14,6 +15,7 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.HttpUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 

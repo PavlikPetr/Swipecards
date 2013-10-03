@@ -18,6 +18,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
+
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.topface.topface.R;

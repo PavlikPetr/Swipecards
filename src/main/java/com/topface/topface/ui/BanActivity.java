@@ -10,12 +10,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
-import com.topface.topface.requests.*;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.requests.RestoreAccountRequest;
 import com.topface.topface.ui.analytics.TrackedActivity;
 import com.topface.topface.utils.AppConfig;
 import com.topface.topface.utils.CacheProfile;

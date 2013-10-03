@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.topface.topface.R;
 import com.topface.topface.data.User;
 import com.topface.topface.utils.FormItem;

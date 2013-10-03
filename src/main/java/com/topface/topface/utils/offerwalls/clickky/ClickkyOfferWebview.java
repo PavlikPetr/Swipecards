@@ -3,7 +3,11 @@ package com.topface.topface.utils.offerwalls.clickky;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.location.*;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
@@ -12,7 +16,9 @@ import android.util.Log;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Toast;
+
 import com.google.android.maps.GeoPoint;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,7 +28,11 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ClickkyOfferWebview extends WebView implements LocationListener
 {

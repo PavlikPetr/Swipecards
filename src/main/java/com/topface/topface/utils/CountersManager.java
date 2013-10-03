@@ -3,6 +3,7 @@ package com.topface.topface.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
+
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.LeadersRequest;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
@@ -185,12 +186,15 @@ public class CountersManager {
     }
 
     private void commitCounters() {
-        if (likesCounter != CacheProfile.unread_likes ||
+        String method = lastRequestMethod == null ? NULL_METHOD : lastRequestMethod;
+        if ((likesCounter != CacheProfile.unread_likes ||
                 dialogsCounter != CacheProfile.unread_messages ||
                 sympathyCounter != CacheProfile.unread_mutual ||
                 visitorsCounter != CacheProfile.unread_visitors ||
                 fansCounter != CacheProfile.unread_fans ||
-                admirationsCounter != CacheProfile.unread_admirations) {
+                admirationsCounter != CacheProfile.unread_admirations) &&
+                !checkMethodIsDenyed(method)
+                ) {
             if (CacheProfile.unread_likes < likesCounter) {
                 LikesClosingFragment.usersProcessed = false;
             }

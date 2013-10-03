@@ -4,11 +4,20 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.util.SparseArrayCompat;
+
 import com.topface.topface.App;
 import com.topface.topface.Static;
-import com.topface.topface.data.*;
+import com.topface.topface.data.City;
+import com.topface.topface.data.DatingFilter;
+import com.topface.topface.data.Gift;
+import com.topface.topface.data.GooglePlayProducts;
+import com.topface.topface.data.Options;
+import com.topface.topface.data.Photo;
+import com.topface.topface.data.Photos;
+import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 

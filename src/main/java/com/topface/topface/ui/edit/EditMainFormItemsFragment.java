@@ -20,6 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
@@ -264,7 +265,9 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                         if (intent != null) getActivity().setResult(Activity.RESULT_OK, intent);
                         else getActivity().setResult(Activity.RESULT_OK);
                         finishRequestSend();
-                        if (handler == null) getActivity().finish();
+                        if (handler == null) {
+                            getActivity().finish();
+                        }
                         else handler.sendEmptyMessage(0);
                     }
 

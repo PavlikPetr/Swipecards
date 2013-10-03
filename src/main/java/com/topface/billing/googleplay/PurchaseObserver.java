@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Handler;
 import android.util.Log;
+
 import com.topface.billing.googleplay.BillingService.RequestPurchase;
 import com.topface.billing.googleplay.BillingService.RestoreTransactions;
 import com.topface.billing.googleplay.Consts.PurchaseState;

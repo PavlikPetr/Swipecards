@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
+
 import com.topface.topface.R;
 
 import java.util.concurrent.TimeUnit;

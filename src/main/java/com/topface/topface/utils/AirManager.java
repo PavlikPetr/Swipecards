@@ -3,6 +3,7 @@ package com.topface.topface.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v4.app.FragmentManager;
+
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.fragments.promo.AirMessagesFragment;
@@ -20,40 +21,63 @@ public class AirManager {
     }
 
     public void startFragment(FragmentManager fm) {
-        int lastFragmentType = getLastFragmentType();
-        PromoPopupFragment promoPopup;
-
-
-        Options.PremiumAirEntity premiumMessages = CacheProfile.getOptions().premium_messages;
-        Options.PremiumAirEntity premiumVisitors = CacheProfile.getOptions().premium_visitors;
-        Options.PremiumAirEntity premiumAdmirations = CacheProfile.getOptions().premium_admirations;
-        //Проверяем можем ли мы показать какой-нибудь попап и не был ли он показан последним.
-        //Если ничего не можем показать, ничего и не показываем.
-        if (checkIsNeedShow(premiumMessages) &&
-                lastFragmentType != Options.PremiumAirEntity.AIR_MESSAGES) {
-
-            mType = Options.PremiumAirEntity.AIR_MESSAGES;
-            promoPopup = new AirMessagesFragment();
-        } else if (checkIsNeedShow(premiumVisitors) &&
-                lastFragmentType != Options.PremiumAirEntity.AIR_VISITORS) {
-
-            mType = Options.PremiumAirEntity.AIR_VISITORS;
-            promoPopup = new PromoVisitorsPopup();
-        } else if (checkIsNeedShow(premiumAdmirations) &&
-                lastFragmentType != Options.PremiumAirEntity.AIR_ADMIRATIONS) {
-
-            mType = Options.PremiumAirEntity.AIR_ADMIRATIONS;
-            promoPopup = new PromoAdmirationsPopup();
-        } else {
+        if (showPromoPopup(fm, Options.PremiumAirEntity.AIR_MESSAGES)) {
+            return;
+        } else if (showPromoPopup(fm, Options.PremiumAirEntity.AIR_VISITORS)) {
+            return;
+        } else if (showPromoPopup(fm, Options.PremiumAirEntity.AIR_ADMIRATIONS, false)) {
             return;
         }
+    }
 
-        setLastFragmentType();
+    public boolean showPromoPopup(FragmentManager fm, int type) {
+        PromoPopupFragment promo = null;
+        if (checkIsNeedShow(CacheProfile.getOptions().getPremiumEntityByType(type)) &&
+                getLastFragmentType() != type) {
+            mType = type;
+            promo = getFragmentByType(type);
+        }
+        if (promo != null) {
+            setLastFragmentType(type);
 
-        fm.beginTransaction()
-            .add(android.R.id.content, promoPopup)
-            .addToBackStack(null)
-            .commit();
+            fm.beginTransaction()
+                    .add(android.R.id.content, promo)
+                    .addToBackStack(null)
+                    .commit();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean showPromoPopup(FragmentManager fm, int type, boolean doNeedSetLastType) {
+        PromoPopupFragment promo = null;
+        if (checkIsNeedShow(CacheProfile.getOptions().getPremiumEntityByType(type)) &&
+                getLastFragmentType() != type) {
+            mType = type;
+            promo = getFragmentByType(type);
+        }
+        if (promo != null) {
+            setLastFragmentType(Options.PremiumAirEntity.AIR_NONE);
+
+            fm.beginTransaction()
+                    .add(android.R.id.content, promo)
+                    .addToBackStack(null)
+                    .commit();
+            return true;
+        }
+        return false;
+    }
+
+    private PromoPopupFragment getFragmentByType(int type) {
+        switch (type) {
+            case Options.PremiumAirEntity.AIR_ADMIRATIONS:
+                return new PromoAdmirationsPopup();
+            case Options.PremiumAirEntity.AIR_VISITORS:
+                return new PromoVisitorsPopup();
+            case Options.PremiumAirEntity.AIR_MESSAGES:
+                return new AirMessagesFragment();
+        }
+        return null;
     }
 
     private boolean checkIsNeedShow(Options.PremiumAirEntity entity) {
@@ -65,13 +89,15 @@ public class AirManager {
         return prefs.getInt(AIR_TYPE_LAST_TAG, Options.PremiumAirEntity.AIR_NONE);
     }
 
-    public void setLastFragmentType() {
+    public void setLastFragmentType(final int type) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 SharedPreferences prefs = mContext.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-                prefs.edit().putInt(AIR_TYPE_LAST_TAG, mType).commit();
+                prefs.edit().putInt(AIR_TYPE_LAST_TAG, type).commit();
             }
         }).start();
     }
+
+
 }

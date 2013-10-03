@@ -10,9 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+
 import com.ivengo.adv.AdvListener;
 import com.ivengo.adv.AdvView;
-import com.lifestreet.android.lsmsdk.*;
+import com.lifestreet.android.lsmsdk.BannerAdapter;
+import com.lifestreet.android.lsmsdk.BasicSlotListener;
+import com.lifestreet.android.lsmsdk.InterstitialAdapter;
+import com.lifestreet.android.lsmsdk.InterstitialSlot;
+import com.lifestreet.android.lsmsdk.SlotView;
 import com.mopub.mobileads.MoPubErrorCode;
 import com.mopub.mobileads.MoPubInterstitial;
 import com.topface.topface.App;
@@ -20,19 +25,23 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Banner;
 import com.topface.topface.data.Options;
-import com.topface.topface.requests.*;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.BannerRequest;
+import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
 import com.topface.topface.ui.views.ImageViewRemote;
-import ru.ideast.adwired.AWView;
-import ru.ideast.adwired.events.OnNoBannerListener;
-import ru.ideast.adwired.events.OnStartListener;
-import ru.ideast.adwired.events.OnStopListener;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+
+import ru.ideast.adwired.AWView;
+import ru.ideast.adwired.events.OnNoBannerListener;
+import ru.ideast.adwired.events.OnStartListener;
+import ru.ideast.adwired.events.OnStopListener;
 
 /**
  */

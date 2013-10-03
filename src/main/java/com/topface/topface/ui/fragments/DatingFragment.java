@@ -1,7 +1,11 @@
 package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
-import android.content.*;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -15,19 +19,38 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ViewFlipper;
+
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.RetryRequestReceiver;
 import com.topface.topface.Static;
-import com.topface.topface.data.*;
+import com.topface.topface.data.DatingFilter;
+import com.topface.topface.data.NoviceLikes;
+import com.topface.topface.data.Photo;
+import com.topface.topface.data.Photos;
 import com.topface.topface.data.search.CachableSearchList;
 import com.topface.topface.data.search.OnUsersListEventsListener;
 import com.topface.topface.data.search.SearchUser;
 import com.topface.topface.data.search.UsersList;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
-import com.topface.topface.requests.*;
+import com.topface.topface.requests.AlbumRequest;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.FilterRequest;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.NoviceLikesRequest;
+import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.requests.SearchRequest;
+import com.topface.topface.requests.SendLikeRequest;
+import com.topface.topface.requests.SkipRateRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
@@ -39,7 +62,13 @@ import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
-import com.topface.topface.utils.*;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.LocaleConfig;
+import com.topface.topface.utils.Novice;
+import com.topface.topface.utils.PreloadManager;
+import com.topface.topface.utils.RateController;
 
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
         RateController.OnRateControllerListener {
@@ -96,14 +125,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private boolean mNeedMore;
     private int mLoadedCount;
 
-    private boolean mCanShowPromo;
-    private BroadcastReceiver closingsReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            mCanShowPromo = true;
-            showPromoDialog();
-        }
-    };
+    private boolean mCanShowPromo = true;
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -154,7 +176,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         SharedPreferences preferences = getActivity().getSharedPreferences(
                 Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         mNovice = Novice.getInstance(preferences);
-//        showPromoDialog();
     }
 
     @Override
@@ -167,7 +188,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         initActionBar();
         initEmptySearchDialog(root, mSettingsListener);
         initImageSwitcher(root);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(closingsReceiver, new IntentFilter(CLOSINGS_FILTER));
+        showPromoDialog();
         return root;
     }
 
@@ -190,7 +211,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onDestroy() {
         super.onDestroy();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(closingsReceiver);
     }
 
     @Override
@@ -385,7 +405,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         if (currentUser != null && mCurrentUser != currentUser) {
                             showUser(currentUser);
                             unlockControls();
-                        } else if (!isAddition || mUserSearchList.isEmpty()) {
+                        } else if (!isAddition || mUserSearchList.isEmpty() || mUserSearchList.isEnded()) {
                             showEmptySearchDialog();
                         } else if (!mUserSearchList.isEnded()) {
                             showNextUser();
@@ -995,6 +1015,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     };
 
     private void sendAlbumRequest(final Photos data) {
+        sendAlbumRequest(data, true);
+    }
+
+    private void sendAlbumRequest(final Photos data, boolean defaultLoading) {
         if (mUserSearchList == null)
             return;
         if ((mLoadedCount - 1) >= data.size())
@@ -1002,11 +1026,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (data.get(mLoadedCount - 1) == null)
             return;
 
-        int position = data.get(mLoadedCount - 1).getPosition() + 1;
+        int loadedPosition = data.get(mLoadedCount - 1).getPosition() + 1;
         final SearchUser currentSearchUser = mUserSearchList.getCurrentUser();
         if (currentSearchUser != null) {
+            int limit = defaultLoading ? ViewUsersListFragment.PHOTOS_LIMIT : getCurrentPhotosLimit();
             AlbumRequest request = new AlbumRequest(getActivity(), currentSearchUser.id,
-                    ViewUsersListFragment.PHOTOS_LIMIT, position, AlbumRequest.MODE_SEARCH);
+                    limit, loadedPosition, AlbumRequest.MODE_SEARCH);
             final int uid = currentSearchUser.id;
             request.callback(new DataApiHandler<Photos>() {
                 @Override
@@ -1021,6 +1046,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                             }
                         }
                         mLoadedCount += newPhotos.size();
+
+                        if (mImageSwitcher.getSelectedPosition() > mLoadedCount + DEFAULT_PRELOAD_ALBUM_RANGE) {
+                            sendAlbumRequest(data, false);
+                        }
 
                         if (mImageSwitcher != null && mImageSwitcher.getAdapter() != null) {
                             mImageSwitcher.getAdapter().notifyDataSetChanged();
@@ -1040,6 +1069,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 }
             }).exec();
         }
+    }
+
+    private int getCurrentPhotosLimit() {
+        int limit = mImageSwitcher.getSelectedPosition() - mLoadedCount + DEFAULT_PRELOAD_ALBUM_RANGE;
+        return limit > AlbumRequest.DEFAULT_PHOTOS_LIMIT ? AlbumRequest.DEFAULT_PHOTOS_LIMIT : limit;
     }
 
     private void updateResources() {

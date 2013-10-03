@@ -1,6 +1,7 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -60,8 +61,7 @@ public class FeedRequest extends ApiRequest {
                 service = "dialog.getList";
                 break;
             case LIKES:
-                service = "likes.getList";
-                service = "feedLikes";
+                service = "like.getList";
                 break;
             case MUTUAL:
                 service = "mutual.getList";
@@ -77,7 +77,7 @@ public class FeedRequest extends ApiRequest {
                 service = "bookmark.getList";
                 break;
             case ADMIRATIONS:
-                service = "feedAdmirations";
+                service = "admiration.getList";
                 break;
         }
         return service;

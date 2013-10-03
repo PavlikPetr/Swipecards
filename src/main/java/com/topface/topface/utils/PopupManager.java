@@ -9,6 +9,7 @@ import android.content.pm.PackageInfo;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.view.View;
+
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;

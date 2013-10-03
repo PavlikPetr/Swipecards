@@ -1,9 +1,11 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.Static;
 import com.topface.topface.data.DatingFilter;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 

@@ -2,8 +2,10 @@ package com.topface.topface.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import com.google.android.maps.GeoPoint;
 import com.topface.topface.utils.Debug;
+
 import org.json.JSONObject;
 
 public class Coordinates extends AbstractData implements Parcelable {

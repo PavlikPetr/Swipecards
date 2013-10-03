@@ -4,6 +4,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
+
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
@@ -54,8 +55,10 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
     }
 
     public void addData(Photos photoLinks, boolean needMore) {
-        if (mPhotoLinks.size() > 0 && mPhotoLinks.get(mPhotoLinks.size() - 1).getId() == 0) {
-            mPhotoLinks.remove(mPhotoLinks.size() - 1);
+        if (mPhotoLinks.size() > 0 && mPhotoLinks.get(mPhotoLinks.size() - 1) != null) {
+            if (mPhotoLinks.size() > 0 && mPhotoLinks.get(mPhotoLinks.size() - 1).getId() == 0) {
+                mPhotoLinks.remove(mPhotoLinks.size() - 1);
+            }
         }
 
         for (Photo photo : photoLinks) {

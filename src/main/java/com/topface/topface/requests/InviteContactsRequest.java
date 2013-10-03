@@ -1,7 +1,9 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+
 import com.topface.topface.utils.ContactsProvider;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 

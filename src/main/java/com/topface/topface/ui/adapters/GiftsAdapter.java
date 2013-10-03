@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.TextView;
+
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedGift;

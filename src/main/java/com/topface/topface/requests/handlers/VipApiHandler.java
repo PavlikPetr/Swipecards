@@ -2,6 +2,7 @@ package com.topface.topface.requests.handlers;
 
 import android.app.Activity;
 import android.content.Context;
+
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.ContainerActivity;
 

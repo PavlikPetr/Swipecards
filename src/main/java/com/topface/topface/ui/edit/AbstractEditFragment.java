@@ -1,9 +1,8 @@
 package com.topface.topface.ui.edit;
 
 import android.os.Handler;
-import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
+
 import com.topface.topface.ui.fragments.BaseFragment;
 
 public abstract class AbstractEditFragment extends BaseFragment {

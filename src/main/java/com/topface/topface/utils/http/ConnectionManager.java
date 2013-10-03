@@ -5,18 +5,21 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import com.topface.topface.*;
+
+import com.topface.topface.App;
+import com.topface.topface.R;
+import com.topface.topface.RetryDialog;
+import com.topface.topface.Ssid;
 import com.topface.topface.data.Auth;
 import com.topface.topface.requests.AuthRequest;
-import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.IApiRequest;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.BanActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
 
-import javax.net.ssl.SSLException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
@@ -26,6 +29,8 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import javax.net.ssl.SSLException;
 
 public class ConnectionManager {
 

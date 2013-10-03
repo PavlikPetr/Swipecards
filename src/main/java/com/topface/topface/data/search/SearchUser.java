@@ -3,6 +3,7 @@ package com.topface.topface.data.search;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.SerializableToJson;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 

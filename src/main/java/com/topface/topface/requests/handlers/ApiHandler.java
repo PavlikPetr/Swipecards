@@ -7,11 +7,17 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
+
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.requests.*;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.AppOptionsRequest;
+import com.topface.topface.requests.ConfirmedApiRequest;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
+
 import org.json.JSONObject;
 
 abstract public class ApiHandler extends Handler {
@@ -102,12 +108,12 @@ abstract public class ApiHandler extends Handler {
                 CountersManager.getInstance(App.getContext())
                         .setMethod(method)
                         .setEntitiesCounters(
-                                unread.optInt("unread_likes"),
-                                unread.optInt("unread_symphaties"),
-                                unread.optInt("unread_messages"),
-                                unread.optInt("unread_visitors"),
-                                unread.optInt("unread_fans"),
-                                unread.optInt("unread_admirations")
+                                unread.optInt("likes"),
+                                unread.optInt("mutual"),
+                                unread.optInt("dialogs"),
+                                unread.optInt("visitors"),
+                                unread.optInt("fans"),
+                                unread.optInt("admirations")
                         );
             }
             if (balance != null) {

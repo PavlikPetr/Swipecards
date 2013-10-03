@@ -4,15 +4,23 @@ package com.topface.billing.googleplay;
 
 import android.text.TextUtils;
 import android.util.Log;
+
 import com.topface.billing.googleplay.Consts.PurchaseState;
 import com.topface.topface.App;
 import com.topface.topface.utils.Base64;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.security.*;
+import java.security.InvalidKeyException;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.SecureRandom;
+import java.security.Signature;
+import java.security.SignatureException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;

@@ -2,7 +2,9 @@ package com.topface.topface.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import com.topface.topface.utils.Debug;
+
 import org.json.JSONObject;
 
 /**

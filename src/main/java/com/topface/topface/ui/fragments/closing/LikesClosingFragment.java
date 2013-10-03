@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.closing;
 
 import android.view.View;
 import android.widget.TextView;
+
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;

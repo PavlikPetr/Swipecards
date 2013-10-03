@@ -6,6 +6,7 @@ import android.graphics.Point;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
+
 import com.topface.topface.App;
 
 public class Device {

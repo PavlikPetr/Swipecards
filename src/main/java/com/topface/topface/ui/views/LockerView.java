@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.topface.topface.R;
 
 /**
@@ -89,7 +90,7 @@ public class LockerView extends RelativeLayout {
         mTextView.setCompoundDrawablePadding(a.getDimensionPixelSize(
                 R.styleable.LockerView_android_drawablePadding, 0));
 
-        if (Build.VERSION.SDK_INT >= 16) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             mTextView.setBackground(a.getDrawable(R.styleable.LockerView_messageBackground));
         } else {
             mTextView.setBackgroundDrawable(a.getDrawable(R.styleable.LockerView_messageBackground));

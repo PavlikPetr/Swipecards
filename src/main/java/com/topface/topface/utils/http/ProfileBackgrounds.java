@@ -5,9 +5,9 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
 import com.topface.topface.R;
 
-import java.util.Collections;
 import java.util.LinkedList;
 
 public class ProfileBackgrounds {

@@ -2,6 +2,7 @@ package com.topface.topface.ui.analytics;
 
 import android.app.Activity;
 import android.support.v4.app.Fragment;
+
 import com.google.analytics.tracking.android.EasyTracker;
 
 public class TrackedFragment extends Fragment {

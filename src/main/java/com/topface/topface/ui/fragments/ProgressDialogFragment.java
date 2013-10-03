@@ -3,6 +3,7 @@ package com.topface.topface.ui.fragments;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+
 import com.topface.topface.R;
 import com.topface.topface.ui.analytics.TrackedDialogFragment;
 

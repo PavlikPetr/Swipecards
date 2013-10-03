@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
+
 import com.facebook.topface.AsyncFacebookRunner;
 import com.facebook.topface.AsyncFacebookRunner.RequestListener;
 import com.facebook.topface.DialogError;
@@ -30,17 +31,19 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.http.HttpUtils;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import ru.ok.android.sdk.Odnoklassniki;
-import ru.ok.android.sdk.OkTokenRequestListener;
-import ru.ok.android.sdk.util.OkScope;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
+
+import ru.ok.android.sdk.Odnoklassniki;
+import ru.ok.android.sdk.OkTokenRequestListener;
+import ru.ok.android.sdk.util.OkScope;
 
 /**
  * AuthorizationManager has to be attached to some Activity (setted on getInstance(...))

@@ -3,6 +3,7 @@ package com.topface.topface.utils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import com.topface.topface.R;
 
 public class NavigationBarController {
