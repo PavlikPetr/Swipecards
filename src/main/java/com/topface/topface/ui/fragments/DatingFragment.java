@@ -886,7 +886,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             moneyDecreased = false;
             updateResources();
         }
-        showNextUser();
     }
 
     @Override
