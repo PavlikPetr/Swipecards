@@ -26,6 +26,15 @@ public abstract class CustomTitlesBaseFragmentActivity extends BaseFragmentActiv
     }
 
     @Override
+    public void setContentView(int layoutResID) {
+        super.setContentView(layoutResID);
+        //Странный глюк на некоторых устройствах (воспроизводится например на HTC One V),
+        // из-за которого показывается лоадер в ActionBar
+        // этот метод можно использовать только после setContent
+        setSupportProgressBarIndeterminateVisibility(false);
+    }
+
+    @Override
     protected void initActionBar(ActionBar actionBar) {
         super.initActionBar(actionBar);
         if (actionBar != null) {

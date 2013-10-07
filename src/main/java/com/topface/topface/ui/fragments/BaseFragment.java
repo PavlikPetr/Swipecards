@@ -133,15 +133,10 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     private void removeAllRequests() {
         if (mRequests != null && mRequests.size() > 0) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    for (ApiRequest request : mRequests) {
-                        cancelRequest(request);
-                    }
-                    mRequests.clear();
-                }
-            }).start();
+            for (ApiRequest request : mRequests) {
+                cancelRequest(request);
+            }
+            mRequests.clear();
         }
     }
 
@@ -286,7 +281,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         Integer res = getOptionsMenuRes();
-        if(res != null) {
+        if (res != null) {
             inflater.inflate(res, menu);
         }
         super.onCreateOptionsMenu(menu, inflater);
@@ -297,10 +292,10 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     protected ActionBar getSupportActionBar() {
-        if(mSupportActionBar == null) {
+        if (mSupportActionBar == null) {
             Activity activity = getActivity();
             if (activity instanceof ActionBarActivity) {
-                mSupportActionBar = ((ActionBarActivity)activity).getSupportActionBar();
+                mSupportActionBar = ((ActionBarActivity) activity).getSupportActionBar();
             }
         }
         return mSupportActionBar;
@@ -309,24 +304,25 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     protected void setSupportProgressBarIndeterminateVisibility(boolean visible) {
         Activity activity = getActivity();
         if (activity instanceof ActionBarActivity) {
-            ((ActionBarActivity)activity).setSupportProgressBarIndeterminateVisibility(visible);
+            ((ActionBarActivity) activity).setSupportProgressBarIndeterminateVisibility(visible);
         }
     }
 
     protected void setActionBarTitles(String title, String subtitle) {
-        getActionBarTitleSetter(getSupportActionBar()).setActionBarTitles(title,subtitle);
+        getActionBarTitleSetter(getSupportActionBar()).setActionBarTitles(title, subtitle);
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     protected void setActionBarTitles(int title, int subtitle) {
-        getActionBarTitleSetter(getSupportActionBar()).setActionBarTitles(title,subtitle);
+        getActionBarTitleSetter(getSupportActionBar()).setActionBarTitles(title, subtitle);
     }
 
     protected void setActionBarTitles(String title) {
-        getActionBarTitleSetter(getSupportActionBar()).setActionBarTitles(title,null);
+        getActionBarTitleSetter(getSupportActionBar()).setActionBarTitles(title, null);
     }
 
     protected void setActionBarTitles(int title) {
-        getActionBarTitleSetter(getSupportActionBar()).setActionBarTitles(title,null);
+        getActionBarTitleSetter(getSupportActionBar()).setActionBarTitles(title, null);
     }
 
     protected String getTitle() {
@@ -337,7 +333,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         return null;
     }
 
-    protected void restoreState(){
+    protected void restoreState() {
     }
 
     protected void setNeedTitles(boolean needTitles) {
@@ -348,7 +344,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         if (mTitleSetter == null) {
             Activity activity = getActivity();
             if (activity instanceof CustomTitlesBaseFragmentActivity) {
-                mTitleSetter = ((CustomTitlesBaseFragmentActivity)activity).getActionBarTitleSetterDelegate();
+                mTitleSetter = ((CustomTitlesBaseFragmentActivity) activity).getActionBarTitleSetterDelegate();
             } else {
                 mTitleSetter = new ActionBarTitleSetterDelegate(actionBar);
             }

@@ -66,7 +66,8 @@ public class PhotoAddRequest extends ApiRequest {
                     headersBytes,
                     endBytes,
                     inputStream,
-                    HttpUtils.getOutputStream(contentLength, connection)
+                    contentLength,
+                    connection
             );
 
             Debug.logJson(
@@ -80,7 +81,10 @@ public class PhotoAddRequest extends ApiRequest {
         }
     }
 
-    private void writeRequest(byte[] headersBytes, byte[] endBytes, InputStream inputStream, OutputStream outputStream) throws IOException {
+    private void writeRequest(byte[] headersBytes, byte[] endBytes, InputStream inputStream,
+                              int contentLength, HttpURLConnection connection) throws IOException {
+
+        OutputStream outputStream = HttpUtils.getOutputStream(contentLength, connection);
         DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(
                 outputStream
         ));

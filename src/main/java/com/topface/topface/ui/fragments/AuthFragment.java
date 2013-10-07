@@ -100,7 +100,7 @@ public class AuthFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater,container,savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
         Debug.log("AF: onCreate");
         mAuthorizationManager = new AuthorizationManager(getActivity());
         Activity activity = getActivity();
@@ -165,7 +165,9 @@ public class AuthFragment extends BaseFragment {
         btnsController = new AuthButtonsController(getActivity(), new AuthButtonsController.OnButtonsSettingsLoadedListener() {
             @Override
             public void buttonSettingsLoaded(HashSet<String> settings) {
-                initButtonsWithSettings(root);
+                if (btnsController != null) {
+                    initButtonsWithSettings(root);
+                }
             }
         });
     }

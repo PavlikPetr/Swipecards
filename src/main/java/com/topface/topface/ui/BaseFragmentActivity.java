@@ -232,15 +232,10 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     private void removeAllRequests() {
         if (mRequests != null && mRequests.size() > 0) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    for (ApiRequest request : mRequests) {
-                        cancelRequest(request);
-                    }
-                    mRequests.clear();
-                }
-            }).start();
+            for (ApiRequest request : mRequests) {
+                cancelRequest(request);
+            }
+            mRequests.clear();
         }
     }
 

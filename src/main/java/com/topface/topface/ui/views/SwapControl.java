@@ -61,7 +61,9 @@ public class SwapControl extends ViewGroup {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        mSizeChangedListener.onSizeChanged(w, h, oldw, oldh);
+        if (mSizeChangedListener != null) {
+            mSizeChangedListener.onSizeChanged(w, h, oldw, oldh);
+        }
     }
 
     public void setOnSizeChangedListener(OnSizeChangedListener listener) {
