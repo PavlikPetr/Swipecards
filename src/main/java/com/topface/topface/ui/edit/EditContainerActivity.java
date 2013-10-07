@@ -5,14 +5,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.view.View;
 
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.CustomTitlesBaseFragmentActivity;
 import com.topface.topface.ui.edit.EditMainFormItemsFragment.EditType;
 import com.topface.topface.ui.views.LockerView;
 
-public class EditContainerActivity extends BaseFragmentActivity {
+public class EditContainerActivity extends CustomTitlesBaseFragmentActivity {
 
     public static final String INTENT_FORM_TITLE_ID = "titleId";
     public static final String INTENT_FORM_DATA_ID = "dataId";
@@ -100,6 +101,16 @@ public class EditContainerActivity extends BaseFragmentActivity {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.loFrame, mFragment).commit();
         }
+    }
+
+    @Override
+    protected void initCustomActionBarView(View mCustomView) {
+
+    }
+
+    @Override
+    protected int getActionBarCustomViewResId() {
+        return R.layout.actionbar_container_title_view;
     }
 
     @Override

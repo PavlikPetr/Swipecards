@@ -24,9 +24,9 @@ public class FilterRequest extends ApiRequest {
         JSONObject data = new JSONObject()
                 .put("beautiful", filter.beautiful)
                 .put("sex", filter.sex)
-                .put("cityId", filter.city.id)
-                .put("ageStart", filter.ageStart) //TODO clarify parameter: ageStart or ageBegin
-                .put("ageEnd", filter.ageEnd) //TODO camel case: ageEnd
+                .put("city", filter.city.id)
+                .put("ageStart", filter.ageStart)
+                .put("ageEnd", filter.ageEnd)
                 .put("xstatus", filter.xstatus)
                 .put("marriage", filter.marriage)
                 .put("character", filter.character)
