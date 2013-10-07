@@ -20,8 +20,8 @@ public class AuthButtonsController {
 
     public static final String BUTTON_SETTINGS = "ButtonSettings";
     private Context mContext;
-    private HashSet<String> activeButtons;
-    private HashSet<String> realButtons;
+    private HashSet<String> activeButtons; // Те кнопки, которые реально показываются пользователю в данный момент
+    private HashSet<String> realButtons; // Те кнопки, которые изначально показываются пользователю
     private final HashSet<String> allSocials = new HashSet<String>();
     private LinkedList<HashSet<String>> allScreenSocials;
     private String locale;
@@ -124,6 +124,10 @@ public class AuthButtonsController {
 
     public void setAllSettings() {
         activeButtons = allSocials;
+    }
+
+    public void switchSettings() {
+        activeButtons = getOhters();
     }
 
     public void addSocialNetwork(String sn) {

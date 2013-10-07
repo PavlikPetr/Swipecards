@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -93,6 +94,9 @@ public class AuthFragment extends BaseFragment {
     private BroadcastReceiver authorizationReceiver;
     private boolean authReceiverRegistered;
     private boolean mButtonsInitialized = false;
+    private ImageView mVkIcon;
+    private ImageView mOkIcon;
+    private ImageView mFbIcon;
 
     public static AuthFragment newInstance() {
         return new AuthFragment();
@@ -173,70 +177,45 @@ public class AuthFragment extends BaseFragment {
     private void initButtonsWithSettings(View root) {
 
         mVKButton = (Button) root.findViewById(R.id.btnAuthVK);
+        mFBButton = (Button) root.findViewById(R.id.btnAuthFB);
+        mOKButton = (Button) root.findViewById(R.id.btnAuthOk);
+
+        mOtherSocialNetworksButton = (LinearLayout) root.findViewById(R.id.otherServices);
+
+        mVkIcon = (ImageView) root.findViewById(R.id.vk_ico);
+        mOkIcon =  (ImageView)root.findViewById(R.id.ok_ico);
+        mFbIcon = (ImageView) root.findViewById(R.id.fb_ico);
+
         mVKButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 btnVKClick();
             }
         });
-        if (btnsController.needSN(AuthToken.SN_VKONTAKTE)) {
-            mVKButton.setVisibility(View.VISIBLE);
-        }
-
-        mFBButton = (Button) root.findViewById(R.id.btnAuthFB);
         mFBButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 btnFBClick();
             }
         });
-        if (btnsController.needSN(AuthToken.SN_FACEBOOK)) {
-            mFBButton.setVisibility(View.VISIBLE);
-        }
-
-        mOKButton = (Button) root.findViewById(R.id.btnAuthOk);
         mOKButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 btnOKClick();
             }
         });
-        if (btnsController.needSN(AuthToken.SN_ODNOKLASSNIKI)) {
-            mOKButton.setVisibility(View.VISIBLE);
-        }
 
-        mOtherSocialNetworksButton = (LinearLayout) root.findViewById(R.id.otherServices);
+        mOtherSocialNetworksButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EasyTracker.getTracker().sendEvent(MAIN_BUTTONS_GA_TAG, "OtherWaysButtonClicked", btnsController.getLocaleTag(), 1L);
+                additionalButtonsScreen = true;
+                btnsController.switchSettings();
+                setAuthInterface();
+            }
+        });
 
-        HashSet<String> otherSN = btnsController.getOhters();
-        if (otherSN.size() == 0) {
-            mOtherSocialNetworksButton.setVisibility(View.GONE);
-        } else {
-            mOtherSocialNetworksButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Debug.log("LOCALE::" + btnsController.getLocaleTag());
-                    EasyTracker.getTracker().sendEvent(MAIN_BUTTONS_GA_TAG, "OtherWaysButtonClicked", btnsController.getLocaleTag(), 1L);
-                    additionalButtonsScreen = true;
-                    btnsController.setAllSettings();
-                    mOtherSocialNetworksButton.setVisibility(View.GONE);
-                    mVKButton.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
-                            R.anim.fade_in));
-                    mVKButton.setVisibility(View.VISIBLE);
-                    mOKButton.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
-                            R.anim.fade_in));
-                    mOKButton.setVisibility(View.VISIBLE);
-                    mFBButton.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
-                            R.anim.fade_in));
-                    mFBButton.setVisibility(View.VISIBLE);
-                }
-            });
-            if (otherSN.contains(AuthToken.SN_VKONTAKTE)) {
-                root.findViewById(R.id.vk_ico).setVisibility(View.VISIBLE);
-            }
-            if (otherSN.contains(AuthToken.SN_ODNOKLASSNIKI)) {
-                root.findViewById(R.id.ok_ico).setVisibility(View.VISIBLE);
-            }
-        }
+        setAuthInterface();
 
         mSignInView = root.findViewById(R.id.loSignIn);
         mSignInView.setOnClickListener(new View.OnClickListener() {
@@ -280,6 +259,57 @@ public class AuthFragment extends BaseFragment {
             }
         });
         mButtonsInitialized = true;
+    }
+
+    private void setAuthInterface() {
+        if (btnsController.needSN(AuthToken.SN_VKONTAKTE)) {
+            mVKButton.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
+                    R.anim.fade_in));
+            mVKButton.setVisibility(View.VISIBLE);
+        } else {
+            mVKButton.setVisibility(View.GONE);
+        }
+
+        if (btnsController.needSN(AuthToken.SN_FACEBOOK)) {
+            mFBButton.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
+                    R.anim.fade_in));
+            mFBButton.setVisibility(View.VISIBLE);
+        } else {
+            mFBButton.setVisibility(View.GONE);
+        }
+
+        if (btnsController.needSN(AuthToken.SN_ODNOKLASSNIKI)) {
+            mOKButton.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
+                    R.anim.fade_in));
+            mOKButton.setVisibility(View.VISIBLE);
+        } else {
+            mOKButton.setVisibility(View.GONE);
+        }
+
+
+        HashSet<String> otherSN = btnsController.getOhters();
+        if (otherSN.size() == 0) {
+            mOtherSocialNetworksButton.setVisibility(View.GONE);
+        } else {
+            mOtherSocialNetworksButton.setVisibility(View.VISIBLE);
+            if (btnsController.getOhters().contains(AuthToken.SN_VKONTAKTE)) {
+                mVkIcon.setVisibility(View.VISIBLE);
+            } else {
+                mVkIcon.setVisibility(View.GONE);
+            }
+
+            if (btnsController.getOhters().contains(AuthToken.SN_ODNOKLASSNIKI)) {
+                mOkIcon.setVisibility(View.VISIBLE);
+            } else {
+                mOkIcon.setVisibility(View.GONE);
+            }
+
+            if (btnsController.getOhters().contains(AuthToken.SN_FACEBOOK)) {
+                mFbIcon.setVisibility(View.VISIBLE);
+            } else {
+                mFbIcon.setVisibility(View.GONE);
+            }
+        }
     }
 
 
