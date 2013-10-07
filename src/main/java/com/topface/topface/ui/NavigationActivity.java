@@ -299,7 +299,10 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
                     public void onPhotoSentSuccess(final Photo photo) {
                         if (CacheProfile.photos != null) {
                             CacheProfile.photos.add(photo);
-                            LocalBroadcastManager.getInstance(NavigationActivity.this).sendBroadcast(new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT));
+                            Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
+                            intent.putExtra(PhotoSwitcherActivity.INTENT_CLEAR, true);
+                            intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, CacheProfile.photos);
+                            LocalBroadcastManager.getInstance(NavigationActivity.this).sendBroadcast(intent);
                         }
                         Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
                         ArrayList<Photo> photos = new ArrayList<Photo>();

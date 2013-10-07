@@ -72,6 +72,8 @@
     </style>
 
     <style name="topfaceEditText">
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="android:cursorVisible">true</item>
         <item name="android:background">@drawable/edittext_selector</item>
         <item name="android:padding">5dp</item>
         <item name="android:textColor">#393939</item>
