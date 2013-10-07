@@ -240,9 +240,14 @@ public class FullscreenController {
     }
 
     private void addLastFullscreenShowedTime() {
-        SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putLong(Static.PREFERENCES_LAST_FULLSCREEN_TIME, System.currentTimeMillis());
-        editor.commit();
+        new BackgroundThread() {
+            @Override
+            public void execute() {
+                SharedPreferences.Editor editor = getPreferences().edit();
+                editor.putLong(Static.PREFERENCES_LAST_FULLSCREEN_TIME, System.currentTimeMillis());
+                editor.commit();
+            }
+        };
     }
 
     private void addNewUrlToFullscreenSet(String url) {
@@ -257,6 +262,7 @@ public class FullscreenController {
         requestFullscreen(CacheProfile.getOptions().gagTypeFullscreen);
     }
 
+    @SuppressWarnings("UnnecessaryReturnStatement")
     public void requestFullscreen(String type) {
         if (type.equals(BannerBlock.BANNER_NONE)) {
             return;

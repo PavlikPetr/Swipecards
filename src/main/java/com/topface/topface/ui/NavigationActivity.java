@@ -90,8 +90,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         mNeedAnimate = false;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_navigation);
-        // этот метод можно использовать только после setContent
-        setSupportProgressBarIndeterminateVisibility(false);
         instance = this;
         if (isNeedBroughtToFront(getIntent())) {
             // При открытии активити из лаунчера перезапускаем ее
@@ -133,8 +131,8 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
     private void initDrawerLayout() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.loNavigationDrawer);
-        mDrawerLayout.setScrimColor(Color.argb(217,0,0,0));
-        mDrawerLayout.setDrawerShadow(R.drawable.shadow_left_menu_right,GravityCompat.START);
+        mDrawerLayout.setScrimColor(Color.argb(217, 0, 0, 0));
+        mDrawerLayout.setDrawerShadow(R.drawable.shadow_left_menu_right, GravityCompat.START);
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
                 mDrawerLayout,         /* DrawerLayout object */
@@ -284,7 +282,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
             }
         }
 
-        if(mNavBarController != null) mNavBarController.refreshNotificators();
+        if (mNavBarController != null) mNavBarController.refreshNotificators();
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
 

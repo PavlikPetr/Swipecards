@@ -14,3 +14,6 @@ localist.db
 local.properties
 *.swp
 *~
+/gradlew
+/gradlew.bat
+/gradle
