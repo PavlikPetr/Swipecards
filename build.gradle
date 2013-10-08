@@ -70,6 +70,10 @@ android {
             signingConfig signingConfigs.release
         }
     }
+
+    buildTypes.all {
+        buildConfig "public static final long BUILD_TIME = " + new Date().getTime() + "L;"
+    }
 }
 
 project(':libs:IllustratedTextView') {

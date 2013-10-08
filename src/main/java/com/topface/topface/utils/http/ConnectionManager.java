@@ -48,9 +48,13 @@ public class ConnectionManager {
     private static long mFloodEndsTime = 0;
 
     private ConnectionManager() {
-        mWorker = Executors.newFixedThreadPool(THREAD_PULL_SIZE);
+        mWorker = getNewExecutorService();
         mAuthUpdateFlag = new AtomicBoolean(false);
         mPendignRequests = new HashMap<String, IApiRequest>();
+    }
+
+    private ExecutorService getNewExecutorService() {
+        return Executors.newFixedThreadPool(THREAD_PULL_SIZE, new ApiThreadFactory());
     }
 
     public static ConnectionManager getInstance() {
@@ -268,7 +272,7 @@ public class ConnectionManager {
     private void showFloodActivity(IApiRequest apiRequest) {
         // закрываем воркер, чтобы удалить висящие запросы
         mWorker.shutdownNow();
-        mWorker = Executors.newFixedThreadPool(THREAD_PULL_SIZE);
+        mWorker = getNewExecutorService();
         // открываем экран флуда
         Intent intent = new Intent(apiRequest.getContext(), BanActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

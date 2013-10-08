@@ -22,7 +22,9 @@ import android.widget.Toast;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
+import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.CitiesRequest;
+import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.CacheProfile;
@@ -276,29 +278,28 @@ public class CitySearchActivity extends BaseFragmentActivity {
         registerRequest(searchCitiesRequest);
         cityListView.setVisibility(View.VISIBLE);
         searchCitiesRequest.prefix = prefix;
-        searchCitiesRequest.callback(new ApiHandler() {
+        searchCitiesRequest.callback(new DataApiHandler<LinkedList<City>>() {
+
             @Override
-            public void success(IApiResponse response) {
-                LinkedList<City> citiesList = City.parse(response);
+            protected void success(LinkedList<City> citiesList, IApiResponse response) {
                 if (citiesList.size() == 0) {
                     cityListView.setVisibility(View.INVISIBLE);
                     if (mCityFail != null) {
                         mCityFail.setVisibility(View.VISIBLE);
                         mCityFail.setText(getString(R.string.filter_city_fail, prefix));
-//                        mMyCityTitle.setText(getString(R.string.filter_city_fail, prefix));
-//                        mMyCityTitle.setVisibility(View.VISIBLE);
                     }
-                    return;
+                } else {
+                    mCityFail.setVisibility(View.GONE);
+                    fillData(citiesList);
+                    mListAdapter.notifyDataSetChanged();
+
                 }
-//                mMyCityTitle.setVisibility(View.GONE);
-                mCityFail.setVisibility(View.GONE);
-                fillData(citiesList);
-                post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mListAdapter.notifyDataSetChanged();
-                    }
-                });
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            protected LinkedList<City> parseResponse(ApiResponse response) {
+                return (LinkedList<City>) City.parse(response);
             }
 
             @Override

@@ -1,6 +1,5 @@
 package com.topface.topface.ui.settings;
 
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -17,8 +16,6 @@ import com.topface.topface.utils.Debug;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 public class SettingsAboutFragment extends BaseFragment {
 
@@ -39,12 +36,9 @@ public class SettingsAboutFragment extends BaseFragment {
             versionNumber = packageManager.getPackageInfo(packageName, 0).versionName;
 
             if (App.DEBUG) {
-                ApplicationInfo ai = packageManager.getApplicationInfo(packageName, 0);
-                ZipFile zf = new ZipFile(ai.sourceDir);
-                ZipEntry ze = zf.getEntry("classes.dex");
-                long time = ze.getTime();
-                versionNumber += "\nBuild: " + SimpleDateFormat.getInstance().format(new java.util.Date(time));
-                zf.close();
+                versionNumber += "\nBuild: " + SimpleDateFormat.getInstance().format(
+                        com.topface.topface.BuildConfig.BUILD_TIME
+                );
             }
         } catch (Exception e) {
             versionNumber = "unknown";

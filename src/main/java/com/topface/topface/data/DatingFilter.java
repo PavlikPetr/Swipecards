@@ -44,6 +44,10 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
 
     public DatingFilter(JSONObject data) {
         super(data);
+        //Если data = null, то у нас не инициализируется city, мы его иницилизируем пустым
+        if (city == null) {
+            city = new City();
+        }
     }
 
     /**

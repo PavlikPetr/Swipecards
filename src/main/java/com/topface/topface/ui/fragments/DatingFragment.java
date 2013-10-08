@@ -51,7 +51,6 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SearchRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.SkipRateRequest;
-import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
@@ -925,17 +924,18 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 final DatingFilter filter = data.getExtras().getParcelable(FilterFragment.INTENT_DATING_FILTER);
                 FilterRequest filterRequest = new FilterRequest(filter, getActivity());
                 registerRequest(filterRequest);
-                filterRequest.callback(new ApiHandler() {
+                filterRequest.callback(new DataApiHandler<DatingFilter>() {
 
                     @Override
-                    public void success(IApiResponse response) {
-                        if (response.isCompleted()) {
-                            CacheProfile.dating = new DatingFilter(response.getJsonResult().optJSONObject("dating"));
-                            updateFilterData();
-                            updateData(false);
-                        } else {
-                            fail(response.getResultCode(), response);
-                        }
+                    protected void success(DatingFilter filter, IApiResponse response) {
+                        CacheProfile.dating = filter;
+                        updateFilterData();
+                        updateData(false);
+                    }
+
+                    @Override
+                    protected DatingFilter parseResponse(ApiResponse response) {
+                        return new DatingFilter(response.getJsonResult());
                     }
 
                     @Override
