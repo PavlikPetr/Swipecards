@@ -80,7 +80,7 @@ public class FeedUser extends AbstractData implements SerializableToJson {
             this.photos = new Photos();
             this.photos.add(this.photo);
         }
-        this.photosCount = user.optInt("photos_count", photos.size()); //TODO camel case
+        this.photosCount = user.optInt("photosCount", photos.size()); //TODO camel case
     }
 
     public String getNameAndAge() {

@@ -130,7 +130,7 @@ public class AuthorizationManager {
         mFacebook.authorize(mParentActivity, FB_PERMISSIONS, mDialogListener);
     }
 
-    public void odnoklassnikiAuth() {
+    public void odnoklassnikiAuth(final OnTokenReceivedListener listener) {
 
         final Odnoklassniki okAuthObject = Odnoklassniki.createInstance(mParentActivity, Static.AUTH_OK_ID, Static.OK_SECRET_KEY, Static.OK_PUBLIC_KEY);
 
@@ -138,7 +138,9 @@ public class AuthorizationManager {
             @Override
             public void onSuccess(String s) {
                 GetCurrentUserTask userTask = new GetCurrentUserTask(okAuthObject, s);
+                listener.onTokenReceived();
                 userTask.execute();
+
             }
 
             @Override
@@ -440,5 +442,13 @@ public class AuthorizationManager {
                     public void onClick(DialogInterface dialog, int which) { logoutRequest.exec(); }
                 });
         retryBuilder.create().show();
+    }
+
+    //Если пользователь авторизуется через ок и нажимает кнопку назад, когда открылся браузер
+    //контроль переходит к нашему приложению и вызывается onResume. Если мы скрываем кнопки и показываем лоадер
+    //до того, как получили токен одноклассников, получается, что лоадер будет вечно крутиться и кнопки никогда не появятся.
+    //Этот лисенер специально для того, чтобы скрывать кнопки только тогда, когда нам уже придет ответ от одноклассников.
+    public interface OnTokenReceivedListener {
+        public void onTokenReceived();
     }
 }
