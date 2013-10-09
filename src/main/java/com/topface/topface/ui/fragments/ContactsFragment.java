@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.MenuItemCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -147,7 +148,7 @@ public class ContactsFragment extends BaseFragment {
                         }
                     } else {
                         EasyTracker.getTracker().sendEvent("InvitesPopup", "SuccessWithChecked", "premiumFalse", (long) contacts.size());
-                        Toast.makeText(getActivity(), getString(R.string.invalid_contacts), 2000).show();
+                        Toast.makeText(getActivity(), getString(R.string.invalid_contacts), Toast.LENGTH_LONG).show();
                         if (contactsVip != null) {
                             contactsVip.setEnabled(true);
                         }
@@ -336,7 +337,7 @@ public class ContactsFragment extends BaseFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         final MenuItem selectAllMenuItem = menu.findItem(R.id.action_select_all);
-        CheckBox checkBox = (CheckBox) selectAllMenuItem.getActionView().findViewById(R.id.cbCheckBox);
+        CheckBox checkBox = (CheckBox) MenuItemCompat.getActionView(selectAllMenuItem).findViewById(R.id.cbCheckBox);
         selectAllMenuItem.setChecked(true);
         checkBox.setChecked(true);
         checkBox.setOnClickListener(new View.OnClickListener() {
@@ -361,7 +362,7 @@ public class ContactsFragment extends BaseFragment {
             case R.id.action_profile:
                 boolean checked = !item.isChecked();
                 item.setChecked(checked);
-                ((CheckBox)item.getActionView().findViewById(R.id.cbCheckBox)).setChecked(checked);
+                ((CheckBox) MenuItemCompat.getActionView(item).findViewById(R.id.cbCheckBox)).setChecked(checked);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

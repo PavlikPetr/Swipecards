@@ -4,10 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.AdmirationsReadedRequest;
-import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
@@ -34,10 +34,6 @@ public class PromoAdmirationsPopup extends PromoPopupFragment{
 
     @Override
     public String getMainTag() {
-
-
-
-
         return "key81";
     }
 
