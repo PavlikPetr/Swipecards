@@ -37,7 +37,7 @@ public abstract class PromoPopupFragment extends BaseFragment implements View.On
         @Override
         public void onReceive(Context context, Intent intent) {
             if (isAdded() && getActivity() != null) {
-//                closeFragment();
+                closeFragment();
             }
         }
     };

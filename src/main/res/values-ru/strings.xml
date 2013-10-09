@@ -740,4 +740,5 @@
         <item quantity="other">%d выбрано</item>
     </plurals>
     <string name="photo_is_uploading">Загрузка фото</string>
+    <string name="default_ringtone">По умолчанию</string>
 </resources>

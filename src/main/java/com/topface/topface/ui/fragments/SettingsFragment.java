@@ -191,7 +191,9 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             setBackground(R.drawable.edit_big_btn_bottom_selector, frame);
             ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.settings_melody);
             melodyName = (TextView) frame.findViewWithTag("tvText");
-            setText(mSettings.getRingtoneName(), frame);
+            melodyName.setVisibility(View.VISIBLE);
+            setRingtonNameByUri(mSettings.getRingtone());
+//            setText(mSettings.getRingtoneName(), frame);
             frame.setOnClickListener(this);
 
             if (!GCMUtils.GCM_SUPPORTED) {
@@ -247,8 +249,9 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         ((TextView) frame.findViewWithTag("tvTitle")).setText(titleId);
     }
     private void setText(String titleId, ViewGroup frame) {
-        ((TextView) frame.findViewWithTag("tvText")).setVisibility(View.VISIBLE);
-        ((TextView) frame.findViewWithTag("tvText")).setText(titleId);
+        TextView text = (TextView) frame.findViewWithTag("tvText");
+        text.setVisibility(View.VISIBLE);
+        text.setText(titleId);
     }
 
     private void initEditNotificationFrame(int key, ViewGroup frame, boolean hasMail, boolean mailChecked, boolean phoneChecked) {
@@ -456,20 +459,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         if (requestCode == Settings.REQUEST_CODE_RINGTONE && resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 Uri uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
-                String ringtoneName= getActivity().getString(R.string.silent_ringtone);
-                if (uri != null) {
-                    Cursor mCursor = getActivity().getContentResolver().query(uri, null, null, null, null);
-
-                    if (mCursor.moveToFirst()) {
-                        if (mCursor.getColumnIndex("title") >= 0) {
-                            ringtoneName = mCursor.getString(mCursor.getColumnIndex("title"));
-                        }
-                    }
-                    mCursor.close();
-                }
-                mSettings.setSetting(Settings.NOTIFICATION_MELODY, ringtoneName);
-                melodyName.setText(ringtoneName);
-                mSettings.setSetting(Settings.SETTINGS_C2DM_RINGTONE, uri == null ? Settings.SILENT : uri.toString());
+                setRingtonNameByUri(uri);
             }
         } else if (resultCode == AuthorizationManager.RESULT_LOGOUT &&
                 requestCode == SettingsContainerActivity.INTENT_ACCOUNT) {
@@ -478,6 +468,26 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void setRingtonNameByUri(Uri uri) {
+        String ringtoneName= getActivity().getString(R.string.silent_ringtone);
+        if (uri != null) {
+            Cursor mCursor = getActivity().getContentResolver().query(uri, null, null, null, null);
+
+            if (mCursor.moveToFirst()) {
+                if (mCursor.getColumnIndex("title") >= 0) {
+                    ringtoneName = mCursor.getString(mCursor.getColumnIndex("title"));
+                } else {
+                    uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                    ringtoneName = getString(R.string.default_ringtone);
+                }
+            }
+            mCursor.close();
+        }
+        mSettings.setSetting(Settings.NOTIFICATION_MELODY, ringtoneName);
+        melodyName.setText(ringtoneName);
+        mSettings.setSetting(Settings.SETTINGS_C2DM_RINGTONE, uri == null ? Settings.SILENT : uri.toString());
     }
 
     @Override

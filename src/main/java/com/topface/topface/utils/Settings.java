@@ -2,6 +2,7 @@ package com.topface.topface.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
@@ -74,7 +75,7 @@ public class Settings {
     }
 
     public String getRingtoneName() {
-        return mSettings.getString(NOTIFICATION_MELODY, Static.EMPTY);
+        return mSettings.getString(NOTIFICATION_MELODY, App.getContext().getString(R.string.silent_ringtone));
     }
 
     public void getSocialAccountName(final TextView textView) {
@@ -134,7 +135,8 @@ public class Settings {
         if (mSettings.getString(SETTINGS_C2DM_RINGTONE, DEFAULT_SOUND).equals(SILENT)) {
             return null;
         }
-        return Uri.parse(mSettings.getString(SETTINGS_C2DM_RINGTONE, DEFAULT_SOUND));
+        String ringtone = mSettings.getString(SETTINGS_C2DM_RINGTONE, DEFAULT_SOUND);
+        return ringtone.equals(DEFAULT_SOUND) ? RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) : Uri.parse(ringtone);
     }
 
     public Boolean isVibrationEnabled() {

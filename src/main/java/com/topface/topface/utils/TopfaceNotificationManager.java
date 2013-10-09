@@ -251,6 +251,7 @@ public class TopfaceNotificationManager {
                         generateBigText();
                     }
                 }
+                notificationBuilder.setSound(Settings.getInstance().getRingtone());
                 if (Settings.getInstance().isVibrationEnabled()) {
                     notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
 
