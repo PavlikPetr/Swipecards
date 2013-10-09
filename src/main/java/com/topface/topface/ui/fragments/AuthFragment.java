@@ -771,8 +771,12 @@ public class AuthFragment extends BaseFragment {
         mProcessingTFReg = false;
         EasyTracker.getTracker().sendEvent(MAIN_BUTTONS_GA_TAG, additionalButtonsScreen ? "LoginAdditionalOk" : "LoginMainOk", btnsController.getLocaleTag(), 1L);
         if (checkOnline() && mAuthorizationManager != null) {
-            hideButtons();
-            mAuthorizationManager.odnoklassnikiAuth();
+            mAuthorizationManager.odnoklassnikiAuth(new AuthorizationManager.OnTokenReceivedListener() {
+                @Override
+                public void onTokenReceived() {
+                    hideButtons();
+                }
+            });
         }
     }
 

@@ -452,18 +452,23 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     protected void onLoadProfile() {
+        //Показываем последнего пользователя
         if (mUserSearchList == null) {
             mUserSearchList = new CachableSearchList<SearchUser>(SearchUser.class);
-            mUserSearchList.setOnEmptyListListener(mSearchListener);
+
         }
-        //Показываем последнего пользователя
         if (mCurrentUser == null) {
             SearchUser currentUser = mUserSearchList.getCurrentUser();
+            mUserSearchList.setOnEmptyListListener(mSearchListener);
             if (currentUser != null) {
                 showUser(currentUser);
             } else {
                 showNextUser();
             }
+        } else {
+            //Сделано для того, чтобы не показывалось сообщение о том, что пользователи не найдены.
+            //Иначе при старте приложения, пока список пользователей не запросился показывается сообщение об ошибки
+            mUserSearchList.setOnEmptyListListener(mSearchListener);
         }
 
         updateFilterData();
