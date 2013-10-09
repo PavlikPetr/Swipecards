@@ -196,7 +196,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
 
         // Navigation bar
-        initNavigationbar(root, mUserName, mUserAge, mUserCity);
+        initNavigationbar(mUserName, mUserAge, mUserCity);
 
         editButtonsNames = new String[]{getString(R.string.general_copy_title), getString(R.string.general_delete_title), getString(R.string.general_complain)};
         editButtonsSelfNames = new String[]{getString(R.string.general_copy_title), getString(R.string.general_delete_title)};
@@ -395,7 +395,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         mLockScreen.addView(retryView.getView());
     }
 
-    private void initNavigationbar(View root, String userName, int userAge, String userCity) {
+    private void initNavigationbar(String userName, int userAge, String userCity) {
         setNavigationTitles(userName, userAge, userCity);
     }
 
@@ -617,7 +617,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             bookmarksTv.setText(user.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
             // ставим фото пользователя в иконку в actionbar
             if (mBarAvatar != null && user.photo != null && !user.photo.isEmpty()) {
-                ((ImageViewRemote) mBarAvatar.getActionView().findViewById(R.id.ivBarAvatar)).setPhoto(user.photo);
+                ((ImageViewRemote) MenuItemCompat.getActionView(mBarAvatar).findViewById(R.id.ivBarAvatar)).setPhoto(user.photo);
             }
             // ставим значок онлайн в нужное состояние
             if (mUserOnlineListener != null) {

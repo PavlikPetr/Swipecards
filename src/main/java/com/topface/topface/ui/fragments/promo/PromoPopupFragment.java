@@ -1,13 +1,11 @@
 package com.topface.topface.ui.fragments.promo;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,27 +15,20 @@ import android.widget.TextView;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.VipBuyFragment;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
 
 public abstract class PromoPopupFragment extends BaseFragment implements View.OnClickListener {
 
-    public static final String AIR_TYPE = "AIR_TYPE";
-
-    private Options.PremiumAirEntity mPremiumEntity;
     private boolean mUserClickButton = false;
-    private int airType = Options.PremiumAirEntity.AIR_MESSAGES;
 
     private BroadcastReceiver vipPurchasedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (isAdded() && getActivity() != null) {
-//                closeFragment();
+                closeFragment();
             }
         }
     };
@@ -45,7 +36,6 @@ public abstract class PromoPopupFragment extends BaseFragment implements View.On
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPremiumEntity = getPremiumEntity();
     }
 
     public abstract Options.PremiumAirEntity getPremiumEntity();
@@ -81,10 +71,6 @@ public abstract class PromoPopupFragment extends BaseFragment implements View.On
 
     public abstract String getMainTag();
 
-    public static String getMainTag(int type) {
-        return type == Options.PremiumAirEntity.AIR_MESSAGES? "AirMessages" : "key_7_1";
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.air_messages_popup, container, false);
@@ -96,12 +82,16 @@ public abstract class PromoPopupFragment extends BaseFragment implements View.On
             }
         });
         root.findViewById(R.id.buyVip).setOnClickListener(this);
-        ((TextView)root.findViewById(R.id.deleteMessages)).setText(getDeleteButtonText());
+        ((TextView) root.findViewById(R.id.deleteMessages)).setText(getDeleteButtonText());
         root.findViewById(R.id.deleteMessages).setOnClickListener(this);
         TextView popupText = (TextView) root.findViewById(R.id.airMessagesText);
         popupText.setText(getMessage());
         EasyTracker.getTracker().sendEvent(getMainTag(), "Show", "", 0L);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(vipPurchasedReceiver, new IntentFilter(VipBuyFragment.VIP_PURCHASED_INTENT));
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(
+                        vipPurchasedReceiver,
+                        new IntentFilter(VipBuyFragment.VIP_PURCHASED_INTENT)
+                );
         return root;
     }
 
