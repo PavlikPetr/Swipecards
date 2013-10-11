@@ -10,9 +10,11 @@ import android.widget.TextView;
 
 import com.topface.IllustratedTextView.IllustratedTextView;
 import com.topface.topface.R;
+import com.topface.topface.ui.gridlayout.GridLayout;
 
 public class RetryViewCreator {
     public static final String REFRESH_TEMPLATE = "{{refresh}} ";
+    private static int buttonsOrientation = LinearLayout.HORIZONTAL;
 
     private View mRetryView;
     private InnerButton mBtn1;
@@ -47,6 +49,10 @@ public class RetryViewCreator {
         if(mRetryView != null) mRetryView.setVisibility(visibility);
     }
 
+    public void setButtonsOrientation(int buttonsOrientation) {
+        this.buttonsOrientation = buttonsOrientation;
+    }
+
     public static RetryViewCreator createRetryView(Context context, String text, InnerButton btn1, InnerButton btn2) {
         LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ViewGroup retryView = (ViewGroup) mInflater.inflate(R.layout.layout_retryview,null);
@@ -60,7 +66,8 @@ public class RetryViewCreator {
             retryView.findViewById(R.id.tvMessage).setVisibility(View.GONE);
         }
 
-        ViewGroup buttonsContainer = (ViewGroup)retryView.findViewById(R.id.loButtonsContainer);
+        LinearLayout buttonsContainer = (LinearLayout)retryView.findViewById(R.id.loButtonsContainer);
+        buttonsContainer.setOrientation(buttonsOrientation);
         if (btn1 != null) buttonsContainer.addView(btn1.createButtonView(retryView));
         if (btn2 != null) buttonsContainer.addView(btn2.createButtonView(retryView));
         return new RetryViewCreator(retryView,btn1,btn2);
@@ -81,9 +88,10 @@ public class RetryViewCreator {
     }
 
     public static RetryViewCreator createDefaultRetryView(Context context, String text, View.OnClickListener listener,
-                                                             String textBtn2, View.OnClickListener listener2) {
+                                                             String textBtn2, View.OnClickListener listener2, int orientation) {
         StringBuilder strBuilder = new StringBuilder();
         strBuilder.append(REFRESH_TEMPLATE).append(context.getString(R.string.general_dialog_retry));
+        buttonsOrientation = orientation;
         return createRetryView(
                 context,
                 text,

@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -341,12 +342,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void initEmptySearchDialog(View view, OnClickListener settingsListener) {
         String text = getString(R.string.general_search_null_response_error);
+
         mRetryView = RetryViewCreator.createDefaultRetryView(getActivity(), text, new OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateData(false);
             }
-        }, getString(R.string.change_filters), settingsListener);
+        }, getString(R.string.change_filters), settingsListener, LinearLayout.VERTICAL);
 
         hideEmptySearchDialog();
         ((RelativeLayout) view.findViewById(R.id.ac_dating_container)).addView(mRetryView.getView());
@@ -407,6 +409,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         } else if (mUserSearchList.isEmpty() || mUserSearchList.isEnded()) {
                             showEmptySearchDialog();
                         } else if (!mUserSearchList.isEnded()) {
+
                             showNextUser();
                             unlockControls();
                         } else {
@@ -460,7 +463,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
         if (mCurrentUser == null) {
             SearchUser currentUser = mUserSearchList.getCurrentUser();
-//            mUserSearchList.setOnEmptyListListener(mSearchListener);
+            mUserSearchList.setOnEmptyListListener(mSearchListener);
             if (currentUser != null) {
                 showUser(currentUser);
             } else {
@@ -469,7 +472,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         } else {
             //Сделано для того, чтобы не показывалось сообщение о том, что пользователи не найдены.
             //Иначе при старте приложения, пока список пользователей не запросился показывается сообщение об ошибки
-//            mUserSearchList.setOnEmptyListListener(mSearchListener);
+            mUserSearchList.setOnEmptyListListener(mSearchListener);
         }
 
         updateFilterData();
