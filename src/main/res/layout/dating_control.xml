@@ -63,6 +63,7 @@
                         android:layout_marginBottom="9sp"
                         android:background="@android:color/transparent"
                         android:drawableRight="@drawable/coins"
+                        android:drawablePadding="2dp"
                         android:text="@integer/love_dating_button"
                         android:textStyle="bold" />
             </RelativeLayout>

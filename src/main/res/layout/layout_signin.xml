@@ -5,7 +5,9 @@
     android:fillViewport="true">
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+        >
 
 
         <LinearLayout
@@ -15,6 +17,7 @@
             android:layout_centerInParent="true"
             android:id="@+id/mainContainer"
             android:gravity="center_horizontal"
+            android:paddingBottom="40dp"
             >
             <ImageView
                     android:id="@+id/ivTopfaceLogo"
@@ -103,27 +106,13 @@
 
         </LinearLayout>
 
-        <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_below="@id/mainContainer"
-                android:paddingTop="30dp">
 
-            <TextView
-                    android:id="@+id/tvBackToMainAuth"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/general_back"
-                    android:drawableLeft="@drawable/ic_back"
-                    android:drawablePadding="8dp"
-                    style="@style/AuthButtonsBigText"
-                    />
-        </RelativeLayout>
-
+        <TextView
+                android:id="@+id/tvBackToMainAuth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/AuthBackButtonStyle"
+                />
         <ImageView
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
@@ -131,6 +120,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/auth_bg_bottom_spot"
                 />
+
     </RelativeLayout>
 
 </ScrollView>

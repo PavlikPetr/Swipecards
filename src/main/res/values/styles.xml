@@ -287,6 +287,15 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="AuthBackButtonStyle" parent="AuthButtonsBigText">
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:text">@string/general_back</item>
+        <item name="android:drawableLeft">@drawable/ic_back</item>
+        <item name="android:drawablePadding">8dp</item>
+    </style>
+
     <style name="RecoveryButtonsBigText" parent="ShadowBlackSolidText">
         <item name="android:textColor">@color/btn_signin</item>
         <item name="android:textSize">16sp</item>
@@ -450,9 +459,10 @@
     </style>
 
     <style name="NavigationBarAvatar">
-
+        <item name="postProcessor">mask</item>
+        <item name="clipMask">@drawable/avatar_chat_mask</item>
         <item name="android:background">@drawable/avatar_chat_mask_selector</item>
-
+        <item name="border">@drawable/feed_photo_border</item>
         <item name="android:layout_width">37dp</item>
         <item name="android:layout_height">37dp</item>
         <item name="android:layout_marginRight">5dp</item>

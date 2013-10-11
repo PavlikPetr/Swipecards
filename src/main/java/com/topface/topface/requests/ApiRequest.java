@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Message;
 import android.text.TextUtils;
+import android.view.WindowManager;
 
 import com.topface.topface.App;
 import com.topface.topface.RetryDialog;
@@ -79,6 +80,12 @@ public abstract class ApiRequest implements IApiRequest {
             }
             try {
                 retryDialog.show();
+                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+
+                lp.copyFrom(retryDialog.getWindow().getAttributes());
+                lp.width = 300;
+                lp.height = 300;
+                retryDialog.getWindow().setAttributes(lp);
             } catch (Exception e) {
                 Debug.error(e);
             }

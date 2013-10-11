@@ -181,28 +181,17 @@
                 android:visibility="gone"
                 android:text="@string/error_login_password"/>
 
-        <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_below="@id/loLoginGroup"
-                android:paddingTop="30dp"
-                >
+        <TextView
+            android:id="@+id/tvBackToMainAuth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            style="@style/AuthBackButtonStyle"
+            android:gravity="top"
+            android:paddingBottom="1dp"
+            />
 
-            <TextView
-                    android:id="@+id/tvBackToMainAuth"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="8dp"
-                    android:text="@string/general_back"
-                    android:drawableLeft="@drawable/ic_back"
-                    android:drawablePadding="8dp"
-                    style="@style/AuthButtonsBigText"
-                    android:gravity="top"
-                    android:paddingBottom="1dp"
-                    />
-        </RelativeLayout>
+
 
     </RelativeLayout>
 
