@@ -556,6 +556,13 @@
     <string name="youve_earned">Jūs uždirbote %s</string>
     <string name="like_topface">Jums patinka Topface?</string>
     <string name="delete_visitors">Pašalinti svečius</string>
+    <string name="delete_admirations">Pašalinti susižavėjimus</string>
+    <string name="general_admirations">Susižavėjimai</string>
+    <plurals name="popup_vip_admirations">
+        <item quantity="few">Jums išsiuntė susižavėjimą %d žmonės</item>
+        <item quantity="other">Jums išsiuntė susižavėjimą %d žmonių</item>
+        <item quantity="one">Jums išsiuntė susižavėjimą %d žmogus</item>
+    </plurals>
     <string name="select_all">Pasirinkti visus</string>
     <string name="silent_ringtone">Be garso</string>
     <plurals name="selected">
@@ -563,4 +570,5 @@
         <item quantity="other">%d išrinkta</item>
         <item quantity="one">%d išrinktas</item>
     </plurals>
+    <string name="photo_is_uploading">Foto įkrova</string>
 </resources>

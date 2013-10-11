@@ -3,6 +3,14 @@ def defaultCompileSdkVersion = "Google Inc.:Google APIs:17"
 def defaultBuildToolsVersion = "18.1"
 def supportLibrary = "com.android.support:support-v4:18.0.0"
 
+def getGitHeadSha() {
+    return '/usr/bin/git rev-parse --short HEAD'.execute().text.trim()
+}
+
+def getTimestamp() {
+    return new Date().getTime();
+}
+
 buildscript {
      repositories {
          mavenCentral()
@@ -55,6 +63,10 @@ android {
     defaultConfig {
         minSdkVersion 7
         targetSdkVersion 17
+        buildConfig """\
+            public static final long BUILD_TIME = ${getTimestamp()}L;
+            public static final String GIT_HEAD_SHA = "${getGitHeadSha()}";
+        """
     }
 
     signingConfigs {
@@ -69,10 +81,6 @@ android {
         release {
             signingConfig signingConfigs.release
         }
-    }
-
-    buildTypes.all {
-        buildConfig "public static final long BUILD_TIME = " + new Date().getTime() + "L;"
     }
 }
 
@@ -198,3 +206,6 @@ subprojects {
     }
 }
 
+//task ('localistPull') {
+//    println "localist pull && localist status -l en".execute().text;
+//}

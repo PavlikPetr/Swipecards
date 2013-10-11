@@ -3,6 +3,7 @@ package com.topface.topface.ui.settings;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,9 +37,12 @@ public class SettingsAboutFragment extends BaseFragment {
             versionNumber = packageManager.getPackageInfo(packageName, 0).versionName;
 
             if (App.DEBUG) {
-                versionNumber += "\nBuild: " + SimpleDateFormat.getInstance().format(
+                versionNumber += "\nBuild time: " + SimpleDateFormat.getInstance().format(
                         com.topface.topface.BuildConfig.BUILD_TIME
                 );
+                if (!TextUtils.isEmpty(com.topface.topface.BuildConfig.GIT_HEAD_SHA)) {
+                    versionNumber += "\nCommit: " + com.topface.topface.BuildConfig.GIT_HEAD_SHA;
+                }
             }
         } catch (Exception e) {
             versionNumber = "unknown";

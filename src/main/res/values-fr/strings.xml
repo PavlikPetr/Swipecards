@@ -443,9 +443,11 @@
     <string name="on_avatar">Sur l\'avatar</string>
     <string name="your_avatar">Votre avatar</string>
     <string name="avatar_set_successfully">L\'avatar est changé avec succès</string>
+    <string name="incorrect_photo">La photo est incorrecte</string>
     <string name="incorrect_photo_format">Le format de la photo est incorrect. Essayer de télécharger</string>
     <string name="incorrect_photo_size">Le format de la photo est incorrect</string>
     <string name="input_contact_name">Saisissez le  nom du contact</string>
+    <string name="incorrect_locale">Si vous voulez que nous puissions lire votre avis, veuillez le régler en russe ou en anglais</string>
     <string name="complain_photo_header">La photo incorrecte</string>
     <string name="complain_msg_header">Le message incorrect</string>
     <string name="complain_info_header">L\'information incorrecte</string>
@@ -504,6 +506,7 @@
         <item quantity="other">%d pièces</item>
         <item quantity="one">%d pièce</item>
     </plurals>
+    <string name="getjar_auth_title">Choisissez le compte</string>
     <string name="skip">Laisser passer</string>
     <string name="chat">Écrire</string>
     <string name="sympathies">Sympathies</string>
@@ -516,6 +519,10 @@
         <item quantity="other">Il y a %d message reçu avec la distribution expresse</item>
         <item quantity="one">Il y a %d message reçu avec la distribution expresse</item>
     </plurals>
+    <plurals name="popup_vip_visitors">
+        <item quantity="other">Vous avez %d hotes</item>
+        <item quantity="one">Vous avez %d hotes</item>
+    </plurals>
     <string name="general_attention">Attention!</string>
     <string name="general_delete_messages">Supprimer des messages</string>
     <string name="mutual_sympathies">Mutuellement</string>
@@ -525,4 +532,26 @@
     <string name="watching_as_list">Regarder en frome d\'une liste</string>
     <string name="watching_sequentually">Regarder simultanément</string>
     <string name="or_use_common_likes_list">Ou bien regardez ceux à qui vous avez plu dans la liste commune</string>
+    <string name="settings_feedback_transaction_number">Le numéro de la commande</string>
+    <string name="settings_feedback_transaction_link">où est-ce que je peux trouver le numéro de la commande?</string>
+    <string name="general_logout_error">Malheureusement, nous n\'avons pas réussi de vous faire quitter le compte</string>
+    <string name="auth_btn_ok">Entrer via Odnoklassniki</string>
+    <string name="other_auth">Entrer via des autres services</string>
+    <string name="settings_feedback_transaction_number_hint">Saisissez le numéro de la commande</string>
+    <string name="youve_earned">Vous avez gagné %s</string>
+    <string name="like_topface">Vous aimez Topface?</string>
+    <string name="delete_visitors">Supprimer des hôtes</string>
+    <string name="delete_admirations">Supprimer des ravissements</string>
+    <string name="general_admirations">Ravissements</string>
+    <plurals name="popup_vip_admirations">
+        <item quantity="other">Vous avez reçu les ravissements de la part de %d personnes</item>
+        <item quantity="one">Vous avez reçu les ravissements de la part de %d personnes</item>
+    </plurals>
+    <string name="select_all">Choisir tous</string>
+    <string name="silent_ringtone">Sans le son</string>
+    <plurals name="selected">
+        <item quantity="other">%d choisis</item>
+        <item quantity="one">%d choisi</item>
+    </plurals>
+    <string name="photo_is_uploading">Le téléchargement d\'une photo</string>
 </resources>

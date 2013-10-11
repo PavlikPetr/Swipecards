@@ -542,10 +542,17 @@
     <string name="youve_earned">Hai guadagnato %s</string>
     <string name="like_topface">Ti piace Topface?</string>
     <string name="delete_visitors">Elimina visitatori</string>
+    <string name="delete_admirations">Elimina ammirazioni</string>
+    <string name="general_admirations">Ammirazioni</string>
+    <plurals name="popup_vip_admirations">
+        <item quantity="other">%d persone ti hanno inviato ammirazione</item>
+        <item quantity="one">%d persona ti ha inviato ammirazione</item>
+    </plurals>
     <string name="select_all">Scegli tutti</string>
     <string name="silent_ringtone">Silenzioso</string>
     <plurals name="selected">
         <item quantity="other">%d scelti</item>
         <item quantity="one">%d scelto</item>
     </plurals>
+    <string name="photo_is_uploading">Caricamento foto</string>
 </resources>

@@ -530,6 +530,11 @@
         <item quantity="other">Ekspres teslimli %d mesaj alınmıştır</item>
         <item quantity="one">Ekspres teslimli %d mesaj alınmıştır</item>
     </plurals>
+    <plurals name="popup_vip_visitors">
+        <item quantity="zero">Sizin %d ziyaretçiniz var</item>
+        <item quantity="other">Sizin %d ziyaretçiniz var</item>
+        <item quantity="one">Sizin %d ziyaretçiniz var</item>
+    </plurals>
     <string name="general_attention">Dikkat!</string>
     <string name="general_delete_messages">Mesajları silmek</string>
     <string name="mutual_sympathies">Karşılıklı</string>
@@ -547,9 +552,20 @@
     <string name="settings_feedback_transaction_number_hint">Sipariş numarasına girin</string>
     <string name="youve_earned">Kazancınız %s</string>
     <string name="like_topface">Topface’yi beğeniyor musunuz?</string>
+    <string name="delete_visitors">Misafirleri silmek</string>
+    <string name="delete_admirations">Hayranlıkları silmek</string>
+    <string name="general_admirations">Hayranlıklar</string>
+    <plurals name="popup_vip_admirations">
+        <item quantity="zero">Size %d kişi hayranlık gönderdi</item>
+        <item quantity="other">Size %d kişi hayranlık gönderdi</item>
+        <item quantity="one">Size %d kişi hayranlık gönderdi</item>
+    </plurals>
+    <string name="select_all">Hepsi seçmek</string>
+    <string name="silent_ringtone">Sessiz</string>
     <plurals name="selected">
         <item quantity="zero">%d seçilmiş</item>
         <item quantity="other">%d seçilmiş</item>
         <item quantity="one">%d seçilmiş</item>
     </plurals>
+    <string name="photo_is_uploading">Foto yüklemesi</string>
 </resources>
