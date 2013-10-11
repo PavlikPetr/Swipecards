@@ -455,7 +455,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     protected void onLoadProfile() {
-        updateData(false);
         //Показываем последнего пользователя
         if (mUserSearchList == null) {
             mUserSearchList = new CachableSearchList<SearchUser>(SearchUser.class);
@@ -1093,7 +1092,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         @Override
         public void onEmptyList(UsersList usersList) {
             lockControls();
-            showEmptySearchDialog();
+            updateData(false);
 
         }
 
