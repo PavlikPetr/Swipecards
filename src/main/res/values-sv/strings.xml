@@ -541,10 +541,17 @@
     <string name="youve_earned">Du har tjänat %s</string>
     <string name="like_topface">Tycker du om Topface?</string>
     <string name="delete_visitors">Radera gäster</string>
+    <string name="delete_admirations">Radera beundran</string>
+    <string name="general_admirations">Beundran</string>
+    <plurals name="popup_vip_admirations">
+        <item quantity="other">%d personer har skickat dig beundran</item>
+        <item quantity="one">%d person har skickat dig beundran</item>
+    </plurals>
     <string name="select_all">Välj alla</string>
     <string name="silent_ringtone">Ljudlöst</string>
     <plurals name="selected">
         <item quantity="other">%d valt</item>
         <item quantity="one">%d valt</item>
     </plurals>
+    <string name="photo_is_uploading">Fotot laddas upp</string>
 </resources>

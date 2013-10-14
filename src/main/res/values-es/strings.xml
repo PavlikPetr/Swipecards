@@ -545,10 +545,17 @@
     <string name="youve_earned">Has ganado %s</string>
     <string name="like_topface">¿Te gusta Topface?</string>
     <string name="delete_visitors">Eliminar visitantes</string>
+    <string name="delete_admirations">Eliminar admiraciones</string>
+    <string name="general_admirations">Admiraciones</string>
+    <plurals name="popup_vip_admirations">
+        <item quantity="other">Te ha enviado la admiración %d personas</item>
+        <item quantity="one">Te ha enviado la admiración %d persona</item>
+    </plurals>
     <string name="select_all">Seleccionar todos</string>
     <string name="silent_ringtone">Sin sonido</string>
     <plurals name="selected">
         <item quantity="other">%d elegidos</item>
         <item quantity="one">%d elegido</item>
     </plurals>
+    <string name="photo_is_uploading">Subiendo foto</string>
 </resources>

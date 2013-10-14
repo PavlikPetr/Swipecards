@@ -497,6 +497,7 @@
     <string name="delete">Αφαιρέστε</string>
     <string name="delete_account_warning">Προσοχή! θέλετε να διαγράψετε το προφίλ σας?</string>
     <string name="delete_account_error">Σφάλμα κατά τη διαγραφή του λογαριασμού. Προσπαθήστε να επαναλάβετε τη δράση αργότερα.</string>
+    <string name="delete_account_will_be_restored_are_you_sure">Προσπαθείτε να εισάγεται έναν λογαριασμό που έχετε διαγράψει. Κατά την είσοδο ο λογαριασμός θα επανέλθει. Θέλετε να συνεχίσετε?</string>
     <string name="restore_of_account">Ανάκτηση του λογαριασμού σας</string>
     <string name="restore">Αποκαταστήστε</string>
     <string name="admiration_sended">Θαυμασμός εστάλη.</string>
@@ -532,16 +533,24 @@
     <string name="or_use_common_likes_list">\'Η μπορείτε να δείτε τους ανθρώπους, στους οποίους αρέσετε, στη λίστα επαφών σας</string>
     <string name="settings_feedback_transaction_number">Αριθμός παραγγελίας</string>
     <string name="settings_feedback_transaction_link">πού να βρείτε τον αριθμό παραγγελίας?</string>
+    <string name="general_logout_error">Δυστυχώς, ο λογαριασμός σας δεν απενεργοποιήθηκε</string>
     <string name="auth_btn_ok">Εισάγετε με Odnoklassniki</string>
     <string name="other_auth">Συνδεθείτε σε άλλες υπηρεσίες</string>
     <string name="settings_feedback_transaction_number_hint">Εισάγετε τον αριθμό παραγγελίας σας</string>
     <string name="youve_earned">έχετε λάβει %s</string>
     <string name="like_topface">Σας αρέσει Topface?</string>
     <string name="delete_visitors">Αφαιρέστε τους επισκέπτες</string>
+    <string name="delete_admirations">Αφαιρέστε τους θαυμασμους</string>
+    <string name="general_admirations">Θαυμασμούς</string>
+    <plurals name="popup_vip_admirations">
+        <item quantity="other">%d άτομα που σας έχουν στείλει τον θαυμασμό</item>
+        <item quantity="one">%d άτομα που σας έχουν στείλει τον θαυμασμό</item>
+    </plurals>
     <string name="select_all">Επιλογή όλων</string>
     <string name="silent_ringtone">Χωρίς ήχο</string>
     <plurals name="selected">
         <item quantity="other">%d επιλεγμένο</item>
         <item quantity="one">%d επιλεγμένο</item>
     </plurals>
+    <string name="photo_is_uploading">Ανεβάστε μια φωτογραφία</string>
 </resources>
