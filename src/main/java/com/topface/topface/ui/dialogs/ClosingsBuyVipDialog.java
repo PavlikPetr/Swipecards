@@ -62,12 +62,14 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
                 break;
             case R.id.btnClose:
                 EasyTracker.getTracker().sendEvent(getTrackName(), "Close", "", 1L);
+                if (mWatchSequentialyListener != null) mWatchSequentialyListener.onWatchSequentialy();
                 closeDialog();
                 break;
             case R.id.btnWatchAsList:
                 EasyTracker.getTracker().sendEvent(getTrackName(), "WatchAsList", "", 1L);
                 Intent intent = ContainerActivity.getVipBuyIntent(null, "ClosingDialogWatchAsList");
                 startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                if (mWatchSequentialyListener != null) mWatchSequentialyListener.onWatchSequentialy();
                 closeDialog();
                 break;
             default:
