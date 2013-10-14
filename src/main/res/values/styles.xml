@@ -67,8 +67,12 @@
     </style>
 
     <style name="Theme.Topface.Fullscreen" parent="Theme.Topface">
-        <item name="android:windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <!--Action Bar-->
+        <item name="android:windowActionBar">false</item>
+
+        <item name="windowActionBar">false</item>
     </style>
 
     <style name="topfaceEditText">
