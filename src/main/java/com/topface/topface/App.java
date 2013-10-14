@@ -126,7 +126,7 @@ public class App extends Application {
         //Оповещаем о том, что профиль загрузился
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
         //Инициализируем GCM
-        if (Ssid.isLoaded() && AuthToken.getInstance().isEmpty()) {
+        if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty()) {
             GCMUtils.init(getContext());
         }
         if (!GCMIntentService.isOnMessageReceived.getAndSet(false)) {
