@@ -434,6 +434,9 @@
     </plurals>
     <string name="filter_hint">Εισάγετε το όνομα</string>
     <string name="buy_status_and_watch_your_fans">Αγοράστε την κατάστασή VIP και ανακαλύψτε, ποιος σας έχει προσθέσει  στις αγαπημένες του?</string>
+    <string name="add_bookmarks_to_be_connected">Προσθέστε νέους ανθρώπους σε αυτό το τμήμα, και ποτέ δεν θα χάσετε την επαφή μαζί τους</string>
+    <string name="nobody_chat_with_you_sympathies_will_help">Κανείς δεν σας έγραψε ακόμα. Οι συμπάθειες σας βοηθούν να βρείτε κάποιον για επικοινωνία</string>
+    <string name="rate_and_have_mutual_or_buy_and_chat">Βάλτε συμπάθειες σε εκείνους που σας αρέσουν και πάρτε αμοιβαίες συμπάθειες. \'Η αγοράστε συμπάθειες  και αρχίστε την επικοινωνία με ανθρώπους που σας αρέσουν!</string>
     <string name="start_rate">Ξεκινήστε την αξιολόγηση</string>
     <string name="with_vip_find_your_visitors">Με την VIP-κατάσταση θα ξέρετε ποιος ήρθαν στη σελίδα σας</string>
     <string name="on_avatar">Στον Άβαταρ</string>
@@ -467,13 +470,14 @@
     <string name="general_bookmarks_add_short">Στις αγαπημένες σας</string>
     <string name="black_list_add_short">Στη μαύρη λίστα</string>
     <string name="general_complaint">Καταγγελία</string>
-    <string name="general_type_complain">Το θέμα της καταγγελίας</string>
+    <string name="general_type_complain">Θέμα καταγγελιών</string>
     <string name="confirm_email_for_dating">Είμαστε αντίθετοι με την τοποθέτηση  spam.Επιβεβαιώστε το email  για να εξοικείωσετε στο Topface!</string>
     <string name="confirm">Επιβεβαιώστε</string>
     <string name="complain_type_swearing_msg">Ευγένειας, απειλές, ύβρεις</string>
     <string name="general_bookmarks_is_deleted">Ο χρήστης διαγράφεται από τα αγαπημένες</string>
     <string name="general_blacklist_is_deleted">Ο χρήστης διαγράφεται από τη μαύρη λίστα</string>
     <string name="invite_friends_title_short">Προσκαλέστε όλους τους φίλους σας στο Topface!</string>
+    <string name="general_exit">Έξοδος</string>
     <string name="likes_can_help_you">Οι συμπάθειες θα βοηθήσουν στην εξοικείωση</string>
     <string name="general_get_dating">Εξοικειωθείτε</string>
     <string name="settings_select_language">Επιλέξτε γλώσσα για την εφαρμογη</string>
@@ -491,7 +495,39 @@
     <string name="chat_block_not_mutual">Για να ξεκινήσετε συνομιλία με τον χρήστη μπορείτε, αν αυτός σας στείλει μια συμπάθεια ή αν έχετε VIP-κατάσταση</string>
     <string name="delete_account_are_you_sure">Είστε σίγουροι?</string>
     <string name="delete">Αφαιρέστε</string>
+    <string name="delete_account_error">Σφάλμα κατά τη διαγραφή του λογαριασμού. Προσπαθήστε να επαναλάβετε τη δράση αργότερα.</string>
     <string name="restore_of_account">Ανάκτηση του λογαριασμού σας</string>
     <string name="restore">Αποκαταστήστε</string>
     <string name="admiration_sended">Θαυμασμός εστάλη.</string>
+    <plurals name="general_coins">
+        <item quantity="other">%d κέρματα</item>
+        <item quantity="one">%d κέρμα</item>
+    </plurals>
+    <string name="getjar_auth_title">Επιλέξτε ένα λογαριασμό</string>
+    <string name="skip">Παραλείψετε</string>
+    <string name="chat">Γράψτε</string>
+    <string name="sympathies">Συμπάθειες</string>
+    <plurals name="number_of_sympathies">
+        <item quantity="zero">%d συμπάθειες</item>
+        <item quantity="other">%d συμπάθειες</item>
+        <item quantity="one">%d συμπάθεια</item>
+    </plurals>
+    <plurals name="popup_vip_messages">
+        <item quantity="other">\'Ελαβε %d μηνύματα με Ταχεία Παράδοση!</item>
+        <item quantity="one">\'Ελαβε %d μήνυμα με Ταχεία Παράδοση!</item>
+    </plurals>
+    <string name="general_attention">Προσοχή!</string>
+    <string name="general_delete_messages">Διαγραφή μηνυμάτων</string>
+    <string name="mutual_sympathies">Αμοιβαία</string>
+    <string name="skip_all">Παραλείψτε όλα</string>
+    <string name="forget">Ξεχάστε</string>
+    <string name="watch_as_list">Εμφανίστε ολόκληρη τη λίστα</string>
+    <string name="watching_as_list">Εμφανίστε ολόκληρη τη λίστα</string>
+    <string name="watching_sequentually">Δείτε σε μια σειρά</string>
+    <string name="or_use_common_likes_list">\'Η μπορείτε να δείτε τους ανθρώπους, στους οποίους αρέσετε, στη λίστα επαφών σας</string>
+    <string name="settings_feedback_transaction_number">Αριθμός παραγγελίας</string>
+    <string name="settings_feedback_transaction_link">πού να βρείτε τον αριθμό παραγγελίας?</string>
+    <string name="settings_feedback_transaction_number_hint">Εισάγετε τον αριθμό παραγγελίας σας</string>
+    <string name="youve_earned">έχετε λάβει %s</string>
+    <string name="like_topface">Σας αρέσει Topface?</string>
 </resources>

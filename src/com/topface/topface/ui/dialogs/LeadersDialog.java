@@ -125,6 +125,6 @@ public class LeadersDialog extends DialogFragment {
         intent.putExtra(ChatFragment.INTENT_USER_CITY, user.city.name);
         intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
         getActivity().startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
-        EasyTracker.getTracker().trackEvent("Leaders", "Dialog", "Chat", 1L);
+        EasyTracker.getTracker().sendEvent("Leaders", "Dialog", "Chat", 1L);
     }
 }

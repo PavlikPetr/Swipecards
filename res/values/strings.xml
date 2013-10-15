@@ -188,6 +188,7 @@
     <string name="novice_fill_profile">Add your best photos,\nto get more likes</string>
     <string name="general_edit_profile_message">Please, fill in all the obligatory fields in you profile</string>
     <string name="general_premium_access_error">To do this you have to be a VIP</string>
+    <string name="address_book_access_error">This application does not have access to your contacts. You can allow access to the privacy settings of your device</string>
     <string name="general_search_null_response_error">Not found. Try to change filters</string>
     <string name="change_filters">Change filters</string>
     <string name="general_sex">Sex</string>
@@ -503,10 +504,49 @@
     <string name="restore_of_account">Restore account</string>
     <string name="restore">Restore</string>
     <string name="admiration_sended">Admiration sent</string>
+    <plurals name="general_coins">
+        <item quantity="other">%d coins</item>
+        <item quantity="one">%d coin</item>
+    </plurals>
+    <string name="getjar_auth_title">Choose account</string>
+    <string name="skip">Skip</string>
+    <string name="chat">Chat</string>
+    <string name="sympathies">Sympathies</string>
+    <plurals name="number_of_sympathies">
+        <item quantity="few">%d sympathies</item>
+        <item quantity="zero">%d sympathies</item>
+        <item quantity="many">%d sympathies</item>
+        <item quantity="other">%d sympathies</item>
+        <item quantity="one">%d sympathy</item>
+    </plurals>
     <plurals name="popup_vip_messages">
         <item quantity="other">Received %d messages with express delivery</item>
         <item quantity="one">Received %d message with express delivery</item>
     </plurals>
+    <plurals name="popup_vip_visitors">
+        <item quantity="other">You have %d visitors</item>
+        <item quantity="one">You have %d visitor</item>
+    </plurals>
+    <plurals name="popup_vip_admirations">
+        <item quantity="other">You have %d admirations</item>
+        <item quantity="one">You have %d admiration</item>
+    </plurals>
     <string name="general_attention">Attention!</string>
-    <string name="general_delete_messages">delete messages</string>
+    <string name="general_delete_messages">Delete messages</string>
+    <string name="mutual_sympathies">Mutual</string>
+    <string name="skip_all">Skip all</string>
+    <string name="forget">Forget</string>
+    <string name="watch_as_list">View a list of</string>
+    <string name="watching_as_list">View a list of</string>
+    <string name="watching_sequentually">View sequentially</string>
+    <string name="or_use_common_likes_list">Or browse those that liked you in the common list</string>
+    <string name="settings_feedback_transaction_number">Order number</string>
+    <string name="settings_feedback_transaction_link">Where to find the order number?</string>
+    <string name="general_logout_error">Unfortunately, you failed to log out from your account</string>
+    <string name="settings_feedback_transaction_number_hint">Enter order number</string>
+    <string name="youve_earned">You\'ve earned %s</string>
+    <string name="like_topface">Do you like Topface?</string>
+    <string name="delete_visitors">delete visitors</string>
+    <string name="delete_admirations">delete admirations</string>
+    <string name="general_admirations">Admirations</string>
 </resources>

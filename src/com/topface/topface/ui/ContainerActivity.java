@@ -28,8 +28,11 @@ public class ContainerActivity extends BaseFragmentActivity {
     private Fragment mCurrentFragment;
     private static final String TAG_FRAGMENT = "current_fragment";
 
+    /**
+     * Constant keys for different fragments
+     * Values have to be > 0
+     */
     public static final int INTENT_BUY_VIP_FRAGMENT = 1;
-
     public static final int INTENT_BUYING_FRAGMENT = 2;
     public static final int INTENT_CHAT_FRAGMENT = 3;
     public static final int INTENT_REGISTRATION_FRAGMENT = 4;
@@ -60,7 +63,10 @@ public class ContainerActivity extends BaseFragmentActivity {
             } catch (Exception ex) {
                 Debug.error(ex);
                 finish();
+            } finally {
+                if (App.DEBUG && mCurrentFragmentId <= 0) throw new IllegalArgumentException("ContainerActivity needs request code, use static ContainerActivity methods to get Intents");
             }
+
         }
     }
 
@@ -257,6 +263,7 @@ public class ContainerActivity extends BaseFragmentActivity {
 
     public static Intent getVipBuyIntent(String extraText, String from) {
         Intent intent = new Intent(App.getContext(), ContainerActivity.class);
+        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUY_VIP_FRAGMENT);
         intent.putExtra(VipBuyFragment.ARG_TAG_EXRA_TEXT, extraText);
         intent.putExtra(BillingFragment.ARG_TAG_SOURCE, from);
         return intent;

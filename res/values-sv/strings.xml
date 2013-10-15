@@ -188,6 +188,7 @@
     <string name="novice_fill_profile">Lägg till dina bästa foton,\för att få fler sympatier.</string>
     <string name="general_edit_profile_message">Vänligen fyll i nödvändiga fälten i profilen</string>
     <string name="general_premium_access_error">För denna funktion behövs Premium</string>
+    <string name="address_book_access_error">Denna applikation har inte tillgång till dina kontakter. Du kan tillåta tillgång i säkerhetsinställningar på din enhet</string>
     <string name="general_search_null_response_error">Inget hittats. Försök att ändra sökkriterier</string>
     <string name="change_filters">Ändra filtrar</string>
     <string name="general_sex">Kön</string>
@@ -462,6 +463,7 @@
     <string name="general_complain_sended">Ditt klagomål har avsänts, tack för hjälpen</string>
     <string name="general_complain">Klagomål</string>
     <string name="general_msg">Meddelande</string>
+    <string name="general_no_notifications">Det är tyvärr omöjligt att erhålla notifikationer på din mobila enhet</string>
     <plurals name="vip_add_more_friends">
         <item quantity="other">Bjud ytterligare %d vänner</item>
         <item quantity="one">Bjud ytterligare %d vän</item>
@@ -476,6 +478,8 @@
     <string name="general_bookmarks_is_deleted">Användaren har raderats från favoriter</string>
     <string name="general_blacklist_is_deleted">Användaren har raderats från svartlistan.</string>
     <string name="invite_friends_title_short">Bjud in samtliga vänner till Topface</string>
+    <string name="general_exit">Logga ut</string>
+    <string name="likes_can_help_you">Sympatier kan träffas</string>
     <string name="general_get_dating">Dejta</string>
     <string name="settings_select_language">Välj applikationens språk</string>
     <string name="restart_to_change_locale">För att byta språk behöver man logga om appen</string>
@@ -498,4 +502,36 @@
     <string name="restore_of_account">Återaktivera konto</string>
     <string name="restore">Återaktivera</string>
     <string name="admiration_sended">Beundran har avsänts</string>
+    <plurals name="general_coins">
+        <item quantity="other">%d mynt</item>
+        <item quantity="one">%d mynt</item>
+    </plurals>
+    <string name="getjar_auth_title">Välj konto</string>
+    <string name="skip">Ignorera</string>
+    <string name="chat">Skriv</string>
+    <string name="sympathies">Sympatier</string>
+    <plurals name="number_of_sympathies">
+        <item quantity="zero">%d sympatier</item>
+        <item quantity="other">sympatier</item>
+        <item quantity="one">%d sympati</item>
+    </plurals>
+    <plurals name="popup_vip_messages">
+        <item quantity="other">%d expressmeddelanden erhållits</item>
+        <item quantity="one">%d expressmeddelande erhållits</item>
+    </plurals>
+    <string name="general_attention">OBS!</string>
+    <string name="general_delete_messages">Radera meddelanden</string>
+    <string name="mutual_sympathies">Ömsesidigt</string>
+    <string name="skip_all">Ignorera alla</string>
+    <string name="forget">Glöm</string>
+    <string name="watch_as_list">Se i listan</string>
+    <string name="watching_as_list">Se i listan</string>
+    <string name="watching_sequentually">Se en för en</string>
+    <string name="or_use_common_likes_list">Eller hitta dem du gillar i en gemensam lista</string>
+    <string name="settings_feedback_transaction_number">Order nr</string>
+    <string name="settings_feedback_transaction_link">var kan man hitta order nr?</string>
+    <string name="general_logout_error">Det gick tyvärr inte att logga ut</string>
+    <string name="settings_feedback_transaction_number_hint">Välj order nr</string>
+    <string name="youve_earned">Du har tjänat %s</string>
+    <string name="like_topface">Tycker du om Topface?</string>
 </resources>

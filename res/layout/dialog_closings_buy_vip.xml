@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+    <LinearLayout
+            android:id="@+id/loDialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_dialog"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:gravity="center" android:layout_margin="40dp" android:paddingLeft="32dp"
+            android:paddingRight="32dp" android:paddingTop="24dp" android:paddingBottom="24dp">
+
+        <TextView
+                android:id="@+id/idYouWasLiked"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/to_see_likes_by_vip"
+                android:gravity="center"/>
+
+        <Button
+                android:id="@+id/btnWatchAsList"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                style="@style/ButtonBlue"
+                android:text="@string/watching_as_list" android:layout_marginTop="16dp"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/or_use_common_likes_list"
+                android:gravity="center" android:layout_marginTop="16dp"/>
+
+        <Button
+                android:id="@+id/btnWatchSequentually"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                style="@style/ButtonGray"
+                android:text="@string/watching_sequentually" android:singleLine="true" android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"/>
+    </LinearLayout>
+
+    <ImageButton
+            android:id="@+id/btnClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@id/loDialog"
+            android:layout_alignTop="@id/loDialog"
+            android:background="@drawable/btn_dialog_close_selector"
+            android:layout_marginTop="-16dp"
+            android:layout_marginRight="-16dp"/>
+</RelativeLayout>

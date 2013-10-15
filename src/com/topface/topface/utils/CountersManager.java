@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.LeadersRequest;
+import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
 
 public class CountersManager {
     private static int likesCounter;
@@ -12,6 +13,7 @@ public class CountersManager {
     private static int visitorsCounter;
     private static int dialogsCounter;
     private static int fansCounter;
+    private static int admirationsCounter;
 
     private Context mContext;
 
@@ -30,6 +32,7 @@ public class CountersManager {
     public final static int VISITORS = 2;
     public final static int DIALOGS = 3;
     public final static int FANS = 4;
+    public final static int ADMIRATIONS = 5;
 
     private static String lastRequestMethod;
 
@@ -49,6 +52,7 @@ public class CountersManager {
         visitorsCounter = CacheProfile.unread_visitors;
         dialogsCounter = CacheProfile.unread_messages;
         fansCounter = CacheProfile.unread_fans;
+        admirationsCounter = CacheProfile.unread_admirations;
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -69,10 +73,14 @@ public class CountersManager {
             case FANS:
                 fansCounter++;
                 break;
+            case ADMIRATIONS:
+                admirationsCounter++;
+                break;
         }
         commitCounters();
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public void decrementCounter(int type) {
         switch (type) {
             case LIKES:
@@ -98,6 +106,11 @@ public class CountersManager {
             case FANS:
                 if (fansCounter > 0) {
                     fansCounter--;
+                }
+                break;
+            case ADMIRATIONS:
+                if (admirationsCounter > 0) {
+                    admirationsCounter--;
                 }
                 break;
         }
@@ -127,15 +140,20 @@ public class CountersManager {
                 fansCounter = value;
                 commitCounters();
                 break;
+            case ADMIRATIONS:
+                admirationsCounter = value;
+                commitCounters();
+                break;
         }
     }
 
-    public void setAllCounters(int likesCounter, int sympathyCounter, int dialogsCounter, int visitorsCounter, int fansCounter) {
+    public void setAllCounters(int likesCounter, int sympathyCounter, int dialogsCounter, int visitorsCounter, int fansCounter, int admirationsCounter) {
         CountersManager.likesCounter = likesCounter;
         CountersManager.sympathyCounter = sympathyCounter;
         CountersManager.dialogsCounter = dialogsCounter;
         CountersManager.visitorsCounter = visitorsCounter;
         CountersManager.fansCounter = fansCounter;
+        CountersManager.admirationsCounter = admirationsCounter;
         commitCounters();
     }
 
@@ -151,36 +169,44 @@ public class CountersManager {
                 return visitorsCounter;
             case FANS:
                 return fansCounter;
+            case ADMIRATIONS:
+                return admirationsCounter;
         }
         return -1;
     }
 
-    public void setMethod(String method) {
+    public CountersManager setMethod(String method) {
         lastRequestMethod = method;
+        return this;
     }
 
     private void commitCounters() {
-        //Хз как тут сделать по-другому, подумаю еще
-        if (likesCounter != CacheProfile.unread_likes || dialogsCounter != CacheProfile.unread_messages ||
-                sympathyCounter != CacheProfile.unread_mutual || visitorsCounter != CacheProfile.unread_visitors ||
-                fansCounter != CacheProfile.unread_fans) {
+        String method = lastRequestMethod == null ? NULL_METHOD : lastRequestMethod;
+        if ((likesCounter != CacheProfile.unread_likes ||
+                dialogsCounter != CacheProfile.unread_messages ||
+                sympathyCounter != CacheProfile.unread_mutual ||
+                visitorsCounter != CacheProfile.unread_visitors ||
+                fansCounter != CacheProfile.unread_fans ||
+                admirationsCounter != CacheProfile.unread_admirations) &&
+                !checkMethodIsDenyed(method)
+                ) {
+            if (CacheProfile.unread_likes < likesCounter) {
+                LikesClosingFragment.usersProcessed = false;
+            }
             CacheProfile.unread_likes = likesCounter;
             CacheProfile.unread_messages = dialogsCounter;
             CacheProfile.unread_mutual = sympathyCounter;
             CacheProfile.unread_visitors = visitorsCounter;
             CacheProfile.unread_fans = fansCounter;
-            updateUICounters(); //кидаем broadcast о том, что счетчики обновились и причину их обновления
-            //название метода, если это запрос, или константу, если это GCM
-        } else {
-
-            CacheProfile.unread_likes = likesCounter;
-            CacheProfile.unread_messages = dialogsCounter;
-            CacheProfile.unread_mutual = sympathyCounter;
-            CacheProfile.unread_visitors = visitorsCounter;
-            CacheProfile.unread_fans = fansCounter;
+            CacheProfile.unread_admirations = admirationsCounter;
+            updateUICounters();
         }
     }
 
+    /**
+        кидаем broadcast о том, что счетчики обновились и причину их обновления
+        название метода, если это запрос, или константу, если это GCM
+     */
     private void updateUICounters() {
         String method = lastRequestMethod == null ? NULL_METHOD : lastRequestMethod;
         if (!checkMethodIsDenyed(method)) {

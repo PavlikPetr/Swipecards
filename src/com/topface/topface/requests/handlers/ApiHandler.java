@@ -18,6 +18,7 @@ abstract public class ApiHandler extends Handler {
 
     private Context mContext;
     private boolean mCancel = false;
+    private boolean mNeedCounters = true;
 
     @Override
     public void handleMessage(Message msg) {
@@ -60,7 +61,7 @@ abstract public class ApiHandler extends Handler {
         }
     }
 
-    private void showToast(final int stringId) {
+    protected void showToast(final int stringId) {
         if (mContext != null && mContext instanceof Activity) {
             try {
                 //показываем уведомление
@@ -87,19 +88,20 @@ abstract public class ApiHandler extends Handler {
     }
 
     private void setCounters(ApiResponse response) {
+        if(!mNeedCounters) return;
         try {
             JSONObject counters = response.counters;
             String method = response.method;
             if (counters != null) {
-                CountersManager.getInstance(App.getContext()).setMethod(method);
-                CountersManager.getInstance(App.getContext()).
-                        setAllCounters(
+                CountersManager.getInstance(App.getContext())
+                        .setMethod(method)
+                        .setAllCounters(
                                 counters.optInt("unread_likes"),
                                 counters.optInt("unread_symphaties"),
                                 counters.optInt("unread_messages"),
                                 counters.optInt("unread_visitors"),
-                                counters.optInt("unread_fans")
-
+                                counters.optInt("unread_fans"),
+                                counters.optInt("unread_admirations")
                         );
             }
         } catch (Exception e) {
@@ -129,5 +131,13 @@ abstract public class ApiHandler extends Handler {
 
     protected boolean isShowPremiumError() {
         return true;
+    }
+
+    protected boolean isCanceled() {
+        return mCancel;
+    }
+
+    public void setNeedCounters(boolean needCounter) {
+        this.mNeedCounters = needCounter;
     }
 }

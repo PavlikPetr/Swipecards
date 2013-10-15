@@ -1,5 +1,6 @@
 package com.topface.topface.ui.settings;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -293,7 +294,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     }
 
     private void logout() {
-        LogoutRequest logoutRequest = new LogoutRequest(getActivity());
+        final LogoutRequest logoutRequest = new LogoutRequest(getActivity());
         mLockerView.setVisibility(View.VISIBLE);
         logoutRequest.callback(new ApiHandler() {
             @Override
@@ -304,6 +305,10 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             @Override
             public void fail(int codeError, ApiResponse response) {
                 mLockerView.setVisibility(View.GONE);
+                Activity activity = getActivity();
+                if (activity != null) {
+                    AuthorizationManager.showRetryLogoutDialog(activity, logoutRequest);
+                }
             }
         }).exec();
     }

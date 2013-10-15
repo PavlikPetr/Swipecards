@@ -27,7 +27,7 @@ public class RestorePwdRequest extends ApiRequest {
     @Override
     public void exec() {
         super.exec();
-        EasyTracker.getTracker().trackEvent("Profile", "Auth", "Restore Password", 1L);
+        EasyTracker.getTracker().sendEvent("Profile", "Auth", "Restore Password", 1L);
     }
 
     @Override

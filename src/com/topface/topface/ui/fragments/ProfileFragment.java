@@ -178,50 +178,13 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            final TranslateAnimation ta = new TranslateAnimation(0, 0, -(mUserActions.getHeight()), 0);
-                            ta.setDuration(500);
-                            ta.setAnimationListener(new Animation.AnimationListener() {
-                                @Override
-                                public void onAnimationStart(Animation animation) {
-                                    mActionBar.disableActionsButton(true);
-                                    mUserActions.setVisibility(View.VISIBLE);
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animation animation) {
-                                    mUserActions.clearAnimation();
-                                    mActionBar.disableActionsButton(false);
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animation animation) {
-
-                                }
-                            });
+                            final TranslateAnimation ta = getAnimation(false, 500);
                             mUserActions.startAnimation(ta);
                         }
                     }, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            TranslateAnimation ta = new TranslateAnimation(0, 0, 0, -(mUserActions.getHeight()));
-                            ta.setDuration(500);
-                            ta.setAnimationListener(new Animation.AnimationListener() {
-                                @Override
-                                public void onAnimationStart(Animation animation) {
-                                    mActionBar.disableActionsButton(true);
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animation animation) {
-                                    mUserActions.clearAnimation();
-                                    mActionBar.disableActionsButton(false);
-                                    mUserActions.setVisibility(View.INVISIBLE);
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animation animation) {
-                                }
-                            });
+                            TranslateAnimation ta = getAnimation(true, 500);
                             mUserActions.startAnimation(ta);
                         }
                     }
@@ -241,6 +204,40 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         mHeaderPager.setCurrentItem(mStartHeaderPage);
         mBodyPager.setCurrentItem(mStartBodyPage);
         return root;
+    }
+
+    private TranslateAnimation getAnimation(final boolean isActive, int time) {
+        TranslateAnimation ta;
+        if (isActive) {
+            ta = new TranslateAnimation(0, 0, 0, -mUserActions.getHeight());
+        } else {
+            ta = new TranslateAnimation(0, 0, -mUserActions.getHeight(), 0);
+        }
+
+        ta.setDuration(time);
+        ta.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                mActionBar.disableActionsButton(true);
+                if (!isActive) {
+                    mUserActions.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                mUserActions.clearAnimation();
+                mActionBar.disableActionsButton(false);
+                if (isActive) {
+                    mUserActions.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        return ta;
     }
 
     private void initUserActions(View root) {
@@ -367,8 +364,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     }
 
                     if (data.inBlackList) {
-                        mBlocked.setEnabled(false);
-                        ((TextView) mBlocked.findViewById(R.id.blockTV)).setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+                        ((TextView)mBlocked.findViewById(R.id.blockTV)).setText(R.string.black_list_delete);
+                    } else {
+                        ((TextView)mBlocked.findViewById(R.id.blockTV)).setText(R.string.black_list_add_short);
                     }
                     mRateController.setOnRateControllerListener(mRateControllerListener);
                     //set info into views for user
@@ -500,7 +498,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             case R.id.acDelight:
                 if (v.isEnabled()) {
                     v.setSelected(true);
-                    TextView textView = (TextView) v.findViewById(R.id.delTV);
+                    final TextView textView = (TextView) v.findViewById(R.id.delTV);
                     final ProgressBar loader = (ProgressBar) v.findViewById(R.id.delPrBar);
                     final ImageView icon = (ImageView) v.findViewById(R.id.delIcon);
 
@@ -531,9 +529,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                                 Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                                 v.setEnabled(true);
                                 v.setSelected(false);
-                                if (v instanceof TextView) {
-                                    TextView view = (TextView) v;
-                                    view.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
+                                if (textView != null) {
+                                    textView.setTextColor(Color.parseColor(DEFAULT_NON_ACTIVATED));
                                 }
                             }
                         }
@@ -627,16 +624,25 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
                         loader.setVisibility(View.VISIBLE);
                         icon.setVisibility(View.GONE);
-                        BlackListAddRequest blackListAddRequest = new BlackListAddRequest(mUserProfile.uid, getActivity());
-                        blackListAddRequest.callback(new VipApiHandler() {
+                        ApiRequest request;
+                        if (mUserProfile.inBlackList) {
+                            request = new BlackListDeleteRequest(mUserProfile.uid, getActivity());
+                        } else {
+                            request = new BlackListAddRequest(mUserProfile.uid, getActivity());
+                        }
+                        request.callback(new VipApiHandler() {
                             @Override
                             public void success(ApiResponse response) {
                                 super.success(response);
                                 if (isAdded()) {
-                                    v.setEnabled(false);
                                     loader.setVisibility(View.INVISIBLE);
                                     icon.setVisibility(View.VISIBLE);
-                                    textView.setTextColor(Color.parseColor(DEFAULT_ACTIVATED_COLOR));
+                                    mUserProfile.inBlackList = !mUserProfile.inBlackList;
+                                    if (mUserProfile.inBlackList) {
+                                        textView.setText(R.string.black_list_delete);
+                                    } else {
+                                        textView.setText(R.string.black_list_add_short);
+                                    }
                                 }
                             }
 

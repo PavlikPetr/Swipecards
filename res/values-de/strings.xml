@@ -413,10 +413,22 @@
     <string name="or">oder</string>
     <string name="settings_delete_account">Account löschen</string>
     <string name="restore">Wiederherstellen</string>
+    <plurals name="general_coins">
+        <item quantity="other">%d Coins</item>
+        <item quantity="one">%d Coin</item>
+    </plurals>
+    <string name="skip">Überspringen</string>
+    <string name="sympathies">Sympathien</string>
+    <plurals name="number_of_sympathies">
+        <item quantity="zero">%d Sympathien</item>
+        <item quantity="other">%d Sympathien</item>
+        <item quantity="one">%d Sympathie</item>
+    </plurals>
     <plurals name="popup_vip_messages">
         <item quantity="other">%d Nachrichten wurden mit dem Express-Versand empfangen</item>
         <item quantity="one">%d Nachricht wurde mit dem Express-Versand empfangen</item>
     </plurals>
     <string name="general_attention">Achtung!</string>
     <string name="general_delete_messages">Nachrichten löschen</string>
+    <string name="forget">Vergessen</string>
 </resources>

@@ -54,8 +54,10 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
     }
 
     public void addData(Photos photoLinks, boolean needMore) {
-        if (mPhotoLinks.size() > 0 && mPhotoLinks.get(mPhotoLinks.size() - 1).getId() == 0) {
-            mPhotoLinks.remove(mPhotoLinks.size() - 1);
+        if (mPhotoLinks.size() > 0 && mPhotoLinks.get(mPhotoLinks.size() - 1) != null) {
+            if (mPhotoLinks.size() > 0 && mPhotoLinks.get(mPhotoLinks.size() - 1).getId() == 0) {
+                mPhotoLinks.remove(mPhotoLinks.size() - 1);
+            }
         }
 
         for (Photo photo : photoLinks) {
@@ -83,6 +85,11 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
     @Override
     public Photo getItem(int position) {
         return mPhotoLinks.get(position);
+    }
+
+    public Photo getLastItem() {
+        // cause there is no loader item
+        return mPhotoLinks.get(mPhotoLinks.size()-1);
     }
 
     @Override

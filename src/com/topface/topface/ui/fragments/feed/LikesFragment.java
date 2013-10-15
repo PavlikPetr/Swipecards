@@ -11,7 +11,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
-import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
@@ -30,7 +29,7 @@ import org.json.JSONObject;
 public class LikesFragment extends FeedFragment<FeedLike> {
 
     private RateController mRateController;
-
+    protected View mEmptyFeedView;
 
     @Override
     protected void init() {
@@ -169,11 +168,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
-    protected void decrementCounters() {
-        CountersManager.getInstance(App.getContext()).decrementCounter(CountersManager.LIKES);
-    }
-
-    @Override
     protected Drawable getBackIcon() {
         return getResources().getDrawable(R.drawable.likes_back_icon);
     }
@@ -185,6 +179,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     @Override
     protected void initEmptyFeedView(View inflated) {
+        if (mEmptyFeedView == null) mEmptyFeedView = inflated;
         if (CacheProfile.premium) {
             ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(0);
             inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
@@ -201,7 +196,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                 inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
+                        Intent intent = ContainerActivity.getVipBuyIntent(null, "Likes");
                         startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                     }
                 });
@@ -237,5 +232,18 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected boolean isForPremium() {
         return true;
+    }
+
+    @Override
+    protected boolean isBlockOnClosing() {
+        return true;
+    }
+
+    @Override
+    protected void onCountersUpdated() {
+        super.onCountersUpdated();
+        if (mEmptyFeedView != null) {
+            initEmptyFeedView(mEmptyFeedView);
+        }
     }
 }

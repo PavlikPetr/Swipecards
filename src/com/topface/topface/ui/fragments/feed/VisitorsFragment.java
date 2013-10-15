@@ -56,7 +56,7 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
             btnBuyVip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getActivity().getApplicationContext(), ContainerActivity.class);
+                    Intent intent = ContainerActivity.getVipBuyIntent(null, "Visitors");
                     startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                 }
             });
@@ -66,11 +66,6 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     @Override
     protected int getEmptyFeedLayout() {
         return R.layout.layout_empty_visitors;
-    }
-
-    @Override
-    protected void decrementCounters() {
-        CountersManager.getInstance(getActivity().getApplicationContext()).decrementCounter(CountersManager.VISITORS);
     }
 
     @Override

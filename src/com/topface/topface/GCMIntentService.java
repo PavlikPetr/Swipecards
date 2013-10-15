@@ -10,9 +10,11 @@ import com.topface.topface.utils.Settings;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class GCMIntentService extends GCMBaseIntentService {
     public static final String SENDER_ID = "932206034265";
-
+    public static AtomicBoolean isOnMessageReceived = new AtomicBoolean(false);
 
     public GCMIntentService() {
         super(SENDER_ID);
@@ -21,6 +23,7 @@ public class GCMIntentService extends GCMBaseIntentService {
     @Override
     protected void onMessage(final Context context, final Intent intent) {
         Debug.log("onMessage");
+        isOnMessageReceived.set(true);
         if (intent != null) {
             if (Settings.getInstance().isNotificationEnabled()) {
                 new Thread(new Runnable() {

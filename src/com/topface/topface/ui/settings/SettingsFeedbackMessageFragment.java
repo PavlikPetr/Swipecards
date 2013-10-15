@@ -45,11 +45,10 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
     private EditText mEditText;
     private EditText mEditEmail;
+    private EditText mTransactionIdEditText;
 
     private Report mReport = new Report();
     private LockerView loadingLocker;
-    private TextView wantAnswerTv;
-    private LinearLayout emailContainer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -134,7 +133,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             }
         });
 
-        initEmailViews(root, feedbackType);
+        initTextViews(root, feedbackType);
 
         try {
             PackageInfo pInfo;
@@ -151,14 +150,15 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         return root;
     }
 
-    private void initEmailViews(View root, int feedbackType) {
+    private void initTextViews(View root, int feedbackType) {
         final TextView emailTitle = (TextView) root.findViewById(R.id.tvEmailTitle);
         mEditEmail = (EditText) root.findViewById(R.id.edEmail);
         final CheckBox emailSwitchLayout = (CheckBox) root.findViewById(R.id.loEmailSwitcher);
         mEditEmail.setInputType(InputType.TYPE_CLASS_TEXT);
         mEditEmail.setText(Settings.getInstance().getSocialAccountEmail());
-        emailContainer = (LinearLayout) root.findViewById(R.id.emailContainer);
-        wantAnswerTv = (TextView) root.findViewById(R.id.wantAnswerTv);
+        LinearLayout emailContainer = (LinearLayout) root.findViewById(R.id.emailContainer);
+        TextView wantAnswerTv = (TextView) root.findViewById(R.id.wantAnswerTv);
+        mTransactionIdEditText = (EditText) root.findViewById(R.id.edTransactionId);
         switch (feedbackType) {
             case DEVELOPERS_MESSAGE:
                 emailSwitchLayout.setChecked(true);
@@ -171,6 +171,18 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
                 mEditEmail.setVisibility(View.VISIBLE);
 //                emailTitle.setVisibility(View.VISIBLE);
                 emailContainer.setVisibility(View.GONE);
+                root.findViewById(R.id.tvTransactionIdTitle).setVisibility(View.VISIBLE);
+                mTransactionIdEditText.setVisibility(View.VISIBLE);
+                //TODO when link will be available
+//                TextView link = ((TextView)root.findViewById(R.id.tvTransactionIdInfoLink));
+//                link.setVisibility(View.VISIBLE);
+//                link.setOnClickListener(new OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Utils.hideSoftKeyboard(getActivity(),mEditText,mEditEmail,mTransactionIdEditText);
+//                        Utils.goToUrl(getActivity(),getString(R.string.transaction_info_link));
+//                    }
+//                });
                 break;
             case ERROR_MESSAGE:
             case COOPERATION_MESSAGE:
@@ -221,6 +233,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
         if (emailConfirmed()) {
             mReport.body = feedbackText;
+            mReport.transactionId = mTransactionIdEditText.getText().toString().trim();
             prepareRequestSend();
             FeedbackReport feedbackRequest = new FeedbackReport(getActivity().getApplicationContext());
             feedbackRequest.subject = mReport.getSubject();
@@ -282,6 +295,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         String android_CODENAME = android.os.Build.VERSION.CODENAME;
         String device = android.os.Build.DEVICE;
         String model = android.os.Build.MODEL;
+        String transactionId = null;
 
         private AuthToken authToken = AuthToken.getInstance();
 
@@ -318,6 +332,9 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             strBuilder.append(android_RELEASE).append("/").append(android_SDK).append(";</p>\n");
 
             strBuilder.append("<p>Build type: ").append(Utils.getBuildType()).append(android_SDK).append(";</p>\n");
+            if (transactionId != null) {
+                strBuilder.append("<p>Transaction Id: ").append(transactionId).append(";</p>\n");
+            }
 
             return strBuilder.toString();
         }

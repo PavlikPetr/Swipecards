@@ -128,8 +128,8 @@
     <string name="form_detail">Mais detalhado</string>
     <plurals name="form_matches">
         <item quantity="zero">Vocês não têm coincidências</item>
-        <item quantity="other">У Vocês têm %de coincidências</item>
-        <item quantity="one">Vocês têm %de coincidência</item>
+        <item quantity="other">У Vocês têm %d de coincidências</item>
+        <item quantity="one">Vocês têm %d de coincidência</item>
     </plurals>
     <string name="invite_search_hint">Encontrar amigos</string>
     <string name="invite_title">Convites</string>
@@ -182,13 +182,14 @@
     <string name="photo_add_error">Não foi possivel adicionar fotografia</string>
     <plurals name="photo">
         <item quantity="zero">Não há fotografias</item>
-        <item quantity="other">%de fotografias</item>
-        <item quantity="one">%de fotografias</item>
+        <item quantity="other">%d de fotografias</item>
+        <item quantity="one">%d de fotografias</item>
     </plurals>
     <string name="novice_sympathy">Envie simpatias para aqueles que realmente você gosta, para travar um conhecimento agradável</string>
     <string name="novice_fill_profile">Adicione as suas melhores fotografias, para ganhar mais simpatias.</string>
     <string name="general_edit_profile_message">Por favor, preencha espaços necessários do questonário</string>
     <string name="general_premium_access_error">É preciso Premium para esta função</string>
+    <string name="address_book_access_error">Esta aplicação não tem acesso aos seus contactos. Você pode permitir o acesso às configurações de privacidade do seu dispositivo</string>
     <string name="general_search_null_response_error">Nada foi encontrado. Tente mudar filtros</string>
     <string name="change_filters">Modificar filtros</string>
     <string name="general_sex">Genero</string>
@@ -463,6 +464,7 @@
     <string name="general_complain_sended">A sua queixa foi enviada, muito obrigado pela ajuda</string>
     <string name="general_complain">Queixa</string>
     <string name="general_msg">Mensagem</string>
+    <string name="general_no_notifications">Infelizmente, as notificações no seu dispositivo não estão disponíveis</string>
     <string name="general_bookmarks_add_short">Aos favoritos</string>
     <string name="black_list_add_short">Na lista negra</string>
     <string name="general_complaint">Queixar-se</string>
@@ -473,6 +475,8 @@
     <string name="general_bookmarks_is_deleted">O usuário foi removido dos favoritos</string>
     <string name="general_blacklist_is_deleted">O usuário foi removido da lista negra</string>
     <string name="invite_friends_title_short">Convidar todos os amigos à Topface</string>
+    <string name="general_exit">Sair</string>
+    <string name="likes_can_help_you">Simpatias ajudarão travar conhecimentos</string>
     <string name="general_get_dating">Travar conhecimento</string>
     <string name="settings_select_language">Escolha de idioma para o aplicativo</string>
     <string name="restart_to_change_locale">Para a alteração de idioma, o aplicativo terá que ser reiniciado</string>
@@ -491,6 +495,23 @@
     <string name="restore_of_account">Restauração da conta</string>
     <string name="restore">Restaurar</string>
     <string name="admiration_sended">Admiração foi enviada</string>
+    <string name="getjar_auth_title">Selecione uma conta</string>
+    <string name="skip">deixar passar</string>
+    <string name="chat">Escrever</string>
+    <string name="sympathies">Simpatias</string>
     <string name="general_attention">Atenção!</string>
     <string name="general_delete_messages">Eliminar mensagens</string>
+    <string name="mutual_sympathies">Mutuamente</string>
+    <string name="skip_all">deixar passar todos</string>
+    <string name="forget">Esquecer</string>
+    <string name="watch_as_list">Ver pela lista</string>
+    <string name="watching_as_list">Ver pela lista</string>
+    <string name="watching_sequentually">Ver sucessivamente</string>
+    <string name="or_use_common_likes_list">Ou procure aqueles que gostam de você na lista comum</string>
+    <string name="settings_feedback_transaction_number">Número de encomenda</string>
+    <string name="settings_feedback_transaction_link">onde encontrar o número de encomenda?</string>
+    <string name="general_logout_error">Infelizmente não foi possível sair de conta</string>
+    <string name="settings_feedback_transaction_number_hint">Digite o número de ordem</string>
+    <string name="youve_earned">Você ganhou %s</string>
+    <string name="like_topface">Você gosta de Topface?</string>
 </resources>

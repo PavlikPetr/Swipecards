@@ -2,10 +2,6 @@ package com.topface.topface.utils;
 
 import android.content.Intent;
 import android.net.Uri;
-import com.topface.topface.Static;
-import com.topface.topface.ui.fragments.ProfileFragment;
-import com.topface.topface.ui.settings.SettingsContainerActivity;
-import com.topface.topface.utils.social.AuthToken;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,7 +21,8 @@ public class ExternalLinkExecuter {
 
             Uri data = intent.getData();
             if(data != null)  {
-                if(data.getScheme().equals(TOPFACE_CHEME)) {
+                String scheme = data.getScheme();
+                if(scheme != null && scheme.equals(TOPFACE_CHEME)) {
                     if (data.getHost().equals("offerwall")) {
                         listener.onOfferWall();
                     }
@@ -57,10 +54,11 @@ public class ExternalLinkExecuter {
 
             Pattern codePattern = Pattern.compile("[0-9]+-[0-f]+-[0-9]*");
             Matcher matcher = codePattern.matcher(splittedPath[1]);
-            matcher.find();
+            if (matcher.find()) {
+                String code = matcher.group();
+                listener.onConfirmLink(code);
+            }
 
-            String code = matcher.group();
-            listener.onConfirmLink(code);
         }
     }
 

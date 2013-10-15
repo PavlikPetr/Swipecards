@@ -74,6 +74,12 @@ public class BuyingFragment extends BillingFragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Offerwalls.init(getActivity());
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_buy, null);
         initViews(root);
@@ -253,7 +259,7 @@ public class BuyingFragment extends BillingFragment {
     }
 
     private void goToVipSettings() {
-        Intent intent = new Intent(getActivity(), ContainerActivity.class);
+        Intent intent = ContainerActivity.getVipBuyIntent(null, "BuyingGoToVipSettings");
         intent.putExtra(Static.INTENT_REQUEST_KEY, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
         startActivity(intent);
     }

@@ -2,10 +2,11 @@ package com.topface.topface.utils;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.*;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.widget.Toast;
 import com.topface.topface.App;
@@ -17,7 +18,6 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.Locale;
@@ -30,6 +30,7 @@ public class LocaleConfig {
     private Context mContext;
     private String mSystemLocale;
     private String mApplicationLocale;
+    public static boolean localeChangeInitiated = false;
 
     public LocaleConfig(Context context) {
         mContext = context;
@@ -61,7 +62,6 @@ public class LocaleConfig {
     }
 
     public String getApplicationLocale() {
-        fetchToSystemLocale();
         if (mApplicationLocale == null) {
             mApplicationLocale = getPreferences().getString(APPLICATION_LOCALE,Locale.getDefault().getLanguage());
         }
@@ -96,6 +96,7 @@ public class LocaleConfig {
     }
 
     public static void changeLocale(final Activity activity, String selectedLocale,final int fragmentId) {
+        localeChangeInitiated = true;
         final ProgressDialog progress = new ProgressDialog(activity);
         progress.setTitle(R.string.locale_changing);
         progress.setMessage(activity.getResources().getString(R.string.general_dialog_loading));
@@ -128,6 +129,11 @@ public class LocaleConfig {
             public void fail(int codeError, ApiResponse response) {
                 progress.dismiss();
                 Toast.makeText(activity, R.string.general_server_error, Toast.LENGTH_SHORT);
+            }
+
+            @Override
+            public void always(ApiResponse response) {
+                super.always(response);
             }
         }).exec();
     }

@@ -12,9 +12,10 @@ import android.view.View;
 import android.view.WindowManager;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.Static;
+import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
-import com.topface.topface.ui.dialogs.ConfirmEmailDialog;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.ActionBar;
@@ -38,6 +39,19 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     protected boolean mNeedAnimate = true;
     private BroadcastReceiver mProfileLoadReceiver;
     private boolean afterOnSaveInstanceState;
+    private BroadcastReceiver mClosingDataReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            onClosingDataReceived();
+        }
+    };
+
+    private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            onProfileUpdated();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,12 +110,26 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         }
     }
 
+    protected void onClosingDataReceived() {
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         afterOnSaveInstanceState = false;
         checkProfileLoad();
         registerReauthReceiver();
+        (new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                onResumeAsync();
+            }
+        }).start();
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(mClosingDataReceiver, new IntentFilter(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(mProfileUpdateReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
     }
 
     private void registerReauthReceiver() {
@@ -179,6 +207,8 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         } catch (Exception ex) {
             Debug.error(ex);
         }
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mClosingDataReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mProfileUpdateReceiver);
     }
 
     private void removeAllRequests() {
@@ -246,16 +276,10 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         }
     }
 
-    protected void showConfirmEmailDialog() {
-        ConfirmEmailDialog newFragment = ConfirmEmailDialog.newInstance();
-        try {
-            newFragment.show(getSupportFragmentManager(), ConfirmEmailDialog.TAG);
-        } catch (Exception e) {
-            Debug.error(e);
-        }
+    protected void onCreateAsync() {
     }
 
-    protected void onCreateAsync() {
+    protected void onResumeAsync() {
     }
 
     private ActionBar mActionBar;
@@ -265,5 +289,8 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             mActionBar = new ActionBar(this, view);
         }
         return mActionBar;
+    }
+
+    protected void onProfileUpdated(){
     }
 }

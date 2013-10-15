@@ -9,13 +9,16 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
-import android.os.Looper;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.support.v4.content.LocalBroadcastManager;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.*;
+import com.topface.topface.ui.blocks.BannerBlock;
+import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
+import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
 import com.topface.topface.utils.*;
 import com.topface.topface.utils.GeoUtils.GeoLocationManager;
 import com.topface.topface.utils.GeoUtils.GeoPreferencesManager;
@@ -58,8 +61,6 @@ public class App extends Application {
 
     @Override
     public void onCreate() {
-        //android.os.Debug.startMethodTracing("topface_create");
-
         super.onCreate();
         mContext = getApplicationContext();
         //Включаем отладку, если это дебаг версия
@@ -84,43 +85,45 @@ public class App extends Application {
             mConnectionIntent = registerReceiver(mConnectionReceiver, new IntentFilter(CONNECTIVITY_CHANGE_ACTION));
         }
 
+        MutualClosingFragment.usersProcessed = false;
+        LikesClosingFragment.usersProcessed = false;
+
+        final Handler handler = new Handler();
         //Выполнение всего, что можно сделать асинхронно, делаем в отдельном потоке
         new Thread(new Runnable() {
             @Override
             public void run() {
-                onCreateAsync();
+                onCreateAsync(handler);
             }
         }).start();
-
     }
 
     /**
      * Вызывается в onCreate, но выполняется в отдельном потоке
+     * @param handler нужен для выполнения запросов
      */
-    private void onCreateAsync() {
+    private void onCreateAsync(Handler handler) {
+        Debug.log("App", "+onCreateAsync");
         DateUtils.syncTime();
-
         Ssid.init();
-
         CacheProfile.loadProfile();
-
         //Оповещаем о том, что профиль загрузился
-        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(
-                new Intent(CacheProfile.ACTION_PROFILE_LOAD)
-        );
-
-        if (!CacheProfile.isEmpty()) {
-            Looper.prepare();
-            sendProfileAndOptionsRequests();
-            sendLocation();
-            Looper.loop();
-        }
-
+        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
+        //Инициализируем GCM
         if (Ssid.isLoaded() && AuthToken.getInstance().isEmpty()) {
-            // GCM
             GCMUtils.init(getContext());
         }
-
+        if (!GCMIntentService.isOnMessageReceived.getAndSet(false)) {
+            if (!CacheProfile.isEmpty()) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        sendProfileAndOptionsRequests();
+                        sendLocation();
+                    }
+                });
+            }
+        }
     }
 
     private void sendLocation() {
@@ -173,13 +176,15 @@ public class App extends Application {
 
     public static void sendProfileAndOptionsRequests() {
         OptionsRequest request = new OptionsRequest(App.getContext());
-        request.callback(new DataApiHandler() {
+        request.callback(new DataApiHandler<Options>() {
             @Override
-            protected void success(Object data, ApiResponse response) {
+            protected void success(Options data, ApiResponse response) {
+                //Инициализируем баннерные сети
+                BannerBlock.init();
             }
 
             @Override
-            protected Object parseResponse(ApiResponse response) {
+            protected Options parseResponse(ApiResponse response) {
                 return Options.parse(response);
             }
 
@@ -211,8 +216,10 @@ public class App extends Application {
                 @Override
                 protected void success(Profile data, ApiResponse response) {
                     CacheProfile.setProfile(data, response, part);
-
-                    LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                    LocalBroadcastManager.getInstance(getContext())
+                            .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                    LocalBroadcastManager.getInstance(getContext())
+                            .sendBroadcast(new Intent(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
                 }
 
                 @Override

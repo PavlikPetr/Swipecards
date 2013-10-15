@@ -1,5 +1,6 @@
 package com.topface.topface.requests;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Message;
 import android.text.TextUtils;
@@ -34,8 +35,6 @@ public abstract class ApiRequest implements IApiRequest {
     public static final String CONTENT_TYPE = "application/json";
     public static final String APP_IS_OFFILINE = "App is offiline";
 
-    // Data
-    private String mId;
     public String ssid;
     public ApiHandler handler;
     public Context context;
@@ -45,6 +44,7 @@ public abstract class ApiRequest implements IApiRequest {
     private int mResendCnt = 0;
     private String mPostData;
     protected String mApiUrl;
+    private boolean isNeedCounters = true;
 
     public ApiRequest(Context context) {
         //Нельзя передавать Application Context!!!! Только контекст Activity
@@ -66,8 +66,9 @@ public abstract class ApiRequest implements IApiRequest {
     @Override
     public void exec() {
         setEmptyHandler();
+        handler.setNeedCounters(isNeedCounters);
 
-        if (context != null && !App.isOnline() && doNeedAlert) {
+        if (context != null && context instanceof Activity && !App.isOnline() && doNeedAlert) {
             RetryDialog retryDialog = new RetryDialog(context, this);
             if (handler != null) {
                 Message msg = new Message();
@@ -101,7 +102,7 @@ public abstract class ApiRequest implements IApiRequest {
         }
 
         mResendCnt++;
-        Debug.error("Try resend request #" + mResendCnt);
+        Debug.error("Try resend request #" + getId() + " try #" + mResendCnt);
 
         return mResendCnt;
     }
@@ -349,5 +350,9 @@ public abstract class ApiRequest implements IApiRequest {
     @Override
     public boolean isNeedAuth() {
         return true;
+    }
+
+    protected void setNeedCounters(boolean value) {
+        isNeedCounters = value;
     }
 }

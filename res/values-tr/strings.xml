@@ -189,6 +189,7 @@
     <string name="novice_fill_profile">Daha fazla sempati almak \n için en iyi fotoğrafınızı yükleyin.</string>
     <string name="general_edit_profile_message">Lütfen, anketin gerekli boşlukları doldurun</string>
     <string name="general_premium_access_error">Bu fonksiyon için Premium gerek</string>
+    <string name="address_book_access_error">Bu uygulama iletişim bilgilerine ulaşılmaz. Cihazınızın özel ayarlarında etkinleştirebilirsiniz.</string>
     <string name="general_search_null_response_error">Hiçbir şey bulunamadı. Filtreleri değiştirmeyi deneyin</string>
     <string name="change_filters">Filtreleri değiştirmek</string>
     <string name="general_sex">Cinsiyet</string>
@@ -510,6 +511,20 @@
     <string name="restore_of_account">Hesap kurtarmak</string>
     <string name="restore">Kurtarmak</string>
     <string name="admiration_sended">Hayranlık gönderilmiştir</string>
+    <plurals name="general_coins">
+        <item quantity="zero">%d para</item>
+        <item quantity="other">%d para</item>
+        <item quantity="one">%d para</item>
+    </plurals>
+    <string name="getjar_auth_title">Hesap seçin</string>
+    <string name="skip">Geç</string>
+    <string name="chat">Yazmak</string>
+    <string name="sympathies">Sempatiler</string>
+    <plurals name="number_of_sympathies">
+        <item quantity="zero">%d sempati</item>
+        <item quantity="other">%d sempati</item>
+        <item quantity="one">%d sempati</item>
+    </plurals>
     <plurals name="popup_vip_messages">
         <item quantity="zero">Ekspres teslimli %d mesaj alınmıştır</item>
         <item quantity="other">Ekspres teslimli %d mesaj alınmıştır</item>
@@ -517,4 +532,17 @@
     </plurals>
     <string name="general_attention">Dikkat!</string>
     <string name="general_delete_messages">Mesajları silmek</string>
+    <string name="mutual_sympathies">Karşılıklı</string>
+    <string name="skip_all">Hepsi geç</string>
+    <string name="forget">Unutmak</string>
+    <string name="watch_as_list">Liste olarak bakmak</string>
+    <string name="watching_as_list">Liste olarak bakmak</string>
+    <string name="watching_sequentually">Sırayla bakmak</string>
+    <string name="or_use_common_likes_list">Veya sizi beğenen genel listedekilerini izleyin</string>
+    <string name="settings_feedback_transaction_number">Siparişin numarası</string>
+    <string name="settings_feedback_transaction_link">Siparişin numarası nerede bulunur?</string>
+    <string name="general_logout_error">Maalesef, hesaptan çıkış yapılamadı</string>
+    <string name="settings_feedback_transaction_number_hint">Sipariş numarasına girin</string>
+    <string name="youve_earned">Kazancınız %s</string>
+    <string name="like_topface">Topface’yi beğeniyor musunuz?</string>
 </resources>

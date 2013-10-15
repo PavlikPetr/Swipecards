@@ -65,11 +65,6 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
 
 
     @Override
-    protected void decrementCounters() {
-        CountersManager.getInstance(getActivity().getApplicationContext()).decrementCounter(CountersManager.SYMPATHY);
-    }
-
-    @Override
     protected int getTypeForGCM() {
         return GCMUtils.GCM_TYPE_SYMPATHY;
     }

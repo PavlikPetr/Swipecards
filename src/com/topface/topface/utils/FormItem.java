@@ -41,6 +41,7 @@ public class FormItem implements Parcelable{
         this.dataId = dataId;
         this.type = type;
         this.equal = false;
+        this.value = Static.EMPTY;
     }
 
     public FormItem(int titleId, int dataId, int type, FormItem header) {
@@ -49,11 +50,12 @@ public class FormItem implements Parcelable{
         this.type = type;
         this.equal = false;
         this.header = header;
+        this.value = Static.EMPTY;
     }
 
     public FormItem(int titleId, String data, int type) {
         this.titleId = titleId;
-        this.value = data;
+        this.value = data == null ? Static.EMPTY : data;
         this.dataId = NO_RESOURCE_ID;
         this.type = type;
         this.equal = false;
@@ -61,7 +63,7 @@ public class FormItem implements Parcelable{
 
     public FormItem(int titleId, String data, int type, FormItem header) {
         this.titleId = titleId;
-        this.value = data;
+        this.value = data == null ? Static.EMPTY : data;
         this.dataId = NO_RESOURCE_ID;
         this.type = type;
         this.equal = false;
@@ -102,6 +104,7 @@ public class FormItem implements Parcelable{
         dest.writeInt(dataId);
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public static final Parcelable.Creator CREATOR =
             new Parcelable.Creator() {
                 public FormItem createFromParcel(Parcel in) {

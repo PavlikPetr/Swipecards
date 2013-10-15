@@ -512,4 +512,9 @@
     <string name="restore_of_account">Obnovení účtu</string>
     <string name="restore">Obnovit</string>
     <string name="admiration_sended">Obdiv je odeslán</string>
+    <plurals name="general_coins">
+        <item quantity="few">%d mince</item>
+        <item quantity="other">%d mincí</item>
+        <item quantity="one">%d mince</item>
+    </plurals>
 </resources>

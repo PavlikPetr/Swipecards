@@ -1,14 +1,14 @@
 package com.topface.topface.utils;
 
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
+import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
-import com.topface.topface.data.search.Search;
-import com.topface.topface.data.search.SearchUser;
+import com.topface.topface.data.search.UsersList;
 import com.topface.topface.imageloader.DefaultImageLoader;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 
-public class PreloadManager {
+public class PreloadManager<T extends FeedUser> {
 
     int width, height;
     boolean canLoad = true;
@@ -24,14 +24,11 @@ public class PreloadManager {
         this(0, 0);
     }
 
-    public void preloadPhoto(Search userList) {
+    @SuppressWarnings("unchecked")
+    public void preloadPhoto(UsersList userList) {
         if (!userList.isEnded()) {
-            preloadNextPhoto(userList.get(userList.getSearchPosition() + 1).photos.getFirst());
+            preloadNextPhoto(((T)userList.get(userList.getSearchPosition() + 1)).photos.getFirst());
         }
-    }
-
-    public void preloadPhoto(SearchUser currentUser, int position) {
-        preloadNextPhoto(currentUser.photos.get(position));
     }
 
     public boolean preloadPhoto(Photos photos, int position) {
@@ -65,10 +62,6 @@ public class PreloadManager {
         }
 
         return result;
-    }
-
-    private void preloadImage(String url) {
-        preloadImage(url, null);
     }
 
     private void preloadImage(String url, ImageLoadingListener listener) {

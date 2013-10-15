@@ -15,7 +15,7 @@ public class TrackedActivity extends Activity {
         setCustomMeticsAndDimensions();
 
         if (isTrackable()) {
-            EasyTracker.getTracker().trackView(getTrackName());
+            EasyTracker.getTracker().sendView(getTrackName());
         }
     }
 

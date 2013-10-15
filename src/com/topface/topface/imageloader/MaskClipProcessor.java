@@ -13,20 +13,25 @@ public class MaskClipProcessor implements BitmapProcessor {
 
     public static final int DEFAULT_MASK = R.drawable.user_mask_album;
     private Bitmap mMask;
+    private Bitmap mBorder;
     private static SparseArrayCompat<Bitmap> cachedMaskBitmaps = new SparseArrayCompat<Bitmap>();
 
-    public MaskClipProcessor(int mask) {
+    public MaskClipProcessor(int mask, int border) {
         mMask = cachedMaskBitmaps.get(mask);
         if (mMask == null) {
             mMask = BitmapFactory.decodeResource(App.getContext().getResources(), mask);
             cachedMaskBitmaps.put(mask, mMask);
+        }
+        if (mBorder == null && border != 0) {
+            mBorder = BitmapFactory.decodeResource(App.getContext().getResources(),border);
         }
     }
 
     @Override
     public Bitmap process(Bitmap bitmap) {
         try {
-            bitmap = Utils.getRoundedCornerBitmapByMask(bitmap, mMask);
+            bitmap = Utils.getRoundedCornerBitmapByMask(bitmap, mMask, mBorder);
+
         } catch (OutOfMemoryError e) {
             Debug.error(e);
         }

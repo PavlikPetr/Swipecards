@@ -46,10 +46,5 @@ public class AmazonBillingDriver extends BillingDriver {
         PurchasingManager.initiatePurchaseRequest(subscriptionId);
     }
 
-    @Override
-    public String getDriverName() {
-        return "Amazon In-App Purchasing";
-    }
-
 
 }

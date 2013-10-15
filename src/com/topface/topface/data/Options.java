@@ -1,6 +1,7 @@
 package com.topface.topface.data;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.preference.PreferenceManager;
@@ -12,8 +13,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.Ssid;
+import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -77,28 +81,28 @@ public class Options extends AbstractData {
      * Идентификаторы типов баннеров
      */
     public final static String BANNER_TOPFACE = "TOPFACE";
-    public final static String BANNER_ADFONIC = "ADFONIC";
     public final static String BANNER_ADMOB = "ADMOB";
-    public final static String BANNER_WAPSTART = "WAPSTART";
     public static final String BANNER_ADWIRED = "ADWIRED";
-    public final static String BANNER_MADNET = "MADNET";
-    public static final String BANNER_BEGUN = "BEGUN";
     public static final String BANNER_MOPUB = "MOPUB";
+    public static final String BANNER_IVENGO = "IVENGO";
+    public static final String BANNER_ADCAMP = "ADCAMP";
+    public static final String BANNER_LIFESTREET = "LIFESTREET";
+    public static final String BANNER_ADLAB = "ADLAB";
     public static final String BANNER_INNERACTIVE = "INNERACTIVE";
-    public static final String BANNER_MOBCLIX = "MOBCLIX";
     public static final String BANNER_GAG = "GAG";
+    public static final String BANNER_NONE = "NONE";
     public final static String[] BANNERS = new String[]{
             BANNER_TOPFACE,
-            BANNER_ADFONIC,
             BANNER_ADMOB,
-            BANNER_WAPSTART,
             BANNER_ADWIRED,
-            BANNER_MADNET,
-            BANNER_BEGUN,
             BANNER_MOPUB,
+            BANNER_IVENGO,
+            BANNER_ADCAMP,
+            BANNER_LIFESTREET,
+            BANNER_ADLAB,
             BANNER_INNERACTIVE,
-            BANNER_MOBCLIX,
-            BANNER_GAG
+            BANNER_GAG,
+            BANNER_NONE
     };
 
     /**
@@ -108,22 +112,27 @@ public class Options extends AbstractData {
     public static final String SPONSORPAY = "SPONSORPAY";
     public static final String CLICKKY = "CLICKKY";
     public static final String RANDOM = "RANDOM";
+    public static final String GETJAR = "GETJAR";
     public final static String[] OFFERWALLS = new String[]{
             TAPJOY,
             SPONSORPAY,
             CLICKKY,
+            GETJAR,
             RANDOM
     };
     public static final String PREMIUM_MESSAGES_POPUP_SHOW_TIME = "premium_messages_popup_last_show";
-
+    public static final String PREMIUM_VISITORS_POPUP_SHOW_TIME = "premium_visitors_popup_last_show";
+    public static final String PREMIUM_ADMIRATION_POPUP_SHOW_TIME = "premium_admirations_popup_last_show";
     /**
      * Настройки для каждого типа страниц
      */
-    public HashMap<String, Page> pages = new HashMap<String, Options.Page>();
+    public HashMap<String, Page> pages = new HashMap<String, Page>();
     public LinkedList<BuyButton> coins = new LinkedList<BuyButton>();
     public LinkedList<BuyButton> likes = new LinkedList<BuyButton>();
     public LinkedList<BuyButton> premium = new LinkedList<BuyButton>();
     public LinkedList<BuyButton> others = new LinkedList<BuyButton>();
+
+    public String ratePopupType;
     private String paymentwall;
 
     public String max_version = "2147483647"; //Integer.MAX_VALUE);
@@ -147,7 +156,13 @@ public class Options extends AbstractData {
     public long popup_timeout;
     public boolean block_unconfirmed;
     public boolean block_chat_not_mutual;
-    public PremiumMessages premium_messages;
+    public Closing closing = new Closing();
+    public PremiumAirEntity premium_messages;
+    public PremiumAirEntity premium_visitors;
+    public PremiumAirEntity premium_admirations;
+    public GetJar getJar;
+    public String gagTypeBanner = BANNER_ADMOB;
+    public String gagTypeFullscreen = BANNER_NONE;
 
     public static Options parse(ApiResponse response) {
         Options options = new Options();
@@ -208,11 +223,27 @@ public class Options extends AbstractData {
             options.popup_timeout = contacts_invite.optInt("show_popup_timeout") * 60 * 60 * 1000;
 
             if (response.jsonResult.has("premium_messages")) {
-                options.premium_messages = new PremiumMessages(
-                        response.jsonResult.optJSONObject("premium_messages")
+                options.premium_messages = new PremiumAirEntity(
+                        response.jsonResult.optJSONObject("premium_messages"), PremiumAirEntity.AIR_MESSAGES
                 );
             } else {
-                options.premium_messages = new PremiumMessages(false, 10, 1000);
+                options.premium_messages = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_MESSAGES);
+            }
+
+            if (response.jsonResult.has("visitors_popup")) {
+                options.premium_visitors = new PremiumAirEntity(
+                        response.jsonResult.optJSONObject("visitors_popup"), PremiumAirEntity.AIR_VISITORS
+                );
+            } else {
+                options.premium_visitors = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_VISITORS);
+            }
+
+            if (response.jsonResult.has("admiration_popup")) {
+                options.premium_admirations = new PremiumAirEntity(
+                        response.jsonResult.optJSONObject("admiration_popup"), PremiumAirEntity.AIR_ADMIRATIONS
+                );
+            } else {
+                options.premium_admirations = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_ADMIRATIONS);
             }
 
             if (response.jsonResult.has("links")) {
@@ -222,7 +253,20 @@ public class Options extends AbstractData {
                 }
             }
 
+            JSONObject closings = response.jsonResult.optJSONObject("closing");
+            if (options.closing == null) options.closing = new Closing();
+            options.closing.enabledMutual = closings.optBoolean("enabled_mutual");
+            options.closing.enabledSympathies = closings.optBoolean("enabled_sympathies");
+            options.closing.limitMutual = closings.optInt("limit_mutual");
+            options.closing.limitSympathies = closings.optInt("limit_sympathies");
 
+            options.ratePopupType = response.jsonResult.optJSONObject("rate_popup").optString("type");
+
+            JSONObject getJar = response.jsonResult.optJSONObject("getjar");
+            options.getJar = new GetJar(getJar.optString("id"), getJar.optString("name"), getJar.optLong("price"));
+
+            options.gagTypeBanner = response.jsonResult.optString("gag_type_banner", Options.BANNER_ADMOB);
+            options.gagTypeFullscreen = response.jsonResult.optString("gag_type_fullscreen", Options.BANNER_NONE);
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
         }
@@ -256,6 +300,18 @@ public class Options extends AbstractData {
         } else {
             return PAGE_UNKNOWK + "(" + name + ")";
         }
+    }
+
+    public PremiumAirEntity getPremiumEntityByType(int type) {
+        switch (type) {
+            case PremiumAirEntity.AIR_ADMIRATIONS:
+                return premium_admirations;
+            case PremiumAirEntity.AIR_VISITORS:
+                return  premium_visitors;
+            case PremiumAirEntity.AIR_MESSAGES:
+                return premium_messages;
+        }
+        return null;
     }
 
     public BuyButton createBuyButtonFromJSON(JSONObject purchaseItem) {
@@ -343,6 +399,15 @@ public class Options extends AbstractData {
         public void onClick(String id);
     }
 
+    public boolean containsBannerType(String bannerType) {
+        for (Page page : pages.values()) {
+            if (page.banner.equals(bannerType)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static class Page {
         public String name;
         public String floatType;
@@ -368,7 +433,7 @@ public class Options extends AbstractData {
         public static Page parseFromString(String str) {
             String[] params = str.split(SEPARATOR);
             if (params.length == 3) {
-                return new Page(params[0],params[1],params[2]);
+                return new Page(params[0], params[1], params[2]);
             } else {
                 return null;
             }
@@ -401,9 +466,11 @@ public class Options extends AbstractData {
         return paymentwall;
     }
 
-    public static class PremiumMessages {
+    public static class PremiumAirEntity {
         public static final int DEFAULT_COUNT = 10;
         private static final int DEFAULT_TIMEOUT = 1000;
+
+        private int airType;
         /**
          * включен ли механизм для данного пользователя в булевых константах
          */
@@ -417,7 +484,13 @@ public class Options extends AbstractData {
          */
         private int mTimeout;
 
-        public PremiumMessages(JSONObject premiumMessages) {
+        public static final int AIR_NONE = 0;
+        public static final int AIR_MESSAGES = 1;
+        public static final int AIR_VISITORS = 2;
+        public static final int AIR_ADMIRATIONS = 3;
+
+        public PremiumAirEntity(JSONObject premiumMessages, int airType) {
+            this.airType = airType;
             if (premiumMessages != null) {
                 mEnabled = premiumMessages.optBoolean("enabled");
                 mCount = premiumMessages.optInt("count", DEFAULT_COUNT);
@@ -425,10 +498,11 @@ public class Options extends AbstractData {
             }
         }
 
-        public PremiumMessages(boolean enabled, int count, int timeout) {
+        public PremiumAirEntity(boolean enabled, int count, int timeout, int type) {
             mEnabled = enabled;
             mCount = count;
             mTimeout = timeout;
+            airType = type;
         }
 
         public int getCount() {
@@ -445,7 +519,7 @@ public class Options extends AbstractData {
                 public void run() {
                     PreferenceManager.getDefaultSharedPreferences(App.getContext())
                             .edit()
-                            .putLong(PREMIUM_MESSAGES_POPUP_SHOW_TIME, System.currentTimeMillis())
+                            .putLong(getPrefsConstant(), System.currentTimeMillis())
                             .commit();
                 }
             }).run();
@@ -457,15 +531,133 @@ public class Options extends AbstractData {
                 public void run() {
                     PreferenceManager.getDefaultSharedPreferences(App.getContext())
                             .edit()
-                            .remove(PREMIUM_MESSAGES_POPUP_SHOW_TIME)
+                            .remove(getPrefsConstant())
                             .commit();
                 }
             }).run();
         }
 
+        public String getPrefsConstant() {
+            switch (airType) {
+                case AIR_MESSAGES:
+                    return PREMIUM_MESSAGES_POPUP_SHOW_TIME;
+                case AIR_VISITORS:
+                    return PREMIUM_VISITORS_POPUP_SHOW_TIME;
+                case AIR_ADMIRATIONS:
+                    return PREMIUM_ADMIRATION_POPUP_SHOW_TIME;
+            }
+
+            return PREMIUM_MESSAGES_POPUP_SHOW_TIME;
+        }
+
         private long getLashShowTime() {
             return  PreferenceManager.getDefaultSharedPreferences(App.getContext())
-                    .getLong(PREMIUM_MESSAGES_POPUP_SHOW_TIME, 0);
+                    .getLong(getPrefsConstant(), 0);
+        }
+    }
+
+
+
+
+    public static class Closing {
+        public static String DATA_FOR_CLOSING_RECEIVED_ACTION = "DATA_FOR_CLOSING_RECEIVED_ACTION";
+
+        private static Ssid.ISsidUpdateListener listener;
+        public boolean enabledSympathies;
+        public boolean enabledMutual;
+        public int limitSympathies;
+        public int limitMutual;
+
+        public Closing() {
+            if (listener == null) {
+                listener = new Ssid.ISsidUpdateListener() {
+                    @Override
+                    public void onUpdate() {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = pref.edit();
+                                editor.putLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME, 0);
+                                editor.commit();
+                            }
+                        }).start();
+                    }
+                };
+                Ssid.addUpdateListener(listener);
+            }
+        }
+
+        public void onStopMutualClosings() {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = pref.edit();
+                    long currentTime = System.currentTimeMillis();
+                    editor.putLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME, currentTime);
+                    editor.commit();
+                }
+            }).start();
+        }
+
+        public void onStopLikesClosings() {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = pref.edit();
+                    long currentTime = System.currentTimeMillis();
+                    editor.putLong(Static.PREFERENCES_LIKES_CLOSING_LAST_TIME, currentTime);
+                    editor.commit();
+                }
+            }).start();
+        }
+
+        public boolean isClosingsEnabled() {
+            return (enabledMutual || enabledSympathies) && !CacheProfile.premium;
+        }
+
+        public boolean isMutualClosingAvailable() {
+            SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+            long currentTime = System.currentTimeMillis();
+            long lastCallTime = pref.getLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME, 0);
+            return DateUtils.isOutside24Hours(lastCallTime, System.currentTimeMillis());
+        }
+
+        public boolean isLikesClosingAvailable() {
+            SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+            long lastCallTime = pref.getLong(Static.PREFERENCES_LIKES_CLOSING_LAST_TIME, 0);
+            return DateUtils.isOutside24Hours(lastCallTime, System.currentTimeMillis());
+        }
+
+        public void stopForPremium() {
+            enabledMutual = false;
+            enabledSympathies = false;
+        }
+    }
+
+    public static class GetJar {
+        String id = "unknown";
+        String name = "coins";
+        long price = Integer.MAX_VALUE;
+
+        public GetJar(String id, String name, long price) {
+            this.id = id;
+            this.name = name;
+            this.price = price;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public long getPrice() {
+            return price;
         }
     }
 }

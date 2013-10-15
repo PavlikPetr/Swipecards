@@ -35,6 +35,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
 
     public static final String ACTION_BAR_CONST = "needActionBar";
     public static final String ARG_TAG_EXRA_TEXT = "extra_text";
+    public static final String VIP_PURCHASED_INTENT = "com.topface.topface.VIP_PURCHASED";
     EditSwitcher mInvisSwitcher;
 
     ProgressBar mInvisLoadBar;
@@ -145,7 +146,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
                     if (arguments != null) {
                         from = "From" + arguments.getString(ARG_TAG_SOURCE);
                     }
-                    EasyTracker.getTracker().trackEvent("Subscription", "ButtonClick" + from, id, 0L);
+                    EasyTracker.getTracker().sendEvent("Subscription", "ButtonClick" + from, id, 0L);
                 }
             });
         }
@@ -295,6 +296,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     @Override
     public void onPurchased() {
         switchLayouts();
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(VIP_PURCHASED_INTENT));
     }
 
     @Override

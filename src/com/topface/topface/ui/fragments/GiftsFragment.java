@@ -89,7 +89,7 @@ public class GiftsFragment extends BaseFragment {
                                         intent.putExtra(GiftsActivity.INTENT_GIFT_URL, item.gift.link);
                                         intent.putExtra(GiftsActivity.INTENT_GIFT_PRICE, item.gift.price);
 
-                                        EasyTracker.getTracker().trackEvent("Gifts", "Send", "GiftId=" + item.gift.id, (long) item.gift.price);
+                                        EasyTracker.getTracker().sendEvent("Gifts", "Send", "GiftId=" + item.gift.id, (long) item.gift.price);
                                         activity.setResult(Activity.RESULT_OK, intent);
                                         activity.finish();
                                     }
@@ -221,7 +221,7 @@ public class GiftsFragment extends BaseFragment {
         if (mProfile.gifts != null) mProfile.gifts.add(0, sendedGift.gift);
         mGridAdapter.notifyDataSetChanged();
         if (getActivity() != null) {
-            Toast.makeText(getActivity(), R.string.chat_gift_out, 1500).show();
+            Toast.makeText(getActivity(), R.string.chat_gift_out, Toast.LENGTH_LONG).show();
         }
     }
 

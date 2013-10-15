@@ -1,7 +1,6 @@
 package com.topface.topface.data.search;
 
 import com.topface.topface.data.FeedUser;
-import com.topface.topface.data.Photos;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.SerializableToJson;
 import org.json.JSONException;
@@ -20,8 +19,6 @@ public class SearchUser extends FeedUser implements SerializableToJson {
     // Flags
     public boolean skipped = false;
     public boolean rated = false;
-    public Photos photos;
-    public int photosCount;
 
     public SearchUser(JSONObject user) {
         super(user);
@@ -33,8 +30,6 @@ public class SearchUser extends FeedUser implements SerializableToJson {
 
         status = Profile.normilizeStatus(user.optString("status"));
         mutual = user.optBoolean("mutual");
-        photos = new Photos(user.optJSONArray("photos"));
-        photosCount = user.optInt("photos_count", photos.size());
     }
 
     @Override

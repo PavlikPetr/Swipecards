@@ -10,7 +10,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.topface.topface.App;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
@@ -64,11 +63,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     @Override
     protected void makeAllItemsRead() {
 
-    }
-
-    @Override
-    protected void decrementCounters() {
-        CountersManager.getInstance(App.getContext()).decrementCounter(CountersManager.DIALOGS);
     }
 
     @Override

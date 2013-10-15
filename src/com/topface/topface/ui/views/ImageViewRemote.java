@@ -3,10 +3,12 @@ package com.topface.topface.ui.views;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -41,6 +43,9 @@ public class ImageViewRemote extends ImageView {
     public static final int PHOTO_ERROR_RESOURCE = R.drawable.im_photo_error;
     private BitmapProcessor mPostProcessor;
     private String mCurrentSrc;
+    private boolean isFirstTime = true;
+
+    private int borderResId;
     /**
      * Счетчик попыток загрузить фотографию
      */
@@ -53,7 +58,8 @@ public class ImageViewRemote extends ImageView {
      * View, которое используется в качестве индикатора загрузки
      */
     private View mLoader;
-
+    private int mMaxHeight;
+    private int mMaxWidth;
 
     public ImageViewRemote(Context context) {
         super(context);
@@ -79,6 +85,8 @@ public class ImageViewRemote extends ImageView {
     private void setAttributes(AttributeSet attrs) {
         TypedArray values = getContext().obtainStyledAttributes(attrs, R.styleable.ImageViewRemote);
 
+        borderResId = values.getResourceId(R.styleable.ImageViewRemote_border, 0);
+
         setPostProcessor(
                 values.getInt(
                         R.styleable.ImageViewRemote_postProcessor,
@@ -94,33 +102,39 @@ public class ImageViewRemote extends ImageView {
                 )
         );
 
+
         setRemoteSrc(
                 values.getString(
                         R.styleable.ImageViewRemote_remoteSrc
                 )
         );
-
+        mMaxHeight = values.getDimensionPixelSize(R.styleable.ImageViewRemote_android_maxHeight, 0);
+        mMaxWidth = values.getDimensionPixelSize(R.styleable.ImageViewRemote_android_maxWidth,0);
     }
 
     private void setPostProcessor(int postProcessorId, float cornerRadius, int maskId) {
-        if (!isInEditMode()) {
-            switch (postProcessorId) {
-                case POST_PROCESSOR_ROUNDED:
-                    mPostProcessor = new RoundProcessor();
-                    break;
-                case POST_PROCESSOR_ROUND_CORNERS:
-                    mPostProcessor = new RoundCornersProcessor(cornerRadius);
-                    break;
-                case POST_PROCESSOR_MASK:
-                    mPostProcessor = new MaskClipProcessor(maskId);
-                    break;
-                case POST_PROCESSOR_CIRCUMCIRCLE:
-                    mPostProcessor = new CircumCircleProcessor();
-                    break;
-                default:
-                    mPostProcessor = null;
-            }
+
+        switch (postProcessorId) {
+            case POST_PROCESSOR_ROUNDED:
+                mPostProcessor = new RoundProcessor();
+                break;
+            case POST_PROCESSOR_ROUND_CORNERS:
+                mPostProcessor = new RoundCornersProcessor(cornerRadius);
+                break;
+            case POST_PROCESSOR_MASK:
+                mPostProcessor = new MaskClipProcessor(maskId, borderResId);
+                break;
+            case POST_PROCESSOR_CIRCUMCIRCLE:
+                mPostProcessor = new CircumCircleProcessor();
+                break;
+            default:
+                mPostProcessor = null;
         }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
     }
 
     public void setResourceSrc(int resource) {
@@ -149,24 +163,19 @@ public class ImageViewRemote extends ImageView {
             mRepeatTimer = null;
         }
 
-
         //Если ссылка не пустая и мы не патаемся скачать уже установленный в View изображение, то начинаем загрузку
         if (!TextUtils.isEmpty(remoteSrc)) {
             if (!remoteSrc.equals(mCurrentSrc)) {
                 mCurrentSrc = remoteSrc;
             }
-
-            super.setImageDrawable(null);
-
-            getImageLoader()
-                    .displayImage(remoteSrc, this, null, getListener(handler, remoteSrc), getPostProcessor());
-
+            getImageLoader().displayImage(remoteSrc, this, null, getListener(handler, remoteSrc), getPostProcessor());
+            if (borderResId != 0 && isFirstTime) {
+                setImageResource(borderResId);
+            }
         } else {
             isCorrectSrc = false;
-            super.setImageDrawable(null);
             mCurrentSrc = null;
         }
-
         return isCorrectSrc;
     }
 
@@ -207,7 +216,6 @@ public class ImageViewRemote extends ImageView {
     }
 
     public boolean setPhoto(Photo photo, Handler handler, View loader) {
-
         boolean result = true;
         mLoader = loader;
 
@@ -222,9 +230,8 @@ public class ImageViewRemote extends ImageView {
                 }
             }
         } else {
-            result = setRemoteSrc(null);
+            setImageBitmap(null);
         }
-
         return result;
     }
 
@@ -238,6 +245,12 @@ public class ImageViewRemote extends ImageView {
         }
 
         @Override
+        public void onLoadingStarted(String imageUri, View view) {
+            super.onLoadingStarted(imageUri, view);
+            isFirstTime = true;
+        }
+
+        @Override
         public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
             super.onLoadingFailed(imageUri, view, failReason);
             if (FailReason.FailType.OUT_OF_MEMORY != failReason.getType()) {
@@ -248,23 +261,22 @@ public class ImageViewRemote extends ImageView {
                             mHandler.sendEmptyMessage(LOADING_ERROR);
                         }
                         if (mLoader != null) {
-                            mLoader.setVisibility(View.GONE);
+                            setImageResource(PHOTO_ERROR_RESOURCE);
+                        } else {
+                            mRepeatCounter++;
+                            mRepeatTimer = new Timer();
+                            mRepeatTimer.schedule(new TimerTask() {
+                                @Override
+                                public void run() {
+                                    ImageViewRemote.this.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            setRemoteSrc(mRemoteSrc, mHandler, true);
+                                        }
+                                    });
+                                }
+                            }, REPEAT_SCHEDULE);
                         }
-                        setImageResource(PHOTO_ERROR_RESOURCE);
-                    } else {
-                        mRepeatCounter++;
-                        mRepeatTimer = new Timer();
-                        mRepeatTimer.schedule(new TimerTask() {
-                            @Override
-                            public void run() {
-                                ImageViewRemote.this.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        setRemoteSrc(mRemoteSrc, mHandler, true);
-                                    }
-                                });
-                            }
-                        }, REPEAT_SCHEDULE);
                     }
                 } catch (OutOfMemoryError e) {
                     Debug.error("ImageViewRemote:: OnLoadingFailed " + e.toString());
@@ -277,6 +289,10 @@ public class ImageViewRemote extends ImageView {
             super.onLoadingComplete(imageUri, view, loadedImage);
 
             mRepeatCounter = 0;
+            isFirstTime = false;
+            if (mLoader != null) {
+                mLoader.setVisibility(View.GONE);
+            }
             if (mHandler != null) {
                 Message msg = new Message();
                 msg.what = LOADING_COMPLETE;
@@ -295,5 +311,15 @@ public class ImageViewRemote extends ImageView {
                 mHandler.sendEmptyMessage(LOADING_ERROR);
             }
         }
+    }
+
+    @Override
+    public int getMaxHeight() {
+        return mMaxHeight;
+    }
+
+    @Override
+    public int getMaxWidth() {
+        return mMaxWidth;
     }
 }

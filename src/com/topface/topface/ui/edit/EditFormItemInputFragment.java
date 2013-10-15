@@ -126,7 +126,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
                 if (CacheProfile.forms.get(i).titleId == mTitleId) {
                     final FormItem item = CacheProfile.forms.get(i);
                     FormItem newItem;
-                    mInputData = mEditText.getText().toString();
+                    mInputData = mEditText.getText().toString().trim();
                     newItem = new FormItem(item.titleId, mInputData, FormItem.DATA);
 
                     mFormInfo.fillFormItem(newItem);

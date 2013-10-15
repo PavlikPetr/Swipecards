@@ -419,4 +419,9 @@ Sa oled müksanud.</string>
     <string name="delete_account_are_you_sure">Kas sa oled päris kindel?</string>
     <string name="delete">Ära kustutada</string>
     <string name="restore">Taastada</string>
+    <plurals name="general_coins">
+        <item quantity="zero">%d münti</item>
+        <item quantity="other">%d münti</item>
+        <item quantity="one">%d münt</item>
+    </plurals>
 </resources>

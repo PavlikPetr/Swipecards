@@ -3,55 +3,56 @@
           package="com.topface.topface"
           android:installLocation="auto"
 
-          android:versionCode="83"
-          android:versionName="2.6.3">
+          android:versionCode="90"
+          android:versionName="2.7.6">
 
     <uses-sdk
             android:minSdkVersion="7"
-            android:targetSdkVersion="16" />
+            android:targetSdkVersion="16"/>
 
     <!-- permissions -->
     <permission
             android:name="com.topface.topface.permission.C2D_MESSAGE"
-            android:protectionLevel="signature" />
+            android:protectionLevel="signature"/>
 
-    <uses-permission android:name="com.topface.topface.permission.C2D_MESSAGE" />
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="com.android.vending.BILLING" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="com.topface.topface.permission.C2D_MESSAGE"/>
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="com.android.vending.BILLING"/>
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
 
     <uses-feature
             android:name="android.hardware.location.gps"
-            android:required="false" />
+            android:required="false"/>
     <uses-feature
             android:name="android.hardware.location.network"
-            android:required="false" />
+            android:required="false"/>
 
     <!-- Разрешения для Fortumo -->
     <uses-feature
             android:name="android.hardware.telephony"
-            android:required="false" />
+            android:required="false"/>
 
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.SEND_SMS"/>
 
     <supports-screens
             android:resizeable="true"
             android:smallScreens="true"
             android:normalScreens="true"
             android:largeScreens="true"
-            android:anyDensity="true" />
+            android:anyDensity="true"/>
 
     <application
             android:allowBackup="true"
@@ -64,11 +65,11 @@
         <!-- Тип сборки. При релизе приложения не забываем его указать! -->
         <meta-data
                 android:name="com.topface.topface.build"
-                android:value="@string/build_default" />
+                android:value="@string/build_default"/>
 
         <uses-library
                 android:required="false"
-                android:name="com.google.android.maps" />
+                android:name="com.google.android.maps"/>
 
         <!-- activity -->
         <activity
@@ -78,64 +79,64 @@
                 android:configChanges="locale"
                 >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
 
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
-
-                <data
-                        android:scheme="http"
-                        android:host="topface.com"
-                        android:pathPrefix="/profile" />
-
-                <data
-                        android:scheme="http"
-                        android:host="topface.ru"
-                        android:pathPattern="/profile" />
 
                 <data
                         android:scheme="http"
                         android:host="topface.com"
-                        android:pathPrefix="/confirm" />
+                        android:pathPrefix="/profile"/>
 
                 <data
                         android:scheme="http"
                         android:host="topface.ru"
-                        android:pathPrefix="/confirm" />
+                        android:pathPattern="/profile"/>
+
+                <data
+                        android:scheme="http"
+                        android:host="topface.com"
+                        android:pathPrefix="/confirm"/>
+
+                <data
+                        android:scheme="http"
+                        android:host="topface.ru"
+                        android:pathPrefix="/confirm"/>
 
                 <data
                         android:scheme="https"
                         android:host="topface.com"
-                        android:pathPattern="/profile" />
+                        android:pathPattern="/profile"/>
 
                 <data
                         android:scheme="https"
                         android:host="topface.ru"
-                        android:pathPattern="/profile" />
+                        android:pathPattern="/profile"/>
 
                 <data
                         android:scheme="https"
                         android:host="topface.com"
-                        android:pathPrefix="/confirm" />
+                        android:pathPrefix="/confirm"/>
 
                 <data
                         android:scheme="https"
                         android:host="topface.ru"
-                        android:pathPrefix="/confirm" />
+                        android:pathPrefix="/confirm"/>
 
                 />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
                         android:scheme="topface"
@@ -143,10 +144,10 @@
                         />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
                         android:scheme="topface"
@@ -163,35 +164,30 @@
         <activity
                 android:name=".ui.CitySearchActivity"
                 android:screenOrientation="portrait"
-                android:windowSoftInputMode="stateHidden" />
+                android:windowSoftInputMode="stateHidden"/>
         <activity
                 android:name=".ui.GeoMapActivity"
                 android:screenOrientation="portrait"
-                android:windowSoftInputMode="adjustResize" />
+                android:windowSoftInputMode="adjustResize"/>
         <activity
                 android:name=".ui.profile.PhotoSwitcherActivity"
                 android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
                 />
         <activity
                 android:name=".ui.edit.EditProfileActivity"
-                android:screenOrientation="portrait" />
+                android:screenOrientation="portrait"/>
         <activity
                 android:name=".ui.edit.EditContainerActivity"
-                android:screenOrientation="portrait" />
-        <activity android:name=".ui.GiftsActivity" />
+                android:screenOrientation="portrait"/>
+        <activity android:name=".ui.GiftsActivity"/>
         <activity
                 android:name=".ui.LeadersActivity"
-                android:screenOrientation="portrait" />
+                android:screenOrientation="portrait"/>
         <activity
                 android:name=".ui.settings.SettingsContainerActivity"
-                android:screenOrientation="portrait" />
-        <activity android:name=".ui.BanActivity" />
-        <activity
-                android:name="com.google.ads.AdActivity"
-                android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
-        <activity android:name="com.adfonic.android.AdfonicActivity" />
-        <activity android:name="ru.wapstart.plus1.sdk.MraidBrowser" />
-        <activity android:name=".ui.profile.BlackListActivity" />
+                android:screenOrientation="portrait"/>
+        <activity android:name=".ui.BanActivity"/>
+        <activity android:name=".ui.profile.BlackListActivity"/>
         <activity
                 android:name=".ui.ContainerActivity"
                 android:screenOrientation="portrait"
@@ -199,101 +195,114 @@
                 android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
-                    android:value=".ui.NavigationActivity" />
+                    android:value=".ui.NavigationActivity"/>
         </activity>
 
+        <activity android:name=".ui.PaymentwallActivity"/>
+
+        <!-- ADS -->
+
+        <activity android:name="com.inneractive.api.ads.InneractiveFullScreenView"
+                  android:configChanges="orientation|screenSize"/>
+
         <activity
-                android:name="com.mad.ad.ImageActivity"
-                android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
-        <activity
-                android:name="com.mad.view.Browser"
-                android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
-        <activity
-                android:name="com.mad.view.OrmmaActionHandler"
-                android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
+                android:name="com.google.ads.AdActivity"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
 
         <activity
                 android:name="com.tapjoy.TJCOffersWebView"
-                android:configChanges="keyboardHidden|orientation" />
+                android:configChanges="keyboardHidden|orientation"/>
         <activity
                 android:name="com.tapjoy.TapjoyVideoView"
-                android:configChanges="keyboardHidden|orientation" />
-
-        <activity
-                android:name=".ui.PaymentwallActivity" />
+                android:configChanges="keyboardHidden|orientation"/>
 
         <activity
                 android:name="com.sponsorpay.sdk.android.publisher.OfferWallActivity"
-                android:configChanges="orientation" />
+                android:configChanges="orientation"/>
 
         <activity
                 android:name="com.topface.topface.utils.offerwalls.clickky.ClickkyActivity"
                 />
 
+        <activity android:name="com.getjar.sdk.rewards.GetJarActivity"
+                  android:configChanges="orientation|keyboard|keyboardHidden|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+
         <activity
                 android:name="com.mopub.mobileads.MoPubActivity"
-                android:configChanges="keyboardHidden|orientation" />
+                android:configChanges="keyboardHidden|orientation"/>
         <activity
                 android:name="com.mopub.mobileads.MraidActivity"
-                android:configChanges="keyboardHidden|orientation" />
+                android:configChanges="keyboardHidden|orientation"/>
         <activity
                 android:name="com.mopub.mobileads.MraidBrowser"
-                android:configChanges="keyboardHidden|orientation" />
+                android:configChanges="keyboardHidden|orientation"/>
 
         <activity
-                android:name="com.inneractive.api.ads.InneractiveFullScreenView"
-                android:configChanges="orientation|screenSize" />
+                android:name="com.lifestreet.android.lsmsdk.ads.InterstitialAdActivity"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
 
         <activity
-                android:name="com.millennialmedia.android.MMActivity"
-                android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+                android:name="com.lifestreet.android.lsmsdk.mraid.MRAIDActivity"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
 
-        <meta-data
-                android:name="com.mobclix.APPLICATION_ID"
-                android:value="18FE3F53-02A6-4585-9518-B2896A13FD6C" />
         <activity
-                android:name="com.mobclix.android.sdk.MobclixBrowserActivity"
-                android:theme="@android:style/Theme.Translucent.NoTitleBar"
-                android:hardwareAccelerated="true" />
+                android:name="com.lifestreet.android.lsmsdk.mraid.MRAIDInterstitialActivity"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+
+        <service android:name="org.OpenUDID.OpenUDID_service">
+            <intent-filter>
+                <action android:name="org.openudid.GETUDID"/>
+            </intent-filter>
+        </service>
 
         <!-- Алиас для главной активити из первой версии. На всякий случай, а то раньше уже были проблемы с FB -->
         <activity-alias
                 android:name=".ui.MainActivity"
-                android:targetActivity=".ui.NavigationActivity" />
+                android:targetActivity=".ui.NavigationActivity"/>
 
         <activity-alias
                 android:name=".ui.AuthActivity"
-                android:targetActivity=".ui.NavigationActivity" />
+                android:targetActivity=".ui.NavigationActivity"/>
 
         <!-- services -->
-        <service android:name="com.topface.billing.googleplay.BillingService" />
+        <service android:name="com.topface.billing.googleplay.BillingService"/>
+        <service android:name="com.getjar.sdk.rewards.GetJarService"/>
 
         <!-- receivers -->
         <receiver android:name="com.topface.billing.googleplay.BillingReceiver">
             <intent-filter>
-                <action android:name="com.android.vending.billing.IN_APP_NOTIFY" />
-                <action android:name="com.android.vending.billing.RESPONSE_CODE" />
-                <action android:name="com.android.vending.billing.PURCHASE_STATE_CHANGED" />
+                <action android:name="com.android.vending.billing.IN_APP_NOTIFY"/>
+                <action android:name="com.android.vending.billing.RESPONSE_CODE"/>
+                <action android:name="com.android.vending.billing.PURCHASE_STATE_CHANGED"/>
             </intent-filter>
         </receiver>
 
         <receiver android:name=".receivers.TestNotificationsReceiver">
             <intent-filter>
-                <action android:name="com.topface.topface.NOTIFY" />
+                <action android:name="com.topface.topface.NOTIFY"/>
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name="com.getjar.sdk.data.metadata.PackageMonitor" android:enabled="true"
+                  android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED"/>
+                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+                <data android:scheme="package"/>
             </intent-filter>
         </receiver>
 
 
         <!-- gcm -->
-        <service android:name=".GCMIntentService" />
+        <service android:name=".GCMIntentService"/>
         <receiver
                 android:name="com.google.android.gcm.GCMBroadcastReceiver"
                 android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
 
-                <category android:name="com.topface.topface" />
+                <category android:name="com.topface.topface"/>
             </intent-filter>
         </receiver>
 
@@ -302,7 +311,7 @@
             <intent-filter>
                 <action
                         android:name="com.amazon.inapp.purchasing.NOTIFY"
-                        android:permission="com.amazon.inapp.purchasing.Permission.NOTIFY" />
+                        android:permission="com.amazon.inapp.purchasing.Permission.NOTIFY"/>
             </intent-filter>
         </receiver>
 
@@ -310,17 +319,9 @@
                 android:exported="true"
                 android:name="com.sponsorpay.sdk.android.advertiser.InstallReferrerReceiver">
             <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
+                <action android:name="com.android.vending.INSTALL_REFERRER"/>
             </intent-filter>
         </receiver>
-
-
-        <!-- providers -->
-        <provider
-                android:name="com.mad.provider.MadProvider"
-                android:authorities="com.topface.topface.mad.provider"
-                android:exported="false"
-                android:multiprocess="true" />
     </application>
 
 </manifest>

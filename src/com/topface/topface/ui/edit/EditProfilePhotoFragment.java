@@ -151,7 +151,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     @Override
                     public void fail(int codeError, ApiResponse response) {
 //                        finishOperations(handler);
-                        Toast.makeText(App.getContext(), R.string.general_server_error, 1500).show();
+                        Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_LONG).show();
                     }
 
 
@@ -174,7 +174,6 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     @Override
                     public void success(ApiResponse response) {
                         CacheProfile.photo = mPhotoLinks.getByPhotoId(mLastSelectedAsMainId);
-                        getActivity().setResult(Activity.RESULT_OK);
                         mSelectedAsMainId = mLastSelectedAsMainId;
                         LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
                         finishOperations(handler);
@@ -191,9 +190,9 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                                 mPhotoGridAdapter.notifyDataSetChanged();
                                 if (CacheProfile.photos.contains(removedPhoto)) {
                                     CacheProfile.photos.remove(removedPhoto);
-                                    Toast.makeText(App.getContext(), R.string.general_photo_deleted, 1500).show();
+                                    Toast.makeText(App.getContext(), R.string.general_photo_deleted, Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(App.getContext(), R.string.general_server_error, 1500).show();
+                                    Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                                 }
                                 mLastSelectedAsMainId = mSelectedAsMainId;
                             }
@@ -209,7 +208,6 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     }
                 }).exec();
             } else {
-                getActivity().setResult(Activity.RESULT_OK);
                 mSelectedAsMainId = mLastSelectedAsMainId;
                 finishOperations(handler);
             }
@@ -220,6 +218,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
     }
 
     private synchronized void finishOperations(Handler handler) {
+        getActivity().setResult(Activity.RESULT_OK);
         if (mOperationsFinished) {
             finishRequestSend();
             handler.sendEmptyMessage(0);
@@ -358,6 +357,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
 
                 if (activity != null) {
                     Toast.makeText(activity, R.string.photo_add_or, Toast.LENGTH_SHORT).show();
+                    activity.setResult(Activity.RESULT_OK);
                 }
             } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR && activity != null) {
                 Toast.makeText(activity, R.string.photo_add_error, Toast.LENGTH_SHORT).show();

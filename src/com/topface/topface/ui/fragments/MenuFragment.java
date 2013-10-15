@@ -1,10 +1,12 @@
 package com.topface.topface.ui.fragments;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,28 +24,32 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.dialogs.ClosingsBuyVipDialog;
+import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
+import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
 import com.topface.topface.ui.fragments.feed.*;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.ui.views.ServicesTextView;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Editor;
-import com.topface.topface.utils.Novice;
+import com.topface.topface.utils.*;
 
 public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
     public static final String SELECT_MENU_ITEM = "com.topface.topface.action.menu.selectitem";
     public static final String SELECTED_FRAGMENT_ID = "com.topface.topface.action.menu.item";
+    public static boolean logoutInvoked = false;
     private SparseArray<Button> mButtons;
 
     private TextView mTvNotifyLikes;
     private TextView mTvNotifyMutual;
     private TextView mTvNotifyDialogs;
     private TextView mTvNotifyVisitors;
+    private TextView mTvNotifyAdmirations;
 
     private ImageViewRemote mMenuAvatar;
     private ServicesTextView mCoins;
@@ -66,6 +72,8 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             setMenuData();
         }
     };
+
+    private boolean isClosed = false;
 
     private BroadcastReceiver mSelectMenuReceiver = new BroadcastReceiver() {
 
@@ -169,7 +177,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         mTvNotifyDialogs = (TextView) rootLayout.findViewById(R.id.tvNotifyDialogs);
         mTvNotifyFans = (TextView) rootLayout.findViewById(R.id.tvNotifyFans);
         mTvNotifyVisitors = (TextView) rootLayout.findViewById(R.id.tvNotifyVisitors);
-
+        mTvNotifyAdmirations = (TextView) rootLayout.findViewById(R.id.tvNotifyAdmirations);
         mHardwareAccelerated = isHardwareAccelerated(rootLayout);
 
         return rootLayout;
@@ -191,6 +199,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         buttons.put(BaseFragment.F_VISITORS, (Button) rootLayout.findViewById(R.id.btnFragmentVisitors));
         buttons.put(BaseFragment.F_BOOKMARKS, (Button) rootLayout.findViewById(R.id.btnFragmentBookmarks));
         buttons.put(BaseFragment.F_EDITOR, (Button) rootLayout.findViewById(R.id.btnEditor));
+        buttons.put(BaseFragment.F_ADMIRATIONS, (Button) rootLayout.findViewById(R.id.btnFragmentAdmirations));
 
         //Устанавливаем теги и листенеры на кнопки
         for (int i = 0; i < buttons.size(); i++) {
@@ -216,7 +225,6 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         mProfileInfo.setImageResource(R.drawable.ic_not_enough_data);
         mProfileInfo.setVisibility(View.VISIBLE);
     }
-
 
     @Override
     public void onClick(View view) {
@@ -268,6 +276,13 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         } else {
             mTvNotifyFans.setVisibility(View.GONE);
         }
+
+        if (CacheProfile.unread_admirations > 0) {
+            mTvNotifyAdmirations.setText(Integer.toString(CacheProfile.unread_admirations));
+            mTvNotifyAdmirations.setVisibility(View.VISIBLE);
+        } else {
+            mTvNotifyAdmirations.setVisibility(View.GONE);
+        }
     }
 
     public void setClickable(boolean clickable) {
@@ -306,7 +321,8 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         FragmentManager fragmentManager = getFragmentManager();
         Fragment oldFragment = fragmentManager.findFragmentById(android.R.id.content);
 
-        BaseFragment newFragment = (BaseFragment) fragmentManager.findFragmentByTag(getTagById(mCurrentFragmentId));
+        String fragmentTag = getTagById(mCurrentFragmentId);
+        BaseFragment newFragment = (BaseFragment) fragmentManager.findFragmentByTag(fragmentTag);
         //Если не нашли в FragmentManager уже существующего инстанса, то создаем новый
         if (newFragment == null) {
             newFragment = getFragmentNewInstanceById(mCurrentFragmentId);
@@ -318,9 +334,10 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             if (mHardwareAccelerated) {
                 transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             }
-            transaction.replace(android.R.id.content, newFragment, getTagById(mCurrentFragmentId));
-            transaction.commit();
 
+            transaction.replace(android.R.id.content, newFragment, fragmentTag);
+            transaction.commitAllowingStateLoss();
+            fragmentManager.executePendingTransactions();
             mCurrentFragment = newFragment;
         }
 
@@ -335,7 +352,13 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private String getTagById(int id) {
-        return "fragment_switch_controller_" + id;
+        if (id == F_LIKES && !LikesClosingFragment.usersProcessed) {
+            return "fragment_switch_controller_closed_" + id;
+        } else if (id == F_MUTUAL && !MutualClosingFragment.usersProcessed) {
+            return "fragment_switch_controller_closed_" + id;
+        } else {
+            return "fragment_switch_controller_" + id;
+        }
     }
 
     public BaseFragment getCurrentFragment() {
@@ -355,11 +378,21 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             case BaseFragment.F_DATING:
                 fragment = new DatingFragment();
                 break;
+            case BaseFragment.F_ADMIRATIONS:
+                fragment = new AdmirationFragment();
+                break;
             case BaseFragment.F_LIKES:
-                fragment = new LikesFragment();
+                if (LikesClosingFragment.usersProcessed || CacheProfile.premium) {
+                    fragment = new LikesFragment();
+                } else {
+                    if (!isClosed) getActivity().getIntent().putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_LIKES);
+                    Debug.log("Closing:Last fragment F_LIKES from MenuFragment");
+                    fragment = new LikesClosingFragment();
+                }
                 break;
             case BaseFragment.F_MUTUAL:
-                fragment = new MutualFragment();
+                fragment = MutualClosingFragment.usersProcessed || CacheProfile.premium ?
+                        new MutualFragment() : new MutualClosingFragment();
                 break;
             case BaseFragment.F_DIALOGS:
                 fragment = new DialogsFragment();
@@ -377,10 +410,11 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 fragment = new SettingsFragment();
                 break;
             case BaseFragment.F_EDITOR:
+                fragment = null;
                 if (Editor.isEditor()) {
                     fragment = new EditorFragment();
-                    break;
                 }
+                break;
             default:
                 fragment = ProfileFragment.newInstance(CacheProfile.uid, ProfileFragment.TYPE_MY_PROFILE);
                 break;
@@ -394,6 +428,10 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
     public void setOnFragmentSelected(OnFragmentSelectedListener listener) {
         mOnFragmentSelected = listener;
+    }
+
+    public static void onLogout() {
+        logoutInvoked = true;
     }
 
     public static interface OnFragmentSelectedListener {
@@ -418,6 +456,74 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 noviceLayout.startAnimation(alphaAnimation);
                 novice.completeShowFillProfile();
             }
+        }
+    }
+
+    public void onClosings(int type) {
+        for (int i = 0; i < mButtons.size(); i++) {
+            int key = mButtons.keyAt(i);
+            Button btn = mButtons.get(key);
+            if (key != F_PROFILE && key != F_EDITOR && key != type) {
+                setAlphaToTextAndDrawable(btn, 102);
+                btn.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mCurrentFragmentId == F_MUTUAL) {
+                            showWatchAsListDialog(CacheProfile.unread_mutual);
+                        } else if (mCurrentFragmentId == F_LIKES) {
+                            showWatchAsListDialog(CacheProfile.unread_likes);
+                        } else {
+                            showWatchAsListDialog(CacheProfile.unread_likes + CacheProfile.unread_mutual);
+                        }
+
+                    }
+                });
+            } else {
+                setAlphaToTextAndDrawable(btn, 255);
+                btn.setOnClickListener(this);
+            }
+        }
+        isClosed = true;
+    }
+
+    private void setAlphaToTextAndDrawable(Button btn, int alpha) {
+        btn.setTextColor(Color.argb(alpha, 255, 255, 255));
+        if (btn.getCompoundDrawables()[0] != null) {
+            btn.getCompoundDrawables()[0].setAlpha(alpha);
+        }
+    }
+
+    public void onStopClosings() {
+        for (int i = 0; i < mButtons.size(); i++) {
+            Button btn = mButtons.get(mButtons.keyAt(i));
+            setAlphaToTextAndDrawable(btn, 255);
+            btn.setOnClickListener(this);
+        }
+        mCurrentFragmentId = F_UNDEFINED;
+        isClosed = false;
+    }
+
+    public boolean isClosed() {
+        return isClosed;
+    }
+
+    public void showWatchAsListDialog(int likesCount) {
+        if (ClosingsBuyVipDialog.opened) return;
+
+        ClosingsBuyVipDialog newFragment = ClosingsBuyVipDialog.newInstance(likesCount);
+        newFragment.setOnWatchSequentialyListener(new ClosingsBuyVipDialog.IWatchSequentialyListener() {
+            @Override
+            public void onWatchSequentialy(boolean animate) {
+                Activity activity = getActivity();
+                if (activity instanceof NavigationActivity) {
+                    ((NavigationActivity) activity).showContent(animate);
+                }
+            }
+        });
+        try {
+            newFragment.show(getActivity().getSupportFragmentManager(), ClosingsBuyVipDialog.TAG);
+        } catch (Exception e) {
+            Debug.error(e);
         }
     }
 }
