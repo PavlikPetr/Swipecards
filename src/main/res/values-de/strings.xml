@@ -225,7 +225,6 @@
     <string name="vip_messages_bg">Nachrichten Hintergrund</string>
     <string name="vip_black_list">Schwarze Liste</string>
     <string name="vip_profile_bg">Hitergrund Foto</string>
-    <string name="profile_vip_status">Super {{rocket}} Skills</string>
     <string name="profile_services">Services</string>
     <string name="default_balance_constant">Auf Ihrem Konto</string>
     <string name="default_energy_coins_buy_btn_text">Coins und Sympathien kaufen</string>

@@ -228,7 +228,6 @@
     <string name="vip_messages_bg">Pozadí zpráv</string>
     <string name="vip_black_list">Černá listina</string>
     <string name="vip_profile_bg">Fotka na pozadi</string>
-    <string name="profile_vip_status">Super {{rocket}} Skills</string>
     <string name="profile_services">Služby</string>
     <string name="default_balance_constant">Na Vašem účtu</string>
     <string name="default_energy_coins_buy_btn_text">Koupit mince, doplnit zásobu energie</string>

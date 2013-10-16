@@ -455,7 +455,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         if (mProfileType == TYPE_MY_PROFILE) {
             addBodyPage(ProfilePhotoFragment.class.getName(), getResources().getString(R.string.profile_photo));
             addBodyPage(ProfileFormFragment.class.getName(), getResources().getString(R.string.profile_form));
-            addBodyPage(VipBuyFragment.class.getName(), getResources().getString(R.string.profile_vip_status));
+            addBodyPage(VipBuyFragment.class.getName(), getResources().getString(R.string.vip_status));
             addBodyPage(GiftsFragment.class.getName(), getResources().getString(R.string.profile_gifts));
         } else {
             addBodyPage(UserPhotoFragment.class.getName(), getResources().getString(R.string.profile_photo));

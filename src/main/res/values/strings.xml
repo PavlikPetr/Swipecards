@@ -226,7 +226,7 @@
     <string name="vip_messages_bg">Background message</string>
     <string name="vip_black_list">Blacklist</string>
     <string name="vip_profile_bg">Background photo</string>
-    <string name="profile_vip_status">VIP-status</string>
+    <string name="vip_status">VIP-status</string>
     <string name="profile_services">Services</string>
     <string name="default_balance_constant">Your account</string>
     <string name="default_energy_coins_buy_btn_text">Buy coins and likes</string>
@@ -323,7 +323,7 @@
     <string name="boy">guy</string>
     <string name="girl">girl</string>
     <string name="start_communication">Start a chat</string>
-    <string name="birthdate">Date of birth</string>
+    <string name="birthdate">BD</string>
     <string name="welcome_to_topface">Welcome to Topface!</string>
     <string name="incorrect_email">Incorrect e-mail</string>
     <string name="incorrect_login">Incorrect login</string>
@@ -560,4 +560,5 @@
         <item quantity="one">%d selected</item>
     </plurals>
     <string name="photo_is_uploading">Uploading photo</string>
+    <string name="default_ringtone">By default</string>
 </resources>

@@ -222,7 +222,6 @@
     <string name="vip_messages_bg">메세지 배경</string>
     <string name="vip_black_list">블랙 리스트</string>
     <string name="vip_profile_bg">기본 사진</string>
-    <string name="profile_vip_status">Super {{rocket}} Skills</string>
     <string name="profile_services">Services</string>
     <string name="default_balance_constant">당신의 계좌에</string>
     <string name="default_energy_coins_buy_btn_text">코인을 구입하여 에너지를 추가로 보충하십시오.</string>
