@@ -228,7 +228,6 @@
     <string name="vip_messages_bg">Фон повідомлень</string>
     <string name="vip_black_list">Чорний список</string>
     <string name="vip_profile_bg">Фонова фотографія</string>
-    <string name="profile_vip_status">Super {{rocket}} Skills</string>
     <string name="profile_services">Послуги</string>
     <string name="default_balance_constant">На вашому рахунку</string>
     <string name="default_energy_coins_buy_btn_text">Купити монет, поповнити запас енергії</string>

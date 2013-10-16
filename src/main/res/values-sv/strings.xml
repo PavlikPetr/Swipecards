@@ -226,7 +226,6 @@
     <string name="vip_messages_bg">Meddelandets bakgrund</string>
     <string name="vip_black_list">Svartlista</string>
     <string name="vip_profile_bg">Bakgrundsbild</string>
-    <string name="profile_vip_status">Super {{rocket}} Skills</string>
     <string name="profile_services">Tjänster</string>
     <string name="default_balance_constant">På ditt konto</string>
     <string name="default_energy_coins_buy_btn_text">Köp mynt, fyll på energi</string>
