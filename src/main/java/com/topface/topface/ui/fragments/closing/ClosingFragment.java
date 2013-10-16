@@ -22,6 +22,9 @@ import com.topface.topface.ui.fragments.QuickMessageFragment;
 import com.topface.topface.ui.fragments.ViewUsersListFragment;
 import com.topface.topface.utils.CacheProfile;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * Базовый фрагмент экранов запираний
  */
@@ -80,11 +83,11 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
             public void onMessageSent(String message, final QuickMessageFragment fragment) {
                 //Закрываем чат с задержкой и переключаем пользователя
                 if (ClosingFragment.this != null) {
-                    ClosingFragment.this.getView().postDelayed(new Runnable() {
+                    new Timer().schedule(new TimerTask() {
                         @Override
                         public void run() {
                             closeFragment(fragment);
-                            showNextUser();
+                            showNextFromUiThread();
                         }
                     }, CHAT_CLOSE_DELAY_MILLIS);
                 }
@@ -106,6 +109,15 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
                 }
             }
         };
+    }
+
+    private void showNextFromUiThread() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                showNextUser();
+            }
+        });
     }
 
     @Override

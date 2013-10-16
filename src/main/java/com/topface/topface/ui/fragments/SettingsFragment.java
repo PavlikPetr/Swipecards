@@ -473,17 +473,21 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     private void setRingtonNameByUri(Uri uri) {
         String ringtoneName= getActivity().getString(R.string.silent_ringtone);
         if (uri != null) {
-            Cursor mCursor = getActivity().getContentResolver().query(uri, null, null, null, null);
+            Cursor mCursor = null;
+            try {
+                 mCursor = getActivity().getContentResolver().query(uri, null, null, null, null);
 
-            if (mCursor.moveToFirst()) {
-                if (mCursor.getColumnIndex("title") >= 0) {
-                    ringtoneName = mCursor.getString(mCursor.getColumnIndex("title"));
-                } else {
-                    uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                    ringtoneName = getString(R.string.default_ringtone);
+                if (mCursor.moveToFirst()) {
+                    if (mCursor.getColumnIndex("title") >= 0) {
+                        ringtoneName = mCursor.getString(mCursor.getColumnIndex("title"));
+                    } else {
+                        uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                        ringtoneName = getString(R.string.default_ringtone);
+                    }
                 }
+            } finally {
+                mCursor.close();
             }
-            mCursor.close();
         }
         mSettings.setSetting(Settings.NOTIFICATION_MELODY, ringtoneName);
         melodyName.setText(ringtoneName);
