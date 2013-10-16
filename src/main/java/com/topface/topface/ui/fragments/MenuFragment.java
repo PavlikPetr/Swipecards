@@ -558,7 +558,17 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             public void onWatchSequentialy() {
                 Activity activity = getActivity();
                 if (activity instanceof NavigationActivity) {
-                    ((NavigationActivity) activity).showContent();
+                    ((NavigationActivity) activity).hideContent();
+                }
+            }
+        });
+        newFragment.setOnWatchListListener(new ClosingsBuyVipDialog.IWatchListListener() {
+
+            @Override
+            public void onWatchList() {
+                Activity activity = getActivity();
+                if (activity instanceof NavigationActivity) {
+                    ((NavigationActivity) activity).hideContent();
                 }
             }
         });

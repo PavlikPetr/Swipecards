@@ -132,11 +132,6 @@ public class AuthFragment extends BaseFragment {
         initButtons(root);
         initRetryView(root);
         initOtherViews(root);
-//        if (btnsHidden && getActivity() != null) {
-//            hideButtons();
-//        } else {
-//            showButtons();
-//        }
     }
 
     private void initAuthorizationHandler() {
