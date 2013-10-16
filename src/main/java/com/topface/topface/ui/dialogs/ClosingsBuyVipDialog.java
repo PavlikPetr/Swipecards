@@ -24,6 +24,7 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
     public static final String TAG = "com.topface.topface.ui.dialogs.ClosingsBuyVipDialog_TAG";
     private static final String ARG_LIKES = "likesCount";
     private IWatchSequentialyListener mWatchSequentialyListener;
+    private IWatchListListener mWatchListListener;
 
 
     @Override
@@ -62,14 +63,13 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
                 break;
             case R.id.btnClose:
                 EasyTracker.getTracker().sendEvent(getTrackName(), "Close", "", 1L);
-                if (mWatchSequentialyListener != null) mWatchSequentialyListener.onWatchSequentialy();
                 closeDialog();
                 break;
             case R.id.btnWatchAsList:
                 EasyTracker.getTracker().sendEvent(getTrackName(), "WatchAsList", "", 1L);
                 Intent intent = ContainerActivity.getVipBuyIntent(null, "ClosingDialogWatchAsList");
                 startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
-                if (mWatchSequentialyListener != null) mWatchSequentialyListener.onWatchSequentialy();
+                if (mWatchListListener != null) mWatchListListener.onWatchList();
                 closeDialog();
                 break;
             default:
@@ -104,8 +104,16 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
         mWatchSequentialyListener = listener;
     }
 
+    public void setOnWatchListListener(IWatchListListener listener) {
+        mWatchListListener = listener;
+    }
+
     public interface IWatchSequentialyListener {
         void onWatchSequentialy();
+    }
+
+    public interface IWatchListListener {
+        void onWatchList();
     }
 
     @Override

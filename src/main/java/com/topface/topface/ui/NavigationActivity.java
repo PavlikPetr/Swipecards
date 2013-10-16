@@ -211,6 +211,10 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         mDrawerLayout.openDrawer(GravityCompat.START);
     }
 
+    public void hideContent() {
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+    }
+
     @Override
     public void onLoadProfile() {
         super.onLoadProfile();
@@ -372,7 +376,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         showFragment(MenuFragment.DEFAULT_FRAGMENT);
     }
 
-    @SuppressWarnings("UnusedDeclaration")
+//    @SuppressWarnings("UnusedDeclaration")
     private void toggleDrawerLayout() {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
