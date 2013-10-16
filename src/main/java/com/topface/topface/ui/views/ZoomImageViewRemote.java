@@ -68,6 +68,7 @@ public class ZoomImageViewRemote extends ImageViewRemote {
             super(imageView);
         }
 
+
         /**
          * Переопределяем двойной тап по фотографии, в нашем случае зум двухуровневый, а не трех, как в оригинале
          */
@@ -77,11 +78,11 @@ public class ZoomImageViewRemote extends ImageViewRemote {
                 float x = ev.getX();
                 float y = ev.getY();
 
-                float minScale = getMinScale();
+                float minScale = getMinimumScale();
                 if (scale > minScale) {
-                    zoomTo(minScale, x, y);
+                    setScale(minScale, x, y, true);
                 } else {
-                    zoomTo(DOUBLE_TAP_SCALE, x, y);
+                    setScale(DOUBLE_TAP_SCALE, x, y, true);
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
                 // Can sometimes happen when getX() and getY() is called
@@ -103,7 +104,7 @@ public class ZoomImageViewRemote extends ImageViewRemote {
         boolean isPhotoError = resId == PHOTO_ERROR_RESOURCE;
         mPhotoViewAttacher.setZoomable(!isPhotoError);
         if (isPhotoError) {
-            mPhotoViewAttacher.zoomTo(1, 0, 0);
+            mPhotoViewAttacher.setScale(1, 0, 0, true);
         }
     }
 }
