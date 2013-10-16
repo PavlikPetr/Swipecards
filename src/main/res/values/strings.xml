@@ -560,4 +560,5 @@
         <item quantity="one">%d selected</item>
     </plurals>
     <string name="photo_is_uploading">Uploading photo</string>
+    <string name="default_ringtone">Default</string>
 </resources>

@@ -57,7 +57,7 @@
     <!-- Auth -->
     <string name="auth_btn_vk">Войти через ВКонтакте</string>
     <string name="auth_btn_fb">Войти через Facebook</string>
-    <string name="auth_retry">Повторить попытку</string>
+    <string name="auth_retry">Повторить</string>
     <string name="auth_vk_name">ВКонтакте</string>
 
     <!-- Dating -->
