@@ -294,7 +294,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void initControlButtons(View view) {
         // Control Buttons
-        mDelightBtn = (Button) view.findViewById(R.id.btnDatingLove);
+        mDelightBtn = (Button) view.findViewById(R.id.btnDatingAdmiration);
         mDelightBtn.setOnClickListener(this);
         mMutualBtn = (Button) view.findViewById(R.id.btnDatingSympathy);
         mMutualBtn.setOnClickListener(this);
@@ -500,7 +500,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 startActivity(ContainerActivity.getBuyingIntent("Dating"));
             }
             break;
-            case R.id.btnDatingLove: {
+            case R.id.btnDatingAdmiration: {
                 if (mCurrentUser != null) {
                     if (mUserSearchList == null || mUserSearchList.isEnded()) {
                         updateData(true);
@@ -525,7 +525,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                     @Override
                                     public void onRateFailed() {
                                         if (moneyDecreased) {
-                                            moneyDecreased = true;
+                                            moneyDecreased = false;
                                             CacheProfile.money += CacheProfile.getOptions().priceAdmiration;
                                             updateResources();
                                         }
