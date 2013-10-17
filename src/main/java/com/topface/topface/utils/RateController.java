@@ -44,8 +44,6 @@ public class RateController {
 
             @Override
             protected void success(Rate rate, IApiResponse response) {
-                CacheProfile.likes = rate.likes;
-                CacheProfile.money = rate.money;
                 if (listener != null) {
                     listener.onRateCompleted();
                 }
