@@ -1047,8 +1047,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         mNeedMore = response.getJsonResult().optBoolean("more");
                         int i = 0;
                         for (Photo photo : newPhotos) {
-                            if (mLoadedCount + i < newPhotos.size()) {
-                                newPhotos.set(mLoadedCount + i, photo);
+                            if (mLoadedCount + i < data.size()) {
+                                data.set(mLoadedCount + i, photo);
                                 i++;
                             }
                         }
