@@ -266,6 +266,7 @@ public class ImageViewRemote extends ImageView {
 
         @Override
         public void onLoadingStarted(String imageUri, View view) {
+
             super.onLoadingStarted(imageUri, view);
             isFirstTime = true;
         }
@@ -300,6 +301,8 @@ public class ImageViewRemote extends ImageView {
                     }
                 } catch (OutOfMemoryError e) {
                     Debug.error("ImageViewRemote:: OnLoadingFailed " + e.toString());
+                } catch (Exception e) {
+                    Debug.error(e);
                 }
             }
         }
