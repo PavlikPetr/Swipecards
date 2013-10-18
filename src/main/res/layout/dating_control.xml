@@ -45,7 +45,7 @@
                     android:gravity="center">
 
                 <Button
-                        android:id="@+id/btnDatingLove"
+                        android:id="@+id/btnDatingAdmiration"
                         style="@style/DatingButtonsText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -58,8 +58,8 @@
                         style="@style/DatingButtonsText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignBottom="@id/btnDatingLove"
-                        android:layout_alignRight="@id/btnDatingLove"
+                        android:layout_alignBottom="@id/btnDatingAdmiration"
+                        android:layout_alignRight="@id/btnDatingAdmiration"
                         android:layout_marginBottom="9sp"
                         android:background="@android:color/transparent"
                         android:drawableRight="@drawable/coins"

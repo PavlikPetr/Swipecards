@@ -94,6 +94,7 @@ public class AuthorizationManager {
         LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, TOKEN_RECEIVED).putExtra("token", authToken));
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public void setOnAuthorizationHandler(Handler handler) {
         mHandler = handler;
     }
@@ -198,6 +199,9 @@ public class AuthorizationManager {
                     Debug.error(e);
                 }
 
+            } else {
+                Debug.error("OK auth error. users.getCurrentUser returns null");
+                mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
             }
         }
     }

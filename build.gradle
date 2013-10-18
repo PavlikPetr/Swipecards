@@ -3,8 +3,9 @@ def defaultCompileSdkVersion = "Google Inc.:Google APIs:17"
 def defaultBuildToolsVersion = "18.1"
 def supportLibrary = "com.android.support:support-v4:18.0.0"
 
+//TODO нет команды git в окружении
 def getGitHeadSha() {
-    return '/usr/bin/git rev-parse --short HEAD'.execute().text.trim()
+    return "git_head_sha";
 }
 
 def getTimestamp() {

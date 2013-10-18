@@ -16,7 +16,7 @@
         <RelativeLayout
                 android:id="@+id/btnProfileLayoutWithBackground"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/left_menu_background_height"
                 android:addStatesFromChildren="true"
                 android:layout_alignParentTop="true"
                 android:visibility="gone"
