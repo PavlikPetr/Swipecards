@@ -283,21 +283,22 @@ public class ImageViewRemote extends ImageView {
                         }
                         if (mLoader != null) {
                             setImageResource(PHOTO_ERROR_RESOURCE);
-                        } else {
-                            mRepeatCounter++;
-                            mRepeatTimer = new Timer();
-                            mRepeatTimer.schedule(new TimerTask() {
-                                @Override
-                                public void run() {
-                                    ImageViewRemote.this.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            setRemoteSrc(mRemoteSrc, mHandler, true);
-                                        }
-                                    });
-                                }
-                            }, REPEAT_SCHEDULE);
+                            mLoader.setVisibility(View.GONE);
                         }
+                    } else {
+                        mRepeatCounter++;
+                        mRepeatTimer = new Timer();
+                        mRepeatTimer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                ImageViewRemote.this.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        setRemoteSrc(mRemoteSrc, mHandler, true);
+                                    }
+                                });
+                            }
+                        }, REPEAT_SCHEDULE);
                     }
                 } catch (OutOfMemoryError e) {
                     Debug.error("ImageViewRemote:: OnLoadingFailed " + e.toString());
