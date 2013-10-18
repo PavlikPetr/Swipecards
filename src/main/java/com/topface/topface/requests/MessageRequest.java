@@ -36,7 +36,7 @@ public class MessageRequest extends ConfirmedApiRequest {
     public void exec() {
         if (mUserId < 1) {
             handleFail(ErrorCodes.MISSING_REQUIRE_PARAMETER, "Wrong user id");
-        } else if (TextUtils.isEmpty(mMessage) || mMessage.length() <= 1) {
+        } else if (TextUtils.isEmpty(mMessage) || mMessage.length() < 1) {
             handleFail(ErrorCodes.MISSING_REQUIRE_PARAMETER, "Message is too short");
         } else {
             super.exec();
