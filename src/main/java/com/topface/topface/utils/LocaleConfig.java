@@ -11,15 +11,11 @@ import android.widget.Toast;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Ssid;
-import com.topface.topface.data.Auth;
-import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserSetLocaleRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.utils.social.AuthToken;
 
 import java.util.Locale;
 
@@ -96,7 +92,7 @@ public class LocaleConfig {
         return resources.getString(R.string.app_locale);
     }
 
-    public static void changeLocale(final Activity activity, String selectedLocale) {
+    public static void changeLocale(final Activity activity,String selectedLocale) {
         localeChangeInitiated = true;
         final ProgressDialog progress = new ProgressDialog(activity);
         progress.setTitle(R.string.locale_changing);
