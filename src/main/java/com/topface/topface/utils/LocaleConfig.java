@@ -15,6 +15,7 @@ import com.topface.topface.Ssid;
 import com.topface.topface.data.Auth;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.UserSetLocaleRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -106,14 +107,12 @@ public class LocaleConfig {
         //save application locale to preferences
         App.getConfig().getLocaleConfig().setApplicationLocale(selectedLocale);
         //restart -> open NavigationActivity
-        AuthRequest request = new AuthRequest(AuthToken.getInstance(), activity);
         final String locale = LocaleConfig.getServerLocale(activity, selectedLocale);
-        request.setLocale(locale);
+
+        UserSetLocaleRequest request = new UserSetLocaleRequest(activity,locale);
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
-                Auth auth = new Auth(response);
-                Ssid.save(auth.ssid);
                 App.sendProfileAndOptionsRequests();
                 NavigationActivity.restartNavigationActivity(BaseFragment.F_PROFILE);
             }
