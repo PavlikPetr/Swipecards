@@ -159,7 +159,9 @@
 
         <activity
                 android:name=".utils.social.VkAuthActivity"
-                android:screenOrientation="portrait">
+                android:screenOrientation="portrait"
+                android:theme="@style/Theme.Topface.NoActionBar"
+                >
 
         </activity>
 
@@ -173,7 +175,7 @@
                 android:windowSoftInputMode="adjustResize"/>
         <activity
                 android:name=".ui.profile.PhotoSwitcherActivity"
-                android:theme="@style/Theme.Topface.Fullscreen"
+                android:theme="@style/Theme.Topface.NoActionBar.Fullscreen"
                 />
         <activity
                 android:name=".ui.edit.EditProfileActivity"

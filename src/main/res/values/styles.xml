@@ -66,12 +66,14 @@
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="Theme.Topface.Fullscreen" parent="Theme.Topface">
+    <style name="Theme.Topface.NoActionBar.Fullscreen" parent="Theme.Topface.NoActionBar">
         <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="Theme.Topface.NoActionBar" parent="Theme.Topface">
         <item name="android:windowNoTitle">true</item>
         <!--Action Bar-->
         <item name="android:windowActionBar">false</item>
-
         <item name="windowActionBar">false</item>
     </style>
 
