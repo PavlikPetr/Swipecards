@@ -244,7 +244,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
         citiesRequest.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
-                final LinkedList<City> citiesList = City.parse(response);
+                final LinkedList<City> citiesList = City.getCitiesList(response);
                 if (citiesList.size() == 0 || mTopCitiesList == null) {
                     return;
                 }
@@ -299,7 +299,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
             @SuppressWarnings("unchecked")
             @Override
             protected LinkedList<City> parseResponse(ApiResponse response) {
-                return (LinkedList<City>) City.parse(response);
+                return City.getCitiesList(response);
             }
 
             @Override
