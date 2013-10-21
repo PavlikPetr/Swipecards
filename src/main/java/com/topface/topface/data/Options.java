@@ -159,7 +159,6 @@ public class Options extends AbstractData {
         fillData(data);
     }
 
-    @Override
     protected void fillData(JSONObject response) {
         try {
             priceAdmiration = response.optInt("admirationPrice");
@@ -238,7 +237,12 @@ public class Options extends AbstractData {
             Debug.error("Options parsing error", e);
         }
 
-        CacheProfile.setOptions(this, response);
+        if (response != null) {
+            CacheProfile.setOptions(this, response);
+        } else {
+            Debug.error("Options response is null");
+        }
+
     }
 
 

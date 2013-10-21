@@ -27,33 +27,21 @@ public class GooglePlayProducts extends AbstractData {
 
     public boolean saleExists = false;
 
-    public LinkedList<BuyButton> coins;
-    public LinkedList<BuyButton> likes;
-    public LinkedList<BuyButton> premium;
-    public LinkedList<BuyButton> others;
+    public LinkedList<BuyButton> coins = new LinkedList<BuyButton>();
+    public LinkedList<BuyButton> likes = new LinkedList<BuyButton>();
+    public LinkedList<BuyButton> premium = new LinkedList<BuyButton>();
+    public LinkedList<BuyButton> others = new LinkedList<BuyButton>();
 
     public GooglePlayProducts(@NotNull IApiResponse data) {
-        this();
         fillData(data.getJsonResult());
     }
 
-    private void fillFields() {
-        coins = new LinkedList<BuyButton>();
-        likes = new LinkedList<BuyButton>();
-        premium = new LinkedList<BuyButton>();
-        others = new LinkedList<BuyButton>();
-    }
-
     public GooglePlayProducts(@Nullable JSONObject data) {
-        this();
-        fillData(data);
+        if (data != null) {
+            fillData(data);
+        }
     }
 
-    public GooglePlayProducts() {
-        fillFields();
-    }
-
-    @Override
     protected void fillData(JSONObject data) {
         try {
             fillProductsArray(coins, data.optJSONArray("coins"));

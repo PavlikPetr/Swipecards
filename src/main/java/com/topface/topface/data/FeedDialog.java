@@ -49,7 +49,6 @@ public class FeedDialog extends FeedLike {
 
     @Override
     public void fillData(JSONObject item) {
-        super.fillData(item);
         text = item.optString("text");
         link = item.optString("link");
         if (type == MAP || type == ADDRESS) {

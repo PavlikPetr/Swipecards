@@ -53,11 +53,11 @@ public class FeedUser extends AbstractData implements SerializableToJson {
     public FeedItem feedItem;
 
     public FeedUser(JSONObject user) {
-        super(user);
+        fillData(user);
     }
 
     public FeedUser(JSONObject user, FeedItem item) {
-        super(user);
+        this(user);
         feedItem = item;
     }
 
@@ -74,7 +74,7 @@ public class FeedUser extends AbstractData implements SerializableToJson {
         this.deleted = user.optBoolean("deleted") || this.isEmpty();
         this.bookmarked = user.optBoolean("bookmarked");
         this.blocked = user.optBoolean("blocked");
-        if(user.has("photos")) {
+        if (user.has("photos")) {
             this.photos = new Photos(user.optJSONArray("photos"));
         } else {
             this.photos = new Photos();

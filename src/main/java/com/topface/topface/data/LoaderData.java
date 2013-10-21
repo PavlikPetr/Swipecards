@@ -2,8 +2,6 @@ package com.topface.topface.data;
 
 import com.topface.topface.ui.adapters.IListLoader;
 
-import org.json.JSONObject;
-
 public class LoaderData extends AbstractData implements IListLoader {
 
     //Loader indicators
@@ -11,13 +9,7 @@ public class LoaderData extends AbstractData implements IListLoader {
     private boolean mIsListRetrier = false;
 
     public LoaderData(IListLoader.ItemType type) {
-         setLoaderTypeFlags(type);
-    }
-
-    public LoaderData() {}
-
-    public LoaderData(JSONObject data) {
-        super(data);
+        setLoaderTypeFlags(type);
     }
 
     public void setLoaderTypeFlags(ItemType type) {

@@ -26,11 +26,12 @@ public class City extends AbstractData implements SerializableToJson, Cloneable 
     public String full;
 
     public City() {
-        super();
     }
 
     public City(JSONObject city) {
-        super(city);
+        if (city != null) {
+            fillData(city);
+        }
     }
 
     public City(int id, String name, String full) {
