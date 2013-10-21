@@ -85,9 +85,9 @@ public class CacheProfile {
 
     private static void setProfileCache(final ApiResponse response) {
         //Пишем в SharedPreferences в отдельном потоке
-        new Thread(new Runnable() {
+        new BackgroundThread() {
             @Override
-            public void run() {
+            public void execute() {
                 if (response != null) {
                     SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit();
                     editor.putString(PROFILE_CACHE_KEY, response.toJson().toString());
@@ -101,7 +101,7 @@ public class CacheProfile {
                     editor.commit();
                 }
             }
-        }).start();
+        };
     }
 
     public static Profile getProfile() {
@@ -327,14 +327,16 @@ public class CacheProfile {
     public static void setOptions(Options newOptions, final JSONObject response) {
         options = newOptions;
         //Каждый раз не забываем кешировать запрос опций, но делаем это в отдельном потоке
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit();
-                editor.putString(OPTIONS_CACHE_KEY, response.toString());
-                editor.commit();
-            }
-        }).start();
+        if (response != null) {
+            new BackgroundThread() {
+                @Override
+                public void execute() {
+                    SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit();
+                    editor.putString(OPTIONS_CACHE_KEY, response.toString());
+                    editor.commit();
+                }
+            };
+        }
     }
 
     public static void setGooglePlayProducts(GooglePlayProducts products, final JSONObject response) {

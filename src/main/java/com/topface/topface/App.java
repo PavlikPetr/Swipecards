@@ -31,6 +31,7 @@ import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
 import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
 import com.topface.topface.utils.AppConfig;
+import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
@@ -105,12 +106,12 @@ public class App extends Application {
 
         final Handler handler = new Handler();
         //Выполнение всего, что можно сделать асинхронно, делаем в отдельном потоке
-        new Thread(new Runnable() {
+        new BackgroundThread() {
             @Override
-            public void run() {
+            public void execute() {
                 onCreateAsync(handler);
             }
-        }).start();
+        };
     }
 
     /**
