@@ -32,7 +32,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -155,7 +154,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private GeoLocationManager mGeoManager = null;
     private RelativeLayout mLockScreen;
     private String[] editButtonsSelfNames;
-    private LinearLayout chatActions;
+    private ViewGroup chatActions;
     private TextView bookmarksTv;
     private RelativeLayout blockView;
     private String mUserName;
@@ -185,7 +184,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         View root = inflater.inflate(R.layout.ac_chat, null);
         Debug.log(this, "+onCreate");
 
-        chatActions = (LinearLayout) root.findViewById(R.id.mChatActions);
+        chatActions = (ViewGroup) root.findViewById(R.id.loChatActions);
         chatActions.setVisibility(View.INVISIBLE);
 
         // Locker
@@ -626,7 +625,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     }
 
-    private TranslateAnimation getAnimation(final boolean isActive, int time) {
+    private void animateChatActions(final boolean isActive, long time) {
         TranslateAnimation ta;
         if (isActive) {
             ta = new TranslateAnimation(0, 0, 0, -chatActions.getHeight());
@@ -638,9 +637,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         ta.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                if (!isActive) {
-                    chatActions.setVisibility(View.VISIBLE);
-                }
             }
 
             @Override
@@ -655,7 +651,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             public void onAnimationRepeat(Animation animation) {
             }
         });
-        return ta;
+
+        if (!isActive) {
+            chatActions.setVisibility(View.VISIBLE);
+        }
+        chatActions.startAnimation(ta);
     }
 
     private void release() {
@@ -803,7 +803,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }).exec();
                 break;
             case R.id.acComplain:
-                chatActions.startAnimation(getAnimation(true, 0));
+                animateChatActions(true,0);
                 startActivity(ContainerActivity.getComplainIntent(mUserId));
                 break;
             case R.id.ivBarAvatar:
@@ -1231,6 +1231,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         super.onCreateOptionsMenu(menu, inflater);
         mBarAvatar = menu.findItem(R.id.action_profile);
         MenuItemCompat.getActionView(mBarAvatar).findViewById(R.id.ivBarAvatar).setOnClickListener(this);
+        menu.findItem(R.id.action_profile).setChecked(false);
     }
 
     @Override
@@ -1244,8 +1245,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             case R.id.action_profile:
                 boolean checked = !item.isChecked();
                 item.setChecked(checked);
-                final TranslateAnimation ta = getAnimation(!checked, 500);
-                chatActions.startAnimation(ta);
+                animateChatActions(!checked,500);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

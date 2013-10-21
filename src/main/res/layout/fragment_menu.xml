@@ -61,6 +61,7 @@
                 <Button
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
+                        android:id="@+id/btnUserName"
                         android:text="@string/general_profile"
                         android:paddingLeft="14dp"
                         android:background="@android:color/transparent"

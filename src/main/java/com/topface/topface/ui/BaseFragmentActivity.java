@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.PixelFormat;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -14,6 +15,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.topface.topface.GCMUtils;
+import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiRequest;
@@ -76,6 +78,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     protected void initActionBar(ActionBar actionBar) {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setIcon(R.drawable.ic_home_topface_white);
         }
     }
 
@@ -180,7 +183,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             if (authFragment == null) {
                 authFragment = AuthFragment.newInstance();
             }
-            getSupportFragmentManager().beginTransaction().replace(android.R.id.content, authFragment, AUTH_TAG).commit();
+            getSupportFragmentManager().beginTransaction().replace(getContentViewCompat(), authFragment, AUTH_TAG).commit();
             return true;
         }
         return false;
@@ -188,8 +191,13 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     public void startFragment(Fragment fragment) {
         if (!afterOnSaveInstanceState) {
-            getSupportFragmentManager().beginTransaction().add(android.R.id.content, fragment).addToBackStack(null).commit();
+            getSupportFragmentManager().beginTransaction().add(getContentViewCompat(), fragment).addToBackStack(null).commit();
         }
+    }
+
+    public static int getContentViewCompat() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH ?
+                android.R.id.content : R.id.action_bar_activity_content;
     }
 
     public void close(Fragment fragment) {

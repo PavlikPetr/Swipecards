@@ -210,7 +210,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         }
     }
 
-    private TranslateAnimation getAnimation(final boolean isActive, int time) {
+    private void animateProfileActions(final boolean isActive, int time) {
         TranslateAnimation ta;
         if (isActive) {
             ta = new TranslateAnimation(0, 0, 0, -mUserActions.getHeight());
@@ -222,9 +222,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         ta.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                if (!isActive) {
-                    mUserActions.setVisibility(View.VISIBLE);
-                }
             }
 
             @Override
@@ -239,7 +236,11 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             public void onAnimationRepeat(Animation animation) {
             }
         });
-        return ta;
+
+        if (!isActive) {
+            mUserActions.setVisibility(View.VISIBLE);
+        }
+        mUserActions.startAnimation(ta);
     }
 
     private void initUserActions(View root) {
@@ -979,8 +980,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             case R.id.action_user_actions_list:
                 boolean checked = !item.isChecked();
                 item.setChecked(checked);
-                final TranslateAnimation ta = getAnimation(!checked, 500);
-                mUserActions.startAnimation(ta);
+                animateProfileActions(!checked, 500);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

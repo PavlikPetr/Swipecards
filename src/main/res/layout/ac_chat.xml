@@ -164,7 +164,7 @@
             android:drawableLeft="@drawable/loader"
             android:visibility="gone"/>
     <include
-            android:id="@+id/mChatActions"
+            android:id="@+id/loChatActions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
