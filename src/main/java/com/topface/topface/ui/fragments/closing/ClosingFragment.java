@@ -15,6 +15,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SkipAllClosedRequest;
 import com.topface.topface.requests.SkipClosedRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.OnQuickMessageSentListener;
@@ -55,7 +56,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
         if (user != null) {
             QuickMessageFragment fragment = QuickMessageFragment.newInstance(user.id, getChatListener());
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.add(android.R.id.content, fragment, ((Object) fragment).getClass().getName());
+            transaction.add(BaseFragmentActivity.getContentViewCompat(), fragment, ((Object) fragment).getClass().getName());
             transaction.addToBackStack(null);
             transaction.commit();
         } else {

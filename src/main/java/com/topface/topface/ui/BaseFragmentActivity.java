@@ -72,6 +72,15 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         }).start();
     }
 
+    @Override
+    public void setContentView(int layoutResID) {
+        super.setContentView(layoutResID);
+        //Странный глюк на некоторых устройствах (воспроизводится например на HTC One V),
+        // из-за которого показывается лоадер в ActionBar
+        // этот метод можно использовать только после setContent
+        setSupportProgressBarIndeterminateVisibility(false);
+    }
+
     /**
      * Выставляем опции для ActionBar
      */
