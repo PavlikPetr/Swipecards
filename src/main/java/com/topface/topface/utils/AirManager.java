@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.fragments.promo.AirMessagesFragment;
 import com.topface.topface.ui.fragments.promo.PromoAdmirationsPopup;
 import com.topface.topface.ui.fragments.promo.PromoPopupFragment;
@@ -41,7 +42,7 @@ public class AirManager {
             setLastFragmentType(type);
 
             fm.beginTransaction()
-                    .add(android.R.id.content, promo)
+                    .add(BaseFragmentActivity.getContentViewCompat(), promo)
                     .addToBackStack(null)
                     .commit();
             return true;
@@ -60,7 +61,7 @@ public class AirManager {
             setLastFragmentType(Options.PremiumAirEntity.AIR_NONE);
 
             fm.beginTransaction()
-                    .add(android.R.id.content, promo)
+                    .add(BaseFragmentActivity.getContentViewCompat(), promo)
                     .addToBackStack(null)
                     .commit();
             return true;
