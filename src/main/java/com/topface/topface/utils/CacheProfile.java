@@ -340,14 +340,16 @@ public class CacheProfile {
     public static void setGooglePlayProducts(GooglePlayProducts products, final JSONObject response) {
         mProducts = products;
         //Каждый раз не забываем кешировать запрос продуктов, но делаем это в отдельном потоке
-        new BackgroundThread() {
-            @Override
-            public void execute() {
-                PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit()
-                        .putString(GP_PRODUCTS_CACHE_KEY, response.toString())
-                        .commit();
-            }
-        };
+        if (response != null) {
+            new BackgroundThread() {
+                @Override
+                public void execute() {
+                    PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit()
+                            .putString(GP_PRODUCTS_CACHE_KEY, response.toString())
+                            .commit();
+                }
+            };
+        }
     }
 
     @SuppressWarnings("UnusedDeclaration")

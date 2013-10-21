@@ -27,17 +27,30 @@ public class GooglePlayProducts extends AbstractData {
 
     public boolean saleExists = false;
 
-    public LinkedList<BuyButton> coins = new LinkedList<BuyButton>();
-    public LinkedList<BuyButton> likes = new LinkedList<BuyButton>();
-    public LinkedList<BuyButton> premium = new LinkedList<BuyButton>();
-    public LinkedList<BuyButton> others = new LinkedList<BuyButton>();
+    public LinkedList<BuyButton> coins;
+    public LinkedList<BuyButton> likes;
+    public LinkedList<BuyButton> premium;
+    public LinkedList<BuyButton> others;
 
     public GooglePlayProducts(@NotNull IApiResponse data) {
+        this();
         fillData(data.getJsonResult());
     }
 
+    private void fillFields() {
+        coins = new LinkedList<BuyButton>();
+        likes = new LinkedList<BuyButton>();
+        premium = new LinkedList<BuyButton>();
+        others = new LinkedList<BuyButton>();
+    }
+
     public GooglePlayProducts(@Nullable JSONObject data) {
+        this();
         fillData(data);
+    }
+
+    public GooglePlayProducts() {
+        fillFields();
     }
 
     @Override
@@ -48,7 +61,7 @@ public class GooglePlayProducts extends AbstractData {
             fillProductsArray(premium, data.optJSONArray("premium"));
             fillProductsArray(others, data.optJSONArray("others"));
         } catch (Exception e) {
-            Debug.error("Options parsing error", e);
+            Debug.error("GooglePlayProducts parsing error", e);
         }
         //Обновляем кэш
         CacheProfile.setGooglePlayProducts(this, data);
@@ -56,8 +69,9 @@ public class GooglePlayProducts extends AbstractData {
 
     private void fillProductsArray(LinkedList<BuyButton> list, JSONArray coinsJSON) {
         if (coinsJSON != null && list != null) {
+            BuyButton buyButtonFromJSON;
             for (int i = 0; i < coinsJSON.length(); i++) {
-                BuyButton buyButtonFromJSON = createBuyButtonFromJSON(coinsJSON.optJSONObject(i));
+                buyButtonFromJSON = createBuyButtonFromJSON(coinsJSON.optJSONObject(i));
                 if (buyButtonFromJSON != null) {
                     list.add(buyButtonFromJSON);
                 }
