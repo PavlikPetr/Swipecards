@@ -1,6 +1,7 @@
 package com.topface.topface.data;
 
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.IApiResponse;
 
 import org.json.JSONObject;
 
@@ -20,7 +21,7 @@ public abstract class AbstractData {
         //Extend me
     }
 
-    public static Object parse(ApiResponse response) {
+    public static Object parse(IApiResponse response) {
         return null;
     }
 
