@@ -32,6 +32,7 @@ import com.topface.topface.ui.edit.EditProfileActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.Utils;
@@ -485,8 +486,10 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                         ringtoneName = getString(R.string.default_ringtone);
                     }
                 }
+            } catch (Exception ex) {
+                Debug.error(ex);
             } finally {
-                mCursor.close();
+                if (mCursor != null) mCursor.close();
             }
         }
         mSettings.setSetting(Settings.NOTIFICATION_MELODY, ringtoneName);

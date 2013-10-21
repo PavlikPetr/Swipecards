@@ -68,9 +68,9 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        restoreState();
         setHasOptionsMenu(needOptionsMenu());
         super.onCreate(savedInstanceState);
-        restoreState();
 
         (new Thread() {
             @Override
