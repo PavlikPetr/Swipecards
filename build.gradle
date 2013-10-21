@@ -13,12 +13,12 @@ def getTimestamp() {
 }
 
 buildscript {
-     repositories {
-         mavenCentral()
-     }
-     dependencies {
-         classpath 'com.android.tools.build:gradle:0.5.+'
-     }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.6.3'
+    }
 }
 
 repositories {
@@ -29,9 +29,9 @@ apply plugin: 'android'
 apply plugin: 'idea'
 
 dependencies {
-	//Android Support libs
-	compile supportLibrary
-	compile 'com.android.support:appcompat-v7:18.0.0'
+    //Android Support libs
+    compile supportLibrary
+    compile 'com.android.support:appcompat-v7:18.0.0'
 
     //All jar libs
     compile fileTree(dir: 'libs', include: '*.jar', exclude: 'GoogleAdMobAdsSdk.jar')
@@ -55,6 +55,9 @@ dependencies {
     compile project(':libs:AdLabSDK')
     compile project(':libs:LifeStreetMediaSDK')
 
+    //Test
+    instrumentTestCompile 'com.jayway.android.robotium:robotium-solo:4.+'
+
 }
 
 android {
@@ -68,6 +71,9 @@ android {
             public static final long BUILD_TIME = ${getTimestamp()}L;
             public static final String GIT_HEAD_SHA = "${getGitHeadSha()}";
         """
+
+        testPackageName "com.topface.topface.test"
+        testInstrumentationRunner "android.test.InstrumentationTestRunner"
     }
 
     signingConfigs {
@@ -91,14 +97,14 @@ project(':libs:IllustratedTextView') {
         manifest.srcFile 'AndroidManifest.xml'
         java.srcDirs = ['src']
         res.srcDirs = ['res']
-	}
+    }
 }
 
 project(':libs:Android-ViewPagerIndicator') {
     apply plugin: 'android-library'
     dependencies {
-	    compile supportLibrary
-	    compile project(':libs:IllustratedTextView')
+        compile supportLibrary
+        compile project(':libs:IllustratedTextView')
     }
     android.sourceSets.main {
         manifest.srcFile 'library/AndroidManifest.xml'
@@ -114,7 +120,6 @@ project(':libs:PullToRefresh') {
         java.srcDirs = ['library/src']
         res.srcDirs = ['library/res']
     }
-
 }
 
 project(':libs:PhotoView') {
@@ -142,7 +147,7 @@ project(':libs:Facebook') {
         manifest.srcFile 'facebook/AndroidManifest.xml'
         java.srcDirs = ['facebook/src']
         res.srcDirs = ['facebook/res']
-	}
+    }
 }
 
 project(':libs:odnoklassniki') {
@@ -151,30 +156,30 @@ project(':libs:odnoklassniki') {
         manifest.srcFile 'AndroidManifest.xml'
         java.srcDirs = ['src']
         res.srcDirs = ['res']
-	}
+    }
 }
 
 //Ad networks
 project(':libs:MoPub') {
     apply plugin: 'android-library'
     dependencies {
-    	compile supportLibrary
-    	compile files('../GoogleAdMobAdsSdk.jar')
+        compile supportLibrary
+        compile files('../GoogleAdMobAdsSdk.jar')
     }
     android.sourceSets.main {
         manifest.srcFile 'mopub-sdk/AndroidManifest.xml'
         java.srcDirs = ['mopub-sdk/src/main/java']
         res.srcDirs = ['mopub-sdk/res']
-	}
+    }
 }
 
 
 project(':libs:AdLabSDK') {
     apply plugin: 'android-library'
     dependencies {
-    	compile files('libs/apache-mime4j-0.6.jar')
+        compile files('libs/apache-mime4j-0.6.jar')
         compile files('libs/commons-io-1.4.jar')
-    	compile files('libs/httpmime-4.0.jar')
+        compile files('libs/httpmime-4.0.jar')
     }
     android.sourceSets.main {
         manifest.srcFile 'AndroidManifest.xml'
@@ -187,7 +192,7 @@ project(':libs:AdLabSDK') {
 project(':libs:LifeStreetMediaSDK') {
     apply plugin: 'android-library'
     dependencies {
-    	compile supportLibrary
+        compile supportLibrary
     }
     android.sourceSets.main {
         manifest.srcFile 'AndroidManifest.xml'

@@ -210,7 +210,7 @@ public class App extends Application {
 
             @Override
             protected GooglePlayProducts parseResponse(ApiResponse response) {
-                return GooglePlayProducts.parse(response);
+                return new GooglePlayProducts(response);
             }
 
             @Override
@@ -230,7 +230,7 @@ public class App extends Application {
 
                     @Override
                     protected Options parseResponse(ApiResponse response) {
-                        return Options.parse(response);
+                        return new Options(response);
                     }
 
                     @Override

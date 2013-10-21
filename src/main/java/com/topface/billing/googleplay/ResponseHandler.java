@@ -238,7 +238,7 @@ public class ResponseHandler {
 
             @Override
             protected Options parseResponse(ApiResponse response) {
-                return Options.parse(response);
+                return new Options(response);
             }
 
             @Override

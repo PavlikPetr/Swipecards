@@ -55,7 +55,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
         if (user != null) {
             QuickMessageFragment fragment = QuickMessageFragment.newInstance(user.id, getChatListener());
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.add(android.R.id.content, fragment, fragment.getClass().getName());
+            transaction.add(android.R.id.content, fragment, ((Object) fragment).getClass().getName());
             transaction.addToBackStack(null);
             transaction.commit();
         } else {
@@ -145,7 +145,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
                     }
                     showNextUser();
                 } else {
-                    Intent intent = ContainerActivity.getVipBuyIntent(null, getClass().getSimpleName());
+                    Intent intent = ContainerActivity.getVipBuyIntent(null, ((Object) this).getClass().getSimpleName());
                     startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                 }
                 break;
@@ -155,7 +155,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
                 break;
             case R.id.btnWatchAsList:
                 EasyTracker.getTracker().sendEvent(getTrackName(), "WatchAsList", "", 1L);
-                Intent intent = ContainerActivity.getVipBuyIntent(null, getClass().getSimpleName());
+                Intent intent = ContainerActivity.getVipBuyIntent(null, ((Object) this).getClass().getSimpleName());
                 startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
                 break;
             default:

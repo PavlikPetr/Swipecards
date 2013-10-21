@@ -232,7 +232,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     protected void onLoadProfile() {
-        Debug.log(getClass().getSimpleName() + ": onLoadProfile");
+        Debug.log(((Object) this).getClass().getSimpleName() + ": onLoadProfile");
     }
 
     protected void inBackroundThread() {
@@ -264,11 +264,9 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         }
 
         //Показываем рекламу AirMessages только если не показываем инвайты
-        if (!invitePopupShow && !CacheProfile.premium) {
-            AirManager manager = new AirManager(getActivity());
-            if (getActivity() != null) {
-                manager.startFragment(getActivity().getSupportFragmentManager());
-            }
+        if (!invitePopupShow && !CacheProfile.premium && activity != null) {
+            AirManager manager = new AirManager(activity);
+            manager.startFragment(activity.getSupportFragmentManager());
         }
     }
 

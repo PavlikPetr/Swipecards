@@ -1,6 +1,7 @@
 package com.topface.topface.requests.v6;
 
 import android.content.Context;
+
 import com.topface.topface.Ssid;
 import com.topface.topface.requests.AbstractThreadTest;
 import com.topface.topface.requests.AuthRequest;

@@ -188,7 +188,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         initActionBar();
         initEmptySearchDialog(root, mSettingsListener);
         initImageSwitcher(root);
-        showPromoDialog();
         return root;
     }
 
@@ -632,7 +631,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         intent.putExtra(ChatFragment.INTENT_USER_SEX, mCurrentUser.sex);
         intent.putExtra(ChatFragment.INTENT_USER_AGE, mCurrentUser.age);
         intent.putExtra(ChatFragment.INTENT_USER_CITY, mCurrentUser.city.name);
-        intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, getClass().getSimpleName());
+        intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, ((Object) this).getClass().getSimpleName());
         activity.startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
         EasyTracker.getTracker().sendEvent("Dating", "Additional", "Chat", 1L);
     }
