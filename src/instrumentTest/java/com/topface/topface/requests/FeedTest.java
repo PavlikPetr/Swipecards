@@ -2,6 +2,7 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 import android.text.TextUtils;
+
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.handlers.ApiHandler;

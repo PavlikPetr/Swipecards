@@ -180,7 +180,7 @@ public class AuthFragment extends BaseFragment {
         mOtherSocialNetworksButton = (LinearLayout) root.findViewById(R.id.otherServices);
 
         mVkIcon = (ImageView) root.findViewById(R.id.vk_ico);
-        mOkIcon =  (ImageView)root.findViewById(R.id.ok_ico);
+        mOkIcon = (ImageView) root.findViewById(R.id.ok_ico);
         mFbIcon = (ImageView) root.findViewById(R.id.fb_ico);
 
         mVKButton.setOnClickListener(new View.OnClickListener() {
@@ -526,7 +526,7 @@ public class AuthFragment extends BaseFragment {
 
             @Override
             protected Options parseResponse(ApiResponse response) {
-                return Options.parse(response);
+                return new Options(response);
             }
 
             @Override

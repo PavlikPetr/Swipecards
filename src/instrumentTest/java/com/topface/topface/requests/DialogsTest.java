@@ -30,7 +30,7 @@ public class DialogsTest extends FeedTest<FeedDialog> {
         runAsyncTest(new Runnable() {
             @Override
             public void run() {
-                new DialogDeleteRequest(0, getContext())
+                new DialogDeleteManyRequest(0, getContext())
                         .callback(new ApiHandler() {
                             @Override
                             public void success(IApiResponse response) {

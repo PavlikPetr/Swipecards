@@ -244,7 +244,7 @@ public class CacheProfile {
      * Опции по умолчанию
      */
     private static Options options;
-    private static GooglePlayProducts gpProducts;
+    private static GooglePlayProducts mProducts;
 
     /**
      * Данные из сервиса options
@@ -256,11 +256,7 @@ public class CacheProfile {
             if (optionsCache != null) {
                 //Получаем опции из кэша
                 try {
-                    options = Options.parse(
-                            new ApiResponse(
-                                    new JSONObject(optionsCache)
-                            )
-                    );
+                    options = new Options(new JSONObject(optionsCache));
                 } catch (JSONException e) {
                     Debug.error(e);
                 }
@@ -269,7 +265,7 @@ public class CacheProfile {
             if (options == null) {
                 //Если по каким то причинам кэша нет и опции нам в данный момент взять негде.
                 //то просто используем их по умолчанию
-                options = new Options();
+                options = new Options((JSONObject) null);
             }
         }
         return options;
@@ -279,29 +275,27 @@ public class CacheProfile {
      * Данные из сервиса googleplay.getProducts
      */
     public static GooglePlayProducts getGooglePlayProducts() {
-        if (gpProducts == null) {
+        if (mProducts == null) {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
             String productsCache = preferences.getString(GP_PRODUCTS_CACHE_KEY, null);
             if (productsCache != null) {
                 //Получаем опции из кэша
                 try {
-                    gpProducts = GooglePlayProducts.parse(
-                            new ApiResponse(
-                                    new JSONObject(productsCache)
-                            )
+                    mProducts = new GooglePlayProducts(
+                            new JSONObject(productsCache)
                     );
                 } catch (JSONException e) {
                     Debug.error(e);
                 }
             }
 
-            if (gpProducts == null) {
+            if (mProducts == null) {
                 //Если по каким то причинам кэша нет и опции нам в данный момент взять негде.
                 //то просто используем их по умолчанию
-                gpProducts = new GooglePlayProducts();
+                mProducts = new GooglePlayProducts((JSONObject) null);
             }
         }
-        return gpProducts;
+        return mProducts;
     }
 
     public static boolean checkIsFillData() {
@@ -344,16 +338,16 @@ public class CacheProfile {
     }
 
     public static void setGooglePlayProducts(GooglePlayProducts products, final JSONObject response) {
-        gpProducts = products;
-        //Каждый раз не забываем кешировать запрос опций, но делаем это в отдельном потоке
-        new Thread(new Runnable() {
+        mProducts = products;
+        //Каждый раз не забываем кешировать запрос продуктов, но делаем это в отдельном потоке
+        new BackgroundThread() {
             @Override
-            public void run() {
-                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit();
-                editor.putString(GP_PRODUCTS_CACHE_KEY, response.toString());
-                editor.commit();
+            public void execute() {
+                PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit()
+                        .putString(GP_PRODUCTS_CACHE_KEY, response.toString())
+                        .commit();
             }
-        }).start();
+        };
     }
 
     @SuppressWarnings("UnusedDeclaration")

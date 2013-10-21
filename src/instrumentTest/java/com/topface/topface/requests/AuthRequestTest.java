@@ -1,6 +1,7 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.data.Auth;
@@ -21,7 +22,7 @@ public class AuthRequestTest extends AbstractThreadTest {
             public void run() {
                 Context context = getInstrumentation().getContext();
                 AuthToken token = AuthToken.getInstance();
-                Debug.log(token.toString());
+                Debug.log("Token: " + token.getTokenKey());
                 AuthRequest authRequest = new AuthRequest(token, context);
                 authRequest.callback(new ApiHandler() {
                     @Override
