@@ -110,7 +110,7 @@ public class ConnectionManager {
         try {
             IApiResponse response;
             //Отправляем запрос, если есть SSID и Токен или если запрос не требует авторизации
-            if (!Ssid.isEmpty() || !request.isNeedAuth()) {
+            if (Ssid.isLoaded() || !request.isNeedAuth()) {
                 response = executeRequest(request);
             } else {
                 //Если у нас нет авторизационного токена, то выкидываем на авторизацию
@@ -164,6 +164,8 @@ public class ConnectionManager {
             //Если пользователь заблокирован за флуд, показываем соответсвующий экран
             showFloodActivity(apiRequest, apiResponse);
         } else if (apiResponse.isCodeEqual(ErrorCodes.USER_DELETED)) {
+            // посылаем callback для изменения состояния экрана, с которого послали запрос
+            apiRequest.sendHandlerMessage(apiResponse);
             //Если пользователь удален, показываем соответсвующий экран
             showRestoreAccountActivity(apiRequest);
         } else if (apiResponse.isCodeEqual(ErrorCodes.MAINTENANCE)) {

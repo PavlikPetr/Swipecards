@@ -331,9 +331,9 @@ public class CacheProfile {
             new BackgroundThread() {
                 @Override
                 public void execute() {
-                    SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit();
-                    editor.putString(OPTIONS_CACHE_KEY, response.toString());
-                    editor.commit();
+                    PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit()
+                            .putString(OPTIONS_CACHE_KEY, response.toString())
+                            .commit();
                 }
             };
         }
