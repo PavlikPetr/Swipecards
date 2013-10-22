@@ -419,7 +419,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         super.onSaveInstanceState(outState);
         outState.putBoolean(WAS_FAILED, wasFailed);
         outState.putParcelableArrayList(ADAPTER_DATA, mAdapter.getDataCopy());
-
         try {
             outState.putString(FRIEND_FEED_USER, mUser.toJson().toString());
         } catch (Exception e) {
@@ -615,13 +614,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             ((TextView) blockView.findViewById(R.id.blockTV)).setText(user.blocked ? R.string.black_list_delete : R.string.black_list_add_short);
             bookmarksTv.setText(user.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
             // ставим фото пользователя в иконку в actionbar
-            if (mBarAvatar != null && user.photo != null && !user.photo.isEmpty()) {
-                ((ImageViewRemote) MenuItemCompat.getActionView(mBarAvatar).findViewById(R.id.ivBarAvatar)).setPhoto(user.photo);
-            }
+            setActionBarAvatar(user);
             // ставим значок онлайн в нужное состояние
             if (mUserOnlineListener != null) {
                 mUserOnlineListener.setUserOnline(user.online);
             }
+        }
+    }
+
+    private void setActionBarAvatar(FeedUser user) {
+        if (mBarAvatar != null && user != null && user.photo != null && !user.photo.isEmpty()) {
+            ((ImageViewRemote) MenuItemCompat.getActionView(mBarAvatar).findViewById(R.id.ivBarAvatar)).setPhoto(user.photo);
         }
     }
 
@@ -1232,6 +1235,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         mBarAvatar = menu.findItem(R.id.action_profile);
         MenuItemCompat.getActionView(mBarAvatar).findViewById(R.id.ivBarAvatar).setOnClickListener(this);
         menu.findItem(R.id.action_profile).setChecked(false);
+        setActionBarAvatar(mUser);
     }
 
     @Override
