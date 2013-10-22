@@ -12,7 +12,6 @@
     <string name="general_warning">ПРЕДУПРЕЖДЕНИЕ</string>
     <string name="general_ok">OK</string>
     <!--/ строки iOS -->
-
     <string name="general_yes">Да</string>
     <string name="general_no">Нет</string>
     <string name="general_cancel">Отмена</string>
@@ -741,4 +740,5 @@
     </plurals>
     <string name="photo_is_uploading">Загрузка фото</string>
     <string name="default_ringtone">По умолчанию</string>
+    <string name="photo_info_deleted">Удалена</string>
 </resources>
