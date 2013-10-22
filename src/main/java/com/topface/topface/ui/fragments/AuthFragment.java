@@ -27,7 +27,6 @@ import android.widget.ViewFlipper;
 
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.App;
-import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
@@ -135,7 +134,6 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void initAuthorizationHandler() {
-
         authorizationReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -355,7 +353,7 @@ public class AuthFragment extends BaseFragment {
                 String userId = extras.getString(RegistrationFragment.INTENT_USER_ID);
                 AuthToken.getInstance().saveToken(userId, login, password);
                 hideButtons();
-                auth(generateTopfaceAuthRequest(AuthToken.getInstance()));
+                auth(generateAuthRequest(AuthToken.getInstance()));
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
             showButtons();
@@ -417,8 +415,11 @@ public class AuthFragment extends BaseFragment {
         authRequest.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
-                saveAuthInfo((ApiResponse) response);
-                btnsController.addSocialNetwork(AuthToken.getInstance().getSocialNet());
+                AuthorizationManager.saveAuthInfo(response);
+                AuthToken token = authRequest.getAuthToken();
+                if (!token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+                    btnsController.addSocialNetwork(token.getSocialNet());
+                }
                 getProfileAndOptions();
                 hasAuthorized = true;
             }
@@ -433,52 +434,27 @@ public class AuthFragment extends BaseFragment {
         }).exec();
     }
 
-    private AuthRequest generateAuthRequest(AuthToken token) {
-        AuthRequest authRequest = new AuthRequest(token, getActivity());
+    private AuthRequest generateAuthRequest(final AuthToken token) {
+        final AuthRequest authRequest = new AuthRequest(token, getActivity());
+        if (token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+            authRequest.callback(new ApiHandler() {
+                @Override
+                public void success(IApiResponse response) {
+                }
+
+                @Override
+                public void fail(final int codeError, IApiResponse response) {
+                    authorizationFailed(codeError, authRequest);
+                }
+
+            });
+        }
         registerRequest(authRequest);
         EasyTracker.getTracker().sendEvent("Profile", "Auth", "FromActivity" + token.getSocialNet(), 1L);
         return authRequest;
     }
 
-    private AuthRequest generateTopfaceAuthRequest(AuthToken token) {
-        final AuthRequest authRequest = new AuthRequest(token, getActivity());
-        final String login = token.getLogin();
-        final String password = token.getPassword();
-        registerRequest(authRequest);
-        authRequest.callback(new ApiHandler() {
-            @Override
-            public void success(IApiResponse response) {
-                saveAuthInfo((ApiResponse) response);
-                getProfileAndOptions(new ProfileIdReceiver() {
-                    @Override
-                    public void onProfileIdReceived(int profileId) {
-                        AuthToken.getInstance().saveToken(Integer.toString(profileId), login, password);
-                    }
-                });
-            }
-
-            @Override
-            public void fail(final int codeError, IApiResponse response) {
-                authorizationFailed(codeError, authRequest);
-            }
-
-        });
-        EasyTracker.getTracker().sendEvent("Profile", "Auth", "FromActivity" + AuthToken.SN_TOPFACE, 1L);
-
-        return authRequest;
-    }
-
-    private void saveAuthInfo(ApiResponse response) {
-        Auth auth = new Auth(response);
-        Ssid.save(auth.ssid);
-        GCMUtils.init(App.getContext());
-    }
-
     private void getProfileAndOptions() {
-        getProfileAndOptions(null);
-    }
-
-    private void getProfileAndOptions(final ProfileIdReceiver idReceiver) {
         final ProfileRequest profileRequest = new ProfileRequest(getActivity());
         profileRequest.part = ProfileRequest.P_ALL;
         registerRequest(profileRequest);
@@ -488,7 +464,6 @@ public class AuthFragment extends BaseFragment {
             @Override
             protected void success(Profile data, IApiResponse response) {
                 CacheProfile.setProfile(data, (ApiResponse) response);
-                if (idReceiver != null) idReceiver.onProfileIdReceived(CacheProfile.uid);
                 getOptions();
             }
 
@@ -600,6 +575,9 @@ public class AuthFragment extends BaseFragment {
                     break;
                 case ErrorCodes.MISSING_REQUIRE_PARAMETER:
                     redAlert(R.string.empty_fields);
+                    needShowRetry = false;
+                    break;
+                case ErrorCodes.USER_DELETED:
                     needShowRetry = false;
                     break;
                 default:
@@ -792,9 +770,9 @@ public class AuthFragment extends BaseFragment {
                 showButtons();
                 return;
             }
-            AuthToken.getInstance().saveToken("", login, password);
-            AuthRequest authRequest = generateTopfaceAuthRequest(AuthToken.getInstance());
-            authRequest.exec();
+            AuthToken token = AuthToken.getInstance();
+            token.saveToken("", login, password);
+            auth(generateAuthRequest(token));
         }
     }
 
@@ -807,6 +785,9 @@ public class AuthFragment extends BaseFragment {
             initAuthorizationHandler();
         }
         removeRedAlert();
+        if (Ssid.isLoaded()) {
+            getProfileAndOptions();
+        }
     }
 
     @Override
@@ -829,10 +810,6 @@ public class AuthFragment extends BaseFragment {
     @Override
     public void onDetach() {
         super.onDetach();
-    }
-
-    interface ProfileIdReceiver {
-        void onProfileIdReceived(int id);
     }
 
     @Override
