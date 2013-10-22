@@ -15,7 +15,9 @@ public class Geo extends AbstractData implements Parcelable {
     private Coordinates mCoordinates;
 
     public Geo(JSONObject data) {
-        super(data);
+        if (data != null) {
+            fillData(data);
+        }
     }
 
     public Geo(String address, Coordinates coordinates) {
@@ -33,9 +35,7 @@ public class Geo extends AbstractData implements Parcelable {
         }
     }
 
-    @Override
     protected void fillData(JSONObject data) {
-        super.fillData(data);
         this.mAddress = "";
         try {
             this.mCoordinates = new Coordinates(data);

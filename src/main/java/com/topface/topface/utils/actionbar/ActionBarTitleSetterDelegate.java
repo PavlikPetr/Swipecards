@@ -17,7 +17,7 @@ public class ActionBarTitleSetterDelegate implements IActionBarTitleSetter{
     @Override
     public void setActionBarTitles(String title, String subtitle) {
         mActionBar.setTitle(title);
-        mActionBar.setTitle(subtitle);
+        mActionBar.setSubtitle(subtitle);
     }
 
     @Override

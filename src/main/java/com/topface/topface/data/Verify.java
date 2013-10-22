@@ -12,25 +12,22 @@ public class Verify extends AbstractData {
     public boolean premium; // количество энергии пользователя
     public String order; // идентификатор верифицированного заказа
 
-    public Verify(JSONObject data) {
-        super(data);
+    public Verify(ApiResponse data) {
+        if (data != null) {
+            fillData(data.getJsonResult());
+        }
     }
 
-    public static Verify parse(ApiResponse response) {
-        Verify verify = new Verify(response.getJsonResult());
-        return verify;
-    }
-
-    @Override
     protected void fillData(JSONObject data) {
-        super.fillData(data);
-        try {
-            money = data.optInt("money");
-            likes = data.optInt("likes");
-            order = data.optString("order");
-            premium = data.optBoolean("premium");
-        } catch (Exception e) {
-            Debug.error("Verify.class: Wrong response parsing", e);
+        if (data != null) {
+            try {
+                money = data.optInt("money");
+                likes = data.optInt("likes");
+                order = data.optString("order");
+                premium = data.optBoolean("premium");
+            } catch (Exception e) {
+                Debug.error("Verify.class: Wrong response parsing", e);
+            }
         }
     }
 }

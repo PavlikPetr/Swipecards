@@ -21,7 +21,7 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
     public static final int webAbsoluteMaxAge = 99;
     public static final int webAbsoluteMinAge = 16;
 
-    public City city;
+    public City city = new City();
     public int sex;
     public int ageStart;
     public int ageEnd;
@@ -36,18 +36,13 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
     private static Boolean mOnlineDating;
 
     public DatingFilter() {
-        super();
         city = new City();
         ageStart = webAbsoluteMinAge;
         ageEnd = webAbsoluteMaxAge;
     }
 
     public DatingFilter(JSONObject data) {
-        super(data);
-        //Если data = null, то у нас не инициализируется city, мы его иницилизируем пустым
-        if (city == null) {
-            city = new City();
-        }
+        fillData(data);
     }
 
     /**
@@ -72,11 +67,10 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
         mOnlineDating = online;
     }
 
-    @Override
     protected void fillData(JSONObject data) {
         city = new City(data.optJSONObject("city"));
         sex = data.optInt("sex");
-        ageStart = data.optInt("ageStart"); //TODO clarify parameter: ageStart or ageBegin
+        ageStart = data.optInt("ageStart");
         ageEnd = data.optInt("ageEnd");
         trimToMinMaxAge();
         alcohol = data.optInt("alcohol");

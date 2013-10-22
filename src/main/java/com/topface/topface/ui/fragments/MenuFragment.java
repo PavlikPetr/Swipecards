@@ -460,6 +460,9 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 profileLayout.setVisibility(View.GONE);
                 profileLayout = (ViewGroup) rootLayout.findViewById(R.id.btnProfileLayoutWithBackground);
                 profileLayout.setVisibility(View.VISIBLE);
+                String name = CacheProfile.first_name.length() <= 1
+                        ? getString(R.string.general_profile): CacheProfile.first_name;
+                ((Button)profileLayout.findViewById(R.id.btnUserName)).setText(name);
                 Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
                         ProfileBackgrounds.getBackgroundResource(getActivity(), CacheProfile.background_id));
                 ((ImageViewRemote)profileLayout.findViewById(R.id.ivProfileBackground))

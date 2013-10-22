@@ -7,8 +7,9 @@ import android.preference.PreferenceManager;
 import com.topface.topface.App;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
-import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.blocks.BannerBlock;
+import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
@@ -150,19 +151,25 @@ public class Options extends AbstractData {
     public String gagTypeBanner = BannerBlock.BANNER_ADMOB;
     public String gagTypeFullscreen = BannerBlock.BANNER_NONE;
 
-    public static Options parse(ApiResponse response) {
-        Options options = new Options();
+    public Options(IApiResponse data) {
+        fillData(data.getJsonResult());
+    }
 
+    public Options(JSONObject data) {
+        fillData(data);
+    }
+
+    protected void fillData(JSONObject response) {
         try {
-            options.priceAdmiration = response.jsonResult.optInt("admirationPrice");
-            options.priceLeader = response.jsonResult.optInt("leaderPrice");
-            options.minLeadersPercent = response.jsonResult.optInt("leaderPercent");
+            priceAdmiration = response.optInt("admirationPrice");
+            priceLeader = response.optInt("leaderPrice");
+            minLeadersPercent = response.optInt("leaderPercent");
             // Pages initialization
-            JSONArray pages = response.jsonResult.optJSONArray("pages");
-            for (int i = 0; i < pages.length(); i++) {
-                JSONObject page = pages.getJSONObject(i);
+            JSONArray pagesJson = response.optJSONArray("pages");
+            for (int i = 0; i < pagesJson.length(); i++) {
+                JSONObject page = pagesJson.getJSONObject(i);
                 String pageName = getPageName(page, "name");
-                options.pages.put(pageName,
+                pages.put(pageName,
                         new Page(
                                 pageName,
                                 page.optString("float"),
@@ -170,69 +177,74 @@ public class Options extends AbstractData {
                         )
                 );
             }
-            options.offerwall = response.jsonResult.optString("offerwall");
-            options.maxVersion = response.jsonResult.optString("maxVersion");
-            options.block_unconfirmed = response.jsonResult.optBoolean("blockUnconfirmed");
-            options.block_chat_not_mutual = response.jsonResult.optBoolean("blockChatNotMutual");
+            offerwall = response.optString("offerwall");
+            maxVersion = response.optString("maxVersion");
+            block_unconfirmed = response.optBoolean("blockUnconfirmed");
+            block_chat_not_mutual = response.optBoolean("blockChatNotMutual");
 
-            JSONObject contactsInvite = response.jsonResult.optJSONObject("inviteContacts");
-            options.premium_period = contactsInvite.optInt("premiumPeriod");
-            options.contacts_count = contactsInvite.optInt("contactsCount");
-            options.popup_timeout = contactsInvite.optInt("showPopupTimeout") * 60 * 60 * 1000;
+            JSONObject contactsInvite = response.optJSONObject("inviteContacts");
+            premium_period = contactsInvite.optInt("premiumPeriod");
+            contacts_count = contactsInvite.optInt("contactsCount");
+            popup_timeout = contactsInvite.optInt("showPopupTimeout") * 60 * 60 * 1000;
 
-            if (response.jsonResult.has("premiumMessages")) {
-                options.premium_messages = new PremiumAirEntity(
-                        response.jsonResult.optJSONObject("premiumMessages"), PremiumAirEntity.AIR_MESSAGES
+            if (response.has("premiumMessages")) {
+                premium_messages = new PremiumAirEntity(
+                        response.optJSONObject("premiumMessages"), PremiumAirEntity.AIR_MESSAGES
                 );
             } else {
-                options.premium_messages = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_MESSAGES);
+                premium_messages = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_MESSAGES);
             }
 
-            if (response.jsonResult.has("visitors_popup")) {
-                options.premium_visitors = new PremiumAirEntity(
-                        response.jsonResult.optJSONObject("visitors_popup"), PremiumAirEntity.AIR_VISITORS
+            if (response.has("visitors_popup")) {
+                premium_visitors = new PremiumAirEntity(
+                        response.optJSONObject("visitors_popup"), PremiumAirEntity.AIR_VISITORS
                 );
             } else {
-                options.premium_visitors = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_VISITORS);
+                premium_visitors = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_VISITORS);
             }
 
-            if (response.jsonResult.has("admiration_popup")) {
-                options.premium_admirations = new PremiumAirEntity(
-                        response.jsonResult.optJSONObject("admiration_popup"), PremiumAirEntity.AIR_ADMIRATIONS
+            if (response.has("admiration_popup")) {
+                premium_admirations = new PremiumAirEntity(
+                        response.optJSONObject("admiration_popup"), PremiumAirEntity.AIR_ADMIRATIONS
                 );
             } else {
-                options.premium_admirations = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_ADMIRATIONS);
+                premium_admirations = new PremiumAirEntity(false, 10, 1000, PremiumAirEntity.AIR_ADMIRATIONS);
             }
 
-            if (response.jsonResult.has("links")) {
-                JSONObject links = response.jsonResult.optJSONObject("links");
+            if (response.has("links")) {
+                JSONObject links = response.optJSONObject("links");
                 if (links != null && links.has("paymentwall")) {
-                    options.paymentwall = links.optString("paymentwall");
+                    paymentwall = links.optString("paymentwall");
                 }
             }
 
-            JSONObject closings = response.jsonResult.optJSONObject("closing");
-            if (options.closing == null) options.closing = new Closing();
-            options.closing.enabledMutual = closings.optBoolean("enabledMutual");
-            options.closing.enabledSympathies = closings.optBoolean("enabledSympathies");
-            options.closing.limitMutual = closings.optInt("limitMutual");
-            options.closing.limitSympathies = closings.optInt("limitSympathies");
+            JSONObject closings = response.optJSONObject("closing");
+            if (closing == null) closing = new Closing();
+            closing.enabledMutual = closings.optBoolean("enabledMutual");
+            closing.enabledSympathies = closings.optBoolean("enabledSympathies");
+            closing.limitMutual = closings.optInt("limitMutual");
+            closing.limitSympathies = closings.optInt("limitSympathies");
 
             //TODO clarify parameter: timeout
-            options.ratePopupType = response.jsonResult.optJSONObject("ratePopup").optString("type");
+            ratePopupType = response.optJSONObject("ratePopup").optString("type");
 
-            JSONObject getJar = response.jsonResult.optJSONObject("getjar");
-            options.getJar = new GetJar(getJar.optString("id"), getJar.optString("name"), getJar.optLong("price"));
+            JSONObject getJarJson = response.optJSONObject("getjar");
+            getJar = new GetJar(getJarJson.optString("id"), getJarJson.optString("name"), getJarJson.optLong("price"));
 
-            options.gagTypeBanner = response.jsonResult.optString("gag_type_banner", BannerBlock.BANNER_ADMOB);
-            options.gagTypeFullscreen = response.jsonResult.optString("gag_type_fullscreen", BannerBlock.BANNER_NONE);
+            gagTypeBanner = response.optString("gag_type_banner", BannerBlock.BANNER_ADMOB);
+            gagTypeFullscreen = response.optString("gag_type_fullscreen", BannerBlock.BANNER_NONE);
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
         }
 
-        CacheProfile.setOptions(options, response.getJsonResult());
-        return options;
+        if (response != null) {
+            CacheProfile.setOptions(this, response);
+        } else {
+            Debug.error("Options response is null");
+        }
+
     }
+
 
     private static String getPageName(JSONObject page, String key) {
         String name = page.optString(key);
@@ -266,7 +278,7 @@ public class Options extends AbstractData {
             case PremiumAirEntity.AIR_ADMIRATIONS:
                 return premium_admirations;
             case PremiumAirEntity.AIR_VISITORS:
-                return  premium_visitors;
+                return premium_visitors;
             case PremiumAirEntity.AIR_MESSAGES:
                 return premium_messages;
         }
@@ -368,27 +380,27 @@ public class Options extends AbstractData {
         }
 
         public void setPopupShowTime() {
-            new Thread(new Runnable() {
+            new BackgroundThread() {
                 @Override
-                public void run() {
+                public void execute() {
                     PreferenceManager.getDefaultSharedPreferences(App.getContext())
                             .edit()
                             .putLong(getPrefsConstant(), System.currentTimeMillis())
                             .commit();
                 }
-            }).run();
+            };
         }
 
         public void clearPopupShowTime() {
-            new Thread(new Runnable() {
+            new BackgroundThread() {
                 @Override
-                public void run() {
+                public void execute() {
                     PreferenceManager.getDefaultSharedPreferences(App.getContext())
                             .edit()
                             .remove(getPrefsConstant())
                             .commit();
                 }
-            }).run();
+            };
         }
 
         public String getPrefsConstant() {
@@ -405,7 +417,7 @@ public class Options extends AbstractData {
         }
 
         private long getLashShowTime() {
-            return  PreferenceManager.getDefaultSharedPreferences(App.getContext())
+            return PreferenceManager.getDefaultSharedPreferences(App.getContext())
                     .getLong(getPrefsConstant(), 0);
         }
     }
@@ -471,9 +483,9 @@ public class Options extends AbstractData {
         }
 
         public boolean isMutualClosingAvailable() {
-            SharedPreferences pref =  App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+            SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
             long currentTime = System.currentTimeMillis();
-            long lastCallTime = pref.getLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME,0);
+            long lastCallTime = pref.getLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME, 0);
             return DateUtils.isOutside24Hours(lastCallTime, System.currentTimeMillis());
         }
 

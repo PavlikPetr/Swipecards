@@ -162,7 +162,7 @@ public class ConnectionManager {
             showBanActivity(apiRequest, apiResponse);
         } else if (apiResponse.isCodeEqual(ErrorCodes.DETECT_FLOOD)) {
             //Если пользователь заблокирован за флуд, показываем соответсвующий экран
-            showFloodActivity(apiRequest);
+            showFloodActivity(apiRequest, apiResponse);
         } else if (apiResponse.isCodeEqual(ErrorCodes.USER_DELETED)) {
             //Если пользователь удален, показываем соответсвующий экран
             showRestoreAccountActivity(apiRequest);
@@ -269,7 +269,7 @@ public class ConnectionManager {
         apiRequest.getContext().startActivity(intent);
     }
 
-    private void showFloodActivity(IApiRequest apiRequest) {
+    private void showFloodActivity(IApiRequest apiRequest, IApiResponse apiResponse) {
         // закрываем воркер, чтобы удалить висящие запросы
         mWorker.shutdownNow();
         mWorker = getNewExecutorService();
@@ -277,6 +277,12 @@ public class ConnectionManager {
         Intent intent = new Intent(apiRequest.getContext(), BanActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(BanActivity.INTENT_TYPE, BanActivity.TYPE_FLOOD);
+        if (apiResponse != null
+                && apiResponse.getJsonResult() != null
+                && apiResponse.getJsonResult().has("remainingTime")) {
+            intent.putExtra(BanActivity.INTENT_FLOOD_TIME,
+                    apiResponse.getJsonResult().optLong("remainingTime"));
+        }
         apiRequest.getContext().startActivity(intent);
     }
 
@@ -315,7 +321,7 @@ public class ConnectionManager {
     private boolean checkForFlood(IApiRequest apiRequest) {
         // Не посылать запросы пока не истечет время бана за флуд
         if (isBlockedForFlood()) {
-            showFloodActivity(apiRequest);
+            showFloodActivity(apiRequest, null);
             return true;
         }
         return false;

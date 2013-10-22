@@ -15,7 +15,6 @@ public class Auth extends AbstractData {
         fillData(response.getJsonResult());
     }
 
-    @Override
     protected void fillData(JSONObject jsonResult) {
         try {
             ssid = jsonResult.getString("ssid");

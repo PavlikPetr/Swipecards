@@ -26,22 +26,12 @@ public abstract class CustomTitlesBaseFragmentActivity extends BaseFragmentActiv
     }
 
     @Override
-    public void setContentView(int layoutResID) {
-        super.setContentView(layoutResID);
-        //Странный глюк на некоторых устройствах (воспроизводится например на HTC One V),
-        // из-за которого показывается лоадер в ActionBar
-        // этот метод можно использовать только после setContent
-        setSupportProgressBarIndeterminateVisibility(false);
-    }
-
-    @Override
     protected void initActionBar(ActionBar actionBar) {
         super.initActionBar(actionBar);
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayShowCustomEnabled(true);
-            actionBar.setIcon(R.drawable.ic_home_topface_white);
             mCustomView = getLayoutInflater().inflate(getActionBarCustomViewResId(), null);
             actionBar.setCustomView(mCustomView);
             mActioBarTitleSetter = new CustomActionBarTitleSetter(

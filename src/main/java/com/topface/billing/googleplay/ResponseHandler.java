@@ -196,7 +196,7 @@ public class ResponseHandler {
 
             @Override
             protected Verify parseResponse(ApiResponse response) {
-                return Verify.parse(response);
+                return new Verify(response);
             }
 
             @Override
@@ -238,7 +238,7 @@ public class ResponseHandler {
 
             @Override
             protected Options parseResponse(ApiResponse response) {
-                return Options.parse(response);
+                return new Options(response);
             }
 
             @Override

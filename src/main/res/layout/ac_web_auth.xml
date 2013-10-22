@@ -6,7 +6,6 @@
 
 
     <WebView android:id="@+id/wvWebFrame"
-             android:layout_margin="15dp"
              android:layout_height="fill_parent"
              android:layout_width="fill_parent">
     </WebView>

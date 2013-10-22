@@ -1,6 +1,7 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -24,7 +25,7 @@ public class ParallelRequestTest extends AbstractThreadTest {
 
                     @Override
                     protected Options parseResponse(ApiResponse response) {
-                        return Options.parse(response);
+                        return new Options(response);
                     }
 
                     @Override

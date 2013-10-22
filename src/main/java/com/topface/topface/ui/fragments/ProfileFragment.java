@@ -104,7 +104,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     private int mProfileId;
     private String mCallingClass;
 
-    private TextView mTitle;
     private View mLoaderView;
     private RateController mRateController;
     private RelativeLayout mLockScreen;
@@ -232,7 +231,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         }
     }
 
-    private TranslateAnimation getAnimation(final boolean isActive, int time) {
+    private void animateProfileActions(final boolean isActive, int time) {
         TranslateAnimation ta;
         if (isActive) {
             ta = new TranslateAnimation(0, 0, 0, -mUserActions.getHeight());
@@ -244,9 +243,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         ta.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                if (!isActive) {
-                    mUserActions.setVisibility(View.VISIBLE);
-                }
             }
 
             @Override
@@ -261,7 +257,11 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             public void onAnimationRepeat(Animation animation) {
             }
         });
-        return ta;
+
+        if (!isActive) {
+            mUserActions.setVisibility(View.VISIBLE);
+        }
+        mUserActions.startAnimation(ta);
     }
 
     private void initUserActions(View root) {
@@ -353,8 +353,10 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         if (mHeaderMainFragment != null) mHeaderMainFragment.setProfile(profile);
         if (mHeaderStatusFragment != null) mHeaderStatusFragment.setProfile(profile);
         if (mGiftFragment != null) mGiftFragment.setProfile(profile);
-        if (mUserPhotoFragment != null && profile instanceof User) mUserPhotoFragment.setUserData((User) profile);
-        if (mUserFormFragment != null && profile instanceof User) mUserFormFragment.setUserData((User) profile);
+        if (mUserPhotoFragment != null && profile instanceof User)
+            mUserPhotoFragment.setUserData((User) profile);
+        if (mUserFormFragment != null && profile instanceof User)
+            mUserFormFragment.setUserData((User) profile);
     }
 
     private void getUserProfile() {
@@ -750,7 +752,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             intent.putExtra(ChatFragment.INTENT_USER_SEX, mUserProfile.sex);
             intent.putExtra(ChatFragment.INTENT_USER_AGE, mUserProfile.age);
             intent.putExtra(ChatFragment.INTENT_USER_CITY, mUserProfile.city == null ? "" : mUserProfile.city.name);
-            intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
+            intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, ((Object) this).getClass().getSimpleName());
             getActivity().startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
         }
     }
@@ -1006,8 +1008,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             case R.id.action_user_actions_list:
                 boolean checked = !item.isChecked();
                 item.setChecked(checked);
-                final TranslateAnimation ta = getAnimation(!checked, 500);
-                mUserActions.startAnimation(ta);
+                animateProfileActions(!checked, 500);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

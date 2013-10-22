@@ -1,5 +1,6 @@
 package com.topface.topface.data;
 
+import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.Debug;
 
@@ -26,11 +27,12 @@ public class City extends AbstractData implements SerializableToJson, Cloneable 
     public String full;
 
     public City() {
-        super();
     }
 
     public City(JSONObject city) {
-        super(city);
+        if (city != null) {
+            fillData(city);
+        }
     }
 
     public City(int id, String name, String full) {
@@ -45,9 +47,8 @@ public class City extends AbstractData implements SerializableToJson, Cloneable 
         this.full = city.optString("full");
     }
 
-    public static LinkedList<City> parse(IApiResponse response) {
+        public static LinkedList<City> getCitiesList(IApiResponse response) {
         LinkedList<City> cities = new LinkedList<City>();
-
         try {
             JSONArray arr = response.getJsonResult().getJSONArray("cities");
             if (arr.length() > 0)

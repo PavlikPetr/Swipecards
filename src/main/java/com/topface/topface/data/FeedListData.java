@@ -19,9 +19,7 @@ public class FeedListData<T extends FeedItem> extends AbstractData {
         }
     }
 
-    @Override
     protected void fillData(JSONObject data) {
-        super.fillData(data);
         more = data.optBoolean("more");
         items = getList(data.optJSONArray("items"));
     }

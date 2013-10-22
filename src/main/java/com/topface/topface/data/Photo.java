@@ -164,9 +164,7 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
         return isFakePhoto;
     }
 
-    @Override
     protected void fillData(JSONObject photoItem) {
-        super.fillData(photoItem);
         if (photoItem != null && photoItem.has("id")) {
             mId = photoItem.optInt("id");
             JSONObject linksJson = photoItem.optJSONObject("links");
@@ -200,7 +198,9 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
     }
 
     public Photo(JSONObject data) {
-        super(data);
+        if (data != null) {
+            fillData(data);
+        }
     }
 
     /**

@@ -12,16 +12,18 @@ import android.widget.TextView;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.LinkedList;
 
-public class GooglePlayProducts extends AbstractData{
+public class GooglePlayProducts extends AbstractData {
 
     public boolean saleExists = false;
 
@@ -30,56 +32,59 @@ public class GooglePlayProducts extends AbstractData{
     public LinkedList<BuyButton> premium = new LinkedList<BuyButton>();
     public LinkedList<BuyButton> others = new LinkedList<BuyButton>();
 
-    public static GooglePlayProducts parse(ApiResponse response) {
-        GooglePlayProducts products = new GooglePlayProducts();
-        JSONObject data = response.getJsonResult();
-        try {
-                JSONArray coinsJSON = data.optJSONArray("coins");
-                if (coinsJSON != null) {
-                    for (int i = 0; i < coinsJSON.length(); i++) {
-                        products.coins.add(products.createBuyButtonFromJSON(coinsJSON.optJSONObject(i)));
-                    }
-                }
+    public GooglePlayProducts(@NotNull IApiResponse data) {
+        fillData(data.getJsonResult());
+    }
 
-                JSONArray likesJSON = data.optJSONArray("likes");
-                for (int i = 0; i < likesJSON.length(); i++) {
-                    products.likes.add(products.createBuyButtonFromJSON(likesJSON.optJSONObject(i)));
-                }
-
-                JSONArray premiumJSON = data.optJSONArray("premium");
-                if (premiumJSON != null) {
-                    for (int i = 0; i < premiumJSON.length(); i++) {
-                        products.premium.add(products.createBuyButtonFromJSON(premiumJSON.optJSONObject(i)));
-                    }
-                }
-
-                JSONArray othersJSON = data.optJSONArray("others");
-                if (othersJSON != null) {
-                    for (int i = 0; i < othersJSON.length(); i++) {
-                        products.others.add(products.createBuyButtonFromJSON(othersJSON.optJSONObject(i)));
-                    }
-                }
-        } catch (Exception e) {
-            Debug.error("Options parsing error", e);
+    public GooglePlayProducts(@Nullable JSONObject data) {
+        if (data != null) {
+            fillData(data);
         }
-        CacheProfile.setGooglePlayProducts(products, response.getJsonResult());
-        return products;
+    }
+
+    protected void fillData(JSONObject data) {
+        try {
+            fillProductsArray(coins, data.optJSONArray("coins"));
+            fillProductsArray(likes, data.optJSONArray("likes"));
+            fillProductsArray(premium, data.optJSONArray("premium"));
+            fillProductsArray(others, data.optJSONArray("others"));
+        } catch (Exception e) {
+            Debug.error("GooglePlayProducts parsing error", e);
+        }
+        //Обновляем кэш
+        CacheProfile.setGooglePlayProducts(this, data);
+    }
+
+    private void fillProductsArray(LinkedList<BuyButton> list, JSONArray coinsJSON) {
+        if (coinsJSON != null && list != null) {
+            BuyButton buyButtonFromJSON;
+            for (int i = 0; i < coinsJSON.length(); i++) {
+                buyButtonFromJSON = createBuyButtonFromJSON(coinsJSON.optJSONObject(i));
+                if (buyButtonFromJSON != null) {
+                    list.add(buyButtonFromJSON);
+                }
+            }
+        }
     }
 
     public BuyButton createBuyButtonFromJSON(JSONObject purchaseItem) {
-        if (purchaseItem.optInt("discount") > 0) {
-            saleExists = true;
-
+        BuyButton button = null;
+        if (purchaseItem != null) {
+            if (purchaseItem.optInt("discount") > 0) {
+                saleExists = true;
+            }
+            button = new BuyButton(
+                    purchaseItem.optString("id"),
+                    purchaseItem.optString("title"),
+                    purchaseItem.optInt("price"),
+                    purchaseItem.optString("hint"),
+                    purchaseItem.optInt("showType"),
+                    purchaseItem.optString("type"),
+                    purchaseItem.optInt("discount")
+            );
         }
-        return new BuyButton(
-                purchaseItem.optString("id"),
-                purchaseItem.optString("title"),
-                purchaseItem.optInt("price"),
-                purchaseItem.optString("hint"),
-                purchaseItem.optInt("showType"),
-                purchaseItem.optString("type"),
-                purchaseItem.optInt("discount")
-        );
+
+        return button;
     }
 
     public static RelativeLayout setButton(LinearLayout root, final BuyButton curBtn, Context context, final BuyButtonClickListener l) {
@@ -88,7 +93,6 @@ public class GooglePlayProducts extends AbstractData{
             View view = inflater.inflate(R.layout.item_buying_btn, root, false);
 
             RelativeLayout container = (RelativeLayout) view.findViewById(R.id.itContainer);
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) container.getLayoutParams();
             double density = context.getResources().getDisplayMetrics().density;
 
             int bgResource;
@@ -155,8 +159,6 @@ public class GooglePlayProducts extends AbstractData{
         public String hint;
         public String type;
         public int discount;
-        public static final String COINS_NAME = "coins";
-        public static final String LIKES_NAME = "likes";
 
         public BuyButton(String id, String title, int price, String hint, int showType, String type, int discount) {
             this.id = id;

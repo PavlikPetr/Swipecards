@@ -30,8 +30,10 @@ import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 
 import java.util.Arrays;
@@ -364,7 +366,7 @@ public class FullscreenController {
         ViewGroup fullscreenContainer = (ViewGroup) mActivity.findViewById(R.id.loBannerContainer);
         if (fullscreenContainer == null) {
             fullscreenContainer = (ViewGroup) mActivity.getLayoutInflater().inflate(R.layout.layout_fullscreen, null);
-            ((ViewGroup) mActivity.findViewById(android.R.id.content)).addView(fullscreenContainer);
+            ((ViewGroup) mActivity.findViewById(BaseFragmentActivity.getContentViewCompat())).addView(fullscreenContainer);
         }
         return fullscreenContainer;
     }

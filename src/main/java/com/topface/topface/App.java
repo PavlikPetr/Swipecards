@@ -31,6 +31,7 @@ import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
 import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
 import com.topface.topface.utils.AppConfig;
+import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
@@ -105,12 +106,12 @@ public class App extends Application {
 
         final Handler handler = new Handler();
         //Выполнение всего, что можно сделать асинхронно, делаем в отдельном потоке
-        new Thread(new Runnable() {
+        new BackgroundThread() {
             @Override
-            public void run() {
+            public void execute() {
                 onCreateAsync(handler);
             }
-        }).start();
+        };
     }
 
     /**
@@ -210,7 +211,7 @@ public class App extends Application {
 
             @Override
             protected GooglePlayProducts parseResponse(ApiResponse response) {
-                return GooglePlayProducts.parse(response);
+                return new GooglePlayProducts(response);
             }
 
             @Override
@@ -230,7 +231,7 @@ public class App extends Application {
 
                     @Override
                     protected Options parseResponse(ApiResponse response) {
-                        return Options.parse(response);
+                        return new Options(response);
                     }
 
                     @Override

@@ -79,7 +79,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.age = resp.optInt("age");
             profile.sex = resp.optInt("sex");
             profile.status = normilizeStatus(resp.optString("status"));
-            profile.firstName = resp.optString("firstName").trim();
+            profile.firstName = normilizeName(resp.optString("firstName"));
             profile.city = new City(resp.optJSONObject("city"));
             profile.dating = new DatingFilter(resp.optJSONObject("dating"));
             profile.hasMail = resp.optBoolean("email");
@@ -477,17 +477,25 @@ public class Profile extends AbstractDataWithPhotos {
         this.status = normilizeStatus(status);
     }
 
-    public static String normilizeStatus(String status) {
+    public final static String normilizeStatus(String status) {
         if (status == null) {
             return Static.EMPTY;
         }
-        String result = status.trim();
+        String result = status.replaceAll("\n", " ").trim();
         for (String EMPTY_STATUS : EMPTY_STATUSES) {
             if (EMPTY_STATUS.equals(result)) {
                 return Static.EMPTY;
             }
         }
-        return result.replaceAll("\n", " ");
+        return result;
+    }
+
+    public final static String normilizeName(String name) {
+        if (name == null) {
+            return Static.EMPTY;
+        }
+        String result = name.replaceAll("\n", " ").trim();
+        return result;
     }
 
     public boolean isEmpty() {

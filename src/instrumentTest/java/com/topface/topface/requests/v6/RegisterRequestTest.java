@@ -1,8 +1,13 @@
 package com.topface.topface.requests.v6;
 
 import android.content.Context;
+
 import com.topface.topface.data.Register;
-import com.topface.topface.requests.*;
+import com.topface.topface.requests.AbstractThreadTest;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.RegisterRequest;
 
 public class RegisterRequestTest extends AbstractThreadTest {
 

@@ -3,6 +3,7 @@ package com.topface.topface.requests.blacklist;
 
 import android.content.Context;
 import android.text.TextUtils;
+
 import com.topface.topface.data.BlackListItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.AbstractThreadTest;

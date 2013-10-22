@@ -26,9 +26,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.social.AuthToken;
 
 public class BanActivity extends TrackedActivity implements View.OnClickListener {
-
     private SharedPreferences mPreferences;
-
 
     public static final int TYPE_UNKNOWN = 0;
     public static final int TYPE_BAN = 1;
@@ -37,10 +35,11 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
 
     public static final String INTENT_TYPE = "message_type";
     public static final String BANNING_TEXT_INTENT = "banning_intent";
+    public static final String INTENT_FLOOD_TIME = "flood_time";
 
-    private static final long FLOOD_WAIT_TIME = 180000L;
+    private static final long DEFAULT_FLOOD_WAIT_TIME = 180L;
 
-    private TextView mTimerContainer;
+    private TextView mTimerTextView;
     private Button mButton;
     private int mType;
 
@@ -51,9 +50,9 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
         mPreferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
 
         ImageView image = (ImageView) findViewById(R.id.ivBan);
-        TextView titleContainer = (TextView) findViewById(R.id.banned_title);
-        TextView messageContainer = (TextView) findViewById(R.id.banned_message);
-        mTimerContainer = (TextView) findViewById(R.id.banned_timer);
+        TextView titleTextView = (TextView) findViewById(R.id.banned_title);
+        TextView messageTextView = (TextView) findViewById(R.id.banned_message);
+        mTimerTextView = (TextView) findViewById(R.id.banned_timer);
         mButton = (Button) findViewById(R.id.btnButton);
 
         mType = getIntent().getIntExtra(INTENT_TYPE, TYPE_UNKNOWN);
@@ -64,27 +63,28 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
             case TYPE_BAN:
                 title = getString(R.string.ban_title);
                 message = getIntent().getStringExtra(BANNING_TEXT_INTENT);
-                mTimerContainer.setVisibility(View.GONE);
+                mTimerTextView.setVisibility(View.GONE);
                 break;
             case TYPE_FLOOD:
                 message = getString(R.string.ban_flood_detected);
-                mTimerContainer.setVisibility(View.VISIBLE);
-                getTimer(getFloodTime()).start();
+                mTimerTextView.setVisibility(View.VISIBLE);
+                long floodTime = getIntent().getLongExtra(INTENT_FLOOD_TIME, DEFAULT_FLOOD_WAIT_TIME)*1000l;
+                getTimer(getFloodTime(floodTime)).start();
                 break;
             case TYPE_RESTORE:
                 title = getString(R.string.restore_of_account);
                 mButton.setText(R.string.restore);
                 mButton.setVisibility(View.VISIBLE);
                 mButton.setOnClickListener(this);
-                mTimerContainer.setVisibility(View.GONE);
+                mTimerTextView.setVisibility(View.GONE);
                 image.setVisibility(View.GONE);
                 break;
             default:
                 break;
         }
 
-        titleContainer.setText(title);
-        messageContainer.setText(message);
+        titleTextView.setText(title);
+        messageTextView.setText(message);
     }
 
     @Override
@@ -94,15 +94,19 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
     }
 
     private long getFloodTime() {
+        return getFloodTime(DEFAULT_FLOOD_WAIT_TIME);
+    }
+
+    private long getFloodTime(long floodTime) {
         AppConfig config = App.getConfig();
         long result;
         long endTime = config.getFloodEndsTime();
         long now = System.currentTimeMillis();
 
         if (endTime < now) {
-            endTime = now + FLOOD_WAIT_TIME;
+            endTime = now + floodTime;
             config.setFloodEndsTime(endTime);
-            result = FLOOD_WAIT_TIME;
+            result = floodTime;
         } else {
             result = endTime - now;
         }
@@ -118,11 +122,11 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
                 int minutes = seconds / 60;
                 seconds = seconds % 60;
 
-                mTimerContainer.setText(String.format("%d:%02d", minutes, seconds));
+                mTimerTextView.setText(String.format("%d:%02d", minutes, seconds));
             }
 
             public void onFinish() {
-                mTimerContainer.setText("0:00");
+                mTimerTextView.setText("0:00");
                 finish();
             }
         };
