@@ -54,8 +54,6 @@ public class AuthButtonsController {
     }
 
     private void getAllSocialsForLocale() {
-
-
         Collections.addAll(allSocials, AuthToken.SN_FACEBOOK, AuthToken.SN_VKONTAKTE, AuthToken.SN_ODNOKLASSNIKI);
         allScreenSocials = new LinkedList<HashSet<String>>();
         allScreenSocials.add(new HashSet<String>(Arrays.asList(AuthToken.SN_FACEBOOK)));

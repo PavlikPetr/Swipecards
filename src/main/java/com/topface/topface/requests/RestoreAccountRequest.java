@@ -15,11 +15,6 @@ public class RestoreAccountRequest extends AuthRequest{
     }
 
     @Override
-    protected JSONObject getRequestData() throws JSONException {
-        return null;
-    }
-
-    @Override
     public String getServiceName() {
         return SERVICE;
     }

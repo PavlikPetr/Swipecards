@@ -21,11 +21,7 @@ public class Ssid {
     }
 
     public static boolean isLoaded() {
-        return !TextUtils.isEmpty(mSsid);
-    }
-
-    public static boolean isEmpty() {
-        return TextUtils.isEmpty(get());
+        return !TextUtils.isEmpty(get());
     }
 
     public synchronized static String load() {
