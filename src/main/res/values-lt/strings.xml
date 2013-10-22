@@ -229,6 +229,7 @@
     <string name="vip_messages_bg">Pranešimų fonas</string>
     <string name="vip_black_list">Juodasis sąrašas</string>
     <string name="vip_profile_bg">Foninė fotografija</string>
+    <string name="vip_status">VIP-statusas</string>
     <string name="profile_services">Paslaugos</string>
     <string name="default_balance_constant">Jūsų sąskaitoje</string>
     <string name="default_energy_coins_buy_btn_text">Pirkti monetas, papildyti energijos atsargas</string>
@@ -570,4 +571,5 @@
         <item quantity="one">%d išrinktas</item>
     </plurals>
     <string name="photo_is_uploading">Foto įkrova</string>
+    <string name="default_ringtone">Pagal nutylėjimą</string>
 </resources>

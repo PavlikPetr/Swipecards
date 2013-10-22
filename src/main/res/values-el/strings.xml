@@ -225,6 +225,7 @@
     <string name="vip_messages_bg">Το φόντο μηνυμάτων</string>
     <string name="vip_black_list">Η μαύρη λίστα</string>
     <string name="vip_profile_bg">Ιστορικό φωτογραφία</string>
+    <string name="vip_status">Κατάσταση VIP</string>
     <string name="profile_services">Τα υπηρεσίες</string>
     <string name="default_balance_constant">Στο λογαριασμό σας</string>
     <string name="default_energy_coins_buy_btn_text">Aγοράστε τα κέρματα και τις συμπάθειες</string>
@@ -552,4 +553,5 @@
         <item quantity="one">%d επιλεγμένο</item>
     </plurals>
     <string name="photo_is_uploading">Ανεβάστε μια φωτογραφία</string>
+    <string name="default_ringtone">Από προεπιλογή</string>
 </resources>
