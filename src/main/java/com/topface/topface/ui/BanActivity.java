@@ -20,6 +20,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RestoreAccountRequest;
+import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.analytics.TrackedActivity;
 import com.topface.topface.utils.AppConfig;
 import com.topface.topface.utils.social.AuthToken;
@@ -160,21 +161,12 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
                 switch (v.getId()) {
                     case R.id.btnConfirm:
                         new RestoreAccountRequest(AuthToken.getInstance(), this)
-                                .callback(new DataApiHandler<Profile>() {
+                                .callback(new SimpleApiHandler() {
                                     @Override
-                                    protected void success(Profile data, IApiResponse response) {
+                                    public void success(IApiResponse response) {
+                                        super.success(response);
                                         AuthorizationManager.saveAuthInfo(response);
                                         finish();
-                                    }
-
-                                    @Override
-                                    protected Profile parseResponse(ApiResponse response) {
-                                        return Profile.parse(response);
-                                    }
-
-                                    @Override
-                                    public void fail(int codeError, IApiResponse response) {
-                                        Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
                                     }
                                 }).exec();
                         break;
