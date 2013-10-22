@@ -53,7 +53,9 @@ public class FeedUser extends AbstractData implements SerializableToJson {
     public FeedItem feedItem;
 
     public FeedUser(JSONObject user) {
-        fillData(user);
+        if (user != null) {
+            fillData(user);
+        }
     }
 
     public FeedUser(JSONObject user, FeedItem item) {
