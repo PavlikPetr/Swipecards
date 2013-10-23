@@ -38,6 +38,8 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
 
     private TakePhotoListener mTakePhotoListener;
     private AddPhotoHelper mAddPhotoHelper;
+    private Bitmap bitmap;
+    private Bitmap scaledBitmap;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -134,11 +136,10 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
         int maxWidth = getResources().getDimensionPixelSize(R.dimen.take_photo_max_width);
         int maxHeight = getResources().getDimensionPixelSize(R.dimen.take_photo_max_height);
 
-        Bitmap bitmap = BitmapUtils.getBitmap(getActivity(), uri, maxWidth, maxHeight);
+        bitmap = BitmapUtils.getBitmap(getActivity(), uri, maxWidth, maxHeight);
         if (bitmap == null) return;
 
         if (bitmap.getWidth() >= maxWidth || bitmap.getHeight() >= maxHeight) {
-            Bitmap scaledBitmap;
             if (bitmap.getWidth() >= bitmap.getHeight()) {
                 scaledBitmap = BitmapUtils.getScaledBitmap(bitmap, maxWidth, 0);
             } else {
@@ -148,6 +149,7 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
         } else {
             photo.setImageBitmap(bitmap);
         }
+
     }
 
     @Override
@@ -189,6 +191,17 @@ public class TakePhotoDialog extends DialogFragment implements View.OnClickListe
     private void sendRequest(Uri uri) {
         if (uri != null) {
             if (mAddPhotoHelper != null) mAddPhotoHelper.sendRequest(uri);
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (bitmap != null) {
+            bitmap.recycle();
+        }
+        if (scaledBitmap != null) {
+            scaledBitmap.recycle();
         }
     }
 

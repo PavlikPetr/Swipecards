@@ -55,6 +55,7 @@ import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
 import com.topface.topface.ui.dialogs.LeadersDialog;
 import com.topface.topface.ui.profile.AddPhotoHelper;
@@ -206,10 +207,14 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (mAddPhotoHelper != null) {
-                    int id = intent.getIntExtra("btn_id", 0);
-                    View view = new View(getActivity());
-                    view.setId(id);
-                    mAddPhotoHelper.getAddPhotoClickListener().onClick(view);
+                    if (getActivity() != null) {
+
+                        int id = intent.getIntExtra("btn_id", 0);
+
+                        View view = new View(getActivity());
+                        view.setId(id);
+                        mAddPhotoHelper.getAddPhotoClickListener().onClick(view);
+                    }
                 }
             }
         };
@@ -851,7 +856,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 }
             }
             if ((requestCode == AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA ||
-                    requestCode == AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY) ) {
+                    requestCode == AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY) &&
+                    !((NavigationActivity)getActivity()).getDialogStarted()
+                    ) {
                mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
             }
             resultToNestedFragments(requestCode, resultCode, data);

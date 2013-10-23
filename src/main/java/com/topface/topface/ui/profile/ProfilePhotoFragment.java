@@ -279,29 +279,6 @@ public class ProfilePhotoFragment extends BaseFragment {
         }
     };
 
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            mViewFlipper.setDisplayedChild(0);
-            if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
-                Photo photo = (Photo) msg.obj;
-                // ставим фото на аватарку только если она едиснтвенная
-                if (CacheProfile.photos.size() == 0) {
-                    CacheProfile.photo = photo;
-                }
-                // добавляется фото в начало списка
-                CacheProfile.photos.addFirst(photo);
-                mProfilePhotoGridAdapter.addFirst(photo);
-                // оповещаем всех об изменениях
-
-                Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
-                initTitleText(mTitle);
-            } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
-                Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -314,10 +291,12 @@ public class ProfilePhotoFragment extends BaseFragment {
             ArrayList<Photo> arrList = intent.getParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS);
             boolean clear = intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_CLEAR, false);
             Photos newPhotos = new Photos();
+
             newPhotos.addAll(arrList);
             if (clear) {
                 // TODO перенести логику в адаптер
-                newPhotos.addFirst(null);
+
+//                newPhotos.addFirst(null);
                 ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).setData(newPhotos, intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_MORE, false));
             } else {
                 ((ProfilePhotoGridAdapter) mGridAlbum.getAdapter()).addData(newPhotos, intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_MORE, false));

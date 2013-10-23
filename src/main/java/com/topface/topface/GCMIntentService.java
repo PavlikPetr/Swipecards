@@ -41,6 +41,7 @@ public class GCMIntentService extends GCMBaseIntentService {
             //Сообщаем о том что есть новое уведомление и нужно обновить список
             Intent broadcastReceiver = new Intent(GCMUtils.GCM_NOTIFICATION);
             String user = intent.getStringExtra("user");
+
             if (user != null) {
                 broadcastReceiver.putExtra("id", getUserId(user));
                 context.sendBroadcast(broadcastReceiver);
