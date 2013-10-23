@@ -160,6 +160,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private String mUserName;
     private int mUserAge;
     private String mUserCity;
+    private int mUserSex;
     private MenuItem mBarAvatar;
 
     @Override
@@ -229,6 +230,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         mItemId = getArguments().getString(INTENT_ITEM_ID);
         mUserId = getArguments().getInt(INTENT_USER_ID, -1);
         mUserName = getArguments().getString(INTENT_USER_NAME);
+        mUserSex = getArguments().getInt(INTENT_USER_SEX,Static.BOY);
         mUserAge = getArguments().getInt(INTENT_USER_AGE, 0);
         mUserCity = getArguments().getString(INTENT_USER_CITY);
     }
@@ -631,7 +633,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         } else {
             ((ImageViewRemote) MenuItemCompat.getActionView(mBarAvatar)
                     .findViewById(R.id.ivBarAvatar))
-                    .setImageResource(user != null && user.sex == Static.GIRL ?
+                    .setImageResource(mUserSex == Static.GIRL ?
                             R.drawable.feed_banned_female_avatar :
                             R.drawable.feed_banned_male_avatar);
         }
