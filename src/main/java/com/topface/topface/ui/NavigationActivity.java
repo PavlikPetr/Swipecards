@@ -84,6 +84,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
             if (mNavBarController != null) mNavBarController.refreshNotificators();
         }
     };
+    private boolean takePhotoDialogStarted;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,6 +104,14 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         if (!AuthToken.getInstance().isEmpty()) {
             showFragment(savedInstanceState);
         }
+    }
+
+    public void setDialogStarted(boolean started) {
+        takePhotoDialogStarted = started;
+    }
+
+    public boolean getDialogStarted() {
+        return takePhotoDialogStarted;
     }
 
     @Override
@@ -298,6 +307,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     private void actionsAfterRegistration() {
         if (!AuthToken.getInstance().isEmpty()) {
             if (CacheProfile.photo == null) {
+                takePhotoDialogStarted = true;
                 takePhoto(new TakePhotoDialog.TakePhotoListener() {
                     @Override
                     public void onPhotoSentSuccess(final Photo photo) {
@@ -307,12 +317,14 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
                             intent.putExtra(PhotoSwitcherActivity.INTENT_CLEAR, true);
                             intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, CacheProfile.photos);
                             LocalBroadcastManager.getInstance(NavigationActivity.this).sendBroadcast(intent);
+                        } else {
+                            Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
+                            ArrayList<Photo> photos = new ArrayList<Photo>();
+                            photos.add(photo);
+                            intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, photos);
+//                            LocalBroadcastManager.getInstance(NavigationActivity.this).sendBroadcast(intent);
                         }
-                        Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
-                        ArrayList<Photo> photos = new ArrayList<Photo>();
-                        photos.add(photo);
-                        intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, photos);
-                        LocalBroadcastManager.getInstance(NavigationActivity.this).sendBroadcast(intent);
+                        takePhotoDialogStarted = false;
                         PhotoMainRequest request = new PhotoMainRequest(getApplicationContext());
                         request.photoid = photo.getId();
                         request.callback(new ApiHandler() {

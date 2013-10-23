@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
@@ -31,6 +33,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Gift;
+import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.User;
@@ -52,8 +55,11 @@ import com.topface.topface.requests.handlers.VipApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.GiftsActivity;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
 import com.topface.topface.ui.dialogs.LeadersDialog;
+import com.topface.topface.ui.profile.AddPhotoHelper;
+import com.topface.topface.ui.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.profile.ProfileFormFragment;
 import com.topface.topface.ui.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.profile.UserFormFragment;
@@ -83,6 +89,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
     public static final String INTENT_TYPE = "intent_profile_type";
     public static final String INTENT_ITEM_ID = "intent_profile_item_id";
     public static final String INTENT_CALLING_FRAGMENT = "intent_profile_calling_fragment";
+    public static final String ADD_PHOTO_INTENT = "com.topface.topface.ADD_PHOTO_INTENT";
 
     ArrayList<String> BODY_PAGES_TITLES = new ArrayList<String>();
     ArrayList<String> BODY_PAGES_CLASS_NAMES = new ArrayList<String>();
@@ -121,6 +128,8 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
     private ProgressBar giftsLoader;
     private ImageView giftsIcon;
+    private AddPhotoHelper mAddPhotoHelper;
+    private BroadcastReceiver addPhotoReceiver;
 
     private OnGiftReceivedListener giftsReceivedListener = new OnGiftReceivedListener() {
         @Override
@@ -140,7 +149,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         super.onCreateView(inflater, container, savedInstanceState);
 
         //init views
-        View root = inflater.inflate(R.layout.ac_profile, null);
+        final View root = inflater.inflate(R.layout.ac_profile, null);
 
         mLoaderView = root.findViewById(R.id.llvProfileLoading);
         final FragmentActivity activity = getActivity();
@@ -192,6 +201,24 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         if (startHeaderPage != -1) {
             mStartHeaderPage = startHeaderPage;
         }
+        mAddPhotoHelper = new AddPhotoHelper(this, null);
+        mAddPhotoHelper.setOnResultHandler(mHandler);
+        addPhotoReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (mAddPhotoHelper != null) {
+                    if (getActivity() != null) {
+
+                        int id = intent.getIntExtra("btn_id", 0);
+
+                        View view = new View(getActivity());
+                        view.setId(id);
+                        mAddPhotoHelper.getAddPhotoClickListener().onClick(view);
+                    }
+                }
+            }
+        };
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(addPhotoReceiver, new IntentFilter(ADD_PHOTO_INTENT));
 
         mHeaderPager.setCurrentItem(mStartHeaderPage);
         mBodyPager.setCurrentItem(mStartBodyPage);
@@ -817,6 +844,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         if (mUserFormFragment != null) mUserFormFragment.clearContent();
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -826,6 +854,12 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     sendGift(data);
                     return;
                 }
+            }
+            if ((requestCode == AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA ||
+                    requestCode == AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY) &&
+                    !((NavigationActivity)getActivity()).getDialogStarted()
+                    ) {
+               mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
             }
             resultToNestedFragments(requestCode, resultCode, data);
         } else if (resultCode == Activity.RESULT_CANCELED) {
@@ -987,4 +1021,28 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 return super.onOptionsItemSelected(item);
         }
     }
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
+                Photo photo = (Photo) msg.obj;
+                // ставим фото на аватарку только если она едиснтвенная
+                if (CacheProfile.photos.size() == 0) {
+                    CacheProfile.photo = photo;
+                }
+                // добавляется фото в начало списка
+                CacheProfile.photos.addFirst(photo);
+                ArrayList<Photo> photosForAdd = new ArrayList<Photo>();
+                photosForAdd.add(photo);
+                Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
+                intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, photosForAdd);
+                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+                // оповещаем всех об изменениях
+                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
+            } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
+                Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
 }
