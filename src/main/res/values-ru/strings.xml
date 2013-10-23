@@ -741,4 +741,5 @@
     <string name="photo_is_uploading">Загрузка фото</string>
     <string name="default_ringtone">По умолчанию</string>
     <string name="photo_info_deleted">Удалена</string>
+    <string name="user_deleted_or_banned">Пользователь удален или забанен</string>
 </resources>
