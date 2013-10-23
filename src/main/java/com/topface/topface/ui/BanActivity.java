@@ -1,23 +1,15 @@
 package com.topface.topface.ui;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.Auth;
-import com.topface.topface.data.Profile;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RestoreAccountRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
@@ -27,7 +19,6 @@ import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
 public class BanActivity extends TrackedActivity implements View.OnClickListener {
-    private SharedPreferences mPreferences;
 
     public static final int TYPE_UNKNOWN = 0;
     public static final int TYPE_BAN = 1;
@@ -41,22 +32,18 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
     private static final long DEFAULT_FLOOD_WAIT_TIME = 180L;
 
     private TextView mTimerTextView;
-    private Button mBtnConfirm;
-    private Button mBtnCancel;
     private int mType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ban);
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-
         ImageView image = (ImageView) findViewById(R.id.ivBan);
         TextView titleTextView = (TextView) findViewById(R.id.banned_title);
         TextView messageTextView = (TextView) findViewById(R.id.banned_message);
         mTimerTextView = (TextView) findViewById(R.id.banned_timer);
-        mBtnConfirm = (Button) findViewById(R.id.btnConfirm);
-        mBtnCancel = (Button) findViewById(R.id.btnCancel);
+        Button btnConfirm = (Button) findViewById(R.id.btnConfirm);
+        Button btnCancel = (Button) findViewById(R.id.btnCancel);
 
         mType = getIntent().getIntExtra(INTENT_TYPE, TYPE_UNKNOWN);
 
@@ -76,12 +63,12 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
                 break;
             case TYPE_RESTORE:
                 title = getString(R.string.delete_account_will_be_restored_are_you_sure);
-                mBtnConfirm.setText(R.string.restore);
-                mBtnConfirm.setVisibility(View.VISIBLE);
-                mBtnConfirm.setOnClickListener(this);
-                mBtnCancel.setText(android.R.string.cancel);
-                mBtnCancel.setVisibility(View.VISIBLE);
-                mBtnCancel.setOnClickListener(this);
+                btnConfirm.setText(R.string.restore);
+                btnConfirm.setVisibility(View.VISIBLE);
+                btnConfirm.setOnClickListener(this);
+                btnCancel.setText(android.R.string.cancel);
+                btnCancel.setVisibility(View.VISIBLE);
+                btnCancel.setOnClickListener(this);
                 mTimerTextView.setVisibility(View.GONE);
                 image.setVisibility(View.GONE);
                 break;
@@ -131,8 +118,7 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
     }
 
     private CountDownTimer getTimer(long time) {
-        CountDownTimer timer = new CountDownTimer(time, 1000) {
-
+        return new CountDownTimer(time, 1000) {
             public void onTick(long millis) {
                 int seconds = (int) (millis / 1000);
                 int minutes = seconds / 60;
@@ -146,7 +132,6 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
                 finish();
             }
         };
-        return timer;
     }
 
     @Override
