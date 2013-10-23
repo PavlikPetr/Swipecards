@@ -226,6 +226,7 @@
     <string name="vip_messages_bg">Sfondo dei messaggi</string>
     <string name="vip_black_list">Black list</string>
     <string name="vip_profile_bg">Foto di sfondo</string>
+    <string name="vip_status">lo stato VIP</string>
     <string name="profile_services">Servizi</string>
     <string name="default_balance_constant">Sul tuo conto</string>
     <string name="default_energy_coins_buy_btn_text">Compra monete e simpatie</string>
@@ -554,4 +555,5 @@
         <item quantity="one">%d scelto</item>
     </plurals>
     <string name="photo_is_uploading">Caricamento foto</string>
+    <string name="default_ringtone">Preimpostato</string>
 </resources>

@@ -160,6 +160,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private String mUserName;
     private int mUserAge;
     private String mUserCity;
+    private int mUserSex;
     private MenuItem mBarAvatar;
 
     @Override
@@ -229,6 +230,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         mItemId = getArguments().getString(INTENT_ITEM_ID);
         mUserId = getArguments().getInt(INTENT_USER_ID, -1);
         mUserName = getArguments().getString(INTENT_USER_NAME);
+        mUserSex = getArguments().getInt(INTENT_USER_SEX,Static.BOY);
         mUserAge = getArguments().getInt(INTENT_USER_AGE, 0);
         mUserCity = getArguments().getString(INTENT_USER_CITY);
     }
@@ -419,7 +421,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         super.onSaveInstanceState(outState);
         outState.putBoolean(WAS_FAILED, wasFailed);
         outState.putParcelableArrayList(ADAPTER_DATA, mAdapter.getDataCopy());
-
         try {
             outState.putString(FRIEND_FEED_USER, mUser.toJson().toString());
         } catch (Exception e) {
@@ -441,7 +442,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             return;
         }
 
-        DeleteMessagesRequest dr = new DeleteMessagesRequest(item.id,getActivity());
+        DeleteMessagesRequest dr = new DeleteMessagesRequest(item.id, getActivity());
         dr.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
@@ -614,14 +615,27 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             blockView = (RelativeLayout) userActions.getViewById(R.id.acBlock);
             ((TextView) blockView.findViewById(R.id.blockTV)).setText(user.blocked ? R.string.black_list_delete : R.string.black_list_add_short);
             bookmarksTv.setText(user.bookmarked ? R.string.general_bookmarks_delete : R.string.general_bookmarks_add);
-            // ставим фото пользователя в иконку в actionbar
-            if (mBarAvatar != null && user.photo != null && !user.photo.isEmpty()) {
-                ((ImageViewRemote) MenuItemCompat.getActionView(mBarAvatar).findViewById(R.id.ivBarAvatar)).setPhoto(user.photo);
-            }
             // ставим значок онлайн в нужное состояние
             if (mUserOnlineListener != null) {
                 mUserOnlineListener.setUserOnline(user.online);
             }
+        }
+        // ставим фото пользователя в иконку в actionbar
+        setActionBarAvatar(user);
+    }
+
+    private void setActionBarAvatar(FeedUser user) {
+        if (mBarAvatar == null) return;
+        if (user != null && !user.banned && !user.deleted && user.photo != null && !user.photo.isEmpty()) {
+            ((ImageViewRemote) MenuItemCompat.getActionView(mBarAvatar)
+                    .findViewById(R.id.ivBarAvatar))
+                    .setPhoto(user.photo);
+        } else {
+            ((ImageViewRemote) MenuItemCompat.getActionView(mBarAvatar)
+                    .findViewById(R.id.ivBarAvatar))
+                    .setImageResource(mUserSex == Static.GIRL ?
+                            R.drawable.feed_banned_female_avatar :
+                            R.drawable.feed_banned_male_avatar);
         }
     }
 
@@ -803,7 +817,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }).exec();
                 break;
             case R.id.acComplain:
-                animateChatActions(true,0);
+                animateChatActions(true, 0);
                 startActivity(ContainerActivity.getComplainIntent(mUserId));
                 break;
             case R.id.ivBarAvatar:
@@ -842,7 +856,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     private void addToBlackList() {
         if (mUserId > 0) {
-            BlackListAddManyRequest blackListRequest = new BlackListAddManyRequest(mUserId,getActivity());
+            BlackListAddManyRequest blackListRequest = new BlackListAddManyRequest(mUserId, getActivity());
             mAddToBlackList.setEnabled(false);
             blackListRequest.callback(new VipApiHandler() {
                 @Override
@@ -1232,6 +1246,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         mBarAvatar = menu.findItem(R.id.action_profile);
         MenuItemCompat.getActionView(mBarAvatar).findViewById(R.id.ivBarAvatar).setOnClickListener(this);
         menu.findItem(R.id.action_profile).setChecked(false);
+        setActionBarAvatar(mUser);
     }
 
     @Override
@@ -1243,9 +1258,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_profile:
-                boolean checked = !item.isChecked();
-                item.setChecked(checked);
-                animateChatActions(!checked,500);
+                if (!(mUser == null || mUser.deleted || mUser.banned)) {
+                    boolean checked = !item.isChecked();
+                    item.setChecked(checked);
+                    animateChatActions(!checked, 500);
+                } else {
+                    Toast.makeText(getActivity(),R.string.user_deleted_or_banned,
+                            Toast.LENGTH_LONG).show();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

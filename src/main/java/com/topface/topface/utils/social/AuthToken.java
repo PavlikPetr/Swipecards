@@ -48,7 +48,7 @@ public class AuthToken implements Parcelable {
     }
 
 
-    public boolean isToken() {
+    private boolean isToken() {
         boolean hasSocialToken  = (mTokenKey != null && mTokenKey.length() > 0);
         boolean hasTopfaceToken = (mLogin != null && mLogin.length() > 0
                 && mPassword != null && mPassword.length() > 0);

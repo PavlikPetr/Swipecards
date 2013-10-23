@@ -1,29 +1,30 @@
 package com.topface.topface.ui;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.Auth;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.RestoreAccountRequest;
+import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.analytics.TrackedActivity;
 import com.topface.topface.utils.AppConfig;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.social.AuthToken;
+import com.topface.topface.utils.social.AuthorizationManager;
 
 public class BanActivity extends TrackedActivity implements View.OnClickListener {
     private SharedPreferences mPreferences;
@@ -40,8 +41,10 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
     private static final long DEFAULT_FLOOD_WAIT_TIME = 180L;
 
     private TextView mTimerTextView;
-    private Button mButton;
+    private Button mBtnConfirm;
+    private Button mBtnCancel;
     private int mType;
+    private boolean mRestored;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +56,8 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
         TextView titleTextView = (TextView) findViewById(R.id.banned_title);
         TextView messageTextView = (TextView) findViewById(R.id.banned_message);
         mTimerTextView = (TextView) findViewById(R.id.banned_timer);
-        mButton = (Button) findViewById(R.id.btnButton);
+        mBtnConfirm = (Button) findViewById(R.id.btnConfirm);
+        mBtnCancel = (Button) findViewById(R.id.btnCancel);
 
         mType = getIntent().getIntExtra(INTENT_TYPE, TYPE_UNKNOWN);
 
@@ -68,14 +72,17 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
             case TYPE_FLOOD:
                 message = getString(R.string.ban_flood_detected);
                 mTimerTextView.setVisibility(View.VISIBLE);
-                long floodTime = getIntent().getLongExtra(INTENT_FLOOD_TIME, DEFAULT_FLOOD_WAIT_TIME)*1000l;
+                long floodTime = getIntent().getLongExtra(INTENT_FLOOD_TIME, DEFAULT_FLOOD_WAIT_TIME) * 1000l;
                 getTimer(getFloodTime(floodTime)).start();
                 break;
             case TYPE_RESTORE:
-                title = getString(R.string.restore_of_account);
-                mButton.setText(R.string.restore);
-                mButton.setVisibility(View.VISIBLE);
-                mButton.setOnClickListener(this);
+                title = getString(R.string.delete_account_will_be_restored_are_you_sure);
+                mBtnConfirm.setText(R.string.restore);
+                mBtnConfirm.setVisibility(View.VISIBLE);
+                mBtnConfirm.setOnClickListener(this);
+                mBtnCancel.setText(android.R.string.cancel);
+                mBtnCancel.setVisibility(View.VISIBLE);
+                mBtnCancel.setOnClickListener(this);
                 mTimerTextView.setVisibility(View.GONE);
                 image.setVisibility(View.GONE);
                 break;
@@ -90,11 +97,23 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        App.getConfig().saveConfigField(AppConfig.FLOOD_ENDS_TIME);
-    }
-
-    private long getFloodTime() {
-        return getFloodTime(DEFAULT_FLOOD_WAIT_TIME);
+        switch (mType) {
+            case TYPE_BAN:
+                break;
+            case TYPE_FLOOD:
+                App.getConfig().saveConfigField(AppConfig.FLOOD_ENDS_TIME);
+                break;
+            case TYPE_RESTORE:
+                if (!mRestored) {
+                    AuthToken authToken = AuthToken.getInstance();
+                    if (!authToken.isEmpty()) {
+                        authToken.removeToken();
+                    }
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     private long getFloodTime(long floodTime) {
@@ -136,34 +155,29 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        mRestored = false;
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btnButton:
-                switch (mType) {
-                    case TYPE_RESTORE:
-                        new RestoreAccountRequest(AuthToken.getInstance(),this)
-                                .callback(new DataApiHandler<Profile>() {
-                        @Override
-                        protected void success(Profile data, IApiResponse response) {
-                            CacheProfile.setProfile(data, (ApiResponse) response, ProfileRequest.P_ALL);
-                            LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
-                            finish();
-                        }
-
-                        @Override
-                        protected Profile parseResponse(ApiResponse response) {
-                            return Profile.parse(response);
-                        }
-
-                        @Override
-                        public void fail(int codeError, IApiResponse response) {
-                        }
-                    })
-                                .exec();
+        switch (mType) {
+            case TYPE_RESTORE:
+                switch (v.getId()) {
+                    case R.id.btnConfirm:
+                        new RestoreAccountRequest(AuthToken.getInstance(), this)
+                                .callback(new SimpleApiHandler() {
+                                    @Override
+                                    public void success(IApiResponse response) {
+                                        super.success(response);
+                                        AuthorizationManager.saveAuthInfo(response);
+                                        mRestored = true;
+                                        finish();
+                                    }
+                                }).exec();
                         break;
+                    case R.id.btnCancel:
+                        mRestored = false;
+                        finish();
                     default:
                         break;
                 }
@@ -172,4 +186,6 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
                 break;
         }
     }
+
+
 }
