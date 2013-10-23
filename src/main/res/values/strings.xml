@@ -561,4 +561,5 @@
     </plurals>
     <string name="photo_is_uploading">Uploading photo</string>
     <string name="default_ringtone">By default</string>
+    <string name="user_deleted_or_banned">User is deleted od banned</string>
 </resources>

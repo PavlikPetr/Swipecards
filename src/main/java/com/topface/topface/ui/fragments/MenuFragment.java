@@ -213,6 +213,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         SparseArray<Button> buttons = new SparseArray<Button>();
         buttons.put(BaseFragment.F_PROFILE, (Button) profileLayout.findViewById(R.id.btnFragmentProfile));
         buttons.put(BaseFragment.F_DATING, (Button) rootLayout.findViewById(R.id.btnFragmentDating));
+        buttons.put(BaseFragment.F_ADMIRATIONS, (Button) rootLayout.findViewById(R.id.btnFragmentAdmirations));
         buttons.put(BaseFragment.F_LIKES, (Button) rootLayout.findViewById(R.id.btnFragmentLikes));
         buttons.put(BaseFragment.F_MUTUAL, (Button) rootLayout.findViewById(R.id.btnFragmentMutual));
         buttons.put(BaseFragment.F_DIALOGS, (Button) rootLayout.findViewById(R.id.btnFragmentDialogs));
@@ -220,7 +221,6 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         buttons.put(BaseFragment.F_VISITORS, (Button) rootLayout.findViewById(R.id.btnFragmentVisitors));
         buttons.put(BaseFragment.F_BOOKMARKS, (Button) rootLayout.findViewById(R.id.btnFragmentBookmarks));
         buttons.put(BaseFragment.F_EDITOR, (Button) rootLayout.findViewById(R.id.btnEditor));
-        buttons.put(BaseFragment.F_ADMIRATIONS, (Button) rootLayout.findViewById(R.id.btnFragmentAdmirations));
 
         //Устанавливаем теги и листенеры на кнопки
         for (int i = 0; i < buttons.size(); i++) {
@@ -520,7 +520,6 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                         } else {
                             showWatchAsListDialog(CacheProfile.unread_likes + CacheProfile.unread_mutual);
                         }
-
                     }
                 });
             } else {

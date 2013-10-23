@@ -33,6 +33,7 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
 
     private TextView mTimerTextView;
     private int mType;
+    private boolean mRestored;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,9 +91,11 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
                 App.getConfig().saveConfigField(AppConfig.FLOOD_ENDS_TIME);
                 break;
             case TYPE_RESTORE:
-                AuthToken authToken = AuthToken.getInstance();
-                if (authToken.isEmpty()) {
-                    authToken.removeToken();
+                if (!mRestored) {
+                    AuthToken authToken = AuthToken.getInstance();
+                    if (!authToken.isEmpty()) {
+                        authToken.removeToken();
+                    }
                 }
                 break;
             default:
@@ -137,6 +140,7 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        mRestored = false;
     }
 
     @Override
@@ -151,11 +155,13 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
                                     public void success(IApiResponse response) {
                                         super.success(response);
                                         AuthorizationManager.saveAuthInfo(response);
+                                        mRestored = true;
                                         finish();
                                     }
                                 }).exec();
                         break;
                     case R.id.btnCancel:
+                        mRestored = false;
                         finish();
                     default:
                         break;

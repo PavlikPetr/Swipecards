@@ -160,7 +160,7 @@
                 android:id="@+id/btnFragmentAdmirations"
                 android:layout_below="@id/btnFragmentLikes"
                 android:text="@string/general_admirations"
-                android:drawableLeft="@drawable/ic_admiration"
+                android:drawableLeft="@drawable/topface_admirations_selector"
                 style="@style/LeftMenuButtons"/>
 
         <!-- UNREAD ADMIRATIONS -->
