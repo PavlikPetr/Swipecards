@@ -544,7 +544,6 @@ public class AuthFragment extends BaseFragment {
     private void resendRequest(ApiRequest request) {
         if (request != null) {
             request.canceled = false;
-            registerRequest(request);
             request.exec();
         } else {
             //Если запрос базовой информации не прошел, то повторяем запрос

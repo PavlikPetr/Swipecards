@@ -27,9 +27,8 @@ public class AirManager {
             return true;
         } else if (showPromoPopup(fm, Options.PremiumAirEntity.AIR_ADMIRATIONS, false)) {
             return true;
-        } else {
-            return true;
         }
+        return true;
     }
 
     public boolean showPromoPopup(FragmentManager fm, int type) {
