@@ -8,4 +8,7 @@
     <dimen name="default_gap">16dip</dimen>
     <dimen name="default_header_height">46dp</dimen>
 
+    <dimen name="counter_badge_width">30dp</dimen>
+    <dimen name="counter_badge_negative_margin">-30dp</dimen>
+
 </resources>

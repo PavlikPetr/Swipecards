@@ -785,7 +785,7 @@ public class AuthFragment extends BaseFragment {
             initAuthorizationHandler();
         }
         removeRedAlert();
-        if (Ssid.isLoaded()) {
+        if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty()) {
             getProfileAndOptions();
         }
     }
