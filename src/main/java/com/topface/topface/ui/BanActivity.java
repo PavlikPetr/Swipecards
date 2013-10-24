@@ -7,14 +7,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RestoreAccountRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.analytics.TrackedActivity;
-import com.topface.topface.utils.AppConfig;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -29,7 +27,7 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
     public static final String BANNING_TEXT_INTENT = "banning_intent";
     public static final String INTENT_FLOOD_TIME = "flood_time";
 
-    private static final long DEFAULT_FLOOD_WAIT_TIME = 180L;
+    private static final long DEFAULT_FLOOD_WAIT_TIME = 60L;
 
     private TextView mTimerTextView;
     private int mType;
@@ -72,6 +70,7 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
                 btnCancel.setOnClickListener(this);
                 mTimerTextView.setVisibility(View.GONE);
                 image.setVisibility(View.GONE);
+                mRestored = false;
                 break;
             default:
                 break;
@@ -88,7 +87,6 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
             case TYPE_BAN:
                 break;
             case TYPE_FLOOD:
-                App.getConfig().saveConfigField(AppConfig.FLOOD_ENDS_TIME);
                 break;
             case TYPE_RESTORE:
                 if (!mRestored) {
@@ -104,20 +102,8 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
     }
 
     private long getFloodTime(long floodTime) {
-        AppConfig config = App.getConfig();
-        long result;
-        long endTime = config.getFloodEndsTime();
         long now = System.currentTimeMillis();
-
-        if (endTime < now) {
-            endTime = now + floodTime;
-            config.setFloodEndsTime(endTime);
-            result = floodTime;
-        } else {
-            result = endTime - now;
-        }
-
-        return result;
+        return now + floodTime;
     }
 
     private CountDownTimer getTimer(long time) {

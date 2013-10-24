@@ -28,7 +28,6 @@ public class AppConfig {
     private static final String DATA_DEBUG_MODE = "data_debug_mode";
     private static final String DATA_APP_CONFIG_VERSION = "data_app_config_version";
     private static final String DATA_API_VERSION = "data_api_version";
-    public static final String FLOOD_ENDS_TIME = "flood_ens_time";
 
     private BannersConfig mBannerConfig;
     private LocaleConfig mLocaleConfig;
@@ -81,15 +80,6 @@ public class AppConfig {
         return mFields.getStringField(DATA_API_URL);
     }
 
-    public void setFloodEndsTime(long timestamp) {
-        mFields.setField(FLOOD_ENDS_TIME, timestamp);
-    }
-
-    public long getFloodEndsTime() {
-        return mFields.getLongField(FLOOD_ENDS_TIME);
-    }
-
-
     /**
      * Возможные типы полей настроек
      * Поле с типом Unknown не будет обрабатываться (возникает, если поле имеет неизвестный класс у данных)
@@ -114,7 +104,6 @@ public class AppConfig {
         fields.addStringField(DATA_AUTH_FB_API, Static.AUTH_FACEBOOK_ID);
         fields.addIntegerField(DATA_EDITOR_MODE, Editor.MODE_USER_FIELD);
         fields.addIntegerField(DATA_DEBUG_MODE, Debug.MODE_EDITOR);
-        fields.addLongField(FLOOD_ENDS_TIME, 0l);
         return fields;
     }
 
