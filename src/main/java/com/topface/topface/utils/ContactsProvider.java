@@ -7,9 +7,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.ContactsContract;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 public class ContactsProvider {
@@ -25,14 +22,16 @@ public class ContactsProvider {
 
     public void getContacts(final int limit, final int offset, GetContactsListener listener) {
         this.listener = listener;
-        new Thread(new Runnable() {
+        new BackgroundThread() {
             @Override
-            public void run() {
+            public void execute() {
                 getContactsAsync(limit, offset);
             }
-        }).start();
+        };
     }
 
+    //Что за странная хрень с циклом???
+    @SuppressWarnings("LoopStatementThatDoesntLoop")
     private void getContactsAsync(int limit, int offset) {
         ContentResolver cr = getContentResolver();
 
@@ -152,9 +151,6 @@ public class ContactsProvider {
             dest.writeString(Boolean.toString(email));
         }
 
-        public JSONObject makeJSON() throws JSONException {
-            return new JSONObject().put(phone, name);
-        }
     }
 
     public interface GetContactsListener {

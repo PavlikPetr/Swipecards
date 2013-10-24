@@ -63,13 +63,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         LocaleConfig.updateConfiguration(getBaseContext());
         setWindowOptions();
         initActionBar(getSupportActionBar());
-        (new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                onCreateAsync();
-            }
-        }).start();
     }
 
     @Override
@@ -150,13 +143,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         afterOnSaveInstanceState = false;
         checkProfileLoad();
         registerReauthReceiver();
-        (new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                onResumeAsync();
-            }
-        }).start();
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mClosingDataReceiver, new IntentFilter(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
         LocalBroadcastManager.getInstance(this)
@@ -310,12 +296,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             }
             needOpenDialog = false;
         }
-    }
-
-    protected void onCreateAsync() {
-    }
-
-    protected void onResumeAsync() {
     }
 
     protected Integer getOptionsMenuRes() {

@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.topface.topface.data.search.SearchUser;
 import com.topface.topface.data.search.UsersList;
+import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 
@@ -23,9 +24,9 @@ public class SearchCacheManager extends PreferencesCacheManager {
     }
 
     public void setCache(final UsersList usersList) {
-        new Thread(new Runnable() {
+        new BackgroundThread() {
             @Override
-            public void run() {
+            public void execute() {
                 try {
                     getEditor()
                             .putString(getDataCacheKey(CACHE_KEY), usersList.toJson().toString())
@@ -37,7 +38,7 @@ public class SearchCacheManager extends PreferencesCacheManager {
                     Debug.error(e);
                 }
             }
-        }).start();
+        };
     }
 
     public void saveSearchSignature(String searchSignature) {

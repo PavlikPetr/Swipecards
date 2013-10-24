@@ -74,6 +74,7 @@ public class Settings {
         return mSettings.getString(SETTINGS_SOCIAL_ACCOUNT_NAME, Static.EMPTY);
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public String getRingtoneName() {
         return mSettings.getString(NOTIFICATION_MELODY, App.getContext().getString(R.string.silent_ringtone));
     }
@@ -85,7 +86,7 @@ public class Settings {
         } else {
             String name = getSocialAccountName();
             if (TextUtils.isEmpty(name)) {
-                getSocialAccountNameAsync(new Handler(){
+                getSocialAccountNameAsync(new Handler() {
                     @Override
                     public void handleMessage(Message msg) {
                         final String socialName = (String) msg.obj;
@@ -123,12 +124,12 @@ public class Settings {
     }
 
     public void getSocialAccountNameAsync(final Handler handler) {
-        (new Thread() {
+        new BackgroundThread() {
             @Override
-            public void run() {
+            public void execute() {
                 AuthorizationManager.getAccountName(handler);
             }
-        }).start();
+        };
     }
 
     public Uri getRingtone() {

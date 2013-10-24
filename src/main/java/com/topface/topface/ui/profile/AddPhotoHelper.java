@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ListView;
@@ -27,6 +26,7 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.LockerView;
+import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.TopfaceNotificationManager;
 import com.topface.topface.utils.Utils;
@@ -109,9 +109,9 @@ public class AddPhotoHelper {
     };
 
     private void startCamera() {
-        new Thread(new Runnable() {
+        new BackgroundThread() {
             @Override
-            public void run() {
+            public void execute() {
                 Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 
                 UUID uuid = UUID.randomUUID();
@@ -149,7 +149,7 @@ public class AddPhotoHelper {
 
 
             }
-        }).start();
+        };
     }
 
     public Activity getActivity() {
@@ -308,14 +308,14 @@ public class AddPhotoHelper {
                 super.always(response);
                 hideProgressDialog();
                 //Удаляем все временные картинки
-                new Thread(new Runnable() {
+                new BackgroundThread() {
                     @Override
-                    public void run() {
+                    public void execute() {
                         try {
                             String id = photoAddRequest.getId();
                             //TODO также обрабатывать запросы с id...x, где x-порядковый номер переповтора
                             if (fileNames != null) {
-                                if(fileNames.size() != 0) {
+                                if (fileNames.size() != 0) {
                                     File file = fileNames.get(id);
                                     if (file != null && file.delete()) {
                                         Debug.log("Delete temp photo " + id);
@@ -329,7 +329,7 @@ public class AddPhotoHelper {
                         }
 
                     }
-                }).start();
+                };
             }
         }).exec();
 

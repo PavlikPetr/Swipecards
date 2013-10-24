@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
+import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
@@ -87,6 +88,18 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         }
     };
 
+    private BroadcastReceiver mProductsUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //Кнопка распродаж
+            if (CacheProfile.getGooglePlayProducts().saleExists) {
+                buyButton.setBackgroundResource(R.drawable.btn_sale_selector);
+            } else {
+                buyButton.setBackgroundResource(R.drawable.btn_blue_selector);
+            }
+        }
+    };
+
     private boolean isClosed = false;
 
     private BroadcastReceiver mSelectMenuReceiver = new BroadcastReceiver() {
@@ -115,12 +128,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             mProfileInfo.setVisibility(View.GONE);
         }
         canChangeProfileIcons = true;
-        //Кнопка распродаж
-        if (CacheProfile.getGooglePlayProducts().saleExists) {
-            buyButton.setBackgroundResource(R.drawable.btn_sale_selector);
-        } else {
-            buyButton.setBackgroundResource(R.drawable.btn_blue_selector);
-        }
+        buyButton.setBackgroundResource(R.drawable.btn_blue_selector);
         //Новые данные монет и лайков
         mCoins.setText(Integer.toString(CacheProfile.money));
         mLikes.setText(Integer.toString(CacheProfile.likes));
@@ -141,6 +149,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         super.onResume();
         refreshNotifications();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileUpdateReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProductsUpdateReceiver, new IntentFilter(GooglePlayProducts.INTENT_UPDATE_PRODUCTS));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mSelectMenuReceiver, new IntentFilter(SELECT_MENU_ITEM));
         switchProfileButton();
@@ -150,6 +159,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileUpdateReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProductsUpdateReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mCountersReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mSelectMenuReceiver);
     }

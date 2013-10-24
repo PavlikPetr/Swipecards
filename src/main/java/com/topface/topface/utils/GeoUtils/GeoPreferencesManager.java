@@ -6,6 +6,7 @@ import android.location.Location;
 import android.location.LocationManager;
 
 import com.topface.topface.Static;
+import com.topface.topface.utils.BackgroundThread;
 
 public class GeoPreferencesManager {
     public static String LATITUDE = "latitude";
@@ -19,26 +20,27 @@ public class GeoPreferencesManager {
         mPreferences = context.getSharedPreferences(Static.PREFERENCES_TAG_GEO, Context.MODE_PRIVATE);
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public Location loadLastLocation() {
         final Location location = new Location(LocationManager.NETWORK_PROVIDER);
         double latitude = mPreferences.getFloat(LATITUDE, 1000);
         double longitude = mPreferences.getFloat(LONGITUDE, 1000);
         location.setLatitude(latitude);
         location.setLongitude(longitude);
-        if(location.getLatitude() == 1000 || location.getLongitude() == 1000) {
+        if (location.getLatitude() == 1000 || location.getLongitude() == 1000) {
             return null;
         }
         return location;
     }
 
     public void saveLocation(final Location location) {
-        new Thread(new Runnable() {
+        new BackgroundThread() {
             @Override
-            public void run() {
+            public void execute() {
                 if (location != null) {
                     mPreferences.edit().putFloat(LATITUDE, (float) location.getLatitude()).putFloat(LONGITUDE, (float) location.getLongitude()).commit();
                 }
             }
-        }).start();
+        };
     }
 }

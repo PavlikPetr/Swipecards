@@ -1,8 +1,10 @@
 package com.topface.topface.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.SparseArrayCompat;
 
 import com.topface.topface.App;
@@ -276,8 +278,8 @@ public class CacheProfile {
      */
     public static GooglePlayProducts getGooglePlayProducts() {
         if (mProducts == null) {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-            String productsCache = preferences.getString(GP_PRODUCTS_CACHE_KEY, null);
+            String productsCache = PreferenceManager.getDefaultSharedPreferences(App.getContext())
+                    .getString(GP_PRODUCTS_CACHE_KEY, null);
             if (productsCache != null) {
                 //Получаем опции из кэша
                 try {
@@ -351,6 +353,9 @@ public class CacheProfile {
                             .commit();
                 }
             };
+            LocalBroadcastManager.getInstance(App.getContext())
+                    .sendBroadcast(new Intent(GooglePlayProducts.INTENT_UPDATE_PRODUCTS));
+
         }
     }
 

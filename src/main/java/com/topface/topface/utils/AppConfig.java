@@ -2,10 +2,12 @@ package com.topface.topface.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import com.topface.topface.Static;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 /**
  * Класс для хранения в SharedPreferences тех настроек, которые обязательны для работы приложения,
@@ -29,6 +31,7 @@ public class AppConfig {
     private static final String DATA_APP_CONFIG_VERSION = "data_app_config_version";
     private static final String DATA_API_VERSION = "data_api_version";
     public static final String FLOOD_ENDS_TIME = "flood_ens_time";
+    private static final String APP_UNIQUE_ID = "app_unique_id";
 
     private BannersConfig mBannerConfig;
     private LocaleConfig mLocaleConfig;
@@ -89,6 +92,15 @@ public class AppConfig {
         return mFields.getLongField(FLOOD_ENDS_TIME);
     }
 
+    public String getAppUniqueId() {
+        String uniqueId = mFields.getStringField(APP_UNIQUE_ID);
+        if (TextUtils.isEmpty(uniqueId)) {
+            uniqueId = UUID.randomUUID().toString();
+            mFields.setField(APP_UNIQUE_ID, uniqueId);
+        }
+        return uniqueId;
+    }
+
 
     /**
      * Возможные типы полей настроек
@@ -115,6 +127,7 @@ public class AppConfig {
         fields.addIntegerField(DATA_EDITOR_MODE, Editor.MODE_USER_FIELD);
         fields.addIntegerField(DATA_DEBUG_MODE, Debug.MODE_EDITOR);
         fields.addLongField(FLOOD_ENDS_TIME, 0l);
+        fields.addStringField(APP_UNIQUE_ID, null);
         return fields;
     }
 

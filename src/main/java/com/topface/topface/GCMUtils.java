@@ -22,6 +22,7 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.ChatFragment;
+import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
@@ -80,24 +81,24 @@ public class GCMUtils {
                     }
 
                 } else {
-                    new Thread(new Runnable() {
+                    new BackgroundThread() {
                         @Override
-                        public void run() {
+                        public void execute() {
                             GCMRegistrar.register(context, GCMIntentService.SENDER_ID);
                         }
-                    }).start();
+                    };
                     Debug.log("Registered: " + GCMRegistrar.getRegistrationId(context));
                 }
 
             } catch (Exception ex) {
-                new Thread(new Runnable() {
+                new BackgroundThread() {
                     @Override
-                    public void run() {
+                    public void execute() {
                         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit();
                         editor.putString(IS_GCM_SUPPORTED, Boolean.toString(false));
                         editor.commit();
                     }
-                }).start();
+                };
 
                 GCM_SUPPORTED = false;
                 Debug.error("GCM not supported", ex);
