@@ -31,7 +31,12 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
 
     private TextView mTimerTextView;
     private int mType;
+
+    // variables for Restore process
     private boolean mRestored;
+    // need local authToken object to store token only for this session
+    // if user will quit on the next launch he will be directed to auth screen
+    private AuthToken mLocalAuthToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +63,7 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
                 message = getString(R.string.ban_flood_detected);
                 mTimerTextView.setVisibility(View.VISIBLE);
                 long floodTime = getIntent().getLongExtra(INTENT_FLOOD_TIME, DEFAULT_FLOOD_WAIT_TIME) * 1000l;
-                getTimer(getFloodTime(floodTime)).start();
+                getTimer(floodTime).start();
                 break;
             case TYPE_RESTORE:
                 title = getString(R.string.delete_account_will_be_restored_are_you_sure);
@@ -70,6 +75,7 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
                 btnCancel.setOnClickListener(this);
                 mTimerTextView.setVisibility(View.GONE);
                 image.setVisibility(View.GONE);
+                mLocalAuthToken = AuthToken.getInstance();
                 mRestored = false;
                 break;
             default:
@@ -99,11 +105,6 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
             default:
                 break;
         }
-    }
-
-    private long getFloodTime(long floodTime) {
-        long now = System.currentTimeMillis();
-        return now + floodTime;
     }
 
     private CountDownTimer getTimer(long time) {
