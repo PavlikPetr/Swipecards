@@ -4,7 +4,9 @@
     android:id="@+id/loCounters"
     android:orientation="vertical"
     android:layout_width="wrap_content"
+    android:minWidth="@dimen/counter_badge_width"
     android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/counter_badge_negative_margin"
     android:padding="4dp">
 
     <TextView

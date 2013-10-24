@@ -2,7 +2,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
-    android:layout_width="wrap_content"
+    android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_gravity="center_vertical">
 
@@ -10,6 +10,7 @@
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
+        android:paddingRight="@dimen/counter_badge_width"
         android:gravity="center_vertical">
 
         <TextView
@@ -28,5 +29,6 @@
             android:visibility="gone"/>
     </LinearLayout>
 
-    <include layout="@layout/layout_notifications_badges"/>
+    <include layout="@layout/layout_notifications_badges"
+        />
 </LinearLayout>
