@@ -72,10 +72,6 @@ public class ConnectionManager {
      * @return объект содержащий сам запрос и связанное с ним http соединение
      */
     public boolean sendRequest(final IApiRequest apiRequest) {
-        //Если пользователь заблокирован за флуд (или точнее частые запросы к API)
-        //То прерываем обработку запроса и показываем предупреждение
-        if (checkForFlood(apiRequest)) return false;
-
         //Добавляем поток с запросом в пулл потоков
         mWorker.submit(new Runnable() {
             @Override
@@ -320,15 +316,6 @@ public class ConnectionManager {
         return needResend;
     }
 
-    private boolean checkForFlood(IApiRequest apiRequest) {
-        // Не посылать запросы пока не истечет время бана за флуд
-        if (isBlockedForFlood()) {
-            showFloodActivity(apiRequest, null);
-            return true;
-        }
-        return false;
-    }
-
     private IApiResponse executeRequest(IApiRequest apiRequest) {
         IApiResponse response = null;
         String rawResponse = null;
@@ -417,15 +404,6 @@ public class ConnectionManager {
         Intent intent = new Intent();
         intent.setAction(AuthFragment.REAUTH_INTENT);
         context.sendBroadcast(intent);
-    }
-
-    private boolean isBlockedForFlood() {
-        if (mFloodEndsTime == 0) {
-            mFloodEndsTime = App.getConfig().getFloodEndsTime();
-        }
-        long now = System.currentTimeMillis();
-        return mFloodEndsTime > now;
-
     }
 
     /**
