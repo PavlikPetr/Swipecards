@@ -13,7 +13,6 @@ public class Novice {
 
     private Boolean showEnergyToSympathies = null;
     private Boolean showSympathy = null;
-    private Boolean showSympathiesBonus = null;
     private Boolean showBuySympathies = null;
     private Boolean showFillProfile = null;
 
@@ -141,7 +140,6 @@ public class Novice {
     }
 
     public void completeShowBatteryBonus() {
-        showSympathiesBonus = false;
         Novice.giveNoviceLikes = false;
     }
 
@@ -151,36 +149,36 @@ public class Novice {
     }
 
     private void commitFlagAsync(final String key, final boolean value) {
-        new Thread(new Runnable() {
+        new BackgroundThread() {
             @Override
-            public void run() {
+            public void execute() {
                 SharedPreferences.Editor editor = mPreferences.edit();
                 editor.putBoolean(key, value);
                 editor.commit();
             }
-        }).start();
+        };
     }
 
     private void commitFlagAsync(final String key, final long value) {
-        new Thread(new Runnable() {
+        new BackgroundThread() {
             @Override
-            public void run() {
+            public void execute() {
                 SharedPreferences.Editor editor = mPreferences.edit();
                 editor.putLong(key, value);
                 editor.commit();
             }
-        }).start();
+        };
     }
 
     private void commitFlagAsync(final String key, final boolean value, final String key2, final long value2) {
-        new Thread(new Runnable() {
+        new BackgroundThread() {
             @Override
-            public void run() {
+            public void execute() {
                 SharedPreferences.Editor editor = mPreferences.edit();
                 editor.putBoolean(key, value);
                 editor.putLong(key2, value2);
                 editor.commit();
             }
-        }).start();
+        };
     }
 }

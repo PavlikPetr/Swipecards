@@ -15,27 +15,26 @@ import com.topface.topface.ui.fragments.promo.PromoVisitorsPopup;
 public class AirManager {
     public static final String AIR_TYPE_LAST_TAG = "air_type_last_tag";
     private final Context mContext;
-    private int mType;
 
     public AirManager(Context context) {
         mContext = context;
     }
 
-    public void startFragment(FragmentManager fm) {
+    public boolean startFragment(FragmentManager fm) {
         if (showPromoPopup(fm, Options.PremiumAirEntity.AIR_MESSAGES)) {
-            return;
+            return true;
         } else if (showPromoPopup(fm, Options.PremiumAirEntity.AIR_VISITORS)) {
-            return;
+            return true;
         } else if (showPromoPopup(fm, Options.PremiumAirEntity.AIR_ADMIRATIONS, false)) {
-            return;
+            return true;
         }
+        return true;
     }
 
     public boolean showPromoPopup(FragmentManager fm, int type) {
         PromoPopupFragment promo = null;
         if (checkIsNeedShow(CacheProfile.getOptions().getPremiumEntityByType(type)) &&
                 getLastFragmentType() != type) {
-            mType = type;
             promo = getFragmentByType(type);
         }
         if (promo != null) {
@@ -50,11 +49,11 @@ public class AirManager {
         return false;
     }
 
+    @SuppressWarnings("UnusedParameters")
     public boolean showPromoPopup(FragmentManager fm, int type, boolean doNeedSetLastType) {
         PromoPopupFragment promo = null;
         if (checkIsNeedShow(CacheProfile.getOptions().getPremiumEntityByType(type)) &&
                 getLastFragmentType() != type) {
-            mType = type;
             promo = getFragmentByType(type);
         }
         if (promo != null) {
@@ -91,13 +90,13 @@ public class AirManager {
     }
 
     public void setLastFragmentType(final int type) {
-        new Thread(new Runnable() {
+        new BackgroundThread() {
             @Override
-            public void run() {
+            public void execute() {
                 SharedPreferences prefs = mContext.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
                 prefs.edit().putInt(AIR_TYPE_LAST_TAG, type).commit();
             }
-        }).start();
+        };
     }
 
 

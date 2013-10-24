@@ -50,18 +50,18 @@ public class Profile extends AbstractDataWithPhotos {
 
     public ArrayList<Gift> gifts = new ArrayList<Gift>();
     public SparseArrayCompat<TopfaceNotifications> notifications = new SparseArrayCompat<TopfaceNotifications>();
-    public boolean hasMail;
+    public boolean email;
     public boolean emailGrabbed;
     public boolean emailConfirmed;
     public int xstatus;
 
-    public int totalPhotos;
+    public int photosCount;
     // Идентификатор заднего фона в профиле
     public int background;
     // Платяший пользователь или нет
     public boolean paid;
     // Показывать рекламу или нет
-    public boolean show_ad;
+    public boolean showAd;
     // Флаг того, является ли пользоветль редактором
     private boolean mEditor;
     public boolean canInvite;
@@ -72,27 +72,32 @@ public class Profile extends AbstractDataWithPhotos {
 
     protected static Profile parse(Profile profile, JSONObject resp) {
         try {
-            if (!(profile instanceof User)) {
-                Novice.giveNoviceLikes = !resp.optBoolean("noviceLikes", true);
-            }
             profile.uid = resp.optInt("id");
             profile.age = resp.optInt("age");
             profile.sex = resp.optInt("sex");
             profile.status = normilizeStatus(resp.optString("status"));
-            profile.firstName = normilizeName(resp.optString("firstName"));
+            profile.firstName = normalizeName(resp.optString("firstName"));
             profile.city = new City(resp.optJSONObject("city"));
-            profile.dating = new DatingFilter(resp.optJSONObject("dating"));
-            profile.hasMail = resp.optBoolean("email");
-            profile.emailGrabbed = resp.optBoolean("emailGrabbed");
-            profile.emailConfirmed = resp.optBoolean("emailConfirmed");
             profile.premium = resp.optBoolean("premium");
-            profile.invisible = resp.optBoolean("invisible");
             profile.background = resp.optInt("bg", ProfileBackgrounds.DEFAULT_BACKGROUND_ID);
-            profile.totalPhotos = resp.optInt("photosCount");
-            profile.paid = resp.optBoolean("paid");
-            profile.show_ad = resp.optBoolean("showAd", true);
+            profile.photosCount = resp.optInt("photosCount");
             profile.xstatus = resp.optInt("xstatus");
-            profile.canInvite = resp.optBoolean("canInvite");
+
+            //Дада, это ужасный косяк, когда мы наследуемся подобным способом,
+            //поправим потом, с новой системой парсинга запросво
+            //NOTE: Добавлять поля, нужные исключительно для профиля текущего юзера только в это условие!
+            if (!(profile instanceof User)) {
+                Novice.giveNoviceLikes = !resp.optBoolean("noviceLikes", true);
+                profile.dating = new DatingFilter(resp.optJSONObject("dating"));
+                profile.email = resp.optBoolean("email");
+                profile.emailGrabbed = resp.optBoolean("emailGrabbed");
+                profile.emailConfirmed = resp.optBoolean("emailConfirmed");
+                profile.invisible = resp.optBoolean("invisible");
+                profile.paid = resp.optBoolean("paid");
+                profile.showAd = resp.optBoolean("showAd", true);
+                profile.canInvite = resp.optBoolean("canInvite");
+            }
+
             profile.setEditor(resp.optBoolean("editor", false));
             parseGifts(profile, resp);
             parseNotifications(profile, resp);
@@ -414,7 +419,7 @@ public class Profile extends AbstractDataWithPhotos {
     }
 
     private static void parseGifts(Profile profile, JSONObject resp) throws JSONException {
-        JSONArray arrGifts = resp.optJSONArray("gifts");
+        JSONArray arrGifts = resp.optJSONObject("gifts").optJSONArray("items");
         if (arrGifts == null) return;
         for (int i = 0; i < arrGifts.length(); i++) {
             JSONObject itemGift = arrGifts.getJSONObject(i);
@@ -477,7 +482,7 @@ public class Profile extends AbstractDataWithPhotos {
         this.status = normilizeStatus(status);
     }
 
-    public final static String normilizeStatus(String status) {
+    public static String normilizeStatus(String status) {
         if (status == null) {
             return Static.EMPTY;
         }
@@ -490,12 +495,11 @@ public class Profile extends AbstractDataWithPhotos {
         return result;
     }
 
-    public final static String normilizeName(String name) {
+    public static String normalizeName(String name) {
         if (name == null) {
             return Static.EMPTY;
         }
-        String result = name.replaceAll("\n", " ").trim();
-        return result;
+        return name.replaceAll("\n", " ").trim();
     }
 
     public boolean isEmpty() {

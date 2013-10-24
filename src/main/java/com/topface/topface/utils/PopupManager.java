@@ -32,7 +32,7 @@ public class PopupManager {
         mContext = context;
     }
 
-    private boolean checkVersion(String version) {
+    private boolean isOldVersion(String version) {
         try {
             PackageInfo pInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
             String curVersion = pInfo.versionName;
@@ -62,7 +62,7 @@ public class PopupManager {
     }
 
     public void showOldVersionPopup(String version) {
-        if (checkVersion(version) && CAN_SHOW_POPUP) {
+        if (isOldVersion(version) && CAN_SHOW_POPUP) {
             CAN_SHOW_POPUP = false;
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
             builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {
@@ -89,15 +89,15 @@ public class PopupManager {
     }
 
     public void showRatePopup() {
-        if (!checkVersion(CacheProfile.getOptions().maxVersion) && App.isOnline() && mRatingPopupIsShowing && CAN_SHOW_POPUP) {
+        if (!isOldVersion(CacheProfile.getOptions().maxVersion) && App.isOnline() && !mRatingPopupIsShowing && CAN_SHOW_POPUP) {
             ratingPopup();
         }
     }
 
     private void ratingPopup() {
-        new Thread(new Runnable() {
+        new BackgroundThread() {
             @Override
-            public void run() {
+            public void execute() {
                 final SharedPreferences preferences = mContext.getSharedPreferences(
                         Static.PREFERENCES_TAG_SHARED,
                         Context.MODE_PRIVATE
@@ -118,7 +118,7 @@ public class PopupManager {
                 mRatingPopupIsShowing = true;
                 Looper.loop();
             }
-        }).start();
+        };
 
     }
 
@@ -169,16 +169,16 @@ public class PopupManager {
     }
 
     private void saveRatingPopupStatus(final long value) {
-        new Thread(new Runnable() {
+        new BackgroundThread() {
             @Override
-            public void run() {
+            public void execute() {
                 final SharedPreferences.Editor editor = mContext.getSharedPreferences(
                         Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE
                 ).edit();
                 editor.putLong(RATING_POPUP, value);
                 editor.commit();
             }
-        }).start();
+        };
     }
 
 

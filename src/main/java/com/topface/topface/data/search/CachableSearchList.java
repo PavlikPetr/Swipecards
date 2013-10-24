@@ -2,6 +2,7 @@ package com.topface.topface.data.search;
 
 
 import com.topface.topface.data.FeedUser;
+import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.cache.SearchCacheManager;
 
 public class CachableSearchList<T extends FeedUser> extends UsersList<T> {
@@ -41,13 +42,13 @@ public class CachableSearchList<T extends FeedUser> extends UsersList<T> {
     public boolean setSignature(final String signature) {
         boolean result = super.setSignature(signature);
         if (result) {
-            new Thread(new Runnable() {
+            new BackgroundThread() {
                 @Override
-                public void run() {
+                public void execute() {
                     mCache.clearCache();
                     mCache.saveSearchSignature(signature);
                 }
-            }).start();
+            };
         }
 
         return result;

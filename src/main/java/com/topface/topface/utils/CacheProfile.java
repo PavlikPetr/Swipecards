@@ -1,8 +1,10 @@
 package com.topface.topface.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.SparseArrayCompat;
 
 import com.topface.topface.App;
@@ -112,7 +114,7 @@ public class CacheProfile {
         profile.sex = sex;
 
         profile.notifications = notifications;
-        profile.hasMail = hasMail;
+        profile.email = hasMail;
         profile.emailConfirmed = emailConfirmed;
         profile.emailGrabbed = emailGrabbed;
 
@@ -129,10 +131,10 @@ public class CacheProfile {
         profile.gifts = gifts;
         profile.background = background_id;
 
-        profile.totalPhotos = totalPhotos;
+        profile.photosCount = totalPhotos;
 
         profile.paid = paid;
-        profile.show_ad = show_ad;
+        profile.showAd = show_ad;
         profile.xstatus = xstatus;
         profile.setEditor(editor);
 
@@ -153,7 +155,7 @@ public class CacheProfile {
                 gifts = profile.gifts;
                 invisible = profile.invisible;
                 premium = profile.premium;
-                show_ad = profile.show_ad;
+                show_ad = profile.showAd;
                 photo = profile.photo;
                 photos = profile.photos;
                 break;
@@ -166,7 +168,7 @@ public class CacheProfile {
                 city = profile.city;
 
                 notifications = profile.notifications;
-                hasMail = profile.hasMail;
+                hasMail = profile.email;
                 emailConfirmed = profile.emailConfirmed;
                 emailGrabbed = profile.emailGrabbed;
 
@@ -181,10 +183,10 @@ public class CacheProfile {
                 gifts = profile.gifts;
                 background_id = profile.background;
 
-                totalPhotos = profile.totalPhotos;
+                totalPhotos = profile.photosCount;
 
                 paid = profile.paid;
-                show_ad = profile.show_ad;
+                show_ad = profile.showAd;
 
                 xstatus = profile.xstatus;
 
@@ -276,8 +278,8 @@ public class CacheProfile {
      */
     public static GooglePlayProducts getGooglePlayProducts() {
         if (mProducts == null) {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-            String productsCache = preferences.getString(GP_PRODUCTS_CACHE_KEY, null);
+            String productsCache = PreferenceManager.getDefaultSharedPreferences(App.getContext())
+                    .getString(GP_PRODUCTS_CACHE_KEY, null);
             if (productsCache != null) {
                 //Получаем опции из кэша
                 try {
@@ -351,6 +353,9 @@ public class CacheProfile {
                             .commit();
                 }
             };
+            LocalBroadcastManager.getInstance(App.getContext())
+                    .sendBroadcast(new Intent(GooglePlayProducts.INTENT_UPDATE_PRODUCTS));
+
         }
     }
 

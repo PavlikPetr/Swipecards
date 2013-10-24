@@ -42,6 +42,7 @@ import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
 import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
 import com.topface.topface.ui.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
+import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
@@ -104,10 +105,13 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         if (!AuthToken.getInstance().isEmpty()) {
             showFragment(savedInstanceState);
         }
-    }
 
-    public void setDialogStarted(boolean started) {
-        takePhotoDialogStarted = started;
+        new BackgroundThread() {
+            @Override
+            public void execute() {
+                onCreateAsync();
+            }
+        };
     }
 
     public boolean getDialogStarted() {
@@ -126,9 +130,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         return R.layout.actionbar_navigation_title_view;
     }
 
-    @Override
     protected void onCreateAsync() {
-        super.onCreateAsync();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
         String isGcmSupported = preferences.getString(GCMUtils.IS_GCM_SUPPORTED, null);
         if (isGcmSupported != null) {
@@ -214,10 +216,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         }
 
         showFragment(currentFragment);
-    }
-
-    public void showContent() {
-        mDrawerLayout.openDrawer(GravityCompat.START);
     }
 
     public void hideContent() {
@@ -386,15 +384,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     @Override
     public void onCloseFragment() {
         showFragment(MenuFragment.DEFAULT_FRAGMENT);
-    }
-
-//    @SuppressWarnings("UnusedDeclaration")
-    private void toggleDrawerLayout() {
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            mDrawerLayout.openDrawer(GravityCompat.START);
-        }
     }
 
     public void setPopupVisible(boolean visibility) {
