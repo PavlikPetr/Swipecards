@@ -25,6 +25,7 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.CustomTitlesBaseFragmentActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.utils.AirManager;
+import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.CountersManager;
@@ -65,6 +66,9 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     public static final String INVITE_POPUP = "INVITE_POPUP";
     private boolean mNeedTitles = true;
+    private boolean invitePopupShow;
+
+    private static boolean needShowPopup = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -240,33 +244,53 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     protected void showPromoDialog() {
         FragmentActivity activity = getActivity();
-        boolean invitePopupShow = false;
+        if (needShowPopup) {
+            showInvitePopup(activity);
+
+            //Показываем рекламу AirMessages только если не показываем инвайты
+            if (!invitePopupShow && !CacheProfile.premium && activity != null) {
+                AirManager manager = new AirManager(activity);
+                if (manager.startFragment(activity.getSupportFragmentManager())) {
+                    needShowPopup = false;
+                }
+            }
+        }
+    }
+
+    private void showInvitePopup(final FragmentActivity activity) {
         if (CacheProfile.canInvite && activity != null) {
             final SharedPreferences preferences = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+            needShowPopup = false;
+            new BackgroundThread() {
 
-            long date_start = preferences.getLong(INVITE_POPUP, 1);
-            long date_now = new java.util.Date().getTime();
+                @Override
+                public void execute() {
+                    doInvitePopupActions(preferences, activity);
+                }
+            };
 
-            if (date_now - date_start >= CacheProfile.getOptions().popup_timeout) {
-                invitePopupShow = true;
-                preferences.edit().putLong(INVITE_POPUP, date_now).commit();
+        }
+    }
+
+    private void doInvitePopupActions(SharedPreferences preferences, FragmentActivity activity) {
+        long date_start = preferences.getLong(INVITE_POPUP, 1);
+        long date_now = new java.util.Date().getTime();
+
+        if (date_now - date_start >= CacheProfile.getOptions().popup_timeout) {
+            invitePopupShow = true;
+            preferences.edit().putLong(INVITE_POPUP, date_now).commit();
+            if (activity != null) {
                 ContactsProvider provider = new ContactsProvider(activity);
                 provider.getContacts(-1, 0, new ContactsProvider.GetContactsListener() {
                     @Override
                     public void onContactsReceived(ArrayList<ContactsProvider.Contact> contacts) {
-
                         if (isAdded()) {
                             showInvitePopup(contacts);
+                            needShowPopup = false;
                         }
                     }
                 });
             }
-        }
-
-        //Показываем рекламу AirMessages только если не показываем инвайты
-        if (!invitePopupShow && !CacheProfile.premium && activity != null) {
-            AirManager manager = new AirManager(activity);
-            manager.startFragment(activity.getSupportFragmentManager());
         }
     }
 
@@ -328,6 +352,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     protected String getSubtitle() {
+
         return null;
     }
 

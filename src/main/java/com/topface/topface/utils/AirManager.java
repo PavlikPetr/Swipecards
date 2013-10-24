@@ -21,14 +21,15 @@ public class AirManager {
         mContext = context;
     }
 
-    public void startFragment(FragmentManager fm) {
+    public boolean startFragment(FragmentManager fm) {
         if (showPromoPopup(fm, Options.PremiumAirEntity.AIR_MESSAGES)) {
-            return;
+            return true;
         } else if (showPromoPopup(fm, Options.PremiumAirEntity.AIR_VISITORS)) {
-            return;
+            return true;
         } else if (showPromoPopup(fm, Options.PremiumAirEntity.AIR_ADMIRATIONS, false)) {
-            return;
+            return true;
         }
+        return false;
     }
 
     public boolean showPromoPopup(FragmentManager fm, int type) {
@@ -91,13 +92,13 @@ public class AirManager {
     }
 
     public void setLastFragmentType(final int type) {
-        new Thread(new Runnable() {
+        new BackgroundThread() {
             @Override
-            public void run() {
+            public void execute() {
                 SharedPreferences prefs = mContext.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
                 prefs.edit().putInt(AIR_TYPE_LAST_TAG, type).commit();
             }
-        }).start();
+        };
     }
 
 

@@ -48,10 +48,9 @@ public class ContactsProvider {
                 String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                 String email = "";
                 Cursor emailCur = cr.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, null, ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ? ", new String[]{String.valueOf(id)}, null);
-                while (emailCur.isLast()) {
+                if (emailCur.isLast()) {
                     emailCur.moveToNext();
                     email = emailCur.getString(emailCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
-                    break;
                 }
                 emailCur.close();
                 if (!email.equals("")) {
