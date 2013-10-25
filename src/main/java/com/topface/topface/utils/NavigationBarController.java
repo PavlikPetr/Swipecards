@@ -27,7 +27,7 @@ public class NavigationBarController {
 
     public void refreshNotificators() {
         if (CacheProfile.unread_messages > 0) {
-
+            CacheProfile.unread_messages = 15;
             mDialogsNotificator.setText(Integer.toString(CacheProfile.unread_messages > MAX_COUNTER ? MAX_COUNTER : CacheProfile.unread_messages));
             mDialogsNotificator.setVisibility(View.VISIBLE);
             mMutualNotificator.setVisibility(View.INVISIBLE);
