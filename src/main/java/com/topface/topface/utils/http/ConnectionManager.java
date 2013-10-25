@@ -395,6 +395,8 @@ public class ConnectionManager {
             //Пробрасываем ошибку авторизации в основной запрос, может не очень красиво, зато работает
             //Может стоит сделать отдельный, внутренний, тип ошибки
             response = request.constructApiResponse(authResponse.getResultCode(), "Auth error: " + authResponse.getErrorMessage());
+        } else if (authResponse.isCodeEqual(ErrorCodes.USER_DELETED)) {
+            response = request.constructApiResponse(authResponse.getResultCode(), "Auth error: " + authResponse.getErrorMessage());
         }
 
         return response;
