@@ -145,8 +145,7 @@ public class ApiResponse implements IApiResponse, SerializableToJson {
                 ErrorCodes.UNKNOWN_SOCIAL_USER,
                 ErrorCodes.UNVERIFIED_TOKEN,
                 ErrorCodes.INCORRECT_LOGIN,
-                ErrorCodes.INCORRECT_PASSWORD,
-                ErrorCodes.USER_DELETED
+                ErrorCodes.INCORRECT_PASSWORD
         );
     }
 
