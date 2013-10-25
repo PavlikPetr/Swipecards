@@ -9,6 +9,7 @@ import com.topface.topface.requests.LeadersRequest;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
 
 public class CountersManager {
+    public static final String UPDATE_BALANCE_COUNTERS = "com.topface.topface.UPDATE_BALANCE_COUNTERS";
     private static int likesCounter;
     private static int sympathyCounter;
     private static int visitorsCounter;
@@ -159,7 +160,7 @@ public class CountersManager {
     public void setBalanceCounters(int likes, int money) {
         CacheProfile.likes = likes;
         CacheProfile.money = money;
-        updateUICounters();
+        updateBalanceCounters();
     }
 
     public int getCounter(int type) {
@@ -220,6 +221,11 @@ public class CountersManager {
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
         }
         setMethod(NULL_METHOD);
+    }
+
+    private void updateBalanceCounters() {
+        Intent intent = new Intent(UPDATE_BALANCE_COUNTERS);
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
 
     private boolean checkMethodIsDenyed(String method) {
