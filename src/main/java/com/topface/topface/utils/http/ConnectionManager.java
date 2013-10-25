@@ -377,7 +377,7 @@ public class ConnectionManager {
 
         //Отправляем запрос авторизации
         IApiResponse authResponse = executeRequest(
-                new AuthRequest(AuthToken.getInstance(), context)
+                new AuthRequest(AuthToken.getInstance().getTokenInfo(), context)
         );
 
         //Проверяем, что авторизация прошла и нет ошибки

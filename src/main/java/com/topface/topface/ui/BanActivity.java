@@ -13,6 +13,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RestoreAccountRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.analytics.TrackedActivity;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -33,7 +34,7 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
     private int mType;
 
     // variables for Restore process
-    private boolean mRestored;
+    private AuthToken.TokenInfo mLocalTokenInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +73,8 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
                 btnCancel.setOnClickListener(this);
                 mTimerTextView.setVisibility(View.GONE);
                 image.setVisibility(View.GONE);
-                mRestored = false;
+                mLocalTokenInfo = AuthToken.getInstance().getTokenInfo();
+                AuthToken.getInstance().removeToken();
                 break;
             default:
                 break;
@@ -85,22 +87,6 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        switch (mType) {
-            case TYPE_BAN:
-                break;
-            case TYPE_FLOOD:
-                break;
-            case TYPE_RESTORE:
-                if (!mRestored) {
-                    AuthToken authToken = AuthToken.getInstance();
-                    if (!authToken.isEmpty()) {
-                        authToken.removeToken();
-                    }
-                }
-                break;
-            default:
-                break;
-        }
     }
 
     private CountDownTimer getTimer(long time) {
@@ -121,30 +107,24 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        mRestored = false;
-    }
-
-    @Override
     public void onClick(View v) {
         switch (mType) {
             case TYPE_RESTORE:
                 switch (v.getId()) {
                     case R.id.btnConfirm:
-                        new RestoreAccountRequest(AuthToken.getInstance(), this)
+                        new RestoreAccountRequest(mLocalTokenInfo, this)
                                 .callback(new SimpleApiHandler() {
                                     @Override
                                     public void success(IApiResponse response) {
                                         super.success(response);
+                                        AuthToken.getInstance().setTokeInfo(mLocalTokenInfo);
                                         AuthorizationManager.saveAuthInfo(response);
-                                        mRestored = true;
+
                                         finish();
                                     }
                                 }).exec();
                         break;
                     case R.id.btnCancel:
-                        mRestored = false;
                         finish();
                     default:
                         break;
@@ -154,6 +134,4 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
                 break;
         }
     }
-
-
 }

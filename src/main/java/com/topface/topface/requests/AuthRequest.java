@@ -31,8 +31,6 @@ public class AuthRequest extends ApiRequest {
     private String password; // пароль для нашей авторизации
     private String refresh; // еще один токен для одноклассников
 
-    private AuthToken mAuthToken;
-
     private AuthRequest(Context context) {
         super(context);
         doNeedAlert(false);
@@ -44,20 +42,19 @@ public class AuthRequest extends ApiRequest {
         clientid = App.getConfig().getAppUniqueId();
     }
 
-    public AuthRequest(AuthToken authToken, Context context) {
+    public AuthRequest(AuthToken.TokenInfo authTokenInfo, Context context) {
         this(context);
-        mAuthToken = authToken;
-        platform = authToken.getSocialNet();
+        platform = authTokenInfo.getSocialNet();
         if (TextUtils.equals(platform, AuthToken.SN_TOPFACE)) {
-            login = authToken.getLogin();
-            password = authToken.getPassword();
+            login = authTokenInfo.getLogin();
+            password = authTokenInfo.getPassword();
         } else if (TextUtils.equals(platform, AuthToken.SN_ODNOKLASSNIKI)) {
-            sid = authToken.getUserId();
-            token = authToken.getTokenKey();
-            refresh = mAuthToken.getmExpiresIn();
+            sid = authTokenInfo.getUserId();
+            token = authTokenInfo.getTokenKey();
+            refresh = authTokenInfo.getExpiresIn();
         } else {
-            sid = authToken.getUserId();
-            token = authToken.getTokenKey();
+            sid = authTokenInfo.getUserId();
+            token = authTokenInfo.getTokenKey();
         }
     }
 

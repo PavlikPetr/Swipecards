@@ -2,21 +2,14 @@ package com.topface.topface.utils.social;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Parcel;
-import android.os.Parcelable;
 
 import com.topface.topface.App;
 import com.topface.topface.Static;
+import com.topface.topface.utils.Debug;
 
-public class AuthToken implements Parcelable {
+public class AuthToken {
     // Data
-    private String mSnType;
-    private String mUserId;
-    private String mTokenKey;
-    private String mExpiresIn;
-
-    private String mLogin;
-    private String mPassword;
+    private TokenInfo mTokenInfo;
     private SharedPreferences mPreferences;
     // Constants
     public static final int AUTH_COMPLETE = 1001;
@@ -37,6 +30,7 @@ public class AuthToken implements Parcelable {
 
     private AuthToken() {
         mPreferences = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        mTokenInfo = new TokenInfo();
         loadToken();
     }
 
@@ -49,42 +43,42 @@ public class AuthToken implements Parcelable {
 
 
     private boolean isToken() {
-        boolean hasSocialToken  = (mTokenKey != null && mTokenKey.length() > 0);
-        boolean hasTopfaceToken = (mLogin != null && mLogin.length() > 0
-                && mPassword != null && mPassword.length() > 0);
-        return mSnType.equals(SN_TOPFACE) ? hasTopfaceToken : hasSocialToken;
+        boolean hasSocialToken  = (mTokenInfo.mTokenKey != null && mTokenInfo.mTokenKey.length() > 0);
+        boolean hasTopfaceToken = (mTokenInfo.mLogin != null && mTokenInfo.mLogin.length() > 0
+                && mTokenInfo.mPassword != null && mTokenInfo.mPassword.length() > 0);
+        return mTokenInfo.mSnType.equals(SN_TOPFACE) ? hasTopfaceToken : hasSocialToken;
     }
 
 
     public void loadToken() {
-        mSnType = mPreferences.getString(TOKEN_NETWORK, Static.EMPTY);
-        mUserId = mPreferences.getString(TOKEN_USER_ID, Static.EMPTY);
-        mTokenKey = mPreferences.getString(TOKEN_TOKEN_KEY, Static.EMPTY);
-        mExpiresIn = mPreferences.getString(TOKEN_EXPIRES, Static.EMPTY);
-        mLogin  = mPreferences.getString(TOKEN_LOGIN,Static.EMPTY);
-        mPassword  = mPreferences.getString(TOKEN_PASSWORD,Static.EMPTY);
+        mTokenInfo.mSnType = mPreferences.getString(TOKEN_NETWORK, Static.EMPTY);
+        mTokenInfo.mUserId = mPreferences.getString(TOKEN_USER_ID, Static.EMPTY);
+        mTokenInfo.mTokenKey = mPreferences.getString(TOKEN_TOKEN_KEY, Static.EMPTY);
+        mTokenInfo.mExpiresIn = mPreferences.getString(TOKEN_EXPIRES, Static.EMPTY);
+        mTokenInfo.mLogin  = mPreferences.getString(TOKEN_LOGIN,Static.EMPTY);
+        mTokenInfo.mPassword  = mPreferences.getString(TOKEN_PASSWORD,Static.EMPTY);
     }
 
 
     public void saveToken(String user_Id, String login,String password) {
         SharedPreferences.Editor editor = mPreferences.edit();
-        editor.putString(TOKEN_NETWORK, mSnType = SN_TOPFACE);
-        editor.putString(TOKEN_USER_ID, mUserId = user_Id);
-        editor.putString(TOKEN_TOKEN_KEY, mTokenKey = Static.EMPTY);
-        editor.putString(TOKEN_EXPIRES, mExpiresIn = Static.EMPTY);
-        editor.putString(TOKEN_LOGIN, mLogin = login);
-        editor.putString(TOKEN_PASSWORD, mPassword = password);
+        editor.putString(TOKEN_NETWORK, mTokenInfo.mSnType = SN_TOPFACE);
+        editor.putString(TOKEN_USER_ID, mTokenInfo.mUserId = user_Id);
+        editor.putString(TOKEN_TOKEN_KEY, mTokenInfo.mTokenKey = Static.EMPTY);
+        editor.putString(TOKEN_EXPIRES, mTokenInfo.mExpiresIn = Static.EMPTY);
+        editor.putString(TOKEN_LOGIN, mTokenInfo.mLogin = login);
+        editor.putString(TOKEN_PASSWORD, mTokenInfo.mPassword = password);
         editor.commit();
     }
 
     public void saveToken(String sn_type, String user_Id, String token_key, String expires_in) {
         SharedPreferences.Editor editor = mPreferences.edit();
-        editor.putString(TOKEN_NETWORK, mSnType = sn_type);
-        editor.putString(TOKEN_USER_ID, mUserId = user_Id);
-        editor.putString(TOKEN_TOKEN_KEY, mTokenKey = token_key);
-        editor.putString(TOKEN_EXPIRES, mExpiresIn = expires_in);
-        editor.putString(TOKEN_LOGIN, mLogin = Static.EMPTY);
-        editor.putString(TOKEN_PASSWORD, mPassword = Static.EMPTY);
+        editor.putString(TOKEN_NETWORK, mTokenInfo.mSnType = sn_type);
+        editor.putString(TOKEN_USER_ID, mTokenInfo.mUserId = user_Id);
+        editor.putString(TOKEN_TOKEN_KEY, mTokenInfo.mTokenKey = token_key);
+        editor.putString(TOKEN_EXPIRES, mTokenInfo.mExpiresIn = expires_in);
+        editor.putString(TOKEN_LOGIN, mTokenInfo.mLogin = Static.EMPTY);
+        editor.putString(TOKEN_PASSWORD, mTokenInfo.mPassword = Static.EMPTY);
         editor.commit();
     }
 
@@ -92,58 +86,110 @@ public class AuthToken implements Parcelable {
         saveToken(Static.EMPTY, Static.EMPTY, Static.EMPTY, Static.EMPTY);
     }
 
-    public String getSocialNet() {
-        return mSnType;
+    public boolean isEmpty() {
+        return mTokenInfo.mSnType.equals(Static.EMPTY) || !isToken();
     }
 
-    public String getUserId() {
-        return mUserId;
+    public TokenInfo getTokenInfo() {
+        try {
+            return mTokenInfo.clone();
+        } catch (CloneNotSupportedException e) {
+            Debug.error(e.toString());
+            return new TokenInfo();
+        }
+    }
+
+    public AuthToken setTokeInfo(TokenInfo tokenInfo) {
+        mTokenInfo.mSnType = tokenInfo.mSnType;
+        mTokenInfo.mUserId = tokenInfo.mUserId;
+        mTokenInfo.mTokenKey = tokenInfo.mTokenKey;
+        mTokenInfo.mExpiresIn = tokenInfo.mExpiresIn;
+        mTokenInfo.mLogin = tokenInfo.mLogin;
+        mTokenInfo.mPassword = tokenInfo.mPassword;
+        return this;
+    }
+
+    public String getSocialNet() {
+        return mTokenInfo.getSocialNet();
     }
 
     public String getTokenKey() {
-        if (getSocialNet().equals(AuthToken.SN_FACEBOOK)){
-            return mTokenKey;
-        } else if (getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
-            return mTokenKey;
-        } else if (getSocialNet().equals(AuthToken.SN_TOPFACE)) {
-            return mLogin;
-        } else if (getSocialNet().equals(SN_ODNOKLASSNIKI)) {
-            return mTokenKey;
-        }
-        return mTokenKey;
+        return mTokenInfo.getTokenKey();
     }
 
-    public boolean isEmpty() {
-        return mSnType.equals(Static.EMPTY) || !isToken();
+    public String getUserId() {
+        return mTokenInfo.getUserId();
     }
 
     public String getLogin() {
-        return mLogin;
+        return mTokenInfo.getLogin();
     }
 
     public String getPassword() {
-        return mPassword;
+        return mTokenInfo.getPassword();
     }
 
-    public String getmExpiresIn() {
-        return mExpiresIn;
+    public static class TokenInfo implements Cloneable {
+        private String mSnType;
+        private String mUserId;
+        private String mTokenKey;
+        private String mExpiresIn;
+
+        private String mLogin;
+        private String mPassword;
+
+        private TokenInfo() {
+            mSnType = Static.EMPTY;
+            mUserId = Static.EMPTY;
+            mTokenKey = Static.EMPTY;
+            mExpiresIn = Static.EMPTY;
+            mLogin = Static.EMPTY;
+            mPassword = Static.EMPTY;
+        }
+
+        public String getLogin() {
+            return mLogin;
+        }
+
+        public String getPassword() {
+            return mPassword;
+        }
+
+        public String getSocialNet() {
+            return mSnType;
+        }
+
+        public String getUserId() {
+            return mUserId;
+        }
+
+        public String getTokenKey() {
+            if (getSocialNet().equals(AuthToken.SN_FACEBOOK)){
+                return mTokenKey;
+            } else if (getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
+                return mTokenKey;
+            } else if (getSocialNet().equals(AuthToken.SN_TOPFACE)) {
+                return mLogin;
+            } else if (getSocialNet().equals(SN_ODNOKLASSNIKI)) {
+                return mTokenKey;
+            }
+            return mTokenKey;
+        }
+
+        @Override
+        protected TokenInfo clone() throws CloneNotSupportedException {
+            TokenInfo tokenInfoClone = new TokenInfo();
+            tokenInfoClone.mSnType = mSnType;
+            tokenInfoClone.mUserId = mUserId;
+            tokenInfoClone.mTokenKey = mTokenKey;
+            tokenInfoClone.mExpiresIn = mExpiresIn;
+            tokenInfoClone.mLogin = mLogin;
+            tokenInfoClone.mPassword = mPassword;
+            return tokenInfoClone;
+        }
+
+        public String getExpiresIn() {
+            return mExpiresIn;
+        }
     }
-
-    @Override
-    public int describeContents() {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mSnType);
-        dest.writeString(mUserId);
-        dest.writeString(mTokenKey);
-        dest.writeString(mExpiresIn);
-
-        dest.writeString(mLogin);
-        dest.writeString(mPassword);
-    }
-
-
 }

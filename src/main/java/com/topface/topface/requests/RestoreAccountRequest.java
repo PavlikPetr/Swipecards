@@ -10,8 +10,8 @@ import org.json.JSONObject;
 public class RestoreAccountRequest extends AuthRequest{
     public static final String SERVICE = "user.restore";
 
-    public RestoreAccountRequest(AuthToken token, Context context) {
-        super(token, context);
+    public RestoreAccountRequest(AuthToken.TokenInfo tokenInfo, Context context) {
+        super(tokenInfo, context);
     }
 
     @Override

@@ -110,7 +110,6 @@ public class AuthFragment extends BaseFragment {
         //Если у нас нет токена
         if (!AuthToken.getInstance().isEmpty()) {
             //Если мы попали на этот фрагмент с работающей авторизацией, то просто перезапрашиваем профиль
-            hideButtons();
             loadAllProfileData();
         }
         checkOnline();
@@ -138,7 +137,7 @@ public class AuthFragment extends BaseFragment {
                         hideButtons();
                         break;
                     case AuthorizationManager.TOKEN_RECEIVED:
-                        auth((AuthToken) intent.getParcelableExtra("token"));
+                        auth(AuthToken.getInstance());
                         break;
                     case AuthorizationManager.AUTHORIZATION_CANCELLED:
                         showButtons();
@@ -405,7 +404,7 @@ public class AuthFragment extends BaseFragment {
 
     private void auth(final AuthToken token) {
         EasyTracker.getTracker().sendEvent("Profile", "Auth", "FromActivity" + token.getSocialNet(), 1L);
-        final AuthRequest authRequest = new AuthRequest(token, getActivity());
+        final AuthRequest authRequest = new AuthRequest(token.getTokenInfo(), getActivity());
         authRequest.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
@@ -440,13 +439,14 @@ public class AuthFragment extends BaseFragment {
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                if (response.isCodeEqual(ErrorCodes.BAN))
-                    if (isAdded()) {
+                if (isAdded()) {
+                    if (response.isCodeEqual(ErrorCodes.BAN)) {
                         showButtons();
                     } else {
                         authorizationFailed(codeError, null);
-                        Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
+                        Utils.showErrorMessage(App.getContext());
                     }
+                }
             }
         });
     }

@@ -106,7 +106,7 @@ public class AuthorizationManager {
     }
 
     private void receiveToken(AuthToken authToken) {
-        LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, TOKEN_RECEIVED).putExtra("token", authToken));
+        LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, TOKEN_RECEIVED));
     }
 
     @SuppressWarnings("UnusedDeclaration")
