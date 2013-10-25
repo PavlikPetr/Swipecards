@@ -265,7 +265,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         long date_start = preferences.getLong(INVITE_POPUP, 1);
         long date_now = new java.util.Date().getTime();
 
-//        if (date_now - date_start >= CacheProfile.getOptions().popup_timeout) {
+        if (date_now - date_start >= CacheProfile.getOptions().popup_timeout) {
             invitePopupShow = true;
             preferences.edit().putLong(INVITE_POPUP, date_now).commit();
             if (activity != null) {
@@ -279,7 +279,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
                         }
                     }
                 });
-//            }
+            }
         }
     }
 
