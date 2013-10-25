@@ -17,9 +17,9 @@
 	        android:layout_alignParentTop="true"
 	        android:layout_alignParentLeft="true"
 	        android:src="@drawable/tip_battery_bonus_mask"
-	        android:layout_marginTop="22dp"/>
-    
-	<ImageView
+        android:layout_marginTop="2dp" />
+
+    <ImageView
 	        android:id="@+id/ivArrow"
 	        android:layout_width="316.5dp"
 	        android:layout_height="284.5dp"
