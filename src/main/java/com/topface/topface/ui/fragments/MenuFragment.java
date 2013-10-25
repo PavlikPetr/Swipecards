@@ -150,7 +150,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         refreshNotifications();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileUpdateReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProductsUpdateReceiver, new IntentFilter(GooglePlayProducts.INTENT_UPDATE_PRODUCTS));
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_BALANCE_COUNTERS));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mSelectMenuReceiver, new IntentFilter(SELECT_MENU_ITEM));
         switchProfileButton();
     }
