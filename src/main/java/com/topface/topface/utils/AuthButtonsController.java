@@ -2,6 +2,7 @@ package com.topface.topface.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import com.topface.topface.Static;
 import com.topface.topface.utils.social.AuthToken;
@@ -35,7 +36,7 @@ public class AuthButtonsController {
         loadButtons(new OnButtonsSettingsLoadedListener() {
             @Override
             public void buttonSettingsLoaded(HashSet<String> settings) {
-                if(settings.size() == 0) {
+                if (settings.size() == 0) {
                     realButtons = getButtonsSettings();
                     activeButtons = realButtons;
                     saveButtons();
@@ -70,40 +71,32 @@ public class AuthButtonsController {
         ruLocales.add(new Locale("ru", "RU"));
         ruLocales.add(new Locale("uk", "UA"));
         ruLocales.add(new Locale("be", "BY"));
-        return ruLocales.contains(lang)?"Ru":"Other";
-    }
-
-    public AuthButtonsController(Context context, HashSet<String> settings) {
-        mContext = context;
-        activeButtons = settings;
-        getAllSocialsForLocale();
-        mPreferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-//        saveButtons();
+        return ruLocales.contains(lang) ? "Ru" : "Other";
     }
 
     private void saveButtons() {
-        new Thread(new Runnable() {
+        new BackgroundThread() {
             @Override
-            public void run() {
+            public void execute() {
                 mPreferences = mContext.getSharedPreferences(Static.PREFERENCES_TAG_BUTTONS, Context.MODE_PRIVATE);
                 mPreferences.edit().putString(BUTTON_SETTINGS, toJson()).commit();
 
             }
 
 
-        }).start();
+        };
     }
 
     private void loadButtons(final OnButtonsSettingsLoadedListener listener) {
-        new Thread(new Runnable() {
+        new BackgroundThread() {
             @Override
-            public void run() {
+            public void execute() {
                 mPreferences = mContext.getSharedPreferences(Static.PREFERENCES_TAG_BUTTONS, Context.MODE_PRIVATE);
                 String json = mPreferences.getString(BUTTON_SETTINGS, "");
                 activeButtons = fromJson(json);
                 listener.buttonSettingsLoaded(activeButtons);
             }
-        }).start();
+        };
     }
 
     public boolean needSN(String sn) {
@@ -112,16 +105,12 @@ public class AuthButtonsController {
 
     public HashSet<String> getOhters() {
         HashSet<String> others = new HashSet<String>();
-        for(String sn: allSocials) {
-            if(!activeButtons.contains(sn)) {
+        for (String sn : allSocials) {
+            if (!activeButtons.contains(sn)) {
                 others.add(sn);
             }
         }
         return others;
-    }
-
-    public void setAllSettings() {
-        activeButtons = allSocials;
     }
 
     public void switchSettings() {
@@ -166,9 +155,9 @@ public class AuthButtonsController {
     private HashSet<String> fromJson(String json) {
         realButtons = new HashSet<String>();
         try {
-            if (json != "") {
+            if (!TextUtils.isEmpty(json)) {
                 JSONArray object = new JSONArray(json);
-                for(int i = 0; i < object.length(); i++) {
+                for (int i = 0; i < object.length(); i++) {
                     realButtons.add(object.optString(i));
                 }
 

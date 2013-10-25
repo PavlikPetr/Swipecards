@@ -30,17 +30,10 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
-import com.topface.topface.data.Auth;
-import com.topface.topface.data.Options;
-import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.ApiRequest;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.AppOptionsRequest;
 import com.topface.topface.requests.AuthRequest;
-import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.BaseFragmentActivity;
@@ -48,7 +41,6 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.AuthButtonsController;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
@@ -119,7 +111,7 @@ public class AuthFragment extends BaseFragment {
         if (!AuthToken.getInstance().isEmpty()) {
             //Если мы попали на этот фрагмент с работающей авторизацией, то просто перезапрашиваем профиль
             hideButtons();
-            getProfileAndOptions();
+            loadAllProfileData();
         }
         checkOnline();
         getSupportActionBar().hide();
@@ -146,7 +138,7 @@ public class AuthFragment extends BaseFragment {
                         hideButtons();
                         break;
                     case AuthorizationManager.TOKEN_RECEIVED:
-                        auth(generateAuthRequest((AuthToken) intent.getParcelableExtra("token")));
+                        auth((AuthToken) intent.getParcelableExtra("token"));
                         break;
                     case AuthorizationManager.AUTHORIZATION_CANCELLED:
                         showButtons();
@@ -353,7 +345,7 @@ public class AuthFragment extends BaseFragment {
                 String userId = extras.getString(RegistrationFragment.INTENT_USER_ID);
                 AuthToken.getInstance().saveToken(userId, login, password);
                 hideButtons();
-                auth(generateAuthRequest(AuthToken.getInstance()));
+                auth(AuthToken.getInstance());
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
             showButtons();
@@ -411,16 +403,17 @@ public class AuthFragment extends BaseFragment {
                 .show();
     }
 
-    private void auth(final AuthRequest authRequest) {
+    private void auth(final AuthToken token) {
+        EasyTracker.getTracker().sendEvent("Profile", "Auth", "FromActivity" + token.getSocialNet(), 1L);
+        final AuthRequest authRequest = new AuthRequest(token, getActivity());
         authRequest.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
                 AuthorizationManager.saveAuthInfo(response);
-                AuthToken token = authRequest.getAuthToken();
                 if (!token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
                     btnsController.addSocialNetwork(token.getSocialNet());
                 }
-                getProfileAndOptions();
+                loadAllProfileData();
                 hasAuthorized = true;
             }
 
@@ -434,89 +427,28 @@ public class AuthFragment extends BaseFragment {
         }).exec();
     }
 
-    private AuthRequest generateAuthRequest(final AuthToken token) {
-        final AuthRequest authRequest = new AuthRequest(token, getActivity());
-        if (token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
-            authRequest.callback(new ApiHandler() {
-                @Override
-                public void success(IApiResponse response) {
-                }
-
-                @Override
-                public void fail(final int codeError, IApiResponse response) {
-                    authorizationFailed(codeError, authRequest);
-                }
-
-            });
-        }
-        registerRequest(authRequest);
-        EasyTracker.getTracker().sendEvent("Profile", "Auth", "FromActivity" + token.getSocialNet(), 1L);
-        return authRequest;
-    }
-
-    private void getProfileAndOptions() {
-        final ProfileRequest profileRequest = new ProfileRequest(getActivity());
-        profileRequest.part = ProfileRequest.P_ALL;
-        registerRequest(profileRequest);
+    private void loadAllProfileData() {
         hideButtons();
-        profileRequest.callback(new DataApiHandler<Profile>() {
-
+        App.sendProfileAndOptionsRequests(new ApiHandler() {
             @Override
-            protected void success(Profile data, IApiResponse response) {
-                CacheProfile.setProfile(data, (ApiResponse) response);
-                getOptions();
-            }
-
-            @Override
-            protected Profile parseResponse(ApiResponse response) {
-                return Profile.parse(response);
+            public void success(IApiResponse response) {
+                if (isAdded()) {
+                    Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
+                    ((BaseFragmentActivity) getActivity()).close(AuthFragment.this, true);
+                }
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) {
                 if (response.isCodeEqual(ErrorCodes.BAN))
-                    showButtons();
-                else {
-                    authorizationFailed(codeError, profileRequest);
-                    Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
-                }
+                    if (isAdded()) {
+                        showButtons();
+                    } else {
+                        authorizationFailed(codeError, null);
+                        Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
+                    }
             }
-        }).exec();
-    }
-
-    private void getOptions() {
-        final AppOptionsRequest request = new AppOptionsRequest(getActivity());
-        registerRequest(request);
-        if (isAdded()) {
-            hideButtons();
-        }
-        request.callback(new DataApiHandler<Options>() {
-            @Override
-            protected void success(Options data, IApiResponse response) {
-                Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
-                ((BaseFragmentActivity) getActivity()).close(AuthFragment.this, true);
-                LocalBroadcastManager.getInstance(getContext())
-                        .sendBroadcast(new Intent(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
-            }
-
-            @Override
-            protected Options parseResponse(ApiResponse response) {
-                return new Options(response);
-            }
-
-            @Override
-            public void fail(int codeError, IApiResponse response) {
-                if (response.isCodeEqual(ErrorCodes.BAN))
-                    showButtons();
-                else {
-                    request.callback(this);
-                    authorizationFailed(codeError, request);
-                    Context context = App.getContext();
-                    Toast.makeText(context, context.getString(R.string.general_data_error),
-                            Toast.LENGTH_SHORT).show();
-                }
-            }
-        }).exec();
+        });
     }
 
     @Override
@@ -612,8 +544,10 @@ public class AuthFragment extends BaseFragment {
     private void resendRequest(ApiRequest request) {
         if (request != null) {
             request.canceled = false;
-            registerRequest(request);
             request.exec();
+        } else {
+            //Если запрос базовой информации не прошел, то повторяем запрос
+            loadAllProfileData();
         }
     }
 
@@ -696,7 +630,7 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void hideButtons() {
-        if (mButtonsInitialized) {
+        if (mButtonsInitialized && isAdded()) {
             btnsHidden = true;
             mFBButton.setVisibility(View.GONE);
             mVKButton.setVisibility(View.GONE);
@@ -772,7 +706,7 @@ public class AuthFragment extends BaseFragment {
             }
             AuthToken token = AuthToken.getInstance();
             token.saveToken("", login, password);
-            auth(generateAuthRequest(token));
+            auth(token);
         }
     }
 
@@ -786,7 +720,7 @@ public class AuthFragment extends BaseFragment {
         }
         removeRedAlert();
         if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty()) {
-            getProfileAndOptions();
+            loadAllProfileData();
         }
     }
 

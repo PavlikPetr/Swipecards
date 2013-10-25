@@ -14,6 +14,11 @@ public class FeedGift extends FeedItem {
         super((JSONObject) null);
     }
 
+    @SuppressWarnings("UnusedDeclaration")
+    public FeedGift(JSONObject data) {
+        super(data);
+    }
+
     @Override
     public void fillData(JSONObject item) {
         super.fillData(item);

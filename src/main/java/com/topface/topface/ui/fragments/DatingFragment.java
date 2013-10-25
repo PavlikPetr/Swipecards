@@ -62,6 +62,7 @@ import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.NoviceLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
+import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
@@ -168,11 +169,15 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         // Rate Controller
         mRateController = new RateController(getActivity(), SendLikeRequest.Place.FROM_SEARCH);
         mRateController.setOnRateControllerUiListener(this);
+        new BackgroundThread() {
+            @Override
+            public void execute() {
+                inBackroundThread();
+            }
+        };
     }
 
-    @Override
     protected void inBackroundThread() {
-        super.inBackroundThread();
         SharedPreferences preferences = getActivity().getSharedPreferences(
                 Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         mNovice = Novice.getInstance(preferences);

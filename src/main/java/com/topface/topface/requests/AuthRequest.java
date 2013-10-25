@@ -1,9 +1,9 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.text.TextUtils;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.Utils;
@@ -11,8 +11,6 @@ import com.topface.topface.utils.social.AuthToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.UUID;
 
 public class AuthRequest extends ApiRequest {
     // Data
@@ -43,7 +41,7 @@ public class AuthRequest extends ApiRequest {
         clientversion = Utils.getClientVersion();
         clientosversion = Utils.getClientOsVersion();
         clientdevice = Utils.getClientDeviceName();
-        clientid = getClientId(context);
+        clientid = App.getConfig().getAppUniqueId();
     }
 
     public AuthRequest(AuthToken authToken, Context context) {
@@ -73,33 +71,6 @@ public class AuthRequest extends ApiRequest {
         }
 
         return locale;
-    }
-
-    private static String uniqueID = null;
-
-    private static final String PREF_UNIQUE_ID = "PREF_UNIQUE_ID";
-
-    /**
-     * Возвращает уникальный id устройства (на самом деле id установки, т.к. он генерится при первом запросе)
-     *
-     * @param context контекст
-     * @return id устройства в виде строки UUID
-     */
-    public synchronized static String getClientId(Context context) {
-        if (uniqueID == null && context != null) {
-            SharedPreferences sharedPrefs = context.getSharedPreferences(
-                    PREF_UNIQUE_ID, Context.MODE_PRIVATE);
-            uniqueID = sharedPrefs.getString(PREF_UNIQUE_ID, null);
-
-            if (uniqueID == null) {
-                uniqueID = UUID.randomUUID().toString();
-                SharedPreferences.Editor editor = sharedPrefs.edit();
-                editor.putString(PREF_UNIQUE_ID, uniqueID);
-                editor.commit();
-            }
-        }
-
-        return uniqueID;
     }
 
     @Override
@@ -138,10 +109,6 @@ public class AuthRequest extends ApiRequest {
 
     public void setLocale(String locale) {
         this.locale = locale;
-    }
-
-    public AuthToken getAuthToken() {
-        return mAuthToken;
     }
 
     @Override

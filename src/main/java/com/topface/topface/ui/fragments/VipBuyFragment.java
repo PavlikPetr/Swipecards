@@ -136,12 +136,13 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     private void initBuyVipViews(View root) {
         mBuyVipViewsContainer = (LinearLayout) root.findViewById(R.id.fbpContainer);
         LinearLayout btnContainer = (LinearLayout) root.findViewById(R.id.fbpBtnContainer);
-        if (CacheProfile.getGooglePlayProducts().premium.isEmpty()) {
+        GooglePlayProducts googlePlayProducts = CacheProfile.getGooglePlayProducts();
+        if (googlePlayProducts.premium.isEmpty()) {
             root.findViewById(R.id.fbpBuyingDisabled).setVisibility(View.VISIBLE);
         } else {
             root.findViewById(R.id.fbpBuyingDisabled).setVisibility(View.GONE);
         }
-        for (GooglePlayProducts.BuyButton curBtn : CacheProfile.getGooglePlayProducts().premium) {
+        for (GooglePlayProducts.BuyButton curBtn : googlePlayProducts.premium) {
             GooglePlayProducts.setButton(btnContainer, curBtn, getActivity(),
                     new GooglePlayProducts.BuyButtonClickListener() {
                         @Override

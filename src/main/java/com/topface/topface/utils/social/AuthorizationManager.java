@@ -25,11 +25,11 @@ import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.data.Auth;
-import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
+import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
@@ -175,7 +175,6 @@ public class AuthorizationManager {
 
         okAuthObject.requestAuthorization(mParentActivity, false, OkScope.SET_STATUS, OkScope.PHOTO_CONTENT, OkScope.VALUABLE_ACCESS);
     }
-
 
 
     private final class GetCurrentUserTask extends AsyncTask<Void, Void, String> {
@@ -341,9 +340,9 @@ public class AuthorizationManager {
     public static final int FAILURE_GET_NAME = 1;
 
     public static void getVkName(final String token, final String user_id, final Handler handler) {
-        (new Thread() {
+        new BackgroundThread() {
             @Override
-            public void run() {
+            public void execute() {
                 String responseRaw = HttpUtils.httpGetRequest(String.format(VK_NAME_URL, user_id, token));
                 try {
                     String result = "";
@@ -363,7 +362,7 @@ public class AuthorizationManager {
                     handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
                 }
             }
-        }).start();
+        };
     }
 
     public static void getFbName(final String user_id, final Handler handler) {
@@ -422,12 +421,12 @@ public class AuthorizationManager {
         }
         LocalBroadcastManager.getInstance(activity).sendBroadcast(new Intent(Static.LOGOUT_INTENT));
         //Чистим список тех, кого нужно оценить
-        new Thread(new Runnable() {
+        new BackgroundThread() {
             @Override
-            public void run() {
+            public void execute() {
                 new SearchCacheManager().clearCache();
             }
-        }).start();
+        };
         NavigationActivity.onLogout();
         if (!(activity instanceof NavigationActivity)) {
             activity.setResult(RESULT_LOGOUT);
@@ -454,11 +453,15 @@ public class AuthorizationManager {
         retryBuilder.setMessage(R.string.general_logout_error)
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) { dialog.cancel(); }
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
                 })
                 .setPositiveButton(R.string.auth_retry, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) { logoutRequest.exec(); }
+                    public void onClick(DialogInterface dialog, int which) {
+                        logoutRequest.exec();
+                    }
                 });
         retryBuilder.create().show();
     }

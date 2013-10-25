@@ -95,7 +95,7 @@ public class UserPhotoFragment extends BaseFragment {
             Intent intent = new Intent(getActivity().getApplicationContext(), PhotoSwitcherActivity.class);
             intent.putExtra(PhotoSwitcherActivity.INTENT_USER_ID, mUser.uid);
             intent.putExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, position);
-            intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS_COUNT, mUser.totalPhotos);
+            intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS_COUNT, mUser.photosCount);
             intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, ((ProfileGridAdapter) mGridAlbum.getAdapter()).getData());
             startActivity(intent);
         }
@@ -113,13 +113,13 @@ public class UserPhotoFragment extends BaseFragment {
 
     private void setPhotos(Photos photos) {
         if (photos != null) {
-            mTitle.setText(Utils.formatPhotoQuantity(mUser.totalPhotos));
+            mTitle.setText(Utils.formatPhotoQuantity(mUser.photosCount));
         }
 
         if (mUserPhotoGridAdapter == null) {
             mUserPhotoGridAdapter = new UserPhotoGridAdapter(getActivity().getApplicationContext(),
                     photos,
-                    mUser.totalPhotos,
+                    mUser.photosCount,
                     mUpdater);
         }
     }

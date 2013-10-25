@@ -1,7 +1,7 @@
 package com.topface.topface.utils.GeoUtils;
 
+import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
@@ -9,6 +9,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -21,6 +22,7 @@ import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.OsmManager;
 
@@ -98,34 +100,16 @@ public class GeoLocationManager {
         return LocationProviderType.NONE;
     }
 
-    public boolean availableLocationProvider(LocationProviderType type) {
-        String provider;
-
-        switch (type) {
-            case GPS:
-                provider = LocationManager.GPS_PROVIDER;
-                break;
-            case AGPS:
-                provider = LocationManager.NETWORK_PROVIDER;
-                break;
-            default:
-                provider = LocationManager.PASSIVE_PROVIDER;
-                break;
-        }
-
-        return mLocationManager.isProviderEnabled(provider);
-    }
-
+    @TargetApi(Build.VERSION_CODES.FROYO)
     public boolean isAvailable(LocationProviderType type) {
-        String internalType = LocationManager.PASSIVE_PROVIDER;
+        String internalType;
         switch (type) {
             case GPS:
                 internalType = LocationManager.GPS_PROVIDER;
                 break;
             case AGPS:
-                internalType = LocationManager.NETWORK_PROVIDER;
-                break;
             default:
+                internalType = LocationManager.NETWORK_PROVIDER;
                 break;
         }
 
@@ -160,8 +144,8 @@ public class GeoLocationManager {
     /**
      * Address by coordinates
      *
-     * @param latitude
-     * @param longitude
+     * @param latitude широта
+     * @param longitude долго
      * @return specific address correlating with input coordinates
      */
     public String getLocationAddress(double latitude, double longitude) {
@@ -195,10 +179,6 @@ public class GeoLocationManager {
 
     /**
      * Address by coordinates
-     *
-     * @param latitude
-     * @param longitude
-     * @return
      */
     public String getLocationAddress(GeoPoint point) {
         return getLocationAddress(point.getLatitudeE6() / 1E6, point.getLongitudeE6() / 1E6);
@@ -207,8 +187,6 @@ public class GeoLocationManager {
     /**
      * Addresses that correlate with user input
      *
-     * @param text
-     * @param maxResultsNumber
      * @return addresses' suggestions
      */
     public ArrayList<Address> getSuggestionAddresses(String text, int maxResultsNumber) {
@@ -227,10 +205,6 @@ public class GeoLocationManager {
     /**
      * Set icon on specific location and shift to that location
      *
-     * @param context
-     * @param mapView
-     * @param point
-     * @param zoom
      */
     public void setOverlayItem(Context context, MapView mapView, GeoPoint point, int zoom) {
         List<Overlay> mapOverlays = mapView.getOverlays();
@@ -249,25 +223,7 @@ public class GeoLocationManager {
 
     public Location getLastKnownLocation() {
         String locationProvider = LocationManager.NETWORK_PROVIDER;
-        Location lastKnownLocation = mLocationManager.getLastKnownLocation(locationProvider);
-        return lastKnownLocation;
-    }
-    /**
-     * Read MapView cache
-     *
-     * @param mapView view with map
-     * @param point   specific coordinates
-     * @param zoom    map zoom
-     * @return bitmap of caches map
-     */
-    public static Bitmap getMapImage(MapView mapView, GeoPoint point, int zoom) {
-        shiftToPoint(mapView, point, zoom);
-
-        mapView.setDrawingCacheEnabled(true);
-        Bitmap bmp = Bitmap.createBitmap(mapView.getDrawingCache());
-        mapView.setDrawingCacheEnabled(false);
-
-        return bmp;
+        return mLocationManager.getLastKnownLocation(locationProvider);
     }
 
     public static void shiftToPoint(MapView mapView, GeoPoint point, int zoom) {
@@ -321,8 +277,9 @@ public class GeoLocationManager {
             tvAddress.setText(Static.EMPTY);
             final ProgressBar progressBar = (ProgressBar) mAddressView.findViewById(R.id.prsMapAddressLoading);
             progressBar.setVisibility(View.VISIBLE);
-            (new Thread() {
-                public void run() {
+            new BackgroundThread() {
+                @Override
+                public void execute() {
                     final String address = GeoLocationManager.this.getLocationAddress(point.getLatitudeE6() / 1E6, point.getLongitudeE6() / 1E6);
 
                     tvAddress.post(new Runnable() {
@@ -337,7 +294,7 @@ public class GeoLocationManager {
 
 
                 }
-            }).start();
+            };
             currentPoint = point;
         }
 

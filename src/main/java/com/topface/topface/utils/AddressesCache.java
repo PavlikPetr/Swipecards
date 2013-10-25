@@ -11,7 +11,7 @@ public class AddressesCache {
     private MemoryCacheTemplate<String, String> mAddressesCache = new MemoryCacheTemplate<String, String>();
 
     public void mapAddressDetection(final History history, final TextView tv,
-                                     final ProgressBar prgsBar) {
+                                    final ProgressBar prgsBar) {
         if (history.geo != null) {
             final String key = history.geo.getCoordinates().toString();
             String cachedAddress = mAddressesCache.get(key);
@@ -22,9 +22,9 @@ public class AddressesCache {
             }
 
             prgsBar.setVisibility(View.VISIBLE);
-            new Thread(new Runnable() {
+            new BackgroundThread() {
                 @Override
-                public void run() {
+                public void execute() {
                     final String address = OsmManager.getAddress(
                             history.geo.getCoordinates().getLatitude(),
                             history.geo.getCoordinates().getLongitude()
@@ -38,7 +38,7 @@ public class AddressesCache {
                         }
                     });
                 }
-            }).start();
+            };
         }
 
     }

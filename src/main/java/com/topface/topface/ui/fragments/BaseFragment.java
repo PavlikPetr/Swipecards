@@ -75,14 +75,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         restoreState();
         setHasOptionsMenu(needOptionsMenu());
         super.onCreate(savedInstanceState);
-
-        (new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                inBackroundThread();
-            }
-        }).start();
     }
 
     protected boolean needOptionsMenu() {
@@ -237,9 +229,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     protected void onLoadProfile() {
         Debug.log(((Object) this).getClass().getSimpleName() + ": onLoadProfile");
-    }
-
-    protected void inBackroundThread() {
     }
 
     protected void showPromoDialog() {

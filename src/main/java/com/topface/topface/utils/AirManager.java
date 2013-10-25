@@ -15,7 +15,6 @@ import com.topface.topface.ui.fragments.promo.PromoVisitorsPopup;
 public class AirManager {
     public static final String AIR_TYPE_LAST_TAG = "air_type_last_tag";
     private final Context mContext;
-    private int mType;
 
     public AirManager(Context context) {
         mContext = context;
@@ -29,14 +28,13 @@ public class AirManager {
         } else if (showPromoPopup(fm, Options.PremiumAirEntity.AIR_ADMIRATIONS, false)) {
             return true;
         }
-        return false;
+        return true;
     }
 
     public boolean showPromoPopup(FragmentManager fm, int type) {
         PromoPopupFragment promo = null;
         if (checkIsNeedShow(CacheProfile.getOptions().getPremiumEntityByType(type)) &&
                 getLastFragmentType() != type) {
-            mType = type;
             promo = getFragmentByType(type);
         }
         if (promo != null) {
@@ -51,11 +49,11 @@ public class AirManager {
         return false;
     }
 
+    @SuppressWarnings("UnusedParameters")
     public boolean showPromoPopup(FragmentManager fm, int type, boolean doNeedSetLastType) {
         PromoPopupFragment promo = null;
         if (checkIsNeedShow(CacheProfile.getOptions().getPremiumEntityByType(type)) &&
                 getLastFragmentType() != type) {
-            mType = type;
             promo = getFragmentByType(type);
         }
         if (promo != null) {

@@ -437,15 +437,15 @@ public class Options extends AbstractData {
                 listener = new Ssid.ISsidUpdateListener() {
                     @Override
                     public void onUpdate() {
-                        new Thread(new Runnable() {
+                        new BackgroundThread() {
                             @Override
-                            public void run() {
+                            public void execute() {
                                 SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = pref.edit();
                                 editor.putLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME, 0);
                                 editor.commit();
                             }
-                        }).start();
+                        };
                     }
                 };
                 Ssid.addUpdateListener(listener);
@@ -453,29 +453,29 @@ public class Options extends AbstractData {
         }
 
         public void onStopMutualClosings() {
-            new Thread(new Runnable() {
+            new BackgroundThread() {
                 @Override
-                public void run() {
+                public void execute() {
                     SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = pref.edit();
                     long currentTime = System.currentTimeMillis();
                     editor.putLong(Static.PREFERENCES_MUTUAL_CLOSING_LAST_TIME, currentTime);
                     editor.commit();
                 }
-            }).start();
+            };
         }
 
         public void onStopLikesClosings() {
-            new Thread(new Runnable() {
+            new BackgroundThread() {
                 @Override
-                public void run() {
+                public void execute() {
                     SharedPreferences pref = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = pref.edit();
                     long currentTime = System.currentTimeMillis();
                     editor.putLong(Static.PREFERENCES_LIKES_CLOSING_LAST_TIME, currentTime);
                     editor.commit();
                 }
-            }).start();
+            };
         }
 
         public boolean isClosingsEnabled() {

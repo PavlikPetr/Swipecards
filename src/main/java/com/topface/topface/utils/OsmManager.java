@@ -69,15 +69,15 @@ public class OsmManager {
     }
 
     public static void getAddress(final double lat, final double lon, final Handler handler) {
-        (new Thread() {
+        new BackgroundThread() {
             @Override
-            public void run() {
+            public void execute() {
                 String address = getAddress(lat, lon);
                 Message msg = new Message();
                 msg.obj = address;
                 handler.sendMessage(msg);
             }
-        }).start();
+        };
     }
 
     public static ArrayList<Address> getSuggestionAddresses(String text, int maxNumber) {

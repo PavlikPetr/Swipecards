@@ -27,6 +27,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ParallelApiRequest;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
 import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
@@ -130,16 +131,14 @@ public class App extends Application {
         if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty()) {
             GCMUtils.init(getContext());
         }
-        if (!GCMIntentService.isOnMessageReceived.getAndSet(false)) {
-            if (!CacheProfile.isEmpty()) {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        sendProfileAndOptionsRequests();
-                        sendLocation();
-                    }
-                });
-            }
+        if (!GCMIntentService.isOnMessageReceived.getAndSet(false) && !CacheProfile.isEmpty()) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    sendProfileAndOptionsRequests();
+                    sendLocation();
+                }
+            });
         }
     }
 
@@ -195,12 +194,21 @@ public class App extends Application {
     /**
      * Множественный запрос Options и профиля
      */
-    public static void sendProfileAndOptionsRequests() {
+    public static void sendProfileAndOptionsRequests(ApiHandler handler) {
         new ParallelApiRequest(App.getContext())
                 .addRequest(getOptionsRequst())
-                .addRequest(getProfileRequest(ProfileRequest.P_ALL))
                 .addRequest(getGooglePlayProductsRequest())
+                .addRequest(getProfileRequest(ProfileRequest.P_ALL))
+                .callback(handler)
                 .exec();
+    }
+
+
+    /**
+     * Множественный запрос Options и профиля
+     */
+    public static void sendProfileAndOptionsRequests() {
+        sendProfileAndOptionsRequests(null);
     }
 
     private static ApiRequest getGooglePlayProductsRequest() {

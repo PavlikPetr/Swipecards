@@ -25,6 +25,7 @@ import java.util.LinkedList;
 
 public class GooglePlayProducts extends AbstractData {
 
+    public static final String INTENT_UPDATE_PRODUCTS = "com.topface.topface.action.UPDATE_PRODUCTS";
     public boolean saleExists = false;
 
     public LinkedList<BuyButton> coins = new LinkedList<BuyButton>();
