@@ -152,11 +152,13 @@ public class Options extends AbstractData {
     public String gagTypeFullscreen = BannerBlock.BANNER_NONE;
 
     public Options(IApiResponse data) {
-        fillData(data.getJsonResult());
+        this(data.getJsonResult());
     }
 
     public Options(JSONObject data) {
-        fillData(data);
+        if (data != null) {
+            fillData(data);
+        }
     }
 
     protected void fillData(JSONObject response) {

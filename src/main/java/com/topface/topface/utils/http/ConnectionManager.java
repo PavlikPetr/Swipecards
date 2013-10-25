@@ -45,7 +45,6 @@ public class ConnectionManager {
 
     public static final String TAG = "ConnectionManager";
     private final HashMap<String, IApiRequest> mPendignRequests;
-    private static long mFloodEndsTime = 0;
 
     private ConnectionManager() {
         mWorker = getNewExecutorService();

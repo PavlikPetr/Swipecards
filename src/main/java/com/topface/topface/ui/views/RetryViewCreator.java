@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.topface.IllustratedTextView.IllustratedTextView;
 import com.topface.topface.R;
-import com.topface.topface.ui.gridlayout.GridLayout;
 
 public class RetryViewCreator {
     public static final String REFRESH_TEMPLATE = "{{refresh}} ";
@@ -18,17 +17,15 @@ public class RetryViewCreator {
 
     private View mRetryView;
     private InnerButton mBtn1;
-    private InnerButton mBtn2;
 
-    private RetryViewCreator(View retryView, InnerButton btn1, InnerButton btn2) {
+    private RetryViewCreator(View retryView, InnerButton btn1) {
         mRetryView = retryView;
         mBtn1 = btn1;
-        mBtn2 = btn2;
     }
 
     public void setText(String text) {
         if (mRetryView != null) {
-            ((TextView)mRetryView.findViewById(R.id.tvMessage)).setText(text);
+            ((TextView) mRetryView.findViewById(R.id.tvMessage)).setText(text);
         }
     }
 
@@ -36,41 +33,33 @@ public class RetryViewCreator {
         if (mBtn1 != null) mBtn1.setListener(listener);
     }
 
-    public void setListener(View.OnClickListener listener1, View.OnClickListener listener2) {
-        if (mBtn1 != null) mBtn1.setListener(listener1);
-        if (mBtn2 != null) mBtn2.setListener(listener2);
-    }
-
     public View getView() {
         return mRetryView;
     }
 
+    @SuppressWarnings("MagicConstant")
     public void setVisibility(int visibility) {
-        if(mRetryView != null) mRetryView.setVisibility(visibility);
-    }
-
-    public void setButtonsOrientation(int buttonsOrientation) {
-        this.buttonsOrientation = buttonsOrientation;
+        if (mRetryView != null) mRetryView.setVisibility(visibility);
     }
 
     public static RetryViewCreator createRetryView(Context context, String text, InnerButton btn1, InnerButton btn2) {
         LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        ViewGroup retryView = (ViewGroup) mInflater.inflate(R.layout.layout_retryview,null);
+        ViewGroup retryView = (ViewGroup) mInflater.inflate(R.layout.layout_retryview, null);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.CENTER_IN_PARENT, -1);
         retryView.setLayoutParams(params);
 
         if (text != null) {
-            ((TextView)retryView.findViewById(R.id.tvMessage)).setText(text);
+            ((TextView) retryView.findViewById(R.id.tvMessage)).setText(text);
         } else {
             retryView.findViewById(R.id.tvMessage).setVisibility(View.GONE);
         }
 
-        LinearLayout buttonsContainer = (LinearLayout)retryView.findViewById(R.id.loButtonsContainer);
+        LinearLayout buttonsContainer = (LinearLayout) retryView.findViewById(R.id.loButtonsContainer);
         buttonsContainer.setOrientation(buttonsOrientation);
         if (btn1 != null) buttonsContainer.addView(btn1.createButtonView(retryView));
         if (btn2 != null) buttonsContainer.addView(btn2.createButtonView(retryView));
-        return new RetryViewCreator(retryView,btn1,btn2);
+        return new RetryViewCreator(retryView, btn1);
     }
 
     public static RetryViewCreator createRetryView(Context context, String text, InnerButton btn) {
@@ -88,7 +77,7 @@ public class RetryViewCreator {
     }
 
     public static RetryViewCreator createDefaultRetryView(Context context, String text, View.OnClickListener listener,
-                                                             String textBtn2, View.OnClickListener listener2, int orientation) {
+                                                          String textBtn2, View.OnClickListener listener2, int orientation) {
         StringBuilder strBuilder = new StringBuilder();
         strBuilder.append(REFRESH_TEMPLATE).append(context.getString(R.string.general_dialog_retry));
         buttonsOrientation = orientation;
@@ -96,27 +85,7 @@ public class RetryViewCreator {
                 context,
                 text,
                 new InnerButton(InnerButton.Type.GRAY, strBuilder.toString(), listener),
-                new InnerButton(InnerButton.Type.GRAY,textBtn2,listener2)
-        );
-    }
-
-    public static RetryViewCreator createBlueButtonRetryView(Context context, String text, String buttonText, View.OnClickListener listener) {
-        return createRetryView(
-                context,
-                text,
-                new InnerButton(InnerButton.Type.BLUE, buttonText, listener)
-        );
-    }
-
-    public static RetryViewCreator createDefaultWithBlueRetryView(Context context, String text, View.OnClickListener listener,
-                                                             String textBtn2, View.OnClickListener listener2) {
-        StringBuilder strBuilder = new StringBuilder();
-        strBuilder.append(REFRESH_TEMPLATE).append(context.getString(R.string.general_dialog_retry));
-        return createRetryView(
-                context,
-                text,
-                new InnerButton(InnerButton.Type.GRAY, strBuilder.toString(), listener),
-                new InnerButton(InnerButton.Type.GRAY,textBtn2,listener2)
+                new InnerButton(InnerButton.Type.GRAY, textBtn2, listener2)
         );
     }
 
@@ -140,7 +109,7 @@ public class RetryViewCreator {
             mButtonView.setText(btnText);
         }
 
-        public enum Type {GRAY,BLUE}
+        public enum Type {GRAY, BLUE}
 
         private IllustratedTextView mButtonView;
         private Type mType = Type.GRAY;
@@ -156,7 +125,7 @@ public class RetryViewCreator {
         private View createButtonView(ViewGroup parentView) {
             if (mButtonView == null) {
                 switch (mType) {
-                    case BLUE :
+                    case BLUE:
                         mButtonView = generateBlueButton(parentView);
                         mButtonView.setText(mText);
                         mButtonView.setOnClickListener(mListener);
@@ -173,7 +142,7 @@ public class RetryViewCreator {
         }
 
         public void setListener(View.OnClickListener listener) {
-            if(mButtonView != null) mButtonView.setOnClickListener(mListener);
+            if (mButtonView != null) mButtonView.setOnClickListener(listener);
         }
 
         public void performClick() {

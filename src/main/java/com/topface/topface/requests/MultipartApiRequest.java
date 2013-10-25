@@ -138,11 +138,14 @@ abstract public class MultipartApiRequest extends ApiRequest {
                         mRequests.remove(key);
                     }
                 }
+
+                if (mRequests.isEmpty()) {
+                    super.sendHandlerMessage(multipartResponse);
+                }
             }
-            //Ответ от основного запроса
+        } else {
             super.sendHandlerMessage(multipartResponse);
         }
-
     }
 
     @SuppressWarnings("UnusedDeclaration")

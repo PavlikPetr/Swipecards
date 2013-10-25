@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.getjar.sdk.ConsumableProduct;
@@ -50,6 +51,7 @@ public class Offerwalls {
     public static final String CLICKKY = "CLICKKY";
     public static final String RANDOM = "RANDOM";
     public static final String GETJAR = "GETJAR";
+    @SuppressWarnings("UnusedDeclaration")
     public final static String[] OFFERWALLS = new String[]{
             TAPJOY,
             SPONSORPAY,
@@ -71,12 +73,14 @@ public class Offerwalls {
 
     public static void init(Context context) {
         String offerwall = getOfferWallType();
-        if (offerwall.equals(TAPJOY)) {
-            initTapjoy(context);
-        } else if (offerwall.equals(SPONSORPAY)) {
-            initSponsorpay(context);
-        } else if (offerwall.equals(GETJAR)) {
-            initGetJar(context);
+        if (!TextUtils.isEmpty(offerwall)) {
+            if (offerwall.equals(TAPJOY)) {
+                initTapjoy(context);
+            } else if (offerwall.equals(SPONSORPAY)) {
+                initSponsorpay(context);
+            } else if (offerwall.equals(GETJAR)) {
+                initGetJar(context);
+            }
         }
     }
 
@@ -85,7 +89,7 @@ public class Offerwalls {
         offerwall = offerwall == null ? "" : offerwall;
 
         if (CacheProfile.uid <= 0) {
-            Toast.makeText(activity, R.string.general_server_error, Toast.LENGTH_SHORT);
+            Toast.makeText(activity, R.string.general_server_error, Toast.LENGTH_SHORT).show();
             return;
         }
 
