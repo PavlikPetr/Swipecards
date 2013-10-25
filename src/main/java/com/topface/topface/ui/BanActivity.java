@@ -34,9 +34,6 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
 
     // variables for Restore process
     private boolean mRestored;
-    // need local authToken object to store token only for this session
-    // if user will quit on the next launch he will be directed to auth screen
-    private AuthToken mLocalAuthToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +72,6 @@ public class BanActivity extends TrackedActivity implements View.OnClickListener
                 btnCancel.setOnClickListener(this);
                 mTimerTextView.setVisibility(View.GONE);
                 image.setVisibility(View.GONE);
-                mLocalAuthToken = AuthToken.getInstance();
                 mRestored = false;
                 break;
             default:

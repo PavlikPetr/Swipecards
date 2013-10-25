@@ -1258,7 +1258,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_profile:
-                if (!(mUser == null || mUser.deleted || mUser.banned)) {
+                if (mUser == null) return true;
+                if (!(mUser.deleted || mUser.banned)) {
                     boolean checked = !item.isChecked();
                     item.setChecked(checked);
                     animateChatActions(!checked, 500);
