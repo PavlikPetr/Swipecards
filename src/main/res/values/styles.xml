@@ -63,9 +63,8 @@
     </style>
 
     <style name="Widget.Topface.ActionBar.Buttons" parent="@style/Widget.AppCompat.ActionButton">
-        <item name="android:padding">0dp</item>
-        <item name="android:maxWidth">54dp</item>
-        <item name="android:gravity">center</item>
+        <item name="android:minWidth">@dimen/default_header_height</item>
+        <item name="android:maxWidth">@dimen/default_header_height</item>
     </style>
 
     <style name="Theme.Topface.NoActionBar.Fullscreen" parent="Theme.Topface.NoActionBar">
