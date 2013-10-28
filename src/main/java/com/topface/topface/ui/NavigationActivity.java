@@ -284,10 +284,12 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
             MenuFragment.logoutInvoked = false;
         }
 
-        if (!AuthToken.getInstance().isEmpty() &&
-                !CacheProfile.premium && !mHasClosingsForThisSession &&
-                mFragmentMenu.getCurrentFragmentId() != MenuFragment.F_PROFILE
-                && !mFragmentMenu.isClosed() && mClosingsOnProfileUpdateInvoked) {
+        if (!AuthToken.getInstance().isEmpty()
+                && !CacheProfile.premium
+                && !mHasClosingsForThisSession
+                && mFragmentMenu.getCurrentFragmentId() != MenuFragment.F_PROFILE
+                && !mFragmentMenu.isClosed()
+                && mClosingsOnProfileUpdateInvoked) {
             if (CacheProfile.unread_likes > 0 || CacheProfile.unread_mutual > 0) {
                 onClosings();
             }
@@ -537,6 +539,8 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         if (CacheProfile.unread_likes == 0) {
             LikesClosingFragment.usersProcessed = true;
         }
+        if (!mClosingsOnProfileUpdateInvoked) return;
+
         Options.Closing closing = CacheProfile.getOptions().closing;
         if (closing.enabledMutual && !MutualClosingFragment.usersProcessed) {
             mFragmentMenu.onClosings(BaseFragment.F_MUTUAL);
@@ -562,6 +566,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
                 Options.Closing closing = CacheProfile.getOptions().closing;
                 if (closing.isClosingsEnabled()) {
                     closing.stopForPremium();
+                    mClosingsOnProfileUpdateInvoked = true;
                     onClosings();
                 }
             }
