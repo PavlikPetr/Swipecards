@@ -78,7 +78,11 @@
                         style="@style/ChatButtonsText"
                         android:text="@string/general_gift"
                         android:background="@drawable/chat_gift_selector"
-                        android:layout_marginLeft="6dp"/>
+                        android:layout_marginLeft="6dp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"/>
 
                 <Button
                         android:id="@+id/btnChatPlace"
@@ -88,7 +92,11 @@
                         style="@style/ChatButtonsText"
                         android:text="@string/general_place"
                         android:background="@drawable/chat_place_selector"
-                        android:layout_marginLeft="6dp"/>
+                        android:layout_marginLeft="6dp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"/>
 
 
                 <Button
@@ -100,7 +108,11 @@
                         android:text="@string/general_soon"
                         android:background="@drawable/chat_photo_selector"
                         android:layout_marginLeft="6dp"
-                        android:layout_marginRight="6dp"/>
+                        android:layout_marginRight="6dp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"/>
             </LinearLayout>
 
             <RelativeLayout
