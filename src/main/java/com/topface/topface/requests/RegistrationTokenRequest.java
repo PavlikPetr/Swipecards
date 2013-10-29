@@ -8,10 +8,11 @@ import org.json.JSONObject;
 public class RegistrationTokenRequest extends ApiRequest {
     // Data
     public static final String service = "googleplay.setPushToken";
-    public String token; //Токен регистрации в C2DM
+    private String token; //Токен регистрации в C2DM
 
-    public RegistrationTokenRequest(Context context) {
+    public RegistrationTokenRequest(String token, Context context) {
         super(context);
+        this.token = token;
         doNeedAlert(false);
     }
 

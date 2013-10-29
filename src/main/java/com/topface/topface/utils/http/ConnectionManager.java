@@ -291,8 +291,11 @@ public class ConnectionManager {
             apiRequest.getHandler().post(new Runnable() {
                 @Override
                 public void run() {
-                    RetryDialog retryDialog = new RetryDialog(context, apiRequest);
-                    retryDialog.setMessage(context.getString(R.string.general_maintenance));
+                    RetryDialog retryDialog = new RetryDialog(
+                            context.getString(R.string.general_maintenance),
+                            context,
+                            apiRequest
+                    );
                     retryDialog.setButton(
                             Dialog.BUTTON_POSITIVE,
                             context.getString(R.string.general_dialog_retry),
