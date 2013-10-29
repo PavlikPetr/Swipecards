@@ -36,7 +36,7 @@ public class FeedRequest extends ApiRequest {
     protected JSONObject getRequestData() throws JSONException {
         JSONObject data = new JSONObject();
         data.put("limit", limit);
-        data.put("new", unread);
+        data.put("unread", unread);
         //data.put("leave", leave);
         if (to != null) {
             data.put("to", to);
