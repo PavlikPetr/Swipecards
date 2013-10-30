@@ -421,10 +421,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         super.onSaveInstanceState(outState);
         outState.putBoolean(WAS_FAILED, wasFailed);
         outState.putParcelableArrayList(ADAPTER_DATA, mAdapter.getDataCopy());
-        try {
-            outState.putString(FRIEND_FEED_USER, mUser.toJson().toString());
-        } catch (Exception e) {
-            Debug.error(e);
+        if (mUser != null) {
+            try {
+                outState.putString(FRIEND_FEED_USER, mUser.toJson().toString());
+            } catch (Exception e) {
+                Debug.error(e);
+            }
         }
     }
 

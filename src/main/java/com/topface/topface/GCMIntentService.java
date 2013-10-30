@@ -2,7 +2,6 @@ package com.topface.topface;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Looper;
 
 import com.google.android.gcm.GCMBaseIntentService;
 import com.topface.topface.utils.Debug;
@@ -28,15 +27,7 @@ public class GCMIntentService extends GCMBaseIntentService {
         isOnMessageReceived.set(true);
         if (intent != null) {
             if (Settings.getInstance().isNotificationEnabled()) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Looper.prepare();
-                        GCMUtils.showNotification(intent, context);
-                        Looper.loop();
-                    }
-
-                }).start();
+                GCMUtils.showNotification(intent, context);
             }
             //Сообщаем о том что есть новое уведомление и нужно обновить список
             Intent broadcastReceiver = new Intent(GCMUtils.GCM_NOTIFICATION);

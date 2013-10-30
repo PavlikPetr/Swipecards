@@ -11,6 +11,7 @@ import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.IApiRequest;
@@ -20,6 +21,7 @@ import com.topface.topface.utils.Debug;
  * Диалог, показываемый при ошибке отправки запроса и предлагающий его повторить
  */
 public class RetryDialog extends AlertDialog {
+    private String mMessage;
     private BroadcastReceiver mReciever;
     private Context mContext;
     private IApiRequest mRequest;
@@ -30,10 +32,16 @@ public class RetryDialog extends AlertDialog {
         mRequest = request;
     }
 
+    public RetryDialog(String message, Context context, IApiRequest request) {
+        this(context, request);
+        mMessage = message;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.retry_dialog_layout);
+        ((TextView) findViewById(R.id.retryDialogMessage)).setText(mMessage);
 
         ImageView satelite = (ImageView) findViewById(R.id.sat);
         Animation anim = new RotateAnimation(0f, 358f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);

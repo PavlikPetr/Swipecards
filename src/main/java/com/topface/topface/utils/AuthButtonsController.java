@@ -103,7 +103,7 @@ public class AuthButtonsController {
         return activeButtons.contains(sn);
     }
 
-    public HashSet<String> getOhters() {
+    public HashSet<String> getOthers() {
         HashSet<String> others = new HashSet<String>();
         for (String sn : allSocials) {
             if (!activeButtons.contains(sn)) {
@@ -114,7 +114,7 @@ public class AuthButtonsController {
     }
 
     public void switchSettings() {
-        activeButtons = getOhters();
+        activeButtons = getOthers();
     }
 
     public void addSocialNetwork(String sn) {
