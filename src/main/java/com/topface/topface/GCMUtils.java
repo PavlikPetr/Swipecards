@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
@@ -111,21 +110,6 @@ public class GCMUtils {
      *
      * @param context контекст приложения
      */
-    /*public static void generateFakeNotification(Context context) {
-        Intent intent = new Intent();
-        intent.putExtra("text", "asd");
-        intent.putExtra("title", "da");
-        intent.putExtra("type", "5");
-        intent.putExtra("unread", "1");
-        intent.putExtra("counters", "788"); // поле counters в ответе от сервера переименованно в unread
-//        try {                  topface://chat?id=13123
-//            intent.putExtra("user", new JSONObject().put("id", "43945394").put("photo", new JSONObject().put("c128x128", "http://imgs.topface.com/u43945394/c128x128/nnf6g6.jpg")).put("name", "Ilya").put("age", "21").toString());
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-        showNotification(intent, context);
-    }*/
     public static void showNotification(final Intent extra, Context context) {
         try {
             final String data = extra.getStringExtra("text");
@@ -344,30 +328,30 @@ public class GCMUtils {
     }
 
     public static void sendRegId(final Context context, final String registrationId) {
-        new Thread(new Runnable() {
+        Debug.log("Try send GCM regId to server: ", registrationId);
+
+        new RegistrationTokenRequest(registrationId, context).callback(new ApiHandler() {
             @Override
-            public void run() {
-                Looper.prepare();
-
-                Debug.log("Try send GCM regId to server: ", registrationId);
-
-                RegistrationTokenRequest registrationRequest = new RegistrationTokenRequest(context);
-                registrationRequest.token = registrationId;
-                registrationRequest.callback(new ApiHandler() {
+            public void success(IApiResponse response) {
+                new BackgroundThread() {
                     @Override
-                    public void success(IApiResponse response) {
+                    public void execute() {
                         GCMRegistrar.setRegisteredOnServer(context, true);
                     }
+                };
+            }
 
+            @Override
+            public void fail(int codeError, IApiResponse response) {
+                Debug.error(String.format("RegistrationRequest fail: #%d %s", codeError, response));
+                new BackgroundThread() {
                     @Override
-                    public void fail(int codeError, IApiResponse response) {
-                        Debug.error(String.format("RegistrationRequest fail: #%d %s", codeError, response));
+                    public void execute() {
                         GCMRegistrar.setRegisteredOnServer(context, false);
                     }
-                }).exec();
-                Looper.loop();
+                };
             }
-        }).start();
+        }).exec();
     }
 
 
