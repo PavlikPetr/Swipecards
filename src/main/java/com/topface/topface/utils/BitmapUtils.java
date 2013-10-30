@@ -137,6 +137,10 @@ public class BitmapUtils {
     }
 
     public static Bitmap getScaledBitmap(final Bitmap rawBitmap, final float dstWidth, final float dstHeight) {
+        if (rawBitmap.isRecycled()) {
+            Debug.error("Bitmap is already recycled");
+            return rawBitmap;
+        }
         // Исходный размер загруженного изображения
         final int srcWidth = rawBitmap.getWidth();
         final int srcHeight = rawBitmap.getHeight();
@@ -152,10 +156,8 @@ public class BitmapUtils {
         matrix.postScale(ratio, ratio);
 
         Bitmap result = Bitmap.createBitmap(rawBitmap, 0, 0, srcWidth, srcHeight, matrix, true);
-        if (!rawBitmap.isRecycled()) {
+        if (result != rawBitmap) {
             rawBitmap.recycle();
-        } else {
-            Debug.error("Bitmap is already recycled");
         }
         // сжатие изображения
         return result;
@@ -181,15 +183,17 @@ public class BitmapUtils {
     }
 
     private static Bitmap getRotatedBitmap(Bitmap bitmap, int rotate) {
+        if (bitmap.isRecycled()) {
+            Debug.error("Bitmap is already recycled");
+            return bitmap;
+        }
         int w = bitmap.getWidth();
         int h = bitmap.getHeight();
         Matrix mtx = new Matrix();
         mtx.postRotate(rotate);
         Bitmap result = Bitmap.createBitmap(bitmap, 0, 0, w, h, mtx, true);
-        if (!bitmap.isRecycled()) {
+        if (result != bitmap) {
             bitmap.recycle();
-        } else {
-            Debug.error("Bitmap is already recycled");
         }
         return result;
     }
