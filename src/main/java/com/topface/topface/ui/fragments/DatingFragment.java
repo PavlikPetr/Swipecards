@@ -362,6 +362,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             public void onReceive(Context context, Intent intent) {
                 if (isAdded()) {
                     updateFilterData();
+                    setHighRatePrice();
                 }
             }
         };
