@@ -247,7 +247,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     private void showInvitePopup(final FragmentActivity activity) {
-//        if (CacheProfile.canInvite && activity != null) {
+        if (CacheProfile.canInvite && activity != null) {
             final SharedPreferences preferences = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
             needShowPopup = false;
             new BackgroundThread() {
@@ -258,7 +258,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
                 }
             };
 
-//        }
+        }
     }
 
     private void doInvitePopupActions(SharedPreferences preferences, FragmentActivity activity) {
@@ -293,6 +293,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         Integer res = getOptionsMenuRes();
         if (res != null) {
+            menu.clear();
             inflater.inflate(res, menu);
         }
         super.onCreateOptionsMenu(menu, inflater);
