@@ -287,6 +287,9 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     protected void takePhoto(TakePhotoDialog.TakePhotoListener listener) {
         if (needOpenDialog) {
+            if (this instanceof NavigationActivity) {
+                ((NavigationActivity)this).setTakePhotoDialogStarted(true);
+            }
             TakePhotoDialog newFragment = TakePhotoDialog.newInstance();
             newFragment.setOnTakePhotoListener(listener);
             try {

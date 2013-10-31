@@ -85,6 +85,11 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
             if (mNavBarController != null) mNavBarController.refreshNotificators();
         }
     };
+
+    public void setTakePhotoDialogStarted(boolean takePhotoDialogStarted) {
+        this.takePhotoDialogStarted = takePhotoDialogStarted;
+    }
+
     private boolean takePhotoDialogStarted;
 
     @Override
@@ -307,7 +312,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     private void actionsAfterRegistration() {
         if (!AuthToken.getInstance().isEmpty()) {
             if (CacheProfile.photo == null) {
-                takePhotoDialogStarted = true;
+
                 takePhoto(new TakePhotoDialog.TakePhotoListener() {
                     @Override
                     public void onPhotoSentSuccess(final Photo photo) {
@@ -365,6 +370,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
                     @Override
                     public void onDialogClose() {
+                        takePhotoDialogStarted = false;
                         if (!CacheProfile.isEmpty() && (CacheProfile.city.isEmpty() || CacheProfile.needCityConfirmation(getApplicationContext()))
                                 && !CacheProfile.wasCityAsked) {
                             CacheProfile.wasCityAsked = true;
