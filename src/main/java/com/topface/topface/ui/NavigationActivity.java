@@ -72,7 +72,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     private Novice mNovice;
     private boolean needAnimate = false;
     private boolean isPopupVisible = false;
-    private static boolean mHasClosingsForThisSession;
+    private static boolean mHasClosingsForThisSession = false;
     private static boolean mClosingsOnProfileUpdateInvoked = false;
 
     private static NavigationActivity instance = null;
@@ -295,7 +295,9 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
             }
         }
 
-        if (mNavBarController != null) mNavBarController.refreshNotificators();
+        if (mNavBarController != null) {
+            mNavBarController.refreshNotificators();
+        }
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
 
@@ -533,6 +535,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     }
 
     public void onClosings() {
+        if (mHasClosingsForThisSession) return;
         if (CacheProfile.unread_mutual == 0) {
             MutualClosingFragment.usersProcessed = true;
         }
