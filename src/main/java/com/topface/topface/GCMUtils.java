@@ -69,25 +69,24 @@ public class GCMUtils {
             try {
                 GCMRegistrar.checkDevice(context);
                 GCMRegistrar.checkManifest(context);
+                new BackgroundThread() {
+                    @Override
+                    public void execute() {
+                        if (GCMRegistrar.isRegistered(context)) {
+                            final String regId = GCMRegistrar.getRegistrationId(context);
+                            Debug.log("Already registered, regID is " + regId);
 
-                if (GCMRegistrar.isRegistered(context)) {
-                    final String regId = GCMRegistrar.getRegistrationId(context);
-                    Debug.log("Already registered, regID is " + regId);
+                            //Если на сервере не зарегистрированы, отправляем запрос
+                            if (!GCMRegistrar.isRegisteredOnServer(context)) {
+                                sendRegId(context, regId);
+                            }
 
-                    //Если на сервере не зарегистрированы, отправляем запрос
-                    if (!GCMRegistrar.isRegisteredOnServer(context)) {
-                        sendRegId(context, regId);
-                    }
-
-                } else {
-                    new BackgroundThread() {
-                        @Override
-                        public void execute() {
+                        } else {
                             GCMRegistrar.register(context, GCMIntentService.SENDER_ID);
+                            Debug.log("Registered: " + GCMRegistrar.getRegistrationId(context));
                         }
-                    };
-                    Debug.log("Registered: " + GCMRegistrar.getRegistrationId(context));
-                }
+                    }
+                };
 
             } catch (Exception ex) {
                 new BackgroundThread() {
@@ -177,7 +176,7 @@ public class GCMUtils {
     }
 
     private static void setCounters(Intent extra, Context context) {
-        String countersString = extra.getStringExtra("unread");
+        String countersString = extra.getStringExtra("counters");
         if (countersString != null) {
             setCounters(countersString, context);
         }
