@@ -44,10 +44,6 @@ public class AppConfig {
         return mLocaleConfig;
     }
 
-    public String getApiRevision() {
-        return mFields.getStringField(DATA_API_REVISION);
-    }
-
     public String getAuthVkApi() {
         return mFields.getStringField(DATA_AUTH_VK_API);
     }
@@ -76,20 +72,12 @@ public class AppConfig {
         return mFields.getIntegerField(DATA_API_VERSION);
     }
 
-    public String getApiRevisin() {
-        return mFields.getStringField(DATA_API_REVISION);
-    }
-
     public String getApiDomain() {
         return mFields.getStringField(DATA_API_URL);
     }
 
-    public void setFloodEndsTime(long timestamp) {
-        mFields.setField(FLOOD_ENDS_TIME, timestamp);
-    }
-
-    public long getFloodEndsTime() {
-        return mFields.getLongField(FLOOD_ENDS_TIME);
+    public String getApiRevision() {
+        return mFields.getStringField(DATA_API_REVISION);
     }
 
     public String getAppUniqueId() {
@@ -196,6 +184,7 @@ public class AppConfig {
         Debug.log("Save AppConfig" + toString());
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public void saveConfigField(String key) {
         SharedPreferences.Editor editor = getPreferences().edit();
         editor.putInt(DATA_APP_CONFIG_VERSION, APP_CONFIG_VERSION);
@@ -298,6 +287,7 @@ public class AppConfig {
             return result;
         }
 
+        @SuppressWarnings("UnusedDeclaration")
         public boolean setField(String fieldName, Long value) {
             boolean result = false;
             if (containsKey(fieldName)) {
@@ -343,6 +333,7 @@ public class AppConfig {
             return result;
         }
 
+        @SuppressWarnings("UnusedDeclaration")
         public Long getLongField(String fieldName) {
             Long result = 0l;
             SettingsField settingsField = get(fieldName);

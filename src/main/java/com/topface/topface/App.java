@@ -105,6 +105,11 @@ public class App extends Application {
         MutualClosingFragment.usersProcessed = false;
         LikesClosingFragment.usersProcessed = false;
 
+        //Инициализируем GCM
+        if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty()) {
+            GCMUtils.init(getContext());
+        }
+
         final Handler handler = new Handler();
         //Выполнение всего, что можно сделать асинхронно, делаем в отдельном потоке
         new BackgroundThread() {
@@ -127,10 +132,6 @@ public class App extends Application {
         CacheProfile.loadProfile();
         //Оповещаем о том, что профиль загрузился
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
-        //Инициализируем GCM
-        if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty()) {
-            GCMUtils.init(getContext());
-        }
         if (!GCMIntentService.isOnMessageReceived.getAndSet(false) && !CacheProfile.isEmpty()) {
             handler.post(new Runnable() {
                 @Override
