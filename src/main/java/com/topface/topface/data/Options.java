@@ -136,7 +136,7 @@ public class Options extends AbstractData {
     public int priceLeader = 8;
     public int minLeadersPercent = 25; //Не уверен в этом, возможно стоит использовать другое дефолтное значение
 
-    public String offerwall;
+    public String offerwall = SPONSORPAY;
 
     public int premium_period;
     public int contacts_count;

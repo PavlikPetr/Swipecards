@@ -84,6 +84,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         if (getData().size() > ChatFragment.LIMIT) {
             addLoaderItem(true);
         }
+        for (History item : data) {
+            if (item.isWaitingItem() || item.isRepeatItem() || item.isFake()) {
+                mUnrealItems.add(item);
+            }
+        }
     }
 
     @Override
@@ -533,7 +538,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             if (!dataClone.isEmpty() && dataClone.get(dataClone.size() - 1).isLoaderOrRetrier()) {
                 dataClone.remove(dataClone.size() - 1);
             }
-            removeUnrealItems(dataClone);
+//            removeUnrealItems(dataClone);
         } catch (OutOfMemoryError e) {
             Debug.error(e);
         }
