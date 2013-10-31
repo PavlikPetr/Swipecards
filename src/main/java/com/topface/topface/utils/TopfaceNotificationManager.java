@@ -182,7 +182,7 @@ public class TopfaceNotificationManager {
                 case FAIL:
                     return generateFail(isVersionOld(), intent);
                 case STANDARD:
-                    return generateSuccess(isVersionOld(), intent);
+                    return generateStandard(intent);
             }
             return null;
         }
@@ -196,7 +196,7 @@ public class TopfaceNotificationManager {
             notificationBuilder.setSmallIcon(R.drawable.ic_notification);
 
             if (image != null) {
-                Bitmap scaledIcon = Utils.clipAndScaleBitmap(image, (int) width, (int) height);
+                Bitmap scaledIcon = Utils.clippingBitmap(image);
                 if (scaledIcon != null) {
                     notificationBuilder.setLargeIcon(scaledIcon);
                 }
@@ -346,7 +346,7 @@ public class TopfaceNotificationManager {
             Bitmap tficon = BitmapFactory.decodeResource(context.getResources(),
                     R.drawable.ic_notification);
             NotificationCompat.BigPictureStyle inboxStyle =
-                    new NotificationCompat.BigPictureStyle(notificationBuilder.setLargeIcon(tficon).setContentTitle(title));
+                    new NotificationCompat.BigPictureStyle(notificationBuilder.setContentTitle(title));
 
             inboxStyle.bigPicture(image).build();
         }
@@ -368,10 +368,8 @@ public class TopfaceNotificationManager {
         }
 
         private void generateBigText() {
-            Bitmap tficon = BitmapFactory.decodeResource(context.getResources(),
-                    R.drawable.ic_notification);
             NotificationCompat.BigTextStyle inboxStyle =
-                    new NotificationCompat.BigTextStyle(notificationBuilder.setLargeIcon(tficon).setContentTitle(title));
+                    new NotificationCompat.BigTextStyle(notificationBuilder.setLargeIcon(image).setContentTitle(title));
 
             inboxStyle.bigText(text).build();
         }

@@ -85,6 +85,11 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
             if (mNavBarController != null) mNavBarController.refreshNotificators();
         }
     };
+
+    public void setTakePhotoDialogStarted(boolean takePhotoDialogStarted) {
+        this.takePhotoDialogStarted = takePhotoDialogStarted;
+    }
+
     private boolean takePhotoDialogStarted;
 
     @Override
@@ -143,7 +148,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     private void initDrawerLayout() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.loNavigationDrawer);
         mDrawerLayout.setScrimColor(Color.argb(217, 0, 0, 0));
-        //mDrawerLayout.setDrawerShadow(R.drawable.shadow_left_menu_right, GravityCompat.START);
+        mDrawerLayout.setDrawerShadow(R.drawable.shadow_left_menu_right, GravityCompat.START);
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
                 mDrawerLayout,         /* DrawerLayout object */
@@ -309,7 +314,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     private void actionsAfterRegistration() {
         if (!AuthToken.getInstance().isEmpty()) {
             if (CacheProfile.photo == null) {
-                takePhotoDialogStarted = true;
+
                 takePhoto(new TakePhotoDialog.TakePhotoListener() {
                     @Override
                     public void onPhotoSentSuccess(final Photo photo) {
@@ -367,6 +372,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
                     @Override
                     public void onDialogClose() {
+                        takePhotoDialogStarted = false;
                         if (!CacheProfile.isEmpty() && (CacheProfile.city.isEmpty() || CacheProfile.needCityConfirmation(getApplicationContext()))
                                 && !CacheProfile.wasCityAsked) {
                             CacheProfile.wasCityAsked = true;

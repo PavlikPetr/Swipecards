@@ -5,13 +5,13 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:gravity="center_vertical"
-              android:padding="10dp"
+
               android:id="@+id/notification">
 
     <ImageView
             android:id="@+id/notificationImage"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:scaleType="centerCrop"
             />
 
