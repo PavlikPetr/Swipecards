@@ -166,7 +166,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
-        super.onCreateView(inflater,container,saved);
+        super.onCreateView(inflater, container, saved);
         View rootLayout = inflater.inflate(R.layout.fragment_menu, null);
 
         View profileLayout = getProfileLayout(rootLayout);
@@ -366,9 +366,11 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             }
             if (!newFragment.isAdded()) {
-                transaction.replace(R.id.fragment_content, newFragment, fragmentTag);
+                if (oldFragment != null) {
+                    transaction.remove(oldFragment);
+                }
+                transaction.add(R.id.fragment_content, newFragment, fragmentTag);
                 transaction.commitAllowingStateLoss();
-                fragmentManager.executePendingTransactions();
             }
         }
 
@@ -412,7 +414,8 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 if (LikesClosingFragment.usersProcessed || CacheProfile.premium) {
                     fragment = new LikesFragment();
                 } else {
-                    if (!isClosed) getActivity().getIntent().putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_LIKES);
+                    if (!isClosed)
+                        getActivity().getIntent().putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_LIKES);
                     Debug.log("Closing:Last fragment F_LIKES from MenuFragment");
                     fragment = new LikesClosingFragment();
                 }
@@ -471,11 +474,11 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 profileLayout = (ViewGroup) rootLayout.findViewById(R.id.btnProfileLayoutWithBackground);
                 profileLayout.setVisibility(View.VISIBLE);
                 String name = CacheProfile.first_name.length() <= 1
-                        ? getString(R.string.general_profile): CacheProfile.first_name;
-                ((Button)profileLayout.findViewById(R.id.btnUserName)).setText(name);
+                        ? getString(R.string.general_profile) : CacheProfile.first_name;
+                ((Button) profileLayout.findViewById(R.id.btnUserName)).setText(name);
                 Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
                         ProfileBackgrounds.getBackgroundResource(getActivity(), CacheProfile.background_id));
-                ((ImageViewRemote)profileLayout.findViewById(R.id.ivProfileBackground))
+                ((ImageViewRemote) profileLayout.findViewById(R.id.ivProfileBackground))
                         .setRemoteImageBitmap(bitmap);
                 switchLayoutToPremium = true;
             }
@@ -600,7 +603,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         View profileLayout = getProfileLayout(getView());
         initMenuAvatar(profileLayout);
         Button profileButton = (Button) profileLayout.findViewById(R.id.btnFragmentProfile);
-        final  Button hashedProfileButton = mButtons.get(BaseFragment.F_PROFILE);
+        final Button hashedProfileButton = mButtons.get(BaseFragment.F_PROFILE);
         if (profileButton != hashedProfileButton) {
             profileButton.setOnClickListener(new OnClickListener() {
                 @Override
