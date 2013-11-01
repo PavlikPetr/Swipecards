@@ -38,9 +38,13 @@ import com.topface.topface.ui.edit.EditProfileItem.Type;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.http.ProfileBackgrounds;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.LinkedList;
 
@@ -251,26 +255,27 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     break;
                 case CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY:
                     Bundle extras = data.getExtras();
-                    final String city_name = extras.getString(CitySearchActivity.INTENT_CITY_NAME);
-                    final String city_full = extras.getString(CitySearchActivity.INTENT_CITY_FULL_NAME);
-                    final int city_id = extras.getInt(CitySearchActivity.INTENT_CITY_ID);
-                    SettingsRequest request = new SettingsRequest(this);
-                    request.cityid = city_id;
-                    request.callback(new ApiHandler() {
+                    try {
+                        final City city = new City(new JSONObject(extras.getString(CitySearchActivity.INTENT_CITY)));
+                        SettingsRequest request = new SettingsRequest(this);
+                        request.cityid = city.id;
+                        request.callback(new ApiHandler() {
 
-                        @Override
-                        public void success(IApiResponse response) {
-                            CacheProfile.city = new City(city_id, city_name,
-                                    city_full);
-                            LocalBroadcastManager.getInstance(getApplicationContext())
-                                    .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
-                        }
+                            @Override
+                            public void success(IApiResponse response) {
+                                CacheProfile.city = city;
+                                LocalBroadcastManager.getInstance(getApplicationContext())
+                                        .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                            }
 
-                        @Override
-                        public void fail(int codeError, IApiResponse response) {
-                        }
-                    }).exec();
-                    mEditCity.setText(city_name);
+                            @Override
+                            public void fail(int codeError, IApiResponse response) {
+                            }
+                        }).exec();
+                        mEditCity.setText(city.name);
+                    } catch (JSONException e) {
+                        Debug.error(e);
+                    }
                 default:
                     break;
             }

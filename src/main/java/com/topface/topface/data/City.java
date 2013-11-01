@@ -1,5 +1,7 @@
 package com.topface.topface.data;
 
+import com.topface.topface.App;
+import com.topface.topface.R;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.Debug;
@@ -82,5 +84,13 @@ public class City extends AbstractData implements SerializableToJson, Cloneable 
 
     public boolean isEmpty() {
         return id == 0;
+    }
+
+    public String getName() {
+        if (this.id == ALL_CITIES) {
+            return App.getContext().getString(R.string.filter_cities_all);
+        } else {
+            return name;
+        }
     }
 }

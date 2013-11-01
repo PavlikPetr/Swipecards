@@ -272,7 +272,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
 
     private void setConfigValues() {
         mApiVersion.setText(Integer.toString(mConfig.getApiVersion()));
-        mApiRevision.setText(mConfig.getApiRevisin());
+        mApiRevision.setText(mConfig.getApiRevision());
         mApiUrl.setSelection(mApiUrlsMap.indexOfValue(mConfig.getApiDomain()));
         mEditorModeSpinner.setSelection(mConfig.getEditorMode());
         mDebugModeSpinner.setSelection(mConfig.getDebugMode());

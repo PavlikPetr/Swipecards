@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
@@ -69,25 +70,26 @@ public class GCMUtils {
             try {
                 GCMRegistrar.checkDevice(context);
                 GCMRegistrar.checkManifest(context);
+                new BackgroundThread() {
+                    @Override
+                    public void execute() {
+                        if (GCMRegistrar.isRegistered(context)) {
+                            final String regId = GCMRegistrar.getRegistrationId(context);
+                            Debug.log("Already registered, regID is " + regId);
 
-                if (GCMRegistrar.isRegistered(context)) {
-                    final String regId = GCMRegistrar.getRegistrationId(context);
-                    Debug.log("Already registered, regID is " + regId);
+                            //Если на сервере не зарегистрированы, отправляем запрос
+                            if (!GCMRegistrar.isRegisteredOnServer(context)) {
+                                Looper.loop();
+                                sendRegId(context, regId);
+                                Looper.prepare();
+                            }
 
-                    //Если на сервере не зарегистрированы, отправляем запрос
-                    if (!GCMRegistrar.isRegisteredOnServer(context)) {
-                        sendRegId(context, regId);
-                    }
-
-                } else {
-                    new BackgroundThread() {
-                        @Override
-                        public void execute() {
+                        } else {
                             GCMRegistrar.register(context, GCMIntentService.SENDER_ID);
+                            Debug.log("Registered: " + GCMRegistrar.getRegistrationId(context));
                         }
-                    };
-                    Debug.log("Registered: " + GCMRegistrar.getRegistrationId(context));
-                }
+                    }
+                };
 
             } catch (Exception ex) {
                 new BackgroundThread() {
@@ -177,7 +179,7 @@ public class GCMUtils {
     }
 
     private static void setCounters(Intent extra, Context context) {
-        String countersString = extra.getStringExtra("unread");
+        String countersString = extra.getStringExtra("counters");
         if (countersString != null) {
             setCounters(countersString, context);
         }
@@ -330,6 +332,7 @@ public class GCMUtils {
     public static void sendRegId(final Context context, final String registrationId) {
         Debug.log("Try send GCM regId to server: ", registrationId);
 
+        //Ебаный стыд. Но ничего, мы это поправим, когда сделаем поддержку коллбэков без handler
         new RegistrationTokenRequest(registrationId, context).callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
