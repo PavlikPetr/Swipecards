@@ -56,6 +56,10 @@ import com.topface.topface.utils.offerwalls.Offerwalls;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
@@ -445,25 +449,26 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
                     requestCode == CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY) {
                 if (data != null) {
                     Bundle extras = data.getExtras();
-                    final String city_name = extras.getString(CitySearchActivity.INTENT_CITY_NAME);
-                    final String city_full = extras.getString(CitySearchActivity.INTENT_CITY_FULL_NAME);
-                    final int city_id = extras.getInt(CitySearchActivity.INTENT_CITY_ID);
-                    SettingsRequest request = new SettingsRequest(this);
-                    request.cityid = city_id;
-                    request.callback(new ApiHandler() {
+                    try {
+                        final City city = new City(new JSONObject(extras.getString(CitySearchActivity.INTENT_CITY)));
+                        SettingsRequest request = new SettingsRequest(this);
+                        request.cityid = city.id;
+                        request.callback(new ApiHandler() {
 
-                        @Override
-                        public void success(IApiResponse response) {
-                            CacheProfile.city = new City(city_id, city_name,
-                                    city_full);
-                            LocalBroadcastManager.getInstance(getApplicationContext())
-                                    .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
-                        }
+                            @Override
+                            public void success(IApiResponse response) {
+                                CacheProfile.city = city;
+                                LocalBroadcastManager.getInstance(getApplicationContext())
+                                        .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                            }
 
-                        @Override
-                        public void fail(int codeError, IApiResponse response) {
-                        }
-                    }).exec();
+                            @Override
+                            public void fail(int codeError, IApiResponse response) {
+                            }
+                        }).exec();
+                    } catch (JSONException e) {
+                        Debug.error(e);
+                    }
                 }
             }
         }

@@ -751,4 +751,5 @@
     <string name="locking_screen_button_answer">Ответить</string>
     <string name="locking_screen_advice">Ответьте на все входящие симпатии</string>
     <string name="locking_screen_advice2">Избавьтесь от всех ограничений</string>
+    <string name="current_city">Текущий город</string>
 </resources>
