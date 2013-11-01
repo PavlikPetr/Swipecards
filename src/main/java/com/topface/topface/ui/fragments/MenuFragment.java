@@ -371,6 +371,8 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 }
                 transaction.add(R.id.fragment_content, newFragment, fragmentTag);
                 transaction.commitAllowingStateLoss();
+            } else {
+                transaction.show(newFragment);
             }
         }
 
