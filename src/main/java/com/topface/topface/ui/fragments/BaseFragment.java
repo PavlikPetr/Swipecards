@@ -298,6 +298,12 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.clear();
+    }
+
     protected Integer getOptionsMenuRes() {
         return null;
     }
