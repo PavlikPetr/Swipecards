@@ -79,9 +79,9 @@ public class GCMUtils {
 
                             //Если на сервере не зарегистрированы, отправляем запрос
                             if (!GCMRegistrar.isRegisteredOnServer(context)) {
-                                Looper.loop();
-                                sendRegId(context, regId);
                                 Looper.prepare();
+                                sendRegId(context, regId);
+                                Looper.loop();
                             }
 
                         } else {
