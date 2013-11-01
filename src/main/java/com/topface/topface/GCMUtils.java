@@ -79,7 +79,9 @@ public class GCMUtils {
 
                             //Если на сервере не зарегистрированы, отправляем запрос
                             if (!GCMRegistrar.isRegisteredOnServer(context)) {
+                                Looper.loop();
                                 sendRegId(context, regId);
+                                Looper.prepare();
                             }
 
                         } else {
@@ -331,7 +333,6 @@ public class GCMUtils {
         Debug.log("Try send GCM regId to server: ", registrationId);
 
         //Ебаный стыд. Но ничего, мы это поправим, когда сделаем поддержку коллбэков без handler
-        Looper.prepare();
         new RegistrationTokenRequest(registrationId, context).callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
@@ -354,7 +355,6 @@ public class GCMUtils {
                 };
             }
         }).exec();
-        Looper.loop();
     }
 
 
