@@ -3,7 +3,7 @@ package com.topface.topface.requests;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.topface.topface.Static;
+import com.topface.topface.App;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.HttpUtils;
@@ -53,7 +53,9 @@ abstract public class MultipartApiRequest extends ApiRequest {
 
         Debug.logJson(
                 ConnectionManager.TAG,
-                "MULTIPART REQUEST >>> " + Static.API_URL + " rev:" + getRevNum(),
+                "MULTIPART REQUEST >>> " +
+                        getApiUrl() +
+                        " rev:" + App.getConfig().getApiRevision(),
                 requests
         );
 
