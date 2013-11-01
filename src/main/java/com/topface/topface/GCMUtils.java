@@ -61,7 +61,7 @@ public class GCMUtils {
     private static boolean showLikes = false;
     private static boolean showSympathy = false;
     private static boolean showVisitors = false;
-    public static final String GCM_INTENT = "GCM";
+    public static final String NOTIFICATION_INTENT = "GCM";
     public static boolean GCM_SUPPORTED = true;
 
     public static void init(final Context context) {
@@ -123,7 +123,7 @@ public class GCMUtils {
                 Intent intent = getIntentByType(context, type, user);
 
                 if (intent != null) {
-                    intent.putExtra(GCMUtils.GCM_INTENT, true);
+                    intent.putExtra(GCMUtils.NOTIFICATION_INTENT, true);
                     if (!TextUtils.equals(intent.getComponent().getClassName(), ContainerActivity.class.getName())) {
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     }

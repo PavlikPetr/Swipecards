@@ -276,7 +276,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     protected boolean isNeedBroughtToFront(Intent intent) {
         return intent != null &&
-                !intent.getBooleanExtra(GCMUtils.GCM_INTENT, false) &&
+                !intent.getBooleanExtra(GCMUtils.NOTIFICATION_INTENT, false) &&
                 (intent.getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0;
     }
 
