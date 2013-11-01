@@ -31,6 +31,9 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.LinkedList;
 
 public class CitySearchActivity extends BaseFragmentActivity {
@@ -43,9 +46,7 @@ public class CitySearchActivity extends BaseFragmentActivity {
     public static final int INTENT_CITY_SEARCH_ACTIVITY = 100;
     public static final int INTENT_CITY_SEARCH_FROM_FILTER_ACTIVITY = 101;
     public static final int INTENT_CITY_SEARCH_AFTER_REGISTRATION = 102;
-    public static final String INTENT_CITY_ID = "city_id";
-    public static final String INTENT_CITY_NAME = "city_name";
-    public static final String INTENT_CITY_FULL_NAME = "city_full";
+    public static final String INTENT_CITY = "city";
 
     private String mAllCitiesString;
     private int mRequestKey;
@@ -54,6 +55,8 @@ public class CitySearchActivity extends BaseFragmentActivity {
     private EditText mCityInputView;
     private ListView cityListView;
     private TextView mCityFail;
+
+    private City initCity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +67,14 @@ public class CitySearchActivity extends BaseFragmentActivity {
         overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
 
         mRequestKey = getIntent().getIntExtra(Static.INTENT_REQUEST_KEY, 0);
+        try {
+            if (getIntent().hasExtra(INTENT_CITY)) {
+                initCity = new City(new JSONObject(getIntent().getStringExtra(INTENT_CITY)));
+            }
+        } catch (JSONException e) {
+            Debug.error(e);
+            initCity = CacheProfile.city;
+        }
         mAllCitiesString = getResources().getString(R.string.filter_cities_all);
 
         // Data
@@ -202,9 +213,11 @@ public class CitySearchActivity extends BaseFragmentActivity {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, final int position, long arg3) {
                 Intent intent = CitySearchActivity.this.getIntent();
-                intent.putExtra(INTENT_CITY_ID, mDataList.get(position).id);
-                intent.putExtra(INTENT_CITY_NAME, mDataList.get(position).name);
-                intent.putExtra(INTENT_CITY_FULL_NAME, mDataList.get(position).full);
+                try {
+                    intent.putExtra(INTENT_CITY, mDataList.get(position).toJson().toString());
+                } catch (JSONException e) {
+                    Debug.error(e);
+                }
                 Debug.log(CitySearchActivity.this, "1.city_id:" + mDataList.get(position).id);
                 CitySearchActivity.this.setResult(RESULT_OK, intent);
                 CitySearchActivity.this.finish();
@@ -220,19 +233,30 @@ public class CitySearchActivity extends BaseFragmentActivity {
     private void initMyCity() {
         mCbMyCity = findViewById(R.id.cbMyCity);
         mMyCityTitle = (TextView) findViewById(R.id.tvMyCity);
-        if (mRequestKey == INTENT_CITY_SEARCH_FROM_FILTER_ACTIVITY || CacheProfile.city == null || CacheProfile.city.isEmpty()) {
+        if (CacheProfile.city == null || CacheProfile.city.isEmpty()) {
             mCbMyCity.setVisibility(View.GONE);
             mMyCityTitle.setVisibility(View.GONE);
         } else {
-            if (mRequestKey == INTENT_CITY_SEARCH_AFTER_REGISTRATION) {
-                mMyCityTitle.setText(R.string.we_detect_your_city);
-            } else {
-                mMyCityTitle.setText(R.string.edit_my_city);
-            }
             ((ImageView) mCbMyCity.findViewById(R.id.ivEditBackground)).setImageDrawable(getResources().getDrawable(
                     R.drawable.edit_big_btn_selector));
-            ((TextView) mCbMyCity.findViewWithTag("tvTitle")).setText(CacheProfile.city.name);
-            mCbMyCity.findViewWithTag("ivCheck").setVisibility(View.VISIBLE);
+            View checkView = mCbMyCity.findViewWithTag("ivCheck");
+            if (checkView != null) checkView.setVisibility(View.VISIBLE);
+
+            TextView cityTextView = ((TextView) mCbMyCity.findViewWithTag("tvTitle"));
+            switch (mRequestKey) {
+                case INTENT_CITY_SEARCH_FROM_FILTER_ACTIVITY:
+                    mMyCityTitle.setText(R.string.current_city);
+                    if (cityTextView != null) cityTextView.setText(initCity.getName());
+                    break;
+                case INTENT_CITY_SEARCH_AFTER_REGISTRATION:
+                    mMyCityTitle.setText(R.string.we_detect_your_city);
+                    if (cityTextView != null) cityTextView.setText(CacheProfile.city.name);
+                    break;
+                default:
+                    mMyCityTitle.setText(R.string.edit_my_city);
+                    if (cityTextView != null) cityTextView.setText(CacheProfile.city.name);
+                    break;
+            }
         }
     }
 

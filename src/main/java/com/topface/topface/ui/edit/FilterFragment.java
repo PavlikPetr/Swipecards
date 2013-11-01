@@ -23,6 +23,9 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.FormInfo;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class FilterFragment extends AbstractEditFragment implements OnClickListener {
 
     public static Profile mTargetUser = new User();
@@ -326,6 +329,11 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 break;
             case R.id.loCity:
                 Intent intent = new Intent(getActivity().getApplicationContext(), CitySearchActivity.class);
+                try {
+                    intent.putExtra(CitySearchActivity.INTENT_CITY, mFilter.city.toJson().toString());
+                } catch (JSONException e) {
+                    Debug.error(e);
+                }
                 startActivityForResult(intent, CitySearchActivity.INTENT_CITY_SEARCH_FROM_FILTER_ACTIVITY);
                 break;
             case R.id.loOnline:
@@ -391,11 +399,11 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 TextView item = hashTextViewByTitleId.get(titleId);
                 if (item != null) item.setText(mFormInfo.getEntry(titleId, selectedId));
             } else if (requestCode == CitySearchActivity.INTENT_CITY_SEARCH_FROM_FILTER_ACTIVITY) {
-                int city_id = extras.getInt(CitySearchActivity.INTENT_CITY_ID);
-                String city_name = extras.getString(CitySearchActivity.INTENT_CITY_NAME);
-
-                mFilter.city = new City(city_id, city_name, city_name);
-
+                try {
+                    mFilter.city = new City(new JSONObject(extras.getString(CitySearchActivity.INTENT_CITY)));
+                } catch (JSONException e) {
+                    Debug.error(e);
+                }
                 setText(buildCityString(), mCityFrame);
             } else if (requestCode == EditContainerActivity.INTENT_EDIT_AGE) {
                 int ageStart = extras.getInt(EditContainerActivity.INTENT_AGE_START);

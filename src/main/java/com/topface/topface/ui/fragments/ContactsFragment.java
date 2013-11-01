@@ -157,9 +157,7 @@ public class ContactsFragment extends BaseFragment {
                             @Override
                             public void always(IApiResponse response) {
                                 super.always(response);
-                                if (isAdded()) {
-                                    locker.setVisibility(View.GONE);
-                                }
+                                unlockUi();
                             }
                         });
                     } else {
@@ -168,6 +166,7 @@ public class ContactsFragment extends BaseFragment {
                         if (contactsVip != null) {
                             contactsVip.setEnabled(true);
                         }
+                        unlockUi();
                     }
                 }
 
@@ -177,11 +176,15 @@ public class ContactsFragment extends BaseFragment {
                     if (contactsVip != null) {
                         contactsVip.setEnabled(true);
                     }
-                    if (isAdded()) {
-                        locker.setVisibility(View.GONE);
-                    }
+                    unlockUi();
                 }
             }).exec();
+        }
+    }
+
+    private void unlockUi() {
+        if (isAdded()) {
+            locker.setVisibility(View.GONE);
         }
     }
 
