@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
@@ -329,6 +330,8 @@ public class GCMUtils {
     public static void sendRegId(final Context context, final String registrationId) {
         Debug.log("Try send GCM regId to server: ", registrationId);
 
+        //Ебаный стыд. Но ничего, мы это поправим, когда сделаем поддержку коллбэков без handler
+        Looper.prepare();
         new RegistrationTokenRequest(registrationId, context).callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
@@ -351,6 +354,7 @@ public class GCMUtils {
                 };
             }
         }).exec();
+        Looper.loop();
     }
 
 
