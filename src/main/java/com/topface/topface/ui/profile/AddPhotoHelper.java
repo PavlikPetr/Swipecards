@@ -5,9 +5,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -41,6 +43,7 @@ import java.util.UUID;
 public class AddPhotoHelper {
 
     public static final String CANCEL_NOTIFICATION_RECEIVER = "CancelNotificationReceiver";
+    public static final String FILENAME_CONST = "filename";
     public static String PATH_TO_FILE;
     private String mFileName = "/tmp.jpg";
 
@@ -109,6 +112,7 @@ public class AddPhotoHelper {
     };
 
     private void startCamera() {
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         new BackgroundThread() {
             @Override
             public void execute() {
@@ -116,6 +120,7 @@ public class AddPhotoHelper {
 
                 UUID uuid = UUID.randomUUID();
                 mFileName = "/" + uuid.toString() + ".jpg";
+                preferences.edit().putString(FILENAME_CONST, mFileName).commit();
                 File outputDirectory = new File(PATH_TO_FILE);
                 //noinspection ResultOfMethodCallIgnored
                 if (!outputDirectory.exists()) {
@@ -197,6 +202,19 @@ public class AddPhotoHelper {
                 //Если фотография сделана, то ищем ее во временном файле
                 if (outputFile != null) {
                     photoUri = Uri.fromFile(outputFile);
+                } else {
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+                    String filename = preferences.getString(FILENAME_CONST, "");
+                    if (!filename.equals("")) {
+                        File outputDirectory = new File(PATH_TO_FILE);
+                        //noinspection ResultOfMethodCallIgnored
+                        if (outputDirectory.exists()) {
+                            outputFile = new File(outputDirectory, filename);
+                            photoUri = Uri.fromFile(outputFile);
+                            preferences.edit().remove(FILENAME_CONST).commit();
+                        }
+
+                    }
                 }
             } else if (requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY) {
                 //Если она взята из галереи, то получаем URL из данных интента и преобразуем его в путь до файла
