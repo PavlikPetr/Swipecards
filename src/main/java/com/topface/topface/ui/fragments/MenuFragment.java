@@ -365,15 +365,15 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             if (mHardwareAccelerated) {
                 transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             }
-            if (!newFragment.isAdded()) {
-                if (oldFragment != null) {
-                    transaction.remove(oldFragment);
-                }
-                transaction.add(R.id.fragment_content, newFragment, fragmentTag);
-                transaction.commitAllowingStateLoss();
-            } else {
-                transaction.show(newFragment);
+            if (newFragment.isAdded()) {
+                transaction.remove(newFragment);
             }
+
+            if (oldFragment != null) {
+                transaction.remove(oldFragment);
+            }
+            transaction.add(R.id.fragment_content, newFragment, fragmentTag);
+            transaction.commitAllowingStateLoss();
         }
 
         //Закрываем меню только после создания фрагмента

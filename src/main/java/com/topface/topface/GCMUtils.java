@@ -3,12 +3,10 @@ package com.topface.topface;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.widget.ListView;
 
@@ -52,7 +50,6 @@ public class GCMUtils {
     public static final String NEXT_INTENT = "com.topface.topface_next";
 
     public static final int NOTIFICATION_CANCEL_DELAY = 2000;
-    public static final String IS_GCM_SUPPORTED = "IS_GCM_SUPPORTED";
 
     public static int lastNotificationType = GCM_TYPE_DIALOGS;
 
@@ -92,15 +89,6 @@ public class GCMUtils {
                 };
 
             } catch (Exception ex) {
-                new BackgroundThread() {
-                    @Override
-                    public void execute() {
-                        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit();
-                        editor.putString(IS_GCM_SUPPORTED, Boolean.toString(false));
-                        editor.commit();
-                    }
-                };
-
                 GCM_SUPPORTED = false;
                 Debug.error("GCM not supported", ex);
             }

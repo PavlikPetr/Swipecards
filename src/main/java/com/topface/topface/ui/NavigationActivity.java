@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
@@ -56,7 +55,6 @@ import com.topface.topface.utils.offerwalls.Offerwalls;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -140,11 +138,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     }
 
     protected void onCreateAsync() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-        String isGcmSupported = preferences.getString(GCMUtils.IS_GCM_SUPPORTED, null);
-        if (isGcmSupported != null) {
-            GCMUtils.GCM_SUPPORTED = Boolean.getBoolean(isGcmSupported);
-        }
         mNovice = Novice.getInstance(getPreferences());
         mNovice.initNoviceFlags();
     }
@@ -542,6 +535,9 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
             } else {
                 LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(DatingFragment.CLOSINGS_FILTER));
             }
+        } else {
+            MutualClosingFragment.usersProcessed = true;
+            LikesClosingFragment.usersProcessed = true;
         }
     }
 
