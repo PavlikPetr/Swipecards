@@ -442,8 +442,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     FragmentActivity activity = getActivity();
                     if (activity != null) {
                         UsersList.log("load error: " + response.getErrorMessage());
-                        Toast.makeText(activity, App.getContext().getString(R.string.general_data_error),
-                                Toast.LENGTH_SHORT).show();
                         onUpdateFail(isAddition);
                         unlockControls();
                     }
