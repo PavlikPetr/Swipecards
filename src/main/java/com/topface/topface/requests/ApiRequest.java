@@ -50,7 +50,6 @@ public abstract class ApiRequest implements IApiRequest {
     private boolean isNeedCounters = true;
 
     public ApiRequest(Context context) {
-        //Нельзя передавать Application Context!!!! Только контекст Activity
         if (isNeedAuth()) {
             ssid = Static.EMPTY;
         }
