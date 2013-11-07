@@ -200,6 +200,9 @@ public class TopfaceNotificationManager {
                 if (scaledIcon != null) {
                     notificationBuilder.setLargeIcon(scaledIcon);
                 }
+            } else {
+                notificationBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
+                        R.drawable.ic_notification));
             }
             if (Settings.getInstance().isVibrationEnabled()) {
                 notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
