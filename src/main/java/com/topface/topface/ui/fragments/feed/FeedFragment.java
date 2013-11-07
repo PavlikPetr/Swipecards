@@ -542,7 +542,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             intent.putExtra(ChatFragment.INTENT_USER_SEX, item.user.sex);
             intent.putExtra(ChatFragment.INTENT_USER_AGE, item.user.age);
             intent.putExtra(ChatFragment.INTENT_USER_CITY, item.user.city.name);
-            intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
+            intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, ((Object) this).getClass().getSimpleName());
             intent.putExtra(ChatFragment.INTENT_ITEM_ID, item.id);
             getActivity().startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
         }
