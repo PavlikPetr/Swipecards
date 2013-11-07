@@ -27,11 +27,23 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.TopfaceNotificationManager;
 import com.topface.topface.utils.Utils;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 
 public class GCMUtils {
@@ -201,15 +213,28 @@ public class GCMUtils {
     }
 
     private static void showNotificationWithIcon(final int unread, final String data, final User user, final TopfaceNotificationManager notificationManager, final TopfaceNotificationManager.TempImageViewRemote fakeImageView, final Intent newI, final String finalTitle) {
+        //Устанавливаем таймер - если фотка за 5 секунд не смогла загрузиться, то показываем нотификацию с лого вместо фотки.
+        final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+
+        executorService.schedule(new Runnable() {
+            @Override
+            public void run() {
+                notificationManager.showNotification(finalTitle, data, true, null, unread, newI, false);
+            }
+        }, 5000, TimeUnit.MILLISECONDS);
+
         fakeImageView.setRemoteSrc(user.photoUrl, new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                if (user.id != lastUserId) {
+
+                if (user.id != lastUserId && !executorService.isShutdown()) {
+                    executorService.shutdown();
                     notificationManager.showNotification(finalTitle, data, true, fakeImageView.getImageBitmap(), unread, newI, false);
                 }
             }
         });
+
     }
 
     private static int getUnread(Intent extra) {
