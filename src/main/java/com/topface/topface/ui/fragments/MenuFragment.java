@@ -353,10 +353,12 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         Fragment oldFragment = fragmentManager.findFragmentById(R.id.fragment_content);
 
         String fragmentTag = getTagById(mCurrentFragmentId);
+        Debug.log("MenuFragment: Try switch to fragment with tag" + fragmentTag);
         BaseFragment newFragment = (BaseFragment) fragmentManager.findFragmentByTag(fragmentTag);
         //Если не нашли в FragmentManager уже существующего инстанса, то создаем новый
         if (newFragment == null) {
             newFragment = getFragmentNewInstanceById(mCurrentFragmentId);
+            Debug.log("MenuFragment: newFragment is null, create new instance");
         }
 
         if (oldFragment == null || newFragment != oldFragment) {
@@ -366,14 +368,18 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             }
             if (newFragment.isAdded()) {
-                transaction.remove(newFragment);
+                transaction.detach(newFragment);
+                Debug.error("MenuFragment: try detach already added new fragment" + fragmentTag);
             }
 
             if (oldFragment != null) {
                 transaction.remove(oldFragment);
+                Debug.log("MenuFragment: remove old fragment " + oldFragment.getTag());
             }
             transaction.add(R.id.fragment_content, newFragment, fragmentTag);
             transaction.commitAllowingStateLoss();
+        } else {
+            Debug.error("MenuFragment: new fragment already added");
         }
 
         //Закрываем меню только после создания фрагмента
