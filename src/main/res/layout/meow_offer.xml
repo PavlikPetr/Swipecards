@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_offer_meow"
+        >
+        <ImageView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/sayMeowAvatar"
+            android:src="@drawable/ava"
+            android:layout_marginTop="36dp"
+            android:layout_marginLeft="36dp"
+            />
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/sayMeowText"
+            android:text="@string/general_say_meow"
+            android:layout_toRightOf="@id/sayMeowAvatar"
+            android:layout_marginTop="36dp"
+            android:layout_marginLeft="20dp"
+            android:textSize="24sp"
+            />
+        <TextView
+            android:id="@+id/sayMeowOffer"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/general_meow_offer"
+            android:layout_below="@id/sayMeowText"
+            android:layout_toRightOf="@id/sayMeowAvatar"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="7dp"
+            />
+    </RelativeLayout>
+
+</RelativeLayout>

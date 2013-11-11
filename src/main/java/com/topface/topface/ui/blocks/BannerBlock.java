@@ -148,7 +148,7 @@ public class BannerBlock {
     private void initBanner() {
         Map<String, Options.Page> bannersMap = FloatBlock.getActivityMap();
         if (mFragment != null && bannersMap != null) {
-            String fragmentId = mFragment.getClass().toString();
+            String fragmentId = ((Object) mFragment).getClass().toString();
             Options options = CacheProfile.getOptions();
             if (bannersMap.containsKey(fragmentId) && options != null && options.pages != null) {
                 if (bannersMap.get(fragmentId) != null) {
@@ -239,6 +239,7 @@ public class BannerBlock {
     }
 
     private void showBanner(final Banner banner) throws Exception {
+        Debug.log("BannersBlock: try show banner " + mBannerView);
         if (mBannerView instanceof AdView) {
             showAdMob();
         } else if (mBannerView instanceof AWView) {
@@ -572,7 +573,7 @@ public class BannerBlock {
                             @Override
                             public void onComplete(Bundle values) {
                                 super.onComplete(values);
-                                loadBanner(FloatBlock.getActivityMap().get(mFragment.getClass().toString()).name);
+                                loadBanner(FloatBlock.getActivityMap().get(((Object) mFragment).getClass().toString()).name);
                             }
                         }
                 );
@@ -660,7 +661,7 @@ public class BannerBlock {
         initBanner();
         if (mBannerView != null) {
             if (mBannerView instanceof AWView) {
-                ((AWView) mBannerView).request(mAdwiredMap.get(mFragment.getClass().toString()));
+                ((AWView) mBannerView).request(mAdwiredMap.get(((Object) mFragment).getClass().toString()));
             }
         }
     }

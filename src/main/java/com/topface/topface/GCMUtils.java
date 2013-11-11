@@ -3,12 +3,10 @@ package com.topface.topface;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.widget.ListView;
 
@@ -28,11 +26,23 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.TopfaceNotificationManager;
 import com.topface.topface.utils.Utils;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.*;
 
@@ -52,7 +62,6 @@ public class GCMUtils {
     public static final String NEXT_INTENT = "com.topface.topface_next";
 
     public static final int NOTIFICATION_CANCEL_DELAY = 2000;
-    public static final String IS_GCM_SUPPORTED = "IS_GCM_SUPPORTED";
 
     public static int lastNotificationType = GCM_TYPE_DIALOGS;
 
@@ -92,15 +101,6 @@ public class GCMUtils {
                 };
 
             } catch (Exception ex) {
-                new BackgroundThread() {
-                    @Override
-                    public void execute() {
-                        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(App.getContext()).edit();
-                        editor.putString(IS_GCM_SUPPORTED, Boolean.toString(false));
-                        editor.commit();
-                    }
-                };
-
                 GCM_SUPPORTED = false;
                 Debug.error("GCM not supported", ex);
             }
@@ -213,15 +213,28 @@ public class GCMUtils {
     }
 
     private static void showNotificationWithIcon(final int unread, final String data, final User user, final TopfaceNotificationManager notificationManager, final TopfaceNotificationManager.TempImageViewRemote fakeImageView, final Intent newI, final String finalTitle) {
+        //Устанавливаем таймер - если фотка за 5 секунд не смогла загрузиться, то показываем нотификацию с лого вместо фотки.
+        final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+
+        executorService.schedule(new Runnable() {
+            @Override
+            public void run() {
+                notificationManager.showNotification(finalTitle, data, true, null, unread, newI, false);
+            }
+        }, 5000, TimeUnit.MILLISECONDS);
+
         fakeImageView.setRemoteSrc(user.photoUrl, new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                if (user.id != lastUserId) {
+
+                if (user.id != lastUserId && !executorService.isShutdown()) {
+                    executorService.shutdown();
                     notificationManager.showNotification(finalTitle, data, true, fakeImageView.getImageBitmap(), unread, newI, false);
                 }
             }
         });
+
     }
 
     private static int getUnread(Intent extra) {

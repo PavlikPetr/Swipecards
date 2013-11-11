@@ -752,4 +752,6 @@
     <string name="locking_screen_advice">Ответьте на все входящие симпатии</string>
     <string name="locking_screen_advice2">Избавьтесь от всех ограничений</string>
     <string name="current_city">Текущий город</string>
+    <string name="general_say_meow">Скажи Мяу</string>
+    <string name="general_meow_offer">Сыграйте 3 раунда с друзьями и получите VIP статус на 2 дня</string>
 </resources>

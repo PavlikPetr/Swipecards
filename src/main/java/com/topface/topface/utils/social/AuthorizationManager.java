@@ -105,7 +105,7 @@ public class AuthorizationManager {
         return auth;
     }
 
-    private void receiveToken(AuthToken authToken) {
+    private void receiveToken() {
         LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, TOKEN_RECEIVED));
     }
 
@@ -126,7 +126,7 @@ public class AuthorizationManager {
 
                     AuthToken authToken = AuthToken.getInstance();
                     authToken.saveToken(AuthToken.SN_VKONTAKTE, user_id, token_key, expires_in);
-                    receiveToken(authToken);
+                    receiveToken();
                 }
             } else {
                 mFacebook.authorizeCallback(requestCode, resultCode, data);
@@ -152,23 +152,32 @@ public class AuthorizationManager {
 
         okAuthObject.setTokenRequestListener(new OkTokenRequestListener() {
             @Override
-            public void onSuccess(String s) {
-                GetCurrentUserTask userTask = new GetCurrentUserTask(okAuthObject, s);
+            public void onSuccess(String token) {
+                Debug.log("Odnoklassniki auth success with token " + token);
                 listener.onTokenReceived();
-                userTask.execute();
-
+                new GetCurrentUserTask(okAuthObject, token).execute();
             }
 
             @Override
             public void onError() {
-                LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, AUTHORIZATION_FAILED));
-//                mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
+                LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(
+                        new Intent(AUTHORIZATION_TAG).putExtra(
+                                AuthFragment.MSG_AUTH_KEY,
+                                AUTHORIZATION_FAILED
+                        )
+                );
+                Debug.error("Odnoklassniki auth error");
             }
 
             @Override
             public void onCancel() {
-                LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, AUTHORIZATION_CANCELLED));
-//                mHandler.sendEmptyMessage(AUTHORIZATION_CANCELLED);
+                LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(
+                        new Intent(AUTHORIZATION_TAG).putExtra(
+                                AuthFragment.MSG_AUTH_KEY,
+                                AUTHORIZATION_CANCELLED
+                        )
+                );
+                Debug.error("Odnoklassniki auth cancel");
 
             }
         });
@@ -184,6 +193,7 @@ public class AuthorizationManager {
 
         public GetCurrentUserTask(Odnoklassniki ok, String token) {
             odnoklassniki = ok;
+            Debug.log("Odnoklassniki token: " + token);
             this.token = token;
         }
 
@@ -207,7 +217,7 @@ public class AuthorizationManager {
                     f.setAccessible(true);
                     authToken.saveToken(AuthToken.SN_ODNOKLASSNIKI, user.optString("uid"), token, (String) f.get(odnoklassniki));
                     Settings.getInstance().setSocialAccountName(user.optString("name"));
-                    receiveToken(authToken);
+                    receiveToken();
                 } catch (Exception e) {
                     mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
                     Debug.error(e);
@@ -274,13 +284,10 @@ public class AuthorizationManager {
                 final AuthToken authToken = AuthToken.getInstance();
                 authToken.saveToken(AuthToken.SN_FACEBOOK, user_id, mFacebook.getAccessToken(),
                         Long.toString(mFacebook.getAccessExpires()));
-                receiveToken(authToken);
+                receiveToken();
             } catch (JSONException e) {
                 Debug.log("FB", "mRequestListener::onComplete:error");
                 LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, AUTHORIZATION_CANCELLED));
-//                if (mHandler != null) {
-//                    mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
-//                }
             }
         }
 

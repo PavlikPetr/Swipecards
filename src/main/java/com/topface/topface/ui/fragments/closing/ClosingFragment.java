@@ -65,16 +65,16 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     }
 
     protected void skipAllRequest(int type) {
-        SkipAllClosedRequest skipAllRequest = new SkipAllClosedRequest(type, getActivity());
-        skipAllRequest.callback(new SimpleApiHandler() {
-            @Override
-            public void always(IApiResponse response) {
-                if(isAdded()) {
-                    refreshActionBarTitles();
-                }
-            }
-        });
-        skipAllRequest.exec();
+        new SkipAllClosedRequest(type, getActivity())
+                .callback(new SimpleApiHandler() {
+                    @Override
+                    public void always(IApiResponse response) {
+                        if (isAdded()) {
+                            refreshActionBarTitles();
+                        }
+                    }
+                }).exec();
+
         onUsersProcessed();
     }
 

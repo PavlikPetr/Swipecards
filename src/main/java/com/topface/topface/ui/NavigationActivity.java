@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
@@ -152,12 +151,8 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     }
 
     protected void onCreateAsync() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
-        String isGcmSupported = preferences.getString(GCMUtils.IS_GCM_SUPPORTED, null);
-        if (isGcmSupported != null) {
-            GCMUtils.GCM_SUPPORTED = Boolean.getBoolean(isGcmSupported);
-        }
-        Novice.getInstance(getPreferences()).initNoviceFlags();
+        mNovice = Novice.getInstance(getPreferences());
+        mNovice.initNoviceFlags();
     }
 
     private void initDrawerLayout() {
