@@ -202,13 +202,14 @@ public class AuthorizationManager {
             try {
                 return odnoklassniki.request("users.getCurrentUser", null, "get");
             } catch (IOException e) {
-                Debug.error(e);
+                Debug.error("Odnoklassniki doInBackground error", e);
             }
             return null;
         }
 
         @Override
         protected void onPostExecute(String s) {
+            Debug.log("Odnoklassniki users.getCurrentUser result: " + s);
             if (s != null) {
                 final AuthToken authToken = AuthToken.getInstance();
                 try {
@@ -220,13 +221,20 @@ public class AuthorizationManager {
                     receiveToken();
                 } catch (Exception e) {
                     mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
-                    Debug.error(e);
+                    Debug.error("Odnoklassniki result parse error", e);
                 }
 
             } else {
-                Debug.error("OK auth error. users.getCurrentUser returns null");
+                Debug.error("Odnoklassniki auth error. users.getCurrentUser returns null");
                 mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
             }
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            Debug.error("Odnoklassniki auth cancelled");
+            mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
         }
     }
 
@@ -417,9 +425,12 @@ public class AuthorizationManager {
     public static void logout(Activity activity) {
         GCMRegistrar.unregister(activity.getApplicationContext());
         Ssid.remove();
-        AuthToken.getInstance().removeToken();
-        //noinspection unchecked
-        new FacebookLogoutTask().execute();
+        AuthToken authToken = AuthToken.getInstance();
+        if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
+            //noinspection unchecked
+            new FacebookLogoutTask().execute();
+        }
+        authToken.removeToken();
         Settings.getInstance().resetSettings();
         CacheProfile.clearProfile();
         SharedPreferences preferences = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
