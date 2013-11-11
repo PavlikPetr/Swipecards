@@ -227,6 +227,7 @@
     <string name="vip_messages_bg">Mesajların arka planı</string>
     <string name="vip_black_list">Kara liste</string>
     <string name="vip_profile_bg">Arka plan fotoğrafı</string>
+    <string name="vip_status">VIP-durumu</string>
     <string name="profile_services">Hizmetler</string>
     <string name="default_balance_constant">Hesabınızda</string>
     <string name="default_energy_coins_buy_btn_text">Para satın almak, enerji deposu doldurmak</string>
@@ -567,4 +568,16 @@
         <item quantity="one">%d seçilmiş</item>
     </plurals>
     <string name="photo_is_uploading">Foto yüklemesi</string>
+    <string name="default_ringtone">Varsayılan</string>
+    <string name="photo_info_deleted">Silinmiştir</string>
+    <string name="user_deleted_or_banned">Kullanıcı silinmiş veya engellenmiştir</string>
+    <string name="locking_popup_title">«%s» bölümüne geçiş sınırlıdır!</string>
+    <string name="locking_popup_message">«%s» bölümüne geçmek için tüm gelen sempatilere cevap verin veya VIP alın.</string>
+    <string name="locking_popup_button_buy">VIP satın almak</string>
+    <string name="locking_popup_button_answer">Sempatilere cevap vermek</string>
+    <string name="locking_menu_message">Uygulamanın bazı sayfalarına erişim sınırlıdır. Tüm sınırları kaldırmak için tüm gelen sempatilere cevap verin veya VIP alın.</string>
+    <string name="locking_likes_message">Dikkat! Uygulamanın bazı sayfalarına erişim sınırlıdır. Tüm sınırları kaldırmak için tüm gelen sempatilere cevap verin veya VIP alın.</string>
+    <string name="locking_screen_button_answer">Cevap vermek</string>
+    <string name="locking_screen_advice">Tüm gelen sempatilere cevap verin</string>
+    <string name="locking_screen_advice2">Tüm sınırlarınızı kaldırın</string>
 </resources>

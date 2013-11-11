@@ -261,7 +261,7 @@
     <string name="general_reconnect">Vänligen vänta. Vi försöker återställa Internetanslutningen.</string>
     <string name="dating_people_unnoticed">Du har ignorerat tio personer!</string>
     <string name="dating_continue">Fortsätt umgås</string>
-    <string name="dating_better_look">Titta närmanre!\nDu kanske missar ditt öde!</string>
+    <string name="dating_better_look">Titta närmare!\nDu kanske missar ditt öde!</string>
     <string name="edit_my_city">Min stad</string>
     <string name="edit_my_photos">Mina foton</string>
     <string name="general_search_empty_title">Inget hittats, tyvärr</string>
@@ -415,7 +415,7 @@
     <string name="general_invite_friends">Bjud in vänner</string>
     <string name="general_rest_contacts">Du har %d kontakter kvar</string>
     <string name="invite_friends_title">Bjud alla vänner från telefonboken till Topface.</string>
-    <string name="invalid_contacts">Vissa kontakter är inkoreekta. Vänligen skicka korrekta kontakter.</string>
+    <string name="invalid_contacts">Vissa kontakter är inkorrekta. Vänligen skicka korrekta kontakter.</string>
     <string name="general_choose_action">Välj handling</string>
     <plurals name="vip_status_period">
         <item quantity="other">Du har fått VIP-status för %d dagar</item>
@@ -555,4 +555,15 @@
     </plurals>
     <string name="photo_is_uploading">Fotot laddas upp</string>
     <string name="default_ringtone">Som standard</string>
+    <string name="photo_info_deleted">Raderats</string>
+    <string name="user_deleted_or_banned">Användaren raderad eller bannlyst</string>
+    <string name="locking_popup_title">Tilgång till sidan «%s» är begransad!</string>
+    <string name="locking_popup_message">För att få tillgång till sidan  «%s» besvara alla inkommande sympatier eller erhåll VIP.</string>
+    <string name="locking_popup_button_buy">Köp VIP</string>
+    <string name="locking_popup_button_answer">Besvara sympatier</string>
+    <string name="locking_menu_message">Tillgång till vissa sidor är begränsad. För att ta bort begränsningar besvara alla inkommande sympatier eller erhåll VIP.</string>
+    <string name="locking_likes_message">OBS! Tillgång till vissa sidor är begränsad. För att ta bort alla begränsningar besvara alla inkommande sympatier eller erhåll VIP.</string>
+    <string name="locking_screen_button_answer">Svara</string>
+    <string name="locking_screen_advice">Besvara alla inkommande sympatier</string>
+    <string name="locking_screen_advice2">Ta bort alla begränsningar</string>
 </resources>

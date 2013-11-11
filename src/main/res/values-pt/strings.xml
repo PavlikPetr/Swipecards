@@ -523,4 +523,15 @@
     <string name="silent_ringtone">Sem som</string>
     <string name="photo_is_uploading">Carregamento de fotos</string>
     <string name="default_ringtone">Por silêncio</string>
+    <string name="photo_info_deleted">Remover</string>
+    <string name="user_deleted_or_banned">O Usuário foi banido ou excluído</string>
+    <string name="locking_popup_title">A mudança para a secção «%s» é limitada!</string>
+    <string name="locking_popup_message">Para mudar para a secção «%s» responda a todas as simpatias recebidas ou obtenha VIP.</string>
+    <string name="locking_popup_button_buy">Comprar VIP</string>
+    <string name="locking_popup_button_answer">Responder as simpatias</string>
+    <string name="locking_menu_message">O acesso a determinadas páginas da aplicação é limitado. Para remover as restrições, responda a todas as simpatias recebidas ou obtenha VIP.</string>
+    <string name="locking_likes_message">Atenção! Acesso a determinadas páginas da aplicação é limitado. Para remover todas as restrições, responda a todas as simpatias recebidas ou obtenha VIP.</string>
+    <string name="locking_screen_button_answer">Responder</string>
+    <string name="locking_screen_advice">Responda a todas as simpatias recebidas</string>
+    <string name="locking_screen_advice2">Livre-se de todas as restrições</string>
 </resources>
