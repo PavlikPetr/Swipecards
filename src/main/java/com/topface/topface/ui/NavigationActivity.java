@@ -151,8 +151,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     }
 
     protected void onCreateAsync() {
-        mNovice = Novice.getInstance(getPreferences());
-        mNovice.initNoviceFlags();
+        Novice.getInstance(getPreferences()).initNoviceFlags();
     }
 
     private void initDrawerLayout() {

@@ -37,6 +37,7 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.BuyWidgetController;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 
@@ -282,12 +283,12 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         FragmentManager fragmentManager = getFragmentManager();
         Fragment oldFragment = fragmentManager.findFragmentById(R.id.fragment_content);
 
-        String fragmentTag = getTagById(mCurrentFragmentId);
+        String fragmentTag = getTagById(fragmentId);
         Debug.log("MenuFragment: Try switch to fragment with tag" + fragmentTag);
         BaseFragment newFragment = (BaseFragment) fragmentManager.findFragmentByTag(fragmentTag);
         //Если не нашли в FragmentManager уже существующего инстанса, то создаем новый
         if (newFragment == null) {
-            newFragment = getFragmentNewInstanceById(mCurrentFragmentId);
+            newFragment = getFragmentNewInstanceById(fragmentId);
             Debug.log("MenuFragment: newFragment is null, create new instance");
         }
 
