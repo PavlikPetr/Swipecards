@@ -66,7 +66,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
     public static final String CURRENT_FRAGMENT_ID = "NAVIGATION_FRAGMENT";
     private FragmentManager mFragmentManager;
-    private MenuFragment mFragmentMenu;
+    private MenuFragment mMenuFragment;
     private DrawerLayout mDrawerLayout;
     private FullscreenController mFullscreenController;
 
@@ -109,9 +109,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         mFragmentManager = getSupportFragmentManager();
 
         initDrawerLayout();
-        if (!AuthToken.getInstance().isEmpty()) {
-            showFragment(savedInstanceState);
-        }
 
         new BackgroundThread() {
             @Override
@@ -143,6 +140,19 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     }
 
     private void initDrawerLayout() {
+        mMenuFragment = new MenuFragment();
+        mMenuFragment.setClickable(true);
+        mMenuFragment.setOnFragmentSelected(new MenuFragment.OnFragmentSelectedListener() {
+            @Override
+            public void onFragmentSelected(int fragmentId) {
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+            }
+        });
+        mFragmentManager
+                .beginTransaction()
+                .add(R.id.fragment_menu, mMenuFragment)
+                .commit();
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.loNavigationDrawer);
         mDrawerLayout.setScrimColor(Color.argb(217, 0, 0, 0));
         mDrawerLayout.setDrawerShadow(R.drawable.shadow_left_menu_right, GravityCompat.START);
@@ -156,7 +166,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                mFragmentMenu.showNovice(mNovice);
+                mMenuFragment.showNovice(mNovice);
             }
 
             @Override
@@ -167,15 +177,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         };
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-        mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
-        mFragmentMenu.setClickable(true);
-        mFragmentMenu.setOnFragmentSelected(new MenuFragment.OnFragmentSelectedListener() {
-            @Override
-            public void onFragmentSelected(int fragmentId) {
-                mDrawerLayout.closeDrawer(GravityCompat.START);
-            }
-        });
     }
 
     @Override
@@ -203,10 +204,10 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     }
 
     public void showFragment(int fragmentId) {
-        mFragmentMenu.selectMenu(fragmentId);
+        mMenuFragment.selectMenu(fragmentId);
     }
 
-    private void showFragment(Bundle savedInstanceState) {
+    private int getSavedFragmentId(Bundle savedInstanceState) {
         Intent intent = getIntent();
         //Получаем id фрагмента, если он открыт
         int currentFragment = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
@@ -217,7 +218,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
                     BaseFragment.F_DATING;
         }
 
-        showFragment(currentFragment);
+        return currentFragment;
     }
 
     public void hideContent() {
@@ -227,7 +228,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     @Override
     public void onLoadProfile() {
         super.onLoadProfile();
-        mFragmentMenu.onLoadProfile();
+        mMenuFragment.onLoadProfile();
         AuthorizationManager.extendAccessToken(NavigationActivity.this);
         PopupManager manager = new PopupManager(this);
         manager.showOldVersionPopup(CacheProfile.getOptions().maxVersion);
@@ -253,7 +254,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         super.onNewIntent(intent);
         int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
         if (id != -1) {
-            mFragmentMenu.showFragment(id);
+            mMenuFragment.switchFragment(id);
         }
     }
 
@@ -282,15 +283,15 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
         App.checkProfileUpdate();
         if (MenuFragment.logoutInvoked) {
-            mFragmentMenu.onStopClosings();
+            mMenuFragment.onStopClosings();
             MenuFragment.logoutInvoked = false;
         }
 
         if (!AuthToken.getInstance().isEmpty()
                 && !CacheProfile.premium
                 && !mHasClosingsForThisSession
-                && mFragmentMenu.getCurrentFragmentId() != MenuFragment.F_PROFILE
-                && !mFragmentMenu.isClosed()
+                && mMenuFragment.getCurrentFragmentId() != MenuFragment.F_PROFILE
+                && !mMenuFragment.isClosed()
                 && mClosingsOnProfileUpdateInvoked) {
             if (CacheProfile.unread_likes > 0 || CacheProfile.unread_mutual > 0) {
                 onClosings();
@@ -303,7 +304,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
 
-        if (mFragmentMenu.isClosed()) {
+        if (mMenuFragment.isClosed()) {
             updateClosing();
         }
     }
@@ -468,15 +469,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(
-                CURRENT_FRAGMENT_ID,
-                mFragmentMenu.getCurrentFragmentId()
-        );
-    }
-
     ExternalLinkExecuter.OnExternalLinkListener mListener = new ExternalLinkExecuter.OnExternalLinkListener() {
         @Override
         public void onProfileLink(int profileID) {
@@ -523,8 +515,8 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
             mClosingsOnProfileUpdateInvoked = true;
             Options.Closing closing = CacheProfile.getOptions().closing;
             if (closing.isClosingsEnabled()) {
-                getIntent().putExtra(GCMUtils.NEXT_INTENT, mFragmentMenu.getCurrentFragmentId());
-                Debug.log("Closing:Last fragment ID=" + mFragmentMenu.getCurrentFragmentId() + " from NavigationActivity");
+                getIntent().putExtra(GCMUtils.NEXT_INTENT, mMenuFragment.getCurrentFragmentId());
+                Debug.log("Closing:Last fragment ID=" + mMenuFragment.getCurrentFragmentId() + " from NavigationActivity");
                 MutualClosingFragment.usersProcessed = !closing.isMutualClosingAvailable();
                 LikesClosingFragment.usersProcessed = !closing.isLikesClosingAvailable();
                 if (!MutualClosingFragment.usersProcessed || !LikesClosingFragment.usersProcessed) {
@@ -553,32 +545,30 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
         Options.Closing closing = CacheProfile.getOptions().closing;
         if (closing.enabledMutual && !MutualClosingFragment.usersProcessed) {
-            mFragmentMenu.onClosings(BaseFragment.F_MUTUAL);
+            mMenuFragment.onClosings(BaseFragment.F_MUTUAL);
             showFragment(BaseFragment.F_MUTUAL);
             return;
         }
         if (closing.enabledSympathies && !LikesClosingFragment.usersProcessed) {
-            mFragmentMenu.onClosings(BaseFragment.F_LIKES);
+            mMenuFragment.onClosings(BaseFragment.F_LIKES);
             showFragment(BaseFragment.F_LIKES);
             return;
         }
         if (!mHasClosingsForThisSession) {
             mHasClosingsForThisSession = true;
         }
-        mFragmentMenu.onStopClosings();
-        showFragment(null); // it will take fragment id from getIntent() extra data
+        mMenuFragment.onStopClosings();
+        getSavedFragmentId(null); // it will take fragment id from getIntent() extra data
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(DatingFragment.CLOSINGS_FILTER));
     }
 
     private void updateClosing() {
         if (CacheProfile.premium) {
-            if (CacheProfile.premium) {
-                Options.Closing closing = CacheProfile.getOptions().closing;
-                if (closing.isClosingsEnabled()) {
-                    closing.stopForPremium();
-                    mClosingsOnProfileUpdateInvoked = true;
-                    onClosings();
-                }
+            Options.Closing closing = CacheProfile.getOptions().closing;
+            if (closing.isClosingsEnabled()) {
+                closing.stopForPremium();
+                mClosingsOnProfileUpdateInvoked = true;
+                onClosings();
             }
         }
     }
