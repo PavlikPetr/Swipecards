@@ -118,7 +118,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setNeedTitles(false);
         //Показываем фрагмент только если мы авторизованы
-        if (AuthToken.getInstance().isEmpty()) {
+        if (!AuthToken.getInstance().isEmpty()) {
             //Показываем фрагмент по умолчанию или последний выбранный фрагмент
             switchFragment(
                     savedInstanceState != null ?
