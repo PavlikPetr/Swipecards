@@ -223,7 +223,6 @@ public class AuthorizationManager {
                     mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
                     Debug.error("Odnoklassniki result parse error", e);
                 }
-
             } else {
                 Debug.error("Odnoklassniki auth error. users.getCurrentUser returns null");
                 mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
