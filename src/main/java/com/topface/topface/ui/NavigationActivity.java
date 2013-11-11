@@ -33,7 +33,6 @@ import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
@@ -61,10 +60,9 @@ import static com.topface.topface.ui.fragments.BaseFragment.*;
 public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
-    public static final String CURRENT_FRAGMENT_ID = "NAVIGATION_FRAGMENT";
 
     private FragmentManager mFragmentManager;
-    private MenuFragment mFragmentMenu;
+    private MenuFragment mMenuFragment;
     private DrawerLayout mDrawerLayout;
     private FullscreenController mFullscreenController;
 
@@ -103,35 +101,12 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         setMenuEnabled(true);
         mFragmentManager = getSupportFragmentManager();
         initDrawerLayout();
-        if (!AuthToken.getInstance().isEmpty()) {
-            showFragment(savedInstanceState);
-        }
         new BackgroundThread() {
             @Override
             public void execute() {
                 onCreateAsync();
             }
         };
-    }
-
-    private void showFragment(Bundle savedInstanceState) {
-        FragmentId id = FragmentId.F_DATING;
-        if (savedInstanceState != null) {
-            FragmentId savedId = (FragmentId) savedInstanceState.getSerializable(CURRENT_FRAGMENT_ID);
-            if (savedId != null) {
-                id = savedId;
-            }
-        }
-        showFragment(id);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable(
-                CURRENT_FRAGMENT_ID,
-                mFragmentMenu.getCurrentFragmentId()
-        );
     }
 
     public boolean getDialogStarted() {
@@ -155,6 +130,18 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     }
 
     private void initDrawerLayout() {
+        mMenuFragment = new MenuFragment();
+        mMenuFragment.setOnFragmentSelected(new MenuFragment.OnFragmentSelectedListener() {
+            @Override
+            public void onFragmentSelected(FragmentId fragmentId) {
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+            }
+        });
+        mFragmentManager
+                .beginTransaction()
+                .add(R.id.fragment_menu, mMenuFragment)
+                .commit();
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.loNavigationDrawer);
         mDrawerLayout.setScrimColor(Color.argb(217, 0, 0, 0));
         mDrawerLayout.setDrawerShadow(R.drawable.shadow_left_menu_right, GravityCompat.START);
@@ -178,15 +165,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         };
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-        mFragmentMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
-        mFragmentMenu.setClickable(true);
-        mFragmentMenu.setOnFragmentSelected(new MenuFragment.OnFragmentSelectedListener() {
-            @Override
-            public void onFragmentSelected(FragmentId fragmentId) {
-                mDrawerLayout.closeDrawer(GravityCompat.START);
-            }
-        });
     }
 
     @Override
@@ -214,17 +192,13 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     }
 
     public void showFragment(FragmentId fragmentId) {
-        mFragmentMenu.selectMenu(fragmentId);
+        mMenuFragment.selectMenu(fragmentId);
     }
 
     private void showFragment(Intent intent) {
         //Получаем id фрагмента, если он открыт
         FragmentId currentFragment = (FragmentId) intent.getSerializableExtra(GCMUtils.NEXT_INTENT);
         showFragment(currentFragment == null ? FragmentId.F_DATING : currentFragment);
-    }
-
-    public void hideContent() {
-        mDrawerLayout.closeDrawer(GravityCompat.START);
     }
 
     @Override

@@ -40,6 +40,7 @@ import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.http.ProfileBackgrounds;
+import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -57,6 +58,7 @@ import static com.topface.topface.ui.fragments.BaseFragment.*;
 public class MenuFragment extends ListFragment implements View.OnClickListener {
     public static final String SELECT_MENU_ITEM = "com.topface.topface.action.menu.selectitem";
     public static final String SELECTED_FRAGMENT_ID = "com.topface.topface.action.menu.item";
+    private static final String CURRENT_FRAGMENT_STATE = "menu_fragment_current_fragment";
 
     private OnFragmentSelectedListener mOnFragmentSelected;
     private FragmentId mSelectedFragment;
@@ -192,6 +194,30 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         }
     }
 
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //Показываем фрагмент только если мы авторизованы
+        if (!AuthToken.getInstance().isEmpty()) {
+            FragmentId id = FragmentId.F_DATING;
+            if (savedInstanceState != null) {
+                FragmentId savedId = (FragmentId) savedInstanceState.getSerializable(CURRENT_FRAGMENT_STATE);
+                if (savedId != null) {
+                    id = savedId;
+                }
+            }
+            switchFragment(id, false);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(
+                CURRENT_FRAGMENT_STATE,
+                getCurrentFragmentId()
+        );
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -247,12 +273,14 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
 
     /**
      * Selects menu item and shows fragment by id
+     * Note: some strange behavior, when method is called in onCreate
+     * (Exception: recursive call of executePendingTransactions)
      *
      * @param fragmentId id of fragment that is going to be shown
      */
     public void selectMenu(FragmentId fragmentId) {
         if (fragmentId != mSelectedFragment) {
-            showFragment(fragmentId);
+            switchFragment(fragmentId, true);
         } else if (mOnFragmentSelected != null) {
             mOnFragmentSelected.onFragmentSelected(fragmentId);
         }
@@ -260,7 +288,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
     }
 
     /**
-     * Needs to change selected state of menu items from Header, Adapter
+     * To change selected state of menu items from Header & Adapter
      */
     private void notifyDataSetChanged() {
         if (mAdapter != null) {
@@ -276,43 +304,45 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
     /**
      * Shows fragment by id
      *
-     * @param fragmentId id of fragment that is going to be shown
+     * @param newFragmentId id of fragment that is going to be shown
      */
-    public void showFragment(FragmentId fragmentId) {
-        // TODO rewrite after investigation of fragmentTransaction process
+    private void switchFragment(FragmentId newFragmentId, boolean executePending) {
         FragmentManager fragmentManager = getFragmentManager();
         Fragment oldFragment = fragmentManager.findFragmentById(R.id.fragment_content);
 
-        String fragmentTag = getTagById(fragmentId);
-        Debug.log("MenuFragment: Try switch to fragment with tag" + fragmentTag);
+        String fragmentTag = getTagById(newFragmentId);
+        Debug.log("MenuFragment: Try switch to fragment with tag " + fragmentTag + " (old fragment " + mSelectedFragment + ")");
         BaseFragment newFragment = (BaseFragment) fragmentManager.findFragmentByTag(fragmentTag);
         //Если не нашли в FragmentManager уже существующего инстанса, то создаем новый
         if (newFragment == null) {
-            newFragment = getFragmentNewInstanceById(fragmentId);
+            newFragment = getFragmentNewInstanceById(newFragmentId);
             Debug.log("MenuFragment: newFragment is null, create new instance");
         }
 
-        if (oldFragment == null || newFragment != oldFragment) {
+        if (oldFragment == null || newFragmentId != mSelectedFragment) {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             //Меняем фрагменты анимировано, но только на новых устройствах c HW ускорением
             if (mHardwareAccelerated) {
                 transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             }
             if (newFragment.isAdded()) {
-                transaction.detach(newFragment);
-                Debug.error("MenuFragment: try detach already added new fragment" + fragmentTag);
+                transaction.remove(newFragment);
+                Debug.error("MenuFragment: try detach already added new fragment " + fragmentTag);
             }
 
-            if (oldFragment != null) {
-                transaction.remove(oldFragment);
-                Debug.log("MenuFragment: remove old fragment " + oldFragment.getTag());
-            }
-            transaction.add(R.id.fragment_content, newFragment, fragmentTag);
+            transaction.replace(R.id.fragment_content, newFragment, fragmentTag);
             transaction.commitAllowingStateLoss();
+            //Вызываем executePendingTransactions, если передан соответвующий флаг
+            //и сохраняем результат
+            String transactionResult = executePending ?
+                    Boolean.toString(fragmentManager.executePendingTransactions()) :
+                    "no executePending";
+            mSelectedFragment = newFragmentId;
+            Debug.log("MenuFragment: commit " + transactionResult);
         } else {
             Debug.error("MenuFragment: new fragment already added");
         }
-        mSelectedFragment = fragmentId;
+        mSelectedFragment = newFragmentId;
 
         //Закрываем меню только после создания фрагмента
         new Handler().postDelayed(new Runnable() {
