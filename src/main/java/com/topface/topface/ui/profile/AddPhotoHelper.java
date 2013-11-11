@@ -255,12 +255,29 @@ public class AddPhotoHelper {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 if (listener.isResponseReceived == -1) {
-                    listener.onNotificationIdReceived(mNotificationManager.showProgressNotification(mContext.getString(R.string.default_photo_upload), fakeImageView.getImageBitmap(), new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE).putExtra("PhotoUrl", uri)));
+                    Intent intent = new Intent(mActivity, NavigationActivity.class)
+                            .putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.F_PROFILE)
+                            .putExtra("PhotoUrl", uri);
+                    listener.onNotificationIdReceived(
+                            mNotificationManager.showProgressNotification(
+                                    mContext.getString(R.string.default_photo_upload),
+                                    fakeImageView.getImageBitmap(), intent
+                            )
+                    );
                 } else if (listener.isResponseReceived == listener.SUCCESS) {
-                    mNotificationManager.showNotification(mContext.getString(R.string.default_photo_upload_complete), "", false, fakeImageView.getImageBitmap(), 1,
-                            new Intent(App.getContext(), NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE), true);
+                    Intent intent = new Intent(App.getContext(), NavigationActivity.class)
+                            .putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.F_PROFILE);
+                    mNotificationManager.showNotification(
+                            mContext.getString(R.string.default_photo_upload_complete),"", false,
+                            fakeImageView.getImageBitmap(), 1, intent, true
+                    );
                 } else if (listener.isResponseReceived == listener.FAIL) {
-                    mNotificationManager.showFailNotification(mContext.getString(R.string.default_photo_upload_error), "", fakeImageView.getImageBitmap(), new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE).putExtra("PhotoUrl", uri));
+                    Intent intent = new Intent(mActivity, NavigationActivity.class)
+                            .putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.F_PROFILE)
+                            .putExtra("PhotoUrl", uri);
+                    mNotificationManager.showFailNotification(
+                            mContext.getString(R.string.default_photo_upload_error),"",
+                            fakeImageView.getImageBitmap(), intent);
                 }
 
             }
@@ -274,7 +291,7 @@ public class AddPhotoHelper {
             @Override
             public void onReceive(Context context, Intent intent) {
                 mNotificationManager.cancelNotification(intent.getIntExtra("id", 1));
-                if (!intent.getBooleanExtra("isRetry", false) && photoAddRequest != null) {
+                if (!intent.getBooleanExtra("isRetry", false)) {
                     photoAddRequest.cancel();
                 } else if (intent.getBooleanExtra("isRetry", false)) {
                     photoAddRequest.cancel();
@@ -297,8 +314,13 @@ public class AddPhotoHelper {
                 }
                 listener.onResponseReceived(listener.SUCCESS);
                 if (listener.notificationId != -1) {
-                    mNotificationManager.showNotification(mContext.getString(R.string.default_photo_upload_complete), "", false, fakeImageView.getImageBitmap(), 1,
-                            new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE).putExtra(GCMUtils.NOTIFICATION_INTENT, true).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK), true);
+                    Intent intent = new Intent(mActivity, NavigationActivity.class)
+                            .putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.F_PROFILE)
+                            .putExtra(GCMUtils.NOTIFICATION_INTENT, true)
+                            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    mNotificationManager.showNotification(
+                            mContext.getString(R.string.default_photo_upload_complete), "", false,
+                            fakeImageView.getImageBitmap(), 1, intent, true);
                 }
                 if (mContext != null) {
                     mContext.unregisterReceiver(receiver);
@@ -320,7 +342,12 @@ public class AddPhotoHelper {
                 showErrorMessage(codeError);
                 listener.onResponseReceived(listener.FAIL);
                 if (listener.notificationId != -1) {
-                    mNotificationManager.showFailNotification(mContext.getString(R.string.default_photo_upload_error), "", fakeImageView.getImageBitmap(), new Intent(mActivity, NavigationActivity.class).putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_PROFILE).putExtra("PhotoUrl", uri));
+                    Intent intent = new Intent(mActivity, NavigationActivity.class)
+                            .putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.F_PROFILE)
+                            .putExtra("PhotoUrl", uri);
+                    mNotificationManager.showFailNotification(
+                            mContext.getString(R.string.default_photo_upload_error), "",
+                            fakeImageView.getImageBitmap(), intent);
                 }
             }
 

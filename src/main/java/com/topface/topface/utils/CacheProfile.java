@@ -19,6 +19,7 @@ import com.topface.topface.data.Photos;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.ui.fragments.BaseFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -300,7 +301,7 @@ public class CacheProfile {
         return mProducts;
     }
 
-    public static boolean checkIsFillData() {
+    public static boolean isDataFilled() {
         return city != null && !city.isEmpty() && age != 0 && first_name != null && photo != null;
     }
 
@@ -406,5 +407,24 @@ public class CacheProfile {
 
     public static boolean isEditor() {
         return editor;
+    }
+
+    public static int getUnreadCounterByFragmentId(BaseFragment.FragmentId id) {
+        switch (id) {
+            case F_LIKES:
+                return CacheProfile.unread_likes;
+            case F_MUTUAL:
+                return CacheProfile.unread_mutual;
+            case F_DIALOGS:
+                return CacheProfile.unread_messages;
+            case F_VISITORS:
+                return CacheProfile.unread_visitors;
+            case F_FANS:
+                return CacheProfile.unread_fans;
+            case F_ADMIRATIONS:
+                return CacheProfile.unread_admirations;
+            default:
+                return 0;
+        }
     }
 }

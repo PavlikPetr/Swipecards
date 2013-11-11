@@ -52,7 +52,7 @@
                         ivr:postProcessor="mask"
                         ivr:clipMask="@drawable/frame_menu_mask"
                         android:background="@drawable/frame_menu_big_avatar_selector"
-                        android:id="@+id/ivMenuAvatar"
+                        android:id="@+id/ivMenuAvatarWithBackground"
                         android:src="@drawable/topface_male_profile_button"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
@@ -103,7 +103,7 @@
                     ivr:postProcessor="mask"
                     ivr:clipMask="@drawable/frame_menu_mask"
                     android:background="@drawable/frame_menu_selector"
-                    android:id="@+id/ivMenuAvatar"
+                    android:id="@+id/ivMenuAvatarWithBackground"
                     android:src="@drawable/topface_male_profile_button"
                     android:layout_centerVertical="true"
                     android:layout_width="30dp"
@@ -114,7 +114,7 @@
                     android:id="@+id/btnFragmentProfile"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/ivMenuAvatar"
+                    android:layout_toRightOf="@id/ivMenuAvatarWithBackground"
                     android:layout_centerVertical="true"
                     android:text="@string/general_profile"
                     android:paddingLeft="12dp"
@@ -146,7 +146,7 @@
                 android:id="@+id/btnFragmentLikes"
                 android:layout_below="@id/btnFragmentDating"
                 android:text="@string/general_likes"
-                android:drawableLeft="@drawable/topface_likes_selector"
+                android:drawableLeft="@drawable/ic_likes_selector"
                 style="@style/LeftMenuButtons"/>
 
         <!-- UNREAD LIKES -->
@@ -160,7 +160,7 @@
                 android:id="@+id/btnFragmentAdmirations"
                 android:layout_below="@id/btnFragmentLikes"
                 android:text="@string/general_admirations"
-                android:drawableLeft="@drawable/topface_admirations_selector"
+                android:drawableLeft="@drawable/ic_admirations_selector"
                 style="@style/LeftMenuButtons"/>
 
         <!-- UNREAD ADMIRATIONS -->
@@ -174,7 +174,7 @@
                 android:id="@+id/btnFragmentMutual"
                 android:layout_below="@id/btnFragmentAdmirations"
                 android:text="@string/general_mutual"
-                android:drawableLeft="@drawable/topface_sympathy_selector"
+                android:drawableLeft="@drawable/ic_mutual_selector"
                 style="@style/LeftMenuButtons"/>
 
         <!-- UNREAD MUTUAL -->
@@ -224,7 +224,7 @@
                 android:id="@+id/btnFragmentVisitors"
                 android:layout_below="@id/btnFragmentFans"
                 android:text="@string/general_visitors"
-                android:drawableLeft="@drawable/topface_guests_selector"
+                android:drawableLeft="@drawable/ic_guests_selector"
                 style="@style/LeftMenuButtons"
                 />
 

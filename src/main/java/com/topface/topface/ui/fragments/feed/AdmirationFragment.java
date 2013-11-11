@@ -84,7 +84,7 @@ public class AdmirationFragment extends LikesFragment{
                 inflated.findViewById(R.id.btnRate).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        NavigationActivity.selectFragment(F_DATING);
+                        NavigationActivity.selectFragment(FragmentId.F_DATING);
                     }
                 });
                 ((ImageViewRemote) inflated.findViewById(R.id.ivOne))

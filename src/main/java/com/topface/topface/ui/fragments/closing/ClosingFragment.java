@@ -174,9 +174,6 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     protected void onUsersProcessed() {
         super.onUsersProcessed();
         clearUsersList();
-        if (getActivity() instanceof NavigationActivity) {
-            ((NavigationActivity) getActivity()).onClosings();
-        }
     }
 
     @Override

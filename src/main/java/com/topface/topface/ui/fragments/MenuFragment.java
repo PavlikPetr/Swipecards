@@ -1,41 +1,31 @@
 package com.topface.topface.ui.fragments;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.ListFragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.SparseArray;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.topface.topface.GCMUtils;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.requests.ProfileRequest;
-import com.topface.topface.ui.ContainerActivity;
-import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.dialogs.ClosingsBuyVipDialog;
-import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
-import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
 import com.topface.topface.ui.fragments.feed.AdmirationFragment;
 import com.topface.topface.ui.fragments.feed.BookmarksFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
@@ -44,174 +34,184 @@ import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.ui.views.NoviceLayout;
-import com.topface.topface.ui.views.ServicesTextView;
+import com.topface.topface.utils.BuyWidgetController;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
-import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 
-public class MenuFragment extends BaseFragment implements View.OnClickListener {
+import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.*;
+import static com.topface.topface.ui.fragments.BaseFragment.*;
+
+/**
+ * Created by kirussell on 05.11.13.
+ * Left menu for switching NavigationActivity fragments
+ */
+public class MenuFragment extends ListFragment implements View.OnClickListener {
     public static final String SELECT_MENU_ITEM = "com.topface.topface.action.menu.selectitem";
     public static final String SELECTED_FRAGMENT_ID = "com.topface.topface.action.menu.item";
-    public static boolean logoutInvoked = false;
-    private SparseArray<Button> mButtons;
 
-    private TextView mTvNotifyLikes;
-    private TextView mTvNotifyMutual;
-    private TextView mTvNotifyDialogs;
-    private TextView mTvNotifyVisitors;
-    private TextView mTvNotifyAdmirations;
-
-    private ImageViewRemote mMenuAvatar;
-    private ServicesTextView mCoins;
-    private ServicesTextView mLikes;
-    private ImageView mProfileInfo;
-    private TextView mTvNotifyFans;
-    private Button buyButton;
-    private boolean canChangeProfileIcons = false;
-    private int mCurrentFragmentId;
-    private boolean mHardwareAccelerated;
-
-    public static final int DEFAULT_FRAGMENT = BaseFragment.F_DATING;
     private OnFragmentSelectedListener mOnFragmentSelected;
-    private boolean mClickable = true;
+    private FragmentId mSelectedFragment;
+    private LeftMenuAdapter mAdapter;
+    private boolean mHardwareAccelerated;
+    private View mHeaderView;
+    private Button mProfileButton;
+    private BuyWidgetController mBuyWidgetController;
 
-    private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            setMenuData();
-            switchProfileButton();
-        }
-    };
+            String action = intent.getAction();
+            if (action == null) return;
 
-    private BroadcastReceiver mProductsUpdateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            //Кнопка распродаж
-            if (CacheProfile.getGooglePlayProducts().saleExists) {
-                buyButton.setBackgroundResource(R.drawable.btn_sale_selector);
-            } else {
-                buyButton.setBackgroundResource(R.drawable.btn_blue_selector);
+            if (action.equals(CountersManager.UPDATE_BALANCE_COUNTERS)) {
+                mAdapter.refreshCounterBadges();
+                mBuyWidgetController.updateBalance();
+            } else if (action.equals(ProfileRequest.PROFILE_UPDATE_ACTION)) {
+                initProfileMenuItem(mHeaderView);
+            } else if (action.equals(GooglePlayProducts.INTENT_UPDATE_PRODUCTS)) {
+                if (mBuyWidgetController != null) {
+                    mBuyWidgetController.setButtonBackgroundResource(
+                            CacheProfile.getGooglePlayProducts().saleExists ?
+                                    R.drawable.btn_sale_selector : R.drawable.btn_blue_selector
+                    );
+                }
+            } else if (action.equals(SELECT_MENU_ITEM)) {
+                FragmentId fragmentId = (FragmentId) intent.getExtras().getSerializable(SELECTED_FRAGMENT_ID);
+                selectMenu(fragmentId);
             }
         }
     };
 
-    private boolean isClosed = false;
-
-    private BroadcastReceiver mSelectMenuReceiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int fragmentId = intent.getExtras().getInt(SELECTED_FRAGMENT_ID);
-            selectMenu(fragmentId);
-        }
-    };
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setNeedTitles(false);
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        // init & add header with profile selector view
+        initHeader();
+        //init adapter
+        initAdapter();
+        // init & add footer
+        initFooter();
+        // set listview settings
+        getListView().setDividerHeight(0);
+        getListView().setDivider(null);
     }
 
-    private void setMenuData() {
-        if (mMenuAvatar != null) {
-            mMenuAvatar.setPhoto(CacheProfile.photo);
-        }
-        //Иконки на профиле
-        if (!CacheProfile.checkIsFillData() && canChangeProfileIcons) {
-            showNotEnoughDataIcon();
+    private void initHeader() {
+        mHeaderView = View.inflate(getActivity(), R.layout.item_left_menu_button_profile, null);
+        initProfileMenuItem(mHeaderView);
+        getListView().addHeaderView(mHeaderView);
+    }
+
+    private void initAdapter() {
+        List<ILeftMenuItem> menuItems = new ArrayList<ILeftMenuItem>();
+        //- Profile added as part of header
+        menuItems.add(newLeftMenuItem(F_DATING, LeftMenuAdapter.TYPE_MENU_BUTTON,
+                R.string.general_dating, R.drawable.ic_dating_selector));
+        menuItems.add(newLeftMenuItem(F_LIKES, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+                R.string.general_likes, R.drawable.ic_likes_selector));
+        menuItems.add(newLeftMenuItem(F_ADMIRATIONS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+                R.string.general_admirations, R.drawable.ic_admirations_selector));
+        menuItems.add(newLeftMenuItem(F_MUTUAL, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+                R.string.general_mutual, R.drawable.ic_mutual_selector));
+        menuItems.add(newLeftMenuItem(F_DIALOGS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+                R.string.general_dialogs, R.drawable.ic_dialog_selector));
+        menuItems.add(newLeftMenuItem(F_BOOKMARKS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+                R.string.general_bookmarks, R.drawable.ic_star_selector));
+        menuItems.add(newLeftMenuItem(F_FANS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+                R.string.general_fans, R.drawable.ic_fans_selector));
+        menuItems.add(newLeftMenuItem(F_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+                R.string.general_visitors, R.drawable.ic_guests_selector));
+        mAdapter = new LeftMenuAdapter(menuItems);
+        setListAdapter(mAdapter);
+    }
+
+    private void initFooter() {
+        View footerView = View.inflate(getActivity(), R.layout.buy_widget, null);
+        mBuyWidgetController = new BuyWidgetController(getActivity(), footerView);
+        getListView().addFooterView(footerView);
+    }
+
+    private void initProfileMenuItem(View headerView) {
+        if (headerView == null) return;
+        final View profileLayout = headerView.findViewById(R.id.btnProfileLayout);
+        final View profileLayoutWithBackground = headerView.findViewById(R.id.btnProfileLayoutWithBackground);
+
+        // detect right layout for profile button and init photo and background if needed
+        View currentLayout;
+        if (CacheProfile.premium
+                && ProfileBackgrounds.isVipBackgroundId(getActivity(), CacheProfile.background_id)) {
+            profileLayout.setVisibility(View.GONE);
+            profileLayoutWithBackground.setVisibility(View.VISIBLE);
+            currentLayout = profileLayoutWithBackground;
+            String name = CacheProfile.first_name.length() <= 1
+                    ? getString(R.string.general_profile) : CacheProfile.first_name;
+            ((Button) profileLayoutWithBackground.findViewById(R.id.btnUserName)).setText(name);
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
+                    ProfileBackgrounds.getBackgroundResource(getActivity(), CacheProfile.background_id));
+            ((ImageViewRemote) profileLayoutWithBackground.findViewById(R.id.ivProfileBackground))
+                    .setRemoteImageBitmap(bitmap);
         } else {
-            mProfileInfo.setVisibility(View.GONE);
+            profileLayout.setVisibility(View.VISIBLE);
+            profileLayoutWithBackground.setVisibility(View.GONE);
+            currentLayout = profileLayout;
         }
-        canChangeProfileIcons = true;
-        buyButton.setBackgroundResource(R.drawable.btn_blue_selector);
-        //Новые данные монет и лайков
-        mCoins.setText(Integer.toString(CacheProfile.money));
-        mLikes.setText(Integer.toString(CacheProfile.likes));
+        // init warning(fill profile info) icon
+        ImageView profileInfo = (ImageView) currentLayout.findViewWithTag("profileInfo");
+        if (profileInfo != null) {
+            if (!CacheProfile.isDataFilled() && CacheProfile.isLoaded()) {
+                profileInfo.setImageResource(R.drawable.ic_not_enough_data);
+                profileInfo.setVisibility(View.VISIBLE);
+            } else {
+                profileInfo.setVisibility(View.GONE);
+            }
+        }
+        // set avatar photo for current profile menu item
+        ImageViewRemote avatarView = ((ImageViewRemote) currentLayout.findViewWithTag("ivMenuAvatar"));
+        if (avatarView != null) {
+            avatarView.setPhoto(CacheProfile.photo);
+        }
+        // set OnClickListener for profile menu item
+        mProfileButton = (Button) currentLayout.findViewWithTag("btnFragmentProfile");
+        if (mProfileButton == null) {
+            mProfileButton = (Button) currentLayout.findViewWithTag(F_PROFILE);
+        } else {
+            mProfileButton.setTag(F_PROFILE);
+        }
+        if (mProfileButton != null) {
+            mProfileButton.setOnClickListener(this);
+            notifyDataSetChanged();
+        }
     }
-
-    private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            refreshNotifications();
-            //Новые данные монет и лайков
-            mCoins.setText(Integer.toString(CacheProfile.money));
-            mLikes.setText(Integer.toString(CacheProfile.likes));
-        }
-    };
 
     @Override
     public void onResume() {
         super.onResume();
-        refreshNotifications();
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileUpdateReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProductsUpdateReceiver, new IntentFilter(GooglePlayProducts.INTENT_UPDATE_PRODUCTS));
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_BALANCE_COUNTERS));
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mSelectMenuReceiver, new IntentFilter(SELECT_MENU_ITEM));
-        switchProfileButton();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ProfileRequest.PROFILE_UPDATE_ACTION);
+        filter.addAction(GooglePlayProducts.INTENT_UPDATE_PRODUCTS);
+        filter.addAction(CountersManager.UPDATE_BALANCE_COUNTERS);
+        filter.addAction(SELECT_MENU_ITEM);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, filter);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileUpdateReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProductsUpdateReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mCountersReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mSelectMenuReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateReceiver);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
-        super.onCreateView(inflater, container, saved);
-        View rootLayout = inflater.inflate(R.layout.fragment_menu, null);
-
-        View profileLayout = getProfileLayout(rootLayout);
-        //Делаем список кнопок
-        mButtons = getButtonsMap(rootLayout, profileLayout);
-
-        //Автарка в меню
-        initMenuAvatar(profileLayout);
-        mProfileInfo = (ImageView) profileLayout.findViewById(R.id.profileInfo);
-
-        mCoins = (ServicesTextView) rootLayout.findViewById(R.id.menuCurCoins);
-        mLikes = (ServicesTextView) rootLayout.findViewById(R.id.menuCurLikes);
-        mCoins.setText(Integer.toString(CacheProfile.money));
-        mLikes.setText(Integer.toString(CacheProfile.likes));
-
-        buyButton = (Button) rootLayout.findViewById(R.id.menuBuyBtn);
-        buyButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(ContainerActivity.getBuyingIntent("Menu"));
-            }
-        });
-
-        // Notifications
-        mTvNotifyLikes = (TextView) rootLayout.findViewById(R.id.tvNotifyLikes);
-        mTvNotifyMutual = (TextView) rootLayout.findViewById(R.id.tvNotifyMutual);
-        mTvNotifyDialogs = (TextView) rootLayout.findViewById(R.id.tvNotifyDialogs);
-        mTvNotifyFans = (TextView) rootLayout.findViewById(R.id.tvNotifyFans);
-        mTvNotifyVisitors = (TextView) rootLayout.findViewById(R.id.tvNotifyVisitors);
-        mTvNotifyAdmirations = (TextView) rootLayout.findViewById(R.id.tvNotifyAdmirations);
-        mHardwareAccelerated = isHardwareAccelerated(rootLayout);
-
-        return rootLayout;
-    }
-
-    private void initMenuAvatar(View profileLayout) {
-        mMenuAvatar = (ImageViewRemote) profileLayout.findViewById(R.id.ivMenuAvatar);
-        mMenuAvatar.setPhoto(CacheProfile.photo);
-        //При клике на автарку должен происходить клик на кнопку "Профиль"
-        mMenuAvatar.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mButtons.get(BaseFragment.F_PROFILE).performClick();
-            }
-        });
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mHardwareAccelerated = isHardwareAccelerated(view);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -219,144 +219,74 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         return Build.VERSION.SDK_INT >= 11 && rootLayout.isHardwareAccelerated();
     }
 
-    private SparseArray<Button> getButtonsMap(View rootLayout, View profileLayout) {
-        SparseArray<Button> buttons = new SparseArray<Button>();
-        buttons.put(BaseFragment.F_PROFILE, (Button) profileLayout.findViewById(R.id.btnFragmentProfile));
-        buttons.put(BaseFragment.F_DATING, (Button) rootLayout.findViewById(R.id.btnFragmentDating));
-        buttons.put(BaseFragment.F_ADMIRATIONS, (Button) rootLayout.findViewById(R.id.btnFragmentAdmirations));
-        buttons.put(BaseFragment.F_LIKES, (Button) rootLayout.findViewById(R.id.btnFragmentLikes));
-        buttons.put(BaseFragment.F_MUTUAL, (Button) rootLayout.findViewById(R.id.btnFragmentMutual));
-        buttons.put(BaseFragment.F_DIALOGS, (Button) rootLayout.findViewById(R.id.btnFragmentDialogs));
-        buttons.put(BaseFragment.F_FANS, (Button) rootLayout.findViewById(R.id.btnFragmentFans));
-        buttons.put(BaseFragment.F_VISITORS, (Button) rootLayout.findViewById(R.id.btnFragmentVisitors));
-        buttons.put(BaseFragment.F_BOOKMARKS, (Button) rootLayout.findViewById(R.id.btnFragmentBookmarks));
-        buttons.put(BaseFragment.F_EDITOR, (Button) rootLayout.findViewById(R.id.btnEditor));
-
-        //Устанавливаем теги и листенеры на кнопки
-        for (int i = 0; i < buttons.size(); i++) {
-            int key = buttons.keyAt(i);
-            Button button = buttons.get(key);
-            if (button != null) {
-                button.setOnClickListener(this);
-                button.setTag(key);
-            }
-        }
-
-        return buttons;
-    }
-
-    public void onLoadProfile() {
-        setMenuData();
-        if (Editor.isEditor()) {
-            mButtons.get(F_EDITOR).setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void showNotEnoughDataIcon() {
-        mProfileInfo.setImageResource(R.drawable.ic_not_enough_data);
-        mProfileInfo.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onClick(View view) {
-        if (mClickable) {
-            unselectAllButtons();
-            view.setSelected(true);
-            showFragment((Integer) view.getTag());
-        }
-    }
-
-    public void unselectAllButtons() {
-        for (int i = 0; i < mButtons.size(); i++) {
-            mButtons.get(mButtons.keyAt(i)).setSelected(false);
-        }
-    }
-
-    public void refreshNotifications() {
-        if (CacheProfile.unread_likes > 0) {
-            mTvNotifyLikes.setText(Integer.toString(CacheProfile.unread_likes));
-            mTvNotifyLikes.setVisibility(View.VISIBLE);
-        } else {
-            mTvNotifyLikes.setVisibility(View.GONE);
-        }
-
-        if (CacheProfile.unread_mutual > 0) {
-            mTvNotifyMutual.setText(Integer.toString(CacheProfile.unread_mutual));
-            mTvNotifyMutual.setVisibility(View.VISIBLE);
-        } else {
-            mTvNotifyMutual.setVisibility(View.GONE);
-        }
-
-        if (CacheProfile.unread_messages > 0) {
-            mTvNotifyDialogs.setText(Integer.toString(CacheProfile.unread_messages));
-            mTvNotifyDialogs.setVisibility(View.VISIBLE);
-        } else {
-            mTvNotifyDialogs.setVisibility(View.GONE);
-        }
-
-        if (CacheProfile.unread_visitors > 0) {
-            mTvNotifyVisitors.setText(Integer.toString(CacheProfile.unread_visitors));
-            mTvNotifyVisitors.setVisibility(View.VISIBLE);
-        } else {
-            mTvNotifyVisitors.setVisibility(View.GONE);
-        }
-
-        if (CacheProfile.unread_fans > 0) {
-            mTvNotifyFans.setText(Integer.toString(CacheProfile.unread_fans));
-            mTvNotifyFans.setVisibility(View.VISIBLE);
-        } else {
-            mTvNotifyFans.setVisibility(View.GONE);
-        }
-
-        if (CacheProfile.unread_admirations > 0) {
-            mTvNotifyAdmirations.setText(Integer.toString(CacheProfile.unread_admirations));
-            mTvNotifyAdmirations.setVisibility(View.VISIBLE);
-        } else {
-            mTvNotifyAdmirations.setVisibility(View.GONE);
-        }
-    }
-
-    public void setClickable(boolean clickable) {
-        mClickable = clickable;
-    }
-
-    public void selectMenu(int fragmentId) {
-        Button selectedItem = mButtons.get(fragmentId);
-        if (selectedItem != null) {
-            unselectAllButtons();
-            selectedItem.setSelected(true);
-            showFragment(fragmentId);
-        }
-    }
-
-    public OnClickListener getProfileButtonOnClickListener() {
-        final Button btnProfile = (Button) getView().findViewById(R.id.btnFragmentProfile);
-        return new OnClickListener() {
+    private ILeftMenuItem newLeftMenuItem(final FragmentId menuId, final int menuType,
+                                          final int menuTextResId, final int menuIconResId) {
+        return new ILeftMenuItem() {
             @Override
-            public void onClick(View v) {
-                btnProfile.performClick();
+            public FragmentId getMenuId() {
+                return menuId;
+            }
+
+            @Override
+            public int getMenuType() {
+                return menuType;
+            }
+
+            @Override
+            public String getMenuText() {
+                return getString(menuTextResId);
+            }
+
+            @Override
+            public int getMenuIconResId() {
+                return menuIconResId;
             }
         };
     }
 
-    public void showFragment(int fragmentId) {
-        if (fragmentId != mCurrentFragmentId) {
-            mCurrentFragmentId = fragmentId;
-            switchFragment();
+    /**
+     * Selects menu item and shows fragment by id
+     *
+     * @param fragmentId id of fragment that is going to be shown
+     */
+    public void selectMenu(FragmentId fragmentId) {
+        if (fragmentId != mSelectedFragment) {
+            showFragment(fragmentId);
         } else if (mOnFragmentSelected != null) {
             mOnFragmentSelected.onFragmentSelected(fragmentId);
         }
+        notifyDataSetChanged();
     }
 
-    private void switchFragment() {
+    /**
+     * Needs to change selected state of menu items from Header, Adapter
+     */
+    private void notifyDataSetChanged() {
+        if (mAdapter != null) {
+            mAdapter.notifyDataSetChanged();
+        }
+        if (mProfileButton != null) {
+            mProfileButton.setSelected(
+                    mSelectedFragment == F_PROFILE || mSelectedFragment == F_VIP_PROFILE
+            );
+        }
+    }
+
+    /**
+     * Shows fragment by id
+     *
+     * @param fragmentId id of fragment that is going to be shown
+     */
+    public void showFragment(FragmentId fragmentId) {
+        // TODO rewrite after investigation of fragmentTransaction process
         FragmentManager fragmentManager = getFragmentManager();
         Fragment oldFragment = fragmentManager.findFragmentById(R.id.fragment_content);
 
-        String fragmentTag = getTagById(mCurrentFragmentId);
+        String fragmentTag = getTagById(fragmentId);
         BaseFragment newFragment = (BaseFragment) fragmentManager.findFragmentByTag(fragmentTag);
         //Если не нашли в FragmentManager уже существующего инстанса, то создаем новый
         if (newFragment == null) {
-            newFragment = getFragmentNewInstanceById(mCurrentFragmentId);
+            newFragment = getFragmentNewInstanceById(fragmentId);
         }
 
         if (oldFragment == null || newFragment != oldFragment) {
@@ -365,83 +295,73 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             if (mHardwareAccelerated) {
                 transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             }
-            if (!newFragment.isAdded()) {
-                if (oldFragment != null) {
-                    transaction.remove(oldFragment);
-                }
-                transaction.add(R.id.fragment_content, newFragment, fragmentTag);
-                transaction.commitAllowingStateLoss();
-            } else {
-                transaction.show(newFragment);
+            if (newFragment.isAdded()) {
+                transaction.remove(newFragment);
             }
+
+            if (oldFragment != null) {
+                transaction.remove(oldFragment);
+            }
+            transaction.add(R.id.fragment_content, newFragment, fragmentTag);
+            transaction.commitAllowingStateLoss();
         }
+        mSelectedFragment = fragmentId;
 
         //Закрываем меню только после создания фрагмента
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mOnFragmentSelected.onFragmentSelected(mCurrentFragmentId);
+                mOnFragmentSelected.onFragmentSelected(mSelectedFragment);
             }
         }, 250);
-
     }
 
-    private String getTagById(int id) {
-        if (id == F_LIKES && !LikesClosingFragment.usersProcessed) {
-            return "fragment_switch_controller_closed_" + id;
-        } else if (id == F_MUTUAL && !MutualClosingFragment.usersProcessed) {
-            return "fragment_switch_controller_closed_" + id;
-        } else {
-            return "fragment_switch_controller_" + id;
-        }
+    private String getTagById(FragmentId id) {
+        return "fragment_switch_controller_" + id;
     }
 
-    private BaseFragment getFragmentNewInstanceById(int id) {
+    public FragmentId getCurrentFragmentId() {
+        return mSelectedFragment == F_UNDEFINED ? F_DATING : mSelectedFragment;
+    }
+
+    private BaseFragment getFragmentNewInstanceById(FragmentId id) {
         BaseFragment fragment;
         switch (id) {
-            case BaseFragment.F_VIP_PROFILE:
+            case F_VIP_PROFILE:
                 fragment = ProfileFragment.newInstance(CacheProfile.uid, ProfileFragment.TYPE_MY_PROFILE,
                         VipBuyFragment.class.getName());
                 break;
-            case BaseFragment.F_PROFILE:
+            case F_PROFILE:
                 fragment = ProfileFragment.newInstance(CacheProfile.uid, ProfileFragment.TYPE_MY_PROFILE);
                 break;
-            case BaseFragment.F_DATING:
+            case F_DATING:
                 fragment = new DatingFragment();
                 break;
-            case BaseFragment.F_ADMIRATIONS:
+            case F_ADMIRATIONS:
                 fragment = new AdmirationFragment();
                 break;
-            case BaseFragment.F_LIKES:
-                if (LikesClosingFragment.usersProcessed || CacheProfile.premium) {
-                    fragment = new LikesFragment();
-                } else {
-                    if (!isClosed)
-                        getActivity().getIntent().putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_LIKES);
-                    Debug.log("Closing:Last fragment F_LIKES from MenuFragment");
-                    fragment = new LikesClosingFragment();
-                }
+            case F_LIKES:
+                fragment = new LikesFragment();
                 break;
-            case BaseFragment.F_MUTUAL:
-                fragment = MutualClosingFragment.usersProcessed || CacheProfile.premium ?
-                        new MutualFragment() : new MutualClosingFragment();
+            case F_MUTUAL:
+                fragment = new MutualFragment();
                 break;
-            case BaseFragment.F_DIALOGS:
+            case F_DIALOGS:
                 fragment = new DialogsFragment();
                 break;
-            case BaseFragment.F_BOOKMARKS:
+            case F_BOOKMARKS:
                 fragment = new BookmarksFragment();
                 break;
-            case BaseFragment.F_FANS:
+            case F_FANS:
                 fragment = new FansFragment();
                 break;
-            case BaseFragment.F_VISITORS:
+            case F_VISITORS:
                 fragment = new VisitorsFragment();
                 break;
-            case BaseFragment.F_SETTINGS:
+            case F_SETTINGS:
                 fragment = new SettingsFragment();
                 break;
-            case BaseFragment.F_EDITOR:
+            case F_EDITOR:
                 fragment = null;
                 if (Editor.isEditor()) {
                     fragment = new EditorFragment();
@@ -454,169 +374,150 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         return fragment;
     }
 
-    public int getCurrentFragmentId() {
-        return mCurrentFragmentId == 0 ? BaseFragment.F_DATING : mCurrentFragmentId;
+    @Override
+    public void onClick(View v) {
+        if (getListView().isClickable()) {
+            selectMenu((FragmentId) v.getTag());
+        }
+    }
+
+    public static interface OnFragmentSelectedListener {
+        public void onFragmentSelected(FragmentId fragmentId);
     }
 
     public void setOnFragmentSelected(OnFragmentSelectedListener listener) {
         mOnFragmentSelected = listener;
     }
 
-    public static void onLogout() {
-        logoutInvoked = true;
+    public void setClickable(boolean clickable) {
+        getListView().setClickable(clickable);
     }
 
-    public View getProfileLayout(View rootLayout) {
-        ViewGroup profileLayout = (ViewGroup) rootLayout.findViewById(R.id.btnProfileLayout);
-        if (!needProfileBackground()) return profileLayout;
-        boolean switchLayoutToPremium = false;
-        if (CacheProfile.premium) {
-            if (ProfileBackgrounds.isVipBackgroundId(getActivity(), CacheProfile.background_id)) {
-                profileLayout.setVisibility(View.GONE);
-                profileLayout = (ViewGroup) rootLayout.findViewById(R.id.btnProfileLayoutWithBackground);
-                profileLayout.setVisibility(View.VISIBLE);
-                String name = CacheProfile.first_name.length() <= 1
-                        ? getString(R.string.general_profile) : CacheProfile.first_name;
-                ((Button) profileLayout.findViewById(R.id.btnUserName)).setText(name);
-                Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
-                        ProfileBackgrounds.getBackgroundResource(getActivity(), CacheProfile.background_id));
-                ((ImageViewRemote) profileLayout.findViewById(R.id.ivProfileBackground))
-                        .setRemoteImageBitmap(bitmap);
-                switchLayoutToPremium = true;
-            }
+    /**
+     * Classes for Adapter's work: ILeftMenuItem, LeftMenuAdapter
+     */
+    private interface ILeftMenuItem {
+        FragmentId getMenuId();
+
+        int getMenuType();
+
+        String getMenuText();
+
+        int getMenuIconResId();
+    }
+
+    private class LeftMenuAdapter extends BaseAdapter {
+        private static final int TYPE_MENU_BUTTON = 0;
+        private static final int TYPE_MENU_BUTTON_WITH_BADGE = 1;
+        private static final int TYPE_COUNT = 2;
+        private final List<ILeftMenuItem> mItems;
+        private HashMap<FragmentId, TextView> mCountersBadgesMap = new HashMap<FragmentId, TextView>();
+
+        public LeftMenuAdapter(List<ILeftMenuItem> items) {
+            mItems = items;
         }
-        if (!switchLayoutToPremium) {
-            rootLayout.findViewById(R.id.btnProfileLayoutWithBackground).setVisibility(View.GONE);
-            profileLayout.setVisibility(View.VISIBLE);
+
+        @Override
+        public int getCount() {
+            return mItems.size();
         }
-        rootLayout.requestLayout();
-        rootLayout.invalidate();
-        return profileLayout;
-    }
 
-    public static interface OnFragmentSelectedListener {
-        public void onFragmentSelected(int fragmentId);
-    }
-
-    public void showNovice(Novice novice) {
-        if (novice != null && novice.isFlagsInitializationProccesed()) {
-            if (novice.isMenuCompleted()) return;
-
-            if (novice.isShowFillProfile()) {
-                RelativeLayout rootLayout = (RelativeLayout) getView().findViewById(R.id.MenuLayout);
-                NoviceLayout noviceLayout = new NoviceLayout(getActivity());
-                noviceLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                rootLayout.addView(noviceLayout);
-                noviceLayout.setLayoutRes(
-                        R.layout.novice_fill_profile,
-                        this.getProfileButtonOnClickListener()
-                );
-                AlphaAnimation alphaAnimation = new AlphaAnimation(0.0F, 1.0F);
-                alphaAnimation.setDuration(400L);
-                noviceLayout.startAnimation(alphaAnimation);
-                novice.completeShowFillProfile();
-            }
+        @Override
+        public ILeftMenuItem getItem(int position) {
+            return mItems.get(position);
         }
-    }
 
-    public void onClosings(int type) {
-        for (int i = 0; i < mButtons.size(); i++) {
-            int key = mButtons.keyAt(i);
-            Button btn = mButtons.get(key);
-            if (key != F_PROFILE && key != F_EDITOR && key != type) {
-                setAlphaToTextAndDrawable(btn, 102);
-                btn.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (mCurrentFragmentId == F_MUTUAL) {
-                            showWatchAsListDialog(CacheProfile.unread_mutual);
-                        } else if (mCurrentFragmentId == F_LIKES) {
-                            showWatchAsListDialog(CacheProfile.unread_likes);
-                        } else {
-                            showWatchAsListDialog(CacheProfile.unread_likes + CacheProfile.unread_mutual);
-                        }
-                    }
-                });
+        @Override
+        public long getItemId(int position) {
+            return mItems.get(position).getMenuId().ordinal();
+        }
+
+        @NotNull
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            // initialize holder and convertView
+            final ViewHolder holder;
+            // get menu item on current position
+            final ILeftMenuItem item = getItem(position);
+            //init convertView
+            if (convertView == null) {
+                holder = new ViewHolder();
+                convertView = View.inflate(getActivity(), R.layout.item_left_menu_button_with_badge, null);
+                holder.mBtnMenu = (Button) convertView.findViewById(R.id.btnMenu);
+                holder.mCounterBadge = (TextView) convertView.findViewById(R.id.tvCounterBadge);
+                convertView.setTag(holder);
             } else {
-                setAlphaToTextAndDrawable(btn, 255);
-                btn.setOnClickListener(this);
+                holder = (ViewHolder) convertView.getTag();
             }
+            // initiate views' state in holder
+            switch (item.getMenuType()) {
+                case TYPE_MENU_BUTTON:
+                    holder.mBtnMenu.setText(item.getMenuText());
+                    holder.mCounterBadge.setVisibility(View.GONE);
+                    unregisterCounterBadge(item);
+                    break;
+                case TYPE_MENU_BUTTON_WITH_BADGE:
+                    holder.mBtnMenu.setText(item.getMenuText());
+                    registerCounterBadge(item, holder.mCounterBadge);
+                    break;
+                default:
+                    break;
+            }
+            // init menu item icon
+            holder.mBtnMenu.setCompoundDrawablesWithIntrinsicBounds(
+                    App.getContext().getResources().getDrawable(item.getMenuIconResId()),
+                    null, null, null);
+            // processing click events
+            holder.mBtnMenu.setTag(item.getMenuId());
+            holder.mBtnMenu.setOnClickListener(MenuFragment.this);
+            // switch selected state of menu item button view
+            holder.mBtnMenu.setSelected(getCurrentFragmentId() == item.getMenuId());
+            return convertView;
         }
-        isClosed = true;
-    }
 
-    private void setAlphaToTextAndDrawable(Button btn, int alpha) {
-        btn.setTextColor(Color.argb(alpha, 255, 255, 255));
-        if (btn.getCompoundDrawables()[0] != null) {
-            btn.getCompoundDrawables()[0].setAlpha(alpha);
+        @Override
+        public int getItemViewType(int position) {
+            return mItems.get(position).getMenuType();
         }
-    }
 
-    public void onStopClosings() {
-        for (int i = 0; i < mButtons.size(); i++) {
-            Button btn = mButtons.get(mButtons.keyAt(i));
-            setAlphaToTextAndDrawable(btn, 255);
-            btn.setOnClickListener(this);
+        @Override
+        public int getViewTypeCount() {
+            return TYPE_COUNT;
         }
-        mCurrentFragmentId = F_UNDEFINED;
-        isClosed = false;
-    }
 
-    public boolean isClosed() {
-        return isClosed;
-    }
+        private void registerCounterBadge(ILeftMenuItem item, TextView mCounterBadge) {
+            FragmentId id = item.getMenuId();
+            mCountersBadgesMap.put(item.getMenuId(), mCounterBadge);
+            updateCounterBadge(id, mCounterBadge);
+        }
 
-    public void showWatchAsListDialog(int likesCount) {
-        if (ClosingsBuyVipDialog.opened) return;
+        private void unregisterCounterBadge(ILeftMenuItem item) {
+            mCountersBadgesMap.remove(item.getMenuId());
+        }
 
-        ClosingsBuyVipDialog newFragment = ClosingsBuyVipDialog.newInstance(likesCount);
-        newFragment.setOnWatchSequentialyListener(new ClosingsBuyVipDialog.IWatchSequentialyListener() {
-            @Override
-            public void onWatchSequentialy() {
-                Activity activity = getActivity();
-                if (activity instanceof NavigationActivity) {
-                    ((NavigationActivity) activity).hideContent();
+        public void refreshCounterBadges() {
+            for (ILeftMenuItem item : mItems) {
+                if (item.getMenuType() == TYPE_MENU_BUTTON_WITH_BADGE) {
+                    FragmentId menuId = item.getMenuId();
+                    TextView mCounterBadgeView = mCountersBadgesMap.get(menuId);
+                    updateCounterBadge(menuId, mCounterBadgeView);
                 }
             }
-        });
-        newFragment.setOnWatchListListener(new ClosingsBuyVipDialog.IWatchListListener() {
+        }
 
-            @Override
-            public void onWatchList() {
-                Activity activity = getActivity();
-                if (activity instanceof NavigationActivity) {
-                    ((NavigationActivity) activity).hideContent();
-                }
+        private void updateCounterBadge(FragmentId menuId, TextView mCounterBadgeView) {
+            int unreadCounter = CacheProfile.getUnreadCounterByFragmentId(menuId);
+            if (unreadCounter > 0) {
+                mCounterBadgeView.setText(Integer.toString(unreadCounter));
+                mCounterBadgeView.setVisibility(View.VISIBLE);
+            } else {
+                mCounterBadgeView.setVisibility(View.GONE);
             }
-        });
-        try {
-            newFragment.show(getActivity().getSupportFragmentManager(), ClosingsBuyVipDialog.TAG);
-        } catch (Exception e) {
-            Debug.error(e);
         }
-    }
 
-    @Override
-    protected boolean needOptionsMenu() {
-        return false;
-    }
-
-    public void switchProfileButton() {
-        View profileLayout = getProfileLayout(getView());
-        initMenuAvatar(profileLayout);
-        Button profileButton = (Button) profileLayout.findViewById(R.id.btnFragmentProfile);
-        final Button hashedProfileButton = mButtons.get(BaseFragment.F_PROFILE);
-        if (profileButton != hashedProfileButton) {
-            profileButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    hashedProfileButton.performClick();
-                }
-            });
+        class ViewHolder {
+            Button mBtnMenu;
+            TextView mCounterBadge;
         }
-    }
-
-    private boolean needProfileBackground() {
-        return getResources().getBoolean(R.bool.needProfileBackground);
     }
 }

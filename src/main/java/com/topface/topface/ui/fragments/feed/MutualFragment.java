@@ -53,7 +53,7 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
         inflated.findViewById(R.id.btnGetDating).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NavigationActivity.selectFragment(BaseFragment.F_DATING);
+                NavigationActivity.selectFragment(FragmentId.F_DATING);
             }
         });
 

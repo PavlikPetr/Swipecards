@@ -20,7 +20,7 @@ import com.topface.topface.data.Leader;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
@@ -100,7 +100,7 @@ public class LeadersDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 if (user.id == CacheProfile.uid) {
-                    ((NavigationActivity) getActivity()).showFragment(BaseFragment.F_PROFILE);
+                    ((NavigationActivity) getActivity()).showFragment(FragmentId.F_PROFILE);
                     dialog.dismiss();
                 } else {
                     startActivity(ContainerActivity.getProfileIntent(user.id, LeadersDialog.class, getActivity()));
@@ -125,7 +125,7 @@ public class LeadersDialog extends DialogFragment {
         intent.putExtra(ChatFragment.INTENT_USER_SEX, user.sex);
         intent.putExtra(ChatFragment.INTENT_USER_AGE, user.age);
         intent.putExtra(ChatFragment.INTENT_USER_CITY, user.city.name);
-        intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, this.getClass().getSimpleName());
+        intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, ((Object)this).getClass().getSimpleName());
         getActivity().startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
         EasyTracker.getTracker().sendEvent("Leaders", "Dialog", "Chat", 1L);
     }
