@@ -570,4 +570,7 @@
     <string name="locking_screen_button_answer">Responder</string>
     <string name="locking_screen_advice">Responde a todas las simpatías entrantes</string>
     <string name="locking_screen_advice2">Líbrate de todas las limitaciones</string>
+    <string name="current_city">Ciudad actual</string>
+    <string name="general_say_meow">Dí Meow</string>
+    <string name="general_meow_offer">Juega 3 rondas con tus amigos y recibe el estado VIP para 2 días</string>
 </resources>
