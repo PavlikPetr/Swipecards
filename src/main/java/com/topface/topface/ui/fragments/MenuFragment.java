@@ -52,7 +52,6 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.http.ProfileBackgrounds;
-import com.topface.topface.utils.social.AuthToken;
 
 public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
@@ -117,16 +116,13 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setNeedTitles(false);
-        //Показываем фрагмент только если мы авторизованы
-        if (!AuthToken.getInstance().isEmpty()) {
-            //Показываем фрагмент по умолчанию или последний выбранный фрагмент
-            switchFragment(
-                    savedInstanceState != null ?
-                            savedInstanceState.getInt(CURRENT_FRAGMENT_STATE, DEFAULT_FRAGMENT) :
-                            DEFAULT_FRAGMENT,
-                    false
-            );
-        }
+        //Показываем фрагмент по умолчанию или последний выбранный фрагмент
+        switchFragment(
+                savedInstanceState != null ?
+                        savedInstanceState.getInt(CURRENT_FRAGMENT_STATE, DEFAULT_FRAGMENT) :
+                        DEFAULT_FRAGMENT,
+                false
+        );
     }
 
     private void setMenuData() {
@@ -396,13 +392,15 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             Debug.error("MenuFragment: new fragment already added");
         }
 
-        //Закрываем меню только после создания фрагмента
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mOnFragmentSelected.onFragmentSelected(newFragmentId);
-            }
-        }, 250);
+        if (mOnFragmentSelected != null) {
+            //Закрываем меню только после создания фрагмента
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mOnFragmentSelected.onFragmentSelected(newFragmentId);
+                }
+            }, 250);
+        }
 
     }
 

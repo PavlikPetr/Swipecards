@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import java.util.Arrays;
 
 public class ApiResponse implements IApiResponse, SerializableToJson {
+    private boolean mIsNeedUpdateCounters = true;
     // Data
     protected int code = ErrorCodes.RESULT_DONT_SET;
     public String message = "";
@@ -19,6 +20,7 @@ public class ApiResponse implements IApiResponse, SerializableToJson {
     public JSONObject balance;
     public String method;
     public String id;
+
 
     /**
      * Конструиерует объект ответа от сервера с указаной ошибкой
@@ -129,6 +131,35 @@ public class ApiResponse implements IApiResponse, SerializableToJson {
         return isCodeEqual(ErrorCodes.RESULT_OK);
     }
 
+    @Override
+    public String getMethodName() {
+        return method;
+    }
+
+    @Override
+    public boolean isMethodNameEquals(String method) {
+        return this.method != null && this.method.equals(method);
+    }
+
+    @Override
+    public JSONObject getUnread() {
+        return unread;
+    }
+
+    @Override
+    public JSONObject getBalance() {
+        return balance;
+    }
+
+    @Override
+    public boolean isNeedUpdateCounters() {
+        return mIsNeedUpdateCounters;
+    }
+
+    public void setUpdateCountersFlag(boolean isNeedUpdateCounters) {
+        mIsNeedUpdateCounters = isNeedUpdateCounters;
+    }
+
     /**
      * Проверяет, является ли этот ответ от сервера ошибокой переданно в параметре errorCode
      */
@@ -163,4 +194,5 @@ public class ApiResponse implements IApiResponse, SerializableToJson {
     public int getResultCode() {
         return code;
     }
+
 }
