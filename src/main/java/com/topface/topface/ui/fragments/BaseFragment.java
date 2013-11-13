@@ -47,6 +47,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     private BroadcastReceiver mProfileLoadReceiver;
 
     private BroadcastReceiver updateCountersReceiver;
+    public static final int F_UNDEFINED = -1;
     public static final int F_VIP_PROFILE = 1000;
     public static final int F_PROFILE = 1001;
     public static final int F_DATING = 1002;
@@ -62,7 +63,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public static final int F_ADMIRATIONS = 1011;
 
     public static final int F_EDITOR = 9999;
-    public static final int F_UNDEFINED = 9998;
 
     public static final String INVITE_POPUP = "INVITE_POPUP";
     private boolean mNeedTitles = true;

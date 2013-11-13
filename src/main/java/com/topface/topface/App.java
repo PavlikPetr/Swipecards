@@ -12,6 +12,7 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.topface.topface.data.GooglePlayProducts;
@@ -181,6 +182,9 @@ public class App extends Application {
 
     private void checkDebugMode() {
         DEBUG = isDebugMode();
+        if (DEBUG) {
+            FragmentManager.enableDebugLogging(true);
+        }
     }
 
     @Override

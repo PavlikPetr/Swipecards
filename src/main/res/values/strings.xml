@@ -573,4 +573,6 @@
     <string name="locking_screen_advice">Respond to all incoming likes</string>
     <string name="locking_screen_advice2">Get rid of all restrictions</string>
     <string name="current_city">Current city</string>
+    <string name="general_say_meow">Say Meow</string>
+    <string name="general_meow_offer">Play 3 rounds with friends and get VIP status for 2 days</string>
 </resources>

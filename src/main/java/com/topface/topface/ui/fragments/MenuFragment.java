@@ -57,6 +57,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
     public static final String SELECT_MENU_ITEM = "com.topface.topface.action.menu.selectitem";
     public static final String SELECTED_FRAGMENT_ID = "com.topface.topface.action.menu.item";
+    private static final String CURRENT_FRAGMENT_STATE = "menu_fragment_current_fragment";
     public static boolean logoutInvoked = false;
     private SparseArray<Button> mButtons;
 
@@ -115,6 +116,13 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setNeedTitles(false);
+        //Показываем фрагмент по умолчанию или последний выбранный фрагмент
+        switchFragment(
+                savedInstanceState != null ?
+                        savedInstanceState.getInt(CURRENT_FRAGMENT_STATE, DEFAULT_FRAGMENT) :
+                        DEFAULT_FRAGMENT,
+                false
+        );
     }
 
     private void setMenuData() {
@@ -262,7 +270,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         if (mClickable) {
             unselectAllButtons();
             view.setSelected(true);
-            showFragment((Integer) view.getTag());
+            switchFragment((Integer) view.getTag());
         }
     }
 
@@ -325,7 +333,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         if (selectedItem != null) {
             unselectAllButtons();
             selectedItem.setSelected(true);
-            showFragment(fragmentId);
+            switchFragment(fragmentId);
         }
     }
 
@@ -339,27 +347,28 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         };
     }
 
-    public void showFragment(int fragmentId) {
-        if (fragmentId != mCurrentFragmentId) {
-            mCurrentFragmentId = fragmentId;
-            switchFragment();
+    public void switchFragment(final int newFragmentId) {
+        if (newFragmentId != mCurrentFragmentId) {
+            switchFragment(newFragmentId, true);
         } else if (mOnFragmentSelected != null) {
-            mOnFragmentSelected.onFragmentSelected(fragmentId);
+            mOnFragmentSelected.onFragmentSelected(newFragmentId);
         }
     }
 
-    private void switchFragment() {
+    private void switchFragment(final int newFragmentId, boolean executePending) {
         FragmentManager fragmentManager = getFragmentManager();
         Fragment oldFragment = fragmentManager.findFragmentById(R.id.fragment_content);
 
-        String fragmentTag = getTagById(mCurrentFragmentId);
+        String fragmentTag = getTagById(newFragmentId);
+        Debug.log("MenuFragment: Try switch to fragment with tag " + fragmentTag + " (old fragment " + mCurrentFragmentId + ")");
         BaseFragment newFragment = (BaseFragment) fragmentManager.findFragmentByTag(fragmentTag);
         //Если не нашли в FragmentManager уже существующего инстанса, то создаем новый
         if (newFragment == null) {
-            newFragment = getFragmentNewInstanceById(mCurrentFragmentId);
+            newFragment = getFragmentNewInstanceById(newFragmentId);
+            Debug.log("MenuFragment: newFragment is null, create new instance");
         }
 
-        if (oldFragment == null || newFragment != oldFragment) {
+        if (oldFragment == null || newFragmentId != mCurrentFragmentId) {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             //Меняем фрагменты анимировано, но только на новых устройствах c HW ускорением
             if (mHardwareAccelerated) {
@@ -367,22 +376,31 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             }
             if (newFragment.isAdded()) {
                 transaction.remove(newFragment);
+                Debug.error("MenuFragment: try detach already added new fragment " + fragmentTag);
             }
 
-            if (oldFragment != null) {
-                transaction.remove(oldFragment);
-            }
-            transaction.add(R.id.fragment_content, newFragment, fragmentTag);
+            transaction.replace(R.id.fragment_content, newFragment, fragmentTag);
             transaction.commitAllowingStateLoss();
+            //Вызываем executePendingTransactions, если передан соответвующий флаг
+            //и сохраняем результат
+            String transactionResult = executePending ?
+                    Boolean.toString(fragmentManager.executePendingTransactions()) :
+                    "no executePending";
+            mCurrentFragmentId = newFragmentId;
+            Debug.log("MenuFragment: commit " + transactionResult);
+        } else {
+            Debug.error("MenuFragment: new fragment already added");
         }
 
-        //Закрываем меню только после создания фрагмента
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mOnFragmentSelected.onFragmentSelected(mCurrentFragmentId);
-            }
-        }, 250);
+        if (mOnFragmentSelected != null) {
+            //Закрываем меню только после создания фрагмента
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mOnFragmentSelected.onFragmentSelected(newFragmentId);
+                }
+            }, 250);
+        }
 
     }
 
@@ -618,5 +636,11 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
     private boolean needProfileBackground() {
         return getResources().getBoolean(R.bool.needProfileBackground);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(CURRENT_FRAGMENT_STATE, mCurrentFragmentId);
     }
 }

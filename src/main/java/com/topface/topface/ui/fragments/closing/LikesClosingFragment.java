@@ -11,7 +11,6 @@ import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.SkipAllClosedRequest;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
 
@@ -118,7 +117,6 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     @Override
     protected void onUsersProcessed() {
         usersProcessed = true;
-        CountersManager.getInstance(getActivity()).setCounter(CountersManager.LIKES, 0, true);
         CacheProfile.getOptions().closing.onStopLikesClosings();
         super.onUsersProcessed();
     }
