@@ -19,9 +19,9 @@ import com.topface.topface.requests.DeleteLikesRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.ui.ContainerActivity;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.LikesListAdapter;
 import com.topface.topface.ui.adapters.LikesListAdapter.OnMutualListener;
+import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
@@ -128,7 +128,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                 inflated.findViewById(R.id.btnRate).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        NavigationActivity.selectFragment(FragmentId.F_DATING);
+                        MenuFragment.selectFragment(FragmentId.F_DATING);
                     }
                 });
                 ((ImageViewRemote) inflated.findViewById(R.id.ivOne))

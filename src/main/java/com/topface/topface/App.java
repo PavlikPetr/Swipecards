@@ -268,7 +268,6 @@ public class App extends Application {
                         CacheProfile.setProfile(data, (ApiResponse) response, part);
                         LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(getContext());
                         broadcastManager.sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
-                        broadcastManager.sendBroadcast(new Intent(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
                     }
 
                     @Override

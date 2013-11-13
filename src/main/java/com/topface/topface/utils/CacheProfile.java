@@ -259,7 +259,7 @@ public class CacheProfile {
             if (optionsCache != null) {
                 //Получаем опции из кэша
                 try {
-                    options = new Options(new JSONObject(optionsCache));
+                    options = new Options(new JSONObject(optionsCache), true);
                 } catch (JSONException e) {
                     Debug.error(e);
                 }
@@ -412,8 +412,10 @@ public class CacheProfile {
     public static int getUnreadCounterByFragmentId(BaseFragment.FragmentId id) {
         switch (id) {
             case F_LIKES:
+            case F_LIKES_CLOSINGS:
                 return CacheProfile.unread_likes;
             case F_MUTUAL:
+            case F_MUTUAL_CLOSINGS:
                 return CacheProfile.unread_mutual;
             case F_DIALOGS:
                 return CacheProfile.unread_messages;

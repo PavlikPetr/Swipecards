@@ -201,9 +201,14 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         showFragment(currentFragment == null ? FragmentId.F_DATING : currentFragment);
     }
 
+    public void hideContent() {
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+    }
+
     @Override
     public void onLoadProfile() {
         super.onLoadProfile();
+        mMenuFragment.onLoadProfile();
         AuthorizationManager.extendAccessToken(NavigationActivity.this);
         PopupManager manager = new PopupManager(this);
         manager.showOldVersionPopup(CacheProfile.getOptions().maxVersion);
@@ -440,13 +445,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
             getIntent().setData(null);
         }
     };
-
-    public static void selectFragment(FragmentId fragmentId) {
-        Intent intent = new Intent();
-        intent.setAction(MenuFragment.SELECT_MENU_ITEM);
-        intent.putExtra(MenuFragment.SELECTED_FRAGMENT_ID, fragmentId);
-        LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
-    }
 
     public static void onLogout() {
     }

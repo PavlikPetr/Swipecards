@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,16 +17,19 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.adapters.LeftMenuAdapter;
+import com.topface.topface.ui.dialogs.ClosingsBuyVipDialog;
+import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
+import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
 import com.topface.topface.ui.fragments.feed.AdmirationFragment;
 import com.topface.topface.ui.fragments.feed.BookmarksFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
@@ -39,13 +43,11 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
+import com.topface.topface.utils.controllers.ClosingsController;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.topface.topface.utils.social.AuthToken;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.*;
@@ -67,6 +69,9 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
     private View mHeaderView;
     private Button mProfileButton;
     private BuyWidgetController mBuyWidgetController;
+    private ViewStub mHeaderViewStub;
+
+    private ClosingsController mClosingsController;
 
     private BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -77,6 +82,9 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             if (action.equals(CountersManager.UPDATE_BALANCE_COUNTERS)) {
                 mAdapter.refreshCounterBadges();
                 mBuyWidgetController.updateBalance();
+                if (mClosingsController != null){
+                    mClosingsController.refreshCounterBadges();
+                }
             } else if (action.equals(ProfileRequest.PROFILE_UPDATE_ACTION)) {
                 initProfileMenuItem(mHeaderView);
             } else if (action.equals(GooglePlayProducts.INTENT_UPDATE_PRODUCTS)) {
@@ -87,52 +95,66 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                     );
                 }
             } else if (action.equals(SELECT_MENU_ITEM)) {
-                FragmentId fragmentId = (FragmentId) intent.getExtras().getSerializable(SELECTED_FRAGMENT_ID);
+                Bundle extras = intent.getExtras();
+                FragmentId fragmentId = null;
+                if (extras != null) {
+                    fragmentId = (FragmentId) extras.getSerializable(SELECTED_FRAGMENT_ID);
+                }
                 selectMenu(fragmentId);
             }
         }
     };
+
+    public static void selectFragment(FragmentId fragmentId) {
+        Intent intent = new Intent();
+        intent.setAction(SELECT_MENU_ITEM);
+        intent.putExtra(SELECTED_FRAGMENT_ID, fragmentId);
+        LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // init & add header with profile selector view
         initHeader();
-        //init adapter
+        // init adapter
         initAdapter();
         // init & add footer
         initFooter();
         // set listview settings
         getListView().setDividerHeight(0);
         getListView().setDivider(null);
+        // controller for closings uses ViewStub in header to be inflated
+        mClosingsController = new ClosingsController(getActivity(), mHeaderViewStub, mAdapter);
     }
 
     private void initHeader() {
-        mHeaderView = View.inflate(getActivity(), R.layout.item_left_menu_button_profile, null);
+        mHeaderView = View.inflate(getActivity(), R.layout.layout_left_menu_header, null);
         initProfileMenuItem(mHeaderView);
+        mHeaderViewStub = (ViewStub) mHeaderView.findViewById(R.id.vsHeaderStub);
         getListView().addHeaderView(mHeaderView);
     }
 
     private void initAdapter() {
-        List<ILeftMenuItem> menuItems = new ArrayList<ILeftMenuItem>();
+        List<LeftMenuAdapter.ILeftMenuItem> menuItems = new ArrayList<LeftMenuAdapter.ILeftMenuItem>();
         //- Profile added as part of header
-        menuItems.add(newLeftMenuItem(F_DATING, LeftMenuAdapter.TYPE_MENU_BUTTON,
+        menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_DATING, LeftMenuAdapter.TYPE_MENU_BUTTON,
                 R.string.general_dating, R.drawable.ic_dating_selector));
-        menuItems.add(newLeftMenuItem(F_LIKES, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_LIKES, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.string.general_likes, R.drawable.ic_likes_selector));
-        menuItems.add(newLeftMenuItem(F_ADMIRATIONS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_ADMIRATIONS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.string.general_admirations, R.drawable.ic_admirations_selector));
-        menuItems.add(newLeftMenuItem(F_MUTUAL, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_MUTUAL, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.string.general_mutual, R.drawable.ic_mutual_selector));
-        menuItems.add(newLeftMenuItem(F_DIALOGS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_DIALOGS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.string.general_dialogs, R.drawable.ic_dialog_selector));
-        menuItems.add(newLeftMenuItem(F_BOOKMARKS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_BOOKMARKS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.string.general_bookmarks, R.drawable.ic_star_selector));
-        menuItems.add(newLeftMenuItem(F_FANS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_FANS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.string.general_fans, R.drawable.ic_fans_selector));
-        menuItems.add(newLeftMenuItem(F_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.string.general_visitors, R.drawable.ic_guests_selector));
-        mAdapter = new LeftMenuAdapter(menuItems);
+        mAdapter = new LeftMenuAdapter(this, menuItems);
         setListAdapter(mAdapter);
     }
 
@@ -146,7 +168,6 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         if (headerView == null) return;
         final View profileLayout = headerView.findViewById(R.id.btnProfileLayout);
         final View profileLayoutWithBackground = headerView.findViewById(R.id.btnProfileLayoutWithBackground);
-
         // detect right layout for profile button and init photo and background if needed
         View currentLayout;
         if (CacheProfile.premium
@@ -194,6 +215,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         }
     }
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //Показываем фрагмент только если мы авторизованы
@@ -244,31 +266,6 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private boolean isHardwareAccelerated(View rootLayout) {
         return Build.VERSION.SDK_INT >= 11 && rootLayout.isHardwareAccelerated();
-    }
-
-    private ILeftMenuItem newLeftMenuItem(final FragmentId menuId, final int menuType,
-                                          final int menuTextResId, final int menuIconResId) {
-        return new ILeftMenuItem() {
-            @Override
-            public FragmentId getMenuId() {
-                return menuId;
-            }
-
-            @Override
-            public int getMenuType() {
-                return menuType;
-            }
-
-            @Override
-            public String getMenuText() {
-                return getString(menuTextResId);
-            }
-
-            @Override
-            public int getMenuIconResId() {
-                return menuIconResId;
-            }
-        };
     }
 
     /**
@@ -348,7 +345,9 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mOnFragmentSelected.onFragmentSelected(mSelectedFragment);
+                if (mOnFragmentSelected != null) {
+                    mOnFragmentSelected.onFragmentSelected(mSelectedFragment);
+                }
             }
         }, 250);
     }
@@ -380,8 +379,14 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             case F_LIKES:
                 fragment = new LikesFragment();
                 break;
+            case F_LIKES_CLOSINGS:
+                fragment = new LikesClosingFragment();
+                break;
             case F_MUTUAL:
                 fragment = new MutualFragment();
+                break;
+            case F_MUTUAL_CLOSINGS:
+                fragment = new MutualClosingFragment();
                 break;
             case F_DIALOGS:
                 fragment = new DialogsFragment();
@@ -418,6 +423,15 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         }
     }
 
+    public void onLoadProfile() {
+
+        //TODO we don't have counters' values from cached data,
+        // so we have to make actions after we will receive data from server
+        if (CacheProfile.getOptions().closing.isClosingsEnabled()) {
+            mClosingsController.inflate();
+        }
+    }
+
     public static interface OnFragmentSelectedListener {
         public void onFragmentSelected(FragmentId fragmentId);
     }
@@ -430,131 +444,33 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         getListView().setClickable(clickable);
     }
 
-    /**
-     * Classes for Adapter's work: ILeftMenuItem, LeftMenuAdapter
-     */
-    private interface ILeftMenuItem {
-        FragmentId getMenuId();
+    public void showWatchAsListDialog(int likesCount) {
+        if (ClosingsBuyVipDialog.opened) return;
 
-        int getMenuType();
-
-        String getMenuText();
-
-        int getMenuIconResId();
-    }
-
-    private class LeftMenuAdapter extends BaseAdapter {
-        private static final int TYPE_MENU_BUTTON = 0;
-        private static final int TYPE_MENU_BUTTON_WITH_BADGE = 1;
-        private static final int TYPE_COUNT = 2;
-        private final List<ILeftMenuItem> mItems;
-        private HashMap<FragmentId, TextView> mCountersBadgesMap = new HashMap<FragmentId, TextView>();
-
-        public LeftMenuAdapter(List<ILeftMenuItem> items) {
-            mItems = items;
-        }
-
-        @Override
-        public int getCount() {
-            return mItems.size();
-        }
-
-        @Override
-        public ILeftMenuItem getItem(int position) {
-            return mItems.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return mItems.get(position).getMenuId().ordinal();
-        }
-
-        @NotNull
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            // initialize holder and convertView
-            final ViewHolder holder;
-            // get menu item on current position
-            final ILeftMenuItem item = getItem(position);
-            //init convertView
-            if (convertView == null) {
-                holder = new ViewHolder();
-                convertView = View.inflate(getActivity(), R.layout.item_left_menu_button_with_badge, null);
-                holder.mBtnMenu = (Button) convertView.findViewById(R.id.btnMenu);
-                holder.mCounterBadge = (TextView) convertView.findViewById(R.id.tvCounterBadge);
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-            // initiate views' state in holder
-            switch (item.getMenuType()) {
-                case TYPE_MENU_BUTTON:
-                    holder.mBtnMenu.setText(item.getMenuText());
-                    holder.mCounterBadge.setVisibility(View.GONE);
-                    unregisterCounterBadge(item);
-                    break;
-                case TYPE_MENU_BUTTON_WITH_BADGE:
-                    holder.mBtnMenu.setText(item.getMenuText());
-                    registerCounterBadge(item, holder.mCounterBadge);
-                    break;
-                default:
-                    break;
-            }
-            // init menu item icon
-            holder.mBtnMenu.setCompoundDrawablesWithIntrinsicBounds(
-                    App.getContext().getResources().getDrawable(item.getMenuIconResId()),
-                    null, null, null);
-            // processing click events
-            holder.mBtnMenu.setTag(item.getMenuId());
-            holder.mBtnMenu.setOnClickListener(MenuFragment.this);
-            // switch selected state of menu item button view
-            holder.mBtnMenu.setSelected(getCurrentFragmentId() == item.getMenuId());
-            return convertView;
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            return mItems.get(position).getMenuType();
-        }
-
-        @Override
-        public int getViewTypeCount() {
-            return TYPE_COUNT;
-        }
-
-        private void registerCounterBadge(ILeftMenuItem item, TextView mCounterBadge) {
-            FragmentId id = item.getMenuId();
-            mCountersBadgesMap.put(item.getMenuId(), mCounterBadge);
-            updateCounterBadge(id, mCounterBadge);
-        }
-
-        private void unregisterCounterBadge(ILeftMenuItem item) {
-            mCountersBadgesMap.remove(item.getMenuId());
-        }
-
-        public void refreshCounterBadges() {
-            for (ILeftMenuItem item : mItems) {
-                if (item.getMenuType() == TYPE_MENU_BUTTON_WITH_BADGE) {
-                    FragmentId menuId = item.getMenuId();
-                    TextView mCounterBadgeView = mCountersBadgesMap.get(menuId);
-                    updateCounterBadge(menuId, mCounterBadgeView);
+        ClosingsBuyVipDialog newFragment = ClosingsBuyVipDialog.newInstance(likesCount);
+        newFragment.setOnWatchSequentialyListener(new ClosingsBuyVipDialog.IWatchSequentialyListener() {
+            @Override
+            public void onWatchSequentialy() {
+                Activity activity = getActivity();
+                if (activity instanceof NavigationActivity) {
+                    ((NavigationActivity) activity).hideContent();
                 }
             }
-        }
+        });
+        newFragment.setOnWatchListListener(new ClosingsBuyVipDialog.IWatchListListener() {
 
-        private void updateCounterBadge(FragmentId menuId, TextView mCounterBadgeView) {
-            int unreadCounter = CacheProfile.getUnreadCounterByFragmentId(menuId);
-            if (unreadCounter > 0) {
-                mCounterBadgeView.setText(Integer.toString(unreadCounter));
-                mCounterBadgeView.setVisibility(View.VISIBLE);
-            } else {
-                mCounterBadgeView.setVisibility(View.GONE);
+            @Override
+            public void onWatchList() {
+                Activity activity = getActivity();
+                if (activity instanceof NavigationActivity) {
+                    ((NavigationActivity) activity).hideContent();
+                }
             }
-        }
-
-        class ViewHolder {
-            Button mBtnMenu;
-            TextView mCounterBadge;
+        });
+        try {
+            newFragment.show(getActivity().getSupportFragmentManager(), ClosingsBuyVipDialog.TAG);
+        } catch (Exception e) {
+            Debug.error(e);
         }
     }
 }

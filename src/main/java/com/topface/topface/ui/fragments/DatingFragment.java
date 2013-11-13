@@ -461,7 +461,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         //Показываем последнего пользователя
         if (mUserSearchList == null) {
             mUserSearchList = new CachableSearchList<SearchUser>(SearchUser.class);
-
         }
         if (mCurrentUser == null) {
             SearchUser currentUser = mUserSearchList.getCurrentUser();

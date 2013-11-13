@@ -14,11 +14,10 @@ import com.topface.topface.Static;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.ContainerActivity;
-import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.AirManager;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 
 public class AdmirationFragment extends LikesFragment{
@@ -84,7 +83,7 @@ public class AdmirationFragment extends LikesFragment{
                 inflated.findViewById(R.id.btnRate).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        NavigationActivity.selectFragment(FragmentId.F_DATING);
+                        MenuFragment.selectFragment(FragmentId.F_DATING);
                     }
                 });
                 ((ImageViewRemote) inflated.findViewById(R.id.ivOne))

@@ -12,9 +12,8 @@ import com.topface.topface.requests.DeleteFeedsRequest;
 import com.topface.topface.requests.DeleteMutualsRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.ContainerActivity;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.MutualListAdapter;
-import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.utils.CountersManager;
 
 import org.json.JSONObject;
@@ -53,7 +52,7 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
         inflated.findViewById(R.id.btnGetDating).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NavigationActivity.selectFragment(FragmentId.F_DATING);
+                MenuFragment.selectFragment(FragmentId.F_DATING);
             }
         });
 

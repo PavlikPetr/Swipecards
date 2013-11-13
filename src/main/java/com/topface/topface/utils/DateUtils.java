@@ -18,6 +18,7 @@ public class DateUtils {
     private final static SimpleDateFormat mDateFormatHours = new SimpleDateFormat("HH:mm");
 
     public static final long DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000;
+    public static final long HOUR_IN_MILLISECONDS = 60 * 60 * 1000;
 
     public static void syncTime() {
         Calendar cal = Calendar.getInstance();
@@ -80,10 +81,6 @@ public class DateUtils {
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         return (prev < cal.getTimeInMillis());
-    }
-
-    public static boolean isOutside24Hours(long prev, long current) {
-        return Math.abs(current - prev) > DAY_IN_MILLISECONDS;
     }
 
     public static Date getDate(int year, int month, int day) {

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/itemLikesClosings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/item_left_menu_button_with_badge"/>
+
+        <include
+            android:id="@+id/itemMutualsClosings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/item_left_menu_button_with_badge"/>
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:text="@string/locking_menu_message"
+            android:layout_margin="16dp"
+            style="@style/TopfaceTextAppearance.Small" />
+
+        <Button
+            android:id="@+id/btnBuyVipFromClosingsWidget"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/locking_popup_button_buy"
+            style="@style/ButtonBlue"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:src="@drawable/shadow_closing_top_panel"
+        android:layout_alignParentBottom="true"/>
+</RelativeLayout>

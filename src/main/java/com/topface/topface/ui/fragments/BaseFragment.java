@@ -67,6 +67,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public static enum FragmentId {
         F_VIP_PROFILE, F_PROFILE, F_DATING,
         F_LIKES, F_ADMIRATIONS, F_MUTUAL,
+        F_LIKES_CLOSINGS, F_MUTUAL_CLOSINGS,
         F_DIALOGS,
         F_VISITORS, F_BOOKMARKS, F_FANS,
         F_EDITOR, F_SETTINGS,

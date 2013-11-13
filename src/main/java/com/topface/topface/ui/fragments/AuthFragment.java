@@ -431,6 +431,7 @@ public class AuthFragment extends BaseFragment {
                 if (isAdded()) {
                     Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
                     ((BaseFragmentActivity) getActivity()).close(AuthFragment.this, true);
+                    MenuFragment.selectFragment(FragmentId.F_DATING);
                 }
             }
 
