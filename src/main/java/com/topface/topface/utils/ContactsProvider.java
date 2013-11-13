@@ -103,7 +103,7 @@ public class ContactsProvider {
         private Contact(Parcel in) {
             name = in.readString();
             phone = in.readString();
-            email = Boolean.getBoolean(in.readString());
+            email = in.readInt() == 1? true:false;
         }
 
         public String getName() {
@@ -147,7 +147,7 @@ public class ContactsProvider {
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeString(name);
             dest.writeString(phone);
-            dest.writeString(Boolean.toString(email));
+            dest.writeInt(email?1:0);
         }
 
     }

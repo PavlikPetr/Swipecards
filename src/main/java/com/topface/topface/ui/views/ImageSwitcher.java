@@ -91,6 +91,7 @@ public class ImageSwitcher extends ViewPager {
                 //При WiFi подключении это не нужно, т.к. фотографию мы уже прелоадим заранее, но нужно при 3G
                 //Если показано больше 10% следующей фотографии, то начинаем ее грузить
                 if (v > 0.1 && v < 0.6) {
+                    Debug.log("IS: page_scroll " + i);
                     if (getCurrentItem() == i) {
                         int next;
                         next = i + 1;
@@ -155,6 +156,7 @@ public class ImageSwitcher extends ViewPager {
                     super.onLoadingComplete(imageUri, view, loadedImage);
 
                     int currentItem = getCurrentItem();
+                    Debug.log("IS: complete_but_not_set " + position + " " + currentItem);
                     if (currentItem + 1 == position || currentItem - 1 == position) {
                         Debug.log("IS: onLoadingComplete " + position);
                         setPhotoToPosition(position, true);
@@ -244,6 +246,23 @@ public class ImageSwitcher extends ViewPager {
                 imageView.setTag(R.string.photo_is_set_tag, !photo.isFake());
             }
             mLoadedPhotos.put(position, true);
+        }
+
+
+        //Опасная копипаста
+        private boolean isPhotoSet(int position) {
+            View baseLayout = ImageSwitcher.this.findViewWithTag(VIEW_TAG + Integer.toString(position));
+            //Этот метод может вызываться до того, как создана страница для этой фотографии
+            if (baseLayout != null) {
+                Debug.log("IS: trySetPhoto " + position);
+                ImageViewRemote imageView = (ImageViewRemote) baseLayout.findViewById(R.id.ivPreView);
+                Object tag = imageView.getTag(R.string.photo_is_set_tag);
+                //Проверяем, не установленно ли уже изображение в ImageView
+                if (tag != null && ((Boolean) tag)) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public void setData(Photos photos) {
