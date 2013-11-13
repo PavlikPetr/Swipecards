@@ -264,7 +264,7 @@ public class ContactsFragment extends BaseFragment {
 
         public void setAllDataChecked(boolean checked) {
             if (data != null) {
-                for (ContactsProvider.Contact contact : data) {
+                for (ContactsProvider.Contact contact : filteredContacts) {
                     contact.setChecked(checked);
                 }
                 wasChanges = true;
