@@ -566,4 +566,7 @@
     <string name="locking_screen_button_answer">Svara</string>
     <string name="locking_screen_advice">Besvara alla inkommande sympatier</string>
     <string name="locking_screen_advice2">Ta bort alla begränsningar</string>
+    <string name="current_city">Aktuell stad</string>
+    <string name="general_say_meow">SayMeow</string>
+    <string name="general_meow_offer">Spela tre rundor med vänner och erhåll VIP för två dagar</string>
 </resources>

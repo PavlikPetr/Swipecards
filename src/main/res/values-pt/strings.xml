@@ -534,4 +534,7 @@
     <string name="locking_screen_button_answer">Responder</string>
     <string name="locking_screen_advice">Responda a todas as simpatias recebidas</string>
     <string name="locking_screen_advice2">Livre-se de todas as restrições</string>
+    <string name="current_city">Cidade atual</string>
+    <string name="general_say_meow">Diga Meow</string>
+    <string name="general_meow_offer">Jogue três rondas com amigos e obtenha o status VIP por 2 dias</string>
 </resources>
