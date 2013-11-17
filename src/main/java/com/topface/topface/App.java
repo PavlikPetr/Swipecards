@@ -129,7 +129,7 @@ public class App extends Application {
     private void onCreateAsync(Handler handler) {
         Debug.log("App", "+onCreateAsync");
         DateUtils.syncTime();
-        Ssid.init();
+        Ssid.load();
         CacheProfile.loadProfile();
         //Оповещаем о том, что профиль загрузился
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));

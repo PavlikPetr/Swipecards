@@ -150,6 +150,7 @@ public class Options extends AbstractData {
     public GetJar getJar;
     public String gagTypeBanner = BannerBlock.BANNER_ADMOB;
     public String gagTypeFullscreen = BannerBlock.BANNER_NONE;
+    public String helpUrl;
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -235,6 +236,8 @@ public class Options extends AbstractData {
 
             gagTypeBanner = response.optString("gag_type_banner", BannerBlock.BANNER_ADMOB);
             gagTypeFullscreen = response.optString("gag_type_fullscreen", BannerBlock.BANNER_NONE);
+
+            helpUrl = response.optString("helpUrl");
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
         }

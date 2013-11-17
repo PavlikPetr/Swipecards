@@ -41,6 +41,7 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.AuthButtonsController;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
@@ -428,6 +429,8 @@ public class AuthFragment extends BaseFragment {
         App.sendProfileAndOptionsRequests(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
+                //После авторизации обязательно бросаем события, что бы профиль загрузился
+                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
                 if (isAdded()) {
                     Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
                     ((BaseFragmentActivity) getActivity()).close(AuthFragment.this, true);

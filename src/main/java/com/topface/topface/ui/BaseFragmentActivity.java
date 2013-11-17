@@ -120,7 +120,10 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             mProfileLoadReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    checkProfileLoad();
+                    //Уведомлять о загрузке профиля следует только если мы авторизованы
+                    if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
+                        checkProfileLoad();
+                    }
                 }
             };
 
@@ -207,7 +210,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     }
 
     public void close(Fragment fragment, boolean needFireEvent) {
-        getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+        getSupportFragmentManager().beginTransaction().remove(fragment).commitAllowingStateLoss();
         if (needFireEvent) {
             onCloseFragment();
         }

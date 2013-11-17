@@ -180,6 +180,9 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         View profileLayout = getProfileLayout(rootLayout);
         //Делаем список кнопок
         mButtons = getButtonsMap(rootLayout, profileLayout);
+        //При создании View меню выделяем нужный пункт,
+        //т.к. он уже может быть уже выбран при восстановлении фрагмента системой
+        selectMenuItem(mCurrentFragmentId);
 
         //Автарка в меню
         initMenuAvatar(profileLayout);
@@ -329,11 +332,16 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
     }
 
     public void selectMenu(int fragmentId) {
-        Button selectedItem = mButtons.get(fragmentId);
-        if (selectedItem != null) {
-            unselectAllButtons();
-            selectedItem.setSelected(true);
-            switchFragment(fragmentId);
+        switchFragment(fragmentId);
+    }
+
+    public void selectMenuItem(int fragmentId) {
+        if (mButtons != null) {
+            Button selectedItem = mButtons.get(fragmentId);
+            if (selectedItem != null) {
+                unselectAllButtons();
+                selectedItem.setSelected(true);
+            }
         }
     }
 
@@ -356,6 +364,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private void switchFragment(final int newFragmentId, boolean executePending) {
+        selectMenuItem(newFragmentId);
         FragmentManager fragmentManager = getFragmentManager();
         Fragment oldFragment = fragmentManager.findFragmentById(R.id.fragment_content);
 
@@ -373,10 +382,6 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
             //Меняем фрагменты анимировано, но только на новых устройствах c HW ускорением
             if (mHardwareAccelerated) {
                 transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-            }
-            if (newFragment.isAdded()) {
-                transaction.remove(newFragment);
-                Debug.error("MenuFragment: try detach already added new fragment " + fragmentTag);
             }
 
             transaction.replace(R.id.fragment_content, newFragment, fragmentTag);
@@ -640,7 +645,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
         outState.putInt(CURRENT_FRAGMENT_STATE, mCurrentFragmentId);
+        super.onSaveInstanceState(outState);
     }
 }
