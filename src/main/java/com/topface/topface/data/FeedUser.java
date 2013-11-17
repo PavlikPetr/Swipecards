@@ -65,6 +65,7 @@ public class FeedUser extends AbstractData implements SerializableToJson {
 
     public void fillData(JSONObject user) {
         this.id = user.optInt("id");
+
         this.first_name = user.optString("firstName");
         this.age = user.optInt("age");
         this.online = user.optBoolean("online");

@@ -9,7 +9,7 @@ import org.json.JSONObject;
 public class User extends Profile {
     // Data
     public String platform; // платформа пользователя
-    public int last_visit;  // таймстамп последнего посещения приложения
+    public int lastVisit;  // таймстамп последнего посещения приложения
     public String status;   // статус пользователя
     public boolean online;  // флаг наличия пользвоателя в онлайне
     public boolean mutual;  // флаг наличия симпатии к авторизованному пользователю
@@ -27,7 +27,7 @@ public class User extends Profile {
             if (item != null) {
                 parse(user, item);
                 user.platform = item.optString("platform");
-                user.last_visit = item.optInt("lastVisit");
+                user.lastVisit = item.optInt("lastVisit");
                 user.inBlackList = item.optBoolean("inBlacklist");
                 user.status = item.optString("status");
                 user.online = item.optBoolean("online");
