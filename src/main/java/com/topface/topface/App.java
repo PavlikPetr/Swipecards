@@ -29,6 +29,7 @@ import com.topface.topface.requests.ParallelApiRequest;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
 import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
@@ -102,9 +103,6 @@ public class App extends Application {
             mConnectionReceiver = new ConnectionChangeReceiver(mContext);
             mConnectionIntent = registerReceiver(mConnectionReceiver, new IntentFilter(CONNECTIVITY_CHANGE_ACTION));
         }
-
-        MutualClosingFragment.usersProcessed = false;
-        LikesClosingFragment.usersProcessed = false;
 
         //Инициализируем GCM
         if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty()) {
@@ -213,7 +211,14 @@ public class App extends Application {
      * Множественный запрос Options и профиля
      */
     public static void sendProfileAndOptionsRequests() {
-        sendProfileAndOptionsRequests(null);
+        sendProfileAndOptionsRequests(new SimpleApiHandler(){
+            @Override
+            public void success(IApiResponse response) {
+                super.success(response);
+                LocalBroadcastManager.getInstance(getContext())
+                        .sendBroadcast(new Intent(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
+            }
+        });
     }
 
     private static ApiRequest getGooglePlayProductsRequest() {
@@ -266,8 +271,8 @@ public class App extends Application {
                     @Override
                     protected void success(Profile data, IApiResponse response) {
                         CacheProfile.setProfile(data, (ApiResponse) response, part);
-                        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(getContext());
-                        broadcastManager.sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                        LocalBroadcastManager.getInstance(getContext())
+                                .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
                     }
 
                     @Override

@@ -50,7 +50,8 @@ public class FeedUser extends AbstractData implements SerializableToJson {
     public boolean blocked;
 
     // соответствующий пользователю элемент списка, может быть null
-    public FeedItem feedItem;
+    // optional(for example for closings fragments)
+    public String feedItemId;
 
     public FeedUser(JSONObject user) {
         if (user != null) {
@@ -60,7 +61,7 @@ public class FeedUser extends AbstractData implements SerializableToJson {
 
     public FeedUser(JSONObject user, FeedItem item) {
         this(user);
-        feedItem = item;
+        feedItemId = item.id;
     }
 
     public void fillData(JSONObject user) {
@@ -82,7 +83,8 @@ public class FeedUser extends AbstractData implements SerializableToJson {
             this.photos = new Photos();
             this.photos.add(this.photo);
         }
-        this.photosCount = user.optInt("photosCount", photos.size()); //TODO camel case
+        this.photosCount = user.optInt("photosCount", photos.size());
+        this.feedItemId = user.optString("feedItemId");
     }
 
     public String getNameAndAge() {
@@ -97,7 +99,7 @@ public class FeedUser extends AbstractData implements SerializableToJson {
 
     @Override
     public JSONObject toJson() throws JSONException {
-        JSONObject json = new JSONObject();
+        JSONObject json = new JSONObject();//TODO do not serialize twice for closings in FeedUser in FeedItem
         json.put("id", id);
         json.put("firstName", first_name);
         json.put("sex", sex);
@@ -108,7 +110,8 @@ public class FeedUser extends AbstractData implements SerializableToJson {
         json.put("premium", premium);
         json.put("bookmarked", bookmarked);
         json.put("blocked", blocked);
-        json.put("photos", photos);
+        json.put("photos", photos.toJson());
+        json.put("feedItemId", feedItemId);
         return json;
     }
 

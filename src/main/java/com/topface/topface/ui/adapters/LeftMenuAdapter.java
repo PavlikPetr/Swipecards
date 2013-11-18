@@ -27,6 +27,7 @@ public class LeftMenuAdapter extends BaseAdapter {
     private static final int TYPE_COUNT = 2;
     private MenuFragment mMenuFragment;
     private final List<ILeftMenuItem> mItems;
+
     private HashMap<BaseFragment.FragmentId, TextView> mCountersBadgesMap = new HashMap<BaseFragment.FragmentId, TextView>();
     private boolean mIsEnabled = true;
     private View.OnClickListener mDisabledItemClickListener = new View.OnClickListener() {
@@ -112,11 +113,21 @@ public class LeftMenuAdapter extends BaseAdapter {
         setItemHidden(id,false);
     }
 
+    public void showAllItems() {
+        setAllItemsHidden(false);
+    }
+
     private void setItemHidden(BaseFragment.FragmentId id, boolean hidden) {
         for (ILeftMenuItem item : mItems) {
             if (item.getMenuId().equals(id)) {
                 item.setHidden(hidden);
             }
+        }
+    }
+
+    private void setAllItemsHidden(boolean hidden) {
+        for (ILeftMenuItem item : mItems) {
+            item.setHidden(hidden);
         }
     }
 

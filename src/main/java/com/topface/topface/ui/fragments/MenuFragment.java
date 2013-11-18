@@ -24,6 +24,8 @@ import android.widget.ImageView;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.GooglePlayProducts;
+import com.topface.topface.data.Options;
+import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.LeftMenuAdapter;
@@ -101,6 +103,12 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                     fragmentId = (FragmentId) extras.getSerializable(SELECTED_FRAGMENT_ID);
                 }
                 selectMenu(fragmentId);
+            } else if (action.equals(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION)) {
+                if (!CacheProfile.premium) mClosingsController.show();
+            } else if (action.equals(LikesClosingFragment.ACTION_LIKES_CLOSINGS_PROCESSED)){
+                mClosingsController.onClosingsProcessed(FeedRequest.FeedService.LIKES);
+            } else if (action.equals(MutualClosingFragment.ACTION_MUTUAL_CLOSINGS_PROCESSED)) {
+                mClosingsController.onClosingsProcessed(FeedRequest.FeedService.MUTUAL);
             }
         }
     };
@@ -248,6 +256,9 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         filter.addAction(GooglePlayProducts.INTENT_UPDATE_PRODUCTS);
         filter.addAction(CountersManager.UPDATE_BALANCE_COUNTERS);
         filter.addAction(SELECT_MENU_ITEM);
+        filter.addAction(LikesClosingFragment.ACTION_LIKES_CLOSINGS_PROCESSED);
+        filter.addAction(MutualClosingFragment.ACTION_MUTUAL_CLOSINGS_PROCESSED);
+        filter.addAction(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, filter);
     }
 
@@ -377,7 +388,8 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 fragment = new AdmirationFragment();
                 break;
             case F_LIKES:
-                fragment = new LikesFragment();
+                // TODO make empty screen for LikesClosingFragment and take care of FragmentManager.findByTag logic when premium status is obtained
+                fragment = mClosingsController.getLikesFragment();
                 break;
             case F_LIKES_CLOSINGS:
                 fragment = new LikesClosingFragment();
@@ -424,12 +436,10 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
     }
 
     public void onLoadProfile() {
-
-        //TODO we don't have counters' values from cached data,
-        // so we have to make actions after we will receive data from server
-        if (CacheProfile.getOptions().closing.isClosingsEnabled()) {
-            mClosingsController.inflate();
-        }
+        // We don't have counters' values from cached data
+        // so we have to make actions after we will receive data from server.
+        // Another call is in BroadcastReceiver of MenuFragment
+        if (!CacheProfile.premium) mClosingsController.show();
     }
 
     public static interface OnFragmentSelectedListener {

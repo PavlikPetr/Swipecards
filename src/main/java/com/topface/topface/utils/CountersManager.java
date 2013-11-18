@@ -196,9 +196,6 @@ public class CountersManager {
                 admirationsCounter != CacheProfile.unread_admirations) &&
                 !checkMethodIsDenyed(method)
                 ) {
-            if (CacheProfile.unread_likes < likesCounter) {
-                LikesClosingFragment.usersProcessed = false;
-            }
             CacheProfile.unread_likes = likesCounter;
             CacheProfile.unread_messages = dialogsCounter;
             CacheProfile.unread_mutual = sympathyCounter;

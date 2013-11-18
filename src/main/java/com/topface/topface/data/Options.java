@@ -1,6 +1,7 @@
 package com.topface.topface.data;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -432,6 +433,7 @@ public class Options extends AbstractData {
 
 
     public static class Closing {
+        public static final String DATA_FOR_CLOSING_RECEIVED_ACTION = "closings_received_action";
         private static Ssid.ISsidUpdateListener listener;
         private long mutualsClosingLastCallTime;
         private long likesClosingLastCallTime;

@@ -30,6 +30,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
+import com.topface.topface.data.Options;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.AuthRequest;
@@ -432,6 +433,8 @@ public class AuthFragment extends BaseFragment {
                     Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
                     ((BaseFragmentActivity) getActivity()).close(AuthFragment.this, true);
                     MenuFragment.selectFragment(FragmentId.F_DATING);
+                    LocalBroadcastManager.getInstance(getContext())
+                            .sendBroadcast(new Intent(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
                 }
             }
 

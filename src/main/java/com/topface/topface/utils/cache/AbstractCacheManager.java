@@ -47,5 +47,4 @@ public abstract class AbstractCacheManager {
     abstract protected String getDataFromCache(String cacheKey);
 
     abstract protected long getExpireDateFromCache(String cacheKey);
-
 }

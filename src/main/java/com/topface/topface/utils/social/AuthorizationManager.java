@@ -34,6 +34,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.cache.SearchCacheManager;
+import com.topface.topface.utils.controllers.ClosingsController;
 import com.topface.topface.utils.http.HttpUtils;
 
 import org.json.JSONArray;
@@ -446,6 +447,7 @@ public class AuthorizationManager {
             }
         };
         NavigationActivity.onLogout();
+        ClosingsController.onLogout();
         if (!(activity instanceof NavigationActivity)) {
             activity.setResult(RESULT_LOGOUT);
             activity.finish();

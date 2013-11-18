@@ -65,7 +65,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     private T mCurrentUser;
     private RateController mRateController;
     private AtomicBoolean mFragmentPaused = new AtomicBoolean(false);
-    private boolean mDatareturnedOnce = false;
+    private boolean mDataReturnedOnce = false;
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -293,7 +293,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                         return;
                     }
                     if (data.size() != 0) {
-                        if (!mDatareturnedOnce) onNotEmptyDataReturnedOnce();
+                        if (!mDataReturnedOnce) onNotEmptyDataReturnedOnce();
                         getImageSwitcher().setVisibility(View.VISIBLE);
                         usersList.addAndUpdateSignature(data);
                         //если список был пуст, то просто показываем нового пользователя
@@ -361,7 +361,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     }
 
     protected void onNotEmptyDataReturnedOnce() {
-        mDatareturnedOnce = true;
+        mDataReturnedOnce = true;
     }
 
     private void sendAlbumRequest() {
@@ -412,17 +412,17 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
 
     protected abstract ApiRequest getUsersListRequest();
 
-    public abstract Class getItemsClass();
+    public abstract Class<FeedUser> getItemsClass();
 
     @Override
-    protected void onUpdateStart(boolean isPushUpdating) {
+    protected void onUpdateStart(boolean isAddition) {
         lockControls();
         mUpdateInProcess = true;
-        if (!isPushUpdating) {
+        if (!isAddition) {
             getProgressBar().setVisibility(View.VISIBLE);
             getImageSwitcher().setVisibility(View.GONE);
         }
-        UsersList.log("Update start: " + (isPushUpdating ? "addition" : "replace"));
+        UsersList.log("Update start: " + (isAddition ? "addition" : "replace"));
     }
 
     @Override
@@ -485,7 +485,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
 
     protected void showNextUser() {
         if (getUsersList().isEnded()) {
-            updateData(true);
+            updateData(false);
             return;
         }
         T nextUser = getUsersList().nextUser();
