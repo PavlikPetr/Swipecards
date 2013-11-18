@@ -114,7 +114,9 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
             mProfileLoadReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    checkProfileLoad();
+                    if (isAdded()) {
+                        checkProfileLoad();
+                    }
                 }
             };
         }
@@ -155,7 +157,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     @Override
     public void cancelRequest(ApiRequest request) {
-        request.cancel();
+        request.cancelFromUi();
     }
 
     @Override

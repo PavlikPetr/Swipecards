@@ -289,6 +289,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         setLastUpdate();
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public boolean removeItem(int position) {
         boolean result = false;
         FeedList<T> data = getData();
@@ -382,7 +383,9 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         if (mSelectionController != null) {
             List<T> selected = mSelectionController.getSelected();
             for (T aSelected : selected) {
-                ids.add(aSelected.user.id);
+                if (aSelected != null && aSelected.user != null) {
+                    ids.add(aSelected.user.id);
+                }
             }
         }
         return ids;

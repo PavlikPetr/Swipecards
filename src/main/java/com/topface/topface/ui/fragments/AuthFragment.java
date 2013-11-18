@@ -247,9 +247,10 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void setAuthInterface() {
-        if (btnsController == null) return;
+        if (btnsController == null || !isAdded()) return;
+        Context applicationContext = getActivity().getApplicationContext();
         if (btnsController.needSN(AuthToken.SN_VKONTAKTE)) {
-            mVKButton.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
+            mVKButton.setAnimation(AnimationUtils.loadAnimation(applicationContext,
                     R.anim.fade_in));
             mVKButton.setVisibility(View.VISIBLE);
         } else {
@@ -257,7 +258,7 @@ public class AuthFragment extends BaseFragment {
         }
 
         if (btnsController.needSN(AuthToken.SN_FACEBOOK)) {
-            mFBButton.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
+            mFBButton.setAnimation(AnimationUtils.loadAnimation(applicationContext,
                     R.anim.fade_in));
             mFBButton.setVisibility(View.VISIBLE);
         } else {
@@ -265,7 +266,7 @@ public class AuthFragment extends BaseFragment {
         }
 
         if (btnsController.needSN(AuthToken.SN_ODNOKLASSNIKI)) {
-            mOKButton.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
+            mOKButton.setAnimation(AnimationUtils.loadAnimation(applicationContext,
                     R.anim.fade_in));
             mOKButton.setVisibility(View.VISIBLE);
         } else {

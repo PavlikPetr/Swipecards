@@ -13,6 +13,7 @@ import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.PopupManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -122,7 +123,7 @@ public class Options extends AbstractData {
      */
     public HashMap<String, Page> pages = new HashMap<String, Page>();
 
-    public String ratePopupType;
+    public String ratePopupType = PopupManager.OFF_RATE_TYPE;
     private String paymentwall;
 
     public String maxVersion = "2147483647";
@@ -157,12 +158,16 @@ public class Options extends AbstractData {
     }
 
     public Options(JSONObject data) {
+        this(data, true);
+    }
+
+    public Options(JSONObject data, boolean cacheToPreferences) {
         if (data != null) {
-            fillData(data);
+            fillData(data, cacheToPreferences);
         }
     }
 
-    protected void fillData(JSONObject response) {
+    protected void fillData(JSONObject response, boolean cacheToPreferences) {
         try {
             priceAdmiration = response.optInt("admirationPrice");
             priceLeader = response.optInt("leaderPrice");
@@ -242,7 +247,7 @@ public class Options extends AbstractData {
             Debug.error("Options parsing error", e);
         }
 
-        if (response != null) {
+        if (response != null && cacheToPreferences) {
             CacheProfile.setOptions(this, response);
         } else {
             Debug.error("Options response is null");

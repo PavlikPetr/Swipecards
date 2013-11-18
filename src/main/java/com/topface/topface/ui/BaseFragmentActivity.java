@@ -273,7 +273,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     @Override
     public void cancelRequest(ApiRequest request) {
-        request.cancel();
+        request.cancelFromUi();
     }
 
     @Override

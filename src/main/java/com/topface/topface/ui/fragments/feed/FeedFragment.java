@@ -183,6 +183,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             mFloatBlock.onPause();
         }
         if (mActionMode != null) mActionMode.finish();
+        if (mListView.isRefreshing()) {
+            mListView.onRefreshComplete();
+        }
     }
 
     @Override

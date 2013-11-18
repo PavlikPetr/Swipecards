@@ -16,6 +16,8 @@ import com.topface.topface.ui.fragments.GiftsFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.TripleButton;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -38,7 +40,7 @@ public class GiftsActivity extends BaseFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.ac_gifts);
+        setContentView(R.layout.ac_gifts);
 
         getSupportActionBar().setTitle(getString(R.string.gifts_title));
 
@@ -204,7 +206,7 @@ public class GiftsActivity extends BaseFragmentActivity {
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(@NotNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         mGiftsList = savedInstanceState.getParcelableArrayList(GIFTS_LIST);
     }

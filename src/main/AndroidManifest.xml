@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.topface.topface"
-          android:installLocation="auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.topface.topface"
+    android:installLocation="auto"
 
-          android:versionCode="91"
-          android:versionName="2.8.0">
+    android:versionCode="92"
+    android:versionName="2.8.1">
 
     <uses-sdk
-            android:minSdkVersion="7"
-            android:targetSdkVersion="17" />
+        android:minSdkVersion="7"
+        android:targetSdkVersion="17" />
 
     <!-- permissions -->
     <permission
@@ -267,9 +268,11 @@
                 android:name="com.lifestreet.android.lsmsdk.mraid.MRAIDActivity"
                 android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
 
-        <service android:name="org.OpenUDID.OpenUDID_service">
+        <service
+            android:name="org.OpenUDID.OpenUDID_service"
+            tools:ignore="InnerclassSeparator">
             <intent-filter>
-                <action android:name="org.openudid.GETUDID"/>
+                <action android:name="org.openudid.GET˚UDID" />
             </intent-filter>
         </service>
 
@@ -287,17 +290,21 @@
         <service android:name="com.getjar.sdk.rewards.GetJarService"/>
 
         <!-- receivers -->
-        <receiver android:name="com.topface.billing.googleplay.BillingReceiver">
+        <receiver
+            android:name="com.topface.billing.googleplay.BillingReceiver"
+            tools:ignore="ExportedReceiver">
             <intent-filter>
-                <action android:name="com.android.vending.billing.IN_APP_NOTIFY"/>
+            <action android:name="com.android.vending.billing.IN_APP_NOTIFY"/>
                 <action android:name="com.android.vending.billing.RESPONSE_CODE"/>
                 <action android:name="com.android.vending.billing.PURCHASE_STATE_CHANGED"/>
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".receivers.TestNotificationsReceiver">
+        <receiver
+            android:name=".receivers.TestNotificationsReceiver"
+            tools:ignore="ExportedReceiver">
             <intent-filter>
-                <action android:name="com.topface.topface.NOTIFY"/>
+            <action android:name="com.topface.topface.NOTIFY"/>
             </intent-filter>
         </receiver>
 
@@ -328,9 +335,11 @@
         </receiver>
 
         <!-- Amazon In-App Purchasing -->
-        <receiver android:name="com.amazon.inapp.purchasing.ResponseReceiver">
+        <receiver
+            android:name="com.amazon.inapp.purchasing.ResponseReceiver"
+            tools:ignore="ExportedReceiver">
             <intent-filter>
-                <action
+            <action
                         android:name="com.amazon.inapp.purchasing.NOTIFY"
                         android:permission="com.amazon.inapp.purchasing.Permission.NOTIFY"/>
             </intent-filter>
@@ -338,9 +347,10 @@
 
         <receiver
                 android:exported="true"
-                android:name="com.sponsorpay.sdk.android.advertiser.InstallReferrerReceiver">
+            android:name="com.sponsorpay.sdk.android.advertiser.InstallReferrerReceiver"
+            tools:ignore="ExportedReceiver">
             <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER"/>
+            <action android:name="com.android.vending.INSTALL_REFERRER"/>
             </intent-filter>
         </receiver>
     </application>
