@@ -46,13 +46,16 @@ public class MultiselectionController<T> {
             return;
         }
         if (mAdapter != null) {
-            mSelected.add((T)mAdapter.getItem(position));
-            mAdapter.notifyDataSetChanged();
+            T item = (T)mAdapter.getItem(position);
+            if (item != null) {
+                mSelected.add(item);
+                mAdapter.notifyDataSetChanged();
+            }
         }
     }
 
     public void addSelection(T item) {
-        if (mAdapter != null) {
+        if (mAdapter != null && item != null) {
             mSelected.add(item);
             mAdapter.notifyDataSetChanged();
         }
