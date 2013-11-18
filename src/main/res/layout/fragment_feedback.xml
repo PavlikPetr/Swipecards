@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:gravity="center_horizontal"
+              android:clickable="false"
+              android:orientation="vertical"
+              android:paddingTop="20dp">
+
+    <include
+            android:id="@+id/loErrorMessage"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/item_edit_form_select"/>
+
+    <include
+            android:id="@+id/loAskDevelopers"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/item_edit_form_select"/>
+
+    <include
+            android:id="@+id/loPaymentProblem"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/item_edit_form_select"/>
+
+    <include
+            android:id="@+id/loCooperation"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/item_edit_form_select"/>
+
+</LinearLayout>

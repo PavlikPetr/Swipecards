@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_main"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
+
+    <com.topface.topface.ui.views.SwapControl
+            android:id="@+id/swapFormView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
+                android:id="@+id/chatContainer">
+
+            <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@drawable/bg_main"
+                    android:visibility="gone"
+                    android:id="@+id/llvLockScreen"/>
+
+            <com.handmark.pulltorefresh.library.PullToRefreshListView
+                    xmlns:p2r="http://schemas.android.com/apk/res-auto"
+                    p2r:ptrShowIndicator="false"
+                    p2r:ptrOverScroll="false"
+                    p2r:ptrMode="pullUpFromBottom"
+                    android:id="@+id/lvChatList"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dip"
+                    android:layout_weight="1"
+                    android:cacheColorHint="#00000000"
+                    android:clickable="true"
+                    android:divider="@android:color/transparent"
+                    android:dividerHeight="8dp"
+                    android:fadeScrollbars="true"
+                    android:fadingEdge="none"
+                    android:stackFromBottom="true"
+                    android:listSelector="@android:color/transparent"/>
+
+            <FrameLayout
+                    android:id="@+id/loChatFooterSend"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    >
+
+                <include layout="@layout/chat_footer_send"/>
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+        <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+
+                >
+
+            <LinearLayout
+                    android:id="@+id/loAddButtons"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@drawable/bg_chat_add_panel"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp">
+
+                <Button
+                        android:id="@+id/btnChatGift"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        style="@style/ChatButtonsText"
+                        android:text="@string/general_gift"
+                        android:background="@drawable/chat_gift_selector"
+                        android:layout_marginLeft="6dp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"/>
+
+                <Button
+                        android:id="@+id/btnChatPlace"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        style="@style/ChatButtonsText"
+                        android:text="@string/general_place"
+                        android:background="@drawable/chat_place_selector"
+                        android:layout_marginLeft="6dp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"/>
+
+
+                <Button
+                        android:id="@+id/btnChatPhoto"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        style="@style/ChatButtonsText"
+                        android:text="@string/general_soon"
+                        android:background="@drawable/chat_photo_selector"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginRight="6dp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"/>
+            </LinearLayout>
+
+            <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/loAddButtons"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:orientation="vertical"
+                    >
+
+                <TextView
+                        android:id="@+id/tvBuyVipTitle"
+                        android:layout_height="wrap_content"
+                        android:layout_width="fill_parent"
+                        android:text="@string/black_list_activation"
+                        style="@style/ChatVipTitleText"
+                        android:layout_marginTop="6dp"
+                        />
+
+                <Button
+                        android:id="@+id/btnBuyVip"
+                        android:layout_height="wrap_content"
+                        android:layout_width="fill_parent"
+                        style="@style/ButtonBlue"
+                        android:text="@string/buying_vip_status"
+                        android:textStyle="bold"
+                        android:layout_below="@id/tvBuyVipTitle"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        />
+
+                <Button
+                        android:id="@+id/btnAddToBlackList"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:background="@drawable/btn_gray_selector"
+                        style="@style/ButtonGray"
+                        android:text="@string/black_list_add"
+                        android:layout_centerInParent="true"
+                        android:layout_below="@id/tvBuyVipTitle"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        />
+            </RelativeLayout>
+        </RelativeLayout>
+    </com.topface.topface.ui.views.SwapControl>
+
+    <TextView
+            android:id="@+id/tvBackgroundText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:singleLine="true"
+            style="@style/BackgroundFont"
+            android:text="@string/general_dialog_loading"
+            android:drawableLeft="@drawable/loader"
+            android:visibility="gone"/>
+    <include
+            android:id="@+id/loChatActions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            layout="@layout/user_actions_layout"
+            />
+</RelativeLayout>

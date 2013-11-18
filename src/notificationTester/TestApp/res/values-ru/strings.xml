@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="general_sympathy_text">Симпатия</string>
+    <string name="general_mutual_text">Взаимно</string>
+    <string name="general_visitors_text">Гости</string>
+    <string name="general_message_text">Сообщениe</string>
+    <string name="general_send_mail">Отправить!</string>
+    <string name="general_email">E-mail</string>
+    <string name="general_send_notification">Послать нотификацию</string>
+    <string name="general_test_gcm">Тест GCM</string>
+</resources>
