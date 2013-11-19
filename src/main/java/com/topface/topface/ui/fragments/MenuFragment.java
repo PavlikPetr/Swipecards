@@ -31,6 +31,7 @@ import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.ui.BonusFragment;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.ClosingsBuyVipDialog;
@@ -236,6 +237,7 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         buttons.put(BaseFragment.F_MUTUAL, (Button) rootLayout.findViewById(R.id.btnFragmentMutual));
         buttons.put(BaseFragment.F_DIALOGS, (Button) rootLayout.findViewById(R.id.btnFragmentDialogs));
         buttons.put(BaseFragment.F_FANS, (Button) rootLayout.findViewById(R.id.btnFragmentFans));
+        buttons.put(BaseFragment.F_BONUS, (Button) rootLayout.findViewById(R.id.btnFragmentBonus));
         buttons.put(BaseFragment.F_VISITORS, (Button) rootLayout.findViewById(R.id.btnFragmentVisitors));
         buttons.put(BaseFragment.F_BOOKMARKS, (Button) rootLayout.findViewById(R.id.btnFragmentBookmarks));
         buttons.put(BaseFragment.F_EDITOR, (Button) rootLayout.findViewById(R.id.btnEditor));
@@ -452,6 +454,9 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case BaseFragment.F_FANS:
                 fragment = new FansFragment();
+                break;
+            case BaseFragment.F_BONUS:
+                fragment = new BonusFragment();
                 break;
             case BaseFragment.F_VISITORS:
                 fragment = new VisitorsFragment();
