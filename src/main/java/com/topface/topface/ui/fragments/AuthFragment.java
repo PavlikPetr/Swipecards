@@ -93,7 +93,7 @@ public class AuthFragment extends BaseFragment {
     public static AuthFragment newInstance() {
         return new AuthFragment();
     }
-
+//пробный пуш
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
