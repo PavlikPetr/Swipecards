@@ -201,6 +201,10 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         showFragment(currentFragment == null ? FragmentId.F_DATING : currentFragment);
     }
 
+    public void showContent() {
+        mDrawerLayout.openDrawer(GravityCompat.START);
+    }
+
     public void hideContent() {
         mDrawerLayout.closeDrawer(GravityCompat.START);
     }

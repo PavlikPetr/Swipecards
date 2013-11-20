@@ -565,7 +565,6 @@
     <string name="user_deleted_or_banned">The user is banned or deleted</string>
     <string name="locking_popup_title">Entering this section is  «%s» restricted!</string>
     <string name="locking_popup_message">To enter this section «%s» answer all incoming likes or get VIP.</string>
-    <string name="locking_popup_button_buy">Buy VIP</string>
     <string name="locking_popup_button_answer">Respond to likes</string>
     <string name="locking_menu_message">Access to certain pages of the application is restricted. To remove these restrictions, answer all incoming likes or get VIP.</string>
     <string name="locking_likes_message">Attention! Access to some of the pages on the application is restricted. To remove these restrictions, answer to all incoming likes or get VIP.</string>

@@ -25,6 +25,7 @@ import com.topface.topface.requests.ParallelApiRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.LeftMenuAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
@@ -244,11 +245,9 @@ public class ClosingsController implements View.OnClickListener {
         if (tag instanceof FragmentId) {
             switch ((FragmentId) tag) {
                 case F_LIKES_CLOSINGS:
-                    MenuFragment.selectFragment(BaseFragment.FragmentId.F_LIKES_CLOSINGS);
                     selectMenuItem(FragmentId.F_LIKES_CLOSINGS);
                     break;
                 case F_MUTUAL_CLOSINGS:
-                    MenuFragment.selectFragment(BaseFragment.FragmentId.F_MUTUAL_CLOSINGS);
                     selectMenuItem(FragmentId.F_MUTUAL_CLOSINGS);
                     break;
             }
@@ -264,6 +263,7 @@ public class ClosingsController implements View.OnClickListener {
     }
 
     private void selectMenuItem(FragmentId id) {
+        MenuFragment.selectFragment(id);
         for (View item : menuItemsButtons) {
             Object tag = item.getTag();
             if (tag instanceof FragmentId) {
@@ -325,7 +325,11 @@ public class ClosingsController implements View.OnClickListener {
         mClosingsPassed = false;
     }
 
-    public BaseFragment getLikesFragment() {
-        return new LikesClosingFragment();
+    public void respondToLikes() {
+        if(mMutualClosingsActive) {
+            selectMenuItem(FragmentId.F_MUTUAL_CLOSINGS);
+        } else if(mLikesClosingsActive) {
+            selectMenuItem(FragmentId.F_LIKES_CLOSINGS);
+        }
     }
 }
