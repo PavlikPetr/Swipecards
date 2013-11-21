@@ -48,7 +48,6 @@ public class ClosingsController implements View.OnClickListener {
 
     public static final String LIKES_CACHE_KEY = "likes_cache_key";
     public static final String MUTUALS_CACHE_KEY = "mutuals_cache_key";
-    public static final String ACTION_REMOVE_CLOSINGS = "remove_closings";
 
     private Context mContext;
 
