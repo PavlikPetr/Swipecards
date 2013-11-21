@@ -279,7 +279,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
 
     /**
      * Selects menu item and shows fragment by id
-     * Note: some strange behavior, when method is called in onCreate
+     * Note: incorrect behavior, when method is called in onCreate
      * (Exception: recursive call of executePendingTransactions)
      *
      * @param fragmentId id of fragment that is going to be shown
@@ -301,9 +301,15 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             mAdapter.notifyDataSetChanged();
         }
         if (mProfileButton != null) {
-            mProfileButton.setSelected(
-                    mSelectedFragment == F_PROFILE || mSelectedFragment == F_VIP_PROFILE
-            );
+            if (mSelectedFragment == F_PROFILE || mSelectedFragment == F_VIP_PROFILE) {
+                mProfileButton.setSelected(true);
+                if (mClosingsController != null) {
+                    mClosingsController.unselectMenuItems();
+                    mClosingsController.unlockLeftMenu();
+                }
+            } else {
+                mProfileButton.setSelected(false);
+            }
         }
     }
 

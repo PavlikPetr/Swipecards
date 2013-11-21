@@ -1,7 +1,7 @@
 package com.topface.topface.utils.controllers;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.Button;
@@ -30,8 +30,6 @@ import com.topface.topface.ui.adapters.LeftMenuAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.ViewUsersListFragment;
-import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
-import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.utils.CacheProfile;
 
 import com.topface.topface.ui.fragments.BaseFragment.FragmentId;
@@ -44,6 +42,7 @@ import java.util.List;
 
 /**
  * Created by kirussell on 12.11.13.
+ * Controller for closings. All closings logic here for removing without pain
  */
 public class ClosingsController implements View.OnClickListener {
 
@@ -66,8 +65,8 @@ public class ClosingsController implements View.OnClickListener {
     private boolean mMutualClosingsActive = false;
     private boolean mLikesClosingsActive = false;
 
-    private boolean isInflated = false;
     private List<View> menuItemsButtons = new ArrayList<View>();
+    private boolean mLeftMenuLocked = false;
 
     public ClosingsController(@NotNull final Context context, @NotNull ViewStub mHeaderViewStub, @NotNull LeftMenuAdapter adapter) {
         mContext = context;
@@ -115,6 +114,7 @@ public class ClosingsController implements View.OnClickListener {
                     }
                     mAdapter.setEnabled(false);
                     mAdapter.notifyDataSetChanged();
+                    lockLeftMenu();
                 }
             }
         };
@@ -127,7 +127,7 @@ public class ClosingsController implements View.OnClickListener {
     }
 
     private View getClosingsWidget() {
-        if(mClosingsWidget == null) {
+        if (mClosingsWidget == null) {
             mClosingsWidget = mViewStub.inflate();
         }
         return mClosingsWidget;
@@ -198,11 +198,11 @@ public class ClosingsController implements View.OnClickListener {
     /**
      * Initializes closing menu items if needed
      *
-     * @param menuItem
-     * @param btnTextResId
-     * @param iconResId
-     * @param visible
-     * @param fragmentId
+     * @param menuItem menu item view
+     * @param btnTextResId test resourse id
+     * @param iconResId icon resource id
+     * @param visible true if menu item has to be shown
+     * @param fragmentId id for fragment which will be shown when menu item will be chosen
      * @return true if closing menu item is visible
      */
     private boolean initMenuItem(View menuItem, int btnTextResId, int iconResId, boolean visible,
@@ -243,6 +243,7 @@ public class ClosingsController implements View.OnClickListener {
     public void onClick(View v) {
         Object tag = v.getTag();
         if (tag instanceof FragmentId) {
+            unlockLeftMenu();
             switch ((FragmentId) tag) {
                 case F_LIKES_CLOSINGS:
                     selectMenuItem(FragmentId.F_LIKES_CLOSINGS);
@@ -263,7 +264,9 @@ public class ClosingsController implements View.OnClickListener {
     }
 
     private void selectMenuItem(FragmentId id) {
-        MenuFragment.selectFragment(id);
+        if (id != null) {
+            MenuFragment.selectFragment(id);
+        }
         for (View item : menuItemsButtons) {
             Object tag = item.getTag();
             if (tag instanceof FragmentId) {
@@ -274,7 +277,7 @@ public class ClosingsController implements View.OnClickListener {
         }
     }
 
-    public void  onClosingsProcessed(FeedRequest.FeedService service) {
+    public void onClosingsProcessed(FeedRequest.FeedService service) {
         if (mClosingsPassed) return;
         if (service == FeedRequest.FeedService.LIKES) {
             if (!mMutualClosingsActive) {
@@ -326,10 +329,37 @@ public class ClosingsController implements View.OnClickListener {
     }
 
     public void respondToLikes() {
-        if(mMutualClosingsActive) {
+        if (mMutualClosingsActive) {
             selectMenuItem(FragmentId.F_MUTUAL_CLOSINGS);
-        } else if(mLikesClosingsActive) {
+        } else if (mLikesClosingsActive) {
             selectMenuItem(FragmentId.F_LIKES_CLOSINGS);
+        }
+    }
+
+    public void unselectMenuItems() {
+        selectMenuItem(null);
+    }
+
+    private void lockLeftMenu() {
+        if (!mLeftMenuLocked) {
+            if (mContext instanceof NavigationActivity) {
+                NavigationActivity activity = ((NavigationActivity) mContext);
+                activity.showContent();
+                activity.setMenuLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
+                activity.getSupportActionBar().setDisplayUseLogoEnabled(false);
+            }
+            mLeftMenuLocked = true;
+        }
+    }
+
+    public void unlockLeftMenu() {
+        if (mLeftMenuLocked) {
+            if (mContext instanceof NavigationActivity) {
+                NavigationActivity activity = ((NavigationActivity) mContext);
+                activity.setMenuLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                activity.getSupportActionBar().setDisplayUseLogoEnabled(true);
+            }
+            mLeftMenuLocked = false;
         }
     }
 }

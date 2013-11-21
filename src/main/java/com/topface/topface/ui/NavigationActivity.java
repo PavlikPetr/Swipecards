@@ -98,7 +98,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
             finish();
             return;
         }
-        setMenuEnabled(true);
         mFragmentManager = getSupportFragmentManager();
         initDrawerLayout();
         new BackgroundThread() {
@@ -152,10 +151,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
                 R.string.app_name,  /* "open drawer" description */
                 R.string.app_name  /* "close drawer" description */
         ) {
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-            }
 
             @Override
             public void onDrawerClosed(View drawerView) {
@@ -181,7 +176,17 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+        if (mDrawerLayout.getDrawerLockMode(GravityCompat.START) == DrawerLayout.LOCK_MODE_UNLOCKED) {
+            return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+        } else {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    //TODO dialog for closings
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
+        }
     }
 
     private SharedPreferences getPreferences() {
@@ -203,10 +208,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
     public void showContent() {
         mDrawerLayout.openDrawer(GravityCompat.START);
-    }
-
-    public void hideContent() {
-        mDrawerLayout.closeDrawer(GravityCompat.START);
     }
 
     @Override
@@ -363,9 +364,9 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         }
     }
 
-    public void setMenuEnabled(boolean enabled) {
+    public void setMenuLockMode(int lockMode) {
         if (mDrawerLayout != null) {
-            mDrawerLayout.setEnabled(enabled);
+            mDrawerLayout.setDrawerLockMode(lockMode, GravityCompat.START);
         }
     }
 
@@ -398,30 +399,31 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
                     requestCode == CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY) {
                 if (data != null) {
                     Bundle extras = data.getExtras();
-                    try {
-                        final City city = new City(new JSONObject(extras.getString(CitySearchActivity.INTENT_CITY)));
-                        SettingsRequest request = new SettingsRequest(this);
-                        request.cityid = city.id;
-                        request.callback(new ApiHandler() {
+                    if (extras != null) {
+                        try {
+                            final City city = new City(new JSONObject(extras.getString(CitySearchActivity.INTENT_CITY)));
+                            SettingsRequest request = new SettingsRequest(this);
+                            request.cityid = city.id;
+                            request.callback(new ApiHandler() {
 
-                            @Override
-                            public void success(IApiResponse response) {
-                                CacheProfile.city = city;
-                                LocalBroadcastManager.getInstance(getApplicationContext())
-                                        .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
-                            }
+                                @Override
+                                public void success(IApiResponse response) {
+                                    CacheProfile.city = city;
+                                    LocalBroadcastManager.getInstance(getApplicationContext())
+                                            .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                                }
 
-                            @Override
-                            public void fail(int codeError, IApiResponse response) {
-                            }
-                        }).exec();
-                    } catch (JSONException e) {
-                        Debug.error(e);
+                                @Override
+                                public void fail(int codeError, IApiResponse response) {
+                                }
+                            }).exec();
+                        } catch (JSONException e) {
+                            Debug.error(e);
+                        }
                     }
                 }
             }
         }
-
     }
 
     ExternalLinkExecuter.OnExternalLinkListener mListener = new ExternalLinkExecuter.OnExternalLinkListener() {

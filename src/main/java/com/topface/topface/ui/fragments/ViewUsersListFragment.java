@@ -75,7 +75,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
             }
         }
     };
-    private FeedItem mLastFeedItem;
+    private String mLastFeedItemId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -88,7 +88,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_view_users, null);
 
-        initActionBar(root);
+        initActionBar();
         inflateTopPanel(root);
         inflateControls(root);
         initImageSwitcher(root);
@@ -159,7 +159,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
 
     protected abstract void initControls(View controlsView);
 
-    private void initActionBar(View view) {
+    private void initActionBar() {
         refreshActionBarTitles();
         initActionBarControls();
     }
@@ -251,6 +251,9 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     private UsersList<T> getUsersList() {
         if (mUsersList == null) {
             mUsersList = createUsersList();
+            if (mUsersList.size() > 0) {
+                mLastFeedItemId = mUsersList.getLast().feedItemId;
+            }
         }
         return mUsersList;
     }
@@ -264,8 +267,8 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     }
 
     protected String getLastFeedId() {
-        if (mLastFeedItem != null)
-            return mLastFeedItem.id;
+        if (mLastFeedItemId != null)
+            return mLastFeedItemId;
         else
             return null;
     }
@@ -331,7 +334,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                         if (getFeedUserContainerClass() != null) {
                             FeedListData<FeedItem> items = new FeedListData<FeedItem>(response.getJsonResult(), getFeedUserContainerClass());
                             more = items.more;
-                            mLastFeedItem = items.items.isEmpty() ? null : items.items.get(items.items.size() - 1);
+                            mLastFeedItemId = items.items.isEmpty() ? null : items.items.get(items.items.size() - 1).id;
                             return new UsersList<FeedUser>(items, itemsClass);
                         } else {
                             return new UsersList<FeedUser>(itemsClass);
