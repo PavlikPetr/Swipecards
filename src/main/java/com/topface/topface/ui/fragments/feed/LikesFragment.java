@@ -70,10 +70,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         return CountersManager.LIKES;
     }
 
-    private void onMutual(int position) {
-        onMutual(getItem(position));
-    }
-
     private void onMutual(FeedItem item) {
         if (!(item.user.deleted || item.user.banned)) {
             if (item instanceof FeedLike) {
@@ -152,16 +148,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected int getEmptyFeedLayout() {
         return R.layout.layout_empty_likes;
-    }
-
-    @Override
-    protected boolean isForPremium() {
-        return true;
-    }
-
-    @Override
-    protected boolean isBlockOnClosing() {
-        return true;
     }
 
     @Override

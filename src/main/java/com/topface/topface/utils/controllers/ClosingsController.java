@@ -78,7 +78,7 @@ public class ClosingsController implements View.OnClickListener {
     }
 
     public void show() {
-        if (mClosingsPassed) return;
+        if (mClosingsPassed || mLikesClosingsActive || mMutualClosingsActive) return;
         if (!CacheProfile.getOptions().closing.isClosingsEnabled()) return;
         ApiRequest likesRequest = getUsersListRequest(FeedRequest.FeedService.LIKES, mContext);
         likesRequest.callback(getDataRequestHandler(FeedRequest.FeedService.LIKES));

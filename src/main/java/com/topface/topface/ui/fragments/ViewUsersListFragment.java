@@ -67,6 +67,8 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     private AtomicBoolean mFragmentPaused = new AtomicBoolean(false);
     private boolean mDataReturnedOnce = false;
 
+    private boolean more = true;
+
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -284,7 +286,6 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
             onUpdateStart(isAddition);
             ApiRequest request = getUsersListRequest();
             request.callback(new DataApiHandler<UsersList>() {
-                private boolean more = true;
 
                 @Override
                 protected void success(UsersList data, IApiResponse response) {
@@ -319,7 +320,6 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                         mRetryBtn.setVisibility(View.GONE);
                     } else {
                         getProgressBar().setVisibility(View.GONE);
-                        if (!more) showUser(null);
                     }
                     onUpdateSuccess(isAddition);
                 }
@@ -474,10 +474,6 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
             fillUserInfo(user);
             unlockControls();
             mPreloadManager.preloadPhoto(getUsersList());
-        } else {
-            if (getUsersList().isEnded()) {
-                onUsersProcessed();
-            }
         }
         onShowUser();
     }
@@ -488,7 +484,11 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
 
     protected void showNextUser() {
         if (getUsersList().isEnded()) {
-            updateData(false);
+            if (more) {
+                updateData(false);
+            } else {
+                onUsersProcessed();
+            }
             return;
         }
         T nextUser = getUsersList().nextUser();
