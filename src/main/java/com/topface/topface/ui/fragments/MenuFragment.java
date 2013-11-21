@@ -258,6 +258,8 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         filter.addAction(MutualClosingFragment.ACTION_MUTUAL_CLOSINGS_PROCESSED);
         filter.addAction(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, filter);
+        // We need to clean state if there was a logout in other Activity
+        mClosingsController.onLogoutWasInitiated();
     }
 
     @Override
@@ -473,5 +475,9 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         } catch (Exception e) {
             Debug.error(e);
         }
+    }
+
+    public static void onLogout() {
+        ClosingsController.onLogout();
     }
 }

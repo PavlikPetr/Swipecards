@@ -459,6 +459,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     };
 
     public static void onLogout() {
+        MenuFragment.onLogout();
     }
 
     public static void restartNavigationActivity(FragmentId fragmentId) {

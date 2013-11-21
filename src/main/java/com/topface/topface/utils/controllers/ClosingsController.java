@@ -48,6 +48,7 @@ public class ClosingsController implements View.OnClickListener {
 
     public static final String LIKES_CACHE_KEY = "likes_cache_key";
     public static final String MUTUALS_CACHE_KEY = "mutuals_cache_key";
+    public static final String ACTION_REMOVE_CLOSINGS = "remove_closings";
 
     private Context mContext;
 
@@ -67,6 +68,7 @@ public class ClosingsController implements View.OnClickListener {
 
     private List<View> menuItemsButtons = new ArrayList<View>();
     private boolean mLeftMenuLocked = false;
+    private static boolean mLogoutWasInitiated = false;
 
     public ClosingsController(@NotNull final Context context, @NotNull ViewStub mHeaderViewStub, @NotNull LeftMenuAdapter adapter) {
         mContext = context;
@@ -326,6 +328,7 @@ public class ClosingsController implements View.OnClickListener {
 
     public static void onLogout() {
         mClosingsPassed = false;
+        mLogoutWasInitiated = true;
     }
 
     public void respondToLikes() {
@@ -361,5 +364,13 @@ public class ClosingsController implements View.OnClickListener {
             }
             mLeftMenuLocked = false;
         }
+    }
+
+    public void onLogoutWasInitiated() {
+        if (mLogoutWasInitiated){
+            removeClosings();
+            mClosingsPassed = false;
+        }
+        mLogoutWasInitiated = false;
     }
 }
