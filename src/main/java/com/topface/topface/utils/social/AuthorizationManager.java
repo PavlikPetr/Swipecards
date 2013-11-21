@@ -29,13 +29,11 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
-import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.cache.SearchCacheManager;
-import com.topface.topface.utils.controllers.ClosingsController;
 import com.topface.topface.utils.http.HttpUtils;
 
 import org.json.JSONArray;
@@ -120,14 +118,17 @@ public class AuthorizationManager {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == VkAuthActivity.INTENT_WEB_AUTH) {
                 if (data != null) {
-                    String token_key = data.getExtras().getString(VkAuthActivity.ACCESS_TOKEN);
-                    String user_id = data.getExtras().getString(VkAuthActivity.USER_ID);
-                    String expires_in = data.getExtras().getString(VkAuthActivity.EXPIRES_IN);
-                    String user_name = data.getExtras().getString(VkAuthActivity.USER_NAME);
-                    Settings.getInstance().setSocialAccountName(user_name);
+                    Bundle extras = data.getExtras();
+                    if (extras != null) {
+                        String token_key = extras.getString(VkAuthActivity.ACCESS_TOKEN);
+                        String user_id = extras.getString(VkAuthActivity.USER_ID);
+                        String expires_in = extras.getString(VkAuthActivity.EXPIRES_IN);
+                        String user_name = extras.getString(VkAuthActivity.USER_NAME);
+                        Settings.getInstance().setSocialAccountName(user_name);
 
-                    AuthToken authToken = AuthToken.getInstance();
-                    authToken.saveToken(AuthToken.SN_VKONTAKTE, user_id, token_key, expires_in);
+                        AuthToken authToken = AuthToken.getInstance();
+                        authToken.saveToken(AuthToken.SN_VKONTAKTE, user_id, token_key, expires_in);
+                    }
                     receiveToken();
                 }
             } else {
