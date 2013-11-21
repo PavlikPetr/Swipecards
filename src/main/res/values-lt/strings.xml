@@ -582,4 +582,7 @@
     <string name="locking_screen_button_answer">Atsakyti</string>
     <string name="locking_screen_advice">Atsakykite į visas įeinančias simpatijas</string>
     <string name="locking_screen_advice2">Atsikratykite visų apribojimų</string>
+    <string name="current_city">Dabartinis miestas</string>
+    <string name="general_say_meow">Sakyk Miau</string>
+    <string name="general_meow_offer">Sužaiskite 3 raundus su draugais ir gaukite VIP statusą 2 dienoms</string>
 </resources>

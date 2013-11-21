@@ -28,4 +28,15 @@ public interface IApiResponse {
     public int getResultCode();
 
     public boolean isCompleted();
+
+    public String getMethodName();
+
+    public boolean isMethodNameEquals(String method);
+
+    public JSONObject getUnread();
+
+    public JSONObject getBalance();
+
+    public boolean isNeedUpdateCounters();
+
 }

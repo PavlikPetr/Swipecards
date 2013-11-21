@@ -566,4 +566,7 @@
     <string name="locking_screen_button_answer">Rispondi</string>
     <string name="locking_screen_advice">Rispondi a tutte le simpatie in entrata</string>
     <string name="locking_screen_advice2">Togli tutte le restrizioni</string>
+    <string name="current_city">Città attuale</string>
+    <string name="general_say_meow">Say Meow</string>
+    <string name="general_meow_offer">Gioca 3 partite con gli amici e ricevi lo stato VIP per 2 giorni</string>
 </resources>

@@ -80,13 +80,16 @@
                 android:visibility="gone"
                 />
 
-        <include layout="@layout/item_divider"/>
+        <include
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="20dp"
+            layout="@layout/item_divider" />
 
         <include
                 android:id="@+id/loHelp"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 layout="@layout/item_edit_form_select"/>
 
         <include

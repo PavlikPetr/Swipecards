@@ -568,4 +568,7 @@
     <string name="locking_screen_button_answer">Antworten</string>
     <string name="locking_screen_advice">Antworten Sie bitte auf alle empfangenen Sympathien</string>
     <string name="locking_screen_advice2">Befreien Sie sich von allen Begrenzungen</string>
+    <string name="current_city">Aktuelle Stadt</string>
+    <string name="general_say_meow">Say Meow</string>
+    <string name="general_meow_offer">Spielen Sie 3 Runden mit den Freunden und erhalten Sie einen VIP-Status für 2 Tage</string>
 </resources>

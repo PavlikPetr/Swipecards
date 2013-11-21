@@ -245,7 +245,7 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
     public static Intent getIntentForContacts(ArrayList<ContactsProvider.Contact> data) {
         Intent intent = new Intent(App.getContext(), ContainerActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_CONTACTS_FRAGMENT);
-        intent.putExtra(CONTACTS_DATA, data);
+        intent.putParcelableArrayListExtra(CONTACTS_DATA, data);
         return intent;
     }
 

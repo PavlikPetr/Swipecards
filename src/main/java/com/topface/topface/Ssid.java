@@ -18,9 +18,6 @@ public class Ssid {
     private static long mLastUpdate;
     private static List<ISsidUpdateListener> updateListeners = new ArrayList<ISsidUpdateListener>();
 
-    public static void init() {
-        load();
-    }
 
     public static boolean isLoaded() {
         return !TextUtils.isEmpty(get());

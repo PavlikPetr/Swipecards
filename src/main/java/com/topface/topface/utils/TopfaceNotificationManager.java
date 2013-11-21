@@ -402,7 +402,6 @@ public class TopfaceNotificationManager {
             } else {
                 resultPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             }
-
             return resultPendingIntent;
         }
     }

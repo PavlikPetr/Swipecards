@@ -129,17 +129,22 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     }
 
     private void initDrawerLayout() {
-        mMenuFragment = new MenuFragment();
+        mMenuFragment = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
+        if (mMenuFragment == null) {
+            mMenuFragment = new MenuFragment();
+        }
         mMenuFragment.setOnFragmentSelected(new MenuFragment.OnFragmentSelectedListener() {
             @Override
             public void onFragmentSelected(FragmentId fragmentId) {
                 mDrawerLayout.closeDrawer(GravityCompat.START);
             }
         });
-        mFragmentManager
-                .beginTransaction()
-                .add(R.id.fragment_menu, mMenuFragment)
-                .commit();
+        if (!mMenuFragment.isAdded()) {
+            mFragmentManager
+                    .beginTransaction()
+                    .add(R.id.fragment_menu, mMenuFragment)
+                    .commit();
+        }
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.loNavigationDrawer);
         mDrawerLayout.setScrimColor(Color.argb(217, 0, 0, 0));
@@ -243,6 +248,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        mMenuFragment.onLoadProfile();
         //restart -> open NavigationActivity
         if (App.getConfig().getLocaleConfig().fetchToSystemLocale()) {
             LocaleConfig.changeLocale(this, App.getConfig().getLocaleConfig().getApplicationLocale());

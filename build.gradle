@@ -196,7 +196,7 @@ project(':libs:LifeStreetMediaSDK') {
     }
     android.sourceSets.main {
         manifest.srcFile 'AndroidManifest.xml'
-        java.srcDirs = ['sdk', '3rdparty/OpenUDID']
+        java.srcDirs = ['sdk', '3rdparty/OpenUDID/src']
         res.srcDirs = ['res']
     }
 }

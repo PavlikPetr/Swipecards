@@ -42,6 +42,7 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.AuthButtonsController;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
@@ -243,9 +244,10 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void setAuthInterface() {
-        if (btnsController == null) return;
+        if (btnsController == null || !isAdded()) return;
+        Context applicationContext = getActivity();
         if (btnsController.needSN(AuthToken.SN_VKONTAKTE)) {
-            mVKButton.setAnimation(AnimationUtils.loadAnimation(getActivity(),
+            mVKButton.setAnimation(AnimationUtils.loadAnimation(applicationContext,
                     R.anim.fade_in));
             mVKButton.setVisibility(View.VISIBLE);
         } else {
@@ -253,7 +255,7 @@ public class AuthFragment extends BaseFragment {
         }
 
         if (btnsController.needSN(AuthToken.SN_FACEBOOK)) {
-            mFBButton.setAnimation(AnimationUtils.loadAnimation(getActivity(),
+            mFBButton.setAnimation(AnimationUtils.loadAnimation(applicationContext,
                     R.anim.fade_in));
             mFBButton.setVisibility(View.VISIBLE);
         } else {
@@ -261,7 +263,7 @@ public class AuthFragment extends BaseFragment {
         }
 
         if (btnsController.needSN(AuthToken.SN_ODNOKLASSNIKI)) {
-            mOKButton.setAnimation(AnimationUtils.loadAnimation(getActivity(),
+            mOKButton.setAnimation(AnimationUtils.loadAnimation(applicationContext,
                     R.anim.fade_in));
             mOKButton.setVisibility(View.VISIBLE);
         } else {
@@ -430,6 +432,8 @@ public class AuthFragment extends BaseFragment {
         App.sendProfileAndOptionsRequests(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
+                //После авторизации обязательно бросаем события, что бы профиль загрузился
+                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
                 if (isAdded()) {
                     Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
                     ((BaseFragmentActivity) getActivity()).close(AuthFragment.this, true);
