@@ -1,9 +1,12 @@
 package com.topface.topface.ui.fragments.closing;
 
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.TextView;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.FeedUser;
@@ -13,10 +16,11 @@ import com.topface.topface.requests.SkipAllClosedRequest;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.controllers.ClosingsController;
 
 public class LikesClosingFragment extends ClosingFragment implements View.OnClickListener {
 
-    public static boolean usersProcessed;
+    public static final String ACTION_LIKES_CLOSINGS_PROCESSED = "action_closings_likes_processed";
 
     private TextView mUserName;
     private TextView mUserCity;
@@ -42,6 +46,11 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     @Override
     public Integer getTopPanelLayoutResId() {
         return R.layout.controls_closing_top_panel;
+    }
+
+    @Override
+    protected String getCacheKey() {
+        return ClosingsController.LIKES_CACHE_KEY;
     }
 
     @Override
@@ -116,7 +125,8 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
 
     @Override
     protected void onUsersProcessed() {
-        usersProcessed = true;
+        LocalBroadcastManager.getInstance(App.getContext())
+                .sendBroadcast(new Intent(ACTION_LIKES_CLOSINGS_PROCESSED));
         CacheProfile.getOptions().closing.onStopLikesClosings();
         super.onUsersProcessed();
     }

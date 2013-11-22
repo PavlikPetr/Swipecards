@@ -110,7 +110,7 @@ public class LocaleConfig {
             @Override
             public void success(IApiResponse response) {
                 App.sendProfileAndOptionsRequests();
-                NavigationActivity.restartNavigationActivity(BaseFragment.F_PROFILE);
+                NavigationActivity.restartNavigationActivity(BaseFragment.FragmentId.F_PROFILE);
             }
 
             @Override

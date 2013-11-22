@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +48,7 @@ public abstract class PromoPopupFragment extends BaseFragment implements View.On
         FragmentActivity activity = getActivity();
         if (activity instanceof NavigationActivity) {
             ((NavigationActivity) activity).setPopupVisible(true);
-            ((NavigationActivity) activity).setMenuEnabled(false);
+            ((NavigationActivity) activity).setMenuLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         }
     }
 
@@ -61,7 +62,7 @@ public abstract class PromoPopupFragment extends BaseFragment implements View.On
         FragmentActivity activity = getActivity();
         if (activity instanceof NavigationActivity) {
             ((NavigationActivity) activity).setPopupVisible(false);
-            ((NavigationActivity) activity).setMenuEnabled(true);
+            ((NavigationActivity) activity).setMenuLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         }
 
         if (!mUserClickButton) {
@@ -74,13 +75,9 @@ public abstract class PromoPopupFragment extends BaseFragment implements View.On
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.air_messages_popup, container, false);
-        //Магия для того, чтобы клики не проходили в дэйтинг фрагмент
-        root.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        if (root == null) return null;
 
-            }
-        });
+        root.setClickable(true);
         root.findViewById(R.id.buyVip).setOnClickListener(this);
         ((TextView) root.findViewById(R.id.deleteMessages)).setText(getDeleteButtonText());
         root.findViewById(R.id.deleteMessages).setOnClickListener(this);
