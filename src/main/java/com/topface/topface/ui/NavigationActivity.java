@@ -186,7 +186,9 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         } else {
             switch (item.getItemId()) {
                 case android.R.id.home:
-                    //TODO dialog for closings
+                    if (mMenuFragment.isLockedByClosings()) {
+                        mMenuFragment.showClosingsDialog();
+                    }
                     return true;
                 default:
                     return super.onOptionsItemSelected(item);

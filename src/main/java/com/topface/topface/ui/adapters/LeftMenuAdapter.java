@@ -1,6 +1,7 @@
 package com.topface.topface.ui.adapters;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -35,7 +36,7 @@ public class LeftMenuAdapter extends BaseAdapter {
         @Override
         public void onClick(View v) {
             if (mMenuFragment != null) {
-                mMenuFragment.showWatchAsListDialog();
+                mMenuFragment.showClosingsDialog();
             }
         }
     };
@@ -188,8 +189,9 @@ public class LeftMenuAdapter extends BaseAdapter {
 
     private void setAlphaToTextAndDrawable(Button btn, int alpha) {
         btn.setTextColor(Color.argb(alpha, 255, 255, 255));
-        if (btn.getCompoundDrawables()[0] != null) {
-            btn.getCompoundDrawables()[0].setAlpha(alpha);
+        Drawable[] compoundDrawables = btn.getCompoundDrawables();
+        if (compoundDrawables != null && compoundDrawables[0] != null) {
+            compoundDrawables[0].setAlpha(alpha);
         }
     }
 

@@ -56,6 +56,7 @@ import static com.topface.topface.ui.fragments.BaseFragment.*;
 /**
  * Created by kirussell on 05.11.13.
  * Left menu for switching NavigationActivity fragments
+ * extends ListFragment and does not have any xml layout
  */
 public class MenuFragment extends ListFragment implements View.OnClickListener {
     public static final String SELECT_MENU_ITEM = "com.topface.topface.action.menu.selectitem";
@@ -447,6 +448,10 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         if (!CacheProfile.premium) mClosingsController.show();
     }
 
+    public boolean isLockedByClosings() {
+        return mClosingsController.isLeftMenuLocked();
+    }
+
     public static interface OnFragmentSelectedListener {
         public void onFragmentSelected(FragmentId fragmentId);
     }
@@ -459,7 +464,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         getListView().setClickable(clickable);
     }
 
-    public void showWatchAsListDialog() {
+    public void showClosingsDialog() {
         if (ClosingsBuyVipDialog.opened) return;
         ClosingsBuyVipDialog newFragment = ClosingsBuyVipDialog.newInstance(mSelectedFragment);
         newFragment.setOnRespondToLikesListener(new ClosingsBuyVipDialog.IRespondToLikesListener() {
