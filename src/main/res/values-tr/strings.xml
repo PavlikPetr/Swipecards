@@ -573,7 +573,6 @@
     <string name="user_deleted_or_banned">Kullanıcı silinmiş veya engellenmiştir</string>
     <string name="locking_popup_title">«%s» bölümüne geçiş sınırlıdır!</string>
     <string name="locking_popup_message">«%s» bölümüne geçmek için tüm gelen sempatilere cevap verin veya VIP alın.</string>
-    <string name="locking_popup_button_buy">VIP satın almak</string>
     <string name="locking_popup_button_answer">Sempatilere cevap vermek</string>
     <string name="locking_menu_message">Uygulamanın bazı sayfalarına erişim sınırlıdır. Tüm sınırları kaldırmak için tüm gelen sempatilere cevap verin veya VIP alın.</string>
     <string name="locking_likes_message">Dikkat! Uygulamanın bazı sayfalarına erişim sınırlıdır. Tüm sınırları kaldırmak için tüm gelen sempatilere cevap verin veya VIP alın.</string>

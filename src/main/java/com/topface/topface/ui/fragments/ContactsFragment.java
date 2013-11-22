@@ -47,6 +47,7 @@ public class ContactsFragment extends BaseFragment {
     private Button contactsVip;
     private ArrayList<ContactsProvider.Contact> data;
     private LockerView locker;
+    private CheckBox checkBox;
 
     public static ContactsFragment newInstance(ArrayList<ContactsProvider.Contact> contacts) {
         Bundle args = new Bundle();
@@ -88,6 +89,11 @@ public class ContactsFragment extends BaseFragment {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     ((ContactsListAdapter) contactsView.getAdapter()).getFilter().filter(s);
+                    if (count != 0) {
+                        checkBox.setVisibility(View.GONE);
+                    } else {
+                        checkBox.setVisibility(View.VISIBLE);
+                    }
                 }
 
                 @Override
@@ -260,11 +266,17 @@ public class ContactsFragment extends BaseFragment {
                 contactsVip.setText(Utils.getQuantityString(R.plurals.vip_status_period_btn, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period));
                 contactsVip.setEnabled(true);
             }
+
+            if (getCheckedCount() < data.size()) {
+                checkBox.setChecked(false);
+            } else {
+                checkBox.setChecked(true);
+            }
         }
 
         public void setAllDataChecked(boolean checked) {
             if (data != null) {
-                for (ContactsProvider.Contact contact : data) {
+                for (ContactsProvider.Contact contact : filteredContacts) {
                     contact.setChecked(checked);
                 }
                 wasChanges = true;
@@ -351,7 +363,7 @@ public class ContactsFragment extends BaseFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         final MenuItem selectAllMenuItem = menu.findItem(R.id.action_select_all);
-        CheckBox checkBox = (CheckBox) MenuItemCompat.getActionView(selectAllMenuItem).findViewById(R.id.cbCheckBox);
+        checkBox = (CheckBox) MenuItemCompat.getActionView(selectAllMenuItem).findViewById(R.id.cbCheckBox);
         selectAllMenuItem.setChecked(true);
         checkBox.setChecked(true);
         checkBox.setOnClickListener(new View.OnClickListener() {
@@ -360,11 +372,11 @@ public class ContactsFragment extends BaseFragment {
                 onOptionsItemSelected(selectAllMenuItem);
             }
         });
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        checkBox.setOnClickListener(new CompoundButton.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                ContactsListAdapter adapter = (ContactsListAdapter)contactsView.getAdapter();
-                adapter.setAllDataChecked(isChecked);
+            public void onClick(View buttonView) {
+                ContactsListAdapter adapter = (ContactsListAdapter) contactsView.getAdapter();
+                adapter.setAllDataChecked(checkBox.isChecked());
                 adapter.changeButtonState();
             }
         });

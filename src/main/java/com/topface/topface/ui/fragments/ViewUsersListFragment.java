@@ -67,6 +67,8 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     private AtomicBoolean mFragmentPaused = new AtomicBoolean(false);
     private boolean mDataReturnedOnce = false;
 
+    private boolean more = true;
+
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -75,7 +77,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
             }
         }
     };
-    private FeedItem mLastFeedItem;
+    private String mLastFeedItemId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -88,7 +90,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_view_users, null);
 
-        initActionBar(root);
+        initActionBar();
         inflateTopPanel(root);
         inflateControls(root);
         initImageSwitcher(root);
@@ -159,7 +161,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
 
     protected abstract void initControls(View controlsView);
 
-    private void initActionBar(View view) {
+    private void initActionBar() {
         refreshActionBarTitles();
         initActionBarControls();
     }
@@ -251,6 +253,9 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     private UsersList<T> getUsersList() {
         if (mUsersList == null) {
             mUsersList = createUsersList();
+            if (mUsersList.size() > 0) {
+                mLastFeedItemId = mUsersList.getLast().feedItemId;
+            }
         }
         return mUsersList;
     }
@@ -264,8 +269,8 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     }
 
     protected String getLastFeedId() {
-        if (mLastFeedItem != null)
-            return mLastFeedItem.id;
+        if (mLastFeedItemId != null)
+            return mLastFeedItemId;
         else
             return null;
     }
@@ -281,7 +286,6 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
             onUpdateStart(isAddition);
             ApiRequest request = getUsersListRequest();
             request.callback(new DataApiHandler<UsersList>() {
-                private boolean more = true;
 
                 @Override
                 protected void success(UsersList data, IApiResponse response) {
@@ -316,7 +320,6 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                         mRetryBtn.setVisibility(View.GONE);
                     } else {
                         getProgressBar().setVisibility(View.GONE);
-                        if (!more) showUser(null);
                     }
                     onUpdateSuccess(isAddition);
                 }
@@ -331,7 +334,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                         if (getFeedUserContainerClass() != null) {
                             FeedListData<FeedItem> items = new FeedListData<FeedItem>(response.getJsonResult(), getFeedUserContainerClass());
                             more = items.more;
-                            mLastFeedItem = items.items.isEmpty() ? null : items.items.get(items.items.size() - 1);
+                            mLastFeedItemId = items.items.isEmpty() ? null : items.items.get(items.items.size() - 1).id;
                             return new UsersList<FeedUser>(items, itemsClass);
                         } else {
                             return new UsersList<FeedUser>(itemsClass);
@@ -471,10 +474,6 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
             fillUserInfo(user);
             unlockControls();
             mPreloadManager.preloadPhoto(getUsersList());
-        } else {
-            if (getUsersList().isEnded()) {
-                onUsersProcessed();
-            }
         }
         onShowUser();
     }
@@ -485,7 +484,11 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
 
     protected void showNextUser() {
         if (getUsersList().isEnded()) {
-            updateData(false);
+            if (more) {
+                updateData(false);
+            } else {
+                onUsersProcessed();
+            }
             return;
         }
         T nextUser = getUsersList().nextUser();

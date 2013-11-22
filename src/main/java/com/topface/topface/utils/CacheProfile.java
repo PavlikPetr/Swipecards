@@ -257,10 +257,12 @@ public class CacheProfile {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
             String optionsCache = preferences.getString(OPTIONS_CACHE_KEY, null);
             if (optionsCache != null) {
-                //Получаем опции из кэша
+                //Получаем опции из кэша, причем передаем флаг, что бы эти опции не кешировались повторно
                 try {
-                    options = new Options(new JSONObject(optionsCache), true);
+                    options = new Options(new JSONObject(optionsCache), false);
                 } catch (JSONException e) {
+                    //Если произошла ошибка при парсинге кэша, то скидываем опции
+                    preferences.edit().remove(OPTIONS_CACHE_KEY).commit();
                     Debug.error(e);
                 }
             }
@@ -268,7 +270,7 @@ public class CacheProfile {
             if (options == null) {
                 //Если по каким то причинам кэша нет и опции нам в данный момент взять негде.
                 //то просто используем их по умолчанию
-                options = new Options((JSONObject) null);
+                options = new Options(null, false);
             }
         }
         return options;

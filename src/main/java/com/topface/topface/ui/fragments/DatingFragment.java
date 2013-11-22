@@ -32,6 +32,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.RetryRequestReceiver;
+import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.NoviceLikes;
@@ -70,6 +71,7 @@ import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
+import com.topface.topface.utils.social.AuthToken;
 
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
         RateController.OnRateControllerListener {
@@ -458,25 +460,27 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     protected void onLoadProfile() {
-        //Показываем последнего пользователя
-        if (mUserSearchList == null) {
-            mUserSearchList = new CachableSearchList<SearchUser>(SearchUser.class);
-        }
-        if (mCurrentUser == null) {
-            SearchUser currentUser = mUserSearchList.getCurrentUser();
-            mUserSearchList.setOnEmptyListListener(mSearchListener);
-            if (currentUser != null) {
-                showUser(currentUser);
-            } else {
-                showNextUser();
+        if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty()) {
+            //Показываем последнего пользователя
+            if (mUserSearchList == null) {
+                mUserSearchList = new CachableSearchList<SearchUser>(SearchUser.class);
             }
-        } else {
-            //Сделано для того, чтобы не показывалось сообщение о том, что пользователи не найдены.
-            //Иначе при старте приложения, пока список пользователей не запросился показывается сообщение об ошибки
-            mUserSearchList.setOnEmptyListListener(mSearchListener);
-        }
+            if (mCurrentUser == null) {
+                SearchUser currentUser = mUserSearchList.getCurrentUser();
+                mUserSearchList.setOnEmptyListListener(mSearchListener);
+                if (currentUser != null) {
+                    showUser(currentUser);
+                } else {
+                    showNextUser();
+                }
+            } else {
+                //Сделано для того, чтобы не показывалось сообщение о том, что пользователи не найдены.
+                //Иначе при старте приложения, пока список пользователей не запросился показывается сообщение об ошибки
+                mUserSearchList.setOnEmptyListListener(mSearchListener);
+            }
 
-        updateFilterData();
+            updateFilterData();
+        }
     }
 
     private SearchRequest getSearchRequest() {

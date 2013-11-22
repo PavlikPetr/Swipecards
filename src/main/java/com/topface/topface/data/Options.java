@@ -13,6 +13,7 @@ import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.PopupManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -122,7 +123,7 @@ public class Options extends AbstractData {
      */
     public HashMap<String, Page> pages = new HashMap<String, Page>();
 
-    public String ratePopupType;
+    public String ratePopupType = PopupManager.OFF_RATE_TYPE;
     private String paymentwall;
 
     public String maxVersion = "2147483647";
@@ -150,24 +151,23 @@ public class Options extends AbstractData {
     public GetJar getJar;
     public String gagTypeBanner = BannerBlock.BANNER_ADMOB;
     public String gagTypeFullscreen = BannerBlock.BANNER_NONE;
+    public String helpUrl;
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
     }
 
     public Options(JSONObject data) {
+        this(data, true);
+    }
+
+    public Options(JSONObject data, boolean cacheToPreferences) {
         if (data != null) {
-            fillData(data, false);
+            fillData(data, cacheToPreferences);
         }
     }
 
-    public Options(JSONObject data, boolean fromCache) {
-        if (data != null) {
-            fillData(data, fromCache);
-        }
-    }
-
-    protected void fillData(JSONObject response, boolean fromCache) {
+    protected void fillData(JSONObject response, boolean cacheToPreferences) {
         try {
             priceAdmiration = response.optInt("admirationPrice");
             priceLeader = response.optInt("leaderPrice");
@@ -242,14 +242,16 @@ public class Options extends AbstractData {
 
             gagTypeBanner = response.optString("gag_type_banner", BannerBlock.BANNER_ADMOB);
             gagTypeFullscreen = response.optString("gag_type_fullscreen", BannerBlock.BANNER_NONE);
+
+            helpUrl = response.optString("helpUrl");
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
         }
 
-        if (response != null && !fromCache) {
+        if (response != null && cacheToPreferences) {
             CacheProfile.setOptions(this, response);
         } else {
-            Debug.error(fromCache ? "Options restored from cache" : "Options response is null");
+            Debug.error(cacheToPreferences ? "Options from preferences" : "Options response is null");
         }
 
     }

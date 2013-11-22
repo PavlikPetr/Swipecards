@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.closing;
 
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -122,12 +123,17 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     }
 
     private void showNextFromUiThread() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                showNextUser();
-            }
-        });
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (isAdded()) {
+                        showNextUser();
+                    }
+                }
+            });
+        }
     }
 
     @Override

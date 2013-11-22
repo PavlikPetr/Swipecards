@@ -34,7 +34,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.cache.SearchCacheManager;
-import com.topface.topface.utils.controllers.ClosingsController;
 import com.topface.topface.utils.http.HttpUtils;
 
 import org.json.JSONArray;
@@ -119,14 +118,17 @@ public class AuthorizationManager {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == VkAuthActivity.INTENT_WEB_AUTH) {
                 if (data != null) {
-                    String token_key = data.getExtras().getString(VkAuthActivity.ACCESS_TOKEN);
-                    String user_id = data.getExtras().getString(VkAuthActivity.USER_ID);
-                    String expires_in = data.getExtras().getString(VkAuthActivity.EXPIRES_IN);
-                    String user_name = data.getExtras().getString(VkAuthActivity.USER_NAME);
-                    Settings.getInstance().setSocialAccountName(user_name);
+                    Bundle extras = data.getExtras();
+                    if (extras != null) {
+                        String token_key = extras.getString(VkAuthActivity.ACCESS_TOKEN);
+                        String user_id = extras.getString(VkAuthActivity.USER_ID);
+                        String expires_in = extras.getString(VkAuthActivity.EXPIRES_IN);
+                        String user_name = extras.getString(VkAuthActivity.USER_NAME);
+                        Settings.getInstance().setSocialAccountName(user_name);
 
-                    AuthToken authToken = AuthToken.getInstance();
-                    authToken.saveToken(AuthToken.SN_VKONTAKTE, user_id, token_key, expires_in);
+                        AuthToken authToken = AuthToken.getInstance();
+                        authToken.saveToken(AuthToken.SN_VKONTAKTE, user_id, token_key, expires_in);
+                    }
                     receiveToken();
                 }
             } else {
@@ -224,7 +226,6 @@ public class AuthorizationManager {
                     mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
                     Debug.error("Odnoklassniki result parse error", e);
                 }
-
             } else {
                 Debug.error("Odnoklassniki auth error. users.getCurrentUser returns null");
                 mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
@@ -284,56 +285,51 @@ public class AuthorizationManager {
             try {
                 Debug.log("FB", "mRequestListener::onComplete");
                 JSONObject jsonResult = new JSONObject(response);
-                String user_id = jsonResult.getString("id");
-                String user_name = jsonResult.getString("name");
-                String user_email = jsonResult.getString("email");
-                Settings.getInstance().setSocialAccountName(user_name);
-                Settings.getInstance().setSocialAccountEmail(user_email);
 
-                final AuthToken authToken = AuthToken.getInstance();
-                authToken.saveToken(AuthToken.SN_FACEBOOK, user_id, mFacebook.getAccessToken(),
-                        Long.toString(mFacebook.getAccessExpires()));
+                AuthToken.getInstance().saveToken(
+                        AuthToken.SN_FACEBOOK,
+                        jsonResult.getString("id"),
+                        mFacebook.getAccessToken(),
+                        Long.toString(mFacebook.getAccessExpires())
+                );
+
+                Settings settings = Settings.getInstance();
+                settings.setSocialAccountName(
+                        jsonResult.optString("name", "")
+                );
+                settings.setSocialAccountEmail(
+                        jsonResult.optString("email", "")
+                );
+
                 receiveToken();
             } catch (JSONException e) {
-                Debug.log("FB", "mRequestListener::onComplete:error");
+                Debug.error("FB login mRequestListener::onComplete:error", e);
                 LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, AUTHORIZATION_CANCELLED));
             }
         }
 
         @Override
         public void onMalformedURLException(MalformedURLException e, Object state) {
-            Debug.log("FB", "mRequestListener::onMalformedURLException");
+            Debug.error("FB mRequestListener::onMalformedURLException", e);
             LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, AUTHORIZATION_FAILED));
-//            if (mHandler != null) {
-//                mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
-//            }
         }
 
         @Override
         public void onIOException(IOException e, Object state) {
-            Debug.log("FB", "mRequestListener::onIOException");
+            Debug.error("FB mRequestListener::onIOException", e);
             LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, AUTHORIZATION_FAILED));
-//            if (mHandler != null) {
-//                mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
-//            }
         }
 
         @Override
         public void onFileNotFoundException(FileNotFoundException e, Object state) {
-            Debug.log("FB", "mRequestListener::onFileNotFoundException");
+            Debug.error("FB mRequestListener::onFileNotFoundException", e);
             LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, AUTHORIZATION_FAILED));
-//            if (mHandler != null) {
-//                mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
-//            }
         }
 
         @Override
         public void onFacebookError(FacebookError e, Object state) {
-            Debug.log("FB", "mRequestListener::onFacebookError:" + e + ":" + state);
+            Debug.error("FB mRequestListener::onFacebookError", e);
             LocalBroadcastManager.getInstance(mParentActivity).sendBroadcast(new Intent(AUTHORIZATION_TAG).putExtra(AuthFragment.MSG_AUTH_KEY, AUTHORIZATION_FAILED));
-//            if (mHandler != null) {
-//                mHandler.sendEmptyMessage(AUTHORIZATION_FAILED);
-//            }
         }
     };
 
@@ -391,32 +387,32 @@ public class AuthorizationManager {
                     String user_name = jsonResult.getString("name");
                     handler.sendMessage(Message.obtain(null, SUCCESS_GET_NAME, user_name));
                 } catch (JSONException e) {
-                    Debug.log("FB", "mRequestListener::onComplete:error");
+                    Debug.error("FB RequestListener::onComplete:error ", e);
                     handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
                 }
             }
 
             @Override
             public void onMalformedURLException(MalformedURLException e, Object state) {
-                Debug.log("FB", "mRequestListener::onMalformedURLException");
+                Debug.error("FB RequestListener::onMalformedURLException");
                 handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
             }
 
             @Override
             public void onIOException(IOException e, Object state) {
-                Debug.log("FB", "mRequestListener::onIOException");
+                Debug.error("FB RequestListener::onIOException", e);
                 handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
             }
 
             @Override
             public void onFileNotFoundException(FileNotFoundException e, Object state) {
-                Debug.log("FB", "mRequestListener::onFileNotFoundException");
+                Debug.error("FB RequestListener::onFileNotFoundException", e);
                 handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
             }
 
             @Override
             public void onFacebookError(FacebookError e, Object state) {
-                Debug.log("FB", "mRequestListener::onFacebookError:" + e + ":" + state);
+                Debug.error("FB RequestListener::onFacebookError:" + state, e);
                 handler.sendMessage(Message.obtain(null, FAILURE_GET_NAME, ""));
             }
         });
@@ -447,7 +443,6 @@ public class AuthorizationManager {
             }
         };
         NavigationActivity.onLogout();
-        ClosingsController.onLogout();
         if (!(activity instanceof NavigationActivity)) {
             activity.setResult(RESULT_LOGOUT);
             activity.finish();

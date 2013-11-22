@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.text.method.TransformationMethod;
@@ -39,9 +40,9 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.AuthButtonsController;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
@@ -99,10 +100,6 @@ public class AuthFragment extends BaseFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         Debug.log("AF: onCreate");
         mAuthorizationManager = new AuthorizationManager(getActivity());
-        Activity activity = getActivity();
-        if (activity instanceof NavigationActivity) {
-            ((NavigationActivity) activity).setMenuEnabled(false);
-        }
         View root = inflater.inflate(R.layout.ac_auth, null);
         if (savedInstanceState != null) {
             btnsHidden = savedInstanceState.getBoolean(BTNS_HIDDEN);
@@ -247,9 +244,10 @@ public class AuthFragment extends BaseFragment {
     }
 
     private void setAuthInterface() {
-        if (btnsController == null) return;
+        if (btnsController == null || !isAdded()) return;
+        Context applicationContext = getActivity();
         if (btnsController.needSN(AuthToken.SN_VKONTAKTE)) {
-            mVKButton.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
+            mVKButton.setAnimation(AnimationUtils.loadAnimation(applicationContext,
                     R.anim.fade_in));
             mVKButton.setVisibility(View.VISIBLE);
         } else {
@@ -257,7 +255,7 @@ public class AuthFragment extends BaseFragment {
         }
 
         if (btnsController.needSN(AuthToken.SN_FACEBOOK)) {
-            mFBButton.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
+            mFBButton.setAnimation(AnimationUtils.loadAnimation(applicationContext,
                     R.anim.fade_in));
             mFBButton.setVisibility(View.VISIBLE);
         } else {
@@ -265,7 +263,7 @@ public class AuthFragment extends BaseFragment {
         }
 
         if (btnsController.needSN(AuthToken.SN_ODNOKLASSNIKI)) {
-            mOKButton.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
+            mOKButton.setAnimation(AnimationUtils.loadAnimation(applicationContext,
                     R.anim.fade_in));
             mOKButton.setVisibility(View.VISIBLE);
         } else {
@@ -337,10 +335,12 @@ public class AuthFragment extends BaseFragment {
                         || requestCode == ContainerActivity.INTENT_REGISTRATION_FRAGMENT)) {
             if (data != null) {
                 Bundle extras = data.getExtras();
-                String login = extras.getString(RegistrationFragment.INTENT_LOGIN);
-                String password = extras.getString(RegistrationFragment.INTENT_PASSWORD);
-                String userId = extras.getString(RegistrationFragment.INTENT_USER_ID);
-                AuthToken.getInstance().saveToken(userId, login, password);
+                if (extras != null) {
+                    String login = extras.getString(RegistrationFragment.INTENT_LOGIN);
+                    String password = extras.getString(RegistrationFragment.INTENT_PASSWORD);
+                    String userId = extras.getString(RegistrationFragment.INTENT_USER_ID);
+                    AuthToken.getInstance().saveToken(userId, login, password);
+                }
                 hideButtons();
                 auth(AuthToken.getInstance());
             }
@@ -373,7 +373,10 @@ public class AuthFragment extends BaseFragment {
             public void onClick(View v) {
                 toggle = !toggle;
                 mPassword.setTransformationMethod(toggle ? null : passwordMethod);
-                mPassword.setSelection(mPassword.getText().length());
+                Editable text = mPassword.getText();
+                if (text != null) {
+                    mPassword.setSelection(text.length());
+                }
             }
         });
         mRecoverPwd = (TextView) root.findViewById(R.id.tvRecoverPwd);
@@ -429,6 +432,8 @@ public class AuthFragment extends BaseFragment {
         App.sendProfileAndOptionsRequests(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
+                //После авторизации обязательно бросаем события, что бы профиль загрузился
+                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
                 if (isAdded()) {
                     Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
                     ((BaseFragmentActivity) getActivity()).close(AuthFragment.this, true);
@@ -558,7 +563,7 @@ public class AuthFragment extends BaseFragment {
             if (text != null) {
                 mWrongDataTextView.setText(text);
             }
-            mWrongPasswordAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(),
+            mWrongPasswordAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity(),
                     R.anim.slide_down_fade_in));
             mWrongPasswordAlertView.setVisibility(View.VISIBLE);
             mWrongDataTextView.setVisibility(View.VISIBLE);

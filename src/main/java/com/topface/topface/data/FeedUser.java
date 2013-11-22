@@ -66,6 +66,7 @@ public class FeedUser extends AbstractData implements SerializableToJson {
 
     public void fillData(JSONObject user) {
         this.id = user.optInt("id");
+
         this.first_name = user.optString("firstName");
         this.age = user.optInt("age");
         this.online = user.optBoolean("online");
@@ -76,7 +77,7 @@ public class FeedUser extends AbstractData implements SerializableToJson {
         this.banned = user.optBoolean("banned");
         this.deleted = user.optBoolean("deleted") || this.isEmpty();
         this.bookmarked = user.optBoolean("bookmarked");
-        this.blocked = user.optBoolean("blocked");
+        this.blocked = user.optBoolean("inBlacklist");
         if (user.has("photos")) {
             this.photos = new Photos(user.optJSONArray("photos"));
         } else {
@@ -109,7 +110,7 @@ public class FeedUser extends AbstractData implements SerializableToJson {
         json.put("photo", photo.toJson());
         json.put("premium", premium);
         json.put("bookmarked", bookmarked);
-        json.put("blocked", blocked);
+        json.put("inBlacklist", blocked);
         json.put("photos", photos.toJson());
         json.put("feedItemId", feedItemId);
         return json;

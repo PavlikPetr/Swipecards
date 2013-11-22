@@ -1,7 +1,6 @@
 package com.topface.topface.ui.fragments;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -27,7 +26,6 @@ import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.ProfileRequest;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.LeftMenuAdapter;
 import com.topface.topface.ui.dialogs.ClosingsBuyVipDialog;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
@@ -147,21 +145,21 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         List<LeftMenuAdapter.ILeftMenuItem> menuItems = new ArrayList<LeftMenuAdapter.ILeftMenuItem>();
         //- Profile added as part of header
         menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_DATING, LeftMenuAdapter.TYPE_MENU_BUTTON,
-                R.string.general_dating, R.drawable.ic_dating_selector));
+                R.drawable.ic_dating_selector));
         menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_LIKES, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                R.string.general_likes, R.drawable.ic_likes_selector));
+                R.drawable.ic_likes_selector));
         menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_ADMIRATIONS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                R.string.general_admirations, R.drawable.ic_admirations_selector));
+                R.drawable.ic_admirations_selector));
         menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_MUTUAL, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                R.string.general_mutual, R.drawable.ic_mutual_selector));
+                R.drawable.ic_mutual_selector));
         menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_DIALOGS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                R.string.general_dialogs, R.drawable.ic_dialog_selector));
+                R.drawable.ic_dialog_selector));
         menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_BOOKMARKS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                R.string.general_bookmarks, R.drawable.ic_star_selector));
+                R.drawable.ic_star_selector));
         menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_FANS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                R.string.general_fans, R.drawable.ic_fans_selector));
+                R.drawable.ic_fans_selector));
         menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                R.string.general_visitors, R.drawable.ic_guests_selector));
+                R.drawable.ic_guests_selector));
         mAdapter = new LeftMenuAdapter(this, menuItems);
         setListAdapter(mAdapter);
     }
@@ -260,6 +258,8 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         filter.addAction(MutualClosingFragment.ACTION_MUTUAL_CLOSINGS_PROCESSED);
         filter.addAction(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, filter);
+        // We need to clean state if there was a logout in other Activity
+        mClosingsController.onLogoutWasInitiated();
     }
 
     @Override
@@ -281,7 +281,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
 
     /**
      * Selects menu item and shows fragment by id
-     * Note: some strange behavior, when method is called in onCreate
+     * Note: incorrect behavior, when method is called in onCreate
      * (Exception: recursive call of executePendingTransactions)
      *
      * @param fragmentId id of fragment that is going to be shown
@@ -303,9 +303,15 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             mAdapter.notifyDataSetChanged();
         }
         if (mProfileButton != null) {
-            mProfileButton.setSelected(
-                    mSelectedFragment == F_PROFILE || mSelectedFragment == F_VIP_PROFILE
-            );
+            if (mSelectedFragment == F_PROFILE || mSelectedFragment == F_VIP_PROFILE) {
+                mProfileButton.setSelected(true);
+                if (mClosingsController != null) {
+                    mClosingsController.unselectMenuItems();
+                    mClosingsController.unlockLeftMenu();
+                }
+            } else {
+                mProfileButton.setSelected(false);
+            }
         }
     }
 
@@ -388,8 +394,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 fragment = new AdmirationFragment();
                 break;
             case F_LIKES:
-                // TODO make empty screen for LikesClosingFragment and take care of FragmentManager.findByTag logic when premium status is obtained
-                fragment = mClosingsController.getLikesFragment();
+                fragment = new LikesFragment();
                 break;
             case F_LIKES_CLOSINGS:
                 fragment = new LikesClosingFragment();
@@ -454,26 +459,14 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         getListView().setClickable(clickable);
     }
 
-    public void showWatchAsListDialog(int likesCount) {
+    public void showWatchAsListDialog() {
         if (ClosingsBuyVipDialog.opened) return;
-
-        ClosingsBuyVipDialog newFragment = ClosingsBuyVipDialog.newInstance(likesCount);
-        newFragment.setOnWatchSequentialyListener(new ClosingsBuyVipDialog.IWatchSequentialyListener() {
+        ClosingsBuyVipDialog newFragment = ClosingsBuyVipDialog.newInstance(mSelectedFragment);
+        newFragment.setOnRespondToLikesListener(new ClosingsBuyVipDialog.IRespondToLikesListener() {
             @Override
-            public void onWatchSequentialy() {
-                Activity activity = getActivity();
-                if (activity instanceof NavigationActivity) {
-                    ((NavigationActivity) activity).hideContent();
-                }
-            }
-        });
-        newFragment.setOnWatchListListener(new ClosingsBuyVipDialog.IWatchListListener() {
-
-            @Override
-            public void onWatchList() {
-                Activity activity = getActivity();
-                if (activity instanceof NavigationActivity) {
-                    ((NavigationActivity) activity).hideContent();
+            public void onRespondToLikes() {
+                if (mClosingsController != null) {
+                    mClosingsController.respondToLikes();
                 }
             }
         });
@@ -482,5 +475,9 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         } catch (Exception e) {
             Debug.error(e);
         }
+    }
+
+    public static void onLogout() {
+        ClosingsController.onLogout();
     }
 }

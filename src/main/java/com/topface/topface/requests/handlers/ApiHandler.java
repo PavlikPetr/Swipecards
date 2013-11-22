@@ -53,11 +53,9 @@ abstract public class ApiHandler extends Handler {
                 } else if (result != ErrorCodes.RESULT_OK) {
                     fail(result, response);
                 } else {
-                    if (response instanceof ApiResponse) {
-                        ApiResponse apiResponse = (ApiResponse) response;
-                        setCounters(apiResponse);
-                        sendUpdateIntent(apiResponse);
-                    }
+                    setCounters(response);
+                    sendUpdateIntent(response);
+
                     success(response);
                 }
             } catch (Exception e) {
@@ -98,15 +96,19 @@ abstract public class ApiHandler extends Handler {
         }
     }
 
-    private void setCounters(ApiResponse response) {
-        if (!mNeedCounters) return;
+    private void setCounters(IApiResponse response) {
+        if (!mNeedCounters || !response.isNeedUpdateCounters()) return;
         try {
-            JSONObject unread = response.unread;
-            JSONObject balance = response.balance;
-            String method = response.method;
+            JSONObject unread = response.getUnread();
+            JSONObject balance = response.getBalance();
+            String method = response.getMethodName();
+            Debug.log("Set counters from method " + method);
+            CountersManager countersManager = CountersManager
+                    .getInstance(App.getContext())
+                    .setMethod(method);
+
             if (unread != null) {
-                CountersManager.getInstance(App.getContext())
-                        .setMethod(method)
+                countersManager
                         .setEntitiesCounters(
                                 unread.optInt("likes"),
                                 unread.optInt("mutual"),
@@ -117,7 +119,7 @@ abstract public class ApiHandler extends Handler {
                         );
             }
             if (balance != null) {
-                CountersManager.getInstance(App.getContext()).setMethod(method).setBalanceCounters(
+                countersManager.setBalanceCounters(
                         balance.optInt("likes"),
                         balance.optInt("money")
                 );
@@ -127,10 +129,11 @@ abstract public class ApiHandler extends Handler {
         }
     }
 
-    private void sendUpdateIntent(ApiResponse response) {
-        if (response.method.equals(ProfileRequest.SERVICE)) {
+    private void sendUpdateIntent(IApiResponse response) {
+        String methodName = response.getMethodName();
+        if (methodName.equals(ProfileRequest.SERVICE)) {
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
-        } else if (response.method.equals(AppOptionsRequest.SERVICE)) {
+        } else if (methodName.equals(AppOptionsRequest.SERVICE)) {
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(AppOptionsRequest.VERSION_INTENT));
         }
     }
@@ -149,10 +152,6 @@ abstract public class ApiHandler extends Handler {
 
     protected boolean isShowPremiumError() {
         return true;
-    }
-
-    protected boolean isCanceled() {
-        return mCancel;
     }
 
     public void setNeedCounters(boolean needCounter) {

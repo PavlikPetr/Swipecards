@@ -47,22 +47,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     private BroadcastReceiver mProfileLoadReceiver;
 
     private BroadcastReceiver updateCountersReceiver;
-//    public static final int F_VIP_PROFILE = 1000;
-//    public static final int F_PROFILE = 1001;
-//    public static final int F_DATING = 1002;
-//    public static final int F_LIKES = 1003;
-//    public static final int F_MUTUAL = 1004;
-//    public static final int F_DIALOGS = 1005;
-//    //Страницы топов у нас больше нет
-//    //public static final int F_TOPS = 1006;
-//    public static final int F_SETTINGS = 1007;
-//    public static final int F_VISITORS = 1008;
-//    public static final int F_BOOKMARKS = 1009;
-//    public static final int F_FANS = 1010;
-//    public static final int F_ADMIRATIONS = 1011;
-//
-//    public static final int F_EDITOR = 9999;
-//    public static final int F_UNDEFINED = 9998;
 
     public static enum FragmentId {
         F_VIP_PROFILE, F_PROFILE, F_DATING,
@@ -120,6 +104,18 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public void onResume() {
         setUpdateCountersReceiver();
         super.onResume();
+        if (mProfileLoadReceiver == null) {
+            mProfileLoadReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    if (isAdded()) {
+                        checkProfileLoad();
+                    }
+                }
+            };
+        }
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(mProfileLoadReceiver, new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD));
         checkProfileLoad();
     }
 
@@ -155,7 +151,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     @Override
     public void cancelRequest(ApiRequest request) {
-        request.cancel();
+        request.cancelFromUi();
     }
 
     @Override
@@ -224,17 +220,12 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     private void checkProfileLoad() {
         if (CacheProfile.isLoaded()) {
             onLoadProfile();
-        } else if (mProfileLoadReceiver == null) {
-            mProfileLoadReceiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    checkProfileLoad();
-                }
-            };
-
-            LocalBroadcastManager.getInstance(getActivity())
-                    .registerReceiver(mProfileLoadReceiver, new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD));
         }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
     }
 
     protected void onLoadProfile() {

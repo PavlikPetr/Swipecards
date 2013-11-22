@@ -30,6 +30,7 @@ public class AuthRequest extends ApiRequest {
     private String login;  // логин для нашей авторизации
     private String password; // пароль для нашей авторизации
     private String refresh; // еще один токен для одноклассников
+    private boolean tablet; // является ли данное устройство планшетом
 
     private AuthRequest(Context context) {
         super(context);
@@ -40,6 +41,7 @@ public class AuthRequest extends ApiRequest {
         clientosversion = Utils.getClientOsVersion();
         clientdevice = Utils.getClientDeviceName();
         clientid = App.getConfig().getAppUniqueId();
+        tablet = context.getResources().getBoolean(R.bool.is_tablet);
     }
 
     public AuthRequest(AuthToken.TokenInfo authTokenInfo, Context context) {
@@ -84,7 +86,8 @@ public class AuthRequest extends ApiRequest {
                 .put("clientId", clientid)
                 .put("login", login)
                 .put("password", password)
-                .put("refresh", refresh);
+                .put("refresh", refresh)
+                .put("tablet", tablet);
     }
 
     @Override
@@ -111,7 +114,7 @@ public class AuthRequest extends ApiRequest {
     @Override
     public void exec() {
         if (TextUtils.isEmpty(platform)) {
-            handleFail(ErrorCodes.UNVERIFIED_TOKEN,"Key params are empty");
+            handleFail(ErrorCodes.UNVERIFIED_TOKEN, "Key params are empty");
             return;
         } else {
             if (TextUtils.equals(platform, AuthToken.SN_TOPFACE)) {

@@ -31,7 +31,6 @@ public class MultipartApiResponse implements IApiResponse {
     public int code = ErrorCodes.RESULT_DONT_SET;
     public String message;
     public JSONObject jsonResult;
-    public String method;
     private HashMap<String, ApiResponse> mResponses = new HashMap<String, ApiResponse>();
 
     public MultipartApiResponse(HttpURLConnection connection) {
@@ -53,12 +52,20 @@ public class MultipartApiResponse implements IApiResponse {
 
     private void parseResponses(LinkedList<String> parts) {
         int result = ErrorCodes.RESULT_OK;
+        boolean firstResponse = true;
         for (String responseString : parts) {
             if (!TextUtils.isEmpty(responseString)) {
                 ApiResponse response = new ApiResponse(responseString);
                 mResponses.put(response.id, response);
                 if (!response.isCompleted()) {
                     result = response.getResultCode();
+                } else {
+                    //Для всех ответов кроме первого отключаем обновление счетчиков
+                    if (firstResponse) {
+                        firstResponse = false;
+                    } else {
+                        response.setUpdateCountersFlag(false);
+                    }
                 }
             } else {
                 Debug.error("Wrong response part:\n" + responseString);
@@ -177,6 +184,53 @@ public class MultipartApiResponse implements IApiResponse {
     @Override
     public boolean isCompleted() {
         return isCodeEqual(ErrorCodes.RESULT_OK);
+    }
+
+    private ApiResponse getFirstResponse() {
+        ApiResponse response = null;
+        if (mResponses != null && mResponses.size() > 0) {
+            response = (ApiResponse) mResponses.values().toArray()[0];
+        }
+
+        return response;
+    }
+
+    @Override
+    public String getMethodName() {
+        ApiResponse response = getFirstResponse();
+        return response != null ? response.getMethodName() : null;
+    }
+
+    @Override
+    public boolean isMethodNameEquals(String method) {
+        boolean result = false;
+        if (mResponses != null && mResponses.size() > 0) {
+            for (Map.Entry<String, ApiResponse> response : mResponses.entrySet()) {
+                if (response.getValue().isMethodNameEquals(method)) {
+                    result = true;
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public JSONObject getUnread() {
+        ApiResponse response = getFirstResponse();
+        return response != null ? response.getUnread() : null;
+    }
+
+    @Override
+    public JSONObject getBalance() {
+        ApiResponse response = getFirstResponse();
+        return response != null ? response.getBalance() : null;
+    }
+
+    @Override
+    public boolean isNeedUpdateCounters() {
+        return false;
     }
 
     @Override

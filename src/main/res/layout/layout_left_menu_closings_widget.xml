@@ -36,7 +36,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp"
-            android:text="@string/locking_popup_button_buy"
+            android:text="@string/buying_vip_status"
             style="@style/ButtonBlue"/>
     </LinearLayout>
 

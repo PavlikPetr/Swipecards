@@ -12,6 +12,7 @@ import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.ResourcesUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -34,7 +35,7 @@ public class LeftMenuAdapter extends BaseAdapter {
         @Override
         public void onClick(View v) {
             if (mMenuFragment != null) {
-                mMenuFragment.showWatchAsListDialog(CacheProfile.unread_likes + CacheProfile.unread_mutual);
+                mMenuFragment.showWatchAsListDialog();
             }
         }
     };
@@ -45,7 +46,7 @@ public class LeftMenuAdapter extends BaseAdapter {
     }
 
     public static ILeftMenuItem newLeftMenuItem(final BaseFragment.FragmentId menuId, final int menuType,
-                                          final int menuTextResId, final int menuIconResId) {
+                                          final int menuIconResId) {
         return new ILeftMenuItem() {
             boolean isHidden = false;
 
@@ -61,7 +62,7 @@ public class LeftMenuAdapter extends BaseAdapter {
 
             @Override
             public String getMenuText() {
-                return App.getContext().getString(menuTextResId);
+                return App.getContext().getString(ResourcesUtils.getFragmentNameResId(menuId));
             }
 
             @Override
