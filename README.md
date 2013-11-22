@@ -1,5 +1,6 @@
-<img style="float:right; padding: 10px;" src="https://lh5.ggpht.com/IeTGlZNc3b031FWAs609XIgtxrFd8YolpF3n2q5emStxTzcdPgl-1Tjx0I6oARWS4Q=w60" />
 # Topface для Android
+
+![Topface для Android](https://lh5.ggpht.com/IeTGlZNc3b031FWAs609XIgtxrFd8YolpF3n2q5emStxTzcdPgl-1Tjx0I6oARWS4Q=w60)
 
 ## Доступ к коду
 Если вы видите этот Readme, то у вас есть полный доступ ко всему исходному коду, но только на чтение.
