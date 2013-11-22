@@ -56,6 +56,7 @@ import static com.topface.topface.ui.fragments.BaseFragment.*;
 /**
  * Created by kirussell on 05.11.13.
  * Left menu for switching NavigationActivity fragments
+ * extends ListFragment and does not have any xml layout
  */
 public class MenuFragment extends ListFragment implements View.OnClickListener {
     public static final String SELECT_MENU_ITEM = "com.topface.topface.action.menu.selectitem";
