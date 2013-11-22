@@ -447,6 +447,10 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         if (!CacheProfile.premium) mClosingsController.show();
     }
 
+    public boolean isLockedByClosings() {
+        return mClosingsController.isLeftMenuLocked();
+    }
+
     public static interface OnFragmentSelectedListener {
         public void onFragmentSelected(FragmentId fragmentId);
     }
@@ -459,7 +463,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         getListView().setClickable(clickable);
     }
 
-    public void showWatchAsListDialog() {
+    public void showClosingsDialog() {
         if (ClosingsBuyVipDialog.opened) return;
         ClosingsBuyVipDialog newFragment = ClosingsBuyVipDialog.newInstance(mSelectedFragment);
         newFragment.setOnRespondToLikesListener(new ClosingsBuyVipDialog.IRespondToLikesListener() {

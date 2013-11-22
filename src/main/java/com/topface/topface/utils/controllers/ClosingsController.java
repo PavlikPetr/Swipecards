@@ -365,6 +365,10 @@ public class ClosingsController implements View.OnClickListener {
         }
     }
 
+    public boolean isLeftMenuLocked() {
+        return mLeftMenuLocked;
+    }
+
     public void onLogoutWasInitiated() {
         if (mLogoutWasInitiated){
             removeClosings();
