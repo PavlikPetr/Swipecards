@@ -158,6 +158,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
                     .commit();
         }
 
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.loNavigationDrawer);
         mDrawerLayout.setScrimColor(Color.argb(217, 0, 0, 0));
         mDrawerLayout.setDrawerShadow(R.drawable.shadow_left_menu_right, GravityCompat.START);
