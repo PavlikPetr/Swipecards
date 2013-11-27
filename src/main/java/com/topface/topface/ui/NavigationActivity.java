@@ -14,6 +14,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -449,22 +451,24 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
                 if (data != null) {
                     Bundle extras = data.getExtras();
                     try {
-                        final City city = new City(new JSONObject(extras.getString(CitySearchActivity.INTENT_CITY)));
-                        SettingsRequest request = new SettingsRequest(this);
-                        request.cityid = city.id;
-                        request.callback(new ApiHandler() {
+                        if (extras != null) {
+                            final City city = new City(new JSONObject(extras.getString(CitySearchActivity.INTENT_CITY)));
+                            SettingsRequest request = new SettingsRequest(this);
+                            request.cityid = city.id;
+                            request.callback(new ApiHandler() {
 
-                            @Override
-                            public void success(IApiResponse response) {
-                                CacheProfile.city = city;
-                                LocalBroadcastManager.getInstance(getApplicationContext())
-                                        .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
-                            }
+                                @Override
+                                public void success(IApiResponse response) {
+                                    CacheProfile.city = city;
+                                    LocalBroadcastManager.getInstance(getApplicationContext())
+                                            .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                                }
 
-                            @Override
-                            public void fail(int codeError, IApiResponse response) {
-                            }
-                        }).exec();
+                                @Override
+                                public void fail(int codeError, IApiResponse response) {
+                                }
+                            }).exec();
+                        }
                     } catch (JSONException e) {
                         Debug.error(e);
                     }
@@ -591,5 +595,20 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         intent.putExtra(GCMUtils.NEXT_INTENT, fragmentId);
         activity.startActivity(intent);
         activity.finish();
+    }
+
+    @Override
+    public boolean onKeyDown(int keycode, KeyEvent e) {
+        switch(keycode) {
+            case KeyEvent.KEYCODE_MENU:
+                if (mDrawerLayout.isDrawerOpen(Gravity.START)) {
+                    mDrawerLayout.closeDrawer(Gravity.START);
+                } else {
+                    mDrawerLayout.openDrawer(Gravity.START);
+                }
+                return true;
+        }
+
+        return super.onKeyDown(keycode, e);
     }
 }
