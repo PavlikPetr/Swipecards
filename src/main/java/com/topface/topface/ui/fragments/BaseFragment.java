@@ -277,7 +277,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
             preferences.edit().putLong(INVITE_POPUP, date_now).commit();
             if (activity != null) {
                 ContactsProvider provider = new ContactsProvider(activity);
-                provider.getContacts(-1, 0, new ContactsProvider.GetContactsListener() {
+                provider.getContacts(-1, 0, new ContactsProvider.GetContactsHandler() {
                     @Override
                     public void onContactsReceived(ArrayList<ContactsProvider.Contact> contacts) {
                         if (isAdded()) {

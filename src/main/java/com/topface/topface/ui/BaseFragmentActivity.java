@@ -150,13 +150,18 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     @Override
     protected void onResume() {
         super.onResume();
-        afterOnSaveInstanceState = false;
         checkProfileLoad();
         registerReauthReceiver();
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mClosingDataReceiver, new IntentFilter(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mProfileUpdateReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        afterOnSaveInstanceState = false;
     }
 
     private void registerReauthReceiver() {
