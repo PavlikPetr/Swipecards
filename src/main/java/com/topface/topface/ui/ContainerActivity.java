@@ -300,6 +300,10 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
         return intent;
     }
 
+    public static Intent getVipBuyIntent(String from) {
+        return getVipBuyIntent(null, from);
+    }
+
     public static Intent getBuyingIntent(String from) {
         Intent intent = new Intent(App.getContext(), ContainerActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUYING_FRAGMENT);
@@ -330,4 +334,6 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
 }

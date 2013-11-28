@@ -14,16 +14,18 @@ import android.widget.TextView;
 
 import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.ui.ContainerActivity;
-import com.topface.topface.utils.Utils;
+import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.utils.ResourcesUtils;
 
 public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnClickListener {
 
     public static boolean opened = false;
 
     public static final String TAG = "com.topface.topface.ui.dialogs.ClosingsBuyVipDialog_TAG";
-    private static final String ARG_LIKES = "likesCount";
-    private IWatchSequentialyListener mWatchSequentialyListener;
+    private static final String ARG_FRAGMENT = "fragmentId";
+    private IRespondToLikesListener mWatchSequentialyListener;
     private IWatchListListener mWatchListListener;
 
 
@@ -32,17 +34,24 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.dialog_closings_buy_vip, container, false);
 
-        int likesCount = 0;
+        String fragmentName = Static.EMPTY;
         if (getActivity() != null) {
-            likesCount = getArguments().getInt(ARG_LIKES);
+            BaseFragment.FragmentId fragmentId = (BaseFragment.FragmentId) getArguments().getSerializable(ARG_FRAGMENT);
+            fragmentName = getString(ResourcesUtils.getFragmentNameResId(fragmentId));
         }
 
         setTransparentBackground();
         getDialog().setCanceledOnTouchOutside(false);
 
-        root.findViewById(R.id.btnWatchAsList).setOnClickListener(this);
-        root.findViewById(R.id.btnWatchSequentually).setOnClickListener(this);
-        ((TextView) root.findViewById(R.id.idYouWasLiked)).setText(Utils.getQuantityString(R.plurals.you_was_liked, likesCount, likesCount));
+        root.findViewById(R.id.btnRespondToLikes).setOnClickListener(this);
+        root.findViewById(R.id.btnBuyVip).setOnClickListener(this);
+
+
+
+        ((TextView) root.findViewById(R.id.tvTitle))
+                .setText(String.format(getString(R.string.locking_popup_title), fragmentName));
+        ((TextView) root.findViewById(R.id.tvMessage))
+                .setText(String.format(getString(R.string.locking_popup_message), fragmentName));
         root.findViewById(R.id.btnClose).setOnClickListener(this);
         return root;
     }
@@ -56,20 +65,20 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btnWatchSequentually:
-                EasyTracker.getTracker().sendEvent(getTrackName(), "WatchSequentially", "", 1L);
-                if (mWatchSequentialyListener != null) mWatchSequentialyListener.onWatchSequentialy();
+            case R.id.btnRespondToLikes:
+                EasyTracker.getTracker().sendEvent(getTrackName(), "AnswerOnLikes", "", 1L);
+                if (mWatchSequentialyListener != null) mWatchSequentialyListener.onRespondToLikes();
+                closeDialog();
+                break;
+            case R.id.btnBuyVip:
+                EasyTracker.getTracker().sendEvent(getTrackName(), "BuyVipStatus", "", 1L);
+                Intent intent = ContainerActivity.getVipBuyIntent(null, "ClosingDialogWatchAsList");
+                startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
+                if (mWatchListListener != null) mWatchListListener.onWatchList();
                 closeDialog();
                 break;
             case R.id.btnClose:
                 EasyTracker.getTracker().sendEvent(getTrackName(), "Close", "", 1L);
-                closeDialog();
-                break;
-            case R.id.btnWatchAsList:
-                EasyTracker.getTracker().sendEvent(getTrackName(), "WatchAsList", "", 1L);
-                Intent intent = ContainerActivity.getVipBuyIntent(null, "ClosingDialogWatchAsList");
-                startActivityForResult(intent, ContainerActivity.INTENT_BUY_VIP_FRAGMENT);
-                if (mWatchListListener != null) mWatchListListener.onWatchList();
                 closeDialog();
                 break;
             default:
@@ -83,11 +92,11 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
         ClosingsBuyVipDialog.opened = false;
     }
 
-    public static ClosingsBuyVipDialog newInstance(int likesCount) {
+    public static ClosingsBuyVipDialog newInstance(BaseFragment.FragmentId fragmentId) {
         ClosingsBuyVipDialog dialog = new ClosingsBuyVipDialog();
 
         Bundle args = new Bundle();
-        args.putInt(ARG_LIKES, likesCount);
+        args.putSerializable(ARG_FRAGMENT, fragmentId);
         dialog.setArguments(args);
 
         dialog.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.Theme_Topface);
@@ -100,7 +109,7 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
         ClosingsBuyVipDialog.opened = true;
     }
 
-    public void setOnWatchSequentialyListener(IWatchSequentialyListener listener) {
+    public void setOnRespondToLikesListener(IRespondToLikesListener listener) {
         mWatchSequentialyListener = listener;
     }
 
@@ -108,8 +117,8 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
         mWatchListListener = listener;
     }
 
-    public interface IWatchSequentialyListener {
-        void onWatchSequentialy();
+    public interface IRespondToLikesListener {
+        void onRespondToLikes();
     }
 
     public interface IWatchListListener {

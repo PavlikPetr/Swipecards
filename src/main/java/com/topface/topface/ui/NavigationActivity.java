@@ -25,7 +25,6 @@ import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
-import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PhotoMainRequest;
@@ -34,11 +33,7 @@ import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
-import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
-import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
-import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
 import com.topface.topface.ui.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.BackgroundThread;
@@ -60,22 +55,20 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static com.topface.topface.ui.fragments.BaseFragment.*;
+
 public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
 
-    public static final String CURRENT_FRAGMENT_ID = "NAVIGATION_FRAGMENT";
     private FragmentManager mFragmentManager;
     private MenuFragment mMenuFragment;
     private DrawerLayout mDrawerLayout;
     private FullscreenController mFullscreenController;
 
     private SharedPreferences mPreferences;
-    private Novice mNovice;
     private boolean needAnimate = false;
     private boolean isPopupVisible = false;
-    private static boolean mHasClosingsForThisSession = false;
-    private static boolean mClosingsOnProfileUpdateInvoked = false;
 
     private static NavigationActivity instance = null;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -105,11 +98,8 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
             finish();
             return;
         }
-        setMenuEnabled(true);
         mFragmentManager = getSupportFragmentManager();
-
         initDrawerLayout();
-
         new BackgroundThread() {
             @Override
             public void execute() {
@@ -135,8 +125,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     }
 
     protected void onCreateAsync() {
-        mNovice = Novice.getInstance(getPreferences());
-        mNovice.initNoviceFlags();
+        Novice.getInstance(getPreferences()).initNoviceFlags();
     }
 
     private void initDrawerLayout() {
@@ -144,10 +133,9 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         if (mMenuFragment == null) {
             mMenuFragment = new MenuFragment();
         }
-        mMenuFragment.setClickable(true);
         mMenuFragment.setOnFragmentSelected(new MenuFragment.OnFragmentSelectedListener() {
             @Override
-            public void onFragmentSelected(int fragmentId) {
+            public void onFragmentSelected(FragmentId fragmentId) {
                 mDrawerLayout.closeDrawer(GravityCompat.START);
             }
         });
@@ -169,11 +157,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
                 R.string.app_name,  /* "open drawer" description */
                 R.string.app_name  /* "close drawer" description */
         ) {
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                mMenuFragment.showNovice(mNovice);
-            }
 
             @Override
             public void onDrawerClosed(View drawerView) {
@@ -199,7 +182,19 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+        if (mDrawerLayout.getDrawerLockMode(GravityCompat.START) == DrawerLayout.LOCK_MODE_UNLOCKED) {
+            return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+        } else {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    if (mMenuFragment.isLockedByClosings()) {
+                        mMenuFragment.showClosingsDialog();
+                    }
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
+        }
     }
 
     private SharedPreferences getPreferences() {
@@ -209,26 +204,18 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         return mPreferences;
     }
 
-    public void showFragment(int fragmentId) {
+    public void showFragment(FragmentId fragmentId) {
         mMenuFragment.selectMenu(fragmentId);
     }
 
-    private int getSavedFragmentId(Bundle savedInstanceState) {
-        Intent intent = getIntent();
+    private void showFragment(Intent intent) {
         //Получаем id фрагмента, если он открыт
-        int currentFragment = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
-
-        if (currentFragment == -1) {
-            currentFragment = savedInstanceState != null ?
-                    savedInstanceState.getInt(CURRENT_FRAGMENT_ID, BaseFragment.F_DATING) :
-                    BaseFragment.F_DATING;
-        }
-
-        return currentFragment;
+        FragmentId currentFragment = (FragmentId) intent.getSerializableExtra(GCMUtils.NEXT_INTENT);
+        showFragment(currentFragment == null ? FragmentId.F_DATING : currentFragment);
     }
 
-    public void hideContent() {
-        mDrawerLayout.closeDrawer(GravityCompat.START);
+    public void showContent() {
+        mDrawerLayout.openDrawer(GravityCompat.START);
     }
 
     @Override
@@ -258,10 +245,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        int id = intent.getIntExtra(GCMUtils.NEXT_INTENT, -1);
-        if (id != -1) {
-            mMenuFragment.switchFragment(id);
-        }
+        showFragment(intent);
     }
 
     @Override
@@ -289,31 +273,12 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         new ExternalLinkExecuter(mListener).execute(getIntent());
 
         App.checkProfileUpdate();
-        if (MenuFragment.logoutInvoked) {
-            mMenuFragment.onStopClosings();
-            MenuFragment.logoutInvoked = false;
-        }
-
-        if (!AuthToken.getInstance().isEmpty()
-                && !CacheProfile.premium
-                && !mHasClosingsForThisSession
-                && mMenuFragment.getCurrentFragmentId() != MenuFragment.F_PROFILE
-                && !mMenuFragment.isClosed()
-                && mClosingsOnProfileUpdateInvoked) {
-            if (CacheProfile.unread_likes > 0 || CacheProfile.unread_mutual > 0) {
-                onClosings();
-            }
-        }
 
         if (mNavBarController != null) {
             mNavBarController.refreshNotificators();
         }
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
-
-        if (mMenuFragment.isClosed()) {
-            updateClosing();
-        }
     }
 
     private void actionsAfterRegistration() {
@@ -334,7 +299,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
                             ArrayList<Photo> photos = new ArrayList<Photo>();
                             photos.add(photo);
                             intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, photos);
-//                            LocalBroadcastManager.getInstance(NavigationActivity.this).sendBroadcast(intent);
                         }
                         takePhotoDialogStarted = false;
                         PhotoMainRequest request = new PhotoMainRequest(getApplicationContext());
@@ -395,11 +359,6 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         }
     }
 
-    @Override
-    public void onCloseFragment() {
-        showFragment(MenuFragment.DEFAULT_FRAGMENT);
-    }
-
     public void setPopupVisible(boolean visibility) {
         isPopupVisible = visibility;
     }
@@ -414,9 +373,9 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         }
     }
 
-    public void setMenuEnabled(boolean enabled) {
+    public void setMenuLockMode(int lockMode) {
         if (mDrawerLayout != null) {
-            mDrawerLayout.setEnabled(enabled);
+            mDrawerLayout.setDrawerLockMode(lockMode, GravityCompat.START);
         }
     }
 
@@ -449,30 +408,31 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
                     requestCode == CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY) {
                 if (data != null) {
                     Bundle extras = data.getExtras();
-                    try {
-                        final City city = new City(new JSONObject(extras.getString(CitySearchActivity.INTENT_CITY)));
-                        SettingsRequest request = new SettingsRequest(this);
-                        request.cityid = city.id;
-                        request.callback(new ApiHandler() {
+                    if (extras != null) {
+                        try {
+                            final City city = new City(new JSONObject(extras.getString(CitySearchActivity.INTENT_CITY)));
+                            SettingsRequest request = new SettingsRequest(this);
+                            request.cityid = city.id;
+                            request.callback(new ApiHandler() {
 
-                            @Override
-                            public void success(IApiResponse response) {
-                                CacheProfile.city = city;
-                                LocalBroadcastManager.getInstance(getApplicationContext())
-                                        .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
-                            }
+                                @Override
+                                public void success(IApiResponse response) {
+                                    CacheProfile.city = city;
+                                    LocalBroadcastManager.getInstance(getApplicationContext())
+                                            .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                                }
 
-                            @Override
-                            public void fail(int codeError, IApiResponse response) {
-                            }
-                        }).exec();
-                    } catch (JSONException e) {
-                        Debug.error(e);
+                                @Override
+                                public void fail(int codeError, IApiResponse response) {
+                                }
+                            }).exec();
+                        } catch (JSONException e) {
+                            Debug.error(e);
+                        }
                     }
                 }
             }
         }
-
     }
 
     ExternalLinkExecuter.OnExternalLinkListener mListener = new ExternalLinkExecuter.OnExternalLinkListener() {
@@ -501,95 +461,15 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         }
     };
 
-    public static void selectFragment(int fragmentId) {
-        Intent intent = new Intent();
-        intent.setAction(MenuFragment.SELECT_MENU_ITEM);
-        intent.putExtra(MenuFragment.SELECTED_FRAGMENT_ID, fragmentId);
-        LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
-    }
-
     public static void onLogout() {
-        mHasClosingsForThisSession = false;
-        mClosingsOnProfileUpdateInvoked = false;
         MenuFragment.onLogout();
     }
 
-    @Override
-    protected void onClosingDataReceived() {
-        super.onClosingDataReceived();
-        if (!CacheProfile.premium && !mClosingsOnProfileUpdateInvoked && !mHasClosingsForThisSession) {
-            mClosingsOnProfileUpdateInvoked = true;
-            Options.Closing closing = CacheProfile.getOptions().closing;
-            if (closing.isClosingsEnabled()) {
-                getIntent().putExtra(GCMUtils.NEXT_INTENT, mMenuFragment.getCurrentFragmentId());
-                Debug.log("Closing:Last fragment ID=" + mMenuFragment.getCurrentFragmentId() + " from NavigationActivity");
-                MutualClosingFragment.usersProcessed = !closing.isMutualClosingAvailable();
-                LikesClosingFragment.usersProcessed = !closing.isLikesClosingAvailable();
-                if (!MutualClosingFragment.usersProcessed || !LikesClosingFragment.usersProcessed) {
-                    onClosings();
-                } else {
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(DatingFragment.CLOSINGS_FILTER));
-                }
-            } else {
-                LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(DatingFragment.CLOSINGS_FILTER));
-            }
-        } else {
-            MutualClosingFragment.usersProcessed = true;
-            LikesClosingFragment.usersProcessed = true;
-        }
-    }
-
-    public void onClosings() {
-        if (mHasClosingsForThisSession) return;
-        if (CacheProfile.unread_mutual == 0) {
-            MutualClosingFragment.usersProcessed = true;
-        }
-        if (CacheProfile.unread_likes == 0) {
-            LikesClosingFragment.usersProcessed = true;
-        }
-        if (!mClosingsOnProfileUpdateInvoked) return;
-
-        Options.Closing closing = CacheProfile.getOptions().closing;
-        if (closing.enabledMutual && !MutualClosingFragment.usersProcessed) {
-            mMenuFragment.onClosings(BaseFragment.F_MUTUAL);
-            showFragment(BaseFragment.F_MUTUAL);
-            return;
-        }
-        if (closing.enabledSympathies && !LikesClosingFragment.usersProcessed) {
-            mMenuFragment.onClosings(BaseFragment.F_LIKES);
-            showFragment(BaseFragment.F_LIKES);
-            return;
-        }
-        if (!mHasClosingsForThisSession) {
-            mHasClosingsForThisSession = true;
-        }
-        mMenuFragment.onStopClosings();
-        getSavedFragmentId(null); // it will take fragment id from getIntent() extra data
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(DatingFragment.CLOSINGS_FILTER));
-    }
-
-    private void updateClosing() {
-        if (CacheProfile.premium) {
-            Options.Closing closing = CacheProfile.getOptions().closing;
-            if (closing.isClosingsEnabled()) {
-                closing.stopForPremium();
-                mClosingsOnProfileUpdateInvoked = true;
-                onClosings();
-            }
-        }
-    }
-
-    @Override
-    protected void onProfileUpdated() {
-        super.onProfileUpdated();
-        updateClosing();
-    }
-
-    public static void restartNavigationActivity(int fragmentId) {
+    public static void restartNavigationActivity(FragmentId fragmentId) {
         Activity activity = instance;
-        Intent intent = new Intent(activity, NavigationActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra(GCMUtils.NEXT_INTENT, fragmentId);
+        Intent intent = new Intent(activity, NavigationActivity.class)
+                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra(GCMUtils.NEXT_INTENT, fragmentId);
         activity.startActivity(intent);
         activity.finish();
     }

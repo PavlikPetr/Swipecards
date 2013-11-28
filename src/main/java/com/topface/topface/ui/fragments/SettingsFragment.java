@@ -502,6 +502,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 if (mCursor != null) mCursor.close();
             }
         }
+        //TODO 2 settings and Settings.NOTIFICATION_MELODY is never used???
         mSettings.setSetting(Settings.NOTIFICATION_MELODY, ringtoneName);
         melodyName.setText(ringtoneName);
         mSettings.setSetting(Settings.SETTINGS_C2DM_RINGTONE, uri == null ? Settings.SILENT : uri.toString());

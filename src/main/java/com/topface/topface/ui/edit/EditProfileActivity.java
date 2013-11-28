@@ -35,7 +35,7 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.edit.EditProfileItem.Type;
-import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Debug;
@@ -392,7 +392,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     holder.mTitle.setText(item.getTitle());
                 } else if (item instanceof EditForm) {
                     holder.mTitle.setText(item.getTitle());
-                    if (item != null && item.getText() != null && item.getText().trim().length() > 0) {
+                    if (item.getText() != null && item.getText().trim().length() > 0) {
                         if (((EditForm) item).getId() != FormItem.NOT_SPECIFIED_ID) {
                             holder.mText.setVisibility(View.VISIBLE);
                             holder.mText.setText(item.getText());
@@ -456,13 +456,18 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
             Bitmap original = BitmapFactory.decodeResource(getResources(),
                     ProfileBackgrounds.getBackgroundResource(getApplicationContext(),
                             CacheProfile.background_id));
-            int w = getResources().getDrawable(R.drawable.edit_icon_photo).getIntrinsicWidth();
-            int h = getResources().getDrawable(R.drawable.edit_icon_photo).getIntrinsicHeight();
+            Drawable icon = getResources().getDrawable(R.drawable.edit_icon_photo);
+            if (icon != null) {
+                int w = icon.getIntrinsicWidth();
+                int h = icon.getIntrinsicHeight();
 
-            return new BitmapDrawable(
-                    getResources(),
-                    Bitmap.createScaledBitmap(original, w, h, true)
-            );
+                return new BitmapDrawable(
+                        getResources(),
+                        Bitmap.createScaledBitmap(original, w, h, true)
+                );
+            } else {
+                return null;
+            }
         }
 
         @Override
@@ -583,7 +588,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
         if (CacheProfile.city != null) {
             if (hasStartedFromAuthActivity && !CacheProfile.city.isEmpty()) {
                 Intent intent = new Intent(EditProfileActivity.this, NavigationActivity.class);
-                intent.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.F_VIP_PROFILE);
+                intent.putExtra(GCMUtils.NEXT_INTENT, FragmentId.F_VIP_PROFILE);
                 SharedPreferences preferences = getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
                 preferences.edit().putBoolean(Static.PREFERENCES_NEED_EDIT, false).commit();
                 startActivity(intent);

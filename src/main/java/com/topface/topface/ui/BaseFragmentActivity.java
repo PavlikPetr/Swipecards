@@ -43,12 +43,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     protected boolean mNeedAnimate = true;
     private BroadcastReceiver mProfileLoadReceiver;
     private boolean afterOnSaveInstanceState;
-    private BroadcastReceiver mClosingDataReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            onClosingDataReceived();
-        }
-    };
 
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -144,17 +138,12 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         }
     }
 
-    protected void onClosingDataReceived() {
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
         afterOnSaveInstanceState = false;
         checkProfileLoad();
         registerReauthReceiver();
-        LocalBroadcastManager.getInstance(this)
-                .registerReceiver(mClosingDataReceiver, new IntentFilter(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mProfileUpdateReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
     }
@@ -239,7 +228,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         } catch (Exception ex) {
             Debug.error(ex);
         }
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mClosingDataReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mProfileUpdateReceiver);
     }
 
