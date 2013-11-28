@@ -744,7 +744,6 @@
     <string name="user_deleted_or_banned">Пользователь удален или забанен</string>
     <string name="locking_popup_title">Переход в раздел «%s» ограничен!</string>
     <string name="locking_popup_message">Для перехода в раздел «%s» ответьте на все входящие симпатии или получите VIP.</string>
-    <string name="locking_popup_button_buy">Купить VIP</string>
     <string name="locking_popup_button_answer">Ответить на симпатии</string>
     <string name="locking_menu_message">Доступ к некоторым страницам приложения ограничен. Для снятия ограничений ответьте на все входящие симпатии или получите VIP.</string>
     <string name="locking_likes_message">Внимание! Доступ к некоторым страницам приложения ограничен. Для снятия всех ограничений ответьте на все входящие симпатии или получите VIP.</string>

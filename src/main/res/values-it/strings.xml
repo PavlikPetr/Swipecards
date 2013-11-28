@@ -560,11 +560,13 @@
     <string name="user_deleted_or_banned">L’utente è stato eliminato o ha ricevuto ban</string>
     <string name="locking_popup_title">L’accesso alla sezione «%s» è limitato!</string>
     <string name="locking_popup_message">Per accedere alla sezione «%s» rispondi a tutte le simpatie in entrata o ricevi VIP.</string>
-    <string name="locking_popup_button_buy">Comprare VIP</string>
     <string name="locking_popup_button_answer">Rispondere alle simpatie</string>
     <string name="locking_menu_message">L’accesso ad alcune sezioni è limitato. Rispondi a tutte le simpatie in entrata o ricevi VIP per togliere le restrizioni.</string>
     <string name="locking_likes_message">Attenzione! L’accesso ad alcune sezioni è limitato. Rispondi a tutte le simpatie in entrata o ricevi VIP per togliere tutte le restrizioni.</string>
     <string name="locking_screen_button_answer">Rispondi</string>
     <string name="locking_screen_advice">Rispondi a tutte le simpatie in entrata</string>
     <string name="locking_screen_advice2">Togli tutte le restrizioni</string>
+    <string name="current_city">Città attuale</string>
+    <string name="general_say_meow">Say Meow</string>
+    <string name="general_meow_offer">Gioca 3 partite con gli amici e ricevi lo stato VIP per 2 giorni</string>
 </resources>

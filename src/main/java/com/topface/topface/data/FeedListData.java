@@ -10,9 +10,9 @@ public class FeedListData<T extends FeedItem> extends AbstractData {
 
     public boolean more;
     public FeedList<T> items;
-    private final Class<T> mClass;
+    private final Class mClass;
 
-    public FeedListData(JSONObject data, Class<T> itemClass) {
+    public FeedListData(JSONObject data, Class itemClass) {
         mClass = itemClass;
         if (data != null) {
             fillData(data);

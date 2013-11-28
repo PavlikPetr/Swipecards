@@ -42,7 +42,6 @@ public class AirManager {
 
             fm.beginTransaction()
                     .add(BaseFragmentActivity.getContentViewCompat(), promo)
-                    .addToBackStack(null)
                     .commit();
             return true;
         }
@@ -61,7 +60,6 @@ public class AirManager {
 
             fm.beginTransaction()
                     .add(BaseFragmentActivity.getContentViewCompat(), promo)
-                    .addToBackStack(null)
                     .commit();
             return true;
         }

@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -9,6 +10,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -194,7 +196,6 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
             melodyName = (TextView) frame.findViewWithTag("tvText");
             melodyName.setVisibility(View.VISIBLE);
             setRingtonNameByUri(mSettings.getRingtone());
-//            setText(mSettings.getRingtoneName(), frame);
             frame.setOnClickListener(this);
 
             if (!GCMUtils.GCM_SUPPORTED) {
@@ -204,9 +205,13 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         }
         // Help
         frame = (ViewGroup) root.findViewById(R.id.loHelp);
-        setBackground(R.drawable.edit_big_btn_top_selector, frame);
-        setText(R.string.settings_help, frame);
-        frame.setOnClickListener(this);
+        if (!TextUtils.isEmpty(CacheProfile.getOptions().helpUrl)) {
+            setBackground(R.drawable.edit_big_btn_top_selector, frame);
+            setText(R.string.settings_help, frame);
+            frame.setOnClickListener(this);
+        } else {
+            frame.setVisibility(View.GONE);
+        }
 
         // Account
         initAccountViews(root);
@@ -235,7 +240,12 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     private void initAccountViews(View root) {
         ViewGroup frame;
         frame = (ViewGroup) root.findViewById(R.id.loAccount);
-        setBackground(R.drawable.edit_big_btn_middle_selector, frame);
+        setBackground(
+                TextUtils.isEmpty(CacheProfile.getOptions().helpUrl) ?
+                        R.drawable.edit_big_btn_top_selector :
+                        R.drawable.edit_big_btn_middle_selector,
+                frame
+        );
 
         ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.settings_account);
         TextView socialNameText = (TextView) frame.findViewWithTag("tvText");
@@ -248,11 +258,6 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
 
     private void setText(int titleId, ViewGroup frame) {
         ((TextView) frame.findViewWithTag("tvTitle")).setText(titleId);
-    }
-    private void setText(String titleId, ViewGroup frame) {
-        TextView text = (TextView) frame.findViewWithTag("tvText");
-        text.setVisibility(View.VISIBLE);
-        text.setText(titleId);
     }
 
     private void initEditNotificationFrame(int key, ViewGroup frame, boolean hasMail, boolean mailChecked, boolean phoneChecked) {
@@ -304,22 +309,27 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     @Override
     public void onClick(View v) {
         Intent intent;
+        Context applicationContext = App.getContext();
         switch (v.getId()) {
             case R.id.loHelp:
-                intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(getResources().getString(R.string.settings_help_url)));
-                startActivity(intent);
+                String helpUrl = CacheProfile.getOptions().helpUrl;
+                //Ссылку на помощь показываем только в случае, если сервер нам ее прислал.
+                if (!TextUtils.isEmpty(helpUrl)) {
+                    intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(helpUrl));
+                    startActivity(intent);
+                }
                 break;
             case R.id.loAccount:
-                intent = new Intent(getActivity().getApplicationContext(), SettingsContainerActivity.class);
+                intent = new Intent(applicationContext, SettingsContainerActivity.class);
                 startActivityForResult(intent, SettingsContainerActivity.INTENT_ACCOUNT);
                 break;
             case R.id.loFeedback:
-                intent = new Intent(getActivity().getApplicationContext(), SettingsContainerActivity.class);
+                intent = new Intent(applicationContext, SettingsContainerActivity.class);
                 startActivityForResult(intent, SettingsContainerActivity.INTENT_FEEDBACK);
                 break;
             case R.id.loAbout:
-                intent = new Intent(getActivity().getApplicationContext(), SettingsContainerActivity.class);
+                intent = new Intent(applicationContext, SettingsContainerActivity.class);
                 startActivityForResult(intent, SettingsContainerActivity.INTENT_ABOUT);
                 break;
             case R.id.loVibration:
@@ -492,6 +502,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 if (mCursor != null) mCursor.close();
             }
         }
+        //TODO 2 settings and Settings.NOTIFICATION_MELODY is never used???
         mSettings.setSetting(Settings.NOTIFICATION_MELODY, ringtoneName);
         melodyName.setText(ringtoneName);
         mSettings.setSetting(Settings.SETTINGS_C2DM_RINGTONE, uri == null ? Settings.SILENT : uri.toString());

@@ -12,6 +12,7 @@ import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.http.ConnectionManager;
@@ -250,6 +251,24 @@ public abstract class ApiRequest implements IApiRequest {
         }
     }
 
+    /**
+     * В KitKat нельзя завершать соединение из ui треда, что нам нужно при отмене запросов
+     * Поэтому используем этот
+     */
+    public void closeConnectionAsync() {
+        if (mURLConnection != null) {
+            new BackgroundThread() {
+                @Override
+                public void execute() {
+                    if (mURLConnection != null) {
+                        mURLConnection.disconnect();
+                        mURLConnection = null;
+                    }
+                }
+            };
+        }
+    }
+
     public HttpURLConnection getConnection() throws IOException {
         if (mURLConnection != null) {
             closeConnection();
@@ -386,4 +405,13 @@ public abstract class ApiRequest implements IApiRequest {
         }
     }
 
+    //Отменяем запрос из UI потомка
+    public void cancelFromUi() {
+        closeConnectionAsync();
+        mPostData = null;
+        canceled = true;
+        if (handler != null) {
+            handler.cancel();
+        }
+    }
 }

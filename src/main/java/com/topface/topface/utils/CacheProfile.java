@@ -19,6 +19,7 @@ import com.topface.topface.data.Photos;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.ui.fragments.BaseFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -256,10 +257,12 @@ public class CacheProfile {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
             String optionsCache = preferences.getString(OPTIONS_CACHE_KEY, null);
             if (optionsCache != null) {
-                //Получаем опции из кэша
+                //Получаем опции из кэша, причем передаем флаг, что бы эти опции не кешировались повторно
                 try {
-                    options = new Options(new JSONObject(optionsCache));
+                    options = new Options(new JSONObject(optionsCache), false);
                 } catch (JSONException e) {
+                    //Если произошла ошибка при парсинге кэша, то скидываем опции
+                    preferences.edit().remove(OPTIONS_CACHE_KEY).commit();
                     Debug.error(e);
                 }
             }
@@ -267,7 +270,7 @@ public class CacheProfile {
             if (options == null) {
                 //Если по каким то причинам кэша нет и опции нам в данный момент взять негде.
                 //то просто используем их по умолчанию
-                options = new Options((JSONObject) null);
+                options = new Options(null, false);
             }
         }
         return options;
@@ -300,7 +303,7 @@ public class CacheProfile {
         return mProducts;
     }
 
-    public static boolean checkIsFillData() {
+    public static boolean isDataFilled() {
         return city != null && !city.isEmpty() && age != 0 && first_name != null && photo != null;
     }
 
@@ -406,5 +409,26 @@ public class CacheProfile {
 
     public static boolean isEditor() {
         return editor;
+    }
+
+    public static int getUnreadCounterByFragmentId(BaseFragment.FragmentId id) {
+        switch (id) {
+            case F_LIKES:
+            case F_LIKES_CLOSINGS:
+                return CacheProfile.unread_likes;
+            case F_MUTUAL:
+            case F_MUTUAL_CLOSINGS:
+                return CacheProfile.unread_mutual;
+            case F_DIALOGS:
+                return CacheProfile.unread_messages;
+            case F_VISITORS:
+                return CacheProfile.unread_visitors;
+            case F_FANS:
+                return CacheProfile.unread_fans;
+            case F_ADMIRATIONS:
+                return CacheProfile.unread_admirations;
+            default:
+                return 0;
+        }
     }
 }

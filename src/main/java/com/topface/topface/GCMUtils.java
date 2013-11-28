@@ -18,7 +18,6 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
@@ -45,6 +44,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.*;
 
 public class GCMUtils {
     public static final String GCM_NOTIFICATION = "com.topface.topface.action.NOTIFICATION";
@@ -274,7 +274,7 @@ public class GCMUtils {
                 if (showSympathy) {
                     lastNotificationType = GCM_TYPE_SYMPATHY;
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(NEXT_INTENT, BaseFragment.F_MUTUAL);
+                    i.putExtra(NEXT_INTENT, F_MUTUAL);
                 }
                 break;
 
@@ -282,7 +282,7 @@ public class GCMUtils {
                 if (showLikes) {
                     lastNotificationType = GCM_TYPE_LIKE;
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(NEXT_INTENT, BaseFragment.F_LIKES);
+                    i.putExtra(NEXT_INTENT, F_LIKES);
                 }
                 break;
 
@@ -290,7 +290,7 @@ public class GCMUtils {
                 if (showVisitors) {
                     lastNotificationType = GCM_TYPE_GUESTS;
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(NEXT_INTENT, BaseFragment.F_VISITORS);
+                    i.putExtra(NEXT_INTENT, F_VISITORS);
                 }
                 break;
             case GCM_TYPE_UPDATE:

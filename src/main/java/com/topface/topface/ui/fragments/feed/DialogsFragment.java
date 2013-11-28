@@ -18,8 +18,8 @@ import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.DeleteFeedsRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.ContainerActivity;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.DialogListAdapter;
+import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.utils.CountersManager;
 
 import org.json.JSONObject;
@@ -95,7 +95,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
         inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NavigationActivity.selectFragment(F_DATING);
+                MenuFragment.selectFragment(FragmentId.F_DATING);
             }
         });
     }

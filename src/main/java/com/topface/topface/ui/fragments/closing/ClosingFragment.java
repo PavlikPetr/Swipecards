@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.closing;
 
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -17,11 +18,11 @@ import com.topface.topface.requests.SkipClosedRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContainerActivity;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.OnQuickMessageSentListener;
 import com.topface.topface.ui.fragments.QuickMessageFragment;
 import com.topface.topface.ui.fragments.ViewUsersListFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.cache.UsersListCacheManager;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -32,6 +33,7 @@ import java.util.TimerTask;
 abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> implements View.OnClickListener {
 
     public static final int CHAT_CLOSE_DELAY_MILLIS = 1500;
+    private UsersListCacheManager mCacheManager;
 
     @Override
     protected void initActionBarControls() {
@@ -48,8 +50,16 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
 
     @Override
     protected UsersList<FeedUser> createUsersList() {
-        return new UsersList<FeedUser>(FeedUser.class);
+        Class<FeedUser> itemsClass = getItemsClass();
+        mCacheManager = new UsersListCacheManager(getCacheKey(),itemsClass);
+        UsersList<FeedUser> users = mCacheManager.getCacheAndRemove();
+        if (users == null) {
+            users = new UsersList<FeedUser>(itemsClass);
+        }
+        return users;
     }
+
+    protected abstract String getCacheKey();
 
     public void showChat() {
         FeedUser user = getCurrentUser();
@@ -113,12 +123,17 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     }
 
     private void showNextFromUiThread() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                showNextUser();
-            }
-        });
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (isAdded()) {
+                        showNextUser();
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -131,7 +146,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
             case R.id.btnSkip:
                 EasyTracker.getTracker().sendEvent(getTrackName(), "Skip", "", 1L);
                 if (CacheProfile.premium || alowSkipForNonPremium()) {
-                    if (getCurrentUser() != null && getCurrentUser().feedItem != null) {
+                    if (getCurrentUser() != null) {
                         SkipClosedRequest request = new SkipClosedRequest(getActivity());
                         request.callback(new SimpleApiHandler() {
                             @Override
@@ -141,7 +156,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
                                 }
                             }
                         });
-                        request.item = getCurrentUser().feedItem.id;
+                        request.item = getCurrentUser().feedItemId;
                         request.exec();
                     }
                     showNextUser();
@@ -174,9 +189,6 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     protected void onUsersProcessed() {
         super.onUsersProcessed();
         clearUsersList();
-        if (getActivity() instanceof NavigationActivity) {
-            ((NavigationActivity) getActivity()).onClosings();
-        }
     }
 
     @Override
@@ -193,7 +205,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     abstract protected FeedRequest.FeedService getFeedType();
 
     @Override
-    public Class getItemsClass() {
+    public Class<FeedUser> getItemsClass() {
         return FeedUser.class;
     }
 
