@@ -61,6 +61,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public static final int F_BOOKMARKS = 1009;
     public static final int F_FANS = 1010;
     public static final int F_ADMIRATIONS = 1011;
+    public static final int F_BONUS = 1012;
 
     public static final int F_EDITOR = 9999;
 

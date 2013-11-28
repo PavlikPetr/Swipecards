@@ -153,6 +153,8 @@ public class Options extends AbstractData {
     public String gagTypeFullscreen = BannerBlock.BANNER_NONE;
     public String helpUrl;
 
+    public boolean bonusEnabled;
+
     public Options(IApiResponse data) {
         this(data.getJsonResult());
     }
@@ -241,6 +243,8 @@ public class Options extends AbstractData {
 
             gagTypeBanner = response.optString("gag_type_banner", BannerBlock.BANNER_ADMOB);
             gagTypeFullscreen = response.optString("gag_type_fullscreen", BannerBlock.BANNER_NONE);
+            JSONObject bonusObject = response.optJSONObject("bonus");
+            bonusEnabled = bonusObject.optBoolean("enabled");
 
             helpUrl = response.optString("helpUrl");
         } catch (Exception e) {
