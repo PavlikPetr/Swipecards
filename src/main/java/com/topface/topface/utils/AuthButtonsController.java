@@ -2,6 +2,8 @@ package com.topface.topface.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 
 import com.topface.topface.Static;
@@ -29,11 +31,11 @@ public class AuthButtonsController {
 
     private SharedPreferences mPreferences;
 
-    public AuthButtonsController(Context context, final OnButtonsSettingsLoadedListener listener) {
+    public AuthButtonsController(Context context, final OnButtonsSettingsLoadedHandler listener) {
         mContext = context;
         getAllSocialsForLocale();
 
-        loadButtons(new OnButtonsSettingsLoadedListener() {
+        loadButtons(new OnButtonsSettingsLoadedHandler() {
             @Override
             public void buttonSettingsLoaded(HashSet<String> settings) {
                 if (settings.size() == 0) {
@@ -42,7 +44,7 @@ public class AuthButtonsController {
                     saveButtons();
                 }
                 createLocale();
-                listener.buttonSettingsLoaded(activeButtons);
+                listener.sendSettings(activeButtons);
             }
         });
     }
@@ -87,14 +89,14 @@ public class AuthButtonsController {
         };
     }
 
-    private void loadButtons(final OnButtonsSettingsLoadedListener listener) {
+    private void loadButtons(final OnButtonsSettingsLoadedHandler listener) {
         new BackgroundThread() {
             @Override
             public void execute() {
                 mPreferences = mContext.getSharedPreferences(Static.PREFERENCES_TAG_BUTTONS, Context.MODE_PRIVATE);
                 String json = mPreferences.getString(BUTTON_SETTINGS, "");
                 activeButtons = fromJson(json);
-                listener.buttonSettingsLoaded(activeButtons);
+                listener.sendSettings(activeButtons);
             }
         };
     }
@@ -168,8 +170,25 @@ public class AuthButtonsController {
         return realButtons;
     }
 
-    public static interface OnButtonsSettingsLoadedListener {
-        public void buttonSettingsLoaded(HashSet<String> settings);
+    public static abstract class OnButtonsSettingsLoadedHandler extends Handler {
+
+        private HashSet<String> mSetting;
+
+        public OnButtonsSettingsLoadedHandler() {
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            buttonSettingsLoaded(mSetting);
+        }
+
+        protected void sendSettings(HashSet<String> settings) {
+            mSetting = settings;
+            sendMessage(new Message());
+        }
+
+        public abstract void buttonSettingsLoaded(HashSet<String> settings);
     }
 
 
