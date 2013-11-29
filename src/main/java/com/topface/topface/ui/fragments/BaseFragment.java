@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 
 import com.google.analytics.tracking.android.EasyTracker;
@@ -323,8 +324,16 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     protected void setSupportProgressBarIndeterminateVisibility(boolean visible) {
         Activity activity = getActivity();
-        if (activity instanceof ActionBarActivity) {
-            ((ActionBarActivity) activity).setSupportProgressBarIndeterminateVisibility(visible);
+
+        if (activity instanceof BaseFragmentActivity) {
+            // use overriden setSupportProgressBarIndeterminateVisibility from BaseFragmentActivity
+            ((BaseFragmentActivity) activity).setSupportProgressBarIndeterminateVisibility(visible);
+        } else if (activity instanceof ActionBarActivity) {
+            // check support of indeterminate progress bar
+            ActionBarActivity abActivity = (ActionBarActivity) activity;
+            if (abActivity.supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS)) {
+                abActivity.setSupportProgressBarIndeterminate(visible);
+            }
         }
     }
 
