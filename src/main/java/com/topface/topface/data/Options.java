@@ -145,6 +145,7 @@ public class Options extends AbstractData {
     public boolean block_unconfirmed;
     public boolean block_chat_not_mutual;
     public Closing closing = new Closing();
+    public BlockSympathy blockSympathy = new BlockSympathy();
     public PremiumAirEntity premium_messages;
     public PremiumAirEntity premium_visitors;
     public PremiumAirEntity premium_admirations;
@@ -226,14 +227,29 @@ public class Options extends AbstractData {
                 }
             }
 
-            JSONObject closings = response.optJSONObject("closing");
+            JSONObject closingsObj = response.optJSONObject("closing");
             if (closing == null) closing = new Closing();
-            closing.enabledMutual = closings.optBoolean("enabledMutual");
-            closing.enabledSympathies = closings.optBoolean("enabledSympathies");
-            closing.limitMutual = closings.optInt("limitMutual");
-            closing.limitSympathies = closings.optInt("limitSympathies");
+            if (closingsObj != null) {
+                closing.enabledMutual = closingsObj.optBoolean("enabledMutual");
+                closing.enabledSympathies = closingsObj.optBoolean("enabledSympathies");
+                closing.limitMutual = closingsObj.optInt("limitMutual");
+                closing.limitSympathies = closingsObj.optInt("limitSympathies");
+            }
 
-            //TODO clarify parameter: timeout
+            JSONObject blockSympathyObj = response.optJSONObject("blockSympathy");
+            if (blockSympathy == null) blockSympathy = new BlockSympathy();
+            if (blockSympathyObj != null) {
+                blockSympathy.enabled = blockSympathyObj.optBoolean("enabled");
+                JSONObject settingsBlock = blockSympathyObj.optJSONObject("settings");
+                if (settingsBlock != null) {
+                    blockSympathy.text = settingsBlock.optString("text");
+                    blockSympathy.buttonText = settingsBlock.optString("buttonText");
+                    blockSympathy.showPhotos = settingsBlock.optBoolean("showPhotos");
+                    blockSympathy.group = settingsBlock.optString("group");
+                    blockSympathy.price = settingsBlock.optInt("price");
+                }
+            }
+
             ratePopupType = response.optJSONObject("ratePopup").optString("type");
 
             JSONObject getJarJson = response.optJSONObject("getjar");
@@ -532,6 +548,18 @@ public class Options extends AbstractData {
 
         public long getPrice() {
             return price;
+        }
+    }
+
+    public static class BlockSympathy {
+        public boolean enabled = false;
+        public String text = Static.EMPTY;
+        public String buttonText = Static.EMPTY;
+        public boolean showPhotos = true;
+        public String group;
+        public int price = 0;
+
+        public BlockSympathy() {
         }
     }
 }

@@ -4,8 +4,8 @@
     package="com.topface.topface"
     android:installLocation="auto"
 
-    android:versionCode="92"
-    android:versionName="2.8.1">
+    android:versionCode="94"
+    android:versionName="2.8.3">
 
     <uses-sdk
         android:minSdkVersion="7"
