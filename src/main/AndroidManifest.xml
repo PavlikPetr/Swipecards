@@ -272,7 +272,7 @@
             android:name="org.OpenUDID.OpenUDID_service"
             tools:ignore="InnerclassSeparator">
             <intent-filter>
-                <action android:name="org.openudid.GET˚UDID" />
+                <action android:name="org.openudid.GETUDID" />
             </intent-filter>
         </service>
 
