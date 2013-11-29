@@ -46,35 +46,12 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"/>
 
-            <LinearLayout
-                    android:id="@+id/emailContainer"
-                    android:orientation="horizontal"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp">
-
-                <CheckBox
-                        android:id="@+id/loEmailSwitcher"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"/>
-
-                <TextView
-                        android:id="@+id/wantAnswerTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:textSize="14sp"
-                        android:gravity="center_vertical"
-                        android:text="@string/settings_want_answer"/>
-            </LinearLayout>
-
-
             <TextView
                     android:paddingTop="8dp"
                     android:id="@+id/tvEmailTitle"
                     style="@style/BackgroundFormTitleText"
                     android:text="@string/settings_feedback_email"
-                    android:visibility="gone"/>
+                    android:visibility="visible"/>
 
             <EditText
                     android:id="@+id/edEmail"
@@ -92,7 +69,7 @@
                     android:singleLine="true"
                     android:textSize="14sp"
                     android:hint="@string/general_input_email"
-                    android:visibility="gone"/>
+                    android:visibility="visible"/>
 
             <TextView
                     android:paddingTop="8dp"
