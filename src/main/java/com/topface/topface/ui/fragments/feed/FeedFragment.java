@@ -102,6 +102,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
         View root = inflater.inflate(getLayout(), null);
+        if (root == null) return null;
+
         mContainer = (RelativeLayout) root.findViewById(R.id.feedContainer);
         initNavigationBar();
         mLockView = (LockerView) root.findViewById(R.id.llvFeedLoading);
@@ -109,7 +111,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         init();
 
         initViews(root);
-
         readItemReceiver = new BroadcastReceiver() {
 
             @Override
@@ -203,12 +204,17 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         // ListView background
         mBackgroundText = (TextView) view.findViewById(R.id.tvBackgroundText);
 
-        mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(
-                mBackgroundText.getCompoundDrawables()[0],
-                getBackIcon(),
-                mBackgroundText.getCompoundDrawables()[2],
-                mBackgroundText.getCompoundDrawables()[3]
-        );
+        if (mBackgroundText != null) {
+            Drawable[] drawables = mBackgroundText.getCompoundDrawables();
+            if (drawables != null) {
+                mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(
+                        drawables[0],
+                        getBackIcon(),
+                        drawables[2],
+                        drawables[3]
+                );
+            }
+        }
     }
 
     @Override
@@ -565,7 +571,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     protected void updateData(final boolean isPushUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {
         if (isBlockOnClosing() && !CacheProfile.premium) {
-            showUpdateErrorMessage(ErrorCodes.PREMIUM_ACCESS_ONLY);
+            processErrors(ErrorCodes.PREMIUM_ACCESS_ONLY);
             return;
         }
         mIsUpdating = true;
@@ -625,10 +631,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     if (isHistoryLoad) {
                         getListAdapter().showRetryItem();
                     }
-                    showUpdateErrorMessage(codeError);
 
-                    //Если это не ошибка доступа, то показываем стандартное сообщение об ошибке
-                    if (codeError != ErrorCodes.PREMIUM_ACCESS_ONLY) {
+                    //Если ошибки обработаны на уровне фрагмента,
+                    // то не показываем стандартную ошибку
+                    if (!processErrors(codeError)) {
                         Utils.showErrorMessage(activity);
                     }
                     onUpdateFail(isPushUpdating || isHistoryLoad);
@@ -648,16 +654,23 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         return false;
     }
 
-    private void showUpdateErrorMessage(int codeError) {
+    /**
+     * Process error codes from server, put view in appropriate states
+     *
+     * @param codeError - error code from server
+     * @return true if error is processed and don't need Toast message
+     */
+    private boolean processErrors(int codeError) {
         mListView.setVisibility(View.INVISIBLE);
         switch (codeError) {
             case ErrorCodes.PREMIUM_ACCESS_ONLY:
+            case ErrorCodes.BLOCKED_SYMPATHIES:
                 onEmptyFeed();
-                break;
+                return true;
             default:
                 mRetryView.setVisibility(View.VISIBLE);
                 onFilledFeed();
-                break;
+                return false;
         }
     }
 
@@ -715,17 +728,20 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             mListView.setVisibility(View.VISIBLE);
             mRetryView.setVisibility(View.GONE);
 
-            if (mBackgroundText.getCompoundDrawables()[0] != null) {
-                Drawable drawable = mBackgroundText.getCompoundDrawables()[0];
-                if (drawable instanceof AnimationDrawable) {
-                    ((AnimationDrawable) drawable).stop();
+            Drawable[] drawables = mBackgroundText.getCompoundDrawables();
+            if (drawables != null) {
+                if (drawables[0] != null) {
+                    Drawable drawable = drawables[0];
+                    if (drawable instanceof AnimationDrawable) {
+                        ((AnimationDrawable) drawable).stop();
+                    }
                 }
-            }
 
-            mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(getLoader0(),
-                    mBackgroundText.getCompoundDrawables()[1],
-                    mBackgroundText.getCompoundDrawables()[2],
-                    mBackgroundText.getCompoundDrawables()[3]);
+                mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(getLoader0(),
+                        drawables[1],
+                        drawables[2],
+                        drawables[3]);
+            }
             setFilterSwitcherState(true);
         }
 
@@ -769,15 +785,18 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         if (!isPushUpdating) {
             mListView.setVisibility(View.VISIBLE);
             mBackgroundText.setText("");
-            Drawable drawable = mBackgroundText.getCompoundDrawables()[0];
-            if (drawable != null && drawable instanceof AnimationDrawable) {
-                ((AnimationDrawable) drawable).stop();
-            }
+            Drawable[] drawables = mBackgroundText.getCompoundDrawables();
+            if(drawables != null) {
+                Drawable drawable = drawables[0];
+                if (drawable != null && drawable instanceof AnimationDrawable) {
+                    ((AnimationDrawable) drawable).stop();
+                }
 
-            mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(getLoader0(),
-                    mBackgroundText.getCompoundDrawables()[1],
-                    mBackgroundText.getCompoundDrawables()[2],
-                    mBackgroundText.getCompoundDrawables()[3]);
+                mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(getLoader0(),
+                        drawables[1],
+                        drawables[2],
+                        drawables[3]);
+            }
             setFilterSwitcherState(true);
         }
     }
@@ -789,13 +808,16 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             mListView.setVisibility(View.INVISIBLE);
             mBackgroundText.setVisibility(View.VISIBLE);
             mBackgroundText.setText(R.string.general_dialog_loading);
-            mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(getLoader(),
-                    mBackgroundText.getCompoundDrawables()[1],
-                    mBackgroundText.getCompoundDrawables()[2],
-                    mBackgroundText.getCompoundDrawables()[3]);
-            Drawable drawable = mBackgroundText.getCompoundDrawables()[0];
-            if (drawable instanceof AnimationDrawable) {
-                ((AnimationDrawable) drawable).start();
+            Drawable[] drawables = mBackgroundText.getCompoundDrawables();
+            if (drawables != null) {
+                mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(getLoader(),
+                        drawables[1],
+                        drawables[2],
+                        drawables[3]);
+                Drawable drawable = drawables[0];
+                if (drawable instanceof AnimationDrawable) {
+                    ((AnimationDrawable) drawable).start();
+                }
             }
             setFilterSwitcherState(false);
         }
