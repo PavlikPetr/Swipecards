@@ -259,18 +259,28 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         if (CacheProfile.canInvite && activity != null) {
             final SharedPreferences preferences = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
             needShowPopup = false;
+            final ContactsProvider.GetContactsHandler handler = new ContactsProvider.GetContactsHandler() {
+                @Override
+                public void onContactsReceived(ArrayList<ContactsProvider.Contact> contacts) {
+                    if (isAdded()) {
+                        showInvitePopup(contacts);
+                        needShowPopup = false;
+                    }
+                }
+            };
             new BackgroundThread() {
 
                 @Override
                 public void execute() {
-                    doInvitePopupActions(preferences, activity);
+                    doInvitePopupActions(preferences, activity, handler);
                 }
             };
 
         }
     }
 
-    private void doInvitePopupActions(SharedPreferences preferences, FragmentActivity activity) {
+    private void doInvitePopupActions(SharedPreferences preferences, FragmentActivity activity,
+                                      ContactsProvider.GetContactsHandler handler) {
         long date_start = preferences.getLong(INVITE_POPUP, 1);
         long date_now = new java.util.Date().getTime();
 
@@ -279,15 +289,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
             preferences.edit().putLong(INVITE_POPUP, date_now).commit();
             if (activity != null) {
                 ContactsProvider provider = new ContactsProvider(activity);
-                provider.getContacts(-1, 0, new ContactsProvider.GetContactsHandler() {
-                    @Override
-                    public void onContactsReceived(ArrayList<ContactsProvider.Contact> contacts) {
-                        if (isAdded()) {
-                            showInvitePopup(contacts);
-                            needShowPopup = false;
-                        }
-                    }
-                });
+                provider.getContacts(-1, 0, handler);
             }
         }
     }
