@@ -251,7 +251,7 @@
     <string name="general_premium_access_error">Для данной функции необходим VIP-статус</string>
 
     <string name="address_book_access_error">Это приложение не имеет доступа к вашим контактам. Вы можете разрешить доступ в настройках приватности вашего устройства</string>
-    
+
     <string name="general_search_null_response_error">Ничего не найдено. Попробуйте изменить фильтры</string>
     <string name="change_filters">Изменить фильтры</string>
     <string name="general_sex">Пол</string>
@@ -627,12 +627,12 @@
         <item quantity="many">Пригласите еще %d друзей</item>
         <item quantity="other">Пригласите еще %d друзей</item>
     </plurals>
-    
+
     <string name="general_bookmarks_add_short">В избранные</string>
     <string name="black_list_add_short">В черный список</string>
     <string name="general_complaint">Пожаловаться</string>
     <string name="general_type_complain">Тема жалобы</string>
-    
+
     <string name="confirm_email_for_dating">Мы против спама. Подтвердите свой почтовый адрес, чтобы знакомиться в Topface!</string>
     <string name="confirm">Подтвердить</string>
 
@@ -708,7 +708,6 @@
     <string name="skip_all">Пропустить всех</string>
     <string name="forget">Забыть</string>
 
-    <string name="watch_as_list">Посмотреть списком</string>
     <string name="watching_as_list">Смотреть списком</string>
     <string name="watching_sequentually">Смотреть последовательно</string>
     <string name="or_use_common_likes_list">Или просматривайте тех, кому вы понравились в общем списке</string>
@@ -754,4 +753,5 @@
     <string name="current_city">Текущий город</string>
     <string name="general_say_meow">Скажи Мяу</string>
     <string name="general_meow_offer">Сыграйте 3 раунда с друзьями и получите VIP статус на 2 дня</string>
+    <string name="general_bonus">Бонус</string>
 </resources>

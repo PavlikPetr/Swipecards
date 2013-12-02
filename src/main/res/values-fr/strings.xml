@@ -417,7 +417,7 @@
     <string name="invalid_contacts">Quelques contacts étaient incorrects. Veuillez envoyer des contacts corrects</string>
     <string name="general_choose_action">Choisissez l\'action</string>
     <plurals name="vip_status_period">
-        <item quantity="other">Vous avez reçu le statut VIP pour  %d jours</item>
+        <item quantity="other">Vous avez reçu le statut VIP pour %d jours</item>
         <item quantity="one">Vous avez reçu le statut VIP pour %d jour</item>
     </plurals>
     <plurals name="vip_status_period_btn">
@@ -527,7 +527,6 @@
     <string name="mutual_sympathies">Mutuellement</string>
     <string name="skip_all">Laisser passer tout</string>
     <string name="forget">Oublier</string>
-    <string name="watch_as_list">Regarder en frome d\'une liste</string>
     <string name="watching_as_list">Regarder en frome d\'une liste</string>
     <string name="watching_sequentually">Regarder simultanément</string>
     <string name="or_use_common_likes_list">Ou bien regardez ceux à qui vous avez plu dans la liste commune</string>

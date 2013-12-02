@@ -17,6 +17,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Display;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -298,9 +300,12 @@ public class Utils {
     public static boolean isIntentAvailable(Context context, String action) {
         final PackageManager packageManager = context.getPackageManager();
         final Intent intent = new Intent(action);
-        List<ResolveInfo> list =
-                packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-        return list.size() > 0;
+        if (packageManager != null) {
+            List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            return list.size() > 0;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -330,9 +335,10 @@ public class Utils {
     );
 
     public static boolean isValidEmail(CharSequence email) {
-        return email != null && EMAIL_ADDRESS_PATTERN.matcher(email).matches();
+        return !TextUtils.isEmpty(email) && EMAIL_ADDRESS_PATTERN.matcher(email).matches();
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public static void goToUrl(Context context, String url) {
         context.startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse(url)));
     }
@@ -379,7 +385,10 @@ public class Utils {
         if (mClientVersion == null) {
             try {
                 Context context = App.getContext();
-                mClientVersion = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+                PackageManager pManager = context.getPackageManager();
+                if (pManager != null) {
+                    mClientVersion = pManager.getPackageInfo(context.getPackageName(), 0).versionName;
+                }
             } catch (Exception e) {
                 Debug.error(e);
                 mClientVersion = AuthRequest.FALLBACK_CLIENT_VERSION;
@@ -414,6 +423,7 @@ public class Utils {
         keyboard.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public static int getPxFromDp(int pixels) {
         return (int) (mDensity * pixels);
     }
@@ -442,5 +452,16 @@ public class Utils {
 
     public static String capitalize(String line) {
         return Character.toUpperCase(line.charAt(0)) + line.substring(1);
+    }
+
+    public static String getText(EditText editText) {
+        if (editText == null) {
+            return Static.EMPTY;
+        }
+        Editable text = editText.getText();
+        if (text == null) {
+            return Static.EMPTY;
+        }
+        return text.toString();
     }
 }

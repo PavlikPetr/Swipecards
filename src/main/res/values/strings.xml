@@ -534,7 +534,6 @@
     <string name="mutual_sympathies">Mutual</string>
     <string name="skip_all">Skip all</string>
     <string name="forget">Forget</string>
-    <string name="watch_as_list">View a list of</string>
     <string name="watching_as_list">View a list of</string>
     <string name="watching_sequentually">View sequentially</string>
     <string name="or_use_common_likes_list">Or browse those that liked you in the common list</string>
@@ -575,4 +574,5 @@
     <string name="current_city">Current city</string>
     <string name="general_say_meow">Say Meow</string>
     <string name="general_meow_offer">Play 3 rounds with friends and get VIP status for 2 days</string>
+    <string name="general_bonus">Bonus</string>
 </resources>
