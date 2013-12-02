@@ -1,7 +1,8 @@
 package com.topface.topface.ui.settings;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,13 +13,9 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,7 +57,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
         View root = inflater.inflate(R.layout.fragment_feedback_message, null);
-
+        if (root == null) return null;
         // Navigation bar
         loadingLocker = (LockerView) root.findViewById(R.id.fbLoadingLocker);
 
@@ -104,10 +101,13 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
         try {
             PackageInfo pInfo;
-            pInfo = getActivity().getPackageManager().getPackageInfo(
-                    getActivity().getPackageName(), 0);
-            mReport.topface_version = pInfo.versionName;
-            mReport.topface_versionCode = pInfo.versionCode;
+            Activity activity = getActivity();
+            PackageManager pManager = activity.getPackageManager();
+            if (activity != null && pManager != null) {
+                pInfo = pManager.getPackageInfo(activity.getPackageName(), 0);
+                mReport.topface_version = pInfo.versionName;
+                mReport.topface_versionCode = pInfo.versionCode;
+            }
         } catch (NameNotFoundException e) {
             Debug.error(e);
         }
@@ -121,7 +121,9 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
     protected void restoreState() {
         super.restoreState();
         Bundle extras = getActivity().getIntent().getExtras();
-        mFeedbackType = extras.getInt(INTENT_FEEDBACK_TYPE, UNKNOWN);
+        if (extras != null) {
+            mFeedbackType = extras.getInt(INTENT_FEEDBACK_TYPE, UNKNOWN);
+        }
         switch (mFeedbackType) {
             case ERROR_MESSAGE:
                 mReport.subject = getResources().getString(R.string.settings_error_message_internal);
@@ -162,26 +164,15 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
     }
 
     private void initTextViews(View root, int feedbackType) {
-        final TextView emailTitle = (TextView) root.findViewById(R.id.tvEmailTitle);
         mEditEmail = (EditText) root.findViewById(R.id.edEmail);
-        final CheckBox emailSwitchLayout = (CheckBox) root.findViewById(R.id.loEmailSwitcher);
         mEditEmail.setInputType(InputType.TYPE_CLASS_TEXT);
         mEditEmail.setText(Settings.getInstance().getSocialAccountEmail());
-        LinearLayout emailContainer = (LinearLayout) root.findViewById(R.id.emailContainer);
-        TextView wantAnswerTv = (TextView) root.findViewById(R.id.wantAnswerTv);
         mTransactionIdEditText = (EditText) root.findViewById(R.id.edTransactionId);
         switch (feedbackType) {
             case DEVELOPERS_MESSAGE:
-                emailSwitchLayout.setChecked(true);
-                mReport.emailWanted = true;
-                mEditEmail.setVisibility(View.VISIBLE);
-                emailTitle.setVisibility(View.VISIBLE);
                 break;
             case PAYMENT_MESSAGE:
-                mReport.emailWanted = true;
-                mEditEmail.setVisibility(View.VISIBLE);
 //                emailTitle.setVisibility(View.VISIBLE);
-                emailContainer.setVisibility(View.GONE);
                 root.findViewById(R.id.tvTransactionIdTitle).setVisibility(View.VISIBLE);
                 mTransactionIdEditText.setVisibility(View.VISIBLE);
                 //TODO when link will be available
@@ -198,32 +189,8 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             case ERROR_MESSAGE:
             case COOPERATION_MESSAGE:
             case UNKNOWN:
-                emailSwitchLayout.setChecked(false);
                 break;
         }
-
-        emailSwitchLayout.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                emailSwitchLayout.doSwitch();
-                if (emailSwitchLayout.isChecked()) {
-                    mReport.emailWanted = true;
-                    mEditEmail.setVisibility(View.VISIBLE);
-                    emailTitle.setVisibility(View.VISIBLE);
-                } else {
-                    mReport.emailWanted = false;
-                    mEditEmail.setVisibility(View.GONE);
-                    emailTitle.setVisibility(View.GONE);
-                }
-            }
-        });
-
-        wantAnswerTv.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                emailSwitchLayout.performClick();
-            }
-        });
     }
 
     @Override
@@ -233,18 +200,18 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
 
     @Override
     protected void saveChanges(Handler handler) {
-        InputMethodManager imm = (InputMethodManager) getActivity().getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
-        String feedbackText = mEditText.getText().toString().trim();
+        Utils.hideSoftKeyboard(getActivity(), mEditText);
+        String feedbackText = Utils.getText(mEditText).trim();
 
         //Если текст сообщения пустой, то не отправляем сообщение
         if (TextUtils.isEmpty(feedbackText)) {
+            Toast.makeText(App.getContext(), R.string.empty_fields, Toast.LENGTH_LONG).show();
             return;
         }
 
-        if (emailConfirmed()) {
+        if (emailConfirmed(Utils.getText(mEditEmail))) {
             mReport.body = feedbackText;
-            mReport.transactionId = mTransactionIdEditText.getText().toString().trim();
+            mReport.transactionId = Utils.getText(mTransactionIdEditText).trim();
             prepareRequestSend();
             FeedbackReport feedbackRequest = new FeedbackReport(getActivity().getApplicationContext());
             feedbackRequest.subject = mReport.getSubject();
@@ -279,23 +246,17 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         }
     }
 
-    private boolean emailConfirmed() {
-        if (mReport.emailWanted) {
-            String email = mEditEmail.getText().toString();
-            if (Utils.isValidEmail(email)) {
-                mReport.email = email;
-                Settings.getInstance().setSocialAccountEmail(mReport.email);
-                return true;
-            } else {
-                return false;
-            }
-        } else {
+    private boolean emailConfirmed(String email) {
+        if (Utils.isValidEmail(email)) {
+            mReport.email = email;
+            Settings.getInstance().setSocialAccountEmail(mReport.email);
             return true;
+        } else {
+            return false;
         }
     }
 
     class Report {
-        boolean emailWanted = false;
         String email;
         String subject;
         String body = Static.EMPTY;
@@ -321,9 +282,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
         public String getExtra() {
             StringBuilder strBuilder = new StringBuilder();
 
-            if (emailWanted && email != null) {
-                strBuilder.append("<p>Email for answer: ").append(email).append(";</p>\n");
-            }
+            strBuilder.append("<p>Email for answer: ").append(email).append(";</p>\n");
             strBuilder.append("<p>Topface version: ").append(topface_version).append("/").append(topface_versionCode)
                     .append(";</p>\n");
             strBuilder.append("<p>Device: ").append(device).append("/").append(model).append(";</p>\n");

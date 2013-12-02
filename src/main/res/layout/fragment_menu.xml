@@ -219,10 +219,19 @@
                 android:layout_alignBaseline="@id/btnFragmentFans"
                 style="@style/Informer"/>
 
+        <!-- Bonus -->
+        <Button
+            android:id="@+id/btnFragmentBonus"
+            android:layout_below="@id/btnFragmentFans"
+            android:text="@string/general_bonus"
+            android:drawableLeft="@drawable/ic_bonus_1"
+            style="@style/LeftMenuButtons"
+            />
+
         <!-- Visitors -->
         <Button
                 android:id="@+id/btnFragmentVisitors"
-                android:layout_below="@id/btnFragmentFans"
+                android:layout_below="@id/btnFragmentBonus"
                 android:text="@string/general_visitors"
                 android:drawableLeft="@drawable/topface_guests_selector"
                 style="@style/LeftMenuButtons"

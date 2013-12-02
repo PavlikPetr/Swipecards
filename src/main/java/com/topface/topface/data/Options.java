@@ -154,6 +154,8 @@ public class Options extends AbstractData {
     public String gagTypeFullscreen = BannerBlock.BANNER_NONE;
     public String helpUrl;
 
+    public boolean bonusEnabled;
+
     public Options(IApiResponse data) {
         this(data.getJsonResult());
     }
@@ -192,9 +194,11 @@ public class Options extends AbstractData {
             block_chat_not_mutual = response.optBoolean("blockChatNotMutual");
 
             JSONObject contactsInvite = response.optJSONObject("inviteContacts");
-            premium_period = contactsInvite.optInt("premiumPeriod");
-            contacts_count = contactsInvite.optInt("contactsCount");
-            popup_timeout = contactsInvite.optInt("showPopupTimeout") * 60 * 60 * 1000;
+            if (contactsInvite != null) {
+                premium_period = contactsInvite.optInt("premiumPeriod");
+                contacts_count = contactsInvite.optInt("contactsCount");
+                popup_timeout = contactsInvite.optInt("showPopupTimeout") * 60 * 60 * 1000;
+            }
 
             if (response.has("premiumMessages")) {
                 premium_messages = new PremiumAirEntity(
@@ -236,6 +240,11 @@ public class Options extends AbstractData {
                 closing.limitSympathies = closingsObj.optInt("limitSympathies");
             }
 
+            JSONObject ratePopupObject = response.optJSONObject("ratePopup");
+            if (ratePopupType != null) {
+                ratePopupType = ratePopupObject.optString("type");
+            }
+            
             JSONObject blockSympathyObj = response.optJSONObject("blockSympathy");
             if (blockSympathy == null) blockSympathy = new BlockSympathy();
             if (blockSympathyObj != null) {
@@ -253,10 +262,16 @@ public class Options extends AbstractData {
             ratePopupType = response.optJSONObject("ratePopup").optString("type");
 
             JSONObject getJarJson = response.optJSONObject("getjar");
-            getJar = new GetJar(getJarJson.optString("id"), getJarJson.optString("name"), getJarJson.optLong("price"));
+            if (getJarJson != null) {
+                getJar = new GetJar(getJarJson.optString("id"), getJarJson.optString("name"), getJarJson.optLong("price"));
+            }
 
             gagTypeBanner = response.optString("gag_type_banner", BannerBlock.BANNER_ADMOB);
             gagTypeFullscreen = response.optString("gag_type_fullscreen", BannerBlock.BANNER_NONE);
+            JSONObject bonusObject = response.optJSONObject("bonus");
+            if (bonusObject != null) {
+                bonusEnabled = bonusObject.optBoolean("enabled");
+            }
 
             helpUrl = response.optString("helpUrl");
         } catch (Exception e) {
