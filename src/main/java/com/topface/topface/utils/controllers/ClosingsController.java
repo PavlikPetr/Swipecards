@@ -323,6 +323,8 @@ public class ClosingsController implements View.OnClickListener {
         // switch to DatingFragment after closings are passed
         MenuFragment.selectFragment(BaseFragment.FragmentId.F_DATING);
         mClosingsPassed = true;
+        mLikesClosingsActive = false;
+        mMutualClosingsActive = false;
     }
 
     public static void onLogout() {
