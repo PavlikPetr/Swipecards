@@ -343,9 +343,10 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
      *
      * @param usersList поиск
      */
-    public void addAndUpdateSignature(UsersList usersList) {
+    public boolean addAndUpdateSignature(UsersList usersList) {
         //noinspection unchecked
-        addAll(usersList);
+        boolean result = addAll(usersList);
         updateSignature();
+        return result;
     }
 }

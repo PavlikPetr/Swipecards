@@ -54,6 +54,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     private ProgressBar mProgressBar;
     private ImageSwitcher mImageSwitcher;
     private ImageButton mRetryBtn;
+    private View mControlsView;
 
     private UsersList<T> mUsersList;
     private PreloadManager<SearchUser> mPreloadManager;
@@ -153,13 +154,13 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
         if (resId != null) {
             ViewStub controlsStub = (ViewStub) root.findViewById(R.id.vsControls);
             controlsStub.setLayoutResource(getControlsLayoutResId());
-            initControls(controlsStub.inflate());
+            mControlsView = initControls(controlsStub.inflate());
         }
     }
 
     protected abstract void initTopPanel(View topPanelView);
 
-    protected abstract void initControls(View controlsView);
+    protected abstract View initControls(View controlsView);
 
     private void initActionBar() {
         refreshActionBarTitles();
@@ -175,7 +176,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     private void initImageSwitcher(View root) {
         ImageSwitcher imageSwitcher = getImageSwitcher(root);
         imageSwitcher.setOnPageChangeListener(getOnPageChangedListener());
-        imageSwitcher.setOnClickListener(getOnImgeSwitcherClickListener());
+        imageSwitcher.setOnClickListener(getOnImageSwitcherClickListener());
         imageSwitcher.setUpdateHandler(getUnlockControlsHandler());
     }
 
@@ -242,8 +243,17 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
 
     protected abstract void onPageSelected(int position);
 
-    public View.OnClickListener getOnImgeSwitcherClickListener() {
-        return null;
+    private View.OnClickListener getOnImageSwitcherClickListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mControlsView != null) {
+                    mControlsView.setVisibility(
+                            mControlsView.getVisibility() != View.VISIBLE ? View.VISIBLE : View.GONE
+                    );
+                }
+            }
+        };
     }
 
     public Handler getUnlockControlsHandler() {
@@ -299,7 +309,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                     if (data.size() != 0) {
                         if (!mDataReturnedOnce) onNotEmptyDataReturnedOnce();
                         getImageSwitcher().setVisibility(View.VISIBLE);
-                        usersList.addAndUpdateSignature(data);
+                        boolean usersAdded = usersList.addAndUpdateSignature(data);
                         //если список был пуст, то просто показываем нового пользователя
                         T currentUser = usersList.getCurrentUser();
                         //NOTE: Если в поиске никого нет, то мы показываем следующего юзера
@@ -310,11 +320,15 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                         //<code>if (!isAddition && mCurrentUser != currentUser || mCurrentUser == null)</code>
                         //Но возникает странный эффект, когда в поиске написано одно, а у юзера другое,
                         //В связи с чем, все работает так как работает
-                        if (currentUser != null && mCurrentUser != currentUser) {
-                            showUser(currentUser);
-                            unlockControls();
+                        if (usersAdded) {
+                            if (currentUser != null && mCurrentUser != currentUser) {
+                                showUser(currentUser);
+                                unlockControls();
+                            } else {
+                                showNextUser();
+                            }
                         } else {
-                            showNextUser();
+                            getProgressBar().setVisibility(View.GONE);
                         }
                         //Скрываем кнопку отправки повтора
                         mRetryBtn.setVisibility(View.GONE);

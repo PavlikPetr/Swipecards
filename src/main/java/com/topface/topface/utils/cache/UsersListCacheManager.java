@@ -1,9 +1,9 @@
 package com.topface.topface.utils.cache;
 
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import com.topface.topface.Static;
-import com.topface.topface.data.search.SearchUser;
 import com.topface.topface.data.search.UsersList;
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.Debug;
@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 /**
  * Created by kirussell on 14.11.13.
+ * Cache manager for UserList object
  */
 public class UsersListCacheManager extends PreferencesCacheManager{
 
@@ -53,7 +54,7 @@ public class UsersListCacheManager extends PreferencesCacheManager{
      * Note: commit will be called after
      * TODO hide editor object from outside code
      * @param editor editor
-     * @param usersList
+     * @param usersList users
      * @throws JSONException
      */
     protected void saveToCache(SharedPreferences.Editor editor, UsersList usersList) throws JSONException {
@@ -77,7 +78,7 @@ public class UsersListCacheManager extends PreferencesCacheManager{
     private UsersList parseCacheData(String cache) {
         UsersList usersList = null;
 
-        if (cache != null) {
+        if (cache != null && !TextUtils.isEmpty(cache)) {
             try {
                 usersList = new UsersList(new JSONObject(cache), mItemClass);
                 usersList.setSearchPosition(getPosition());
