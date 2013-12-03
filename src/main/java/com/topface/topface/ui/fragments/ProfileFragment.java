@@ -397,7 +397,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                     } else {
                         ((TextView) mBlocked.findViewById(R.id.blockTV)).setText(R.string.black_list_add_short);
                     }
-                    mRateController.setOnRateControllerUiListener(mRateControllerListener);
 
                     setProfile(data);
                     if (mHeaderMainFragment != null) {
@@ -857,9 +856,9 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             }
             if ((requestCode == AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA ||
                     requestCode == AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY) &&
-                    !((NavigationActivity)getActivity()).getDialogStarted()
+                    !((NavigationActivity) getActivity()).getDialogStarted()
                     ) {
-               mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
+                mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
             }
             resultToNestedFragments(requestCode, resultCode, data);
         } else if (resultCode == Activity.RESULT_CANCELED) {
@@ -938,24 +937,6 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         }
     }
 
-    RateController.OnRateControllerListener mRateControllerListener = new RateController.OnRateControllerListener() {
-        @Override
-        public void successRate() {
-            //TODO:
-//            mUserProfile.rated = true;
-//            mUserDelight.setEnabled(!mUser.rated);
-//            mUserMutual.setEnabled(!mUser.rated);
-        }
-
-        @Override
-        public void failRate() {
-            //TODO:
-//            mUserUser.rated = false;
-//            mUserDelight.setEnabled(!mUser.rated);
-//            mUserMutual.setEnabled(!mUser.rated);
-        }
-    };
-
 
     ProfileUpdater mProfileUpdater = new ProfileUpdater() {
         @Override
@@ -1021,6 +1002,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 return super.onOptionsItemSelected(item);
         }
     }
+
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
