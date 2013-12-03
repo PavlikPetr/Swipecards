@@ -665,7 +665,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         switch (codeError) {
             case ErrorCodes.PREMIUM_ACCESS_ONLY:
             case ErrorCodes.BLOCKED_SYMPATHIES:
-                onEmptyFeed();
+                onEmptyFeed(codeError);
                 return true;
             default:
                 mRetryView.setVisibility(View.VISIBLE);
@@ -760,17 +760,24 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     private View mInflated;
 
-    protected void onEmptyFeed() {
+    protected void onEmptyFeed(int errorCode) {
         ViewStub stub = getEmptyFeedViewStub();
         if (mInflated == null && stub != null) {
             mInflated = stub.inflate();
-            initEmptyFeedView(mInflated);
+            initEmptyFeedView(mInflated, errorCode);
         }
         if (mInflated != null) mInflated.setVisibility(View.VISIBLE);
         if (mBackgroundText != null) mBackgroundText.setVisibility(View.GONE);
     }
 
-    protected abstract void initEmptyFeedView(View inflated);
+    protected void onEmptyFeed() {
+        onEmptyFeed(ErrorCodes.RESULT_OK);
+    }
+
+    protected abstract void initEmptyFeedView(View inflated, int errorCode);
+    protected void initEmptyFeedView(View inflated){
+        initEmptyFeedView(inflated,ErrorCodes.RESULT_OK);
+    }
 
     protected abstract int getEmptyFeedLayout();
 
