@@ -102,8 +102,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
         View root = inflater.inflate(getLayout(), null);
-        if (root == null) return null;
-
         mContainer = (RelativeLayout) root.findViewById(R.id.feedContainer);
         initNavigationBar();
         mLockView = (LockerView) root.findViewById(R.id.llvFeedLoading);
@@ -245,14 +243,15 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         });
 
         mListAdapter = getNewAdapter();
-        getListAdapter().setOnAvatarClickListener(this);
+        FeedAdapter<T> adapter = getListAdapter();
+        adapter.setOnAvatarClickListener(this);
         //Пауза загрузки изображений при прокрутке списка
         mListView.setOnScrollListener(
                 new PauseOnScrollListener(
                         DefaultImageLoader.getInstance().getImageLoader(),
                         Static.PAUSE_DOWNLOAD_ON_SCROLL,
                         Static.PAUSE_DOWNLOAD_ON_FLING,
-                        getListAdapter()
+                        adapter
                 )
         );
 
@@ -261,7 +260,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         iv.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         mListView.getRefreshableView().addHeaderView(iv);
 
-        mListView.getRefreshableView().setAdapter(getListAdapter());
+        mListView.getRefreshableView().setAdapter(adapter);
         mListView.getRefreshableView().setOnItemClickListener(getOnItemClickListener());
         mListView.getRefreshableView().setOnTouchListener(getListViewOnTouchListener());
         mListView.getRefreshableView().setOnItemLongClickListener(getOnItemLongClickListener());
@@ -290,15 +289,16 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             @SuppressWarnings("unchecked")
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long itemPosition) {
-                if (getListAdapter().isMultiSelectionMode()) {
-                    getListAdapter().onSelection((int) itemPosition);
+                final FeedAdapter<T> adapter = getListAdapter();
+                if (adapter.isMultiSelectionMode()) {
+                    adapter.onSelection((int) itemPosition);
                 } else {
                     T item = (T) parent.getItemAtPosition(position);
                     if (item != null) {
                         if (!mIsUpdating && item.isRetrier()) {
                             updateUI(new Runnable() {
                                 public void run() {
-                                    getListAdapter().showLoaderItem();
+                                    adapter.showLoaderItem();
                                 }
                             });
                             updateData(false, true, false);
@@ -320,9 +320,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, final long itemPosition) {
                 if (isDeletable) {
+                    FeedAdapter<T> adapter = getListAdapter();
                     ((ActionBarActivity) getActivity()).startSupportActionMode(mActionActivityCallback);
-                    getListAdapter().startMultiSelection(getMultiSelectionLimit());
-                    getListAdapter().onSelection((int) itemPosition);
+                    adapter.startMultiSelection(getMultiSelectionLimit());
+                    adapter.onSelection((int) itemPosition);
                     return true;
                 }
                 return false;
@@ -339,13 +340,14 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mActionMode = mode;
-            getListAdapter().setMultiSelectionListener(new MultiselectionController.IMultiSelectionListener() {
+            FeedAdapter<T> adapter = getListAdapter();
+            adapter.setMultiSelectionListener(new MultiselectionController.IMultiSelectionListener() {
                 @Override
                 public void onSelected(int size) {
                     mActionMode.setTitle(Utils.getQuantityString(R.plurals.selected, size, size));
                 }
             });
-            getListAdapter().notifyDataSetChanged();
+            adapter.notifyDataSetChanged();
             menu.clear();
             getActivity().getMenuInflater().inflate(getContextMenuLayoutRes(), menu);
             return true;
@@ -359,24 +361,25 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             boolean result = true;
+            FeedAdapter<T> adapter = getListAdapter();
             switch (item.getItemId()) {
                 case R.id.delete_feed:
-                    onDeleteFeedItems(getListAdapter().getSelectedFeedIds(), getListAdapter().getSelectedItems());
+                    onDeleteFeedItems(adapter.getSelectedFeedIds(), adapter.getSelectedItems());
                     break;
                 case R.id.add_to_black_list:
-                    onAddToBlackList(getListAdapter().getSelectedUsersIds(), getListAdapter().getSelectedItems());
+                    onAddToBlackList(adapter.getSelectedUsersIds(), adapter.getSelectedItems());
                     break;
                 case R.id.delete_from_blacklist:
-                    onRemoveFromBlackList(getListAdapter().getSelectedUsersIds(), getListAdapter().getSelectedItems());
+                    onRemoveFromBlackList(adapter.getSelectedUsersIds(), adapter.getSelectedItems());
                     break;
                 case R.id.delete_from_bookmarks:
-                    onDeleteBookmarksItems(getListAdapter().getSelectedUsersIds(), getListAdapter().getSelectedItems());
+                    onDeleteBookmarksItems(adapter.getSelectedUsersIds(), adapter.getSelectedItems());
                     break;
                 case R.id.delete_dialogs:
-                    onDeleteDialogItems(getListAdapter().getSelectedUsersIds(), getListAdapter().getSelectedItems());
+                    onDeleteDialogItems(adapter.getSelectedUsersIds(), adapter.getSelectedItems());
                     break;
                 case R.id.delete_visitors:
-                    onDeleteVisitors(getListAdapter().getSelectedFeedIds(), getListAdapter().getSelectedItems());
+                    onDeleteVisitors(adapter.getSelectedFeedIds(), adapter.getSelectedItems());
                     break;
                 default:
                     result = false;
@@ -428,8 +431,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 .callback(new VipApiHandler() {
                     @Override
                     public void success(IApiResponse response) {
-                        if (getListAdapter() != null) {
-                            getListAdapter().removeItems(items);
+                        FeedAdapter<T> adapter = getListAdapter();
+                        if (adapter != null) {
+                            adapter.removeItems(items);
                         }
                     }
                 }).exec();
@@ -559,8 +563,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     public void onAvatarClick(T item, View view) {
         if (isAdded()) {
-            if (getListAdapter().isMultiSelectionMode()) {
-                getListAdapter().onSelection(item);
+            FeedAdapter<T> adapter = getListAdapter();
+            if (adapter.isMultiSelectionMode()) {
+                adapter.onSelection(item);
             } else {
                 startActivity(
                         ContainerActivity.getProfileIntent(item.user.id, item.id, getActivity())
@@ -569,28 +574,29 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         }
     }
 
-    protected void updateData(final boolean isPushUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {
+    protected void updateData(final boolean isPullToRefreshUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {
         if (isBlockOnClosing() && !CacheProfile.premium) {
             processErrors(ErrorCodes.PREMIUM_ACCESS_ONLY);
             return;
         }
         mIsUpdating = true;
-        onUpdateStart(isPushUpdating || isHistoryLoad);
+        onUpdateStart(isPullToRefreshUpdating || isHistoryLoad);
 
         FeedRequest request = getRequest();
         registerRequest(request);
 
-        FeedItem lastItem = getListAdapter().getLastFeedItem();
-        FeedItem firstItem = getListAdapter().getFirstItem();
+        final FeedAdapter<T> adapter = getListAdapter();
+        FeedItem lastItem = adapter.getLastFeedItem();
+        FeedItem firstItem = adapter.getFirstItem();
 
         if (isHistoryLoad && lastItem != null) {
             request.to = lastItem.id;
         }
-        if (isPushUpdating && firstItem != null) {
+        if (isPullToRefreshUpdating && firstItem != null) {
             request.from = firstItem.id;
         }
 
-        final int limit = mListAdapter.getLimit();
+        final int limit = adapter.getLimit();
         request.limit = limit;
         request.unread = isShowUnreadItemsSelected();
         request.callback(new DataApiHandler<FeedListData<T>>() {
@@ -602,23 +608,25 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
             @Override
             protected void success(FeedListData<T> data, IApiResponse response) {
+                FeedAdapter<T> adapter = getListAdapter();
                 if (isHistoryLoad) {
-                    getListAdapter().addData(data);
-                } else if (isPushUpdating) {
+                    adapter.addData(data);
+                } else if (isPullToRefreshUpdating) {
                     if (makeItemsRead) {
                         makeAllItemsRead();
                     }
                     if (data.items.size() > 0) {
-                        if (getListAdapter().getCount() >= limit) {
+                        if (adapter.getCount() >= limit) {
                             data.more = true;
                         }
-
-                        getListAdapter().addDataFirst(data);
+                        adapter.addDataFirst(data);
+                    } else {
+                        adapter.notifyDataSetChanged();
                     }
                 } else {
-                    getListAdapter().setData(data);
+                    adapter.setData(data);
                 }
-                onUpdateSuccess(isPushUpdating || isHistoryLoad);
+                onUpdateSuccess(isPullToRefreshUpdating || isHistoryLoad);
                 mListView.onRefreshComplete();
                 mListView.setVisibility(View.VISIBLE);
                 mIsUpdating = false;
@@ -629,7 +637,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                 Activity activity = getActivity();
                 if (activity != null) {
                     if (isHistoryLoad) {
-                        getListAdapter().showRetryItem();
+                        adapter.showRetryItem();
                     }
 
                     //Если ошибки обработаны на уровне фрагмента,
@@ -637,7 +645,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                     if (!processErrors(codeError)) {
                         Utils.showErrorMessage(activity);
                     }
-                    onUpdateFail(isPushUpdating || isHistoryLoad);
+                    onUpdateFail(isPullToRefreshUpdating || isHistoryLoad);
                     mListView.onRefreshComplete();
                     mIsUpdating = false;
                 }
@@ -857,10 +865,11 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     private void makeItemReadWithId(String id) {
-        for (FeedItem item : getListAdapter().getData()) {
+        FeedAdapter<T> adapter = getListAdapter();
+        for (FeedItem item : adapter.getData()) {
             if (TextUtils.equals(item.id, id) && item.unread) {
                 item.unread = false;
-                getListAdapter().notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
             }
         }
     }

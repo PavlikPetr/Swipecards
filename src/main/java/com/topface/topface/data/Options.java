@@ -260,6 +260,11 @@ public class Options extends AbstractData {
             }
 
             ratePopupType = response.optJSONObject("ratePopup").optString("type");
+            //TODO clarify parameter: timeout
+             JSONObject ratePopupObject = response.optJSONObject("ratePopup");
+            if (ratePopupType != null) {
+                ratePopupType = ratePopupObject.optString("type");
+            }
 
             JSONObject getJarJson = response.optJSONObject("getjar");
             if (getJarJson != null) {
