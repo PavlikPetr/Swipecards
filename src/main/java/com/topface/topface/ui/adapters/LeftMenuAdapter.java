@@ -36,7 +36,8 @@ public class LeftMenuAdapter extends BaseAdapter {
         @Override
         public void onClick(View v) {
             if (mMenuFragment != null) {
-                mMenuFragment.showClosingsDialog();
+                BaseFragment.FragmentId id = (BaseFragment.FragmentId) v.getTag();
+                mMenuFragment.showClosingsDialog(id);
             }
         }
     };
