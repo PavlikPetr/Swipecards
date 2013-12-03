@@ -78,7 +78,7 @@ public class UsersListCacheManager extends PreferencesCacheManager{
     private UsersList parseCacheData(String cache) {
         UsersList usersList = null;
 
-        if (cache != null && !TextUtils.isEmpty(cache)) {
+        if (!TextUtils.isEmpty(cache)) {
             try {
                 usersList = new UsersList(new JSONObject(cache), mItemClass);
                 usersList.setSearchPosition(getPosition());
