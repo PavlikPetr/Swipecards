@@ -84,7 +84,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
-    protected void initEmptyFeedView(View inflated) {
+    protected void initEmptyFeedView(View inflated, int errorCode) {
         inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

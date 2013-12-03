@@ -73,7 +73,7 @@ public class BlackListFragment extends FeedFragment<BlackListItem> implements Vi
     }
 
     @Override
-    protected void initEmptyFeedView(View inflated) {
+    protected void initEmptyFeedView(View inflated, int errorCode) {
     }
 
     @Override

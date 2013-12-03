@@ -543,7 +543,7 @@ public class Options extends AbstractData {
     }
 
     public static class GetJar {
-        String id = "unknown";
+        String id = Static.UNKNOWN;
         String name = "coins";
         long price = Integer.MAX_VALUE;
 
@@ -571,7 +571,7 @@ public class Options extends AbstractData {
         public String text = Static.EMPTY;
         public String buttonText = Static.EMPTY;
         public boolean showPhotos = true;
-        public String group;
+        public String group = Static.UNKNOWN;
         public int price = 0;
 
         public BlockSympathy() {

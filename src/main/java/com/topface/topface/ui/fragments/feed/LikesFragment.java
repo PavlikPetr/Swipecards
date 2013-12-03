@@ -109,12 +109,12 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
-    protected void initEmptyFeedView(final View inflated) {
+    protected void initEmptyFeedView(final View inflated, int errorCode) {
         if (mEmptyFeedView == null) mEmptyFeedView = inflated;
         ViewFlipper viewFlipper = (ViewFlipper) inflated.findViewById(R.id.vfEmptyViews);
         if (CacheProfile.premium) {
             final Options.BlockSympathy blockSympathyOptions = CacheProfile.getOptions().blockSympathy;
-            if (blockSympathyOptions.enabled) {
+            if (blockSympathyOptions.enabled && errorCode == ErrorCodes.BLOCKED_SYMPATHIES) {
                 initEmptyScreenOnBlockedLikes(inflated, viewFlipper, blockSympathyOptions);
             } else {
                 initEmptyScreenWithoutLikes(viewFlipper);
