@@ -244,7 +244,7 @@ public class Options extends AbstractData {
             if (ratePopupType != null) {
                 ratePopupType = ratePopupObject.optString("type");
             }
-            
+
             JSONObject blockSympathyObj = response.optJSONObject("blockSympathy");
             if (blockSympathy == null) blockSympathy = new BlockSympathy();
             if (blockSympathyObj != null) {
@@ -257,13 +257,6 @@ public class Options extends AbstractData {
                     blockSympathy.group = settingsBlock.optString("group");
                     blockSympathy.price = settingsBlock.optInt("price");
                 }
-            }
-
-            ratePopupType = response.optJSONObject("ratePopup").optString("type");
-            //TODO clarify parameter: timeout
-             JSONObject ratePopupObject = response.optJSONObject("ratePopup");
-            if (ratePopupType != null) {
-                ratePopupType = ratePopupObject.optString("type");
             }
 
             JSONObject getJarJson = response.optJSONObject("getjar");
