@@ -465,8 +465,12 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
     }
 
     public void showClosingsDialog() {
+        showClosingsDialog(mSelectedFragment);
+    }
+
+    public void showClosingsDialog(FragmentId selectedFragment) {
         if (ClosingsBuyVipDialog.opened) return;
-        ClosingsBuyVipDialog newFragment = ClosingsBuyVipDialog.newInstance(mSelectedFragment);
+        ClosingsBuyVipDialog newFragment = ClosingsBuyVipDialog.newInstance(selectedFragment);
         newFragment.setOnRespondToLikesListener(new ClosingsBuyVipDialog.IRespondToLikesListener() {
             @Override
             public void onRespondToLikes() {

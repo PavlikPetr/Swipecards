@@ -16,7 +16,6 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SkipAllClosedRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.controllers.ClosingsController;
 
@@ -43,7 +42,7 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
     }
 
     @Override
-    protected void initControls(View controlsView) {
+    protected View initControls(View controlsView) {
         controlsView.findViewById(R.id.btnForget).setOnClickListener(this);
         mBtnSkipAll = controlsView.findViewById(R.id.btnSkipAll);
         mBtnSkipAll.setOnClickListener(this);
@@ -55,6 +54,7 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
         controlsView.findViewById(R.id.btnChat).setOnClickListener(this);
         mUserName = (TextView) controlsView.findViewById(R.id.tvUserName);
         mUserCity = (TextView) controlsView.findViewById(R.id.tvUserCity);
+        return controlsView;
     }
 
     @Override

@@ -86,6 +86,7 @@ public class QuickMessageFragment extends BaseFragment implements View.OnClickLi
     }
 
     private boolean sendMessage() {
+        Utils.hideSoftKeyboard(getActivity(), mEditBox);
         final Editable editText = mEditBox.getText();
         final String editString = editText == null ? "" : editText.toString();
         if (editText == null || TextUtils.isEmpty(editString.trim()) || mUserId == 0) {

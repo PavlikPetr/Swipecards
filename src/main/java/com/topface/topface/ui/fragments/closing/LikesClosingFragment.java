@@ -64,7 +64,7 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     }
 
     @Override
-    protected void initControls(View controlsView) {
+    protected View initControls(View controlsView) {
         controlsView.findViewById(R.id.btnSkip).setOnClickListener(this);
         controlsView.findViewById(R.id.btnSkipAll).setOnClickListener(this);
         View btnSkipAll = controlsView.findViewById(R.id.btnSkipAll);
@@ -76,6 +76,7 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
         controlsView.findViewById(R.id.btnChat).setOnClickListener(this);
         mUserName = (TextView) controlsView.findViewById(R.id.tvUserName);
         mUserCity = (TextView) controlsView.findViewById(R.id.tvUserCity);
+        return controlsView;
     }
 
     @Override
