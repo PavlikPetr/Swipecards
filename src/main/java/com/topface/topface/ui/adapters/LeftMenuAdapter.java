@@ -176,7 +176,7 @@ public class LeftMenuAdapter extends BaseAdapter {
         } else {
             holder.mBtnMenu.setOnClickListener(mDisabledItemClickListener);
             setAlphaToTextAndDrawable(holder.mBtnMenu, 102);
-            holder.mBtnMenu.setSelected(false);
+            holder.mBtnMenu.setSelected(mMenuFragment.getCurrentFragmentId() == item.getMenuId());
         }
 
         if (item.isHidden()) {
