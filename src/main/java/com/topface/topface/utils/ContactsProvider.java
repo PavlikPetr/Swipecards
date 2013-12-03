@@ -3,6 +3,8 @@ package com.topface.topface.utils;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.ContactsContract;
@@ -13,15 +15,15 @@ public class ContactsProvider {
 
     private final Context ctx;
     private ArrayList<Contact> contacts;
-    private GetContactsListener listener;
+    private GetContactsHandler handler;
 
     public ContactsProvider(Context ctx) {
         this.ctx = ctx;
         contacts = new ArrayList<Contact>();
     }
 
-    public void getContacts(final int limit, final int offset, GetContactsListener listener) {
-        this.listener = listener;
+    public void getContacts(final int limit, final int offset, GetContactsHandler handler) {
+        this.handler = handler;
         new BackgroundThread() {
             @Override
             public void execute() {
@@ -47,37 +49,41 @@ public class ContactsProvider {
                 String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                 String email = "";
                 Cursor emailCur = cr.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, null, ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ? ", new String[]{String.valueOf(id)}, null);
-                if (emailCur.getCount() > 0) {
-                    emailCur.moveToFirst();
-                    email = emailCur.getString(emailCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+                if (emailCur != null) {
+                    if (emailCur.getCount() > 0) {
+                        emailCur.moveToFirst();
+                        email = emailCur.getString(emailCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+                    }
+                    emailCur.close();
                 }
-                emailCur.close();
-                if (!email.equals("")) {
+                if (email != null && !email.equals("")) {
                     contacts.add(new Contact(name, email, true));
                 } else {
                     Cursor phoneCursor = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{String.valueOf(id)}, null);
-                    if (phoneCursor.getCount() > 0) {
-                        phoneCursor.moveToNext();
-                        Contact contact = new Contact(name, getContactFromCursor(phoneCursor), false);
-                        while (!phoneCursor.isLast()) {
+                    if (phoneCursor != null) {
+                        if (phoneCursor.getCount() > 0) {
                             phoneCursor.moveToNext();
-                            int isPrimary = phoneCursor.getInt(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.IS_SUPER_PRIMARY));
-                            if (isPrimary > 0) {
-                                String phone = getContactFromCursor(phoneCursor);
-                                contact = new Contact(name, phone, false);
-                                break;
+                            Contact contact = new Contact(name, getContactFromCursor(phoneCursor), false);
+                            while (!phoneCursor.isLast()) {
+                                phoneCursor.moveToNext();
+                                int isPrimary = phoneCursor.getInt(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.IS_SUPER_PRIMARY));
+                                if (isPrimary > 0) {
+                                    String phone = getContactFromCursor(phoneCursor);
+                                    contact = new Contact(name, phone, false);
+                                    break;
+                                }
                             }
+                            contacts.add(contact);
                         }
-                        contacts.add(contact);
+                        phoneCursor.close();
                     }
-                    phoneCursor.close();
                 }
             }
 
         }
         cur.close();
 
-        listener.onContactsReceived(contacts);
+        handler.sendContacts(contacts);
     }
 
     private String getContactFromCursor(Cursor cursor) {
@@ -103,7 +109,7 @@ public class ContactsProvider {
         private Contact(Parcel in) {
             name = in.readString();
             phone = in.readString();
-            email = in.readInt() == 1? true:false;
+            email = in.readInt() == 1;
         }
 
         public String getName() {
@@ -152,8 +158,25 @@ public class ContactsProvider {
 
     }
 
-    public interface GetContactsListener {
-        public void onContactsReceived(ArrayList<Contact> contacts);
+    public static abstract class GetContactsHandler extends Handler{
+
+        private ArrayList<Contact> mContacts;
+
+        public GetContactsHandler() {
+        }
+
+        protected void sendContacts(ArrayList<Contact> contacts) {
+            mContacts = contacts;
+            sendMessage(new Message());
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            onContactsReceived(mContacts);
+        }
+
+        public abstract void onContactsReceived(ArrayList<Contact> contacts);
     }
 
 }

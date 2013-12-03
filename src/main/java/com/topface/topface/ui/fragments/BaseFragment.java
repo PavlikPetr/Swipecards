@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 
 import com.google.analytics.tracking.android.EasyTracker;
@@ -61,6 +62,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public static final int F_BOOKMARKS = 1009;
     public static final int F_FANS = 1010;
     public static final int F_ADMIRATIONS = 1011;
+    public static final int F_BONUS = 1012;
 
     public static final int F_EDITOR = 9999;
 
@@ -257,18 +259,28 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         if (CacheProfile.canInvite && activity != null) {
             final SharedPreferences preferences = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
             needShowPopup = false;
+            final ContactsProvider.GetContactsHandler handler = new ContactsProvider.GetContactsHandler() {
+                @Override
+                public void onContactsReceived(ArrayList<ContactsProvider.Contact> contacts) {
+                    if (isAdded()) {
+                        showInvitePopup(contacts);
+                        needShowPopup = false;
+                    }
+                }
+            };
             new BackgroundThread() {
 
                 @Override
                 public void execute() {
-                    doInvitePopupActions(preferences, activity);
+                    doInvitePopupActions(preferences, activity, handler);
                 }
             };
 
         }
     }
 
-    private void doInvitePopupActions(SharedPreferences preferences, FragmentActivity activity) {
+    private void doInvitePopupActions(SharedPreferences preferences, FragmentActivity activity,
+                                      ContactsProvider.GetContactsHandler handler) {
         long date_start = preferences.getLong(INVITE_POPUP, 1);
         long date_now = new java.util.Date().getTime();
 
@@ -277,15 +289,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
             preferences.edit().putLong(INVITE_POPUP, date_now).commit();
             if (activity != null) {
                 ContactsProvider provider = new ContactsProvider(activity);
-                provider.getContacts(-1, 0, new ContactsProvider.GetContactsListener() {
-                    @Override
-                    public void onContactsReceived(ArrayList<ContactsProvider.Contact> contacts) {
-                        if (isAdded()) {
-                            showInvitePopup(contacts);
-                            needShowPopup = false;
-                        }
-                    }
-                });
+                provider.getContacts(-1, 0, handler);
             }
         }
     }
@@ -322,8 +326,16 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     protected void setSupportProgressBarIndeterminateVisibility(boolean visible) {
         Activity activity = getActivity();
-        if (activity instanceof ActionBarActivity) {
-            ((ActionBarActivity) activity).setSupportProgressBarIndeterminateVisibility(visible);
+
+        if (activity instanceof BaseFragmentActivity) {
+            // use overriden setSupportProgressBarIndeterminateVisibility from BaseFragmentActivity
+            ((BaseFragmentActivity) activity).setSupportProgressBarIndeterminateVisibility(visible);
+        } else if (activity instanceof ActionBarActivity) {
+            // check support of indeterminate progress bar
+            ActionBarActivity abActivity = (ActionBarActivity) activity;
+            if (abActivity.supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS)) {
+                abActivity.setSupportProgressBarIndeterminate(visible);
+            }
         }
     }
 

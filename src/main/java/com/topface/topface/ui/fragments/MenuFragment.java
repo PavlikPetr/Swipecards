@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.data.GooglePlayProducts;
@@ -52,6 +53,7 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.http.ProfileBackgrounds;
+import com.topface.topface.utils.offerwalls.Offerwalls;
 
 public class MenuFragment extends BaseFragment implements View.OnClickListener {
 
@@ -240,8 +242,13 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
         buttons.put(BaseFragment.F_DIALOGS, (Button) rootLayout.findViewById(R.id.btnFragmentDialogs));
         buttons.put(BaseFragment.F_FANS, (Button) rootLayout.findViewById(R.id.btnFragmentFans));
         buttons.put(BaseFragment.F_VISITORS, (Button) rootLayout.findViewById(R.id.btnFragmentVisitors));
+        buttons.put(BaseFragment.F_BONUS, (Button) rootLayout.findViewById(R.id.btnFragmentBonus));
         buttons.put(BaseFragment.F_BOOKMARKS, (Button) rootLayout.findViewById(R.id.btnFragmentBookmarks));
         buttons.put(BaseFragment.F_EDITOR, (Button) rootLayout.findViewById(R.id.btnEditor));
+
+        if (!CacheProfile.getOptions().bonusEnabled) {
+            rootLayout.findViewById(R.id.btnFragmentBonus).setVisibility(View.GONE);
+        }
 
         //Устанавливаем теги и листенеры на кнопки
         for (int i = 0; i < buttons.size(); i++) {
@@ -271,9 +278,14 @@ public class MenuFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         if (mClickable) {
-            unselectAllButtons();
-            view.setSelected(true);
-            switchFragment((Integer) view.getTag());
+            if ((Integer)view.getTag() == BaseFragment.F_BONUS) {
+                Offerwalls.startOfferwall(getActivity());
+                EasyTracker.getTracker().sendEvent("BonusPage", "Click", "", 0L);
+            } else {
+                unselectAllButtons();
+                view.setSelected(true);
+                switchFragment((Integer) view.getTag());
+            }
         }
     }
 
