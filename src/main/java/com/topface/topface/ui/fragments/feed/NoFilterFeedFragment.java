@@ -12,7 +12,7 @@ public abstract class NoFilterFeedFragment<T extends FeedItem> extends FeedFragm
     }
 
     @Override
-    protected final boolean isShowUnreadItems() {
+    protected final boolean isShowUnreadItemsSelected() {
         //Данный фрагмент оперирует только прочитаными элементами ленты, здесь нет поддержки фильтра
         return false;
     }

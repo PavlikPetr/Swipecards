@@ -592,7 +592,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
         final int limit = mListAdapter.getLimit();
         request.limit = limit;
-        request.unread = isShowUnreadItems();
+        request.unread = isShowUnreadItemsSelected();
         request.callback(new DataApiHandler<FeedListData<T>>() {
 
             @Override
@@ -678,7 +678,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
         return mListAdapter;
     }
 
-    protected boolean isShowUnreadItems() {
+    protected boolean isShowUnreadItemsSelected() {
         return mDoubleButton != null && mDoubleButton.isRightButtonChecked();
     }
 
