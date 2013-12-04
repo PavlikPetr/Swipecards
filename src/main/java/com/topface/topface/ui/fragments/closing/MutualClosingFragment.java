@@ -5,16 +5,12 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.FeedUser;
-import com.topface.topface.requests.DeleteMutualsRequest;
 import com.topface.topface.requests.FeedRequest;
-import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SkipAllClosedRequest;
-import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.controllers.ClosingsController;
@@ -43,7 +39,6 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
 
     @Override
     protected View initControls(View controlsView) {
-        controlsView.findViewById(R.id.btnForget).setOnClickListener(this);
         mBtnSkipAll = controlsView.findViewById(R.id.btnSkipAll);
         mBtnSkipAll.setOnClickListener(this);
         if (CacheProfile.unread_mutual > CacheProfile.getOptions().closing.limitMutual) {
@@ -91,25 +86,7 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btnForget:
-                EasyTracker.getTracker().sendEvent(getTrackName(), "Forget", "", 1L);
-                FeedUser user = getCurrentUser();
-                if (user != null) {
-                    DeleteMutualsRequest deleteRequest = new DeleteMutualsRequest(user.feedItemId, getActivity());
-                    deleteRequest.callback(new SimpleApiHandler() {
-                        @Override
-                        public void always(IApiResponse response) {
-                            if(isAdded()) refreshActionBarTitles();
-                        }
-                    });
-                    deleteRequest.exec();
-                }
-                showNextUser();
-                break;
-            default:
-                super.onClick(v);
-        }
+        super.onClick(v);
     }
 
     @Override
@@ -129,11 +106,6 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
     @Override
     protected int getSkipAllRequestType() {
         return SkipAllClosedRequest.MUTUAL;
-    }
-
-    @Override
-    protected boolean alowSkipForNonPremium() {
-        return false;
     }
 
     @Override

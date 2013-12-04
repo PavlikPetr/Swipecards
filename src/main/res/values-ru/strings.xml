@@ -769,7 +769,7 @@
     <string name="pincode_dont_match">PIN-коды не совпали. Повторите попытку.</string>
     <string name="pincode_wrong">Неверный PIN-код</string>
     <string name="pincode_input">Введите PIN-код</string>
-    <string name="pincode_input-previous">Введите старый PIN-код</string>
+    <string name="pincode_input_previous">Введите старый PIN-код</string>
     <string name="pincode_repeat">Повторите PIN-код</string>
     <string name="pincode_forget">Забыли PIN-код?</string>
     <string name="pincode_auth_input">Вам необходимо ввести логин и пароль.</string>
