@@ -3,6 +3,7 @@ package com.topface.topface.requests.handlers;
 /**
  * Error codes
  */
+@SuppressWarnings("unused")
 public class ErrorCodes {
     /**
      * Возможные ошибки запросов (если >= 0, то это серверная ошиба, если < 0, то это внутренняя ошибка
@@ -28,7 +29,7 @@ public class ErrorCodes {
     public static final int DETECT_FLOOD = 11;
     public static final int INCORRECT_PHOTO_URL = 12;
     public static final int DEFAULT_ERO_PHOTO = 13;
-    public static final int PAYMENT = 14;
+    public static final int PAYMENT = 14; // not enough coins
     public static final int INCORRECT_VOTE = 15;
     public static final int INVALID_TRANSACTION = 16;
     public static final int INVALID_PRODUCT = 17;
@@ -67,6 +68,7 @@ public class ErrorCodes {
     public static final int ALREADY_AWARDED = 52;
     public static final int UNCONFIRMED_LOGIN = 53;
     public static final int USER_DELETED = 54;
+    public static final int BLOCKED_SYMPATHIES = 57;
     // local
     public static final int NULL_RESPONSE = 100;
     public static final int WRONG_RESPONSE = 101;

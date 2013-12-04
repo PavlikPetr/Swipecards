@@ -574,5 +574,6 @@
     <string name="current_city">Current city</string>
     <string name="general_say_meow">Say Meow</string>
     <string name="general_meow_offer">Play 3 rounds with friends and get VIP status for 2 days</string>
+    <string name="not_enough_coins">Not enough coins to purchase</string>
     <string name="general_bonus">Bonus</string>
 </resources>

@@ -18,7 +18,6 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.AirManager;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 
 public class AdmirationFragment extends LikesFragment{
@@ -54,7 +53,7 @@ public class AdmirationFragment extends LikesFragment{
     }
 
     @Override
-    protected void initEmptyFeedView(View inflated) {
+    protected void initEmptyFeedView(View inflated, int errorCode) {
         if (mEmptyFeedView == null) mEmptyFeedView = inflated;
         if (CacheProfile.premium) {
             ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(0);

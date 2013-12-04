@@ -753,5 +753,6 @@
     <string name="current_city">Текущий город</string>
     <string name="general_say_meow">Скажи Мяу</string>
     <string name="general_meow_offer">Сыграйте 3 раунда с друзьями и получите VIP статус на 2 дня</string>
+    <string name="not_enough_coins">Недостаточно монет для покупки</string>
     <string name="general_bonus">Бонус</string>
 </resources>
