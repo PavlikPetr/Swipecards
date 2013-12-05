@@ -825,14 +825,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             mBackgroundText.setText(R.string.general_dialog_loading);
             Drawable[] drawables = mBackgroundText.getCompoundDrawables();
             if (drawables != null) {
-                mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(getLoader(),
+                AnimationDrawable drawable = getLoader();
+                mBackgroundText.setCompoundDrawablesWithIntrinsicBounds(drawable,
                         drawables[1],
                         drawables[2],
                         drawables[3]);
-                Drawable drawable = drawables[0];
-                if (drawable instanceof AnimationDrawable) {
-                    ((AnimationDrawable) drawable).start();
-                }
+                 drawable.start();
             }
             setFilterSwitcherState(false);
         }
