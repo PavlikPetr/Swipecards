@@ -334,7 +334,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 break;
             case R.id.loVibration:
                 mSwitchVibration.doSwitch();
-                mSettings.setSetting(Settings.SETTINGS_C2DM_VIBRATION, mSwitchVibration.isChecked());
+                mSettings.setSetting(Settings.SETTINGS_GCM_VIBRATION, mSwitchVibration.isChecked());
                 break;
             case R.id.loMelody:
                 intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
@@ -482,11 +482,11 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     }
 
     private void setRingtonNameByUri(Uri uri) {
-        String ringtoneName= getActivity().getString(R.string.silent_ringtone);
+        String ringtoneName = getActivity().getString(R.string.silent_ringtone);
         if (uri != null) {
             Cursor mCursor = null;
             try {
-                 mCursor = getActivity().getContentResolver().query(uri, null, null, null, null);
+                mCursor = getActivity().getContentResolver().query(uri, null, null, null, null);
 
                 if (mCursor.moveToFirst()) {
                     if (mCursor.getColumnIndex("title") >= 0) {
@@ -505,7 +505,7 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         //TODO 2 settings and Settings.NOTIFICATION_MELODY is never used???
         mSettings.setSetting(Settings.NOTIFICATION_MELODY, ringtoneName);
         melodyName.setText(ringtoneName);
-        mSettings.setSetting(Settings.SETTINGS_C2DM_RINGTONE, uri == null ? Settings.SILENT : uri.toString());
+        mSettings.setSetting(Settings.SETTINGS_GCM_RINGTONE, uri == null ? Settings.SILENT : uri.toString());
     }
 
     @Override

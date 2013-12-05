@@ -23,10 +23,10 @@ import com.topface.topface.utils.social.AuthorizationManager;
 public class Settings {
     public static final String SILENT = "silent";
     private static Settings mInstance;
-    public static final String SETTINGS_C2DM_RINGTONE = "settings_c2dm_ringtone";
+    public static final String SETTINGS_GCM_RINGTONE = "settings_c2dm_ringtone";
     public static final String NOTIFICATION_MELODY = "notification_melody";
-    public static final String SETTINGS_C2DM_VIBRATION = "settings_c2dm_vibration";
-    public static final String SETTINGS_C2DM = "settings_c2dm";
+    public static final String SETTINGS_GCM_VIBRATION = "settings_c2dm_vibration";
+    public static final String SETTINGS_GCM = "settings_c2dm";
     public static final String DEFAULT_SOUND = "DEFAULT_SOUND";
 
     public static final String SETTINGS_SOCIAL_ACCOUNT_NAME = "social_account_name";
@@ -133,19 +133,19 @@ public class Settings {
     }
 
     public Uri getRingtone() {
-        if (mSettings.getString(SETTINGS_C2DM_RINGTONE, DEFAULT_SOUND).equals(SILENT)) {
+        if (mSettings.getString(SETTINGS_GCM_RINGTONE, DEFAULT_SOUND).equals(SILENT)) {
             return null;
         }
-        String ringtone = mSettings.getString(SETTINGS_C2DM_RINGTONE, DEFAULT_SOUND);
+        String ringtone = mSettings.getString(SETTINGS_GCM_RINGTONE, DEFAULT_SOUND);
         return ringtone.equals(DEFAULT_SOUND) ? RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) : Uri.parse(ringtone);
     }
 
     public Boolean isVibrationEnabled() {
-        return mSettings.getBoolean(SETTINGS_C2DM_VIBRATION, true);
+        return mSettings.getBoolean(SETTINGS_GCM_VIBRATION, true);
     }
 
     public boolean isNotificationEnabled() {
-        return mSettings.getBoolean(SETTINGS_C2DM, true);
+        return mSettings.getBoolean(SETTINGS_GCM, true);
     }
 
     public void resetSettings() {

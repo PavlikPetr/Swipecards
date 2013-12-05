@@ -23,6 +23,7 @@ import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
+import com.topface.topface.utils.Settings;
 import com.topface.topface.utils.TopfaceNotificationManager;
 import com.topface.topface.utils.Utils;
 
@@ -30,21 +31,15 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.*;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_LIKES;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_MUTUAL;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_VISITORS;
 
 public class GCMUtils {
     public static final String GCM_NOTIFICATION = "com.topface.topface.action.NOTIFICATION";
@@ -84,7 +79,7 @@ public class GCMUtils {
                     public void execute() {
                         if (GCMRegistrar.isRegistered(context)) {
                             final String regId = GCMRegistrar.getRegistrationId(context);
-                            Debug.log("Already registered, regID is " + regId);
+                            Debug.log("GCM: Already registered, regID is " + regId);
 
                             //Если на сервере не зарегистрированы, отправляем запрос
                             if (!GCMRegistrar.isRegisteredOnServer(context)) {
@@ -95,14 +90,14 @@ public class GCMUtils {
 
                         } else {
                             GCMRegistrar.register(context, GCMIntentService.SENDER_ID);
-                            Debug.log("Registered: " + GCMRegistrar.getRegistrationId(context));
+                            Debug.log("GCM: Registered: " + GCMRegistrar.getRegistrationId(context));
                         }
                     }
                 };
 
             } catch (Exception ex) {
                 GCM_SUPPORTED = false;
-                Debug.error("GCM not supported", ex);
+                Debug.error("GCM: GCM not supported", ex);
             }
         }
     }
@@ -112,13 +107,33 @@ public class GCMUtils {
      *
      * @param context контекст приложения
      */
-    public static void showNotification(final Intent extra, Context context) {
+    public static boolean showNotification(@NotNull final Intent extra, Context context) {
+        boolean result = false;
+        //Проверяем, не отключены ли уведомления
+        if (!Settings.getInstance().isNotificationEnabled()) {
+            Debug.log("GCM: notification is disabled");
+            return false;
+        } else if (extra == null) {
+            Debug.log("GCM: intent is null");
+            return false;
+        }
         try {
+            String uid = Integer.toString(CacheProfile.uid);
+            String targetUserId = extra.getStringExtra("receiver");
+            targetUserId = targetUserId != null ? targetUserId : uid;
+
+            //Проверяем id адресата GCM, что бы не показывать уведомления, предназначенные
+            //другому пользователю. Такое может произойти, если не было нормального разлогина,
+            //например если удалить приложения будучи залогиненым
+            if (!TextUtils.equals(targetUserId, uid)) {
+                Debug.error("GCM: target id # " + targetUserId + " dont equal current user id " + CacheProfile.uid);
+                return false;
+            }
+
             final String data = extra.getStringExtra("text");
             if (data != null) {
                 loadNotificationSettings();
                 setCounters(extra, context);
-
                 int type = getType(extra);
                 final User user = getUser(extra);
                 String title = getTitle(context, extra.getStringExtra("title"));
@@ -159,11 +174,14 @@ public class GCMUtils {
                                 intent,
                                 false);
                     }
+                    result = true;
                 }
             }
         } catch (Exception e) {
-            Debug.error("Notifcation from GCM error", e);
+            Debug.error("GCM: Notifcation error", e);
         }
+
+        return result;
     }
 
     private static TopfaceNotificationManager.TempImageViewRemote getTempImageViewRemote(Context context) {
@@ -243,7 +261,7 @@ public class GCMUtils {
         try {
             unread = unreadExtra != null ? Integer.parseInt(unreadExtra) : 0;
         } catch (NumberFormatException e) {
-            Debug.error("Wrong unread format: " + unreadExtra, e);
+            Debug.error("GCM: Wrong unread format: " + unreadExtra, e);
         }
         return unread;
     }
@@ -343,7 +361,7 @@ public class GCMUtils {
     }
 
     public static void sendRegId(final Context context, final String registrationId) {
-        Debug.log("Try send GCM regId to server: ", registrationId);
+        Debug.log("GCM: Try send regId to server: ", registrationId);
 
         //Ебаный стыд. Но ничего, мы это поправим, когда сделаем поддержку коллбэков без handler
         new RegistrationTokenRequest(registrationId, context).callback(new ApiHandler() {
@@ -359,7 +377,7 @@ public class GCMUtils {
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                Debug.error(String.format("RegistrationRequest fail: #%d %s", codeError, response));
+                Debug.error(String.format("GCM: RegistrationRequest fail: #%d %s", codeError, response));
                 new BackgroundThread() {
                     @Override
                     public void execute() {
