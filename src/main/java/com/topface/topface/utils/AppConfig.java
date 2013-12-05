@@ -89,7 +89,6 @@ public class AppConfig {
         return uniqueId;
     }
 
-
     /**
      * Возможные типы полей настроек
      * Поле с типом Unknown не будет обрабатываться (возникает, если поле имеет неизвестный класс у данных)
@@ -272,37 +271,37 @@ public class AppConfig {
         }
 
         public boolean setField(String fieldName, String value) {
-            boolean result = false;
             if (containsKey(fieldName)) {
                 get(fieldName).value = value;
+                return true;
             }
-            return result;
+            return false;
         }
 
         public boolean setField(String fieldName, Integer value) {
-            boolean result = false;
             if (containsKey(fieldName)) {
                 get(fieldName).value = value;
+                return true;
             }
-            return result;
+            return false;
         }
 
         @SuppressWarnings("UnusedDeclaration")
         public boolean setField(String fieldName, Long value) {
-            boolean result = false;
             if (containsKey(fieldName)) {
                 get(fieldName).value = value;
+                return true;
             }
-            return result;
+            return false;
         }
 
         @SuppressWarnings("UnusedDeclaration")
         public boolean setField(String fieldName, Boolean value) {
-            boolean result = false;
             if (containsKey(fieldName)) {
                 get(fieldName).value = value;
+                return true;
             }
-            return result;
+            return false;
         }
 
         public String getStringField(String fieldName) {

@@ -162,7 +162,8 @@ public class HttpUtils {
             connection.setFixedLengthStreamingMode(contentLength);
         }
         /*else {
-            //У нас какие то проблемы с поддержкой сервера
+            //Nginx без поддержки сторонних модулей не поддерживает chunked.
+            //Подробности https://tasks.verumnets.ru/issues/13282
             connection.setChunkedStreamingMode(-1);
         }*/
 

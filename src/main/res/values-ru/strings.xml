@@ -752,6 +752,36 @@
     <string name="current_city">Текущий город</string>
     <string name="general_say_meow">Скажи Мяу</string>
     <string name="general_meow_offer">Сыграйте 3 раунда с друзьями и получите VIP статус на 2 дня</string>
+        
+    <!-- Pin code -->
+    <string name="pincode_app_blocking">Блокировка приложения</string>
+    <string name="pincode_blocking">Блокировка</string>
+    <string name="pincode_reset">Сбросить PIN-код</string>
+    <string name="pincode_set">Установить PIN-код</string>
+    <string name="pincode_change">Изменить PIN-код</string>
+    <string name="pincode_delete">Удалить PIN-код</string>
+    <string name="pincode_input_label">Ввод PIN-кода</string>
+    <string name="pincode_check_label">Проверка PIN-кода</string>
+    <string name="pincode_change_label">Изменение PIN-кода</string>
+    <string name="pincode_delete_label">Удаление PIN-кода</string>
+    <string name="pincode_turning_on">Включение блокировки</string>
+    <string name="pincode_dont_match">PIN-коды не совпали. Повторите попытку.</string>
+    <string name="pincode_wrong">Неверный PIN-код</string>
+    <string name="pincode_input">Введите PIN-код</string>
+    <string name="pincode_input_previous">Введите старый PIN-код</string>
+    <string name="pincode_repeat">Повторите PIN-код</string>
+    <string name="pincode_forget">Забыли PIN-код?</string>
+    <string name="pincode_auth_input">Вам необходимо ввести логин и пароль.</string>
+    <string name="pincode_will_be_reset">При удачной авторизации все настройки приложения будут сброшены.</string>
+    <plurals name="pincode_interval">
+        <item quantity="zero">сразу после закрытия</item>
+        <item quantity="one">%d мин.</item>
+        <item quantity="many">%d мин.</item>
+        <item quantity="few">%d мин.</item>
+        <item quantity="other">%d мин.</item>
+    </plurals>
+    
+    <string name="ok_label">Одноклассники</string>
     <string name="general_bonus">Бонус</string>
     <string name="general_get">Получить</string>
     <string name="not_enough_coins">Недостаточно монет для покупки</string>
