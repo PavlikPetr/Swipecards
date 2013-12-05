@@ -314,6 +314,10 @@ public class ClosingsController implements View.OnClickListener {
     }
 
     private void removeClosings() {
+        removeClosings(true);
+    }
+
+    private void removeClosings(boolean needToSetClosingsPassedTime) {
         if (mClosingsWidget != null) mClosingsWidget.setVisibility(View.GONE);
         if (mAdapter != null) {
             mAdapter.setEnabled(true);
@@ -325,6 +329,10 @@ public class ClosingsController implements View.OnClickListener {
         mClosingsPassed = true;
         mLikesClosingsActive = false;
         mMutualClosingsActive = false;
+        if (needToSetClosingsPassedTime) {
+            CacheProfile.getOptions().closing.onStopLikesClosings();
+            CacheProfile.getOptions().closing.onStopMutualClosings();
+        }
     }
 
     public static void onLogout() {
@@ -373,7 +381,7 @@ public class ClosingsController implements View.OnClickListener {
 
     public void onLogoutWasInitiated() {
         if (mLogoutWasInitiated){
-            removeClosings();
+            removeClosings(false);
             mClosingsPassed = false;
         }
         mLogoutWasInitiated = false;

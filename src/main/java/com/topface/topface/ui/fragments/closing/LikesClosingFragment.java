@@ -128,7 +128,6 @@ public class LikesClosingFragment extends ClosingFragment implements View.OnClic
     protected void onUsersProcessed() {
         LocalBroadcastManager.getInstance(App.getContext())
                 .sendBroadcast(new Intent(ACTION_LIKES_CLOSINGS_PROCESSED));
-        CacheProfile.getOptions().closing.onStopLikesClosings();
         super.onUsersProcessed();
     }
 

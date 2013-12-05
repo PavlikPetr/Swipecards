@@ -93,7 +93,6 @@ public class MutualClosingFragment extends ClosingFragment implements View.OnCli
     protected void onUsersProcessed() {
         LocalBroadcastManager.getInstance(App.getContext())
                 .sendBroadcast(new Intent(ACTION_MUTUAL_CLOSINGS_PROCESSED));
-        CacheProfile.getOptions().closing.onStopMutualClosings();
         super.onUsersProcessed();
     }
 
