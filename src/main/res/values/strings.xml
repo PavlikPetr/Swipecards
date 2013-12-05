@@ -598,4 +598,6 @@
         <item quantity="one">%d min.</item>
     </plurals>
     <string name="ok_label">Odnoklassniki</string>
+    <string name="not_enough_coins">Not enough coins to purchase</string>
+    <string name="general_bonus">Bonus</string>
 </resources>

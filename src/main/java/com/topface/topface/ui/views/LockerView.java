@@ -7,6 +7,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,6 +15,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.topface.topface.R;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * LockView - descendant of RelativeLayout with internal TextView for message.
@@ -68,65 +71,71 @@ public class LockerView extends RelativeLayout {
 
     @SuppressWarnings("deprecation")
     private void setAttrs(AttributeSet attrs) {
-        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.LockerView);
+        Context context = getContext();
+        if (context == null) return;
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.LockerView);
+        if (a != null) {
+            this.setGravity(a.getInteger(R.styleable.LockerView_android_gravity, Gravity.CENTER));
+            // setting TextView attributes
+            mTextView.setText(a.getString(R.styleable.LockerView_android_text));
 
-        this.setGravity(a.getInteger(R.styleable.LockerView_android_gravity, Gravity.CENTER));
+            mTextView.setTextColor(a.getColor(R.styleable.LockerView_android_textColor, Color.BLACK));
+            mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, a.getDimension(R.styleable.LockerView_android_textSize, 16));
+            mTextView.setShadowLayer(a.getFloat(R.styleable.LockerView_android_shadowRadius, 0.0f),
+                    a.getFloat(R.styleable.LockerView_android_shadowDx, 0.0f),
+                    a.getFloat(R.styleable.LockerView_android_shadowDy, 0.0f),
+                    a.getColor(R.styleable.LockerView_android_shadowColor, Color.TRANSPARENT));
 
-        // setting TextView attributes
-        mTextView.setText(a.getString(R.styleable.LockerView_android_text));
-        mTextView.setTextColor(a.getColor(R.styleable.LockerView_android_textColor, Color.BLACK));
-        mTextView.setTextSize(a.getDimensionPixelSize(R.styleable.LockerView_android_textSize, 10));
-        mTextView.setShadowLayer(a.getFloat(R.styleable.LockerView_android_shadowRadius, 0.0f),
-                a.getFloat(R.styleable.LockerView_android_shadowDx, 0.0f),
-                a.getFloat(R.styleable.LockerView_android_shadowDy, 0.0f),
-                a.getColor(R.styleable.LockerView_android_shadowColor, Color.TRANSPARENT));
+            mTextView.setCompoundDrawablesWithIntrinsicBounds(
+                    a.getDrawable(R.styleable.LockerView_android_drawableLeft),
+                    a.getDrawable(R.styleable.LockerView_android_drawableTop),
+                    a.getDrawable(R.styleable.LockerView_android_drawableRight),
+                    a.getDrawable(R.styleable.LockerView_android_drawableBottom));
 
-        mTextView.setCompoundDrawablesWithIntrinsicBounds(
-                a.getDrawable(R.styleable.LockerView_android_drawableLeft),
-                a.getDrawable(R.styleable.LockerView_android_drawableTop),
-                a.getDrawable(R.styleable.LockerView_android_drawableRight),
-                a.getDrawable(R.styleable.LockerView_android_drawableBottom));
+            mTextView.setCompoundDrawablePadding(a.getDimensionPixelSize(
+                    R.styleable.LockerView_android_drawablePadding, 0));
 
-        mTextView.setCompoundDrawablePadding(a.getDimensionPixelSize(
-                R.styleable.LockerView_android_drawablePadding, 0));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                mTextView.setBackground(a.getDrawable(R.styleable.LockerView_messageBackground));
+            } else {
+                mTextView.setBackgroundDrawable(a.getDrawable(R.styleable.LockerView_messageBackground));
+            }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            mTextView.setBackground(a.getDrawable(R.styleable.LockerView_messageBackground));
-        } else {
-            mTextView.setBackgroundDrawable(a.getDrawable(R.styleable.LockerView_messageBackground));
+            int padding = a.getDimensionPixelSize(R.styleable.LockerView_messagePadding, 0);
+            if (a.hasValue(R.styleable.LockerView_messagePadding)) {
+                mTextView.setPadding(padding, padding, padding, padding);
+            } else {
+                mTextView.setPadding(
+                        a.getDimensionPixelSize(R.styleable.LockerView_messagePaddingLeft, 0),
+                        a.getDimensionPixelSize(R.styleable.LockerView_messagePaddingTop, 0),
+                        a.getDimensionPixelSize(R.styleable.LockerView_messagePaddingRight, 0),
+                        a.getDimensionPixelSize(R.styleable.LockerView_messagePaddingBottom, 0));
+            }
+
+            mTextView.setGravity(a.getInt(R.styleable.LockerView_messageGravity, Gravity.CENTER));
+
+            mTextView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+                    LayoutParams.WRAP_CONTENT));
+            mTextView.setSingleLine(false);
+
+            a.recycle();
         }
-
-        int padding = a.getDimensionPixelSize(R.styleable.LockerView_messagePadding, 0);
-        if (a.hasValue(R.styleable.LockerView_messagePadding)) {
-            mTextView.setPadding(padding, padding, padding, padding);
-        } else {
-            mTextView.setPadding(
-                    a.getDimensionPixelSize(R.styleable.LockerView_messagePaddingLeft, 0),
-                    a.getDimensionPixelSize(R.styleable.LockerView_messagePaddingTop, 0),
-                    a.getDimensionPixelSize(R.styleable.LockerView_messagePaddingRight, 0),
-                    a.getDimensionPixelSize(R.styleable.LockerView_messagePaddingBottom, 0));
-        }
-
-        mTextView.setGravity(a.getInt(R.styleable.LockerView_messageGravity, Gravity.CENTER));
-
-        mTextView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT));
-        mTextView.setSingleLine(false);
-
-        a.recycle();
     }
 
     @Override
     public void setVisibility(int visibility) {
         super.setVisibility(visibility);
+        if (mTextView == null) return;
+        Drawable[] drawables = mTextView.getCompoundDrawables();
+        if (drawables == null) return;
         if (visibility == View.GONE || visibility == View.INVISIBLE) {
-            for (Drawable drawable : mTextView.getCompoundDrawables()) {
+            for (Drawable drawable : drawables) {
                 if (drawable instanceof AnimationDrawable) {
                     ((AnimationDrawable) drawable).stop();
                 }
             }
         } else {
-            for (Drawable drawable : mTextView.getCompoundDrawables()) {
+            for (Drawable drawable : drawables) {
                 if (drawable instanceof AnimationDrawable) {
                     ((AnimationDrawable) drawable).start();
                 }
@@ -136,7 +145,7 @@ public class LockerView extends RelativeLayout {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(@NotNull MotionEvent event) {
         return true;
     }
 }

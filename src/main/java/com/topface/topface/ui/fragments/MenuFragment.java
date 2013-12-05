@@ -27,6 +27,7 @@ import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.ui.BonusFragment;
 import com.topface.topface.ui.adapters.LeftMenuAdapter;
 import com.topface.topface.ui.dialogs.ClosingsBuyVipDialog;
 import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
@@ -46,6 +47,7 @@ import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.controllers.ClosingsController;
 import com.topface.topface.utils.http.ProfileBackgrounds;
+import com.topface.topface.utils.offerwalls.Offerwalls;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.ArrayList;
@@ -162,8 +164,13 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 R.drawable.ic_star_selector));
         menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_FANS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_fans_selector));
+        if (CacheProfile.getOptions().bonusEnabled) {
+            menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON,
+                    R.drawable.ic_bonus_1));
+        }
         menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_guests_selector));
+
         mAdapter = new LeftMenuAdapter(this, menuItems);
         setListAdapter(mAdapter);
     }
@@ -418,6 +425,9 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             case F_FANS:
                 fragment = new FansFragment();
                 break;
+            case F_BONUS:
+                fragment = new BonusFragment();
+                break;
             case F_VISITORS:
                 fragment = new VisitorsFragment();
                 break;
@@ -440,7 +450,11 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (getListView().isClickable()) {
-            selectMenu((FragmentId) v.getTag());
+            if ((FragmentId) v.getTag() == F_BONUS) {
+                Offerwalls.startOfferwall(getActivity());
+            } else {
+                selectMenu((FragmentId) v.getTag());
+            }
         }
     }
 

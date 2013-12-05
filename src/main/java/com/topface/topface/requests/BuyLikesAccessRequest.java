@@ -1,0 +1,25 @@
+package com.topface.topface.requests;
+
+import android.content.Context;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class BuyLikesAccessRequest extends ApiRequest {
+    public static final String SERVICE_NAME = "like.buyAccess";
+
+    public BuyLikesAccessRequest(Context context) {
+        super(context);
+    }
+
+    @Override
+    protected JSONObject getRequestData() throws JSONException {
+        return null;
+    }
+
+    @Override
+    public String getServiceName() {
+        return SERVICE_NAME;
+    }
+
+}

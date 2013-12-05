@@ -426,8 +426,10 @@
         <item quantity="one">Λάβετε κατάσταση VIP για %d μέρα</item>
     </plurals>
     <plurals name="invite_friends_plurals">
-        <item quantity="other">Καλέστε %1$d φίλους για να πάρετε την κατάσταση VIP για %2$d μέρες</item>
-        <item quantity="one">Καλέστε %1$d φίλους για να πάρετε την κατάσταση VIP για %2$d μέρα</item>
+        <item quantity="other">Καλέστε %1$d φίλους για να πάρετε την κατάσταση VIP για %2$d μέρες
+        </item>
+        <item quantity="one">Καλέστε %1$d φίλους για να πάρετε την κατάσταση VIP για %2$d μέρα
+        </item>
     </plurals>
     <plurals name="get_vip_for_invites_plurals">
         <item quantity="other">Λάβετε VIP κατάσταση δωρεάν για %d προσκλήσεις</item>
@@ -528,7 +530,6 @@
     <string name="mutual_sympathies">Αμοιβαία</string>
     <string name="skip_all">Παραλείψτε όλα</string>
     <string name="forget">Ξεχάστε</string>
-    <string name="watch_as_list">Εμφανίστε ολόκληρη τη λίστα</string>
     <string name="watching_as_list">Εμφανίστε ολόκληρη τη λίστα</string>
     <string name="watching_sequentually">Δείτε σε μια σειρά</string>
     <string name="or_use_common_likes_list">\'Η μπορείτε να δείτε τους ανθρώπους, στους οποίους αρέσετε, στη λίστα επαφών σας</string>

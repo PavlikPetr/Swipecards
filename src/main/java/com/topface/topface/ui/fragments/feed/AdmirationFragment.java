@@ -53,7 +53,7 @@ public class AdmirationFragment extends LikesFragment{
     }
 
     @Override
-    protected void initEmptyFeedView(View inflated) {
+    protected void initEmptyFeedView(View inflated, int errorCode) {
         if (mEmptyFeedView == null) mEmptyFeedView = inflated;
         if (CacheProfile.premium) {
             ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(0);

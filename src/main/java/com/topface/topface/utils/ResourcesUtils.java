@@ -30,6 +30,8 @@ public class ResourcesUtils {
                 return R.string.general_visitors;
             case F_BOOKMARKS:
                 return R.string.general_bookmarks;
+            case F_BONUS:
+                return R.string.general_bonus;
             case F_FANS:
                 return R.string.general_fans;
             case F_EDITOR:

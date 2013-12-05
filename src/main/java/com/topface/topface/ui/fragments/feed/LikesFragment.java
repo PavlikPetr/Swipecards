@@ -2,27 +2,38 @@ package com.topface.topface.ui.fragments.feed;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.google.analytics.tracking.android.EasyTracker;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.FeedListData;
+import com.topface.topface.data.Options;
+import com.topface.topface.requests.BuyLikesAccessRequest;
 import com.topface.topface.requests.DeleteFeedsRequest;
 import com.topface.topface.requests.DeleteLikesRequest;
 import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendLikeRequest;
+import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.ContainerActivity;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.LikesListAdapter;
 import com.topface.topface.ui.adapters.LikesListAdapter.OnMutualListener;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.RateController;
@@ -99,7 +110,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
-    protected void initEmptyFeedView(View inflated) {
+    protected void initEmptyFeedView(final View inflated, int errorCode) {
         if (mEmptyFeedView == null) mEmptyFeedView = inflated;
         if (CacheProfile.premium) {
             ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(0);
@@ -165,7 +176,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     @Override
     protected DeleteFeedsRequest getDeleteRequest(List<String> ids, Context context) {
-        return new DeleteLikesRequest(ids,context);
+        return new DeleteLikesRequest(ids, context);
     }
 
     @Override

@@ -94,7 +94,7 @@ public class AuthFragment extends BaseFragment {
     public static AuthFragment newInstance() {
         return new AuthFragment();
     }
-
+//пробный пуш
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -120,7 +120,7 @@ public class AuthFragment extends BaseFragment {
 
         initButtons(root);
 
-        btnsController = new AuthButtonsController(getActivity(), new AuthButtonsController.OnButtonsSettingsLoadedListener() {
+        btnsController = new AuthButtonsController(getActivity(), new AuthButtonsController.OnButtonsSettingsLoadedHandler() {
             @Override
             public void buttonSettingsLoaded(HashSet<String> settings) {
                 if (btnsController != null) {
@@ -245,9 +245,8 @@ public class AuthFragment extends BaseFragment {
 
     private void setAuthInterface() {
         if (btnsController == null || !isAdded()) return;
-        Context applicationContext = getActivity();
         if (btnsController.needSN(AuthToken.SN_VKONTAKTE)) {
-            mVKButton.setAnimation(AnimationUtils.loadAnimation(applicationContext,
+            mVKButton.setAnimation(AnimationUtils.loadAnimation(getActivity(),
                     R.anim.fade_in));
             mVKButton.setVisibility(View.VISIBLE);
         } else {
@@ -255,7 +254,7 @@ public class AuthFragment extends BaseFragment {
         }
 
         if (btnsController.needSN(AuthToken.SN_FACEBOOK)) {
-            mFBButton.setAnimation(AnimationUtils.loadAnimation(applicationContext,
+            mFBButton.setAnimation(AnimationUtils.loadAnimation(getActivity(),
                     R.anim.fade_in));
             mFBButton.setVisibility(View.VISIBLE);
         } else {
@@ -263,7 +262,7 @@ public class AuthFragment extends BaseFragment {
         }
 
         if (btnsController.needSN(AuthToken.SN_ODNOKLASSNIKI)) {
-            mOKButton.setAnimation(AnimationUtils.loadAnimation(applicationContext,
+            mOKButton.setAnimation(AnimationUtils.loadAnimation(getActivity(),
                     R.anim.fade_in));
             mOKButton.setVisibility(View.VISIBLE);
         } else {
