@@ -1,7 +1,6 @@
 package com.topface.topface.data;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -513,13 +512,13 @@ public class Options extends AbstractData {
 
         public boolean isMutualAvailable() {
             return enabledSympathies
-                    && Math.abs(System.currentTimeMillis() - likesClosingLastCallTime) > timeout
+                    && Math.abs(System.currentTimeMillis() - mutualsClosingLastCallTime) > timeout
                     && CacheProfile.unread_mutual > 0;
         }
 
         public boolean isLikesAvailable() {
             return enabledMutual
-                    && Math.abs(System.currentTimeMillis() - mutualsClosingLastCallTime) > timeout
+                    && Math.abs(System.currentTimeMillis() - likesClosingLastCallTime) > timeout
                     && CacheProfile.unread_likes > 0;
         }
     }

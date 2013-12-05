@@ -36,7 +36,8 @@ public class LeftMenuAdapter extends BaseAdapter {
         @Override
         public void onClick(View v) {
             if (mMenuFragment != null) {
-                mMenuFragment.showClosingsDialog();
+                BaseFragment.FragmentId id = (BaseFragment.FragmentId) v.getTag();
+                mMenuFragment.showClosingsDialog(id);
             }
         }
     };
@@ -145,8 +146,8 @@ public class LeftMenuAdapter extends BaseAdapter {
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = View.inflate(mMenuFragment.getActivity(), R.layout.item_left_menu_button_with_badge, null);
-            holder.mBtnMenu = (Button) convertView.findViewById(R.id.btnMenu);
-            holder.mCounterBadge = (TextView) convertView.findViewById(R.id.tvCounterBadge);
+            holder.btnMenu = (Button) convertView.findViewById(R.id.btnMenu);
+            holder.counterBadge = (TextView) convertView.findViewById(R.id.tvCounterBadge);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -154,35 +155,35 @@ public class LeftMenuAdapter extends BaseAdapter {
         // initiate views' state in holder
         switch (item.getMenuType()) {
             case TYPE_MENU_BUTTON:
-                holder.mBtnMenu.setText(item.getMenuText());
-                holder.mCounterBadge.setVisibility(View.GONE);
+                holder.btnMenu.setText(item.getMenuText());
+                holder.counterBadge.setVisibility(View.GONE);
                 unregisterCounterBadge(item);
                 break;
             case TYPE_MENU_BUTTON_WITH_BADGE:
-                holder.mBtnMenu.setText(item.getMenuText());
-                registerCounterBadge(item, holder.mCounterBadge);
+                holder.btnMenu.setText(item.getMenuText());
+                registerCounterBadge(item, holder.counterBadge);
                 break;
             default:
                 break;
         }
         // init button state
-        holder.mBtnMenu.setCompoundDrawablesWithIntrinsicBounds(item.getMenuIconResId(), 0, 0, 0);
-        holder.mBtnMenu.setTag(item.getMenuId());
+        holder.btnMenu.setCompoundDrawablesWithIntrinsicBounds(item.getMenuIconResId(), 0, 0, 0);
+        holder.btnMenu.setTag(item.getMenuId());
         if (enabled || item.isHidden()) {
-            holder.mBtnMenu.setOnClickListener(mMenuFragment);
-            setAlphaToTextAndDrawable(holder.mBtnMenu, 255);
-            holder.mBtnMenu.setSelected(mMenuFragment.getCurrentFragmentId() == item.getMenuId());
+            holder.btnMenu.setOnClickListener(mMenuFragment);
+            setAlphaToTextAndDrawable(holder.btnMenu, 255);
+            holder.btnMenu.setSelected(mMenuFragment.getCurrentFragmentId() == item.getMenuId());
         } else {
-            holder.mBtnMenu.setOnClickListener(mDisabledItemClickListener);
-            setAlphaToTextAndDrawable(holder.mBtnMenu, 102);
-            holder.mBtnMenu.setSelected(false);
+            holder.btnMenu.setOnClickListener(mDisabledItemClickListener);
+            setAlphaToTextAndDrawable(holder.btnMenu, 102);
+            holder.btnMenu.setSelected(mMenuFragment.getCurrentFragmentId() == item.getMenuId());
         }
 
         if (item.isHidden()) {
-            holder.mBtnMenu.setVisibility(View.GONE);
-            holder.mCounterBadge.setVisibility(View.GONE);
+            holder.btnMenu.setVisibility(View.GONE);
+            holder.counterBadge.setVisibility(View.GONE);
         } else {
-            holder.mBtnMenu.setVisibility(View.VISIBLE);
+            holder.btnMenu.setVisibility(View.VISIBLE);
         }
         return convertView;
     }
@@ -238,8 +239,8 @@ public class LeftMenuAdapter extends BaseAdapter {
     }
 
     class ViewHolder {
-        Button mBtnMenu;
-        TextView mCounterBadge;
+        Button btnMenu;
+        TextView counterBadge;
     }
 
     public interface ILeftMenuItem {

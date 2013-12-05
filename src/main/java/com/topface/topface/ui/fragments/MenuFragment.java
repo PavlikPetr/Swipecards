@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -131,8 +132,10 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         // init & add footer
         initFooter();
         // set listview settings
-        getListView().setDividerHeight(0);
-        getListView().setDivider(null);
+        ListView list = getListView();
+        list.setDividerHeight(0);
+        list.setDivider(null);
+        list.setBackgroundColor(getResources().getColor(R.color.bg_left_menu));
         // controller for closings uses ViewStub in header to be inflated
         mClosingsController = new ClosingsController(getActivity(), mHeaderViewStub, mAdapter);
     }
@@ -479,8 +482,12 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
     }
 
     public void showClosingsDialog() {
+        showClosingsDialog(mSelectedFragment);
+    }
+
+    public void showClosingsDialog(FragmentId selectedFragment) {
         if (ClosingsBuyVipDialog.opened) return;
-        ClosingsBuyVipDialog newFragment = ClosingsBuyVipDialog.newInstance(mSelectedFragment);
+        ClosingsBuyVipDialog newFragment = ClosingsBuyVipDialog.newInstance(selectedFragment);
         newFragment.setOnRespondToLikesListener(new ClosingsBuyVipDialog.IRespondToLikesListener() {
             @Override
             public void onRespondToLikes() {

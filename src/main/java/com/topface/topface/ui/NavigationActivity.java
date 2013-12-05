@@ -138,7 +138,10 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
         mMenuFragment.setOnFragmentSelected(new MenuFragment.OnFragmentSelectedListener() {
             @Override
             public void onFragmentSelected(FragmentId fragmentId) {
-                mDrawerLayout.closeDrawer(GravityCompat.START);
+                if (mDrawerLayout.getDrawerLockMode(GravityCompat.START) ==
+                        DrawerLayout.LOCK_MODE_UNLOCKED) {
+                    mDrawerLayout.closeDrawer(GravityCompat.START);
+                }
             }
         });
         if (!mMenuFragment.isAdded()) {
