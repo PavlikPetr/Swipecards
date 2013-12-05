@@ -161,8 +161,10 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 R.drawable.ic_star_selector));
         menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_FANS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_fans_selector));
-        menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON,
-                R.drawable.ic_bonus_1));
+        if (CacheProfile.getOptions().bonusEnabled) {
+            menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON,
+                    R.drawable.ic_bonus_1));
+        }
         menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_guests_selector));
 
