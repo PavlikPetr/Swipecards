@@ -566,4 +566,7 @@
     <string name="locking_screen_button_answer">Απαντήστε</string>
     <string name="locking_screen_advice">Απαντήστε σε όλες τις νέες συμπάθειες</string>
     <string name="locking_screen_advice2">Απαλλαγή από όλους τους περιορισμούς</string>
+    <string name="current_city">Τρέχουσα πόλη</string>
+    <string name="general_say_meow">Πες Meow</string>
+    <string name="general_meow_offer">Παίξτε 3 γύρους με τους φίλους και πάρτε την κατάσταση VIP για 2 ημέρες</string>
 </resources>

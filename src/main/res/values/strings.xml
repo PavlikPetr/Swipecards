@@ -534,6 +534,7 @@
     <string name="mutual_sympathies">Mutual</string>
     <string name="skip_all">Skip all</string>
     <string name="forget">Forget</string>
+    <string name="watch_as_list">View a list of</string>
     <string name="watching_as_list">View a list of</string>
     <string name="watching_sequentually">View sequentially</string>
     <string name="or_use_common_likes_list">Or browse those that liked you in the common list</string>
@@ -573,6 +574,30 @@
     <string name="current_city">Current city</string>
     <string name="general_say_meow">Say Meow</string>
     <string name="general_meow_offer">Play 3 rounds with friends and get VIP status for 2 days</string>
+    <string name="pincode_app_blocking">Application is blocked</string>
+    <string name="pincode_blocking">Blocking</string>
+    <string name="pincode_reset">Reset PIN-code</string>
+    <string name="pincode_set">Set PIN-code</string>
+    <string name="pincode_change">Change PIN-code</string>
+    <string name="pincode_delete">Delete PIN-code</string>
+    <string name="pincode_input_label">Enter PIN-code</string>
+    <string name="pincode_check_label">Checking PIN-code</string>
+    <string name="pincode_change_label">Changing PIN-code</string>
+    <string name="pincode_delete_label">Deleting PIN-code</string>
+    <string name="pincode_turning_on">Turning on</string>
+    <string name="pincode_dont_match">PIN-codes do not match. Please try again.</string>
+    <string name="pincode_wrong">Incorrect PIN-code</string>
+    <string name="pincode_input">Enter PIN-code</string>
+    <string name="pincode_repeat">Repeat PIN-code</string>
+    <string name="pincode_forget">Forgot PIN-code?</string>
+    <string name="pincode_auth_input">You need to enter your login and password</string>
+    <string name="pincode_will_be_reset">If the authorization is successful, all application settings will be reset.</string>
+    <plurals name="pincode_interval">
+        <item quantity="zero">right after closing</item>
+        <item quantity="other">%d min.</item>
+        <item quantity="one">%d min.</item>
+    </plurals>
+    <string name="ok_label">Odnoklassniki</string>
     <string name="not_enough_coins">Not enough coins to purchase</string>
     <string name="general_bonus">Bonus</string>
 </resources>
