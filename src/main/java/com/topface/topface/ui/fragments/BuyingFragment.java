@@ -227,9 +227,12 @@ public class BuyingFragment extends BillingFragment {
                 }
             };
 
-            //На все кнопки навишиваем
+            //На все кнопки навешиваем
             for (int i = 0; i < layout.getChildCount(); i++) {
-                layout.getChildAt(i).setOnClickListener(mobilePaymentsListener);
+                View child = layout.getChildAt(i);
+                if (child != null) {
+                    child.setOnClickListener(mobilePaymentsListener);
+                }
             }
         }
     }

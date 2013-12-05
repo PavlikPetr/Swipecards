@@ -27,7 +27,7 @@ public class FansFragment extends BookmarksFragment{
     }
 
     @Override
-    protected void initEmptyFeedView(View inflated) {
+    protected void initEmptyFeedView(View inflated, int errorCode) {
         View btnBuyVip = inflated.findViewById(R.id.btnBuyVip);
         if (CacheProfile.premium) {
             inflated.findViewById(R.id.tvText).setVisibility(View.GONE);

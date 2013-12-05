@@ -38,6 +38,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     public static final String AUTH_TAG = "AUTH";
 
     protected boolean needOpenDialog = true;
+    private boolean mIndeterminateSupported = false;
 
     private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
     private BroadcastReceiver mReauthReceiver;
@@ -71,8 +72,10 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     @Override
     public void setSupportProgressBarIndeterminateVisibility(boolean visible) {
-        if (getSupportActionBar() != null) {
-            super.setSupportProgressBarIndeterminateVisibility(visible);
+        if (mIndeterminateSupported) {
+            if (getSupportActionBar() != null) {
+                super.setSupportProgressBarIndeterminateVisibility(visible);
+            }
         }
     }
 
@@ -93,7 +96,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     private void setWindowOptions() {
         // supportRequestWindowFeature() вызывать только до setContent(),
         // метод setSupportProgressBarIndeterminateVisibility(boolean) вызывать строго после setContent();
-        supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        mIndeterminateSupported = supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         // для корректного отображения картинок
         getWindow().setFormat(PixelFormat.RGBA_8888);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
@@ -110,7 +113,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             } else {
                 startAuth();
             }
-
         } else if (mProfileLoadReceiver == null) {
             mProfileLoadReceiver = new BroadcastReceiver() {
                 @Override
@@ -121,7 +123,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
                     }
                 }
             };
-
             try {
                 LocalBroadcastManager.getInstance(this).registerReceiver(
                         mProfileLoadReceiver,
@@ -142,11 +143,16 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     @Override
     protected void onResume() {
         super.onResume();
-        afterOnSaveInstanceState = false;
         checkProfileLoad();
         registerReauthReceiver();
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mProfileUpdateReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        afterOnSaveInstanceState = false;
     }
 
     private void registerReauthReceiver() {

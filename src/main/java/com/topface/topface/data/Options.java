@@ -145,6 +145,7 @@ public class Options extends AbstractData {
     public boolean block_unconfirmed;
     public boolean block_chat_not_mutual;
     public Closing closing = new Closing();
+    public BlockSympathy blockSympathy = new BlockSympathy();
     public PremiumAirEntity premium_messages;
     public PremiumAirEntity premium_visitors;
     public PremiumAirEntity premium_admirations;
@@ -152,6 +153,8 @@ public class Options extends AbstractData {
     public String gagTypeBanner = BannerBlock.BANNER_ADMOB;
     public String gagTypeFullscreen = BannerBlock.BANNER_NONE;
     public String helpUrl;
+
+    public boolean bonusEnabled;
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -191,9 +194,11 @@ public class Options extends AbstractData {
             block_chat_not_mutual = response.optBoolean("blockChatNotMutual");
 
             JSONObject contactsInvite = response.optJSONObject("inviteContacts");
-            premium_period = contactsInvite.optInt("premiumPeriod");
-            contacts_count = contactsInvite.optInt("contactsCount");
-            popup_timeout = contactsInvite.optInt("showPopupTimeout") * 60 * 60 * 1000;
+            if (contactsInvite != null) {
+                premium_period = contactsInvite.optInt("premiumPeriod");
+                contacts_count = contactsInvite.optInt("contactsCount");
+                popup_timeout = contactsInvite.optInt("showPopupTimeout") * 60 * 60 * 1000;
+            }
 
             if (response.has("premiumMessages")) {
                 premium_messages = new PremiumAirEntity(
@@ -226,22 +231,45 @@ public class Options extends AbstractData {
                 }
             }
 
-            JSONObject closings = response.optJSONObject("closing");
+            JSONObject closingsObj = response.optJSONObject("closing");
             if (closing == null) closing = new Closing();
-            closing.enabledMutual = closings.optBoolean("enabledMutual");
-            closing.enabledSympathies = closings.optBoolean("enabledSympathies");
-            closing.limitMutual = closings.optInt("limitMutual");
-            closing.limitSympathies = closings.optInt("limitSympathies");
-            closing.timeout = closings.optLong("timeout");
+            if (closingsObj != null) {
+                closing.enabledMutual = closingsObj.optBoolean("enabledMutual");
+                closing.enabledSympathies = closingsObj.optBoolean("enabledSympathies");
+                closing.limitMutual = closingsObj.optInt("limitMutual");
+                closing.limitSympathies = closingsObj.optInt("limitSympathies");
+            }
 
-            //TODO clarify parameter: timeout
-            ratePopupType = response.optJSONObject("ratePopup").optString("type");
+            JSONObject ratePopupObject = response.optJSONObject("ratePopup");
+            if (ratePopupType != null) {
+                ratePopupType = ratePopupObject.optString("type");
+            }
+
+            JSONObject blockSympathyObj = response.optJSONObject("blockSympathy");
+            if (blockSympathy == null) blockSympathy = new BlockSympathy();
+            if (blockSympathyObj != null) {
+                blockSympathy.enabled = blockSympathyObj.optBoolean("enabled");
+                JSONObject settingsBlock = blockSympathyObj.optJSONObject("settings");
+                if (settingsBlock != null) {
+                    blockSympathy.text = settingsBlock.optString("text");
+                    blockSympathy.buttonText = settingsBlock.optString("buttonText");
+                    blockSympathy.showPhotos = settingsBlock.optBoolean("showPhotos");
+                    blockSympathy.group = settingsBlock.optString("group");
+                    blockSympathy.price = settingsBlock.optInt("price");
+                }
+            }
 
             JSONObject getJarJson = response.optJSONObject("getjar");
-            getJar = new GetJar(getJarJson.optString("id"), getJarJson.optString("name"), getJarJson.optLong("price"));
+            if (getJarJson != null) {
+                getJar = new GetJar(getJarJson.optString("id"), getJarJson.optString("name"), getJarJson.optLong("price"));
+            }
 
             gagTypeBanner = response.optString("gag_type_banner", BannerBlock.BANNER_ADMOB);
             gagTypeFullscreen = response.optString("gag_type_fullscreen", BannerBlock.BANNER_NONE);
+            JSONObject bonusObject = response.optJSONObject("bonus");
+            if (bonusObject != null) {
+                bonusEnabled = bonusObject.optBoolean("enabled");
+            }
 
             helpUrl = response.optString("helpUrl");
         } catch (Exception e) {
@@ -497,7 +525,7 @@ public class Options extends AbstractData {
     }
 
     public static class GetJar {
-        String id = "unknown";
+        String id = Static.UNKNOWN;
         String name = "coins";
         long price = Integer.MAX_VALUE;
 
@@ -517,6 +545,18 @@ public class Options extends AbstractData {
 
         public long getPrice() {
             return price;
+        }
+    }
+
+    public static class BlockSympathy {
+        public boolean enabled = false;
+        public String text = Static.EMPTY;
+        public String buttonText = Static.EMPTY;
+        public boolean showPhotos = true;
+        public String group = Static.UNKNOWN;
+        public int price = 0;
+
+        public BlockSympathy() {
         }
     }
 }

@@ -47,7 +47,7 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     }
 
     @Override
-    protected void initEmptyFeedView(View inflated) {
+    protected void initEmptyFeedView(View inflated, int errorCode) {
 
         inflated.findViewById(R.id.btnGetDating).setOnClickListener(new View.OnClickListener() {
             @Override

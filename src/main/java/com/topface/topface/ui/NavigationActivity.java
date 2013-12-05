@@ -14,6 +14,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -408,8 +410,8 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
                     requestCode == CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY) {
                 if (data != null) {
                     Bundle extras = data.getExtras();
-                    if (extras != null) {
-                        try {
+                    try {
+                        if (extras != null) {
                             final City city = new City(new JSONObject(extras.getString(CitySearchActivity.INTENT_CITY)));
                             SettingsRequest request = new SettingsRequest(this);
                             request.cityid = city.id;
@@ -426,9 +428,9 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
                                 public void fail(int codeError, IApiResponse response) {
                                 }
                             }).exec();
-                        } catch (JSONException e) {
-                            Debug.error(e);
                         }
+                    } catch (JSONException e) {
+                        Debug.error(e);
                     }
                 }
             }
@@ -472,5 +474,20 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
                 .putExtra(GCMUtils.NEXT_INTENT, fragmentId);
         activity.startActivity(intent);
         activity.finish();
+    }
+
+    @Override
+    public boolean onKeyDown(int keycode, KeyEvent e) {
+        switch(keycode) {
+            case KeyEvent.KEYCODE_MENU:
+                if (mDrawerLayout.isDrawerOpen(Gravity.START)) {
+                    mDrawerLayout.closeDrawer(Gravity.START);
+                } else {
+                    mDrawerLayout.openDrawer(Gravity.START);
+                }
+                return true;
+        }
+
+        return super.onKeyDown(keycode, e);
     }
 }
