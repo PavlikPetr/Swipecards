@@ -148,7 +148,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     private void initTextViews(ViewGroup root) {
         mEditText = (EditText) root.findViewById(R.id.edText);
         mEditText.setText(mToken.getLogin());
-        mEditText.setSelection(mEditText.getText().length());
+        mEditText.setSelection(Utils.getText(mEditText).length());
         mEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -266,7 +266,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                 }).exec();
                 break;
             case ACTION_CHANGE_EMAIL:
-                final String email = mEditText.getText().toString();
+                final String email = Utils.getText(mEditText).trim();
                 if (Utils.isValidEmail(email)) {
                     ChangeLoginRequest changeLoginRequest = new ChangeLoginRequest(getActivity(), email);
                     changeLoginRequest.callback(new ApiHandler() {
