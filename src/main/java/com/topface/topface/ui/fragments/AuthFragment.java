@@ -695,19 +695,19 @@ public class AuthFragment extends BaseFragment {
         //---------------------------------------------------------
         if (checkOnline()) {
             hideButtons();
-            String login = mLogin.getText().toString();
-            String password = mPassword.getText().toString();
-            if (TextUtils.isEmpty(login.trim()) || TextUtils.isEmpty(password.trim())) {
+            String emailLogin = Utils.getText(mLogin).trim();
+            String password = Utils.getText(mPassword);
+            if (TextUtils.isEmpty(emailLogin) || TextUtils.isEmpty(password.trim())) {
                 redAlert(R.string.empty_fields);
                 showButtons();
                 return;
-            } else if (!Utils.isValidEmail(login)) {
+            } else if (!Utils.isValidEmail(emailLogin)) {
                 redAlert(R.string.incorrect_login);
                 showButtons();
                 return;
             }
             AuthToken token = AuthToken.getInstance();
-            token.saveToken("", login, password);
+            token.saveToken("", emailLogin, password);
             auth(token);
         }
     }
