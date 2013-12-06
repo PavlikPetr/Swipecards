@@ -535,4 +535,6 @@
     <string name="current_city">Cidade atual</string>
     <string name="general_say_meow">Diga Meow</string>
     <string name="general_meow_offer">Jogue três rondas com amigos e obtenha o status VIP por 2 dias</string>
+    <string name="general_bonus">Bónus</string>
+    <string name="not_enough_coins">Moedas insuficientes para a compra</string>
 </resources>

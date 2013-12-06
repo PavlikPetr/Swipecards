@@ -584,4 +584,6 @@
     <string name="current_city">Dabartinis miestas</string>
     <string name="general_say_meow">Sakyk Miau</string>
     <string name="general_meow_offer">Sužaiskite 3 raundus su draugais ir gaukite VIP statusą 2 dienoms</string>
+    <string name="general_bonus">Bonus</string>
+    <string name="not_enough_coins">Nepakanka monetų pirkiniui</string>
 </resources>

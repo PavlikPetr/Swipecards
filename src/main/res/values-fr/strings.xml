@@ -417,7 +417,7 @@
     <string name="invalid_contacts">Quelques contacts étaient incorrects. Veuillez envoyer des contacts corrects</string>
     <string name="general_choose_action">Choisissez l\'action</string>
     <plurals name="vip_status_period">
-        <item quantity="other">Vous avez reçu le statut VIP pour %d jours</item>
+        <item quantity="other">Vous avez reçu le statut VIP pour  %d jours</item>
         <item quantity="one">Vous avez reçu le statut VIP pour %d jour</item>
     </plurals>
     <plurals name="vip_status_period_btn">
