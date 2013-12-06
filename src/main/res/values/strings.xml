@@ -600,4 +600,5 @@
     <string name="ok_label">Odnoklassniki</string>
     <string name="not_enough_coins">Not enough coins to purchase</string>
     <string name="general_bonus">Bonus</string>
+    <string name="not_enough_coins">Not enough coins to purchase</string>
 </resources>
