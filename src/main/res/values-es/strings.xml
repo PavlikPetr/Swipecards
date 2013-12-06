@@ -573,4 +573,29 @@
     <string name="general_meow_offer">Juega 3 rondas con tus amigos y recibe el estado VIP para 2 días</string>
     <string name="general_bonus">Bonus</string>
     <string name="not_enough_coins">Insuficientes monedas para comprar</string>
+    <string name="pincode_app_blocking">Bloquear la aplicación</string>
+    <string name="pincode_blocking">Bloquear</string>
+    <string name="pincode_reset">Reiniciar el código PIN</string>
+    <string name="pincode_set">Establecer el código PIN</string>
+    <string name="pincode_change">Cambiar el código PIN</string>
+    <string name="pincode_delete">Eliminar el código PIN</string>
+    <string name="pincode_input_label">Introduciendo el código PIN</string>
+    <string name="pincode_check_label">Comprobando el código PIN</string>
+    <string name="pincode_change_label">Cambiando el código PIN</string>
+    <string name="pincode_delete_label">Eliminando el código PIN</string>
+    <string name="pincode_turning_on">Conectar el bloqueo</string>
+    <string name="pincode_dont_match">Los códigos PIN no concuerdan. Repite el intento.</string>
+    <string name="pincode_wrong">El código PIN incorrecto</string>
+    <string name="pincode_input">Introduce el código PIN</string>
+    <string name="pincode_input_previous">Introduce el código PIN antiguo</string>
+    <string name="pincode_repeat">Repite el código PIN</string>
+    <string name="pincode_forget">¿Olvidaste el código PIN?</string>
+    <string name="pincode_auth_input">Tienes que introducir el login y la contraseña.</string>
+    <string name="pincode_will_be_reset">Al efectuar una autorización exitosa todos los ajustes de la aplicación van a ser reiniciados.</string>
+    <plurals name="pincode_interval">
+        <item quantity="zero">directamente después de cerrar</item>
+        <item quantity="other">%d min.</item>
+        <item quantity="one">%d min.</item>
+    </plurals>
+    <string name="ok_label">Одноклассники</string>
 </resources>

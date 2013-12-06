@@ -568,5 +568,31 @@
     <string name="general_say_meow">SayMeow</string>
     <string name="general_meow_offer">Spela tre rundor med vänner och erhåll VIP för två dagar</string>
     <string name="general_bonus">Bonus</string>
+    <string name="general_get">Erhåll</string>
     <string name="not_enough_coins">Du behöver fler mynt för att handla</string>
+    <string name="pincode_app_blocking">Blockera appen</string>
+    <string name="pincode_blocking">Blockera</string>
+    <string name="pincode_reset">Återställ PIN-kod</string>
+    <string name="pincode_set">Sätta up PIN-kod</string>
+    <string name="pincode_change">Ändra PIN-kod</string>
+    <string name="pincode_delete">Radera PIN-kod</string>
+    <string name="pincode_input_label">PIN-kod</string>
+    <string name="pincode_check_label">Verifiera PIN-kod</string>
+    <string name="pincode_change_label">Ändra PIN-kod</string>
+    <string name="pincode_delete_label">Radera PIN-kod</string>
+    <string name="pincode_turning_on">Slå på blockeringen</string>
+    <string name="pincode_dont_match">PIN-koder sammanfaller inte. Vänligen försök igen</string>
+    <string name="pincode_wrong">Felaktig PIN-kod</string>
+    <string name="pincode_input">Ange PIN-kod</string>
+    <string name="pincode_input_previous">Ange den gamla PIN-koden</string>
+    <string name="pincode_repeat">Repetera PIN-kod</string>
+    <string name="pincode_forget">Glömt PIN-kod?</string>
+    <string name="pincode_auth_input">Du behöver ange dina login och lösenord</string>
+    <string name="pincode_will_be_reset">Vid lyckad auktorisation återställs applikationens samtliga inställningar.</string>
+    <plurals name="pincode_interval">
+        <item quantity="zero">strax när du stänger</item>
+        <item quantity="other">%d min.</item>
+        <item quantity="one">%d min.</item>
+    </plurals>
+    <string name="ok_label">Klasskamrater</string>
 </resources>

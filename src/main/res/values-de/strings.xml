@@ -570,4 +570,32 @@
     <string name="current_city">Aktuelle Stadt</string>
     <string name="general_say_meow">Say Meow</string>
     <string name="general_meow_offer">Spielen Sie 3 Runden mit den Freunden und erhalten Sie einen VIP-Status für 2 Tage</string>
+    <string name="general_bonus">Bonus</string>
+    <string name="general_get">Bekommen</string>
+    <string name="not_enough_coins">Nicht genug Coins für den Kauf</string>
+    <string name="pincode_app_blocking">App Sperre</string>
+    <string name="pincode_blocking">Sperre</string>
+    <string name="pincode_reset">Reset PIN-Code</string>
+    <string name="pincode_set">Set PIN-Code</string>
+    <string name="pincode_change">PIN-Code ändern</string>
+    <string name="pincode_delete">PIN-Code löschen</string>
+    <string name="pincode_input_label">PIN-Code eingeben</string>
+    <string name="pincode_check_label">Überprüfung der PIN-Code</string>
+    <string name="pincode_change_label">PIN-Code ändern</string>
+    <string name="pincode_delete_label">PIN-Code löschen</string>
+    <string name="pincode_turning_on">Sperre einschalten</string>
+    <string name="pincode_dont_match">PINs stimmen nicht überein. Versuchen Sie später.</string>
+    <string name="pincode_wrong">Falsche PIN-Code</string>
+    <string name="pincode_input">Geben Sie PIN-Code ein</string>
+    <string name="pincode_input_previous">Geben Sie alte PIN-Code ein</string>
+    <string name="pincode_repeat">Wiederholen Sie PIN-Code</string>
+    <string name="pincode_forget">PIN-Code vergessen?</string>
+    <string name="pincode_auth_input">Sie müssen Login und Passwort eingeben.</string>
+    <string name="pincode_will_be_reset">Bei erfolgreicher Autorisierung werden alle App-Einstellungen zurückgesetzt.</string>
+    <plurals name="pincode_interval">
+        <item quantity="zero">sofort nach dem Schließen</item>
+        <item quantity="other">%d Min.</item>
+        <item quantity="one">%d Min.</item>
+    </plurals>
+    <string name="ok_label">Odnoklassniki</string>
 </resources>

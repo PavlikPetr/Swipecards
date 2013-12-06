@@ -569,5 +569,31 @@
     <string name="general_say_meow">Say Meow</string>
     <string name="general_meow_offer">Gioca 3 partite con gli amici e ricevi lo stato VIP per 2 giorni</string>
     <string name="general_bonus">Bonus</string>
+    <string name="general_get">Ricevere</string>
     <string name="not_enough_coins">Non hai abbastanza monete per l’acquisto</string>
+    <string name="pincode_app_blocking">Blocco dell’applicazione</string>
+    <string name="pincode_blocking">Blocco</string>
+    <string name="pincode_reset">Azzerare il codice PIN</string>
+    <string name="pincode_set">Attivare il codice PIN</string>
+    <string name="pincode_change">Cambiare il codice PIN</string>
+    <string name="pincode_delete">Eliminare il codice PIN</string>
+    <string name="pincode_input_label">Inserimento del codice PIN</string>
+    <string name="pincode_check_label">Verifica del codice PIN</string>
+    <string name="pincode_change_label">Modifica del codice PIN</string>
+    <string name="pincode_delete_label">Cancellazione del codice PIN</string>
+    <string name="pincode_turning_on">Attivazione del blocco</string>
+    <string name="pincode_dont_match">I codici PIN non coincidono. Riprova.</string>
+    <string name="pincode_wrong">Il codice PIN errato</string>
+    <string name="pincode_input">Inserisci il codice PIN</string>
+    <string name="pincode_input_previous">Inserisci il vecchio codice PIN</string>
+    <string name="pincode_repeat">Ripeti il codice PIN</string>
+    <string name="pincode_forget">Hai dimenticato il codice PIN?</string>
+    <string name="pincode_auth_input">Bisogna inserire login e password.</string>
+    <string name="pincode_will_be_reset">All\'autorizzazione avvenuta con successo tutte le impostazioni dell’applicazione verranno azzerate.</string>
+    <plurals name="pincode_interval">
+        <item quantity="zero">subito dopo la chiusura</item>
+        <item quantity="other">%d min</item>
+        <item quantity="one">%d min</item>
+    </plurals>
+    <string name="ok_label">Odnoklassniki</string>
 </resources>
