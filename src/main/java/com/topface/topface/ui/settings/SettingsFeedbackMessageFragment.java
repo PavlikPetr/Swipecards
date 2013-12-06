@@ -209,7 +209,7 @@ public class SettingsFeedbackMessageFragment extends AbstractEditFragment {
             return;
         }
 
-        if (emailConfirmed(Utils.getText(mEditEmail))) {
+        if (emailConfirmed(Utils.getText(mEditEmail).trim())) {
             mReport.body = feedbackText;
             mReport.transactionId = Utils.getText(mTransactionIdEditText).trim();
             prepareRequestSend();

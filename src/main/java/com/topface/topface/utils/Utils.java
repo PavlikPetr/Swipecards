@@ -334,7 +334,7 @@ public class Utils {
                     ")+"
     );
 
-    public static boolean isValidEmail(CharSequence email) {
+    public static boolean isValidEmail(String email) {
         return !TextUtils.isEmpty(email) && EMAIL_ADDRESS_PATTERN.matcher(email).matches();
     }
 
