@@ -366,12 +366,12 @@ public class ClosingsController implements View.OnClickListener {
 
     public void unlockLeftMenu() {
         if (mLeftMenuLocked) {
+            mLeftMenuLocked = false;
             if (mContext instanceof NavigationActivity) {
                 NavigationActivity activity = ((NavigationActivity) mContext);
                 activity.setMenuLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                 activity.getSupportActionBar().setDisplayUseLogoEnabled(true);
             }
-            mLeftMenuLocked = false;
         }
     }
 

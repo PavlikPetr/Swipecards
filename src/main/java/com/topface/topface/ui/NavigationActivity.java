@@ -380,6 +380,10 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
     public void setMenuLockMode(int lockMode) {
         if (mDrawerLayout != null) {
+            if(lockMode == DrawerLayout.LOCK_MODE_UNLOCKED &&
+                    mMenuFragment.getClosingsController().isLeftMenuLocked()) {
+                    return;
+            }
             mDrawerLayout.setDrawerLockMode(lockMode, GravityCompat.START);
         }
     }
@@ -483,10 +487,13 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
     public boolean onKeyDown(int keycode, KeyEvent e) {
         switch(keycode) {
             case KeyEvent.KEYCODE_MENU:
-                if (mDrawerLayout.isDrawerOpen(Gravity.START)) {
-                    mDrawerLayout.closeDrawer(Gravity.START);
-                } else {
-                    mDrawerLayout.openDrawer(Gravity.START);
+                if (mDrawerLayout.getDrawerLockMode(GravityCompat.START) ==
+                        DrawerLayout.LOCK_MODE_UNLOCKED) {
+                    if (mDrawerLayout.isDrawerOpen(Gravity.START)) {
+                        mDrawerLayout.closeDrawer(Gravity.START);
+                    } else {
+                        mDrawerLayout.openDrawer(Gravity.START);
+                    }
                 }
                 return true;
         }

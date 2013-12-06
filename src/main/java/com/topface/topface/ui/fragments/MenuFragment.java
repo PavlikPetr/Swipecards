@@ -450,10 +450,11 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (getListView().isClickable()) {
-            if ((FragmentId) v.getTag() == F_BONUS) {
+            FragmentId id = (FragmentId) v.getTag();
+            if (id == F_BONUS) {
                 Offerwalls.startOfferwall(getActivity());
             } else {
-                selectMenu((FragmentId) v.getTag());
+                selectMenu(id);
             }
         }
     }
@@ -467,6 +468,11 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
 
     public boolean isLockedByClosings() {
         return mClosingsController.isLeftMenuLocked();
+    }
+
+    @Deprecated
+    public ClosingsController getClosingsController() {
+        return mClosingsController;
     }
 
     public static interface OnFragmentSelectedListener {
