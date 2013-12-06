@@ -783,9 +783,6 @@
         <item quantity="few">%d мин.</item>
         <item quantity="other">%d мин.</item>
     </plurals>
-    
+
     <string name="ok_label">Одноклассники</string>
-    <string name="general_bonus">Бонус</string>
-    <string name="general_get">Получить</string>
-    <string name="not_enough_coins">Недостаточно монет для покупки</string>
 </resources>
