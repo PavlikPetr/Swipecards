@@ -55,6 +55,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
     private ImageSwitcher mImageSwitcher;
     private ImageButton mRetryBtn;
     private View mControlsView;
+    private View mTopPanel;
 
     private UsersList<T> mUsersList;
     private PreloadManager<SearchUser> mPreloadManager;
@@ -144,6 +145,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
             ViewStub topPanelStub = ((ViewStub) root.findViewById(R.id.vsTopPanelContainer));
             topPanelStub.setLayoutResource(R.layout.controls_closing_top_panel);
             final View view = topPanelStub.inflate();
+            mTopPanel = view;
             initTopPanel(view);
 
         }
@@ -243,13 +245,18 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
 
     protected abstract void onPageSelected(int position);
 
-    private View.OnClickListener getOnImageSwitcherClickListener() {
+    private final View.OnClickListener getOnImageSwitcherClickListener() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mControlsView != null) {
                     mControlsView.setVisibility(
                             mControlsView.getVisibility() != View.VISIBLE ? View.VISIBLE : View.GONE
+                    );
+                }
+                if (mTopPanel != null) {
+                    mTopPanel.setVisibility(
+                            mTopPanel.getVisibility() != View.VISIBLE ? View.VISIBLE : View.GONE
                     );
                 }
             }

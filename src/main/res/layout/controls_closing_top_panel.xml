@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:background="@drawable/bg_closing_list_button_tile"
-                android:layout_height="wrap_content">
+    android:layout_width="fill_parent"
+    android:background="@drawable/bg_closing_list_button_tile"
+    android:layout_height="wrap_content">
 
     <Button
-            android:id="@+id/btnWatchAsList"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/ButtonBlue"
-            android:paddingLeft="35dp"
-            android:paddingRight="35dp"
-            android:layout_centerInParent="true"
+        android:id="@+id/btnWatchAsList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/ButtonBlue"
+        android:paddingLeft="35dp"
+        android:paddingRight="35dp"
+        android:layout_centerInParent="true"
         android:text="@string/watching_as_list" />
 
 </RelativeLayout>
