@@ -320,6 +320,7 @@ public class BannerBlock {
     private void showLifeStreet() {
         SlotView slotView = (SlotView) mBannerView;
         slotView.setSlotTag(LIFESTREET_SLOT_TAG);
+        slotView.setAutoRefreshEnabled(true);
         slotView.setListener(new BasicSlotListener() {
             @Override
             public void onFailedToLoadSlotView(SlotView slotView) {
