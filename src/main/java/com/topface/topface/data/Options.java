@@ -11,6 +11,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.PopupManager;
 
@@ -237,6 +238,7 @@ public class Options extends AbstractData {
                 closing.enabledSympathies = closingsObj.optBoolean("enabledSympathies");
                 closing.limitMutual = closingsObj.optInt("limitMutual");
                 closing.limitSympathies = closingsObj.optInt("limitSympathies");
+                closing.timeout = closingsObj.optInt("timeout") * DateUtils.HOUR_IN_MILLISECONDS;
             }
 
             JSONObject ratePopupObject = response.optJSONObject("ratePopup");
