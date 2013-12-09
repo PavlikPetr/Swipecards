@@ -56,7 +56,6 @@ public class GCMIntentService extends GCMBaseIntentService {
     }
 
 
-
     @Override
     protected void onUnregistered(Context context, String s) {
         Debug.log(String.format("GCM: onUnregistered: %s", s));

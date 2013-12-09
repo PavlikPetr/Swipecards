@@ -153,12 +153,12 @@ public class ContactsProvider {
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeString(name);
             dest.writeString(phone);
-            dest.writeInt(email?1:0);
+            dest.writeInt(email ? 1 : 0);
         }
 
     }
 
-    public static abstract class GetContactsHandler extends Handler{
+    public static abstract class GetContactsHandler extends Handler {
 
         private ArrayList<Contact> mContacts;
 

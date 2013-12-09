@@ -21,7 +21,7 @@ public class CitiesRequest extends ApiRequest {
         if (type != null) {
             data.put("type", type);
         }
-        if(prefix != null) {
+        if (prefix != null) {
             data.put("prefix", prefix);
         }
         return data;

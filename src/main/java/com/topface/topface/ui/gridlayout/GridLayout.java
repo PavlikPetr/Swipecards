@@ -461,7 +461,7 @@ public class GridLayout extends com.topface.topface.ui.gridlayout.ViewGroup {
      * Returns whether or not row boundaries are ordered by their grid indices.
      *
      * @return {@code true} if row boundaries must appear in the order of their indices,
-     *         {@code false} otherwise
+     * {@code false} otherwise
      * @attr ref android.R.styleable#GridLayout_rowOrderPreserved
      * @see #setRowOrderPreserved(boolean)
      */
@@ -493,7 +493,7 @@ public class GridLayout extends com.topface.topface.ui.gridlayout.ViewGroup {
      * Returns whether or not column boundaries are ordered by their grid indices.
      *
      * @return {@code true} if column boundaries must appear in the order of their indices,
-     *         {@code false} otherwise
+     * {@code false} otherwise
      * @attr ref android.R.styleable#GridLayout_columnOrderPreserved
      * @see #setColumnOrderPreserved(boolean)
      */
@@ -2211,7 +2211,7 @@ public class GridLayout extends com.topface.topface.ui.gridlayout.ViewGroup {
          *
          * @param that the object to compare this interval with
          * @return {@code true} if the specified object is equal to this
-         *         {@code Interval}, {@code false} otherwise.
+         * {@code Interval}, {@code false} otherwise.
          */
         @Override
         public boolean equals(Object that) {
@@ -2305,7 +2305,7 @@ public class GridLayout extends com.topface.topface.ui.gridlayout.ViewGroup {
          *
          * @param that the object to compare this spec with
          * @return {@code true} if the specified object is equal to this
-         *         {@code Spec}; {@code false} otherwise
+         * {@code Spec}; {@code false} otherwise
          */
         @Override
         public boolean equals(Object that) {

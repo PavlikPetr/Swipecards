@@ -49,7 +49,7 @@ abstract class ViewGroup extends android.view.ViewGroup {
      * @param size        How big the view wants to be
      * @param measureSpec Constraints imposed by the parent
      * @return Size information bit mask as defined by
-     *         {@link #MEASURED_SIZE_MASK} and {@link #MEASURED_STATE_TOO_SMALL}.
+     * {@link #MEASURED_SIZE_MASK} and {@link #MEASURED_STATE_TOO_SMALL}.
      */
     public static int resolveSizeAndState(int size, int measureSpec, int childMeasuredState) {
         if (Build.VERSION.SDK_INT >= 11) {

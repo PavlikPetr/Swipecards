@@ -1,47 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/item_list_selector">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/item_list_selector">
 
     <!-- аватар -->
     <com.topface.topface.ui.views.ImageViewRemote
-            android:id="@+id/ivAvatar"
-            style="@style/FeedAvatar" />
+        android:id="@+id/ivAvatar"
+        style="@style/FeedAvatar" />
 
     <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/ivAvatar"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="20dp">
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/ivAvatar"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp">
 
         <!-- имя, возраст -->
         <TextView
-                android:id="@+id/tvName"
-                style="@style/ListName" />
+            android:id="@+id/tvName"
+            style="@style/ListName" />
 
         <!-- город -->
         <TextView
-                android:id="@+id/tvCity"
-                android:layout_toRightOf="@id/tvName"
-                android:layout_alignBaseline="@id/tvName"
-                style="@style/ListCity" />
+            android:id="@+id/tvCity"
+            android:layout_toRightOf="@id/tvName"
+            android:layout_alignBaseline="@id/tvName"
+            style="@style/ListCity" />
 
         <!-- текст -->
         <TextView
-                android:id="@+id/tvText"
-                android:layout_below="@id/tvName"
-                android:drawablePadding="3dp"
-                android:layout_toLeftOf="@+id/tvTime"
-                style="@style/ListMessageText" />
+            android:id="@+id/tvText"
+            android:layout_below="@id/tvName"
+            android:drawablePadding="3dp"
+            android:layout_toLeftOf="@+id/tvTime"
+            style="@style/ListMessageText" />
 
         <!-- время -->
         <TextView
-                android:id="@+id/tvTime"
-                android:layout_alignBaseline="@id/tvText"
-                style="@style/ListTime" />
+            android:id="@+id/tvTime"
+            android:layout_alignBaseline="@id/tvText"
+            style="@style/ListTime" />
 
 
     </RelativeLayout>
@@ -49,7 +48,7 @@
 
     <!-- online -->
     <ImageView
-            android:id="@+id/ivOnline"
-            style="@style/OnlineIndicator" />
+        android:id="@+id/ivOnline"
+        style="@style/OnlineIndicator" />
 
 </RelativeLayout>

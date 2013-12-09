@@ -8,9 +8,6 @@ import com.topface.topface.R;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.views.ServicesTextView;
 
-/**
-* Created by kirussell on 11.11.13.
-*/
 public class BuyWidgetController {
     Button mBuyButton;
     ServicesTextView mCoins;

@@ -16,12 +16,12 @@ import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.utils.CacheProfile;
 
 /**
-* Created with IntelliJ IDEA.
-* User: User
-* Date: 27.03.13
-* Time: 14:56
-* To change this template use File | Settings | File Templates.
-*/
+ * Created with IntelliJ IDEA.
+ * User: User
+ * Date: 27.03.13
+ * Time: 14:56
+ * To change this template use File | Settings | File Templates.
+ */
 public class HeaderStatusFragment extends BaseFragment implements View.OnClickListener {
     private static final String ARG_TAG_STATUS = "status";
     private static final String ARG_TAG_PROFILE_TYPE = "profile_type";

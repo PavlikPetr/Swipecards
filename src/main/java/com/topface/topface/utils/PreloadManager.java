@@ -27,7 +27,7 @@ public class PreloadManager<T extends FeedUser> {
     @SuppressWarnings("unchecked")
     public void preloadPhoto(UsersList userList) {
         if (!userList.isEnded()) {
-            preloadNextPhoto(((T)userList.get(userList.getSearchPosition() + 1)).photos.getFirst());
+            preloadNextPhoto(((T) userList.get(userList.getSearchPosition() + 1)).photos.getFirst());
         }
     }
 

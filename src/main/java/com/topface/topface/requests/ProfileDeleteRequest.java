@@ -20,7 +20,7 @@ public class ProfileDeleteRequest extends ApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         JSONObject data = new JSONObject();
-        data.put("reason",reason)
+        data.put("reason", reason)
                 .put("message", message);
         return data;
     }

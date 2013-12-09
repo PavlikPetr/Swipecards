@@ -1,116 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
     <RelativeLayout
-            android:id="@+id/loDialog"
-            android:layout_width="299dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_dialog"
-            android:layout_centerInParent="true"
-            android:padding="12dp">
+        android:id="@+id/loDialog"
+        android:layout_width="299dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_dialog"
+        android:layout_centerInParent="true"
+        android:padding="12dp">
 
         <LinearLayout
-                android:id="@+id/loInfo"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                >
+            android:id="@+id/loInfo"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
             <TextView
-                    android:id="@+id/tvText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    style="@style/ItemWhiteText"
-                    android:textSize="12sp"
-                    android:text="@string/no_photo_take_photo"
-                    />
+                android:id="@+id/tvText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                style="@style/ItemWhiteText"
+                android:textSize="12sp"
+                android:text="@string/no_photo_take_photo" />
 
             <RelativeLayout
-                    android:id="@+id/loPhoto"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:visibility="gone">
+                android:id="@+id/loPhoto"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:visibility="gone">
 
                 <com.topface.topface.ui.views.ImageViewRemote
-                        android:id="@+id/ivPhoto"
-                        android:maxHeight="320dp"
-                        android:adjustViewBounds="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        />
+                    android:id="@+id/ivPhoto"
+                    android:maxHeight="320dp"
+                    android:adjustViewBounds="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true" />
 
                 <ImageView
-                        android:id="@+id/ivFrame"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignLeft="@id/ivPhoto"
-                        android:layout_alignTop="@id/ivPhoto"
-                        android:layout_alignRight="@id/ivPhoto"
-                        android:layout_alignBottom="@id/ivPhoto"
-                        android:background="@drawable/frame_dialog_photo"
-                        />
+                    android:id="@+id/ivFrame"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/ivPhoto"
+                    android:layout_alignTop="@id/ivPhoto"
+                    android:layout_alignRight="@id/ivPhoto"
+                    android:layout_alignBottom="@id/ivPhoto"
+                    android:background="@drawable/frame_dialog_photo" />
             </RelativeLayout>
         </LinearLayout>
 
         <LinearLayout
-                android:id="@+id/loControlButtons"
-                android:layout_below="@id/loInfo"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal"
-                >
+            android:id="@+id/loControlButtons"
+            android:layout_below="@id/loInfo"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
 
             <Button
-                    android:id="@+id/btnTakePhoto"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginRight="4dp"
-                    android:background="@drawable/btn_gray_selector"
-                    style="@style/ButtonWhiteTextMini"
-                    android:text="@string/take_photo"
-                    android:padding="8dp"/>
+                android:id="@+id/btnTakePhoto"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginRight="4dp"
+                android:background="@drawable/btn_gray_selector"
+                style="@style/ButtonWhiteTextMini"
+                android:text="@string/take_photo"
+                android:padding="8dp" />
 
             <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="4dp">
+
+                <Button
+                    android:id="@+id/btnTakeFormGallery"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="4dp"
-                    >
+                    android:background="@drawable/btn_gray_selector"
+                    style="@style/ButtonWhiteTextMini"
+                    android:text="@string/gallery"
+                    android:padding="8dp" />
 
                 <Button
-                        android:id="@+id/btnTakeFormGallery"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/btn_gray_selector"
-                        style="@style/ButtonWhiteTextMini"
-                        android:text="@string/gallery"
-                        android:padding="8dp"/>
-
-                <Button
-                        android:id="@+id/btnSendPhoto"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:layout_alignLeft="@id/btnTakeFormGallery"
-                        android:layout_alignTop="@id/btnTakeFormGallery"
-                        android:layout_alignRight="@id/btnTakeFormGallery"
-                        android:layout_alignBottom="@id/btnTakeFormGallery"
-                        android:background="@drawable/btn_blue_selector"
-                        style="@style/ButtonWhiteTextMini"
-                        android:text="@string/general_send_full"
-                        android:padding="8dp"/>
+                    android:id="@+id/btnSendPhoto"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_alignLeft="@id/btnTakeFormGallery"
+                    android:layout_alignTop="@id/btnTakeFormGallery"
+                    android:layout_alignRight="@id/btnTakeFormGallery"
+                    android:layout_alignBottom="@id/btnTakeFormGallery"
+                    android:background="@drawable/btn_blue_selector"
+                    style="@style/ButtonWhiteTextMini"
+                    android:text="@string/general_send_full"
+                    android:padding="8dp" />
             </RelativeLayout>
         </LinearLayout>
 
@@ -118,13 +110,13 @@
 
 
     <ImageButton
-            android:id="@+id/btnClose"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignRight="@id/loDialog"
-            android:layout_alignTop="@id/loDialog"
-            android:background="@drawable/btn_dialog_close_selector"
-            android:layout_marginTop="-16dp"
-            android:layout_marginRight="-16dp"/>
+        android:id="@+id/btnClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@id/loDialog"
+        android:layout_alignTop="@id/loDialog"
+        android:background="@drawable/btn_dialog_close_selector"
+        android:layout_marginTop="-16dp"
+        android:layout_marginRight="-16dp" />
 
 </RelativeLayout>

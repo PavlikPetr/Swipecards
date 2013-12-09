@@ -7,7 +7,7 @@ import android.content.Intent;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.utils.Debug;
 
-public class TestNotificationsReceiver extends BroadcastReceiver{
+public class TestNotificationsReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {

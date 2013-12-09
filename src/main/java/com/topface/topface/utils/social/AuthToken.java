@@ -43,7 +43,7 @@ public class AuthToken {
 
 
     private boolean isToken() {
-        boolean hasSocialToken  = (mTokenInfo.mTokenKey != null && mTokenInfo.mTokenKey.length() > 0);
+        boolean hasSocialToken = (mTokenInfo.mTokenKey != null && mTokenInfo.mTokenKey.length() > 0);
         boolean hasTopfaceToken = (mTokenInfo.mLogin != null && mTokenInfo.mLogin.length() > 0
                 && mTokenInfo.mPassword != null && mTokenInfo.mPassword.length() > 0);
         return mTokenInfo.mSnType.equals(SN_TOPFACE) ? hasTopfaceToken : hasSocialToken;
@@ -55,12 +55,12 @@ public class AuthToken {
         mTokenInfo.mUserId = mPreferences.getString(TOKEN_USER_ID, Static.EMPTY);
         mTokenInfo.mTokenKey = mPreferences.getString(TOKEN_TOKEN_KEY, Static.EMPTY);
         mTokenInfo.mExpiresIn = mPreferences.getString(TOKEN_EXPIRES, Static.EMPTY);
-        mTokenInfo.mLogin  = mPreferences.getString(TOKEN_LOGIN,Static.EMPTY);
-        mTokenInfo.mPassword  = mPreferences.getString(TOKEN_PASSWORD,Static.EMPTY);
+        mTokenInfo.mLogin = mPreferences.getString(TOKEN_LOGIN, Static.EMPTY);
+        mTokenInfo.mPassword = mPreferences.getString(TOKEN_PASSWORD, Static.EMPTY);
     }
 
 
-    public void saveToken(String user_Id, String login,String password) {
+    public void saveToken(String user_Id, String login, String password) {
         SharedPreferences.Editor editor = mPreferences.edit();
         editor.putString(TOKEN_NETWORK, mTokenInfo.mSnType = SN_TOPFACE);
         editor.putString(TOKEN_USER_ID, mTokenInfo.mUserId = user_Id);
@@ -164,7 +164,7 @@ public class AuthToken {
         }
 
         public String getTokenKey() {
-            if (getSocialNet().equals(AuthToken.SN_FACEBOOK)){
+            if (getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
                 return mTokenKey;
             } else if (getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
                 return mTokenKey;

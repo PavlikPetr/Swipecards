@@ -102,7 +102,7 @@ public class Photos extends ArrayList<Photo> implements SerializableToJsonArray 
 
     public boolean removeById(int photoId) {
         for (Photo photo : this) {
-            if(photo.getId() == photoId) {
+            if (photo.getId() == photoId) {
                 this.remove(photo);
                 return true;
             }
@@ -123,7 +123,7 @@ public class Photos extends ArrayList<Photo> implements SerializableToJsonArray 
 
     public int[] getIdsArray() {
         int[] result = new int[this.size()];
-        for (int i=0;i<result.length;i++) {
+        for (int i = 0; i < result.length; i++) {
             result[i] = this.get(i).getId();
         }
         return result;

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.VisitorsMarkReadedRequest;
@@ -11,7 +12,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 
-public class PromoVisitorsPopup extends PromoPopupFragment{
+public class PromoVisitorsPopup extends PromoPopupFragment {
 
     private boolean counterUpdated;
 
@@ -45,7 +46,7 @@ public class PromoVisitorsPopup extends PromoPopupFragment{
     protected String getMessage() {
         int count = getPremiumEntity().getCount();
         int guests = CountersManager.getInstance(getActivity()).getCounter(CountersManager.VISITORS);
-        count = guests > 0? guests:count;
+        count = guests > 0 ? guests : count;
         return Utils.getQuantityString(getPluralForm(), count, count);
     }
 

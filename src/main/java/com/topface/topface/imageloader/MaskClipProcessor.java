@@ -24,7 +24,7 @@ public class MaskClipProcessor implements BitmapProcessor {
             cachedMaskBitmaps.put(mask, mMask);
         }
         if (mBorder == null && border != 0) {
-            mBorder = BitmapFactory.decodeResource(App.getContext().getResources(),border);
+            mBorder = BitmapFactory.decodeResource(App.getContext().getResources(), border);
         }
     }
 

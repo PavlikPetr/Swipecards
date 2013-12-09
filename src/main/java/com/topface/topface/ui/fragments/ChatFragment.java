@@ -230,7 +230,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         mItemId = getArguments().getString(INTENT_ITEM_ID);
         mUserId = getArguments().getInt(INTENT_USER_ID, -1);
         mUserName = getArguments().getString(INTENT_USER_NAME);
-        mUserSex = getArguments().getInt(INTENT_USER_SEX,Static.BOY);
+        mUserSex = getArguments().getInt(INTENT_USER_SEX, Static.BOY);
         mUserAge = getArguments().getInt(INTENT_USER_AGE, 0);
         mUserCity = getArguments().getString(INTENT_USER_CITY);
     }
@@ -1266,7 +1266,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     item.setChecked(checked);
                     animateChatActions(!checked, 500);
                 } else {
-                    Toast.makeText(getActivity(),R.string.user_deleted_or_banned,
+                    Toast.makeText(getActivity(), R.string.user_deleted_or_banned,
                             Toast.LENGTH_LONG).show();
                 }
                 return true;

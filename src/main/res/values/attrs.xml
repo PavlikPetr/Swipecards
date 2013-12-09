@@ -1,64 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="UniversalFrameImageView">
-        <attr name="frameSrc" format="reference"/>
+        <attr name="frameSrc" format="reference" />
     </declare-styleable>
 
     <declare-styleable name="LockerView">
-        <attr name="android:gravity"/>
-        <attr name="android:text"/>
-        <attr name="android:textColor"/>
-        <attr name="android:textSize"/>
-        <attr name="android:shadowColor"/>
-        <attr name="android:shadowRadius"/>
-        <attr name="android:shadowDx"/>
-        <attr name="android:shadowDy"/>
-        <attr name="android:drawableLeft"/>
-        <attr name="android:drawableTop"/>
-        <attr name="android:drawableRight"/>
-        <attr name="android:drawableBottom"/>
-        <attr name="android:drawablePadding"/>
-        <attr name="android:indeterminateDrawable"/>
-        <attr name="messageGravity" format="integer"/>
-        <attr name="messageBackground" format="reference|color"/>
-        <attr name="messagePadding" format="dimension"/>
-        <attr name="messagePaddingLeft" format="dimension"/>
-        <attr name="messagePaddingTop" format="dimension"/>
-        <attr name="messagePaddingRight" format="dimension"/>
-        <attr name="messagePaddingBottom" format="dimension"/>
+        <attr name="android:gravity" />
+        <attr name="android:text" />
+        <attr name="android:textColor" />
+        <attr name="android:textSize" />
+        <attr name="android:shadowColor" />
+        <attr name="android:shadowRadius" />
+        <attr name="android:shadowDx" />
+        <attr name="android:shadowDy" />
+        <attr name="android:drawableLeft" />
+        <attr name="android:drawableTop" />
+        <attr name="android:drawableRight" />
+        <attr name="android:drawableBottom" />
+        <attr name="android:drawablePadding" />
+        <attr name="android:indeterminateDrawable" />
+        <attr name="messageGravity" format="integer" />
+        <attr name="messageBackground" format="reference|color" />
+        <attr name="messagePadding" format="dimension" />
+        <attr name="messagePaddingLeft" format="dimension" />
+        <attr name="messagePaddingTop" format="dimension" />
+        <attr name="messagePaddingRight" format="dimension" />
+        <attr name="messagePaddingBottom" format="dimension" />
     </declare-styleable>
 
     <declare-styleable name="ImageViewRemote">
         <!--attr name="stubImage" format="reference" />
         <attr name="imageForEmptyUri" format="reference" /-->
-        <attr name="remoteSrc" format="string"/>
-        <attr name="cornersRadius" format="dimension"/>
-        <attr name="clipMask" format="reference"/>
-        <attr name="border" format="reference"/>
-        <attr name="android:maxHeight"/>
-        <attr name="android:maxWidth"/>
+        <attr name="remoteSrc" format="string" />
+        <attr name="cornersRadius" format="dimension" />
+        <attr name="clipMask" format="reference" />
+        <attr name="border" format="reference" />
+        <attr name="android:maxHeight" />
+        <attr name="android:maxWidth" />
         <attr name="postProcessor">
-            <flag name="none" value="0"/>
-            <flag name="rounded" value="1"/>
-            <flag name="roundCorners" value="2"/>
-            <flag name="mask" value="3"/>
-            <flag name="circumCircle" value="4"/>
-            <flag name="leftMenuClip" value="5"/>
+            <flag name="none" value="0" />
+            <flag name="rounded" value="1" />
+            <flag name="roundCorners" value="2" />
+            <flag name="mask" value="3" />
+            <flag name="circumCircle" value="4" />
+            <flag name="leftMenuClip" value="5" />
         </attr>
     </declare-styleable>
 
     <declare-styleable name="ServicesTextView">
-            <attr name="maxChars" format="integer" />
-            <attr name="charPadding" format="integer"/>
-            <attr name="text" format="string"/>
-            <attr name="image" format="reference"/>
-            <attr name="fontSize" format="integer"/>
-            <attr name="textWithoutBackground" format="string"/>
+        <attr name="maxChars" format="integer" />
+        <attr name="charPadding" format="integer" />
+        <attr name="text" format="string" />
+        <attr name="image" format="reference" />
+        <attr name="fontSize" format="integer" />
+        <attr name="textWithoutBackground" format="string" />
     </declare-styleable>
 
     <declare-styleable name="AnimatedView">
-        <attr name="settings" format="reference"/>
-        <attr name="src" format="reference"/>
+        <attr name="settings" format="reference" />
+        <attr name="src" format="reference" />
     </declare-styleable>
 
     <declare-styleable name="com.inneractive.api.ads.InneractiveAd">

@@ -335,7 +335,7 @@ public class BannerBlock {
     }
 
     private void showAdlab() {
-        AdBanner adBanner = (AdBanner)mBannerView;
+        AdBanner adBanner = (AdBanner) mBannerView;
         mAdlabInitializer = new AdInitializer(mContext, adBanner, ADLAB_IDENTIFICATOR);
         mAdlabInitializer.setOnBannerRequestListener(new BannerLoader.OnBannerRequestListener() {
             @Override

@@ -1,117 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:id="@+id/leadersCont"
-                android:background="@drawable/bg_main">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/leadersCont"
+    android:background="@drawable/bg_main">
 
     <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
         <RelativeLayout
-                android:id="@+id/loFooter"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                >
+            android:id="@+id/loFooter"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
 
             <ImageView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/leader_btn_bg_plate"
-                    android:scaleType="fitXY"
-                    />
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/leader_btn_bg_plate"
+                android:scaleType="fitXY" />
 
             <Button
-                    android:id="@+id/btnLeadersBuy"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    style="@style/ButtonBlue"
-                    />
+                android:id="@+id/btnLeadersBuy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                style="@style/ButtonBlue" />
         </RelativeLayout>
 
         <ScrollView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@id/loFooter"
-                android:layout_alignParentTop="true"
-                android:layout_margin="5dp"
-                >
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/loFooter"
+            android:layout_alignParentTop="true"
+            android:layout_margin="5dp">
 
             <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    >
-
-                <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:textSize="14sp"
-                        android:text="@string/choose_cool_photo"
-                        />
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="14sp"
+                    android:text="@string/choose_cool_photo" />
 
                 <com.topface.topface.ui.gridlayout.GridLayout
-                        android:id="@+id/usedGrid"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:fadeScrollbars="true"
-                        android:fadingEdge="none"
-                        android:horizontalSpacing="0px"
-                        android:listSelector="@android:color/transparent"
-                        android:padding="0px"
-                        app:columnsAutoFit="true"
-                        app:columnWidth="95"
-                        android:stretchMode="columnWidth"
-                        android:verticalSpacing="0px"
-                        android:gravity="center">
-                </com.topface.topface.ui.gridlayout.GridLayout>
+                    android:id="@+id/usedGrid"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:fadeScrollbars="true"
+                    android:fadingEdge="none"
+                    android:horizontalSpacing="0px"
+                    android:listSelector="@android:color/transparent"
+                    android:padding="0px"
+                    app:columnsAutoFit="true"
+                    app:columnWidth="95"
+                    android:stretchMode="columnWidth"
+                    android:verticalSpacing="0px"
+                    android:gravity="center"></com.topface.topface.ui.gridlayout.GridLayout>
 
                 <TextView
-                        android:id="@+id/unusedTitle"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:textSize="14sp"/>
+                    android:id="@+id/unusedTitle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="14sp" />
 
                 <com.topface.topface.ui.gridlayout.GridLayout
-                        android:id="@+id/unusedGrid"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:fadeScrollbars="true"
-                        android:fadingEdge="none"
-                        android:horizontalSpacing="0px"
-                        android:listSelector="@android:color/transparent"
-                        android:padding="0px"
-                        app:columnWidth="95"
-                        app:columnsAutoFit="true"
-                        android:stretchMode="columnWidth"
-                        android:verticalSpacing="0px"
-                        android:gravity="center"/>
+                    android:id="@+id/unusedGrid"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:fadeScrollbars="true"
+                    android:fadingEdge="none"
+                    android:horizontalSpacing="0px"
+                    android:listSelector="@android:color/transparent"
+                    android:padding="0px"
+                    app:columnWidth="95"
+                    app:columnsAutoFit="true"
+                    android:stretchMode="columnWidth"
+                    android:verticalSpacing="0px"
+                    android:gravity="center" />
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>
 
     <com.topface.topface.ui.views.LockerView
-            android:id="@+id/llvLeaderSending"
-            style="@style/LoadingLocker"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:visibility="gone"/>
+        android:id="@+id/llvLeaderSending"
+        style="@style/LoadingLocker"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="gone" />
 
 </RelativeLayout>

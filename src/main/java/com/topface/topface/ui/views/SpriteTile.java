@@ -113,11 +113,11 @@ public class SpriteTile extends Drawable {
         } catch (Exception e) {
             Log.e("ERROR", "ERROR IN SPRITE TILE CODE:" + e.toString());
         }
-        Rect firstFrameSize = new Rect(((FrameInfo)((AnimationSequece)animations.get(currentAnimation)).sequence.get(currentFrame)).rect);
-        frameSize.bottom = (int)(firstFrameSize.bottom * mDensity);
-        frameSize.top = (int)(firstFrameSize.top * mDensity);
-        frameSize.left = (int)(firstFrameSize.left * mDensity);
-        frameSize.right = (int)(firstFrameSize.right * mDensity);
+        Rect firstFrameSize = new Rect(((FrameInfo) ((AnimationSequece) animations.get(currentAnimation)).sequence.get(currentFrame)).rect);
+        frameSize.bottom = (int) (firstFrameSize.bottom * mDensity);
+        frameSize.top = (int) (firstFrameSize.top * mDensity);
+        frameSize.left = (int) (firstFrameSize.left * mDensity);
+        frameSize.right = (int) (firstFrameSize.right * mDensity);
         System.out.println("Sprite Loaded ");
     }
 
@@ -128,7 +128,7 @@ public class SpriteTile extends Drawable {
             FrameInfo frameinfo = (FrameInfo) ((AnimationSequece) animations.get(currentAnimation)).sequence.get(currentFrame);
             Rect rclip = new Rect(frameinfo.rect);
 
-            rclip.set((int) (mDensity * rclip.left), (int)(rclip.top * mDensity), (int)(rclip.right * mDensity), (int)(rclip.bottom * mDensity));
+            rclip.set((int) (mDensity * rclip.left), (int) (rclip.top * mDensity), (int) (rclip.right * mDensity), (int) (rclip.bottom * mDensity));
 
             Rect dest = new Rect(getXpos(), getYpos(), getXpos() + (rclip.right - rclip.left),
                     getYpos() + (rclip.bottom - rclip.top));
@@ -164,13 +164,12 @@ public class SpriteTile extends Drawable {
         if (waitDelay == 0)//if done waiting
         {
 //set current frame back to the first because looping is possible
-            if (((AnimationSequece)animations.get(currentAnimation)).canLoop && currentFrame == ((AnimationSequece)animations.get(currentAnimation)).sequence.size() - 1)
-            currentFrame = 0;
-            else
-            {
+            if (((AnimationSequece) animations.get(currentAnimation)).canLoop && currentFrame == ((AnimationSequece) animations.get(currentAnimation)).sequence.size() - 1)
+                currentFrame = 0;
+            else {
                 currentFrame++; //go to next frame
 
-                FrameInfo frameinfo = (FrameInfo) ((AnimationSequece)animations.get(currentAnimation)).sequence.get(currentFrame);
+                FrameInfo frameinfo = (FrameInfo) ((AnimationSequece) animations.get(currentAnimation)).sequence.get(currentFrame);
                 waitDelay = frameinfo.nextFrameDelay; //set delaytime for the next frame
             }
         } else {
@@ -181,16 +180,16 @@ public class SpriteTile extends Drawable {
 
     //has this sprite collided with a rect
     public boolean hasCollided(Rect rect) {
-        AnimationSequece as = (AnimationSequece)animations.get(currentAnimation);
-        if ( rect.right < as.collisionRect.left)
-        return false;
-        if ( rect.left > as.collisionRect.right)
-        return false;
+        AnimationSequece as = (AnimationSequece) animations.get(currentAnimation);
+        if (rect.right < as.collisionRect.left)
+            return false;
+        if (rect.left > as.collisionRect.right)
+            return false;
 
-        if ( rect.top > as.collisionRect.bottom)
-        return false;
-        if ( rect.bottom < as.collisionRect.top)
-        return false;
+        if (rect.top > as.collisionRect.bottom)
+            return false;
+        if (rect.bottom < as.collisionRect.top)
+            return false;
 
         return true;
     }
@@ -198,8 +197,8 @@ public class SpriteTile extends Drawable {
     //has animation finished playing, returns true on a animaiton that can loop for ever
     public boolean hasAnimationFinished() {
         AnimationSequece as = (AnimationSequece) animations.get(currentAnimation);
-        if ( currentFrame == as.sequence.size() - 1 && !as.canLoop)
-        return true;
+        if (currentFrame == as.sequence.size() - 1 && !as.canLoop)
+            return true;
 
         return false;
     }

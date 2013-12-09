@@ -12,7 +12,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 
-public class PromoAdmirationsPopup extends PromoPopupFragment{
+public class PromoAdmirationsPopup extends PromoPopupFragment {
 
     private boolean counterUpdated;
 
@@ -46,7 +46,7 @@ public class PromoAdmirationsPopup extends PromoPopupFragment{
     protected String getMessage() {
         int count = getPremiumEntity().getCount();
         int admirations = CountersManager.getInstance(getActivity()).getCounter(CountersManager.ADMIRATIONS);
-        count = admirations > 0? admirations:count;
+        count = admirations > 0 ? admirations : count;
         return Utils.getQuantityString(getPluralForm(), count, count);
     }
 

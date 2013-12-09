@@ -144,7 +144,7 @@ public class GeoLocationManager {
     /**
      * Address by coordinates
      *
-     * @param latitude широта
+     * @param latitude  широта
      * @param longitude долго
      * @return specific address correlating with input coordinates
      */
@@ -204,7 +204,6 @@ public class GeoLocationManager {
 
     /**
      * Set icon on specific location and shift to that location
-     *
      */
     public void setOverlayItem(Context context, MapView mapView, GeoPoint point, int zoom) {
         List<Overlay> mapOverlays = mapView.getOverlays();

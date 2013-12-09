@@ -1,225 +1,222 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:padding="16dp">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="16dp">
 
     <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_marginTop="10dp"
-            android:orientation="vertical"
-            android:layout_height="wrap_content">
+        android:layout_width="fill_parent"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
 
         <!-- Это просто текстовая информация о пользователе -->
         <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/editor_title_name"
-                android:id="@+id/EditorInfoName"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/editor_title_name"
+            android:id="@+id/EditorInfoName" />
 
         <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/editor_title_id"
-                android:autoLink="web"
-                android:id="@+id/EditorInfoId"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/editor_title_id"
+            android:autoLink="web"
+            android:id="@+id/EditorInfoId" />
 
         <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/EditorInfoSsid"
-                android:text="@string/editor_title_ssid"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/EditorInfoSsid"
+            android:text="@string/editor_title_ssid" />
 
         <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/EditorInfoToken"
-                android:text="@string/editor_title_token"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/EditorInfoToken"
+            android:text="@string/editor_title_token" />
 
         <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/EditorInfoSocialNetwork"
-                android:autoLink="web"
-                android:text="@string/editor_title_social_link"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/EditorInfoSocialNetwork"
+            android:autoLink="web"
+            android:text="@string/editor_title_social_link" />
 
         <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/EditorInfoEditorStatus"
-                android:text="@string/editor_title_editor_status"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/EditorInfoEditorStatus"
+            android:text="@string/editor_title_editor_status" />
 
         <!-- Настройка подключения к API: URL, версия, ревизия -->
         <RelativeLayout
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
 
             <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/EditorApiTitle"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/editor_api_url_title"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/EditorApiTitle"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/editor_api_url_title" />
 
             <Spinner
-                    android:layout_toRightOf="@id/EditorApiTitle"
-                    android:id="@+id/EditorApiUrl"
-                    android:layout_alignTop="@id/EditorApiTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                android:layout_toRightOf="@id/EditorApiTitle"
+                android:id="@+id/EditorApiUrl"
+                android:layout_alignTop="@id/EditorApiTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/EditorApiTitleVersion"
-                    android:layout_toRightOf="@id/EditorApiUrl"
-                    android:layout_marginTop="15dp"
-                    android:text="@string/editor_api_title_version"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/EditorApiTitleVersion"
+                android:layout_toRightOf="@id/EditorApiUrl"
+                android:layout_marginTop="15dp"
+                android:text="@string/editor_api_title_version" />
 
             <EditText
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:id="@+id/EditorApiVersion"
-                    android:singleLine="true"
-                    android:maxLength="10"
-                    android:hint="@string/editor_api_version_hint"
-                    android:layout_alignTop="@id/EditorApiUrl"
-                    android:layout_toRightOf="@id/EditorApiTitleVersion"
-                    />
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:id="@+id/EditorApiVersion"
+                android:singleLine="true"
+                android:maxLength="10"
+                android:hint="@string/editor_api_version_hint"
+                android:layout_alignTop="@id/EditorApiUrl"
+                android:layout_toRightOf="@id/EditorApiTitleVersion" />
 
             <EditText
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:id="@+id/EditorApiRevision"
-                    android:singleLine="true"
-                    android:hint="@string/editor_api_rev_hint"
-                    android:layout_alignLeft="@id/EditorApiUrl"
-                    android:layout_below="@id/EditorApiUrl"/>
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:id="@+id/EditorApiRevision"
+                android:singleLine="true"
+                android:hint="@string/editor_api_rev_hint"
+                android:layout_alignLeft="@id/EditorApiUrl"
+                android:layout_below="@id/EditorApiUrl" />
 
         </RelativeLayout>
 
         <!-- Настройка подключения к API: URL, версия, ревизия -->
         <RelativeLayout
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
 
             <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:id="@+id/EditorModeTitle"
-                    android:text="@string/editor_title_editor_mode"/>
-
-            <Spinner
-                    android:layout_toRightOf="@id/EditorModeTitle"
-                    android:id="@+id/EditorMode"
-                    android:layout_alignTop="@id/EditorModeTitle"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:id="@+id/EditorDebugTitle"
-                    android:text="@string/editor_title_debug"/>
-
-            <Spinner
-                    android:layout_toRightOf="@id/EditorDebugTitle"
-                    android:id="@+id/EditorDebug"
-                    android:layout_alignTop="@id/EditorDebugTitle"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="5dp"
-                >
+                android:layout_marginRight="10dp"
+                android:id="@+id/EditorModeTitle"
+                android:text="@string/editor_title_editor_mode" />
+
+            <Spinner
+                android:layout_toRightOf="@id/EditorModeTitle"
+                android:id="@+id/EditorMode"
+                android:layout_alignTop="@id/EditorModeTitle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
 
             <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:text="Показывать попап приглашений"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:id="@+id/EditorDebugTitle"
+                android:text="@string/editor_title_debug" />
+
+            <Spinner
+                android:layout_toRightOf="@id/EditorDebugTitle"
+                android:id="@+id/EditorDebug"
+                android:layout_alignTop="@id/EditorDebugTitle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="Показывать попап приглашений" />
 
             <include
-                    android:id="@+id/loPopupSwitcher"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_alignParentRight="true"
-                    layout="@layout/item_edit_form_switch"/>
+                android:id="@+id/loPopupSwitcher"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_alignParentRight="true"
+                layout="@layout/item_edit_form_switch" />
         </RelativeLayout>
 
         <Button
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="@string/editor_refresh_profile"
-                android:id="@+id/EditorRefreshProfile"
-                style="@style/ButtonGray"/>
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/editor_refresh_profile"
+            android:id="@+id/EditorRefreshProfile"
+            style="@style/ButtonGray" />
 
         <Button
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="@string/editor_clear_search_cache"
-                android:id="@+id/EditorClearSearchCache"
-                style="@style/ButtonGray"/>
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/editor_clear_search_cache"
+            android:id="@+id/EditorClearSearchCache"
+            style="@style/ButtonGray" />
 
         <Button
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="@string/editor_clear_air_messages"
-                android:id="@+id/EditorClearAirMessages"
-                style="@style/ButtonGray"/>
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/editor_clear_air_messages"
+            android:id="@+id/EditorClearAirMessages"
+            style="@style/ButtonGray" />
 
         <Button
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="@string/editor_configure_banners"
-                android:id="@+id/EditorConfigureBanners"
-                style="@style/ButtonGray"/>
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/editor_configure_banners"
+            android:id="@+id/EditorConfigureBanners"
+            style="@style/ButtonGray" />
 
         <Button
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="30dp"
-                android:text="@string/editor_save_settings"
-                android:id="@+id/EditorSaveSettings"
-                style="@style/ButtonGray"/>
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="30dp"
+            android:text="@string/editor_save_settings"
+            android:id="@+id/EditorSaveSettings"
+            style="@style/ButtonGray" />
 
         <Button
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="@string/editor_reset_settings"
-                android:id="@+id/EditorResetSettings"
-                style="@style/ButtonGray"/>
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/editor_reset_settings"
+            android:id="@+id/EditorResetSettings"
+            style="@style/ButtonGray" />
     </LinearLayout>
 
 </ScrollView>

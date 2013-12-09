@@ -90,7 +90,7 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
 
     public Photo getLastItem() {
         // cause there is no loader item
-        return mPhotoLinks.get(mPhotoLinks.size()-1);
+        return mPhotoLinks.get(mPhotoLinks.size() - 1);
     }
 
     @Override

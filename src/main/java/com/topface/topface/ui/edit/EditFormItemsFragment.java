@@ -40,7 +40,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater,container,savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_edit_with_listview, container,
                 false);
@@ -255,7 +255,7 @@ public class EditFormItemsFragment extends AbstractEditFragment {
 
     @Override
     protected String getTitle() {
-        return  getString(R.string.edit_title);
+        return getString(R.string.edit_title);
     }
 
     @Override

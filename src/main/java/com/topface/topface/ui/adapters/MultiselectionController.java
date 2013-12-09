@@ -42,11 +42,11 @@ public class MultiselectionController<T> {
     }
 
     public void addSelection(int position) {
-        if (selectedCount()+1 > mSelectionLimit) {
+        if (selectedCount() + 1 > mSelectionLimit) {
             return;
         }
         if (mAdapter != null) {
-            T item = (T)mAdapter.getItem(position);
+            T item = (T) mAdapter.getItem(position);
             if (item != null) {
                 mSelected.add(item);
                 mAdapter.notifyDataSetChanged();
@@ -104,7 +104,7 @@ public class MultiselectionController<T> {
 
     public void deleteAllSelectedItems() {
         for (T item : mSelected) {
-            removeSelection(item,false);
+            removeSelection(item, false);
         }
         if (mAdapter != null) mAdapter.notifyDataSetChanged();
     }

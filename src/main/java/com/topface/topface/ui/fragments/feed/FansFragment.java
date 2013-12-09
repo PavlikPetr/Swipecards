@@ -10,7 +10,7 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.utils.CacheProfile;
 
 
-public class FansFragment extends BookmarksFragment{
+public class FansFragment extends BookmarksFragment {
     @Override
     protected Drawable getBackIcon() {
         return getResources().getDrawable(R.drawable.fans);

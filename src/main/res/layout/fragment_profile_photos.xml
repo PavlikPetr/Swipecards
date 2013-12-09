@@ -1,100 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-        >
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
     <ViewFlipper
-            android:id="@+id/vfFlipper"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:inAnimation="@android:anim/fade_in">
+        android:id="@+id/vfFlipper"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:inAnimation="@android:anim/fade_in">
 
         <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:orientation="vertical"
-                android:paddingTop="8dp">
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:paddingTop="8dp">
 
             <TextView
-                    android:id="@+id/usedTitle"
-                    style="@style/BackgroundTitleText"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="6dp"/>
+                android:id="@+id/usedTitle"
+                style="@style/BackgroundTitleText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp" />
 
             <GridView
-                    android:id="@+id/usedGrid"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_below="@id/usedTitle"
-                    android:layout_margin="0px"
-                    android:background="@android:color/transparent"
-                    android:fadeScrollbars="true"
-                    android:fadingEdge="none"
-                    android:horizontalSpacing="0px"
-                    android:listSelector="@android:color/transparent"
-                    android:padding="0dp"
-                    android:numColumns="auto_fit"
-                    android:stretchMode="columnWidth"
-                    android:columnWidth="110dp"
-                    android:verticalSpacing="0px"
-                    />
-
-            <ImageView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/usedTitle"
-                    android:background="@drawable/background_profile_info"/>
-        </RelativeLayout>
-
-        <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/usedGrid"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:orientation="vertical">
+                android:layout_below="@id/usedTitle"
+                android:layout_margin="0px"
+                android:background="@android:color/transparent"
+                android:fadeScrollbars="true"
+                android:fadingEdge="none"
+                android:horizontalSpacing="0px"
+                android:listSelector="@android:color/transparent"
+                android:padding="0dp"
+                android:numColumns="auto_fit"
+                android:stretchMode="columnWidth"
+                android:columnWidth="110dp"
+                android:verticalSpacing="0px" />
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/usedTitle"
+                android:background="@drawable/background_profile_info" />
+        </RelativeLayout>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
 
             <Button
-                    android:id="@+id/btnAddPhotoCamera"
-                    style="@style/ButtonGrayText"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="26dp"
-                    android:background="@drawable/buying_purchase_selector"
-                    android:text="@string/profile_add_camera"/>
+                android:id="@+id/btnAddPhotoCamera"
+                style="@style/ButtonGrayText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="26dp"
+                android:background="@drawable/buying_purchase_selector"
+                android:text="@string/profile_add_camera" />
 
             <Button
-                    android:id="@+id/btnAddPhotoAlbum"
-                    style="@style/ButtonGrayText"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="14dp"
-                    android:background="@drawable/buying_purchase_selector"
-                    android:text="@string/profile_add_album"/>
+                android:id="@+id/btnAddPhotoAlbum"
+                style="@style/ButtonGrayText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/buying_purchase_selector"
+                android:text="@string/profile_add_album" />
 
             <Button
-                    android:id="@+id/btnCancel"
-                    style="@style/ButtonGrayText"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="26dp"
-                    android:background="@drawable/buying_purchase_selector"
-                    android:text="@string/general_cancel"/>
+                android:id="@+id/btnCancel"
+                style="@style/ButtonGrayText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="26dp"
+                android:background="@drawable/buying_purchase_selector"
+                android:text="@string/general_cancel" />
         </LinearLayout>
 
     </ViewFlipper>
 
     <com.topface.topface.ui.views.LockerView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            style="@style/LoadingLocker"
-            android:id="@+id/fppLocker"
-            android:visibility="gone"
-            />
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        style="@style/LoadingLocker"
+        android:id="@+id/fppLocker"
+        android:visibility="gone" />
 </RelativeLayout>

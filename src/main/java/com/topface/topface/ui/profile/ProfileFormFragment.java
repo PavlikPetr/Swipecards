@@ -46,7 +46,7 @@ public class ProfileFormFragment extends BaseFragment {
     private BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(mProfileFormListAdapter != null) {
+            if (mProfileFormListAdapter != null) {
                 mProfileFormListAdapter.refillData();
                 mProfileFormListAdapter.notifyDataSetChanged();
             }
@@ -58,7 +58,7 @@ public class ProfileFormFragment extends BaseFragment {
         super.onResume();
         mProfileFormListAdapter.refillData();
         mProfileFormListAdapter.notifyDataSetChanged();
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver,new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
     }
 
     @Override

@@ -94,7 +94,8 @@ public class AuthFragment extends BaseFragment {
     public static AuthFragment newInstance() {
         return new AuthFragment();
     }
-//пробный пуш
+
+    //пробный пуш
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -191,7 +192,7 @@ public class AuthFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 additionalButtonsScreen = true;
-                if (btnsController!= null) {
+                if (btnsController != null) {
                     btnsController.switchSettings();
                     EasyTracker.getTracker().sendEvent(MAIN_BUTTONS_GA_TAG, "OtherWaysButtonClicked", btnsController.getLocaleTag(), 1L);
                 }

@@ -53,8 +53,19 @@ import com.topface.topface.utils.social.AuthToken;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.*;
-import static com.topface.topface.ui.fragments.BaseFragment.*;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_ADMIRATIONS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_BONUS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_BOOKMARKS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_DATING;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_DIALOGS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_FANS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_LIKES;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_MUTUAL;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_PROFILE;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_UNDEFINED;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_VIP_PROFILE;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.F_VISITORS;
 
 /**
  * Created by kirussell on 05.11.13.
@@ -86,7 +97,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             if (action.equals(CountersManager.UPDATE_BALANCE_COUNTERS)) {
                 mAdapter.refreshCounterBadges();
                 mBuyWidgetController.updateBalance();
-                if (mClosingsController != null){
+                if (mClosingsController != null) {
                     mClosingsController.refreshCounterBadges();
                 }
             } else if (action.equals(ProfileRequest.PROFILE_UPDATE_ACTION)) {
@@ -107,7 +118,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 selectMenu(fragmentId);
             } else if (action.equals(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION)) {
                 if (!CacheProfile.premium) mClosingsController.show();
-            } else if (action.equals(LikesClosingFragment.ACTION_LIKES_CLOSINGS_PROCESSED)){
+            } else if (action.equals(LikesClosingFragment.ACTION_LIKES_CLOSINGS_PROCESSED)) {
                 mClosingsController.onClosingsProcessed(FeedRequest.FeedService.LIKES);
             } else if (action.equals(MutualClosingFragment.ACTION_MUTUAL_CLOSINGS_PROCESSED)) {
                 mClosingsController.onClosingsProcessed(FeedRequest.FeedService.MUTUAL);

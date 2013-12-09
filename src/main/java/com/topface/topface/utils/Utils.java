@@ -340,7 +340,7 @@ public class Utils {
 
     @SuppressWarnings("UnusedDeclaration")
     public static void goToUrl(Context context, String url) {
-        context.startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse(url)));
+        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
     }
 
     public static void goToMarket(Context context) {

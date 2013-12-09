@@ -51,7 +51,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
     @Override
     protected UsersList<FeedUser> createUsersList() {
         Class<FeedUser> itemsClass = getItemsClass();
-        mCacheManager = new UsersListCacheManager(getCacheKey(),itemsClass);
+        mCacheManager = new UsersListCacheManager(getCacheKey(), itemsClass);
         UsersList<FeedUser> users = mCacheManager.getCacheAndRemove();
         if (users == null) {
             users = new UsersList<FeedUser>(itemsClass);
@@ -151,7 +151,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
                         request.callback(new SimpleApiHandler() {
                             @Override
                             public void always(IApiResponse response) {
-                                if(isAdded()) {
+                                if (isAdded()) {
                                     refreshActionBarTitles();
                                 }
                             }

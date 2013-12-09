@@ -38,7 +38,7 @@ public class PluralResources {
      *                   plural rules.
      * @param formatArgs The format arguments that will be used for substitution.
      * @return String The string data associated with the resource,
-     *         stripped of styled text information.
+     * stripped of styled text information.
      * @throws NotFoundException Throws NotFoundException if the given ID does not exist.
      */
     public String getQuantityString(int id, int quantity, Object... formatArgs) throws NotFoundException {

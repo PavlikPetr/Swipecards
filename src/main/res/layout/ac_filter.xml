@@ -1,105 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:fillViewport="true">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true">
 
     <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/loGirl"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:layout_marginTop="20dp"
+            layout="@layout/item_edit_form_check" />
 
         <include
-                android:id="@+id/loGirl"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                layout="@layout/item_edit_form_check"/>
+            android:id="@+id/loBoy"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/item_edit_form_check" />
 
         <include
-                android:id="@+id/loBoy"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                layout="@layout/item_edit_form_check"/>
+            android:id="@+id/loAge"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            layout="@layout/item_edit_form_select" />
 
         <include
-                android:id="@+id/loAge"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                layout="@layout/item_edit_form_select"/>
+            android:id="@+id/loCity"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/item_edit_form_select" />
 
         <include
-                android:id="@+id/loCity"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                layout="@layout/item_edit_form_select"/>
+            android:id="@+id/loOnline"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            layout="@layout/item_edit_form_switch" />
 
         <include
-                android:id="@+id/loOnline"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                layout="@layout/item_edit_form_switch"/>
+            android:id="@+id/loBeautiful"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            layout="@layout/item_edit_form_switch" />
+
+        <include layout="@layout/item_divider" />
 
         <include
-                android:id="@+id/loBeautiful"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                layout="@layout/item_edit_form_switch"/>
+            android:id="@+id/loExtraHeader"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
 
-        <include layout="@layout/item_divider"/>
+            layout="@layout/item_edit_profile_form_header" />
 
         <include
-                android:id="@+id/loExtraHeader"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-
-                layout="@layout/item_edit_profile_form_header"/>
-
-        <include
-                android:id="@+id/loDatingStatus"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                layout="@layout/item_edit_form_select"/>
+            android:id="@+id/loDatingStatus"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/item_edit_form_select" />
 
         <include
-                android:id="@+id/loMarriage"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                layout="@layout/item_edit_form_select"/>
+            android:id="@+id/loMarriage"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/item_edit_form_select" />
 
         <include
-                android:id="@+id/loCharacter"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                layout="@layout/item_edit_form_select"/>
+            android:id="@+id/loCharacter"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/item_edit_form_select" />
 
         <include
-                android:id="@+id/loAlcohol"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                layout="@layout/item_edit_form_select"/>
+            android:id="@+id/loAlcohol"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/item_edit_form_select" />
 
         <include
-                android:id="@+id/loFinance"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                layout="@layout/item_edit_form_select"/>
+            android:id="@+id/loFinance"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/item_edit_form_select" />
 
         <include
-                android:id="@+id/loShowOff"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                layout="@layout/item_edit_form_select"/>
+            android:id="@+id/loShowOff"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/item_edit_form_select" />
 
         <View
-                android:layout_width="fill_parent"
-                android:layout_height="20dp"
-                />
+            android:layout_width="fill_parent"
+            android:layout_height="20dp" />
 
     </LinearLayout>
 

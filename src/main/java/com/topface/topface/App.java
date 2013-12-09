@@ -31,8 +31,6 @@ import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.blocks.BannerBlock;
-import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
-import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
 import com.topface.topface.utils.AppConfig;
 import com.topface.topface.utils.BackgroundThread;
 import com.topface.topface.utils.CacheProfile;
@@ -211,7 +209,7 @@ public class App extends Application {
      * Множественный запрос Options и профиля
      */
     public static void sendProfileAndOptionsRequests() {
-        sendProfileAndOptionsRequests(new SimpleApiHandler(){
+        sendProfileAndOptionsRequests(new SimpleApiHandler() {
             @Override
             public void success(IApiResponse response) {
                 super.success(response);

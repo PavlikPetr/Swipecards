@@ -47,7 +47,6 @@ public class ClosingsBuyVipDialog extends BaseDialogFragment implements View.OnC
         root.findViewById(R.id.btnBuyVip).setOnClickListener(this);
 
 
-
         ((TextView) root.findViewById(R.id.tvTitle))
                 .setText(String.format(getString(R.string.locking_popup_title), fragmentName));
         ((TextView) root.findViewById(R.id.tvMessage))

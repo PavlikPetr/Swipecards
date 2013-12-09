@@ -6,7 +6,6 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.LeadersRequest;
-import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
 
 public class CountersManager {
     public static final String UPDATE_BALANCE_COUNTERS = "com.topface.topface.UPDATE_BALANCE_COUNTERS";
@@ -207,8 +206,8 @@ public class CountersManager {
     }
 
     /**
-        кидаем broadcast о том, что счетчики обновились и причину их обновления
-        название метода, если это запрос, или константу, если это GCM
+     * кидаем broadcast о том, что счетчики обновились и причину их обновления
+     * название метода, если это запрос, или константу, если это GCM
      */
     private void updateUICounters() {
         String method = lastRequestMethod == null ? NULL_METHOD : lastRequestMethod;

@@ -7,7 +7,7 @@ import android.widget.RelativeLayout;
 
 import com.topface.topface.utils.CacheProfile;
 
-public class ClickkyActivity extends Activity{
+public class ClickkyActivity extends Activity {
 
     private final static int SITE_ID = 3382;
     private final static String API_KEY = "c2441dedd5b0e62a7acadbdb5a43c8d2";

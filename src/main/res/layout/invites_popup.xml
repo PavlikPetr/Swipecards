@@ -1,93 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/loInvitesPopup"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/popup_invite_background"
-        >
+    android:id="@+id/loInvitesPopup"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/popup_invite_background">
 
     <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:background="@drawable/popup_invite_text_bg"
-            >
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:background="@drawable/popup_invite_text_bg">
 
         <TextView
-                android:id="@+id/invitesTitle"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:gravity="center"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:minHeight="50dp"
-                />
+            android:id="@+id/invitesTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:minHeight="50dp" />
 
         <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:layout_below="@id/invitesTitle"
-                >
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_below="@id/invitesTitle">
 
             <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/checkboxContainer"
-                    android:layout_margin="5dp"
-                    >
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkboxContainer"
+                android:layout_margin="5dp">
 
                 <CheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/sendAllContacts"
-                        android:checked="true"
-                        android:layout_alignParentLeft="true"
-                        />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/sendAllContacts"
+                    android:checked="true"
+                    android:layout_alignParentLeft="true" />
 
                 <TextView
-                        android:id="@+id/checkBoxTitle"
-                        android:layout_width="fill_parent"
-                        android:layout_centerVertical="true"
-                        android:gravity="center"
-                        android:layout_height="wrap_content"
-                        android:textColor="#FFFFFF"
-                        android:textSize="14sp"
-                        android:text="@string/invite_friends_title"
-                        android:layout_toRightOf="@id/sendAllContacts" />
+                    android:id="@+id/checkBoxTitle"
+                    android:layout_width="fill_parent"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:layout_height="wrap_content"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    android:text="@string/invite_friends_title"
+                    android:layout_toRightOf="@id/sendAllContacts" />
             </RelativeLayout>
 
             <Button
-                    style="@style/ButtonBlue"
-                    android:layout_height="wrap_content"
-                    android:layout_width="fill_parent"
-                    android:id="@+id/sendContacts"
-                    android:layout_below="@id/checkboxContainer"
-                    />
+                style="@style/ButtonBlue"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:id="@+id/sendContacts"
+                android:layout_below="@id/checkboxContainer" />
         </RelativeLayout>
 
     </RelativeLayout>
 
     <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/closePopup"
-            android:src="@drawable/ic_close_dialog"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_margin="5dp"
-            />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/closePopup"
+        android:src="@drawable/ic_close_dialog"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="5dp" />
 
     <com.topface.topface.ui.views.LockerView
-            android:id="@+id/ipLocker"
-            android:visibility="gone"
-            style="@style/LoadingLocker"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            />
+        android:id="@+id/ipLocker"
+        android:visibility="gone"
+        style="@style/LoadingLocker"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
 
 </RelativeLayout>

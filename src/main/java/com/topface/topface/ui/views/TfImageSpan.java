@@ -6,21 +6,23 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.text.style.ImageSpan;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.ref.WeakReference;
 
-public class TfImageSpan extends ImageSpan{
+public class TfImageSpan extends ImageSpan {
 
     public static final int ALIGN_CENTER = 2;
     private final int mVerticalAlignment;
 
     public TfImageSpan(Context context, int resId, int verticalAlignment) {
-       super(context, resId, verticalAlignment==ALIGN_CENTER?ALIGN_BASELINE:verticalAlignment);
+        super(context, resId, verticalAlignment == ALIGN_CENTER ? ALIGN_BASELINE : verticalAlignment);
         mVerticalAlignment = verticalAlignment;
 
     }
 
     @Override
-    public void draw(Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, Paint paint) {
+    public void draw(@NotNull Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, Paint paint) {
 //        super.draw(canvas, text, start, end, x, top, y, bottom, paint);
         Drawable b = getCachedDrawable();
 

@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import com.topface.topface.Static;
 
-public class FormItem implements Parcelable{
+public class FormItem implements Parcelable {
     // Data
     public int type;
     public String title;
@@ -111,7 +111,7 @@ public class FormItem implements Parcelable{
                 public FormItem createFromParcel(Parcel in) {
                     FormItem result = new FormItem();
                     result.type = in.readInt();
-                    result.title =  in.readString();
+                    result.title = in.readString();
                     result.value = in.readString();
                     result.equal = in.readInt() == 1;
                     result.titleId = in.readInt();

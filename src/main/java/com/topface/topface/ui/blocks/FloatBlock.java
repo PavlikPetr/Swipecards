@@ -72,7 +72,7 @@ public class FloatBlock {
         //Если переданого активити нет в карте, то не инициализируем ни один блок
     }
 
-    public static Map<String,Options.Page> getActivityMap() {
+    public static Map<String, Options.Page> getActivityMap() {
         if (mBannersMap == null) {
             mBannersMap = new HashMap<String, Options.Page>();
             Options mOptions = CacheProfile.getOptions();

@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/authContainer"
-        android:background="@drawable/auth_bg"
-        android:clickable="true"
-        >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/authContainer"
+    android:background="@drawable/auth_bg"
+    android:clickable="true">
 
     <!--ImageView
             android:layout_centerInParent="true"
@@ -16,18 +14,19 @@
             /-->
 
     <RelativeLayout
-            android:id="@+id/redAlert"
-            android:background="@drawable/background_alert_plate"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:visibility="gone"
-            android:padding="10dp"
-              >
+        android:id="@+id/redAlert"
+        android:background="@drawable/background_alert_plate"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:visibility="gone"
+        android:padding="10dp">
+
         <TextView
-                android:id="@+id/redAlertTextView"
-                style="@style/RedAlertTextView"
-                android:text="@string/error_login_password"/>
+            android:id="@+id/redAlertTextView"
+            style="@style/RedAlertTextView"
+            android:text="@string/error_login_password" />
+
         <TextView
             android:id="@+id/redAlertButton"
             android:layout_centerHorizontal="true"
@@ -37,29 +36,29 @@
             android:background="@drawable/btn_create_acc_selector"
             android:layout_margin="5dp"
             android:padding="5dp"
-            android:text="@string/create_account"/>
+            android:text="@string/create_account" />
 
     </RelativeLayout>
 
     <ProgressBar
-            android:id="@+id/prsAuthLoading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="gone"
-            style="@android:style/Widget.ProgressBar.Small"/>
+        android:id="@+id/prsAuthLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        style="@android:style/Widget.ProgressBar.Small" />
 
     <ViewFlipper
-            android:id="@+id/vfAuthViewFlipper"
-            android:layout_below="@id/redAlert"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:inAnimation="@android:anim/fade_in"
-            android:outAnimation="@android:anim/fade_out">
+        android:id="@+id/vfAuthViewFlipper"
+        android:layout_below="@id/redAlert"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:inAnimation="@android:anim/fade_in"
+        android:outAnimation="@android:anim/fade_out">
 
-        <include layout="@layout/layout_main_auth"/>
+        <include layout="@layout/layout_main_auth" />
 
-        <include layout="@layout/layout_signin"/>
+        <include layout="@layout/layout_signin" />
 
     </ViewFlipper>
 

@@ -3,8 +3,7 @@
 <ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/vfEmptyViews"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
+    android:layout_height="fill_parent">
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -161,6 +160,6 @@
             android:layout_marginTop="16dp" />
     </LinearLayout>
 
-    <include layout="@layout/layout_paid_likes_for_vip"/>
+    <include layout="@layout/layout_paid_likes_for_vip" />
 
 </ViewFlipper>

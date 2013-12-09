@@ -35,7 +35,7 @@ public class ProfilePageAdapter extends FragmentStatePagerAdapter {
     }
 
     public SparseArrayCompat<Fragment> getFragmentCache() {
-        return  mFragmentCache;
+        return mFragmentCache;
     }
 
     public int getFragmentIndexByClassName(String className) {
@@ -106,7 +106,7 @@ public class ProfilePageAdapter extends FragmentStatePagerAdapter {
         }
     }
 
-    public void setPageIndicator(PageIndicator indicator){
+    public void setPageIndicator(PageIndicator indicator) {
         mPageIndicator = indicator;
     }
 }

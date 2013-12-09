@@ -28,11 +28,10 @@ import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.LeftMenuAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.ViewUsersListFragment;
 import com.topface.topface.utils.CacheProfile;
-
-import com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import com.topface.topface.utils.cache.UsersListCacheManager;
 
 import org.jetbrains.annotations.NotNull;
@@ -199,11 +198,11 @@ public class ClosingsController implements View.OnClickListener {
     /**
      * Initializes closing menu items if needed
      *
-     * @param menuItem menu item view
+     * @param menuItem     menu item view
      * @param btnTextResId test resourse id
-     * @param iconResId icon resource id
-     * @param visible true if menu item has to be shown
-     * @param fragmentId id for fragment which will be shown when menu item will be chosen
+     * @param iconResId    icon resource id
+     * @param visible      true if menu item has to be shown
+     * @param fragmentId   id for fragment which will be shown when menu item will be chosen
      * @return true if closing menu item is visible
      */
     private boolean initMenuItem(View menuItem, int btnTextResId, int iconResId, boolean visible,
@@ -380,7 +379,7 @@ public class ClosingsController implements View.OnClickListener {
     }
 
     public void onLogoutWasInitiated() {
-        if (mLogoutWasInitiated){
+        if (mLogoutWasInitiated) {
             removeClosings(false);
             mClosingsPassed = false;
         }

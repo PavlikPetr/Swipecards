@@ -20,9 +20,9 @@ public class ExternalLinkExecuter {
         if (intent != null) {
 
             Uri data = intent.getData();
-            if(data != null)  {
+            if (data != null) {
                 String scheme = data.getScheme();
-                if(scheme != null && scheme.equals(TOPFACE_CHEME)) {
+                if (scheme != null && scheme.equals(TOPFACE_CHEME)) {
                     if (data.getHost().equals("offerwall")) {
                         listener.onOfferWall();
                     }

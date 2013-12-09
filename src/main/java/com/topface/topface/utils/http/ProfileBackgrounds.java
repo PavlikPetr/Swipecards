@@ -60,7 +60,7 @@ public class ProfileBackgrounds {
 
     public static boolean isVipBackgroundId(Context context, int id) {
         int[] ids = getVipBackgroundIds(context);
-        for (int i=0; i < ids.length; i++) {
+        for (int i = 0; i < ids.length; i++) {
             if (ids[i] == id) return true;
         }
         return false;
@@ -68,16 +68,16 @@ public class ProfileBackgrounds {
 
     public static LinkedList<BackgroundItem> getBackgroundItems(Context context) {
         LinkedList<BackgroundItem> result = new LinkedList<BackgroundItem>();
-        for(BackgroundPair pair : getPairs(context)) {
-            result.add(new ResourceBackgroundItem(context.getResources(), pair.resId, pair.id,pair.vip));
+        for (BackgroundPair pair : getPairs(context)) {
+            result.add(new ResourceBackgroundItem(context.getResources(), pair.resId, pair.id, pair.vip));
         }
         return result;
     }
 
     public static LinkedList<BackgroundItem> getBackgroundItems(Context context, int selectedId) {
         LinkedList<BackgroundItem> result = new LinkedList<BackgroundItem>();
-        for(BackgroundPair pair : getPairs(context)) {
-            result.add(new ResourceBackgroundItem(context.getResources(), pair.resId, pair.id,pair.vip,selectedId == pair.id));
+        for (BackgroundPair pair : getPairs(context)) {
+            result.add(new ResourceBackgroundItem(context.getResources(), pair.resId, pair.id, pair.vip, selectedId == pair.id));
         }
         return result;
     }

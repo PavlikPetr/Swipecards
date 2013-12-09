@@ -555,7 +555,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             intent.putExtra(ChatFragment.INTENT_USER_SEX, item.user.sex);
             intent.putExtra(ChatFragment.INTENT_USER_AGE, item.user.age);
             intent.putExtra(ChatFragment.INTENT_USER_CITY, item.user.city.name);
-            intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, ((Object)this).getClass().getSimpleName());
+            intent.putExtra(BaseFragmentActivity.INTENT_PREV_ENTITY, ((Object) this).getClass().getSimpleName());
             intent.putExtra(ChatFragment.INTENT_ITEM_ID, item.id);
             getActivity().startActivityForResult(intent, ContainerActivity.INTENT_CHAT_FRAGMENT);
         }
@@ -783,8 +783,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     protected abstract void initEmptyFeedView(View inflated, int errorCode);
-    protected void initEmptyFeedView(View inflated){
-        initEmptyFeedView(inflated,ErrorCodes.RESULT_OK);
+
+    protected void initEmptyFeedView(View inflated) {
+        initEmptyFeedView(inflated, ErrorCodes.RESULT_OK);
     }
 
     protected abstract int getEmptyFeedLayout();
@@ -801,7 +802,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             mListView.setVisibility(View.VISIBLE);
             mBackgroundText.setText("");
             Drawable[] drawables = mBackgroundText.getCompoundDrawables();
-            if(drawables != null) {
+            if (drawables != null) {
                 Drawable drawable = drawables[0];
                 if (drawable != null && drawable instanceof AnimationDrawable) {
                     ((AnimationDrawable) drawable).stop();
@@ -830,7 +831,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
                         drawables[1],
                         drawables[2],
                         drawables[3]);
-                 drawable.start();
+                drawable.start();
             }
             setFilterSwitcherState(false);
         }

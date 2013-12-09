@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/ivNameEditBackground"
@@ -17,34 +17,34 @@
         android:layout_width="wrap_content"
         android:maxWidth="140dp"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/ivEditBackground"        
+        android:layout_alignLeft="@id/ivEditBackground"
         android:layout_centerVertical="true"
         android:ellipsize="end"
-        android:gravity="left|center_vertical"        
+        android:gravity="left|center_vertical"
         android:paddingLeft="10dp"
         android:paddingRight="5dp"
         android:singleLine="true"
-        android:textSize="14sp" 
-        style="@style/ItemTitleText"/>
-    
+        android:textSize="14sp"
+        style="@style/ItemTitleText" />
+
     <TextView
         android:id="@+id/tvAge"
-        android:layout_width="wrap_content"        
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/tvName"        
-        android:layout_centerVertical="true"        
-        android:gravity="left|center_vertical"        
+        android:layout_toRightOf="@id/tvName"
+        android:layout_centerVertical="true"
+        android:gravity="left|center_vertical"
         android:singleLine="true"
         android:textSize="14sp"
-        style="@style/ItemTitleText"/>
-    
+        style="@style/ItemTitleText" />
+
     <ImageView
         android:id="@+id/ivSexIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@id/tvAge"
-        android:layout_marginLeft="5dp"/>
+        android:layout_marginLeft="5dp" />
 
     <ImageView
         android:id="@+id/ivArrow"

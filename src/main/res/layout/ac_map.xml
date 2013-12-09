@@ -1,67 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:orientation="vertical"
-                android:descendantFocusability="beforeDescendants"
-                android:focusableInTouchMode="true">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
 
-    <com.google.android.maps.MapView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/mapView"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:apiKey="0esBRa6fF4Tv5zV7GQCpVOOhF2nxB4D_PQmujeA"
-            android:background="#FFFFFF"
-            android:clickable="true"/>
+    <com.google.android.maps.MapView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/mapView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:apiKey="0esBRa6fF4Tv5zV7GQCpVOOhF2nxB4D_PQmujeA"
+        android:background="#FFFFFF"
+        android:clickable="true" />
     <!-- DEBUGv kirussell: 0esBRa6fF4TuK2GrbWw6wRGFijK_puzqgunUVDw -->
     <!-- DEBUGv pavel: 0esBRa6fF4Tv5zV7GQCpVOOhF2nxB4D_PQmujeA -->
     <!-- PRODUCTION: 0-JKy7KX15mHPhyYQ4lBv_GhepNzV5s0ikPPyg -->
 
     <LinearLayout
-            android:id="@+id/inputBar"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/chat_footer_send"
-            android:orientation="horizontal"
-            android:paddingLeft="6dp"
-            android:paddingRight="6dp"
-            android:layout_alignParentBottom="true">
+        android:id="@+id/inputBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/chat_footer_send"
+        android:orientation="horizontal"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:layout_alignParentBottom="true">
 
         <ImageButton
-                android:id="@+id/mapBtnMyLocation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/map_pin_selector"
-                android:background="@android:color/transparent"/>
+            android:id="@+id/mapBtnMyLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/map_pin_selector"
+            android:background="@android:color/transparent" />
 
         <AutoCompleteTextView
-                android:id="@+id/mapAddress"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="6dp"
-                android:layout_weight="1"
-                android:background="@drawable/map_text_input_selector"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
-                android:singleLine="true"
-                android:textColor="#000000"
-                android:textSize="12sp"
-                android:hint="@string/map_address"
-                android:imeOptions="actionNone"/>
+            android:id="@+id/mapAddress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/map_text_input_selector"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:singleLine="true"
+            android:textColor="#000000"
+            android:textSize="12sp"
+            android:hint="@string/map_address"
+            android:imeOptions="actionNone" />
 
         <Button
-                android:id="@+id/mapBtnConfirm"
-                android:layout_width="wrap_content"
-                android:layout_height="33.5dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="6dp"
-                android:text="@string/general_send_button"
-                android:textSize="12sp"
-                android:textColor="#FFFFFF"
-                android:background="@drawable/map_send_selector"/>
+            android:id="@+id/mapBtnConfirm"
+            android:layout_width="wrap_content"
+            android:layout_height="33.5dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="6dp"
+            android:text="@string/general_send_button"
+            android:textSize="12sp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/map_send_selector" />
     </LinearLayout>
 
 </RelativeLayout>

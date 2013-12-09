@@ -11,7 +11,7 @@ public class FeedList<T> extends ArrayList<T> {
     }
 
     public T getLast() {
-        if (!this.isEmpty()) return this.get(size()-1);
+        if (!this.isEmpty()) return this.get(size() - 1);
         else return null;
     }
 
@@ -21,13 +21,14 @@ public class FeedList<T> extends ArrayList<T> {
     }
 
     public void addFirst(T item) {
-        this.add(0,item);
+        this.add(0, item);
     }
 
     public void addAllFirst(Collection<T> item) {
         this.addAll(0, item);
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public void removeFirst() {
         if (!this.isEmpty()) {
             this.remove(0);
@@ -36,7 +37,7 @@ public class FeedList<T> extends ArrayList<T> {
 
     public void removeLast() {
         if (!this.isEmpty()) {
-            this.remove(size()-1);
+            this.remove(size() - 1);
         }
     }
 }

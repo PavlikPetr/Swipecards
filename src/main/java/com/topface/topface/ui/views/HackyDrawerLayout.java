@@ -8,7 +8,8 @@ import android.view.MotionEvent;
 /**
  * fix ArrayIndexOutOfBoundsException (https://github.com/chrisbanes/PhotoView/issues/72)
  */
-public class HackyDrawerLayout extends DrawerLayout{
+@SuppressWarnings("UnusedDeclaration")
+public class HackyDrawerLayout extends DrawerLayout {
 
     public HackyDrawerLayout(Context context) {
         super(context);

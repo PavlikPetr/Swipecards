@@ -286,8 +286,8 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
         int searchPosition = getSearchPosition();
         if (searchPosition < size()) {
             try {
-                removeRange(searchPosition+1,size());
-                removeRange(0,searchPosition);
+                removeRange(searchPosition + 1, size());
+                removeRange(0, searchPosition);
                 setSearchPosition(0);
             } catch (Exception ex) {
                 Debug.error("Remove users exception", ex);

@@ -15,46 +15,43 @@ public class AnimatedView extends View {
     SpriteTile st;
 
     GameLoop gameloop;
-    private class GameLoop extends Thread
-    {
-        private volatile boolean running=true;
-        public void run()
-        {
-            while(running)
-            {
-                try{
+
+    private class GameLoop extends Thread {
+        private volatile boolean running = true;
+
+        public void run() {
+            while (running) {
+                try {
 
                     TimeUnit.MILLISECONDS.sleep(1);
                     postInvalidate();
                     pause();
 
-                }
-                catch(InterruptedException ex)
-                {
-                    running=false;
+                } catch (InterruptedException ex) {
+                    running = false;
                 }
 
             }
 
         }
-        public void pause()
-        {
-            running=false;
+
+        public void pause() {
+            running = false;
         }
-        public void start()
-        {
-            running=true;
+
+        public void start() {
+            running = true;
             run();
         }
-        public void safeStop()
-        {
-            running=false;
+
+        public void safeStop() {
+            running = false;
             interrupt();
         }
 
     }
-    public void unload()
-    {
+
+    public void unload() {
         gameloop.safeStop();
 
     }
@@ -66,7 +63,7 @@ public class AnimatedView extends View {
                 R.styleable.AnimatedView,
                 0, 0);
         try {
-            int src = a.getResourceId(R.styleable.AnimatedView_src,0);
+            int src = a.getResourceId(R.styleable.AnimatedView_src, 0);
             int sprite = a.getResourceId(R.styleable.AnimatedView_settings, 0);
             init(context, src, sprite);
         } finally {
@@ -82,7 +79,7 @@ public class AnimatedView extends View {
                 R.styleable.AnimatedView,
                 0, 0);
         try {
-            int src = a.getResourceId(R.styleable.AnimatedView_src,0);
+            int src = a.getResourceId(R.styleable.AnimatedView_src, 0);
             int sprite = a.getResourceId(R.styleable.AnimatedView_settings, 0);
             init(context, src, sprite);
         } finally {
@@ -94,13 +91,13 @@ public class AnimatedView extends View {
         super(context);
     }
 
-    private void init(Context context, int src, int sprite)
-    {
+    private void init(Context context, int src, int sprite) {
         st = new SpriteTile(src, sprite, context);
         gameloop = new GameLoop();
         gameloop.run();
 
     }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 //        super.onMeasure(widthMeasureSpec, heightMeasureSpec);

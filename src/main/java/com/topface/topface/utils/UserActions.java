@@ -21,12 +21,8 @@ public class UserActions {
         }
     }
 
-    public View getViewById (int id) {
+    public View getViewById(int id) {
         return actionsView.findViewById(id);
-    }
-
-    private void initListeners() {
-
     }
 
     public static class ActionItem {

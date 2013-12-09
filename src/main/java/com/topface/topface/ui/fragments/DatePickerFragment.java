@@ -34,19 +34,20 @@ public class DatePickerFragment extends TrackedDialogFragment implements DatePic
         c.add(Calendar.YEAR, -(Static.MAX_AGE - Static.MIN_AGE));
         MIN_DATE = c.getTimeInMillis();
 
-        c.add(Calendar.YEAR, -(START_SHIFT-Static.MAX_AGE));
+        c.add(Calendar.YEAR, -(START_SHIFT - Static.MAX_AGE));
         final int year = getArguments().getInt(YEAR);
         final int month = getArguments().getInt(MONTH);
         final int day = getArguments().getInt(DAY);
 
-        DatePickerDialog dialog = new DatePickerDialog(getActivity(),this,year,month,day) {
+        DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, year, month, day) {
             int lastYear = year;
             int lastMonth = month;
             int lastDay = day;
+
             @Override
             public void onDateChanged(DatePicker view, int year, int month, int day) {
-                if(!isValidDate(year, month, day, MIN_DATE, MAX_DATE)){
-                    view.init(lastYear,lastMonth,lastDay, this);
+                if (!isValidDate(year, month, day, MIN_DATE, MAX_DATE)) {
+                    view.init(lastYear, lastMonth, lastDay, this);
                 } else {
                     lastYear = year;
                     lastMonth = month;
@@ -65,7 +66,7 @@ public class DatePickerFragment extends TrackedDialogFragment implements DatePic
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
         if (mDateSetListener != null) {
-            mDateSetListener.onDateSet(view,year,monthOfYear,dayOfMonth);
+            mDateSetListener.onDateSet(view, year, monthOfYear, dayOfMonth);
         }
     }
 
@@ -83,9 +84,9 @@ public class DatePickerFragment extends TrackedDialogFragment implements DatePic
         return datePickerFragment;
     }
 
-    public static boolean isValidDate(final int year,final  int month,final  int day,final  long minDate,
-                                      final  long maxDate) {
-        final long millis = DateUtils.getDateInMilliseconds(year,month,day);
+    public static boolean isValidDate(final int year, final int month, final int day, final long minDate,
+                                      final long maxDate) {
+        final long millis = DateUtils.getDateInMilliseconds(year, month, day);
         return (millis >= minDate && millis <= maxDate);
     }
 

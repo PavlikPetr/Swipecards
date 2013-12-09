@@ -15,11 +15,11 @@ public class MutualListAdapter extends FeedAdapter<FeedMutual> {
     protected int getItemLayout() {
         return R.layout.item_feed_like;
     }
-    
+
     @Override
-	protected int getNewItemLayout() {		
-		return R.layout.item_feed_like;
-	}
+    protected int getNewItemLayout() {
+        return R.layout.item_feed_like;
+    }
 
     @Override
     protected int getVipItemLayout() {
@@ -28,7 +28,7 @@ public class MutualListAdapter extends FeedAdapter<FeedMutual> {
 
     @Override
     protected int getNewVipItemLayout() {
-        return  R.layout.item_new_vip_feed_like;
+        return R.layout.item_new_vip_feed_like;
     }
 
     @Override

@@ -24,7 +24,7 @@ public class FeedRequest extends ApiRequest {
     public FeedRequest(FeedService service, Context context) {
         super(context);
         //Костыль для избранных
-        if(service == FeedService.BOOKMARKS) {
+        if (service == FeedService.BOOKMARKS) {
             type = 0;
         } else {
             type = 1;

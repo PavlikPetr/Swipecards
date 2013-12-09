@@ -38,7 +38,7 @@ public class ComplainsFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater,container,savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.complains_fragment, container, false);
         Bundle arguments = getArguments();
         if (arguments != null) {
@@ -57,7 +57,7 @@ public class ComplainsFragment extends BaseFragment {
     }
 
     private void setHeaders(View root) {
-        setText(R.string.complain_photo_header, (ViewGroup)root.findViewById(R.id.loPhotoHeader), ComplainRequest.ClassNames.PHOTO);
+        setText(R.string.complain_photo_header, (ViewGroup) root.findViewById(R.id.loPhotoHeader), ComplainRequest.ClassNames.PHOTO);
         setText(R.string.complain_info_header, (ViewGroup) root.findViewById(R.id.loInfoHeader), ComplainRequest.ClassNames.USER);
         setText(R.string.complain_msg_header, (ViewGroup) root.findViewById(R.id.loMsgHeader), ComplainRequest.ClassNames.PRIVATE_MSG);
     }
@@ -83,12 +83,12 @@ public class ComplainsFragment extends BaseFragment {
             if (canHideItem(className)) {
                 frame.setVisibility(View.GONE);
             } else {
-                ((ImageView)frame.findViewWithTag("ivEditBackground")).setImageResource(bgId);
+                ((ImageView) frame.findViewWithTag("ivEditBackground")).setImageResource(bgId);
                 setText(item.title, frame, className);
                 frame.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ((BaseFragmentActivity)getActivity()).startFragment(ComplainsMessageFragment.newInstance(userId, feedId, className, typeName));
+                        ((BaseFragmentActivity) getActivity()).startFragment(ComplainsMessageFragment.newInstance(userId, feedId, className, typeName));
                     }
                 });
             }
@@ -106,11 +106,11 @@ public class ComplainsFragment extends BaseFragment {
             case FAKE_USER:
                 return new ComplainItem(R.id.typeFake, R.string.complain_type_fake_user);
             case SPAM:
-                return className == ComplainRequest.ClassNames.PRIVATE_MSG?
+                return className == ComplainRequest.ClassNames.PRIVATE_MSG ?
                         new ComplainItem(R.id.typeSpam, R.string.complain_type_spam_msg) :
                         new ComplainItem(R.id.typeCommercial, R.string.complain_type_spam_profile);
             case SWEARING:
-                return className == ComplainRequest.ClassNames.PRIVATE_MSG?
+                return className == ComplainRequest.ClassNames.PRIVATE_MSG ?
                         new ComplainItem(R.id.typeSwear, R.string.complain_type_swearing_msg) :
                         new ComplainItem(R.id.typeSwearData, R.string.complain_type_swearing_profile);
             case FAKE_DATA:

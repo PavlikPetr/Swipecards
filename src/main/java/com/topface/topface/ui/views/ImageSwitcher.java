@@ -249,22 +249,6 @@ public class ImageSwitcher extends ViewPager {
         }
 
 
-        //Опасная копипаста
-        private boolean isPhotoSet(int position) {
-            View baseLayout = ImageSwitcher.this.findViewWithTag(VIEW_TAG + Integer.toString(position));
-            //Этот метод может вызываться до того, как создана страница для этой фотографии
-            if (baseLayout != null) {
-                Debug.log("IS: trySetPhoto " + position);
-                ImageViewRemote imageView = (ImageViewRemote) baseLayout.findViewById(R.id.ivPreView);
-                Object tag = imageView.getTag(R.string.photo_is_set_tag);
-                //Проверяем, не установленно ли уже изображение в ImageView
-                if (tag != null && ((Boolean) tag)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         public void setData(Photos photos) {
             mPhotoLinks = photos;
             mLoadedPhotos = new SparseBooleanArray();
@@ -280,7 +264,7 @@ public class ImageSwitcher extends ViewPager {
         @Override
         public void notifyDataSetChanged() {
             super.notifyDataSetChanged();
-            setPhotoToPosition(getSelectedPosition(),true);
+            setPhotoToPosition(getSelectedPosition(), true);
         }
     }
 

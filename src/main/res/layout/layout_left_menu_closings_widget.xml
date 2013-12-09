@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -14,13 +13,13 @@
             android:id="@+id/itemLikesClosings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            layout="@layout/item_left_menu_button_with_badge"/>
+            layout="@layout/item_left_menu_button_with_badge" />
 
         <include
             android:id="@+id/itemMutualsClosings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            layout="@layout/item_left_menu_button_with_badge"/>
+            layout="@layout/item_left_menu_button_with_badge" />
 
         <TextView
             android:layout_height="wrap_content"
@@ -37,12 +36,12 @@
             android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp"
             android:text="@string/buying_vip_status"
-            style="@style/ButtonBlue"/>
+            style="@style/ButtonBlue" />
     </LinearLayout>
 
     <ImageView
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:src="@drawable/shadow_closing_top_panel"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true" />
 </RelativeLayout>

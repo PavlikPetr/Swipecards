@@ -31,7 +31,7 @@ import com.topface.topface.utils.social.AuthToken;
 
 import java.util.ArrayList;
 
-public class ContainerActivity extends CustomTitlesBaseFragmentActivity implements ChatFragment.IUserOnlineListener{
+public class ContainerActivity extends CustomTitlesBaseFragmentActivity implements ChatFragment.IUserOnlineListener {
 
     public static final String CONTACTS_DATA = "contacts_data";
     public static final String INTENT_USERID = "INTENT_USERID";
@@ -89,7 +89,8 @@ public class ContainerActivity extends CustomTitlesBaseFragmentActivity implemen
                 Debug.error(ex);
                 finish();
             } finally {
-                if (App.DEBUG && mCurrentFragmentId <= 0) throw new IllegalArgumentException("ContainerActivity needs request code, use static ContainerActivity methods to get Intents");
+                if (App.DEBUG && mCurrentFragmentId <= 0)
+                    throw new IllegalArgumentException("ContainerActivity needs request code, use static ContainerActivity methods to get Intents");
             }
         }
     }

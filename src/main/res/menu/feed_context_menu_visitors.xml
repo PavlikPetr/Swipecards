@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:appcompat="http://schemas.android.com/apk/res-auto">
+    xmlns:appcompat="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/delete_visitors"
-          appcompat:showAsAction="always"
-          android:icon="@drawable/ic_delete_selector"
-          android:title="@string/delete"
-            />
+    <item
+        android:id="@+id/delete_visitors"
+        appcompat:showAsAction="always"
+        android:icon="@drawable/ic_delete_selector"
+        android:title="@string/delete" />
 
-    <item android:id="@+id/add_to_black_list"
-          android:title="@string/black_list_add_short"
-          android:icon="@drawable/ic_blacklist_selector"
-            />
+    <item
+        android:id="@+id/add_to_black_list"
+        android:title="@string/black_list_add_short"
+        android:icon="@drawable/ic_blacklist_selector" />
 </menu>

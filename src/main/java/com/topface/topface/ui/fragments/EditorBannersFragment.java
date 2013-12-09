@@ -29,7 +29,7 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater,container,savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_editor_banners, null);
         initHeader();
         mConfigContainer = (ViewGroup) root.findViewById(R.id.loBannersConfigurationsContainer);
@@ -41,7 +41,7 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
     }
 
     private void initOnStartLoadingControls(View root) {
-        final CheckBox checkBoxOnStart = ((CheckBox)root.findViewById(R.id.cbOnStart));
+        final CheckBox checkBoxOnStart = ((CheckBox) root.findViewById(R.id.cbOnStart));
         checkBoxOnStart.setChecked(App.getConfig().getBannerConfig().needLoadOnStart());
         View.OnClickListener listener = new View.OnClickListener() {
             @Override

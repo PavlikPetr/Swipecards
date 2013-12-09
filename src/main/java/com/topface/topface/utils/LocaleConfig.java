@@ -92,7 +92,7 @@ public class LocaleConfig {
         return resources.getString(R.string.app_locale);
     }
 
-    public static void changeLocale(final Activity activity,String selectedLocale) {
+    public static void changeLocale(final Activity activity, String selectedLocale) {
         localeChangeInitiated = true;
         final ProgressDialog progress = new ProgressDialog(activity);
         progress.setTitle(R.string.locale_changing);
@@ -105,7 +105,7 @@ public class LocaleConfig {
         //restart -> open NavigationActivity
         final String locale = LocaleConfig.getServerLocale(activity, selectedLocale);
 
-        UserSetLocaleRequest request = new UserSetLocaleRequest(activity,locale);
+        UserSetLocaleRequest request = new UserSetLocaleRequest(activity, locale);
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {

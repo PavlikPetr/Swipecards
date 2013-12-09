@@ -20,13 +20,13 @@ import com.topface.topface.utils.AirManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
-public class AdmirationFragment extends LikesFragment{
+public class AdmirationFragment extends LikesFragment {
 
     private boolean isPopupShowed;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
-        if (!CacheProfile.premium ) {
+        if (!CacheProfile.premium) {
             AirManager manager = new AirManager(getActivity());
             isPopupShowed = manager.showPromoPopup(getActivity().getSupportFragmentManager(), Options.PremiumAirEntity.AIR_ADMIRATIONS, false);
 

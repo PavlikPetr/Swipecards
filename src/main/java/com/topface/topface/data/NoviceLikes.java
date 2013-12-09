@@ -13,7 +13,7 @@ public class NoviceLikes extends AbstractData {
 
         try {
             novice.likes = response.jsonResult.optInt("likes", 0);
-            novice.increment  = response.jsonResult.optInt("increment",0);
+            novice.increment = response.jsonResult.optInt("increment", 0);
         } catch (Exception e) {
             Debug.error("NoviceLikes.class: Wrong response parsing", e);
         }

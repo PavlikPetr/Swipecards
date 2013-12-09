@@ -6,7 +6,7 @@ import android.support.v7.app.ActionBar;
  * Created by kirussell on 26.09.13.
  * Class
  */
-public class ActionBarTitleSetterDelegate implements IActionBarTitleSetter{
+public class ActionBarTitleSetterDelegate implements IActionBarTitleSetter {
 
     private ActionBar mActionBar;
 

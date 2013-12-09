@@ -58,7 +58,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater,container,savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
         mTargetUser.sex = CacheProfile.dating != null ? CacheProfile.dating.sex : Static.BOY;
         mFormInfo = new FormInfo(getActivity().getApplicationContext(), mTargetUser.sex, mTargetUser.getType());
 
@@ -199,12 +199,12 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
             mCheckGirl.setVisibility(View.VISIBLE);
             mCheckBoy.setVisibility(View.INVISIBLE);
             mBreastFrame.setVisibility(View.VISIBLE);
-            setBackground(R.drawable.edit_big_btn_middle_selector,mFinanceFrame);
+            setBackground(R.drawable.edit_big_btn_middle_selector, mFinanceFrame);
         } else {
             mCheckBoy.setVisibility(View.VISIBLE);
             mCheckGirl.setVisibility(View.INVISIBLE);
             mBreastFrame.setVisibility(View.GONE);
-            setBackground(R.drawable.edit_big_btn_bottom_selector,mFinanceFrame);
+            setBackground(R.drawable.edit_big_btn_bottom_selector, mFinanceFrame);
         }
 
         mTargetUser.sex = sex;
@@ -214,26 +214,26 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     }
 
     private void refreshFilterExtraCellsText() {
-        for (int i=0;i<hashTextViewByTitleId.size();i++) {
+        for (int i = 0; i < hashTextViewByTitleId.size(); i++) {
             int titleId = hashTextViewByTitleId.keyAt(i);
             switch (titleId) {
                 case R.array.form_main_status:
-                    hashTextViewByTitleId.get(titleId).setText(mFormInfo.getEntry(titleId,mFilter.xstatus));
+                    hashTextViewByTitleId.get(titleId).setText(mFormInfo.getEntry(titleId, mFilter.xstatus));
                     break;
                 case R.array.form_social_marriage:
                     hashTextViewByTitleId.get(titleId).setText(mFormInfo.getEntry(titleId, mFilter.marriage));
                     break;
                 case R.array.form_main_character:
-                    hashTextViewByTitleId.get(titleId).setText(mFormInfo.getEntry(titleId,mFilter.character));
+                    hashTextViewByTitleId.get(titleId).setText(mFormInfo.getEntry(titleId, mFilter.character));
                     break;
                 case R.array.form_habits_alcohol:
-                    hashTextViewByTitleId.get(titleId).setText(mFormInfo.getEntry(titleId,mFilter.alcohol));
+                    hashTextViewByTitleId.get(titleId).setText(mFormInfo.getEntry(titleId, mFilter.alcohol));
                     break;
                 case R.array.form_social_finances:
-                    hashTextViewByTitleId.get(titleId).setText(mFormInfo.getEntry(titleId,mFilter.finances));
+                    hashTextViewByTitleId.get(titleId).setText(mFormInfo.getEntry(titleId, mFilter.finances));
                     break;
                 case R.array.form_physique_breast:
-                    hashTextViewByTitleId.get(titleId).setText(mFormInfo.getEntry(titleId,mFilter.breast));
+                    hashTextViewByTitleId.get(titleId).setText(mFormInfo.getEntry(titleId, mFilter.breast));
                     break;
             }
         }

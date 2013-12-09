@@ -62,7 +62,7 @@ public class SettingsAccountFragment extends BaseFragment implements OnClickList
     protected String getTitle() {
         return getString(R.string.settings_account);
     }
-    
+
     private void showExitPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(R.string.settings_logout_msg)

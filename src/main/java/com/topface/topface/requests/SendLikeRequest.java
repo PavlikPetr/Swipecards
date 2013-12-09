@@ -17,6 +17,7 @@ public class SendLikeRequest extends ConfirmedApiRequest {
         FROM_FEED(2);
 
         int placeId;
+
         Place(int id) {
             this.placeId = id;
         }
@@ -24,20 +25,20 @@ public class SendLikeRequest extends ConfirmedApiRequest {
         public int id() {
             return placeId;
         }
-    };
+    }
 
     // Data
     private int userid; // идентификатор пользователя для оценки
     private int mutualid; // идентификатор сообщения из ленты, на который отправляется взаимная симпатия
     private Place place; //TODO место отправки лайка
 
-    public SendLikeRequest(Context context,int userId, Place place) {
+    public SendLikeRequest(Context context, int userId, Place place) {
         super(context);
         this.userid = userId;
         this.place = place;
     }
 
-    public SendLikeRequest(Context context,int userId, int mutualId, Place place) {
+    public SendLikeRequest(Context context, int userId, int mutualId, Place place) {
         super(context);
         this.mutualid = mutualId;
         this.userid = userId;
@@ -49,7 +50,7 @@ public class SendLikeRequest extends ConfirmedApiRequest {
         return new JSONObject()
                 .put("userId", userid)
                 .put("mutualId", mutualid)
-                .put("place",place.id());
+                .put("place", place.id());
     }
 
     @Override

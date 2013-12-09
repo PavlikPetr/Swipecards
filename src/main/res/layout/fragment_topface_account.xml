@@ -1,100 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
     <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            >
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
         <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="16dp"
-                android:gravity="center"
-                >
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center">
 
             <EditText
-                    android:id="@+id/edText"
-                    style="@style/ItemWhiteText"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:background="@drawable/city_editbox_selector"
-                    android:singleLine="true"
-                    android:paddingLeft="4dp"
-                    android:paddingRight="4dp"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    />
+                android:id="@+id/edText"
+                style="@style/ItemWhiteText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:background="@drawable/city_editbox_selector"
+                android:singleLine="true"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true" />
 
             <TextView
-                    android:id="@+id/tvText"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:padding="4dp"
-                    android:textSize="14sp"
-                    style="@style/BackgroundText"
-                    android:visibility="gone"
-                    />
+                android:id="@+id/tvText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:singleLine="true"
+                android:padding="4dp"
+                android:textSize="14sp"
+                style="@style/BackgroundText"
+                android:visibility="gone" />
         </RelativeLayout>
 
         <Button
-                android:id="@+id/btnLogout"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:background="@drawable/btn_darkgray_large_selector"
-                android:text="@string/settings_logout"
-                style="@style/ItemtText"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                />
+            android:id="@+id/btnLogout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/btn_darkgray_large_selector"
+            android:text="@string/settings_logout"
+            style="@style/ItemtText"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <Button
-                android:id="@+id/btnChange"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:background="@drawable/btn_light_gray_selector"
-                android:text="@string/settings_logout"
-                style="@style/ButtonGrayText"
-                />
+            android:id="@+id/btnChange"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/btn_light_gray_selector"
+            android:text="@string/settings_logout"
+            style="@style/ButtonGrayText" />
     </LinearLayout>
 
     <Button
-            android:id="@+id/btnDeleteAccount"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:background="@drawable/buying_purchase_selector"
-            android:text="@string/settings_delete_account"
-            style="@style/ItemtText"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_alignParentBottom="true"
-            />
+        android:id="@+id/btnDeleteAccount"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/buying_purchase_selector"
+        android:text="@string/settings_delete_account"
+        style="@style/ItemtText"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_alignParentBottom="true" />
 
     <com.topface.topface.ui.views.LockerView
-            android:id="@+id/llvLogoutLoading"
-            style="@style/LoadingLocker"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:visibility="gone"/>
+        android:id="@+id/llvLogoutLoading"
+        style="@style/LoadingLocker"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="gone" />
 </RelativeLayout>

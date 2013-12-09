@@ -60,7 +60,7 @@ public class EditFormItemInputFragment extends AbstractEditFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater,container,savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_edit_input, null, false);
 

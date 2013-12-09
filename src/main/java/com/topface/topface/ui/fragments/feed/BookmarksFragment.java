@@ -47,7 +47,7 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
 
     @Override
     protected FeedListData<FeedBookmark> getFeedList(JSONObject response) {
-        return  new FeedListData<FeedBookmark>(response, FeedBookmark.class);
+        return new FeedListData<FeedBookmark>(response, FeedBookmark.class);
     }
 
     @Override

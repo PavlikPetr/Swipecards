@@ -77,6 +77,7 @@ public class RateController {
      */
     public interface OnRateControllerListener {
         public void successRate();
+
         public void failRate();
     }
 
@@ -85,6 +86,7 @@ public class RateController {
      */
     public interface OnRateRequestListener {
         public void onRateCompleted();
+
         public void onRateFailed();
     }
 }

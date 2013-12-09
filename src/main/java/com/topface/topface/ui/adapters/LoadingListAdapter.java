@@ -38,7 +38,7 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
     protected TextView mLoaderRetrierText;
     protected ProgressBar mLoaderRetrierProgress;
 
-    public LoadingListAdapter(Context context,FeedList<T> data, Updater updateCallback) {
+    public LoadingListAdapter(Context context, FeedList<T> data, Updater updateCallback) {
         mContext = context;
         mInflater = LayoutInflater.from(context);
         mData = new FeedList<T>();
@@ -59,7 +59,7 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
 
     @Override
     public T getItem(int i) {
-        if(mData == null) {
+        if (mData == null) {
             return null;
         }
         return mData.hasItem(i) ? mData.get(i) : null;
@@ -118,7 +118,7 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
     }
 
     public void add(int i, T item) {
-        getData().add(i,item);
+        getData().add(i, item);
     }
 
     public void add(T item) {
@@ -145,12 +145,12 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
     }
 
     public void addFirst(ArrayList<T> data, boolean more) {
-        addFirst(data,more,true);
+        addFirst(data, more, true);
     }
 
     protected void setData(ArrayList<T> dataList, boolean more, boolean notify) {
         removeLoaderItem();
-        ArrayList<T> data  = getData();
+        ArrayList<T> data = getData();
         data.clear();
         data.addAll(dataList);
         addLoaderItem(more);
@@ -254,6 +254,7 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
 
     public interface ILoaderRetrierCreator<T> {
         T getLoader();
+
         T getRetrier();
     }
 

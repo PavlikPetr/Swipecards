@@ -66,7 +66,7 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater,container,savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_create_account, null);
 
         initViews(root);

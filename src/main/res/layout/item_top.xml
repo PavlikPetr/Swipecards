@@ -1,54 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp">
 
     <com.topface.topface.ui.views.ImageViewRemote
-            android:id="@+id/ivTG"
-            style="@style/TopItem"/>
+        android:id="@+id/ivTG"
+        style="@style/TopItem" />
 
     <ImageView
-            android:src="@drawable/frame_top_shadow"
-            android:scaleType="fitXY"
-            android:paddingTop="1dp"
-            android:layout_width="108dp"
-            android:layout_height="108dp"/>
+        android:src="@drawable/frame_top_shadow"
+        android:scaleType="fitXY"
+        android:paddingTop="1dp"
+        android:layout_width="108dp"
+        android:layout_height="108dp" />
 
     <TextView
-            android:id="@+id/topsRating"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:textColor="#FFFFFF"
-            android:drawableRight="@drawable/tops_heart"
-            android:layout_marginTop="3dp"
-            android:layout_marginLeft="5dp"
-            android:textSize="12sp"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:layout_alignParentTop="true"
-            style="@style/ShadowItemFontBottom"
-            />
+        android:id="@+id/topsRating"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textColor="#FFFFFF"
+        android:drawableRight="@drawable/tops_heart"
+        android:layout_marginTop="3dp"
+        android:layout_marginLeft="5dp"
+        android:textSize="12sp"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:layout_alignParentTop="true"
+        style="@style/ShadowItemFontBottom" />
 
     <TextView
-            android:id="@+id/topsName"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:textColor="#FFFFFF"
-            android:layout_marginBottom="3dp"
-            android:layout_marginLeft="5dp"
-            android:layout_alignBottom="@id/ivTG"
-            style="@style/ShadowItemFontBottom"
-            android:textSize="14sp"
-            android:text=""
-            />
+        android:id="@+id/topsName"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="3dp"
+        android:layout_marginLeft="5dp"
+        android:layout_alignBottom="@id/ivTG"
+        style="@style/ShadowItemFontBottom"
+        android:textSize="14sp"
+        android:text="" />
 
     <ImageView
-            android:id="@+id/ivOnline"
-            android:layout_alignRight="@id/ivTG"
-            android:layout_alignParentRight="false"
-            style="@style/OnlineIndicatorStatic"/>
+        android:id="@+id/ivOnline"
+        android:layout_alignRight="@id/ivTG"
+        android:layout_alignParentRight="false"
+        style="@style/OnlineIndicatorStatic" />
 
 </RelativeLayout>

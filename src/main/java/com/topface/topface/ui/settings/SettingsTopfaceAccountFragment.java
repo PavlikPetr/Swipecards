@@ -54,7 +54,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater,container,savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_topface_account, container, false);
 
         mLockerView = (LockerView) root.findViewById(R.id.llvLogoutLoading);
@@ -340,6 +340,6 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Utils.hideSoftKeyboard(getActivity(),mEditText);
+        Utils.hideSoftKeyboard(getActivity(), mEditText);
     }
 }

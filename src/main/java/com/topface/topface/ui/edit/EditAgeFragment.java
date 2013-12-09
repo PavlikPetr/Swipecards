@@ -27,6 +27,7 @@ public class EditAgeFragment extends AbstractEditFragment {
 
     private RangeSeekBar<Integer> rsb;
 
+    @SuppressWarnings("UnusedDeclaration")
     public EditAgeFragment() {
         super();
     }
@@ -41,7 +42,7 @@ public class EditAgeFragment extends AbstractEditFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater,container,savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.pref_age_picker_hor, null);
 
         if (sex == 0) {
@@ -87,7 +88,6 @@ public class EditAgeFragment extends AbstractEditFragment {
         String plus = age_end == absoluteMax ? "+" : "";
         return baseSexString + " " + Integer.toString(age_start) + " - " + Integer.toString(age_end) + plus;
     }
-
 
 
     @Override

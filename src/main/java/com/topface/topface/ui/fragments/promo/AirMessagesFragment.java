@@ -5,7 +5,7 @@ import com.topface.topface.data.Options;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
-public class AirMessagesFragment extends PromoPopupFragment{
+public class AirMessagesFragment extends PromoPopupFragment {
     @Override
     public Options.PremiumAirEntity getPremiumEntity() {
         return CacheProfile.getOptions().premium_messages;

@@ -33,7 +33,6 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.blocks.BannerBlock;
 import com.topface.topface.ui.blocks.FloatBlock;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 
 import java.util.Arrays;

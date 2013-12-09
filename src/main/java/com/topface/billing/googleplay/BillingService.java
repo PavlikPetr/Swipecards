@@ -90,7 +90,7 @@ public class BillingService extends Service implements ServiceConnection {
          * Run the request, starting the connection if necessary.
          *
          * @return true if the request was executed or queued; false if there
-         *         was an error starting the connection
+         * was an error starting the connection
          */
         public boolean runRequest() {
             if (runIfConnected()) {
@@ -109,7 +109,7 @@ public class BillingService extends Service implements ServiceConnection {
          * Try running the request directly if the service is already connected.
          *
          * @return true if the request ran successfully; false if the service
-         *         is not connected or there was an error when trying to use it
+         * is not connected or there was an error when trying to use it
          */
         public boolean runIfConnected() {
             if (Consts.DEBUG) {
@@ -241,6 +241,7 @@ public class BillingService extends Service implements ServiceConnection {
     /**
      * Wrapper class that requests a purchase.
      */
+    @SuppressWarnings("UnusedDeclaration")
     public class RequestPurchase extends BillingRequest {
         public final String mProductId;
         public final String mDeveloperPayload;

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
     <!-- Profile with background -->
     <RelativeLayout
         android:id="@+id/btnProfileLayoutWithBackground"
@@ -9,24 +10,20 @@
         android:layout_height="@dimen/left_menu_background_height"
         android:addStatesFromChildren="true"
         android:layout_alignParentTop="true"
-        android:visibility="gone"
-        >
+        android:visibility="gone">
 
-        <com.topface.topface.ui.views.ImageViewRemote
-            xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
+        <com.topface.topface.ui.views.ImageViewRemote xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
             ivr:postProcessor="leftMenuClip"
             android:id="@+id/ivProfileBackground"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/left_menu_background_height"
-            android:scaleType="centerCrop"
-            />
+            android:scaleType="centerCrop" />
 
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/shadow_left_menu_background"
-            android:layout_alignParentBottom="true"
-            />
+            android:layout_alignParentBottom="true" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -34,11 +31,9 @@
             android:orientation="horizontal"
             android:gravity="bottom"
             android:layout_alignParentBottom="true"
-            android:paddingBottom="6dp"
-            >
+            android:paddingBottom="6dp">
 
-            <com.topface.topface.ui.views.ImageViewRemote
-                xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
+            <com.topface.topface.ui.views.ImageViewRemote xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
                 ivr:postProcessor="mask"
                 ivr:clipMask="@drawable/frame_menu_mask"
                 android:background="@drawable/frame_menu_big_avatar_selector"
@@ -47,7 +42,7 @@
                 android:src="@drawable/topface_male_profile_button"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginLeft="8dp"/>
+                android:layout_marginLeft="8dp" />
 
             <Button
                 android:layout_width="fill_parent"
@@ -59,7 +54,7 @@
                 style="@style/LeftMenuButtons"
                 android:gravity="bottom"
                 android:singleLine="true"
-                android:ellipsize="end"/>
+                android:ellipsize="end" />
 
         </LinearLayout>
 
@@ -67,8 +62,7 @@
             android:tag="btnFragmentProfile"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/left_menu_background_height"
-            android:background="@drawable/bg_semitransparent_black"
-            />
+            android:background="@drawable/bg_semitransparent_black" />
 
         <ImageView
             android:tag="profileInfo"
@@ -77,8 +71,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:layout_marginRight="15dp"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
     </RelativeLayout>
 
     <!-- Profile -->
@@ -90,8 +83,7 @@
         android:addStatesFromChildren="true"
         android:layout_below="@id/btnProfileLayoutWithBackground">
 
-        <com.topface.topface.ui.views.ImageViewRemote
-            xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
+        <com.topface.topface.ui.views.ImageViewRemote xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
             ivr:postProcessor="mask"
             ivr:clipMask="@drawable/frame_menu_mask"
             android:background="@drawable/frame_menu_selector"
@@ -101,7 +93,7 @@
             android:layout_centerVertical="true"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginLeft="8dp"/>
+            android:layout_marginLeft="8dp" />
 
         <Button
             android:tag="btnFragmentProfile"
@@ -112,7 +104,7 @@
             android:text="@string/general_profile"
             android:paddingLeft="12dp"
             android:background="@android:color/transparent"
-            style="@style/LeftMenuButtons"/>
+            style="@style/LeftMenuButtons" />
 
         <ImageView
             android:tag="profileInfo"
@@ -122,7 +114,6 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
             android:layout_alignParentRight="true"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
     </RelativeLayout>
 </RelativeLayout>

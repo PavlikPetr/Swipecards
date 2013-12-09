@@ -5,7 +5,7 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class UserSetLocaleRequest extends ApiRequest{
+public class UserSetLocaleRequest extends ApiRequest {
 
     public static final String SERVICE_NAME = "user.setLocale";
     private final String locale;

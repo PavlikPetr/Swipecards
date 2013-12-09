@@ -16,7 +16,7 @@ import org.json.JSONObject;
  * Created by kirussell on 14.11.13.
  * Cache manager for UserList object
  */
-public class UsersListCacheManager extends PreferencesCacheManager{
+public class UsersListCacheManager extends PreferencesCacheManager {
 
     private static final String CACHE_KEY_SEARCH_POSITION_POSTFIX = "_search_position";
 
@@ -53,7 +53,8 @@ public class UsersListCacheManager extends PreferencesCacheManager{
      * You have to write values to cache here
      * Note: commit will be called after
      * TODO hide editor object from outside code
-     * @param editor editor
+     *
+     * @param editor    editor
      * @param usersList users
      * @throws JSONException
      */
@@ -99,7 +100,7 @@ public class UsersListCacheManager extends PreferencesCacheManager{
         getEditor()
                 .remove(getPositionCacheKey(mCacheKey))
                 .remove(getDataCacheKey(mCacheKey))
-                //.remove(getExpireDateCacheKey(mCacheKey))
+                        //.remove(getExpireDateCacheKey(mCacheKey))
                 .commit();
     }
 

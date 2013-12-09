@@ -1,38 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="left">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="left">
 
     <include
-            layout="@layout/chat_date_divider"
-            android:id="@+id/loDateDivider"/>
+        layout="@layout/chat_date_divider"
+        android:id="@+id/loDateDivider" />
 
     <LinearLayout
-            android:layout_below="@id/loDateDivider"
-            android:id="@+id/user_info"
-            style="@style/chat_message_layout.friend"
-            android:layout_alignParentLeft="true">
+        android:layout_below="@id/loDateDivider"
+        android:id="@+id/user_info"
+        style="@style/chat_message_layout.friend"
+        android:layout_alignParentLeft="true">
 
         <!--image-->
         <com.topface.topface.ui.views.ImageViewRemote
-                android:id="@+id/chat_image"
-                style="@style/chat_image.gift"
-                />
+            android:id="@+id/chat_image"
+            style="@style/chat_image.gift" />
 
         <!-- message -->
         <TextView
-                android:id="@+id/chat_message"
-                style="@style/chat_message.friend"
-                />
+            android:id="@+id/chat_message"
+            style="@style/chat_message.friend" />
     </LinearLayout>
 
     <!-- date -->
     <TextView
-            android:id="@+id/chat_date"
-            style="@style/chat_date"
-            android:layout_toRightOf="@id/user_info"
-            android:layout_alignBottom="@id/user_info"/>
+        android:id="@+id/chat_date"
+        style="@style/chat_date"
+        android:layout_toRightOf="@id/user_info"
+        android:layout_alignBottom="@id/user_info" />
 
 </RelativeLayout>
 

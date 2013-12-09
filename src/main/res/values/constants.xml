@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--suppress AndroidLintMissingTranslation -->
+<?xml version="1.0" encoding="utf-8"?><!--suppress AndroidLintMissingTranslation -->
 <resources>
 
     <string name="build_type_key">com.topface.topface.build</string>

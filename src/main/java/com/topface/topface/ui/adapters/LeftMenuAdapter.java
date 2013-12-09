@@ -20,9 +20,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.List;
 
-/**
-* Created by kirussell on 13.11.13.
-*/
 public class LeftMenuAdapter extends BaseAdapter {
     public static final int TYPE_MENU_BUTTON = 0;
     public static final int TYPE_MENU_BUTTON_WITH_BADGE = 1;
@@ -48,7 +45,7 @@ public class LeftMenuAdapter extends BaseAdapter {
     }
 
     public static ILeftMenuItem newLeftMenuItem(final BaseFragment.FragmentId menuId, final int menuType,
-                                          final int menuIconResId) {
+                                                final int menuIconResId) {
         return new ILeftMenuItem() {
             boolean isHidden = false;
 
@@ -109,11 +106,11 @@ public class LeftMenuAdapter extends BaseAdapter {
     }
 
     public void hideItem(BaseFragment.FragmentId id) {
-        setItemHidden(id,true);
+        setItemHidden(id, true);
     }
 
     public void showItem(BaseFragment.FragmentId id) {
-        setItemHidden(id,false);
+        setItemHidden(id, false);
     }
 
     public void showAllItems() {
@@ -245,10 +242,15 @@ public class LeftMenuAdapter extends BaseAdapter {
 
     public interface ILeftMenuItem {
         BaseFragment.FragmentId getMenuId();
+
         int getMenuType();
+
         String getMenuText();
+
         int getMenuIconResId();
+
         boolean isHidden();
+
         void setHidden(boolean hidden);
     }
 }

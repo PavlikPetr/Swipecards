@@ -1,58 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              >
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
     <ViewFlipper
         android:id="@+id/prFlipper"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:inAnimation="@android:anim/slide_in_left"
         android:outAnimation="@android:anim/slide_out_right">
+
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:paddingBottom="10dp"
-            >
+            android:paddingBottom="10dp">
 
             <LinearLayout
                 android:id="@+id/prBtnsContainer"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_centerInParent="true"
-                >
+                android:layout_centerInParent="true">
+
                 <TextView
-                        android:id="@+id/btnRatingPopupTitle"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
+                    android:id="@+id/btnRatingPopupTitle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
 
-                        android:textSize="18sp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_alignParentTop="true"
-                        android:gravity="center"
-                        android:text="@string/like_topface"/>
-                <Button
-                        android:id="@+id/btnRPYes"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:text="@string/general_yes"/>
+                    android:textSize="18sp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center"
+                    android:text="@string/like_topface" />
 
                 <Button
-                        android:id="@+id/btnRPNo"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/general_no"/>
+                    android:id="@+id/btnRPYes"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/general_yes" />
+
+                <Button
+                    android:id="@+id/btnRPNo"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/general_no" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -63,46 +64,46 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:paddingBottom="10dp"
-            android:visibility="gone"
-                >
+            android:visibility="gone">
+
             <TextView
-                    android:id="@+id/btnRatingPopupTitle"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:textSize="16sp"
-                    android:gravity="center_horizontal"
-                    android:text="@string/dashbrd_popup_rating"/>
+                android:id="@+id/btnRatingPopupTitle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="16sp"
+                android:gravity="center_horizontal"
+                android:text="@string/dashbrd_popup_rating" />
 
             <Button
-                    android:id="@+id/btnRatingPopupRate"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:text="@string/dashbrd_popup_rate"/>
+                android:id="@+id/btnRatingPopupRate"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/dashbrd_popup_rate" />
 
             <Button
-                    android:id="@+id/btnRatingPopupLate"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:text="@string/dashbrd_popup_later"/>
+                android:id="@+id/btnRatingPopupLate"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/dashbrd_popup_later" />
 
             <Button
-                    android:id="@+id/btnRatingPopupCancel"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:text="@string/dashbrd_popup_cancel"/>
+                android:id="@+id/btnRatingPopupCancel"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/dashbrd_popup_cancel" />
 
         </LinearLayout>
 

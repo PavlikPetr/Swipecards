@@ -34,7 +34,7 @@ public class FormInfo {
         FormItem breastItem = null;
         FormItem physiqueHeaderItem = null;
         int physiqueIndex = -1;
-        for (int i=0;i<items.size();i++) {
+        for (int i = 0; i < items.size(); i++) {
             FormItem item = items.get(i);
             if (item.titleId == R.array.form_physique_breast) {
                 breastItem = item;
@@ -50,10 +50,10 @@ public class FormInfo {
         if (mSex == Static.BOY) {
             if (breastItem != null) items.remove(breastItem);
         } else if (mSex == Static.GIRL) {
-            breastItem  = new FormItem(R.array.form_physique_breast, 0,
-                            FormItem.DATA, physiqueHeaderItem);
+            breastItem = new FormItem(R.array.form_physique_breast, 0,
+                    FormItem.DATA, physiqueHeaderItem);
             fillFormItem(breastItem);
-            items.add(physiqueIndex+1, breastItem);
+            items.add(physiqueIndex + 1, breastItem);
         }
     }
 

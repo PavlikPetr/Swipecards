@@ -71,7 +71,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater,container,savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_edit_main_form_items, null, false);
 
         TextView sexTitle = (TextView) root.findViewById(R.id.tvSexTitle);
@@ -267,8 +267,7 @@ public class EditMainFormItemsFragment extends AbstractEditFragment implements O
                         finishRequestSend();
                         if (handler == null) {
                             getActivity().finish();
-                        }
-                        else handler.sendEmptyMessage(0);
+                        } else handler.sendEmptyMessage(0);
                     }
 
                     @Override

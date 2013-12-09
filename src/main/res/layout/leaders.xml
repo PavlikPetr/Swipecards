@@ -1,37 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/leadersBlock"
-                android:layout_width="fill_parent"
-                android:layout_height="67dp"
-                android:paddingTop="6dp"
-                android:paddingBottom="4dp"
-                android:background="@drawable/bg_leaders"
-                android:visibility="gone">
+    android:id="@+id/leadersBlock"
+    android:layout_width="fill_parent"
+    android:layout_height="67dp"
+    android:paddingTop="6dp"
+    android:paddingBottom="4dp"
+    android:background="@drawable/bg_leaders"
+    android:visibility="gone">
 
     <com.topface.topface.ui.blocks.HorizontalListView
-            android:id="@+id/leadersList"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0.5dp"
-            android:layout_width="fill_parent"
-            android:layout_marginLeft="58dp"
-            />
+        android:id="@+id/leadersList"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0.5dp"
+        android:layout_width="fill_parent"
+        android:layout_marginLeft="58dp" />
 
     <Button
-            android:id="@+id/leadersDateBtn"
-            android:layout_height="55.5dp"
-            android:layout_width="wrap_content"
-            android:background="@drawable/btn_leaders_date_selector"
-            android:text="@string/leaders_go_date"
-            android:textSize="11sp"
-            android:textScaleX="0.9"
-            android:textColor="#FFFFFF"
-            android:shadowDy="-1"
-            android:shadowColor="#444444"
-            android:shadowRadius="1"
-            android:gravity="left|center_vertical"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_marginLeft="5dp"/>
+        android:id="@+id/leadersDateBtn"
+        android:layout_height="55.5dp"
+        android:layout_width="wrap_content"
+        android:background="@drawable/btn_leaders_date_selector"
+        android:text="@string/leaders_go_date"
+        android:textSize="11sp"
+        android:textScaleX="0.9"
+        android:textColor="#FFFFFF"
+        android:shadowDy="-1"
+        android:shadowColor="#444444"
+        android:shadowRadius="1"
+        android:gravity="left|center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_marginLeft="5dp" />
 
 </RelativeLayout>

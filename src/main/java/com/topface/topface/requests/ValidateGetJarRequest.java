@@ -5,7 +5,7 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ValidateGetJarRequest extends ApiRequest{
+public class ValidateGetJarRequest extends ApiRequest {
     private static final String SERVICE = "getjar.charge";
 
     private String signedData;

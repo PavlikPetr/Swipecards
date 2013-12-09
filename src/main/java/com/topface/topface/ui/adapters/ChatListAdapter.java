@@ -471,7 +471,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 break;
         }
         if (holder != null) {
-            if (holder.message != null) holder.message.setMovementMethod(LinkMovementMethod.getInstance());
+            if (holder.message != null)
+                holder.message.setMovementMethod(LinkMovementMethod.getInstance());
             if (holder.date != null) holder.date.setText(DateUtils.getFormattedTime(item.created));
         }
 

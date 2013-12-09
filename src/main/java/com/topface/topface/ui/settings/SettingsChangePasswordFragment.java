@@ -43,7 +43,7 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater,container,savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_change_password, container, false);
         final FragmentActivity activity = getActivity();
 
@@ -71,13 +71,13 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Utils.hideSoftKeyboard(getActivity(),mEdPassword,mEdPasswordConfirmation);
+        Utils.hideSoftKeyboard(getActivity(), mEdPassword, mEdPasswordConfirmation);
     }
 
     @Override
     protected void restoreState() {
         Bundle arguments = getArguments();
-        if(arguments != null) {
+        if (arguments != null) {
             mNeedExit = arguments.getBoolean("needExit");
         }
     }
@@ -91,7 +91,7 @@ public class SettingsChangePasswordFragment extends BaseFragment implements OnCl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSave:
-                Utils.hideSoftKeyboard(getActivity(),mEdPassword,mEdPasswordConfirmation);
+                Utils.hideSoftKeyboard(getActivity(), mEdPassword, mEdPasswordConfirmation);
                 final String password = mEdPassword.getText().toString();
                 final String passwordConfirmation = mEdPasswordConfirmation.getText().toString();
                 if (password.trim().length() <= 0) {

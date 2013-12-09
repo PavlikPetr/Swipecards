@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.lifestreet.android.lsmsdk.SlotView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/slotView"
-        android:layout_width="fill_parent"
-        android:layout_height="53dp"
-        slot_autoRefreshEnabled="true"/>
+<com.lifestreet.android.lsmsdk.SlotView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/slotView"
+    android:layout_width="fill_parent"
+    android:layout_height="53dp"
+    slot_autoRefreshEnabled="true" />
 

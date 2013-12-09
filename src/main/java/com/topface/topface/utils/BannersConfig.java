@@ -44,7 +44,7 @@ public class BannersConfig {
     }
 
     public boolean needLoadOnStart() {
-        return getPreferences().getBoolean(BANNERS_CONFIG_ON_START,false);
+        return getPreferences().getBoolean(BANNERS_CONFIG_ON_START, false);
     }
 
     public void saveBannersSettings() {
@@ -64,7 +64,7 @@ public class BannersConfig {
         for (String pageName : Options.PAGES) {
             String str = preferences.getString(pageName, Static.EMPTY);
             if (!str.isEmpty()) {
-                options.pages.put(pageName,Options.Page.parseFromString(str));
+                options.pages.put(pageName, Options.Page.parseFromString(str));
             }
         }
     }
@@ -76,7 +76,7 @@ public class BannersConfig {
     }
 
     public void setLoadOnStart(boolean start) {
-         getPreferences().edit().putBoolean(BANNERS_CONFIG_ON_START,start).commit();
+        getPreferences().edit().putBoolean(BANNERS_CONFIG_ON_START, start).commit();
     }
 
     private SharedPreferences getPreferences() {

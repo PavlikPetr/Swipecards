@@ -57,7 +57,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import static com.topface.topface.ui.fragments.BaseFragment.*;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 
 public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
@@ -380,9 +380,9 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
     public void setMenuLockMode(int lockMode) {
         if (mDrawerLayout != null) {
-            if(lockMode == DrawerLayout.LOCK_MODE_UNLOCKED &&
+            if (lockMode == DrawerLayout.LOCK_MODE_UNLOCKED &&
                     mMenuFragment.getClosingsController().isLeftMenuLocked()) {
-                    return;
+                return;
             }
             mDrawerLayout.setDrawerLockMode(lockMode, GravityCompat.START);
         }
@@ -485,7 +485,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
 
     @Override
     public boolean onKeyDown(int keycode, KeyEvent e) {
-        switch(keycode) {
+        switch (keycode) {
             case KeyEvent.KEYCODE_MENU:
                 if (mDrawerLayout.getDrawerLockMode(GravityCompat.START) ==
                         DrawerLayout.LOCK_MODE_UNLOCKED) {

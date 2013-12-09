@@ -41,7 +41,7 @@ public class RecoverPwdFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater,container,savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_recover_pwd, null);
 
 //        getActivity().findViewById(R.id.loNavigationBar).setVisibility(View.GONE);

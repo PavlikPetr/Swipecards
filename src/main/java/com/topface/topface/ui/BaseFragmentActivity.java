@@ -18,7 +18,6 @@ import android.view.WindowManager;
 import com.topface.topface.GCMUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
@@ -293,7 +292,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     protected void takePhoto(TakePhotoDialog.TakePhotoListener listener) {
         if (needOpenDialog) {
             if (this instanceof NavigationActivity) {
-                ((NavigationActivity)this).setTakePhotoDialogStarted(true);
+                ((NavigationActivity) this).setTakePhotoDialogStarted(true);
             }
             TakePhotoDialog newFragment = TakePhotoDialog.newInstance();
             newFragment.setOnTakePhotoListener(listener);
