@@ -282,11 +282,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
-    protected boolean isBlockOnClosing() {
-        return true;
-    }
-
-    @Override
     protected void onCountersUpdated() {
         super.onCountersUpdated();
         if (mEmptyFeedView != null) {

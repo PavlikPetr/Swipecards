@@ -62,7 +62,6 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.DoubleBigButton;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.ui.views.RetryViewCreator;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Utils;
@@ -225,7 +224,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
 
     abstract protected int getTypeForGCM();
 
-    abstract protected int getTypeForCounters(); //TODO: Надо сделать что-то единообразное для того и того. Возможно стоит вынести типы фидов в константы
+    abstract protected int getTypeForCounters();
 
     protected int getLayout() {
         return R.layout.ac_feed;
@@ -575,10 +574,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
     }
 
     protected void updateData(final boolean isPullToRefreshUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {
-        if (isBlockOnClosing() && !CacheProfile.premium) {
-            processErrors(ErrorCodes.PREMIUM_ACCESS_ONLY);
-            return;
-        }
         mIsUpdating = true;
         onUpdateStart(isPullToRefreshUpdating || isHistoryLoad);
 
@@ -899,10 +894,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment impl
             }
         }
         return mLoader;
-    }
-
-    protected boolean isBlockOnClosing() {
-        return false;
     }
 
     @Override
