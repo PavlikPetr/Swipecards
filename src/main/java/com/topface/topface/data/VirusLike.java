@@ -1,9 +1,7 @@
 package com.topface.topface.data;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -11,10 +9,8 @@ import com.facebook.topface.DialogError;
 import com.facebook.topface.Facebook;
 import com.facebook.topface.FacebookError;
 import com.google.analytics.tracking.android.EasyTracker;
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.VirusLikesRequest;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.social.AuthToken;
@@ -44,8 +40,7 @@ public class VirusLike extends AbstractData {
             //При парсинге устанавливаем новое количество лайков
             CacheProfile.likes = response.jsonResult.optInt(FIELD_LIKES, CacheProfile.likes);
             //И обновляем UI
-            LocalBroadcastManager.getInstance(App.getContext())
-                    .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+            CacheProfile.sendUpdateProfileBroadcast();
 
         } else {
             mSocialIdArray = new ArrayList<Long>();

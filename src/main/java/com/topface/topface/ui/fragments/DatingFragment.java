@@ -49,7 +49,6 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.FilterRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.NoviceLikesRequest;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SearchRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.SkipRateRequest;
@@ -78,7 +77,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     public static final int SEARCH_LIMIT = 30;
     public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 2;
-    public static final String CLOSINGS_FILTER = "com.topface.topface.CLOSINGS";
 
     private TextView mResourcesLikes;
     private TextView mResourcesMoney;
@@ -203,7 +201,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
         setHighRatePrice();
         setActionBarTitles(getTitle(), getSubtitle());
         updateResources();

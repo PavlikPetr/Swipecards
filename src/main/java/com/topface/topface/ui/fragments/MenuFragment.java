@@ -16,6 +16,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -26,7 +27,6 @@ import com.topface.topface.R;
 import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.FeedRequest;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.BonusFragment;
 import com.topface.topface.ui.adapters.LeftMenuAdapter;
 import com.topface.topface.ui.dialogs.ClosingsBuyVipDialog;
@@ -45,6 +45,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 import com.topface.topface.utils.Editor;
+import com.topface.topface.utils.ResourcesUtils;
 import com.topface.topface.utils.controllers.ClosingsController;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.topface.topface.utils.offerwalls.Offerwalls;
@@ -85,8 +86,12 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
     private Button mProfileButton;
     private BuyWidgetController mBuyWidgetController;
     private ViewStub mHeaderViewStub;
+    private ViewGroup mFooterView;
+    private View mEditorItem;
 
     private ClosingsController mClosingsController;
+
+    private static boolean mEditorInitializationForSessionInvoked = false;
 
     private BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -100,8 +105,9 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
                 if (mClosingsController != null) {
                     mClosingsController.refreshCounterBadges();
                 }
-            } else if (action.equals(ProfileRequest.PROFILE_UPDATE_ACTION)) {
+            } else if (action.equals(CacheProfile.PROFILE_UPDATE_ACTION)) {
                 initProfileMenuItem(mHeaderView);
+                initEditor();
             } else if (action.equals(GooglePlayProducts.INTENT_UPDATE_PRODUCTS)) {
                 if (mBuyWidgetController != null) {
                     mBuyWidgetController.setButtonBackgroundResource(
@@ -125,6 +131,23 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
             }
         }
     };
+
+    private void initEditor() {
+        if (mEditorInitializationForSessionInvoked) return;
+        if (mFooterView != null) {
+            if (Editor.isEditor() && mEditorItem == null) {
+                mEditorItem = View.inflate(getActivity(), R.layout.item_left_menu_button_with_badge, null);
+                Button btnMenu = (Button) mEditorItem.findViewById(R.id.btnMenu);
+                btnMenu.setText(ResourcesUtils.getFragmentNameResId(FragmentId.F_EDITOR));
+                btnMenu.setTag(FragmentId.F_EDITOR);
+                btnMenu.setOnClickListener(this);
+                mFooterView.addView(mEditorItem);
+            } else {
+                mFooterView.removeView(mEditorItem);
+            }
+        }
+        mEditorInitializationForSessionInvoked = true;
+    }
 
     public static void selectFragment(FragmentId fragmentId) {
         Intent intent = new Intent();
@@ -181,15 +204,15 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         }
         menuItems.add(LeftMenuAdapter.newLeftMenuItem(F_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_guests_selector));
-
         mAdapter = new LeftMenuAdapter(this, menuItems);
         setListAdapter(mAdapter);
     }
 
     private void initFooter() {
-        View footerView = View.inflate(getActivity(), R.layout.buy_widget, null);
-        mBuyWidgetController = new BuyWidgetController(getActivity(), footerView);
-        getListView().addFooterView(footerView);
+        mFooterView = (ViewGroup) View.inflate(getActivity(), R.layout.layout_left_menu_footer, null);
+        mBuyWidgetController = new BuyWidgetController(getActivity(),
+                mFooterView.findViewById(R.id.countersLayout));
+        getListView().addFooterView(mFooterView);
     }
 
     private void initProfileMenuItem(View headerView) {
@@ -272,7 +295,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
         IntentFilter filter = new IntentFilter();
-        filter.addAction(ProfileRequest.PROFILE_UPDATE_ACTION);
+        filter.addAction(CacheProfile.PROFILE_UPDATE_ACTION);
         filter.addAction(GooglePlayProducts.INTENT_UPDATE_PRODUCTS);
         filter.addAction(CountersManager.UPDATE_BALANCE_COUNTERS);
         filter.addAction(SELECT_MENU_ITEM);
@@ -280,6 +303,7 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         filter.addAction(MutualClosingFragment.ACTION_MUTUAL_CLOSINGS_PROCESSED);
         filter.addAction(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, filter);
+        initProfileMenuItem(mHeaderView);
         // We need to clean state if there was a logout in other Activity
         mClosingsController.onLogoutWasInitiated();
     }
@@ -481,6 +505,15 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
         return mClosingsController.isLeftMenuLocked();
     }
 
+    /**
+     * !!!Не использовать без критической надобности!!!
+     * Не хочется отрывать доступ к ClosingControler'у для дальнейшего его локального уничтожения
+     * Костыль - нужен для фикса проблемы с непроизвольными появлениями попапов, которые активируют
+     * левое меню при закрытии попапа, при работающих запираниях. После реализации ротатора попапов
+     * все использования будут удалены, ClosingsController спрячу, чтобы не был доступен извне
+     *
+     * @return контроллер запираний
+     */
     @Deprecated
     public ClosingsController getClosingsController() {
         return mClosingsController;
@@ -522,5 +555,6 @@ public class MenuFragment extends ListFragment implements View.OnClickListener {
 
     public static void onLogout() {
         ClosingsController.onLogout();
+        mEditorInitializationForSessionInvoked = false;
     }
 }

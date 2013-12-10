@@ -11,7 +11,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
@@ -22,7 +21,6 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PhotoDeleteRequest;
 import com.topface.topface.requests.PhotoMainRequest;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.views.ImageSwitcher;
@@ -199,7 +197,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             @Override
             public void success(IApiResponse response) {
                 CacheProfile.photo = currentPhoto;
-                sendProfileUpdateBroadcast();
+                CacheProfile.sendUpdateProfileBroadcast();
                 refreshButtonsState();
                 Toast.makeText(PhotoSwitcherActivity.this, R.string.avatar_set_successfully, Toast.LENGTH_SHORT).show();
             }
@@ -212,21 +210,24 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         }).exec();
     }
 
-    private static void sendProfileUpdateBroadcast() {
-        Intent intent = new Intent();
-        intent.setAction(ProfileRequest.PROFILE_UPDATE_ACTION);
-        LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
-    }
-
     private ArrayList<Photo> getPhotos(Intent intent) {
-        ArrayList<Photo> arrList = intent.getExtras().getParcelableArrayList(INTENT_PHOTOS);
-        //Удаляем пустые пукнты фотографий
-        for (int i = 0; i < arrList.size(); i++) {
-            if (arrList.get(i) == null) {
-                arrList.remove(i);
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            ArrayList<Photo> arrList = extras.getParcelableArrayList(INTENT_PHOTOS);
+            //Удаляем пустые пукнты фотографий
+            if (arrList != null) {
+                for (int i = 0; i < arrList.size(); i++) {
+                    if (arrList.get(i) == null) {
+                        arrList.remove(i);
+                    }
+                }
+                return arrList;
+            } else {
+                return new ArrayList<Photo>();
             }
+        } else {
+            return new ArrayList<Photo>();
         }
-        return arrList;
     }
 
     private void setCounter(int position) {

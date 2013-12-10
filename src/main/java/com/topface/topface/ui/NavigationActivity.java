@@ -30,7 +30,6 @@ import com.topface.topface.data.City;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PhotoMainRequest;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
@@ -313,7 +312,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
                             @Override
                             public void success(IApiResponse response) {
                                 CacheProfile.photo = photo;
-                                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                                CacheProfile.sendUpdateProfileBroadcast();
                             }
 
                             @Override
@@ -427,8 +426,7 @@ public class NavigationActivity extends CustomTitlesBaseFragmentActivity {
                                 @Override
                                 public void success(IApiResponse response) {
                                     CacheProfile.city = city;
-                                    LocalBroadcastManager.getInstance(getApplicationContext())
-                                            .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                                    CacheProfile.sendUpdateProfileBroadcast();
                                 }
 
                                 @Override

@@ -22,7 +22,6 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.GooglePlayProducts;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.ContainerActivity;
 import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.views.ServicesTextView;
@@ -101,7 +100,7 @@ public class BuyingFragment extends BillingFragment {
                 updateBalanceCounters();
             }
         };
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
     }
 
     @Override
@@ -292,7 +291,7 @@ public class BuyingFragment extends BillingFragment {
 
     @Override
     public void onPurchased() {
-        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+        CacheProfile.sendUpdateProfileBroadcast();
     }
 
     @Override

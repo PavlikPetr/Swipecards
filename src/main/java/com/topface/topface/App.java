@@ -269,8 +269,7 @@ public class App extends Application {
                     @Override
                     protected void success(Profile data, IApiResponse response) {
                         CacheProfile.setProfile(data, (ApiResponse) response, part);
-                        LocalBroadcastManager.getInstance(getContext())
-                                .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                        CacheProfile.sendUpdateProfileBroadcast();
                     }
 
                     @Override

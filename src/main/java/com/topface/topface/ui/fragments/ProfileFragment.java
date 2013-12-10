@@ -45,7 +45,6 @@ import com.topface.topface.requests.BookmarkAddRequest;
 import com.topface.topface.requests.BookmarkDeleteManyRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SendGiftRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.UserRequest;
@@ -303,7 +302,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
             }
         };
 
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateProfileReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
         setProfile(mUserProfile);
     }
 
@@ -751,7 +750,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
         if (mUserProfile != null) {
             Intent intent = new Intent(getActivity(), ContainerActivity.class);
             intent.putExtra(ChatFragment.INTENT_USER_ID, mUserProfile.uid);
-            intent.putExtra(ChatFragment.INTENT_USER_NAME, mUserProfile.firstName == null ?
+            intent.putExtra(ChatFragment.INTENT_USER_NAME, mUserProfile.firstName != null ?
                     mUserProfile.firstName : Static.EMPTY);
             intent.putExtra(ChatFragment.INTENT_USER_SEX, mUserProfile.sex);
             intent.putExtra(ChatFragment.INTENT_USER_AGE, mUserProfile.age);
@@ -868,61 +867,63 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
 
     private void sendGift(Intent data) {
         Bundle extras = data.getExtras();
-        final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
-        final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
-        final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
+        if (extras != null) {
+            final int id = extras.getInt(GiftsActivity.INTENT_GIFT_ID);
+            final String url = extras.getString(GiftsActivity.INTENT_GIFT_URL);
+            final int price = extras.getInt(GiftsActivity.INTENT_GIFT_PRICE);
 
-        if (mUserProfile != null) {
-            final SendGiftRequest sendGift = new SendGiftRequest(getActivity());
-            registerRequest(sendGift);
-            sendGift.giftId = id;
-            sendGift.userId = mUserProfile.uid;
-            final FeedGift sendedGift = new FeedGift();
-            sendedGift.gift = new Gift(
-                    sendGift.giftId,
-                    Gift.PROFILE_NEW,
-                    url,
-                    0
-            );
-            sendGift.callback(new DataApiHandler<SendGiftAnswer>() {
+            if (mUserProfile != null) {
+                final SendGiftRequest sendGift = new SendGiftRequest(getActivity());
+                registerRequest(sendGift);
+                sendGift.giftId = id;
+                sendGift.userId = mUserProfile.uid;
+                final FeedGift sendedGift = new FeedGift();
+                sendedGift.gift = new Gift(
+                        sendGift.giftId,
+                        Gift.PROFILE_NEW,
+                        url,
+                        0
+                );
+                sendGift.callback(new DataApiHandler<SendGiftAnswer>() {
 
-                @Override
-                protected void success(SendGiftAnswer data, IApiResponse response) {
-                    CacheProfile.likes = data.likes;
-                    CacheProfile.money = data.money;
-                    if (mGiftFragment != null) {
-                        mGiftFragment.addGift(sendedGift);
-                    } else {
-                        mUserProfile.gifts.add(0, sendedGift.gift);
+                    @Override
+                    protected void success(SendGiftAnswer data, IApiResponse response) {
+                        CacheProfile.likes = data.likes;
+                        CacheProfile.money = data.money;
+                        if (mGiftFragment != null) {
+                            mGiftFragment.addGift(sendedGift);
+                        } else {
+                            mUserProfile.gifts.add(0, sendedGift.gift);
+                        }
+                        Toast.makeText(getContext(), R.string.chat_gift_out, Toast.LENGTH_SHORT).show();
                     }
-                    Toast.makeText(getContext(), R.string.chat_gift_out, Toast.LENGTH_SHORT).show();
-                }
 
-                @Override
-                protected SendGiftAnswer parseResponse(ApiResponse response) {
-                    return SendGiftAnswer.parse(response);
-                }
+                    @Override
+                    protected SendGiftAnswer parseResponse(ApiResponse response) {
+                        return SendGiftAnswer.parse(response);
+                    }
 
-                @Override
-                public void fail(int codeError, IApiResponse response) {
-                    Utils.showErrorMessage(getContext());
-                    if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
-                        FragmentActivity activity = getActivity();
-                        if (activity != null) {
-                            Intent intent = ContainerActivity.getBuyingIntent("Profile");
-                            intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
-                            intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
-                            startActivity(intent);
+                    @Override
+                    public void fail(int codeError, IApiResponse response) {
+                        Utils.showErrorMessage(getContext());
+                        if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
+                            FragmentActivity activity = getActivity();
+                            if (activity != null) {
+                                Intent intent = ContainerActivity.getBuyingIntent("Profile");
+                                intent.putExtra(BuyingFragment.ARG_ITEM_TYPE, BuyingFragment.TYPE_GIFT);
+                                intent.putExtra(BuyingFragment.ARG_ITEM_PRICE, price);
+                                startActivity(intent);
+                            }
                         }
                     }
-                }
 
-                @Override
-                public void always(IApiResponse response) {
-                    super.always(response);
-                    giftsReceivedListener.onReceived();
-                }
-            }).exec();
+                    @Override
+                    public void always(IApiResponse response) {
+                        super.always(response);
+                        giftsReceivedListener.onReceived();
+                    }
+                }).exec();
+            }
         }
     }
 
@@ -1020,7 +1021,7 @@ public class ProfileFragment extends BaseFragment implements View.OnClickListene
                 intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, photosForAdd);
                 LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
                 // оповещаем всех об изменениях
-                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                CacheProfile.sendUpdateProfileBroadcast();
                 Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
             } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
                 Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();

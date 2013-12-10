@@ -5,7 +5,6 @@ package com.topface.billing.googleplay;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.topface.billing.BillingUtils;
@@ -20,7 +19,6 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AppOptionsRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.VerifyRequest;
 import com.topface.topface.utils.CacheProfile;
 
@@ -231,9 +229,7 @@ public class ResponseHandler {
 
             @Override
             protected void success(Options data, IApiResponse response) {
-                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(
-                        new Intent(ProfileRequest.PROFILE_UPDATE_ACTION)
-                );
+                CacheProfile.sendUpdateProfileBroadcast();
             }
 
             @Override

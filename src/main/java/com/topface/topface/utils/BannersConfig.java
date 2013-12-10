@@ -9,7 +9,6 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.blocks.FloatBlock;
 
 import java.util.HashMap;
@@ -34,7 +33,7 @@ public class BannersConfig {
             public void onReceive(Context context, Intent intent) {
                 initSavedOptionsPages();
             }
-        }, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
+        }, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
     }
 
     public void initSavedOptionsPages() {

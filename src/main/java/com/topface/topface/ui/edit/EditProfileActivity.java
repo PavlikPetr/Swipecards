@@ -28,7 +28,6 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
@@ -126,7 +125,8 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
     @Override
     protected void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver,
+                new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
     }
 
     @Override
@@ -256,23 +256,24 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                 case CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY:
                     Bundle extras = data.getExtras();
                     try {
-                        final City city = new City(new JSONObject(extras.getString(CitySearchActivity.INTENT_CITY)));
-                        SettingsRequest request = new SettingsRequest(this);
-                        request.cityid = city.id;
-                        request.callback(new ApiHandler() {
+                        if (extras != null) {
+                            final City city = new City(new JSONObject(extras.getString(CitySearchActivity.INTENT_CITY)));
+                            SettingsRequest request = new SettingsRequest(this);
+                            request.cityid = city.id;
+                            request.callback(new ApiHandler() {
 
-                            @Override
-                            public void success(IApiResponse response) {
-                                CacheProfile.city = city;
-                                LocalBroadcastManager.getInstance(getApplicationContext())
-                                        .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
-                            }
+                                @Override
+                                public void success(IApiResponse response) {
+                                    CacheProfile.city = city;
+                                    CacheProfile.sendUpdateProfileBroadcast();
+                                }
 
-                            @Override
-                            public void fail(int codeError, IApiResponse response) {
-                            }
-                        }).exec();
-                        mEditCity.setText(city.name);
+                                @Override
+                                public void fail(int codeError, IApiResponse response) {
+                                }
+                            }).exec();
+                            mEditCity.setText(city.name);
+                        }
                     } catch (JSONException e) {
                         Debug.error(e);
                     }

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,7 +25,6 @@ import com.topface.topface.data.Photos;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PhotoDeleteRequest;
 import com.topface.topface.requests.PhotoMainRequest;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.profile.AddPhotoHelper;
@@ -68,7 +66,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         super.onCreate(savedInstanceState);
         mSelectedAsMainId = CacheProfile.photo == null ? -1 : CacheProfile.photo.getId();
         mLastSelectedAsMainId = mSelectedAsMainId;
-        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+        CacheProfile.sendUpdateProfileBroadcast();
         mPhotoLinks = new Photos();
         mPhotoLinks.add(null);
         if (CacheProfile.photos != null) {
@@ -139,7 +137,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     public void success(IApiResponse response) {
                         CacheProfile.photos.removeAll(mDeleted);
                         mDeleted.clear();
-                        LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                        CacheProfile.sendUpdateProfileBroadcast();
                         finishOperations(handler);
 
                     }
@@ -171,7 +169,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     public void success(IApiResponse response) {
                         CacheProfile.photo = mPhotoLinks.getByPhotoId(mLastSelectedAsMainId);
                         mSelectedAsMainId = mLastSelectedAsMainId;
-                        LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                        CacheProfile.sendUpdateProfileBroadcast();
                         finishOperations(handler);
                     }
 
