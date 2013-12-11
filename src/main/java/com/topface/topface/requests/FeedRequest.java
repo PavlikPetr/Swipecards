@@ -15,7 +15,7 @@ public class FeedRequest extends ApiRequest {
     public boolean unread;  // параметр получения только тех диалогов, в которых есть непрочитанные сообщения
     public int type = -1; // нужен исключительно для избранных - показывает кого подгрузить - избранных или поклонников. Если не указан, подгружаются поклонники
     private FeedService mService;
-    //private boolean leave; //Оставить сообщения не прочитанными
+    public boolean leave; //Оставить сообщения не прочитанными
 
     public static enum FeedService {
         DIALOGS, LIKES, MUTUAL, VISITORS, BLACK_LIST, BOOKMARKS, FANS, ADMIRATIONS
@@ -37,7 +37,7 @@ public class FeedRequest extends ApiRequest {
         JSONObject data = new JSONObject();
         data.put("limit", limit);
         data.put("unread", unread);
-        //data.put("leave", leave);
+        data.put("leave", leave);
         if (to != null) {
             data.put("to", to);
         }
