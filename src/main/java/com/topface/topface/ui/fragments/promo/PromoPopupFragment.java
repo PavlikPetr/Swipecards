@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.promo;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -42,13 +43,23 @@ public abstract class PromoPopupFragment extends BaseFragment implements View.On
     public abstract Options.PremiumAirEntity getPremiumEntity();
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
         //Отключаем боковое меню
-        FragmentActivity activity = getActivity();
         if (activity instanceof NavigationActivity) {
             ((NavigationActivity) activity).setPopupVisible(true);
             ((NavigationActivity) activity).setMenuLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        //Включаем боковое меню
+        FragmentActivity activity = getActivity();
+        if (activity instanceof NavigationActivity) {
+            ((NavigationActivity) activity).setPopupVisible(false);
+            ((NavigationActivity) activity).setMenuLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         }
     }
 
@@ -57,14 +68,6 @@ public abstract class PromoPopupFragment extends BaseFragment implements View.On
         super.onPause();
         //Отмечаем время закрытия попапа
         getPremiumEntity().setPopupShowTime();
-
-        //Включаем боковое меню
-        FragmentActivity activity = getActivity();
-        if (activity instanceof NavigationActivity) {
-            ((NavigationActivity) activity).setPopupVisible(false);
-            ((NavigationActivity) activity).setMenuLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        }
-
         if (!mUserClickButton) {
             EasyTracker.getTracker().sendEvent(getMainTag(), "Dismiss", "BackClose", 0L);
         }
@@ -135,7 +138,6 @@ public abstract class PromoPopupFragment extends BaseFragment implements View.On
     }
 
     private void closeFragment() {
-
         getFragmentManager()
                 .beginTransaction()
                 .remove(PromoPopupFragment.this)
