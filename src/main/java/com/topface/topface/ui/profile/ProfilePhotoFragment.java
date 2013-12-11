@@ -25,7 +25,6 @@ import com.topface.topface.requests.AlbumRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PhotoDeleteRequest;
 import com.topface.topface.requests.PhotoMainRequest;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.edit.EditContainerActivity;
@@ -178,7 +177,7 @@ public class ProfilePhotoFragment extends BaseFragment {
                             public void success(IApiResponse response) {
                                 super.success(response);
                                 CacheProfile.photo = photo;
-                                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                                CacheProfile.sendUpdateProfileBroadcast();
                             }
 
                             @Override

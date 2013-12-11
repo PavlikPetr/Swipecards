@@ -15,6 +15,7 @@ import com.topface.topface.requests.AppOptionsRequest;
 import com.topface.topface.requests.ConfirmedApiRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Debug;
 
@@ -132,7 +133,7 @@ abstract public class ApiHandler extends Handler {
     private void sendUpdateIntent(IApiResponse response) {
         String methodName = response.getMethodName();
         if (methodName.equals(ProfileRequest.SERVICE)) {
-            LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+            CacheProfile.sendUpdateProfileBroadcast();
         } else if (methodName.equals(AppOptionsRequest.SERVICE)) {
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(AppOptionsRequest.VERSION_INTENT));
         }

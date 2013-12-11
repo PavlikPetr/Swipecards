@@ -25,7 +25,6 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.GooglePlayProducts;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.edit.EditContainerActivity;
@@ -80,7 +79,7 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
     }
 
     @Override
@@ -220,9 +219,11 @@ public class VipBuyFragment extends BillingFragment implements OnClickListener {
         RelativeLayout layout = (RelativeLayout) root.findViewById(ID);
 
         TextView layoutText = (TextView) layout.findViewWithTag("tvTitle");
-        layoutText.setText(text);
-        layout.setBackgroundResource(bgId);
-        layoutText.setCompoundDrawablesWithIntrinsicBounds(bgLeftId, 0, 0, 0);
+        if (layoutText != null) {
+            layoutText.setText(text);
+            layout.setBackgroundResource(bgId);
+            layoutText.setCompoundDrawablesWithIntrinsicBounds(bgLeftId, 0, 0, 0);
+        }
         return layout;
     }
 

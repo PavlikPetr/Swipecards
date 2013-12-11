@@ -3,6 +3,7 @@ package com.topface.topface.ui.edit;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -55,7 +56,7 @@ public class EditBackgroundFragment extends AbstractEditFragment {
         for (int i = 0; i < result.size(); i++) {
             if (result.get(i) instanceof ResourceBackgroundItem) {
                 ResourceBackgroundItem item = (ResourceBackgroundItem) result.get(i);
-                if (item instanceof ResourceBackgroundItem) {
+                if (item != null) {
                     if (mSelectedId == item.getId()) {
                         mSelectedIndex = i;
                     }
@@ -87,6 +88,7 @@ public class EditBackgroundFragment extends AbstractEditFragment {
                 @Override
                 public void success(IApiResponse response) {
                     CacheProfile.background_id = mSelectedId;
+                    CacheProfile.sendUpdateProfileBroadcast();
                     getActivity().setResult(Activity.RESULT_OK);
                     finishRequestSend();
                     handler.sendEmptyMessage(0);
@@ -153,8 +155,13 @@ public class EditBackgroundFragment extends AbstractEditFragment {
             }
 
             LayoutParams params = holder.mImageView.getLayoutParams();
-            params.height = holder.mFrameImageView.getDrawable().getIntrinsicHeight() - 2;
-            params.width = holder.mFrameImageView.getDrawable().getIntrinsicWidth() - 2;
+            if (params != null) {
+                Drawable drawable = holder.mFrameImageView.getDrawable();
+                if (drawable != null) {
+                    params.height = drawable.getIntrinsicHeight() - 2;
+                    params.width = drawable.getIntrinsicWidth() - 2;
+                }
+            }
             holder.mImageView.setImageBitmap(getItem(position).getBitmap());
 
             if (mSelectedIndex == position) {

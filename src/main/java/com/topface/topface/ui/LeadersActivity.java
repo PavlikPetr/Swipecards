@@ -2,7 +2,6 @@ package com.topface.topface.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -21,7 +20,6 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.LeaderRequest;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.gridlayout.GridLayout;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -105,8 +103,7 @@ public class LeadersActivity extends BaseFragmentActivity {
                                     Toast.makeText(LeadersActivity.this, R.string.leaders_leader_now, Toast.LENGTH_SHORT).show();
                                     //Обновляем число монет
                                     CacheProfile.money = response.getJsonResult().optInt("money", CacheProfile.money);
-                                    LocalBroadcastManager.getInstance(LeadersActivity.this)
-                                            .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                                    CacheProfile.sendUpdateProfileBroadcast();
                                     finish();
                                 }
 

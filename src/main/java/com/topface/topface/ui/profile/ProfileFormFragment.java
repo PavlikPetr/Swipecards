@@ -12,9 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.topface.topface.R;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormItem;
 
 public class ProfileFormFragment extends BaseFragment {
@@ -58,7 +58,7 @@ public class ProfileFormFragment extends BaseFragment {
         super.onResume();
         mProfileFormListAdapter.refillData();
         mProfileFormListAdapter.notifyDataSetChanged();
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
     }
 
     @Override

@@ -9,7 +9,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.ViewGroup;
 
 import com.topface.topface.data.Options;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.fragments.feed.BookmarksFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.FansFragment;
@@ -115,7 +114,7 @@ public class FloatBlock {
     public void onResume() {
         LocalBroadcastManager.getInstance(mFragment.getActivity()).registerReceiver(
                 mOptionsUpdateReceiver,
-                new IntentFilter(ProfileRequest.PROFILE_UPDATE_ACTION)
+                new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION)
         );
         if (mLeaders != null) mLeaders.loadLeaders();
         if (mBanner != null) mBanner.onResume();

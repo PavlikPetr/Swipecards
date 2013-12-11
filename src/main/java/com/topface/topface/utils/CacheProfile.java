@@ -32,6 +32,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /* Cache Profile */
 public class CacheProfile {
     public static final String ACTION_PROFILE_LOAD = "com.topface.topface.ACTION.PROFILE_LOAD";
+    /**
+     * Use sendProfileUpdateBroadcast() static method
+     */
+    public static final String PROFILE_UPDATE_ACTION = "com.topface.topface.UPDATE_PROFILE";
+
     private static AtomicBoolean mIsLoaded = new AtomicBoolean(false);
     // Data
     public static int uid;             // id пользователя в топфейсе
@@ -430,5 +435,10 @@ public class CacheProfile {
             default:
                 return 0;
         }
+    }
+
+    public static void sendUpdateProfileBroadcast() {
+        LocalBroadcastManager.getInstance(App.getContext())
+                .sendBroadcast(new Intent(PROFILE_UPDATE_ACTION));
     }
 }

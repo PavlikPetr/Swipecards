@@ -7,8 +7,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ProfileRequest extends ApiRequest {
-    // Data
-    public static final String PROFILE_UPDATE_ACTION = "com.topface.topface.UPDATE_PROFILE";
     public static final String SERVICE = "user.getOwnProfile";
     public int part; // часть профиля, необходимая для загрузки
     //public String  fields;  //массив интересующих полей профиля

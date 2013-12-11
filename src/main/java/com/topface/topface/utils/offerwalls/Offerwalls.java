@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -29,7 +28,6 @@ import com.tapjoy.TapjoyConnect;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.ValidateGetJarRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.CacheProfile;
@@ -257,8 +255,7 @@ public class Offerwalls {
                                         CacheProfile.likes = result.optInt("likes", CacheProfile.likes);
                                     }
                                     Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
-                                    LocalBroadcastManager.getInstance(getContext())
-                                            .sendBroadcast(new Intent(ProfileRequest.PROFILE_UPDATE_ACTION));
+                                    CacheProfile.sendUpdateProfileBroadcast();
                                 } else {
                                     showToast(R.string.general_server_error);
                                 }
