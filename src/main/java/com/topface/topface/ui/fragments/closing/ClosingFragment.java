@@ -196,6 +196,7 @@ abstract public class ClosingFragment extends ViewUsersListFragment<FeedUser> im
         FeedRequest request = new FeedRequest(getFeedType(), getActivity());
         request.limit = LIMIT;
         request.unread = true;
+        request.leave = true;
         String lastFeedId = getLastFeedId();
         if (lastFeedId != null)
             request.to = lastFeedId;
