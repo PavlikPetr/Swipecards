@@ -192,6 +192,7 @@ public class ClosingsController implements View.OnClickListener {
         FeedRequest request = new FeedRequest(feedType, context);
         request.limit = ViewUsersListFragment.LIMIT;
         request.unread = true;
+        request.leave = true;
         return request;
     }
 
